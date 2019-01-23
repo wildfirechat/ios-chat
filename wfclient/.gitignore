@@ -1,0 +1,8 @@
+WFChatClient_Products
+WFChatClient.xcodeproj/project.xcworkspace/xcuserdata
+DerivedData
+WFChatClient.xcodeproj/xcuserdata
+.DS_Store
+bin
+bin_tmp
+WFChatClient/Frameworks
