@@ -15,4 +15,5 @@
 在项目的Config.m文件中，修改IM服务器地址配置。把```IM_SERVER_HOST```和```IM_SERVER_PORT```设置成火信的地址和端口。另外需要搭配应用服务器，请按照说明部署好[应用服务器](https://github.com/wildfirechat/app_server)，然后把```APP_SERVER_HOST```和```APP_SERVER_PORT```设置为应用服务器的地址和端口。
 
 ### 登陆
-使用手机号码登陆，验证码请参考[应用服务器](https://github.com/wildfirechat/app_server)说明。
+使用手机号码及验证码登陆，
+> 在没有短信供应商时，可以使用[superCode](https://github.com/wildfirechat/app_server#短信资源)进行测试验证。
