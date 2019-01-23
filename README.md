@@ -1,5 +1,5 @@
 ## 说明
-本系统有4部分组成，服务器部分/iOS部分（ios-chat）/Android部分（android-chat）/协议栈部分（mars）。其中iso和android都依赖于协议栈部分。本工程为iOS部分
+本系统有4部分组成，服务器/iOS客户端/Android客户端/协议栈库。其中iso和android都依赖于协议栈库。本工程为iOS客户端
 
 
 ### 编译
@@ -12,7 +12,7 @@
 
 ### 配置
 
-在项目的Config.m文件中，修改IM服务器地址配置。如果为了体验，把```USE_EMBED_APP```改成```YES```, 然后```IM_SERVER_HOST```和```IM_SERVER_PORT```设置成火信的地址和端口。如果生产使用，请使用独立应用服务器。
+在项目的Config.m文件中，修改IM服务器地址配置。把```IM_SERVER_HOST```和```IM_SERVER_PORT```设置成火信的地址和端口。另外需要搭配应用服务器，请按照说明部署好[应用服务器](https://github.com/wildfirechat/app_server)，然后把```APP_SERVER_HOST```和```APP_SERVER_PORT```设置为应用服务器的地址和端口。
 
 ### 登陆
-根据服务器说明，使用注册脚本注册的用户
+使用手机号码登陆，验证码请参考[应用服务器](https://github.com/wildfirechat/app_server)说明。
