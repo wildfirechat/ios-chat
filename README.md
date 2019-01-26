@@ -1,14 +1,14 @@
 ## 说明
-本系统有4部分组成，服务器/iOS客户端/Android客户端/协议栈库。其中iso和android都依赖于协议栈库。本工程为iOS客户端
+本系统有4部分组成，[服务器](https://github.com/wildfirechat/server)/[iOS客户端](https://github.com/wildfirechat/ios-chat)/[Android客户端](https://github.com/wildfirechat/android-chat)/[协议栈库](https://github.com/wildfirechat/proto)。其中iOS和Android都依赖于协议栈库。本工程为iOS客户端
 
 
 ### 编译
 
-下载之后要先编译一遍协议栈，编译方法参考协议栈文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
+工程中已经包含了编译好的协议栈，也可以自己编译，编译方法参考协议栈文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
 
 ### 工程说明
 
-工程中有3个项目，1个应用和2个库。chatclient库是IM的通讯能力，是最底层的库，chatuikit是IM的UI控件库，依赖于chatclient。chat是IM的demo，依赖于这两个库，chat需要正确配置服务器地址。
+工程中有3个项目，其中1个是应用，另外两个2个是库。chatclient库是IM的通讯能力，是最底层的库，chatuikit是IM的UI控件库，依赖于chatclient。chat是IM的demo，依赖于这两个库，chat需要正确配置服务器地址。
 
 ### 配置
 
