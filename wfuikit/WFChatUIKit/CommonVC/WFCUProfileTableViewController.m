@@ -17,7 +17,6 @@
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
-@property (strong, nonatomic)UILabel *nameLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
@@ -78,9 +77,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 48, 48)];
-    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
-    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 33, width - 64 - 8, 21)];
-    
+    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 24, width - 64 - 8, 21)];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
     [self.portraitView addGestureRecognizer:tap];
@@ -88,12 +85,10 @@
     
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
-    [self.nameLabel setText:self.userInfo.name];
     self.displayNameLabel.text = self.userInfo.displayName;
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
-    [self.headerCell addSubview:self.nameLabel];
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
         if (self.userInfo.mobile.length > 0) {
