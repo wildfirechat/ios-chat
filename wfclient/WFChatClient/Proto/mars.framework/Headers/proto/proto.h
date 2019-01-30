@@ -214,6 +214,8 @@ namespace mars{
                 mediaType = c.mediaType;
                 remoteMediaUrl = c.remoteMediaUrl;
                 localMediaPath = c.localMediaPath;
+                mentionedType = c.mentionedType;
+                mentionedTargets = c.mentionedTargets;
                 return *this;
             }
             int type;

@@ -73,6 +73,11 @@
  */
 @property (nonatomic, assign)long long updateDt;
 
+/**
+ 用户类型
+ */
+@property (nonatomic, assign) int type;
+
 - (void)cloneFrom:(WFCCUserInfo *)other;
 
 @end
