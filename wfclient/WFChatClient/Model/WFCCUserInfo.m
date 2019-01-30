@@ -23,5 +23,6 @@
     self.extra = other.extra;
     self.updateDt = other.updateDt;
     self.social = other.social;
+    self.type = other.type;
 }
 @end
