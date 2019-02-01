@@ -9,25 +9,26 @@
 #### 应用截图
 ![ios-demo](http://static.wildfirechat.cn/ios-demo.gif)
 
-![messageview](http://static.wildfirechat.cn/ios-message-view.png)
+<img src="http://static.wildfirechat.cn/ios-message-view.png" width = 50% height = 50% />
 
-![contactview](http://static.wildfirechat.cn/ios-contact-view.png)
+<img src="http://static.wildfirechat.cn/ios-contact-view.png" width = 50% height = 50% />
 
-![discoverview](http://static.wildfirechat.cn/ios-discover-view.png)
+<img src="http://static.wildfirechat.cn/ios-discover-view.png" width = 50% height = 50% />
 
-![settingsview](http://static.wildfirechat.cn/ios-settings-view.png)
+<img src="http://static.wildfirechat.cn/ios-settings-view.png" width = 50% height = 50% />
 
-![messagelistview](http://static.wildfirechat.cn/ios-messagelist-view.png)
+<img src="http://static.wildfirechat.cn/ios-messagelist-view.png" width = 50% height = 50% />
 
-![chatsettingview](http://static.wildfirechat.cn/ios-chat-setting-view.png)
+<img src="http://static.wildfirechat.cn/ios-chat-setting-view.png" width = 50% height = 50% />
 
-![takephotoview](http://static.wildfirechat.cn/ios-takephoto-view.png)
+<img src="http://static.wildfirechat.cn/ios-takephoto-view.png" width = 50% height = 50% />
 
-![recordvoiceview](http://static.wildfirechat.cn/ios-record-voice-view.png)
+<img src="http://static.wildfirechat.cn/ios-record-voice-view.png" width = 50% height = 50% />
 
-![locationview](http://static.wildfirechat.cn/ios-location-view.png)
+<img src="http://static.wildfirechat.cn/ios-location-view.png" width = 50% height = 50% />
 
-![voipview](http://static.wildfirechat.cn/ios-voip-view.png)
+<img src="http://static.wildfirechat.cn/ios-voip-view.png" width = 50% height = 50% />
+
 
 ### 编译
 
