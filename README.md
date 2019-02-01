@@ -6,6 +6,29 @@
 
 ![野火IM](http://static.wildfirechat.cn/download_qrcode.png)
 
+#### 应用截图
+![ios-demo](http://static.wildfirechat.cn/ios-demo.gif)
+
+![messageview](http://static.wildfirechat.cn/ios-message-view.png)
+
+![contactview](http://static.wildfirechat.cn/ios-contact-view.png)
+
+![discoverview](http://static.wildfirechat.cn/ios-discover-view.png)
+
+![settingsview](http://static.wildfirechat.cn/ios-settings-view.png)
+
+![messagelistview](http://static.wildfirechat.cn/ios-messagelist-view.png)
+
+![chatsettingview](http://static.wildfirechat.cn/ios-chat-setting-view.png)
+
+![takephotoview](http://static.wildfirechat.cn/ios-takephoto-view.png)
+
+![recordvoiceview](http://static.wildfirechat.cn/ios-record-voice-view.png)
+
+![locationview](http://static.wildfirechat.cn/ios-location-view.png)
+
+![voipview](http://static.wildfirechat.cn/ios-voip-view.png)
+
 ### 编译
 
 工程中已经包含了编译好的协议栈，也可以自己编译，编译方法参考协议栈文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
