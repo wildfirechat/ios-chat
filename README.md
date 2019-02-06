@@ -1,5 +1,5 @@
 ## 说明
-本系统有4部分组成，[服务器](https://github.com/wildfirechat/server)/[iOS客户端](https://github.com/wildfirechat/ios-chat)/[Android客户端](https://github.com/wildfirechat/android-chat)/[协议栈库](https://github.com/wildfirechat/proto)。其中iOS和Android都依赖于协议栈库。本工程为iOS客户端
+本工程为野火IM iOS平台的SDK和Demo。野火IM作为一个通用的即时通讯SDK，可以集成到各种应用中。详情可以阅读[docs](http://docs.wildfirechat.cn).
 
 #### 体验Demo
 我们提供了体验demo，请使用微信扫码下载安装体验
@@ -32,7 +32,7 @@
 
 ### 编译
 
-工程中已经包含了编译好的协议栈，也可以自己编译，编译方法参考协议栈文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
+工程中已经包含了编译好的协议栈，也可以自己编译，编译方法参考[协议栈库](https://github.com/wildfirechat/proto)文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
 
 ### 工程说明
 
