@@ -52,11 +52,11 @@ struct DeviceInfo {
     
     std::string packagename;
     int pushtype;
-    //设备型号
+    //device type
     std::string device;
-    //设备版本号
+    //device version
     std::string deviceversion;
-    //设备名称 某某的iphone
+    //device name eg. somebody's iphone
     std::string phonename;
     std::string language;
     std::string carriername;
