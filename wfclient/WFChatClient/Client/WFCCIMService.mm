@@ -22,14 +22,14 @@ NSString *kConnectionStatusChanged = @"kConnectionStatusChanged";
 NSString *kReceiveMessages = @"kReceiveMessages";
 NSString *kRecallMessages = @"kRecallMessages";
 
-class IMSendMessageCallback : public mars::stn::SendMessageCallback {
+class IMSendMessageCallback : public mars::stn::SendMsgCallback {
 private:
     void(^m_successBlock)(long long messageUid, long long timestamp);
     void(^m_errorBlock)(int error_code);
     void(^m_progressBlock)(long uploaded, long total);
     WFCCMessage *m_message;
 public:
-    IMSendMessageCallback(WFCCMessage *message, void(^successBlock)(long long messageUid, long long timestamp), void(^progressBlock)(long uploaded, long total), void(^errorBlock)(int error_code)) : mars::stn::SendMessageCallback(), m_message(message), m_successBlock(successBlock), m_progressBlock(progressBlock), m_errorBlock(errorBlock) {};
+    IMSendMessageCallback(WFCCMessage *message, void(^successBlock)(long long messageUid, long long timestamp), void(^progressBlock)(long uploaded, long total), void(^errorBlock)(int error_code)) : mars::stn::SendMsgCallback(), m_message(message), m_successBlock(successBlock), m_progressBlock(progressBlock), m_errorBlock(errorBlock) {};
      void onSuccess(long long messageUid, long long timestamp) {
         dispatch_async(dispatch_get_main_queue(), ^{
             m_message.messageUid = messageUid;
