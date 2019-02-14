@@ -361,14 +361,14 @@ namespace mars{
             virtual ~UploadMediaCallback() {}
         };
         
-        class SendMessageCallback {
+        class SendMsgCallback {
         public:
             virtual void onPrepared(long messageId, int64_t savedTime) = 0;
             virtual void onMediaUploaded(std::string remoteUrl) = 0;
             virtual void onSuccess(long long messageUid, long long timestamp) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual void onProgress(int uploaded, int total) = 0;
-            virtual ~SendMessageCallback() {}
+            virtual ~SendMsgCallback() {}
         };
         
         class UpdateMediaCallback {
@@ -519,7 +519,7 @@ namespace mars{
         extern int64_t getServerDeltaTime();
         extern void setDeviceToken(const std::string &appName, const std::string &deviceToken, int pushType);
         
-        extern int (*sendMessage)(TMessage &tmsg, SendMessageCallback *callback, int expireDuration);
+        extern int (*sendMessage)(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
         
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         
