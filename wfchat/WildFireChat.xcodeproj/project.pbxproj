@@ -31,6 +31,32 @@
 		2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
+		2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F94F98622291577005BD461 /* CodeScan.bundle */; };
+		2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98922291577005BD461 /* LBXScanViewController.m */; };
+		2F94FB8D22291577005BD461 /* LBXScanViewStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98A22291577005BD461 /* LBXScanViewStyle.m */; };
+		2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */; };
+		2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */; };
+		2F94FB9022291577005BD461 /* LBXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98D22291577005BD461 /* LBXScanView.m */; };
+		2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */; };
+		2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F99322291577005BD461 /* LBXScanTypes.m */; };
+		2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FB8A22291577005BD461 /* LBXScanNative.m */; };
+		2F94FC75222917C7005BD461 /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC74222917C7005BD461 /* DIYScanViewController.m */; };
+		2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7722291813005BD461 /* LBXAlertAction.m */; };
+		2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */; };
+		2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */; };
+		2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */; };
+		2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */; };
+		2F94FC9E22291813005BD461 /* LBXPermissionMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */; };
+		2F94FC9F22291813005BD461 /* LBXPermissionNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */; };
+		2F94FCA022291813005BD461 /* LBXPermissionCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8522291813005BD461 /* LBXPermissionCalendar.m */; };
+		2F94FCA122291813005BD461 /* LBXPermissionReminders.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */; };
+		2F94FCA222291813005BD461 /* LBXPermissionHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8B22291813005BD461 /* LBXPermissionHealth.m */; };
+		2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */; };
+		2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */; };
+		2F94FCA522291813005BD461 /* LBXPermissionLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9122291813005BD461 /* LBXPermissionLocation.m */; };
+		2F94FCA622291813005BD461 /* LBXPermissionContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9222291813005BD461 /* LBXPermissionContacts.m */; };
+		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
+		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
@@ -130,6 +156,57 @@
 		2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyViewController.m; sourceTree = "<group>"; };
 		2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
 		2F7268FC21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
+		2F94F98622291577005BD461 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
+		2F94F98722291577005BD461 /* LBXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanView.h; sourceTree = "<group>"; };
+		2F94F98822291577005BD461 /* LBXScanNetAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNetAnimation.h; sourceTree = "<group>"; };
+		2F94F98922291577005BD461 /* LBXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewController.m; sourceTree = "<group>"; };
+		2F94F98A22291577005BD461 /* LBXScanViewStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewStyle.m; sourceTree = "<group>"; };
+		2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanVideoZoomView.m; sourceTree = "<group>"; };
+		2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanLineAnimation.m; sourceTree = "<group>"; };
+		2F94F98D22291577005BD461 /* LBXScanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanView.m; sourceTree = "<group>"; };
+		2F94F98E22291577005BD461 /* LBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewController.h; sourceTree = "<group>"; };
+		2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNetAnimation.m; sourceTree = "<group>"; };
+		2F94F99022291577005BD461 /* LBXScanLineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanLineAnimation.h; sourceTree = "<group>"; };
+		2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanVideoZoomView.h; sourceTree = "<group>"; };
+		2F94F99222291577005BD461 /* LBXScanViewStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewStyle.h; sourceTree = "<group>"; };
+		2F94F99322291577005BD461 /* LBXScanTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanTypes.m; sourceTree = "<group>"; };
+		2F94FB8722291577005BD461 /* LBXScanTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanTypes.h; sourceTree = "<group>"; };
+		2F94FB8922291577005BD461 /* LBXScanNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNative.h; sourceTree = "<group>"; };
+		2F94FB8A22291577005BD461 /* LBXScanNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNative.m; sourceTree = "<group>"; };
+		2F94FC73222917C6005BD461 /* DIYScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIYScanViewController.h; sourceTree = "<group>"; };
+		2F94FC74222917C7005BD461 /* DIYScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DIYScanViewController.m; sourceTree = "<group>"; };
+		2F94FC7722291813005BD461 /* LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXAlertAction.m; sourceTree = "<group>"; };
+		2F94FC7822291813005BD461 /* LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXAlertAction.h; sourceTree = "<group>"; };
+		2F94FC7A22291813005BD461 /* UIActionSheet+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+LBXAlertAction.h"; sourceTree = "<group>"; };
+		2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+supportedInterfaceOrientations.h"; sourceTree = "<group>"; };
+		2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+LBXAlertAction.h"; sourceTree = "<group>"; };
+		2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+LBXHierarchy.m"; sourceTree = "<group>"; };
+		2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+LBXAlertAction.m"; sourceTree = "<group>"; };
+		2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LBXAlertAction.m"; sourceTree = "<group>"; };
+		2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+supportedInterfaceOrientations.m"; sourceTree = "<group>"; };
+		2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+LBXHierarchy.h"; sourceTree = "<group>"; };
+		2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionMicrophone.m; sourceTree = "<group>"; };
+		2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionNetwork.m; sourceTree = "<group>"; };
+		2F94FC8522291813005BD461 /* LBXPermissionCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionCalendar.m; sourceTree = "<group>"; };
+		2F94FC8622291813005BD461 /* LBXPermissionLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionLocation.h; sourceTree = "<group>"; };
+		2F94FC8722291813005BD461 /* LBXPermission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermission.h; sourceTree = "<group>"; };
+		2F94FC8822291813005BD461 /* LBXPermissionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionCamera.h; sourceTree = "<group>"; };
+		2F94FC8922291813005BD461 /* LBXPermissionContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionContacts.h; sourceTree = "<group>"; };
+		2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionReminders.m; sourceTree = "<group>"; };
+		2F94FC8B22291813005BD461 /* LBXPermissionHealth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionHealth.m; sourceTree = "<group>"; };
+		2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionSetting.m; sourceTree = "<group>"; };
+		2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionPhotos.m; sourceTree = "<group>"; };
+		2F94FC8E22291813005BD461 /* LBXPermissionCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionCalendar.h; sourceTree = "<group>"; };
+		2F94FC8F22291813005BD461 /* LBXPermissionNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionNetwork.h; sourceTree = "<group>"; };
+		2F94FC9022291813005BD461 /* LBXPermissionMicrophone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionMicrophone.h; sourceTree = "<group>"; };
+		2F94FC9122291813005BD461 /* LBXPermissionLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionLocation.m; sourceTree = "<group>"; };
+		2F94FC9222291813005BD461 /* LBXPermissionContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionContacts.m; sourceTree = "<group>"; };
+		2F94FC9322291813005BD461 /* LBXPermissionCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionCamera.m; sourceTree = "<group>"; };
+		2F94FC9422291813005BD461 /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
+		2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
+		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
+		2F94FC9722291813005BD461 /* LBXPermissionHealth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionHealth.h; sourceTree = "<group>"; };
+		2F94FC9822291813005BD461 /* LBXPermissionReminders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionReminders.h; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -192,6 +269,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				2F94F98422291577005BD461 /* LBXScan */,
 				2FF07F4621F82E7200A78A62 /* Me */,
 				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
 				2F7268F621F7136600E05F9C /* Privacy */,
@@ -329,6 +407,104 @@
 				2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */,
 			);
 			path = YBAttributeTextTapAction;
+			sourceTree = "<group>";
+		};
+		2F94F98422291577005BD461 /* LBXScan */ = {
+			isa = PBXGroup;
+			children = (
+				2F94FC7622291813005BD461 /* LBXAlertAction */,
+				2F94FC8222291813005BD461 /* LBXPermissions */,
+				2F94F98522291577005BD461 /* UI */,
+				2F94F99322291577005BD461 /* LBXScanTypes.m */,
+				2F94FB8722291577005BD461 /* LBXScanTypes.h */,
+				2F94FC73222917C6005BD461 /* DIYScanViewController.h */,
+				2F94FC74222917C7005BD461 /* DIYScanViewController.m */,
+				2F94FB8822291577005BD461 /* LBXNative */,
+			);
+			path = LBXScan;
+			sourceTree = "<group>";
+		};
+		2F94F98522291577005BD461 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				2F94F98622291577005BD461 /* CodeScan.bundle */,
+				2F94F98722291577005BD461 /* LBXScanView.h */,
+				2F94F98822291577005BD461 /* LBXScanNetAnimation.h */,
+				2F94F98922291577005BD461 /* LBXScanViewController.m */,
+				2F94F98A22291577005BD461 /* LBXScanViewStyle.m */,
+				2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */,
+				2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */,
+				2F94F98D22291577005BD461 /* LBXScanView.m */,
+				2F94F98E22291577005BD461 /* LBXScanViewController.h */,
+				2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */,
+				2F94F99022291577005BD461 /* LBXScanLineAnimation.h */,
+				2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */,
+				2F94F99222291577005BD461 /* LBXScanViewStyle.h */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		2F94FB8822291577005BD461 /* LBXNative */ = {
+			isa = PBXGroup;
+			children = (
+				2F94FB8922291577005BD461 /* LBXScanNative.h */,
+				2F94FB8A22291577005BD461 /* LBXScanNative.m */,
+			);
+			path = LBXNative;
+			sourceTree = "<group>";
+		};
+		2F94FC7622291813005BD461 /* LBXAlertAction */ = {
+			isa = PBXGroup;
+			children = (
+				2F94FC7722291813005BD461 /* LBXAlertAction.m */,
+				2F94FC7822291813005BD461 /* LBXAlertAction.h */,
+				2F94FC7922291813005BD461 /* Class */,
+			);
+			path = LBXAlertAction;
+			sourceTree = "<group>";
+		};
+		2F94FC7922291813005BD461 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				2F94FC7A22291813005BD461 /* UIActionSheet+LBXAlertAction.h */,
+				2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */,
+				2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */,
+				2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */,
+				2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */,
+				2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */,
+				2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */,
+				2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		2F94FC8222291813005BD461 /* LBXPermissions */ = {
+			isa = PBXGroup;
+			children = (
+				2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */,
+				2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */,
+				2F94FC8522291813005BD461 /* LBXPermissionCalendar.m */,
+				2F94FC8622291813005BD461 /* LBXPermissionLocation.h */,
+				2F94FC8722291813005BD461 /* LBXPermission.h */,
+				2F94FC8822291813005BD461 /* LBXPermissionCamera.h */,
+				2F94FC8922291813005BD461 /* LBXPermissionContacts.h */,
+				2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */,
+				2F94FC8B22291813005BD461 /* LBXPermissionHealth.m */,
+				2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */,
+				2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */,
+				2F94FC8E22291813005BD461 /* LBXPermissionCalendar.h */,
+				2F94FC8F22291813005BD461 /* LBXPermissionNetwork.h */,
+				2F94FC9022291813005BD461 /* LBXPermissionMicrophone.h */,
+				2F94FC9122291813005BD461 /* LBXPermissionLocation.m */,
+				2F94FC9222291813005BD461 /* LBXPermissionContacts.m */,
+				2F94FC9322291813005BD461 /* LBXPermissionCamera.m */,
+				2F94FC9422291813005BD461 /* LBXPermission.m */,
+				2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */,
+				2F94FC9622291813005BD461 /* LBXPermissionSetting.h */,
+				2F94FC9722291813005BD461 /* LBXPermissionHealth.h */,
+				2F94FC9822291813005BD461 /* LBXPermissionReminders.h */,
+			);
+			path = LBXPermissions;
 			sourceTree = "<group>";
 		};
 		2FEA5D6721F4AC8900280B23 /* Login */ = {
@@ -484,6 +660,7 @@
 				2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */,
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
+				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
@@ -499,19 +676,44 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
+				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
+				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewCell.m in Sources */,
+				2F94FC75222917C7005BD461 /* DIYScanViewController.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
+				2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
+				2F94FB8D22291577005BD461 /* LBXScanViewStyle.m in Sources */,
+				2F94FB9022291577005BD461 /* LBXScanView.m in Sources */,
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,
 				2E1D200A1FAF0AE600F4405D /* main.m in Sources */,
+				2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */,
+				2F94FCA122291813005BD461 /* LBXPermissionReminders.m in Sources */,
+				2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */,
 				2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */,
+				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
+				2F94FCA522291813005BD461 /* LBXPermissionLocation.m in Sources */,
 				2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */,
 				2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */,
+				2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */,
+				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
+				2F94FC9E22291813005BD461 /* LBXPermissionMicrophone.m in Sources */,
+				2F94FC9F22291813005BD461 /* LBXPermissionNetwork.m in Sources */,
+				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
+				2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */,
+				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,
+				2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */,
+				2F94FCA222291813005BD461 /* LBXPermissionHealth.m in Sources */,
 				2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */,
+				2F94FCA822291813005BD461 /* LBXPermission.m in Sources */,
+				2F94FCA022291813005BD461 /* LBXPermissionCalendar.m in Sources */,
 				2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */,
+				2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
+				2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */,
+				2F94FCA622291813005BD461 /* LBXPermissionContacts.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
