@@ -1335,7 +1335,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         mars::stn::MessageDB::Instance()->updateConversationTimestamp(tmsg.conversationType, tmsg.target, tmsg.line, tmsg.timestamp);
     }
     
-    message.fromUser = [WFCCNetworkService sharedInstance].userId;
+    message.fromUser = sender;
     if (notify) {
         [[WFCCNetworkService sharedInstance].receiveMessageDelegate onReceiveMessage:@[message] hasMore:NO];
     }
@@ -1384,7 +1384,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                      maxCount:(int)maxCount
                       success:(void(^)(WFCCChatroomMemberInfo *memberInfo))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::getChatroomMemberInfo([chatroomId UTF8String], 30, new IMGetChatroomMemberInfoCallback(successBlock, errorBlock));
+    if (maxCount <= 0) {
+        maxCount = 30;
+    }
+    mars::stn::getChatroomMemberInfo([chatroomId UTF8String], maxCount, new IMGetChatroomMemberInfoCallback(successBlock, errorBlock));
 }
 
 - (void)createChannel:(NSString *)channelName

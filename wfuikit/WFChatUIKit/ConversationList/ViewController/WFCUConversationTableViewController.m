@@ -163,7 +163,11 @@
                              [KxMenuItem menuItem:@"收听频道"
                                             image:[UIImage imageNamed:@"menu_listen_channel"]
                                            target:self
-                                           action:@selector(listenChannelAction:)]
+                                           action:@selector(listenChannelAction:)],
+                             [KxMenuItem menuItem:@"扫码"
+                                            image:[UIImage imageNamed:@"menu_listen_channel"]
+                                           target:self
+                                           action:@selector(scanQrCodeAction:)]
                              ]];
 }
 
@@ -211,6 +215,9 @@
     [self.navigationController pushViewController:searchChannelVC animated:YES];
 }
 
+- (void)scanQrCodeAction:(id)sender {
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.conversations = [[NSMutableArray alloc] init];
