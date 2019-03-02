@@ -557,9 +557,6 @@
     CGImageRelease(cgImage);
     
     return codeImage;
-
-    
-    
 }
 //引用自:http://www.jianshu.com/p/e8f7a257b612
 + (UIImage*)createQRWithString:(NSString*)text QRSize:(CGSize)size QRColor:(UIColor*)qrColor bkColor:(UIColor*)bkColor
