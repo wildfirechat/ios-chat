@@ -78,6 +78,7 @@
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90FF267B222AA4690001D8AF /* WFCMyProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */; };
+		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -245,6 +246,8 @@
 		90C1D910208C12A900E923F4 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
 		90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCMyProfileTableViewController.h; sourceTree = "<group>"; };
 		90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCMyProfileTableViewController.m; sourceTree = "<group>"; };
+		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
+		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +310,8 @@
 				908542772229FD460009713D /* WFCConversationTableViewController.m */,
 				90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */,
 				90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */,
+				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
+				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
 			);
 			path = WildFireChat;
 			sourceTree = "<group>";
@@ -757,6 +762,7 @@
 				2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
 				2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */,
 				2F94FCA622291813005BD461 /* LBXPermissionContacts.m in Sources */,
+				90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
 				9085428B222A07280009713D /* UIImageView+CornerRadius.m in Sources */,
 			);
