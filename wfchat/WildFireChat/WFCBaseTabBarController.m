@@ -11,6 +11,7 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
+#import "WFCConversationTableViewController.h"
 
 #define kClassKey   @"rootVCClassString"
 #define kTitleKey   @"title"
@@ -26,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIViewController *vc = [WFCUConversationTableViewController new];
+    UIViewController *vc = [WFCConversationTableViewController new];
     vc.title = @"消息";
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     UITabBarItem *item = nav.tabBarItem;
