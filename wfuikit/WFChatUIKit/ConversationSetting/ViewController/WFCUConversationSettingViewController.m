@@ -699,11 +699,11 @@
       } else {
         userId = self.conversation.target;
       }
-        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userId]) {
-            WFCUMyProfileTableViewController *vc = [[WFCUMyProfileTableViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        } else {
+//        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userId]) {
+//            WFCUMyProfileTableViewController *vc = [[WFCUMyProfileTableViewController alloc] init];
+//            vc.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:vc animated:YES];
+//        } else {
             WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
             vc.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
             if (vc.userInfo == nil) {
@@ -711,7 +711,7 @@
             }
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
-        }
+//        }
     }
 }
 @end

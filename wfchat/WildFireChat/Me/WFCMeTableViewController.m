@@ -13,6 +13,7 @@
 #import "WFCSettingTableViewController.h"
 #import "WFCSecurityTableViewController.h"
 #import "WFCMeTableViewCell.h"
+#import "WFCMyProfileTableViewController.h"
 
 @interface WFCMeTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -119,7 +120,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        WFCUMyProfileTableViewController *vc = [[WFCUMyProfileTableViewController alloc] init];
+        WFCUMyProfileTableViewController *vc = [[WFCMyProfileTableViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     } else if (indexPath.section == 1) {

@@ -164,8 +164,8 @@
                                             image:[UIImage imageNamed:@"menu_listen_channel"]
                                            target:self
                                            action:@selector(listenChannelAction:)],
-                             [KxMenuItem menuItem:@"扫码"
-                                            image:[UIImage imageNamed:@"menu_listen_channel"]
+                             [KxMenuItem menuItem:@"扫二维码"
+                                            image:[UIImage imageNamed:@"menu_scan_qr"]
                                            target:self
                                            action:@selector(scanQrCodeAction:)]
                              ]];
