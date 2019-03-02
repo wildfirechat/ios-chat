@@ -21,26 +21,12 @@
     // Do any additional setup after loading the view.
     
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
-        
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
     self.view.backgroundColor = [UIColor blackColor];
     
-
-    switch (_libraryType) {
-        case SLT_Native:
-            self.title = @"native";
-            break;
-        case SLT_ZXing:
-            self.title = @"ZXing";
-            break;
-        case SLT_ZBar:
-            self.title = @"ZBar";
-            break;
-        default:
-            break;
-    }
+    self.title = @"二维码/条形码";
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -92,16 +78,6 @@
             [_scanObj startScan];
         }
             break;
-        case SLT_ZXing:
-        {
-
-        }
-            break;
-        case SLT_ZBar:
-        {
-
-        }
-            break;
         default:
             break;
     }
@@ -146,16 +122,6 @@
             [_scanObj startScan];
         }
             break;
-        case SLT_ZXing:
-        {
-
-        }
-            break;
-        case SLT_ZBar:
-        {
-
-        }
-            break;
         default:
             break;
     }
@@ -183,14 +149,6 @@
         case SLT_Native:
         {
             [_scanObj stopScan];
-        }
-            break;
-        case SLT_ZXing:
-        {
-        }
-            break;
-        case SLT_ZBar:
-        {
         }
             break;
         default:
@@ -223,16 +181,7 @@
             [_scanObj changeTorch];
         }
             break;
-        case SLT_ZXing:
-        {
 
-        }
-            break;
-        case SLT_ZBar:
-        {
-
-        }
-            break;
         default:
             break;
     }
