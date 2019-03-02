@@ -10,6 +10,7 @@
 #import "LBXAlertAction.h"
 #import "LBXScanNative.h"
 #import "UIImageView+CornerRadius.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @interface CreateBarCodeViewController ()
 
@@ -124,11 +125,12 @@
     _qrView.hidden = NO;
     _tView.hidden = YES;
     
-    
-    _qrImgView.image = [LBXScanNative createQRWithString:@"lbxia20091227@foxmail.com" QRSize:_qrImgView.bounds.size];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+    _qrImgView.image = [LBXScanNative createQRWithString:[NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId] QRSize:_qrImgView.bounds.size];
     
     CGSize logoSize=CGSizeMake(30, 30);
-    self.logoImgView = [self roundCornerWithImage:[UIImage imageNamed:@"logo"] size:logoSize];
+    UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:userInfo.portrait]]];
+    self.logoImgView = [self roundCornerWithImage:logo size:logoSize];
     _logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);
     _logoImgView.center = CGPointMake(CGRectGetWidth(_qrImgView.frame)/2, CGRectGetHeight(_qrImgView.frame)/2);
     [_qrImgView addSubview:_logoImgView];
