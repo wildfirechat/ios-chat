@@ -77,6 +77,7 @@
 		909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */; };
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
+		90FF267B222AA4690001D8AF /* WFCMyProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -242,6 +243,8 @@
 		909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatroomItemCell.m; sourceTree = "<group>"; };
 		90C1D90F208C12A900E923F4 /* foreman.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foreman.mp4; sourceTree = "<group>"; };
 		90C1D910208C12A900E923F4 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
+		90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCMyProfileTableViewController.h; sourceTree = "<group>"; };
+		90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCMyProfileTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,6 +305,8 @@
 				903EBC942136313B00312C16 /* SupportFiles */,
 				908542762229FD460009713D /* WFCConversationTableViewController.h */,
 				908542772229FD460009713D /* WFCConversationTableViewController.m */,
+				90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */,
+				90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */,
 			);
 			path = WildFireChat;
 			sourceTree = "<group>";
@@ -740,6 +745,7 @@
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
 				2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */,
+				90FF267B222AA4690001D8AF /* WFCMyProfileTableViewController.m in Sources */,
 				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,
 				2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */,
 				2F94FCA222291813005BD461 /* LBXPermissionHealth.m in Sources */,

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CreateBarCodeViewController : UIViewController
-
+@property (nonatomic, strong)NSString *str;
+@property (nonatomic, strong)NSString *logoUrl;
 @end

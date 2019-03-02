@@ -11,6 +11,7 @@
 #import "LBXScanVideoZoomView.h"
 #import "LBXPermission.h"
 #import "LBXPermissionSetting.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @interface QQLBXScanViewController ()
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;
@@ -233,14 +234,8 @@
 
 - (void)showNextVCWithScanResult:(LBXScanResult*)strResult
 {
-//    ScanResultViewController *vc = [ScanResultViewController new];
-//    vc.imgScan = strResult.imgScanned;
-//
-//    vc.strScan = strResult.strScanned;
-//
-//    vc.strCodeType = strResult.strBarCodeType;
-//
-//    [self.navigationController pushViewController:vc animated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
+    self.scanResult(strResult.strScanned);
 }
 
 
@@ -280,6 +275,9 @@
 - (void)myQRCode
 {
     CreateBarCodeViewController *vc = [CreateBarCodeViewController new];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+    vc.str = [NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId];
+    vc.logoUrl = userInfo.portrait;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
