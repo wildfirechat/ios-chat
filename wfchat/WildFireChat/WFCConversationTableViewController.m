@@ -11,6 +11,7 @@
 #import "StyleDIY.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "PCLoginConfirmViewController.h"
 
 @interface WFCConversationTableViewController ()
 
@@ -33,6 +34,7 @@
     
     //镜头拉远拉近功能
     vc.isVideoZoom = YES;
+    
     vc.hidesBottomBarWhenPushed = YES;
     vc.scanResult = ^(NSString *str) {
         NSLog(@"str scanned %@", str);
@@ -43,12 +45,17 @@
             if (vc2.userInfo == nil) {
                 return;
             }
+
             vc2.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc2 animated:YES];
         } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
             
         } else if ([str rangeOfString:@"wildfirechat://pcsession" options:NSCaseInsensitiveSearch].location == 0) {
-            
+            NSString *sessionId = [str lastPathComponent];
+            PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
+            vc2.sessionId = sessionId;
+            vc2.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc2 animated:YES];
         }
         
     };
