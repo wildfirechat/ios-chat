@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WFChatClient/WFCChatClient.h>
 
+@class WFCCUserInfo;
 @interface WFCUProfileTableViewController : UIViewController
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
 @end

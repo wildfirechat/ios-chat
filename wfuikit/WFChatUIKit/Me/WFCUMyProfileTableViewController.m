@@ -14,6 +14,7 @@
 #import "WFCUMyPortraitViewController.h"
 #import "WFCUModifyMyProfileViewController.h"
 
+
 @interface WFCUMyProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (nonatomic, strong)UITableView *tableView;
@@ -89,6 +90,16 @@
     UITableViewCell *cell = [self getAttrCell:@"昵称" rightText:self.userInfo.displayName mutable:YES];
     cell.tag = Modify_DisplayName;
     [self.cells1 addObject:cell];
+    
+    cell = [self getAttrCell:@"二维码" rightText:@"" mutable:YES];
+    cell.tag = 1000;
+    [self.cells1 addObject:cell];
+    UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+    
+    UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
+    qrview.image = qrcode;
+    [cell addSubview:qrview];
+    
 
 //    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
 //    [self.cells1 addObject:cell];
@@ -199,7 +210,9 @@
     return self.cells2[indexPath.row];
 }
 
-
+- (void)showMyQrCode {
+    
+}
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIViewController *vc;
@@ -210,6 +223,10 @@
         [self.navigationController pushViewController:pvc animated:YES];
     } else {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell.tag == 1000) {
+            [self showMyQrCode];
+            return;
+        }
         if (cell.tag < 0) {
             return;
         }

@@ -36,22 +36,8 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    [self showSetttingButton];
 }
 
-- (void)showSetttingButton
-{
-    //选择码扫码类型的按钮
-    //把右侧的两个按钮添加到rightBarButtonItem
-    UIButton *rightBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 30)];
-    [rightBtn setTitle:@"切换" forState:UIControlStateNormal];
-    [rightBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [rightBtn addTarget:self action:@selector(newCodeChooose) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *rightCunstomButtonView = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
-    self.navigationItem.rightBarButtonItem = rightCunstomButtonView;
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -92,44 +78,15 @@
     
 }
 
-- (void)newCodeChooose
-{
-    __weak __typeof(self) weakSelf = self;
-    
-    [LBXAlertAction showActionSheetWithTitle:@"" message:nil cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitle:@[@"二维码+logo",@"二维码前景颜色+背景颜色",@"code13-商品条形码",@"支付宝付款条形码(code128)"] chooseBlock:^(NSInteger buttonIdx) {
-        
-        switch (buttonIdx) {
-           
-            case 1:
-                [weakSelf createQR_logo];
-                break;
-            case 2:
-                [weakSelf createQR_color];
-                break;
-            case 3:
-                [weakSelf createCodeEAN13];
-                break;
-            case 4:
-                [weakSelf createCode128];
-                break;
-                
-            default:
-                break;
-        }
-    }];
-}
-
-
 - (void)createQR_logo
 {
     _qrView.hidden = NO;
     _tView.hidden = YES;
     
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    _qrImgView.image = [LBXScanNative createQRWithString:[NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId] QRSize:_qrImgView.bounds.size];
+    _qrImgView.image = [LBXScanNative createQRWithString:self.str QRSize:_qrImgView.bounds.size];
     
     CGSize logoSize=CGSizeMake(30, 30);
-    UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:userInfo.portrait]]];
+    UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.logoUrl]]];
     self.logoImgView = [self roundCornerWithImage:logo size:logoSize];
     _logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);
     _logoImgView.center = CGPointMake(CGRectGetWidth(_qrImgView.frame)/2, CGRectGetHeight(_qrImgView.frame)/2);
@@ -151,30 +108,6 @@
     [backImage addSubview:logImage];
     
     return backImage;
-}
-
-- (void)createQR_color
-{
-    _qrView.hidden = NO;
-    _tView.hidden = YES;
-    
-    _qrImgView.image = [LBXScanNative createQRWithString:@"" QRSize:_qrImgView.bounds.size QRColor:[UIColor blueColor] bkColor:[UIColor whiteColor]];
-}
-
-//商品条形码
-- (void)createCodeEAN13
-{
-    _qrView.hidden = YES;
-    _tView.hidden = NO;
-    
-    [self showError:@"native暂不支持EAN13条形码"];
-}
-
-- (void)createCode128
-{
-    _qrView.hidden = YES;
-    _tView.hidden = NO;
-    _tImgView.image = [LBXScanNative createBarCodeWithString:@"283657461695996598" QRSize:_qrImgView.bounds.size];
 }
 
 - (void)showError:(NSString*)str

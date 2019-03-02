@@ -58,7 +58,7 @@
 		2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ECE217F5CC000F56C26 /* WFCUMessageModel.h */; };
 		2F5510AB217F5CC200F56C26 /* WFCUMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */; };
 		2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED3217F5CC000F56C26 /* WFCUProfileTableViewController.h */; };
+		2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED3217F5CC000F56C26 /* WFCUProfileTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510AE217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550ED4217F5CC000F56C26 /* WFCUGroupMemberTableViewCell.m */; };
 		2F5510AF217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED5217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.h */; };
 		2F5510B0217F5CC200F56C26 /* WFCUGroupMemberTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED6217F5CC000F56C26 /* WFCUGroupMemberTableViewController.h */; };
@@ -1474,6 +1474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F551166217F5CC200F56C26 /* AFURLRequestSerialization.h in Headers */,
+				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
@@ -1597,7 +1598,6 @@
 				2F44A3A72180B48F00E74EA4 /* WFCUMentionUserTableViewController.h in Headers */,
 				2F5511EC217F5CC300F56C26 /* WFCUForwardMessageCell.h in Headers */,
 				2F551150217F5CC200F56C26 /* KZVideoListViewController.h in Headers */,
-				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
 				2F5510E9217F5CC200F56C26 /* WFCUSelectFileViewController.h in Headers */,
 				2F55118F217F5CC200F56C26 /* UIView+SDExtension.h in Headers */,
 				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,

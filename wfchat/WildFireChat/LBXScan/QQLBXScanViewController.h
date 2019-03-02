@@ -34,8 +34,7 @@
 @property (nonatomic, strong) UIButton *btnMyQR;
 
 
-
-
+@property (nonatomic, copy)void (^scanResult)(NSString *strScanned);
 
 
 @end
