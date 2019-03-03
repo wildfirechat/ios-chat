@@ -13,6 +13,12 @@
 #import "LBXPermissionSetting.h"
 #import <WFChatClient/WFCChatClient.h>
 
+#define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f )
+
+#define kStatusBarAndNavigationBarHeight (kIs_iPhoneX ? 88.f : 64.f)
+
+#define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
+
 @interface QQLBXScanViewController ()
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;
 @end
@@ -143,7 +149,7 @@
         return;
     }
     
-    self.bottomItemsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.frame)-164,
+    self.bottomItemsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.bounds)-100 - kTabbarSafeBottomMargin,
                                                                       CGRectGetWidth(self.view.frame), 100)];
     _bottomItemsView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     

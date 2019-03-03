@@ -26,6 +26,7 @@
 #import "MBProgressHUD.h"
 
 #import "WFCUContactTableViewCell.h"
+#import "QrCodeHelper.h"
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
@@ -216,7 +217,9 @@
 }
 
 - (void)scanQrCodeAction:(id)sender {
-    
+    if (gQrCodeDelegate) {
+        [gQrCodeDelegate scanQrCode:self.navigationController];
+    }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
