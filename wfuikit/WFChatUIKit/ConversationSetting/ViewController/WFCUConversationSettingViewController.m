@@ -23,7 +23,7 @@
 #import "WFCUMyProfileTableViewController.h"
 #import "WFCUConversationSearchTableViewController.h"
 #import "WFCUChannelProfileViewController.h"
-
+#import "QrCodeHelper.h"
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -256,8 +256,15 @@
   return NO;
 }
 
+- (BOOL)isGroupQrCodeCell:(NSIndexPath *)indexPath {
+    if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 2) {
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)isGroupManageCell:(NSIndexPath *)indexPath {
-  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 2) {
+  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 3) {
     return YES;
   }
   return NO;
@@ -338,9 +345,9 @@
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
             if ([self isGroupManager]) {
-                return 3; //群名称，群头像，群管理
+                return 4; //群名称，群头像，群二维码，群管理，
             } else {
-                return 2; //群名称，群头像
+                return 3; //群名称，群头像，群二维码
             }
             
         } else if(section == 1) {
@@ -420,6 +427,16 @@
     [portraitView sd_setImageWithURL:[NSURL URLWithString:self.groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     cell.accessoryView = portraitView;
     return cell;
+  } else if([self isGroupQrCodeCell:indexPath]) {
+    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:@"群二维码" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+      
+      CGFloat width = [UIScreen mainScreen].bounds.size.width;
+      UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+      UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
+      qrview.image = qrcode;
+      [cell addSubview:qrview];
+      
+      return cell;
   } else if ([self isGroupManageCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:@"群管理" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if ([self isSearchMessageCell:indexPath]) {
@@ -583,8 +600,14 @@
       dispatch_async(dispatch_get_main_queue(), ^{
           [self presentViewController:actionSheet animated:YES completion:nil];
       });
+  } else if([self isGroupQrCodeCell:indexPath]) {
+      if (gQrCodeDelegate) {
+          [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_Group target:self.groupInfo.target];
+      }
   }
 }
+
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (self.conversation.type == Group_Type) {

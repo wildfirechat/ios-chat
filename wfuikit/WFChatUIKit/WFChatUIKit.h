@@ -26,4 +26,5 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUMyProfileTableViewController.h>
 #import <WFChatUIKit/WFCUProfileTableViewController.h>
 #import <WFChatUIKit/WFCUMessageNotificationViewController.h>
+#import <WFChatUIKit/QrCodeHelper.h>
 
