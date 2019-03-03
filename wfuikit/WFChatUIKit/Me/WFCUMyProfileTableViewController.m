@@ -13,7 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUMyPortraitViewController.h"
 #import "WFCUModifyMyProfileViewController.h"
-
+#import "QrCodeHelper.h"
 
 @interface WFCUMyProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -211,7 +211,9 @@
 }
 
 - (void)showMyQrCode {
-    
+    if (gQrCodeDelegate) {
+        [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_Me target:nil];
+    }
 }
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

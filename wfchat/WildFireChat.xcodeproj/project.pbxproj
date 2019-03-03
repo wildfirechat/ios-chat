@@ -56,6 +56,7 @@
 		2F94FCA622291813005BD461 /* LBXPermissionContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9222291813005BD461 /* LBXPermissionContacts.m */; };
 		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
 		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
+		2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E8601222BA6180076B82B /* GroupInfoViewController.m */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
@@ -67,7 +68,6 @@
 		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		908542782229FD460009713D /* WFCConversationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 908542772229FD460009713D /* WFCConversationTableViewController.m */; };
 		9085427B2229FF160009713D /* StyleDIY.m in Sources */ = {isa = PBXBuildFile; fileRef = 908542792229FF160009713D /* StyleDIY.m */; };
 		9085427E222A00430009713D /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9085427D222A00430009713D /* DIYScanViewController.m */; };
 		90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90854280222A04C80009713D /* QQLBXScanViewController.m */; };
@@ -77,7 +77,6 @@
 		909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */; };
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
-		90FF267B222AA4690001D8AF /* WFCMyProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -212,6 +211,8 @@
 		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
 		2F94FC9722291813005BD461 /* LBXPermissionHealth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionHealth.h; sourceTree = "<group>"; };
 		2F94FC9822291813005BD461 /* LBXPermissionReminders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionReminders.h; sourceTree = "<group>"; };
+		2F9E8600222BA6180076B82B /* GroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupInfoViewController.h; sourceTree = "<group>"; };
+		2F9E8601222BA6180076B82B /* GroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupInfoViewController.m; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -226,8 +227,6 @@
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
 		6E616D9B20AB3435002CB8BE /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = Frameworks/GoogleWebRTC/LICENSE.md; sourceTree = SOURCE_ROOT; };
 		6E616D9F20AB3435002CB8BE /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework; sourceTree = SOURCE_ROOT; };
-		908542762229FD460009713D /* WFCConversationTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCConversationTableViewController.h; sourceTree = "<group>"; };
-		908542772229FD460009713D /* WFCConversationTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCConversationTableViewController.m; sourceTree = "<group>"; };
 		908542792229FF160009713D /* StyleDIY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleDIY.m; sourceTree = "<group>"; };
 		9085427A2229FF160009713D /* StyleDIY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleDIY.h; sourceTree = "<group>"; };
 		9085427C222A00430009713D /* DIYScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIYScanViewController.h; sourceTree = "<group>"; };
@@ -244,8 +243,6 @@
 		909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatroomItemCell.m; sourceTree = "<group>"; };
 		90C1D90F208C12A900E923F4 /* foreman.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foreman.mp4; sourceTree = "<group>"; };
 		90C1D910208C12A900E923F4 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
-		90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCMyProfileTableViewController.h; sourceTree = "<group>"; };
-		90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCMyProfileTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -306,12 +303,10 @@
 				2E1D20BB1FAF127100F4405D /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
-				908542762229FD460009713D /* WFCConversationTableViewController.h */,
-				908542772229FD460009713D /* WFCConversationTableViewController.m */,
-				90FF2679222AA4690001D8AF /* WFCMyProfileTableViewController.h */,
-				90FF267A222AA4690001D8AF /* WFCMyProfileTableViewController.m */,
 				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
 				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
+				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
+				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
 			);
 			path = WildFireChat;
 			sourceTree = "<group>";
@@ -718,6 +713,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
@@ -732,7 +728,6 @@
 				9085427B2229FF160009713D /* StyleDIY.m in Sources */,
 				2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */,
 				2F94FCA122291813005BD461 /* LBXPermissionReminders.m in Sources */,
-				908542782229FD460009713D /* WFCConversationTableViewController.m in Sources */,
 				2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */,
 				2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
@@ -750,7 +745,6 @@
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
 				2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */,
-				90FF267B222AA4690001D8AF /* WFCMyProfileTableViewController.m in Sources */,
 				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,
 				2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */,
 				2F94FCA222291813005BD461 /* LBXPermissionHealth.m in Sources */,

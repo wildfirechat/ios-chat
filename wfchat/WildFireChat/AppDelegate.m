@@ -14,8 +14,13 @@
 #import "WFCBaseTabBarController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <UserNotifications/UserNotifications.h>
+#import "CreateBarCodeViewController.h"
+#import "PCLoginConfirmViewController.h"
+#import "QQLBXScanViewController.h"
+#import "StyleDIY.h"
+#import "GroupInfoViewController.h"
 
-@interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate, WFAVEngineDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate, WFAVEngineDelegate, UNUserNotificationCenterDelegate, QrCodeDelegate>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @end
 
@@ -37,6 +42,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self setupNavBar];
+    
+    setQrCodeDelegate(self);
     
     
     if (@available(iOS 10.0, *)) {
@@ -343,5 +350,62 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         }
     }
     completionHandler();
+}
+
+
+#pragma mark - QrCodeDelegate
+- (void)showQrCodeViewController:(UINavigationController *)navigator type:(int)type target:(NSString *)target {
+    CreateBarCodeViewController *vc = [CreateBarCodeViewController new];
+    if (type == QRType_Me) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+        vc.str = [NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId];
+        vc.logoUrl = userInfo.portrait;
+    } else if(type == QRType_Group) {
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:target refresh:NO];
+        vc.str = [NSString stringWithFormat:@"wildfirechat://group/%@", target];
+        vc.logoUrl = groupInfo.portrait;
+    }
+    
+    [navigator pushViewController:vc animated:YES];
+}
+- (void)scanQrCode:(UINavigationController *)navigator {
+    QQLBXScanViewController *vc = [QQLBXScanViewController new];
+    vc.libraryType = SLT_Native;
+    vc.scanCodeType = SCT_QRCode;
+    
+    vc.style = [StyleDIY qqStyle];
+    
+    //镜头拉远拉近功能
+    vc.isVideoZoom = YES;
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    vc.scanResult = ^(NSString *str) {
+        NSLog(@"str scanned %@", str);
+        if ([str rangeOfString:@"wildfirechat://user" options:NSCaseInsensitiveSearch].location == 0) {
+            NSString *userId = [str lastPathComponent];
+            WFCUProfileTableViewController *vc2 = [[WFCUProfileTableViewController alloc] init];
+            vc2.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+            if (vc2.userInfo == nil) {
+                return;
+            }
+            
+            vc2.hidesBottomBarWhenPushed = YES;
+            [navigator pushViewController:vc2 animated:YES];
+        } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
+            NSString *groupId = [str lastPathComponent];
+            GroupInfoViewController *vc2 = [[GroupInfoViewController alloc] init];
+            vc2.groupId = groupId;
+            vc2.hidesBottomBarWhenPushed = YES;
+            [navigator pushViewController:vc2 animated:YES];
+        } else if ([str rangeOfString:@"wildfirechat://pcsession" options:NSCaseInsensitiveSearch].location == 0) {
+            NSString *sessionId = [str lastPathComponent];
+            PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
+            vc2.sessionId = sessionId;
+            vc2.hidesBottomBarWhenPushed = YES;
+            [navigator pushViewController:vc2 animated:YES];
+        }
+        
+    };
+    [navigator pushViewController:vc animated:YES];
 }
 @end
