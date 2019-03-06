@@ -63,6 +63,20 @@
 
 - (NSString *)formatNotification {
     NSString *formatMsg;
+    if ([self.invitees count] == 1 && [[self.invitees objectAtIndex:0] isEqualToString:self.invitor]) {
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.invitor]) {
+            formatMsg = @"你加入了群聊";
+        } else {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.invitor refresh:NO];
+            if (userInfo.displayName.length > 0) {
+                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.displayName];
+            } else {
+                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", self.invitor];
+            }
+        }
+        return formatMsg;
+    }
+    
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.invitor]) {
         formatMsg = @"你邀请";
     } else {

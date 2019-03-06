@@ -34,6 +34,13 @@
 #define MESSAGE_CONTENT_TYPE_MODIFY_GROUP_ALIAS 111
 #define MESSAGE_CONTENT_TYPE_CHANGE_GROUP_PORTRAIT 112
 
+#if WFCHAT_PROTO_SERIALIZABLE
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/document.h"
+using namespace wfchatjson;
+#endif //WFCHAT_PROTO_SERIALIZABLE
+
 namespace mars{
     namespace stn{
         //error code
@@ -101,8 +108,22 @@ namespace mars{
             kEcServerNotImplement = 254,
         };
         
+        class TSerializable {
+        public:
+            TSerializable() {}
+            virtual ~TSerializable() {}
+            
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const = 0;
+            virtual void Unserialize(const Value& value) = 0;
+            bool fromJson(std::string jsonStr);
+            std::string toJson() const;
+            static std::string list2Json(std::list<std::string> &strs);
+            static std::string list2Json(std::list<int> &is);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+        };
         
-        class TGroupInfo {
+        class TGroupInfo : public TSerializable {
         public:
             TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0) {}
             std::string target;
@@ -114,9 +135,13 @@ namespace mars{
             std::string extra;
             int64_t updateDt;
             virtual ~TGroupInfo() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TGroupMember {
+        class TGroupMember : public TSerializable {
         public:
             TGroupMember() : type(0), updateDt(0) {}
             std::string groupId;
@@ -125,10 +150,14 @@ namespace mars{
             int type;
             int64_t updateDt;
             virtual ~TGroupMember() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
         
-        class TUserInfo {
+        class TUserInfo : public TSerializable {
         public:
             TUserInfo() : gender(0), updateDt(0)  {}
             std::string uid;
@@ -146,9 +175,13 @@ namespace mars{
             int type;
             int64_t updateDt;
             virtual ~TUserInfo() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TChatroomInfo {
+        class TChatroomInfo : public TSerializable {
         public:
             TChatroomInfo()  : title(""), desc(""), portrait(""), memberCount(0), createDt(0), updateDt(0), extra(""), state(0) {}
             std::string title;
@@ -161,17 +194,25 @@ namespace mars{
             //0 normal; 1 not started; 2 end
             int state;
             virtual ~TChatroomInfo() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TChatroomMemberInfo {
+        class TChatroomMemberInfo : public TSerializable {
         public:
             TChatroomMemberInfo()  : memberCount(0) {}
             int memberCount;
             std::list<std::string> olderMembers;
             virtual ~TChatroomMemberInfo() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TChannelInfo {
+        class TChannelInfo : public TSerializable {
         public:
             TChannelInfo() : status(0), updateDt(0), automatic(0) {}
             std::string channelId;
@@ -186,9 +227,13 @@ namespace mars{
             int64_t updateDt;
             int automatic;
             virtual ~TChannelInfo() {}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TMessageContent {
+        class TMessageContent : public TSerializable {
         public:
             TMessageContent() : type(0), mediaType(0), mentionedType(0) {}
             TMessageContent(const TMessageContent &c) :
@@ -232,6 +277,10 @@ namespace mars{
             std::list<std::string> mentionedTargets;
             virtual ~TMessageContent(){
             }
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
         typedef enum {
@@ -245,7 +294,7 @@ namespace mars{
             Message_Status_Played
         } MessageStatus;
         
-        class TMessage {
+        class TMessage : public TSerializable {
         public:
             TMessage() : conversationType(0), line(0), messageId(-1), direction(0), status(Message_Status_Sending), messageUid(0), timestamp(0) {}
             
@@ -262,17 +311,25 @@ namespace mars{
             int64_t timestamp;
             std::string to;
             virtual ~TMessage(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TUnreadCount {
+        class TUnreadCount : public TSerializable {
         public:
             TUnreadCount():unread(0),unreadMetion(0),unreadMentionAll(0){}
             int unread;
             int unreadMetion;
             int unreadMentionAll;
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TConversation {
+        class TConversation : public TSerializable {
         public:
             TConversation() : conversationType(0), line(0), lastMessage() , timestamp(0), unreadCount(), isTop(false), isSilent(false) {}
             int conversationType;
@@ -285,9 +342,13 @@ namespace mars{
             bool isTop;
             bool isSilent;
             virtual ~TConversation(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TConversationSearchresult {
+        class TConversationSearchresult : public TSerializable {
         public:
             TConversationSearchresult() : conversationType(0), line(0), marchedMessage(), timestamp(0), marchedCount(0)  {}
             int conversationType;
@@ -298,18 +359,26 @@ namespace mars{
             int64_t timestamp;
             int marchedCount;
             virtual ~TConversationSearchresult(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TGroupSearchResult {
+        class TGroupSearchResult : public TSerializable {
         public:
             TGroupSearchResult() : marchedType(-1)  {}
             TGroupInfo groupInfo;
             int marchedType;  //0 march name, 1 march group member, 2 both
             std::list<std::string> marchedMemberNames;
             virtual ~TGroupSearchResult(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
-        class TFriendRequest {
+        class TFriendRequest : public TSerializable {
         public:
             TFriendRequest() : direction(0), status(0), readStatus(0), timestamp(0) {}
             int direction;
@@ -319,6 +388,10 @@ namespace mars{
             int readStatus;
             int64_t timestamp;
             virtual ~TFriendRequest(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
         enum UserSettingScope {
@@ -336,7 +409,7 @@ namespace mars{
         };
 
         
-        class TUserSettingEntry {
+        class TUserSettingEntry : public TSerializable {
         public:
             TUserSettingEntry() : scope(kUserSettingCustomBegin), updateDt(0) {}
             UserSettingScope scope;
@@ -344,6 +417,10 @@ namespace mars{
             std::string value;
             int64_t updateDt;
             virtual ~TUserSettingEntry(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
         class GeneralStringCallback {
@@ -436,6 +513,14 @@ namespace mars{
             virtual ~GetGroupInfoCallback() {}
         };
         
+        class GetGroupMembersCallback {
+        public:
+            virtual void onSuccess(const std::string &groupId, const std::list<mars::stn::TGroupMember> &groupMemberList) = 0;
+            virtual void onFalure(int errorCode) = 0;
+            virtual ~GetGroupMembersCallback() {}
+        };
+        
+        
         class GetChannelInfoCallback {
         public:
             virtual void onSuccess(const std::list<mars::stn::TChannelInfo> &channelInfoList) = 0;
@@ -448,13 +533,6 @@ namespace mars{
             virtual void onSuccess(const std::list<TUserInfo> &userInfoList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetUserInfoCallback() {}
-        };
-        
-        class GetGroupMembersCallback {
-        public:
-            virtual void onSuccess(const std::list<TGroupMember> &retList) = 0;
-            virtual void onFalure(int errorCode) = 0;
-            virtual ~GetGroupMembersCallback() {}
         };
         
         class GetMyFriendsCallback {
@@ -510,6 +588,8 @@ namespace mars{
         extern void setDNSResult(std::vector<std::string> serverIPs);//回调获取服务器地址，Connect设置域名，在需求DNS时，回调上层，上层做DNS解析或者直接返回服务器地址。必须调用SetSvrAddr，setDNSResult为可选
         extern void setRefreshUserInfoCallback(GetUserInfoCallback *callback);
         extern void setRefreshGroupInfoCallback(GetGroupInfoCallback *callback);
+        extern void setRefreshGroupMemberCallback(GetGroupMembersCallback *callback);
+        
         extern void setRefreshChannelInfoCallback(GetChannelInfoCallback *callback);
         extern void setRefreshFriendListCallback(GetMyFriendsCallback *callback);
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
