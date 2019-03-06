@@ -28,6 +28,7 @@ const NSString *SDKVERSION = @"0.1";
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
 
 NSString *kGroupInfoUpdated = @"kGroupInfoUpdated";
+NSString *kGroupMemberUpdated = @"kGroupMemberUpdated";
 NSString *kUserInfoUpdated = @"kUserInfoUpdated";
 NSString *kFriendListUpdated = @"kFriendListUpdated";
 NSString *kFriendRequestUpdated = @"kFriendRequestUpdated";
@@ -36,6 +37,10 @@ NSString *kChannelInfoUpdated = @"kChannelInfoUpdated";
 
 @protocol RefreshGroupInfoDelegate <NSObject>
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo;
+@end
+
+@protocol RefreshGroupMemberDelegate <NSObject>
+- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMember;
 @end
 
 @protocol RefreshChannelInfoDelegate <NSObject>
@@ -180,6 +185,20 @@ class GGCB : public mars::stn::GetGroupInfoCallback {
   id<RefreshGroupInfoDelegate> m_delegate;
 };
 
+class GGMCB : public mars::stn::GetGroupMembersCallback {
+public:
+    GGMCB(id<RefreshGroupMemberDelegate> delegate) : m_delegate(delegate) {}
+    
+    void onSuccess(const std::string &groupId, const std::list<mars::stn::TGroupMember> &groupMemberList) {
+        if(m_delegate && !groupMemberList.empty()) {
+            [m_delegate onGroupMemberUpdated:[NSString stringWithUTF8String:groupId.c_str()] members:nil];
+        }
+    }
+    void onFalure(int errorCode) {
+    }
+    id<RefreshGroupMemberDelegate> m_delegate;
+};
+
 class GCHCB : public mars::stn::GetChannelInfoCallback {
 public:
     GCHCB(id<RefreshChannelInfoDelegate> delegate) : m_delegate(delegate) {}
@@ -238,7 +257,7 @@ public:
 
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -516,6 +535,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setReceiveMessageCallback(new RPCB(self));
   mars::stn::setRefreshUserInfoCallback(new GUCB(self));
   mars::stn::setRefreshGroupInfoCallback(new GGCB(self));
+    mars::stn::setRefreshGroupMemberCallback(new GGMCB(self));
   mars::stn::setRefreshChannelInfoCallback(new GCHCB(self));
   mars::stn::setRefreshFriendListCallback(new GFLCB(self));
     mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
@@ -655,6 +675,12 @@ static WFCCNetworkService * sharedSingleton = nil;
       [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:groupInfo.target userInfo:@{@"groupInfo":groupInfo}];
     }
   });
+}
+
+- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMember {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberUpdated object:groupId];
+    });
 }
 
 - (void)onChannelInfoUpdated:(NSArray<WFCCChannelInfo *> *)updatedChannelInfo {
