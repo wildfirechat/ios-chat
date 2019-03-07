@@ -440,7 +440,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     tmsg.conversationType = conv.type;
     tmsg.target = conv.target ? [conv.target UTF8String] : "";
     tmsg.line = conv.line;
-    tmsg.from = mars::app::GetUserName();
+    tmsg.from = mars::app::GetAccountUserName();
     tmsg.status = mars::stn::MessageStatus::Message_Status_Sending;
     tmsg.timestamp = time(NULL)*1000;
     tmsg.direction = 0;
@@ -584,7 +584,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (WFCCMessage *)getMessage:(long)messageId {
-  mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessage(messageId);
+  mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageById(messageId);
   return convertProtoMessage(&tMsg);
 }
 
