@@ -585,7 +585,7 @@ namespace mars{
         extern void (*Connect)(const std::string& host, uint16_t shortLinkPort);
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
-        extern void setDNSResult(std::vector<std::string> serverIPs);//回调获取服务器地址，Connect设置域名，在需求DNS时，回调上层，上层做DNS解析或者直接返回服务器地址。必须调用SetSvrAddr，setDNSResult为可选
+        extern void setDNSResult(std::vector<std::string> serverIPs);
         extern void setRefreshUserInfoCallback(GetUserInfoCallback *callback);
         extern void setRefreshGroupInfoCallback(GetGroupInfoCallback *callback);
         extern void setRefreshGroupMemberCallback(GetGroupMembersCallback *callback);
