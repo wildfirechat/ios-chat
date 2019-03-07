@@ -51,7 +51,7 @@ namespace mars {
             
             std::list<TMessage> GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, long startPoint, const std::string &withUser);
           
-            TMessage GetMessage(long messageId);
+            TMessage GetMessageById(long messageId);
             TMessage GetMessageByUid(long long messageUid);
           
             
