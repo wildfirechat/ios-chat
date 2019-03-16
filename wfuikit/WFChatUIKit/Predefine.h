@@ -44,4 +44,6 @@ alpha:1.0]
 #define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
 
 #define kMessageListChanged  @"kMessageListChanged"
+
+#define WFCU_SUPPORT_VOIP 1
 #endif /* Predefine_h */

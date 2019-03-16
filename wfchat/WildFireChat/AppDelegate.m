@@ -6,9 +6,20 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
+
+//如果您不需要voip功能，请在ChatUIKit工程中关掉voip功能，然后这里定义WFCU_SUPPORT_VOIP为0
+//ChatUIKit关闭voip的方式是，找到ChatUIKit工程下的Predefine.h头文件，定义WFCU_SUPPORT_VOIP为0，
+//然后找到脚本“xcodescript.sh”，删除掉“cp -af WFChatUIKit/AVEngine/*  ${DST_DIR}/”这句话。
+//在删除掉ChatUIKit工程的WebRTC和WFAVEngineKit的依赖。
+//删除掉应用工程中的WebRTC.framework和WFAVEngineKit.framework。
+#define WFCU_SUPPORT_VOIP 1
+//#define WFCU_SUPPORT_VOIP 0
+
 #import "AppDelegate.h"
 #import <WFChatClient/WFCChatClient.h>
+#if WFCU_SUPPORT_VOIP
 #import <WFAVengineKit/WFAVengineKit.h>
+#endif
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
 #import "WFCBaseTabBarController.h"
@@ -20,7 +31,13 @@
 #import "StyleDIY.h"
 #import "GroupInfoViewController.h"
 
-@interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate, WFAVEngineDelegate, UNUserNotificationCenterDelegate, QrCodeDelegate>
+
+@interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
+#if WFCU_SUPPORT_VOIP
+    WFAVEngineDelegate,
+#endif
+
+    UNUserNotificationCenterDelegate, QrCodeDelegate>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @end
 
@@ -30,9 +47,12 @@
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST port:IM_SERVER_PORT];
+    
+#if WFCU_SUPPORT_VOIP
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     [[WFAVEngineKit sharedEngineKit] setVideoProfile:kWFAVVideoProfile360P swapWidthHeight:YES];
     [WFAVEngineKit sharedEngineKit].delegate = self;
+#endif
     
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
@@ -59,55 +79,6 @@
                                       });
                                   }
                               }];
-        
-        
-        //第二步：设置推送内容
-//        UNMutableNotificationContent *content = [UNMutableNotificationContent new];
-//        content.title = @"推送中心标题";
-//        content.subtitle = @"副标题";
-//        content.body  = @"这是UNUserNotificationCenter信息中心";
-//        content.badge = @20;
-//        content.categoryIdentifier = @"categoryIdentifier";
-        
-        
-        //        需要解锁显示，红色文字。点击不会进app。
-        //        UNNotificationActionOptionAuthenticationRequired = (1 << 0),
-        //
-        //        黑色文字。点击不会进app。
-        //        UNNotificationActionOptionDestructive = (1 << 1),
-        //
-        //        黑色文字。点击会进app。
-        //        UNNotificationActionOptionForeground = (1 << 2),
-        
-        
-//        UNNotificationAction *action = [UNNotificationAction actionWithIdentifier:@"enterApp"
-//                                                                            title:@"进入应用"
-//                                                                          options:UNNotificationActionOptionForeground];
-//        UNNotificationAction *clearAction = [UNNotificationAction actionWithIdentifier:@"destructive"
-//                                                                                 title:@"忽略2"
-//                                                                               options:UNNotificationActionOptionDestructive];
-//        UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:@"categoryIdentifier"
-//                                                                                  actions:@[action,clearAction]
-//                                                                        intentIdentifiers:@[requestID]
-//                                                                                  options:UNNotificationCategoryOptionNone];
-//        [center setNotificationCategories:[NSSet setWithObject:category]];
-//
-//        //第三步：设置推送方式
-//        UNTimeIntervalNotificationTrigger *timeTrigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 repeats:YES];
-//        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:requestID content:content trigger:timeTrigger];
-//
-//        //第四步：添加推送request
-//        [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-//
-//        }];
-//
-//
-//        [center removePendingNotificationRequestsWithIdentifiers:@[requestID]];
-//        [center removeAllDeliveredNotifications];
-        //        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
-        //            NSLog(@"settings===%@",settings);
-        //        }];
-        
     } else {
         UIUserNotificationSettings *settings = [UIUserNotificationSettings
                                                 settingsForTypes:(UIUserNotificationTypeBadge |
@@ -122,11 +93,8 @@
     
     if (savedToken.length > 0 && savedUserId.length > 0) {
         [[WFCCNetworkService sharedInstance] connect:savedUserId token:savedToken];
-        //等待2s，以便sdk进行连接/接收等动作，这里也可以去掉
-        [NSThread sleepForTimeInterval:2.f];
     } else {
         UIViewController *loginVC = [[WFCLoginViewController alloc] init];
-        
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
         self.window.rootViewController = nav;
     }
@@ -256,7 +224,7 @@
     bar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     bar.barStyle = UIBarStyleBlack;
 }
-
+#if WFCU_SUPPORT_VOIP
 #pragma mark - WFAVEngineDelegate
 - (void)didReceiveCall:(WFAVCallSession *)session {
     WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
@@ -328,7 +296,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     }
 }
-
+#endif
 #pragma mark - UNUserNotificationCenterDelegate
 //将要推送
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(ios(10.0)){
