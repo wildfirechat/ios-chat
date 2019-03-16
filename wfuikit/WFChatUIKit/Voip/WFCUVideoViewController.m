@@ -6,6 +6,7 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
+#if WFCU_SUPPORT_VOIP
 #import "WFCUVideoViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
@@ -672,3 +673,4 @@
 }
 
 @end
+#endif

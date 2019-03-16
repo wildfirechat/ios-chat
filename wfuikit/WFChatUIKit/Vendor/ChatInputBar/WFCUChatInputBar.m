@@ -837,6 +837,7 @@
         [self notifyTyping:3];
         return;
     } else if(itemTag == 4) {
+#if WFCU_SUPPORT_VOIP
         UIActionSheet *actionSheet =
         [[UIActionSheet alloc] initWithTitle:nil
                                     delegate:self
@@ -844,6 +845,7 @@
                       destructiveButtonTitle:@"视频"
                            otherButtonTitles:@"音频", nil];
         [actionSheet showInView:self.parentView];
+#endif
     } else if(itemTag == 5) {
         WFCUSelectFileViewController *sfvc = [[WFCUSelectFileViewController alloc] init];
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:sfvc];
@@ -891,9 +893,13 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
+#if WFCU_SUPPORT_VOIP
         [self.delegate didTouchVideoBtn:NO];
+#endif
     } else if(buttonIndex == 1) {
+#if WFCU_SUPPORT_VOIP
         [self.delegate didTouchVideoBtn:YES];
+#endif
     }
 }
 

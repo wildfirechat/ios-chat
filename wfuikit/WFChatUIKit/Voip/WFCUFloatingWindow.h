@@ -5,7 +5,7 @@
 //  Created by heavyrain on 17/9/27.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import <Foundation/Foundation.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 
@@ -49,3 +49,4 @@
 + (void)stopCallFloatingWindow;
 
 @end
+#endif

@@ -5,7 +5,7 @@
 //  Created by heavyrain on 17/9/27.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import "WFCUFloatingWindow.h"
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCallCenter.h>
@@ -417,3 +417,4 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 @end
+#endif

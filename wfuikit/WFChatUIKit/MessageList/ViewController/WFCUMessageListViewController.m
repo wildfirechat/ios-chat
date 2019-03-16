@@ -46,8 +46,9 @@
 #import "WFCUForwardViewController.h"
 
 #import <WFChatClient/WFCChatClient.h>
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
-
+#endif
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -923,7 +924,9 @@
         [self.navigationController pushViewController:bvc animated:YES];
     } else if ([model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
         WFCCCallStartMessageContent *callStartMsg = (WFCCCallStartMessageContent *)model.message.content;
+#if WFCU_SUPPORT_VOIP
         [self didTouchVideoBtn:callStartMsg.isAudioOnly];
+#endif
     } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
         if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
@@ -1128,7 +1131,7 @@
     
     [self sendMessage:content];
 }
-
+#if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly {
     if(self.conversation.type == Single_Type) {
         WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:self.conversation.target conversation:self.conversation audioOnly:isAudioOnly];
@@ -1159,6 +1162,7 @@
       [self.navigationController presentViewController:navi animated:YES completion:nil];
     }
 }
+#endif
 
 - (void)onTyping:(WFCCTypingType)type {
     if (self.conversation.type == Single_Type) {

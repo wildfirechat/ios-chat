@@ -40,7 +40,9 @@
 - (void)imageDataDidSelect:(NSArray *)selectedImages;
 
 - (void)didSelectFiles:(NSArray *)files;
+#if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly;
+#endif
 - (void)didSelectSticker:(NSString *)stickerPath;
 - (void)willChangeFrame:(CGRect)newFrame withDuration:(CGFloat)duration keyboardShowing:(BOOL)keyboardShowing;
 
