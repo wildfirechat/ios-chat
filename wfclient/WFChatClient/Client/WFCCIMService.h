@@ -487,8 +487,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  获取用户信息
  
  @param userId 用户ID
- @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
- @return 用户信息
+ @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
+ @return 本地的用户信息，可能为空
  */
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId
                       refresh:(BOOL)refresh;
