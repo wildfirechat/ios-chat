@@ -5,7 +5,7 @@
 //  Created by heavyrain on 17/9/27.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
-#if WFCU_SUPPORT_VOIP
+
 #import <UIKit/UIKit.h>
 
 @class WFAVCallSession;
@@ -14,4 +14,4 @@
 - (instancetype)initWithSession:(WFAVCallSession *)session;
 - (instancetype)initWithTarget:(NSString *)targetId conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly;
 @end
-#endif
+

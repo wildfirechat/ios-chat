@@ -6,18 +6,25 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#if WFCU_SUPPORT_VOIP
+
 #import "WFCUVideoViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
+#if WFCU_SUPPORT_VOIP
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
-#import "SDWebImage.h"
 #import "WFCUFloatingWindow.h"
+#endif
+#import "SDWebImage.h"
 #import <WFChatClient/WFCCConversation.h>
 
 
-@interface WFCUVideoViewController () <UITextFieldDelegate, WFAVCallSessionDelegate>
+@interface WFCUVideoViewController () <UITextFieldDelegate,
+#if WFCU_SUPPORT_VOIP
+    WFAVCallSessionDelegate
+#endif
+>
+#if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UIView *smallVideoView;
 @property (nonatomic, strong) UIButton *hangupButton;
@@ -47,13 +54,32 @@
 @property (nonatomic, assign) CGPoint panStartPoint;
 @property (nonatomic, assign) CGRect panStartVideoFrame;
 @property (nonatomic, strong) NSTimer *connectedTimer;
+#endif
 @end
 
 #define ButtonSize 90
 #define SmallVideoView 120
 
-@implementation WFCUVideoViewController
+#if !WFCU_SUPPORT_VOIP
+@interface WFAVCallSession : NSObject
+@end
 
+@implementation WFAVCallSession
+@end
+#endif
+
+@implementation WFCUVideoViewController
+#if !WFCU_SUPPORT_VOIP
+- (instancetype)initWithSession:(WFAVCallSession *)session {
+    self = [super init];
+    return self;
+}
+
+- (instancetype)initWithTarget:(NSString *)targetId conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
+    self = [super init];
+    return self;
+}
+#else
 - (instancetype)initWithSession:(WFAVCallSession *)session {
     self = [super init];
     if (self) {
@@ -671,6 +697,5 @@
         }];
     }
 }
-
-@end
 #endif
+@end
