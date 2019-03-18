@@ -33,6 +33,9 @@ extern NSString *kChannelInfoUpdated;
 /**
  连接状态
 
+ - kConnectionStatusSecretKeyMismatch 密钥错误
+ - kConnectionStatusTokenIncorrect Token错误
+ - kConnectionStatusServerDown 服务器关闭
  - kConnectionStatusRejected: 被拒绝
  - kConnectionStatusLogout: 退出登录
  - kConnectionStatusUnconnected: 未连接
@@ -41,6 +44,9 @@ extern NSString *kChannelInfoUpdated;
  - kConnectionStatusReceiving: 获取离线消息中，可忽略
  */
 typedef NS_ENUM(NSInteger, ConnectionStatus) {
+  kConnectionStatusSecretKeyMismatch = -6,
+  kConnectionStatusTokenIncorrect = -5,
+  kConnectionStatusServerDown = -4,
   kConnectionStatusRejected = -3,
   kConnectionStatusLogout = -2,
   kConnectionStatusUnconnected = -1,
