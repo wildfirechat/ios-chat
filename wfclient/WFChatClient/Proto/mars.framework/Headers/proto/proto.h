@@ -159,7 +159,7 @@ namespace mars{
         
         class TUserInfo : public TSerializable {
         public:
-            TUserInfo() : gender(0), updateDt(0)  {}
+            TUserInfo() : gender(0), updateDt(0), type(0) {}
             std::string uid;
             std::string name;
             std::string displayName;
@@ -319,9 +319,9 @@ namespace mars{
         
         class TUnreadCount : public TSerializable {
         public:
-            TUnreadCount():unread(0),unreadMetion(0),unreadMentionAll(0){}
+            TUnreadCount():unread(0),unreadMention(0),unreadMentionAll(0){}
             int unread;
-            int unreadMetion;
+            int unreadMention;
             int unreadMentionAll;
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
@@ -580,7 +580,7 @@ namespace mars{
             virtual void onRecallMessage(const std::string operatorId, long long messageUid) = 0;
         };
         
-        extern void setAuthInfo(const std::string &userId, const std::string &token);
+        extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
         extern void (*Connect)(const std::string& host, uint16_t shortLinkPort);
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);

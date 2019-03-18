@@ -602,7 +602,9 @@ static WFCCNetworkService * sharedSingleton = nil;
     [self createMars];
     self.userId = userId;
     self.passwd = token;
-    mars::stn::setAuthInfo([userId cStringUsingEncoding:NSUTF8StringEncoding], [token cStringUsingEncoding:NSUTF8StringEncoding]);
+    if(!mars::stn::setAuthInfo([userId cStringUsingEncoding:NSUTF8StringEncoding], [token cStringUsingEncoding:NSUTF8StringEncoding])) {
+        return;
+    }
     
     self.currentConnectionStatus = kConnectionStatusConnecting;
     [[WFCCNetworkStatus sharedInstance] Start:[WFCCNetworkService sharedInstance]];

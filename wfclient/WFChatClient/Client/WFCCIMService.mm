@@ -403,7 +403,7 @@ static WFCCConversationInfo* convertConversationInfo(const mars::stn::TConversat
     info.lastMessage = convertProtoMessage(&tConv.lastMessage);
     info.draft = [NSString stringWithUTF8String:tConv.draft.c_str()];
     info.timestamp = tConv.timestamp;
-    info.unreadCount = [WFCCUnreadCount countOf:tConv.unreadCount.unread mention:tConv.unreadCount.unreadMetion mentionAll:tConv.unreadCount.unreadMentionAll];
+    info.unreadCount = [WFCCUnreadCount countOf:tConv.unreadCount.unread mention:tConv.unreadCount.unreadMention mentionAll:tConv.unreadCount.unreadMentionAll];
     info.isTop = tConv.isTop;
     info.isSilent = tConv.isSilent;
     return info;
@@ -595,7 +595,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (WFCCUnreadCount *)getUnreadCount:(WFCCConversation *)conversation {
     mars::stn::TUnreadCount tcount = mars::stn::MessageDB::Instance()->GetUnreadCount(conversation.type, [conversation.target UTF8String], conversation.line);
-    return [WFCCUnreadCount countOf:tcount.unread mention:tcount.unreadMetion mentionAll:tcount.unreadMentionAll];
+    return [WFCCUnreadCount countOf:tcount.unread mention:tcount.unreadMention mentionAll:tcount.unreadMentionAll];
 }
 
 - (WFCCUnreadCount *)getUnreadCount:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
@@ -609,7 +609,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         ls.insert(ls.end(), line.intValue);
     }
     mars::stn::TUnreadCount tcount =  mars::stn::MessageDB::Instance()->GetUnreadCount(types, ls);
-    return [WFCCUnreadCount countOf:tcount.unread mention:tcount.unreadMetion mentionAll:tcount.unreadMentionAll];
+    return [WFCCUnreadCount countOf:tcount.unread mention:tcount.unreadMention mentionAll:tcount.unreadMentionAll];
 }
 
 - (void)clearUnreadStatus:(WFCCConversation *)conversation {
