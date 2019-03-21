@@ -30,19 +30,21 @@
 #import "QQLBXScanViewController.h"
 #import "StyleDIY.h"
 #import "GroupInfoViewController.h"
-
+#import <Bugly/Bugly.h>
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
     WFAVEngineDelegate,
 #endif
-
     UNUserNotificationCenterDelegate, QrCodeDelegate>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @end
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    //替换为您自己的Bugly账户。
+    [Bugly startWithAppId:@"b21375e023"];
+    
     [WFCCNetworkService startLog];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
