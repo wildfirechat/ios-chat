@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol AttributedLabelDelegate <NSObject>
+@optional
+- (void)didSelectUrl:(NSString *)urlString;
+- (void)didSelectPhoneNumber:(NSString *)phoneNumberString;
+@end
+
 @interface AttributedLabel : UILabel
+@property(nonatomic, weak)id<AttributedLabelDelegate> attributedLabelDelegate;
 - (void)setText:(NSString *)text;
 @end
