@@ -20,6 +20,12 @@
     self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.webView];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+}
+
+- (void)onRightBtn:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"浏览器打开" otherButtonTitles:nil, nil];
+    [actionSheet showInView:self.view];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,4 +43,11 @@
 }
 */
 
+#pragma mark -  UIActionSheetDelegate <NSObject>
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 0) {
+        [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:self.url]];
+        [self.navigationController popViewControllerAnimated:NO];
+    }
+}
 @end

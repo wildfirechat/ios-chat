@@ -20,7 +20,7 @@
 #import "WFCUCallSummaryCell.h"
 #import "WFCUStickerCell.h"
 #import "WFCUVideoCell.h"
-
+#import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
 
@@ -1001,6 +1001,38 @@
         [[WFCCIMService sharedWFCIMService] deleteMessage:model.message.messageId];
         [self sendMessage:model.message.content];
     }
+}
+
+- (void)didSelectUrl:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model withUrl:(NSString *)urlString {
+    WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+    bvc.url = urlString;
+    [self.navigationController pushViewController:bvc animated:YES];
+}
+
+- (void)didSelectPhoneNumber:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model withPhoneNumber:(NSString *)phoneNumber {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"我猜%@是一个电话号码", phoneNumber] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"呼叫" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"telprompt:%@", phoneNumber]];
+        [[UIApplication sharedApplication] openURL:url];
+    }];
+    
+    UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"复制号码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = phoneNumber;
+    }];
+    
+//    UIAlertAction *addContactAction = [UIAlertAction actionWithTitle:@"添加到通讯录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//
+//
+//    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:callAction];
+    [alertController addAction:copyAction];
+//    [alertController addAction:addContactAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 #pragma mark - AVAudioPlayerDelegate
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
