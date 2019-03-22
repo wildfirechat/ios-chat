@@ -31,6 +31,23 @@
             NSInteger i=[self.rangeArray indexOfObject:value];
             NSString *str = self.stringArray[i];
             NSLog(@"touch url %@", str);
+            
+            NSString *pattern =@"[0-9]{5,12}";
+            
+            
+            NSPredicate*pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",pattern];
+            
+            BOOL isNumber = [pred evaluateWithObject:str];
+            
+            if (isNumber) {
+                if ([self.attributedLabelDelegate respondsToSelector:@selector(didSelectPhoneNumber:)]) {
+                    [self.attributedLabelDelegate didSelectPhoneNumber:str];
+                }
+            } else {
+                if ([self.attributedLabelDelegate respondsToSelector:@selector(didSelectUrl:)]) {
+                    [self.attributedLabelDelegate didSelectUrl:str];
+                }
+            }
         }
     }
     [super touchesBegan:touches withEvent:event];
@@ -65,6 +82,25 @@
         [rangeArr addObject:[self rangesOfString:str inString:subStr]];
     }
     
+    NSString *pattern =@"[0-9]{5,11}";
+    regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                      options:NSRegularExpressionCaseInsensitive
+                                                        error:&error];
+    
+    arrayOfAllMatches = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    
+    for (NSTextCheckingResult *match in arrayOfAllMatches) {
+        NSString* substringForMatch;
+        substringForMatch = [string substringWithRange:match.range];
+        [arr addObject:substringForMatch];
+    }
+    
+    subStr=string;
+    for (NSString *str in arr) {
+        [rangeArr addObject:[self rangesOfString:str inString:subStr]];
+    }
+    
+    
     NSMutableAttributedString *attributedText;
     attributedText=[[NSMutableAttributedString alloc]initWithString:subStr attributes:@{NSFontAttributeName :self.font}];
     
@@ -74,6 +110,7 @@
         [attributedText addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[arr objectAtIndex:index]] range:range];
         [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:range];
     }
+    
     return attributedText;
 }
 

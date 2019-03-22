@@ -14,6 +14,10 @@
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
 
+@interface WFCUTextCell () <AttributedLabelDelegate>
+
+@end
+
 @implementation WFCUTextCell
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msgModel.message.content;
@@ -43,10 +47,20 @@
 - (UILabel *)textLabel {
     if (!_textLabel) {
         _textLabel = [[AttributedLabel alloc] init];
+        ((AttributedLabel*)_textLabel).attributedLabelDelegate = self;
         _textLabel.numberOfLines = 0;
         _textLabel.font = [UIFont systemFontOfSize:18];
+        _textLabel.userInteractionEnabled = YES;
         [self.contentArea addSubview:_textLabel];
     }
     return _textLabel;
+}
+
+#pragma mark - AttributedLabelDelegate
+- (void)didSelectUrl:(NSString *)urlString {
+    [self.delegate didSelectUrl:self withModel:self.model withUrl:urlString];
+}
+- (void)didSelectPhoneNumber:(NSString *)phoneNumberString {
+    [self.delegate didSelectPhoneNumber:self withModel:self.model withPhoneNumber:phoneNumberString];
 }
 @end
