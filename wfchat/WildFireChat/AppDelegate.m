@@ -226,6 +226,41 @@
     bar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     bar.barStyle = UIBarStyleBlack;
 }
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];
+}
+
+- (BOOL)handleUrl:(NSString *)str withNav:(UINavigationController *)navigator {
+    NSLog(@"str scanned %@", str);
+    if ([str rangeOfString:@"wildfirechat://user" options:NSCaseInsensitiveSearch].location == 0) {
+        NSString *userId = [str lastPathComponent];
+        WFCUProfileTableViewController *vc2 = [[WFCUProfileTableViewController alloc] init];
+        vc2.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+        if (vc2.userInfo == nil) {
+            return NO;
+        }
+        
+        vc2.hidesBottomBarWhenPushed = YES;
+        [navigator pushViewController:vc2 animated:YES];
+        return YES;
+    } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
+        NSString *groupId = [str lastPathComponent];
+        GroupInfoViewController *vc2 = [[GroupInfoViewController alloc] init];
+        vc2.groupId = groupId;
+        vc2.hidesBottomBarWhenPushed = YES;
+        [navigator pushViewController:vc2 animated:YES];
+        return YES;
+    } else if ([str rangeOfString:@"wildfirechat://pcsession" options:NSCaseInsensitiveSearch].location == 0) {
+        NSString *sessionId = [str lastPathComponent];
+        PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
+        vc2.sessionId = sessionId;
+        vc2.hidesBottomBarWhenPushed = YES;
+        [navigator pushViewController:vc2 animated:YES];
+        return YES;
+    }
+    return NO;
+}
+
 #if WFCU_SUPPORT_VOIP
 #pragma mark - WFAVEngineDelegate
 - (void)didReceiveCall:(WFAVCallSession *)session {
@@ -338,6 +373,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     
     [navigator pushViewController:vc animated:YES];
 }
+
 - (void)scanQrCode:(UINavigationController *)navigator {
     QQLBXScanViewController *vc = [QQLBXScanViewController new];
     vc.libraryType = SLT_Native;
@@ -349,32 +385,9 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     vc.isVideoZoom = YES;
     
     vc.hidesBottomBarWhenPushed = YES;
+    __weak typeof(self)ws = self;
     vc.scanResult = ^(NSString *str) {
-        NSLog(@"str scanned %@", str);
-        if ([str rangeOfString:@"wildfirechat://user" options:NSCaseInsensitiveSearch].location == 0) {
-            NSString *userId = [str lastPathComponent];
-            WFCUProfileTableViewController *vc2 = [[WFCUProfileTableViewController alloc] init];
-            vc2.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-            if (vc2.userInfo == nil) {
-                return;
-            }
-            
-            vc2.hidesBottomBarWhenPushed = YES;
-            [navigator pushViewController:vc2 animated:YES];
-        } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
-            NSString *groupId = [str lastPathComponent];
-            GroupInfoViewController *vc2 = [[GroupInfoViewController alloc] init];
-            vc2.groupId = groupId;
-            vc2.hidesBottomBarWhenPushed = YES;
-            [navigator pushViewController:vc2 animated:YES];
-        } else if ([str rangeOfString:@"wildfirechat://pcsession" options:NSCaseInsensitiveSearch].location == 0) {
-            NSString *sessionId = [str lastPathComponent];
-            PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
-            vc2.sessionId = sessionId;
-            vc2.hidesBottomBarWhenPushed = YES;
-            [navigator pushViewController:vc2 animated:YES];
-        }
-        
+        [ws handleUrl:str withNav:navigator];
     };
     [navigator pushViewController:vc animated:YES];
 }
