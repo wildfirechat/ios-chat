@@ -17,7 +17,16 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.4</string>
+	<string>1.0.5</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wildfirechat</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -31,14 +40,14 @@
 	<string>播放语音或者来电铃声</string>
 	<key>NSCameraUsageDescription</key>
 	<string>拍摄图片发送</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>发送图片</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>发送地理位置</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>发送语音或者视频</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>保存图片</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>发送图片</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
