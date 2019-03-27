@@ -48,7 +48,8 @@
 
 ### 联系我们
 问题讨论请加群：822762829
-![群QRCode](http://static.wildfirechat.cn/qr_qqgroup.jpeg)
+
+<img src="http://static.wildfirechat.cn/qr_qqgroup.jpeg" width = 50% height = 50% />
 
 ### 其它
 开发一套IM系统真的很艰辛，请路过的朋友们给点个star，支持我们坚持下去🙏🙏🙏🙏🙏
