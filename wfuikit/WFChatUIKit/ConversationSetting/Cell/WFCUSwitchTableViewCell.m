@@ -130,7 +130,7 @@
 
 - (void)setType:(SwitchType)type {
     _type = type;
-    if (_conversation) {
+    if (_conversation || type == SwitchType_Setting_Global_Silent || type == SwitchType_Setting_Show_Notification_Detail) {
         [self updateView];
     }
 }
