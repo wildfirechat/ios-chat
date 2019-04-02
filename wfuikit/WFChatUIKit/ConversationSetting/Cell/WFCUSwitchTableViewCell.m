@@ -54,7 +54,7 @@
         }
         case SwitchType_Setting_Global_Silent:
         {
-            [[WFCCIMService sharedWFCIMService] setGlobalSlient:value success:^{
+            [[WFCCIMService sharedWFCIMService] setGlobalSlient:!value success:^{
                
             } error:^(int error_code) {
                
@@ -107,7 +107,7 @@
             value = [[WFCCIMService sharedWFCIMService] getConversationInfo:_conversation].isSilent;
             break;
         case SwitchType_Setting_Global_Silent: {
-            value = [[WFCCIMService sharedWFCIMService] isGlobalSlient];
+            value = ![[WFCCIMService sharedWFCIMService] isGlobalSlient];
             break;
         }
         case SwitchType_Setting_Show_Notification_Detail: {
