@@ -107,7 +107,7 @@
     if(indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"当前版本";
-            cell.detailTextLabel.text = @"v1.0.3";
+            cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             cell.accessoryType = UITableViewCellAccessoryNone;
         } if (indexPath.row == 1) {
             cell.textLabel.text = @"帮助与反馈";
