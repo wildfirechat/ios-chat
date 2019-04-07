@@ -11,9 +11,6 @@
 
 #import "LBXPermissionCamera.h"
 #import "LBXPermissionPhotos.h"
-#import "LBXPermissionReminders.h"
-#import "LBXPermissionMicrophone.h"
-#import "LBXPermissionNetwork.h"
 
 @implementation LBXPermission
 
@@ -25,15 +22,6 @@
             break;
         case LBXPermissionType_Photos:
             return [LBXPermissionPhotos authorized];
-            break;
-        case LBXPermissionType_Reminders:
-            return [LBXPermissionReminders authorized];
-            break;
-        case LBXPermissionType_Microphone:
-            return [LBXPermissionMicrophone authorized];
-            break;
-        case LBXPermissionType_Network:
-            return [LBXPermissionNetwork authorized];
             break;
         default:
             break;
@@ -49,15 +37,6 @@
             break;
         case LBXPermissionType_Photos:
             return [LBXPermissionPhotos authorizeWithCompletion:completion];
-            break;
-        case LBXPermissionType_Reminders:
-            return [LBXPermissionReminders authorizeWithCompletion:completion];
-            break;
-        case LBXPermissionType_Microphone:
-            return [LBXPermissionMicrophone authorizeWithCompletion:completion];
-            break;
-        case LBXPermissionType_Network:
-            return [LBXPermissionNetwork authorizeWithCompletion:completion];
             break;
             
         default:

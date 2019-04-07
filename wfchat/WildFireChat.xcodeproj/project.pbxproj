@@ -45,9 +45,6 @@
 		2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */; };
 		2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */; };
 		2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */; };
-		2F94FC9E22291813005BD461 /* LBXPermissionMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */; };
-		2F94FC9F22291813005BD461 /* LBXPermissionNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */; };
-		2F94FCA122291813005BD461 /* LBXPermissionReminders.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */; };
 		2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */; };
 		2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */; };
 		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
@@ -190,20 +187,14 @@
 		2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LBXAlertAction.m"; sourceTree = "<group>"; };
 		2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+supportedInterfaceOrientations.m"; sourceTree = "<group>"; };
 		2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+LBXHierarchy.h"; sourceTree = "<group>"; };
-		2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionMicrophone.m; sourceTree = "<group>"; };
-		2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionNetwork.m; sourceTree = "<group>"; };
 		2F94FC8722291813005BD461 /* LBXPermission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermission.h; sourceTree = "<group>"; };
 		2F94FC8822291813005BD461 /* LBXPermissionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionCamera.h; sourceTree = "<group>"; };
-		2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionReminders.m; sourceTree = "<group>"; };
 		2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionSetting.m; sourceTree = "<group>"; };
 		2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionPhotos.m; sourceTree = "<group>"; };
-		2F94FC8F22291813005BD461 /* LBXPermissionNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionNetwork.h; sourceTree = "<group>"; };
-		2F94FC9022291813005BD461 /* LBXPermissionMicrophone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionMicrophone.h; sourceTree = "<group>"; };
 		2F94FC9322291813005BD461 /* LBXPermissionCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionCamera.m; sourceTree = "<group>"; };
 		2F94FC9422291813005BD461 /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
 		2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
 		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
-		2F94FC9822291813005BD461 /* LBXPermissionReminders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionReminders.h; sourceTree = "<group>"; };
 		2F9E8600222BA6180076B82B /* GroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupInfoViewController.h; sourceTree = "<group>"; };
 		2F9E8601222BA6180076B82B /* GroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupInfoViewController.m; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
@@ -518,20 +509,14 @@
 		2F94FC8222291813005BD461 /* LBXPermissions */ = {
 			isa = PBXGroup;
 			children = (
-				2F94FC8322291813005BD461 /* LBXPermissionMicrophone.m */,
-				2F94FC8422291813005BD461 /* LBXPermissionNetwork.m */,
 				2F94FC8722291813005BD461 /* LBXPermission.h */,
 				2F94FC8822291813005BD461 /* LBXPermissionCamera.h */,
-				2F94FC8A22291813005BD461 /* LBXPermissionReminders.m */,
 				2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */,
 				2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */,
-				2F94FC8F22291813005BD461 /* LBXPermissionNetwork.h */,
-				2F94FC9022291813005BD461 /* LBXPermissionMicrophone.h */,
 				2F94FC9322291813005BD461 /* LBXPermissionCamera.m */,
 				2F94FC9422291813005BD461 /* LBXPermission.m */,
 				2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */,
 				2F94FC9622291813005BD461 /* LBXPermissionSetting.h */,
-				2F94FC9822291813005BD461 /* LBXPermissionReminders.h */,
 			);
 			path = LBXPermissions;
 			sourceTree = "<group>";
@@ -661,6 +646,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.HomeKit = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -727,7 +715,6 @@
 				2E1D200A1FAF0AE600F4405D /* main.m in Sources */,
 				9085427B2229FF160009713D /* StyleDIY.m in Sources */,
 				2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */,
-				2F94FCA122291813005BD461 /* LBXPermissionReminders.m in Sources */,
 				2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */,
 				2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
@@ -738,8 +725,6 @@
 				2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */,
 				90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */,
 				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
-				2F94FC9E22291813005BD461 /* LBXPermissionMicrophone.m in Sources */,
-				2F94FC9F22291813005BD461 /* LBXPermissionNetwork.m in Sources */,
 				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
