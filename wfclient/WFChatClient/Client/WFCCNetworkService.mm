@@ -84,7 +84,7 @@ public:
     RPCB(id<ReceiveMessageDelegate> delegate) : m_delegate(delegate) {}
     
     void onReceiveMessage(const std::list<mars::stn::TMessage> &messageList, bool hasMore) {
-        if (m_delegate) {
+        if (m_delegate && !messageList.empty()) {
             NSMutableArray *messages = convertProtoMessageList(messageList, NO);
             [m_delegate onReceiveMessage:messages hasMore:hasMore];
         }
