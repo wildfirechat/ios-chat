@@ -340,7 +340,7 @@ public:
 };
 
 static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
-    if (tMessage->messageId < 0 || tMessage->target.empty()) {
+    if (tMessage->target.empty()) {
         return nil;
     }
     WFCCMessage *ret = [[WFCCMessage alloc] init];
