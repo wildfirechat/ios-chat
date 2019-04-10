@@ -1,27 +1,19 @@
 //
 //  LBXPermission.h
 //  LBXKits
-
-//  github: https://github.com/MxABC/LBXPermission
-
+//  https://github.com/MxABC/LBXPermission
 //  Created by lbx on 2017/9/7.
 //  Copyright © 2017年 lbx. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "LBXPermissionSetting.h"
 
 
 typedef NS_ENUM(NSInteger,LBXPermissionType)
 {
-    LBXPermissionType_Location,
     LBXPermissionType_Camera,
-    LBXPermissionType_Photos,
-    LBXPermissionType_Contacts,
-    LBXPermissionType_Reminders,
-    LBXPermissionType_Calendar,
-    LBXPermissionType_Microphone,
-    LBXPermissionType_Health,
-    LBXPermissionType_Network
+    LBXPermissionType_Photos
 };
 
 @interface LBXPermission : NSObject
