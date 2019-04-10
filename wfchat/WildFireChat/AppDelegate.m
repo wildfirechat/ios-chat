@@ -30,7 +30,7 @@
 #import "QQLBXScanViewController.h"
 #import "StyleDIY.h"
 #import "GroupInfoViewController.h"
-#import <Bugly/Bugly.h>
+//#import <Bugly/Bugly.h>
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -42,8 +42,8 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //替换为您自己的Bugly账户。
-    [Bugly startWithAppId:@"b21375e023"];
+//    //替换为您自己的Bugly账户。
+//    [Bugly startWithAppId:@"b21375e023"];
     
     [WFCCNetworkService startLog];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
