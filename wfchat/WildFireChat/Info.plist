@@ -39,7 +39,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>播放语音或者来电铃声</string>
 	<key>NSCameraUsageDescription</key>
-	<string>拍摄图片发送</string>
+	<string>拍摄图片发送或扫码二维码</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>发送地理位置</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -47,7 +47,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>保存图片</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>发送图片</string>
+	<string>发送图片或扫码二维码</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
