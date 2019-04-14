@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, WFCCMessageStatus) {
 /**
  消息在会话中定向发送给该用户的
  */
-@property (nonatomic, strong)NSString * toUser;
+@property (nonatomic, strong)NSArray<NSString *> *toUsers;
 
 /**
  消息内容

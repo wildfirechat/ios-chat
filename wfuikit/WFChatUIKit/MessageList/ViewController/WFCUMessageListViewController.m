@@ -587,7 +587,12 @@
 - (void)sendMessage:(WFCCMessageContent *)content {
     //发送消息时，client会发出"kSendingMessageStatusUpdated“的通知，消息界面收到通知后加入到列表中。
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] send:self.conversation content:content toUser:self.privateChatUser expireDuration:0 success:^(long long messageUid, long long timestamp) {
+    NSMutableArray *tousers = nil;
+    if (self.privateChatUser) {
+        tousers = [[NSMutableArray alloc] init];
+        [tousers addObject:self.privateChatUser];
+    }
+    [[WFCCIMService sharedWFCIMService] send:self.conversation content:content toUsers:tousers expireDuration:0 success:^(long long messageUid, long long timestamp) {
         NSLog(@"send message success");
         if ([content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [ws saveStickerRemoteUrl:(WFCCStickerMessageContent *)content];

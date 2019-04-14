@@ -348,7 +348,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  
  @param conversation 会话
  @param content 消息内容
- @param toUser 在会话中只发给该用户，如果为空则发到会话中
+ @param toUsers 在会话中只发给该用户，如果为空则发到会话中
  @param expireDuration 消息的有效期，0不限期，单位秒
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
@@ -356,7 +356,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  */
 - (WFCCMessage *)send:(WFCCConversation *)conversation
               content:(WFCCMessageContent *)content
-               toUser:(NSString *)toUser
+              toUsers:(NSArray<NSString *> *)toUsers
        expireDuration:(int)expireDuration
               success:(void(^)(long long messageUid, long long timestamp))successBlock
                 error:(void(^)(int error_code))errorBlock;
@@ -385,7 +385,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  
  @param conversation 会话
  @param content 消息内容
- @param toUser 在会话中只发给该用户，如果为空则发到会话中
+ @param toUsers 在会话中只发给该用户，如果为空则发到会话中
  @param expireDuration 消息的有效期，0不限期，单位秒
  @param successBlock 成功的回调
  @param progressBlock 上传进度的回调，注意仅当媒体内容大于300K才会有回调
@@ -394,7 +394,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  */
 - (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
                    content:(WFCCMessageContent *)content
-                    toUser:(NSString *)toUser
+                   toUsers:(NSArray<NSString *> *)toUsers
             expireDuration:(int)expireDuration
                    success:(void(^)(long long messageUid, long long timestamp))successBlock
                   progress:(void(^)(long uploaded, long total))progressBlock
