@@ -309,7 +309,7 @@ namespace mars{
             MessageStatus status;
             int64_t messageUid;
             int64_t timestamp;
-            std::string to;
+            std::list<std::string> to;
             virtual ~TMessage(){}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;

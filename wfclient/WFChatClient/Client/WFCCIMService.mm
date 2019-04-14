@@ -352,7 +352,13 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     ret.messageId = tMessage->messageId;
     ret.messageUid = tMessage->messageUid;
     ret.serverTime = tMessage->timestamp;
-    ret.toUser = [NSString stringWithUTF8String:tMessage->to.c_str()];
+    
+    NSMutableArray *toUsers = [[NSMutableArray alloc] init];
+    for (std::list<std::string>::const_iterator it = tMessage->to.begin(); it != tMessage->to.end(); ++it) {
+        NSString *user = [NSString stringWithUTF8String:(*it).c_str()];
+        [toUsers addObject:user];
+    }
+    ret.toUsers = toUsers;
     ret.direction = (WFCCMessageDirection)tMessage->direction;
     ret.status = (WFCCMessageStatus)tMessage->status;
     
@@ -489,11 +495,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (WFCCMessage *)send:(WFCCConversation *)conversation
               content:(WFCCMessageContent *)content
-               toUser:(NSString *)toUser
+               toUsers:(NSArray<NSString *> *)toUsers
        expireDuration:(int)expireDuration
               success:(void(^)(long long messageUid, long long timestamp))successBlock
                 error:(void(^)(int error_code))errorBlock {
-    return [self sendMedia:conversation content:content toUser:toUser expireDuration:0 success:successBlock progress:nil error:errorBlock];
+    return [self sendMedia:conversation content:content toUsers:toUsers expireDuration:0 success:successBlock progress:nil error:errorBlock];
 }
 - (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
                    content:(WFCCMessageContent *)content
@@ -501,12 +507,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                    success:(void(^)(long long messageUid, long long timestamp))successBlock
                   progress:(void(^)(long uploaded, long total))progressBlock
                      error:(void(^)(int error_code))errorBlock {
-    return [self sendMedia:conversation content:content toUser:nil expireDuration:expireDuration success:successBlock progress:progressBlock error:errorBlock];
+    return [self sendMedia:conversation content:content toUsers:nil expireDuration:expireDuration success:successBlock progress:progressBlock error:errorBlock];
 }
 
 - (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
                    content:(WFCCMessageContent *)content
-                    toUser:(NSString *)toUser
+                   toUsers:(NSArray<NSString *>*)toUsers
             expireDuration:(int)expireDuration
                    success:(void(^)(long long messageUid, long long timestamp))successBlock
                   progress:(void(^)(long uploaded, long total))progressBlock
@@ -515,9 +521,14 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     WFCCMessage *message = [[WFCCMessage alloc] init];
     message.conversation = conversation;
     message.content = content;
-    message.toUser = toUser;
+    message.toUsers = toUsers;
     mars::stn::TMessage tmsg;
-    tmsg.to = (toUser == nil ? "" : [toUser UTF8String]);
+    if (toUsers.count) {
+        for (NSString *obj in toUsers) {
+            tmsg.to.push_back([obj UTF8String]);
+        }
+    }
+    
     fillTMessage(tmsg, conversation, content);
     mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
     message.fromUser = [WFCCNetworkService sharedInstance].userId;
