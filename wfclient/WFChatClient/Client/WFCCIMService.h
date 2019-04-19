@@ -266,11 +266,14 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  @param conversation 会话
  @param beforeMessageUid 起始index
  @param count 总数
- @return 返回比messageUid对应消息更早的消息实体
+ @param successBlock 返回消息
+ @param errorBlock 返回错误码
  */
-- (NSArray<WFCCMessage *> *)getRemoteMessages:(WFCCConversation *)conversation
-                                       before:(long long)beforeMessageUid
-                                        count:(NSUInteger)count;
+- (void)getRemoteMessages:(WFCCConversation *)conversation
+                   before:(long long)beforeMessageUid
+                    count:(NSUInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock;
 /**
  获取消息
  
