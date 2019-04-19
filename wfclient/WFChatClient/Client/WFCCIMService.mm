@@ -588,10 +588,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
-- (NSArray<WFCCMessage *> *)getRemoteMessages:(WFCCConversation *)conversation
-                                       before:(long long)beforeMessageUid
-                                        count:(NSUInteger)count {
-    return nil;
+- (void)getRemoteMessages:(WFCCConversation *)conversation
+                   before:(long long)beforeMessageUid
+                    count:(NSUInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    return;
 }
 
 - (WFCCMessage *)getMessage:(long)messageId {
