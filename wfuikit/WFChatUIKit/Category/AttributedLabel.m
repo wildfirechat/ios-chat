@@ -89,14 +89,16 @@
     
     arrayOfAllMatches = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     
+    NSMutableArray *telArr = [[NSMutableArray alloc] init];
     for (NSTextCheckingResult *match in arrayOfAllMatches) {
         NSString* substringForMatch;
         substringForMatch = [string substringWithRange:match.range];
         [arr addObject:substringForMatch];
+        [telArr addObject:substringForMatch];
     }
     
     subStr=string;
-    for (NSString *str in arr) {
+    for (NSString *str in telArr) {
         [rangeArr addObject:[self rangesOfString:str inString:subStr]];
     }
     
