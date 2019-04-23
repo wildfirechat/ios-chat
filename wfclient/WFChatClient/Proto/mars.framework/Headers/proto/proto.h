@@ -492,6 +492,13 @@ namespace mars{
             virtual ~GeneralOperationCallback() {}
         };
         
+        class LoadRemoteMessagesCallback {
+        public:
+            virtual void onSuccess(const std::list<TMessage> &messageList) = 0;
+            virtual void onFalure(int errorCode) = 0;
+            virtual ~LoadRemoteMessagesCallback() {}
+        };
+        
         class GetChatroomInfoCallback {
         public:
             virtual void onSuccess(const TChatroomInfo &info) = 0;
@@ -601,7 +608,10 @@ namespace mars{
         
         extern int (*sendMessage)(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
         
+        
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
+        
+        extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
         
         extern int uploadGeneralMedia(std::string mediaData, int mediaType, UpdateMediaCallback *callback);
         
