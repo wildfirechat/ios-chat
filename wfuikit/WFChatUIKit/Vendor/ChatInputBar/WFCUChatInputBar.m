@@ -21,7 +21,6 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUMentionUserTableViewController.h"
 
-
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
 
@@ -52,6 +51,8 @@
 @property (nonatomic, strong)UIButton *pluginSwitchBtn;
 
 @property (nonatomic, strong)UITextView *textInputView;
+@property (nonatomic, strong)UIView *inputCoverView;
+
 @property (nonatomic, strong)UIButton *voiceInputBtn;
 
 @property (nonatomic, strong)UIView *emojInputView;
@@ -73,6 +74,8 @@
 @property (nonatomic, strong)WFCCConversation *conversation;
 
 @property (nonatomic, assign)double lastTypingTime;
+
+@property (nonatomic, strong)UIColor *textInputViewTintColor;
 @end
 
 @implementation WFCUChatInputBar
@@ -135,7 +138,16 @@
     self.textInputView.layer.masksToBounds = YES;
     self.textInputView.layer.borderWidth = 0.5f;
     self.textInputView.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
+    self.textInputView.userInteractionEnabled = YES;
     [self addSubview:self.textInputView];
+    
+    self.inputCoverView = [[UIView alloc] initWithFrame:self.textInputView.bounds];
+    self.inputCoverView.backgroundColor = [UIColor clearColor];
+    [self.textInputView addSubview:self.inputCoverView];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapInputView:)];
+        tap.numberOfTapsRequired = 1;
+        [self.inputCoverView addGestureRecognizer:tap];
+    
     
     self.voiceInputBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_HEIGHT, CHAT_INPUT_BAR_PADDING, parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
     [self.voiceInputBtn setTitle:@"按下 说话" forState:UIControlStateNormal];
@@ -162,6 +174,11 @@
     self.voiceInputBtn.hidden = YES;
     self.textInputView.returnKeyType = UIReturnKeySend;
     self.textInputView.delegate = self;
+}
+
+- (void)onTapInputView:(id)sender {
+    NSLog(@"on tap input view");
+    self.inputBarStatus = ChatInputBarKeyboardStatus;
 }
 
 - (void)onTouchDown:(id)sender {
@@ -405,6 +422,16 @@
             break;
         default:
             break;
+    }
+    if (inputBarStatus != ChatInputBarKeyboardStatus) {
+        if (self.textInputView.tintColor != [UIColor clearColor]) {
+            self.textInputViewTintColor = self.textInputView.tintColor;
+        }
+        self.textInputView.tintColor = [UIColor clearColor];
+        self.inputCoverView.hidden = NO;
+    } else {
+        self.textInputView.tintColor = self.textInputViewTintColor;
+        self.inputCoverView.hidden = YES;
     }
 }
 
@@ -765,6 +792,7 @@
     __weak typeof(self)ws = self;
     [UIView animateWithDuration:duration animations:^{
         ws.textInputView.frame = tvFrame;
+        ws.inputCoverView.frame = ws.textInputView.bounds;
         self.frame = baseFrame;
         self.voiceSwitchBtn.frame = voiceFrame;
         self.emojSwitchBtn.frame = emojFrame;
@@ -807,6 +835,16 @@
     }
 }
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    if (self.inputBarStatus == ChatInputBarDefaultStatus) {
+        self.inputBarStatus = ChatInputBarKeyboardStatus;
+    }
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    return YES;
+}
 #pragma mark - PluginBoardViewDelegate
 - (void)onItemClicked:(NSUInteger)itemTag {
     UINavigationController *navi = [self.delegate requireNavi];
