@@ -212,7 +212,7 @@
 
 - (void)showMyQrCode {
     if (gQrCodeDelegate) {
-        [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_Me target:nil];
+        [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_User target:nil];
     }
 }
 #pragma mark - UITableViewDelegate

@@ -11,7 +11,7 @@
 #define QrCodeHelper_h
 #import <UIKit/UIKit.h>
 
-#define QRType_Me  0
+#define QRType_User  0
 #define QRType_Group 1
 #define QRType_Channel 2
 #define QRType_Chatroom 3

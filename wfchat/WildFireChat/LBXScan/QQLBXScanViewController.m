@@ -12,6 +12,7 @@
 #import "LBXPermission.h"
 #import "LBXPermissionSetting.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatUIKit/WFChatUIKit.h>
 
 #define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f )
 
@@ -281,9 +282,8 @@
 - (void)myQRCode
 {
     CreateBarCodeViewController *vc = [CreateBarCodeViewController new];
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    vc.str = [NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId];
-    vc.logoUrl = userInfo.portrait;
+    vc.qrType = QRType_User;
+    vc.target = [WFCCNetworkService sharedInstance].userId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
