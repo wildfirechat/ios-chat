@@ -21,7 +21,7 @@
 		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
 		2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */; };
 		2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */; };
+		2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */; };
 		2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */; };
 		2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B0DD221E1B38100139CB1 /* ring.caf */; };
