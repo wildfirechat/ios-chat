@@ -588,7 +588,19 @@
 - (BOOL)appendMention:(NSString *)userId name:(NSString *)userName {
     if (self.conversation.type == Group_Type) {
         NSString *mentionText = [NSString stringWithFormat:@"@%@ ", userName];
-        [self didMentionType:1 user:userId range:NSMakeRange(self.textInputView.selectedRange.location, mentionText.length) text:mentionText];
+        BOOL needDelay = NO;
+        if(self.inputBarStatus == ChatInputBarDefaultStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarRecordStatus) {
+            self.inputBarStatus = ChatInputBarKeyboardStatus;
+            needDelay = YES;
+        }
+        if (needDelay) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self didMentionType:1 user:userId range:NSMakeRange(self.textInputView.selectedRange.location, mentionText.length) text:mentionText];
+            });
+        } else {
+            [self didMentionType:1 user:userId range:NSMakeRange(self.textInputView.selectedRange.location, mentionText.length) text:mentionText];
+        }
+        
         return YES;
     } else {
         return NO;
@@ -929,7 +941,8 @@
     
     [self.textInputView.textStorage
      insertAttributedString:attStr  atIndex:range.location];
-    
+    range.location += range.length;
+    range.length = 0;
     self.textInputView.selectedRange = range;
 }
 
