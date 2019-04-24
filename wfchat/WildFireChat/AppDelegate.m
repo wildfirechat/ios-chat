@@ -365,10 +365,20 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
         vc.str = [NSString stringWithFormat:@"wildfirechat://user/%@", userInfo.userId];
         vc.logoUrl = userInfo.portrait;
+        if (userInfo.displayName.length) {
+            vc.labelStr = userInfo.displayName;
+        } else {
+            vc.labelStr = @"用户";
+        }
     } else if(type == QRType_Group) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:target refresh:NO];
         vc.str = [NSString stringWithFormat:@"wildfirechat://group/%@", target];
         vc.logoUrl = groupInfo.portrait;
+        if (groupInfo.name.length) {
+            vc.labelStr = groupInfo.name;
+        } else {
+            vc.labelStr = @"群组";
+        }
     }
     
     [navigator pushViewController:vc animated:YES];
