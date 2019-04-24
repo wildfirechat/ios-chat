@@ -13,17 +13,12 @@
 #import <WFChatClient/WFCChatClient.h>
 
 @interface CreateBarCodeViewController ()
-
-//二维码
-@property (nonatomic, strong) UIView *qrView;
-@property (nonatomic, strong) UIImageView* qrImgView;
+@property (nonatomic, strong)UIImageView *logoView;
+@property (nonatomic, strong)UILabel *nameLabel;
 @property (nonatomic, strong) UIImageView* logoImgView;
 
-//条形码
-@property (nonatomic, strong) UIView *tView;
-@property (nonatomic, strong) UIImageView *tImgView;
-
-
+@property (nonatomic, strong) UIView *qrView;
+@property (nonatomic, strong) UIImageView* qrImgView;
 @end
 
 @implementation CreateBarCodeViewController
@@ -35,62 +30,51 @@
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.view.backgroundColor = [UIColor whiteColor];
-}
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    //二维码
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake( (CGRectGetWidth(self.view.frame)-CGRectGetWidth(self.view.frame)*5/6)/2, 100, CGRectGetWidth(self.view.frame)*5/6, CGRectGetWidth(self.view.frame)*5/6)];
+    self.view.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake( (CGRectGetWidth(self.view.frame)-CGRectGetWidth(self.view.frame)*5/6)/2, 100, CGRectGetWidth(self.view.frame)*5/6, CGRectGetWidth(self.view.frame)*5/6+60)];
     [self.view addSubview:view];
     view.backgroundColor = [UIColor whiteColor];
     view.layer.shadowOffset = CGSizeMake(0, 2);
     view.layer.shadowRadius = 2;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
     view.layer.shadowOpacity = 0.5;
-    
-    
-    self.qrImgView = [[UIImageView alloc]init];
-    _qrImgView.bounds = CGRectMake(0, 0, CGRectGetWidth(view.frame)-12, CGRectGetWidth(view.frame)-12);
-    _qrImgView.center = CGPointMake(CGRectGetWidth(view.frame)/2, CGRectGetHeight(view.frame)/2);
-    [view addSubview:_qrImgView];
     self.qrView = view;
+    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 15, self.qrView.bounds.size.width - 72 - 16, 22)];
+    self.nameLabel.text = self.labelStr;
+    [self.qrView addSubview:self.nameLabel];
     
-    
-    //条形码
-    self.tView = [[UIView alloc]initWithFrame:CGRectMake( (CGRectGetWidth(self.view.frame)-CGRectGetWidth(self.view.frame)*5/6)/2,
-                                                         100,
-                                                         CGRectGetWidth(self.view.frame)*5/6,
-                                                         CGRectGetWidth(self.view.frame)*5/6*0.5)];
-    [self.view addSubview:_tView];
-    
-    
-    self.tImgView = [[UIImageView alloc]init];
-    _tImgView.bounds = CGRectMake(0, 0, CGRectGetWidth(_tView.frame)-12, CGRectGetHeight(_tView.frame)-12);
-    _tImgView.center = CGPointMake(CGRectGetWidth(_tView.frame)/2, CGRectGetHeight(_tView.frame)/3);
-    [_tView addSubview:_tImgView];
-    
+    __weak typeof(self)ws = self;
+    dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
+        CGSize logoSize=CGSizeMake(50, 50);
+        UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.logoUrl]]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ws.logoImgView = [ws roundCornerWithImage:logo size:logoSize];
+            ws.logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);
+            ws.logoImgView.center = CGPointMake(40, 40);
+            [ws.qrView addSubview:ws.logoImgView];
+        });
+    });
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.qrImgView = [[UIImageView alloc]init];
+    _qrImgView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.qrView.frame)-12, CGRectGetWidth(self.qrView.frame)-12);
+    _qrImgView.center = CGPointMake(CGRectGetWidth(self.qrView.frame)/2, CGRectGetHeight(self.qrView.frame)/2+30);
+    [self.qrView addSubview:_qrImgView];
     
     [self createQR_logo];
-    
 }
 
 - (void)createQR_logo
 {
     _qrView.hidden = NO;
-    _tView.hidden = YES;
-    
     _qrImgView.image = [LBXScanNative createQRWithString:self.str QRSize:_qrImgView.bounds.size];
-    
-    CGSize logoSize=CGSizeMake(30, 30);
-    UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.logoUrl]]];
-    self.logoImgView = [self roundCornerWithImage:logo size:logoSize];
-    _logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);
-    _logoImgView.center = CGPointMake(CGRectGetWidth(_qrImgView.frame)/2, CGRectGetHeight(_qrImgView.frame)/2);
-    [_qrImgView addSubview:_logoImgView];
 }
 
 - (UIImageView*)roundCornerWithImage:(UIImage*)logoImg size:(CGSize)size
