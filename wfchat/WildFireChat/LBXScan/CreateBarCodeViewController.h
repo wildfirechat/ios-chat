@@ -11,4 +11,5 @@
 @interface CreateBarCodeViewController : UIViewController
 @property (nonatomic, strong)NSString *str;
 @property (nonatomic, strong)NSString *logoUrl;
+@property (nonatomic, strong)NSString *labelStr;
 @end
