@@ -48,10 +48,10 @@
     [self addChildViewController:nav];
     
     vc = [DiscoverViewController new];
-    vc.title = @"广场";
+    vc.title = @"发现";
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
-    item.title = @"广场";
+    item.title = @"发现";
     item.image = [UIImage imageNamed:@"tabbar_discover"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_discover_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
