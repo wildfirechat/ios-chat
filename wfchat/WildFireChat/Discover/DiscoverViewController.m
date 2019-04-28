@@ -8,6 +8,8 @@
 
 #import "DiscoverViewController.h"
 #import "ChatroomListViewController.h"
+#import <WFChatUIKit/WFChatUIKit.h>
+#import <WFChatClient/WFCCIMService.h>
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -44,18 +46,28 @@
         ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        WFCUMessageListViewController *vc = [[WFCUMessageListViewController alloc] init];
+        
+        vc.conversation = [[WFCCConversation alloc] init];
+        vc.conversation.type = Single_Type;
+        vc.conversation.target = @"FireRobot";
+        vc.conversation.line = 0;
+        
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 1;
     }
-    return 0;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -71,6 +83,16 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"聊天室";
+            cell.imageView.image = [UIImage imageNamed:@"chatroom"];
+        }
+    } else if(indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"机器人";
+            cell.imageView.image = [UIImage imageNamed:@"chatroom"];
+        }
+    } else if(indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"频道";
             cell.imageView.image = [UIImage imageNamed:@"chatroom"];
         }
     }
