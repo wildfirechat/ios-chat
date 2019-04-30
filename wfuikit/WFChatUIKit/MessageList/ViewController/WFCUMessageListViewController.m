@@ -222,21 +222,26 @@
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
             if (!messageList.count) {
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!messages.count) {
-                            weakSelf.hasMoreOld = NO;
-                        } else {
-                            [weakSelf appendMessages:messageList newMessage:NO highlightId:0];
-                        }
-                        weakSelf.loadingMore = NO;
-                    });
-                } error:^(int error_code) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.hasMoreOld = NO;
-                        weakSelf.loadingMore = NO;
-                    });
-                }];
+//                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        if (!messages.count) {
+//                            weakSelf.hasMoreOld = NO;
+//                        } else {
+//                            [weakSelf appendMessages:messageList newMessage:NO highlightId:0];
+//                        }
+//                        weakSelf.loadingMore = NO;
+//                    });
+//                } error:^(int error_code) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        weakSelf.hasMoreOld = NO;
+//                        weakSelf.loadingMore = NO;
+//                    });
+//                }];
+                [NSThread sleepForTimeInterval:0.5];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.hasMoreOld = NO;
+                    weakSelf.loadingMore = NO;
+                });
             } else {
                 [NSThread sleepForTimeInterval:0.5];
                 dispatch_async(dispatch_get_main_queue(), ^{
