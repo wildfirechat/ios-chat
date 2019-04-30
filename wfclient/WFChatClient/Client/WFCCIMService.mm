@@ -1271,7 +1271,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (NSString *)getUserSetting:(UserSettingScope)scope key:(NSString *)key {
     if (!key) {
-        return nil;
+        key = @"";
     }
     std::string str = mars::stn::MessageDB::Instance()->GetUserSetting(scope, [key UTF8String]);
     return [NSString stringWithUTF8String:str.c_str()];
