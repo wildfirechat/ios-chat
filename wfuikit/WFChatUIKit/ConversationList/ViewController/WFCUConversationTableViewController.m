@@ -40,6 +40,8 @@
 @property (nonatomic, strong) UIView *searchViewContainer;
 
 @property (nonatomic, assign) BOOL firstAppear;
+
+@property (nonatomic, strong) UIView *pcSessionView;
 @end
 
 @implementation WFCUConversationTableViewController
@@ -63,13 +65,14 @@
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchController;
     } else {
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
+    
+    [self updatePcSession];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -307,6 +310,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self refreshList];
         [self refreshLeftButton];
+        [self updatePcSession];
     });
 }
 
@@ -337,6 +341,20 @@
         }
     }
     [self.tabBarController.tabBar showBadgeOnItemIndex:0 badgeValue:count];
+}
+
+- (void)updatePcSession {
+    NSString *pcOnline = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_PC_Online key:@""];
+    
+    if (@available(iOS 11.0, *)) {
+        if ([pcOnline isEqualToString:@"1"]) {
+            self.tableView.tableHeaderView = self.pcSessionView;
+        } else {
+            self.tableView.tableHeaderView = nil;
+        }
+    } else {
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -392,6 +410,20 @@
         
         self.navigationItem.backBarButtonItem = item;
     });
+}
+
+- (UIView *)pcSessionView {
+    if (!_pcSessionView) {
+        _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+        [_pcSessionView setBackgroundColor:[UIColor grayColor]];
+        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
+        iv.image = [UIImage imageNamed:@"pc_session"];
+        [_pcSessionView addSubview:iv];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, 100, 20)];
+        label.text = @"PC已登录";
+        [_pcSessionView addSubview:label];
+    }
+    return _pcSessionView;
 }
 
 #pragma mark - Table view data source
