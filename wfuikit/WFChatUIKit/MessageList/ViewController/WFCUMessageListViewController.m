@@ -733,10 +733,15 @@
     
     BOOL isAtButtom = NO;
     if (newMessage) {
-        CGPoint offset = self.collectionView.contentOffset;
-        CGSize size = self.collectionView.contentSize;
-        CGSize visiableSize = self.collectionView.visibleSize;
-        isAtButtom = (offset.y + visiableSize.height - size.height) > -100;
+        if (@available(iOS 12.0, *)) {
+            CGPoint offset = self.collectionView.contentOffset;
+            CGSize size = self.collectionView.contentSize;
+            CGSize visiableSize = CGSizeZero;
+            visiableSize = self.collectionView.visibleSize;
+            isAtButtom = (offset.y + visiableSize.height - size.height) > -100;
+        } else {
+            isAtButtom = YES;
+        }
     }
     
   [self.collectionView reloadData];
