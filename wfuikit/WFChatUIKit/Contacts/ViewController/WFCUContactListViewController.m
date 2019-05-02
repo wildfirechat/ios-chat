@@ -9,7 +9,7 @@
 #import "WFCUContactListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-#import "WFCUMessageListViewController.h"
+#import "WFCUProfileTableViewController.h"
 #import "WFCUContactSelectTableViewCell.h"
 #import "WFCUContactTableViewCell.h"
 #import "pinyin.h"
@@ -543,11 +543,14 @@
             [self left:nil];
         }
     } else {
-            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-            WFCCUserInfo *friend = dataSource[indexPath.row];
-            mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:friend.userId line:0];
-            mvc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:mvc animated:YES];
+        WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+        WFCCUserInfo *friend = dataSource[indexPath.row];
+        vc.userInfo = friend;
+        if (vc.userInfo == nil) {
+            return;
+        }
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
