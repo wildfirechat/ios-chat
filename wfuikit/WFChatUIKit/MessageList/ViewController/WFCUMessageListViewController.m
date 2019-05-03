@@ -699,6 +699,17 @@
         if (!([message.content.class getContentFlags] & 0x1)) {
             continue;
         }
+        BOOL duplcated = NO;
+        for (WFCUMessageModel *model in self.modelList) {
+            if (model.message.messageUid == message.messageUid) {
+                duplcated = YES;
+                break;
+            }
+        }
+        if (duplcated) {
+            continue;
+        }
+        
         count++;
         
         if (newMessage) {
