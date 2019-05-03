@@ -923,6 +923,18 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::deleteFriend([userId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (NSString *)getFriendAlias:(NSString *)friendId {
+    std::string strAlias = mars::stn::MessageDB::Instance()->GetFriendAlias([friendId UTF8String]);
+    return [NSString stringWithUTF8String:strAlias.c_str()];
+}
+
+- (void)setFriend:(NSString *)friendId
+            alias:(NSString *)alias
+          success:(void(^)(void))successBlock
+            error:(void(^)(int error_code))errorBlock {
+    mars::stn::setFriendAlias([friendId UTF8String], alias ? [alias UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (BOOL)isBlackListed:(NSString *)userId {
     return mars::stn::MessageDB::Instance()->isBlackListed([userId UTF8String]);
 }

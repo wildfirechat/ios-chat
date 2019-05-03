@@ -610,6 +610,13 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
                   success:(void(^)(void))successBlock
                     error:(void(^)(int error_code))errorBlock;
 
+- (NSString *)getFriendAlias:(NSString *)friendId;
+
+- (void)setFriend:(NSString *)friendId
+            alias:(NSString *)alias
+          success:(void(^)(void))successBlock
+            error:(void(^)(int error_code))errorBlock;
+
 /**
  查询用户是否被加入黑名单
  
