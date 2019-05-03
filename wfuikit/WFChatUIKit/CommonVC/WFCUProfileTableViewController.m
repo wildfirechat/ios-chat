@@ -13,7 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUMyPortraitViewController.h"
 #import "WFCUVerifyRequestViewController.h"
-
+#import "WFCUGeneralModifyViewController.h"
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -64,7 +64,7 @@
     }
     
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:nil, nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"设置备注", nil];
     [actionSheet showInView:self.view];
 }
 - (void)loadData {
@@ -85,7 +85,13 @@
     
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
-    self.displayNameLabel.text = self.userInfo.displayName;
+    
+    NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userInfo.userId];
+    if (alias.length) {
+        self.displayNameLabel.text = [NSString stringWithFormat:@"%@(%@)", alias, self.userInfo.displayName];
+    } else {
+        self.displayNameLabel.text = self.userInfo.displayName;
+    }
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
@@ -289,6 +295,23 @@
             vc.userId = self.userInfo.userId;
             [self.navigationController pushViewController:vc animated:YES];
         }
+    } else if(buttonIndex == 1) {
+        WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
+        NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userInfo.userId];
+        gmvc.defaultValue = previousAlias;
+        gmvc.titleText = @"设置备注";
+        gmvc.canEmpty = YES;
+        gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
+            if (![newValue isEqualToString:previousAlias]) {
+                [[WFCCIMService sharedWFCIMService] setFriend:self.userInfo.userId alias:newValue success:^{
+                    result(YES);
+                } error:^(int error_code) {
+                    result(NO);
+                }];
+            }
+        };
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
     }
 }
 

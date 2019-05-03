@@ -95,13 +95,15 @@ namespace mars {
             std::list<std::string> getMyFriendList(bool refresh);
             std::list<std::string> getBlackList(bool refresh);
             
+            std::string GetFriendAlias(const std::string &friendId);
+            
             int64_t getFriendRequestHead();
             int64_t getFriendHead();
             
             long InsertFriendRequestOrReplace(const TFriendRequest &friendRequest);
             std::list<TFriendRequest> getFriendRequest(int direction);
             
-            long InsertFriendOrReplace(const std::string &friendUid, int state, int64_t timestamp);
+            long InsertFriendOrReplace(const std::string &friendUid, int state, int64_t timestamp, const std::string &alias);
             
             int unreadFriendRequest();
             void clearUnreadFriendRequestStatus();
