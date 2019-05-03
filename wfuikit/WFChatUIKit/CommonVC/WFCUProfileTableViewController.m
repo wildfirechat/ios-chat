@@ -17,6 +17,7 @@
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
+@property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
@@ -77,7 +78,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 48, 48)];
-    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 24, width - 64 - 8, 21)];
+    
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
     [self.portraitView addGestureRecognizer:tap];
@@ -88,13 +89,19 @@
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userInfo.userId];
     if (alias.length) {
-        self.displayNameLabel.text = [NSString stringWithFormat:@"%@(%@)", alias, self.userInfo.displayName];
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
+        self.aliasLabel.text = alias;
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 32, width - 64 - 8, 21)];
+        self.displayNameLabel.text = self.userInfo.displayName;
     } else {
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 20, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
     }
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
+    [self.headerCell addSubview:self.aliasLabel];
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
         if (self.userInfo.mobile.length > 0) {
