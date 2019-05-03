@@ -46,7 +46,7 @@
         ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
+    } else if (indexPath.section == 0 && indexPath.row == 1) {
         WFCUMessageListViewController *vc = [[WFCUMessageListViewController alloc] init];
         
         vc.conversation = [[WFCCConversation alloc] init];
@@ -60,14 +60,11 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 1;
-    }
-    return 1;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -83,17 +80,13 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"聊天室";
-            cell.imageView.image = [UIImage imageNamed:@"chatroom"];
-        }
-    } else if(indexPath.section == 1) {
-        if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
+        } else if (indexPath.row == 1) {
             cell.textLabel.text = @"机器人";
-            cell.imageView.image = [UIImage imageNamed:@"chatroom"];
-        }
-    } else if(indexPath.section == 2) {
-        if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"discover_robot"];
+        } else if (indexPath.row == 2) {
             cell.textLabel.text = @"频道";
-            cell.imageView.image = [UIImage imageNamed:@"chatroom"];
+            cell.imageView.image = [UIImage imageNamed:@"discover_channel"];
         }
     }
     
