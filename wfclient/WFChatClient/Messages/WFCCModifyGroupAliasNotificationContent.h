@@ -14,6 +14,11 @@
 @interface WFCCModifyGroupAliasNotificationContent : WFCCNotificationMessageContent
 
 /**
+ 群组ID
+ */
+@property (nonatomic, strong)NSString *groupId;
+
+/**
  群成员ID
  */
 @property (nonatomic, strong)NSString *operateUser;

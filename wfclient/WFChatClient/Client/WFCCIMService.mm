@@ -955,6 +955,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::blackListRequest([userId UTF8String], isBlackListed, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId refresh:(BOOL)refresh {
+    return [self getUserInfo:userId inGroup:nil refresh:refresh];
+}
+
+- (WFCCUserInfo *)getUserInfo:(NSString *)userId inGroup:(NSString *)groupId refresh:(BOOL)refresh {
     if (!userId) {
         return nil;
     }
@@ -963,7 +967,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         return [self.userSource getUserInfo:userId refresh:refresh];
     }
     
-    mars::stn::TUserInfo tui = mars::stn::MessageDB::Instance()->getUserInfo([userId UTF8String], refresh);
+    mars::stn::TUserInfo tui = mars::stn::MessageDB::Instance()->getUserInfo([userId UTF8String], groupId ? [groupId UTF8String] : "", refresh);
     if (!tui.uid.empty()) {
         WFCCUserInfo *userInfo = convertUserInfo(tui);
         return userInfo;

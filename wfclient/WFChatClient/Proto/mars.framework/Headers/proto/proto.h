@@ -171,6 +171,8 @@ namespace mars{
             std::string company;
             std::string social;
             std::string extra;
+            std::string friendAlias;
+            std::string groupAlias;
             //0 normal; 1 robot; 2 thing;
             int type;
             int64_t updateDt;

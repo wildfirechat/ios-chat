@@ -14,6 +14,11 @@
 @interface WFCCQuitGroupNotificationContent : WFCCNotificationMessageContent
 
 /**
+ 群组ID
+ */
+@property (nonatomic, strong)NSString *groupId;
+
+/**
  退群成员的ID
  */
 @property (nonatomic, strong)NSString *quitMember;

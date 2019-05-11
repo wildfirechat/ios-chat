@@ -25,6 +25,10 @@
         [dataDict setObject:self.kickedMembers forKey:@"ms"];
     }
     
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
                                                               error:nil];
@@ -40,6 +44,7 @@
     if (!__error) {
         self.operateUser = dictionary[@"o"];
         self.kickedMembers = dictionary[@"ms"];
+        self.groupId = dictionary[@"g"];
     }
 }
 
@@ -66,8 +71,12 @@
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         formatMsg = @"你把";
     } else {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser refresh:NO];
-        if (userInfo.displayName.length > 0) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
+        if (userInfo.friendAlias.length > 0) {
+            formatMsg = [NSString stringWithFormat:@"%@把", userInfo.friendAlias];
+        } else if(userInfo.groupAlias.length > 0) {
+            formatMsg = [NSString stringWithFormat:@"%@把", userInfo.groupAlias];
+        } else if (userInfo.displayName.length > 0) {
             formatMsg = [NSString stringWithFormat:@"%@把", userInfo.displayName];
         } else {
             formatMsg = [NSString stringWithFormat:@"用户<%@>把", self.operateUser];
@@ -78,8 +87,12 @@
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             formatMsg = [formatMsg stringByAppendingString:@" 你"];
         } else {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member refresh:NO];
-            if (userInfo.displayName.length > 0) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member inGroup:self.groupId refresh:NO];
+            if (userInfo.friendAlias.length > 0) {
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.friendAlias];
+            } else if(userInfo.groupAlias.length > 0) {
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.groupAlias];
+            } else if (userInfo.displayName.length > 0) {
                 formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.displayName];
             } else {
                 formatMsg = [formatMsg stringByAppendingFormat:@" 用户<%@>", member];
