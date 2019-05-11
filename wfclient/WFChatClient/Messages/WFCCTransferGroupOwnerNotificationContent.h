@@ -14,6 +14,11 @@
 @interface WFCCTransferGroupOwnerNotificationContent : WFCCNotificationMessageContent
 
 /**
+ 群组ID
+ */
+@property (nonatomic, strong)NSString *groupId;
+
+/**
  操作者的ID
  */
 @property (nonatomic, strong)NSString *operateUser;

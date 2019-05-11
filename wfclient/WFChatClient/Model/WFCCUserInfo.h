@@ -69,6 +69,16 @@
 @property (nonatomic, strong)NSString *extra;
 
 /**
+ 好友备注
+ */
+@property (nonatomic, strong)NSString *friendAlias;
+
+/**
+ 群昵称
+ */
+@property (nonatomic, strong)NSString *groupAlias;
+
+/**
  更新时间
  */
 @property (nonatomic, assign)long long updateDt;

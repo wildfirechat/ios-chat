@@ -14,6 +14,11 @@
 @interface WFCCAddGroupeMemberNotificationContent : WFCCNotificationMessageContent
 
 /**
+ 群组ID
+ */
+@property (nonatomic, strong)NSString *groupId;
+
+/**
  邀请者ID
  */
 @property (nonatomic, strong)NSString *invitor;

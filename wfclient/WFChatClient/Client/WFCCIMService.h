@@ -500,6 +500,16 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
                       refresh:(BOOL)refresh;
 
 /**
+ 获取用户信息
+ @discussion 获取用户信息，如果在群中有群昵称也一并返回
+ 
+ @param userId 用户ID
+ @param groupId 群组ID
+ @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
+ @return 本地的用户信息，可能为空
+ */
+- (WFCCUserInfo *)getUserInfo:(NSString *)userId inGroup:(NSString *)groupId refresh:(BOOL)refresh;
+/**
  搜索用户
  
  @param keyword 关键词

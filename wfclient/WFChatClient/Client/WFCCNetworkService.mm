@@ -113,6 +113,8 @@ WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     userInfo.company = [NSString stringWithUTF8String:tui.company.c_str()];
     userInfo.social = [NSString stringWithUTF8String:tui.social.c_str()];
     userInfo.extra = [NSString stringWithUTF8String:tui.extra.c_str()];
+    userInfo.friendAlias = [NSString stringWithUTF8String:tui.friendAlias.c_str()];
+    userInfo.groupAlias = [NSString stringWithUTF8String:tui.groupAlias.c_str()];
     userInfo.updateDt = tui.updateDt;
     userInfo.type = tui.type;
     

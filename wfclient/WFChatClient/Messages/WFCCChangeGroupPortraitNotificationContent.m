@@ -21,6 +21,10 @@
         [dataDict setObject:self.operateUser forKey:@"o"];
     }
     
+    if (self.groupId) {
+        [dataDict setObject:self.groupId forKey:@"g"];
+    }
+    
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
@@ -36,6 +40,7 @@
                                                                  error:&__error];
     if (!__error) {
         self.operateUser = dictionary[@"o"];
+        self.groupId = dictionary[@"g"];
     }
 }
 
@@ -62,8 +67,12 @@
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         formatMsg = @"你更新了群头像";
     } else {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser refresh:NO];
-        if (userInfo.displayName.length > 0) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
+        if (userInfo.friendAlias.length > 0) {
+            formatMsg = [NSString stringWithFormat:@"%@更新了群头像", userInfo.friendAlias];
+        } else if(userInfo.groupAlias.length > 0) {
+            formatMsg = [NSString stringWithFormat:@"%@更新了群头像", userInfo.groupAlias];
+        } else if (userInfo.displayName.length > 0) {
             formatMsg = [NSString stringWithFormat:@"%@更新了群头像", userInfo.displayName];
         } else {
             formatMsg = [NSString stringWithFormat:@"用户<%@>更新了群头像", self.operateUser];

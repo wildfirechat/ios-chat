@@ -86,7 +86,7 @@ namespace mars {
             bool RemoveGroupAndMember(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             
-            TUserInfo getUserInfo(const std::string &userId, bool refresh);
+            TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
             long InsertUserInfoOrReplace(const TUserInfo &userInfo);
             long UpdateMyInfo(const std::list<std::pair<int, std::string>> &infos);
             
