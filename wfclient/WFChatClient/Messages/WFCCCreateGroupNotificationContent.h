@@ -14,6 +14,11 @@
 @interface WFCCCreateGroupNotificationContent : WFCCNotificationMessageContent
 
 /**
+ 群组ID
+ */
+@property (nonatomic, strong)NSString *groupId;
+
+/**
  创建者ID
  */
 @property (nonatomic, strong)NSString *creator;
