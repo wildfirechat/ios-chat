@@ -308,10 +308,14 @@
         gmvc.defaultValue = previousAlias;
         gmvc.titleText = @"设置备注";
         gmvc.canEmpty = YES;
+        __weak typeof(self)ws = self;
         gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
             if (![newValue isEqualToString:previousAlias]) {
                 [[WFCCIMService sharedWFCIMService] setFriend:self.userInfo.userId alias:newValue success:^{
                     result(YES);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [ws loadData];
+                    });
                 } error:^(int error_code) {
                     result(NO);
                 }];
