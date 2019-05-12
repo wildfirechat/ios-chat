@@ -57,7 +57,7 @@
     if (self.selectedMember) {
         NSString *name = self.selectedMember.alias;
         if (!name.length) {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.selectedMember.memberId refresh:NO];
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.selectedMember.memberId inGroup:self.groupId refresh:NO];
             name = userInfo.displayName;
         }
         NSString *text = [NSString stringWithFormat:@"@%@ ", name];
@@ -85,7 +85,7 @@
     
     WFCCGroupMember *member = [self.groupMembers objectAtIndex:(indexPath.row)];
     if (member.alias.length) {
-        contactCell.alterName = member.alias;
+        contactCell.groupAlias = member.alias;
     }
     contactCell.userId = member.memberId;
     

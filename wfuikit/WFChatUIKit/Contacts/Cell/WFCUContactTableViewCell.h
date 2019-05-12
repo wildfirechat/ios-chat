@@ -14,7 +14,7 @@
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UILabel *nameLabel;
 
-@property (nonatomic, strong)NSString *alterName;
+@property (nonatomic, strong)NSString *groupAlias;
 
 @property (nonatomic, assign, getter=isBig)BOOL big;
 @end

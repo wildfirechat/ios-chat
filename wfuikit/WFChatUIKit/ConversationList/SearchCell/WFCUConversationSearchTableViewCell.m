@@ -28,11 +28,13 @@
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
   
-  if(userInfo.displayName.length > 0) {
-    self.targetView.text = userInfo.displayName;
-  } else {
-    self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.message.fromUser];
-  }
+    if (userInfo.friendAlias.length) {
+        self.targetView.text = userInfo.friendAlias;
+    } else if(userInfo.displayName.length > 0) {
+        self.targetView.text = userInfo.displayName;
+    } else {
+        self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.message.fromUser];
+    }
 }
 
 - (void)setMessage:(WFCCMessage *)message {
