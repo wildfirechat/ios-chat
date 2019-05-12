@@ -86,6 +86,10 @@
     _friendUid = friendUid;
     WFCCUserInfo *friendInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendUid refresh:NO];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:friendInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
-    self.nameLabel.text = friendInfo.displayName;
+    if (friendInfo.friendAlias.length) {
+        self.nameLabel.text = friendInfo.friendAlias;
+    } else {
+        self.nameLabel.text = friendInfo.displayName;
+    }
 }
 @end

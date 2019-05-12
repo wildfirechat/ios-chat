@@ -91,7 +91,7 @@
     WFCCChannelInfo *channelInfo;
     if (type == Group_Type) {
         groupMember = (WFCCGroupMember *)model;
-        userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId refresh:NO];
+        userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId inGroup:groupMember.groupId refresh:NO];
     } else if(type == Single_Type) {
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:(NSString *)model refresh:NO];
     } else if(type == Channel_Type) {
@@ -105,10 +105,15 @@
         self.nameLabel.text = channelInfo.name;
     } else {
         [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-        if (type == Group_Type && groupMember.alias.length) {
-            self.nameLabel.text = groupMember.alias;
+        
+        if (userInfo.friendAlias.length) {
+            self.nameLabel.text = userInfo.friendAlias;
+        } else if(userInfo.groupAlias.length) {
+            self.nameLabel.text = userInfo.groupAlias;
+        } else if(userInfo.displayName.length) {
+            self.nameLabel.text = userInfo.displayName;
         } else {
-            [self.nameLabel setText:userInfo.displayName];
+            self.nameLabel.text = nil;
         }
     }
     self.nameLabel.hidden = NO;

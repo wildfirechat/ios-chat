@@ -26,11 +26,13 @@
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
   
-  if(userInfo.displayName.length > 0) {
-    self.targetView.text = userInfo.displayName;
-  } else {
-    self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.info.conversation.target];
-  }
+    if (userInfo.friendAlias.length) {
+        self.targetView.text = userInfo.friendAlias;
+    } else if(userInfo.displayName.length > 0) {
+        self.targetView.text = userInfo.displayName;
+    } else {
+        self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.info.conversation.target];
+    }
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
@@ -174,8 +176,16 @@
         }
         self.digestView.attributedText = attString;
     } else if (_info.lastMessage.direction == MessageDirection_Receive && (_info.conversation.type == Group_Type || _info.conversation.type == Channel_Type)) {
-        WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:_info.lastMessage.fromUser refresh:NO];
-        if (sender.displayName.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
+        NSString *groupId = nil;
+        if (_info.conversation.type == Group_Type) {
+            groupId = _info.conversation.target;
+        }
+        WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:_info.lastMessage.fromUser inGroup:groupId refresh:NO];
+        if (sender.friendAlias.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
+            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.friendAlias, _info.lastMessage.content.digest];
+        } else if (sender.groupAlias.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
+            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.groupAlias, _info.lastMessage.content.digest];
+        } else if (sender.displayName.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
             self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.displayName, _info.lastMessage.content.digest];
         } else {
             self.digestView.text = _info.lastMessage.content.digest;
