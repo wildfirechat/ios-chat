@@ -666,7 +666,10 @@
                          return [obj1 compare:obj2 options:NSNumericSearch];
                      }];
     NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray:keys];
-    
+    if ([allKeys containsObject:@"#"]) {
+        [allKeys removeObject:@"#"];
+        [allKeys insertObject:@"#" atIndex:allKeys.count];
+    }
     NSMutableDictionary *resultDic = [NSMutableDictionary new];
     [resultDic setObject:infoDic forKey:@"infoDic"];
     [resultDic setObject:allKeys forKey:@"allKeys"];
