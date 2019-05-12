@@ -14,6 +14,8 @@
 #import "WFCUMyPortraitViewController.h"
 #import "WFCUVerifyRequestViewController.h"
 #import "WFCUGeneralModifyViewController.h"
+#import "WFCUVideoViewController.h"
+#import <WFAVEngineKit/WFAVEngineKit.h>
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -154,7 +156,7 @@
         }
         btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
         [btn setTitle:@"视频聊天" forState:UIControlStateNormal];
-        [btn setBackgroundColor:[UIColor grayColor]];
+        [btn setBackgroundColor:[UIColor blueColor]];
         [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
         btn.layer.cornerRadius = 5.f;
         btn.layer.masksToBounds = YES;
@@ -198,7 +200,32 @@
 }
 
 - (void)onVoipCallBtn:(id)sender {
+    __weak typeof(self)ws = self;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionVoice = [UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
+        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:YES];
+        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+    }];
+    
+    UIAlertAction *actionVideo = [UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
+        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:NO];
+        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionVoice];
+    [actionSheet addAction:actionVideo];
+    [actionSheet addAction:actionCancel];
+    
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 - (void)onAddFriendBtn:(id)sender {
