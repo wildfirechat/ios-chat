@@ -59,7 +59,7 @@ alpha:1.0]
     CGFloat sendCodeBtnwidth = 120;
     CGFloat paddingField2Code = 8;
     
-    CGFloat topPos = kStatusBarAndNavigationBarHeight + 50;
+    CGFloat topPos = kStatusBarAndNavigationBarHeight + 45;
     CGFloat fieldHeight = 25;
     
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, fieldHeight*2)];
@@ -67,10 +67,10 @@ alpha:1.0]
     self.hintLabel.textAlignment = NSTextAlignmentCenter;
     self.hintLabel.font = [UIFont systemFontOfSize:fieldHeight];
     
-    topPos += fieldHeight * 2 + 5;
+    topPos += fieldHeight * 2 + 10;
     
-    self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight, bgRect.size.width - paddingEdge - paddingEdge, 0.5f)];
-    self.userNameLine.backgroundColor = [UIColor blackColor];
+    self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight, bgRect.size.width - paddingEdge - paddingEdge, 1.f)];
+    self.userNameLine.backgroundColor = [UIColor grayColor];
     
     
     self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, fieldHeight)];
@@ -81,8 +81,8 @@ alpha:1.0]
     [self.userNameField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
 
-    self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight + paddingLine2TF + fieldHeight + paddingTF2Line, bgRect.size.width - paddingEdge - paddingEdge, 0.5f)];
-    self.passwordLine.backgroundColor = [UIColor blackColor];
+    self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight + paddingLine2TF + fieldHeight + paddingTF2Line, bgRect.size.width - paddingEdge - paddingEdge, 1.f)];
+    self.passwordLine.backgroundColor = [UIColor grayColor];
     
     self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight + paddingLine2TF, bgRect.size.width - paddingEdge - paddingEdge - sendCodeBtnwidth - paddingField2Code, fieldHeight)];
     self.passwordField.placeholder = @"请输入短信验证码";
@@ -93,13 +93,13 @@ alpha:1.0]
     
     self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - sendCodeBtnwidth, topPos + paddingTF2Line + fieldHeight + paddingLine2TF, sendCodeBtnwidth, fieldHeight)];
     [self.sendCodeBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
-    [self.sendCodeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
     [self.sendCodeBtn addTarget:self action:@selector(onSendCode:) forControlEvents:UIControlEventTouchDown];
     self.sendCodeBtn.enabled = NO;
     
-    self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight + paddingLine2TF + fieldHeight + paddingTF2Line + paddingLine2TF, bgRect.size.width - paddingEdge - paddingEdge, 36)];
-    [self.loginBtn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
+    self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos + paddingTF2Line + fieldHeight + paddingLine2TF + fieldHeight + paddingTF2Line + paddingLine2TF + 20, bgRect.size.width - paddingEdge - paddingEdge, 36)];
+    [self.loginBtn setBackgroundColor:[UIColor grayColor]];
     [self.loginBtn addTarget:self action:@selector(onLoginButton:) forControlEvents:UIControlEventTouchDown];
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = 5.f;
@@ -236,9 +236,9 @@ alpha:1.0]
 
 - (void)resetKeyboard:(id)sender {
     [self.userNameField resignFirstResponder];
-    self.userNameLine.backgroundColor = [UIColor blackColor];
+    self.userNameLine.backgroundColor = [UIColor grayColor];
     [self.passwordField resignFirstResponder];
-    self.passwordLine.backgroundColor = [UIColor blackColor];
+    self.passwordLine.backgroundColor = [UIColor grayColor];
 }
 
 - (void)onLoginButton:(id)sender {
@@ -293,9 +293,9 @@ alpha:1.0]
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     if (textField == self.userNameField) {
         self.userNameLine.backgroundColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-        self.passwordLine.backgroundColor = [UIColor blackColor];
+        self.passwordLine.backgroundColor = [UIColor grayColor];
     } else if (textField == self.passwordField) {
-        self.userNameLine.backgroundColor = [UIColor blackColor];
+        self.userNameLine.backgroundColor = [UIColor grayColor];
         self.passwordLine.backgroundColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
     }
     return YES;
@@ -313,14 +313,24 @@ alpha:1.0]
     if ([self isValidNumber]) {
         if (!self.countdownTimer) {
             self.sendCodeBtn.enabled = YES;
+            [self.sendCodeBtn setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
+        } else {
+            self.sendCodeBtn.enabled = NO;
+            [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         }
+        
         if ([self isValidCode]) {
+            [self.loginBtn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
             self.loginBtn.enabled = YES;
+        } else {
+            [self.loginBtn setBackgroundColor:[UIColor grayColor]];
+            self.loginBtn.enabled = NO;
         }
     } else {
-        if (!self.countdownTimer) {
-            self.sendCodeBtn.enabled = NO;
-        }
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        
+        [self.loginBtn setBackgroundColor:[UIColor grayColor]];
         self.loginBtn.enabled = NO;
     }
 }
