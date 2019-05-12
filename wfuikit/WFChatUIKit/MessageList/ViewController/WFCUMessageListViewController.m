@@ -329,7 +329,9 @@
 
 - (void)setTargetUser:(WFCCUserInfo *)targetUser {
   _targetUser = targetUser;
-    if(targetUser.displayName.length == 0) {
+    if(targetUser.friendAlias.length) {
+        self.title = targetUser.friendAlias;
+    } else if(targetUser.displayName.length == 0) {
         self.title = [NSString stringWithFormat:@"用户<%@>", self.conversation.target];
     } else {
         self.title = targetUser.displayName;

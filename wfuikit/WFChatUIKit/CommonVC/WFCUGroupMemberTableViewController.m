@@ -65,7 +65,7 @@
         }
     }
     WFCCGroupMember *member = self.members[indexPath.row];
-    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:member.memberId refresh:NO];
+    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:member.memberId inGroup:self.groupId refresh:NO];
     cell.groupNameView.text = user.displayName;
     if (self.selectable) {
         if ([self.selectedMembers containsObject:member]) {

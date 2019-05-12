@@ -634,8 +634,12 @@
         for (id user in userList) {
             NSString *firstLetter;
 
-                WFCCUserInfo *userInfo = (WFCCUserInfo*)user;
-                firstLetter = [self getFirstUpperLetter:userInfo.displayName];
+            WFCCUserInfo *userInfo = (WFCCUserInfo*)user;
+            NSString *userName = userInfo.displayName;
+            if (userInfo.friendAlias.length) {
+                userName = userInfo.friendAlias;
+            }
+            firstLetter = [self getFirstUpperLetter:userName];
             
         
             if ([firstLetter isEqualToString:key]) {

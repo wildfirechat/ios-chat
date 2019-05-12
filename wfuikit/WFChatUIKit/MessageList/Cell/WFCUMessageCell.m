@@ -119,24 +119,23 @@
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-    if(self.model.showNameLabel) {
-        if(self.model.message.conversation.type == Group_Type) {
-            WFCCGroupMember *groupMember = [[WFCCIMService sharedWFCIMService] getGroupMember:self.model.message.conversation.target memberId:self.model.message.fromUser];
-            if (groupMember != nil && groupMember.alias.length != 0) {
-                if(userInfo.displayName.length > 0) {
-                    self.nameLabel.text = [groupMember.alias stringByAppendingFormat:@"(%@)", userInfo.displayName];
-                } else {
-                    self.nameLabel.text = groupMember.alias;
-                }
-                return;
-            }
-        }
-      if(userInfo.displayName.length > 0) {
-        self.nameLabel.text = userInfo.displayName;
-      } else {
-        self.nameLabel.text = [NSString stringWithFormat:@"User<%@>", self.model.message.fromUser];
+      if(self.model.showNameLabel) {
+          NSString *nameStr = nil;
+          if (userInfo.friendAlias.length) {
+              nameStr = userInfo.friendAlias;
+          } else if(userInfo.groupAlias.length) {
+              if(userInfo.displayName.length > 0) {
+                  nameStr = [userInfo.groupAlias stringByAppendingFormat:@"(%@)", userInfo.displayName];
+              } else {
+                  nameStr = userInfo.groupAlias;
+              }
+          } else if(userInfo.displayName.length > 0) {
+              nameStr = userInfo.displayName;
+          } else {
+              nameStr = [NSString stringWithFormat:@"User<%@>", self.model.message.fromUser];
+          }
+          self.nameLabel.text = nameStr;
       }
-    }
   }
 }
   
@@ -194,7 +193,11 @@
       
   }
     
-  WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser refresh:NO];
+    NSString *groupId = nil;
+    if (self.model.message.conversation.type == Group_Type) {
+        groupId = self.model.message.conversation.target;
+    }
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser inGroup:groupId refresh:NO];
   if(userInfo.userId.length == 0) {
     userInfo = [[WFCCUserInfo alloc] init];
     userInfo.userId = model.message.fromUser;
