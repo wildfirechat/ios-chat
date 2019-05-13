@@ -62,11 +62,11 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
-    return [self formatNotification];
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
 }
 
-- (NSString *)formatNotification {
+- (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.owner inGroup:self.groupId refresh:NO];

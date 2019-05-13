@@ -31,7 +31,7 @@
 + (int)getContentFlags {
     return 0;
 }
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
   return @"Unimplement digest function";
 }
 @end

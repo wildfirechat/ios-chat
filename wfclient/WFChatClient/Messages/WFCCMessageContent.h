@@ -114,6 +114,7 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
 
 @end
 
+@class WFCCMessage;
 /**
  消息协议，所有消息(包括自定义消息均需要实现此协议)
  */
@@ -152,7 +153,7 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
 
  @return 消息的简短信息，主要用于通知提示和会话列表等需要简略信息的地方。
  */
-- (NSString *)digest;
+- (NSString *)digest:(WFCCMessage *)message;
 
 @end
 

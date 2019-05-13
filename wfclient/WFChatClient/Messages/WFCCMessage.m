@@ -11,5 +11,7 @@
 
 
 @implementation WFCCMessage
-
+- (NSString *)digest {
+    return [self.content digest:self];
+}
 @end

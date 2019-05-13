@@ -38,11 +38,11 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)formatNotification {
+- (NSString *)formatNotification:(WFCCMessage *)message {
     return self.tip;
 }
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
     return self.tip;
 }
 @end

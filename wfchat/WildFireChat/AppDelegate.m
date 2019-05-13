@@ -168,7 +168,7 @@
             if((flag & 0x03) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
               UILocalNotification *localNote = [[UILocalNotification alloc] init];
               
-              localNote.alertBody = [msg.content digest];
+              localNote.alertBody = [msg digest];
               if (msg.conversation.type == Single_Type) {
                 WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
                 if (sender.name) {

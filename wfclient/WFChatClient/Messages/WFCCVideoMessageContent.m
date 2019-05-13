@@ -56,7 +56,7 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
     return @"[视频]";
 }
 @end

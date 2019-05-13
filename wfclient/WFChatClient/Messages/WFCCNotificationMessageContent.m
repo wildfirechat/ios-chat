@@ -11,7 +11,7 @@
 
 @implementation WFCCNotificationMessageContent
 
-- (NSString *)formatNotification {
+- (NSString *)formatNotification:(WFCCMessage *)message {
     return nil;
 }
 

@@ -65,11 +65,11 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
-    return [self formatNotification];
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
 }
 
-- (NSString *)formatNotification {
+- (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         formatMsg = [NSString stringWithFormat:@"你修改群名称为：%@", self.name];

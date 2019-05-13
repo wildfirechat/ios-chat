@@ -29,10 +29,9 @@
     NSString *infoText;
     if ([msgModel.message.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
         WFCCNotificationMessageContent *content = (WFCCNotificationMessageContent *)msgModel.message.content;
-        infoText = [content formatNotification];
+        infoText = [content formatNotification:msgModel.message];
     } else {
-        WFCCUnknownMessageContent *unknownContent = (WFCCUnknownMessageContent *)msgModel.message.content;
-        infoText = [unknownContent digest];
+        infoText = [msgModel.message digest];
     }
     CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING + TEXT_TOP_PADDING + TEXT_BUTTOM_PADDING;
@@ -48,10 +47,10 @@
     NSString *infoText;
     if ([model.message.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
         WFCCNotificationMessageContent *content = (WFCCNotificationMessageContent *)model.message.content;
-        infoText = [content formatNotification];
+        infoText = [content formatNotification:model.message];
     } else {
         WFCCUnknownMessageContent *unknownContent = (WFCCUnknownMessageContent *)model.message.content;
-        infoText = [unknownContent digest];
+        infoText = [model.message digest];
     }
     
     CGFloat width = self.contentView.bounds.size.width;
