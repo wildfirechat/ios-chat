@@ -92,4 +92,6 @@ typedef NS_ENUM(NSInteger, WFCCMessageStatus) {
  */
 @property (nonatomic, assign)long long serverTime;
 
+- (NSString *)digest;
+
 @end

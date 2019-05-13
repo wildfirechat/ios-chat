@@ -64,7 +64,7 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
     if (_audioOnly) {
         return @"[语音通话]";
     } else {

@@ -61,11 +61,11 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
-    return [self formatNotification];
+- (NSString *)digest:(WFCCMessage *)message {
+    return [self formatNotification:message];
 }
 
-- (NSString *)formatNotification {
+- (NSString *)formatNotification:(WFCCMessage *)message {
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
         return [NSString stringWithFormat:@"你创建了群\"%@\"", self.groupName];
     } else {

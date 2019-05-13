@@ -30,7 +30,7 @@
 
 
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
   return [NSString stringWithFormat:@"未知类型消息(%zd)", self.orignalType];
 }
 @end

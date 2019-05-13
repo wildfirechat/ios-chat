@@ -118,6 +118,6 @@
 
 - (void)setMessage:(WFCCMessage *)message {
     _message = message;
-    self.digestLabel.text = [message.content digest];
+    self.digestLabel.text = [message.content digest:message];
 }
 @end

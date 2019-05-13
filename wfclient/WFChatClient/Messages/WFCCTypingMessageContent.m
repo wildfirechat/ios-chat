@@ -42,7 +42,7 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
   return nil;
 }
 @end
