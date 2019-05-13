@@ -58,7 +58,7 @@
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
 }
 
-- (NSString *)digest {
+- (NSString *)digest:(WFCCMessage *)message {
     return [NSString stringWithFormat:@"[文件]:%@", self.name];
 }
 @end

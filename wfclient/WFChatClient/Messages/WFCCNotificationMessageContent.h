@@ -9,6 +9,7 @@
 #import "WFCCMessageContent.h"
 
 
+@class WFCCMessage;
 /**
  通知消息的协议
  */
@@ -19,12 +20,12 @@
 
  @return 提示内容
  */
-- (NSString *)formatNotification;
+- (NSString *)formatNotification:(WFCCMessage *)message;
 @end
 
 /**
  通知消息
  */
-@interface WFCCNotificationMessageContent : WFCCMessageContent <WFCCNotificationMessageContent>
+@interface WFCCNotificationMessageContent : WFCCMessageContent <    WFCCNotificationMessageContent>
 
 @end

@@ -48,7 +48,7 @@
             userInfo.userId = message.fromUser;
         }
         [self updateUserInfo:userInfo];
-    NSString *strContent = message.content.digest;
+    NSString *strContent = message.digest;
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:strContent];
     NSRange range = [strContent rangeOfString:self.keyword options:NSCaseInsensitiveSearch];
     [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];

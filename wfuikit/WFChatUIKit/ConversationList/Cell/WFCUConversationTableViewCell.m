@@ -63,7 +63,7 @@
     if (searchInfo.marchedCount > 1) {
         self.digestView.text = [NSString stringWithFormat:@"%d条记录", searchInfo.marchedCount];
     } else {
-        NSString *strContent = searchInfo.marchedMessage.content.digest;
+        NSString *strContent = searchInfo.marchedMessage.digest;
         NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:strContent];
         NSRange range = [strContent rangeOfString:searchInfo.keyword options:NSCaseInsensitiveSearch];
         [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];
@@ -182,16 +182,16 @@
         }
         WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:_info.lastMessage.fromUser inGroup:groupId refresh:NO];
         if (sender.friendAlias.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
-            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.friendAlias, _info.lastMessage.content.digest];
+            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.friendAlias, _info.lastMessage.digest];
         } else if (sender.groupAlias.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
-            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.groupAlias, _info.lastMessage.content.digest];
+            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.groupAlias, _info.lastMessage.digest];
         } else if (sender.displayName.length && ![_info.lastMessage.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
-            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.displayName, _info.lastMessage.content.digest];
+            self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.displayName, _info.lastMessage.digest];
         } else {
-            self.digestView.text = _info.lastMessage.content.digest;
+            self.digestView.text = _info.lastMessage.digest;
         }
     } else {
-        self.digestView.text = _info.lastMessage.content.digest;
+        self.digestView.text = _info.lastMessage.digest;
     }
 }
 
