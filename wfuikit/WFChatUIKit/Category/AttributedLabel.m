@@ -55,6 +55,9 @@
 
 
 -(NSMutableAttributedString*)subStr:(NSString *)string {
+    if (!string) {
+        return nil;
+    }
     NSError *error;
     
     //可以识别url的正则表达式
