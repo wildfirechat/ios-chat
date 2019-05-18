@@ -975,6 +975,25 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return nil;
 }
 
+- (NSArray<WFCCUserInfo *> *)getUserInfos:(NSArray<NSString *> *)userIds inGroup:(NSString *)groupId {
+    if ([userIds count] == 0) {
+        return nil;
+    }
+    
+    std::list<std::string> strIds;
+    for (NSString *userId in userIds) {
+        strIds.insert(strIds.end(), [userId UTF8String]);
+    }
+    std::list<mars::stn::TUserInfo> tuis = mars::stn::MessageDB::Instance()->getUserInfos(strIds, groupId ? [groupId UTF8String] : "");
+    
+    NSMutableArray<WFCCUserInfo *> *ret = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TUserInfo>::iterator it = tuis.begin(); it != tuis.end(); it++) {
+        WFCCUserInfo *userInfo = convertUserInfo(*it);
+        [ret addObject:userInfo];
+    }
+    return ret;
+}
+
 - (void)uploadMedia:(NSData *)mediaData
           mediaType:(WFCCMediaType)mediaType
             success:(void(^)(NSString *remoteUrl))successBlock

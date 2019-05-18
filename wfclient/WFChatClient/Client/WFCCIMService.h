@@ -509,6 +509,16 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  @return 本地的用户信息，可能为空
  */
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId inGroup:(NSString *)groupId refresh:(BOOL)refresh;
+
+/**
+ 批量获取用户信息
+ 
+ @param userIds 用户ID列表
+ @param groupId 群组ID
+ @return 本地的用户信息列表。本地不存在的用户会返回只有id的用户信息，同时会拉取。
+ */
+- (NSArray<WFCCUserInfo *> *)getUserInfos:(NSArray<NSString *> *)userIds inGroup:(NSString *)groupId;
+
 /**
  搜索用户
  
