@@ -672,10 +672,27 @@
             if(![vc.memberIds containsObject:self.conversation.target]) {
               [vc.memberIds insertObject:self.conversation.target atIndex:0];
             }
+            
+            if(![vc.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+                [vc.memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
+            }
+            
             vc.hidesBottomBarWhenPushed = YES;
             UINavigationController *nav = self.navigationController;
             [self.navigationController popToRootViewControllerAnimated:NO];
             [nav pushViewController:vc animated:YES];
+            
+            vc.onSuccess = ^(NSString *groupId) {
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [[WFCCConversation alloc] init];
+                mvc.conversation.type = Group_Type;
+                mvc.conversation.target = groupId;
+                mvc.conversation.line = 0;
+                
+                mvc.hidesBottomBarWhenPushed = YES;
+                [nav pushViewController:mvc animated:YES];
+            };
+            
         };
         pvc.disableUsersSelected = YES;
       }

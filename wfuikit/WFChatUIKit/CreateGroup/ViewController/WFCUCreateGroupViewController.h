@@ -12,4 +12,5 @@
 @property(nonatomic, strong)NSMutableArray<NSString *> *memberIds;
 @property(nonatomic, assign)BOOL isModifyPortrait;
 @property(nonatomic, strong)NSString *groupId;
+@property(nonatomic, strong)void (^onSuccess)(NSString *groupId);
 @end
