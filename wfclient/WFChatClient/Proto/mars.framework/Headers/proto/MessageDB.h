@@ -87,6 +87,7 @@ namespace mars {
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
+            std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
             long InsertUserInfoOrReplace(const TUserInfo &userInfo);
             long UpdateMyInfo(const std::list<std::pair<int, std::string>> &infos);
             

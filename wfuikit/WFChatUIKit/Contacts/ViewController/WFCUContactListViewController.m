@@ -34,6 +34,9 @@
 
 @property(nonatomic, strong) NSDictionary *allFriendSectionDic;
 @property(nonatomic, strong) NSArray *allKeys;
+
+@property(nonatomic, assign)BOOL sorting;
+@property(nonatomic, assign)BOOL needSort;
 @end
 
 @implementation WFCUContactListViewController
@@ -65,6 +68,7 @@
 - (void)setup {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -170,18 +174,16 @@
     } else {
         userIdList = [[WFCCIMService sharedWFCIMService] getMyFriendList:forceLoadFromRemote];
     }
-    for (NSString *userId in userIdList) {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-        if (userInfo == nil) {
-            userInfo = [[WFCCUserInfo alloc] init];
-            userInfo.userId = userId;
-            userInfo.displayName = [NSString stringWithFormat:@"User<%@>", userId];
-        }
-        
-        [self.dataArray addObject:userInfo];
+    self.dataArray = [[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil];
+    self.needSort = YES;
+}
+
+- (void)setNeedSort:(BOOL)needSort {
+    _needSort = needSort;
+    if (needSort && !self.sorting) {
+        _needSort = NO;
+        [self sortAndRefreshWithList:self.dataArray];
     }
-    
-    [self sortAndRefreshWithList:self.dataArray];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -195,8 +197,7 @@
         }
     }
     if(needRefresh) {
-        [self sortAndRefreshWithList:self.dataArray];
-        [self.tableView reloadData];
+        self.needSort = needRefresh;
     }
 }
 - (void)onContactsUpdated:(NSNotification *)notification {
@@ -204,6 +205,7 @@
 }
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {
+    self.sorting = YES;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         self.resultDic = [WFCUContactListViewController sortedArrayWithPinYinDic:friendList];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -227,6 +229,10 @@
           }
             
             [self.tableView reloadData];
+            self.sorting = NO;
+            if (self.needSort) {
+                self.needSort = self.needSort;
+            }
         });
     });
 }
@@ -395,6 +401,9 @@
             contactCell.userId = userInfo.userId;
             cell = contactCell;
         }
+    }
+    if (cell == nil) {
+        NSLog(@"error");
     }
     return cell;
 }
@@ -583,9 +592,7 @@
             }
         }
     }
-    
-    [self sortAndRefreshWithList:self.searchList];
-    [self.tableView reloadData];
+    self.needSort = YES;
 }
 
 + (NSMutableDictionary *)sortedArrayWithPinYinDic:(NSArray *)userList {
@@ -639,6 +646,11 @@
             if (userInfo.friendAlias.length) {
                 userName = userInfo.friendAlias;
             }
+            if (userName.length == 0) {
+                userInfo.displayName = [NSString stringWithFormat:@"<%@>", userInfo.userId];
+                userName = userInfo.displayName;
+            }
+            
             firstLetter = [self getFirstUpperLetter:userName];
             
         
