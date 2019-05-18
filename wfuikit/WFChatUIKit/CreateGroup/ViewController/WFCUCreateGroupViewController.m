@@ -286,6 +286,11 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     __weak typeof(self) ws = self;
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
+        if (ws.onSuccess) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                ws.onSuccess(groupId);
+            });
+        }
     } error:^(int error_code) {
         NSLog(@"create group failure");
         [ws.view makeToast:@"创建群组失败"
@@ -301,6 +306,11 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [[WFCCIMService sharedWFCIMService] modifyGroupInfo:groupId type:Modify_Group_Portrait newValue:portraitUrl notifyLines:@[@(0)] notifyContent:nil success:^{
       dispatch_async(dispatch_get_main_queue(), ^{
           [ws.navigationController popViewControllerAnimated:YES];
+          if (ws.onSuccess) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  ws.onSuccess(groupId);
+              });
+          }
       });
   } error:^(int error_code) {
     

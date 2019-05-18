@@ -192,11 +192,16 @@
     mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:self.userInfo.userId line:0];
     for (UIViewController *vc in self.navigationController.viewControllers) {
         if ([vc isKindOfClass:[WFCUMessageListViewController class]]) {
-            [self.navigationController popToViewController:vc animated:YES];
-            return;
+            WFCUMessageListViewController *old = (WFCUMessageListViewController*)vc;
+            if (old.conversation.type == Single_Type && [old.conversation.target isEqualToString:self.userInfo.userId]) {
+                [self.navigationController popToViewController:vc animated:YES];
+                return;
+            }
         }
     }
-    [self.navigationController pushViewController:mvc animated:YES];
+    UINavigationController *nav = self.navigationController;
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    [nav pushViewController:mvc animated:YES];
 }
 
 - (void)onVoipCallBtn:(id)sender {
