@@ -15,7 +15,9 @@
 #import "WFCUVerifyRequestViewController.h"
 #import "WFCUGeneralModifyViewController.h"
 #import "WFCUVideoViewController.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -149,7 +151,8 @@
         btn.layer.cornerRadius = 5.f;
         btn.layer.masksToBounds = YES;
         [self.sendMessageCell addSubview:btn];
-        
+
+#if WFCU_SUPPORT_VOIP
         self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         for (UIView *subView in self.voipCallCell.subviews) {
             [subView removeFromSuperview];
@@ -161,6 +164,7 @@
         btn.layer.cornerRadius = 5.f;
         btn.layer.masksToBounds = YES;
         [self.voipCallCell addSubview:btn];
+#endif
     } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userInfo.userId]) {
         
     } else {
@@ -205,6 +209,7 @@
 }
 
 - (void)onVoipCallBtn:(id)sender {
+#if WFCU_SUPPORT_VOIP
     __weak typeof(self)ws = self;
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -231,6 +236,7 @@
     
     //相当于之前的[actionSheet show];
     [self presentViewController:actionSheet animated:YES completion:nil];
+#endif
 }
 
 - (void)onAddFriendBtn:(id)sender {

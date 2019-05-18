@@ -49,7 +49,6 @@
         WFCCNotificationMessageContent *content = (WFCCNotificationMessageContent *)model.message.content;
         infoText = [content formatNotification:model.message];
     } else {
-        WFCCUnknownMessageContent *unknownContent = (WFCCUnknownMessageContent *)model.message.content;
         infoText = [model.message digest];
     }
     

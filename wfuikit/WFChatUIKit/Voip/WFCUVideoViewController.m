@@ -19,9 +19,9 @@
 #import <WFChatClient/WFCCConversation.h>
 
 
-@interface WFCUVideoViewController () <UITextFieldDelegate,
+@interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
-    WFAVCallSessionDelegate
+    ,WFAVCallSessionDelegate
 #endif
 >
 #if WFCU_SUPPORT_VOIP
