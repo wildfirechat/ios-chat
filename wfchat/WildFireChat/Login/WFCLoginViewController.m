@@ -259,6 +259,7 @@ alpha:1.0]
         [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
         [[WFCCNetworkService sharedInstance] connect:userId token:token];
         
