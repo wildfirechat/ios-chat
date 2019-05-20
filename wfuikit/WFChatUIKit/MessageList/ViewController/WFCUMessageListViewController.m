@@ -703,7 +703,7 @@
         }
         BOOL duplcated = NO;
         for (WFCUMessageModel *model in self.modelList) {
-            if (model.message.messageUid == message.messageUid) {
+            if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
                 duplcated = YES;
                 break;
             }
