@@ -20,6 +20,8 @@
 #import "UIView+Toast.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUMentionUserTableViewController.h"
+#import "WFCUContactListViewController.h"
+
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -716,13 +718,39 @@
     BOOL needUpdateText = NO;
     if(self.conversation.type == Group_Type) {
         if ([text isEqualToString:@"@"]) {
-            WFCUMentionUserTableViewController *mvc = [[WFCUMentionUserTableViewController alloc] init];
-            mvc.groupId = self.conversation.target;
-            mvc.delegate = self;
-            mvc.range = range;
             
-            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mvc];
-            [[self.delegate requireNavi] presentViewController:nav animated:YES completion:nil];
+            WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
+            pvc.selectContact = YES;
+            pvc.multiSelect = NO;
+            NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
+            [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
+            pvc.disableUsers = disabledUser;
+            NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
+            NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+            for (WFCCGroupMember *member in members) {
+                [candidateUser addObject:member.memberId];
+            }
+            pvc.candidateUsers = candidateUser;
+            pvc.withoutCheckBox = YES;
+            __weak typeof(self)ws = self;
+            pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+                if (contacts.count == 1) {
+                    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:self.conversation.target refresh:NO];
+                    NSString *name = userInfo.displayName;
+                    if (userInfo.groupAlias.length) {
+                        name = userInfo.groupAlias;
+                    }
+                    
+                    NSString *text = [NSString stringWithFormat:@"@%@ ", name];
+                    [ws didMentionType:1 user:[contacts objectAtIndex:0] range:NSMakeRange(range.location, text.length) text:text];
+                } else {
+                    [ws didCancelMentionAtRange:range];
+                }
+            };
+            pvc.disableUsersSelected = YES;
+            
+            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+            [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
             return NO;
         }
         
