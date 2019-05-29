@@ -356,7 +356,7 @@
         selectCell.friendUid = userInfo.userId;
         selectCell.multiSelect = self.multiSelect;
         
-        if (self.multiSelect) {
+        if (self.multiSelect && !self.withoutCheckBox) {
             if ([self.selectedContacts containsObject:userInfo.userId]) {
                 selectCell.checked = YES;
             } else {
@@ -372,7 +372,16 @@
             } else {
                 selectCell.disabled = NO;
             }
+        } else {
+            WFCUContactTableViewCell *selectCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
+            if (selectCell == nil) {
+                selectCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
+            }
+            
+            WFCCUserInfo *userInfo = dataSource[indexPath.row];
+            selectCell.userId = userInfo.userId;
         }
+
         cell = selectCell;
     } else {
 #define REUSEIDENTIFY @"resueCell"
