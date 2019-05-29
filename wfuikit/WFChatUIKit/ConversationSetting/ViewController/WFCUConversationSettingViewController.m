@@ -130,6 +130,16 @@
     }
     
     [self.view addSubview:self.tableView];
+    
+    if(self.conversation.type == Group_Type) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupMemberUpdated:) name:kGroupMemberUpdated object:self.conversation.target];
+    }
+}
+
+- (void)onGroupMemberUpdated:(NSNotification *)notification {
+    self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
+    self.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+    [self.memberCollectionView reloadData];
 }
 
 - (void)onTapChannelPortrait:(id)sender {
@@ -657,8 +667,9 @@
             [disabledUser addObject:member.memberId];
         }
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
               [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
+                
             } error:^(int error_code) {
               
             }];
