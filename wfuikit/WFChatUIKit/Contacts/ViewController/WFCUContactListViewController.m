@@ -182,7 +182,11 @@
     _needSort = needSort;
     if (needSort && !self.sorting) {
         _needSort = NO;
-        [self sortAndRefreshWithList:self.dataArray];
+        if (self.searchController.active) {
+            [self sortAndRefreshWithList:self.searchList];
+        } else {
+            [self sortAndRefreshWithList:self.dataArray];
+        }
     }
 }
 
@@ -257,6 +261,7 @@
     int count = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     [self.tabBarController.tabBar showBadgeOnItemIndex:1 badgeValue:count];
 }
+
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -578,21 +583,22 @@
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
-    [self loadContact:NO];
-    [self.tableView reloadData];
+    self.needSort = YES;
 }
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSString *searchString = [self.searchController.searchBar text];
-    if (self.searchList!= nil) {
-        [self.searchList removeAllObjects];
-        for (WFCCUserInfo *friend in self.dataArray) {
-            if ([friend.displayName containsString:searchString]) {
-                [self.searchList addObject:friend];
+    if (searchController.active) {
+        NSString *searchString = [self.searchController.searchBar text];
+        if (self.searchList!= nil) {
+            [self.searchList removeAllObjects];
+            for (WFCCUserInfo *friend in self.dataArray) {
+                if ([friend.displayName containsString:searchString]) {
+                    [self.searchList addObject:friend];
+                }
             }
         }
+        self.needSort = YES;
     }
-    self.needSort = YES;
 }
 
 + (NSMutableDictionary *)sortedArrayWithPinYinDic:(NSArray *)userList {
