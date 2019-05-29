@@ -10,6 +10,7 @@
 @interface WFCUContactListViewController : UIViewController
 @property (nonatomic, assign)BOOL selectContact;
 @property (nonatomic, assign)BOOL multiSelect;
+@property (nonatomic, assign)BOOL withoutCheckBox;
 @property (nonatomic, assign)BOOL isPushed;
 @property (nonatomic, strong)void (^selectResult)(NSArray<NSString *> *contacts);
 @property (nonatomic, strong)NSArray *disableUsers;
