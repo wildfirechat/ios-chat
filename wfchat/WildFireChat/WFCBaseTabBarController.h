@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface WFCBaseTabBarController : UITabBarController
-
+@property(nonatomic, assign)BOOL newUser;
 @end
