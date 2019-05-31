@@ -211,7 +211,7 @@ alpha:1.0]
           }];
 }
 
-- (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+- (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
@@ -224,7 +224,8 @@ alpha:1.0]
               if([dict[@"code"] intValue] == 0) {
                   NSString *userId = dict[@"result"][@"userId"];
                   NSString *token = dict[@"result"][@"token"];
-                  successBlock(userId, token);
+                  BOOL newUser = [dict[@"result"][@"register"] boolValue];
+                  successBlock(userId, token, newUser);
               } else {
                   errorBlock([dict[@"code"] intValue], dict[@"message"]);
               }
@@ -255,7 +256,7 @@ alpha:1.0]
   hud.label.text = @"登陆中...";
   [hud showAnimated:YES];
   
-    [self login:user password:password success:^(NSString *userId, NSString *token) {
+    [self login:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
         [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
@@ -265,7 +266,9 @@ alpha:1.0]
         
         dispatch_async(dispatch_get_main_queue(), ^{
           [hud hideAnimated:YES];
-            [UIApplication sharedApplication].delegate.window.rootViewController =  [WFCBaseTabBarController new];
+            WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
+            tabBarVC.newUser = newUser;
+            [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
         });
     } error:^(int errCode, NSString *message) {
         NSLog(@"login error with code %d, message %@", errCode, message);
