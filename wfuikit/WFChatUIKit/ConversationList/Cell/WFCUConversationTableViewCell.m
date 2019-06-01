@@ -119,9 +119,9 @@
 
 - (void)updateDigestFrame:(BOOL)isSending {
     if (isSending) {
-        _digestView.frame = CGRectMake(8 + 52 + 8 + 18, 36, [UIScreen mainScreen].bounds.size.width - 68  - 16 - 8 - 18, 19);
+        _digestView.frame = CGRectMake(16 + 48 + 12 + 18, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16 - 18, 19);
     } else {
-        _digestView.frame = CGRectMake(8 + 52 + 8, 36, [UIScreen mainScreen].bounds.size.width - 68  - 16 - 8, 19);
+        _digestView.frame = CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16, 19);
     }
 }
 - (void)update:(WFCCConversation *)conversation {
@@ -197,7 +197,7 @@
 
 - (UIImageView *)potraitView {
     if (!_potraitView) {
-        _potraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 52, 52)];
+        _potraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 12, 48, 48)];
         _potraitView.clipsToBounds = YES;
         _potraitView.layer.cornerRadius = 8.f;
         [self.contentView addSubview:_potraitView];
@@ -207,7 +207,7 @@
 
 - (UIImageView *)statusView {
     if (!_statusView) {
-        _statusView = [[UIImageView alloc] initWithFrame:CGRectMake(8 + 52 + 8, 38, 16, 16)];
+        _statusView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, 16, 16)];
         _statusView.image = [UIImage imageNamed:@"conversation_message_sending"];
         [self.contentView addSubview:_statusView];
     }
@@ -216,8 +216,8 @@
 
 - (UILabel *)targetView {
     if (!_targetView) {
-        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(8 + 52 + 8, 12, [UIScreen mainScreen].bounds.size.width - 68  - 68, 20)];
-        _targetView.font = [UIFont systemFontOfSize:18];
+        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
+        _targetView.font = [UIFont systemFontOfSize:16];
         [self.contentView addSubview:_targetView];
     }
     return _targetView;
@@ -225,7 +225,7 @@
 
 - (UILabel *)digestView {
     if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(8 + 52 + 8, 36, [UIScreen mainScreen].bounds.size.width - 68  - 16 - 8, 19)];
+        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
         _digestView.font = [UIFont systemFontOfSize:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         _digestView.textColor = [UIColor grayColor];
@@ -236,7 +236,7 @@
 
 - (UIImageView *)silentView {
     if (!_silentView) {
-        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 12, 40, 12, 12)];
+        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 20, 45, 12, 12)];
         _silentView.image = [UIImage imageNamed:@"conversation_mute"];
         [self.contentView addSubview:_silentView];
     }
@@ -245,8 +245,8 @@
 
 - (UILabel *)timeView {
     if (!_timeView) {
-        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 8, 15, 52, 15)];
-        _timeView.font = [UIFont systemFontOfSize:13];
+        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 16, 20, 52, 12)];
+        _timeView.font = [UIFont systemFontOfSize:11];
         _timeView.textAlignment = NSTextAlignmentRight;
         _timeView.textColor = [UIColor grayColor];
         [self.contentView addSubview:_timeView];
