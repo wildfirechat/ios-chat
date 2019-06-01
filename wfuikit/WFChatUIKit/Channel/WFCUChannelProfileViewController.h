@@ -1,5 +1,5 @@
 //
-//  WFCUProfileTableViewController.h
+//  WFCUChannelProfileViewController.h
 //  WFChat UIKit
 //
 //  Created by WF Chat on 2017/10/22.

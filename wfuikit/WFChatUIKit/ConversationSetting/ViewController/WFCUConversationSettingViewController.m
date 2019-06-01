@@ -756,10 +756,7 @@
 //            [self.navigationController pushViewController:vc animated:YES];
 //        } else {
             WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-            vc.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-            if (vc.userInfo == nil) {
-                return;
-            }
+            vc.userId = userId;
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
 //        }

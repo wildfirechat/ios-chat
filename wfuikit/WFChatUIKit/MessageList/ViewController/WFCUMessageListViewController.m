@@ -988,7 +988,7 @@
 
 - (void)didTapMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
   WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-  vc.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser refresh:NO];
+  vc.userId = model.message.fromUser;
   vc.hidesBottomBarWhenPushed = YES;
   [self.navigationController pushViewController:vc animated:YES];
 }

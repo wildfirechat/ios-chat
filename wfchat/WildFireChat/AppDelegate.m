@@ -235,12 +235,9 @@
     if ([str rangeOfString:@"wildfirechat://user" options:NSCaseInsensitiveSearch].location == 0) {
         NSString *userId = [str lastPathComponent];
         WFCUProfileTableViewController *vc2 = [[WFCUProfileTableViewController alloc] init];
-        vc2.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-        if (vc2.userInfo == nil) {
-            return NO;
-        }
-        
+        vc2.userId = userId;
         vc2.hidesBottomBarWhenPushed = YES;
+        
         [navigator pushViewController:vc2 animated:YES];
         return YES;
     } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {

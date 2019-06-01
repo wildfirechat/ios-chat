@@ -87,7 +87,7 @@
         WFCCUserInfo *userInfo = self.searchList[indexPath.row];
         
         WFCUProfileTableViewController *pvc = [[WFCUProfileTableViewController alloc] init];
-        pvc.userInfo = userInfo;
+        pvc.userId = userInfo.userId;
         [self.navigationController pushViewController:pvc animated:YES];
     }
 }
