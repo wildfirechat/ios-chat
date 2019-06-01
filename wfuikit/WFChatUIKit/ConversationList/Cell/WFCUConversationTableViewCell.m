@@ -69,7 +69,7 @@
         [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];
         self.digestView.attributedText = attrStr;
     }
-    
+    [self separator];
 }
 
 - (void)setInfo:(WFCCConversationInfo *)info {
@@ -115,6 +115,8 @@
         self.statusView.hidden = YES;
     }
     [self updateDigestFrame:!self.statusView.hidden];
+    
+    [self separator];
 }
 
 - (void)updateDigestFrame:(BOOL)isSending {
@@ -263,5 +265,14 @@
         }
     }
     return _bubbleView;
+}
+
+- (UIView *)separator {
+    if (!_separator) {
+        _separator = [[UIView alloc] initWithFrame:CGRectMake(76, 71.5, [UIScreen mainScreen].bounds.size.width-76, 0.5)];
+        [_separator setBackgroundColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.f]];
+        [self.contentView addSubview:_separator];
+    }
+    return _separator;
 }
 @end

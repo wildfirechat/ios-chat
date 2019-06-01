@@ -568,11 +568,10 @@
     } else {
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         WFCCUserInfo *friend = dataSource[indexPath.row];
-        vc.userInfo = friend;
-        if (vc.userInfo == nil) {
-            return;
-        }
+        vc.userId = friend.userId;
+
         vc.hidesBottomBarWhenPushed = YES;
+        
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
