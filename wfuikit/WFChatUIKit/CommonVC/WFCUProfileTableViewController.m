@@ -38,6 +38,8 @@
 
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<UITableViewCell *> *cells;
+
+@property (nonatomic, strong)WFCCUserInfo *userInfo;
 @end
 
 @implementation WFCUProfileTableViewController
@@ -45,6 +47,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:self.userId];
+    self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
@@ -54,10 +58,16 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     
+    self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self loadData];
-    
-    self.tableView.tableFooterView = [[UIView alloc] init];
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
+        [self loadData];
+    }
 }
 
 - (void)onRightBtn:(id)sender {
