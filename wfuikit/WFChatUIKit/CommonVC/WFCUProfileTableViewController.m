@@ -72,7 +72,7 @@
 
 - (void)onRightBtn:(id)sender {
     NSString *title;
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         title = @"删除好友";
     } else {
         title = @"添加好友";
@@ -101,7 +101,7 @@
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
     
-    NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userInfo.userId];
+    NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
         self.aliasLabel.text = alias;
@@ -117,7 +117,7 @@
     [self.headerCell addSubview:self.displayNameLabel];
     [self.headerCell addSubview:self.aliasLabel];
     
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         if (self.userInfo.mobile.length > 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             cell.textLabel.text = self.userInfo.mobile;
@@ -149,7 +149,7 @@
         }
     }
     
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         for (UIView *subView in self.sendMessageCell.subviews) {
             [subView removeFromSuperview];
@@ -175,7 +175,7 @@
         btn.layer.masksToBounds = YES;
         [self.voipCallCell addSubview:btn];
 #endif
-    } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userInfo.userId]) {
+    } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
         
     } else {
         self.addFriendCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
@@ -196,18 +196,18 @@
 
 - (void)onViewPortrait:(id)sender {
     WFCUMyPortraitViewController *pvc = [[WFCUMyPortraitViewController alloc] init];
-    pvc.userId = self.userInfo.userId;
+    pvc.userId = self.userId;
     [self.navigationController pushViewController:pvc animated:YES];
 }
 
 
 - (void)onSendMessageBtn:(id)sender {
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-    mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:self.userInfo.userId line:0];
+    mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:self.userId line:0];
     for (UIViewController *vc in self.navigationController.viewControllers) {
         if ([vc isKindOfClass:[WFCUMessageListViewController class]]) {
             WFCUMessageListViewController *old = (WFCUMessageListViewController*)vc;
-            if (old.conversation.type == Single_Type && [old.conversation.target isEqualToString:self.userInfo.userId]) {
+            if (old.conversation.type == Single_Type && [old.conversation.target isEqualToString:self.userId]) {
                 [self.navigationController popToViewController:vc animated:YES];
                 return;
             }
@@ -251,7 +251,7 @@
 
 - (void)onAddFriendBtn:(id)sender {
     WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
-    vc.userId = self.userInfo.userId;
+    vc.userId = self.userId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -323,8 +323,8 @@
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.label.text = @"处理中...";
         [hud showAnimated:YES];
-        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userInfo.userId]) {
-            [[WFCCIMService sharedWFCIMService] deleteFriend:self.userInfo.userId success:^{
+        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+            [[WFCCIMService sharedWFCIMService] deleteFriend:self.userId success:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [hud hideAnimated:YES];
                     
@@ -347,19 +347,19 @@
             }];
         } else {
             WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
-            vc.userId = self.userInfo.userId;
+            vc.userId = self.userId;
             [self.navigationController pushViewController:vc animated:YES];
         }
     } else if(buttonIndex == 1) {
         WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
-        NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userInfo.userId];
+        NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
         gmvc.defaultValue = previousAlias;
         gmvc.titleText = @"设置备注";
         gmvc.canEmpty = YES;
         __weak typeof(self)ws = self;
         gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
             if (![newValue isEqualToString:previousAlias]) {
-                [[WFCCIMService sharedWFCIMService] setFriend:self.userInfo.userId alias:newValue success:^{
+                [[WFCCIMService sharedWFCIMService] setFriend:self.userId alias:newValue success:^{
                     result(YES);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [ws loadData];
