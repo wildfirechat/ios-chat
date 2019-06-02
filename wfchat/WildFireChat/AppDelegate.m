@@ -210,7 +210,9 @@
 
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (status == kConnectionStatusLogout) {
+        if (status == kConnectionStatusRejected || status == kConnectionStatusTokenIncorrect || status == kConnectionStatusSecretKeyMismatch) {
+            [[WFCCNetworkService sharedInstance] disconnect:YES];
+        } else if (status == kConnectionStatusLogout) {
             UIViewController *loginVC = [[WFCLoginViewController alloc] init];
             self.window.rootViewController = loginVC;
         } 
