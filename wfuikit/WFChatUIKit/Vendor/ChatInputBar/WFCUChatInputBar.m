@@ -1017,4 +1017,8 @@
     
     self.textInputView.selectedRange = range;
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end
