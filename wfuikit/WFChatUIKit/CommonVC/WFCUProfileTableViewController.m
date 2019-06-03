@@ -65,8 +65,12 @@
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
     WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
-        [self loadData];
+    if ([self.userId isEqualToString:userInfo.userId]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.userInfo = userInfo;
+            [self loadData];
+            NSLog(@"reload user info %@", self.userInfo.userId);
+        });
     }
 }
 
@@ -374,4 +378,7 @@
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

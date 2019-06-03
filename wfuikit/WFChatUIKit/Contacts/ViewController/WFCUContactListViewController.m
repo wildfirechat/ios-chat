@@ -750,4 +750,8 @@
     return [predicate evaluateWithObject:text];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end

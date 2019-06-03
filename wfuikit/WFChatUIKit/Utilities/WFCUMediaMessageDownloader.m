@@ -180,4 +180,8 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     }];
     return YES;
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end
