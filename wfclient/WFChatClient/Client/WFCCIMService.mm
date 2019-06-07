@@ -619,6 +619,65 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
+- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+                                           lines:(NSArray<NSNumber *> *)lines
+                                    contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                            from:(NSUInteger)fromIndex
+                                           count:(NSInteger)count
+                                        withUser:(NSString *)user {
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    return convertProtoMessageList(messages, YES);
+}
+
+- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+                                           lines:(NSArray<NSNumber *> *)lines
+                                   messageStatus:(WFCCMessageStatus)messageStatus
+                                            from:(NSUInteger)fromIndex
+                                           count:(NSInteger)count
+                                        withUser:(NSString *)user {
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    
+
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, messageStatus, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    return convertProtoMessageList(messages, YES);
+}
+
 - (void)getRemoteMessages:(WFCCConversation *)conversation
                    before:(long long)beforeMessageUid
                     count:(NSUInteger)count
