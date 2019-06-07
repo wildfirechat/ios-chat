@@ -50,6 +50,11 @@ namespace mars {
             bool ClearMessages(int conversationType, const std::string &target, int line);
             
             std::list<TMessage> GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, long startPoint, const std::string &withUser);
+            
+            std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, long startPoint, const std::string &withUser);
+            
+            std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const int messageStatus, bool desc, int count, long startPoint, const std::string &withUser);
+
           
             TMessage GetMessageById(long messageId);
             TMessage GetMessageByUid(long long messageUid);
