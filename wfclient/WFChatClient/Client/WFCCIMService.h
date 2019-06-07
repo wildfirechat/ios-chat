@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  @param count 总数
  @return 消息实体
  */
-- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+- (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
                                     contentTypes:(NSArray<NSNumber *> *)contentTypes
                                             from:(NSUInteger)fromIndex
@@ -285,12 +285,12 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  
  @param conversationTypes 会话类型
  @param lines 默认传 @[@(0)]
- @param contentTypes 消息类型
+ @param messageStatus 消息状态
  @param fromIndex 起始index
  @param count 总数
  @return 消息实体
  */
-- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+- (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
                                    messageStatus:(WFCCMessageStatus)messageStatus
                                             from:(NSUInteger)fromIndex
