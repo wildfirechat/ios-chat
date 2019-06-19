@@ -171,9 +171,9 @@
               localNote.alertBody = [msg digest];
               if (msg.conversation.type == Single_Type) {
                 WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
-                if (sender.name) {
+                if (sender.displayName) {
                     if (@available(iOS 8.2, *)) {
-                        localNote.alertTitle = sender.name;
+                        localNote.alertTitle = sender.displayName;
                     } else {
                         // Fallback on earlier versions
                     }
@@ -181,15 +181,15 @@
               } else if(msg.conversation.type == Group_Type) {
                   WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:msg.conversation.target refresh:NO];
                   WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
-                  if (sender.name && group.name) {
+                  if (sender.displayName && group.name) {
                       if (@available(iOS 8.2, *)) {
-                          localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.name, group.name];
+                          localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.displayName, group.name];
                       } else {
                           // Fallback on earlier versions
                       }
-                  }else if (sender.name) {
+                  }else if (sender.displayName) {
                       if (@available(iOS 8.2, *)) {
-                          localNote.alertTitle = sender.name;
+                          localNote.alertTitle = sender.displayName;
                       } else {
                           // Fallback on earlier versions
                       }
@@ -271,9 +271,9 @@
         localNote.alertBody = @"来电话了";
         
             WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.clientId refresh:NO];
-            if (sender.name) {
+            if (sender.displayName) {
                 if (@available(iOS 8.2, *)) {
-                    localNote.alertTitle = sender.name;
+                    localNote.alertTitle = sender.displayName;
                 } else {
                     // Fallback on earlier versions
                     
