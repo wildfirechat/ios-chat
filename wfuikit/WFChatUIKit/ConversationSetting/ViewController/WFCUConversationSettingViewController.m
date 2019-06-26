@@ -18,6 +18,7 @@
 #import "WFCUCreateGroupViewController.h"
 #import "WFCUProfileTableViewController.h"
 #import "WFCUCreateGroupViewController.h"
+#import "GroupManageTableViewController.h"
 
 #import "MBProgressHUD.h"
 #import "WFCUMyProfileTableViewController.h"
@@ -556,7 +557,9 @@
     
     [self.navigationController pushViewController:vc animated:YES];
   } else if ([self isGroupManageCell:indexPath]) {
-    
+      GroupManageTableViewController *gmvc = [[GroupManageTableViewController alloc] init];
+      gmvc.groupInfo = self.groupInfo;
+      [self.navigationController pushViewController:gmvc animated:YES];
   } else if ([self isSearchMessageCell:indexPath]) {
       WFCUConversationSearchTableViewController *mvc = [[WFCUConversationSearchTableViewController alloc] init];
       mvc.conversation = self.conversation;

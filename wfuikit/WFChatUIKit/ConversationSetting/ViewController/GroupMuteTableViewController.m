@@ -1,0 +1,63 @@
+//
+//  ManagerTableViewController.m
+//  WFChatUIKit
+//
+//  Created by heavyrain lee on 2019/6/26.
+//  Copyright © 2019 WildFireChat. All rights reserved.
+//
+
+#import "GroupMuteTableViewController.h"
+#import "SDWebImage.h"
+#import "WFCUContactListViewController.h"
+#import "WFCUGeneralTableViewCell.h"
+
+@interface GroupMuteTableViewController () <UITableViewDelegate, UITableViewDataSource>
+@property(nonatomic, strong)UITableView *tableView;
+@property(nonatomic, strong)NSMutableArray<WFCCGroupMember *> *managerList;
+@end
+
+@implementation GroupMuteTableViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.title = @"群禁言管理";
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.tableView reloadData];
+    
+    [self.view addSubview:self.tableView];
+}
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    WFCUGeneralTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell == nil) {
+        cell = [[WFCUGeneralTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell.textLabel.text = @"全员禁言";
+        cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
+            
+        };
+    }
+    
+   
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+@end
