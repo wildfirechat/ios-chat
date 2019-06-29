@@ -26,7 +26,7 @@
 
 #import "WFCUChatInputBar.h"
 
-
+#import "UIView+Toast.h"
 
 #import "WFCUConversationSettingViewController.h"
 #import "SDPhotoBrowser.h"
@@ -987,6 +987,12 @@
 }
 
 - (void)didTapMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
+    if(self.conversation.type == Group_Type) {
+        if (self.targetGroup.privateChat) {
+            [self.view makeToast:@"管理员关闭了群组私聊权限" duration:1 position:CSToastPositionCenter];
+            return;
+        }
+    }
   WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
   vc.userId = model.message.fromUser;
   vc.hidesBottomBarWhenPushed = YES;

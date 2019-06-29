@@ -40,24 +40,23 @@
         cell = [[WFCUGeneralTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
-    if(indexPath.row == 0) {
-        cell.textLabel.text = @"允许普通群成员邀请好友";
-        cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
-            
-        };
-    } else {
+
+        cell.on = !self.groupInfo.privateChat;
         cell.textLabel.text = @"允许普通群成员发起临时会话";
         cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
-            
+            [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_PrivateChat newValue:value?@"0":@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                onDone(YES);
+            } error:^(int error_code) {
+                onDone(NO);
+            }];
         };
-    }
     
    
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

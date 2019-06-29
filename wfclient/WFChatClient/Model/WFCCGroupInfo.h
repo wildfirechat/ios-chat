@@ -61,4 +61,23 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
  */
 @property (nonatomic, strong)NSData *extra;
 
+/**
+ 群禁言状态，0 关闭群禁言；1 开启群禁言
+ */
+@property (nonatomic, assign)int mute;
+
+/**
+ 加群申请状态，0 无需验证；1 需要验证
+ */
+@property (nonatomic, assign)int joinType;
+
+/**
+ 群成员私聊状态，0 允许私聊；1 不允许私聊
+ */
+@property (nonatomic, assign)int privateChat;
+
+/**
+ 群搜索状态，0 群可以被搜索到；1 群不会被搜索到
+ */
+@property (nonatomic, assign)int searchable;
 @end
