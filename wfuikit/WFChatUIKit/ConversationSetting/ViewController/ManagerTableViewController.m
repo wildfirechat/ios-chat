@@ -48,7 +48,11 @@
     pvc.selectContact = YES;
     pvc.multiSelect = YES;
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-        
+        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(0)] notifyContent:nil success:^{
+            
+        } error:^(int error_code) {
+            
+        }];
     };
     NSMutableArray *candidateUsers = [[NSMutableArray alloc] init];
     NSArray *memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO];

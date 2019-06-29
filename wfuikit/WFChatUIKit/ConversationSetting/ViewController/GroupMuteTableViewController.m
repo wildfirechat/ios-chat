@@ -40,9 +40,15 @@
         cell = [[WFCUGeneralTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         cell.textLabel.text = @"全员禁言";
         cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
-            
+            [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                onDone(YES);
+            } error:^(int error_code) {
+                onDone(NO);
+            }];
         };
     }
+    
+    cell.on = self.groupInfo.mute;
     
    
     

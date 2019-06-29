@@ -70,6 +70,7 @@ namespace mars {
             
             TUnreadCount GetUnreadCount(const std::list<int> &conversationTypes, const std::list<int> lines);
             bool ClearUnreadStatus(int conversationType, const std::string &target, int line);
+            bool ClearUnreadStatus(const std::list<int> &conversationTypes, const std::list<int> lines);
             bool ClearAllUnreadStatus();
             
             bool FailSendingMessages();
@@ -110,6 +111,8 @@ namespace mars {
             std::list<TFriendRequest> getFriendRequest(int direction);
             
             long InsertFriendOrReplace(const std::string &friendUid, int state, int64_t timestamp, const std::string &alias);
+            
+            bool DeleteFriend(const std::string &friendUid);
             
             int unreadFriendRequest();
             void clearUnreadFriendRequestStatus();

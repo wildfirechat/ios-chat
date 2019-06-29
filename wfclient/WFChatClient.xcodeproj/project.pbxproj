@@ -82,6 +82,8 @@
 		2E6B511F1FAE9B10006B6E31 /* WFCCUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50F51FAE9B10006B6E31 /* WFCCUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B51201FAE9B10006B6E31 /* WFCCUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50F61FAE9B10006B6E31 /* WFCCUserInfo.m */; };
 		2EE6A4881FB290FC007953BC /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EE6A4871FB290FC007953BC /* Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F19723622C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F19723422C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m */; };
+		2F19723722C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F19723522C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h */; };
 		2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1A931821B250F5006625CD /* WFCCTypingMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A931921B250F5006625CD /* WFCCTypingMessageContent.m */; };
 		2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,6 +98,10 @@
 		2F8742E0219C4FED00F65EBA /* WFCCChatroomInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */; };
 		2FEF332621BE93980087B6C2 /* WFCCChannelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEF332421BE93980087B6C2 /* WFCCChannelInfo.m */; };
 		2FEF332721BE93980087B6C2 /* WFCCChannelInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FEF332521BE93980087B6C2 /* WFCCChannelInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2FF2A45D22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF2A45B22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m */; };
+		2FF2A45E22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF2A45C22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h */; };
+		2FF2A46122C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF2A45F22C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h */; };
+		2FF2A46222C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF2A46022C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.m */; };
 		6E6C69A720B959F100006628 /* WFCCGroupSearchInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6C69A520B959F100006628 /* WFCCGroupSearchInfo.m */; };
 		6E6C69A820B959F100006628 /* WFCCGroupSearchInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E6C69A620B959F100006628 /* WFCCGroupSearchInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6ECFB2C720A84C88001F91CB /* WFCCFileMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ECFB2C520A84C88001F91CB /* WFCCFileMessageContent.m */; };
@@ -187,6 +193,8 @@
 		2E6B50F51FAE9B10006B6E31 /* WFCCUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCUserInfo.h; sourceTree = "<group>"; };
 		2E6B50F61FAE9B10006B6E31 /* WFCCUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCUserInfo.m; sourceTree = "<group>"; };
 		2EE6A4871FB290FC007953BC /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		2F19723422C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupSetManagerNotificationContent.m; sourceTree = "<group>"; };
+		2F19723522C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupSetManagerNotificationContent.h; sourceTree = "<group>"; };
 		2F1A931821B250F5006625CD /* WFCCTypingMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCTypingMessageContent.h; sourceTree = "<group>"; };
 		2F1A931921B250F5006625CD /* WFCCTypingMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCTypingMessageContent.m; sourceTree = "<group>"; };
 		2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCVideoMessageContent.h; sourceTree = "<group>"; };
@@ -201,6 +209,10 @@
 		2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChatroomInfo.m; sourceTree = "<group>"; };
 		2FEF332421BE93980087B6C2 /* WFCCChannelInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelInfo.m; sourceTree = "<group>"; };
 		2FEF332521BE93980087B6C2 /* WFCCChannelInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChannelInfo.h; sourceTree = "<group>"; };
+		2FF2A45B22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupMuteNotificationContent.m; sourceTree = "<group>"; };
+		2FF2A45C22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupMuteNotificationContent.h; sourceTree = "<group>"; };
+		2FF2A45F22C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupPrivateChatNotificationContent.h; sourceTree = "<group>"; };
+		2FF2A46022C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupPrivateChatNotificationContent.m; sourceTree = "<group>"; };
 		6E6C69A520B959F100006628 /* WFCCGroupSearchInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupSearchInfo.m; sourceTree = "<group>"; };
 		6E6C69A620B959F100006628 /* WFCCGroupSearchInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupSearchInfo.h; sourceTree = "<group>"; };
 		6ECFB2C520A84C88001F91CB /* WFCCFileMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCFileMessageContent.m; sourceTree = "<group>"; };
@@ -362,6 +374,12 @@
 				90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */,
 				90B0444C1FEFDC4D00AFE79B /* WFCCModifyGroupAliasNotificationContent.h */,
 				90B0444D1FEFDC4D00AFE79B /* WFCCModifyGroupAliasNotificationContent.m */,
+				2FF2A45C22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h */,
+				2FF2A45B22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m */,
+				2FF2A45F22C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h */,
+				2FF2A46022C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.m */,
+				2F19723522C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h */,
+				2F19723422C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -433,7 +451,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				90D1F597208D65B500C2A9CA /* WFCCCallStartMessageContent.h in Headers */,
+				2FF2A46122C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
 				2E6B51131FAE9B10006B6E31 /* WFCCConversation.h in Headers */,
+				2F19723722C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h in Headers */,
 				903EBB8C21357DDF00312C16 /* WFCCStickerMessageContent.h in Headers */,
 				2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */,
 				2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */,
@@ -477,6 +497,7 @@
 				2E6B50C21FAE9B08006B6E31 /* app_callback.h in Headers */,
 				2E6B50B11FAE990D006B6E31 /* interf_enc.h in Headers */,
 				2E6B50C81FAE9B08006B6E31 /* WFCCNetworkStatus.h in Headers */,
+				2FF2A45E22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h in Headers */,
 				2E6B50B71FAE990D006B6E31 /* wavwriter.h in Headers */,
 				2E6B50B61FAE990D006B6E31 /* wavreader.h in Headers */,
 				2E6B50A01FAE98E6006B6E31 /* WFCChatClient.h in Headers */,
@@ -599,6 +620,7 @@
 				2E6B51121FAE9B10006B6E31 /* WFCCUtilities.m in Sources */,
 				2E6B51041FAE9B10006B6E31 /* WFCCMessage.m in Sources */,
 				2E6B50FC1FAE9B10006B6E31 /* WFCCDismissGroupNotificationContent.m in Sources */,
+				2F19723622C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m in Sources */,
 				2F3223D62144C5FB0016A2C4 /* WFCCVideoMessageContent.m in Sources */,
 				2E6B51181FAE9B10006B6E31 /* WFCCConversationSearchInfo.m in Sources */,
 				2E6B50C31FAE9B08006B6E31 /* app_callback.mm in Sources */,
@@ -617,6 +639,7 @@
 				90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */,
 				2E6B51101FAE9B10006B6E31 /* WFCCTransferGroupOwnerNotificationContent.m in Sources */,
 				2E6B50C51FAE9B08006B6E31 /* WFCCIMService.mm in Sources */,
+				2FF2A46222C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.m in Sources */,
 				2E6B51201FAE9B10006B6E31 /* WFCCUserInfo.m in Sources */,
 				2E6B511C1FAE9B10006B6E31 /* WFCCGroupInfo.m in Sources */,
 				2E6B51161FAE9B10006B6E31 /* WFCCConversationInfo.m in Sources */,
@@ -631,6 +654,7 @@
 				90B0444B1FEFDC1A00AFE79B /* WFCCChangeGroupNameNotificationContent.m in Sources */,
 				90B0444F1FEFDC4D00AFE79B /* WFCCModifyGroupAliasNotificationContent.m in Sources */,
 				2E6B51021FAE9B10006B6E31 /* WFCCMediaMessageContent.m in Sources */,
+				2FF2A45D22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m in Sources */,
 				2F8742DD219C4FED00F65EBA /* WFCCUnreadCount.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,7 +32,9 @@
     
     [self.view addSubview:self.tableView];
 }
-
+- (BOOL)isGroupOwner {
+    return [self.groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId];
+}
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
@@ -46,9 +48,18 @@
     cell.detailTextLabel.text = nil;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"管理员";
+            if ([self isGroupOwner]) {
+                cell.textLabel.text = @"管理员";
+            } else {
+                cell.textLabel.text = @"设置禁言";
+            }
+            
         } else if(indexPath.row == 1) {
-            cell.textLabel.text = @"设置禁言";
+            if ([self isGroupOwner]) {
+                cell.textLabel.text = @"设置禁言";
+            } else {
+                cell.textLabel.text = @"成员权限";
+            }
         } else if(indexPath.row == 2) {
             cell.textLabel.text = @"成员权限";
         }
@@ -67,7 +78,10 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 3;//管理员，设置禁言，群成员权限
+        if ([self isGroupOwner]) {
+            return 3; //管理员，设置禁言，群成员权限
+        }
+        return 2;//设置禁言，群成员权限
     } else if(section == 1) {
         return 2;//加群方式，查找权限
     }
@@ -91,20 +105,37 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2; //成员管理，加群设置
 }
+- (void)toManagerVC {
+    ManagerTableViewController *mtvc = [[ManagerTableViewController alloc] init];
+    mtvc.groupInfo = self.groupInfo;
+    [self.navigationController pushViewController:mtvc animated:YES];
+}
+- (void)toMuteVC {
+    GroupMuteTableViewController *gmtc = [[GroupMuteTableViewController alloc] init];
+    gmtc.groupInfo = self.groupInfo;
+    [self.navigationController pushViewController:gmtc animated:YES];
+}
+- (void)toMemberControlVC {
+    GroupMemberControlTableViewController *gmcvc = [[GroupMemberControlTableViewController alloc] init];
+    gmcvc.groupInfo = self.groupInfo;
+    [self.navigationController pushViewController:gmcvc animated:YES];
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            ManagerTableViewController *mtvc = [[ManagerTableViewController alloc] init];
-            mtvc.groupInfo = self.groupInfo;
-            [self.navigationController pushViewController:mtvc animated:YES];
+            if ([self isGroupOwner]) {
+                [self toManagerVC];
+            } else {
+                [self toMuteVC];
+            }
         } else if(indexPath.row == 1) {
-            GroupMuteTableViewController *gmtc = [[GroupMuteTableViewController alloc] init];
-            gmtc.groupInfo = self.groupInfo;
-            [self.navigationController pushViewController:gmtc animated:YES];
+            if ([self isGroupOwner]) {
+                [self toMuteVC];
+            } else {
+                [self toMemberControlVC];
+            }
         } else if(indexPath.row == 2) {
-            GroupMemberControlTableViewController *gmcvc = [[GroupMemberControlTableViewController alloc] init];
-            gmcvc.groupInfo = self.groupInfo;
-            [self.navigationController pushViewController:gmcvc animated:YES];
+            [self toMemberControlVC];
         }
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
