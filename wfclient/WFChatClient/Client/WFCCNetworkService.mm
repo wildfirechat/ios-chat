@@ -219,7 +219,7 @@ class GFLCB : public mars::stn::GetMyFriendsCallback {
 public:
     GFLCB(id<RefreshFriendListDelegate> delegate) : m_delegate(delegate) {}
     void onSuccess(std::list<std::string> friendIdList) {
-        if(m_delegate && friendIdList.size() > 0) {
+        if(m_delegate) {
             [m_delegate onFriendListUpdated];
         }
     }
