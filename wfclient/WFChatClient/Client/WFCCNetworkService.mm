@@ -424,22 +424,23 @@ static WFCCNetworkService * sharedSingleton = nil;
     if (_bgTaskId !=  UIBackgroundTaskInvalid) {
         [[UIApplication sharedApplication] endBackgroundTask:_bgTaskId];
     }
+    __weak typeof(self) ws = self;
     _bgTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        if (_suspendTimer) {
-            [_suspendTimer invalidate];
-            _suspendTimer = nil;
+        if (ws.suspendTimer) {
+            [ws.suspendTimer invalidate];
+            ws.suspendTimer = nil;
         }
         
-        if(_endBgTaskTimer) {
-            [_endBgTaskTimer invalidate];
-            _endBgTaskTimer = nil;
+        if(ws.endBgTaskTimer) {
+            [ws.endBgTaskTimer invalidate];
+            ws.endBgTaskTimer = nil;
         }
-        if(_forceConnectTimer) {
-            [_forceConnectTimer invalidate];
-            _forceConnectTimer = nil;
+        if(ws.forceConnectTimer) {
+            [ws.forceConnectTimer invalidate];
+            ws.forceConnectTimer = nil;
         }
         
-        _bgTaskId = UIBackgroundTaskInvalid;
+        ws.bgTaskId = UIBackgroundTaskInvalid;
     }];
 }
 
@@ -565,11 +566,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)forceConnect:(NSUInteger)second {
+    __weak typeof(self)ws = self;
   dispatch_async(dispatch_get_main_queue(), ^{
-    if (_logined &&[UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+    if (ws.logined &&[UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self onAppResume];
         [self startBackgroundTask];
-        _forceConnectTimer = [NSTimer scheduledTimerWithTimeInterval:second
+        ws.forceConnectTimer = [NSTimer scheduledTimerWithTimeInterval:second
                                                          target:self
                                                        selector:@selector(forceConnectTimeOut)
                                                        userInfo:nil
@@ -579,10 +581,11 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)cancelForceConnect {
+    __weak typeof(self)ws = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_forceConnectTimer) {
-            [_forceConnectTimer invalidate];
-            _forceConnectTimer = nil;
+        if (ws.forceConnectTimer) {
+            [ws.forceConnectTimer invalidate];
+            ws.forceConnectTimer = nil;
         }
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self onAppSuspend];

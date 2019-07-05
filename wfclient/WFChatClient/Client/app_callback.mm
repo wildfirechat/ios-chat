@@ -117,7 +117,11 @@ DeviceInfo AppCallBack::GetDeviceInfo() {
     CTCarrier *carrier = nwinfo.subscriberCellularProvider;
     info.carriername = carrier.carrierName ? [carrier.carrierName UTF8String] : "";
     
-    info.appversion = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] UTF8String];
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    if (appVersion) {
+        info.appversion = [appVersion UTF8String];
+    }
+    
     info.sdkversion = [SDKVERSION UTF8String];
     
     return info;
