@@ -898,6 +898,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
     groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
     groupInfo.memberCount = tgi.memberCount;
+    groupInfo.mute = tgi.mute;
+    groupInfo.joinType = tgi.joinType;
+    groupInfo.privateChat = tgi.privateChat;
+    groupInfo.searchable = tgi.searchable;
     return groupInfo;
 }
 
@@ -1369,6 +1373,30 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     }
     
     mars::stn::transferGroup([groupId UTF8String], [newOwner UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (void)setGroupManager:(NSString *)groupId
+                  isSet:(BOOL)isSet
+              memberIds:(NSArray<NSString *> *)memberIds
+            notifyLines:(NSArray<NSNumber *> *)notifyLines
+          notifyContent:(WFCCMessageContent *)notifyContent
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    
+    mars::stn::TMessageContent tcontent;
+    fillTMessageContent(tcontent, notifyContent);
+    
+    std::list<int> lines;
+    for (NSNumber *number in notifyLines) {
+        lines.push_back([number intValue]);
+    }
+    
+    std::list<std::string> memberList;
+    for (NSString *member in memberIds) {
+        memberList.push_back([member UTF8String]);
+    }
+    
+    mars::stn::SetGroupManager([groupId UTF8String], memberList, isSet, lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSArray<NSString *> *)getFavGroups {
