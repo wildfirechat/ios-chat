@@ -10,6 +10,7 @@
 #import "ManagerTableViewController.h"
 #import "GroupMuteTableViewController.h"
 #import "GroupMemberControlTableViewController.h"
+#import "UIView+Toast.h"
 
 @interface GroupManageTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -66,7 +67,13 @@
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"加群方式";
-            cell.detailTextLabel.text = @"需要验证加入";
+            if (self.groupInfo.joinType == 0) {
+                cell.detailTextLabel.text = @"不限制加入";
+            } else if(self.groupInfo.joinType == 1) {
+                cell.detailTextLabel.text = @"群成员可以拉人";
+            } else if(self.groupInfo.joinType == 2) {
+                cell.detailTextLabel.text = @"只能群管理拉人";
+            }
         } else if(indexPath.row == 1) {
             cell.textLabel.text = @"查找方式";
             cell.detailTextLabel.text = @"不允许查找";
@@ -147,15 +154,35 @@
             }];
             [alertController addAction:cancelAction];
             
-            UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"不需要验证" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                
+            UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"不限制加入" style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    self.groupInfo.joinType = 0;
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                } error:^(int error_code) {
+                    [self.view makeToast:@"设置失败"];
+                }];
             }];
             [alertController addAction:openAction];
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:@"需要验证加入" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                
+            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:@"群成员可以拉人" style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    self.groupInfo.joinType = 1;
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                } error:^(int error_code) {
+                    [self.view makeToast:@"设置失败"];
+                }];
             }];
             [alertController addAction:verifyAction];
+            
+            UIAlertAction *normalAction = [UIAlertAction actionWithTitle:@"只能群管理拉人" style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    self.groupInfo.joinType = 2;
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                } error:^(int error_code) {
+                    [self.view makeToast:@"设置失败"];
+                }];
+            }];
+            [alertController addAction:normalAction];
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
         } else if(indexPath.row == 1) {
