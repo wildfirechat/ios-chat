@@ -19,7 +19,7 @@
 @property(nonatomic, strong)NSString *portraitUrl;
 
 @property(nonatomic, strong)UIButton *resetBtn;
-  
+@property(nonatomic, strong)UISwitch *qqSwitch;
 @property(nonatomic, strong)UIView *combineHeadView;
 @end
 #define PortraitWidth 120
@@ -70,6 +70,14 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(namePadding, 80 + portraitWidth + 60 + 24, bound.size.width - namePadding - namePadding, 2)];
     [line setBackgroundColor:[UIColor grayColor]];
     [self.view addSubview:line];
+      
+      UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(namePadding, 80 + portraitWidth + 60 + 24 + 40, 80, 24)];
+      label.text = @"QQ风格";
+      [self.view addSubview:label];
+      
+      self.qqSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(namePadding + 84, 80 + portraitWidth + 60 + 24 + 40, 60, 24)];
+      self.qqSwitch.on = NO;
+      [self.view addSubview:self.qqSwitch];
   }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
@@ -284,7 +292,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
   
 - (void)createGroup:(NSString *)groupName portrait:(NSString *)portraitUrl members:(NSArray<NSString *> *)memberIds {
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl type:self.qqSwitch.on ? GroupType_Restricted : GroupType_Normal members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         if (ws.onSuccess) {
             dispatch_async(dispatch_get_main_queue(), ^{

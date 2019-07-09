@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, assign)int mute;
 
 /**
- 加群申请状态，0 无需验证；1 需要验证
+ 加群申请状态，0 不限制加入（用户可以自己加群或被普通群成员拉入）；1 普通群成员可以拉人进群；2 只有群管理才能拉人
  */
 @property (nonatomic, assign)int joinType;
 
