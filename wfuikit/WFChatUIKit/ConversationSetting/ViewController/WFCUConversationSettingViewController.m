@@ -144,15 +144,17 @@
     [self.view addSubview:self.tableView];
     
     if(self.conversation.type == Group_Type) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupMemberUpdated:) name:kGroupMemberUpdated object:self.conversation.target];
+        __weak typeof(self)ws = self;
+        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([ws.conversation.target isEqualToString:note.object]) {
+                ws.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:ws.conversation.target refresh:NO];
+                ws.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:NO];
+                [ws.memberCollectionView reloadData];
+            }
+        }];
     }
 }
 
-- (void)onGroupMemberUpdated:(NSNotification *)notification {
-    self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
-    self.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
-    [self.memberCollectionView reloadData];
-}
 
 - (void)onTapChannelPortrait:(id)sender {
     WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
