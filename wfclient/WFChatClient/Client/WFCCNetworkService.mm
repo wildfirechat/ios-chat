@@ -686,7 +686,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMember {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberUpdated object:groupId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberUpdated object:@"20Dx2xZZ"];
     });
 }
 

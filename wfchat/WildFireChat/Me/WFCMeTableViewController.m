@@ -35,15 +35,14 @@
     
     [self.view addSubview:self.tableView];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+    __weak typeof(self)ws = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:note.object]) {
+            [ws.tableView reloadData];
+        }
+    }];
 }
 
-- (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
-        [self.tableView reloadData]; 
-    }
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
