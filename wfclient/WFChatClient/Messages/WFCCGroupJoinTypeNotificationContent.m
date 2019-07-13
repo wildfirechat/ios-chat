@@ -6,12 +6,12 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCGroupPrivateChatNotificationContent.h"
+#import "WFCCGroupJoinTypeNotificationContent.h"
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
 
-@implementation WFCCGroupPrivateChatNotificationContent
+@implementation WFCCGroupJoinTypeNotificationContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
     payload.contentType = [self.class getContentType];
@@ -48,7 +48,7 @@
 }
 
 + (int)getContentType {
-    return MESSAGE_CONTENT_TYPE_CHANGE_PRIVATECHAT;
+    return MESSAGE_CONTENT_TYPE_CHANGE_JOINTYPE;
 }
 
 + (int)getContentFlags {
@@ -66,19 +66,27 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
-        return [self.type isEqualToString:@"0"] ? @"你开启了成员私聊" : @"你关闭了成员私聊";
-    } else {
+    NSString *user = @"你";
+    if (![[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
         if (userInfo.friendAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.friendAlias];
+            user = userInfo.friendAlias;
         } else if(userInfo.groupAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.groupAlias];
+            user = userInfo.groupAlias;
         } else if (userInfo.displayName.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.displayName];
+            user = userInfo.displayName;
         } else {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"用户<%@>开启了成员私聊" : @"用户<%@>关闭了成员私聊", self.creator];
+            user = [NSString stringWithFormat:@"管理员<%@>", self.creator];
         }
     }
+    
+    if ([self.type isEqualToString:@"0"]) {
+        return [NSString stringWithFormat:@"%@开放了加入群组功能", user];
+    } else if ([self.type isEqualToString:@"1"]) {
+        return [NSString stringWithFormat:@"%@仅允许群成员邀请加入群组", user];
+    } else {
+        return [NSString stringWithFormat:@"%@关闭了加入群组功能", user];
+    }
+    
 }
 @end

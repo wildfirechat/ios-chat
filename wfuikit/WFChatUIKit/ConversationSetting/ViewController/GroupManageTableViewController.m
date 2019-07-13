@@ -32,6 +32,15 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+    __weak typeof(self)ws = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([ws.groupInfo.target isEqualToString:note.object]) {
+            ws.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:ws.groupInfo.target refresh:NO];
+            [ws.tableView reloadData];
+        }
+    }];
+    
 }
 - (BOOL)isGroupOwner {
     return [self.groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId];
@@ -156,8 +165,8 @@
             
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"不限制加入" style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
-                    self.groupInfo.joinType = 0;
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+//                    self.groupInfo.joinType = 0;
+//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
                     [self.view makeToast:@"设置失败"];
                 }];
@@ -166,8 +175,8 @@
             
             UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:@"群成员可以拉人" style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
-                    self.groupInfo.joinType = 1;
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+//                    self.groupInfo.joinType = 1;
+//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
                     [self.view makeToast:@"设置失败"];
                 }];
@@ -176,8 +185,8 @@
             
             UIAlertAction *normalAction = [UIAlertAction actionWithTitle:@"只能群管理拉人" style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
-                    self.groupInfo.joinType = 2;
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+//                    self.groupInfo.joinType = 2;
+//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
                     [self.view makeToast:@"设置失败"];
                 }];

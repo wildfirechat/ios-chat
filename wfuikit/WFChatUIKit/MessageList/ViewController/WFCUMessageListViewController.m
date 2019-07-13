@@ -989,8 +989,16 @@
 - (void)didTapMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if(self.conversation.type == Group_Type) {
         if (self.targetGroup.privateChat) {
-            [self.view makeToast:@"管理员关闭了群组私聊权限" duration:1 position:CSToastPositionCenter];
-            return;
+            if (![self.targetGroup.owner isEqualToString:model.message.fromUser] && ![self.targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
+                if (gm.type != Member_Type_Manager) {
+                    WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:model.message.fromUser];
+                    if (gm.type != Member_Type_Manager) {
+                        [self.view makeToast:@"管理员关闭了群组私聊权限" duration:1 position:CSToastPositionCenter];
+                        return;
+                    }
+                }
+            }
         }
     }
   WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
