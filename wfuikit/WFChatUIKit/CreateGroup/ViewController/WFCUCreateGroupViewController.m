@@ -72,7 +72,7 @@
     [self.view addSubview:line];
       
       UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(namePadding, 80 + portraitWidth + 60 + 24 + 40, 80, 24)];
-      label.text = @"QQ风格";
+      label.text = @"群管理功能";
       [self.view addSubview:label];
       
       self.qqSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(namePadding + 84, 80 + portraitWidth + 60 + 24 + 40, 60, 24)];
