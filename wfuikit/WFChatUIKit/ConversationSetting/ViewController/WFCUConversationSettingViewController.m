@@ -366,7 +366,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
-            if ([self isGroupManager]) {
+            if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
                 return 4; //群名称，群头像，群二维码，群管理，
             } else {
                 return 3; //群名称，群头像，群二维码
