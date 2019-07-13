@@ -138,6 +138,10 @@ WFCCGroupInfo* convertGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
     groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
     groupInfo.memberCount = tgi.memberCount;
+    groupInfo.mute = tgi.mute;
+    groupInfo.joinType = tgi.joinType;
+    groupInfo.privateChat = tgi.privateChat;
+    groupInfo.searchable = tgi.searchable;
     return groupInfo;
 }
 

@@ -355,7 +355,7 @@
 }
 
 - (void)resetInputBarStatue {
-    if (self.inputBarStatus != ChatInputBarRecordStatus) {
+    if (self.inputBarStatus != ChatInputBarRecordStatus && self.inputBarStatus != ChatInputBarMuteStatus) {
         self.inputBarStatus = ChatInputBarDefaultStatus;
     }
 }
@@ -383,6 +383,17 @@
 }
 
 - (void)setInputBarStatus:(ChatInputBarStatus)inputBarStatus {
+    if (inputBarStatus == _inputBarStatus) {
+        return;
+    }
+    if (_inputBarStatus == ChatInputBarMuteStatus) {
+        [self.textInputView setUserInteractionEnabled:YES];
+        [self.voiceInputBtn setEnabled:YES];
+        [self.voiceSwitchBtn setEnabled:YES];
+        [self.emojSwitchBtn setEnabled:YES];
+        [self.pluginSwitchBtn setEnabled:YES];
+    }
+    
     _inputBarStatus = inputBarStatus;
     switch (inputBarStatus) {
         case ChatInputBarKeyboardStatus:
@@ -421,6 +432,17 @@
             self.pluginInput = NO;
             self.textInput = YES;
             [self.textInputView resignFirstResponder];
+            break;
+        case ChatInputBarMuteStatus:
+            self.voiceInput = NO;
+            self.emojInput = NO;
+            self.pluginInput = NO;
+            self.textInput = YES;
+            [self.textInputView setUserInteractionEnabled:NO];
+            [self.voiceInputBtn setEnabled:NO];
+            [self.voiceSwitchBtn setEnabled:NO];
+            [self.emojSwitchBtn setEnabled:NO];
+            [self.pluginSwitchBtn setEnabled:NO];
             break;
         default:
             break;

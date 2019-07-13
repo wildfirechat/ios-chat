@@ -117,18 +117,30 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMenuHidden:) name:UIMenuControllerDidHideMenuNotification object:nil];
     
+    __weak typeof(self) ws = self;
     
   if(self.conversation.type == Single_Type) {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:self.conversation.target];
-    
+      [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+          if ([ws.conversation.target isEqualToString:note.object]) {
+              self.targetUser = note.userInfo[@"userInfo"];
+          }
+      }];
+      
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
-    
   } else if(self.conversation.type == Group_Type) {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:self.conversation.target];
-    
+      [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+          if ([ws.conversation.target isEqualToString:note.object]) {
+              ws.targetGroup = note.userInfo[@"groupInfo"];
+          }
+      }];
+      
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
   } else if(self.conversation.type == Channel_Type) {
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:self.conversation.target];
+      [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+          if ([ws.conversation.target isEqualToString:note.object]) {
+              ws.targetChannel = note.userInfo[@"channelInfo"];
+          }
+      }];
       
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
   }
@@ -138,7 +150,6 @@
     self.orignalDraft = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation].draft;
     
     if (self.conversation.type == Chatroom_Type) {
-        __weak typeof(self) ws = self;
         __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         hud.label.text = @"进入聊天室。。。";
         [hud showAnimated:YES];
@@ -351,6 +362,21 @@
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
         self.navigationItem.backBarButtonItem.title = targetGroup.name;
   }
+    ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
+    if (targetGroup.mute) {
+        if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            self.chatInputBar.inputBarStatus =  defaultStatus;
+        } else {
+            WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
+            if (gm.type == Member_Type_Manager) {
+                self.chatInputBar.inputBarStatus =  defaultStatus;
+            } else {
+                self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+            }
+        }
+    } else {
+        self.chatInputBar.inputBarStatus =  defaultStatus;
+    }
 }
 
 - (void)setTargetChannel:(WFCCChannelInfo *)targetChannel {
@@ -390,19 +416,6 @@
             }
         }
     }
-}
-
-- (void)onUserInfoUpdated:(NSNotification *)notification {
-  self.targetUser = notification.userInfo[@"userInfo"];
-}
-  
-- (void)onGroupInfoUpdated:(NSNotification *)notification {
-  self.targetGroup = notification.userInfo[@"groupInfo"];
-}
-
-- (void)onChannelInfoUpdated:(NSNotification *)notification {
-//    self.targetGroup = notification.userInfo[@"groupInfo"];
-    self.targetChannel = notification.userInfo[@"channelInfo"];
 }
 
 - (void)scrollToBottom:(BOOL)animated {
