@@ -90,8 +90,34 @@
         }
     }
     
+    
     return cell;
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 || (indexPath.section == 1 && indexPath.row == self.managerList.count)) {
+        return NO;
+    }
+    return YES;
+}
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"移除管理员" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+
+        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
+            
+        } error:^(int error_code) {
+            
+        }];
+    }];
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"取消" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        NSLog(@"点击了编辑");
+    }];
+    editAction.backgroundColor = [UIColor grayColor];
+    return @[deleteAction, editAction];
+}
+
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
