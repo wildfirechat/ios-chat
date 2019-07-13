@@ -48,6 +48,17 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:self.userId];
+    
+    __weak typeof(self)ws = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([ws.userId isEqualToString:note.object]) {
+            WFCCUserInfo *userInfo = note.userInfo[@"userInfo"];
+            ws.userInfo = userInfo;
+            [ws loadData];
+            NSLog(@"reload user info %@", ws.userInfo.userId);
+        }
+    }];
+    
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -61,17 +72,6 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self loadData];
-}
-
-- (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    if ([self.userId isEqualToString:userInfo.userId]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.userInfo = userInfo;
-            [self loadData];
-            NSLog(@"reload user info %@", self.userInfo.userId);
-        });
-    }
 }
 
 - (void)onRightBtn:(id)sender {

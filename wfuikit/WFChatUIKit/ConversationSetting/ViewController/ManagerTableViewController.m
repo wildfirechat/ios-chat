@@ -32,6 +32,13 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([self.groupInfo.target isEqualToString:note.object]) {
+            [self loadManagerList];
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)loadManagerList {
@@ -85,7 +92,7 @@
             cell.textLabel.text = @"添加管理员";
         } else {
             WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row].memberId  refresh:NO];
-            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait]];
+            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             cell.textLabel.text = manager.displayName;
         }
     }
@@ -155,5 +162,9 @@
             
         }
     }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end
