@@ -26,20 +26,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:self.groupId];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupMemberUpdated:) name:kGroupMemberUpdated object:self.groupId];
+    __weak typeof(self)ws = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([ws.groupId isEqualToString:note.object]) {
+            WFCCGroupInfo *groupInfo = note.userInfo[@"groupInfo"];
+            ws.groupInfo = groupInfo;
+        }
+    }];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([ws.groupId isEqualToString:note.object]) {
+            ws.members = [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:NO];
+        }
+        
+    }];
     
     self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.groupId refresh:NO];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupId forceUpdate:NO];
-}
-
-- (void)onGroupInfoUpdated:(NSNotification *)notification {
-    WFCCGroupInfo *groupInfo = notification.userInfo[@"groupInfo"];
-    self.groupInfo = groupInfo;
-}
-
-- (void)onGroupMemberUpdated:(NSNotification *)notification {
     self.members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupId forceUpdate:NO];
 }
 

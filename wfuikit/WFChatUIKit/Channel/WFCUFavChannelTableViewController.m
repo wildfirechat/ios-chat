@@ -50,7 +50,11 @@
         if (channelInfo) {
             channelInfo.channelId = channelId;
             [self.myChannels addObject:channelInfo];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:channelId];
+
+            __weak typeof(self)ws = self;
+            [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+                [ws onChannelInfoUpdated:note];
+            }];
         }
     }
     
@@ -60,7 +64,10 @@
         if (channelInfo) {
             channelInfo.channelId = channelId;
             [self.favChannels addObject:channelInfo];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:channelId];
+            __weak typeof(self)ws = self;
+            [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+                [ws onChannelInfoUpdated:note];
+            }];
         }
     }
     
