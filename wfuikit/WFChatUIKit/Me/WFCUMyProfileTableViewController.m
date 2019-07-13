@@ -212,7 +212,7 @@
 
 - (void)showMyQrCode {
     if (gQrCodeDelegate) {
-        [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_User target:nil];
+        [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_User target:[WFCCNetworkService sharedInstance].userId];
     }
 }
 #pragma mark - UITableViewDelegate
