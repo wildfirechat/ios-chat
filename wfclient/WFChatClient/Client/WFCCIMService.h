@@ -241,6 +241,9 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  */
 - (void)clearUnreadStatus:(WFCCConversation *)conversation;
 
+- (void)clearUnreadStatus:(NSArray<NSNumber *> *)conversationTypes
+                              lines:(NSArray<NSNumber *> *)lines;
+
 /**
  清空所有会话的未读数
  */

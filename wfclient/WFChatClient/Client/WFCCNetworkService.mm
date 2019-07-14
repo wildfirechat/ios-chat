@@ -680,6 +680,9 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], 2);
 }
 
+- (NSString *)encodedCid {
+    return [NSString stringWithUTF8String:mars::stn::GetEncodedCid().c_str()];
+}
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo {
   dispatch_async(dispatch_get_main_queue(), ^{
     for (WFCCGroupInfo *groupInfo in updatedGroupInfo) {
@@ -722,6 +725,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     });
 }
 
+- (NSData *)encodeData:(NSData *)data {
+    std::string encodeData = mars::stn::GetEncodeData(std::string((char *)data.bytes, data.length));
+    return [[NSData alloc] initWithBytes:encodeData.c_str() length:encodeData.length()];
+}
 - (void)onSettingUpdated {
   dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter] postNotificationName:kSettingUpdated object:nil];
