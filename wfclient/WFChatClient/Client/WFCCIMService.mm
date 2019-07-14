@@ -650,7 +650,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
-- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+- (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
                                    messageStatus:(WFCCMessageStatus)messageStatus
                                             from:(NSUInteger)fromIndex
@@ -723,6 +723,19 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->ClearUnreadStatus(conversation.type, [conversation.target UTF8String], conversation.line);
 }
 
+- (void)clearUnreadStatus:(NSArray<NSNumber *> *)conversationTypes
+                    lines:(NSArray<NSNumber *> *)lines {
+    std::list<int> types;
+    std::list<int> ls;
+    for (NSNumber *type in conversationTypes) {
+        types.insert(types.end(), type.intValue);
+    }
+    
+    for (NSNumber *line in lines) {
+        ls.insert(ls.end(), line.intValue);
+    }
+    mars::stn::MessageDB::Instance()->ClearUnreadStatus(types, ls);
+}
 - (void)clearAllUnreadStatus {
     mars::stn::MessageDB::Instance()->ClearAllUnreadStatus();
 }
@@ -1423,6 +1436,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Favourite_Group key:groupId value:fav? @"1" : @"0" success:successBlock error:errorBlock];
 }
 - (WFCCGroupInfo *)getGroupInfo:(NSString *)groupId refresh:(BOOL)refresh {
+    return nil;
+    if (!groupId) {
+        return nil;
+    }
     mars::stn::TGroupInfo tgi = mars::stn::MessageDB::Instance()->GetGroupInfo([groupId UTF8String], refresh);
     return convertProtoGroupInfo(tgi);
 }

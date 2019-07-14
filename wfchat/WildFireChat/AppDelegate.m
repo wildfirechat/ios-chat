@@ -153,7 +153,7 @@
 
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0), @(1)]];
+        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
         int count = unreadCount.unread;
         [UIApplication sharedApplication].applicationIconBadgeNumber = count;
         
