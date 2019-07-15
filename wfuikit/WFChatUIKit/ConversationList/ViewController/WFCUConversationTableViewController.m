@@ -329,7 +329,7 @@
 }
 
 - (void)refreshList {
-  self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0), @(1)]] mutableCopy];
+  self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]] mutableCopy];
     [self updateBadgeNumber];
   [self.tableView reloadData];
 }
