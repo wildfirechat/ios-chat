@@ -29,6 +29,7 @@
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
 		2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */; };
 		2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; };
+		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
 		2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F94F98622291577005BD461 /* CodeScan.bundle */; };
@@ -156,6 +157,7 @@
 		2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WFCUShareMessageView.xib; path = Frameworks/WFCUShareMessageView.xib; sourceTree = SOURCE_ROOT; };
 		2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatUIKit.framework; path = Frameworks/WFChatUIKit.framework; sourceTree = SOURCE_ROOT; };
+		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
 		2F7268F721F7136600E05F9C /* WFCPrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyViewController.h; sourceTree = "<group>"; };
 		2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyViewController.m; sourceTree = "<group>"; };
 		2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				2F1B0DD221E1B38100139CB1 /* ring.caf */,
 				90C1D90F208C12A900E923F4 /* foreman.mp4 */,
 				90C1D910208C12A900E923F4 /* ring.mp3 */,
+				2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */,
 			);
 			name = SupportFiles;
 			sourceTree = "<group>";
@@ -687,6 +690,7 @@
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
+				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
