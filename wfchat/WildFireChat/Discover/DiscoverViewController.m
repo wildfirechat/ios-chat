@@ -56,6 +56,10 @@
         
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.section == 0 && indexPath.row == 3) {
+        UIViewController *vc = [[NSClassFromString(@"SDTimeLineTableViewController") alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -64,7 +68,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    if(NSClassFromString(@"SDTimeLineTableViewController")) {
+        return 4;
+    } else {
+        return 3;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,6 +95,9 @@
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"频道";
             cell.imageView.image = [UIImage imageNamed:@"discover_channel"];
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = @"朋友圈";
+            cell.imageView.image = [UIImage imageNamed:@"AlbumReflashIcon"];
         }
     }
     
