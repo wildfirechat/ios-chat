@@ -699,7 +699,6 @@
 		2F143A66217F7D4100B3E38A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2F55103C217F5CC100F56C26 /* WFCUShareMessageView.xib */,
 				2F143A68217F7D4100B3E38A /* Stickers.bundle */,
 				2F143A69217F7D4100B3E38A /* Emoj.plist */,
 				2F143A82217F86EF00B3E38A /* WFChatUIKit.xcassets */,
@@ -1241,6 +1240,7 @@
 				2F551039217F5CC100F56C26 /* WFCUForwardMessageCell.m */,
 				2F55103D217F5CC100F56C26 /* WFCUShareMessageView.h */,
 				2F55103A217F5CC100F56C26 /* WFCUShareMessageView.m */,
+				2F55103C217F5CC100F56C26 /* WFCUShareMessageView.xib */,
 			);
 			path = ForwardMessage;
 			sourceTree = "<group>";
