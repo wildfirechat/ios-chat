@@ -796,30 +796,30 @@
 		2F550EB3217F5CC000F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				2F550EC0217F5CC000F56C26 /* WFCUMediaMessageCell.h */,
 				2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */,
 				2F550EB5217F5CC000F56C26 /* WFCULocationCell.h */,
+				2F550EC2217F5CC000F56C26 /* WFCULocationCell.m */,
+				2F550EC1217F5CC000F56C26 /* WFCUFileCell.h */,
 				2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */,
+				2F550EC8217F5CC000F56C26 /* WFCUCallSummaryCell.h */,
 				2F550EB7217F5CC000F56C26 /* WFCUCallSummaryCell.m */,
+				2F550EC7217F5CC000F56C26 /* WFCUInformationCell.h */,
 				2F550EB8217F5CC000F56C26 /* WFCUInformationCell.m */,
 				2F550EB9217F5CC000F56C26 /* WFCUImageCell.h */,
+				2F550EC6217F5CC000F56C26 /* WFCUImageCell.m */,
+				2F550EC5217F5CC000F56C26 /* WFCUVoiceCell.h */,
 				2F550EBA217F5CC000F56C26 /* WFCUVoiceCell.m */,
 				2F550EBB217F5CC000F56C26 /* WFCUMessageCellBase.h */,
+				2F550EC4217F5CC000F56C26 /* WFCUMessageCellBase.m */,
+				2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */,
 				2F550EBC217F5CC000F56C26 /* WFCUTextCell.m */,
+				2F550ECB217F5CC000F56C26 /* WFCUVideoCell.h */,
 				2F550EBD217F5CC000F56C26 /* WFCUVideoCell.m */,
 				2F550EBE217F5CC000F56C26 /* WFCUMessageCell.h */,
-				2F550EBF217F5CC000F56C26 /* WFCUStickerCell.h */,
-				2F550EC0217F5CC000F56C26 /* WFCUMediaMessageCell.h */,
-				2F550EC1217F5CC000F56C26 /* WFCUFileCell.h */,
-				2F550EC2217F5CC000F56C26 /* WFCULocationCell.m */,
-				2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */,
-				2F550EC4217F5CC000F56C26 /* WFCUMessageCellBase.m */,
-				2F550EC5217F5CC000F56C26 /* WFCUVoiceCell.h */,
-				2F550EC6217F5CC000F56C26 /* WFCUImageCell.m */,
-				2F550EC7217F5CC000F56C26 /* WFCUInformationCell.h */,
-				2F550EC8217F5CC000F56C26 /* WFCUCallSummaryCell.h */,
-				2F550EC9217F5CC000F56C26 /* WFCUStickerCell.m */,
 				2F550ECA217F5CC000F56C26 /* WFCUMessageCell.m */,
-				2F550ECB217F5CC000F56C26 /* WFCUVideoCell.h */,
+				2F550EBF217F5CC000F56C26 /* WFCUStickerCell.h */,
+				2F550EC9217F5CC000F56C26 /* WFCUStickerCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -827,8 +827,8 @@
 		2F550ECC217F5CC000F56C26 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2F550ECD217F5CC000F56C26 /* WFCUMessageModel.m */,
 				2F550ECE217F5CC000F56C26 /* WFCUMessageModel.h */,
+				2F550ECD217F5CC000F56C26 /* WFCUMessageModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -836,8 +836,8 @@
 		2F550ECF217F5CC000F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */,
 				2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */,
+				2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -846,23 +846,23 @@
 			isa = PBXGroup;
 			children = (
 				2F550ED3217F5CC000F56C26 /* WFCUProfileTableViewController.h */,
-				2F550ED4217F5CC000F56C26 /* WFCUGroupMemberTableViewCell.m */,
-				2F550ED5217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.h */,
-				2F550ED6217F5CC000F56C26 /* WFCUGroupMemberTableViewController.h */,
-				2F550ED7217F5CC000F56C26 /* WFCUGroupTableViewCell.m */,
-				2F550ED8217F5CC000F56C26 /* WFCUImagePreviewViewController.h */,
-				2F550ED9217F5CC000F56C26 /* WFCUSearchViewController.m */,
-				2F550EDA217F5CC000F56C26 /* WFCUGeneralModifyViewController.m */,
-				2F550EDB217F5CC000F56C26 /* WFCUBrowserViewController.m */,
 				2F550EDC217F5CC000F56C26 /* WFCUProfileTableViewController.m */,
 				2F550EDD217F5CC000F56C26 /* WFCUGroupMemberTableViewCell.h */,
+				2F550ED4217F5CC000F56C26 /* WFCUGroupMemberTableViewCell.m */,
+				2F550ED5217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.h */,
+				2F550EE1217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.m */,
+				2F550ED6217F5CC000F56C26 /* WFCUGroupMemberTableViewController.h */,
+				2F550EE0217F5CC000F56C26 /* WFCUGroupMemberTableViewController.m */,
+				2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */,
+				2F550ED9217F5CC000F56C26 /* WFCUSearchViewController.m */,
+				2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */,
+				2F550EDA217F5CC000F56C26 /* WFCUGeneralModifyViewController.m */,
+				2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */,
+				2F550EDB217F5CC000F56C26 /* WFCUBrowserViewController.m */,
+				2F550ED8217F5CC000F56C26 /* WFCUImagePreviewViewController.h */,
 				2F550EDE217F5CC000F56C26 /* WFCUImagePreviewViewController.m */,
 				2F550EDF217F5CC000F56C26 /* WFCUGroupTableViewCell.h */,
-				2F550EE0217F5CC000F56C26 /* WFCUGroupMemberTableViewController.m */,
-				2F550EE1217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.m */,
-				2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */,
-				2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */,
-				2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */,
+				2F550ED7217F5CC000F56C26 /* WFCUGroupTableViewCell.m */,
 			);
 			path = CommonVC;
 			sourceTree = "<group>";
@@ -878,8 +878,8 @@
 		2F550EE6217F5CC000F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */,
 				2F550EE8217F5CC000F56C26 /* WFCUCreateGroupViewController.h */,
+				2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -925,24 +925,24 @@
 		2F550EF3217F5CC000F56C26 /* ChatInputBar */ = {
 			isa = PBXGroup;
 			children = (
+				2F550EFB217F5CC000F56C26 /* FaceBoard */,
+				2F550F17217F5CC100F56C26 /* WFCULocationViewController.h */,
 				2F550EF4217F5CC000F56C26 /* WFCULocationViewController.m */,
 				2F550EF5217F5CC000F56C26 /* WFCUPluginItemView.h */,
-				2F550EF6217F5CC000F56C26 /* WFCUSelectFileViewController.m */,
-				2F550EF7217F5CC000F56C26 /* WFCUPluginBoardView.h */,
-				2F550EF8217F5CC000F56C26 /* WFCUChatInputBar.h */,
-				2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */,
-				2F550EFA217F5CC000F56C26 /* WFCUSelectedFileCollectionViewCell.h */,
-				2F550EFB217F5CC000F56C26 /* FaceBoard */,
-				2F550F14217F5CC100F56C26 /* WFCUEmotionTextAttachment.m */,
-				2F550F15217F5CC100F56C26 /* WFCULocationPoint.h */,
 				2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */,
-				2F550F17217F5CC100F56C26 /* WFCULocationViewController.h */,
+				2F550EF8217F5CC000F56C26 /* WFCUChatInputBar.h */,
 				2F550F18217F5CC100F56C26 /* WFCUChatInputBar.m */,
+				2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */,
+				2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */,
+				2F550EFA217F5CC000F56C26 /* WFCUSelectedFileCollectionViewCell.h */,
+				2F550F1C217F5CC100F56C26 /* WFCUSelectedFileCollectionViewCell.m */,
+				2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */,
+				2F550F14217F5CC100F56C26 /* WFCUEmotionTextAttachment.m */,
+				2F550EF7217F5CC000F56C26 /* WFCUPluginBoardView.h */,
 				2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */,
 				2F550F1A217F5CC100F56C26 /* WFCUSelectFileViewController.h */,
-				2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */,
-				2F550F1C217F5CC100F56C26 /* WFCUSelectedFileCollectionViewCell.m */,
-				2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */,
+				2F550EF6217F5CC000F56C26 /* WFCUSelectFileViewController.m */,
+				2F550F15217F5CC100F56C26 /* WFCULocationPoint.h */,
 				2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */,
 			);
 			path = ChatInputBar;
@@ -964,31 +964,31 @@
 		2F550F1F217F5CC100F56C26 /* CCHMapClusterController */ = {
 			isa = PBXGroup;
 			children = (
+				2F550F2E217F5CC100F56C26 /* CCHMapTreeUtils.h */,
 				2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */,
 				2F550F21217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.h */,
+				2F550F2C217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.m */,
+				2F550F31217F5CC100F56C26 /* CCHMapTree.h */,
 				2F550F22217F5CC100F56C26 /* CCHMapTree.m */,
+				2F550F2D217F5CC100F56C26 /* CCHMapClusterControllerDelegate.h */,
+				2F550F2F217F5CC100F56C26 /* CCHMapClusterController.h */,
 				2F550F23217F5CC100F56C26 /* CCHMapClusterController.m */,
+				2F550F32217F5CC100F56C26 /* CCHMapClusterControllerUtils.h */,
 				2F550F24217F5CC100F56C26 /* CCHMapClusterControllerUtils.m */,
+				2F550F33217F5CC100F56C26 /* CCHMapClusterOperation.h */,
 				2F550F25217F5CC100F56C26 /* CCHMapClusterOperation.m */,
 				2F550F26217F5CC100F56C26 /* CCHCenterOfMassMapClusterer.h */,
-				2F550F27217F5CC100F56C26 /* CCHMapViewDelegateProxy.h */,
-				2F550F28217F5CC100F56C26 /* CCHMapAnimator.h */,
-				2F550F29217F5CC100F56C26 /* CCHMapClusterAnnotation.m */,
-				2F550F2A217F5CC100F56C26 /* CCHFadeInOutMapAnimator.h */,
-				2F550F2B217F5CC100F56C26 /* CCHNearCenterMapClusterer.h */,
-				2F550F2C217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.m */,
-				2F550F2D217F5CC100F56C26 /* CCHMapClusterControllerDelegate.h */,
-				2F550F2E217F5CC100F56C26 /* CCHMapTreeUtils.h */,
-				2F550F2F217F5CC100F56C26 /* CCHMapClusterController.h */,
-				2F550F30217F5CC100F56C26 /* CCHMapClusterer.h */,
-				2F550F31217F5CC100F56C26 /* CCHMapTree.h */,
-				2F550F32217F5CC100F56C26 /* CCHMapClusterControllerUtils.h */,
-				2F550F33217F5CC100F56C26 /* CCHMapClusterOperation.h */,
-				2F550F34217F5CC100F56C26 /* CCHNearCenterMapClusterer.m */,
-				2F550F35217F5CC100F56C26 /* CCHFadeInOutMapAnimator.m */,
-				2F550F36217F5CC100F56C26 /* CCHMapClusterAnnotation.h */,
-				2F550F37217F5CC100F56C26 /* CCHMapViewDelegateProxy.m */,
 				2F550F38217F5CC100F56C26 /* CCHCenterOfMassMapClusterer.m */,
+				2F550F27217F5CC100F56C26 /* CCHMapViewDelegateProxy.h */,
+				2F550F37217F5CC100F56C26 /* CCHMapViewDelegateProxy.m */,
+				2F550F30217F5CC100F56C26 /* CCHMapClusterer.h */,
+				2F550F28217F5CC100F56C26 /* CCHMapAnimator.h */,
+				2F550F36217F5CC100F56C26 /* CCHMapClusterAnnotation.h */,
+				2F550F29217F5CC100F56C26 /* CCHMapClusterAnnotation.m */,
+				2F550F2B217F5CC100F56C26 /* CCHNearCenterMapClusterer.h */,
+				2F550F34217F5CC100F56C26 /* CCHNearCenterMapClusterer.m */,
+				2F550F2A217F5CC100F56C26 /* CCHFadeInOutMapAnimator.h */,
+				2F550F35217F5CC100F56C26 /* CCHFadeInOutMapAnimator.m */,
 			);
 			path = CCHMapClusterController;
 			sourceTree = "<group>";
@@ -1005,22 +1005,22 @@
 		2F550F3F217F5CC100F56C26 /* VideoPlayerKit */ = {
 			isa = PBXGroup;
 			children = (
+				2F550F4B217F5CC100F56C26 /* Resource */,
+				2F550F5B217F5CC100F56C26 /* VideoPlayer.h */,
 				2F550F40217F5CC100F56C26 /* VideoPlayerSampleViewController.h */,
+				2F550F47217F5CC100F56C26 /* VideoPlayerSampleViewController.m */,
 				2F550F41217F5CC100F56C26 /* FullScreenView.h */,
+				2F550F4A217F5CC100F56C26 /* FullScreenView.m */,
+				2F550F49217F5CC100F56C26 /* AirplayActiveView.h */,
 				2F550F42217F5CC100F56C26 /* AirplayActiveView.m */,
 				2F550F43217F5CC100F56C26 /* VideoPlayerSampleView.h */,
-				2F550F44217F5CC100F56C26 /* FullScreenViewController.h */,
-				2F550F45217F5CC100F56C26 /* VideoPlayerKit.h */,
-				2F550F46217F5CC100F56C26 /* VideoPlayerView.h */,
-				2F550F47217F5CC100F56C26 /* VideoPlayerSampleViewController.m */,
 				2F550F48217F5CC100F56C26 /* VideoPlayerSampleView.m */,
-				2F550F49217F5CC100F56C26 /* AirplayActiveView.h */,
-				2F550F4A217F5CC100F56C26 /* FullScreenView.m */,
-				2F550F4B217F5CC100F56C26 /* Resource */,
+				2F550F44217F5CC100F56C26 /* FullScreenViewController.h */,
 				2F550F5A217F5CC100F56C26 /* FullScreenViewController.m */,
-				2F550F5B217F5CC100F56C26 /* VideoPlayer.h */,
-				2F550F5C217F5CC100F56C26 /* VideoPlayerView.m */,
+				2F550F45217F5CC100F56C26 /* VideoPlayerKit.h */,
 				2F550F5D217F5CC100F56C26 /* VideoPlayerKit.m */,
+				2F550F46217F5CC100F56C26 /* VideoPlayerView.h */,
+				2F550F5C217F5CC100F56C26 /* VideoPlayerView.m */,
 			);
 			path = VideoPlayerKit;
 			sourceTree = "<group>";
@@ -1036,15 +1036,15 @@
 			isa = PBXGroup;
 			children = (
 				2F550F8E217F5CC100F56C26 /* KZVideoListViewController.h */,
-				2F550F8F217F5CC100F56C26 /* KZVideoConfig.m */,
-				2F550F90217F5CC100F56C26 /* KZVideoSupport.h */,
-				2F550F91217F5CC100F56C26 /* KZVideoPlayer.m */,
-				2F550F92217F5CC100F56C26 /* KZVideoViewController.m */,
-				2F550F93217F5CC100F56C26 /* KZVideoConfig.h */,
 				2F550F94217F5CC100F56C26 /* KZVideoListViewController.m */,
-				2F550F95217F5CC100F56C26 /* KZVideoSupport.m */,
+				2F550F93217F5CC100F56C26 /* KZVideoConfig.h */,
+				2F550F8F217F5CC100F56C26 /* KZVideoConfig.m */,
 				2F550F96217F5CC100F56C26 /* KZVideoPlayer.h */,
+				2F550F91217F5CC100F56C26 /* KZVideoPlayer.m */,
 				2F550F97217F5CC100F56C26 /* KZVideoViewController.h */,
+				2F550F92217F5CC100F56C26 /* KZVideoViewController.m */,
+				2F550F90217F5CC100F56C26 /* KZVideoSupport.h */,
+				2F550F95217F5CC100F56C26 /* KZVideoSupport.m */,
 			);
 			path = KZSmallVideoRecorder;
 			sourceTree = "<group>";
@@ -1053,12 +1053,12 @@
 			isa = PBXGroup;
 			children = (
 				2F550F99217F5CC100F56C26 /* SDPhotoBrowserConfig.h */,
-				2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */,
-				2F550F9B217F5CC100F56C26 /* SDWaitingView.m */,
-				2F550F9C217F5CC100F56C26 /* SDBrowserImageView.m */,
-				2F550F9D217F5CC100F56C26 /* SDWaitingView.h */,
 				2F550F9E217F5CC100F56C26 /* SDPhotoBrowser.h */,
+				2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */,
+				2F550F9D217F5CC100F56C26 /* SDWaitingView.h */,
+				2F550F9B217F5CC100F56C26 /* SDWaitingView.m */,
 				2F550F9F217F5CC100F56C26 /* SDBrowserImageView.h */,
+				2F550F9C217F5CC100F56C26 /* SDBrowserImageView.m */,
 			);
 			path = SDPhotoBrowser;
 			sourceTree = "<group>";
@@ -1066,8 +1066,8 @@
 		2F550FA0217F5CC100F56C26 /* KxMenu */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FA1217F5CC100F56C26 /* KxMenu.m */,
 				2F550FA2217F5CC100F56C26 /* KxMenu.h */,
+				2F550FA1217F5CC100F56C26 /* KxMenu.m */,
 			);
 			path = KxMenu;
 			sourceTree = "<group>";
@@ -1075,19 +1075,19 @@
 		2F550FA3217F5CC100F56C26 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FA4217F5CC100F56C26 /* AFSecurityPolicy.h */,
-				2F550FA5217F5CC100F56C26 /* AFNetworkReachabilityManager.h */,
-				2F550FA6217F5CC100F56C26 /* AFURLSessionManager.h */,
-				2F550FA7217F5CC100F56C26 /* AFURLRequestSerialization.h */,
-				2F550FA8217F5CC100F56C26 /* AFURLResponseSerialization.m */,
-				2F550FA9217F5CC100F56C26 /* AFHTTPSessionManager.m */,
-				2F550FAA217F5CC100F56C26 /* AFURLResponseSerialization.h */,
-				2F550FAB217F5CC100F56C26 /* AFURLSessionManager.m */,
-				2F550FAC217F5CC100F56C26 /* AFURLRequestSerialization.m */,
 				2F550FAD217F5CC100F56C26 /* AFNetworking.h */,
-				2F550FAE217F5CC100F56C26 /* AFNetworkReachabilityManager.m */,
+				2F550FA4217F5CC100F56C26 /* AFSecurityPolicy.h */,
 				2F550FAF217F5CC100F56C26 /* AFSecurityPolicy.m */,
+				2F550FA5217F5CC100F56C26 /* AFNetworkReachabilityManager.h */,
+				2F550FAE217F5CC100F56C26 /* AFNetworkReachabilityManager.m */,
+				2F550FA6217F5CC100F56C26 /* AFURLSessionManager.h */,
+				2F550FAB217F5CC100F56C26 /* AFURLSessionManager.m */,
+				2F550FA7217F5CC100F56C26 /* AFURLRequestSerialization.h */,
+				2F550FAC217F5CC100F56C26 /* AFURLRequestSerialization.m */,
+				2F550FAA217F5CC100F56C26 /* AFURLResponseSerialization.h */,
+				2F550FA8217F5CC100F56C26 /* AFURLResponseSerialization.m */,
 				2F550FB0217F5CC100F56C26 /* AFHTTPSessionManager.h */,
+				2F550FA9217F5CC100F56C26 /* AFHTTPSessionManager.m */,
 			);
 			path = AFNetworking;
 			sourceTree = "<group>";
@@ -1095,8 +1095,8 @@
 		2F550FD5217F5CC100F56C26 /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FD6217F5CC100F56C26 /* MBProgressHUD.m */,
 				2F550FD7217F5CC100F56C26 /* MBProgressHUD.h */,
+				2F550FD6217F5CC100F56C26 /* MBProgressHUD.m */,
 			);
 			path = MBProgressHUD;
 			sourceTree = "<group>";
@@ -1104,14 +1104,14 @@
 		2F550FD8217F5CC100F56C26 /* SDRefeshView */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FD9217F5CC100F56C26 /* UIView+SDExtension.h */,
-				2F550FDA217F5CC100F56C26 /* SDRefreshFooterView.h */,
-				2F550FDB217F5CC100F56C26 /* SDRefreshView.h */,
-				2F550FDC217F5CC100F56C26 /* SDRefreshHeaderView.m */,
-				2F550FDE217F5CC100F56C26 /* UIView+SDExtension.m */,
-				2F550FDF217F5CC100F56C26 /* SDRefreshFooterView.m */,
 				2F550FE0217F5CC100F56C26 /* SDRefresh.h */,
+				2F550FD9217F5CC100F56C26 /* UIView+SDExtension.h */,
+				2F550FDE217F5CC100F56C26 /* UIView+SDExtension.m */,
+				2F550FDA217F5CC100F56C26 /* SDRefreshFooterView.h */,
+				2F550FDF217F5CC100F56C26 /* SDRefreshFooterView.m */,
 				2F550FE1217F5CC100F56C26 /* SDRefreshHeaderView.h */,
+				2F550FDC217F5CC100F56C26 /* SDRefreshHeaderView.m */,
+				2F550FDB217F5CC100F56C26 /* SDRefreshView.h */,
 				2F550FE2217F5CC100F56C26 /* SDRefreshView.m */,
 			);
 			path = SDRefeshView;
@@ -1120,8 +1120,8 @@
 		2F550FE3217F5CC100F56C26 /* UITextViewPlaceholder */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FE4217F5CC100F56C26 /* UITextView+Placeholder.m */,
 				2F550FE5217F5CC100F56C26 /* UITextView+Placeholder.h */,
+				2F550FE4217F5CC100F56C26 /* UITextView+Placeholder.m */,
 			);
 			path = UITextViewPlaceholder;
 			sourceTree = "<group>";
@@ -1129,47 +1129,47 @@
 		2F550FEC217F5CC100F56C26 /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
+				2F551006217F5CC100F56C26 /* SDWebImage.h */,
+				2F551012217F5CC100F56C26 /* SDWebImageOperation.h */,
+				2F55100A217F5CC100F56C26 /* UIImage+WebP.h */,
 				2F550FED217F5CC100F56C26 /* UIImage+WebP.m */,
+				2F551009217F5CC100F56C26 /* MKAnnotationView+WebCache.h */,
 				2F550FEE217F5CC100F56C26 /* MKAnnotationView+WebCache.m */,
 				2F550FEF217F5CC100F56C26 /* NSImage+WebCache.h */,
-				2F550FF0217F5CC100F56C26 /* UIImageView+WebCache.h */,
+				2F551013217F5CC100F56C26 /* NSImage+WebCache.m */,
 				2F550FF1217F5CC100F56C26 /* NSData+ImageContentType.h */,
+				2F551010217F5CC100F56C26 /* NSData+ImageContentType.m */,
+				2F55100F217F5CC100F56C26 /* SDWebImageManager.h */,
 				2F550FF2217F5CC100F56C26 /* SDWebImageManager.m */,
+				2F55100E217F5CC100F56C26 /* SDWebImageDecoder.h */,
 				2F550FF3217F5CC100F56C26 /* SDWebImageDecoder.m */,
-				2F550FF4217F5CC100F56C26 /* SDWebImageDownloaderOperation.h */,
+				2F55100C217F5CC100F56C26 /* UIImageView+HighlightedWebCache.h */,
 				2F550FF5217F5CC100F56C26 /* UIImageView+HighlightedWebCache.m */,
 				2F550FF6217F5CC100F56C26 /* SDImageCache.h */,
+				2F55100B217F5CC100F56C26 /* SDImageCache.m */,
 				2F550FF7217F5CC100F56C26 /* SDImageCacheConfig.h */,
+				2F551015217F5CC100F56C26 /* SDImageCacheConfig.m */,
 				2F550FF8217F5CC100F56C26 /* FLAnimatedImage */,
-				2F551000217F5CC100F56C26 /* SDWebImageDownloader.m */,
+				2F55101C217F5CC100F56C26 /* UIImage+GIF.h */,
 				2F551001217F5CC100F56C26 /* UIImage+GIF.m */,
 				2F551002217F5CC100F56C26 /* UIButton+WebCache.h */,
-				2F551003217F5CC100F56C26 /* UIImage+MultiFormat.m */,
-				2F551004217F5CC100F56C26 /* SDWebImageCompat.m */,
-				2F551005217F5CC100F56C26 /* SDWebImagePrefetcher.m */,
-				2F551006217F5CC100F56C26 /* SDWebImage.h */,
-				2F551007217F5CC100F56C26 /* UIView+WebCache.h */,
-				2F551008217F5CC100F56C26 /* UIView+WebCacheOperation.h */,
-				2F551009217F5CC100F56C26 /* MKAnnotationView+WebCache.h */,
-				2F55100A217F5CC100F56C26 /* UIImage+WebP.h */,
-				2F55100B217F5CC100F56C26 /* SDImageCache.m */,
-				2F55100C217F5CC100F56C26 /* UIImageView+HighlightedWebCache.h */,
-				2F55100D217F5CC100F56C26 /* SDWebImageDownloaderOperation.m */,
-				2F55100E217F5CC100F56C26 /* SDWebImageDecoder.h */,
-				2F55100F217F5CC100F56C26 /* SDWebImageManager.h */,
-				2F551010217F5CC100F56C26 /* NSData+ImageContentType.m */,
-				2F551011217F5CC100F56C26 /* UIImageView+WebCache.m */,
-				2F551012217F5CC100F56C26 /* SDWebImageOperation.h */,
-				2F551013217F5CC100F56C26 /* NSImage+WebCache.m */,
-				2F551014217F5CC100F56C26 /* SDWebImageDownloader.h */,
-				2F551015217F5CC100F56C26 /* SDImageCacheConfig.m */,
-				2F551016217F5CC100F56C26 /* UIView+WebCacheOperation.m */,
-				2F551017217F5CC100F56C26 /* UIView+WebCache.m */,
-				2F551018217F5CC100F56C26 /* SDWebImagePrefetcher.h */,
-				2F551019217F5CC100F56C26 /* SDWebImageCompat.h */,
-				2F55101A217F5CC100F56C26 /* UIImage+MultiFormat.h */,
 				2F55101B217F5CC100F56C26 /* UIButton+WebCache.m */,
-				2F55101C217F5CC100F56C26 /* UIImage+GIF.h */,
+				2F55101A217F5CC100F56C26 /* UIImage+MultiFormat.h */,
+				2F551003217F5CC100F56C26 /* UIImage+MultiFormat.m */,
+				2F551019217F5CC100F56C26 /* SDWebImageCompat.h */,
+				2F551004217F5CC100F56C26 /* SDWebImageCompat.m */,
+				2F551018217F5CC100F56C26 /* SDWebImagePrefetcher.h */,
+				2F551005217F5CC100F56C26 /* SDWebImagePrefetcher.m */,
+				2F551007217F5CC100F56C26 /* UIView+WebCache.h */,
+				2F551017217F5CC100F56C26 /* UIView+WebCache.m */,
+				2F551008217F5CC100F56C26 /* UIView+WebCacheOperation.h */,
+				2F551016217F5CC100F56C26 /* UIView+WebCacheOperation.m */,
+				2F550FF4217F5CC100F56C26 /* SDWebImageDownloaderOperation.h */,
+				2F55100D217F5CC100F56C26 /* SDWebImageDownloaderOperation.m */,
+				2F550FF0217F5CC100F56C26 /* UIImageView+WebCache.h */,
+				2F551011217F5CC100F56C26 /* UIImageView+WebCache.m */,
+				2F551014217F5CC100F56C26 /* SDWebImageDownloader.h */,
+				2F551000217F5CC100F56C26 /* SDWebImageDownloader.m */,
 			);
 			path = SDWebImage;
 			sourceTree = "<group>";
@@ -1177,9 +1177,9 @@
 		2F550FF8217F5CC100F56C26 /* FLAnimatedImage */ = {
 			isa = PBXGroup;
 			children = (
+				2F550FFF217F5CC100F56C26 /* FLAnimatedImageView+WebCache.h */,
 				2F550FF9217F5CC100F56C26 /* FLAnimatedImageView+WebCache.m */,
 				2F550FFA217F5CC100F56C26 /* FLAnimatedImage */,
-				2F550FFF217F5CC100F56C26 /* FLAnimatedImageView+WebCache.h */,
 			);
 			path = FLAnimatedImage;
 			sourceTree = "<group>";
@@ -1187,10 +1187,10 @@
 		2F550FFA217F5CC100F56C26 /* FLAnimatedImage */ = {
 			isa = PBXGroup;
 			children = (
-				2F550FFB217F5CC100F56C26 /* FLAnimatedImage.m */,
-				2F550FFC217F5CC100F56C26 /* FLAnimatedImageView.m */,
 				2F550FFD217F5CC100F56C26 /* FLAnimatedImage.h */,
+				2F550FFB217F5CC100F56C26 /* FLAnimatedImage.m */,
 				2F550FFE217F5CC100F56C26 /* FLAnimatedImageView.h */,
+				2F550FFC217F5CC100F56C26 /* FLAnimatedImageView.m */,
 			);
 			path = FLAnimatedImage;
 			sourceTree = "<group>";
@@ -1198,25 +1198,25 @@
 		2F55101D217F5CC100F56C26 /* TYAlertController */ = {
 			isa = PBXGroup;
 			children = (
+				2F551026217F5CC100F56C26 /* TYAlertController+TransitionAnimate.m */,
+				2F55102A217F5CC100F56C26 /* TYAlertView.h */,
 				2F55101E217F5CC100F56C26 /* TYAlertView.m */,
 				2F55101F217F5CC100F56C26 /* TYAlertDropDownAnimation.h */,
-				2F551020217F5CC100F56C26 /* UIView+TYAutoLayout.h */,
-				2F551021217F5CC100F56C26 /* TYShowAlertView.h */,
-				2F551022217F5CC100F56C26 /* UIView+TYAlertView.m */,
-				2F551023217F5CC100F56C26 /* TYAlertScaleFadeAnimation.m */,
-				2F551024217F5CC100F56C26 /* TYBaseAnimation.h */,
-				2F551025217F5CC100F56C26 /* TYAlertFadeAnimation.m */,
-				2F551026217F5CC100F56C26 /* TYAlertController+TransitionAnimate.m */,
-				2F551027217F5CC100F56C26 /* TYAlertController.h */,
-				2F551028217F5CC100F56C26 /* UIView+TYAutoLayout.m */,
 				2F551029217F5CC100F56C26 /* TYAlertDropDownAnimation.m */,
-				2F55102A217F5CC100F56C26 /* TYAlertView.h */,
-				2F55102B217F5CC100F56C26 /* UIView+TYAlertView.h */,
-				2F55102C217F5CC100F56C26 /* TYShowAlertView.m */,
-				2F55102D217F5CC100F56C26 /* TYBaseAnimation.m */,
 				2F55102E217F5CC100F56C26 /* TYAlertScaleFadeAnimation.h */,
-				2F55102F217F5CC100F56C26 /* TYAlertController.m */,
+				2F551023217F5CC100F56C26 /* TYAlertScaleFadeAnimation.m */,
+				2F551020217F5CC100F56C26 /* UIView+TYAutoLayout.h */,
+				2F551028217F5CC100F56C26 /* UIView+TYAutoLayout.m */,
+				2F551021217F5CC100F56C26 /* TYShowAlertView.h */,
+				2F55102C217F5CC100F56C26 /* TYShowAlertView.m */,
+				2F55102B217F5CC100F56C26 /* UIView+TYAlertView.h */,
+				2F551022217F5CC100F56C26 /* UIView+TYAlertView.m */,
+				2F551024217F5CC100F56C26 /* TYBaseAnimation.h */,
+				2F55102D217F5CC100F56C26 /* TYBaseAnimation.m */,
 				2F551030217F5CC100F56C26 /* TYAlertFadeAnimation.h */,
+				2F551025217F5CC100F56C26 /* TYAlertFadeAnimation.m */,
+				2F551027217F5CC100F56C26 /* TYAlertController.h */,
+				2F55102F217F5CC100F56C26 /* TYAlertController.m */,
 			);
 			path = TYAlertController;
 			sourceTree = "<group>";
@@ -1224,10 +1224,10 @@
 		2F551031217F5CC100F56C26 /* YLGIFImage */ = {
 			isa = PBXGroup;
 			children = (
-				2F551032217F5CC100F56C26 /* YLGIFImage.m */,
-				2F551033217F5CC100F56C26 /* YLImageView.m */,
 				2F551034217F5CC100F56C26 /* YLGIFImage.h */,
+				2F551032217F5CC100F56C26 /* YLGIFImage.m */,
 				2F551035217F5CC100F56C26 /* YLImageView.h */,
+				2F551033217F5CC100F56C26 /* YLImageView.m */,
 			);
 			path = YLGIFImage;
 			sourceTree = "<group>";
@@ -1235,12 +1235,12 @@
 		2F551037217F5CC100F56C26 /* ForwardMessage */ = {
 			isa = PBXGroup;
 			children = (
-				2F551038217F5CC100F56C26 /* WFCUForwardViewController.m */,
-				2F551039217F5CC100F56C26 /* WFCUForwardMessageCell.m */,
-				2F55103A217F5CC100F56C26 /* WFCUShareMessageView.m */,
 				2F55103B217F5CC100F56C26 /* WFCUForwardViewController.h */,
-				2F55103D217F5CC100F56C26 /* WFCUShareMessageView.h */,
+				2F551038217F5CC100F56C26 /* WFCUForwardViewController.m */,
 				2F55103E217F5CC100F56C26 /* WFCUForwardMessageCell.h */,
+				2F551039217F5CC100F56C26 /* WFCUForwardMessageCell.m */,
+				2F55103D217F5CC100F56C26 /* WFCUShareMessageView.h */,
+				2F55103A217F5CC100F56C26 /* WFCUShareMessageView.m */,
 			);
 			path = ForwardMessage;
 			sourceTree = "<group>";
@@ -1249,19 +1249,19 @@
 			isa = PBXGroup;
 			children = (
 				2F551040217F5CC100F56C26 /* TabbarButton.h */,
+				2F551049217F5CC100F56C26 /* TabbarButton.m */,
 				2F551041217F5CC100F56C26 /* UIImage+ERCategory.h */,
+				2F551048217F5CC100F56C26 /* UIImage+ERCategory.m */,
 				2F551042217F5CC100F56C26 /* AttributedLabel.h */,
+				2F551047217F5CC100F56C26 /* AttributedLabel.m */,
+				2F55104A217F5CC100F56C26 /* BubbleTipView.h */,
 				2F551043217F5CC100F56C26 /* BubbleTipView.m */,
 				2F551044217F5CC100F56C26 /* UIView+Toast.h */,
-				2F551045217F5CC100F56C26 /* UIView+Screenshot.h */,
-				2F551046217F5CC100F56C26 /* UITabBar+badge.h */,
-				2F551047217F5CC100F56C26 /* AttributedLabel.m */,
-				2F551048217F5CC100F56C26 /* UIImage+ERCategory.m */,
-				2F551049217F5CC100F56C26 /* TabbarButton.m */,
-				2F55104A217F5CC100F56C26 /* BubbleTipView.h */,
-				2F55104B217F5CC100F56C26 /* UITabBar+badge.m */,
-				2F55104C217F5CC100F56C26 /* UIView+Screenshot.m */,
 				2F55104D217F5CC100F56C26 /* UIView+Toast.m */,
+				2F551045217F5CC100F56C26 /* UIView+Screenshot.h */,
+				2F55104C217F5CC100F56C26 /* UIView+Screenshot.m */,
+				2F551046217F5CC100F56C26 /* UITabBar+badge.h */,
+				2F55104B217F5CC100F56C26 /* UITabBar+badge.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1278,9 +1278,9 @@
 		2F55104F217F5CC100F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				2F551052217F5CC100F56C26 /* WFCUSwitchTableViewCell.h */,
 				2F551050217F5CC100F56C26 /* WFCUSwitchTableViewCell.m */,
 				2F551051217F5CC100F56C26 /* WFCUConversationSettingMemberCell.h */,
-				2F551052217F5CC100F56C26 /* WFCUSwitchTableViewCell.h */,
 				2F551053217F5CC100F56C26 /* WFCUConversationSettingMemberCell.m */,
 				2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h */,
 				2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m */,
@@ -1291,10 +1291,10 @@
 		2F551054217F5CC100F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2F551055217F5CC100F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m */,
-				2F551056217F5CC100F56C26 /* WFCUConversationSettingViewController.m */,
-				2F551057217F5CC100F56C26 /* WFCUConversationSettingViewController.h */,
 				2F551058217F5CC100F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h */,
+				2F551055217F5CC100F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m */,
+				2F551057217F5CC100F56C26 /* WFCUConversationSettingViewController.h */,
+				2F551056217F5CC100F56C26 /* WFCUConversationSettingViewController.m */,
 				2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */,
 				2F5EB43B22C2E21A00BC8C90 /* GroupManageTableViewController.m */,
 				2F5EB43E22C2E6BB00BC8C90 /* ManagerTableViewController.h */,
@@ -1360,12 +1360,12 @@
 		2F551066217F5CC100F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				2F551067217F5CC100F56C26 /* WFCUNewFriendTableViewCell.m */,
-				2F551068217F5CC100F56C26 /* WFCUContactTableViewCell.m */,
-				2F551069217F5CC100F56C26 /* WFCUContactSelectTableViewCell.m */,
 				2F55106A217F5CC100F56C26 /* WFCUNewFriendTableViewCell.h */,
+				2F551067217F5CC100F56C26 /* WFCUNewFriendTableViewCell.m */,
 				2F55106B217F5CC100F56C26 /* WFCUContactTableViewCell.h */,
+				2F551068217F5CC100F56C26 /* WFCUContactTableViewCell.m */,
 				2F55106C217F5CC100F56C26 /* WFCUContactSelectTableViewCell.h */,
+				2F551069217F5CC100F56C26 /* WFCUContactSelectTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1390,8 +1390,8 @@
 		2F551071217F5CC100F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2F551072217F5CC100F56C26 /* WFCUAddFriendViewController.m */,
 				2F551073217F5CC100F56C26 /* WFCUAddFriendViewController.h */,
+				2F551072217F5CC100F56C26 /* WFCUAddFriendViewController.m */,
 				2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */,
 				2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */,
 			);
@@ -1402,13 +1402,13 @@
 			isa = PBXGroup;
 			children = (
 				2F551076217F5CC100F56C26 /* WFCUMyProfileTableViewController.h */,
-				2F55107A217F5CC100F56C26 /* WFCUMyPortraitViewController.h */,
-				2F55107B217F5CC100F56C26 /* WFCUMessageNotificationViewController.m */,
-				2F55107C217F5CC100F56C26 /* WFCUModifyMyProfileViewController.m */,
 				2F551080217F5CC100F56C26 /* WFCUMyProfileTableViewController.m */,
-				2F551082217F5CC100F56C26 /* WFCUModifyMyProfileViewController.h */,
-				2F551083217F5CC100F56C26 /* WFCUMessageNotificationViewController.h */,
+				2F55107A217F5CC100F56C26 /* WFCUMyPortraitViewController.h */,
 				2F551084217F5CC100F56C26 /* WFCUMyPortraitViewController.m */,
+				2F551083217F5CC100F56C26 /* WFCUMessageNotificationViewController.h */,
+				2F55107B217F5CC100F56C26 /* WFCUMessageNotificationViewController.m */,
+				2F551082217F5CC100F56C26 /* WFCUModifyMyProfileViewController.h */,
+				2F55107C217F5CC100F56C26 /* WFCUModifyMyProfileViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -1425,8 +1425,8 @@
 		2F551086217F5CC200F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				2F551087217F5CC200F56C26 /* WFCUFriendRequestTableViewCell.m */,
 				2F551088217F5CC200F56C26 /* WFCUFriendRequestTableViewCell.h */,
+				2F551087217F5CC200F56C26 /* WFCUFriendRequestTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1444,8 +1444,8 @@
 			isa = PBXGroup;
 			children = (
 				2F55108D217F5CC200F56C26 /* WFCUMediaMessageDownloader.h */,
-				2F55108E217F5CC200F56C26 /* WFCUUtilities.h */,
 				2F55108F217F5CC200F56C26 /* WFCUMediaMessageDownloader.m */,
+				2F55108E217F5CC200F56C26 /* WFCUUtilities.h */,
 				2F551090217F5CC200F56C26 /* WFCUUtilities.m */,
 			);
 			path = Utilities;
