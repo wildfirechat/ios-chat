@@ -157,7 +157,7 @@
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(self.view.bounds.size.width - 56, kStatusBarAndNavigationBarHeight + searchExtra, 48, 5)
                  menuItems:@[
-                             [KxMenuItem menuItem:@"创建聊天"
+                             [KxMenuItem menuItem:@"发起群聊"
                                             image:[UIImage imageNamed:@"menu_start_chat"]
                                            target:self
                                            action:@selector(startChatAction:)],
