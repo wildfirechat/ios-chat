@@ -184,6 +184,10 @@ alpha:1.0]
             hud.label.text = @"发送失败";
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.sendCodeBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
+                self.sendCodeBtn.enabled = YES;
+            });
         }
     });
 }
