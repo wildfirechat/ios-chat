@@ -6,15 +6,15 @@
 //  Copyright © 2017 WildFireChat. All rights reserved.
 //
 
-#import "WFCUGeneralTableViewCell.h"
+#import "WFCUGeneralSwitchTableViewCell.h"
 #import "MBProgressHUD.h"
 
 
-@interface WFCUGeneralTableViewCell()
+@interface WFCUGeneralSwitchTableViewCell()
 @property(nonatomic, strong)UISwitch *valueSwitch;
 @end
 
-@implementation WFCUGeneralTableViewCell
+@implementation WFCUGeneralSwitchTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
