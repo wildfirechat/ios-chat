@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WFChatClient/WFCChatClient.h>
 
-
-@interface WFCUGeneralTableViewCell : UITableViewCell
+@interface WFCUGeneralSwitchTableViewCell : UITableViewCell
 @property(nonatomic, assign)BOOL on;
 @property(nonatomic, strong)void (^onSwitch)(BOOL value, void (^)(BOOL success));
 @end

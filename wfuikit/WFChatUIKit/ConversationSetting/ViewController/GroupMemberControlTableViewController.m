@@ -9,7 +9,7 @@
 #import "GroupMemberControlTableViewController.h"
 #import "SDWebImage.h"
 #import "WFCUContactListViewController.h"
-#import "WFCUGeneralTableViewCell.h"
+#import "WFCUGeneralSwitchTableViewCell.h"
 
 @interface GroupMemberControlTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -35,9 +35,9 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    WFCUGeneralTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
-        cell = [[WFCUGeneralTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
 

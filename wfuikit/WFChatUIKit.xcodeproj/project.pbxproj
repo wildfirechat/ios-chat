@@ -320,8 +320,8 @@
 		2F5EB44122C2E6BB00BC8C90 /* ManagerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB43F22C2E6BB00BC8C90 /* ManagerTableViewController.m */; };
 		2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB44222C2EE1800BC8C90 /* GroupMuteTableViewController.h */; };
 		2F5EB44522C2EE1900BC8C90 /* GroupMuteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44322C2EE1800BC8C90 /* GroupMuteTableViewController.m */; };
-		2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h */; };
-		2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m */; };
+		2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */; };
 		2F5EB44C22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB44A22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h */; };
 		2F5EB44D22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44B22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m */; };
 		2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */; };
@@ -659,8 +659,8 @@
 		2F5EB43F22C2E6BB00BC8C90 /* ManagerTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ManagerTableViewController.m; sourceTree = "<group>"; };
 		2F5EB44222C2EE1800BC8C90 /* GroupMuteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupMuteTableViewController.h; sourceTree = "<group>"; };
 		2F5EB44322C2EE1800BC8C90 /* GroupMuteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupMuteTableViewController.m; sourceTree = "<group>"; };
-		2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralTableViewCell.h; sourceTree = "<group>"; };
-		2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUGeneralTableViewCell.m; sourceTree = "<group>"; };
+		2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralSwitchTableViewCell.h; sourceTree = "<group>"; };
+		2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUGeneralSwitchTableViewCell.m; sourceTree = "<group>"; };
 		2F5EB44A22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupMemberControlTableViewController.h; sourceTree = "<group>"; };
 		2F5EB44B22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupMemberControlTableViewController.m; sourceTree = "<group>"; };
 		2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchChannelViewController.m; sourceTree = "<group>"; };
@@ -1282,8 +1282,8 @@
 				2F551051217F5CC100F56C26 /* WFCUConversationSettingMemberCell.h */,
 				2F551052217F5CC100F56C26 /* WFCUSwitchTableViewCell.h */,
 				2F551053217F5CC100F56C26 /* WFCUConversationSettingMemberCell.m */,
-				2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h */,
-				2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m */,
+				2F5EB44622C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h */,
+				2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1509,6 +1509,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */,
 				2F551166217F5CC200F56C26 /* AFURLRequestSerialization.h in Headers */,
 				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
@@ -1574,7 +1575,6 @@
 				2F5511B0217F5CC300F56C26 /* FLAnimatedImageView+WebCache.h in Headers */,
 				2F5510B9217F5CC200F56C26 /* WFCUGroupTableViewCell.h in Headers */,
 				2F551152217F5CC200F56C26 /* KZVideoSupport.h in Headers */,
-				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.h in Headers */,
 				2F55118E217F5CC200F56C26 /* MBProgressHUD.h in Headers */,
 				2F5510EF217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
@@ -1852,7 +1852,7 @@
 				2F551192217F5CC200F56C26 /* SDRefreshHeaderView.m in Sources */,
 				2F5511CC217F5CC300F56C26 /* UIButton+WebCache.m in Sources */,
 				2F551113217F5CC200F56C26 /* VideoPlayerSampleView.m in Sources */,
-				2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralTableViewCell.m in Sources */,
+				2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m in Sources */,
 				2F5511BE217F5CC300F56C26 /* SDWebImageDownloaderOperation.m in Sources */,
 				2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */,
 				2F5510B4217F5CC200F56C26 /* WFCUGeneralModifyViewController.m in Sources */,
