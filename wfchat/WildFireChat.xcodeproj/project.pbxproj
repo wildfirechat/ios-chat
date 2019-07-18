@@ -438,8 +438,8 @@
 				2F94FC7622291813005BD461 /* LBXAlertAction */,
 				2F94FC8222291813005BD461 /* LBXPermissions */,
 				2F94F98522291577005BD461 /* UI */,
-				2F94F99322291577005BD461 /* LBXScanTypes.m */,
 				2F94FB8722291577005BD461 /* LBXScanTypes.h */,
+				2F94F99322291577005BD461 /* LBXScanTypes.m */,
 				9085427A2229FF160009713D /* StyleDIY.h */,
 				908542792229FF160009713D /* StyleDIY.m */,
 				9085427C222A00430009713D /* DIYScanViewController.h */,
@@ -459,17 +459,17 @@
 			children = (
 				2F94F98622291577005BD461 /* CodeScan.bundle */,
 				2F94F98722291577005BD461 /* LBXScanView.h */,
-				2F94F98822291577005BD461 /* LBXScanNetAnimation.h */,
-				2F94F98922291577005BD461 /* LBXScanViewController.m */,
-				2F94F98A22291577005BD461 /* LBXScanViewStyle.m */,
-				2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */,
-				2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */,
 				2F94F98D22291577005BD461 /* LBXScanView.m */,
-				2F94F98E22291577005BD461 /* LBXScanViewController.h */,
+				2F94F98822291577005BD461 /* LBXScanNetAnimation.h */,
 				2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */,
-				2F94F99022291577005BD461 /* LBXScanLineAnimation.h */,
-				2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */,
 				2F94F99222291577005BD461 /* LBXScanViewStyle.h */,
+				2F94F98A22291577005BD461 /* LBXScanViewStyle.m */,
+				2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */,
+				2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */,
+				2F94F99022291577005BD461 /* LBXScanLineAnimation.h */,
+				2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */,
+				2F94F98E22291577005BD461 /* LBXScanViewController.h */,
+				2F94F98922291577005BD461 /* LBXScanViewController.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -486,8 +486,8 @@
 		2F94FC7622291813005BD461 /* LBXAlertAction */ = {
 			isa = PBXGroup;
 			children = (
-				2F94FC7722291813005BD461 /* LBXAlertAction.m */,
 				2F94FC7822291813005BD461 /* LBXAlertAction.h */,
+				2F94FC7722291813005BD461 /* LBXAlertAction.m */,
 				2F94FC7922291813005BD461 /* Class */,
 			);
 			path = LBXAlertAction;
@@ -497,13 +497,13 @@
 			isa = PBXGroup;
 			children = (
 				2F94FC7A22291813005BD461 /* UIActionSheet+LBXAlertAction.h */,
-				2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */,
-				2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */,
-				2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */,
 				2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */,
-				2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */,
+				2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */,
 				2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */,
+				2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */,
+				2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */,
 				2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */,
+				2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -512,13 +512,13 @@
 			isa = PBXGroup;
 			children = (
 				2F94FC8722291813005BD461 /* LBXPermission.h */,
-				2F94FC8822291813005BD461 /* LBXPermissionCamera.h */,
-				2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */,
-				2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */,
-				2F94FC9322291813005BD461 /* LBXPermissionCamera.m */,
 				2F94FC9422291813005BD461 /* LBXPermission.m */,
-				2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */,
+				2F94FC8822291813005BD461 /* LBXPermissionCamera.h */,
+				2F94FC9322291813005BD461 /* LBXPermissionCamera.m */,
 				2F94FC9622291813005BD461 /* LBXPermissionSetting.h */,
+				2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */,
+				2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */,
+				2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */,
 			);
 			path = LBXPermissions;
 			sourceTree = "<group>";
@@ -526,8 +526,8 @@
 		2FEA5D6721F4AC8900280B23 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */,
 				2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */,
+				2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -535,16 +535,16 @@
 		2FF07F4621F82E7200A78A62 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */,
 				2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */,
 				2FF07F4821F82E7200A78A62 /* WFCMeTableViewCell.h */,
+				2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */,
+				2FF07F4C21F82E7200A78A62 /* WFCSecurityTableViewController.h */,
+				2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */,
+				2FF07F5221F82E7200A78A62 /* WFCSettingTableViewController.h */,
 				2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */,
 				2FF07F4B21F82E7200A78A62 /* WFCMeTableViewController.h */,
-				2FF07F4C21F82E7200A78A62 /* WFCSecurityTableViewController.h */,
-				2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */,
-				2FF07F5221F82E7200A78A62 /* WFCSettingTableViewController.h */,
-				2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */,
 				2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */,
-				2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
