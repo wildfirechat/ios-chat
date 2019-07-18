@@ -9,7 +9,7 @@
 #import "GroupMuteTableViewController.h"
 #import "SDWebImage.h"
 #import "WFCUContactListViewController.h"
-#import "WFCUGeneralTableViewCell.h"
+#import "WFCUGeneralSwitchTableViewCell.h"
 
 @interface GroupMuteTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -35,9 +35,9 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    WFCUGeneralTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
-        cell = [[WFCUGeneralTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         cell.textLabel.text = @"全员禁言";
         cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
             [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
