@@ -1,0 +1,130 @@
+PODS:
+  - WFChatClient (1.0):
+    - WFChatClient/amr (= 1.0)
+    - WFChatClient/Client (= 1.0)
+    - WFChatClient/Messages (= 1.0)
+    - WFChatClient/Model (= 1.0)
+    - WFChatClient/Proto (= 1.0)
+    - WFChatClient/Utility (= 1.0)
+  - WFChatClient/amr (1.0)
+  - WFChatClient/Client (1.0)
+  - WFChatClient/Messages (1.0)
+  - WFChatClient/Model (1.0)
+  - WFChatClient/Proto (1.0)
+  - WFChatClient/Utility (1.0)
+  - WFChatUIKit (1.0):
+    - WFChatClient
+    - WFChatUIKit/AddFriend (= 1.0)
+    - WFChatUIKit/AVEngine (= 1.0)
+    - WFChatUIKit/Category (= 1.0)
+    - WFChatUIKit/Channel (= 1.0)
+    - WFChatUIKit/CommonVC (= 1.0)
+    - WFChatUIKit/Contacts (= 1.0)
+    - WFChatUIKit/ConversationList (= 1.0)
+    - WFChatUIKit/ConversationSetting (= 1.0)
+    - WFChatUIKit/CreateGroup (= 1.0)
+    - WFChatUIKit/ForwardMessage (= 1.0)
+    - WFChatUIKit/FriendRequest (= 1.0)
+    - WFChatUIKit/Group (= 1.0)
+    - WFChatUIKit/Me (= 1.0)
+    - WFChatUIKit/MessageList (= 1.0)
+    - WFChatUIKit/SelectMentionVC (= 1.0)
+    - WFChatUIKit/Utilities (= 1.0)
+    - WFChatUIKit/Vendor (= 1.0)
+    - WFChatUIKit/Voip (= 1.0)
+  - WFChatUIKit/AddFriend (1.0):
+    - WFChatClient
+  - WFChatUIKit/AVEngine (1.0):
+    - WFChatClient
+  - WFChatUIKit/Category (1.0):
+    - WFChatClient
+  - WFChatUIKit/Channel (1.0):
+    - WFChatClient
+  - WFChatUIKit/CommonVC (1.0):
+    - WFChatClient
+  - WFChatUIKit/Contacts (1.0):
+    - WFChatClient
+  - WFChatUIKit/ConversationList (1.0):
+    - WFChatClient
+  - WFChatUIKit/ConversationSetting (1.0):
+    - WFChatClient
+  - WFChatUIKit/CreateGroup (1.0):
+    - WFChatClient
+  - WFChatUIKit/ForwardMessage (1.0):
+    - WFChatClient
+  - WFChatUIKit/FriendRequest (1.0):
+    - WFChatClient
+  - WFChatUIKit/Group (1.0):
+    - WFChatClient
+  - WFChatUIKit/Me (1.0):
+    - WFChatClient
+  - WFChatUIKit/MessageList (1.0):
+    - WFChatClient
+  - WFChatUIKit/SelectMentionVC (1.0):
+    - WFChatClient
+  - WFChatUIKit/Utilities (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor (1.0):
+    - WFChatClient
+    - WFChatUIKit/Vendor/AFNetworking (= 1.0)
+    - WFChatUIKit/Vendor/CCHMapClusterController (= 1.0)
+    - WFChatUIKit/Vendor/ChatInputBar (= 1.0)
+    - WFChatUIKit/Vendor/KxMenu (= 1.0)
+    - WFChatUIKit/Vendor/KZSmallVideoRecorder (= 1.0)
+    - WFChatUIKit/Vendor/MBProgressHUD (= 1.0)
+    - WFChatUIKit/Vendor/Pinyin (= 1.0)
+    - WFChatUIKit/Vendor/SDPhotoBrowser (= 1.0)
+    - WFChatUIKit/Vendor/SDRefeshView (= 1.0)
+    - WFChatUIKit/Vendor/SDWebImage (= 1.0)
+    - WFChatUIKit/Vendor/TYAlertController (= 1.0)
+    - WFChatUIKit/Vendor/UITextViewPlaceholder (= 1.0)
+    - WFChatUIKit/Vendor/VideoPlayerKit (= 1.0)
+    - WFChatUIKit/Vendor/YLGIFImage (= 1.0)
+  - WFChatUIKit/Vendor/AFNetworking (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/CCHMapClusterController (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/ChatInputBar (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/KxMenu (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/KZSmallVideoRecorder (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/MBProgressHUD (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/Pinyin (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/SDPhotoBrowser (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/SDRefeshView (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/SDWebImage (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/TYAlertController (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/UITextViewPlaceholder (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/VideoPlayerKit (1.0):
+    - WFChatClient
+  - WFChatUIKit/Vendor/YLGIFImage (1.0):
+    - WFChatClient
+  - WFChatUIKit/Voip (1.0):
+    - WFChatClient
+
+DEPENDENCIES:
+  - WFChatClient (from `../wfclient`)
+  - WFChatUIKit (from `../wfuikit`)
+
+EXTERNAL SOURCES:
+  WFChatClient:
+    :path: "../wfclient"
+  WFChatUIKit:
+    :path: "../wfuikit"
+
+SPEC CHECKSUMS:
+  WFChatClient: 8195d6eb2afc32b8d37f15980d8e176ecf0814cb
+  WFChatUIKit: 995a75f36d80f0c6f0d8a3c5b99304d3c3bad3fb
+
+PODFILE CHECKSUM: b3a937c88865791df4f5e2f0cef525a0429d5067
+
+COCOAPODS: 1.7.4
