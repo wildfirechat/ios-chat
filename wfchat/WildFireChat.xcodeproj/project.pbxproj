@@ -76,6 +76,7 @@
 		909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */; };
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
+		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -234,6 +235,8 @@
 		909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatroomItemCell.m; sourceTree = "<group>"; };
 		90C1D90F208C12A900E923F4 /* foreman.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foreman.mp4; sourceTree = "<group>"; };
 		90C1D910208C12A900E923F4 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
+		90E927F022DFF45F00F168BC /* WFCPrivacyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyTableViewController.h; sourceTree = "<group>"; };
+		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -545,6 +548,8 @@
 				2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */,
 				2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */,
 				2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */,
+				90E927F022DFF45F00F168BC /* WFCPrivacyTableViewController.h */,
+				90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -728,6 +733,7 @@
 				9085427E222A00430009713D /* DIYScanViewController.m in Sources */,
 				2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */,
 				90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */,
+				90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */,
 				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
 				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
