@@ -333,6 +333,9 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     if (collectionView == self.collectionView) {
+        if (self.disableSticker) {
+            return 1;
+        }
         return self.stickers.allKeys.count + 1;
     } else {
         return 1;
@@ -359,6 +362,9 @@
     if (collectionView == self.collectionView) {
         return [self getPagesCount:section];
     } else {
+        if (self.disableSticker) {
+            return 1;
+        }
         return self.stickers.allKeys.count + 1;
     }
 }

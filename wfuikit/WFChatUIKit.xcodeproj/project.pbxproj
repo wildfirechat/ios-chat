@@ -18,7 +18,7 @@
 		2F36433721C13C5300904CAB /* WFCUChannelTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F36433521C13C5300904CAB /* WFCUChannelTableViewCell.h */; };
 		2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F36433621C13C5300904CAB /* WFCUChannelTableViewCell.m */; };
 		2F3A6C18219EE941009A8B4B /* WFCUFaceBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3A6C12219EE941009A8B4B /* WFCUFaceBoard.m */; };
-		2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C13219EE941009A8B4B /* WFCUFaceBoard.h */; };
+		2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C13219EE941009A8B4B /* WFCUFaceBoard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F3A6C1A219EE941009A8B4B /* WFCUFaceButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3A6C14219EE941009A8B4B /* WFCUFaceButton.m */; };
 		2F3A6C1B219EE941009A8B4B /* WFCUFaceButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C15219EE941009A8B4B /* WFCUFaceButton.h */; };
 		2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C16219EE941009A8B4B /* WFCUStickerItem.h */; };
@@ -1523,6 +1523,7 @@
 				2F55121A217F5CC300F56C26 /* WFCUMyPortraitViewController.h in Headers */,
 				2F49910D2189239E005F6A84 /* WFCUFloatingWindow.h in Headers */,
 				2F551211217F5CC300F56C26 /* WFCUContactListViewController.h in Headers */,
+				2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */,
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */,
 				2F5510B0217F5CC200F56C26 /* WFCUGroupMemberTableViewController.h in Headers */,
@@ -1670,7 +1671,6 @@
 				2F5511B9217F5CC300F56C26 /* UIView+WebCacheOperation.h in Headers */,
 				2F5510E6217F5CC200F56C26 /* WFCULocationViewController.h in Headers */,
 				2F55110F217F5CC200F56C26 /* FullScreenViewController.h in Headers */,
-				2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */,
 				2F5511BF217F5CC300F56C26 /* SDWebImageDecoder.h in Headers */,
 				2F55116F217F5CC200F56C26 /* AFHTTPSessionManager.h in Headers */,
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
