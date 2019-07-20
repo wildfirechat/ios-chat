@@ -32,5 +32,7 @@
 + (NSString *)getStickerCachePath;
 + (NSString *)getStickerBundleName;
 
-@property (nonatomic, assign) id<WFCUFaceBoardDelegate> delegate;
+@property (nonatomic, weak) id<WFCUFaceBoardDelegate> delegate;
+
+@property (nonatomic, assign) BOOL disableSticker;
 @end
