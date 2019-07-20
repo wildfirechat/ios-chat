@@ -266,7 +266,7 @@
 		2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551041217F5CC100F56C26 /* UIImage+ERCategory.h */; };
 		2F5511EF217F5CC300F56C26 /* AttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551042217F5CC100F56C26 /* AttributedLabel.h */; };
 		2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551043217F5CC100F56C26 /* BubbleTipView.m */; };
-		2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551044217F5CC100F56C26 /* UIView+Toast.h */; };
+		2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551044217F5CC100F56C26 /* UIView+Toast.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5511F2217F5CC300F56C26 /* UIView+Screenshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551045217F5CC100F56C26 /* UIView+Screenshot.h */; };
 		2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551046217F5CC100F56C26 /* UITabBar+badge.h */; };
 		2F5511F4217F5CC300F56C26 /* AttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551047217F5CC100F56C26 /* AttributedLabel.m */; };
@@ -1517,6 +1517,7 @@
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageNotificationViewController.h in Headers */,
+				2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */,
 				2F49910B2189239E005F6A84 /* WFCUVideoViewController.h in Headers */,
 				2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */,
 				2F55121A217F5CC300F56C26 /* WFCUMyPortraitViewController.h in Headers */,
@@ -1551,7 +1552,6 @@
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F5511CA217F5CC300F56C26 /* SDWebImageCompat.h in Headers */,
 				2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */,
-				2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */,
 				2F55120F217F5CC300F56C26 /* WFCUContactTableViewCell.h in Headers */,
 				2F55120E217F5CC300F56C26 /* WFCUNewFriendTableViewCell.h in Headers */,
 				2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */,
