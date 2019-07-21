@@ -624,7 +624,9 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)disconnect:(BOOL)clearSession {
   _logined = NO;
     self.userId = nil;
-    self.currentConnectionStatus = kConnectionStatusLogout;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.currentConnectionStatus = kConnectionStatusLogout;
+    });
     [[WFCCNetworkStatus sharedInstance] Stop];
   if (mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusConnected && mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusReceiving) {
     [self destroyMars];
