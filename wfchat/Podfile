@@ -4,6 +4,8 @@ platform :ios, '8.0'
 
 use_frameworks!
 
+install! 'cocoapods', :generate_multiple_pod_projects => true
+
 target 'WildFireChat' do
     
     pod 'WFChatClient', :path => '../wfclient'

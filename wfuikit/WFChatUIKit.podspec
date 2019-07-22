@@ -14,8 +14,9 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
 
+  s.prefix_header_contents = '#ifdef __OBJC__', '#import <UIImage+Pods.h>', '#endif'
   s.prefix_header_file = 'WFChatUIKit/Predefine.h'
-  s.private_header_files = 'WFChatUIKit/Predefine.h'
+  s.exclude_files = 'WFChatUIKit/Predefine.h'
   s.source_files = 'WFChatUIKit/*.{h,m}'
   s.resources = 'WFChatUIKit/Resources/*.{xcassets}'
   s.dependency 'WFChatClient'
@@ -23,7 +24,7 @@ Pod::Spec.new do |s|
   s.subspec 'AVEngine' do |ss|
     ss.vendored_frameworks = 'WFChatUIKit/AVEngine/**/*.framework'
     ss.pod_target_xcconfig = {
-      'OTHER_LDFLAGS' => '$(inherited) -framework WFAVEngineKit -framework WebRTC'
+      'OTHER_LDFLAGS' => '$(inherited) -ObjC -framework WFAVEngineKit -framework WebRTC'
     }
   end
 
