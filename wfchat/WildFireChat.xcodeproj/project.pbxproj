@@ -15,16 +15,12 @@
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
-		2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6D217F7DA900B3E38A /* Emoj.plist */; };
-		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
-		2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */; };
 		2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */; };
 		2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */; };
 		2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B0DD221E1B38100139CB1 /* ring.caf */; };
 		2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */; };
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
-		2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
@@ -55,8 +51,6 @@
 		2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
-		905177502243CD9A0020A2AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774F2243CD9A0020A2AC /* libz.tbd */; };
-		905177522243CDA60020A2AC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 905177512243CDA60020A2AC /* libc++.tbd */; };
 		905177542243CEA30020A2AC /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905177532243CEA30020A2AC /* Bugly.framework */; };
 		9085427B2229FF160009713D /* StyleDIY.m in Sources */ = {isa = PBXBuildFile; fileRef = 908542792229FF160009713D /* StyleDIY.m */; };
 		9085427E222A00430009713D /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9085427D222A00430009713D /* DIYScanViewController.m */; };
@@ -134,16 +128,12 @@
 		2F143A50217F607300B3E38A /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
 		2F143A53217F607300B3E38A /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		2F143A5C217F60B600B3E38A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		2F143A6D217F7DA900B3E38A /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Emoj.plist; path = Frameworks/Emoj.plist; sourceTree = SOURCE_ROOT; };
-		2F143A6F217F7DA900B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Stickers.bundle; path = Frameworks/Stickers.bundle; sourceTree = SOURCE_ROOT; };
-		2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = WFChatUIKit.xcassets; path = Frameworks/WFChatUIKit.xcassets; sourceTree = SOURCE_ROOT; };
 		2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		2F1B0DD221E1B38100139CB1 /* ring.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ring.caf; sourceTree = "<group>"; };
 		2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WFCUShareMessageView.xib; path = Frameworks/WFCUShareMessageView.xib; sourceTree = SOURCE_ROOT; };
 		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
 		2F7268F721F7136600E05F9C /* WFCPrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyViewController.h; sourceTree = "<group>"; };
 		2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyViewController.m; sourceTree = "<group>"; };
@@ -200,8 +190,6 @@
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
 		9051774B2243CD830020A2AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		905177512243CDA60020A2AC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		905177532243CEA30020A2AC /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bugly.framework; path = WildFireChat/Bugly.framework; sourceTree = SOURCE_ROOT; };
 		908542792229FF160009713D /* StyleDIY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleDIY.m; sourceTree = "<group>"; };
 		9085427A2229FF160009713D /* StyleDIY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleDIY.h; sourceTree = "<group>"; };
@@ -232,8 +220,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
-				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
@@ -307,8 +293,6 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				905177512243CDA60020A2AC /* libc++.tbd */,
-				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,
 				9051774B2243CD830020A2AC /* SystemConfiguration.framework */,
 				2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */,
@@ -316,11 +300,7 @@
 				2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */,
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
-				2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */,
 				905177532243CEA30020A2AC /* Bugly.framework */,
-				2F143A6D217F7DA900B3E38A /* Emoj.plist */,
-				2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */,
-				2F143A6F217F7DA900B3E38A /* Stickers.bundle */,
 				20595D62708F726D5A46BAD2 /* Pods_WildFireChat.framework */,
 			);
 			path = Frameworks;
@@ -654,17 +634,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
-				2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */,
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
-				2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */,
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
-				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
-				2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,7 +815,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -890,7 +866,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -906,7 +882,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XQ9YLTYXWA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -920,7 +896,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.wildfirechat;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -938,7 +914,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XQ9YLTYXWA;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -952,7 +928,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.wildfirechat;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

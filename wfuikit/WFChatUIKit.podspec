@@ -12,16 +12,19 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/wildfirechat/ios-chat.git', :tag => s.version.to_s }
 
   s.requires_arc = true
-  s.swift_version = '5.0'
   s.ios.deployment_target = '8.0'
 
-  s.dependency 'WFChatClient'
   s.prefix_header_file = 'WFChatUIKit/Predefine.h'
+  s.private_header_files = 'WFChatUIKit/Predefine.h'
   s.source_files = 'WFChatUIKit/*.{h,m}'
-  s.resources = 'WFChatUIKit/Resources/*.{xib,bundle,plist,xcassets}'
-  
+  s.resources = 'WFChatUIKit/Resources/*.{xcassets}'
+  s.dependency 'WFChatClient'
+
   s.subspec 'AVEngine' do |ss|
     ss.vendored_frameworks = 'WFChatUIKit/AVEngine/**/*.framework'
+    ss.pod_target_xcconfig = {
+      'OTHER_LDFLAGS' => '$(inherited) -framework WFAVEngineKit -framework WebRTC'
+    }
   end
 
   s.subspec 'Channel' do |ss|
@@ -29,6 +32,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Voip' do |ss|
+    ss.dependency 'WFChatUIKit/AVEngine'
     ss.source_files = 'WFChatUIKit/Voip/**/*.{h,m}'
   end
 
@@ -66,6 +70,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'ForwardMessage' do |ss|
     ss.source_files = 'WFChatUIKit/ForwardMessage/**/*.{h,m}'
+    ss.resources = 'WFChatUIKit/Resources/WFCUShareMessageView.xib'
   end
 
   s.subspec 'FriendRequest' do |ss|
@@ -92,6 +97,7 @@ Pod::Spec.new do |s|
 
     ss.subspec 'ChatInputBar' do |sss|
       sss.source_files = 'WFChatUIKit/Vendor/ChatInputBar/**/*.{h,m}'
+      sss.resources = 'WFChatUIKit/Resources/Stickers.bundle', 'WFChatUIKit/Resources/Emoj.plist'
     end
 
     ss.subspec 'CCHMapClusterController' do |sss|

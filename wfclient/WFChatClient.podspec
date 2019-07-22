@@ -12,7 +12,6 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/wildfirechat/ios-chat.git', :tag => s.version.to_s }
 
   s.requires_arc = true
-  s.swift_version = '5.0'
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'WFChatClient/*.h'
@@ -36,10 +35,12 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Client' do |ss|
+    ss.private_header_files = 'WFChatClient/Client/app_callback.h'
     ss.source_files = 'WFChatClient/Client/**/*.{h,m,mm}'
   end
 
   s.subspec 'amr' do |ss|
+    ss.private_header_files = 'WFChatClient/amr/*.h'
     ss.source_files = 'WFChatClient/amr/**/*.{h,c,mm}'
     ss.vendored_libraries = 'WFChatClient/amr/**/*.a'
   end
