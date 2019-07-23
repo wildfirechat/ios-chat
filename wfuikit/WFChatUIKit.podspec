@@ -97,59 +97,73 @@ Pod::Spec.new do |s|
   s.subspec 'Vendor' do |ss|
 
     ss.subspec 'ChatInputBar' do |sss|
+      sss.public_header_files = 'WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUFaceBoard.h'
       sss.source_files = 'WFChatUIKit/Vendor/ChatInputBar/**/*.{h,m}'
       sss.resources = 'WFChatUIKit/Resources/Stickers.bundle', 'WFChatUIKit/Resources/Emoj.plist'
     end
 
     ss.subspec 'CCHMapClusterController' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/CCHMapClusterController/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/CCHMapClusterController/**/*.{h,m}'
     end
 
     ss.subspec 'Pinyin' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/Pinyin/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/Pinyin/**/*.{h,c}'
     end
 
     ss.subspec 'VideoPlayerKit' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/VideoPlayerKit/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/VideoPlayerKit/**/*.{h,m}'
     end
 
     ss.subspec 'KZSmallVideoRecorder' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/KZSmallVideoRecorder/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/KZSmallVideoRecorder/**/*.{h,m}'
     end
 
     ss.subspec 'SDPhotoBrowser' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/SDPhotoBrowser/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/SDPhotoBrowser/**/*.{h,m}'
     end
 
     ss.subspec 'KxMenu' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/KxMenu/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/KxMenu/**/*.{h,m}'
     end
 
     ss.subspec 'AFNetworking' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/AFNetworking/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/AFNetworking/**/*.{h,m}'
     end
 
     ss.subspec 'MBProgressHUD' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/MBProgressHUD/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/MBProgressHUD/**/*.{h,m}'
     end
 
     ss.subspec 'SDRefeshView' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/SDRefeshView/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/SDRefeshView/**/*.{h,m}'
     end
 
     ss.subspec 'UITextViewPlaceholder' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/UITextViewPlaceholder/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/UITextViewPlaceholder/**/*.{h,m}'
     end
 
     ss.subspec 'SDWebImage' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/SDWebImage/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/SDWebImage/**/*.{h,m}'
     end
 
     ss.subspec 'TYAlertController' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/TYAlertController/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/TYAlertController/**/*.{h,m}'
     end
 
     ss.subspec 'YLGIFImage' do |sss|
+      sss.private_header_files = 'WFChatUIKit/Vendor/YLGIFImage/**/*.h'
       sss.source_files = 'WFChatUIKit/Vendor/YLGIFImage/**/*.{h,m}'
     end
 
