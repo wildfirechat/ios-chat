@@ -127,7 +127,7 @@
     WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.clientId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
     self.portraitView.layer.masksToBounds = YES;
     self.portraitView.layer.cornerRadius = 8.f;
     [self.view addSubview:self.portraitView];
@@ -152,9 +152,9 @@
 - (UIButton *)hangupButton {
     if (!_hangupButton) {
         _hangupButton = [[UIButton alloc] init];
-        [_hangupButton setImage:[UIImage imageNamed:@"hangup"] forState:UIControlStateNormal];
-        [_hangupButton setImage:[UIImage imageNamed:@"hangup_hover"] forState:UIControlStateHighlighted];
-        [_hangupButton setImage:[UIImage imageNamed:@"hangup_hover"] forState:UIControlStateSelected];
+        [_hangupButton setImage:[UIImage wf_imageNamed:@"hangup"] forState:UIControlStateNormal];
+        [_hangupButton setImage:[UIImage wf_imageNamed:@"hangup_hover"] forState:UIControlStateHighlighted];
+        [_hangupButton setImage:[UIImage wf_imageNamed:@"hangup_hover"] forState:UIControlStateSelected];
         _hangupButton.backgroundColor = [UIColor clearColor];
         [_hangupButton addTarget:self action:@selector(hanupButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _hangupButton.hidden = YES;
@@ -167,9 +167,9 @@
     if (!_answerButton) {
         _answerButton = [[UIButton alloc] init];
         
-        [_answerButton setImage:[UIImage imageNamed:@"answer"] forState:UIControlStateNormal];
-        [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateHighlighted];
-        [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateSelected];
+        [_answerButton setImage:[UIImage wf_imageNamed:@"answer"] forState:UIControlStateNormal];
+        [_answerButton setImage:[UIImage wf_imageNamed:@"answer_hover"] forState:UIControlStateHighlighted];
+        [_answerButton setImage:[UIImage wf_imageNamed:@"answer_hover"] forState:UIControlStateSelected];
         
         _answerButton.backgroundColor = [UIColor clearColor];
         [_answerButton addTarget:self action:@selector(answerButtonDidTap:) forControlEvents:UIControlEventTouchDown];
@@ -183,9 +183,9 @@
     if (!_minimizeButton) {
         _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26, 30, 30)];
         
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize"] forState:UIControlStateNormal];
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateSelected];
+        [_minimizeButton setImage:[UIImage wf_imageNamed:@"minimize"] forState:UIControlStateNormal];
+        [_minimizeButton setImage:[UIImage wf_imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
+        [_minimizeButton setImage:[UIImage wf_imageNamed:@"minimize_hover"] forState:UIControlStateSelected];
         
         _minimizeButton.backgroundColor = [UIColor clearColor];
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
@@ -198,9 +198,9 @@
 - (UIButton *)switchCameraButton {
     if (!_switchCameraButton) {
         _switchCameraButton = [[UIButton alloc] init];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera"] forState:UIControlStateNormal];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera_hover"] forState:UIControlStateHighlighted];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera_hover"] forState:UIControlStateSelected];
+        [_switchCameraButton setImage:[UIImage wf_imageNamed:@"switchcamera"] forState:UIControlStateNormal];
+        [_switchCameraButton setImage:[UIImage wf_imageNamed:@"switchcamera_hover"] forState:UIControlStateHighlighted];
+        [_switchCameraButton setImage:[UIImage wf_imageNamed:@"switchcamera_hover"] forState:UIControlStateSelected];
         _switchCameraButton.backgroundColor = [UIColor clearColor];
         [_switchCameraButton addTarget:self action:@selector(switchCameraButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _switchCameraButton.hidden = YES;
@@ -212,9 +212,9 @@
 - (UIButton *)downgradeButton {
     if (!_downgradeButton) {
         _downgradeButton = [[UIButton alloc] init];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio"] forState:UIControlStateNormal];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
+        [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio"] forState:UIControlStateNormal];
+        [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
+        [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
         _downgradeButton.backgroundColor = [UIColor clearColor];
         [_downgradeButton addTarget:self action:@selector(downgradeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _downgradeButton.hidden = YES;
@@ -226,9 +226,9 @@
 - (UIButton *)audioButton {
     if (!_audioButton) {
         _audioButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
-        [_audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateHighlighted];
-        [_audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateSelected];
+        [_audioButton setImage:[UIImage wf_imageNamed:@"mute"] forState:UIControlStateNormal];
+        [_audioButton setImage:[UIImage wf_imageNamed:@"mute_hover"] forState:UIControlStateHighlighted];
+        [_audioButton setImage:[UIImage wf_imageNamed:@"mute_hover"] forState:UIControlStateSelected];
         _audioButton.backgroundColor = [UIColor clearColor];
         [_audioButton addTarget:self action:@selector(audioButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _audioButton.hidden = YES;
@@ -239,9 +239,9 @@
 - (UIButton *)speakerButton {
     if (!_speakerButton) {
         _speakerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_speakerButton setImage:[UIImage imageNamed:@"speaker"] forState:UIControlStateNormal];
-        [_speakerButton setImage:[UIImage imageNamed:@"speaker_hover"] forState:UIControlStateHighlighted];
-        [_speakerButton setImage:[UIImage imageNamed:@"speaker_hover"] forState:UIControlStateSelected];
+        [_speakerButton setImage:[UIImage wf_imageNamed:@"speaker"] forState:UIControlStateNormal];
+        [_speakerButton setImage:[UIImage wf_imageNamed:@"speaker_hover"] forState:UIControlStateHighlighted];
+        [_speakerButton setImage:[UIImage wf_imageNamed:@"speaker_hover"] forState:UIControlStateSelected];
         _speakerButton.backgroundColor = [UIColor clearColor];
         [_speakerButton addTarget:self action:@selector(speakerButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _speakerButton.hidden = YES;
@@ -341,9 +341,9 @@
         if (result) {
             self.audioMuted = !self.audioMuted;
             if (self.audioMuted) {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateNormal];
+                [self.audioButton setImage:[UIImage wf_imageNamed:@"mute_hover"] forState:UIControlStateNormal];
             } else {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
+                [self.audioButton setImage:[UIImage wf_imageNamed:@"mute"] forState:UIControlStateNormal];
             }
             
         }
@@ -359,9 +359,9 @@
 
 - (void)updateSpeakerButton {
     if (!self.currentSession.isSpeaker) {
-        [self.speakerButton setImage:[UIImage imageNamed:@"speaker"] forState:UIControlStateNormal];
+        [self.speakerButton setImage:[UIImage wf_imageNamed:@"speaker"] forState:UIControlStateNormal];
     } else {
-        [self.speakerButton setImage:[UIImage imageNamed:@"speaker_hover"] forState:UIControlStateNormal];
+        [self.speakerButton setImage:[UIImage wf_imageNamed:@"speaker_hover"] forState:UIControlStateNormal];
     }
 }
 
@@ -582,18 +582,18 @@
                 self.smallVideoView.hidden = YES;
                 self.bigVideoView.hidden = YES;
                 
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video"] forState:UIControlStateNormal];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateHighlighted];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateSelected];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_video"] forState:UIControlStateNormal];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_video_hover"] forState:UIControlStateHighlighted];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_video_hover"] forState:UIControlStateSelected];
             } else {
                 [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
                 [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType];
                 self.smallVideoView.hidden = NO;
                 self.bigVideoView.hidden = NO;
                 
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio"] forState:UIControlStateNormal];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio"] forState:UIControlStateNormal];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
+                [_downgradeButton setImage:[UIImage wf_imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
             }
             
             

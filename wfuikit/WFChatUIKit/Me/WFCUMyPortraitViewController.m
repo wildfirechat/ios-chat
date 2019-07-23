@@ -35,7 +35,7 @@
     
   self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
     __weak typeof(self)ws = self;
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
             ws.image = image;
         });
@@ -189,7 +189,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 #pragma mark - SDPhotoBrowserDelegate
 - (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
-    return [UIImage imageNamed:@"PersonalChat"];
+    return [UIImage wf_imageNamed:@"PersonalChat"];
 }
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {

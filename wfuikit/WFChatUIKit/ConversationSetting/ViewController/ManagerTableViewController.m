@@ -98,11 +98,11 @@
         cell.textLabel.text = owner.displayName;
     } else if(indexPath.section == 1) {
         if (indexPath.row == self.managerList.count) {
-            cell.imageView.image = [UIImage imageNamed:@"plus"];
+            cell.imageView.image = [UIImage wf_imageNamed:@"plus"];
             cell.textLabel.text = @"添加管理员";
         } else {
             WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row].memberId  refresh:NO];
-            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait] placeholderImage: [UIImage wf_imageNamed:@"PersonalChat"]];
             cell.textLabel.text = manager.displayName;
         }
     }

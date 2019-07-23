@@ -803,18 +803,18 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
 - (void)syncPlayPauseButtons
 {
     if ([self isPlaying]) {
-        [_videoPlayerView.playPauseButton setImage:[UIImage imageNamed:@"pause-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.playPauseButton setImage:[UIImage wf_imageNamed:@"pause-button"] forState:UIControlStateNormal];
     } else {
-        [_videoPlayerView.playPauseButton setImage:[UIImage imageNamed:@"play-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.playPauseButton setImage:[UIImage wf_imageNamed:@"play-button"] forState:UIControlStateNormal];
     }
 }
 
 - (void)syncFullScreenButton:(UIInterfaceOrientation)toInterfaceOrientation
 {
     if (_fullScreenModeToggled) {
-        [_videoPlayerView.fullScreenButton setImage:[UIImage imageNamed:@"minimize-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.fullScreenButton setImage:[UIImage wf_imageNamed:@"minimize-button"] forState:UIControlStateNormal];
     } else {
-        [_videoPlayerView.fullScreenButton setImage:[UIImage imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.fullScreenButton setImage:[UIImage wf_imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
     }
 }
 

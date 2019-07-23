@@ -87,7 +87,7 @@
             [self updateRightBarBtn];
         }
     } else {
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_add_friend"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage wf_imageNamed:@"nav_add_friend"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
@@ -315,7 +315,7 @@
                     contactCell = [[WFCUNewFriendTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newFriendCell"];
                 }
                 contactCell.nameLabel.text = @"新朋友";
-                contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
+                contactCell.portraitView.image = [UIImage wf_imageNamed:@"friend_request_icon"];
                 [contactCell refresh];
                 return contactCell;
             } else if(indexPath.row == 1) {
@@ -325,7 +325,7 @@
                 }
                 
                 contactCell.nameLabel.text = @"群组";
-                contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
+                contactCell.portraitView.image = [UIImage wf_imageNamed:@"contact_group_icon"];
                 
                 return contactCell;
             } else {
@@ -335,7 +335,7 @@
                 }
                 
                 contactCell.nameLabel.text = @"频道";
-                contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
+                contactCell.portraitView.image = [UIImage wf_imageNamed:@"contact_channel_icon"];
                 
                 return contactCell;
             }
@@ -394,7 +394,7 @@
                 }
                 [contactCell refresh];
               contactCell.nameLabel.text = @"新朋友";
-              contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
+              contactCell.portraitView.image = [UIImage wf_imageNamed:@"friend_request_icon"];
                 cell = contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -402,7 +402,7 @@
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
               contactCell.nameLabel.text = @"群组";
-              contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
+              contactCell.portraitView.image = [UIImage wf_imageNamed:@"contact_group_icon"];
                 cell = contactCell;
             }
         } else {

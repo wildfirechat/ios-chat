@@ -102,17 +102,17 @@
     }
     
     if (isDir) {
-        fileCell.backIV.image = [UIImage imageNamed:@"dir_icon"];
+        fileCell.backIV.image = [UIImage wf_imageNamed:@"dir_icon"];
         fileCell.selectIV.hidden = YES;
     } else {
-        fileCell.backIV.image = [UIImage imageNamed:@"file_icon"];
+        fileCell.backIV.image = [UIImage wf_imageNamed:@"file_icon"];
         fileCell.selectIV.hidden = NO;
         
         NSString *fullPath = [self.currentPath stringByAppendingPathComponent:self.fileArray[indexPath.row]];
         if (![self.selectedFiles containsObject:fullPath]) {
-            fileCell.selectIV.image = [UIImage imageNamed:@"multi_unselected"];
+            fileCell.selectIV.image = [UIImage wf_imageNamed:@"multi_unselected"];
         }else{
-            fileCell.selectIV.image = [UIImage imageNamed:@"multi_selected"];
+            fileCell.selectIV.image = [UIImage wf_imageNamed:@"multi_selected"];
         }
         
     }

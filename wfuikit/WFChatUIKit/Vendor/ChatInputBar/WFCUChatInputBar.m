@@ -110,19 +110,19 @@
     
     CGRect parentRect = self.bounds;
     self.voiceSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
+    [self.voiceSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
     [self.voiceSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.voiceSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.voiceSwitchBtn];
     
     self.pluginSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.pluginSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
+    [self.pluginSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
     [self.pluginSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pluginSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.pluginSwitchBtn];
     
     self.emojSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
+    [self.emojSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     [self.emojSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.emojSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.emojSwitchBtn];
@@ -467,11 +467,11 @@
         if (self.textInputView.isFirstResponder) {
             [self.textInputView resignFirstResponder];
         }
-        [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        [self.voiceSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
     } else {
         [self.textInputView setHidden:NO];
         [self.voiceInputBtn setHidden:YES];
-        [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
+        [self.voiceSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
     }
 }
 
@@ -485,9 +485,9 @@
             [self.textInputView becomeFirstResponder];
         }
         [self.textInputView reloadInputViews];
-        [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        [self.emojSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
     } else {
-        [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
+        [self.emojSwitchBtn setImage:[UIImage wf_imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     }
 }
 

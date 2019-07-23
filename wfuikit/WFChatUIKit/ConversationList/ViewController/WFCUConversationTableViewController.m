@@ -158,19 +158,19 @@
                   fromRect:CGRectMake(self.view.bounds.size.width - 56, kStatusBarAndNavigationBarHeight + searchExtra, 48, 5)
                  menuItems:@[
                              [KxMenuItem menuItem:@"发起群聊"
-                                            image:[UIImage imageNamed:@"menu_start_chat"]
+                                            image:[UIImage wf_imageNamed:@"menu_start_chat"]
                                            target:self
                                            action:@selector(startChatAction:)],
                              [KxMenuItem menuItem:@"添加朋友"
-                                            image:[UIImage imageNamed:@"menu_add_friends"]
+                                            image:[UIImage wf_imageNamed:@"menu_add_friends"]
                                            target:self
                                            action:@selector(addFriendsAction:)],
                              [KxMenuItem menuItem:@"收听频道"
-                                            image:[UIImage imageNamed:@"menu_listen_channel"]
+                                            image:[UIImage wf_imageNamed:@"menu_listen_channel"]
                                            target:self
                                            action:@selector(listenChannelAction:)],
                              [KxMenuItem menuItem:@"扫二维码"
-                                            image:[UIImage imageNamed:@"menu_scan_qr"]
+                                            image:[UIImage wf_imageNamed:@"menu_scan_qr"]
                                            target:self
                                            action:@selector(scanQrCodeAction:)]
                              ]];
@@ -232,7 +232,7 @@
     [self initSearchUIAndTableView];
     
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage wf_imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClearAllUnread:) name:@"kTabBarClearBadgeNotification" object:nil];
@@ -418,7 +418,7 @@
         _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
         [_pcSessionView setBackgroundColor:[UIColor grayColor]];
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
-        iv.image = [UIImage imageNamed:@"pc_session"];
+        iv.image = [UIImage wf_imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, 100, 20)];
         label.text = @"PC已登录";

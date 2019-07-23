@@ -102,7 +102,7 @@
         }
         WFCCUserInfo *userInfo = self.searchList[indexPath.row];
         [cell.textLabel setText:userInfo.displayName];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
       
       cell.userInteractionEnabled = YES;
       return cell;

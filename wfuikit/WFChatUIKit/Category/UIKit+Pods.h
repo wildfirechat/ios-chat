@@ -1,5 +1,5 @@
 //
-//  UIImage+Pods.h
+//  UIKit+Pods.h
 //  WFChatUIKit
 //
 //  Created by dklinzh on 2019/7/22.
@@ -9,9 +9,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface NSBundle (Pods)
+
++ (instancetype)wf_bundle;
+
+@end
+
 @interface UIImage (Pods)
 
 + (nullable instancetype)wf_imageNamed:(NSString *)name;
+
+@end
+
+@interface UIView (Pods)
+
++ (instancetype)wf_createViewFromNibName:(NSString *)nibName;
+
++ (instancetype)wf_createViewFromNib;
 
 @end
 

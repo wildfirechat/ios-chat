@@ -24,7 +24,7 @@
 }
   
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage wf_imageNamed:@"PersonalChat"]];
   
     if (userInfo.friendAlias.length) {
         self.targetView.text = userInfo.friendAlias;
@@ -36,7 +36,7 @@
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
-    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"channel_default_portrait"]];
     
     if(channelInfo.name.length > 0) {
         self.targetView.text = channelInfo.name;
@@ -46,7 +46,7 @@
 }
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"group_default_portrait"]];
   
   if(groupInfo.name.length > 0) {
     self.targetView.text = groupInfo.name;
@@ -103,10 +103,10 @@
     
     if (info.lastMessage && info.lastMessage.direction == MessageDirection_Send) {
         if (info.lastMessage.status == Message_Status_Sending) {
-            self.statusView.image = [UIImage imageNamed:@"conversation_message_sending"];
+            self.statusView.image = [UIImage wf_imageNamed:@"conversation_message_sending"];
             self.statusView.hidden = NO;
         } else if(info.lastMessage.status == Message_Status_Send_Failure) {
-            self.statusView.image = [UIImage imageNamed:@"MessageSendError"];
+            self.statusView.image = [UIImage wf_imageNamed:@"MessageSendError"];
             self.statusView.hidden = NO;
         } else {
             self.statusView.hidden = YES;
@@ -210,7 +210,7 @@
 - (UIImageView *)statusView {
     if (!_statusView) {
         _statusView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, 16, 16)];
-        _statusView.image = [UIImage imageNamed:@"conversation_message_sending"];
+        _statusView.image = [UIImage wf_imageNamed:@"conversation_message_sending"];
         [self.contentView addSubview:_statusView];
     }
     return _statusView;
@@ -239,7 +239,7 @@
 - (UIImageView *)silentView {
     if (!_silentView) {
         _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 20, 45, 12, 12)];
-        _silentView.image = [UIImage imageNamed:@"conversation_mute"];
+        _silentView.image = [UIImage wf_imageNamed:@"conversation_mute"];
         [self.contentView addSubview:_silentView];
     }
     return _silentView;

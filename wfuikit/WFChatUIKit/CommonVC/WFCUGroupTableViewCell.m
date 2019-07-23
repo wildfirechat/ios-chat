@@ -51,6 +51,6 @@
     } else {
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"group_default_portrait"]];
 }
 @end

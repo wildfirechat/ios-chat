@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
 
-  s.prefix_header_contents = '#ifdef __OBJC__', '#import <UIImage+Pods.h>', '#endif'
+  s.prefix_header_contents = '#ifdef __OBJC__', '#import <UIKit+Pods.h>', '#endif'
   s.prefix_header_file = 'WFChatUIKit/Predefine.h'
   s.exclude_files = 'WFChatUIKit/Predefine.h'
   s.source_files = 'WFChatUIKit/*.{h,m}'

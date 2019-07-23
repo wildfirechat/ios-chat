@@ -46,9 +46,9 @@
     if ([self.model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
         WFCCCallStartMessageContent *startContent = (WFCCCallStartMessageContent *)self.model.message.content;
         if (startContent.isAudioOnly) {
-            self.modeImageView.image = [UIImage imageNamed:@"msg_audio_call"];
+            self.modeImageView.image = [UIImage wf_imageNamed:@"msg_audio_call"];
         } else {
-            self.modeImageView.image = [UIImage imageNamed:@"msg_video_call"];
+            self.modeImageView.image = [UIImage wf_imageNamed:@"msg_video_call"];
         }
     }
 }

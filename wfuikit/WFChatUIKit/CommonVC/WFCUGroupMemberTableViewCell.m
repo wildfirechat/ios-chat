@@ -23,7 +23,7 @@
     if (self.isSelectable) {
         
     }
-    [self.portraitView setImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView setImage:[UIImage wf_imageNamed:@"PersonalChat"]];
     
     
     [self.contentView addSubview:self.portraitView];
@@ -36,7 +36,7 @@
     if (isSelectable) {
         if (self.selectView == nil) {
             self.selectView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 32, 8, 20, 20)];
-            self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+            self.selectView.image = [UIImage wf_imageNamed:@"multi_unselected"];
             [self.contentView addSubview:self.selectView];
         }
     } else {
@@ -54,9 +54,9 @@
     }
     
     if (isSelected) {
-        self.selectView.image = [UIImage imageNamed:@"multi_selected"];
+        self.selectView.image = [UIImage wf_imageNamed:@"multi_selected"];
     } else {
-        self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+        self.selectView.image = [UIImage wf_imageNamed:@"multi_unselected"];
     }
 }
 

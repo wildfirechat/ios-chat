@@ -103,7 +103,7 @@
         _playingImg = [NSString stringWithFormat:@"received_voice_%d", (self.animationIndex++ % 3) + 1];
     }
 
-    [self.voiceBtn setImage:[UIImage imageNamed:_playingImg]];
+    [self.voiceBtn setImage:[UIImage wf_imageNamed:_playingImg]];
 }
 
 - (void)stopAnimationTimer {
@@ -114,9 +114,9 @@
     }
     
     if (self.model.message.direction == MessageDirection_Send) {
-        [self.voiceBtn setImage:[UIImage imageNamed:@"sent_voice"]];
+        [self.voiceBtn setImage:[UIImage wf_imageNamed:@"sent_voice"]];
     } else {
-        [self.voiceBtn setImage:[UIImage imageNamed:@"received_voice"]];
+        [self.voiceBtn setImage:[UIImage wf_imageNamed:@"received_voice"]];
     }
 }
 

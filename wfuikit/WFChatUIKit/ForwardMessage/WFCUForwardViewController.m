@@ -75,7 +75,7 @@
 }
 
 - (void)altertSend:(WFCCConversation *)conversation {
-    WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
+    WFCUShareMessageView *shareView = [WFCUShareMessageView wf_createViewFromNib];
     
     shareView.conversation = conversation;
     shareView.message = self.message;

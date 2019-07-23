@@ -104,7 +104,7 @@
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         
         self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
-        [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:self.channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+        [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:self.channelInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"channel_default_portrait"]];
         self.channelPortrait.userInteractionEnabled = YES;
         [self.channelPortrait addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapChannelPortrait:)]];
         
@@ -448,14 +448,14 @@
   } else if ([self isGroupPortraitCell:indexPath]) {
     UITableViewCell *cell = [self cellOfTable:tableView WithTitle:@"更改头像" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
     UIImageView *portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 56, 8, 40, 40)];
-    [portraitView sd_setImageWithURL:[NSURL URLWithString:self.groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    [portraitView sd_setImageWithURL:[NSURL URLWithString:self.groupInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"group_default_portrait"]];
     cell.accessoryView = portraitView;
     return cell;
   } else if([self isGroupQrCodeCell:indexPath]) {
     UITableViewCell *cell = [self cellOfTable:tableView WithTitle:@"群二维码" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
       
       CGFloat width = [UIScreen mainScreen].bounds.size.width;
-      UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+      UIImage *qrcode = [UIImage wf_imageNamed:@"qrcode"];
       UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
       qrview.image = qrcode;
       [cell addSubview:qrview];
@@ -669,11 +669,11 @@
         [cell setModel:member withType:self.conversation.type];
     } else {
         if (indexPath.row == self.memberList.count) {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"addmember"]];
+            [cell.headerImageView setImage:[UIImage wf_imageNamed:@"addmember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         } else {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"removemember"]];
+            [cell.headerImageView setImage:[UIImage wf_imageNamed:@"removemember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         }

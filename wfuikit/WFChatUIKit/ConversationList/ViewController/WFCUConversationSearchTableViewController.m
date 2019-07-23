@@ -116,15 +116,15 @@
     header.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
     if (self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
-        [portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
     } else if (self.conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
-        [portraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"GroupChatRound"]];
+        [portraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"GroupChatRound"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", groupInfo.name];
     } else if(self.conversation.type == Channel_Type) {
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
-        [portraitView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"GroupChatRound"]];
+        [portraitView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"GroupChatRound"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", channelInfo.name];
     }
     

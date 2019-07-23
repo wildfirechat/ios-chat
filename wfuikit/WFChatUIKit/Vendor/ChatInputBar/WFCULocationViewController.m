@@ -69,7 +69,7 @@
         
         self.mapView.showsUserLocation = YES;
         self.annotationLayer = [CALayer layer];
-        UIImage *image = [UIImage imageNamed:@"PinGreen"];
+        UIImage *image = [UIImage wf_imageNamed:@"PinGreen"];
         self.annotationLayer.contents = (id)image.CGImage;
         self.annotationLayer.frame = CGRectMake(0, 0, 35, 35);
         self.annotationLayer.anchorPoint = CGPointMake(0.25f, 0.f);
@@ -251,7 +251,7 @@
     NSString *title = [lines componentsJoinedByString:@"\n"];
     cell.textLabel.text = title;
     if (cell.selected) {
-        cell.imageView.image = [UIImage imageNamed:@"multi_selected"];
+        cell.imageView.image = [UIImage wf_imageNamed:@"multi_selected"];
     } else {
         cell.imageView.image = nil;
     }

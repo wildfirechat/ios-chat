@@ -66,15 +66,15 @@
     _checked = checked;
     if (self.multiSelect) {
         if (checked) {
-            self.checkImageView.image = [UIImage imageNamed:@"multi_selected"];
+            self.checkImageView.image = [UIImage wf_imageNamed:@"multi_selected"];
         } else {
-            self.checkImageView.image = [UIImage imageNamed:@"multi_unselected"];
+            self.checkImageView.image = [UIImage wf_imageNamed:@"multi_unselected"];
         }
     } else {
         if (checked) {
-            self.checkImageView.image = [UIImage imageNamed:@"single_selected"];
+            self.checkImageView.image = [UIImage wf_imageNamed:@"single_selected"];
         } else {
-            self.checkImageView.image = [UIImage imageNamed:@"single_unselected"];
+            self.checkImageView.image = [UIImage wf_imageNamed:@"single_unselected"];
         }
     }
 }
@@ -85,7 +85,7 @@
 - (void)setFriendUid:(NSString *)friendUid {
     _friendUid = friendUid;
     WFCCUserInfo *friendInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendUid refresh:NO];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:friendInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:friendInfo.portrait] placeholderImage: [UIImage wf_imageNamed:@"PersonalChat"]];
     if (friendInfo.friendAlias.length) {
         self.nameLabel.text = friendInfo.friendAlias;
     } else {

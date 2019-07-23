@@ -79,7 +79,7 @@
     self.portraitView.userInteractionEnabled = YES;
     
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage wf_imageNamed:@"PersonalChat"]];
     
     [headerCell addSubview:self.portraitView];
     headerCell.tag = -1;
@@ -94,7 +94,7 @@
     cell = [self getAttrCell:@"二维码" rightText:@"" mutable:YES];
     cell.tag = 1000;
     [self.cells1 addObject:cell];
-    UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+    UIImage *qrcode = [UIImage wf_imageNamed:@"qrcode"];
     
     UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
     qrview.image = qrcode;
