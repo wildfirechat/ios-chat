@@ -54,9 +54,19 @@
     WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
     pvc.selectContact = YES;
     pvc.multiSelect = YES;
+    __weak typeof(self)ws = self;
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
         [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(0)] notifyContent:nil success:^{
-            
+            for (NSString *memberId in contacts) {
+                WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:ws.groupInfo.target memberId:memberId];
+                if (member) {
+                    member.type = Member_Type_Manager;
+                    [ws.managerList addObject:member];
+                }
+            }
+            if (contacts.count) {
+                [ws.tableView reloadData];
+            }
         } error:^(int error_code) {
             
         }];
@@ -108,12 +118,17 @@
     return YES;
 }
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"移除管理员" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
 
+        __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
-            
+            for (WFCCGroupMember *member in ws.managerList) {
+                if ([member.memberId isEqualToString:[ws.managerList objectAtIndex:indexPath.row].memberId]) {
+                    [ws.managerList removeObject:member];
+                    [ws.tableView reloadData];
+                    break;
+                }
+            }
         } error:^(int error_code) {
             
         }];
