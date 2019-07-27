@@ -52,11 +52,7 @@ Index/
 !default.perspectivev3
 xcuserdata/
 
-## Xcode Patch
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcworkspace/contents.xcworkspacedata
+## Gcc Patch
 /*.gcno
 
 ## Other
