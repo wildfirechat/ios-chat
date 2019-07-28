@@ -2,7 +2,7 @@
 #ifndef Mars_verinfo_h
 #define Mars_verinfo_h
 
-#define MARS_REVISION "434e656"
+#define MARS_REVISION "b23c984"
 #define MARS_PATH "firechat"
 #define MARS_URL ""
 #define MARS_BUILD_TIME "2019-07-26 07:36:03"

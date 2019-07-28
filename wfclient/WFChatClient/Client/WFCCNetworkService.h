@@ -145,10 +145,6 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, assign, readonly)long long serverDeltaTime;
 
 /**
- * encoded client id
- */
-@property(nonatomic, readonly)NSString *encodedCid;
-/**
  开启Log
  */
 + (void)startLog;
@@ -222,9 +218,6 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)forceConnect:(NSUInteger)second;
 
 - (void)cancelForceConnect;
-
-- (NSData *)encodeData:(NSData *)data;
-- (NSData *)decodeData:(NSData *)data;
 @end
 
 #endif
