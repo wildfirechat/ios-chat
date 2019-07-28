@@ -40,7 +40,6 @@
 #import "MBProgressHUD.h"
 #import "WFCUMediaMessageDownloader.h"
 
-#import "VideoPlayerSampleViewController.h"
 #import "VideoPlayerKit.h"
 
 #import "WFCUForwardViewController.h"
