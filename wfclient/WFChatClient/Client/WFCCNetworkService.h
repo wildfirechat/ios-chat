@@ -224,6 +224,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)cancelForceConnect;
 
 - (NSData *)encodeData:(NSData *)data;
+- (NSData *)decodeData:(NSData *)data;
 @end
 
 #endif
