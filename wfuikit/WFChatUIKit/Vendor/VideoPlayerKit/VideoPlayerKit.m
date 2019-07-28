@@ -526,6 +526,12 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                                              selector:@selector(playerItemDidReachEnd:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:self.videoPlayer.currentItem];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidReachEnd:)
+                                                 name:AVPlayerItemFailedToPlayToEndTimeNotification
+                                               object:self.videoPlayer.currentItem];
+    
 }
 
 // Wait for the video player status to change to ready before initializing video player controls

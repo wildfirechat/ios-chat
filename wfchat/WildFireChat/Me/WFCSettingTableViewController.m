@@ -120,7 +120,7 @@
         } if (indexPath.row == 1) {
             cell.textLabel.text = @"帮助与反馈";
         } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"关于火信";
+            cell.textLabel.text = @"关于野火IM";
         }
     } else if(indexPath.section == 2) {
         if (indexPath.row == 0) {
@@ -128,7 +128,7 @@
         } if (indexPath.row == 1) {
             cell.textLabel.text = @"隐私政策";
         } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"关于火信";
+            cell.textLabel.text = @"关于野火IM";
         }
     } else if (indexPath.section == 3) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
