@@ -214,8 +214,6 @@
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
 		6E616D9B20AB3435002CB8BE /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = Frameworks/GoogleWebRTC/LICENSE.md; sourceTree = SOURCE_ROOT; };
 		6E616D9F20AB3435002CB8BE /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework; sourceTree = SOURCE_ROOT; };
-		9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
-		9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		9051774B2243CD830020A2AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -325,8 +323,6 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */,
-				9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */,
 				905177512243CDA60020A2AC /* libc++.tbd */,
 				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,
