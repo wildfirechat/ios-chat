@@ -565,6 +565,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                 [self removeObserversFromVideoPlayerItem];
                 [self removePlayerTimeObservers];
                 self.videoPlayer = nil;
+                [self minimizeVideo];
                 break;
         }
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"] && _videoPlayer.currentItem.playbackBufferEmpty) {
