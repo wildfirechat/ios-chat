@@ -299,7 +299,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     // init xlog
 #if DEBUG
     xlogger_SetLevel(kLevelVerbose);
-    appender_set_console_log(true);
+    //appender_set_console_log(true);
 #else
     xlogger_SetLevel(kLevelInfo);
     appender_set_console_log(false);
@@ -728,14 +728,21 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (NSData *)encodeData:(NSData *)data {
-    std::string encodeData = mars::stn::GetEncodeData(std::string((char *)data.bytes, data.length));
+    std::string encodeData = mars::stn::GetEncodeDataEx(std::string((char *)data.bytes, data.length));
     return [[NSData alloc] initWithBytes:encodeData.c_str() length:encodeData.length()];
 }
+
 - (void)onSettingUpdated {
   dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter] postNotificationName:kSettingUpdated object:nil];
   });
 }
+
+- (NSData *)decodeData:(NSData *)data {
+    std::string encodeData = mars::stn::GetDecodeData(std::string((char *)data.bytes, data.length));
+    return [[NSData alloc] initWithBytes:encodeData.c_str() length:encodeData.length()];
+}
+
 #pragma mark WFCCNetworkStatusDelegate
 -(void) ReachabilityChange:(UInt32)uiFlags {
     if ((uiFlags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {

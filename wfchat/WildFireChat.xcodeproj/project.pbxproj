@@ -62,6 +62,10 @@
 		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9036FE7E22ED474B00FD45E3 /* WFMomentClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */; };
+		9036FE7F22ED474B00FD45E3 /* WFMomentClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9036FE8022ED474B00FD45E3 /* WFMomentUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */; };
+		9036FE8122ED474B00FD45E3 /* WFMomentUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		905177502243CD9A0020A2AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774F2243CD9A0020A2AC /* libz.tbd */; };
@@ -87,7 +91,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9036FE8122ED474B00FD45E3 /* WFMomentUIKit.framework in Embed Frameworks */,
 				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
+				9036FE7F22ED474B00FD45E3 /* WFMomentClient.framework in Embed Frameworks */,
 				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
 				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
 				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
@@ -214,6 +220,8 @@
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
 		6E616D9B20AB3435002CB8BE /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = Frameworks/GoogleWebRTC/LICENSE.md; sourceTree = SOURCE_ROOT; };
 		6E616D9F20AB3435002CB8BE /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework; sourceTree = SOURCE_ROOT; };
+		9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
+		9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		9051774B2243CD830020A2AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -252,6 +260,8 @@
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
+				9036FE8022ED474B00FD45E3 /* WFMomentUIKit.framework in Frameworks */,
+				9036FE7E22ED474B00FD45E3 /* WFMomentClient.framework in Frameworks */,
 				2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */,
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
 				2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */,
@@ -323,6 +333,8 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9036FE7C22ED474A00FD45E3 /* WFMomentClient.framework */,
+				9036FE7D22ED474B00FD45E3 /* WFMomentUIKit.framework */,
 				905177512243CDA60020A2AC /* libc++.tbd */,
 				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,
@@ -911,6 +923,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -943,6 +956,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};

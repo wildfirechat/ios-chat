@@ -9,10 +9,10 @@
 #import "WFCConfig.h"
 
 
-NSString *IM_SERVER_HOST = @"wildfirechat.cn";
+NSString *IM_SERVER_HOST = @"192.168.1.101";
 int IM_SERVER_PORT = 80;
 
-NSString *APP_SERVER_HOST = @"wildfirechat.cn";
+NSString *APP_SERVER_HOST = @"192.168.1.159";
 int APP_SERVER_PORT = 8888;
 
 NSString *ICE_ADDRESS = @"turn:turn.liyufan.win:3478";
