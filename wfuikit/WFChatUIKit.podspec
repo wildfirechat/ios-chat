@@ -24,7 +24,10 @@ Pod::Spec.new do |s|
   s.subspec 'AVEngine' do |ss|
     ss.vendored_frameworks = 'WFChatUIKit/AVEngine/**/*.framework'
     ss.pod_target_xcconfig = {
-      'OTHER_LDFLAGS' => '$(inherited) -ObjC -framework WFAVEngineKit -framework WebRTC'
+      'OTHER_LDFLAGS' => '$(inherited) -framework WFAVEngineKit -framework WebRTC'
+    }
+    ss.xcconfig = {
+      'ENABLE_BITCODE' => 'NO'
     }
   end
 
