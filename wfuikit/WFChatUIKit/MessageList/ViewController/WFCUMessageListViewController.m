@@ -1304,6 +1304,7 @@
     UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:@"复制" action:@selector(performCopy:)];
     UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:@"转发" action:@selector(performForward:)];
     UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:@"撤回" action:@selector(performRecall:)];
+    UIMenuItem *complainItem = [[UIMenuItem alloc]initWithTitle:@"举报" action:@selector(performComplain:)];
     
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
@@ -1320,6 +1321,10 @@
     [items addObject:deleteItem];
     if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
         [items addObject:copyItem];
+    }
+    
+    if (baseCell.model.message.direction == MessageDirection_Receive) {
+        [items addObject:complainItem];
     }
     
     if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
@@ -1384,7 +1389,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -1448,6 +1453,16 @@
     }
 }
 
+- (void)performComplain:(UIMenuItem *)sender {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"举报" message:@"如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 - (void)onMenuHidden:(id)sender {
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setMenuItems:nil];

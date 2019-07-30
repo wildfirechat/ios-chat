@@ -74,6 +74,28 @@
             pvc.isPrivacy = YES;
             [self.navigationController pushViewController:pvc animated:YES];
         }
+    } else if(indexPath.section == 3) {
+        __weak typeof(self)ws = self;
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"举报" message:@"如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        [alertController addAction:action1];
+        
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"举报" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+            mvc.conversation = [[WFCCConversation alloc] init];
+            mvc.conversation.type = Single_Type;
+            mvc.conversation.target = @"cgc8c8VV";
+            mvc.conversation.line = 0;
+            
+            mvc.hidesBottomBarWhenPushed = YES;
+            [ws.navigationController pushViewController:mvc animated:YES];
+        }];
+        [alertController addAction:action2];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 
@@ -83,7 +105,7 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -94,6 +116,8 @@
     } else if (section == 2) {
         return 2;
     } else if (section == 3) {
+        return 1;
+    } else if (section == 4) {
         return 1;
     }
     return 0;
@@ -130,7 +154,11 @@
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"关于野火IM";
         }
-    } else if (indexPath.section == 3) {
+    } else if(indexPath.section == 3) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"举报";
+        }
+    } else if (indexPath.section == 4) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];
