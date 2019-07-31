@@ -330,6 +330,8 @@
 		2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41F21BFE63C005E1BE1 /* WFCUChannelProfileViewController.m */; };
 		2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9E85F8222B83CE0076B82B /* QrCodeHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E85FE222B9D600076B82B /* QrCodeHelper.m */; };
+		2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */; };
 		2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */; };
 		2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */; };
 		2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */; };
@@ -669,6 +671,8 @@
 		2F9CE41F21BFE63C005E1BE1 /* WFCUChannelProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUChannelProfileViewController.m; sourceTree = "<group>"; };
 		2F9E85F8222B83CE0076B82B /* QrCodeHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QrCodeHelper.h; sourceTree = "<group>"; };
 		2F9E85FE222B9D600076B82B /* QrCodeHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QrCodeHelper.m; sourceTree = "<group>"; };
+		2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUBlackListViewController.h; sourceTree = "<group>"; };
+		2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUBlackListViewController.m; sourceTree = "<group>"; };
 		2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUVerifyRequestViewController.h; sourceTree = "<group>"; };
 		2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUVerifyRequestViewController.m; sourceTree = "<group>"; };
 		2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewController.m; sourceTree = "<group>"; };
@@ -863,6 +867,8 @@
 				2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */,
 				2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */,
 				2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */,
+				2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */,
+				2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */,
 			);
 			path = CommonVC;
 			sourceTree = "<group>";
@@ -1514,6 +1520,7 @@
 				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */,
 				2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */,
 				2F551166217F5CC200F56C26 /* AFURLRequestSerialization.h in Headers */,
+				2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */,
 				2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */,
 				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
 				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
@@ -1777,6 +1784,7 @@
 				2F551224217F5CC300F56C26 /* WFCUMyPortraitViewController.m in Sources */,
 				2F5511F9217F5CC300F56C26 /* UIView+Screenshot.m in Sources */,
 				2F55116D217F5CC200F56C26 /* AFNetworkReachabilityManager.m in Sources */,
+				2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */,
 				2F5510EB217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.m in Sources */,
 				2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */,
 				2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */,
