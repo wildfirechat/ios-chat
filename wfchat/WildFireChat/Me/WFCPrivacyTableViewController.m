@@ -8,6 +8,8 @@
 
 #import "WFCPrivacyTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatUIKit/WFChatUIKit.h>
+
 
 @interface WFCPrivacyTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -41,7 +43,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        //Todo goto black list vc
+        WFCUBlackListViewController *vc = [[WFCUBlackListViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     } else if(indexPath.section == 1) {
         UIViewController *vc = [[NSClassFromString(@"MomentSettingsTableViewController") alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
