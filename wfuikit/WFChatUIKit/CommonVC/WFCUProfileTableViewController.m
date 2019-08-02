@@ -223,6 +223,7 @@
     }
     UINavigationController *nav = self.navigationController;
     [self.navigationController popToRootViewControllerAnimated:NO];
+    mvc.hidesBottomBarWhenPushed = YES;
     [nav pushViewController:mvc animated:YES];
 }
 

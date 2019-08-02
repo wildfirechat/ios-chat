@@ -33,10 +33,11 @@
     
     [self.view addSubview:self.tableView];
     
+    __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        if ([self.groupInfo.target isEqualToString:note.object]) {
-            [self loadManagerList];
-            [self.tableView reloadData];
+        if ([ws.groupInfo.target isEqualToString:note.object]) {
+            [ws loadManagerList];
+            [ws.tableView reloadData];
         }
     }];
 }
