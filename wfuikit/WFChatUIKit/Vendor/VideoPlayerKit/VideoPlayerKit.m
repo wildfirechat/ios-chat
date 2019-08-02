@@ -184,6 +184,8 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (self.fullScreenModeToggled) {
         BOOL isHidingPlayerControls = self.videoPlayerView.playerControlBar.alpha == 0;
         [[UIApplication sharedApplication] setStatusBarHidden:isHidingPlayerControls withAnimation:UIStatusBarAnimationNone];

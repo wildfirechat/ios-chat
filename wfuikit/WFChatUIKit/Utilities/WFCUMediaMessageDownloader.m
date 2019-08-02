@@ -107,7 +107,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageStartDownloading object:@(messageUid)];
     
     
-    if (self.downloadingMessages[mediaContent.remoteUrl]) {
+    if (self.downloadingMessages[mediaContent.remoteUrl] != nil) {
         return NO;
     }
     
@@ -226,7 +226,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageStartDownloading object:@(uid)];
     
     
-    if (self.downloadingMessages[mediaPath]) {
+    if (self.downloadingMessages[mediaPath] != nil) {
         return NO;
     }
     

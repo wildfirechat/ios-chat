@@ -121,7 +121,7 @@
   if(self.conversation.type == Single_Type) {
       [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
           if ([ws.conversation.target isEqualToString:note.object]) {
-              self.targetUser = note.userInfo[@"userInfo"];
+              ws.targetUser = note.userInfo[@"userInfo"];
           }
       }];
       
