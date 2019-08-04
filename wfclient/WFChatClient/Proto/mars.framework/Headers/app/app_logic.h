@@ -45,7 +45,6 @@ namespace app {
 		virtual DeviceInfo GetDeviceInfo() = 0;
 
 	};
-
 	void SetCallback(Callback* const callback);
 }}
 
