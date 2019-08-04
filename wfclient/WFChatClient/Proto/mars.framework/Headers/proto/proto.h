@@ -605,7 +605,7 @@ namespace mars{
         
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
-        extern void (*Connect)(const std::string& host, uint16_t shortLinkPort);
+        extern bool Connect(const std::string& host, uint16_t shortLinkPort);
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
         extern void setDNSResult(std::vector<std::string> serverIPs);

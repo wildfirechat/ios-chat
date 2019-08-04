@@ -549,8 +549,8 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshSettingCallback(new GSCB(self));
   mars::baseevent::OnCreate();
 }
-- (void)connect:(NSString *)host port:(int)port {
-    mars::stn::Connect([host UTF8String], port);
+- (BOOL)connect:(NSString *)host port:(int)port {
+    bool newDB = mars::stn::Connect([host UTF8String], port);
     
   dispatch_async(dispatch_get_main_queue(), ^{
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
@@ -561,6 +561,10 @@ static WFCCNetworkService * sharedSingleton = nil;
       });
     }
   });
+    if (newDB) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)forceConnectTimeOut {
@@ -605,20 +609,20 @@ static WFCCNetworkService * sharedSingleton = nil;
     return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
-- (void)connect:(NSString *)userId token:(NSString *)token {
+- (BOOL)connect:(NSString *)userId token:(NSString *)token {
   _logined = YES;
     mars::app::AppCallBack::Instance()->SetAccountUserName([userId UTF8String]);
     [self createMars];
     self.userId = userId;
     self.passwd = token;
     if(!mars::stn::setAuthInfo([userId cStringUsingEncoding:NSUTF8StringEncoding], [token cStringUsingEncoding:NSUTF8StringEncoding])) {
-        return;
+        return NO;
     }
     
     self.currentConnectionStatus = kConnectionStatusConnecting;
     [[WFCCNetworkStatus sharedInstance] Start:[WFCCNetworkService sharedInstance]];
     
-    [self connect:self.serverHost port:self.serverPort];
+    return [self connect:self.serverHost port:self.serverPort];
 }
 
 - (void)disconnect:(BOOL)clearSession {
