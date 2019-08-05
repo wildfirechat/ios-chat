@@ -27,9 +27,19 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUProfileTableViewController.h>
 #import <WFChatUIKit/WFCUMessageNotificationViewController.h>
 #import <WFChatUIKit/WFCUGeneralSwitchTableViewCell.h>
+#import <WFChatUIKit/WFCUBlackListViewController.h>
 #import <WFChatUIKit/QrCodeHelper.h>
 
+
+#import <WFChatUIKit/WFCUMediaMessageDownloader.h>
 #import <WFChatUIKit/WFCUFaceBoard.h>
 
 #import <WFChatUIKit/UIView+Toast.h>
 
+#import <WFChatUIKit/KZVideoConfig.h>
+#import <WFChatUIKit/KZVideoViewController.h>
+
+#import <WFChatUIKit/VideoPlayerKit.h>
+#import <WFChatUIKit/VideoPlayer.h>
+#import <WFChatUIKit/VideoPlayerView.h>
+#import <WFChatUIKit/AirplayActiveView.h>

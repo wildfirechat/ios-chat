@@ -145,10 +145,6 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, assign, readonly)long long serverDeltaTime;
 
 /**
- * encoded client id
- */
-@property(nonatomic, readonly)NSString *encodedCid;
-/**
  开启Log
  */
 + (void)startLog;
@@ -170,8 +166,10 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 
  @param userId 用户Id
  @param token 密码
+ 
+ @return 是否是第一次连接。第一次连接需要同步用户信息，耗时较长，可以加个第一次登录的等待提示界面。
  */
-- (void)connect:(NSString *)userId token:(NSString *)token;
+- (BOOL)connect:(NSString *)userId token:(NSString *)token;
 
 /**
  断开连接
@@ -222,8 +220,6 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)forceConnect:(NSUInteger)second;
 
 - (void)cancelForceConnect;
-
-- (NSData *)encodeData:(NSData *)data;
 @end
 
 #endif

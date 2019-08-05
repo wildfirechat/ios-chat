@@ -20,13 +20,21 @@
 开发一套IM系统真的很艰辛，请路过的朋友们给点个star，支持我们坚持下去🙏🙏🙏🙏🙏
 
 ### 联系我们
-1. QQ：3239481169(野火IM)
-2. QQ: 1960867973(x86)
+
+> 商务合作请优先采用邮箱和我们联系。技术问题请到[野火IM论坛](http://bbs.wildfirechat.cn/)发帖交流。
+
+1. heavyrain.lee  邮箱: heavyrain.lee@wildfirechat.cn  微信：wildfirechat
+2. imndx  邮箱: imndx@wildfirechat.cn  微信：wfchat
 
 ### 问题交流
-1. 如果大家发现bug，请在GitHub提issue
-2. 其他问题，请到[野火IM论坛](http://bbs.wildfirechat.cn/)进行交流学习
-3. 微信公众号
+
+1. 微信交流群（请先加我们好友，我们再邀请您进群）
+
+  ![微信二维码](http://static.wildfirechat.cn/wx_qr_wildfirechat.jpeg)   ![微信二维码](http://static.wildfirechat.cn/wx_qr_wfc.jpeg)
+  
+2. 如果大家发现bug，请在GitHub提issue
+3. 其他问题，请到[野火IM论坛](http://bbs.wildfirechat.cn/)进行交流学习
+4. 微信公众号
 
 <img src="http://static.wildfirechat.cn/wx_wfc_qrcode.jpg" width = 50% height = 50% />
 

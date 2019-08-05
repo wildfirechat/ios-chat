@@ -74,14 +74,20 @@
 
 - (void)onRightBtn:(id)sender {
     NSString *title;
+    UIActionSheet *actionSheet;
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         title = @"删除好友";
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"设置备注", nil];
     } else {
         title = @"添加好友";
+        if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
+            title = @"取消屏蔽";
+            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:nil];
+        } else {
+            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"屏蔽用户", nil];
+        }
     }
     
-    
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"设置备注", nil];
     [actionSheet showInView:self.view];
 }
 - (void)loadData {
@@ -217,6 +223,7 @@
     }
     UINavigationController *nav = self.navigationController;
     [self.navigationController popToRootViewControllerAnimated:NO];
+    mvc.hidesBottomBarWhenPushed = YES;
     [nav pushViewController:mvc animated:YES];
 }
 
@@ -321,11 +328,12 @@
 
 #pragma mark -  UIActionSheetDelegate <NSObject>
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 0) {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.label.text = @"处理中...";
-        [hud showAnimated:YES];
-        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+        //0, 删除好友，1 添加备注
+        if(buttonIndex == 0) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.label.text = @"处理中...";
+            [hud showAnimated:YES];
             [[WFCCIMService sharedWFCIMService] deleteFriend:self.userId success:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [hud hideAnimated:YES];
@@ -347,33 +355,85 @@
                     [hud hideAnimated:YES afterDelay:1.f];
                 });
             }];
-        } else {
-            WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
-            vc.userId = self.userId;
-            [self.navigationController pushViewController:vc animated:YES];
+        } else if(buttonIndex == 1) {
+            WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
+            NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
+            gmvc.defaultValue = previousAlias;
+            gmvc.titleText = @"设置备注";
+            gmvc.canEmpty = YES;
+            __weak typeof(self)ws = self;
+            gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
+                if (![newValue isEqualToString:previousAlias]) {
+                    [[WFCCIMService sharedWFCIMService] setFriend:self.userId alias:newValue success:^{
+                        result(YES);
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [ws loadData];
+                        });
+                    } error:^(int error_code) {
+                        result(NO);
+                    }];
+                }
+            };
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
         }
-    } else if(buttonIndex == 1) {
-        WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
-        NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
-        gmvc.defaultValue = previousAlias;
-        gmvc.titleText = @"设置备注";
-        gmvc.canEmpty = YES;
-        __weak typeof(self)ws = self;
-        gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
-            if (![newValue isEqualToString:previousAlias]) {
-                [[WFCCIMService sharedWFCIMService] setFriend:self.userId alias:newValue success:^{
-                    result(YES);
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [ws loadData];
-                    });
+    } else {
+        if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
+            //0 取消屏蔽
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.label.text = @"处理中...";
+            [hud showAnimated:YES];
+            if (buttonIndex == 0) {
+                [[WFCCIMService sharedWFCIMService] setBlackList:self.userId isBlackListed:NO success:^{
+                    [hud hideAnimated:YES];
+                    
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理成功";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
                 } error:^(int error_code) {
-                    result(NO);
+                    [hud hideAnimated:YES];
+                    
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理失败";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
                 }];
             }
-        };
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
+        } else {
+            //0，添加好友；1 屏蔽用户
+            if (buttonIndex == 0) {
+                    WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
+                    vc.userId = self.userId;
+                    [self.navigationController pushViewController:vc animated:YES];
+            } else if(buttonIndex == 1) {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.label.text = @"处理中...";
+                [hud showAnimated:YES];
+                [[WFCCIMService sharedWFCIMService] setBlackList:self.userId isBlackListed:YES success:^{
+                    [hud hideAnimated:YES];
+                    
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理成功";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
+                } error:^(int error_code) {
+                    [hud hideAnimated:YES];
+                    
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理失败";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
+                }];
+            }
+        }
     }
+    
+    
 }
 
 - (void)dealloc {

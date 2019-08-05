@@ -130,14 +130,14 @@
 		2F55110D217F5CC200F56C26 /* AirplayActiveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F42217F5CC100F56C26 /* AirplayActiveView.m */; };
 		2F55110E217F5CC200F56C26 /* VideoPlayerSampleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F43217F5CC100F56C26 /* VideoPlayerSampleView.h */; };
 		2F55110F217F5CC200F56C26 /* FullScreenViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F44217F5CC100F56C26 /* FullScreenViewController.h */; };
-		2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F45217F5CC100F56C26 /* VideoPlayerKit.h */; };
-		2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F46217F5CC100F56C26 /* VideoPlayerView.h */; };
+		2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F45217F5CC100F56C26 /* VideoPlayerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F46217F5CC100F56C26 /* VideoPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551112217F5CC200F56C26 /* VideoPlayerSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F47217F5CC100F56C26 /* VideoPlayerSampleViewController.m */; };
 		2F551113217F5CC200F56C26 /* VideoPlayerSampleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F48217F5CC100F56C26 /* VideoPlayerSampleView.m */; };
-		2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F49217F5CC100F56C26 /* AirplayActiveView.h */; };
+		2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F49217F5CC100F56C26 /* AirplayActiveView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551115217F5CC200F56C26 /* FullScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F4A217F5CC100F56C26 /* FullScreenView.m */; };
 		2F551124217F5CC200F56C26 /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F5A217F5CC100F56C26 /* FullScreenViewController.m */; };
-		2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F5B217F5CC100F56C26 /* VideoPlayer.h */; };
+		2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F5B217F5CC100F56C26 /* VideoPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551126217F5CC200F56C26 /* VideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F5C217F5CC100F56C26 /* VideoPlayerView.m */; };
 		2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F5D217F5CC100F56C26 /* VideoPlayerKit.m */; };
 		2F551150217F5CC200F56C26 /* KZVideoListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F8E217F5CC100F56C26 /* KZVideoListViewController.h */; };
@@ -145,11 +145,11 @@
 		2F551152217F5CC200F56C26 /* KZVideoSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F90217F5CC100F56C26 /* KZVideoSupport.h */; };
 		2F551153217F5CC200F56C26 /* KZVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F91217F5CC100F56C26 /* KZVideoPlayer.m */; };
 		2F551154217F5CC200F56C26 /* KZVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F92217F5CC100F56C26 /* KZVideoViewController.m */; };
-		2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F93217F5CC100F56C26 /* KZVideoConfig.h */; };
+		2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F93217F5CC100F56C26 /* KZVideoConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551156217F5CC200F56C26 /* KZVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F94217F5CC100F56C26 /* KZVideoListViewController.m */; };
 		2F551157217F5CC200F56C26 /* KZVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F95217F5CC100F56C26 /* KZVideoSupport.m */; };
 		2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F96217F5CC100F56C26 /* KZVideoPlayer.h */; };
-		2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F97217F5CC100F56C26 /* KZVideoViewController.h */; };
+		2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F97217F5CC100F56C26 /* KZVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F99217F5CC100F56C26 /* SDPhotoBrowserConfig.h */; };
 		2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */; };
 		2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F9B217F5CC100F56C26 /* SDWaitingView.m */; };
@@ -310,7 +310,7 @@
 		2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551088217F5CC200F56C26 /* WFCUFriendRequestTableViewCell.h */; };
 		2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108A217F5CC200F56C26 /* WFCUFriendRequestViewController.h */; };
 		2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55108B217F5CC200F56C26 /* WFCUFriendRequestViewController.m */; };
-		2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108D217F5CC200F56C26 /* WFCUMediaMessageDownloader.h */; };
+		2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108D217F5CC200F56C26 /* WFCUMediaMessageDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108E217F5CC200F56C26 /* WFCUUtilities.h */; };
 		2F55122B217F5CC300F56C26 /* WFCUMediaMessageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55108F217F5CC200F56C26 /* WFCUMediaMessageDownloader.m */; };
 		2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551090217F5CC200F56C26 /* WFCUUtilities.m */; };
@@ -330,6 +330,8 @@
 		2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41F21BFE63C005E1BE1 /* WFCUChannelProfileViewController.m */; };
 		2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9E85F8222B83CE0076B82B /* QrCodeHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E85FE222B9D600076B82B /* QrCodeHelper.m */; };
+		2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */; };
 		2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */; };
 		2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */; };
 		2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */; };
@@ -669,6 +671,8 @@
 		2F9CE41F21BFE63C005E1BE1 /* WFCUChannelProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUChannelProfileViewController.m; sourceTree = "<group>"; };
 		2F9E85F8222B83CE0076B82B /* QrCodeHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QrCodeHelper.h; sourceTree = "<group>"; };
 		2F9E85FE222B9D600076B82B /* QrCodeHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QrCodeHelper.m; sourceTree = "<group>"; };
+		2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUBlackListViewController.h; sourceTree = "<group>"; };
+		2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUBlackListViewController.m; sourceTree = "<group>"; };
 		2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUVerifyRequestViewController.h; sourceTree = "<group>"; };
 		2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUVerifyRequestViewController.m; sourceTree = "<group>"; };
 		2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewController.m; sourceTree = "<group>"; };
@@ -863,6 +867,8 @@
 				2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */,
 				2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */,
 				2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */,
+				2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */,
+				2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */,
 			);
 			path = CommonVC;
 			sourceTree = "<group>";
@@ -1509,11 +1515,19 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
+				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */,
+				2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */,
 				2F551166217F5CC200F56C26 /* AFURLRequestSerialization.h in Headers */,
+				2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */,
+				2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */,
 				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
+				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
+				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
+				2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */,
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageNotificationViewController.h in Headers */,
@@ -1548,7 +1562,6 @@
 				2F5511A9217F5CC300F56C26 /* SDImageCache.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
-				2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */,
 				2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */,
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F5511CA217F5CC300F56C26 /* SDWebImageCompat.h in Headers */,
@@ -1559,7 +1572,6 @@
 				2F5511B3217F5CC300F56C26 /* UIButton+WebCache.h in Headers */,
 				2F5511DB217F5CC300F56C26 /* UIView+TYAlertView.h in Headers */,
 				2F551109217F5CC200F56C26 /* pinyin.h in Headers */,
-				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */,
 				2F551191217F5CC200F56C26 /* SDRefreshView.h in Headers */,
 				2F5511A3217F5CC200F56C26 /* UIImageView+WebCache.h in Headers */,
@@ -1620,9 +1632,7 @@
 				2F5511E4217F5CC300F56C26 /* YLImageView.h in Headers */,
 				2F5511C9217F5CC300F56C26 /* SDWebImagePrefetcher.h in Headers */,
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
-				2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */,
 				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
-				2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
@@ -1630,10 +1640,8 @@
 				2F5511A4217F5CC300F56C26 /* NSData+ImageContentType.h in Headers */,
 				2F5511CF217F5CC300F56C26 /* TYAlertDropDownAnimation.h in Headers */,
 				2F5510B7217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.h in Headers */,
-				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				2F5510F8217F5CC200F56C26 /* CCHFadeInOutMapAnimator.h in Headers */,
 				2F5510CC217F5CC200F56C26 /* WFCUVoiceRecordView.h in Headers */,
-				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
 				9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */,
 				2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */,
 				2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */,
@@ -1647,7 +1655,6 @@
 				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */,
 				2F5511B7217F5CC300F56C26 /* SDWebImage.h in Headers */,
-				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
 				2F5511FD217F5CC300F56C26 /* WFCUSwitchTableViewCell.h in Headers */,
 				2F551101217F5CC200F56C26 /* CCHMapClusterOperation.h in Headers */,
 				2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */,
@@ -1777,6 +1784,7 @@
 				2F551224217F5CC300F56C26 /* WFCUMyPortraitViewController.m in Sources */,
 				2F5511F9217F5CC300F56C26 /* UIView+Screenshot.m in Sources */,
 				2F55116D217F5CC200F56C26 /* AFNetworkReachabilityManager.m in Sources */,
+				2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */,
 				2F5510EB217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.m in Sources */,
 				2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */,
 				2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */,

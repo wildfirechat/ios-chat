@@ -247,7 +247,8 @@ extern void (*RequestSync)();
 
 extern std::string GetEncodedCid();
         
-extern std::string GetEncodeData(std::string pbData);
+extern std::string GetEncodeDataEx(std::string pbData);
+extern std::string GetDecodeData(std::string data);
 
 //底层询问上层http网络检查的域名列表 
 extern void (*RequestNetCheckShortLinkHosts)(std::vector<std::string>& _hostlist);

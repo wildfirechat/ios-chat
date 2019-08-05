@@ -184,6 +184,8 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (self.fullScreenModeToggled) {
         BOOL isHidingPlayerControls = self.videoPlayerView.playerControlBar.alpha == 0;
         [[UIApplication sharedApplication] setStatusBarHidden:isHidingPlayerControls withAnimation:UIStatusBarAnimationNone];
@@ -526,6 +528,12 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                                              selector:@selector(playerItemDidReachEnd:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:self.videoPlayer.currentItem];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidReachEnd:)
+                                                 name:AVPlayerItemFailedToPlayToEndTimeNotification
+                                               object:self.videoPlayer.currentItem];
+    
 }
 
 // Wait for the video player status to change to ready before initializing video player controls
@@ -559,6 +567,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                 [self removeObserversFromVideoPlayerItem];
                 [self removePlayerTimeObservers];
                 self.videoPlayer = nil;
+                [self minimizeVideo];
                 break;
         }
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"] && _videoPlayer.currentItem.playbackBufferEmpty) {

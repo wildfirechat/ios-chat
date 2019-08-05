@@ -226,6 +226,7 @@
 		901E270F21F1545000A163CB /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		901E271121F1545900A163CB /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		901E271321F1546100A163CB /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		9036FE9222ED852D00FD45E3 /* libmars-open-iphone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libmars-open-iphone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		903EBB8921357DDF00312C16 /* WFCCStickerMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStickerMessageContent.m; sourceTree = "<group>"; };
 		903EBB8A21357DDF00312C16 /* WFCCStickerMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStickerMessageContent.h; sourceTree = "<group>"; };
 		90B044441FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCUnknownMessageContent.m; sourceTree = "<group>"; };
@@ -441,6 +442,7 @@
 		901E270C21F1543C00A163CB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9036FE9222ED852D00FD45E3 /* libmars-open-iphone.a */,
 				901E271321F1546100A163CB /* libz.tbd */,
 				901E271121F1545900A163CB /* libc++.tbd */,
 				901E270F21F1545000A163CB /* libresolv.tbd */,
@@ -833,7 +835,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 x86_64";
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -869,7 +871,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 x86_64";
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
