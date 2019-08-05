@@ -94,7 +94,8 @@
 - (void)loadStickers {
     self.stickers = [[NSMutableDictionary alloc] init];
     
-    NSString *stickerPath = [[WFCUFaceBoard getStickerCachePath] stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
+//    NSString *stickerPath = [[WFCUFaceBoard getStickerCachePath] stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
+    NSString *stickerPath = [[NSBundle bundleForClass:self.class].resourcePath stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
     
     NSError * err = nil;
     NSFileManager * defaultManager = [NSFileManager defaultManager];
