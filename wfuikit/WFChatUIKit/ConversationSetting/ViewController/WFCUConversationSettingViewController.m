@@ -762,11 +762,18 @@
           }];
       };
         NSMutableArray *candidateUsers = [[NSMutableArray alloc] init];
+        NSMutableArray *disableUsers = [[NSMutableArray alloc] init];
+        BOOL isOwner = [self isGroupOwner];
+        
         for (WFCCGroupMember *member in self.memberList) {
             [candidateUsers addObject:member.memberId];
+            if (!isOwner && (member.type == Member_Type_Manager || [self.groupInfo.owner isEqualToString:member.memberId])) {
+                [disableUsers addObject:member.memberId];
+            }
         }
+        [disableUsers addObject:[WFCCNetworkService sharedInstance].userId];
         pvc.candidateUsers = candidateUsers;
-        pvc.disableUsers = @[[WFCCNetworkService sharedInstance].userId];
+        pvc.disableUsers = [disableUsers copy];
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
         [self.navigationController presentViewController:navi animated:YES completion:nil];
     } else {
