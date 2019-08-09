@@ -13,7 +13,7 @@
 
 @implementation WFCCTipNotificationContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     
     payload.content = self.tip;
@@ -21,6 +21,7 @@
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     self.tip = payload.content;
 }
 

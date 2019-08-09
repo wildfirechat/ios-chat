@@ -49,6 +49,7 @@
 
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
+    payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
     payload.searchableContent = @"[声音]";
     payload.mediaType = Media_Type_VOICE;
@@ -62,6 +63,7 @@
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     if ([payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
         WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
         self.remoteUrl = mediaPayload.remoteMediaUrl;

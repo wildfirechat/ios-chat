@@ -13,7 +13,7 @@
 
 @implementation WFCCTextMessageContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     payload.searchableContent = self.text;
     payload.mentionedType = self.mentionedType;
@@ -22,6 +22,7 @@
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     self.text = payload.searchableContent;
     self.mentionedType = payload.mentionedType;
     self.mentionedTargets = payload.mentionedTargets;

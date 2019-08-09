@@ -90,6 +90,10 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  */
 @property (nonatomic, strong)NSArray<NSString *> *mentionedTargets;
 
+/**
+ 附加信息
+ */
+@property (nonatomic, strong)NSString *extra;
 @end
 
 /**
@@ -154,7 +158,6 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  @return 消息的简短信息，主要用于通知提示和会话列表等需要简略信息的地方。
  */
 - (NSString *)digest:(WFCCMessage *)message;
-
 @end
 
 /**
@@ -162,4 +165,8 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  */
 @interface WFCCMessageContent : NSObject <WFCCMessageContent>
 
+/**
+ 附加信息
+ */
+@property (nonatomic, strong)NSString *extra;
 @end
