@@ -13,7 +13,7 @@
 
 @implementation WFCCLocationMessageContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     payload.searchableContent = self.title;
     payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.67);
@@ -28,6 +28,7 @@
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     self.title = payload.searchableContent;
     self.thumbnail = [UIImage imageWithData:payload.binaryContent];
     
