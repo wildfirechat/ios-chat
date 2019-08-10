@@ -124,9 +124,11 @@
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
+            stvc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:stvc animated:YES];
         } else if(indexPath.row == 1) {
             WFCUMessageNotificationViewController *mnvc = [[WFCUMessageNotificationViewController alloc] init];
+            mnvc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:mnvc animated:YES];
         }
     } else if(indexPath.section == 2)  {
