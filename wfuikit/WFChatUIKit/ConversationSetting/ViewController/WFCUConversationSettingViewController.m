@@ -119,21 +119,25 @@
         top += 18;
         top += 20;
         
-        NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:self.channelInfo.desc];
-        UIFont *font = [UIFont systemFontOfSize:14];
-        [attributeString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, self.channelInfo.desc.length)];
-        NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
-        CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
+        if (self.channelInfo.desc) {
+            NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:self.channelInfo.desc];
+            UIFont *font = [UIFont systemFontOfSize:14];
+            [attributeString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, self.channelInfo.desc.length)];
+            NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+            CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
+            
+            self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
+            self.channelDesc.font = [UIFont systemFontOfSize:14];
+            self.channelDesc.textAlignment = NSTextAlignmentCenter;
+            self.channelDesc.text = self.channelInfo.desc;
+            self.channelDesc.numberOfLines = 0;
+            [self.channelDesc sizeToFit];
+            
+            top += rect.size.height;
+            top += 20;
+        }
         
-        self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
-        self.channelDesc.font = [UIFont systemFontOfSize:14];
-        self.channelDesc.textAlignment = NSTextAlignmentCenter;
-        self.channelDesc.text = self.channelInfo.desc;
-        self.channelDesc.numberOfLines = 0;
-        [self.channelDesc sizeToFit];
         
-        top += rect.size.height;
-        top += 20;
         UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, top)];
         [container addSubview:self.channelPortrait];
         [container addSubview:self.channelName];
