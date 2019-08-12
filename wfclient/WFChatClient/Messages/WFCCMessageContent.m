@@ -20,10 +20,12 @@
     
 }
 - (WFCCMessagePayload *)encode {
-    return nil;
+    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    payload.extra = self.extra;
+    return payload;
 }
 - (void)decode:(WFCCMessagePayload *)payload {
-    
+    self.extra = payload.extra;
 }
 + (int)getContentType {
     return 0;

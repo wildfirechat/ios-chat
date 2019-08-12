@@ -409,6 +409,7 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
   for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
     [mentionedType addObject:[NSString stringWithUTF8String:(*it).c_str()]];
   }
+    payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
   
     ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
     return ret;
@@ -470,6 +471,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
     for (NSString *target in payload.mentionedTargets) {
         tmsgcontent.mentionedTargets.insert(tmsgcontent.mentionedTargets.end(), [target UTF8String]);
     }
+    tmsgcontent.extra = [payload.extra UTF8String] ? [payload.extra UTF8String] : "";
 }
 
 

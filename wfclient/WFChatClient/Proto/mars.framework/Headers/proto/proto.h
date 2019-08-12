@@ -263,7 +263,8 @@ namespace mars{
             remoteMediaUrl(c.remoteMediaUrl),
             localMediaPath(c.localMediaPath),
             mentionedType(c.mentionedType),
-            mentionedTargets(c.mentionedTargets) {}
+            mentionedTargets(c.mentionedTargets),
+            extra(c.extra) {}
             
             TMessageContent operator=(const TMessageContent &c) {
                 type = c.type;
@@ -277,6 +278,7 @@ namespace mars{
                 localMediaPath = c.localMediaPath;
                 mentionedType = c.mentionedType;
                 mentionedTargets = c.mentionedTargets;
+                extra = c.extra;
                 return *this;
             }
             int type;
@@ -291,6 +293,7 @@ namespace mars{
             
             int mentionedType;
             std::list<std::string> mentionedTargets;
+            std::string extra;
             virtual ~TMessageContent(){
             }
 #if WFCHAT_PROTO_SERIALIZABLE

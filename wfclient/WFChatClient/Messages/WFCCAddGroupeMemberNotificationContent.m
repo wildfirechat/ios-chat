@@ -14,7 +14,7 @@
 
 @implementation WFCCAddGroupeMemberNotificationContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
@@ -38,6 +38,7 @@
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     NSError *__error = nil;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
                                                                options:kNilOptions

@@ -13,13 +13,14 @@
 
 @implementation WFCCTypingMessageContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     payload.content = [NSString stringWithFormat:@"%d", (int)self.type];
     return payload;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
+    [super decode:payload];
     self.type = [payload.content intValue];
 }
 
