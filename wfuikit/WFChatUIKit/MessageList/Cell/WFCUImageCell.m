@@ -8,6 +8,7 @@
 
 #import "WFCUImageCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "SDWebImage.h"
 
 @interface WFCUImageCell ()
 @property(nonatomic, strong) UIImageView *shadowMaskView;
@@ -17,8 +18,16 @@
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)msgModel.message.content;
+    CGSize size = CGSizeMake(120, 120);
+    if(imgContent.thumbnail) {
+        size = imgContent.thumbnail.size;
+    } else {
+        NSString *thumbPara = [[WFCCIMService sharedWFCIMService] imageThumbPara];
+        if (thumbPara) {
+            size = [WFCCUtilities imageScaleSize:imgContent.size targetSize:CGSizeMake(120, 120) thumbnailPoint:nil];
+        }
+    }
     
-    CGSize size = imgContent.thumbnail.size;
     
     if (size.height > width || size.width > width) {
         float scale = MIN(width/size.height, width/size.width);
@@ -32,7 +41,12 @@
     
     WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)model.message.content;
     self.thumbnailView.frame = self.bubbleView.bounds;
-    self.thumbnailView.image = imgContent.thumbnail;
+    NSString *thumbPara = [[WFCCIMService sharedWFCIMService] imageThumbPara];
+    if (!imgContent.thumbnail && thumbPara) {
+        [self.thumbnailView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", imgContent.remoteUrl, thumbPara]]];
+    } else {
+        self.thumbnailView.image = imgContent.thumbnail;
+    }
 }
 
 - (UIImageView *)thumbnailView {

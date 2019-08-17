@@ -12,6 +12,9 @@
 #import "WFCCUtilities.h"
 #import "Common.h"
 
+@interface WFCCImageMessageContent ()
+@property (nonatomic, assign)CGSize size;
+@end
 
 @implementation WFCCImageMessageContent
 + (instancetype)contentFrom:(UIImage *)image {
@@ -20,13 +23,16 @@
     
     NSString *path = [[WFCCUtilities getDocumentPathWithComponent:@"/IMG"] stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.jpg", recordTime]];
     
-    
-    NSData *imgData = UIImageJPEGRepresentation([WFCCUtilities generateThumbnail:image withWidth:1024 withHeight:1024], 0.85);
+    image = [WFCCUtilities generateThumbnail:image withWidth:1024 withHeight:1024];
+    NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
     
     [imgData writeToFile:path atomically:YES];
     
     content.localPath = path;
-    content.thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
+    content.size = image.size;
+    if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
+        content.thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
+    }
     
     return content;
 }
@@ -35,10 +41,14 @@
     payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
     payload.searchableContent = @"[图片]";
-    payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
+    if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
+        payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
+    }
+    
     payload.mediaType = Media_Type_IMAGE;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
+    payload.content = [NSString stringWithFormat:@"%dx%d", (int)self.size.width, (int)self.size.height];
     return payload;
 }
 
@@ -46,14 +56,24 @@
     [super decode:payload];
     if ([payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
         WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
-        self.thumbnail = [UIImage imageWithData:payload.binaryContent];
+        if ([payload.binaryContent length]) {
+            self.thumbnail = [UIImage imageWithData:payload.binaryContent];
+        }
         self.remoteUrl = mediaPayload.remoteMediaUrl;
         self.localPath = mediaPayload.localMediaPath;
+        if (mediaPayload.content.length) {
+            NSRange range = [mediaPayload.content rangeOfString:@"x"];
+            if (range.location != NSNotFound) {
+                NSString *str1 = [mediaPayload.content substringToIndex:range.location];
+                NSString *str2 = [mediaPayload.content substringFromIndex:range.location+1];
+                self.size = CGSizeMake([str1 intValue], [str2 intValue]);
+            }
+        }
     }
 }
 
 - (UIImage *)thumbnail {
-    if (!_thumbnail) {
+    if (!_thumbnail && self.localPath.length) {
         UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
         _thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
     }
