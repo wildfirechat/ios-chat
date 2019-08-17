@@ -38,4 +38,6 @@
  @return 资源路径
  */
 + (NSString *)getDocumentPathWithComponent:(NSString *)componentPath;
+
++ (CGSize)imageScaleSize:(CGSize)imageSize targetSize:(CGSize)targetSize thumbnailPoint:(CGPoint *)thumbnailPoint;
 @end

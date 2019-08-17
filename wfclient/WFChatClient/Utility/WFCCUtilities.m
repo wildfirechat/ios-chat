@@ -9,18 +9,20 @@
 #import "WFCCUtilities.h"
 
 @implementation WFCCUtilities
-+ (UIImage *)generateThumbnail:(UIImage *)image
-                     withWidth:(CGFloat)targetWidth
-                    withHeight:(CGFloat)targetHeight {
-    UIImage *targetImage = nil;
-    CGSize imageSize = image.size;
++ (CGSize)imageScaleSize:(CGSize)imageSize targetSize:(CGSize)targetSize thumbnailPoint:(CGPoint *)thumbnailPoint {
+    
+    if (imageSize.width == 0 && imageSize.height == 0) {
+        return targetSize;
+    }
+    
     CGFloat imageWidth = imageSize.width;
     CGFloat imageHeight = imageSize.height;
+    CGFloat targetWidth = targetSize.width;
+    CGFloat targetHeight = targetSize.height;
     
     CGFloat scaleFactor = 0.0;
     CGFloat scaledWidth = 0.0;
     CGFloat scaledHeight = 0.0;
-    CGPoint thumbnailPoint = CGPointMake(0.0, 0.0);
     
     if (imageWidth/imageHeight < 2.4 && imageHeight/imageWidth < 2.4) {
         CGFloat widthFactor = targetWidth / imageWidth;
@@ -34,9 +36,13 @@
         scaledHeight = imageHeight * scaleFactor;
         
         if (widthFactor > heightFactor) {
-            thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+            if (thumbnailPoint) {
+                thumbnailPoint->y = (targetHeight - scaledHeight) * 0.5;
+            }
         } else if (widthFactor < heightFactor) {
-            thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+            if (thumbnailPoint) {
+                thumbnailPoint->x = (targetWidth - scaledWidth) * 0.5;
+            }
         }
     } else {
         if(imageWidth/imageHeight > 2.4) {
@@ -47,6 +53,22 @@
         scaledWidth = imageWidth * scaleFactor;
         scaledHeight = imageHeight * scaleFactor;
     }
+    return CGSizeMake(scaledWidth, scaledHeight);
+}
+
++ (UIImage *)generateThumbnail:(UIImage *)image
+                     withWidth:(CGFloat)targetWidth
+                    withHeight:(CGFloat)targetHeight {
+    UIImage *targetImage = nil;
+    
+    CGPoint thumbnailPoint = CGPointMake(0.0, 0.0);
+    
+    CGSize targetSize = [WFCCUtilities imageScaleSize:image.size targetSize:CGSizeMake(targetWidth, targetHeight) thumbnailPoint:&thumbnailPoint];
+    
+    CGFloat scaledWidth = targetSize.width;
+    CGFloat scaledHeight = targetSize.height;
+    CGFloat imageWidth = image.size.width;
+    CGFloat imageHeight = image.size.height;
     
     UIGraphicsBeginImageContext(CGSizeMake(scaledWidth, scaledHeight));
     
