@@ -1085,4 +1085,11 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
 - (void)destoryChannel:(NSString *)channelId
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取图片缩略图参数
+ 
+ @retur 图片缩略图参数
+ */
+- (NSString *)imageThumbPara;
 @end

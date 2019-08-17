@@ -27,4 +27,9 @@
  */
 @property (nonatomic, strong)UIImage *thumbnail;
 
+/**
+ 图片尺寸
+ */
+@property (nonatomic, assign, readonly)CGSize size;
+
 @end

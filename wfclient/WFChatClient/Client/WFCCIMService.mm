@@ -1652,4 +1652,12 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     }];
     return ids;
 }
+
+- (NSString *)imageThumbPara {
+    std::string cstr = mars::stn::GetImageThumbPara();
+    if (cstr.empty()) {
+        return nil;
+    }
+    return [NSString stringWithUTF8String:cstr.c_str()];
+}
 @end
