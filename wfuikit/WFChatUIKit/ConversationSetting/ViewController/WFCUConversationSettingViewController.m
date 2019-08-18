@@ -19,6 +19,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "WFCUCreateGroupViewController.h"
 #import "GroupManageTableViewController.h"
+#import "WFCUGroupMemberCollectionViewController.h"
 
 #import "MBProgressHUD.h"
 #import "WFCUMyProfileTableViewController.h"
@@ -44,6 +45,7 @@
 
 
 #define Group_Member_Cell_Reuese_ID @"Group_Member_Cell_Reuese_ID"
+#define Group_Member_Visible_Lines 9
 @implementation WFCUConversationSettingViewController
 
 - (void)viewDidLoad {
@@ -65,6 +67,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+    BOOL showMoreMember = NO;
     if (self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
         self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:5];
         int memberCollectionCount = 0;
@@ -82,6 +85,10 @@
             } else {
                 memberCollectionCount = (int)self.memberList.count + 1;
             }
+            if (memberCollectionCount > Group_Member_Visible_Lines * 4) {
+                memberCollectionCount = Group_Member_Visible_Lines * 4;
+                showMoreMember = YES;
+            }
         } else if(self.conversation.type == Channel_Type) {
             memberCollectionCount = 1;
         }
@@ -96,7 +103,24 @@
         
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
-        self.tableView.tableHeaderView = self.memberCollectionView;
+        if (showMoreMember) {
+            UIView *head = [[UIView alloc] init];
+            CGRect frame = self.memberCollectionView.frame;
+            frame.size.height += 36;
+            head.frame = frame;
+            [head addSubview:self.memberCollectionView];
+            
+            UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 36, frame.size.width, 36)];
+            [moreBtn setTitle:@"查看全部成员" forState:UIControlStateNormal];
+            [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
+            [head addSubview:moreBtn];
+            
+            [head setBackgroundColor:[UIColor whiteColor]];
+            self.tableView.tableHeaderView = head;
+        } else {
+            self.tableView.tableHeaderView = self.memberCollectionView;
+        }
     } else if(self.conversation.type == Channel_Type) {
         CGFloat portraitWidth = 80;
         CGFloat top = 40;
@@ -159,6 +183,11 @@
     }
 }
 
+- (void)onViewAllMember:(id)sender {
+    WFCUGroupMemberCollectionViewController *vc = [[WFCUGroupMemberCollectionViewController alloc] init];
+    vc.groupId = self.groupInfo.target;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)onTapChannelPortrait:(id)sender {
     WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
@@ -650,10 +679,19 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (self.conversation.type == Group_Type) {
         if([self isGroupManager]) {
+            if (self.memberList.count + 2 > Group_Member_Visible_Lines * 4) {
+                self.memberList = [self.memberList subarrayWithRange:NSMakeRange(0, Group_Member_Visible_Lines * 4 - 2)];
+            }
             return self.memberList.count + 2;
         } else {
             if (self.groupInfo.type == GroupType_Restricted && self.groupInfo.joinType != 1 && self.groupInfo.joinType != 0) {
+                if (self.memberList.count > Group_Member_Visible_Lines * 4) {
+                    self.memberList = [self.memberList subarrayWithRange:NSMakeRange(0, Group_Member_Visible_Lines * 4)];
+                }
                 return self.memberList.count;
+            }
+            if (self.memberList.count + 1 > Group_Member_Visible_Lines * 4) {
+                self.memberList = [self.memberList subarrayWithRange:NSMakeRange(0, Group_Member_Visible_Lines * 4 - 1)];
             }
             return self.memberList.count + 1;
         }
