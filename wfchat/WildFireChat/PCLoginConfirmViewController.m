@@ -69,7 +69,7 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    [manager POST:[NSString stringWithFormat:@"http://%@:%d%@", APP_SERVER_HOST, APP_SERVER_PORT,path]
+    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, path]
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

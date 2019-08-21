@@ -197,7 +197,7 @@ alpha:1.0]
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    [manager POST:[NSString stringWithFormat:@"http://%@:%d%@", APP_SERVER_HOST, APP_SERVER_PORT,@"/send_code"]
+    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, @"/send_code"]
        parameters:@{@"mobile":phoneNumber}
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -220,7 +220,7 @@ alpha:1.0]
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    [manager POST:[NSString stringWithFormat:@"http://%@:%d%@", APP_SERVER_HOST, APP_SERVER_PORT,@"/login"]
+    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, @"/login"]
        parameters:@{@"mobile":user, @"code":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId]}
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

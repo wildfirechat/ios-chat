@@ -13,8 +13,7 @@
 extern NSString *IM_SERVER_HOST;
 extern int IM_SERVER_PORT;
 
-extern NSString *APP_SERVER_HOST;
-extern int APP_SERVER_PORT;
+extern NSString *APP_SERVER_ADDRESS;
 
 extern NSString *ICE_ADDRESS;
 extern NSString *ICE_USERNAME;
