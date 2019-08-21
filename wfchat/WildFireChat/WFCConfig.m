@@ -12,8 +12,8 @@
 NSString *IM_SERVER_HOST = @"wildfirechat.cn";
 int IM_SERVER_PORT = 80;
 
-NSString *APP_SERVER_HOST = @"wildfirechat.cn";
-int APP_SERVER_PORT = 8888;
+//正式商用时，建议用https，确保token安全
+NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.cn:8888";
 
 NSString *ICE_ADDRESS = @"turn:turn.liyufan.win:3478";
 NSString *ICE_USERNAME = @"wfchat";
