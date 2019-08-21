@@ -95,7 +95,7 @@ NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification"
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
     [self addGestureRecognizer:pan];
     
-    [self addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - 手势
@@ -263,9 +263,9 @@ NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification"
 {
     CGRect bounds = self.bounds;
     //若原热区小于44x44，则放大热区，否则保持原大小不变
-    CGFloat widthDelta = MAX(44.0 - bounds.size.width, 0);
-    CGFloat heightDelta = MAX(44.0 - bounds.size.height, 0);
-    bounds = CGRectInset(bounds, -0.5 * widthDelta, -0.5 * heightDelta);
+//    CGFloat widthDelta = MAX(44.0 - bounds.size.width, 0);
+//    CGFloat heightDelta = MAX(44.0 - bounds.size.height, 0);
+    bounds = CGRectInset(bounds, 3, 3);
     //Todo: check is the message table
     return CGRectContainsPoint(bounds, point);
 }
