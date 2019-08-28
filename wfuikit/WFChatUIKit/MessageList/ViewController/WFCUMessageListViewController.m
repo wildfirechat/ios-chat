@@ -234,11 +234,15 @@
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
             if (!messageList.count) {
                 [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
+                    NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
+                    for (WFCCMessage *msg in messages) {
+                        [reversedMsgs insertObject:msg atIndex:0];
+                    }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!messages.count) {
+                        if (!reversedMsgs.count) {
                             weakSelf.hasMoreOld = NO;
                         } else {
-                            [weakSelf appendMessages:messages newMessage:NO highlightId:0];
+                            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0];
                         }
                         weakSelf.loadingMore = NO;
                     });
