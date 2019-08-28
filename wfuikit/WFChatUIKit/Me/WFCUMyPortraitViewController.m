@@ -13,7 +13,7 @@
 #import "WFCUUtilities.h"
 #import "SDPhotoBrowser.h"
 
-@interface WFCUMyPortraitViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SDPhotoBrowserDelegate>
+@interface WFCUMyPortraitViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, SDPhotoBrowserDelegate>
   @property (strong, nonatomic)UIImageView *portraitView;
 @property (nonatomic, strong)UIImage *image;
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
@@ -68,14 +68,44 @@
         
     }
 }
+
 - (void)onModify:(id)sender {
-  UIActionSheet *actionSheet =
-  [[UIActionSheet alloc] initWithTitle:@"修改头像"
-                              delegate:self
-                     cancelButtonTitle:@"取消"
-                destructiveButtonTitle:@"拍照"
-                     otherButtonTitles:@"相册", nil];
-  [actionSheet showInView:self.view];
+    __weak typeof(self)ws = self;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"修改头像" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionCamera = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.allowsEditing = YES;
+        picker.delegate = ws;
+        if ([UIImagePickerController
+             isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            NSLog(@"无法连接相机");
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+        [ws presentViewController:picker animated:YES completion:nil];
+    }];
+    
+    UIAlertAction *actionAlubum = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.allowsEditing = YES;
+        picker.delegate = ws;
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [ws presentViewController:picker animated:YES completion:nil];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionCamera];
+    [actionSheet addAction:actionAlubum];
+    [actionSheet addAction:actionCancel];
+    
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
   
 - (void)didReceiveMemoryWarning {
@@ -93,30 +123,6 @@
 }
 */
 
-#pragma mark -  UIActionSheetDelegate <NSObject>
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-  if(buttonIndex == 0) {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.allowsEditing = YES;
-    picker.delegate = self;
-    if ([UIImagePickerController
-         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-      picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else {
-      NSLog(@"无法连接相机");
-      picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    [self presentViewController:picker animated:YES completion:nil];
-
-  } else if (buttonIndex == 1) {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.allowsEditing = YES;
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self presentViewController:picker animated:YES completion:nil];
-  }
-}
-  
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info {
