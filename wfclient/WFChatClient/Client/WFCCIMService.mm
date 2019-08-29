@@ -621,7 +621,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
-- (NSArray<WFCCConversationInfo *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
+- (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
                                     contentTypes:(NSArray<NSNumber *> *)contentTypes
                                             from:(NSUInteger)fromIndex
