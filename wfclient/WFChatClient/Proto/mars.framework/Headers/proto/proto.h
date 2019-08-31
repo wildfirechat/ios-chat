@@ -698,8 +698,6 @@ namespace mars{
         extern void searchChannel(const std::string &keyword, bool puzzy, SearchChannelCallback *callback);
         
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
-        
-        extern std::string GetImageThumbPara();
     }
 }
 
