@@ -732,7 +732,8 @@
         pvc.multiSelect = YES;
         NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
       if(self.conversation.type == Group_Type) {
-        for (WFCCGroupMember *member in self.memberList) {
+          
+        for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
             [disabledUser addObject:member.memberId];
         }
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {

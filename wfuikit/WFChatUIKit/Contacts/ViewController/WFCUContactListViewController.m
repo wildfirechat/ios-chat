@@ -37,7 +37,10 @@
 
 @property(nonatomic, assign)BOOL sorting;
 @property(nonatomic, assign)BOOL needSort;
+@property(nonatomic, strong)UIActivityIndicatorView *activityIndicator;
 @end
+
+static NSMutableDictionary *hanziStringDict = nil;
 
 @implementation WFCUContactListViewController
 
@@ -119,6 +122,9 @@
     
     self.tableView.sectionIndexColor = [UIColor grayColor];
     [self.view addSubview:self.tableView];
+    
+    [self.view bringSubviewToFront:self.activityIndicator];
+    
     [self.tableView reloadData];
 }
 
@@ -162,8 +168,12 @@
     [super viewWillAppear:animated];
     
     self.dataArray = [[NSMutableArray alloc] init];
-    [self loadContact:YES];
-    [self updateBadgeNumber];
+    if (self.selectContact) {
+        [self loadContact:NO];
+    } else {
+        [self loadContact:YES];
+        [self updateBadgeNumber];
+    }
 }
 
 - (void)loadContact:(BOOL)forceLoadFromRemote {
@@ -237,6 +247,8 @@
             if (self.needSort) {
                 self.needSort = self.needSort;
             }
+            [self.activityIndicator stopAnimating];
+            self.activityIndicator.hidden = YES;
         });
     });
 }
@@ -497,6 +509,17 @@
     return 56;
 }
 
+- (UIActivityIndicatorView *)activityIndicator {
+    if (!_activityIndicator) {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _activityIndicator.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2);
+        [self.view addSubview:_activityIndicator];
+        [_activityIndicator startAnimating];
+        [self.view bringSubviewToFront:_activityIndicator];
+    }
+    return _activityIndicator;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
   if (self.selectContact) {
     return index;
@@ -645,9 +668,8 @@
     NSMutableDictionary *infoDic = [NSMutableDictionary new];
     NSMutableArray *_tempOtherArr = [NSMutableArray new];
     BOOL isReturn = NO;
-    
+    NSMutableDictionary *firstLetterDict = [[NSMutableDictionary alloc] init];
     for (NSString *key in _keys) {
-        
         if ([_tempOtherArr count]) {
             isReturn = YES;
         }
@@ -665,7 +687,12 @@
                 userName = userInfo.displayName;
             }
             
-            firstLetter = [self getFirstUpperLetter:userName];
+            firstLetter = [firstLetterDict objectForKey:userName];
+            if (!firstLetter) {
+                firstLetter = [self getFirstUpperLetter:userName];
+                [firstLetterDict setObject:firstLetter forKey:userName];
+            }
+            
             
         
             if ([firstLetter isEqualToString:key]) {
@@ -727,7 +754,15 @@
     if (!hanZi) {
         return nil;
     }
-    NSString *pinYinResult = [NSString string];
+    if (!hanziStringDict) {
+        hanziStringDict = [[NSMutableDictionary alloc] init];
+    }
+    
+    NSString *pinYinResult = [hanziStringDict objectForKey:hanZi];
+    if (pinYinResult) {
+        return pinYinResult;
+    }
+    pinYinResult = [NSString string];
     for (int j = 0; j < hanZi.length; j++) {
         NSString *singlePinyinLetter = nil;
         if ([self isChinese:[hanZi substringWithRange:NSMakeRange(j, 1)]]) {
@@ -740,6 +775,7 @@
         
         pinYinResult = [pinYinResult stringByAppendingString:singlePinyinLetter];
     }
+    [hanziStringDict setObject:pinYinResult forKey:hanZi];
     return pinYinResult;
 }
 

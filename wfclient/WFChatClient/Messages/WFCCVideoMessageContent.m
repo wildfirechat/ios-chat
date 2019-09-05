@@ -25,7 +25,7 @@
     WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
     payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
-    payload.searchableContent = @"[图片]";
+    payload.searchableContent = @"[视频]";
     payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
     payload.mediaType = Media_Type_VIDEO;
     payload.remoteMediaUrl = self.remoteUrl;

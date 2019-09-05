@@ -14,7 +14,7 @@
 #import "WFCUCreateChannelViewController.h"
 #import "WFCUSearchChannelViewController.h"
 
-@interface WFCUFavChannelTableViewController () <UIActionSheetDelegate>
+@interface WFCUFavChannelTableViewController ()
 @property (nonatomic, strong)NSMutableArray<WFCCChannelInfo *> *myChannels;
 @property (nonatomic, strong)NSMutableArray<WFCCChannelInfo *> *favChannels;
 @end
@@ -32,13 +32,29 @@
 }
 
 - (void)onRightBarBtn:(id)sender {
-    UIActionSheet *actionSheet =
-    [[UIActionSheet alloc] initWithTitle:@"添加频道"
-                                delegate:self
-                       cancelButtonTitle:@"取消"
-                  destructiveButtonTitle:@"收听别人的频道"
-                       otherButtonTitles:@"新建自己的频道", nil];
-    [actionSheet showInView:self.view];
+    __weak typeof(self)ws = self;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"添加频道" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionSubscribe = [UIAlertAction actionWithTitle:@"收听别人的频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIViewController *vc = [[WFCUSearchChannelViewController alloc] init];
+        [ws.navigationController pushViewController:vc animated:YES];
+    }];
+    
+    UIAlertAction *actionCreate = [UIAlertAction actionWithTitle:@"新建自己的频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIViewController *vc = [[WFCUCreateChannelViewController alloc] init];
+        [ws.navigationController pushViewController:vc animated:YES];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionSubscribe];
+    [actionSheet addAction:actionCreate];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 - (void)refreshList {
     NSArray *ids = [[WFCCIMService sharedWFCIMService] getMyChannels];
@@ -154,17 +170,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 56;
 }
-#pragma mark -  UIActionSheetDelegate <NSObject>
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 0) {
-        UIViewController *vc = [[WFCUSearchChannelViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    } else if (buttonIndex == 1) {
-        UIViewController *vc = [[WFCUCreateChannelViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-}
-
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

@@ -13,7 +13,7 @@
 #import "SDWebImage.h"
 #import "UIView+Toast.h"
 
-@interface WFCUCreateChannelViewController () <UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate>
+@interface WFCUCreateChannelViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
 @property(nonatomic, strong)UILabel *nameLabel;
 @property(nonatomic, strong)UITextField *nameField;
@@ -118,21 +118,16 @@
 }
 
 - (void)onSelectPortrait:(id)sender {
-    UIActionSheet *actionSheet =
-    [[UIActionSheet alloc] initWithTitle:@"修改头像"
-                                delegate:self
-                       cancelButtonTitle:@"取消"
-                  destructiveButtonTitle:@"拍照"
-                       otherButtonTitles:@"相册", nil];
-    [actionSheet showInView:self.view];
-}
-
-#pragma mark -  UIActionSheetDelegate <NSObject>
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 0) {
+    __weak typeof(self)ws = self;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"修改头像" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionCamera = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.allowsEditing = YES;
-        picker.delegate = self;
+        picker.delegate = ws;
         if ([UIImagePickerController
              isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -140,16 +135,26 @@
             NSLog(@"无法连接相机");
             picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
-        [self presentViewController:picker animated:YES completion:nil];
-        
-    } else if (buttonIndex == 1) {
+        [ws presentViewController:picker animated:YES completion:nil];
+    }];
+    
+    UIAlertAction *actionAlubum = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.allowsEditing = YES;
-        picker.delegate = self;
+        picker.delegate = ws;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+        [ws presentViewController:picker animated:YES completion:nil];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionCamera];
+    [actionSheet addAction:actionAlubum];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
+
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker
