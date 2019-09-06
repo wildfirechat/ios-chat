@@ -15,20 +15,12 @@
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
-		2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; };
-		2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; };
-		2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6D217F7DA900B3E38A /* Emoj.plist */; };
-		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
-		2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */; };
-		2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */; };
 		2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */; };
 		2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B0DD221E1B38100139CB1 /* ring.caf */; };
 		2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */; };
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
-		2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */; };
-		2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
@@ -57,15 +49,8 @@
 		2FF07F5D21F82E7200A78A62 /* WFCMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */; };
 		2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */; };
 		2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */; };
-		6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 6E616D9B20AB3435002CB8BE /* LICENSE.md */; };
-		6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; };
-		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
-		905177502243CD9A0020A2AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774F2243CD9A0020A2AC /* libz.tbd */; };
-		905177522243CDA60020A2AC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 905177512243CDA60020A2AC /* libc++.tbd */; };
 		905177542243CEA30020A2AC /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905177532243CEA30020A2AC /* Bugly.framework */; };
 		9085427B2229FF160009713D /* StyleDIY.m in Sources */ = {isa = PBXBuildFile; fileRef = 908542792229FF160009713D /* StyleDIY.m */; };
 		9085427E222A00430009713D /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9085427D222A00430009713D /* DIYScanViewController.m */; };
@@ -78,6 +63,7 @@
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
+		D478DF6BE018DA990EA91F54 /* Pods_WildFireChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20595D62708F726D5A46BAD2 /* Pods_WildFireChat.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,10 +73,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
-				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
-				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
-				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,6 +80,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		20595D62708F726D5A46BAD2 /* Pods_WildFireChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WildFireChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FF71FAF0AE600F4405D /* WildFireChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildFireChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -112,52 +95,13 @@
 		2E1D20BB1FAF127100F4405D /* WFCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCConfig.h; sourceTree = "<group>"; };
 		2E1D20BD1FAF127100F4405D /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
 		2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
-		2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFAVEngineKit.framework; path = Frameworks/WFAVEngineKit.framework; sourceTree = SOURCE_ROOT; };
-		2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatClient.framework; path = Frameworks/WFChatClient.framework; sourceTree = SOURCE_ROOT; };
 		2EF30A58201995630060992B /* WildFireChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WildFireChat.entitlements; sourceTree = "<group>"; };
-		2F143A02217F5F3700B3E38A /* NSImage+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+WebCache.h"; sourceTree = "<group>"; };
-		2F143A03217F5F3700B3E38A /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WebCache.h"; sourceTree = "<group>"; };
-		2F143A04217F5F3700B3E38A /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
-		2F143A07217F5F3700B3E38A /* SDWebImageDownloaderOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDownloaderOperation.h; sourceTree = "<group>"; };
-		2F143A09217F5F3700B3E38A /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCache.h; sourceTree = "<group>"; };
-		2F143A0A217F5F3700B3E38A /* SDImageCacheConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCacheConfig.h; sourceTree = "<group>"; };
-		2F143A10217F5F3700B3E38A /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
-		2F143A11217F5F3700B3E38A /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
-		2F143A12217F5F3700B3E38A /* FLAnimatedImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FLAnimatedImageView+WebCache.h"; sourceTree = "<group>"; };
-		2F143A15217F5F3700B3E38A /* UIButton+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+WebCache.h"; sourceTree = "<group>"; };
-		2F143A19217F5F3700B3E38A /* SDWebImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImage.h; sourceTree = "<group>"; };
-		2F143A1A217F5F3700B3E38A /* UIView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCache.h"; sourceTree = "<group>"; };
-		2F143A1B217F5F3700B3E38A /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
-		2F143A1C217F5F3700B3E38A /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
-		2F143A1D217F5F3700B3E38A /* UIImage+WebP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+WebP.h"; sourceTree = "<group>"; };
-		2F143A1F217F5F3700B3E38A /* UIImageView+HighlightedWebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+HighlightedWebCache.h"; sourceTree = "<group>"; };
-		2F143A21217F5F3700B3E38A /* SDWebImageDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDecoder.h; sourceTree = "<group>"; };
-		2F143A22217F5F3700B3E38A /* SDWebImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageManager.h; sourceTree = "<group>"; };
-		2F143A25217F5F3700B3E38A /* SDWebImageOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageOperation.h; sourceTree = "<group>"; };
-		2F143A27217F5F3700B3E38A /* SDWebImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDownloader.h; sourceTree = "<group>"; };
-		2F143A2B217F5F3700B3E38A /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImagePrefetcher.h; sourceTree = "<group>"; };
-		2F143A2C217F5F3700B3E38A /* SDWebImageCompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageCompat.h; sourceTree = "<group>"; };
-		2F143A2D217F5F3700B3E38A /* UIImage+MultiFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MultiFormat.h"; sourceTree = "<group>"; };
-		2F143A2F217F5F3700B3E38A /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
-		2F143A47217F607300B3E38A /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
-		2F143A48217F607300B3E38A /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
-		2F143A49217F607300B3E38A /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
-		2F143A4A217F607300B3E38A /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
-		2F143A4D217F607300B3E38A /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
-		2F143A50217F607300B3E38A /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
-		2F143A53217F607300B3E38A /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		2F143A5C217F60B600B3E38A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		2F143A6D217F7DA900B3E38A /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Emoj.plist; path = Frameworks/Emoj.plist; sourceTree = SOURCE_ROOT; };
-		2F143A6F217F7DA900B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Stickers.bundle; path = Frameworks/Stickers.bundle; sourceTree = SOURCE_ROOT; };
-		2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = WFChatUIKit.xcassets; path = Frameworks/WFChatUIKit.xcassets; sourceTree = SOURCE_ROOT; };
 		2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		2F1B0DD221E1B38100139CB1 /* ring.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ring.caf; sourceTree = "<group>"; };
 		2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WFCUShareMessageView.xib; path = Frameworks/WFCUShareMessageView.xib; sourceTree = SOURCE_ROOT; };
-		2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatUIKit.framework; path = Frameworks/WFChatUIKit.framework; sourceTree = SOURCE_ROOT; };
 		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
 		2F7268F721F7136600E05F9C /* WFCPrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyViewController.h; sourceTree = "<group>"; };
 		2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyViewController.m; sourceTree = "<group>"; };
@@ -212,12 +156,8 @@
 		2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCAboutViewController.h; sourceTree = "<group>"; };
 		2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCMeTableViewController.m; sourceTree = "<group>"; };
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
-		6E616D9B20AB3435002CB8BE /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = Frameworks/GoogleWebRTC/LICENSE.md; sourceTree = SOURCE_ROOT; };
-		6E616D9F20AB3435002CB8BE /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework; sourceTree = SOURCE_ROOT; };
 		9051774B2243CD830020A2AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		905177512243CDA60020A2AC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		905177532243CEA30020A2AC /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bugly.framework; path = WildFireChat/Bugly.framework; sourceTree = SOURCE_ROOT; };
 		908542792229FF160009713D /* StyleDIY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleDIY.m; sourceTree = "<group>"; };
 		9085427A2229FF160009713D /* StyleDIY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleDIY.h; sourceTree = "<group>"; };
@@ -239,6 +179,8 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		BD75A85E3A5B064156463D7B /* Pods-WildFireChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WildFireChat.debug.xcconfig"; path = "Target Support Files/Pods-WildFireChat/Pods-WildFireChat.debug.xcconfig"; sourceTree = "<group>"; };
+		F7251BFDCF08A4943E07D265 /* Pods-WildFireChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WildFireChat.release.xcconfig"; path = "Target Support Files/Pods-WildFireChat/Pods-WildFireChat.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,8 +188,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
-				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
@@ -256,10 +196,7 @@
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
 				2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */,
 				2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */,
-				2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */,
-				2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */,
-				2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */,
-				6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */,
+				D478DF6BE018DA990EA91F54 /* Pods_WildFireChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +209,7 @@
 				2E1D1FF91FAF0AE600F4405D /* WildFireChat */,
 				2EAC88E61FB0A0D6004B34D1 /* Frameworks */,
 				2E1D1FF81FAF0AE600F4405D /* Products */,
+				3123ECBB7BBF84AD128BA41C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,10 +229,7 @@
 				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
 				2F7268F621F7136600E05F9C /* Privacy */,
 				2FEA5D6721F4AC8900280B23 /* Login */,
-				2F143A5A217F60B600B3E38A /* MBProgressHUD */,
-				2F143A46217F607300B3E38A /* AFNetworking */,
 				2E1D20BC1FAF127100F4405D /* Discover */,
-				2F1439FF217F5F3700B3E38A /* SDWebImage */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
 				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
@@ -323,8 +258,6 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				905177512243CDA60020A2AC /* libc++.tbd */,
-				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,
 				9051774B2243CD830020A2AC /* SystemConfiguration.framework */,
 				2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */,
@@ -332,89 +265,10 @@
 				2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */,
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
-				2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */,
 				905177532243CEA30020A2AC /* Bugly.framework */,
-				2F143A6D217F7DA900B3E38A /* Emoj.plist */,
-				2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */,
-				2F143A6F217F7DA900B3E38A /* Stickers.bundle */,
-				2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */,
-				6E616D9A20AB3435002CB8BE /* GoogleWebRTC */,
-				2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */,
-				2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */,
+				20595D62708F726D5A46BAD2 /* Pods_WildFireChat.framework */,
 			);
 			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		2F1439FF217F5F3700B3E38A /* SDWebImage */ = {
-			isa = PBXGroup;
-			children = (
-				2F143A02217F5F3700B3E38A /* NSImage+WebCache.h */,
-				2F143A03217F5F3700B3E38A /* UIImageView+WebCache.h */,
-				2F143A04217F5F3700B3E38A /* NSData+ImageContentType.h */,
-				2F143A07217F5F3700B3E38A /* SDWebImageDownloaderOperation.h */,
-				2F143A09217F5F3700B3E38A /* SDImageCache.h */,
-				2F143A0A217F5F3700B3E38A /* SDImageCacheConfig.h */,
-				2F143A0B217F5F3700B3E38A /* FLAnimatedImage */,
-				2F143A15217F5F3700B3E38A /* UIButton+WebCache.h */,
-				2F143A19217F5F3700B3E38A /* SDWebImage.h */,
-				2F143A1A217F5F3700B3E38A /* UIView+WebCache.h */,
-				2F143A1B217F5F3700B3E38A /* UIView+WebCacheOperation.h */,
-				2F143A1C217F5F3700B3E38A /* MKAnnotationView+WebCache.h */,
-				2F143A1D217F5F3700B3E38A /* UIImage+WebP.h */,
-				2F143A1F217F5F3700B3E38A /* UIImageView+HighlightedWebCache.h */,
-				2F143A21217F5F3700B3E38A /* SDWebImageDecoder.h */,
-				2F143A22217F5F3700B3E38A /* SDWebImageManager.h */,
-				2F143A25217F5F3700B3E38A /* SDWebImageOperation.h */,
-				2F143A27217F5F3700B3E38A /* SDWebImageDownloader.h */,
-				2F143A2B217F5F3700B3E38A /* SDWebImagePrefetcher.h */,
-				2F143A2C217F5F3700B3E38A /* SDWebImageCompat.h */,
-				2F143A2D217F5F3700B3E38A /* UIImage+MultiFormat.h */,
-				2F143A2F217F5F3700B3E38A /* UIImage+GIF.h */,
-			);
-			name = SDWebImage;
-			path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage;
-			sourceTree = "<group>";
-		};
-		2F143A0B217F5F3700B3E38A /* FLAnimatedImage */ = {
-			isa = PBXGroup;
-			children = (
-				2F143A0D217F5F3700B3E38A /* FLAnimatedImage */,
-				2F143A12217F5F3700B3E38A /* FLAnimatedImageView+WebCache.h */,
-			);
-			path = FLAnimatedImage;
-			sourceTree = "<group>";
-		};
-		2F143A0D217F5F3700B3E38A /* FLAnimatedImage */ = {
-			isa = PBXGroup;
-			children = (
-				2F143A10217F5F3700B3E38A /* FLAnimatedImage.h */,
-				2F143A11217F5F3700B3E38A /* FLAnimatedImageView.h */,
-			);
-			path = FLAnimatedImage;
-			sourceTree = "<group>";
-		};
-		2F143A46217F607300B3E38A /* AFNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				2F143A47217F607300B3E38A /* AFSecurityPolicy.h */,
-				2F143A48217F607300B3E38A /* AFNetworkReachabilityManager.h */,
-				2F143A49217F607300B3E38A /* AFURLSessionManager.h */,
-				2F143A4A217F607300B3E38A /* AFURLRequestSerialization.h */,
-				2F143A4D217F607300B3E38A /* AFURLResponseSerialization.h */,
-				2F143A50217F607300B3E38A /* AFNetworking.h */,
-				2F143A53217F607300B3E38A /* AFHTTPSessionManager.h */,
-			);
-			name = AFNetworking;
-			path = ../../wfuikit/WFChatUIKit/Vendor/AFNetworking;
-			sourceTree = "<group>";
-		};
-		2F143A5A217F60B600B3E38A /* MBProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				2F143A5C217F60B600B3E38A /* MBProgressHUD.h */,
-			);
-			name = MBProgressHUD;
-			path = ../../wfuikit/WFChatUIKit/Vendor/MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		2F7268F621F7136600E05F9C /* Privacy */ = {
@@ -554,30 +408,13 @@
 			path = Me;
 			sourceTree = "<group>";
 		};
-		6E616D9A20AB3435002CB8BE /* GoogleWebRTC */ = {
+		3123ECBB7BBF84AD128BA41C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6E616D9B20AB3435002CB8BE /* LICENSE.md */,
-				6E616D9D20AB3435002CB8BE /* Frameworks */,
+				BD75A85E3A5B064156463D7B /* Pods-WildFireChat.debug.xcconfig */,
+				F7251BFDCF08A4943E07D265 /* Pods-WildFireChat.release.xcconfig */,
 			);
-			name = GoogleWebRTC;
-			path = Frameworks/GoogleWebRTC;
-			sourceTree = SOURCE_ROOT;
-		};
-		6E616D9D20AB3435002CB8BE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6E616D9E20AB3435002CB8BE /* frameworks */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		6E616D9E20AB3435002CB8BE /* frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6E616D9F20AB3435002CB8BE /* WebRTC.framework */,
-			);
-			path = frameworks;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		903EBC942136313B00312C16 /* SupportFiles */ = {
@@ -624,10 +461,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E1D200D1FAF0AE600F4405D /* Build configuration list for PBXNativeTarget "WildFireChat" */;
 			buildPhases = (
+				A35FD823BEB204251F158C61 /* [CP] Check Pods Manifest.lock */,
 				2E1D1FF31FAF0AE600F4405D /* Sources */,
 				2E1D1FF41FAF0AE600F4405D /* Frameworks */,
 				2E1D1FF51FAF0AE600F4405D /* Resources */,
 				90C1D90A208C104400E923F4 /* Embed Frameworks */,
+				125431A15AF9FAE394C0609A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -649,7 +488,7 @@
 				TargetAttributes = {
 					2E1D1FF61FAF0AE600F4405D = {
 						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -688,22 +527,66 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
-				2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */,
-				6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */,
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
-				2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */,
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
-				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
-				2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		125431A15AF9FAE394C0609A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WildFireChat/Pods-WildFireChat-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/WFChatClient/WFChatClient.framework",
+				"${BUILT_PRODUCTS_DIR}/WFChatUIKit/WFChatUIKit.framework",
+				"${PODS_ROOT}/../../wfuikit/WFChatUIKit/AVEngine/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
+				"${PODS_ROOT}/../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WFChatClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WFChatUIKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WFAVEngineKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WildFireChat/Pods-WildFireChat-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A35FD823BEB204251F158C61 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WildFireChat-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2E1D1FF31FAF0AE600F4405D /* Sources */ = {
@@ -825,7 +708,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -876,7 +759,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -885,14 +768,14 @@
 		};
 		2E1D200E1FAF0AE600F4405D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD75A85E3A5B064156463D7B /* Pods-WildFireChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = ZTJABWRJ5T;
-				ENABLE_BITCODE = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/framework",
@@ -905,11 +788,10 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -917,15 +799,15 @@
 		};
 		2E1D200F1FAF0AE600F4405D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7251BFDCF08A4943E07D265 /* Pods-WildFireChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = ZTJABWRJ5T;
-				ENABLE_BITCODE = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/framework",
@@ -938,11 +820,10 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};

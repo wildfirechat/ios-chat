@@ -727,7 +727,7 @@ CGFloat angleToRadian(CGFloat angle) {
 
 - (void)setVideoModel:(KZVideoModel *)videoModel {
     _videoModel = videoModel;
-    _thumImage.image = [UIImage imageNamed:videoModel.thumAbsolutePath];
+    _thumImage.image = [UIImage wf_imageNamed:videoModel.thumAbsolutePath];
 //    [UIImage imageWithContentsOfFile:videoModel.totalThumPath];
 }
 

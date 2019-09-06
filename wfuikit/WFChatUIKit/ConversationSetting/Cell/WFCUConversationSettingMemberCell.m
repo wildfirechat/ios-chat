@@ -101,10 +101,10 @@
     }
     
     if (type == Channel_Type) {
-        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
         self.nameLabel.text = channelInfo.name;
     } else {
-        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
         
         if (userInfo.friendAlias.length) {
             self.nameLabel.text = userInfo.friendAlias;

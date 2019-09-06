@@ -94,7 +94,8 @@
 - (void)loadStickers {
     self.stickers = [[NSMutableDictionary alloc] init];
     
-    NSString *stickerPath = [[WFCUFaceBoard getStickerCachePath] stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
+//    NSString *stickerPath = [[WFCUFaceBoard getStickerCachePath] stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
+    NSString *stickerPath = [[NSBundle bundleForClass:self.class].resourcePath stringByAppendingPathComponent:[WFCUFaceBoard getStickerBundleName]];
     
     NSError * err = nil;
     NSFileManager * defaultManager = [NSFileManager defaultManager];
@@ -149,7 +150,7 @@
 
         self.backgroundColor = [UIColor colorWithRed:236.0/255.0 green:236.0/255.0 blue:236.0/255.0 alpha:1];
 
-        NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+        NSString *resourcePath = [[NSBundle wf_bundle] resourcePath];
         NSString *bundlePath = [resourcePath stringByAppendingPathComponent:@"Emoj.plist"];
         
         self.faceEmojiArray = [[NSArray alloc]initWithContentsOfFile:bundlePath];
@@ -397,8 +398,8 @@
                 
                 if ((cli == FACE_COUNT_ROW -1 && col == FACE_COUNT_CLU - 1) || i == self.faceEmojiArray.count) {
                     UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [back setImage:[UIImage imageNamed:@"del_emoji_normal"] forState:UIControlStateNormal];
-                    [back setImage:[UIImage imageNamed:@"del_emoji_select"] forState:UIControlStateSelected];
+                    [back setImage:[UIImage wf_imageNamed:@"del_emoji_normal"] forState:UIControlStateNormal];
+                    [back setImage:[UIImage wf_imageNamed:@"del_emoji_select"] forState:UIControlStateSelected];
                     [back addTarget:self action:@selector(backFace) forControlEvents:UIControlEventTouchUpInside];
                     
                     if (i == self.faceEmojiArray.count) {
@@ -464,7 +465,7 @@
         }
         
         if (indexPath.row == 0) {
-            iv.image = [UIImage imageNamed:@"emoji_btn_normal"];
+            iv.image = [UIImage wf_imageNamed:@"emoji_btn_normal"];
         } else {
             iv.image = [UIImage imageWithContentsOfFile:self.stickers[self.stickers.allKeys[indexPath.row - 1]].tabIcon];
         }

@@ -25,7 +25,7 @@
         [_gradientLayer setLocations:@[ @0.0, @1.0 ]];
         [[self layer] addSublayer:_gradientLayer];
         
-        _displayImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"airplay-display.png"]];
+        _displayImageView = [[UIImageView alloc] initWithImage:[UIImage wf_imageNamed:@"airplay-display.png"]];
         [self addSubview:_displayImageView];
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];

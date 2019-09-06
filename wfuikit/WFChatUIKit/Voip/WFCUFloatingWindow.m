@@ -211,10 +211,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     if (!_floatingButton) {
         _floatingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         if (false /*self.callSession.mediaType == Audio*/) {
-            [_floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
+            [_floatingButton setImage:[UIImage wf_imageNamed:@"floatingaudio"]
                              forState:UIControlStateNormal];
         } else {
-            [_floatingButton setImage:[UIImage imageNamed:@"floatingvideo"]
+            [_floatingButton setImage:[UIImage wf_imageNamed:@"floatingvideo"]
                              forState:UIControlStateNormal];
         }
         [_floatingButton setTitle:@"" forState:UIControlStateNormal];

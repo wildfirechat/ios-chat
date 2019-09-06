@@ -40,7 +40,7 @@
     CGFloat top = 100;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake((bound.size.width - portraitWidth)/2, top, portraitWidth, portraitWidth)];
-    self.portraitView.image = [UIImage imageNamed:@"channel_default_portrait"];
+    self.portraitView.image = [UIImage wf_imageNamed:@"channel_default_portrait"];
     self.portraitView.userInteractionEnabled = YES;
     self.portraitView.layer.borderWidth = 0.5;
     self.portraitView.layer.borderColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9].CGColor;

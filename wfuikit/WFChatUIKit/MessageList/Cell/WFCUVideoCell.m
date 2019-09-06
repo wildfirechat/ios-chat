@@ -34,7 +34,7 @@
     self.thumbnailView.frame = self.bubbleView.bounds;
     self.thumbnailView.image = imgContent.thumbnail;
     self.videoCoverView.frame = CGRectMake((self.bubbleView.bounds.size.width - 80)/2, (self.bubbleView.bounds.size.height - 80)/2, 80, 80);
-    self.videoCoverView.image = [UIImage imageNamed:@"video_msg_cover"];
+    self.videoCoverView.image = [UIImage wf_imageNamed:@"video_msg_cover"];
 }
 
 - (UIImageView *)thumbnailView {

@@ -118,7 +118,7 @@
   
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage wf_imageNamed:@"PersonalChat"]];
       if(self.model.showNameLabel) {
           NSString *nameStr = nil;
           if (userInfo.friendAlias.length) {
@@ -162,7 +162,7 @@
     }
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-      self.bubbleView.image = [UIImage imageNamed:@"sent_msg_background"];
+      self.bubbleView.image = [UIImage wf_imageNamed:@"sent_msg_background"];
       self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right -Portrait_Padding_Left - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
       
@@ -182,7 +182,7 @@
     }
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-      self.bubbleView.image = [UIImage imageNamed:@"received_msg_background"];
+      self.bubbleView.image = [UIImage wf_imageNamed:@"received_msg_background"];
       self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Portrait_Padding_Right, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Arraw, Client_Bubble_Top_Padding, size.width, size.height);
       
@@ -243,7 +243,7 @@
     _portraitView = [[UIImageView alloc] init];
     _portraitView.clipsToBounds = YES;
     _portraitView.layer.cornerRadius = 3.f;
-    [_portraitView setImage:[UIImage imageNamed:@"PersonalChat"]];
+    [_portraitView setImage:[UIImage wf_imageNamed:@"PersonalChat"]];
     
     [_portraitView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapPortrait:)]];
       [_portraitView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressPortrait:)]];
@@ -304,7 +304,7 @@
 - (UIImageView *)failureView {
     if (!_failureView) {
         _failureView = [[UIImageView alloc] init];
-        _failureView.image = [UIImage imageNamed:@"failure"];
+        _failureView.image = [UIImage wf_imageNamed:@"failure"];
         [_failureView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onResend:)]];
         [_failureView setUserInteractionEnabled:YES];
         [self.contentView addSubview:_failureView];

@@ -51,7 +51,7 @@
         self.sizeLabel.textAlignment = NSTextAlignmentRight;
     }
     
-    self.fileImageView.image = [UIImage imageNamed:fileImage];
+    self.fileImageView.image = [UIImage wf_imageNamed:fileImage];
     self.fileNameLabel.text = fileContent.name;
     if (fileContent.size < 1024) {
         self.sizeLabel.text = [NSString stringWithFormat:@"%ldB", fileContent.size];

@@ -38,7 +38,7 @@
     if (!_backIV) {
         _backIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
         [self addSubview:_backIV];
-        [_backIV setImage:[UIImage imageNamed:@"file_icon"]];
+        [_backIV setImage:[UIImage wf_imageNamed:@"file_icon"]];
     }
     return _backIV;
 }
