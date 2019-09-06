@@ -174,7 +174,12 @@
         if (text != nil) {
             [attString appendAttributedString:[[NSAttributedString alloc] initWithString:text]];
         } else {
-        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:_info.draft]];
+            [attString appendAttributedString:[[NSAttributedString alloc] initWithString:_info.draft]];
+        }
+        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+            NSMutableAttributedString *tmp = [[NSMutableAttributedString alloc] initWithString:@"[有人@你]" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            [tmp appendAttributedString:attString];
+            attString = tmp;
         }
         self.digestView.attributedText = attString;
     } else if (_info.lastMessage.direction == MessageDirection_Receive && (_info.conversation.type == Group_Type || _info.conversation.type == Channel_Type)) {
@@ -191,6 +196,12 @@
             self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.displayName, _info.lastMessage.digest];
         } else {
             self.digestView.text = _info.lastMessage.digest;
+        }
+        
+        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+            NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:@"[有人@你]" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+            self.digestView.attributedText = attString;
         }
     } else {
         self.digestView.text = _info.lastMessage.digest;

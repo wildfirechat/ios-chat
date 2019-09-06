@@ -163,6 +163,10 @@
                 continue;
             }
             
+            if (msg.direction == MessageDirection_Send) {
+                continue;
+            }
+            
             int flag = (int)[msg.content.class performSelector:@selector(getContentFlags)];
             WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:msg.conversation];
             if((flag & 0x03) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
@@ -193,6 +197,14 @@
                       } else {
                           // Fallback on earlier versions
                       }
+                  }
+                  if (msg.status == Message_Status_Mentioned || msg.status == Message_Status_AllMentioned) {
+                      if (sender.displayName) {
+                          localNote.alertBody = [NSString stringWithFormat:@"%@在群里@了你", sender.displayName];
+                      } else {
+                          localNote.alertBody = @"有人在群里@了你";
+                      }
+                          
                   }
               }
               
