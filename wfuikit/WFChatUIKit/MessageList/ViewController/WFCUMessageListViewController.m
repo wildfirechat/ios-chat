@@ -1025,7 +1025,10 @@
 
 - (void)didLongPressMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([cell isKindOfClass:[WFCUMessageCellBase class]]) {
-        [self becomeFirstResponder];
+//        if (!self.isFirstResponder) {
+//            [self becomeFirstResponder];
+//        }
+
         [self displayMenu:(WFCUMessageCellBase *)cell];
     }
 }
