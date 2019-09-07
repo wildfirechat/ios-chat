@@ -623,7 +623,7 @@ static NSMutableDictionary *hanziStringDict = nil;
         if (self.searchList!= nil) {
             [self.searchList removeAllObjects];
             for (WFCCUserInfo *friend in self.dataArray) {
-                if ([friend.displayName containsString:searchString]) {
+                if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
                     [self.searchList addObject:friend];
                 }
             }
