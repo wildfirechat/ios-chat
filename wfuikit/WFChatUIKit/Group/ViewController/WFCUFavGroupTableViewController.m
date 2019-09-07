@@ -28,8 +28,6 @@
 }
 
 - (void)refreshList {
-    
-    
     NSArray *ids = [[WFCCIMService sharedWFCIMService] getFavGroups];
     [self.groups removeAllObjects];
     
