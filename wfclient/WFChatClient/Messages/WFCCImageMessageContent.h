@@ -32,4 +32,9 @@
  */
 @property (nonatomic, assign, readonly)CGSize size;
 
+/**
+ 图片缩略图参数
+ */
+@property (nonatomic, strong)NSString *thumbParameter;
+
 @end
