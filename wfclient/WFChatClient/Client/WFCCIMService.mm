@@ -451,6 +451,7 @@ static WFCCIMService * sharedSingleton = nil;
 
 static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMessageContent *content) {
     WFCCMessagePayload *payload = [content encode];
+    payload.extra = content.extra;
     tmsgcontent.type = payload.contentType;
     tmsgcontent.searchableContent = [payload.searchableContent UTF8String] ? [payload.searchableContent UTF8String] : "";
     tmsgcontent.pushContent = [payload.pushContent UTF8String] ? [payload.pushContent UTF8String] : "";
