@@ -27,7 +27,7 @@
 
 - (void)initSearchUIAndData {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"添加好友";
+    self.navigationItem.title = WFCString(@"AddFriend");
     
     //初始化数据源
     _dataList   = [NSMutableArray array];

@@ -24,7 +24,7 @@
 }
 
 - (void)onRightBtn:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"浏览器打开" otherButtonTitles:nil, nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:WFCString(@"OpenInBrowser") otherButtonTitles:nil, nil];
     [actionSheet showInView:self.view];
 }
 
