@@ -2,8 +2,8 @@
   wfc.strings
   WFChatUIKit
 
-  Created by dali on 2019/9/15.
-  Copyright © 2019 Tom Lee. All rights reserved.
+  Created by heavyrain.lee on 2019/9/15.
+  Copyright © 2019 Wildfirechat. All rights reserved.
 */
 
 "Ok"="Ok";
@@ -59,3 +59,39 @@
 "SendFailure"="Send failure！";
 "Done"="Done";
 "OpenInBrowser"="Open in browser";
+"DeleteFriend"="Delete friend";
+"SetAlias"="Set alias";
+"RemoveFromBlacklist"="Remove from black list";
+"Add2Blacklist"="Add to black list";
+"VOIPCall"="VoIP call";
+"VoiceCall"="Voice call";
+"VideoCall"="Video call";
+"Blacklist"="Black list";
+"Delete"="Delete";
+"SearchContact"="Search contact";
+"NumberOfContacts"="%d contact(s)";
+"NewFriend"="New friend";
+"Group"="Group";
+"Channel"="Channel";
+"NumberOfRecords"="%d record(s)";
+"[Draft]"="[Draft]";
+"[MentionYou]"="[Somebody @ you]";
+"GroupMemberNameMatch"="Group member match:";
+"GroupNameMatch"="Group name match:";
+"Etc"="etc.";
+"Search"="Search";
+"StartChat"="Start chat";
+"ScanQRCode"="Scan QR code";
+"NotLogin"="Not login";
+"NotConnect"="Not connect";
+"Connecting"="Connecting...";
+"Synching"="Syncing...";
+"PCLogined"="PC logined";
+"Contact"="Contact";
+"Pinned"="Pinned";
+"Unpinned"="Unpinned";
+"ShowAllMembers"="Show all members";
+"GroupQRCode"="Group QR code";
+"GroupManage"="Group manage";
+"SearchMessageContent"="Search message content";
+"Silent"="Silent";

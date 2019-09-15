@@ -2,8 +2,8 @@
   wfc.strings
   WFChatUIKit
 
-  Created by dali on 2019/9/15.
-  Copyright © 2019 Tom Lee. All rights reserved.
+  Created by heavyrain.lee on 2019/9/15.
+  Copyright © 2019 Wildfirechat. All rights reserved.
 */
 
 "Ok"="确定";
@@ -59,3 +59,39 @@
 "SendFailure"="发送失败！";
 "Done"="完成";
 "OpenInBrowser"="浏览器打开";
+"DeleteFriend"="删除好友";
+"SetAlias"="设置备注";
+"RemoveFromBlacklist"="取消屏蔽";
+"Add2Blacklist"="屏蔽用户";
+"VOIPCall"="网络电话";
+"VoiceCall"="语音通话";
+"VideoCall"="视频通话";
+"Blacklist"="黑名单";
+"Delete"="删除";
+"SearchContact"="搜索联系人";
+"NumberOfContacts"="%d 位联系人";
+"NewFriend"="新朋友";
+"Group"="群组";
+"Channel"="频道";
+"NumberOfRecords"="%d 条记录";
+"[Draft]"="[草稿]";
+"[MentionYou]"="[有人@你]";
+"GroupMemberNameMatch"="群成员含:";
+"GroupNameMatch"="群名包含:";
+"Etc"="等";
+"Search"="搜索";
+"StartChat"="发起聊天";
+"ScanQRCode"="扫二维码";
+"NotLogin"="未登录";
+"NotConnect"="未连接";
+"Connecting"="连接中...";
+"Synching"="同步中...";
+"PCLogined"="PC已登录";
+"Contact"="联系人";
+"Pinned"="置顶";
+"Unpinned"="取消置顶";
+"ShowAllMembers"="查看全部成员";
+"GroupQRCode"="群二维码";
+"GroupManage"="群管理";
+"SearchMessageContent"="查找聊天内容";
+"Silent"="消息免打扰";

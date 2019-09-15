@@ -76,15 +76,15 @@
     NSString *title;
     UIActionSheet *actionSheet;
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        title = @"删除好友";
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"设置备注", nil];
+        title = WFCString(@"DeleteFriend");
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:title otherButtonTitles:WFCString(@"SetAlias"), nil];
     } else {
-        title = @"添加好友";
+        title = WFCString(@"AddFriend");
         if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
-            title = @"取消屏蔽";
-            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:nil];
+            title = WFCString(@"RemoveFromBlacklist");
+            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:title otherButtonTitles:nil];
         } else {
-            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:@"屏蔽用户", nil];
+            actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:title otherButtonTitles:WFCString(@"Add2Blacklist"), nil];
         }
     }
     
@@ -163,7 +163,7 @@
             [subView removeFromSuperview];
         }
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
-        [btn setTitle:@"发送消息" forState:UIControlStateNormal];
+        [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
         [btn setBackgroundColor:[UIColor greenColor]];
         [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
         btn.layer.cornerRadius = 5.f;
@@ -176,7 +176,7 @@
             [subView removeFromSuperview];
         }
         btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
-        [btn setTitle:@"视频聊天" forState:UIControlStateNormal];
+        [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
         [btn setBackgroundColor:[UIColor blueColor]];
         [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
         btn.layer.cornerRadius = 5.f;
@@ -191,7 +191,7 @@
             [subView removeFromSuperview];
         }
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
-        [btn setTitle:@"添加好友" forState:UIControlStateNormal];
+        [btn setTitle:WFCString(@"AddFriend") forState:UIControlStateNormal];
         [btn setBackgroundColor:[UIColor greenColor]];
         [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
         btn.layer.cornerRadius = 5.f;
@@ -232,16 +232,16 @@
     __weak typeof(self)ws = self;
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    UIAlertAction *actionVoice = [UIAlertAction actionWithTitle:@"语音通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionVoice = [UIAlertAction actionWithTitle:WFCString(@"VoiceCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
         WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:YES];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     }];
     
-    UIAlertAction *actionVideo = [UIAlertAction actionWithTitle:@"视频通话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionVideo = [UIAlertAction actionWithTitle:WFCString(@"VideoCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
         WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:NO];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
