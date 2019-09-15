@@ -266,6 +266,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2BF692E5232DBA840072036A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
+				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
+				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
+				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
+				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
+				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		2E1D1FEE1FAF0AE600F4405D = {
 			isa = PBXGroup;
 			children = (
@@ -295,17 +308,12 @@
 				2F143A46217F607300B3E38A /* AFNetworking */,
 				2E1D20BC1FAF127100F4405D /* Discover */,
 				2F1439FF217F5F3700B3E38A /* SDWebImage */,
+				2BF692E5232DBA840072036A /* Utilities */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
-				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
-				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
 				2E1D20BB1FAF127100F4405D /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
-				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
-				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
-				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
-				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
 			);
 			path = WildFireChat;
 			sourceTree = "<group>";
