@@ -24,8 +24,6 @@
 		2F3A6C1B219EE941009A8B4B /* WFCUFaceButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C15219EE941009A8B4B /* WFCUFaceButton.h */; };
 		2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C16219EE941009A8B4B /* WFCUStickerItem.h */; };
 		2F3A6C1D219EE941009A8B4B /* WFCUStickerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3A6C17219EE941009A8B4B /* WFCUStickerItem.m */; };
-		2F44A3A72180B48F00E74EA4 /* WFCUMentionUserTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F44A3A52180B48F00E74EA4 /* WFCUMentionUserTableViewController.h */; };
-		2F44A3A82180B48F00E74EA4 /* WFCUMentionUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F44A3A62180B48F00E74EA4 /* WFCUMentionUserTableViewController.m */; };
 		2F49910A2189239E005F6A84 /* WFCUFloatingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4991062189239E005F6A84 /* WFCUFloatingWindow.m */; };
 		2F49910B2189239E005F6A84 /* WFCUVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F4991072189239E005F6A84 /* WFCUVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F49910C2189239E005F6A84 /* WFCUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4991082189239E005F6A84 /* WFCUVideoViewController.m */; };
@@ -367,8 +365,6 @@
 		2F3A6C15219EE941009A8B4B /* WFCUFaceButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUFaceButton.h; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUFaceButton.h; sourceTree = SOURCE_ROOT; };
 		2F3A6C16219EE941009A8B4B /* WFCUStickerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUStickerItem.h; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUStickerItem.h; sourceTree = SOURCE_ROOT; };
 		2F3A6C17219EE941009A8B4B /* WFCUStickerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUStickerItem.m; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUStickerItem.m; sourceTree = SOURCE_ROOT; };
-		2F44A3A52180B48F00E74EA4 /* WFCUMentionUserTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMentionUserTableViewController.h; sourceTree = "<group>"; };
-		2F44A3A62180B48F00E74EA4 /* WFCUMentionUserTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMentionUserTableViewController.m; sourceTree = "<group>"; };
 		2F4991062189239E005F6A84 /* WFCUFloatingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFloatingWindow.m; sourceTree = "<group>"; };
 		2F4991072189239E005F6A84 /* WFCUVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVideoViewController.h; sourceTree = "<group>"; };
 		2F4991082189239E005F6A84 /* WFCUVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVideoViewController.m; sourceTree = "<group>"; };
@@ -722,8 +718,6 @@
 		2F44A3A42180B42300E74EA4 /* SelectMentionVC */ = {
 			isa = PBXGroup;
 			children = (
-				2F44A3A52180B48F00E74EA4 /* WFCUMentionUserTableViewController.h */,
-				2F44A3A62180B48F00E74EA4 /* WFCUMentionUserTableViewController.m */,
 			);
 			path = SelectMentionVC;
 			sourceTree = "<group>";
@@ -1656,7 +1650,6 @@
 				9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */,
 				2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */,
 				2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */,
-				2F44A3A72180B48F00E74EA4 /* WFCUMentionUserTableViewController.h in Headers */,
 				2F5511EC217F5CC300F56C26 /* WFCUForwardMessageCell.h in Headers */,
 				2F551150217F5CC200F56C26 /* KZVideoListViewController.h in Headers */,
 				2F5510E9217F5CC200F56C26 /* WFCUSelectFileViewController.h in Headers */,
@@ -1881,7 +1874,6 @@
 				2F5510A1217F5CC200F56C26 /* WFCUMessageCellBase.m in Sources */,
 				2F551106217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.m in Sources */,
 				2F5511AC217F5CC300F56C26 /* FLAnimatedImage.m in Sources */,
-				2F44A3A82180B48F00E74EA4 /* WFCUMentionUserTableViewController.m in Sources */,
 				2F551153217F5CC200F56C26 /* KZVideoPlayer.m in Sources */,
 				2F5511A8217F5CC300F56C26 /* UIImageView+HighlightedWebCache.m in Sources */,
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,

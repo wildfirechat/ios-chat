@@ -153,6 +153,9 @@ static NSMutableDictionary *hanziStringDict = nil;
 }
 
 - (void)onLeftBarBtn:(UIBarButtonItem *)sender {
+    if (self.cancelSelect) {
+        self.cancelSelect();
+    }
     [self left:nil];
 }
 

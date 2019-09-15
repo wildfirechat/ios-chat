@@ -19,7 +19,6 @@
 #import "KZVideoViewController.h"
 #import "UIView+Toast.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "WFCUMentionUserTableViewController.h"
 #import "WFCUContactListViewController.h"
 
 
@@ -41,7 +40,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate, WFCUMentionUserDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -769,6 +768,11 @@
                     [ws didCancelMentionAtRange:range];
                 }
             };
+            
+            pvc.cancelSelect = ^(void) {
+                [ws didCancelMentionAtRange:range];
+            };
+            
             pvc.disableUsersSelected = YES;
             
             UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
@@ -1032,12 +1036,23 @@
     range.location += range.length;
     range.length = 0;
     self.textInputView.selectedRange = range;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.textInputView.isFirstResponder) {
+            [self.textInputView becomeFirstResponder];
+        }
+    });
 }
 
 - (void)didCancelMentionAtRange:(NSRange)range {
     [self.textInputView.textStorage replaceCharactersInRange:NSMakeRange(range.location, 0) withString:@"@"];
     
+    range.location += 1;
     self.textInputView.selectedRange = range;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.textInputView.isFirstResponder) {
+            [self.textInputView becomeFirstResponder];
+        }
+    });
 }
 
 - (void)dealloc {
