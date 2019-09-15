@@ -38,8 +38,8 @@
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
-    [self.searchController.searchBar setValue:@"取消" forKey:@"_cancelButtonText"];
-    self.searchController.searchBar.placeholder = @"搜索";
+    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    self.searchController.searchBar.placeholder = WFCString(@"Search");
     
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
