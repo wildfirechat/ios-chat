@@ -1,0 +1,61 @@
+/*
+  wfc.strings
+  WFChatUIKit
+
+  Created by dali on 2019/9/15.
+  Copyright © 2019 Tom Lee. All rights reserved.
+*/
+
+"Ok"="Ok";
+"Cancel"="Cancel";
+"Message"="Message";
+"GroupName"="Group name";
+"Back"="Back";
+"BackMore"="Back(...)";
+"BackNumber"="Back(%ld)";
+"ChannelName"="Channel name";
+"InputChannelNameHint"="Please input channel name";
+"ChannelDescription"="Channel description";
+"InputChannelDescHint"="Please input channel description";
+"Public"="Public";
+"Create"="Create";
+"ChangePortrait"="Change portrait";
+"TakePhotos"="Take photos";
+"UnableConnect2Camera"="Unable connect to camera";
+"Album"="Album";
+"PhotoUploading"="Photo uploading...";
+"UploadFailure"="Upload failure!";
+"ChannelCreated"="Channel created!";
+"ChannelCreateFailure"="Create channel failure!";
+"MyChannels"="My channel";
+"AddChannel"="Add channel";
+"SubscribeChannel"="Subscribe channel";
+"CreateChannel"="Create channel";
+"SubscribedChannels"="Subscribed channels";
+"SearchChannels"="Search channels";
+"SendMessage"="Send message";
+"DestroyChannel"="Destroy channel";
+"UnscribeChannel"="Unscribe channel";
+"ModifyChannelName"="Modify channel name";
+"ModifyChannelDesc"="Modify channel description";
+"Updating"="Updating...";
+"UpdateDone"="Update done!";
+"UpdateFailure"="Update failure!";
+"ModifyPortraitFailure"="Modify portrait failure!";
+"Ended"="Ended";
+"Video"="Video";
+"Scale"="Scale";
+"CallEnded"="Call ended";
+"WaitingAccept"="Waiting accept";
+"CallConnecting"="Connecting...";
+"InvitingYou"="Inviting you...";
+"AddFriend"="Add friend";
+"SearchUserHint"="Search to add friend";
+"AddFriendReasonHint"="Please input apply reason and wait agreement";
+"DefaultAddFriendReason"="I'm %@";
+"Send"="Send";
+"Sending"="Sending...";
+"Sent"="Sent！";
+"SendFailure"="Send failure！";
+"Done"="Done";
+"OpenInBrowser"="Open in browser";

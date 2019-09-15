@@ -149,7 +149,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                 [[UILabel alloc] initWithFrame:CGRectMake(0, self.videoView.frame.size.height / 2 - 10,
                                                           self.videoView.frame.size.width, 20)];
             videoStopTips.textAlignment = NSTextAlignmentCenter;
-            videoStopTips.text = @"已结束";
+            videoStopTips.text = WFCString(@"Ended");
             videoStopTips.textColor = HEXCOLOR(0x0195ff);
             [self.videoView addSubview:videoStopTips];
         }
@@ -157,7 +157,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         if (self.callSession.state == kWFAVEngineStateConnected) {
             [self.floatingButton setBackgroundColor:[UIColor clearColor]];
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
-            [self.floatingButton setTitle:@"已结束"
+            [self.floatingButton setTitle:WFCString(@"Ended")
                                  forState:UIControlStateNormal];
         }
     }

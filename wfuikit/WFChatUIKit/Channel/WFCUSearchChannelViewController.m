@@ -34,7 +34,7 @@
 
 - (void)initSearchUIAndData {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"收听频道";
+    self.navigationItem.title = WFCString(@"SubscribeChannel");
 
     _searchList = [NSMutableArray array];
         
@@ -45,8 +45,8 @@
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
-    [self.searchController.searchBar setValue:@"取消" forKey:@"_cancelButtonText"];
-    self.searchController.searchBar.placeholder = @"搜索频道";
+    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    self.searchController.searchBar.placeholder = WFCString(@"SearchChannels");
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];

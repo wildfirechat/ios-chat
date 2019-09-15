@@ -21,7 +21,7 @@
     // Do any additional setup after loading the view.
     CGRect clientArea = self.view.bounds;
     UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8 + kStatusBarAndNavigationBarHeight, clientArea.size.width - 16, 16)];
-    hintLabel.text = @"请填入申请理由，等等对方同意";
+    hintLabel.text = WFCString(@"AddFriendReasonHint");
     hintLabel.font = [UIFont systemFontOfSize:12];
     hintLabel.textColor = [UIColor grayColor];
     [self.view addSubview:hintLabel];
@@ -30,20 +30,20 @@
     self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + kStatusBarAndNavigationBarHeight, clientArea.size.width, 32)];
     WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     self.verifyField.font = [UIFont systemFontOfSize:16];
-    self.verifyField.text = [NSString stringWithFormat:@"我是 %@", me.displayName];
+    self.verifyField.text = [NSString stringWithFormat:WFCString(@"DefaultAddFriendReason"), me.displayName];
     self.verifyField.borderStyle = UITextBorderStyleRoundedRect;
     self.verifyField.clearButtonMode = UITextFieldViewModeAlways;
     
     
     [self.view addSubview:self.verifyField];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStyleDone target:self action:@selector(onSend:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Send") style:UIBarButtonItemStyleDone target:self action:@selector(onSend:)];
 }
 
 
 - (void)onSend:(id)sender {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"处理中...";
+    hud.label.text = WFCString(@"Sending");
     [hud showAnimated:YES];
     
     __weak typeof(self) ws = self;
@@ -53,7 +53,7 @@
             
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"处理成功";
+            hud.label.text = WFCString(@"Sent");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             [ws.navigationController popViewControllerAnimated:YES];
@@ -64,7 +64,7 @@
             
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"处理失败";
+            hud.label.text = WFCString(@"SendFailure");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         });

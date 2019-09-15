@@ -261,7 +261,7 @@
         navLabel.text = @"未连接";
         break;
       case kConnectionStatusConnected:
-        navLabel.text = @"信息";
+        navLabel.text = WFCString(@"Message");
         break;
         
       default:
@@ -399,11 +399,11 @@
         
         NSString *title = nil;
         if (count > 0 && count < 1000) {
-            title = [NSString stringWithFormat:@"返回(%ld)", count];
+            title = [NSString stringWithFormat:WFCString(@"BackNumber"), count];
         } else if (count >= 1000) {
-            title = @"返回(...)";
+            title = WFCString(@"BackMore");
         } else {
-            title = @"返回";
+            title = WFCString(@"Back");
         }
         
         UIBarButtonItem *item = [[UIBarButtonItem alloc] init];

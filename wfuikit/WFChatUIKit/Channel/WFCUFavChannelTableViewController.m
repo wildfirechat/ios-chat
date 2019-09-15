@@ -25,7 +25,7 @@
     [super viewDidLoad];
     self.myChannels = [[NSMutableArray alloc] init];
     self.favChannels = [[NSMutableArray alloc] init];
-    self.title = @"我的频道";
+    self.title = WFCString(@"MyChannels");
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
@@ -33,17 +33,17 @@
 
 - (void)onRightBarBtn:(id)sender {
     __weak typeof(self)ws = self;
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"添加频道" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"AddChannel") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    UIAlertAction *actionSubscribe = [UIAlertAction actionWithTitle:@"收听别人的频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionSubscribe = [UIAlertAction actionWithTitle:WFCString(@"SubscribeChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIViewController *vc = [[WFCUSearchChannelViewController alloc] init];
         [ws.navigationController pushViewController:vc animated:YES];
     }];
     
-    UIAlertAction *actionCreate = [UIAlertAction actionWithTitle:@"新建自己的频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCreate = [UIAlertAction actionWithTitle:WFCString(@"CreateChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIViewController *vc = [[WFCUCreateChannelViewController alloc] init];
         [ws.navigationController pushViewController:vc animated:YES];
     }];
@@ -131,9 +131,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"我的频道";
+        return WFCString(@"MyChannels");
     } else {
-        return @"收听的频道";
+        return WFCString(@"SubscribedChannels");
     }
 }
 
