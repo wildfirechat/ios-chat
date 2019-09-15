@@ -73,7 +73,7 @@
 		2F5510B9217F5CC200F56C26 /* WFCUGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EDF217F5CC000F56C26 /* WFCUGroupTableViewCell.h */; };
 		2F5510BA217F5CC200F56C26 /* WFCUGroupMemberTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EE0217F5CC000F56C26 /* WFCUGroupMemberTableViewController.m */; };
 		2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EE1217F5CC000F56C26 /* WFCUInviteGroupMemberViewController.m */; };
-		2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */; };
+		2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */; };
 		2F5510BE217F5CC200F56C26 /* WFCUSearchViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */; };
 		2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */; };
@@ -1529,6 +1529,7 @@
 				2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */,
 				2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */,
 				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
+				2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */,
 				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
@@ -1572,7 +1573,6 @@
 				2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */,
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F5511CA217F5CC300F56C26 /* SDWebImageCompat.h in Headers */,
-				2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */,
 				2F55120F217F5CC300F56C26 /* WFCUContactTableViewCell.h in Headers */,
 				2F55120E217F5CC300F56C26 /* WFCUNewFriendTableViewCell.h in Headers */,
 				2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */,
