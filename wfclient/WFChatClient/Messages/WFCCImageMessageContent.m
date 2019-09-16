@@ -30,25 +30,47 @@
     
     content.localPath = path;
     content.size = image.size;
-    if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
-        content.thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
-    }
+    content.thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
     
     return content;
 }
+
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
     payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
     payload.searchableContent = @"[图片]";
-    if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    if (self.thumbParameter.length && self.size.width > 0) {
+        [dataDict setValue:self.thumbParameter forKey:@"tp"];
+        [dataDict setValue:@(self.size.width) forKey:@"w"];
+        [dataDict setValue:@(self.size.height) forKey:@"h"];
+    } else if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
+        dataDict = nil;
         payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
+    } else {
+        UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
+        if (image) {
+            [dataDict setValue:[[WFCCIMService sharedWFCIMService] imageThumbPara] forKey:@"tp"];
+            [dataDict setValue:@(image.size.width) forKey:@"w"];
+            [dataDict setValue:@(image.size.height) forKey:@"h"];
+        } else {
+            payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
+            dataDict = nil;
+        }
+    }
+    
+    if (dataDict) {
+        NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                       options:kNilOptions
+                                                         error:nil];
+        payload.content = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
     
     payload.mediaType = Media_Type_IMAGE;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
-    payload.content = [NSString stringWithFormat:@"%dx%d", (int)self.size.width, (int)self.size.height];
     return payload;
 }
 
@@ -62,10 +84,14 @@
         self.remoteUrl = mediaPayload.remoteMediaUrl;
         self.localPath = mediaPayload.localMediaPath;
         if (mediaPayload.content.length) {
-            NSRange range = [mediaPayload.content rangeOfString:@"x"];
-            if (range.location != NSNotFound) {
-                NSString *str1 = [mediaPayload.content substringToIndex:range.location];
-                NSString *str2 = [mediaPayload.content substringFromIndex:range.location+1];
+            NSError *__error = nil;
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
+                                                                       options:kNilOptions
+                                                                         error:&__error];
+            if (!__error) {
+                NSString *str1 = dictionary[@"w"];
+                NSString *str2 = dictionary[@"h"];
+                self.thumbParameter = dictionary[@"tp"];
                 self.size = CGSizeMake([str1 intValue], [str2 intValue]);
             }
         }

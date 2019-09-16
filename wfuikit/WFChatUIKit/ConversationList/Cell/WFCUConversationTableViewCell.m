@@ -61,7 +61,7 @@
     self.timeView.hidden = YES;
     [self update:searchInfo.conversation];
     if (searchInfo.marchedCount > 1) {
-        self.digestView.text = [NSString stringWithFormat:@"%d条记录", searchInfo.marchedCount];
+        self.digestView.text = [NSString stringWithFormat:WFCString(@"NumberOfRecords"), searchInfo.marchedCount];
     } else {
         NSString *strContent = searchInfo.marchedMessage.digest;
         NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:strContent];
@@ -156,7 +156,7 @@
     self.potraitView.layer.cornerRadius = 4.f;
     
     if (_info.draft.length) {
-        NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:@"[草稿]" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+        NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[Draft]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
         
         NSError *__error = nil;
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[_info.draft dataUsingEncoding:NSUTF8StringEncoding]
@@ -174,7 +174,12 @@
         if (text != nil) {
             [attString appendAttributedString:[[NSAttributedString alloc] initWithString:text]];
         } else {
-        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:_info.draft]];
+            [attString appendAttributedString:[[NSAttributedString alloc] initWithString:_info.draft]];
+        }
+        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+            NSMutableAttributedString *tmp = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            [tmp appendAttributedString:attString];
+            attString = tmp;
         }
         self.digestView.attributedText = attString;
     } else if (_info.lastMessage.direction == MessageDirection_Receive && (_info.conversation.type == Group_Type || _info.conversation.type == Channel_Type)) {
@@ -191,6 +196,12 @@
             self.digestView.text = [NSString stringWithFormat:@"%@:%@", sender.displayName, _info.lastMessage.digest];
         } else {
             self.digestView.text = _info.lastMessage.digest;
+        }
+        
+        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+            NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+            self.digestView.attributedText = attString;
         }
     } else {
         self.digestView.text = _info.lastMessage.digest;

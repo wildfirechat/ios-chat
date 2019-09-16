@@ -22,10 +22,7 @@
     if(imgContent.thumbnail) {
         size = imgContent.thumbnail.size;
     } else {
-        NSString *thumbPara = [[WFCCIMService sharedWFCIMService] imageThumbPara];
-        if (thumbPara) {
-            size = [WFCCUtilities imageScaleSize:imgContent.size targetSize:CGSizeMake(120, 120) thumbnailPoint:nil];
-        }
+        size = [WFCCUtilities imageScaleSize:imgContent.size targetSize:CGSizeMake(120, 120) thumbnailPoint:nil];
     }
     
     
@@ -41,9 +38,8 @@
     
     WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)model.message.content;
     self.thumbnailView.frame = self.bubbleView.bounds;
-    NSString *thumbPara = [[WFCCIMService sharedWFCIMService] imageThumbPara];
-    if (!imgContent.thumbnail && thumbPara) {
-        [self.thumbnailView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", imgContent.remoteUrl, thumbPara]]];
+    if (!imgContent.thumbnail && imgContent.thumbParameter) {
+        [self.thumbnailView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", imgContent.remoteUrl, imgContent.thumbParameter]]];
     } else {
         self.thumbnailView.image = imgContent.thumbnail;
     }

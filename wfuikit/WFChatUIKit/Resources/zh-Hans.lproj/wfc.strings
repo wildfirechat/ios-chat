@@ -1,0 +1,97 @@
+/*
+  wfc.strings
+  WFChatUIKit
+
+  Created by heavyrain.lee on 2019/9/15.
+  Copyright © 2019 Wildfirechat. All rights reserved.
+*/
+
+"Ok"="确定";
+"Cancel"="取消";
+"Message"="信息";
+"GroupName"="群聊名称";
+"Back"="返回";
+"BackMore"="返回...";
+"BackNumber"="返回(%ld)";
+"ChannelName"="频道名称";
+"InputChannelNameHint"="请输入频道名称";
+"ChannelDescription"="频道说明";
+"InputChannelDescHint"="请输入频道描述";
+"Public"="是否公开";
+"Create"="创建";
+"ChangePortrait"="修改头像";
+"TakePhotos"="拍照";
+"UnableConnect2Camera"="Unable connect to camera";
+"Album"="相册";
+"PhotoUploading"="图片上传中...";
+"UploadFailure"="上传失败!";
+"ChannelCreated"="频道创建成功!";
+"ChannelCreateFailure"="创建频道失败!";
+"MyChannels"="我的频道";
+"AddChannel"="添加频道";
+"SubscribeChannel"="订阅频道";
+"CreateChannel"="新建频道";
+"SubscribedChannels"="订阅的频道";
+"SearchChannels"="搜索频道";
+"SendMessage"="发送消息";
+"DestroyChannel"="销毁频道";
+"UnscribeChannel"="取消订阅";
+"ModifyChannelName"="修改频道名称";
+"ModifyChannelDesc"="修改频道描述";
+"Updating"="更新中...";
+"UpdateDone"="更新成功!";
+"UpdateFailure"="更新失败!";
+"ModifyPortraitFailure"="修改头像失败!";
+"Ended"="已结束";
+"Video"="视频";
+"Scale"="缩放";
+"CallEnded"="通话已结束";
+"WaitingAccept"="等待对方接听";
+"CallConnecting"="连接建立中...";
+"InvitingYou"="对方正在邀请您通话...";
+"AddFriend"="添加好友";
+"SearchUserHint"="搜索添加好友";
+"AddFriendReasonHint"="请填入申请理由，等等对方同意";
+"DefaultAddFriendReason"="我是 %@";
+"Send"="发送";
+"Sending"="发送...";
+"Sent"="发送成功！";
+"SendFailure"="发送失败！";
+"Done"="完成";
+"OpenInBrowser"="浏览器打开";
+"DeleteFriend"="删除好友";
+"SetAlias"="设置备注";
+"RemoveFromBlacklist"="取消屏蔽";
+"Add2Blacklist"="屏蔽用户";
+"VOIPCall"="网络电话";
+"VoiceCall"="语音通话";
+"VideoCall"="视频通话";
+"Blacklist"="黑名单";
+"Delete"="删除";
+"SearchContact"="搜索联系人";
+"NumberOfContacts"="%d 位联系人";
+"NewFriend"="新朋友";
+"Group"="群组";
+"Channel"="频道";
+"NumberOfRecords"="%d 条记录";
+"[Draft]"="[草稿]";
+"[MentionYou]"="[有人@你]";
+"GroupMemberNameMatch"="群成员含:";
+"GroupNameMatch"="群名包含:";
+"Etc"="等";
+"Search"="搜索";
+"StartChat"="发起聊天";
+"ScanQRCode"="扫二维码";
+"NotLogin"="未登录";
+"NotConnect"="未连接";
+"Connecting"="连接中...";
+"Synching"="同步中...";
+"PCLogined"="PC已登录";
+"Contact"="联系人";
+"Pinned"="置顶";
+"Unpinned"="取消置顶";
+"ShowAllMembers"="查看全部成员";
+"GroupQRCode"="群二维码";
+"GroupManage"="群管理";
+"SearchMessageContent"="查找聊天内容";
+"Silent"="消息免打扰";

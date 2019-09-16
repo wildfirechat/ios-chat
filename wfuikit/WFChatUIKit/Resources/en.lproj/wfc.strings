@@ -1,0 +1,97 @@
+/*
+  wfc.strings
+  WFChatUIKit
+
+  Created by heavyrain.lee on 2019/9/15.
+  Copyright © 2019 Wildfirechat. All rights reserved.
+*/
+
+"Ok"="Ok";
+"Cancel"="Cancel";
+"Message"="Message";
+"GroupName"="Group name";
+"Back"="Back";
+"BackMore"="Back(...)";
+"BackNumber"="Back(%ld)";
+"ChannelName"="Channel name";
+"InputChannelNameHint"="Please input channel name";
+"ChannelDescription"="Channel description";
+"InputChannelDescHint"="Please input channel description";
+"Public"="Public";
+"Create"="Create";
+"ChangePortrait"="Change portrait";
+"TakePhotos"="Take photos";
+"UnableConnect2Camera"="Unable connect to camera";
+"Album"="Album";
+"PhotoUploading"="Photo uploading...";
+"UploadFailure"="Upload failure!";
+"ChannelCreated"="Channel created!";
+"ChannelCreateFailure"="Create channel failure!";
+"MyChannels"="My channel";
+"AddChannel"="Add channel";
+"SubscribeChannel"="Subscribe channel";
+"CreateChannel"="Create channel";
+"SubscribedChannels"="Subscribed channels";
+"SearchChannels"="Search channels";
+"SendMessage"="Send message";
+"DestroyChannel"="Destroy channel";
+"UnscribeChannel"="Unscribe channel";
+"ModifyChannelName"="Modify channel name";
+"ModifyChannelDesc"="Modify channel description";
+"Updating"="Updating...";
+"UpdateDone"="Update done!";
+"UpdateFailure"="Update failure!";
+"ModifyPortraitFailure"="Modify portrait failure!";
+"Ended"="Ended";
+"Video"="Video";
+"Scale"="Scale";
+"CallEnded"="Call ended";
+"WaitingAccept"="Waiting accept";
+"CallConnecting"="Connecting...";
+"InvitingYou"="Inviting you...";
+"AddFriend"="Add friend";
+"SearchUserHint"="Search to add friend";
+"AddFriendReasonHint"="Please input apply reason and wait agreement";
+"DefaultAddFriendReason"="I'm %@";
+"Send"="Send";
+"Sending"="Sending...";
+"Sent"="Sent！";
+"SendFailure"="Send failure！";
+"Done"="Done";
+"OpenInBrowser"="Open in browser";
+"DeleteFriend"="Delete friend";
+"SetAlias"="Set alias";
+"RemoveFromBlacklist"="Remove from black list";
+"Add2Blacklist"="Add to black list";
+"VOIPCall"="VoIP call";
+"VoiceCall"="Voice call";
+"VideoCall"="Video call";
+"Blacklist"="Black list";
+"Delete"="Delete";
+"SearchContact"="Search contact";
+"NumberOfContacts"="%d contact(s)";
+"NewFriend"="New friend";
+"Group"="Group";
+"Channel"="Channel";
+"NumberOfRecords"="%d record(s)";
+"[Draft]"="[Draft]";
+"[MentionYou]"="[Somebody @ you]";
+"GroupMemberNameMatch"="Group member match:";
+"GroupNameMatch"="Group name match:";
+"Etc"="etc.";
+"Search"="Search";
+"StartChat"="Start chat";
+"ScanQRCode"="Scan QR code";
+"NotLogin"="Not login";
+"NotConnect"="Not connect";
+"Connecting"="Connecting...";
+"Synching"="Syncing...";
+"PCLogined"="PC logined";
+"Contact"="Contact";
+"Pinned"="Pinned";
+"Unpinned"="Unpinned";
+"ShowAllMembers"="Show all members";
+"GroupQRCode"="Group QR code";
+"GroupManage"="Group manage";
+"SearchMessageContent"="Search message content";
+"Silent"="Silent";

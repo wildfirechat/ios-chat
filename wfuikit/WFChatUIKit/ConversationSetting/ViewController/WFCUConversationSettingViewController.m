@@ -111,7 +111,7 @@
             [head addSubview:self.memberCollectionView];
             
             UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 36, frame.size.width, 36)];
-            [moreBtn setTitle:@"查看全部成员" forState:UIControlStateNormal];
+            [moreBtn setTitle:WFCString(@"ShowAllMembers") forState:UIControlStateNormal];
             [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
@@ -477,15 +477,15 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath  {
   if ([self isGroupNameCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"群聊名称" withDetailTitle:self.groupInfo.name withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"GroupName") withDetailTitle:self.groupInfo.name withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if ([self isGroupPortraitCell:indexPath]) {
-    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:@"更改头像" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"ChangePortrait") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
     UIImageView *portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 56, 8, 40, 40)];
     [portraitView sd_setImageWithURL:[NSURL URLWithString:self.groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     cell.accessoryView = portraitView;
     return cell;
   } else if([self isGroupQrCodeCell:indexPath]) {
-    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:@"群二维码" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"GroupQRCode") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
       
       CGFloat width = [UIScreen mainScreen].bounds.size.width;
       UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
@@ -495,11 +495,11 @@
       
       return cell;
   } else if ([self isGroupManageCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"群管理" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"GroupManage") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if ([self isSearchMessageCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"查找聊天内容" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"SearchMessageContent") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if ([self isMessageSilentCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"消息免打扰" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Silent];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"Silent") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Silent];
   } else if ([self isSetTopCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:@"置顶聊天" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Top];
   } else if ([self isSaveGroupCell:indexPath]) {

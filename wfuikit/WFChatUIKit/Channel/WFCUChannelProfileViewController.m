@@ -74,12 +74,12 @@
         UIButton *btn;
         if ([[WFCCIMService sharedWFCIMService] isListenedChannel:self.channelInfo.channelId]) {
             btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - kTabbarSafeBottomMargin - 40 - 16, screenWidth - 40, 40)];
-            [btn setTitle:@"发送消息" forState:UIControlStateNormal];
+            [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
         } else  {
             btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - kTabbarSafeBottomMargin - 40 - 16, screenWidth - 40, 40)];
-            [btn setTitle:@"收听频道" forState:UIControlStateNormal];
+            [btn setTitle:WFCString(@"SubscribeChannel") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onSubscribeBtn:) forControlEvents:UIControlEventTouchDown];
         }
@@ -102,15 +102,15 @@
 - (void)onRightBtn:(id)sender {
     NSString *title;
     if ([self.channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        title = @"销毁频道";
+        title = WFCString(@"DestroyChannel");
     } else if ([[WFCCIMService sharedWFCIMService] isListenedChannel:self.channelInfo.channelId]) {
-        title = @"取消收听";
+        title = WFCString(@"UnscribeChannel");
     } else {
-        title = @"收听频道";
+        title = WFCString(@"SubscribeChannel");
     }
     
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:title otherButtonTitles:nil, nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:title otherButtonTitles:nil, nil];
     [actionSheet showInView:self.view];
 }
 
@@ -140,11 +140,11 @@
 
 - (void)modifyChannelPortrait {
     UIActionSheet *actionSheet =
-    [[UIActionSheet alloc] initWithTitle:@"修改头像"
+    [[UIActionSheet alloc] initWithTitle:WFCString(@"ChangePortrait")
                                 delegate:self
-                       cancelButtonTitle:@"取消"
-                  destructiveButtonTitle:@"拍照"
-                       otherButtonTitles:@"相册", nil];
+                       cancelButtonTitle:WFCString(@"Cancel")
+                  destructiveButtonTitle:WFCString(@"TakePhotos")
+                       otherButtonTitles:WFCString(@"Album"), nil];
     [actionSheet showInView:self.view];
     actionSheet.tag = 1;
 }
@@ -152,7 +152,7 @@
 - (void)modifyChannelName {
     WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
     gmvc.defaultValue = self.channelInfo.name;
-    gmvc.titleText = @"修改频道名称";
+    gmvc.titleText = WFCString(@"ModifyChannelName");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
         [[WFCCIMService sharedWFCIMService] modifyChannelInfo:self.channelInfo.channelId type:Modify_Channel_Name newValue:newValue success:^{
@@ -168,7 +168,7 @@
 - (void)modifyChannelDesc {
     WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
     gmvc.defaultValue = self.channelInfo.desc;
-    gmvc.titleText = @"修改频道描述";
+    gmvc.titleText = WFCString(@"ModifyChannelDesc");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
         [[WFCCIMService sharedWFCIMService] modifyChannelInfo:self.channelInfo.channelId type:Modify_Channel_Desc newValue:newValue success:^{
@@ -191,7 +191,7 @@
     if(actionSheet.tag == 0) {
         if(buttonIndex == 0) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.label.text = @"处理中...";
+            hud.label.text = WFCString(@"Updating");
             [hud showAnimated:YES];
             
             if ([self.channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -201,7 +201,7 @@
                         
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                         hud.mode = MBProgressHUDModeText;
-                        hud.label.text = @"处理成功";
+                        hud.label.text = WFCString(@"UpdateDone");
                         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                         [hud hideAnimated:YES afterDelay:1.f];
                     });
@@ -211,7 +211,7 @@
                         
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                         hud.mode = MBProgressHUDModeText;
-                        hud.label.text = @"处理失败";
+                        hud.label.text = WFCString(@"UpdateFailure");
                         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                         [hud hideAnimated:YES afterDelay:1.f];
                     });
@@ -224,7 +224,7 @@
                         
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                         hud.mode = MBProgressHUDModeText;
-                        hud.label.text = @"处理成功";
+                        hud.label.text = WFCString(@"UpdateDone");
                         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                         [hud hideAnimated:YES afterDelay:1.f];
                     });
@@ -234,7 +234,7 @@
                         
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                         hud.mode = MBProgressHUDModeText;
-                        hud.label.text = @"处理失败";
+                        hud.label.text = WFCString(@"UpdateFailure");
                         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                         [hud hideAnimated:YES afterDelay:1.f];
                     });
@@ -287,7 +287,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     NSData *portraitData = UIImageJPEGRepresentation(portraitImage, 0.70);
     __weak typeof(self) ws = self;
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"图片上传中...";
+    hud.label.text = WFCString(@"PhotoUploading");
     [hud showAnimated:YES];
     
     [[WFCCIMService sharedWFCIMService] uploadMedia:portraitData mediaType:Media_Type_PORTRAIT success:^(NSString *remoteUrl) {
@@ -297,7 +297,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                 [[WFCCIMService sharedWFCIMService] modifyChannelInfo:ws.channelInfo.channelId type:Modify_Channel_Portrait newValue:remoteUrl success:^{
                     ;
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"创建修改头像失败"
+                    [ws.view makeToast:WFCString(@"ModifyPortraitFailure")
                               duration:2
                               position:CSToastPositionCenter];
                 }];
@@ -312,7 +312,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                                       [hud hideAnimated:NO];
                                                       hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                                                       hud.mode = MBProgressHUDModeText;
-                                                      hud.label.text = @"上传失败";
+                                                      hud.label.text = WFCString(@"UploadFailure");
                                                       hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                                                       [hud hideAnimated:YES afterDelay:1.f];
                                                   });

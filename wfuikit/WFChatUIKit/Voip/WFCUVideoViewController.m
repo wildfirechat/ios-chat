@@ -253,7 +253,7 @@
 - (UIButton *)videoButton {
     if (!_videoButton) {
         _videoButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_videoButton setTitle:@"视频" forState:UIControlStateNormal];
+        [_videoButton setTitle:WFCString(@"Video") forState:UIControlStateNormal];
         _videoButton.backgroundColor = [UIColor greenColor];
         [_videoButton addTarget:self action:@selector(videoButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _videoButton.hidden = YES;
@@ -265,7 +265,7 @@
 - (UIButton *)scalingButton {
     if (!_scalingButton) {
         _scalingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_scalingButton setTitle:@"缩放" forState:UIControlStateNormal];
+        [_scalingButton setTitle:WFCString(@"Scale") forState:UIControlStateNormal];
         _scalingButton.backgroundColor = [UIColor greenColor];
         [_scalingButton addTarget:self action:@selector(scalingButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _scalingButton.hidden = YES;
@@ -496,7 +496,7 @@
             [self stopConnectedTimer];
             self.userNameLabel.hidden = NO;
             self.portraitView.hidden = NO;
-            self.stateLabel.text = @"通话已结束";
+            self.stateLabel.text = WFCString(@"CallEnded");
             self.smallVideoView.hidden = YES;
             self.bigVideoView.hidden = YES;
             self.minimizeButton.hidden = YES;
@@ -523,7 +523,7 @@
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
             [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType];
-            self.stateLabel.text = @"等待对方接听";
+            self.stateLabel.text = WFCString(@"WaitingAccept");
             self.smallVideoView.hidden = YES;
             
             self.userNameLabel.hidden = NO;
@@ -542,7 +542,7 @@
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
             [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType];
-            self.stateLabel.text = @"连接建立中";
+            self.stateLabel.text = WFCString(@"CallConnecting");
             self.smallVideoView.hidden = NO;
             self.downgradeButton.hidden = YES;
             break;
@@ -622,7 +622,7 @@
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
             [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType];
-            self.stateLabel.text = @"对方正在邀请您通话";
+            self.stateLabel.text = WFCString(@"InvitingYou");
             self.smallVideoView.hidden = YES;
             
             if (self.currentSession.isAudioOnly) {

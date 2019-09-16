@@ -78,10 +78,10 @@
         if (string == nil) {
             string = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"用户<%@>", groupSearchInfo.marchedMemberNames[0]]] mutableCopy];
         }
-        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"群成员含:"];
+        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupMemberNameMatch")];
         [attrStr appendAttributedString:string];
         if (groupSearchInfo.marchedMemberNames.count > 1) {
-            [attrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@"等"]];
+            [attrStr appendAttributedString:[[NSAttributedString alloc] initWithString:WFCString(@"Etc")]];
         }
         self.haveMember.attributedText = attrStr;
     } else {
@@ -89,7 +89,7 @@
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
         [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
         
-        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"群名包含:"];
+        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupNameMatch")];
         [attrStr appendAttributedString:string];
         self.haveMember.attributedText = attrStr;
     }

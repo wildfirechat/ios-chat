@@ -83,7 +83,7 @@ static NSMutableDictionary *hanziStringDict = nil;
 
     self.tableView.tableHeaderView = nil;
     if (self.selectContact) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
         
         if(self.multiSelect) {
             self.selectedContacts = [[NSMutableArray alloc] init];
@@ -105,12 +105,12 @@ static NSMutableDictionary *hanziStringDict = nil;
     self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
-    [self.searchController.searchBar setValue:@"取消" forKey:@"_cancelButtonText"];
+    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
     
-    [self.searchController.searchBar setPlaceholder:@"搜索联系人"];
+    [self.searchController.searchBar setPlaceholder:WFCString(@"SearchContact")];
 
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchController;
@@ -130,10 +130,10 @@ static NSMutableDictionary *hanziStringDict = nil;
 
 - (void)updateRightBarBtn {
     if(self.selectedContacts.count == 0) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         self.navigationItem.rightBarButtonItem.enabled = NO;
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"确定(%d)", (int)self.selectedContacts.count] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@(%d)", WFCString(@"Ok"),  (int)self.selectedContacts.count] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     }
 }
 
@@ -153,6 +153,9 @@ static NSMutableDictionary *hanziStringDict = nil;
 }
 
 - (void)onLeftBarBtn:(UIBarButtonItem *)sender {
+    if (self.cancelSelect) {
+        self.cancelSelect();
+    }
     [self left:nil];
 }
 
@@ -233,7 +236,7 @@ static NSMutableDictionary *hanziStringDict = nil;
             line.backgroundColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.8];
             [countLabel addSubview:line];
             
-            [countLabel setText:[NSString stringWithFormat:@"%d位联系人", (int)self.dataArray.count]];
+            [countLabel setText:[NSString stringWithFormat:WFCString(@"NumberOfContacts"), (int)self.dataArray.count]];
             countLabel.font = [UIFont systemFontOfSize:14];
             countLabel.textColor = [UIColor grayColor];
             
@@ -311,7 +314,7 @@ static NSMutableDictionary *hanziStringDict = nil;
         if (self.showCreateChannel && !self.searchController.active) {
             if (indexPath.section == 0) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"new_channel"];
-                cell.textLabel.text = @"新建频道";
+                cell.textLabel.text = WFCString(@"CreateChannel");
                 return cell;
             }
             dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section-1]];
@@ -326,7 +329,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                 if (contactCell == nil) {
                     contactCell = [[WFCUNewFriendTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newFriendCell"];
                 }
-                contactCell.nameLabel.text = @"新朋友";
+                contactCell.nameLabel.text = WFCString(@"NewFriend");
                 contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
                 [contactCell refresh];
                 return contactCell;
@@ -336,7 +339,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
                 
-                contactCell.nameLabel.text = @"群组";
+                contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
                 
                 return contactCell;
@@ -346,7 +349,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
                 
-                contactCell.nameLabel.text = @"频道";
+                contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
                 
                 return contactCell;
@@ -405,7 +408,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUNewFriendTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newFriendCell"];
                 }
                 [contactCell refresh];
-              contactCell.nameLabel.text = @"新朋友";
+              contactCell.nameLabel.text = WFCString(@"NewFriend");
               contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
                 cell = contactCell;
             } else {
@@ -413,7 +416,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                 if (contactCell == nil) {
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
-              contactCell.nameLabel.text = @"群组";
+              contactCell.nameLabel.text = WFCString(@"Group");
               contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
                 cell = contactCell;
             }
@@ -623,7 +626,7 @@ static NSMutableDictionary *hanziStringDict = nil;
         if (self.searchList!= nil) {
             [self.searchList removeAllObjects];
             for (WFCCUserInfo *friend in self.dataArray) {
-                if ([friend.displayName containsString:searchString]) {
+                if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
                     [self.searchList addObject:friend];
                 }
             }

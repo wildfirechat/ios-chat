@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2BCEC536232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC531232E238E00D55E0D /* wfc.strings */; };
+		2BCEC537232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC534232E238E00D55E0D /* wfc.strings */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
@@ -98,6 +100,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2BCEC532232E238E00D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = wfc.strings; sourceTree = "<group>"; };
+		2BCEC535232E238E00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = wfc.strings; sourceTree = "<group>"; };
 		2E1D1FF71FAF0AE600F4405D /* WildFireChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildFireChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -266,6 +270,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2BCEC530232E238E00D55E0D /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				2BCEC531232E238E00D55E0D /* wfc.strings */,
+			);
+			path = "zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
+		2BCEC533232E238E00D55E0D /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				2BCEC534232E238E00D55E0D /* wfc.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		2BF692E5232DBA840072036A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
+				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
+				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
+				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
+				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
+				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		2E1D1FEE1FAF0AE600F4405D = {
 			isa = PBXGroup;
 			children = (
@@ -295,17 +328,12 @@
 				2F143A46217F607300B3E38A /* AFNetworking */,
 				2E1D20BC1FAF127100F4405D /* Discover */,
 				2F1439FF217F5F3700B3E38A /* SDWebImage */,
+				2BF692E5232DBA840072036A /* Utilities */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
-				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
-				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
 				2E1D20BB1FAF127100F4405D /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
-				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
-				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
-				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
-				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
 			);
 			path = WildFireChat;
 			sourceTree = "<group>";
@@ -333,6 +361,8 @@
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
 				2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */,
+				2BCEC533232E238E00D55E0D /* en.lproj */,
+				2BCEC530232E238E00D55E0D /* zh-Hans.lproj */,
 				905177532243CEA30020A2AC /* Bugly.framework */,
 				2F143A6D217F7DA900B3E38A /* Emoj.plist */,
 				2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */,
@@ -671,6 +701,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 2E1D1FEE1FAF0AE600F4405D;
 			productRefGroup = 2E1D1FF81FAF0AE600F4405D /* Products */;
@@ -688,6 +719,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
+				2BCEC537232E238E00D55E0D /* wfc.strings in Resources */,
 				2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */,
 				6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */,
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
@@ -696,6 +728,7 @@
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
+				2BCEC536232E238E00D55E0D /* wfc.strings in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
@@ -756,6 +789,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		2BCEC531232E238E00D55E0D /* wfc.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2BCEC532232E238E00D55E0D /* zh-Hans */,
+			);
+			name = wfc.strings;
+			sourceTree = "<group>";
+		};
+		2BCEC534232E238E00D55E0D /* wfc.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2BCEC535232E238E00D55E0D /* en */,
+			);
+			name = wfc.strings;
+			sourceTree = "<group>";
+		};
 		2E1D20001FAF0AE600F4405D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
