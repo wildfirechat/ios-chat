@@ -40,7 +40,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
-    self.title = @"我的信息";
+    self.title = WFCString(@"MyInformation");
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -54,12 +54,12 @@
     if (gender == 0) {
         return @"";
     } else if(gender == 1) {
-        return @"男";
+        return WFCString(@"Male");
     } else if(gender == 2) {
-        return @"女";
+        return WFCString(@"Female");
     }
     
-    return @"其他";
+    return WFCString(@"Other");
 }
 
 - (void)loadData:(BOOL)refresh {
@@ -84,14 +84,14 @@
     [headerCell addSubview:self.portraitView];
     headerCell.tag = -1;
     headerCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [self addLabel:@"头像" onCell:headerCell isHeaderCell:YES isLeft:YES];
+    [self addLabel:WFCString(@"Portrait") onCell:headerCell isHeaderCell:YES isLeft:YES];
     [self.cells1 addObject:headerCell];
 
-    UITableViewCell *cell = [self getAttrCell:@"昵称" rightText:self.userInfo.displayName mutable:YES];
+    UITableViewCell *cell = [self getAttrCell:WFCString(@"Nickname") rightText:self.userInfo.displayName mutable:YES];
     cell.tag = Modify_DisplayName;
     [self.cells1 addObject:cell];
     
-    cell = [self getAttrCell:@"二维码" rightText:@"" mutable:YES];
+    cell = [self getAttrCell:WFCString(@"QRCode") rightText:@"" mutable:YES];
     cell.tag = 1000;
     [self.cells1 addObject:cell];
     UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
@@ -104,27 +104,27 @@
 //    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
 //    [self.cells1 addObject:cell];
 
-    cell = [self getAttrCell:@"电话" rightText:self.userInfo.mobile mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Mobile") rightText:self.userInfo.mobile mutable:YES];
     cell.tag = Modify_Mobile;
     [self.cells2 addObject:cell];
 
-    cell = [self getAttrCell:@"性别" rightText: [self getGenderString:self.userInfo.gender] mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Gender") rightText: [self getGenderString:self.userInfo.gender] mutable:YES];
     cell.tag = Modify_Gender;
     [self.cells2 addObject:cell];
 
-    cell = [self getAttrCell:@"邮箱" rightText:self.userInfo.email mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Email") rightText:self.userInfo.email mutable:YES];
     cell.tag = Modify_Email;
     [self.cells2 addObject:cell];
 
-    cell = [self getAttrCell:@"地址" rightText:self.userInfo.address mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Address") rightText:self.userInfo.address mutable:YES];
     cell.tag = Modify_Address;
     [self.cells2 addObject:cell];
 
-    cell = [self getAttrCell:@"公司" rightText:self.userInfo.company mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Company") rightText:self.userInfo.company mutable:YES];
     cell.tag = Modify_Company;
     [self.cells2 addObject:cell];
 
-    cell = [self getAttrCell:@"社交账号" rightText:self.userInfo.social mutable:YES];
+    cell = [self getAttrCell:WFCString(@"SocialAccount") rightText:self.userInfo.social mutable:YES];
     cell.tag = Modify_Social;
     [self.cells2 addObject:cell];
     
@@ -276,7 +276,7 @@
     __weak typeof(self) ws = self;
     
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"修改中...";
+    hud.label.text = WFCString(@"Updating");
     [hud showAnimated:YES];
     
     [[WFCCIMService sharedWFCIMService] modifyMyInfo:@{@(Modify_Gender):[NSString stringWithFormat:@"%d", gender]} success:^{
@@ -298,7 +298,7 @@
         
         hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"修改失败";
+        hud.label.text = WFCString(@"UpdateFailure");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
     }];
@@ -306,16 +306,16 @@
 
 - (void)sexAlterView{
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    [alert addAction:[UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Male") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self updateGender:1];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Female") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
         [self updateGender:2];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"其他" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Other") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
         [self updateGender:3];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 

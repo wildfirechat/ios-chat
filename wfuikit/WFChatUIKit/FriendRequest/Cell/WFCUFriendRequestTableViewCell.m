@@ -48,7 +48,7 @@
     self.reasonLabel.textColor = [UIColor grayColor];
     
     self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectMake(width - 68, 13, 64, 28)];
-    [self.acceptBtn setTitle:@"接受" forState:UIControlStateNormal];
+    [self.acceptBtn setTitle:WFCString(@"Accept") forState:UIControlStateNormal];
     [self.acceptBtn setBackgroundColor:[UIColor greenColor]];
     self.acceptBtn.layer.cornerRadius = 4.f;
     self.acceptBtn.layer.masksToBounds = YES;
@@ -80,22 +80,22 @@
         expired = YES;
     }
     if (friendRequest.status == 0 && !expired) {
-        [self.acceptBtn setTitle:@"接受" forState:UIControlStateNormal];
+        [self.acceptBtn setTitle:WFCString(@"Accept") forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.acceptBtn setBackgroundColor:[UIColor greenColor]];
         [self.acceptBtn setEnabled:YES];
     } else if (friendRequest.status == 1) {
-        [self.acceptBtn setTitle:@"已同意" forState:UIControlStateNormal];
+        [self.acceptBtn setTitle:WFCString(@"Accepted") forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.acceptBtn setBackgroundColor:self.backgroundColor];
         [self.acceptBtn setEnabled:NO];
     } else if (friendRequest.status == 2) {
-        [self.acceptBtn setTitle:@"已拒绝" forState:UIControlStateNormal];
+        [self.acceptBtn setTitle:WFCString(@"Rejected") forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.acceptBtn setBackgroundColor:self.backgroundColor];
         [self.acceptBtn setEnabled:NO];
     } else { //expired
-        [self.acceptBtn setTitle:@"已过期" forState:UIControlStateNormal];
+        [self.acceptBtn setTitle:WFCString(@"Expired") forState:UIControlStateNormal];
         [self.acceptBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [self.acceptBtn setBackgroundColor:self.backgroundColor];
         [self.acceptBtn setEnabled:NO];

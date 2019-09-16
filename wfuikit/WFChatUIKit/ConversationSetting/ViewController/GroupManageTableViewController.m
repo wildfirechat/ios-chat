@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"群管理";
+    self.title = WFCString(@"GroupManage");
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     
@@ -59,33 +59,33 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             if ([self isGroupOwner]) {
-                cell.textLabel.text = @"管理员";
+                cell.textLabel.text = WFCString(@"Manager");
             } else {
-                cell.textLabel.text = @"设置禁言";
+                cell.textLabel.text = WFCString(@"MuteSetting");
             }
             
         } else if(indexPath.row == 1) {
             if ([self isGroupOwner]) {
-                cell.textLabel.text = @"设置禁言";
+                cell.textLabel.text = WFCString(@"MuteSetting");
             } else {
-                cell.textLabel.text = @"成员权限";
+                cell.textLabel.text = WFCString(@"MemberPrivilege");
             }
         } else if(indexPath.row == 2) {
-            cell.textLabel.text = @"成员权限";
+            cell.textLabel.text = WFCString(@"MemberPrivilege");
         }
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"加群方式";
+            cell.textLabel.text = WFCString(@"JoinGroupPermission");
             if (self.groupInfo.joinType == 0) {
-                cell.detailTextLabel.text = @"不限制加入";
+                cell.detailTextLabel.text = WFCString(@"Free2Join");
             } else if(self.groupInfo.joinType == 1) {
-                cell.detailTextLabel.text = @"群成员可以拉人";
+                cell.detailTextLabel.text = WFCString(@"MemberInviteOnly");
             } else if(self.groupInfo.joinType == 2) {
-                cell.detailTextLabel.text = @"只能群管理拉人";
+                cell.detailTextLabel.text = WFCString(@"ManagerInviteOnly");
             }
         } else if(indexPath.row == 1) {
-            cell.textLabel.text = @"查找方式";
-            cell.detailTextLabel.text = @"不允许查找";
+            cell.textLabel.text = WFCString(@"GroupVisiable");
+            cell.detailTextLabel.text = WFCString(@"GroupCannotSearch");
         }
     }
     
@@ -106,9 +106,9 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"成员管理";
+        return WFCString(@"MemberManage");
     } else if(section == 1) {
-        return @"加群设置";
+        return WFCString(@"JoinGroupSetting");
     }
     return nil;
 }
@@ -155,15 +155,15 @@
         }
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
-            UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"加群方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertController* alertController = [UIAlertController alertControllerWithTitle:WFCString(@"JoinGroupPermission") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             
             // Create cancel action.
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 
             }];
             [alertController addAction:cancelAction];
             
-            UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"不限制加入" style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"Free2Join") style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
 //                    self.groupInfo.joinType = 0;
 //                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
@@ -173,7 +173,7 @@
             }];
             [alertController addAction:openAction];
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:@"群成员可以拉人" style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"MemberInviteOnly") style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
 //                    self.groupInfo.joinType = 1;
 //                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
@@ -183,7 +183,7 @@
             }];
             [alertController addAction:verifyAction];
             
-            UIAlertAction *normalAction = [UIAlertAction actionWithTitle:@"只能群管理拉人" style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *normalAction = [UIAlertAction actionWithTitle:WFCString(@"ManagerInviteOnly") style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
 //                    self.groupInfo.joinType = 2;
 //                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
@@ -195,20 +195,20 @@
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
         } else if(indexPath.row == 1) {
-            UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"查找方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertController* alertController = [UIAlertController alertControllerWithTitle:WFCString(@"GroupVisiable") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             
             // Create cancel action.
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 
             }];
             [alertController addAction:cancelAction];
             
-            UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"允许查找" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCanbeSearch") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
                 
             }];
             [alertController addAction:openAction];
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:@"不允许查找" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCannotSearch") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 
             }];
             [alertController addAction:verifyAction];

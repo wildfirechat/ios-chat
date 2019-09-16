@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.groups = [[NSMutableArray alloc] init];
-    self.title = @"我的群组";
+    self.title = WFCString(@"MyGroup");
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
@@ -117,16 +117,16 @@
     __weak typeof(self) ws = self;
     
     
-    UITableViewRowAction *cancel = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"取消保存" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *cancel = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Remove") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         
         [[WFCCIMService sharedWFCIMService] setFavGroup:groupId fav:NO success:^{
-            [ws.view makeToast:@"取消成功" duration:2 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"Removed") duration:2 position:CSToastPositionCenter];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [ws refreshList];
             });
             
         } error:^(int error_code) {
-            [ws.view makeToast:@"取消失败" duration:2 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"OperationFailure") duration:2 position:CSToastPositionCenter];
         }];
     }];
     

@@ -501,21 +501,21 @@
   } else if ([self isMessageSilentCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:WFCString(@"Silent") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Silent];
   } else if ([self isSetTopCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"置顶聊天" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Top];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"PinChat") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Top];
   } else if ([self isSaveGroupCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"保存到通讯录" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Save_To_Contact];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"SaveToContact") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Save_To_Contact];
   } else if ([self isGroupNameCardCell:indexPath]) {
     WFCCGroupMember *groupMember = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
       if (groupMember.alias.length) {
-          return [self cellOfTable:tableView WithTitle:@"我在本群的昵称" withDetailTitle:groupMember.alias withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+          return [self cellOfTable:tableView WithTitle:WFCString(@"NicknameInGroup") withDetailTitle:groupMember.alias withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
       } else {
-          return [self cellOfTable:tableView WithTitle:@"我在本群的昵称" withDetailTitle:@"未设置" withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+          return [self cellOfTable:tableView WithTitle:WFCString(@"NicknameInGroup") withDetailTitle:WFCString(@"Unset") withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
       }
     
   } else if([self isShowNameCardCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"显示群成员昵称" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Show_Alias];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"ShowMemberNickname") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Show_Alias];
   } else if ([self isClearMessageCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:@"清空聊天记录" withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+    return [self cellOfTable:tableView WithTitle:WFCString(@"ClearChatHistory") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if([self isQuitGroup:indexPath]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"buttonCell"];
         if (cell == nil) {
@@ -525,9 +525,9 @@
             }
             UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 4, self.view.frame.size.width - 40, 40)];
             if ([self isGroupOwner]) {
-                [btn setTitle:@"解散群组" forState:UIControlStateNormal];
+                [btn setTitle:WFCString(@"DismissGroup") forState:UIControlStateNormal];
             } else {
-                [btn setTitle:@"退出群组" forState:UIControlStateNormal];
+                [btn setTitle:WFCString(@"QuitGroup") forState:UIControlStateNormal];
             }
             
             btn.layer.cornerRadius = 5.f;
@@ -547,9 +547,9 @@
           }
           UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 4, self.view.frame.size.width - 40, 40)];
           if ([self isChannelOwner]) {
-              [btn setTitle:@"销毁频道" forState:UIControlStateNormal];
+              [btn setTitle:WFCString(@"DestroyChannel") forState:UIControlStateNormal];
           } else {
-              [btn setTitle:@"取消订阅频道" forState:UIControlStateNormal];
+              [btn setTitle:WFCString(@"UnscribeChannel") forState:UIControlStateNormal];
           }
           
           btn.layer.cornerRadius = 5.f;
@@ -580,12 +580,12 @@
     __weak typeof(self)weakSelf = self;
   if ([self isGroupNameCell:indexPath]) {
       if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
-          [self.view makeToast:@"只有管理员才可以修改群名称" duration:1 position:CSToastPositionCenter];
+          [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupNameHint") duration:1 position:CSToastPositionCenter];
           return;
       }
     WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
     gmvc.defaultValue = self.groupInfo.name;
-    gmvc.titleText = @"修改群名称";
+    gmvc.titleText = WFCString(@"ModifyGroupName");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
       [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Name newValue:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
@@ -598,7 +598,7 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
   } else if ([self isGroupPortraitCell:indexPath]) {
       if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
-          [self.view makeToast:@"只有管理员才可以修改群头像" duration:1 position:CSToastPositionCenter];
+          [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupPortraitHint") duration:1 position:CSToastPositionCenter];
           return;
       }
     WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
@@ -629,7 +629,7 @@
     WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
     WFCCGroupMember *groupMember = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
     gmvc.defaultValue = groupMember.alias;
-    gmvc.titleText = @"修改我在群中的名片";
+    gmvc.titleText = WFCString(@"ModifyMyGroupNameCard");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
       [[WFCCIMService sharedWFCIMService] modifyGroupAlias:self.conversation.target alias:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
@@ -643,15 +643,15 @@
   } else if([self isShowNameCardCell:indexPath]) {
     
   } else if ([self isClearMessageCell:indexPath]) {
-      UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"确认删除" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+      UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ConfirmDelete") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-      UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+      UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
       }];
-      UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+      UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:WFCString(@"Delete") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
           [[WFCCIMService sharedWFCIMService] clearMessages:self.conversation];
               MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
-              hud.label.text = @"删除成功";
+              hud.label.text = WFCString(@"Deleted");
               hud.mode = MBProgressHUDModeText;
               hud.removeFromSuperViewOnHide = YES;
               [hud hideAnimated:NO afterDelay:1.5];

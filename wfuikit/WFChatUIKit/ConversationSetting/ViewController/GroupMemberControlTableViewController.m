@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"群成员权限";
+    self.title = WFCString(@"MemberPrivilege");
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     
@@ -42,7 +42,7 @@
     
 
         cell.on = !self.groupInfo.privateChat;
-        cell.textLabel.text = @"允许普通群成员发起临时会话";
+        cell.textLabel.text = WFCString(@"AllowTemporarySession");
         cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
             [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_PrivateChat newValue:value?@"0":@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
                 onDone(YES);

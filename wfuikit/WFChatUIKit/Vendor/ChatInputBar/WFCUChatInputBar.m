@@ -945,7 +945,7 @@
         UIActionSheet *actionSheet =
         [[UIActionSheet alloc] initWithTitle:nil
                                     delegate:self
-                           cancelButtonTitle:@"取消"
+                           cancelButtonTitle:WFCString(@"Cancel")
                       destructiveButtonTitle:@"视频"
                            otherButtonTitles:@"音频", nil];
         [actionSheet showInView:self.parentView];

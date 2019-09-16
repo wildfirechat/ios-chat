@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"管理员设置";
+    self.title = WFCString(@"ManagerSetting");
     
     [self loadManagerList];
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
@@ -100,7 +100,7 @@
     } else if(indexPath.section == 1) {
         if (indexPath.row == self.managerList.count) {
             cell.imageView.image = [UIImage imageNamed:@"plus"];
-            cell.textLabel.text = @"添加管理员";
+            cell.textLabel.text = WFCString(@"AddManager");
         } else {
             WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row].memberId  refresh:NO];
             [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
@@ -119,7 +119,7 @@
     return YES;
 }
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"移除管理员" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:WFCString(@"RemoveManager") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
 
         __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
@@ -134,7 +134,7 @@
             
         }];
     }];
-    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"取消" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *editAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Cancel") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         NSLog(@"点击了编辑");
     }];
     editAction.backgroundColor = [UIColor grayColor];
@@ -153,9 +153,9 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"群主";
+        return WFCString(@"GroupOwner");
     } else if(section == 1) {
-        return @"管理员";
+        return WFCString(@"Manager");
     }
     return nil;
 }

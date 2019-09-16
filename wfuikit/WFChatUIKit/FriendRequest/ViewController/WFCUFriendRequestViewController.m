@@ -50,7 +50,7 @@
 
 - (void)initSearchUIAndData {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"新朋友";
+    self.navigationItem.title = WFCString(@"NewFriend");
     
     //初始化数据源
     [[WFCCIMService sharedWFCIMService] loadFriendRequestFromRemote];
@@ -69,7 +69,7 @@
 
     [self.view addSubview:_tableView];
   
-  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加朋友" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"AddFriend") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
 }
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
@@ -116,14 +116,14 @@
 #pragma mark - FriendRequestTableViewCellDelegate
 - (void)onAcceptBtn:(NSString *)targetUserId {
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"更新中...";
+    hud.label.text = WFCString(@"Updating");
     [hud showAnimated:YES];
     
     __weak typeof(self) ws = self;
     [[WFCCIMService sharedWFCIMService] handleFriendRequest:targetUserId accept:YES success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             hud.hidden = YES;
-            [ws.view makeToast:@"成功"
+            [ws.view makeToast:WFCString(@"UpdateDone")
                       duration:2
                       position:CSToastPositionCenter];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -143,7 +143,7 @@
     } error:^(int error_code) {
         dispatch_async(dispatch_get_main_queue(), ^{
             hud.hidden = YES;
-            [ws.view makeToast:@"请求发送失败"
+            [ws.view makeToast:WFCString(@"UpdateFailure")
                       duration:2
                       position:CSToastPositionCenter];
         });

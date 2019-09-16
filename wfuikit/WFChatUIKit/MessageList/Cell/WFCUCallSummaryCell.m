@@ -33,7 +33,7 @@
 
     CGFloat width = self.contentArea.bounds.size.width;
     
-    self.infoLabel.text = @"网络电话";
+    self.infoLabel.text = WFCString(@"VOIPCall");
     self.infoLabel.layoutMargins = UIEdgeInsetsMake(TEXT_TOP_PADDING, TEXT_LEFT_PADDING, TEXT_BUTTOM_PADDING, TEXT_RIGHT_PADDING);
     
     if (model.message.direction == MessageDirection_Send) {
