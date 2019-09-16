@@ -808,7 +808,7 @@
         NSMutableArray *disableUsers = [[NSMutableArray alloc] init];
         BOOL isOwner = [self isGroupOwner];
         
-        for (WFCCGroupMember *member in self.memberList) {
+        for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
             [candidateUsers addObject:member.memberId];
             if (!isOwner && (member.type == Member_Type_Manager || [self.groupInfo.owner isEqualToString:member.memberId])) {
                 [disableUsers addObject:member.memberId];
