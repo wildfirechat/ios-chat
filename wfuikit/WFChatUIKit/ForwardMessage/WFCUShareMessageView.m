@@ -24,7 +24,7 @@
     self.digestBackgrouView.clipsToBounds = YES;
     self.digestBackgrouView.layer.masksToBounds = YES;
     self.digestBackgrouView.layer.cornerRadius = 8.f;
-    self.messageTextView.placeholder = @"给朋友留言";
+    self.messageTextView.placeholder = WFCString(@"LeaveMessage");
     self.messageTextView.layer.masksToBounds = YES;
     self.messageTextView.layer.cornerRadius = 8.f;
     self.messageTextView.contentInset = UIEdgeInsetsMake(2, 8, 2, 2);
@@ -90,7 +90,7 @@
             name = userInfo.displayName;
             portrait = userInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"用户<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), conversation.target];
         }
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     } else if (conversation.type == Group_Type) {
@@ -99,7 +99,7 @@
             name = groupInfo.name;
             portrait = groupInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"群组<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Group"), conversation.target];
         }
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     } else if (conversation.type == Channel_Type) {
@@ -108,7 +108,7 @@
             name = channelInfo.name;
             portrait = channelInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"群组<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Channel"), conversation.target];
         }
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
     }

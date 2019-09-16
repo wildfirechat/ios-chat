@@ -76,7 +76,7 @@
             }
         }
         if (string == nil) {
-            string = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"用户<%@>", groupSearchInfo.marchedMemberNames[0]]] mutableCopy];
+            string = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), groupSearchInfo.marchedMemberNames[0]]] mutableCopy];
         }
         NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupMemberNameMatch")];
         [attrStr appendAttributedString:string];
