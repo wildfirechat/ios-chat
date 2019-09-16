@@ -132,7 +132,7 @@
           } else if(userInfo.displayName.length > 0) {
               nameStr = userInfo.displayName;
           } else {
-              nameStr = [NSString stringWithFormat:@"User<%@>", self.model.message.fromUser];
+              nameStr = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), self.model.message.fromUser];
           }
           self.nameLabel.text = nameStr;
       }

@@ -30,7 +30,7 @@
     [self.view addSubview:self.portraitView];
     
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"修改" style:UIBarButtonItemStyleDone target:self action:@selector(onModify:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Modify") style:UIBarButtonItemStyleDone target:self action:@selector(onModify:)];
     }
     
   self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
@@ -71,12 +71,12 @@
 
 - (void)onModify:(id)sender {
     __weak typeof(self)ws = self;
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"修改头像" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ChangePortrait") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    UIAlertAction *actionCamera = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCamera = [UIAlertAction actionWithTitle:WFCString(@"TakePhotos") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.allowsEditing = YES;
         picker.delegate = ws;
@@ -90,7 +90,7 @@
         [ws presentViewController:picker animated:YES completion:nil];
     }];
     
-    UIAlertAction *actionAlubum = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionAlubum = [UIAlertAction actionWithTitle:WFCString(@"Album") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.allowsEditing = YES;
         picker.delegate = ws;
@@ -141,7 +141,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
   UIImage *previousImage = self.portraitView.image;
   __weak typeof(self) ws = self;
   __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-  hud.label.text = @"更新中...";
+  hud.label.text = WFCString(@"Updating");
   [hud showAnimated:YES];
   
   [[WFCCIMService sharedWFCIMService] uploadMedia:data mediaType:Media_Type_PORTRAIT
@@ -153,7 +153,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
           [hud hideAnimated:YES];
           MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
           hud.mode = MBProgressHUDModeText;
-          hud.label.text = @"更新成功";
+          hud.label.text = WFCString(@"UpdateDone");
           hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
           [hud hideAnimated:YES afterDelay:1.f];
           
@@ -163,7 +163,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
           [hud hideAnimated:YES];
           MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
           hud.mode = MBProgressHUDModeText;
-          hud.label.text = @"更新失败";
+          hud.label.text = WFCString(@"UpdateFailure");
           hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
           [hud hideAnimated:YES afterDelay:1.f];
       });
@@ -175,7 +175,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                             error:^(int error_code) {
     dispatch_async(dispatch_get_main_queue(), ^{
       [hud hideAnimated:NO];
-      [ws showHud:@"更新失败"];
+      [ws showHud:WFCString(@"UpdateFailure")];
     });
   }];
     
