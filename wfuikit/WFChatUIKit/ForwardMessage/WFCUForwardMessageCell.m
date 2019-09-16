@@ -39,7 +39,7 @@
             name = userInfo.displayName;
             portrait = userInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"用户<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), conversation.target];
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     } else if (conversation.type == Group_Type) {
@@ -48,7 +48,7 @@
             name = groupInfo.name;
             portrait = groupInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"群组<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Group"), conversation.target];
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     } else if (conversation.type == Channel_Type) {
@@ -57,7 +57,7 @@
             name = channelInfo.name;
             portrait = channelInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"频道<%@>", conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Channel"), conversation.target];
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
     }

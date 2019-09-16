@@ -35,7 +35,7 @@
     
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _cancelBtn.frame = CGRectMake(10, 22, 50, 40);
-    [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [_cancelBtn setTitle:WFCString(@"Cancel") forState:UIControlStateNormal];
     [_cancelBtn addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     [_cancelBtn setTitleColor:kzThemeTineColor forState:UIControlStateNormal];
     _cancelBtn.alpha = 0.8;
