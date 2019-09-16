@@ -53,6 +53,7 @@
 		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
 		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
 		2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E8601222BA6180076B82B /* GroupInfoViewController.m */; };
+		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
@@ -204,6 +205,8 @@
 		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
 		2F9E8600222BA6180076B82B /* GroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupInfoViewController.h; sourceTree = "<group>"; };
 		2F9E8601222BA6180076B82B /* GroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupInfoViewController.m; sourceTree = "<group>"; };
+		2FBF915E232F6A47003521FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		2FBF9160232F6A5E003521FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -623,6 +626,7 @@
 				90C1D90F208C12A900E923F4 /* foreman.mp4 */,
 				90C1D910208C12A900E923F4 /* ring.mp3 */,
 				2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */,
+				2FBF915F232F6A47003521FF /* InfoPlist.strings */,
 			);
 			name = SupportFiles;
 			sourceTree = "<group>";
@@ -719,6 +723,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
+				2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */,
 				2BCEC537232E238E00D55E0D /* wfc.strings in Resources */,
 				2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */,
 				6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */,
@@ -819,6 +824,15 @@
 				2E1D20061FAF0AE600F4405D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		2FBF915F232F6A47003521FF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2FBF915E232F6A47003521FF /* zh-Hans */,
+				2FBF9160232F6A5E003521FF /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
