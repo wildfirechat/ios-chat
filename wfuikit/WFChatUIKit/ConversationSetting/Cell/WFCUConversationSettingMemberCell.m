@@ -17,7 +17,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.contentView.backgroundColor = [UIColor whiteColor];
+        
     }
     return self;
 }
@@ -84,6 +84,20 @@
 }
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
+    BOOL darkMode = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkMode = YES;
+        }
+    }
+    
+    if (darkMode) {
+        self.contentView.backgroundColor = [UIColor blackColor];
+        self.nameLabel.textColor = [UIColor whiteColor];
+    } else {
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.nameLabel.textColor = [UIColor blackColor];
+    }
     self.model = model;
     
     WFCCUserInfo *userInfo;
