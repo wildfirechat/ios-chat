@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2BCEC536232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC531232E238E00D55E0D /* wfc.strings */; };
 		2BCEC537232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC534232E238E00D55E0D /* wfc.strings */; };
+		2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E0233627450004212B /* PushKit.framework */; };
+		2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E22336278E0004212B /* CallKit.framework */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
@@ -103,6 +105,8 @@
 /* Begin PBXFileReference section */
 		2BCEC532232E238E00D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = wfc.strings; sourceTree = "<group>"; };
 		2BCEC535232E238E00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = wfc.strings; sourceTree = "<group>"; };
+		2BDCE7E0233627450004212B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
+		2BDCE7E22336278E0004212B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		2E1D1FF71FAF0AE600F4405D /* WildFireChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildFireChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -254,10 +258,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
+				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
+				2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
 				2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */,
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
@@ -354,6 +360,8 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2BDCE7E22336278E0004212B /* CallKit.framework */,
+				2BDCE7E0233627450004212B /* PushKit.framework */,
 				905177512243CDA60020A2AC /* libc++.tbd */,
 				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,

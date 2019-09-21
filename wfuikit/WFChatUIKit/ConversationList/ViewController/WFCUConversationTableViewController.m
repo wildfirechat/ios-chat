@@ -52,7 +52,10 @@
     self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
-    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    if (! @available(iOS 13, *)) {
+        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    }
+
     
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
