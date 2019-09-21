@@ -349,7 +349,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
                 
-                contactCell.nameLabel.text = WFCString(@"Group");
+                contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
                 
                 return contactCell;
