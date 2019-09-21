@@ -33,7 +33,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if (@available(iOS 13.0, *)) {
+        [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
+    } else {
+        [self.view setBackgroundColor:[UIColor whiteColor]];
+    }
     
     CGRect bound = self.view.bounds;
     CGFloat portraitWidth = PortraitWidth;

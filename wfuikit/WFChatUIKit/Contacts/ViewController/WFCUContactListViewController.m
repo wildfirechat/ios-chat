@@ -506,7 +506,17 @@ static NSMutableDictionary *hanziStringDict = nil;
     label.textColor = [UIColor grayColor];
     label.textAlignment = NSTextAlignmentLeft;
     label.text = [NSString stringWithFormat:@"  %@", title];
-    label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    
+    
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            label.backgroundColor = [UIColor colorWithRed:39/255.f green:39/255.f blue:39/255.f alpha:1.0f];
+        } else {
+            label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+        }
+    } else {
+        label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    }
     return label;
 }
 

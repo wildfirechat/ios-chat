@@ -49,7 +49,11 @@
     self.memberCollectionView.delegate = self;
     self.memberCollectionView.dataSource = self;
     
-    self.memberCollectionView.backgroundColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        self.memberCollectionView.backgroundColor = [UIColor systemBackgroundColor];
+    } else {
+        self.memberCollectionView.backgroundColor = [UIColor whiteColor];
+    }
     [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
     
     [self.view addSubview:self.memberCollectionView];

@@ -33,7 +33,11 @@
 }
 
 - (void)initSearchUIAndData {
-    self.view.backgroundColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
+    } else {
+        [self.view setBackgroundColor:[UIColor whiteColor]];
+    }
     self.navigationItem.title = WFCString(@"SubscribeChannel");
 
     _searchList = [NSMutableArray array];

@@ -467,8 +467,18 @@
     self.backgroundView.backgroundColor = [UIColor whiteColor];
     
     
-    [self.collectionView
-     setBackgroundColor:[UIColor colorWithRed:(235) / 255.0f green:(235) / 255.0f blue:(235) / 255.0f alpha:1]];
+    BOOL darkMode = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkMode = YES;
+        }
+    }
+    
+    if (darkMode) {
+        [self.collectionView setBackgroundColor:[UIColor blackColor]];
+    } else {
+        [self.collectionView setBackgroundColor:[UIColor colorWithRed:(235) / 255.0f green:(235) / 255.0f blue:(235) / 255.0f alpha:1]];
+    }
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.alwaysBounceVertical = YES;
