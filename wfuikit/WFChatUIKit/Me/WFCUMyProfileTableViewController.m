@@ -36,8 +36,12 @@
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.tableHeaderView = nil;
-    self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
     
+    if (@available(iOS 13.0, *)) {
+        [self.tableView setBackgroundColor:[UIColor systemBackgroundColor]];
+    } else {
+        self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
     self.title = WFCString(@"MyInformation");
