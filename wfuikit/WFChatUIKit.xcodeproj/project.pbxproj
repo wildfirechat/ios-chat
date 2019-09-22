@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2BCEC52C232E10DF00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
+		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
 		2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */; };
 		2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */; };
 		2F143A6B217F7D4100B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A68217F7D4100B3E38A /* Stickers.bundle */; };
@@ -349,6 +351,8 @@
 /* Begin PBXFileReference section */
 		2BCEC52D232E10DF00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/wfc.strings; sourceTree = "<group>"; };
 		2BCEC52F232E10E900D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc.strings"; sourceTree = "<group>"; };
+		2BD671A22336E821007A9FEC /* WFCUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConfigManager.h; sourceTree = "<group>"; };
+		2BD671A32336E821007A9FEC /* WFCUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConfigManager.m; sourceTree = "<group>"; };
 		2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSearchGroupTableViewCell.h; sourceTree = "<group>"; };
 		2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchGroupTableViewCell.m; sourceTree = "<group>"; };
 		2F143A68217F7D4100B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
@@ -1457,6 +1461,8 @@
 				2F55108E217F5CC200F56C26 /* WFCUUtilities.h */,
 				2F55108F217F5CC200F56C26 /* WFCUMediaMessageDownloader.m */,
 				2F551090217F5CC200F56C26 /* WFCUUtilities.m */,
+				2BD671A22336E821007A9FEC /* WFCUConfigManager.h */,
+				2BD671A32336E821007A9FEC /* WFCUConfigManager.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1519,6 +1525,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */,
@@ -1838,6 +1845,7 @@
 				2F5510F2217F5CC200F56C26 /* CCHMapClusterControllerUtils.m in Sources */,
 				2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */,
 				2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */,
+				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
 				2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */,
 				2F5EB43D22C2E21A00BC8C90 /* GroupManageTableViewController.m in Sources */,
 				2F55109F217F5CC200F56C26 /* WFCULocationCell.m in Sources */,

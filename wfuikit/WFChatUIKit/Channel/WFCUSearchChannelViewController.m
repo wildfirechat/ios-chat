@@ -11,7 +11,7 @@
 #import "WFCUChannelProfileViewController.h"
 #import "SDWebImage.h"
 #import "MBProgressHUD.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUSearchChannelViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -33,7 +33,7 @@
 }
 
 - (void)initSearchUIAndData {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.navigationItem.title = WFCString(@"SubscribeChannel");
 
     _searchList = [NSMutableArray array];
@@ -45,7 +45,10 @@
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
-    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    
+    if (! @available(iOS 13, *)) {
+        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    }
     self.searchController.searchBar.placeholder = WFCString(@"SearchChannels");
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
