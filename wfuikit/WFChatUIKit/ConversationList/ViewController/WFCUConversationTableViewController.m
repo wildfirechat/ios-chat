@@ -286,7 +286,7 @@
       }
       
       navLabel.textColor = [WFCUConfigManager globalManager].textColor;
-      navLabel.font = UIFont fontWithName:@"Helvetica-Bold" size:18];
+      navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
       [continer addSubview:navLabel];
       
       UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleWhite;
