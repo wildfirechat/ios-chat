@@ -290,16 +290,10 @@
       navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
       [continer addSubview:navLabel];
       
-      UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleWhite;
-      if (@available(iOS 13.0, *)) {
-          if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-              indicatorStyle = UIActivityIndicatorViewStyleGray;
-          }
-      }
-      
-    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:indicatorStyle];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     indicatorView.center = CGPointMake(20, 21);
     [indicatorView startAnimating];
+      indicatorView.color = [WFCUConfigManager globalManager].textColor;
       [continer addSubview:indicatorView];
     title = continer;
   }
