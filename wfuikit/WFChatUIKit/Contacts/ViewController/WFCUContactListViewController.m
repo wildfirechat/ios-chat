@@ -20,7 +20,7 @@
 #import "WFCUAddFriendViewController.h"
 #import "MBProgressHUD.h"
 #import "WFCUFavChannelTableViewController.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -105,7 +105,9 @@ static NSMutableDictionary *hanziStringDict = nil;
     self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
-    [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    if (! @available(iOS 13, *)) {
+        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    }
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
@@ -349,7 +351,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
                 
-                contactCell.nameLabel.text = WFCString(@"Group");
+                contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
                 
                 return contactCell;
@@ -504,7 +506,9 @@ static NSMutableDictionary *hanziStringDict = nil;
     label.textColor = [UIColor grayColor];
     label.textAlignment = NSTextAlignmentLeft;
     label.text = [NSString stringWithFormat:@"  %@", title];
-    label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    
+    
+    label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     return label;
 }
 
