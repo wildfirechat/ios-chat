@@ -7,3 +7,22 @@
 */
 CFBundleName="Wildfire IM";
 CFBundleDisplayName="Wildfire IM";
+Message="Message";
+Contact="Contact";
+Discover="Disconver";
+Settings="Settings";
+Chatroom="Chatroom";
+DevDocs="Develope Book";
+AccountSafety="Account and Safety";
+MessageNotification="Message notification";
+ChangePassword="Change password";
+PrivacySettings="Privacy settings";
+CurrentVersion="Current version";
+HelpFeedback="Help feedback";
+AboutWFChat="About WildFire IM";
+UserAgreement="User agreement";
+PrivacyPolicy="Privacy policy";
+Complain="Complain";
+Blacklist="Black list";
+Logout="Logout";
+Moments="Moments";

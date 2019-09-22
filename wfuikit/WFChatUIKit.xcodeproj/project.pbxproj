@@ -255,7 +255,6 @@
 		2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551033217F5CC100F56C26 /* YLImageView.m */; };
 		2F5511E3217F5CC300F56C26 /* YLGIFImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551034217F5CC100F56C26 /* YLGIFImage.h */; };
 		2F5511E4217F5CC300F56C26 /* YLImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551035217F5CC100F56C26 /* YLImageView.h */; };
-		2F5511E5217F5CC300F56C26 /* Predefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551036217F5CC100F56C26 /* Predefine.h */; };
 		2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551038217F5CC100F56C26 /* WFCUForwardViewController.m */; };
 		2F5511E7217F5CC300F56C26 /* WFCUForwardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551039217F5CC100F56C26 /* WFCUForwardMessageCell.m */; };
 		2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55103A217F5CC100F56C26 /* WFCUShareMessageView.m */; };
@@ -1670,7 +1669,6 @@
 				2F551101217F5CC200F56C26 /* CCHMapClusterOperation.h in Headers */,
 				2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */,
 				2F5510C0217F5CC200F56C26 /* WFCUCreateGroupViewController.h in Headers */,
-				2F5511E5217F5CC300F56C26 /* Predefine.h in Headers */,
 				2F55109D217F5CC200F56C26 /* WFCUMediaMessageCell.h in Headers */,
 				2F5510FE217F5CC200F56C26 /* CCHMapClusterer.h in Headers */,
 				2F5510F9217F5CC200F56C26 /* CCHNearCenterMapClusterer.h in Headers */,

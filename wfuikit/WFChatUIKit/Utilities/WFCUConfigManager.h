@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, strong)UIColor *frameBackgroudColor;
 @property(nonatomic, strong)UIColor *textColor;
+
+@property(nonatomic, strong)UIColor *naviBackgroudColor;
+@property(nonatomic, strong)UIColor *naviTextColor;
 @end
 
 NS_ASSUME_NONNULL_END

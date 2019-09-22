@@ -20,7 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"发现";
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
         self.hasMoments = YES;
@@ -102,23 +101,23 @@
     
     if (indexPath.section == 0) {
         if (self.hasMoments) {
-            cell.textLabel.text = @"朋友圈";
+            cell.textLabel.text = LocalizedString(@"Moments");
             cell.imageView.image = [UIImage imageNamed:@"AlbumReflashIcon"];
         } else {
-            cell.textLabel.text = @"聊天室";
+            cell.textLabel.text = LocalizedString(@"Chatroom");
             cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
         }
     } else if(indexPath.section == 1) {
         if (self.hasMoments) {
-            cell.textLabel.text = @"聊天室";
+            cell.textLabel.text = LocalizedString(@"Chatroom");
             cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
         } else {
-            cell.textLabel.text = @"开发手册";
+            cell.textLabel.text = LocalizedString(@"DevDocs");
             cell.imageView.image = [UIImage imageNamed:@"dev_docs"];
         }
     } else if(indexPath.section == 2) {
         if (self.hasMoments) {
-            cell.textLabel.text = @"开发手册";
+            cell.textLabel.text = LocalizedString(@"DevDocs");
             cell.imageView.image = [UIImage imageNamed:@"dev_docs"];
         }
     }
