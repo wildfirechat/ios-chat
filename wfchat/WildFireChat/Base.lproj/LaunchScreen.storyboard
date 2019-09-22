@@ -19,13 +19,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="laun_image" highlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T1L-D4-c7B">
-                                <rect key="frame" x="123.5" y="48" width="128" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="128" id="37R-de-zB2"/>
-                                    <constraint firstAttribute="height" constant="128" id="uMQ-4g-Gf9"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="沟通如此简单" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KzX-an-6n1">
                                 <rect key="frame" x="16" y="399.5" width="343" height="68"/>
                                 <constraints>
@@ -35,14 +28,21 @@
                                 <color key="textColor" systemColor="linkColor" red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="laun_image" highlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T1L-D4-c7B">
+                                <rect key="frame" x="123.5" y="69.5" width="128" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="128" id="37R-de-zB2"/>
+                                    <constraint firstAttribute="height" constant="128" id="uMQ-4g-Gf9"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="KzX-an-6n1" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="100" id="Wkl-Id-Pcg"/>
                             <constraint firstItem="T1L-D4-c7B" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="XSI-Uz-0re"/>
                             <constraint firstItem="KzX-an-6n1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" id="g5O-o7-6Jy"/>
-                            <constraint firstItem="T1L-D4-c7B" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="48" id="rLr-kT-RUd"/>
                             <constraint firstItem="KzX-an-6n1" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailingMargin" id="ukB-EV-CVX"/>
+                            <constraint firstItem="T1L-D4-c7B" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-200" id="w9C-o4-fk4"/>
                         </constraints>
                     </view>
                 </viewController>
