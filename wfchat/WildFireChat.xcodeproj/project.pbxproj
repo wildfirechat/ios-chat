@@ -172,6 +172,7 @@
 		2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyViewController.m; sourceTree = "<group>"; };
 		2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
 		2F7268FC21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
+		2F78FA0323371E150007C5CE /* WFChat-Prefix-Header.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WFChat-Prefix-Header.pch"; sourceTree = "<group>"; };
 		2F94F98622291577005BD461 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
 		2F94F98722291577005BD461 /* LBXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanView.h; sourceTree = "<group>"; };
 		2F94F98822291577005BD461 /* LBXScanNetAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNetAnimation.h; sourceTree = "<group>"; };
@@ -635,6 +636,7 @@
 				90C1D910208C12A900E923F4 /* ring.mp3 */,
 				2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */,
 				2FBF915F232F6A47003521FF /* InfoPlist.strings */,
+				2F78FA0323371E150007C5CE /* WFChat-Prefix-Header.pch */,
 			);
 			name = SupportFiles;
 			sourceTree = "<group>";
@@ -973,6 +975,7 @@
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
 				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1006,6 +1009,7 @@
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
 				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
