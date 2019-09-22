@@ -17,7 +17,7 @@
 #import "UIView+TYAlertView.h"
 #import "UIView+Toast.h"
 #import "WFCUContactListViewController.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUForwardViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -220,7 +220,7 @@
             label.font = [UIFont systemFontOfSize:13];
             label.textColor = [UIColor grayColor];
             label.textAlignment = NSTextAlignmentLeft;
-            label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+            label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
             
             int sec = 0;
             if (self.searchFriendList.count) {
@@ -250,7 +250,7 @@
         label.textColor = [UIColor grayColor];
         label.textAlignment = NSTextAlignmentLeft;
         label.text = [NSString stringWithFormat:@"  %@", title];
-        label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+        label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         return label;
     }
 }

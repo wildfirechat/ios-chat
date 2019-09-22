@@ -244,10 +244,13 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     UINavigationBar *bar = [UINavigationBar appearance];
-    bar.barTintColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-    bar.tintColor = [UIColor whiteColor];
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    bar.barStyle = UIBarStyleBlack;
+    bar.barTintColor = [WFCUConfigManager globalManager].frameBackgroudColor;
+    bar.tintColor = [WFCUConfigManager globalManager].textColor;
+    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].textColor};
+    bar.barStyle = UIBarStyleDefault;
+    
+    [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];
+    [UITabBar appearance].translucent = NO;
 }
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];

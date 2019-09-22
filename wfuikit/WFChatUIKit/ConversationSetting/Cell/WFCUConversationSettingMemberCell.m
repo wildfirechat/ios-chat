@@ -9,6 +9,9 @@
 #import "WFCUConversationSettingMemberCell.h"
 #import "SDWebImage.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUConfigManager.h"
+
+
 @interface WFCUConversationSettingMemberCell ()
 @property(nonatomic, strong) NSObject *model;
 @end
@@ -84,20 +87,9 @@
 }
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
-    BOOL darkMode = NO;
-    if (@available(iOS 13.0, *)) {
-        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-            darkMode = YES;
-        }
-    }
+    self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
     
-    if (darkMode) {
-        self.contentView.backgroundColor = [UIColor blackColor];
-        self.nameLabel.textColor = [UIColor whiteColor];
-    } else {
-        self.contentView.backgroundColor = [UIColor whiteColor];
-        self.nameLabel.textColor = [UIColor blackColor];
-    }
     self.model = model;
     
     WFCCUserInfo *userInfo;
