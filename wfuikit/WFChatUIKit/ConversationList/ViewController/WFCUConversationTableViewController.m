@@ -272,7 +272,7 @@
         break;
     }
     
-    navLabel.textColor = [WFCUConfigManager globalManager].textColor;
+    navLabel.textColor = [WFCUConfigManager globalManager].naviTextColor;
     navLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18];
       
     navLabel.textAlignment = NSTextAlignmentCenter;
@@ -286,14 +286,14 @@
         navLabel.text = WFCString(@"Synching");
       }
       
-      navLabel.textColor = [WFCUConfigManager globalManager].textColor;
+      navLabel.textColor = [WFCUConfigManager globalManager].naviTextColor;
       navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
       [continer addSubview:navLabel];
       
     UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     indicatorView.center = CGPointMake(20, 21);
     [indicatorView startAnimating];
-      indicatorView.color = [WFCUConfigManager globalManager].textColor;
+      indicatorView.color = [WFCUConfigManager globalManager].naviTextColor;
       [continer addSubview:indicatorView];
     title = continer;
   }
