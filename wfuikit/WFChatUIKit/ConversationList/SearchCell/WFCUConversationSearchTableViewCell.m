@@ -10,7 +10,7 @@
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "WFCUConfigManager.h"
 
 @implementation WFCUConversationSearchTableViewCell
 - (void)awakeFromNib {
@@ -58,7 +58,7 @@
     
     self.timeView.hidden = NO;
     self.timeView.text = [WFCUUtilities formatTimeLabel:message.serverTime];
-    [self.contentView setBackgroundColor:[UIColor whiteColor]];
+    self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
 - (UIImageView *)potraitView {

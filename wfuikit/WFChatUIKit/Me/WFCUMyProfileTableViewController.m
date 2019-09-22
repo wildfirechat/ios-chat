@@ -14,6 +14,8 @@
 #import "WFCUMyPortraitViewController.h"
 #import "WFCUModifyMyProfileViewController.h"
 #import "QrCodeHelper.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUMyProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -37,11 +39,7 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.tableHeaderView = nil;
     
-    if (@available(iOS 13.0, *)) {
-        [self.tableView setBackgroundColor:[UIColor systemBackgroundColor]];
-    } else {
-        self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
-    }
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
     self.title = WFCString(@"MyInformation");

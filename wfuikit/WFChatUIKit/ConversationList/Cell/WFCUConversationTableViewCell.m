@@ -10,7 +10,7 @@
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "WFCUConfigManager.h"
 
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
@@ -106,13 +106,13 @@
         if (info.isTop) {
             [self.contentView setBackgroundColor:[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.f]];
         } else {
-            [self.contentView setBackgroundColor:[UIColor blackColor]];
+            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         }
     } else {
         if (info.isTop) {
             [self.contentView setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f]];
         } else {
-            [self.contentView setBackgroundColor:[UIColor whiteColor]];
+            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         }
     }
     

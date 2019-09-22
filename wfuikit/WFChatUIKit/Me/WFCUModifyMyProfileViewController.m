@@ -9,7 +9,7 @@
 #import "WFCUModifyMyProfileViewController.h"
 #import "MBProgressHUD.h"
 #import <WFChatClient/WFCChatClient.h>
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUModifyMyProfileViewController () <UITextFieldDelegate, UITextInputDelegate>
 @property(nonatomic, strong)UITextField *textField;
@@ -64,11 +64,7 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
     
-    if (@available(iOS 13.0, *)) {
-        self.view.backgroundColor = [UIColor systemBackgroundColor];
-    } else {
-        [self.view setBackgroundColor:[UIColor colorWithRed:232/255.f green:232/255.f blue:232/255.f alpha:1.f]];
-    }
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     [self.textField becomeFirstResponder];
 }

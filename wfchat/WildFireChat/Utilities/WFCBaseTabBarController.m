@@ -85,4 +85,19 @@
         });
     }
 }
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (@available(iOS 13.0, *)) {
+        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+            if([[UIApplication sharedApplication].delegate respondsToSelector:@selector(setupNavBar)]) {
+                [[UIApplication sharedApplication].delegate performSelector:@selector(setupNavBar)];
+            }
+            UIView *superView = self.view.superview;
+            [self.view removeFromSuperview];
+            [superView addSubview:self.view];
+        }
+    }
+}
+
 @end

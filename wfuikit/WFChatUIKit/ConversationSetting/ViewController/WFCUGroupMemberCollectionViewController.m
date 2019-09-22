@@ -12,7 +12,7 @@
 #import "WFCUConversationSettingMemberCell.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUProfileTableViewController.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -49,11 +49,7 @@
     self.memberCollectionView.delegate = self;
     self.memberCollectionView.dataSource = self;
     
-    if (@available(iOS 13.0, *)) {
-        self.memberCollectionView.backgroundColor = [UIColor systemBackgroundColor];
-    } else {
-        self.memberCollectionView.backgroundColor = [UIColor whiteColor];
-    }
+    self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
     
     [self.view addSubview:self.memberCollectionView];

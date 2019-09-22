@@ -9,6 +9,8 @@
 #import "WFCUVerifyRequestViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "MBProgressHUD.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUVerifyRequestViewController ()
 @property(nonatomic, strong)UITextField *verifyField;
@@ -25,7 +27,7 @@
     hintLabel.font = [UIFont systemFontOfSize:12];
     hintLabel.textColor = [UIColor grayColor];
     [self.view addSubview:hintLabel];
-    [self.view setBackgroundColor:[UIColor colorWithRed:(235) / 255.0f green:(235) / 255.0f blue:(235) / 255.0f alpha:1]];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + kStatusBarAndNavigationBarHeight, clientArea.size.width, 32)];
     WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
