@@ -27,6 +27,8 @@
 #import "WFCUChannelProfileViewController.h"
 #import "QrCodeHelper.h"
 #import "UIView+Toast.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -97,11 +99,7 @@
         self.memberCollectionView.delegate = self;
         self.memberCollectionView.dataSource = self;
         
-        if (@available(iOS 13.0, *)) {
-            self.memberCollectionView.backgroundColor = [UIColor systemBackgroundColor];
-        } else {
-            self.memberCollectionView.backgroundColor = [UIColor whiteColor];
-        }
+        self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
@@ -119,11 +117,7 @@
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
             
-            if (@available(iOS 13.0, *)) {
-                [head setBackgroundColor:[UIColor systemBackgroundColor]];
-            } else {
-                [head setBackgroundColor:[UIColor whiteColor]];
-            }
+            head.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
             
             self.tableView.tableHeaderView = head;
         } else {

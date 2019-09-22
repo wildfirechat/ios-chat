@@ -11,7 +11,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "SDWebImage.h"
 #import "MBProgressHUD.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUAddFriendViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -33,11 +33,7 @@
 }
 
 - (void)initSearchUIAndData {
-    if (@available(iOS 13.0, *)) {
-        [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
-    } else {
-        [self.view setBackgroundColor:[UIColor whiteColor]];
-    }
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.navigationItem.title = WFCString(@"AddFriend");
 
     _searchList = [NSMutableArray array];

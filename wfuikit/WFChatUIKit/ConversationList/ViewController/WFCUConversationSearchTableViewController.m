@@ -21,6 +21,8 @@
 #import "MBProgressHUD.h"
 
 #import "WFCUConversationSearchTableViewCell.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUConversationSearchTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCMessage* > *messages;
@@ -115,7 +117,7 @@
     label.font = [UIFont boldSystemFontOfSize:18];
     label.textColor = [UIColor blackColor];
     label.textAlignment = NSTextAlignmentLeft;
-    header.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    header.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     if (self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];

@@ -27,6 +27,7 @@
 
 #import "WFCUContactTableViewCell.h"
 #import "QrCodeHelper.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
@@ -271,8 +272,8 @@
         break;
     }
     
-    [navLabel setTextColor:[UIColor whiteColor]];
-    navLabel.font = [UIFont systemFontOfSize:18];
+    navLabel.textColor = [WFCUConfigManager globalManager].textColor;
+    navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
     navLabel.textAlignment = NSTextAlignmentCenter;
     title = navLabel;
   } else {
@@ -284,11 +285,18 @@
         navLabel.text = WFCString(@"Synching");
       }
       
-      [navLabel setTextColor:[UIColor whiteColor]];
-      navLabel.font = [UIFont systemFontOfSize:18];
+      navLabel.textColor = [WFCUConfigManager globalManager].textColor;
+      navLabel.font = UIFont fontWithName:@"Helvetica-Bold" size:18];
       [continer addSubview:navLabel];
       
-    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+      UIActivityIndicatorViewStyle indicatorStyle = UIActivityIndicatorViewStyleWhite;
+      if (@available(iOS 13.0, *)) {
+          if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+              indicatorStyle = UIActivityIndicatorViewStyleGray;
+          }
+      }
+      
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:indicatorStyle];
     indicatorView.center = CGPointMake(20, 21);
     [indicatorView startAnimating];
       [continer addSubview:indicatorView];
@@ -557,7 +565,7 @@
         label.font = [UIFont systemFontOfSize:13];
         label.textColor = [UIColor grayColor];
         label.textAlignment = NSTextAlignmentLeft;
-        label.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+        label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         int sec = 0;
         if (self.searchFriendList.count) {
