@@ -6,20 +6,6 @@
 	objectVersion = 48;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		2E66FBCD1FAFE9220025B5A9 /* Release */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 2E66FBCE1FAFE9220025B5A9 /* Build configuration list for PBXAggregateTarget "Release" */;
-			buildPhases = (
-				2E66FBD11FAFE92B0025B5A9 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = Release;
-			productName = Release;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		2E6B50A01FAE98E6006B6E31 /* WFCChatClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B50B01FAE990D006B6E31 /* interf_dec.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50A71FAE990D006B6E31 /* interf_dec.h */; };
@@ -543,10 +529,6 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = WildFireChat;
 				TargetAttributes = {
-					2E66FBCD1FAFE9220025B5A9 = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-					};
 					2E6B509A1FAE98E6006B6E31 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
@@ -566,7 +548,6 @@
 			projectRoot = "";
 			targets = (
 				2E6B509A1FAE98E6006B6E31 /* WFChatClient */,
-				2E66FBCD1FAFE9220025B5A9 /* Release */,
 			);
 		};
 /* End PBXProject section */
@@ -582,19 +563,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E66FBD11FAFE92B0025B5A9 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "sh build.sh WFChatClient\n";
-		};
 		F89D8F2820538E36005A6CD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -670,24 +638,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2E66FBCF1FAFE9220025B5A9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "arm64 armv7 x86_64";
-			};
-			name = Debug;
-		};
-		2E66FBD01FAFE9220025B5A9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "arm64 armv7 x86_64";
-			};
-			name = Release;
-		};
 		2E6B50A11FAE98E6006B6E31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -877,15 +827,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2E66FBCE1FAFE9220025B5A9 /* Build configuration list for PBXAggregateTarget "Release" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2E66FBCF1FAFE9220025B5A9 /* Debug */,
-				2E66FBD01FAFE9220025B5A9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		2E6B50951FAE98E5006B6E31 /* Build configuration list for PBXProject "WFChatClient" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
