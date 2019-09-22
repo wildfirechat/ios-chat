@@ -241,6 +241,9 @@
 }
 
 - (void)setupNavBar {
+    [WFCUConfigManager globalManager].naviBackgroudColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
+    [WFCUConfigManager globalManager].naviTextColor = [UIColor whiteColor];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     UINavigationBar *bar = [UINavigationBar appearance];
