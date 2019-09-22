@@ -8,6 +8,7 @@
 
 #import "WFCLoginViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatUIKit/WFChatUIKit.h>
 #import "AppDelegate.h"
 #import "WFCBaseTabBarController.h"
 #import "AFNetworking.h"
@@ -48,7 +49,7 @@ alpha:1.0]
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     NSString *savedName = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedName"];
    
     CGRect bgRect = self.view.bounds;

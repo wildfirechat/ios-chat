@@ -12,7 +12,7 @@
 #import "YLImageView.h"
 #import "YLGIFImage.h"
 #import "WFCUFaceButton.h"
-
+#import "WFCUConfigManager.h"
 
 #define FACE_COUNT_ROW  4
 #define FACE_COUNT_CLU  7
@@ -147,7 +147,7 @@
     [self loadStickers];
     if (self) {
 
-        self.backgroundColor = [UIColor colorWithRed:236.0/255.0 green:236.0/255.0 blue:236.0/255.0 alpha:1];
+        self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
         NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
         NSString *bundlePath = [resourcePath stringByAppendingPathComponent:@"Emoj.plist"];
@@ -167,7 +167,7 @@
         _sendBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         _sendBtn.frame = CGRectMake(self.frame.size.width - 52,5,52, 37);
         [_sendBtn setTitle:@"发送" forState:UIControlStateNormal];
-        [_sendBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_sendBtn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         self.sendBtn.layer.borderWidth = 0.5f;
         self.sendBtn.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
         [_sendBtn addTarget:self action:@selector(sendBtnHandle:) forControlEvents:UIControlEventTouchUpInside];
@@ -198,7 +198,7 @@
         _tabView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,5,self.frame.size.width - 52, 37) collectionViewLayout:layout];
         _tabView.delegate = self;
         _tabView.dataSource = self;
-        _tabView.backgroundColor = [UIColor whiteColor];
+        _tabView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         _tabView.showsHorizontalScrollIndicator = NO;
         _tabView.userInteractionEnabled = YES;
         [_tabView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cellId"];
@@ -216,7 +216,7 @@
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.decelerationRate = 90;
-        _collectionView.backgroundColor = [UIColor colorWithRed:236.0/255.0 green:236.0/255.0 blue:236.0/255.0 alpha:1];
+        _collectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         _collectionView.showsHorizontalScrollIndicator = NO;
         
         [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cellId"];
@@ -460,7 +460,7 @@
         if (indexPath.row == self.selectedTableRow) {
             cell.backgroundColor = HEXCOLOR(0xa8a8a8);;
         } else {
-            cell.backgroundColor = [UIColor whiteColor];
+            cell.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         }
         
         if (indexPath.row == 0) {

@@ -14,7 +14,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUAddFriendViewController.h"
 #import "UIView+Toast.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUFriendRequestViewController () <UITableViewDataSource, UITableViewDelegate, WFCUFriendRequestTableViewCellDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -49,7 +49,7 @@
 }
 
 - (void)initSearchUIAndData {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.navigationItem.title = WFCString(@"NewFriend");
     
     //初始化数据源

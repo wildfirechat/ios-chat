@@ -9,6 +9,9 @@
 #import "WFCUConversationSettingMemberCell.h"
 #import "SDWebImage.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUConfigManager.h"
+
+
 @interface WFCUConversationSettingMemberCell ()
 @property(nonatomic, strong) NSObject *model;
 @end
@@ -17,7 +20,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.contentView.backgroundColor = [UIColor whiteColor];
+        
     }
     return self;
 }
@@ -84,6 +87,9 @@
 }
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
+    self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+    
     self.model = model;
     
     WFCCUserInfo *userInfo;

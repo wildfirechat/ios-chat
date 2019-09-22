@@ -112,14 +112,23 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSString *token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"
-                                                                             withString:@""]
-                        stringByReplacingOccurrencesOfString:@">"
-                        withString:@""]
-                       stringByReplacingOccurrencesOfString:@" "
-                       withString:@""];
-    
-    [[WFCCNetworkService sharedInstance] setDeviceToken:token];
+    if ([deviceToken isKindOfClass:[NSData class]]) {
+        const unsigned *tokenBytes = [deviceToken bytes];
+        NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                              ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                              ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                              ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+        [[WFCCNetworkService sharedInstance] setDeviceToken:hexToken];
+    } else {
+        NSString *token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"
+                                                                                 withString:@""]
+                            stringByReplacingOccurrencesOfString:@">"
+                            withString:@""]
+                           stringByReplacingOccurrencesOfString:@" "
+                           withString:@""];
+        
+        [[WFCCNetworkService sharedInstance] setDeviceToken:token];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -235,10 +244,13 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     UINavigationBar *bar = [UINavigationBar appearance];
-    bar.barTintColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-    bar.tintColor = [UIColor whiteColor];
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    bar.barStyle = UIBarStyleBlack;
+    bar.barTintColor = [WFCUConfigManager globalManager].frameBackgroudColor;
+    bar.tintColor = [WFCUConfigManager globalManager].textColor;
+    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].textColor};
+    bar.barStyle = UIBarStyleDefault;
+    
+    [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];
+    [UITabBar appearance].translucent = NO;
 }
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];

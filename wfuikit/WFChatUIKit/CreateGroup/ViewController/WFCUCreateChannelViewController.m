@@ -12,6 +12,8 @@
 #import "MBProgressHUD.h"
 #import "SDWebImage.h"
 #import "UIView+Toast.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUCreateChannelViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -33,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     CGRect bound = self.view.bounds;
     CGFloat portraitWidth = PortraitWidth;

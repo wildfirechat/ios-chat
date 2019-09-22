@@ -27,6 +27,8 @@
 #import "WFCUChannelProfileViewController.h"
 #import "QrCodeHelper.h"
 #import "UIView+Toast.h"
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -97,9 +99,7 @@
         self.memberCollectionView.delegate = self;
         self.memberCollectionView.dataSource = self;
         
-        
-        
-        self.memberCollectionView.backgroundColor = [UIColor whiteColor];
+        self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
@@ -112,11 +112,13 @@
             
             UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 36, frame.size.width, 36)];
             [moreBtn setTitle:WFCString(@"ShowAllMembers") forState:UIControlStateNormal];
+            
             [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
             
-            [head setBackgroundColor:[UIColor whiteColor]];
+            head.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+            
             self.tableView.tableHeaderView = head;
         } else {
             self.tableView.tableHeaderView = self.memberCollectionView;

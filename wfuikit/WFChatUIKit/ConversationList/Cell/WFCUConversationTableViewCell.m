@@ -10,7 +10,7 @@
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "WFCUConfigManager.h"
 
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
@@ -95,10 +95,25 @@
     [self update:info.conversation];
     self.timeView.hidden = NO;
     self.timeView.text = [WFCUUtilities formatTimeLabel:info.timestamp];
-    if (info.isTop) {
-        [self.contentView setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f]];
+    
+    BOOL darkMode = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkMode = YES;
+        }
+    }
+    if (darkMode) {
+        if (info.isTop) {
+            [self.contentView setBackgroundColor:[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.f]];
+        } else {
+            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+        }
     } else {
-        [self.contentView setBackgroundColor:[UIColor whiteColor]];
+        if (info.isTop) {
+            [self.contentView setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f]];
+        } else {
+            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+        }
     }
     
     if (info.lastMessage && info.lastMessage.direction == MessageDirection_Send) {

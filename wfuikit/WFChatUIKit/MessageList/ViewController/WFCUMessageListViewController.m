@@ -48,6 +48,9 @@
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
+
+#import "WFCUConfigManager.h"
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -465,10 +468,7 @@
     [self.backgroundView addSubview:self.collectionView];
     
     self.backgroundView.backgroundColor = [UIColor whiteColor];
-    
-    
-    [self.collectionView
-     setBackgroundColor:[UIColor colorWithRed:(235) / 255.0f green:(235) / 255.0f blue:(235) / 255.0f alpha:1]];
+    self.collectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.alwaysBounceVertical = YES;

@@ -8,7 +8,7 @@
 
 #import "WFCUGeneralModifyViewController.h"
 #import "MBProgressHUD.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUGeneralModifyViewController () <UITextFieldDelegate>
 @property (nonatomic, strong)UITextField *textField;
@@ -27,7 +27,7 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Done") style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
     
-    [self.view setBackgroundColor:[UIColor colorWithRed:232/255.f green:232/255.f blue:232/255.f alpha:1.f]];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     [self.textField becomeFirstResponder];
 }
