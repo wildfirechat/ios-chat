@@ -5,6 +5,24 @@
   Created by Heavyrain.lee on 2019/9/16.
   Copyright © 2019 WildFireChat. All rights reserved.
 */
-CFBundleName="Wildfire IM";
-CFBundleDisplayName="Wildfire IM";
-
+CFBundleName="野火IM";
+CFBundleDisplayName="野火IM";
+Message="消息";
+Contact="联系人";
+Discover="发现";
+Settings="设置";
+Chatroom="聊天室";
+DevDocs="开发手册";
+AccountSafety="账户与安全";
+MessageNotification="新消息通知";
+ChangePassword="修改密码";
+PrivacySettings="隐私设置";
+CurrentVersion="当前版本";
+HelpFeedback="帮助与反馈";
+AboutWFChat="关于野火IM";
+UserAgreement="用户协议";
+PrivacyPolicy="隐私政策";
+Complain="举报";
+Blacklist="黑名单";
+Logout="退出登录";
+Moments="朋友圈";

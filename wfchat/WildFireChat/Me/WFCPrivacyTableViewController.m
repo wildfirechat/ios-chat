@@ -19,7 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"隐私";
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     
@@ -84,9 +83,9 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (indexPath.section == 0) {
-        cell.textLabel.text = @"黑名单";
+        cell.textLabel.text = LocalizedString(@"Blacklist");
     } else if(indexPath.section == 1) {
-        cell.textLabel.text = @"朋友圈";
+        cell.textLabel.text = LocalizedString(@"Moments");
     }
     
     return cell;

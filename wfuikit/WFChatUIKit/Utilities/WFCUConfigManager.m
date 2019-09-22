@@ -74,4 +74,40 @@ static WFCUConfigManager *sharedSingleton = nil;
         return [UIColor blackColor];
     }
 }
+
+- (UIColor *)naviBackgroudColor {
+    if (_naviBackgroudColor) {
+        return _naviBackgroudColor;
+    }
+    BOOL darkModel = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkModel = YES;
+        }
+    }
+    
+    if (darkModel) {
+        return [UIColor colorWithRed:39/255.f green:39/255.f blue:39/255.f alpha:1.0f];
+    } else {
+        return [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
+    }
+}
+
+- (UIColor *)naviTextColor {
+    if (_naviTextColor) {
+        return _naviTextColor;
+    }
+    BOOL darkModel = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkModel = YES;
+        }
+    }
+    
+    if (darkModel) {
+        return [UIColor whiteColor];
+    } else {
+        return [UIColor blackColor];
+    }
+}
 @end

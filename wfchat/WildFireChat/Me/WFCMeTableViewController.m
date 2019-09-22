@@ -92,14 +92,14 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (indexPath.section == 1) {
             if (indexPath.row == 0) {
-                cell.textLabel.text = @"账户与安全";
+                cell.textLabel.text = LocalizedString(@"AccountSafety");
                 cell.imageView.image = [UIImage imageNamed:@"safe_setting"];
             } else if (indexPath.row == 1) {
-                cell.textLabel.text = @"新消息通知";
+                cell.textLabel.text = LocalizedString(@"MessageNotification");
                 cell.imageView.image = [UIImage imageNamed:@"notification_setting"];
             }
         } else if(indexPath.section == 2) {
-            cell.textLabel.text = @"设置";
+            cell.textLabel.text = LocalizedString(@"Settings");
             cell.imageView.image = [UIImage imageNamed:@"MoreSetting"];
         }
 

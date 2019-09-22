@@ -130,6 +130,15 @@ static NSMutableDictionary *hanziStringDict = nil;
     [self.tableView reloadData];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (@available(iOS 13.0, *)) {
+        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+            [self.tableView reloadData];
+        }
+    }
+}
+    
 - (void)updateRightBarBtn {
     if(self.selectedContacts.count == 0) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];

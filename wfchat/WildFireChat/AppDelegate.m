@@ -244,9 +244,9 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     UINavigationBar *bar = [UINavigationBar appearance];
-    bar.barTintColor = [WFCUConfigManager globalManager].frameBackgroudColor;
-    bar.tintColor = [WFCUConfigManager globalManager].textColor;
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].textColor};
+    bar.barTintColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+    bar.tintColor = [WFCUConfigManager globalManager].naviTextColor;
+    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor};
     bar.barStyle = UIBarStyleDefault;
     
     [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];

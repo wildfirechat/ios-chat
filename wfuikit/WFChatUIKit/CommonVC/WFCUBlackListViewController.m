@@ -2,8 +2,8 @@
 //  WFCUBlackListViewController.m
 //  WFChatUIKit
 //
-//  Created by Tom Lee on 2019/7/31.
-//  Copyright © 2019 Tom Lee. All rights reserved.
+//  Created by Heavyrain.Lee on 2019/7/31.
+//  Copyright © 2019 Wildfire Chat. All rights reserved.
 //
 
 #import "WFCUBlackListViewController.h"

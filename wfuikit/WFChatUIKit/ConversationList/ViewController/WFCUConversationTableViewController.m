@@ -273,7 +273,8 @@
     }
     
     navLabel.textColor = [WFCUConfigManager globalManager].textColor;
-    navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
+    navLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18];
+      
     navLabel.textAlignment = NSTextAlignmentCenter;
     title = navLabel;
   } else {
@@ -395,6 +396,15 @@
     [self updateConnectionStatus:[WFCCNetworkService sharedInstance].currentConnectionStatus];
     [self refreshList];
     [self refreshLeftButton];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (@available(iOS 13.0, *)) {
+        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+            [self.tableView reloadData];
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

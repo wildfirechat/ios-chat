@@ -27,10 +27,10 @@
     [super viewDidLoad];
     
     UIViewController *vc = [WFCUConversationTableViewController new];
-    vc.title = @"消息";
+    vc.title = LocalizedString(@"Message");
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     UITabBarItem *item = nav.tabBarItem;
-    item.title = @"消息";
+    item.title = LocalizedString(@"Message");
     item.image = [UIImage imageNamed:@"tabbar_chat"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_chat_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
@@ -40,30 +40,30 @@
     
  
     vc = [WFCUContactListViewController new];
-    vc.title = @"联系人";
+    vc.title = LocalizedString(@"Contact");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
-    item.title = @"联系人";
+    item.title = LocalizedString(@"Contact");
     item.image = [UIImage imageNamed:@"tabbar_contacts"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_contacts_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
     vc = [DiscoverViewController new];
-    vc.title = @"发现";
+    vc.title = LocalizedString(@"Discover");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
-    item.title = @"发现";
+    item.title = LocalizedString(@"Discover");
     item.image = [UIImage imageNamed:@"tabbar_discover"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_discover_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
     vc = [WFCMeTableViewController new];
-    vc.title = @"设置";
+    vc.title = LocalizedString(@"Settings");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
-    item.title = @"设置";
+    item.title = LocalizedString(@"Settings");
     item.image = [UIImage imageNamed:@"tabbar_me"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_me_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];

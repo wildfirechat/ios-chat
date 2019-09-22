@@ -23,8 +23,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"设置";
-    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     
     self.tableView.delegate = self;
@@ -135,28 +133,26 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if(indexPath.section == 0) {
-        cell.textLabel.text = @"隐私设置";
+        cell.textLabel.text = LocalizedString(@"PrivacySettings");
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"当前版本";
+            cell.textLabel.text = LocalizedString(@"CurrentVersion");
             cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             cell.accessoryType = UITableViewCellAccessoryNone;
         } if (indexPath.row == 1) {
-            cell.textLabel.text = @"帮助与反馈";
+            cell.textLabel.text = LocalizedString(@"HelpFeedback");
         } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"关于野火IM";
+            cell.textLabel.text = LocalizedString(@"AboutWFChat");
         }
     } else if(indexPath.section == 2) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"用户协议";
+            cell.textLabel.text = LocalizedString(@"UserAgreement");
         } if (indexPath.row == 1) {
-            cell.textLabel.text = @"隐私政策";
-        } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"关于野火IM";
+            cell.textLabel.text = LocalizedString(@"PrivacyPolicy");
         }
     } else if(indexPath.section == 3) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"举报";
+            cell.textLabel.text = LocalizedString(@"Complain");
         }
     } else if (indexPath.section == 4) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
@@ -164,7 +160,7 @@
             [subView removeFromSuperview];
         }
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
-        [btn setTitle:@"退出登录" forState:UIControlStateNormal];
+        [btn setTitle:LocalizedString(@"Logout") forState:UIControlStateNormal];
 
         [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
