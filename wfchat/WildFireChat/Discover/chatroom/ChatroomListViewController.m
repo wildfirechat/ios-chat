@@ -74,7 +74,7 @@ static NSString * identifier = @"cxCellID";
         [_collectionView registerClass:[ChatroomItemCell class] forCellWithReuseIdentifier:identifier];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        [_collectionView setBackgroundColor:[UIColor whiteColor]];
+        [_collectionView setBackgroundColor:[WFCUConfigManager globalManager].backgroudColor];
     }
     return _collectionView;
     
