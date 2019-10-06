@@ -632,7 +632,7 @@ namespace mars{
         
         extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
         
-        extern int uploadGeneralMedia(std::string mediaData, int mediaType, UpdateMediaCallback *callback);
+        extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
         
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
         

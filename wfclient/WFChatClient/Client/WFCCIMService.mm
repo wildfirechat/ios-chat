@@ -1073,12 +1073,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return ret;
 }
 
-- (void)uploadMedia:(NSData *)mediaData
+- (void)uploadMedia:(NSString *)fileName
+          mediaData:(NSData *)mediaData
           mediaType:(WFCCMediaType)mediaType
             success:(void(^)(NSString *remoteUrl))successBlock
            progress:(void(^)(long uploaded, long total))progressBlock
               error:(void(^)(int error_code))errorBlock {
-    mars::stn::uploadGeneralMedia(std::string((char *)mediaData.bytes, mediaData.length), mediaType, new GeneralUpdateMediaCallback(successBlock, progressBlock, errorBlock));
+    mars::stn::uploadGeneralMedia(fileName == nil ? "" : [fileName UTF8String], std::string((char *)mediaData.bytes, mediaData.length), (int)mediaType, new GeneralUpdateMediaCallback(successBlock, progressBlock, errorBlock));
 }
 
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values

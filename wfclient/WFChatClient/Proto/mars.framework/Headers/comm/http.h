@@ -147,6 +147,8 @@ class HeaderFields {
     static const char* const kStringProxyAuthorization;
     static const char* const KStringContentType;
     static const char* const KStringContentLength;
+    static const char* const KStringAuthorization;
+    static const char* const KStringDate;
     static const char* const KStringTransferEncoding;
     static const char* const kStringContentEncoding;
     static const char* const KStringAcceptEncoding;
