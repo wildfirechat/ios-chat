@@ -144,7 +144,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
   hud.label.text = WFCString(@"Updating");
   [hud showAnimated:YES];
   
-  [[WFCCIMService sharedWFCIMService] uploadMedia:data mediaType:Media_Type_PORTRAIT
+    [[WFCCIMService sharedWFCIMService] uploadMedia:nil mediaData:data mediaType:Media_Type_PORTRAIT
                                           success:^(NSString *remoteUrl) {
     [[WFCCIMService sharedWFCIMService] modifyMyInfo:@{@(Modify_Portrait):remoteUrl} success:^{
       dispatch_async(dispatch_get_main_queue(), ^{
