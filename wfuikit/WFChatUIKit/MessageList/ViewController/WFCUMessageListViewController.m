@@ -175,6 +175,17 @@
     
     WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
     self.chatInputBar.draft = info.draft;
+    
+    if (self.conversation.type == Group_Type) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray<WFCCGroupMember *> *groupMembers = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+            NSMutableArray *memberIds = [[NSMutableArray alloc] init];
+            for (WFCCGroupMember *member in groupMembers) {
+                [memberIds addObject:member.memberId];
+            }
+            [[WFCCIMService sharedWFCIMService] getUserInfos:memberIds inGroup:self.conversation.target];
+        });
+    }
 }
 
 - (void)setLoadingMore:(BOOL)loadingMore {
