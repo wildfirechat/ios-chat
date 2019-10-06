@@ -461,13 +461,15 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
 /**
  上传媒体(图片、语音、文件等)
  
+ @param fileName 文件名，可为空
  @param mediaData 媒体信息
  @param mediaType 媒体类型
  @param successBlock 成功的回调
  @param progressBlock 上传进度的回调，注意仅当媒体内容大于300K才会有回调
  @param errorBlock 失败的回调
  */
-- (void)uploadMedia:(NSData *)mediaData
+- (void)uploadMedia:(NSString *)fileName
+          mediaData:(NSData *)mediaData
           mediaType:(WFCCMediaType)mediaType
             success:(void(^)(NSString *remoteUrl))successBlock
            progress:(void(^)(long uploaded, long total))progressBlock

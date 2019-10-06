@@ -209,7 +209,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     hud.label.text = WFCString(@"PhotoUploading");
     [hud showAnimated:YES];
     
-    [[WFCCIMService sharedWFCIMService] uploadMedia:portraitData mediaType:Media_Type_PORTRAIT success:^(NSString *remoteUrl) {
+    [[WFCCIMService sharedWFCIMService] uploadMedia:nil mediaData:portraitData mediaType:Media_Type_PORTRAIT success:^(NSString *remoteUrl) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hideAnimated:NO];
           if (createGroup) {
