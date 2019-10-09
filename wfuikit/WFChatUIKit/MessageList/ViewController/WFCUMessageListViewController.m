@@ -874,7 +874,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessageStartPlaying object:@(self.playingMessageId)];
     } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
-        NSURL *url = [NSURL fileURLWithPath:videoMsg.localPath];
+        NSURL *url = [NSURL fileURLWithPath:[videoMsg.localPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         
         if (!self.videoPlayerViewController) {
             self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
@@ -1290,7 +1290,7 @@
     WFCCMessage *msg = [self.imageMsgs objectAtIndex:index];
     if ([[msg.content class] getContentType] == MESSAGE_CONTENT_TYPE_IMAGE) {
         WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)msg.content;
-        return [NSURL URLWithString:imgContent.remoteUrl];
+        return [NSURL URLWithString:[imgContent.remoteUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     }
     return nil;
 }

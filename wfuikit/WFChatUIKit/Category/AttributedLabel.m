@@ -112,7 +112,7 @@
     for(NSValue *value in rangeArr) {
         NSInteger index=[rangeArr indexOfObject:value];
         NSRange range=[value rangeValue];
-        [attributedText addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[arr objectAtIndex:index]] range:range];
+        [attributedText addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[[arr objectAtIndex:index] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] range:range];
         [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:range];
     }
     
