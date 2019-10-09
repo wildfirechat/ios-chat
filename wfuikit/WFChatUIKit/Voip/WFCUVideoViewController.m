@@ -127,7 +127,7 @@
     WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.clientId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     self.portraitView.layer.masksToBounds = YES;
     self.portraitView.layer.cornerRadius = 8.f;
     [self.view addSubview:self.portraitView];

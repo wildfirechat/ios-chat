@@ -107,7 +107,7 @@
     self.portraitView.userInteractionEnabled = YES;
     
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {

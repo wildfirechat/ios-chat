@@ -24,7 +24,7 @@
 }
   
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
   
     if (userInfo.friendAlias.length) {
         self.targetView.text = userInfo.friendAlias;
@@ -36,7 +36,7 @@
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
-    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
     
     if(channelInfo.name.length > 0) {
         self.targetView.text = channelInfo.name;
@@ -46,7 +46,7 @@
 }
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
   
   if(groupInfo.name.length > 0) {
     self.targetView.text = groupInfo.name;

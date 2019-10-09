@@ -151,11 +151,10 @@ static NSMutableDictionary *hanziStringDict = nil;
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
   if (self.selectContact) {
     if (self.selectedContacts) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        self.selectResult(self.selectedContacts);
-      });
+        [self left:^{
+            self.selectResult(self.selectedContacts);
+        }];
     }
-      [self left:nil];
   } else {
     UIViewController *addFriendVC = [[WFCUAddFriendViewController alloc] init];
     addFriendVC.hidesBottomBarWhenPushed = YES;
@@ -294,7 +293,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     NSArray *dataSource;
 
     if (self.searchController.active || self.selectContact) {
-        if (self.showCreateChannel && !self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             if (section == 0) {
                 return 1;
             }
@@ -322,10 +321,15 @@ static NSMutableDictionary *hanziStringDict = nil;
 #define REUSEIDENTIFY @"resueCell"
     NSArray *dataSource;
     if (self.searchController.active || self.selectContact) {
-        if (self.showCreateChannel && !self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             if (indexPath.section == 0) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"new_channel"];
-                cell.textLabel.text = WFCString(@"CreateChannel");
+                if (self.showCreateChannel) {
+                    cell.textLabel.text = WFCString(@"CreateChannel");
+                } else {
+                    cell.textLabel.text = WFCString(@"MentionAll");
+                }
+                
                 return cell;
             }
             dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section-1]];
@@ -451,7 +455,7 @@ static NSMutableDictionary *hanziStringDict = nil;
 -(NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     if (@available(iOS 11.0, *)) {
         if (self.selectContact) {
-            if (self.showCreateChannel && !self.searchController.active) {
+            if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
                 NSMutableArray *indexs = [self.allKeys mutableCopy];
                 [indexs insertObject:@"" atIndex:0];
                 return indexs;
@@ -471,7 +475,7 @@ static NSMutableDictionary *hanziStringDict = nil;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.selectContact) {
-        if (self.showCreateChannel && !self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             return self.allKeys.count + 1;
         }
         return self.allKeys.count;
@@ -492,7 +496,7 @@ static NSMutableDictionary *hanziStringDict = nil;
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *title;
     if (self.selectContact || self.searchController.active) {
-        if (self.showCreateChannel && !self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             if (section == 0) {
                 return nil;
             }
@@ -550,13 +554,22 @@ static NSMutableDictionary *hanziStringDict = nil;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *dataSource;
     if (self.searchController.active || self.selectContact) {
-        if (self.showCreateChannel && !self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             if (indexPath.section == 0) {
-                [self left:^{
-                    if (self.createChannel) {
-                        self.createChannel();
-                    }
-                }];
+                if (self.showCreateChannel) {
+                    [self left:^{
+                        if (self.createChannel) {
+                            self.createChannel();
+                        }
+                    }];
+                } else {
+                    [self left:^{
+                        if (self.mentionAll) {
+                            self.mentionAll();
+                        }
+                    }];
+                }
+                
                 return;
             }
             dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section-1]];

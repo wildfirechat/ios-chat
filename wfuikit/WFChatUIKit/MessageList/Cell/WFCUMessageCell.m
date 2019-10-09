@@ -118,7 +118,7 @@
   
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
       if(self.model.showNameLabel) {
           NSString *nameStr = nil;
           if (userInfo.friendAlias.length) {

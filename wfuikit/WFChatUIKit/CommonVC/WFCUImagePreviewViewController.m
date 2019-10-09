@@ -31,7 +31,7 @@
     
     __weak typeof(self) weakSelf = self;
     if ([_imageUrl rangeOfString:@"http"].location == 0 || [_imageUrl rangeOfString:@"ftp"].location == 0) {
-        [_imageView sd_setImageWithURL:[NSURL URLWithString:_imageUrl] placeholderImage:_thumbnail completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        [_imageView sd_setImageWithURL:[NSURL URLWithString:[_imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:_thumbnail completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:0.3 animations:^{
                     weakSelf.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);

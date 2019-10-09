@@ -39,7 +39,7 @@
     WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)model.message.content;
     self.thumbnailView.frame = self.bubbleView.bounds;
     if (!imgContent.thumbnail && imgContent.thumbParameter) {
-        [self.thumbnailView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", imgContent.remoteUrl, imgContent.thumbParameter]]];
+        [self.thumbnailView sd_setImageWithURL:[NSURL URLWithString:[[NSString stringWithFormat:@"%@?%@", imgContent.remoteUrl, imgContent.thumbParameter] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     } else {
         self.thumbnailView.image = imgContent.thumbnail;
     }

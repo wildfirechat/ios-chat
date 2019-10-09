@@ -71,7 +71,7 @@
 - (void)setFriendRequest:(WFCCFriendRequest *)friendRequest {
     _friendRequest = friendRequest;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendRequest.target refresh:NO];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait]  placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]  placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
     self.nameLabel.text = userInfo.displayName;
     self.reasonLabel.text = friendRequest.reason;
     BOOL expired = NO;

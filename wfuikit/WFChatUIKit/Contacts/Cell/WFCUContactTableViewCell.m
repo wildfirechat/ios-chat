@@ -51,7 +51,7 @@
 }
 
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
     
     if (userInfo.friendAlias.length) {
         self.nameLabel.text = userInfo.friendAlias;

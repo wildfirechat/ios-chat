@@ -19,7 +19,7 @@
     // Do any additional setup after loading the view.
     self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.webView];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[self.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
 }
 
@@ -46,7 +46,7 @@
 #pragma mark -  UIActionSheetDelegate <NSObject>
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 0) {
-        [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:self.url]];
+        [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:[self.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.navigationController popViewControllerAnimated:NO];
     }
 }
