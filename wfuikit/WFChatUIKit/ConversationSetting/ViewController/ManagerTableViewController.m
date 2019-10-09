@@ -95,7 +95,7 @@
     
     if (indexPath.section == 0) {
         WFCCUserInfo *owner = [[WFCCIMService sharedWFCIMService] getUserInfo:self.groupInfo.owner refresh:NO];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:owner.portrait]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[owner.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         cell.textLabel.text = owner.displayName;
     } else if(indexPath.section == 1) {
         if (indexPath.row == self.managerList.count) {
@@ -103,7 +103,7 @@
             cell.textLabel.text = WFCString(@"AddManager");
         } else {
             WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row].memberId  refresh:NO];
-            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:manager.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[manager.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             cell.textLabel.text = manager.displayName;
         }
     }

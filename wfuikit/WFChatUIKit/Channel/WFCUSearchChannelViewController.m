@@ -105,7 +105,7 @@
         }
         WFCCChannelInfo *channelInfo = self.searchList[indexPath.row];
         [cell.textLabel setText:channelInfo.name];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:channelInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
       
       cell.userInteractionEnabled = YES;
       return cell;

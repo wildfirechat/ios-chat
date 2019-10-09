@@ -190,3 +190,5 @@
 "SelectingFileHint"="Selecting file...";
 "WelcomeJoinChatroomHint"="Welcome %@ join chatroom";
 "LeaveChatroomHint"="%@ leave chatroom";
+"MentionAll"="Mention all";
+"@All"="@All ";

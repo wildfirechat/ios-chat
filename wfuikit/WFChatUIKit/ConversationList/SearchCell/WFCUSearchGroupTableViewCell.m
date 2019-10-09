@@ -93,7 +93,7 @@
         [attrStr appendAttributedString:string];
         self.haveMember.attributedText = attrStr;
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
 }
 
 @end
