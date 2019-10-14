@@ -571,6 +571,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
+    [self.chatInputBar willAppear];
     if(self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.targetUser = userInfo;
@@ -1450,11 +1451,15 @@
         hud.label.text = WFCString(@"Recalling");
         [hud showAnimated:YES];
         __weak typeof(self) ws = self;
+        long messageId = self.cell4Menu.model.message.messageId;
+        WFCUMessageCellBase *cell = self.cell4Menu;
         [[WFCCIMService sharedWFCIMService] recall:self.cell4Menu.model.message success:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
-                ws.cell4Menu.model.message = [[WFCCIMService sharedWFCIMService] getMessage:ws.cell4Menu.model.message.messageId];
-                [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:ws.cell4Menu]]];
+                if (cell.model.message.messageId == messageId) {
+                    cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                    [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
+                }
             });
         } error:^(int error_code) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -1480,10 +1485,9 @@
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setMenuItems:nil];
     __weak typeof(self)ws = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         ws.cell4Menu = nil;
     });
-    
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

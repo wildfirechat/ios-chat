@@ -71,4 +71,5 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 
 - (BOOL)appendMention:(NSString *)userId name:(NSString *)userName;
 - (void)paste:(id)sender;
+- (void)willAppear;
 @end

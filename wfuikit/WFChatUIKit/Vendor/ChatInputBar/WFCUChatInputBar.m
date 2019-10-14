@@ -77,6 +77,8 @@
 @property (nonatomic, assign)double lastTypingTime;
 
 @property (nonatomic, strong)UIColor *textInputViewTintColor;
+
+@property (nonatomic, assign)CGRect backupFrame;
 @end
 
 @implementation WFCUChatInputBar
@@ -90,6 +92,7 @@
         self.mentionInfos = [[NSMutableArray alloc] init];
         self.conversation = conversation;
         self.lastTypingTime = 0;
+        self.backupFrame = CGRectZero;
     }
     return self;
 }
@@ -190,6 +193,12 @@
         [self.parentView bringSubviewToFront:_recordView];
         
         [self recordStart];
+    }
+}
+
+- (void)willAppear {
+    if (self.backupFrame.size.height) {
+        [self.delegate willChangeFrame:self.backupFrame withDuration:0.5 keyboardShowing:NO];
     }
 }
 
@@ -613,6 +622,7 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     CGRect frame = CGRectMake(0, self.superview.bounds.size.height - self.bounds.size.height - height, self.superview.bounds.size.width, self.bounds.size.height);
     [self.delegate willChangeFrame:frame withDuration:duration keyboardShowing:YES];
+    self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
     }];
@@ -624,6 +634,7 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     CGRect frame = CGRectMake(0, self.superview.bounds.size.height - self.bounds.size.height, self.superview.bounds.size.width, self.bounds.size.height);
     [self.delegate willChangeFrame:frame withDuration:duration keyboardShowing:NO];
+    self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
     }];
@@ -856,6 +867,7 @@
     
     float duration = 0.5f;
     [self.delegate willChangeFrame:baseFrame withDuration:duration keyboardShowing:YES];
+    self.backupFrame = baseFrame;
     __weak typeof(self)ws = self;
     [UIView animateWithDuration:duration animations:^{
         ws.textInputView.frame = tvFrame;
