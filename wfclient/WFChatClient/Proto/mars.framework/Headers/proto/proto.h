@@ -700,6 +700,8 @@ namespace mars{
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
         
         extern std::string GetImageThumbPara();
+    
+        extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
     }
 }
 
