@@ -1069,9 +1069,18 @@
 }
 
 - (void)didCancelMentionAtRange:(NSRange)range {
-    [self.textInputView.textStorage replaceCharactersInRange:NSMakeRange(range.location, 0) withString:@"@"];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:@"@"];
+    UIFont *font = [UIFont fontWithName:@"Heiti SC-Bold" size:16];
+    [attStr addAttribute:(__bridge NSString*)kCTFontAttributeName value:(id)CFBridgingRelease(CTFontCreateWithName((CFStringRef)font.fontName,
+                                                                                                                   16,
+                                                                                                                   NULL)) range:NSMakeRange(0, 1)];
     
+
+    [self.textInputView.textStorage
+     insertAttributedString:attStr  atIndex:range.location];
     range.location += 1;
+    range.length = 0;
+    
     self.textInputView.selectedRange = range;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.textInputView.isFirstResponder) {
