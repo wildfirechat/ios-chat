@@ -79,6 +79,7 @@ alpha:1.0]
     self.userNameField.returnKeyType = UIReturnKeyNext;
     self.userNameField.keyboardType = UIKeyboardTypePhonePad;
     self.userNameField.delegate = self;
+    self.userNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.userNameField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
 
@@ -90,6 +91,7 @@ alpha:1.0]
     self.passwordField.returnKeyType = UIReturnKeyDone;
     self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
     self.passwordField.delegate = self;
+    self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.passwordField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - sendCodeBtnwidth, topPos + paddingTF2Line + fieldHeight + paddingLine2TF, sendCodeBtnwidth, fieldHeight)];
