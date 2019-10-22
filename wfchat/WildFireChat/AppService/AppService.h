@@ -1,0 +1,26 @@
+//
+//  AppService.h
+//  WildFireChat
+//
+//  Created by Heavyrain Lee on 2019/10/22.
+//  Copyright © 2019 WildFireChat. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <WFChatUIKit/WFChatUIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface AppService : NSObject <WFCUAppService>
++ (AppService *)sharedAppService;
+
+- (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;
+
+- (void)sendCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
+
+- (void)pcScaned:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+- (void)pcConfirmLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+@end
+
+NS_ASSUME_NONNULL_END
