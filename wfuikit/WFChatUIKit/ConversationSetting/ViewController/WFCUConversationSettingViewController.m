@@ -28,6 +28,8 @@
 #import "QrCodeHelper.h"
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
+#import "WFCUUtilities.h"
+#import "WFCUGroupAnnouncementViewController.h"
 
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
@@ -42,6 +44,8 @@
 @property (nonatomic, strong)UIImageView *channelPortrait;
 @property (nonatomic, strong)UILabel *channelName;
 @property (nonatomic, strong)UILabel *channelDesc;
+
+@property (nonatomic, strong)WFCUGroupAnnouncement *groupAnnouncement;
 @end
 
 
@@ -181,6 +185,19 @@
                 ws.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:NO];
                 [ws.memberCollectionView reloadData];
             }
+        }];
+        [[WFCUConfigManager globalManager].appService getGroupAnnouncement:self.groupInfo.target success:^(WFCUGroupAnnouncement *announcement) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.groupAnnouncement = announcement;
+                if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:4 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                } else {
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                }
+                
+            });
+        } error:^(int error_code) {
+            
         }];
     }
 }
@@ -324,10 +341,30 @@
 
 - (BOOL)isGroupManageCell:(NSIndexPath *)indexPath {
   if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 3) {
-    return YES;
+    if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
+        return YES;
+    } else {
+        return NO;
+    }
   }
   return NO;
 }
+
+- (BOOL)isGroupAnnouncementCell:(NSIndexPath *)indexPath {
+    if(self.conversation.type == Group_Type && indexPath.section == 0) {
+        if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
+            if (indexPath.row == 4) {
+                return YES;
+            }
+        } else {
+            if (indexPath.row == 3) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 
 - (BOOL)isSearchMessageCell:(NSIndexPath *)indexPath {
   if((self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 0)
@@ -404,9 +441,9 @@
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
             if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
-                return 4; //群名称，群头像，群二维码，群管理，
+                return 5; //群名称，群头像，群二维码，群管理，群公告
             } else {
-                return 3; //群名称，群头像，群二维码
+                return 4; //群名称，群头像，群二维码，群公告
             }
             
         } else if(section == 1) {
@@ -444,6 +481,13 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self isGroupAnnouncementCell:indexPath]) {
+        float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont systemFontOfSize:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
+        if (height > 136) {
+            height = 136;
+        }
+        return height + 48;
+    }
     return 48;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -498,6 +542,23 @@
       return cell;
   } else if ([self isGroupManageCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:WFCString(@"GroupManage") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+  } else if([self isGroupAnnouncementCell:indexPath]) {
+//    return [self cellOfTable:tableView WithTitle:@"群公告" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+      
+      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"announcementCell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"announcementCell"];
+        }
+        cell.textLabel.text = @"群公告";
+        cell.detailTextLabel.text = self.groupAnnouncement.text;
+        cell.detailTextLabel.numberOfLines = 10;
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+      
+        return cell;
+      
   } else if ([self isSearchMessageCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:WFCString(@"SearchMessageContent") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if ([self isMessageSilentCell:indexPath]) {
@@ -673,6 +734,11 @@
       if (gQrCodeDelegate) {
           [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_Group target:self.groupInfo.target];
       }
+  } else if([self isGroupAnnouncementCell:indexPath]) {
+      WFCUGroupAnnouncementViewController *vc = [[WFCUGroupAnnouncementViewController alloc] init];
+      vc.announcement = self.groupAnnouncement;
+      vc.isManager = [self isGroupManager];
+      [self.navigationController pushViewController:vc animated:YES];
   }
 }
 
@@ -682,7 +748,7 @@
     if (self.conversation.type == Group_Type) {
         if([self isGroupManager]) {
             if (self.memberList.count + 2 > Group_Member_Visible_Lines * 4) {
-                self.memberList = [self.memberList subarrayWithRange:NSMakeRange(0, Group_Member_Visible_Lines * 4 - 2)];
+                return Group_Member_Visible_Lines * 4;
             }
             return self.memberList.count + 2;
         } else {
@@ -786,7 +852,7 @@
         WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
         pvc.selectContact = YES;
         pvc.multiSelect = YES;
-      pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
           [[WFCCIMService sharedWFCIMService] kickoffMembers:contacts fromGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
             [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
             dispatch_async(dispatch_get_main_queue(), ^{

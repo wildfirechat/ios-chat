@@ -7,11 +7,9 @@
 //
 
 #import "PCLoginConfirmViewController.h"
-#import "AFNetworking.h"
-#import "WFCConfig.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "MBProgressHUD.h"
-
+#import "AppService.h"
 
 @interface PCLoginConfirmViewController ()
 
@@ -54,37 +52,21 @@
 }
 
 - (void)notifyScaned {
-    NSString *path = [NSString stringWithFormat:@"/scan_pc/%@", self.sessionId];
-    [self sendHttp:path data:nil isLogin:NO];
+    __weak typeof(self)ws = self;
+    [[AppService sharedAppService] pcScaned:self.sessionId success:^{
+        [ws sendCodeDone:YES isLogin:NO];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        [ws sendCodeDone:NO isLogin:NO];
+    }];
 }
 
 - (void)confirmLogin {
-    NSString *path = @"/confirm_pc";
-    NSDictionary *param = @{@"im_token":@"", @"token":self.sessionId, @"user_id":[WFCCNetworkService sharedInstance].userId};
-    [self sendHttp:path data:param isLogin:YES];
-}
-
-- (void)sendHttp:(NSString *)path data:(NSDictionary *)data isLogin:(BOOL)isLogin {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
-    
-    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, path]
-       parameters:data
-         progress:nil
-          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-              NSDictionary *dict = responseObject;
-              if([dict[@"code"] intValue] == 0) {
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [self sendCodeDone:YES isLogin:isLogin];
-                  });
-              } else {
-                  [self sendCodeDone:NO isLogin:isLogin];
-              }
-          }
-          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-              [self sendCodeDone:NO isLogin:isLogin];
-          }];
+    __weak typeof(self)ws = self;
+    [[AppService sharedAppService] pcConfirmLogin:self.sessionId success:^{
+        [ws sendCodeDone:YES isLogin:YES];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        [ws sendCodeDone:NO isLogin:YES];
+    }];
 }
 
 - (void)sendCodeDone:(BOOL)result isLogin:(BOOL)isLogin {

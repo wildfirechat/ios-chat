@@ -11,11 +11,10 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "AppDelegate.h"
 #import "WFCBaseTabBarController.h"
-#import "AFNetworking.h"
 #import "MBProgressHUD.h"
-#import "WFCConfig.h"
 #import "UILabel+YBAttributeTextTapAction.h"
 #import "WFCPrivacyViewController.h"
+#import "AppService.h"
 
 //是否iPhoneX YES:iPhoneX屏幕 NO:传统屏幕
 #define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f )
@@ -151,9 +150,14 @@ alpha:1.0]
 - (void)onSendCode:(id)sender {
     self.sendCodeBtn.enabled = NO;
     [self.sendCodeBtn setTitle:@"短信发送中" forState:UIControlStateNormal];
-    [self sendCode:self.userNameField.text];
-    
+    __weak typeof(self)ws = self;
+    [[AppService sharedAppService] sendCode:self.userNameField.text success:^{
+       [ws sendCodeDone:YES];
+    } error:^(NSString * _Nonnull message) {
+        [ws sendCodeDone:NO];
+    }];
 }
+
 - (void)updateCountdown:(id)sender {
     int second = (int)([NSDate date].timeIntervalSince1970 - self.sendCodeTime);
     [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"%ds", 60-second] forState:UIControlStateNormal];
@@ -195,53 +199,6 @@ alpha:1.0]
     });
 }
 
-- (void)sendCode:(NSString *)phoneNumber {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
-    
-    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, @"/send_code"]
-       parameters:@{@"mobile":phoneNumber}
-         progress:nil
-          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-              NSDictionary *dict = responseObject;
-              if([dict[@"code"] intValue] == 0) {
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [self sendCodeDone:YES];
-                  });
-              } else {
-                  [self sendCodeDone:NO];
-              }
-          }
-          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-              [self sendCodeDone:NO];
-          }];
-}
-
-- (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
-    
-    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, @"/login"]
-       parameters:@{@"mobile":user, @"code":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId]}
-         progress:nil
-          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-              NSDictionary *dict = responseObject;
-              if([dict[@"code"] intValue] == 0) {
-                  NSString *userId = dict[@"result"][@"userId"];
-                  NSString *token = dict[@"result"][@"token"];
-                  BOOL newUser = [dict[@"result"][@"register"] boolValue];
-                  successBlock(userId, token, newUser);
-              } else {
-                  errorBlock([dict[@"code"] intValue], dict[@"message"]);
-              }
-          }
-          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-              errorBlock(-1, error.description);
-          }];
-}
-
 - (void)resetKeyboard:(id)sender {
     [self.userNameField resignFirstResponder];
     self.userNameLine.backgroundColor = [UIColor grayColor];
@@ -263,7 +220,7 @@ alpha:1.0]
   hud.label.text = @"登陆中...";
   [hud showAnimated:YES];
   
-    [self login:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
+    [[AppService sharedAppService] login:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
         [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];

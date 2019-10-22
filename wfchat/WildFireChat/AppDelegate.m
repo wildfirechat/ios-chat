@@ -31,6 +31,8 @@
 #import "StyleDIY.h"
 #import "GroupInfoViewController.h"
 #import <Bugly/Bugly.h>
+#import "AppService.h"
+
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -55,6 +57,8 @@
     [[WFAVEngineKit sharedEngineKit] setVideoProfile:kWFAVVideoProfile360P swapWidthHeight:YES];
     [WFAVEngineKit sharedEngineKit].delegate = self;
 #endif
+    
+    [WFCUConfigManager globalManager].appService = [AppService sharedAppService];
     
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
