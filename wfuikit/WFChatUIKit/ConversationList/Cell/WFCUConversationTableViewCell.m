@@ -41,7 +41,7 @@
     if(channelInfo.name.length > 0) {
         self.targetView.text = channelInfo.name;
     } else {
-        self.targetView.text = [NSString stringWithFormat:@"Channel<%@>", self.info.conversation.target];
+        self.targetView.text = WFCString(@"Channel");
     }
 }
 
@@ -51,7 +51,7 @@
   if(groupInfo.name.length > 0) {
     self.targetView.text = groupInfo.name;
   } else {
-    self.targetView.text = [NSString stringWithFormat:@"group<%@>", self.info.conversation.target];
+    self.targetView.text = WFCString(@"GroupChat");
   }
 }
 
