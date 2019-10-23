@@ -88,13 +88,36 @@ static AppService *sharedSingleton = nil;
                       error:(void(^)(int error_code))errorBlock {
     if (successBlock) {
         NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
-        
+    
         WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
         an.data = data;
         an.groupId = groupId;
         
         successBlock(an);
     }
+    
+    NSString *path = @"/get_group_announcement";
+    NSDictionary *param = @{@"groupId":groupId};
+    [self post:path data:param success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0 || [dict[@"code"] intValue] == 12) {
+            WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
+            an.groupId = groupId;
+            if ([dict[@"code"] intValue] == 0) {
+                an.author = dict[@"result"][@"author"];
+                an.text = dict[@"result"][@"text"];
+                an.timestamp = [dict[@"result"][@"timestamp"] longValue];
+            }
+            
+            [[NSUserDefaults standardUserDefaults] setValue:an.data forKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            successBlock(an);
+        } else {
+            errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1);
+    }];
 }
 
 - (void)updateGroup:(NSString *)groupId
@@ -102,19 +125,29 @@ static AppService *sharedSingleton = nil;
             success:(void(^)(long timestamp))successBlock
               error:(void(^)(int error_code))errorBlock {
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
-        an.groupId = groupId;
-        an.author = [WFCCNetworkService sharedInstance].userId;
-        an.text = announcement;
-        an.timestamp = 100;
-        
-        
-        [[NSUserDefaults standardUserDefaults] setValue:an.data forKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        successBlock(an.timestamp);
-    });
+    NSString *path = @"/put_group_announcement";
+    NSDictionary *param = @{@"groupId":groupId, @"author":[WFCCNetworkService sharedInstance].userId, @"text":announcement};
+    [self post:path data:param success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
+            an.groupId = groupId;
+            an.author = [WFCCNetworkService sharedInstance].userId;
+            an.text = announcement;
+            an.timestamp = [dict[@"result"][@"timestamp"] longValue];
+            
+            
+            [[NSUserDefaults standardUserDefaults] setValue:an.data forKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            successBlock(an.timestamp);
+        } else {
+            errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1);
+    }];
+    
+    
 }
 
 - (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
