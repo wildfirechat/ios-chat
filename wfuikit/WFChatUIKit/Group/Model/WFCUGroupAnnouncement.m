@@ -27,4 +27,20 @@
         self.timestamp = [[dict objectForKey:@"ts"] longValue];
     }
 }
+
+- (void)setText:(NSString *)text {
+    if ([text isKindOfClass:[NSNull class]]) {
+        _text = nil;
+    } else {
+        _text = text;
+    }
+}
+
+- (void)setAuthor:(NSString *)author {
+    if ([author isKindOfClass:[NSNull class]]) {
+        _author = nil;
+    } else {
+        _author = author;
+    }
+}
 @end
