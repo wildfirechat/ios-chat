@@ -965,6 +965,7 @@
         if (i == self.imageMsgs.count) {
             i = 0;
         }
+        [self onResetKeyboard:nil];
         browser.currentImageIndex = i;
         browser.delegate = self;
         [browser show]; // 展示图片浏览器
