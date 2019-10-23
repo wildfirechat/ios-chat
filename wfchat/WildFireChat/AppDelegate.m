@@ -58,7 +58,7 @@
     [WFAVEngineKit sharedEngineKit].delegate = self;
 #endif
     
-    [WFCUConfigManager globalManager].appService = [AppService sharedAppService];
+    [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];

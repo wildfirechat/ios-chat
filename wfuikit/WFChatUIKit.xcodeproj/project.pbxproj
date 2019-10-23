@@ -34,7 +34,7 @@
 		2F49910B2189239E005F6A84 /* WFCUVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F4991072189239E005F6A84 /* WFCUVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F49910C2189239E005F6A84 /* WFCUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4991082189239E005F6A84 /* WFCUVideoViewController.m */; };
 		2F49910D2189239E005F6A84 /* WFCUFloatingWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F4991092189239E005F6A84 /* WFCUFloatingWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F518FEF235ED5B300FA3D58 /* WFCUAppService.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F518FEE235ED5B300FA3D58 /* WFCUAppService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F550BE4217F4D7B00F56C26 /* WFChatUIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550BE2217F4D7B00F56C26 /* WFChatUIKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F550BF3217F4DCD00F56C26 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */; };
 		2F551091217F5CC200F56C26 /* WFCUMediaMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */; };
@@ -381,7 +381,7 @@
 		2F4991072189239E005F6A84 /* WFCUVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVideoViewController.h; sourceTree = "<group>"; };
 		2F4991082189239E005F6A84 /* WFCUVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVideoViewController.m; sourceTree = "<group>"; };
 		2F4991092189239E005F6A84 /* WFCUFloatingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUFloatingWindow.h; sourceTree = "<group>"; };
-		2F518FEE235ED5B300FA3D58 /* WFCUAppService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAppService.h; sourceTree = "<group>"; };
+		2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAppServiceProvider.h; sourceTree = "<group>"; };
 		2F550BDF217F4D7B00F56C26 /* WFChatUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WFChatUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F550BE2217F4D7B00F56C26 /* WFChatUIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFChatUIKit.h; sourceTree = "<group>"; };
 		2F550BE3217F4D7B00F56C26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1484,7 +1484,7 @@
 				2F551090217F5CC200F56C26 /* WFCUUtilities.m */,
 				2BD671A22336E821007A9FEC /* WFCUConfigManager.h */,
 				2BD671A32336E821007A9FEC /* WFCUConfigManager.m */,
-				2F518FEE235ED5B300FA3D58 /* WFCUAppService.h */,
+				2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1547,7 +1547,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F518FEF235ED5B300FA3D58 /* WFCUAppService.h in Headers */,
+				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,

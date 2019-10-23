@@ -103,7 +103,7 @@
     hud.label.text = @"保存中...";
     [hud showAnimated:YES];
     
-    [[WFCUConfigManager globalManager].appService updateGroup:self.announcement.groupId announcement:self.textView.text success:^(long timestamp) {
+    [[WFCUConfigManager globalManager].appServiceProvider updateGroup:self.announcement.groupId announcement:self.textView.text success:^(long timestamp) {
         dispatch_async(dispatch_get_main_queue(), ^{
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
