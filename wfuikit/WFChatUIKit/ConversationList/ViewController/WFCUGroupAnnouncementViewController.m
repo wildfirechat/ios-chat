@@ -37,7 +37,7 @@
         self.nameLabel.text = author.displayName;
         
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, kStatusBarAndNavigationBarHeight + 48, self.view.bounds.size.width - 80 - 16, 14)];
-        NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.announcement.timestamp];
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.announcement.timestamp/1000];
         self.timeLabel.text = date.description;
         self.timeLabel.font = [UIFont systemFontOfSize:14];
         self.timeLabel.textColor = [UIColor grayColor];
