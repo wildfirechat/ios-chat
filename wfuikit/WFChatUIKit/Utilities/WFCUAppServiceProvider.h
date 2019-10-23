@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol WFCUAppService <NSObject>
+@protocol WFCUAppServiceProvider <NSObject>
 - (void)getGroupAnnouncement:(NSString *)groupId
                      success:(void(^)(WFCUGroupAnnouncement *))successBlock
                        error:(void(^)(int error_code))errorBlock;
