@@ -60,7 +60,7 @@
     _groupSearchInfo = groupSearchInfo;
     WFCCGroupInfo *groupInfo = groupSearchInfo.groupInfo;
     if (groupInfo.name.length == 0) {
-        self.name.text = [NSString stringWithFormat:@"Group<%@>", groupInfo.target];
+        self.name.text = WFCString(@"GroupChat");
     } else {
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
     }

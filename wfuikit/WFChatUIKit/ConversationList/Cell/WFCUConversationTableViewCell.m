@@ -165,7 +165,7 @@
         }
         [self updateChannelInfo:channelInfo];
     } else {
-        self.targetView.text = [NSString stringWithFormat:@"chatroom<%@>", conversation.target];
+        self.targetView.text = WFCString(@"Chatroom");
     }
     
     self.potraitView.layer.cornerRadius = 4.f;
