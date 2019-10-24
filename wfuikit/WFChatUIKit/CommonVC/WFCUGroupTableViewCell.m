@@ -47,7 +47,7 @@
 - (void)setGroupInfo:(WFCCGroupInfo *)groupInfo {
     _groupInfo = groupInfo;
     if (groupInfo.name.length == 0) {
-        self.name.text = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Group"), groupInfo.target];
+        self.name.text = WFCString(@"GroupChat");
     } else {
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
     }

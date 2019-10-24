@@ -783,7 +783,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
+				VALID_ARCHS = "arm64 arm64e";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -819,7 +819,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e armv7 armv7s";
+				VALID_ARCHS = "arm64 arm64e";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;

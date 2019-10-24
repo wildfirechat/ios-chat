@@ -48,7 +48,7 @@
             name = groupInfo.name;
             portrait = groupInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Group"), conversation.target];
+            name = WFCString(@"GroupChat");
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     } else if (conversation.type == Channel_Type) {
@@ -57,7 +57,7 @@
             name = channelInfo.name;
             portrait = channelInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Channel"), conversation.target];
+            name = WFCString(@"Channel");
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
     }

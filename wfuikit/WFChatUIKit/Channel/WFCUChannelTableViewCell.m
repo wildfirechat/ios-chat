@@ -47,7 +47,7 @@
 - (void)setChannelInfo:(WFCCChannelInfo *)channelInfo {
     _channelInfo = channelInfo;
     if (channelInfo.name.length == 0) {
-        self.name.text = [NSString stringWithFormat:@"Group<%@>", channelInfo.channelId];
+        self.name.text = WFCString(@"Channel");
     } else {
         self.name.text = [NSString stringWithFormat:@"%@", channelInfo.name];
     }
