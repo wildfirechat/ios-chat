@@ -371,7 +371,7 @@
 - (void)setTargetGroup:(WFCCGroupInfo *)targetGroup {
   _targetGroup = targetGroup;
     if(targetGroup.name.length == 0) {
-        self.title = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Group"), self.conversation.target];
+        self.title = WFCString(@"GroupChat");
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
         self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
     } else {
@@ -399,7 +399,7 @@
 - (void)setTargetChannel:(WFCCChannelInfo *)targetChannel {
     _targetChannel = targetChannel;
     if(targetChannel.name.length == 0) {
-        self.title = [NSString stringWithFormat:@"%@<%@>", WFCString(@"Channel"), self.conversation.target];
+        self.title = WFCString(@"Channel");
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
         self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
     } else {
@@ -412,7 +412,7 @@
 - (void)setTargetChatroom:(WFCCChatroomInfo *)targetChatroom {
     _targetChatroom = targetChatroom;
     if(targetChatroom.title.length == 0) {
-        self.title = [NSString stringWithFormat:@"<%@>", WFCString(@"Chatroom"), self.conversation.target];
+        self.title = WFCString(@"Chatroom");
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
         self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
     } else {
