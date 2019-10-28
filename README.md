@@ -66,7 +66,7 @@
 
 ### 编译
 
-工程中已经包含了编译好的协议栈，也可以自己编译，编译方法参考[协议栈库](https://github.com/wildfirechat/proto)文档。然后打开ios-chat.xcworkspace工程，对每个项目进行编译。
+打开ios-chat.xcworkspace工程，第一次编译时需要按照client/uikit/chat的顺序先后进行编译。
 
 ### 工程说明
 
