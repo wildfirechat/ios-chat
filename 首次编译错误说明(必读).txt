@@ -1,0 +1,8 @@
+首次编译错误说明：
+
+从github下载代码首次编译会提示找不到资源，解决办法是 按照 client-》uikit-》chat 的顺序编译就好了。
+
+
+原因是chat隐式依赖uikit和client，必须把uikit和client编译之后才会建立依赖关系。同理uikit隐式依赖client，编译uikit之前要先编译client。依赖关系建立之后就正常使用了。
+
+祝您使用愉快！
