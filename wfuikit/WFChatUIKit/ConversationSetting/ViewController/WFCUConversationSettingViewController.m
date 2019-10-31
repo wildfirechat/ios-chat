@@ -789,7 +789,7 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self)ws = self;
-    if (indexPath.row == self.memberList.count) {
+    if (indexPath.row == self.memberCollectionCount-self.extraBtnNumber) {
         WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
         pvc.selectContact = YES;
         pvc.multiSelect = YES;
@@ -843,7 +843,7 @@
         pvc.disableUsers = disabledUser;
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
         [self.navigationController presentViewController:navi animated:YES completion:nil];
-    } else if(indexPath.row == self.memberList.count + 1) {
+    } else if(indexPath.row == self.memberCollectionCount-self.extraBtnNumber + 1) {
         WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
         pvc.selectContact = YES;
         pvc.multiSelect = YES;
