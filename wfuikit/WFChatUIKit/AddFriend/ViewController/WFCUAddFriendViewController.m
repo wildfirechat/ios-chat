@@ -140,6 +140,7 @@
     NSString *searchString = [ws.searchController.searchBar text];
     if (searchString.length) {
         [[WFCCIMService sharedWFCIMService] searchUser:searchString
+                                                 fuzzy:YES
                                                success:^(NSArray<WFCCUserInfo *> *machedUsers) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                        ws.searchList = machedUsers;

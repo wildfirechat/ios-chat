@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import <WFChatClient/WFCChatClient.h>
 #if WFCU_SUPPORT_VOIP
-#import <WFAVengineKit/WFAVengineKit.h>
+#import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"

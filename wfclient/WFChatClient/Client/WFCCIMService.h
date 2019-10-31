@@ -118,6 +118,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
                       refresh:(BOOL)refresh;
 
 - (void)searchUser:(NSString *)keyword
+             fuzzy:(BOOL)fuzzy
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
@@ -566,10 +567,12 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  搜索用户
  
  @param keyword 关键词
+ @param fuzzy 是否模糊匹配
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)searchUser:(NSString *)keyword
+             fuzzy:(BOOL)fuzzy
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 

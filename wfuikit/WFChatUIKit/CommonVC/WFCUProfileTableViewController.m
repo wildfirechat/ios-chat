@@ -23,6 +23,7 @@
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
+@property (strong, nonatomic)UILabel *userNameLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
 
@@ -115,14 +116,27 @@
         self.aliasLabel.text = alias;
         self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 32, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
+        
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 53, width - 64 - 8, 11)];
+        self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
+        self.userNameLabel.font = [UIFont systemFontOfSize:12];
+        self.userNameLabel.textColor = [UIColor grayColor];
     } else {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 20, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
+        
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 42, width - 64 - 8, 21)];
+        self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
+        self.userNameLabel.font = [UIFont systemFontOfSize:12];
+        self.userNameLabel.textColor = [UIColor grayColor];
     }
+    
+    self.userNameLabel.hidden = YES;
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
+    [self.headerCell addSubview:self.userNameLabel];
     [self.headerCell addSubview:self.aliasLabel];
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
