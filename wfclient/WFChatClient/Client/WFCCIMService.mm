@@ -796,14 +796,17 @@ public:
     ~IMSearchUserCallback() {}
 };
 
-- (void)searchUser:(NSString *)keyword success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock error:(void(^)(int errorCode))errorBlock {
+- (void)searchUser:(NSString *)keyword
+             fuzzy:(BOOL)fuzzy
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock {
     
     if (self.userSource) {
-        [self.userSource searchUser:keyword success:successBlock error:errorBlock];
+        [self.userSource searchUser:keyword fuzzy:fuzzy success:successBlock error:errorBlock];
         return;
     }
     
-    mars::stn::searchUser([keyword UTF8String], YES, 0, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser([keyword UTF8String], fuzzy, 0, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isMyFriend:(NSString *)userId {
