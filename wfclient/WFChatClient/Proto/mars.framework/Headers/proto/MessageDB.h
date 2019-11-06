@@ -66,6 +66,8 @@ namespace mars {
             bool updateMessageRemoteMediaUrl(long messageId, const std::string &remoteMediaUrl);
             bool updateMessageLocalMediaPath(long messageId, const std::string &localMediaPath);
             
+            int GetMsgTotalCount(int conversationType, const std::string &target, int line);
+            
             TUnreadCount GetUnreadCount(int conversationType, const std::string &target, int line);
             
             TUnreadCount GetUnreadCount(const std::list<int> &conversationTypes, const std::list<int> lines);
@@ -122,6 +124,9 @@ namespace mars {
             
             TChannelInfo GetChannelInfo(const std::string &channelId, bool refresh);
             long InsertOrUpdateChannelInfo(const TChannelInfo &channelInfo);
+            
+            bool BeginTransaction();
+            void CommitTransaction();
         private:
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             static MessageDB* instance_;
