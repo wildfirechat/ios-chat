@@ -1094,7 +1094,36 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
 /**
  获取图片缩略图参数
  
- @retur 图片缩略图参数
+ @return 图片缩略图参数
  */
 - (NSString *)imageThumbPara;
+
+/**
+ 插入消息
+ 
+ @param message 待插入的消息
+ @return 插入消息的id
+ */
+- (long)insertMessage:(WFCCMessage *)message;
+
+/**
+ 获取会话的消息数
+ 
+ @param conversation 会话。
+ @return 会话的消息数。
+ */
+- (int)getMessageCount:(WFCCConversation *)conversation;
+
+/**
+ 开启数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；另外开启成功后一定要注意commit，需要配对使用.
+ 
+ @return 是否开启成功。
+ */
+- (BOOL)beginTransaction;
+
+/**
+提交数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；需要跟beginTransaction配对使用
+ 
+*/
+- (void)commitTransaction;
 @end
