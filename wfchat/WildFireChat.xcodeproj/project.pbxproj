@@ -978,7 +978,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -994,7 +994,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.14;
+				MARKETING_VERSION = 1.0.15;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1014,7 +1014,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1030,7 +1030,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.14;
+				MARKETING_VERSION = 1.0.15;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
