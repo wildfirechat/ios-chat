@@ -99,11 +99,11 @@
 - (UIButton *)btn {
     if (!_btn) {
         CGFloat width = [UIScreen mainScreen].bounds.size.width;
-        _btn = [[UIButton alloc] initWithFrame:CGRectMake(width/2 - 80, 360, 160, 44)];
+        _btn = [[UIButton alloc] initWithFrame:CGRectMake(width/2 - 80, 280, 160, 44)];
         _btn.layer.masksToBounds = YES;
         _btn.layer.cornerRadius = 5.f;
         [self.view addSubview:_btn];
-        [_btn setBackgroundColor:[UIColor greenColor]];
+        [_btn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
         [_btn addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchDown];
     }
     return _btn;
@@ -112,8 +112,8 @@
 - (UILabel *)groupNameLabel {
     if (!_groupNameLabel) {
         CGFloat width = [UIScreen mainScreen].bounds.size.width;
-        _groupNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(width/2 - 100, 100, 200, 24)];
-        _groupNameLabel.textAlignment = NSTextAlignmentLeft;
+        _groupNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(width/2 - 100, 200, 200, 24)];
+        _groupNameLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_groupNameLabel];
     }
     return _groupNameLabel;
@@ -122,7 +122,7 @@
 - (UIImageView *)groupProtraitView {
     if (!_groupProtraitView) {
         CGFloat width = [UIScreen mainScreen].bounds.size.width;
-        _groupProtraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width/2 - 100, 132, 200, 200)];
+        _groupProtraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width/2 - 32, 120, 64, 64)];
         [self.view addSubview:_groupProtraitView];
     }
     return _groupProtraitView;
