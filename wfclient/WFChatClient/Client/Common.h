@@ -33,6 +33,8 @@
 #define MESSAGE_CONTENT_TYPE_STICKER 7
 //图文消息
 #define MESSAGE_CONTENT_TYPE_IMAGETEXT 8
+//存储不计数文本消息
+#define MESSAGE_CONTENT_TYPE_P_TEXT 9
 
 
 //撤回消息
