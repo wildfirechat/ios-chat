@@ -488,6 +488,7 @@
     self.view.backgroundColor = self.collectionView.backgroundColor;
     
     [self registerCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
+    [self registerCell:[WFCUTextCell class] forContent:[WFCCPTextMessageContent class]];
     [self registerCell:[WFCUImageCell class] forContent:[WFCCImageMessageContent class]];
     [self registerCell:[WFCUVoiceCell class] forContent:[WFCCSoundMessageContent class]];
     [self registerCell:[WFCUVideoCell class] forContent:[WFCCVideoMessageContent class]];
