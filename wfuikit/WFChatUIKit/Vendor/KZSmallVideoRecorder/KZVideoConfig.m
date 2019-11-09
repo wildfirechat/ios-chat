@@ -89,12 +89,12 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     NSMutableArray *modelList = [NSMutableArray array];
     NSArray *nameList = [fileManager subpathsAtPath:[self getVideoPath]];
     for (NSString *name in nameList) {
-        if ([name hasSuffix:@".JPG"]) {
+        if ([name hasSuffix:@".jpg"]) {
             KZVideoModel *model = [[KZVideoModel alloc] init];
             NSString *thumAbsolutePath = [[self getVideoPath] stringByAppendingPathComponent:name];
             model.thumAbsolutePath = thumAbsolutePath;
             
-            NSString *totalVideoPath = [thumAbsolutePath stringByReplacingOccurrencesOfString:@"JPG" withString:@"MOV"];
+            NSString *totalVideoPath = [thumAbsolutePath stringByReplacingOccurrencesOfString:@"jpg" withString:@"mp4"];
             if ([fileManager fileExistsAtPath:totalVideoPath]) {
                 model.videoAbsolutePath = totalVideoPath;
             }
@@ -142,7 +142,7 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     UIImage *image = [UIImage imageWithCGImage:cgimage scale:0.6 orientation:UIImageOrientationRight];
     NSData *imgData = UIImageJPEGRepresentation(image, 1.0);
     NSString *videoPath = [videoUrl.absoluteString stringByReplacingOccurrencesOfString:@"file://" withString: @""];
-    NSString *thumPath = [videoPath stringByReplacingOccurrencesOfString:@"MOV" withString: @"JPG"];
+    NSString *thumPath = [videoPath stringByReplacingOccurrencesOfString:@"mp4" withString: @"jpg"];
     BOOL isok = [imgData writeToFile:thumPath atomically: YES];
     NSLog(@"缩略图获取结果:%d",isok);
     CGImageRelease(cgimage);
@@ -156,8 +156,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     NSString *videoPath = [self getVideoPath];
     
     KZVideoModel *model = [[KZVideoModel alloc] init];
-    model.videoAbsolutePath = [videoPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.MOV",videoName]];
-    model.thumAbsolutePath = [videoPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.JPG",videoName]];
+    model.videoAbsolutePath = [videoPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",videoName]];
+    model.thumAbsolutePath = [videoPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",videoName]];
     model.recordTime = currentDate;
     return model;
 }
@@ -169,7 +169,7 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     if (error) {
         NSLog(@"删除视频失败:%@",error);
     }
-    NSString *thumPath = [videoPath stringByReplacingOccurrencesOfString:@"MOV" withString:@"JPG"];
+    NSString *thumPath = [videoPath stringByReplacingOccurrencesOfString:@"mp4" withString:@"jpg"];
     NSError *error2 = nil;
     [fileManager removeItemAtPath:thumPath error:&error2];
     if (error2) {
