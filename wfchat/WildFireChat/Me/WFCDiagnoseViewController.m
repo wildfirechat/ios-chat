@@ -90,6 +90,7 @@
     self.indicatorView.hidden = YES;
     self.resultLabel.hidden = NO;
     self.resultLabel.text = text;
+    self.startButton.enabled = YES;
 }
 /*
 #pragma mark - Navigation
