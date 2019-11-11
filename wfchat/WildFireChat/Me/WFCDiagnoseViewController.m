@@ -22,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = LocalizedString(@"Diagnose");
+    
     if (@available(iOS 13.0, *)) {
         self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
         
@@ -35,16 +37,16 @@
     self.indicatorView.hidden = YES;
     [self.view addSubview:self.indicatorView];
     
-    self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 150, self.view.bounds.size.height/4, 300, 20)];
+    self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 150, self.view.bounds.size.height/4-40, 300, 60)];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
     self.resultLabel.text = @"点击开始进行测速";
+    self.resultLabel.numberOfLines = 0;
     [self.view addSubview:self.resultLabel];
     
-    self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 50, self.view.bounds.size.height/2 - 20, 100, 40)];
-    self.startButton.titleLabel.text = @"开始";
-    self.startButton.titleLabel.textColor = [UIColor blueColor];
-    self.startButton.backgroundColor = [WFCUConfigManager globalManager].frameBackgroudColor;
-    self.startButton.tintColor = [WFCUConfigManager globalManager].naviTextColor;
+    self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 - 20, 160, 40)];
+    [self.startButton  setTitle:@"点我开始" forState:UIControlStateNormal];
+    [self.startButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
+    [self.startButton setBackgroundColor:[WFCUConfigManager globalManager].naviBackgroudColor];
     self.startButton.layer.masksToBounds = YES;
     self.startButton.layer.cornerRadius = 5.0;
     
