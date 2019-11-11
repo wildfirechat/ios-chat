@@ -14,6 +14,7 @@
 #import "WFCAboutViewController.h"
 #import "WFCPrivacyViewController.h"
 #import "WFCPrivacyTableViewController.h"
+#import "WFCDiagnoseViewController.h"
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -94,6 +95,9 @@
         [alertController addAction:action2];
         
         [self presentViewController:alertController animated:YES completion:nil];
+    } else if (indexPath.section == 4) {
+        WFCDiagnoseViewController *vc = [[WFCDiagnoseViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -103,20 +107,22 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 1;
     } else if (section == 1) {
-        return 3;
+        return 3; //
     } else if (section == 2) {
-        return 2;
+        return 2; // 用户协议和隐私声明
     } else if (section == 3) {
-        return 1;
+        return 1; //举报
     } else if (section == 4) {
-        return 1;
+        return 1; //diagnose
+    } else if (section == 5) {
+        return 1; //logout
     }
     return 0;
 }
@@ -155,6 +161,8 @@
             cell.textLabel.text = LocalizedString(@"Complain");
         }
     } else if (indexPath.section == 4) {
+        cell.textLabel.text = LocalizedString(@"PrivacySettings");
+    } else if (indexPath.section == 5) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];
