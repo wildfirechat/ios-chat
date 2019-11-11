@@ -161,7 +161,7 @@
             cell.textLabel.text = LocalizedString(@"Complain");
         }
     } else if (indexPath.section == 4) {
-        cell.textLabel.text = LocalizedString(@"PrivacySettings");
+        cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 5) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
