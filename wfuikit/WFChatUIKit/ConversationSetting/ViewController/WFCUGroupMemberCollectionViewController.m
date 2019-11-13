@@ -13,6 +13,7 @@
 #import "WFCUContactListViewController.h"
 #import "WFCUProfileTableViewController.h"
 #import "WFCUConfigManager.h"
+#import "UIView+Toast.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -186,6 +187,19 @@
     } else {
         WFCCGroupMember *member = [self.memberList objectAtIndex:indexPath.row];
         NSString *userId = member.memberId;
+        
+        if (self.groupInfo.privateChat) {
+          if (![self.groupInfo.owner isEqualToString:userId] && ![self.groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+              WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.groupId memberId:[WFCCNetworkService sharedInstance].userId];
+              if (gm.type != Member_Type_Manager) {
+                  WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.groupId memberId:userId];
+                  if (gm.type != Member_Type_Manager) {
+                      [self.view makeToast:WFCString(@"NotAllowTemporarySession") duration:1 position:CSToastPositionCenter];
+                      return;
+                  }
+              }
+          }
+        }
         
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = userId;

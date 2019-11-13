@@ -889,6 +889,20 @@
       if(self.conversation.type == Group_Type) {
         WFCCGroupMember *member = [self.memberList objectAtIndex:indexPath.row];
         userId = member.memberId;
+          
+        if (self.groupInfo.privateChat) {
+          if (![self.groupInfo.owner isEqualToString:userId] && ![self.groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+              WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
+              if (gm.type != Member_Type_Manager) {
+                  WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:userId];
+                  if (gm.type != Member_Type_Manager) {
+                      [self.view makeToast:WFCString(@"NotAllowTemporarySession") duration:1 position:CSToastPositionCenter];
+                      return;
+                  }
+              }
+          }
+        }
+
       } else {
         userId = self.conversation.target;
       }
