@@ -952,7 +952,17 @@
 #pragma mark - MessageCellDelegate
 - (void)didTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
-        self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE)] from:0 count:100 withUser:self.privateChatUser];
+        if (self.conversation.type == Chatroom_Type) {
+            NSMutableArray *imageMsgs = [[NSMutableArray alloc] init];
+            for (WFCUMessageModel *msgModle in self.modelList) {
+                if ([msgModle.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+                    [imageMsgs addObject:msgModle.message];
+                }
+            }
+            self.imageMsgs = imageMsgs;
+        } else {
+            self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE)] from:0 count:100 withUser:self.privateChatUser];
+        }
         SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
         browser.sourceImagesContainerView = self.backgroundView;
         
