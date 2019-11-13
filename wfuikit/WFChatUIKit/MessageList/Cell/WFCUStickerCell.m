@@ -29,24 +29,24 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
+    [super setModel:model];
+    
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
     __weak typeof(self) weakSelf = self;
     if (!stickerMsg.localPath.length) {
         model.mediaDownloading = YES;
         [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
-            if (messageUid == model.message.messageUid) {
-                model.mediaDownloading = NO;
+            if (messageUid == weakSelf.model.message.messageUid) {
+                weakSelf.model.mediaDownloading = NO;
                 stickerMsg.localPath = localPath;
-                [weakSelf setModel:model];
+                [weakSelf setModel:weakSelf.model];
             }
         } error:^(long long messageUid, int error_code) {
-            if (messageUid == model.message.messageUid || error_code == -2) {
-                model.mediaDownloading = NO;
+            if (messageUid == weakSelf.model.message.messageUid) {
+                weakSelf.model.mediaDownloading = NO;
             }
-            
         }];
     }
-    [super setModel:model];
     
     self.thumbnailView.frame = self.bubbleView.bounds;
     if (stickerMsg.localPath.length) {
