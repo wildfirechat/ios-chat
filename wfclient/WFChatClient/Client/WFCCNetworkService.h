@@ -162,7 +162,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (NSString *)getClientId;
 
 /**
- 连接服务器
+ 连接服务器，需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
 
  @param userId 用户Id
  @param token 密码
