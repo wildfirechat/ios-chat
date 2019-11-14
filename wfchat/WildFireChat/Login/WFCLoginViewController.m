@@ -226,6 +226,8 @@ alpha:1.0]
         [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
+        
+    //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
         [[WFCCNetworkService sharedInstance] connect:userId token:token];
         
         dispatch_async(dispatch_get_main_queue(), ^{
