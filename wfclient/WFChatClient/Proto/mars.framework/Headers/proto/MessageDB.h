@@ -21,7 +21,7 @@ namespace mars {
             
         public:
             static MessageDB* Instance();
-            long InsertMessage(TMessage &msg);
+            long InsertMessage(TMessage &msg, bool updateConversationTime = true);
             
             void RegisterMessageFlag(int type, int flag);
             bool UpdateMessageContent(long messageId, TMessageContent &msgConstnet);
