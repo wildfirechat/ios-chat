@@ -71,6 +71,8 @@ public:
     uint64_t       channel_id;
     int32_t        channel_select;
     std::string    cgi;    // user
+    
+    int externalConn;
 
     //optional
     bool    send_only;  // user
