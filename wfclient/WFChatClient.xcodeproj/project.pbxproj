@@ -778,6 +778,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WFChatClient/Proto/**";
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -814,6 +815,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WFChatClient/Proto/**";
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
