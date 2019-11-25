@@ -633,6 +633,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     });
     [[WFCCNetworkStatus sharedInstance] Stop];
   if (mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusConnected && mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusReceiving) {
+    mars::stn::Disconnect(clearSession ? 8 : 0);
     [self destroyMars];
   } else {
     mars::stn::Disconnect(clearSession ? 8 : 0);
