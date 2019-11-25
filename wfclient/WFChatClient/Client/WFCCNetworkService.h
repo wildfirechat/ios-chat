@@ -55,6 +55,19 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
   kConnectionStatusReceiving = 2
 };
 
+
+/**
+平台枚举值
+
+ //Platform_Android = 2,
+ //Platform_Windows = 3,
+ //Platform_OSX = 4,
+ //Platform_WEB = 5,
+ //Platform_WX = 6,
+*/
+#define Platform_iOS 1
+
+    
 #pragma mark - 连接状态&消息监听
 /**
  连接状态的监听
