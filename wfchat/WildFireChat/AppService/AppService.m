@@ -155,7 +155,7 @@ static AppService *sharedSingleton = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    [manager POST:[NSString stringWithFormat:@"%@%@", APP_SERVER_ADDRESS, path]
+    [manager POST:[APP_SERVER_ADDRESS stringByAppendingPathComponent:path]
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
