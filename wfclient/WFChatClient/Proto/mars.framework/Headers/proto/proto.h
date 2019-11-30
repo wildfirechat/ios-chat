@@ -173,7 +173,7 @@ namespace mars{
         
         class TUserInfo : public TSerializable {
         public:
-            TUserInfo() : gender(0), updateDt(0), type(0) {}
+            TUserInfo() : gender(0), updateDt(0), type(0), deleted(0) {}
             std::string uid;
             std::string name;
             std::string displayName;
@@ -189,6 +189,7 @@ namespace mars{
             std::string groupAlias;
             //0 normal; 1 robot; 2 thing;
             int type;
+            int deleted;
             int64_t updateDt;
             virtual ~TUserInfo() {}
 #if WFCHAT_PROTO_SERIALIZABLE

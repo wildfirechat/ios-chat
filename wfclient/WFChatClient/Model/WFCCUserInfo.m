@@ -24,5 +24,6 @@
     self.updateDt = other.updateDt;
     self.social = other.social;
     self.type = other.type;
+    self.deleted = other.deleted;
 }
 @end
