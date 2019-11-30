@@ -117,6 +117,7 @@ WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     userInfo.groupAlias = [NSString stringWithUTF8String:tui.groupAlias.c_str()];
     userInfo.updateDt = tui.updateDt;
     userInfo.type = tui.type;
+    userInfo.deleted = tui.deleted;
     
     return userInfo;
 }

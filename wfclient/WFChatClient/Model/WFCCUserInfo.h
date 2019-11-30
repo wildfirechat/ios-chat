@@ -88,6 +88,12 @@
  */
 @property (nonatomic, assign) int type;
 
+/**
+ 是否被删除用户
+ */
+@property (nonatomic, assign) int deleted;
+
+
 - (void)cloneFrom:(WFCCUserInfo *)other;
 
 @end

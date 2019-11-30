@@ -215,7 +215,10 @@
         
         if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
             NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
-            [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+            if (self.digestView.text.length) {
+                [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+            }
+            
             self.digestView.attributedText = attString;
         }
     } else {
