@@ -257,6 +257,14 @@
     bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor};
     bar.barStyle = UIBarStyleDefault;
     
+    if (@available(iOS 13, *)) {
+        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
+        bar.standardAppearance = navBarAppearance;
+        bar.scrollEdgeAppearance = navBarAppearance;
+        navBarAppearance.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[WFCUConfigManager globalManager].naviTextColor};
+    }
+    
     [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];
     [UITabBar appearance].translucent = NO;
 }
