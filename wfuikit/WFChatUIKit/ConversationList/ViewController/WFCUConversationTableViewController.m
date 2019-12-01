@@ -158,13 +158,13 @@
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
     CGFloat searchExtra = 0;
-    if (@available(iOS 11.0, *)) {
-        if (self.searchController.searchBar.bounds.size.height > 0) {
-            searchExtra = 52;
-        }
+    
+    if ([KxMenu isShowing]) {
+        [KxMenu dismissMenu];
+        return;
     }
     
-    [KxMenu showMenuInView:self.view
+    [KxMenu showMenuInView:self.navigationController.view
                   fromRect:CGRectMake(self.view.bounds.size.width - 56, kStatusBarAndNavigationBarHeight + searchExtra, 48, 5)
                  menuItems:@[
                              [KxMenuItem menuItem:WFCString(@"StartChat")
