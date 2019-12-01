@@ -377,6 +377,10 @@
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self refreshLeftButton];
+    
+    if ([KxMenu isShowing]) {
+        [KxMenu dismissMenu];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
