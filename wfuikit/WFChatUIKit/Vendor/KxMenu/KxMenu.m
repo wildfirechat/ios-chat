@@ -885,4 +885,14 @@ static UIFont *gTitleFont;
     }
 }
 
+- (BOOL) isShowing {
+    if (_menuView.superview) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL) isShowing {
+    return [[self sharedMenu] isShowing];
+}
 @end
