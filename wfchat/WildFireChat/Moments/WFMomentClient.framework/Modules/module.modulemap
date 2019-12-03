@@ -1,0 +1,6 @@
+framework module WFMomentClient {
+  umbrella header "WFMomentClient.h"
+
+  export *
+  module * { export * }
+}

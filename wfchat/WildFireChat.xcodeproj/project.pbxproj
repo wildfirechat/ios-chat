@@ -11,6 +11,10 @@
 		2BCEC537232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC534232E238E00D55E0D /* wfc.strings */; };
 		2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E0233627450004212B /* PushKit.framework */; };
 		2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E22336278E0004212B /* CallKit.framework */; };
+		2BED56772395EC5300B55C79 /* WFMomentClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BED56732395EC4D00B55C79 /* WFMomentClient.framework */; };
+		2BED56782395EC5300B55C79 /* WFMomentClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2BED56732395EC4D00B55C79 /* WFMomentClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2BED56792395EC5600B55C79 /* WFMomentUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */; };
+		2BED567A2395EC5600B55C79 /* WFMomentUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
@@ -94,7 +98,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2BED567A2395EC5600B55C79 /* WFMomentUIKit.framework in Embed Frameworks */,
 				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
+				2BED56782395EC5300B55C79 /* WFMomentClient.framework in Embed Frameworks */,
 				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
 				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
 				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
@@ -109,6 +115,8 @@
 		2BCEC535232E238E00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = wfc.strings; sourceTree = "<group>"; };
 		2BDCE7E0233627450004212B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		2BDCE7E22336278E0004212B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
+		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
+		2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		2E1D1FF71FAF0AE600F4405D /* WildFireChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildFireChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -264,11 +272,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BED56772395EC5300B55C79 /* WFMomentClient.framework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
+				2BED56792395EC5600B55C79 /* WFMomentUIKit.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
@@ -286,6 +296,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2BCBC82F23954AC4009321AD /* Moments */ = {
+			isa = PBXGroup;
+			children = (
+				2BED56732395EC4D00B55C79 /* WFMomentClient.framework */,
+				2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */,
+			);
+			path = Moments;
+			sourceTree = "<group>";
+		};
 		2BCEC530232E238E00D55E0D /* zh-Hans.lproj */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +354,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				2BCBC82F23954AC4009321AD /* Moments */,
 				2F518FF0235ED77700FA3D58 /* AppService */,
 				2F94F98422291577005BD461 /* LBXScan */,
 				2FF07F4621F82E7200A78A62 /* Me */,
@@ -686,6 +706,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E1D200D1FAF0AE600F4405D /* Build configuration list for PBXNativeTarget "WildFireChat" */;
 			buildPhases = (
+				2BCBC82E23954AAF009321AD /* ShellScript */,
 				2E1D1FF31FAF0AE600F4405D /* Sources */,
 				2E1D1FF41FAF0AE600F4405D /* Frameworks */,
 				2E1D1FF51FAF0AE600F4405D /* Resources */,
@@ -770,6 +791,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2BCBC82E23954AAF009321AD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2E1D1FF31FAF0AE600F4405D /* Sources */ = {
@@ -995,6 +1036,7 @@
 					"$(PROJECT_DIR)/WildFireChat/AV/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
+					"$(PROJECT_DIR)/WildFireChat/Moments",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
@@ -1031,6 +1073,7 @@
 					"$(PROJECT_DIR)/WildFireChat/AV/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
+					"$(PROJECT_DIR)/WildFireChat/Moments",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
