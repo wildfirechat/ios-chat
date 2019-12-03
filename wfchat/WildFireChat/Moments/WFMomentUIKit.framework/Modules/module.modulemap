@@ -1,0 +1,6 @@
+framework module WFMomentUIKit {
+  umbrella header "WFMomentUIKit.h"
+
+  export *
+  module * { export * }
+}
