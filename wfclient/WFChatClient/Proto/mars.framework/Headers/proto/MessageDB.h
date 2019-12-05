@@ -30,8 +30,8 @@ namespace mars {
             bool UpdateMessageContentByUid(int64_t messageUid, TMessageContent &msgConstnet);
             bool DeleteMessageByUid(int64_t messageUid);
             
-            bool UpdateMessageTimeline(int64_t timeline);
-            int64_t GetMessageTimeline();
+            bool UpdateMessageTimeline(int64_t timeline, const std::string &node);
+            int64_t GetMessageTimeline(std::string &node);
             int64_t GetSettingVersion();
             bool UpdateUserSettings(const std::list<TUserSettingEntry> &settings);
             std::string GetUserSetting(int scope, const std::string &key);
