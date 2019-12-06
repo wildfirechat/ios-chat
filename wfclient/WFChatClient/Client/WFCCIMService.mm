@@ -797,16 +797,17 @@ public:
 };
 
 - (void)searchUser:(NSString *)keyword
-             fuzzy:(BOOL)fuzzy
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock {
     
     if (self.userSource) {
-        [self.userSource searchUser:keyword fuzzy:fuzzy success:successBlock error:errorBlock];
+        [self.userSource searchUser:keyword searchType:searchType page:page success:successBlock error:errorBlock];
         return;
     }
     
-    mars::stn::searchUser([keyword UTF8String], fuzzy, 0, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser([keyword UTF8String], searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isMyFriend:(NSString *)userId {
