@@ -107,6 +107,22 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Custom_Begin = 1000
 } ;
 
+
+/**
+ 搜索用户类型
+
+ - SearchUserType_General: 模糊搜索diaplayName，精确匹配name和电话
+ - SearchUserType_Name_Mobile: 精确匹配name和电话
+ - SearchUserType_Name: 精确匹配name
+ - SearchUserType_Mobile: 精确匹配电话
+ */
+typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
+    SearchUserType_General,
+    SearchUserType_Name_Mobile,
+    SearchUserType_Name,
+    SearchUserType_Mobile,
+} ;
+
 #pragma mark - 用户源
 /*
  * ChatClient内置支持用户信息托管，但对于很多应用来说都已经拥有自己的用户信息。此时可以实现用户源并设置到IMServer中去。这样ChatClient会从源中读取信息，从而ChatUIKit不用修改代码。
@@ -118,9 +134,11 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
                       refresh:(BOOL)refresh;
 
 - (void)searchUser:(NSString *)keyword
-             fuzzy:(BOOL)fuzzy
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
+
 
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values
             success:(void(^)(void))successBlock
@@ -567,12 +585,14 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
  搜索用户
  
  @param keyword 关键词
- @param fuzzy 是否模糊匹配
+ @param searchType 搜索类型
+ @param page page
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)searchUser:(NSString *)keyword
-             fuzzy:(BOOL)fuzzy
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
