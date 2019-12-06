@@ -639,7 +639,7 @@ namespace mars{
         
         extern int modifyUserSetting(int scope, const std::string &key, const std::string &value, GeneralOperationCallback *callback);
         
-        extern void searchUser(const std::string &keyword, bool puzzy, int page, SearchUserCallback *callback);
+        extern void searchUser(const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
         extern void sendFriendRequest(const std::string &userId, const std::string &reason, GeneralOperationCallback *callback);
         
         extern void loadFriendRequestFromRemote();
