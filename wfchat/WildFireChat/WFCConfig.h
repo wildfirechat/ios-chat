@@ -11,7 +11,6 @@
 #import <Foundation/Foundation.h>
 
 extern NSString *IM_SERVER_HOST;
-extern int IM_SERVER_PORT;
 
 extern NSString *APP_SERVER_ADDRESS;
 

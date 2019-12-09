@@ -197,7 +197,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 
  @param host 服务器地址
  */
-- (void)setServerAddress:(NSString *)host port:(uint)port;
+- (void)setServerAddress:(NSString *)host;
 
 /**
  设置当前设备的device token
