@@ -50,7 +50,7 @@
     [WFCCNetworkService startLog];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
-    [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST port:IM_SERVER_PORT];
+    [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
     
 #if WFCU_SUPPORT_VOIP
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];

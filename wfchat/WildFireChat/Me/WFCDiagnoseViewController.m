@@ -67,7 +67,7 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     __weak typeof(self)ws =self;
-    [manager GET:[NSString stringWithFormat:@"http://%@:%d%@", IM_SERVER_HOST, IM_SERVER_PORT, @"/api/version"] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager GET:[NSString stringWithFormat:@"http://%@%@", IM_SERVER_HOST, @"/api/version"] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([responseObject isKindOfClass:[NSDictionary class]]) {
                 double value = now.timeIntervalSinceNow;

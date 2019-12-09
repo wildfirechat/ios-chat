@@ -270,7 +270,6 @@ public:
 @property (nonatomic, strong)NSString *passwd;
 
 @property(nonatomic, strong)NSString *serverHost;
-@property(nonatomic, assign)int serverPort;
 
 @property(nonatomic, assign)UIBackgroundTaskIdentifier bgTaskId;
 @property(nonatomic, strong)NSTimer *forceConnectTimer;
@@ -550,8 +549,8 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshSettingCallback(new GSCB(self));
   mars::baseevent::OnCreate();
 }
-- (BOOL)connect:(NSString *)host port:(int)port {
-    bool newDB = mars::stn::Connect([host UTF8String], port);
+- (BOOL)connect:(NSString *)host {
+    bool newDB = mars::stn::Connect([host UTF8String]);
     
   dispatch_async(dispatch_get_main_queue(), ^{
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
@@ -623,7 +622,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     self.currentConnectionStatus = kConnectionStatusConnecting;
     [[WFCCNetworkStatus sharedInstance] Start:[WFCCNetworkService sharedInstance]];
     
-    return [self connect:self.serverHost port:self.serverPort];
+    return [self connect:self.serverHost];
 }
 
 - (void)disconnect:(BOOL)clearSession {
@@ -641,9 +640,8 @@ static WFCCNetworkService * sharedSingleton = nil;
   }
 }
 
-- (void)setServerAddress:(NSString *)host port:(uint)port {
+- (void)setServerAddress:(NSString *)host {
     self.serverHost = host;
-    self.serverPort = port;
 }
 
 
