@@ -20,18 +20,6 @@ lipo WFChatClient.framework/WFChatClient -thin arm64 -output XXXX_arm64
 mv XXXX_arm64 WFChatClient.framework/WFChatClient
 rm -rf XXXX*
 
-#lipo WFMomentClient.framework/WFMomentClient -thin armv7 -output XXXX_armv7
-lipo WFMomentClient.framework/WFMomentClient -thin arm64 -output XXXX_arm64
-#lipo -create XXXX_armv7 XXXX_arm64 -output XXXX
-mv XXXX_arm64 WFMomentClient.framework/WFMomentClient
-rm -rf XXXX*
-
-# lipo WFMomentUIKit.framework/WFMomentUIKit -thin armv7 -output XXXX_armv7
-lipo WFMomentUIKit.framework/WFMomentUIKit -thin arm64 -output XXXX_arm64
-# lipo -create XXXX_armv7 XXXX_arm64 -output XXXX
-mv XXXX_arm64 WFMomentUIKit.framework/WFMomentUIKit
-rm -rf XXXX*
-
 cd ../WildFireChat/Moments
 #lipo WFMomentClient.framework/WFMomentClient -thin armv7 -output XXXX_armv7
 lipo WFMomentClient.framework/WFMomentClient -thin arm64 -output XXXX_arm64
