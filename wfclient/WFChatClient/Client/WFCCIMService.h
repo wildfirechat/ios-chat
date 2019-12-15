@@ -510,6 +510,14 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 - (void)clearMessages:(WFCCConversation *)conversation;
 
 /**
+ 删除会话中的before之前的旧消息。
+ 
+ @param conversation 会话，如果conversation为nil，则清除所有会话的消息。
+ @param before 时间点，单位是毫秒
+ */
+- (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before;
+
+/**
  注册自定义消息类型
  
  @param contentClass 自定义消息
