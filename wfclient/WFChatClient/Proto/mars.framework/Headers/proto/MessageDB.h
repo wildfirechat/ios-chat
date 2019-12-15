@@ -48,6 +48,7 @@ namespace mars {
             bool RemoveConversation(int conversationType, const std::string &target, int line, bool clearMessage = false);
             
             bool ClearMessages(int conversationType, const std::string &target, int line);
+            bool ClearMessages(int conversationType, const std::string &target, int line, int64_t before);
             
             std::list<TMessage> GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, long startPoint, const std::string &withUser);
             
