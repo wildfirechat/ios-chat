@@ -761,6 +761,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->ClearMessages(conversation.type, [conversation.target UTF8String], conversation.line);
 }
 
+- (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before {
+    mars::stn::MessageDB::Instance()->ClearMessages(conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, before);
+}
 - (void)setConversation:(WFCCConversation *)conversation top:(BOOL)top
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
