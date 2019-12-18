@@ -121,6 +121,7 @@ namespace mars {
             void clearUnreadFriendRequestStatus();
             int getMessageFlag(int type);
             int64_t getUnreadFriendRequestMaxDt();
+            bool updateFriendRequestStatus(const std::string &friendUid, int status);
             
             
             TChannelInfo GetChannelInfo(const std::string &channelId, bool refresh);
