@@ -173,7 +173,7 @@ namespace mars{
         
         class TUserInfo : public TSerializable {
         public:
-            TUserInfo() : gender(0), updateDt(0), type(0), deleted(0) {}
+            TUserInfo() : gender(0), type(0), deleted(0), updateDt(0) {}
             std::string uid;
             std::string name;
             std::string displayName;

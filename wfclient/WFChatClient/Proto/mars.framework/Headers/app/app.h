@@ -73,6 +73,7 @@ extern unsigned int GetClientVersion();
 extern DeviceInfo GetDeviceInfo();
 extern void SetAppHome(const std::string appHome);
 extern const std::string GetAppHome();
+extern double GetOsVersion();
 }}
 
 #endif /* APPCOMM_INTERFACE_APPCOMM_H_ */

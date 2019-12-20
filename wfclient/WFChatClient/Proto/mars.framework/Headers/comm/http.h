@@ -23,6 +23,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 #include "autobuffer.h"
 
@@ -128,7 +129,7 @@ class HeaderFields {
     // HeaderFields& operator=(const HeaderFields&);
 
   public:
-    static std::pair<const std::string, std::string> MakeContentLength(int _len);
+    static std::pair<const std::string, std::string> MakeContentLength(uint64_t _len);
     static std::pair<const std::string, std::string> MakeTransferEncodingChunked();
     static std::pair<const std::string, std::string> MakeConnectionClose();
     static std::pair<const std::string, std::string> MakeConnectionKeepalive();
@@ -157,17 +158,26 @@ class HeaderFields {
     static const char* const KStringRange;
     static const char* const KStringLocation;
     static const char* const KStringReferer;
+    static const char* const kStringServer;
+    static const char* const KStringKeepalive;
 
     void HeaderFiled(const char* _name, const char* _value);
     void HeaderFiled(const std::pair<const std::string, std::string>& _headerfield);
-    void HeaderFiled(const HeaderFields& _headerfields);
+    void InsertOrUpdate(const std::pair<const std::string, std::string>& _headerfield);
+    void Manipulate(const std::pair<const std::string, std::string>& _headerfield);
     const char* HeaderField(const char* _key) const;
+    void CopyFrom(const HeaderFields& rhs);
     std::map<const std::string, std::string, less>& GetHeaders() {return headers_;}
+    std::list<std::pair<const std::string, const std::string>> GetAsList() const;
 
-    bool IsTransferEncodingChunked();
-    int ContentLength();
+    bool IsTransferEncodingChunked() const;
+    bool IsConnectionClose() const;
+    bool IsConnectionKeepAlive() const;
+    uint64_t ContentLength() const ;
+    uint32_t KeepAliveTimeout() const;
 
-    bool ContentRange(int* start, int* end, int* total);
+    bool Range(long& _start, long& _end) const;
+    bool ContentRange(uint64_t* start, uint64_t* end, uint64_t* total) const;
 
     const std::string ToString() const;
 
@@ -187,10 +197,10 @@ class IBlockBodyProvider {
 class BufferBodyProvider : public IBlockBodyProvider {
   public:
     bool Data(AutoBuffer& _body) {
-        if (!buffer_.Ptr()) return false;
-
-        _body.Write(buffer_.Ptr(), buffer_.Length());
-        buffer_.Reset();
+        if (!_body.Ptr()) return false;
+        
+        buffer_.Write(_body.Ptr(), _body.Length());
+        _body.Reset();
         return true;
     }
     bool FillData(AutoBuffer& _body) {
@@ -311,7 +321,7 @@ class Parser {
     Parser& operator=(const Parser&);
 
   public:
-    TRecvStatus Recv(const void* _buffer, size_t _length);
+    TRecvStatus Recv(const void* _buffer, size_t _length, size_t* consumed_bytes = nullptr, bool only_parse_header = false);
     TRecvStatus Recv(AutoBuffer& _recv_buffer);
     TRecvStatus RecvStatus() const;
 
@@ -324,6 +334,7 @@ class Parser {
     bool FieldsReady() const;
     HeaderFields& Fields();
     const HeaderFields& Fields() const;
+    size_t FirstLineLength() const;
     size_t HeaderLength() const;
 
     bool BodyReady() const;
@@ -348,6 +359,7 @@ class Parser {
 
     BodyReceiver* bodyreceiver_;
     bool is_manage_body_;
+    size_t firstlinelength_;
     size_t headerlength_;
 };
 
