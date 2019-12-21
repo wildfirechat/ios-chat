@@ -529,7 +529,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)onAppTerminate {
-  
+    mars::stn::AppWillTerminate();
 }
 
 - (void)dealloc {
