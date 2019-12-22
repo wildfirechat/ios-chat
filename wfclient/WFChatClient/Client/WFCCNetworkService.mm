@@ -644,6 +644,9 @@ static WFCCNetworkService * sharedSingleton = nil;
     self.serverHost = host;
 }
 
+- (NSString *)getHost {
+    return [NSString stringWithUTF8String:mars::stn::GetHost().c_str()];
+}
 
 - (void)destroyMars {
   [[WFCCNetworkStatus sharedInstance] Stop];
