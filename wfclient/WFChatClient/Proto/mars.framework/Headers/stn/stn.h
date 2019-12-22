@@ -253,13 +253,14 @@ extern int  (*GetLonglinkIdentifyCheckBuffer)(AutoBuffer& identify_buffer, AutoB
 extern bool (*OnLonglinkIdentifyResponse)(const AutoBuffer& response_buffer, const AutoBuffer& identify_buffer_hash);
 
 extern void (*RequestSync)();
-//验证是否已登录
 
+//获取编码过的客户端id
 extern std::string GetEncodedCid();
-        
-extern std::string GetEncodeDataEx(std::string pbData);
+extern std::string GetEncodeDataEx(std::string data);
 extern std::string GetDecodeData(std::string data);
-
+    
+//获取Host
+extern std::string GetHost();
 //底层询问上层http网络检查的域名列表 
 extern void (*RequestNetCheckShortLinkHosts)(std::vector<std::string>& _hostlist);
 //底层向上层上报cgi执行结果 
