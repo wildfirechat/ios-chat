@@ -1681,6 +1681,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     tmsg.timestamp = message.serverTime;
     
     long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
+    message.messageId = msgId;
     
     return msgId;
 }
