@@ -13,6 +13,8 @@
 #include <map>
 namespace mars {
     namespace stn {
+        class UpdateConversationData;
+        class LoadRemoteMessagesPublishCallback;
         class MessageDB {
             
         private:
@@ -21,7 +23,7 @@ namespace mars {
             
         public:
             static MessageDB* Instance();
-            long InsertMessage(TMessage &msg, bool updateConversationTime = true);
+            long InsertMessage(TMessage &msg, bool updateConversationTime = true, std::list<UpdateConversationData*> *delayUpdateDatas = NULL);
             
             void RegisterMessageFlag(int type, int flag);
             bool UpdateMessageContent(long messageId, TMessageContent &msgConstnet);
@@ -37,7 +39,7 @@ namespace mars {
             std::string GetUserSetting(int scope, const std::string &key);
             std::map<std::string, std::string> GetUserSettings(int scope);
             
-            bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp);
+            bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall);
             bool updateConversationIsTop(int conversationType, const std::string &target, int line, bool istop);
             bool updateConversationIsSilent(int conversationType, const std::string &target, int line, bool issilent);
             bool updateConversationDraft(int conversationType, const std::string &target, int line, const std::string &draft);
@@ -129,11 +131,32 @@ namespace mars {
             
             bool BeginTransaction();
             void CommitTransaction();
+            friend class LoadRemoteMessagesPublishCallback;
+            std::list<TConversation> GetConversationListOld(const std::list<int> &conversationTypes, const std::list<int> &lines);
         private:
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
+            bool clearConversationUnread(int conversationType, const std::string &target, int line);
+            bool updateConversationUnread(int conversationType, const std::string &target, int line);
+            bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> lines);
+            bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
             static MessageDB* instance_;
         };
-        
+    
+        class UpdateConversationData {
+        public:
+            UpdateConversationData() : conversationType(0), target(""), line(0), timestamp(0), lastMessageId(0), unreadCount(false), unreadMention(false), unreadMentionAll(false), isRecall(false) {}
+            virtual ~UpdateConversationData() {}
+        public:
+            int conversationType;
+            std::string target;
+            int line;
+            int64_t timestamp;
+            long lastMessageId;
+            bool unreadCount;
+            bool unreadMention;
+            bool unreadMentionAll;
+            bool isRecall;
+        };
     }
 }
 
