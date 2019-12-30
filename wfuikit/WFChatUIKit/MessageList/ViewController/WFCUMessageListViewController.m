@@ -127,8 +127,9 @@
               ws.targetUser = note.userInfo[@"userInfo"];
           }
       }];
-      
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    
+    // 隐藏右上角按钮
+    // self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
   } else if(self.conversation.type == Group_Type) {
       [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
           if ([ws.conversation.target isEqualToString:note.object]) {
@@ -1042,6 +1043,18 @@
             }
         }
     }
+    
+    // 跳到趣运动的个人详情
+    Class class = NSClassFromString(@"GoSportIMHandler");
+    if (class) {
+        id obj = [[class alloc] init];
+        SEL sel = NSSelectorFromString(@"openUserDetailWithUserId:");
+        if ([obj respondsToSelector:sel]) {
+            [obj performSelector:sel withObject:model.message.fromUser];
+        }
+        return;
+    }
+    
   WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
   vc.userId = model.message.fromUser;
   vc.hidesBottomBarWhenPushed = YES;
