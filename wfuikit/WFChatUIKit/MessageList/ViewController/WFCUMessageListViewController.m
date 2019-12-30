@@ -469,7 +469,8 @@
         insets = self.view.safeAreaInsets;
     }
     CGRect frame = self.view.bounds;
-    frame.origin.y += kStatusBarAndNavigationBarHeight;
+    CGFloat backgourndViewY = (self.navigationController.navigationBar.translucent ? kStatusBarAndNavigationBarHeight : 0);
+    frame.origin.y += backgourndViewY;
     frame.size.height -= (kTabbarSafeBottomMargin + kStatusBarAndNavigationBarHeight);
     self.backgroundView = [[UIView alloc] initWithFrame:frame];
     [self.view addSubview:self.backgroundView];
