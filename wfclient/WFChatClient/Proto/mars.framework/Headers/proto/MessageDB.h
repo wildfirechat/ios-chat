@@ -135,9 +135,9 @@ namespace mars {
             std::list<TConversation> GetConversationListOld(const std::list<int> &conversationTypes, const std::list<int> &lines);
         private:
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
-            bool clearConversationUnread(int conversationType, const std::string &target, int line);
+            bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
             bool updateConversationUnread(int conversationType, const std::string &target, int line);
-            bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> lines);
+            bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> lines, bool clearLastMessageId = false);
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
             static MessageDB* instance_;
         };
