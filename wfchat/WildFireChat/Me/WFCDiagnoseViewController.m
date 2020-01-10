@@ -9,12 +9,14 @@
 #import "WFCDiagnoseViewController.h"
 #import "AFNetworking.h"
 #import "WFCConfig.h"
+#import "AppService.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 
 @interface WFCDiagnoseViewController ()
 @property (nonatomic, strong)UIActivityIndicatorView *indicatorView;
 @property (nonatomic, strong)UILabel *resultLabel;
 @property (nonatomic, strong)UIButton *startButton;
+@property (nonatomic, strong)UIButton *uploadLogsButton;
 @end
 
 @implementation WFCDiagnoseViewController
@@ -39,12 +41,12 @@
     
     self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 150, self.view.bounds.size.height/4-40, 300, 60)];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
-    self.resultLabel.text = @"点击开始进行测速";
+    self.resultLabel.text = @"点击\"测试网络\"开始测试";
     self.resultLabel.numberOfLines = 0;
     [self.view addSubview:self.resultLabel];
     
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 - 20, 160, 40)];
-    [self.startButton  setTitle:@"点我开始" forState:UIControlStateNormal];
+    [self.startButton  setTitle:@"测试网络" forState:UIControlStateNormal];
     [self.startButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
     [self.startButton setBackgroundColor:[WFCUConfigManager globalManager].naviBackgroudColor];
     self.startButton.layer.masksToBounds = YES;
@@ -55,6 +57,16 @@
     [self.view addSubview:self.startButton];
     
     
+    self.uploadLogsButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 + 40, 160, 40)];
+    [self.uploadLogsButton  setTitle:@"上传日志" forState:UIControlStateNormal];
+    [self.uploadLogsButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
+    [self.uploadLogsButton setBackgroundColor:[UIColor redColor]];
+    self.uploadLogsButton.layer.masksToBounds = YES;
+    self.uploadLogsButton.layer.cornerRadius = 5.0;
+    
+    [self.uploadLogsButton addTarget:self action:@selector(onUploadLogs:) forControlEvents:UIControlEventTouchDown];
+    
+    [self.view addSubview:self.uploadLogsButton];
 }
 
 - (void)onStart:(id)sender {
@@ -62,13 +74,13 @@
     self.indicatorView.hidden = NO;
     [self.indicatorView startAnimating];
     self.startButton.enabled = NO;
+    self.uploadLogsButton.enabled = NO;
     
     NSDate *now = [[NSDate alloc] init];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     __weak typeof(self)ws =self;
     [manager GET:[NSString stringWithFormat:@"http://%@%@", IM_SERVER_HOST, @"/api/version"] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        dispatch_async(dispatch_get_main_queue(), ^{
             if ([responseObject isKindOfClass:[NSDictionary class]]) {
                 double value = now.timeIntervalSinceNow;
                 int duration = (int)((-value)*1000 + 0.5);
@@ -76,21 +88,35 @@
             } else {
                 [ws reportResult:[NSString stringWithFormat:@"测速失败，无法识别服务器返回的数据：%@", responseObject]];
             }
-        });
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
             [ws reportResult:[NSString stringWithFormat:@"测速失败，错误原因:%@", error.localizedDescription]];
-        });
     }];
     
 }
 
+- (void)onUploadLogs:(id)sender {
+    self.resultLabel.hidden = YES;
+    self.indicatorView.hidden = NO;
+    [self.indicatorView startAnimating];
+    self.startButton.enabled = NO;
+    self.uploadLogsButton.enabled = NO;
+    
+    __weak typeof(self)ws =self;
+    [[AppService sharedAppService] uploadLogs:^{
+        [ws reportResult:@"上传成功"];
+    } error:^(NSString *errorMsg) {
+        [ws reportResult:[NSString stringWithFormat:@"上传失败：%@", errorMsg]];
+    }];
+}
+
 - (void)reportResult:(NSString *)text {
-    self.indicatorView.hidden = YES;
-    self.resultLabel.hidden = NO;
-    self.resultLabel.text = text;
-    self.startButton.enabled = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.indicatorView.hidden = YES;
+        self.resultLabel.hidden = NO;
+        self.resultLabel.text = text;
+        self.startButton.enabled = YES;
+        self.uploadLogsButton.enabled = YES;
+    });
 }
 /*
 #pragma mark - Navigation
