@@ -311,6 +311,28 @@ static WFCCNetworkService * sharedSingleton = nil;
     appender_close();
 }
 
++ (NSArray<NSString *> *)getLogFilePath {
+    NSString* logPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/log"];
+    
+    NSFileManager *myFileManager = [NSFileManager defaultManager];
+    NSDirectoryEnumerator *myDirectoryEnumerator = [myFileManager enumeratorAtPath:logPath];
+
+    BOOL isDir = NO;
+    BOOL isExist = NO;
+
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    for (NSString *path in myDirectoryEnumerator.allObjects) {
+        isExist = [myFileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", logPath, path] isDirectory:&isDir];
+        if (!isDir) {
+            if ([path containsString:@"Test_"]) {
+                [output addObject:[NSString stringWithFormat:@"%@/%@", logPath, path]];
+            }
+        }
+    }
+
+    return output;
+}
+
 - (void)onRecallMessage:(long long)messageUid {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:kRecallMessages object:@(messageUid)];
