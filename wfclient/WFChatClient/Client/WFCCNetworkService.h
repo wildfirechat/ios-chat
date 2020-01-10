@@ -170,7 +170,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 /**
 获取日志文件路径
 */
-+ (NSArray<NSString *> *)getLogFilePath;
++ (NSArray<NSString *> *)getLogFilesPath;
 
 /**
  获取客户端id
