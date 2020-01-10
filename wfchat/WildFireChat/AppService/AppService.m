@@ -171,4 +171,70 @@ static AppService *sharedSingleton = nil;
             });
           }];
 }
+
+- (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSMutableArray<NSString *> *logFiles = [[WFCCNetworkService getLogFilePath] mutableCopy];
+        
+        NSMutableArray *uploadedFiles = [[[NSUserDefaults standardUserDefaults] objectForKey:@"mars_uploaded_files"] mutableCopy];
+        if ([uploadedFiles isKindOfClass:[NSArray class]]) {
+            [logFiles removeObjectsInArray:uploadedFiles];
+        } else {
+            uploadedFiles = [[NSMutableArray alloc] init];
+        }
+        
+        __block NSString *errorMsg = nil;
+        
+        for (NSString *logFile in logFiles) {
+            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
+            
+            NSString *url = [APP_SERVER_ADDRESS stringByAppendingFormat:@"/logs/%@/upload", [WFCCNetworkService sharedInstance].userId];
+            
+             dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+            
+            __block BOOL success = NO;
+
+            [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+                NSData *logData = [NSData dataWithContentsOfFile:logFile];
+                
+                NSString *fileName = [[NSURL URLWithString:logFile] lastPathComponent];
+                
+                [formData appendPartWithFileData:logData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+                
+            } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *dict = (NSDictionary *)responseObject;
+                    if([dict[@"code"] intValue] == 0) {
+                        NSLog(@"上传成功");
+                        success = YES;
+                    }
+                }
+                if (!success) {
+                    errorMsg = @"服务器响应错误";
+                }
+                dispatch_semaphore_signal(sema);
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                NSLog(@"上传失败：%@", error);
+                dispatch_semaphore_signal(sema);
+                errorMsg = error.localizedFailureReason;
+            }];
+            
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+            
+            if (success) {
+                [uploadedFiles addObject:logFile];
+                [[NSUserDefaults standardUserDefaults] setObject:uploadedFiles forKey:@"mars_uploaded_files"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            } else {
+                errorBlock(errorMsg);
+                return;
+            }
+        }
+        
+        successBlock();
+    });
+    
+}
 @end

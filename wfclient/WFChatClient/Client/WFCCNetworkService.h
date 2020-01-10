@@ -168,6 +168,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 + (void)stopLog;
 
 /**
+获取日志文件路径
+*/
++ (NSArray<NSString *> *)getLogFilePath;
+
+/**
  获取客户端id
  
  @return 客户端ID
