@@ -311,7 +311,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     appender_close();
 }
 
-+ (NSArray<NSString *> *)getLogFilePath {
++ (NSArray<NSString *> *)getLogFilesPath {
     NSString* logPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/log"];
     
     NSFileManager *myFileManager = [NSFileManager defaultManager];
