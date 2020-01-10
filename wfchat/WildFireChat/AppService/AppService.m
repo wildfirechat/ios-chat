@@ -174,7 +174,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSMutableArray<NSString *> *logFiles = [[WFCCNetworkService getLogFilePath] mutableCopy];
+        NSMutableArray<NSString *> *logFiles = [[WFCCNetworkService getLogFilesPath] mutableCopy];
         
         NSMutableArray *uploadedFiles = [[[NSUserDefaults standardUserDefaults] objectForKey:@"mars_uploaded_files"] mutableCopy];
         if ([uploadedFiles isKindOfClass:[NSArray class]]) {
