@@ -174,14 +174,24 @@ static AppService *sharedSingleton = nil;
 
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSMutableArray<NSString *> *logFiles = [[WFCCNetworkService getLogFilesPath] mutableCopy];
+        NSMutableArray<NSString *> *logFiles = [[WFCCNetworkService getLogFilesPath]  mutableCopy];
         
-        NSMutableArray *uploadedFiles = [[[NSUserDefaults standardUserDefaults] objectForKey:@"mars_uploaded_files"] mutableCopy];
-        if ([uploadedFiles isKindOfClass:[NSArray class]]) {
-            [logFiles removeObjectsInArray:uploadedFiles];
-        } else {
+        NSMutableArray *uploadedFiles = [[[[NSUserDefaults standardUserDefaults] objectForKey:@"mars_uploaded_files"] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 compare:obj2];
+        }] mutableCopy];
+        
+        //日志文件列表需要删除掉已上传记录，避免重复上传。
+        //但需要上传最后一条已经上传日志，因为那个日志文件可能在上传之后继续写入了，所以需要继续上传
+        if (uploadedFiles.count) {
+            [uploadedFiles removeLastObject];
+        }
+        
+        if (![uploadedFiles isKindOfClass:[NSMutableArray class]]) {
             uploadedFiles = [[NSMutableArray alloc] init];
         }
+        
+        [logFiles removeObjectsInArray:uploadedFiles];
+        
         
         __block NSString *errorMsg = nil;
         
