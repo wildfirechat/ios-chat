@@ -23,7 +23,7 @@
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
-
+#import "WFCUMultiVideoViewController.h"
 #import "WFCUChatInputBar.h"
 
 #import "UIView+Toast.h"
@@ -1253,7 +1253,7 @@
 #if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly {
     if(self.conversation.type == Single_Type) {
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:self.conversation.target conversation:self.conversation audioOnly:isAudioOnly];
+        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[self.conversation.target] conversation:self.conversation audioOnly:isAudioOnly];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     } else {
       WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
@@ -1270,10 +1270,13 @@
       pvc.candidateUsers = candidateUser;
       __weak typeof(self)ws = self;
       pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+          UIViewController *videoVC;
         if (contacts.count == 1) {
-          WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:[contacts objectAtIndex:0] conversation:ws.conversation audioOnly:isAudioOnly];
-          [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+          videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
+        } else {
+          videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
         }
+        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
       };
       pvc.disableUsersSelected = YES;
       

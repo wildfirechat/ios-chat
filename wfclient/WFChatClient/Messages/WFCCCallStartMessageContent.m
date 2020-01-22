@@ -28,7 +28,7 @@
         [dataDict setObject:@(self.status) forKey:@"s"];
     }
     
-    [dataDict setObject:self.targetId forKey:@"t"];
+    [dataDict setObject:self.targetIds forKey:@"ts"];
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
@@ -49,7 +49,7 @@
         self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;
         self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
-        self.targetId = dictionary[@"t"];
+        self.targetIds = dictionary[@"ts"];
     }
 }
 

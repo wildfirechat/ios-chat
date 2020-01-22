@@ -303,14 +303,20 @@
 #if WFCU_SUPPORT_VOIP
 #pragma mark - WFAVEngineDelegate
 - (void)didReceiveCall:(WFAVCallSession *)session {
-    WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
+    UIViewController *videoVC;
+    if (session.participants.count > 1) {
+        videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:session];
+    } else {
+        videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
+    }
+    
     [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         UILocalNotification *localNote = [[UILocalNotification alloc] init];
         
         localNote.alertBody = @"来电话了";
         
-            WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.clientId refresh:NO];
+            WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.participantIds[0] refresh:NO];
             if (sender.displayName) {
                 if (@available(iOS 8.2, *)) {
                     localNote.alertTitle = sender.displayName;

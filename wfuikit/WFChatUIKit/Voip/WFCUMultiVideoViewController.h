@@ -10,7 +10,7 @@
 
 @class WFAVCallSession;
 @class WFCCConversation;
-@interface WFCUVideoViewController : UIViewController
+@interface WFCUMultiVideoViewController : UIViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session;
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly;
 @end

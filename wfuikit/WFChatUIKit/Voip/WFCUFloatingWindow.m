@@ -16,7 +16,7 @@
 @property(nonatomic, strong) NSTimer *activeTimer;
 @property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession);
 @property(nonatomic, strong) CTCallCenter *callCenter;
-
+@property(nonatomic, strong) NSString *focusUserId;
 @end
 
 static WFCUFloatingWindow *staticWindow = nil;
@@ -26,12 +26,13 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 @implementation WFCUFloatingWindow
 
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession focusUser:(NSString *)focusUserId
               withTouchedBlock:(void (^)(WFAVCallSession *callSession))touchedBlock {
     staticWindow = [[WFCUFloatingWindow alloc] init];
     staticWindow.callSession = callSession;
     [staticWindow.callSession setDelegate:staticWindow];
     staticWindow.touchedBlock = touchedBlock;
+    staticWindow.focusUserId = focusUserId;
     [staticWindow initWindow];
 }
 
@@ -142,8 +143,11 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
     if ([self isVideoViewEnabledSession]) {
         if (self.callSession.state == kWFAVEngineStateConnected) {
-            [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
-            [self.callSession setupLocalVideoView:nil scalingType:kWFAVVideoScalingTypeAspectBalanced];
+            if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
+            } else {
+                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced forUser:self.focusUserId];
+            }
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
             UILabel *videoStopTips =
                 [[UILabel alloc] initWithFrame:CGRectMake(0, self.videoView.frame.size.height / 2 - 10,
@@ -375,6 +379,12 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
+- (void)didParticipantJoined:(NSString *)userId {
+    
+}
+- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+    
+}
 - (void)didError:(NSError *)error {
     
 }
@@ -387,7 +397,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
     
 }
 

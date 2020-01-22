@@ -260,13 +260,13 @@
     }];
     UIAlertAction *actionVoice = [UIAlertAction actionWithTitle:WFCString(@"VoiceCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:YES];
+        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[ws.userInfo.userId] conversation:conversation audioOnly:YES];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     }];
     
     UIAlertAction *actionVideo = [UIAlertAction actionWithTitle:WFCString(@"VideoCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTarget:ws.userInfo.userId conversation:conversation audioOnly:NO];
+        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[ws.userInfo.userId] conversation:conversation audioOnly:NO];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     }];
     
