@@ -655,6 +655,7 @@
             self.minimizeButton.hidden = YES;
             self.speakerButton.hidden = YES;
             self.downgradeButton.hidden = YES;
+            self.addParticipantButton.hidden = YES;
             [self updateTopViewFrame];
             break;
         case kWFAVEngineStateOutgoing:
@@ -699,6 +700,8 @@
                 self.smallCollectionView.hidden = YES;
                 self.portraitCollectionView.hidden = NO;
                 [self.portraitCollectionView reloadData];
+                
+                self.portraitCollectionView.center = self.view.center;
             } else {
                 self.smallCollectionView.hidden = NO;
                 [self.smallCollectionView reloadData];
