@@ -21,6 +21,7 @@
 #import "WFCUPortraitCollectionViewCell.h"
 #import "WFCUParticipantCollectionViewLayout.h"
 #import "WFCUContactListViewController.h"
+#import "UIView+Toast.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -149,7 +150,7 @@
     [self.view addSubview:self.bigVideoView];
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    CGFloat itemWidth = self.view.frame.size.width/3 - layout.minimumLineSpacing;
+    CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth) collectionViewLayout:layout];
@@ -835,6 +836,22 @@
 - (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
     [self.participants removeObject:userId];
     [self reloadVideoUI];
+    
+    
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    
+    NSString *reasonStr;
+    if (reason == kWFAVCallEndReasonTimeout) {
+        reasonStr = @"未接听";
+    } else if(reason == kWFAVCallEndReasonBusy) {
+        reasonStr = @"网络忙";
+    } else if(reason == kWFAVCallEndReasonRemoteHangup) {
+        reasonStr = @"离开会议";
+    } else {
+        reasonStr = @"离开会议"; //"网络错误";
+    }
+    
+    [self.view makeToast:[NSString stringWithFormat:@"%@ %@", userInfo.displayName, reasonStr] duration:1 position:CSToastPositionCenter];
 }
 
 - (void)didChangeMode:(BOOL)isAudioOnly {
