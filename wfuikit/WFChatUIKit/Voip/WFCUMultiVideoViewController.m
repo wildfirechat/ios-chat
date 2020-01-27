@@ -40,7 +40,6 @@
 @property (nonatomic, strong) UIButton *switchCameraButton;
 @property (nonatomic, strong) UIButton *audioButton;
 @property (nonatomic, strong) UIButton *speakerButton;
-@property (nonatomic, strong) UIButton *downgradeButton;
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *scalingButton;
 
@@ -67,7 +66,7 @@
 #endif
 @end
 
-#define ButtonSize 90
+#define ButtonSize 60
 #define BottomPadding 36
 #define SmallVideoView 120
 
@@ -288,20 +287,6 @@
     return _switchCameraButton;
 }
 
-- (UIButton *)downgradeButton {
-    if (!_downgradeButton) {
-        _downgradeButton = [[UIButton alloc] init];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio"] forState:UIControlStateNormal];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
-        [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
-        _downgradeButton.backgroundColor = [UIColor clearColor];
-        [_downgradeButton addTarget:self action:@selector(downgradeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _downgradeButton.hidden = YES;
-        [self.view addSubview:_downgradeButton];
-    }
-    return _downgradeButton;
-}
-
 - (UIButton *)audioButton {
     if (!_audioButton) {
         _audioButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
@@ -331,9 +316,10 @@
 
 - (UIButton *)videoButton {
     if (!_videoButton) {
-        _videoButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_videoButton setTitle:WFCString(@"Video") forState:UIControlStateNormal];
-        _videoButton.backgroundColor = [UIColor greenColor];
+        _videoButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width*3/4-ButtonSize/4, self.view.frame.size.height-45-ButtonSize-ButtonSize/2-2, ButtonSize/2, ButtonSize/2)];
+        
+        [_videoButton setImage:[UIImage imageNamed:@"enable_video"] forState:UIControlStateNormal];
+        _videoButton.backgroundColor = [UIColor clearColor];
         [_videoButton addTarget:self action:@selector(videoButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _videoButton.hidden = YES;
         [self.view addSubview:_videoButton];
@@ -447,15 +433,6 @@
     }
 }
 
-- (void)downgradeButtonDidTap:(UIButton *)button {
-    if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:YES];
-    } else if(self.currentSession.state == kWFAVEngineStateConnected) {
-        self.currentSession.audioOnly = !self.currentSession.isAudioOnly;
-    }
-}
-
-
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         BOOL result = [self.currentSession muteAudio:!self.audioMuted];
@@ -483,6 +460,14 @@
         [self.speakerButton setImage:[UIImage imageNamed:@"speaker"] forState:UIControlStateNormal];
     } else {
         [self.speakerButton setImage:[UIImage imageNamed:@"speaker_hover"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)updateVideoButton {
+    if (self.videoMuted) {
+        [self.videoButton setImage:[UIImage imageNamed:@"disable_video"] forState:UIControlStateNormal];
+    } else {
+        [self.videoButton setImage:[UIImage imageNamed:@"enable_video"] forState:UIControlStateNormal];
     }
 }
 
@@ -542,6 +527,7 @@
         if (result) {
             self.videoMuted = !self.videoMuted;
         }
+        [self updateVideoButton];
     }
 }
 
@@ -583,7 +569,7 @@
         self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.view.frame.size.height-BottomPadding-ButtonSize-16, 240, 16);
+        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
 //    } else {
 //        self.portraitView.frame = CGRectMake(16, kStatusBarAndNavigationBarHeight, 64, 64);
@@ -614,7 +600,7 @@
         if (self.hangupButton.hidden) {
             self.hangupButton.hidden = NO;
             self.audioButton.hidden = NO;
-            self.downgradeButton.hidden = NO;
+            self.videoButton.hidden = NO;
             self.switchCameraButton.hidden = NO;
             self.smallCollectionView.hidden = NO;
             self.minimizeButton.hidden = NO;
@@ -622,7 +608,7 @@
         } else {
             self.hangupButton.hidden = YES;
             self.audioButton.hidden = YES;
-            self.downgradeButton.hidden = YES;
+            self.videoButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
             self.minimizeButton.hidden = YES;
             self.addParticipantButton.hidden = YES;
@@ -654,7 +640,6 @@
             self.bigVideoView.hidden = YES;
             self.minimizeButton.hidden = YES;
             self.speakerButton.hidden = YES;
-            self.downgradeButton.hidden = YES;
             self.addParticipantButton.hidden = YES;
             [self updateTopViewFrame];
             break;
@@ -710,7 +695,6 @@
             
             
             self.stateLabel.text = WFCString(@"CallConnecting");
-            self.downgradeButton.hidden = YES;
             self.portraitView.hidden = YES;
             self.userNameLabel.hidden = YES;
             break;
@@ -733,16 +717,10 @@
                 self.switchCameraButton.hidden = NO;
                 self.switchCameraButton.frame = [self getButtomRightButtonFrame];
             }
-            self.videoButton.hidden = YES;
+            self.videoButton.hidden = NO;
             self.scalingButton.hidden = YES;
             self.minimizeButton.hidden = NO;
             self.addParticipantButton.hidden = NO;
-            if (self.currentSession.isAudioOnly) {
-                self.downgradeButton.hidden = YES;;
-            } else {
-                self.downgradeButton.hidden = NO;
-                self.downgradeButton.frame = [self getToAudioButtonFrame];
-            }
             
             if (self.currentSession.isAudioOnly) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
@@ -751,10 +729,6 @@
                 
                 self.portraitCollectionView.hidden = NO;
                 [self.portraitCollectionView reloadData];
-                
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video"] forState:UIControlStateNormal];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateHighlighted];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateSelected];
             } else {
                 NSString *lastUser = [self.participants lastObject];
                 if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -768,10 +742,6 @@
                 self.bigVideoView.hidden = NO;
                 
                 self.portraitCollectionView.hidden = YES;
-                
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio"] forState:UIControlStateNormal];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateHighlighted];
-                [_downgradeButton setImage:[UIImage imageNamed:@"to_audio_hover"] forState:UIControlStateSelected];
             }
             
             
@@ -795,21 +765,12 @@
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
-            self.downgradeButton.hidden = YES;
-            self.downgradeButton.frame = [self getToAudioButtonFrame];
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             self.stateLabel.text = WFCString(@"InvitingYou");
             self.smallCollectionView.hidden = YES;
             self.portraitCollectionView.hidden = NO;
             [self.portraitCollectionView reloadData];
-            
-            if (self.currentSession.isAudioOnly) {
-                self.downgradeButton.hidden = YES;;
-            } else {
-                self.downgradeButton.hidden = YES;
-                self.downgradeButton.frame = [self getToAudioButtonFrame];
-            }
             break;
         default:
             break;
