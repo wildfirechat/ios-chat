@@ -9,7 +9,7 @@
 #import "WFCCMessageContent.h"
 
 /**
- 媒体类型
+ 正在输入类型
  
  - Typing_TEXT : 正在输入文本
  - Typing_VOICE : 正在输入语音
