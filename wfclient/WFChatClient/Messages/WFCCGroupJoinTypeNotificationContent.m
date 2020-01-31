@@ -17,8 +17,8 @@
     payload.contentType = [self.class getContentType];
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-    if (self.creator) {
-        [dataDict setObject:self.creator forKey:@"o"];
+    if (self.operatorId) {
+        [dataDict setObject:self.operatorId forKey:@"o"];
     }
     if (self.type) {
         [dataDict setObject:self.type forKey:@"n"];
@@ -42,7 +42,7 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.creator = dictionary[@"o"];
+        self.operatorId = dictionary[@"o"];
         self.type = dictionary[@"n"];
         self.groupId = dictionary[@"g"];
     }
@@ -68,8 +68,8 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *user = @"你";
-    if (![[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
+    if (![[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (userInfo.friendAlias.length > 0) {
             user = userInfo.friendAlias;
         } else if(userInfo.groupAlias.length > 0) {
@@ -77,7 +77,7 @@
         } else if (userInfo.displayName.length > 0) {
             user = userInfo.displayName;
         } else {
-            user = [NSString stringWithFormat:@"管理员<%@>", self.creator];
+            user = [NSString stringWithFormat:@"管理员<%@>", self.operatorId];
         }
     }
     

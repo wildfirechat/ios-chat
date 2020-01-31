@@ -17,8 +17,8 @@
     payload.contentType = [self.class getContentType];
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-    if (self.creator) {
-        [dataDict setObject:self.creator forKey:@"o"];
+    if (self.operatorId) {
+        [dataDict setObject:self.operatorId forKey:@"o"];
     }
     if (self.type) {
         [dataDict setObject:self.type forKey:@"n"];
@@ -42,7 +42,7 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.creator = dictionary[@"o"];
+        self.operatorId = dictionary[@"o"];
         self.type = dictionary[@"n"];
         self.groupId = dictionary[@"g"];
     }
@@ -67,10 +67,10 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
         return [self.type isEqualToString:@"0"] ? @"你开启了成员私聊" : @"你关闭了成员私聊";
     } else {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (userInfo.friendAlias.length > 0) {
             return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.friendAlias];
         } else if(userInfo.groupAlias.length > 0) {
@@ -78,7 +78,7 @@
         } else if (userInfo.displayName.length > 0) {
             return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.displayName];
         } else {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"用户<%@>开启了成员私聊" : @"用户<%@>关闭了成员私聊", self.creator];
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"用户<%@>开启了成员私聊" : @"用户<%@>关闭了成员私聊", self.operatorId];
         }
     }
 }
