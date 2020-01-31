@@ -19,9 +19,9 @@
 @property (nonatomic, strong)NSString *groupId;
 
 /**
- 创建者ID
+ 操作者ID
  */
-@property (nonatomic, strong)NSString *creator;
+@property (nonatomic, strong)NSString *operatorId;
 
 /**
  操作
