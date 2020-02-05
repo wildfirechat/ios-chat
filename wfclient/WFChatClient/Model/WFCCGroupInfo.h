@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 /**
  扩展信息
  */
-@property (nonatomic, strong)NSData *extra;
+@property (nonatomic, strong)NSString *extra;
 
 /**
  群禁言状态，0 关闭群禁言；1 开启群禁言
