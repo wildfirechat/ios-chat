@@ -135,7 +135,7 @@ WFCCGroupInfo* convertGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.type = (WFCCGroupType)tgi.type;
     groupInfo.target = [NSString stringWithUTF8String:tgi.target.c_str()];
     groupInfo.name = [NSString stringWithUTF8String:tgi.name.c_str()];
-    groupInfo.extra = [NSData dataWithBytes:tgi.extra.c_str() length:tgi.extra.length()];
+    groupInfo.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];;
     groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
     groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
     groupInfo.memberCount = tgi.memberCount;
