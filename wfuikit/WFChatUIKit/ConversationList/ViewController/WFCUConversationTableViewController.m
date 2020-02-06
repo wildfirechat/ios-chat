@@ -96,6 +96,8 @@
             WFCCConversationInfo *conv = dataSource[i];
             if (conv.conversation.type == Single_Type && [conv.conversation.target isEqualToString:userInfo.userId]) {
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            } else if ([conv.lastMessage.fromUser isEqualToString:userInfo.userId]) {
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             }
         }
     }

@@ -737,11 +737,18 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)onUserInfoUpdated:(NSArray<WFCCUserInfo *> *)updatedUserInfo {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    for (WFCCUserInfo *userInfo in updatedUserInfo) {
-      [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoUpdated object:userInfo.userId userInfo:@{@"userInfo":userInfo}];
-    }
-  });
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSMutableArray *userIds = [[NSMutableArray alloc] init];;
+        for (WFCCUserInfo *userInfo in updatedUserInfo) {
+            [userIds addObject:userInfo.userId];
+        }
+        NSArray *userInfos = [[WFCCIMService sharedWFCIMService] getUserInfos:userIds inGroup:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          for (WFCCUserInfo *userInfo in userInfos) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoUpdated object:userInfo.userId userInfo:@{@"userInfo":userInfo}];
+          }
+        });
+    });
 }
 
 - (void)onFriendListUpdated {
