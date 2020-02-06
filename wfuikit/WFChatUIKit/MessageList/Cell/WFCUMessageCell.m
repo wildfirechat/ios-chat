@@ -112,6 +112,9 @@
 - (void)onUserInfoUpdated:(NSNotification *)notification {
   WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
+      if (self.model.message.conversation.type == Group_Type) {
+          userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userInfo.userId inGroup:self.model.message.conversation.target refresh:NO];
+      }
     [self updateUserInfo:userInfo];
   }
 }
