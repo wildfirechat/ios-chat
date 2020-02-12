@@ -1258,7 +1258,7 @@
     } else {
       WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
       pvc.selectContact = YES;
-      pvc.multiSelect = YES;
+      pvc.multiSelect = [WFAVEngineKit sharedEngineKit].supportMultiCall;
       NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
       [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
       pvc.disableUsers = disabledUser;
