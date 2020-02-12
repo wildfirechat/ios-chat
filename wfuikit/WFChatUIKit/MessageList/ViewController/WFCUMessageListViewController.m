@@ -1259,6 +1259,11 @@
       WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
       pvc.selectContact = YES;
       pvc.multiSelect = [WFAVEngineKit sharedEngineKit].supportMultiCall;
+        if (pvc.multiSelect) {
+            pvc.maxSelectCount = isAudioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
+            pvc.maxSelectCount -= 1;
+        }
+        
       NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
       [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
       pvc.disableUsers = disabledUser;
@@ -1271,7 +1276,7 @@
       __weak typeof(self)ws = self;
       pvc.selectResult = ^(NSArray<NSString *> *contacts) {
           UIViewController *videoVC;
-        if (contacts.count == 1) {
+        if (self.conversation.type != Group_Type) {
           videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
         } else {
           videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
