@@ -21,7 +21,7 @@
 /**
  对端用户Id
  */
-@property (nonatomic, strong)NSString *targetId;
+@property (nonatomic, strong)NSArray<NSString *> *targetIds;
 /**
  * 开始时间
  */

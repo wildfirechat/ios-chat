@@ -212,7 +212,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 
  @param remoteVideoTrack 对方视频流
  */
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack;
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)targetId;
 
 @end
 
@@ -230,6 +230,20 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 + (instancetype)sharedEngineKit;
 
+/*
+ 是否支持多人通话
+ */
+@property(nonatomic, assign, readonly)BOOL supportMultiCall;
+
+/*
+ 最大音频通话路数，单人音视频默认为2，无法修改。
+ */
+@property(nonatomic, assign)int maxAudioCallCount;
+
+/*
+最大视频通话路数，单人音视频默认为2，无法修改。
+*/
+@property(nonatomic, assign)int maxVideoCallCount;
 /**
  添加ICE服务地址和鉴权
 
@@ -259,12 +273,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 /**
  发起通话
 
- @param clientId 对方用户ID
+ @param targetIds 接收用户ID，本sdk只支持一个用户
  @param conversation 通话所在会话
  @param sessionDelegate 通话Session的监听
  @return 通话Session
  */
-- (WFAVCallSession *)startCall:(NSString *)clientId
+- (WFAVCallSession *)startCall:(NSArray<NSString *> *)targetIds
                      audioOnly:(BOOL)audioOnly
                   conversation:(WFCCConversation *)conversation
                sessionDelegate:(id<WFAVCallSessionDelegate>)sessionDelegate;
@@ -292,6 +306,14 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  取消通话界面
  */
 - (void)dismissViewController:(UIViewController *)viewController;
+@end
+
+@interface WFAVParticipantProfile : NSObject
+@property(nonatomic, strong, readonly)NSString *userId;
+@property(nonatomic, assign, readonly)long long startTime;
+@property(nonatomic, assign, readonly)WFAVEngineState state;
+@property(nonatomic, assign, readonly)BOOL videoMuted;
+
 @end
 
 #pragma mark - 通话Session
@@ -355,6 +377,22 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 @property(nonatomic, assign, getter=isSpeaker, readonly)BOOL speaker;
 
+
+/**
+通话成员（不包含自己）
+*/
+@property(nonatomic, assign, readonly)NSArray<NSString *> *participantIds;
+@property(nonatomic, assign, readonly)NSString *initiator;
+
+- (BOOL)isParticipant:(NSString *)userId;
+
+/**
+通话成员（不包含自己）
+*/
+@property(nonatomic, assign, readonly) NSArray<WFAVParticipantProfile *> *participants;
+@property(nonatomic, assign, readonly) WFAVParticipantProfile *myProfile;
+
+- (void)inviteNewParticipants:(NSArray<NSString *>*)targetIds;
 /**
  接听通话
  */
@@ -408,6 +446,6 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  @param videoContainerView 本地视频视图Container
  @param scalingType 缩放模式
  */
-- (void)setupRemoteVideoView:(UIView *)videoContainerView scalingType:(WFAVVideoScalingType)scalingType;
+- (void)setupRemoteVideoView:(UIView *)videoContainerView scalingType:(WFAVVideoScalingType)scalingType forUser:(NSString *)targetId;
 @end
 

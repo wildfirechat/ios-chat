@@ -12,6 +12,6 @@
 @class WFCCConversation;
 @interface WFCUVideoViewController : UIViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session;
-- (instancetype)initWithTarget:(NSString *)targetId conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly;
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly;
 @end
 

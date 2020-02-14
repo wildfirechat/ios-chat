@@ -46,8 +46,6 @@
 @property (nonatomic, assign) BOOL videoMuted;
 
 @property (nonatomic, strong) WFAVCallSession *currentSession;
-@property (nonatomic, strong) RTCVideoTrack *localVideoTrack;
-@property (nonatomic, strong) RTCVideoTrack *remoteVideoTrack;
 
 @property (nonatomic, assign) WFAVVideoScalingType scalingType;
 
@@ -75,7 +73,7 @@
     return self;
 }
 
-- (instancetype)initWithTarget:(NSString *)targetId conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
     self = [super init];
     return self;
 }
@@ -92,10 +90,10 @@
     return self;
 }
 
-- (instancetype)initWithTarget:(NSString *)targetId conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
     self = [super init];
     if (self) {
-        WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetId
+        WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
                                                                     audioOnly:audioOnly
                                                                  conversation:conversation
                                                               sessionDelegate:self];
@@ -124,7 +122,7 @@
         [[WFAVEngineKit sharedEngineKit] startPreview];
     }
     
-    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.clientId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.participantIds[0] inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
@@ -313,7 +311,7 @@
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession withTouchedBlock:^(WFAVCallSession *callSession) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:self.currentSession.participantIds[0] withTouchedBlock:^(WFAVCallSession *callSession) {
          [[WFAVEngineKit sharedEngineKit] presentViewController:[[WFCUVideoViewController alloc] initWithSession:callSession]];
      }];
     
@@ -433,7 +431,7 @@
         }
         
         [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType];
+        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
     }
 }
 
@@ -522,7 +520,7 @@
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType];
+            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
             self.stateLabel.text = WFCString(@"WaitingAccept");
             self.smallVideoView.hidden = YES;
             
@@ -541,7 +539,7 @@
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType];
+            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
             self.stateLabel.text = WFCString(@"CallConnecting");
             self.smallVideoView.hidden = NO;
             self.downgradeButton.hidden = YES;
@@ -578,7 +576,7 @@
             
             if (self.currentSession.isAudioOnly) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.scalingType];
-                [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType];
+                [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
                 self.smallVideoView.hidden = YES;
                 self.bigVideoView.hidden = YES;
                 
@@ -587,7 +585,7 @@
                 [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateSelected];
             } else {
                 [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
                 self.smallVideoView.hidden = NO;
                 self.bigVideoView.hidden = NO;
                 
@@ -621,7 +619,7 @@
             self.downgradeButton.frame = [self getToAudioButtonFrame];
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType];
+            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
             self.stateLabel.text = WFCString(@"InvitingYou");
             self.smallVideoView.hidden = YES;
             
@@ -640,7 +638,11 @@
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+}
+
+- (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
+    
 }
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -649,7 +651,12 @@
     });
 
 }
-
+- (void)didParticipantJoined:(NSString *)userId {
+    
+}
+- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+    
+}
 - (void)didChangeMode:(BOOL)isAudioOnly {
     [self didChangeState:self.currentSession.state];
 }

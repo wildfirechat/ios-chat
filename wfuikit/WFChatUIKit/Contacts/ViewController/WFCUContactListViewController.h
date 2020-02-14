@@ -10,6 +10,7 @@
 @interface WFCUContactListViewController : UIViewController
 @property (nonatomic, assign)BOOL selectContact;
 @property (nonatomic, assign)BOOL multiSelect;
+@property (nonatomic, assign)int maxSelectCount;//当多选时有效，0不限制。
 @property (nonatomic, assign)BOOL withoutCheckBox;
 @property (nonatomic, assign)BOOL isPushed;
 @property (nonatomic, strong)void (^selectResult)(NSArray<NSString *> *contacts);
