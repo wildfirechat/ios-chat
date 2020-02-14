@@ -641,6 +641,10 @@
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
 }
 
+- (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
+    
+}
+
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[WFAVEngineKit sharedEngineKit] dismissViewController:self];

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUParticipantCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
-@property (nonatomic, assign)WFAVEngineState state;
+@property (nonatomic, assign)WFAVParticipantProfile *profile;
 @end
 
 NS_ASSUME_NONNULL_END

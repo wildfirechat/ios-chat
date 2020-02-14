@@ -49,7 +49,7 @@
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *stateLabel;
-
+@property (nonatomic, strong) UILabel *connectTimeLabel;
 @property (nonatomic, assign) BOOL audioMuted;
 @property (nonatomic, assign) BOOL videoMuted;
 
@@ -205,6 +205,13 @@
     self.stateLabel.font = [UIFont systemFontOfSize:16];
     self.stateLabel.textColor = [UIColor whiteColor];
     [self.view addSubview:self.stateLabel];
+    
+    self.connectTimeLabel = [[UILabel alloc] init];
+    self.connectTimeLabel.font = [UIFont systemFontOfSize:16];
+    self.connectTimeLabel.textColor = [UIColor whiteColor];
+    [self.view addSubview:self.connectTimeLabel];
+    
+    
     
     [self updateTopViewFrame];
     
@@ -367,9 +374,9 @@
 - (void)updateConnectedTimeLabel {
     long sec = [[NSDate date] timeIntervalSince1970] - self.currentSession.connectedTime / 1000;
     if (sec < 60 * 60) {
-        self.stateLabel.text = [NSString stringWithFormat:@"%02ld:%02ld", sec / 60, sec % 60];
+        self.connectTimeLabel.text = [NSString stringWithFormat:@"%02ld:%02ld", sec / 60, sec % 60];
     } else {
-        self.stateLabel.text = [NSString stringWithFormat:@"%02ld:%02ld:%02ld", sec / 60 / 60, (sec / 60) % 60, sec % 60];
+        self.connectTimeLabel.text = [NSString stringWithFormat:@"%02ld:%02ld:%02ld", sec / 60 / 60, (sec / 60) % 60, sec % 60];
     }
 }
 
@@ -521,6 +528,7 @@
             break;
         }
 }
+
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         BOOL result = [self.currentSession muteVideo:!self.videoMuted];
@@ -569,7 +577,10 @@
         self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
+        self.connectTimeLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
+        self.connectTimeLabel.textAlignment = NSTextAlignmentCenter;
+    
+        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 30, 240, 16);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
 //    } else {
 //        self.portraitView.frame = CGRectMake(16, kStatusBarAndNavigationBarHeight, 64, 64);
@@ -600,7 +611,11 @@
         if (self.hangupButton.hidden) {
             self.hangupButton.hidden = NO;
             self.audioButton.hidden = NO;
-            self.videoButton.hidden = NO;
+            if (self.currentSession.audioOnly) {
+                self.videoButton.hidden = YES;
+            } else {
+                self.videoButton.hidden = NO;
+            }
             self.switchCameraButton.hidden = NO;
             self.smallCollectionView.hidden = NO;
             self.minimizeButton.hidden = NO;
@@ -645,6 +660,7 @@
             break;
         case kWFAVEngineStateOutgoing:
             self.answerButton.hidden = YES;
+            self.connectTimeLabel.hidden = YES;
             self.hangupButton.hidden = NO;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
             self.switchCameraButton.hidden = YES;
@@ -701,6 +717,8 @@
         case kWFAVEngineStateConnected:
             self.answerButton.hidden = YES;
             self.hangupButton.hidden = NO;
+            self.connectTimeLabel.hidden = NO;
+            self.stateLabel.hidden = YES;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
@@ -709,6 +727,7 @@
                 self.audioButton.hidden = NO;
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = YES;
+                self.videoButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
                 [self.currentSession enableSpeaker:YES];
@@ -716,8 +735,9 @@
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = NO;
                 self.switchCameraButton.frame = [self getButtomRightButtonFrame];
+                self.videoButton.hidden = NO;
             }
-            self.videoButton.hidden = NO;
+            
             self.scalingButton.hidden = YES;
             self.minimizeButton.hidden = NO;
             self.addParticipantButton.hidden = NO;
@@ -757,6 +777,7 @@
             [self updateTopViewFrame];
             break;
         case kWFAVEngineStateIncomming:
+            self.connectTimeLabel.hidden = YES;
             self.answerButton.hidden = NO;
             self.answerButton.frame = [self getButtomRightButtonFrame];
             self.hangupButton.hidden = NO;
@@ -781,6 +802,33 @@
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+}
+
+- (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
+    if ([self.participants.lastObject isEqualToString:userId]) {
+        for (int i = 0; i < self.participants.count-1; i++) {
+            NSString *pid = [self.participants objectAtIndex:i];
+            if ([pid isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                if (!self.currentSession.myProfile.videoMuted) {
+                    [self switchVideoView:i];
+                    return;
+                }
+                continue;
+            }
+            for (WFAVParticipantProfile *p in self.currentSession.participants) {
+                if ([p.userId isEqualToString:pid]) {
+                    if (!p.videoMuted && p.state == kWFAVEngineStateConnected) {
+                        [self switchVideoView:i];
+                        return;
+                    }
+                    break;
+                }
+            }
+        }
+        [self reloadVideoUI];
+    } else {
+        [self reloadVideoUI];
+    }
 }
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -870,9 +918,31 @@
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
             NSString *userId = [self.participants lastObject];
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
+                if (self.currentSession.myProfile.videoMuted) {
+                    [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
+                    self.stateLabel.text = @"视频已关闭";
+                    self.stateLabel.hidden = NO;
+                } else {
+                    [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
+                    self.stateLabel.text = nil;
+                    self.stateLabel.hidden = YES;
+                }
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];
+                for (WFAVParticipantProfile *profile in self.currentSession.participants) {
+                    if ([profile.userId isEqualToString:userId]) {
+                        if (profile.videoMuted) {
+                            [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId];
+                            self.stateLabel.text = @"视频已关闭";
+                            self.stateLabel.hidden = NO;
+                        } else {
+                            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];
+                            self.stateLabel.text = nil;
+                            self.stateLabel.hidden = YES;
+                        }
+                        break;
+                    }
+                }
+                
             }
             [self.smallCollectionView reloadData];
         } else {
@@ -882,6 +952,38 @@
         [self.portraitCollectionView reloadData];
     }
 }
+
+- (BOOL)switchVideoView:(NSUInteger)index {
+    NSString *userId = self.participants[index];
+    
+    BOOL canSwitch = NO;
+    for (WFAVParticipantProfile *profile in self.currentSession.participants) {
+        if ([profile.userId isEqualToString:userId]) {
+            if (profile.state == kWFAVEngineStateConnected) {
+                canSwitch = YES;
+            }
+            break;
+        }
+    }
+    
+    if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if (self.currentSession.state == kWFAVEngineStateConnected) {
+            canSwitch = YES;
+        }
+    }
+    
+    if (canSwitch) {
+        NSString *lastId = [self.participants lastObject];
+        [self.participants removeLastObject];
+        [self.participants insertObject:lastId atIndex:index];
+        [self.participants removeObject:userId];
+        [self.participants addObject:userId];
+        [self reloadVideoUI];
+    }
+    
+    return canSwitch;
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (collectionView == self.portraitCollectionView) {
@@ -897,19 +999,33 @@
     NSString *userId = self.participants[indexPath.row];
     if (collectionView == self.smallCollectionView) {
         WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            [self.currentSession setupLocalVideoView:cell scalingType:self.smallScalingType];
-        } else {
-            [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
-        }
+
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
-        for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-            if ([profile.userId isEqualToString:userId]) {
-                cell.state = profile.state;
-                break;
+        
+        
+        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            WFAVParticipantProfile *profile = self.currentSession.myProfile;
+            if (profile.videoMuted) {
+                [self.currentSession setupLocalVideoView:nil scalingType:self.smallScalingType];
+            } else {
+                [self.currentSession setupLocalVideoView:cell scalingType:self.smallScalingType];
+            }
+            cell.profile = profile;
+        } else {
+            for (WFAVParticipantProfile *profile in self.currentSession.participants) {
+                if ([profile.userId isEqualToString:userId]) {
+                    if (profile.videoMuted) {
+                        [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:userId];
+                    } else {
+                        [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
+                    }
+                    cell.profile = profile;
+                    break;
+                }
             }
         }
+
         return cell;
     } else {
         WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
@@ -919,6 +1035,18 @@
         
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
+        
+        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            cell.profile = self.currentSession.myProfile;
+        } else {
+            for (WFAVParticipantProfile *profile in self.currentSession.participants) {
+                if ([profile.userId isEqualToString:userId]) {
+                    cell.profile = profile;
+                    break;
+                }
+            }
+        }
+        
         return cell;
     }
     
@@ -927,34 +1055,9 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (collectionView == self.smallCollectionView) {
-        NSString *userId = self.participants[indexPath.row];
-        
-        BOOL canSwitch = NO;
-        for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-            if ([profile.userId isEqualToString:userId]) {
-                if (profile.state == kWFAVEngineStateConnected) {
-                    canSwitch = YES;
-                }
-                break;
-            }
-        }
-        
-        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            if (self.currentSession.state == kWFAVEngineStateConnected) {
-                canSwitch = YES;
-            }
-        }
-        
-        if (canSwitch) {
-            NSString *lastId = [self.participants lastObject];
-            [self.participants removeLastObject];
-            [self.participants insertObject:lastId atIndex:indexPath.row];
-            [self.participants removeObject:userId];
-            [self.participants addObject:userId];
-            [self reloadVideoUI];
-        }
-        
+        [self switchVideoView:indexPath.row];
     }
 }
+
 #endif
 @end

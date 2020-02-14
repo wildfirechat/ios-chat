@@ -20,13 +20,19 @@
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
 }
 
-- (void)setState:(WFAVEngineState)state {
-    _state = state;
-    if (state == kWFAVEngineStateIncomming) {
+- (void)setProfile:(WFAVParticipantProfile *)profile {
+    _profile = profile;
+    if (profile.state == kWFAVEngineStateIncomming) {
         self.stateLabel.hidden = NO;
         self.stateLabel.text = @"连接中";
     } else {
-        self.stateLabel.hidden = YES;
+        if (profile.videoMuted) {
+            self.stateLabel.hidden = NO;
+            self.stateLabel.text = @"视频已关闭";
+        } else {
+            self.stateLabel.hidden = YES;
+            self.stateLabel.text = nil;
+        }
     }
 }
 

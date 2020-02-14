@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <WFChatClient/WFCChatClient.h>
+#import <WFAVEngineKit/WFAVEngineKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUPortraitCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
+@property (nonatomic, strong)WFAVParticipantProfile *profile;
 
 @property (nonatomic, assign)CGFloat itemSize;
 @property (nonatomic, assign)CGFloat labelSize;

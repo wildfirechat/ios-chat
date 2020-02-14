@@ -401,6 +401,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
+- (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
+    
+}
+
 - (void)didChangeMode:(BOOL)isAudioOnly {
     [self.videoView removeFromSuperview];
     [self initWindow];
