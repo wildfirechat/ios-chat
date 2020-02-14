@@ -38,9 +38,10 @@
  开启悬浮窗
 
  @param callSession  通话实体
+ @param focusUserId  焦点用户Id
  @param touchedBlock 悬浮窗点击的Block
  */
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession focusUser:(NSString *)focusUserId
               withTouchedBlock:(void (^)(WFAVCallSession *callSession))touchedBlock;
 
 /*!

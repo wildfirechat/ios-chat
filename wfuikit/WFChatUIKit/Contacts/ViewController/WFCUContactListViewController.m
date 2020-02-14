@@ -21,6 +21,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUFavChannelTableViewController.h"
 #import "WFCUConfigManager.h"
+#import "UIView+Toast.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -149,7 +150,11 @@ static NSMutableDictionary *hanziStringDict = nil;
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         self.navigationItem.rightBarButtonItem.enabled = NO;
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@(%d)", WFCString(@"Ok"),  (int)self.selectedContacts.count] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        if (self.multiSelect && self.maxSelectCount > 1) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@(%d/%d)", WFCString(@"Ok"),  (int)self.selectedContacts.count, self.maxSelectCount] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        } else {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithFormat:@"%@(%d)", WFCString(@"Ok"),  (int)self.selectedContacts.count] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        }
     }
 }
 
@@ -614,6 +619,11 @@ static NSMutableDictionary *hanziStringDict = nil;
                 [self.selectedContacts removeObject:userInfo.userId];
                 ((WFCUContactSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]).checked = NO;
             } else {
+                if (self.maxSelectCount > 0 && self.selectedContacts.count >= self.maxSelectCount) {
+                    [self.view makeToast:WFCString(@"MaxCount")];
+                    return;
+                }
+                
                 [self.selectedContacts addObject:userInfo.userId];
                 ((WFCUContactSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]).checked = YES;
             }

@@ -13,6 +13,7 @@
 
 @implementation WFCCCallStartMessageContent
 - (WFCCMessagePayload *)encode {
+    
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
     payload.content = self.callId;
@@ -28,7 +29,9 @@
         [dataDict setObject:@(self.status) forKey:@"s"];
     }
     
-    [dataDict setObject:self.targetId forKey:@"t"];
+    [dataDict setObject:self.targetIds forKey:@"ts"];
+    //多人音视频与单人音视频兼容
+    [dataDict setObject:self.targetIds[0] forKey:@"t"];
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
@@ -49,7 +52,13 @@
         self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;
         self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
-        self.targetId = dictionary[@"t"];
+        self.targetIds = dictionary[@"ts"];
+        if (self.targetIds.count == 0) {
+            NSString *target = dictionary[@"t"];
+            NSMutableArray *arr = [[NSMutableArray alloc] init];
+            [arr addObject:target];
+            self.targetIds = arr;
+        }
     }
 }
 
