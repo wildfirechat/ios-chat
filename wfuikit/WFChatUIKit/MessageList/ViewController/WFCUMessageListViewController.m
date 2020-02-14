@@ -1275,11 +1275,11 @@
       pvc.candidateUsers = candidateUser;
       __weak typeof(self)ws = self;
       pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-          UIViewController *videoVC;
-        if (self.conversation.type != Group_Type) {
-          videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
-        } else {
+        UIViewController *videoVC;
+        if (self.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
           videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
+        } else {
+          videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
         }
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
       };

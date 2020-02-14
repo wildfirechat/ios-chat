@@ -304,7 +304,7 @@
 #pragma mark - WFAVEngineDelegate
 - (void)didReceiveCall:(WFAVCallSession *)session {
     UIViewController *videoVC;
-    if (session.conversation.type == Group_Type) {
+    if (session.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
         videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:session];
     } else {
         videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
