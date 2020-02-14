@@ -564,8 +564,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
     
     fillTMessage(tmsg, conversation, content);
-    mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
     message.fromUser = [WFCCNetworkService sharedInstance].userId;
+    
+    mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
     
     return message;
 }
