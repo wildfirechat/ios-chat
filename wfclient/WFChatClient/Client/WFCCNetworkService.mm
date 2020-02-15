@@ -354,7 +354,7 @@ static WFCCNetworkService * sharedSingleton = nil;
             }
         }
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messages];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messageList];
         [self.receiveMessageDelegate onReceiveMessage:messageList hasMore:hasMore];
     });
 }
