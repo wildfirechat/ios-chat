@@ -73,13 +73,6 @@
 
 #define PortraitItemSize 48
 #define PortraitLabelSize 16
-#if !WFCU_SUPPORT_VOIP
-@interface WFAVCallSession : NSObject
-@end
-
-@implementation WFAVCallSession
-@end
-#endif
 
 @implementation WFCUMultiVideoViewController
 #if !WFCU_SUPPORT_VOIP
