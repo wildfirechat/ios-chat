@@ -21,6 +21,9 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUContactListViewController.h"
 
+#if WFCU_SUPPORT_VOIP
+#import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -605,7 +608,12 @@
 
 - (UIView *)pluginInputView {
     if (!_pluginInputView) {
-        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:(self.conversation.type == Single_Type || self.conversation.type == Group_Type)];
+#if WFCU_SUPPORT_VOIP
+        BOOL hasVoip = self.conversation.type == Single_Type || (self.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall);
+#else
+        BOOL hasVoip = NO;
+#endif
+        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip];
     }
     return _pluginInputView;
 }

@@ -5,7 +5,7 @@
 //  Created by dali on 2020/1/20.
 //  Copyright © 2020 Tom Lee. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import "WFCUPortraitCollectionViewCell.h"
 #import "SDWebImage.h"
 
@@ -66,6 +66,5 @@
     }
     return _stateLabel;
 }
-
-
 @end
+#endif

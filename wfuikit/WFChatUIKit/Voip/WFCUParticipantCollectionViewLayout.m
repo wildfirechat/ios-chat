@@ -5,7 +5,7 @@
 //  Created by dali on 2020/1/21.
 //  Copyright © 2020 Tom Lee. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import "WFCUParticipantCollectionViewLayout.h"
 
 @interface WFCUParticipantCollectionViewLayout ()
@@ -97,3 +97,4 @@
     return _attrubutesArray;
 }
 @end
+#endif

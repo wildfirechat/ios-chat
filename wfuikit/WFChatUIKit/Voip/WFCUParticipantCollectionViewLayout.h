@@ -5,7 +5,7 @@
 //  Created by dali on 2020/1/21.
 //  Copyright © 2020 Tom Lee. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,3 +18,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif
