@@ -12,7 +12,7 @@
 @interface WFCUPortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UILabel *nameLabel;
-@property (nonatomic, strong)UILabel *stateLabel;
+@property (nonatomic, strong)UIImageView *stateLabel;
 @end
 
 @implementation WFCUPortraitCollectionViewCell
@@ -25,11 +25,11 @@
 
 -(void)setProfile:(WFAVParticipantProfile *)profile {
     _profile = profile;
-    if (profile.state == kWFAVEngineStateConnected) {
-        self.stateLabel.text = nil;
+    if (profile.state == kWFAVEngineStateConnected || profile.state == kWFAVEngineStateIdle) {
+        [self.stateLabel stopAnimating];
         self.stateLabel.hidden = YES;
     } else {
-        self.stateLabel.text = @"连接中";
+        [self.stateLabel startAnimating];
         self.stateLabel.hidden = NO;
     }
 }
@@ -56,12 +56,13 @@
     return _nameLabel;
 }
 
-- (UILabel *)stateLabel {
+- (UIImageView *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.itemSize/2-10, self.itemSize, 20)];
-        _stateLabel.font = [UIFont systemFontOfSize:14];
-        _stateLabel.textColor = [UIColor whiteColor];
-        _stateLabel.textAlignment = NSTextAlignmentCenter;
+        _stateLabel = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.itemSize, self.itemSize)];
+        
+        _stateLabel.animationImages = @[[UIImage imageNamed:@"connect_ani1"],[UIImage imageNamed:@"connect_ani2"],[UIImage imageNamed:@"connect_ani3"]];
+        _stateLabel.animationDuration = 1.f;
+        _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         [self addSubview:_stateLabel];
     }
     return _stateLabel;

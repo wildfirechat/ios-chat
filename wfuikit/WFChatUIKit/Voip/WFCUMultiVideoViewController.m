@@ -971,8 +971,8 @@
         [self.participants insertObject:lastId atIndex:index];
         [self.participants removeObject:userId];
         [self.participants addObject:userId];
-        [self reloadVideoUI];
     }
+    [self reloadVideoUI];
     
     return canSwitch;
 }
@@ -994,7 +994,6 @@
         WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
 
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
-        cell.userInfo = userInfo;
         
         
         if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -1004,7 +1003,7 @@
             } else {
                 [self.currentSession setupLocalVideoView:cell scalingType:self.smallScalingType];
             }
-            cell.profile = profile;
+            [cell setUserInfo:userInfo callProfile:profile];
         } else {
             for (WFAVParticipantProfile *profile in self.currentSession.participants) {
                 if ([profile.userId isEqualToString:userId]) {
@@ -1013,7 +1012,7 @@
                     } else {
                         [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
                     }
-                    cell.profile = profile;
+                    [cell setUserInfo:userInfo callProfile:profile];
                     break;
                 }
             }

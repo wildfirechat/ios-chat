@@ -8,30 +8,29 @@
 #if WFCU_SUPPORT_VOIP
 #import "WFCUParticipantCollectionViewCell.h"
 #import "SDWebImage.h"
+#import "WFCUWaitingAnimationView.h"
 
 @interface WFCUParticipantCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
-@property (nonatomic, strong)UILabel *stateLabel;
+@property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
 @end
 
 @implementation WFCUParticipantCollectionViewCell
-- (void)setUserInfo:(WFCCUserInfo *)userInfo {
-    _userInfo = userInfo;
+- (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-}
 
-- (void)setProfile:(WFAVParticipantProfile *)profile {
-    _profile = profile;
-    if (profile.state == kWFAVEngineStateIncomming) {
+    if (profile.state == kWFAVEngineStateIncomming
+        || profile.state == kWFAVEngineStateOutgoing
+        || profile.state == kWFAVEngineStateConnecting) {
+        [self.stateLabel start];
         self.stateLabel.hidden = NO;
-        self.stateLabel.text = @"连接中";
     } else {
+        [self.stateLabel stop];
         if (profile.videoMuted) {
             self.stateLabel.hidden = NO;
-            self.stateLabel.text = @"视频已关闭";
+            self.stateLabel.image = [UIImage imageNamed:@"disable_video"];
         } else {
             self.stateLabel.hidden = YES;
-            self.stateLabel.text = nil;
         }
     }
 }
@@ -47,13 +46,15 @@
     return _portraitView;
 }
 
-- (UILabel *)stateLabel {
+- (WFCUWaitingAnimationView *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        _stateLabel.font = [UIFont systemFontOfSize:12];
-        _stateLabel.textColor = [UIColor whiteColor];
-        _stateLabel.textAlignment = NSTextAlignmentCenter;
-        _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:self.bounds];
+
+        _stateLabel.animationImages = @[[UIImage imageNamed:@"connect_ani1"],[UIImage imageNamed:@"connect_ani2"],[UIImage imageNamed:@"connect_ani3"]];
+        _stateLabel.animationDuration = 1;
+        _stateLabel.animationRepeatCount = 200;
+        _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+        _stateLabel.hidden = YES;
         [self addSubview:_stateLabel];
     }
     return _stateLabel;
