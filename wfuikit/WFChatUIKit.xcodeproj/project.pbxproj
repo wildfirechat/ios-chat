@@ -346,6 +346,8 @@
 		2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */; };
 		2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */; };
 		2FE689A921AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */; };
+		2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */; };
+		2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */; };
 		901E270721F152F600A163CB /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270421F152F600A163CB /* WebRTC.framework */; };
 		901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270521F152F600A163CB /* WFAVEngineKit.framework */; };
 		9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9029D0FC21C5D7930002EBAA /* WFCUCreateChannelViewController.h */; };
@@ -703,6 +705,8 @@
 		2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUVerifyRequestViewController.m; sourceTree = "<group>"; };
 		2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewController.m; sourceTree = "<group>"; };
 		2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewController.h; sourceTree = "<group>"; };
+		2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUWaitingAnimationView.h; sourceTree = "<group>"; };
+		2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUWaitingAnimationView.m; sourceTree = "<group>"; };
 		901E270121F152F600A163CB /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		901E270421F152F600A163CB /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
 		901E270521F152F600A163CB /* WFAVEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = "<group>"; };
@@ -769,6 +773,8 @@
 				2BEF789923F6A84D000DE285 /* WFCUPortraitCollectionViewCell.m */,
 				2BEF789A23F6A84D000DE285 /* WFCUVideoViewController.h */,
 				2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */,
+				2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */,
+				2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */,
 			);
 			path = Voip;
 			sourceTree = "<group>";
@@ -1585,6 +1591,7 @@
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
 				2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */,
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
+				2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageNotificationViewController.h in Headers */,
 				2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */,
@@ -1997,6 +2004,7 @@
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,
+				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
 				2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */,
 			);
