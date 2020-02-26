@@ -182,6 +182,7 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
-    [[WFCCNetworkService sharedInstance] disconnect:YES];
+  //不要清除session，这样再次登录时能够保留历史记录。如果需要清除掉本地历史记录和服务器信息这里使用YES
+    [[WFCCNetworkService sharedInstance] disconnect:NO];
 }
 @end
