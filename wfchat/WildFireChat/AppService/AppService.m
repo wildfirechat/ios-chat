@@ -155,12 +155,27 @@ static AppService *sharedSingleton = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
+    //在调用其他接口时需要把cookie传给后台，也就是设置cookie的过程
+    NSData *cookiesdata = [[NSUserDefaults standardUserDefaults] objectForKey:@"WFC_APPSERVER_COOKIES"];//url和登陆时传的url 是同一个
+    if([cookiesdata length]) {
+        NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
+        NSHTTPCookie *cookie;
+        for (cookie in cookies) {
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+        }
+    }
+    
     [manager POST:[APP_SERVER_ADDRESS stringByAppendingPathComponent:path]
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+            //Save cookies
+            NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:APP_SERVER_ADDRESS]];
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookies];
+            [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"WFC_APPSERVER_COOKIES"];
+        
               NSDictionary *dict = responseObject;
-              
               dispatch_async(dispatch_get_main_queue(), ^{
                   successBlock(dict);
               });
