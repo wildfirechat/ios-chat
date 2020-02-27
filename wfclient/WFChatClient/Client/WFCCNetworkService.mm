@@ -632,6 +632,16 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (BOOL)connect:(NSString *)userId token:(NSString *)token {
+    if (_logined) {
+        for (int i = 0; i < 10; i++) {
+            xerror2(TSF"Error: 使用错误，已经connect过了，不能再次connect。如果切换用户请先disconnect，再connect。请修正改错误");
+        }
+#if DEBUG
+        exit(-1);
+#endif
+        return NO;
+    }
+    
   _logined = YES;
     mars::app::AppCallBack::Instance()->SetAccountUserName([userId UTF8String]);
     [self createMars];
