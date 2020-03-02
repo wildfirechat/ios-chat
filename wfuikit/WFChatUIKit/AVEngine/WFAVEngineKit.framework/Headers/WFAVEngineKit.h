@@ -172,6 +172,16 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 - (void)didChangeState:(WFAVEngineState)state;
 
+//多人音视频版本会调用到
+- (void)didParticipantJoined:(NSString *)userId;
+
+//多人音视频版本会调用到
+- (void)didParticipantConnected:(NSString *)userId;
+
+//多人音视频版本会调用到
+- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason;
+
+
 /**
  通话结束的回调
 
