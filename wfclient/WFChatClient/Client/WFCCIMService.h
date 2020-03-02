@@ -558,6 +558,31 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 - (void)updateMessage:(long)messageId
               content:(WFCCMessageContent *)content;
 
+/**
+更新消息状态，需要确保状态跟消息的方向相对应。一般情况下协议栈会自动处理好，不建议客户手动操作状态。
+
+@param messageId 消息ID
+@param status 消息状态
+ 
+@return YES 更新成功。NO 消息不存在，或者状态与消息方向不匹配
+*/
+- (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status;
+
+/**
+ 插入消息
+ 
+ @param message 待插入的消息
+ @return 插入消息的id
+ */
+- (long)insertMessage:(WFCCMessage *)message;
+
+/**
+ 获取会话的消息数
+ 
+ @param conversation 会话。
+ @return 会话的消息数。
+ */
+- (int)getMessageCount:(WFCCConversation *)conversation;
 #pragma mark - 用户相关
 /**
  获取用户信息
@@ -1119,6 +1144,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
 
+#pragma mark - 其它接口
 /**
  获取图片缩略图参数
  
@@ -1126,21 +1152,6 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
  */
 - (NSString *)imageThumbPara;
 
-/**
- 插入消息
- 
- @param message 待插入的消息
- @return 插入消息的id
- */
-- (long)insertMessage:(WFCCMessage *)message;
-
-/**
- 获取会话的消息数
- 
- @param conversation 会话。
- @return 会话的消息数。
- */
-- (int)getMessageCount:(WFCCConversation *)conversation;
 
 /**
  开启数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；另外开启成功后一定要注意commit，需要配对使用.

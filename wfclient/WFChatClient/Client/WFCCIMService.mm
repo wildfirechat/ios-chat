@@ -754,6 +754,19 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, mars::stn::Message_Status_Played);
 }
 
+- (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
+    WFCCMessage *message = [self getMessage:messageId];
+    if (!message) {
+        return NO;
+    }
+    if ((message.direction == MessageDirection_Send && status >= Message_Status_Mentioned) || (message.direction == MessageDirection_Receive && status < Message_Status_Mentioned)) {
+        return NO;
+    }
+    
+    mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
+    return YES;
+}
+
 - (void)removeConversation:(WFCCConversation *)conversation clearMessage:(BOOL)clearMessage {
     mars::stn::MessageDB::Instance()->RemoveConversation(conversation.type, [conversation.target UTF8String], conversation.line, clearMessage);
 }
