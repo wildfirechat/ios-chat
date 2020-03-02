@@ -838,6 +838,10 @@
     [self reloadVideoUI];
 }
 
+- (void)didParticipantConnected:(NSString *)userId {
+    [self reloadVideoUI];
+}
+
 - (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
     [self.participants removeObject:userId];
     [self reloadVideoUI];
