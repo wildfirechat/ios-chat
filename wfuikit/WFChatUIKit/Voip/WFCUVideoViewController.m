@@ -654,6 +654,11 @@
 - (void)didParticipantJoined:(NSString *)userId {
     
 }
+
+- (void)didParticipantConnected:(NSString *)userId {
+    
+}
+
 - (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
     
 }
