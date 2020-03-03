@@ -26,7 +26,7 @@ typedef BOOL (^RTCVideoEncoderCallback)(RTCEncodedImage *frame,
                                         RTCRtpFragmentationHeader *header);
 
 /** Protocol for encoder implementations. */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @protocol RTCVideoEncoder <NSObject>
 
 - (void)setCallback:(RTCVideoEncoderCallback)callback;

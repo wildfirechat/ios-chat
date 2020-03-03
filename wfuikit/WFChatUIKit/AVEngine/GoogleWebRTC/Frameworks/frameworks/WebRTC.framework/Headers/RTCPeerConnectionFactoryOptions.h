@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCPeerConnectionFactoryOptions : NSObject
 
 @property(nonatomic, assign) BOOL disableEncryption;
@@ -30,10 +30,6 @@ RTC_EXPORT
 @property(nonatomic, assign) BOOL ignoreWiFiNetworkAdapter;
 
 @property(nonatomic, assign) BOOL ignoreEthernetNetworkAdapter;
-
-@property(nonatomic, assign) BOOL enableAes128Sha1_32CryptoCipher;
-
-@property(nonatomic, assign) BOOL enableGcmCryptoSuites;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 

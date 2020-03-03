@@ -13,6 +13,6 @@
 #import "RTCMacros.h"
 #import "RTCVideoDecoderFactory.h"
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCVideoDecoderFactoryH264 : NSObject <RTCVideoDecoderFactory>
 @end

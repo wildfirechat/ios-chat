@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCDataChannelConfiguration : NSObject
 
 /** Set to YES if ordered delivery is required. */

@@ -13,7 +13,7 @@
 #import "RTCMacros.h"
 #import "RTCVideoDecoder.h"
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCVideoDecoderVP9 : NSObject
 
 /* This returns a VP9 decoder that can be returned from a RTCVideoDecoderFactory injected into

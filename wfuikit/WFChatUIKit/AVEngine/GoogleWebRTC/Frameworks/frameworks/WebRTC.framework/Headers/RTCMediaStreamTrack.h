@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 RTC_EXTERN NSString *const kRTCMediaStreamTrackKindAudio;
 RTC_EXTERN NSString *const kRTCMediaStreamTrackKindVideo;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCMediaStreamTrack : NSObject
 
 /**

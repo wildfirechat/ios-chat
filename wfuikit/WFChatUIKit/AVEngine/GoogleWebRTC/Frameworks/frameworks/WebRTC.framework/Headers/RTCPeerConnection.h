@@ -57,6 +57,16 @@ typedef NS_ENUM(NSInteger, RTCIceConnectionState) {
   RTCIceConnectionStateCount,
 };
 
+/** Represents the combined ice+dtls connection state of the peer connection. */
+typedef NS_ENUM(NSInteger, RTCPeerConnectionState) {
+  RTCPeerConnectionStateNew,
+  RTCPeerConnectionStateConnecting,
+  RTCPeerConnectionStateConnected,
+  RTCPeerConnectionStateDisconnected,
+  RTCPeerConnectionStateFailed,
+  RTCPeerConnectionStateClosed,
+};
+
 /** Represents the ice gathering state of the peer connection. */
 typedef NS_ENUM(NSInteger, RTCIceGatheringState) {
   RTCIceGatheringStateNew,
@@ -72,7 +82,7 @@ typedef NS_ENUM(NSInteger, RTCStatsOutputLevel) {
 
 @class RTCPeerConnection;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @protocol RTCPeerConnectionDelegate <NSObject>
 
 /** Called when the SignalingState changed. */
@@ -115,11 +125,14 @@ RTC_EXPORT
  *  This is only called with RTCSdpSemanticsUnifiedPlan specified.
  */
 @optional
+/** Called any time the PeerConnectionState changes. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+    didChangeConnectionState:(RTCPeerConnectionState)newState;
+
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didStartReceivingOnTransceiver:(RTCRtpTransceiver *)transceiver;
 
 /** Called when a receiver and its track are created. */
-@optional
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
         didAddReceiver:(RTCRtpReceiver *)rtpReceiver
                streams:(NSArray<RTCMediaStream *> *)mediaStreams;
@@ -130,7 +143,7 @@ RTC_EXPORT
 
 @end
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCPeerConnection : NSObject
 
 /** The object that will be notifed about events such as state changes and
@@ -145,6 +158,7 @@ RTC_EXPORT
 @property(nonatomic, readonly, nullable) RTCSessionDescription *remoteDescription;
 @property(nonatomic, readonly) RTCSignalingState signalingState;
 @property(nonatomic, readonly) RTCIceConnectionState iceConnectionState;
+@property(nonatomic, readonly) RTCPeerConnectionState connectionState;
 @property(nonatomic, readonly) RTCIceGatheringState iceGatheringState;
 @property(nonatomic, readonly, copy) RTCConfiguration *configuration;
 
