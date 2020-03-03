@@ -24,7 +24,7 @@ typedef void (^RTCFileVideoCapturerErrorBlock)(NSError *error);
  *
  * See @c RTCVideoCapturer for more info on capturers.
  */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 
 NS_CLASS_AVAILABLE_IOS(10)
 @interface RTCFileVideoCapturer : RTCVideoCapturer

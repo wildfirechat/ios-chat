@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Implement this protocol to pass codec specific info from the encoder.
  *  Corresponds to webrtc::CodecSpecificInfo.
  */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @protocol RTCCodecSpecificInfo <NSObject>
 @end
 

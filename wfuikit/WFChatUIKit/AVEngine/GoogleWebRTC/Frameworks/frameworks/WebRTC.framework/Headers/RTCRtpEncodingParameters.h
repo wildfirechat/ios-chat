@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCRtpEncodingParameters : NSObject
 
 /** Controls whether the encoding is currently transmitted. */
@@ -27,10 +27,18 @@ RTC_EXPORT
 
 /** The minimum bitrate to use for the encoding, or nil if there is no
  *  limit.
- *
- *  Not implemented.
  */
 @property(nonatomic, copy, nullable) NSNumber *minBitrateBps;
+
+/** The maximum framerate to use for the encoding, or nil if there is no
+ *  limit.
+ */
+@property(nonatomic, copy, nullable) NSNumber *maxFramerate;
+
+/** The requested number of temporal layers to use for the encoding, or nil
+ * if the default should be used.
+ */
+@property(nonatomic, copy, nullable) NSNumber *numTemporalLayers;
 
 /** The SSRC being used by this encoding. */
 @property(nonatomic, readonly, nullable) NSNumber *ssrc;

@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class RTCPeerConnectionFactory;
 @class RTCVideoTrack;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCMediaStream : NSObject
 
 /** The audio tracks in this stream. */

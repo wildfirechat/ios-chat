@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, RTCSourceState) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCMediaSource : NSObject
 
 /** The current state of the RTCMediaSource. */

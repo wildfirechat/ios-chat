@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCRtpParameters : NSObject
 
 /** A unique identifier for the last set of parameters applied. */

@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, RTCLoggingSeverity) {
   RTCLoggingSeverityInfo,
   RTCLoggingSeverityWarning,
   RTCLoggingSeverityError,
+  RTCLoggingSeverityNone,
 };
 
 // Wrapper for C++ RTC_LOG(sev) macros.
