@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol RTCVideoDecoderFactory;
 @protocol RTCVideoEncoderFactory;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCPeerConnectionFactory : NSObject
 
 /* Initialize object with default H264 video encoder/decoder factories */

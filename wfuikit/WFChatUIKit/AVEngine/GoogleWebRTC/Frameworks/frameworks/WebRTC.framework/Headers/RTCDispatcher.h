@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, RTCDispatcherQueueType) {
 /** Dispatcher that asynchronously dispatches blocks to a specific
  *  shared dispatch queue.
  */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCDispatcher : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;

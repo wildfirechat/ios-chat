@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, RTCTlsCertPolicy) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCIceServer : NSObject
 
 /** URI(s) for this server represented as NSStrings. */

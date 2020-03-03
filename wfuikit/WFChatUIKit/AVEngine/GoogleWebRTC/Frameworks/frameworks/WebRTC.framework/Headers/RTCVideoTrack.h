@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class RTCPeerConnectionFactory;
 @class RTCVideoSource;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCVideoTrack : RTCMediaStreamTrack
 
 /** The video source for this video track. */

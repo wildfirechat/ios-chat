@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, RTCVideoContentType) {
 };
 
 /** Represents an encoded frame. Corresponds to webrtc::EncodedImage. */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCEncodedImage : NSObject
 
 @property(nonatomic, strong) NSData *buffer;

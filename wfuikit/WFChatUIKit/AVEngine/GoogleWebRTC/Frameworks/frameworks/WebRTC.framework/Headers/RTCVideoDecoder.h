@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^RTCVideoDecoderCallback)(RTCVideoFrame *frame);
 
 /** Protocol for decoder implementations. */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @protocol RTCVideoDecoder <NSObject>
 
 - (void)setCallback:(RTCVideoDecoderCallback)callback;

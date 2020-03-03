@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class RTCAudioSource;
 
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCAudioTrack : RTCMediaStreamTrack
 
 - (instancetype)init NS_UNAVAILABLE;

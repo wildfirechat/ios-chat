@@ -17,7 +17,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** Mutable version of RTCI420Buffer */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCMutableI420Buffer : RTCI420Buffer<RTCMutableI420Buffer>
 @end
 

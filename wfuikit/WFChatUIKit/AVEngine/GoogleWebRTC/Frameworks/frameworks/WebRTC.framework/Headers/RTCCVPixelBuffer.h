@@ -16,7 +16,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** RTCVideoFrameBuffer containing a CVPixelBufferRef */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCCVPixelBuffer : NSObject <RTCVideoFrameBuffer>
 
 @property(nonatomic, readonly) CVPixelBufferRef pixelBuffer;

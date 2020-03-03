@@ -16,7 +16,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** Protocol for RTCVideoFrameBuffers containing YUV planar data. */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @protocol RTCYUVPlanarBuffer <RTCVideoFrameBuffer>
 
 @property(nonatomic, readonly) int chromaWidth;

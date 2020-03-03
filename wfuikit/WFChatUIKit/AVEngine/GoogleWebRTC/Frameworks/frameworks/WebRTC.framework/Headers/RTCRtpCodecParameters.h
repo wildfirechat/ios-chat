@@ -32,7 +32,7 @@ RTC_EXTERN const NSString *const kRTCVp9CodecName;
 RTC_EXTERN const NSString *const kRTCH264CodecName;
 
 /** Defined in http://w3c.github.io/webrtc-pc/#idl-def-RTCRtpCodecParameters */
-RTC_EXPORT
+RTC_OBJC_EXPORT
 @interface RTCRtpCodecParameters : NSObject
 
 /** The RTP payload type. */
