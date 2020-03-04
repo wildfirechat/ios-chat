@@ -9,7 +9,7 @@
 #import "WFCConfig.h"
 
 //可以是IP，可以是域名，如果是域名的话只支持主域名或www域名或im或imtest的二级域名，其它二级域名不支持！
-//例如：example.com或www.example.com或im.example.com或imtest.example.com是支持的；xx.example.com或xx.yy.example.com是不支持的。
+//例如：example.com或www.example.com或im.example.com或imtest.example.com是支持的；xx.example.com或xx.yy.example.com是不支持的。如果是专业版必须用域名。
 NSString *IM_SERVER_HOST = @"wildfirechat.cn";
 
 //客户端强制使用80端口，不能使用其它端口。需要确保服务器运行在在国内时处于备案状态，确保运营IM服务处在监管之下。
