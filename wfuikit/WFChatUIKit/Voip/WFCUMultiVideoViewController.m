@@ -658,10 +658,10 @@
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
             self.switchCameraButton.hidden = YES;
             if (self.currentSession.isAudioOnly) {
-                self.speakerButton.hidden = NO;
+                self.speakerButton.hidden = YES;
                 [self updateSpeakerButton];
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
-                self.audioButton.hidden = NO;
+                self.audioButton.hidden = YES;
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
             } else {
                 self.speakerButton.hidden = YES;
@@ -823,7 +823,9 @@
         [self reloadVideoUI];
     }
 }
-
+- (void)didReportAudioVolume:(NSInteger)volumn ofUser:(NSString *)userId {
+    NSLog(@"user %@ report volumn %ld", userId, volumn);
+}
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
