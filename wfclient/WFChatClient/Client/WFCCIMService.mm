@@ -759,9 +759,6 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     if (!message) {
         return NO;
     }
-    if ((message.direction == MessageDirection_Send && status >= Message_Status_Mentioned) || (message.direction == MessageDirection_Receive && status < Message_Status_Mentioned)) {
-        return NO;
-    }
     
     mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
     return YES;
