@@ -13,6 +13,8 @@
 @interface WFCUParticipantCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
+
+@property (nonatomic, strong)UIImageView *speakingView;
 @end
 
 @implementation WFCUParticipantCollectionViewCell
@@ -33,7 +35,22 @@
             self.stateLabel.hidden = YES;
         }
     }
+    _speakingView.hidden = YES;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:userInfo.userId];
+    
 }
+
+- (void)onVolumeUpdated:(NSNotification *)notification {
+    NSInteger volume = [notification.userInfo[@"volume"] integerValue];
+    if (volume > 1000) {
+        self.speakingView.hidden = NO;
+        [self bringSubviewToFront:self.speakingView];
+    } else {
+        self.speakingView.hidden = YES;
+    }
+}
+
 
 - (UIImageView *)portraitView {
     if (!_portraitView) {
@@ -44,6 +61,19 @@
         [self addSubview:_portraitView];
     }
     return _portraitView;
+}
+
+
+- (UIImageView *)speakingView {
+    if (!_speakingView) {
+        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - 20, 20, 20)];
+
+        _speakingView.layer.masksToBounds = YES;
+        _speakingView.layer.cornerRadius = 2.f;
+        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        [self addSubview:_speakingView];
+    }
+    return _speakingView;
 }
 
 - (WFCUWaitingAnimationView *)stateLabel {
@@ -58,6 +88,10 @@
         [self addSubview:_stateLabel];
     }
     return _stateLabel;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end
 #endif

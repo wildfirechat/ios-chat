@@ -13,6 +13,8 @@
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UILabel *nameLabel;
 @property (nonatomic, strong)UIImageView *stateLabel;
+
+@property (nonatomic, strong)UIImageView *speakingView;
 @end
 
 @implementation WFCUPortraitCollectionViewCell
@@ -21,6 +23,21 @@
     _userInfo = userInfo;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     self.nameLabel.text = userInfo.displayName;
+    
+    _speakingView.hidden = YES;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:userInfo.userId];
+    
+}
+
+- (void)onVolumeUpdated:(NSNotification *)notification {
+    NSInteger volume = [notification.userInfo[@"volume"] integerValue];
+    if (volume > 1000) {
+        self.speakingView.hidden = NO;
+        [self bringSubviewToFront:self.speakingView];
+    } else {
+        self.speakingView.hidden = YES;
+    }
 }
 
 -(void)setProfile:(WFAVParticipantProfile *)profile {
@@ -45,6 +62,18 @@
     return _portraitView;
 }
 
+- (UIImageView *)speakingView {
+    if (!_speakingView) {
+        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.itemSize - 20, 20, 20)];
+
+        _speakingView.layer.masksToBounds = YES;
+        _speakingView.layer.cornerRadius = 2.f;
+        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        [self addSubview:_speakingView];
+    }
+    return _speakingView;
+}
+
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.itemSize, self.itemSize, self.labelSize)];
@@ -66,6 +95,10 @@
         [self addSubview:_stateLabel];
     }
     return _stateLabel;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end
 #endif
