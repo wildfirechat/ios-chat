@@ -409,7 +409,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
     
 }
-- (void)didReportAudioVolume:(NSInteger)volumn ofUser:(NSString *)userId {
+- (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
     
 }
 - (void)didChangeMode:(BOOL)isAudioOnly {

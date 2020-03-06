@@ -63,6 +63,9 @@
 @property (nonatomic, strong) NSTimer *connectedTimer;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *participants;
+
+//视频时，大屏用户正在说话
+@property (nonatomic, strong)UIImageView *speakingView;
 #endif
 @end
 
@@ -337,6 +340,19 @@
         [self.view addSubview:_scalingButton];
     }
     return _scalingButton;
+}
+
+- (UIImageView *)speakingView {
+    if (!_speakingView) {
+        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bigVideoView.bounds.size.height - 20, 20, 20)];
+
+        _speakingView.layer.masksToBounds = YES;
+        _speakingView.layer.cornerRadius = 2.f;
+        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        _speakingView.hidden = YES;
+        [self.bigVideoView addSubview:_speakingView];
+    }
+    return _speakingView;
 }
 
 - (void)startConnectedTimer {
@@ -823,8 +839,17 @@
         [self reloadVideoUI];
     }
 }
-- (void)didReportAudioVolume:(NSInteger)volumn ofUser:(NSString *)userId {
-    NSLog(@"user %@ report volumn %ld", userId, volumn);
+- (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
+    NSLog(@"user %@ report volume %ld", userId, volume);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
+    if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
+        if (volume > 1000) {
+            [self.bigVideoView bringSubviewToFront:self.speakingView];
+            self.speakingView.hidden = NO;
+        } else {
+            self.speakingView.hidden = YES;
+        }
+    }
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -915,6 +940,7 @@
 - (void)reloadVideoUI {
     if (!self.currentSession.audioOnly) {
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
+            _speakingView.hidden = YES;
             NSString *userId = [self.participants lastObject];
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
