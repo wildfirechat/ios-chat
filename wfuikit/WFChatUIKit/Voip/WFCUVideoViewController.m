@@ -644,7 +644,7 @@
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
     
 }
-- (void)didReportAudioVolume:(NSInteger)volumn ofUser:(NSString *)userId {
+- (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
     
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
