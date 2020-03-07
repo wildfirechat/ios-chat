@@ -568,6 +568,10 @@
     if (hasMentionInfo) {
         draft = text;
     }
+    //防止弹出@选项
+    if ([draft isEqualToString:@"@"]) {
+        draft = @"@ ";
+    }
     
     [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:draft];
     self.textInputView.text = draft;
