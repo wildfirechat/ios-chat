@@ -108,6 +108,7 @@ namespace mars {
             std::list<std::string> getBlackList(bool refresh);
             
             std::string GetFriendAlias(const std::string &friendId);
+            std::string GetFriendExtra(const std::string &friendId);
             
             int64_t getFriendRequestHead();
             int64_t getFriendHead();
@@ -115,7 +116,7 @@ namespace mars {
             long InsertFriendRequestOrReplace(const TFriendRequest &friendRequest);
             std::list<TFriendRequest> getFriendRequest(int direction);
             
-            long InsertFriendOrReplace(const std::string &friendUid, int state, int blacked, int64_t timestamp, const std::string &alias);
+            long InsertFriendOrReplace(const std::string &friendUid, int state, int blacked, int64_t timestamp, const std::string &alias, const std::string &extra);
             
             bool DeleteFriend(const std::string &friendUid);
             
