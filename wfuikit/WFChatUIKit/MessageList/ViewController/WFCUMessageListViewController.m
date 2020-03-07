@@ -256,7 +256,7 @@
                         if (!reversedMsgs.count) {
                             weakSelf.hasMoreOld = NO;
                         } else {
-                            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0];
+                            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
                         }
                         weakSelf.loadingMore = NO;
                     });
@@ -269,7 +269,7 @@
             } else {
                 [NSThread sleepForTimeInterval:0.5];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf appendMessages:messageList newMessage:NO highlightId:0];
+                    [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
                     weakSelf.loadingMore = NO;
                 });
             }
@@ -301,7 +301,7 @@
             }
             [NSThread sleepForTimeInterval:3];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0];
+                [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO];
                 weakSelf.loadingNew = NO;
             });
         });
@@ -647,7 +647,7 @@
 
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
-    [self appendMessages:messages newMessage:YES highlightId:0];
+    [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO];
     [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
 }
 
@@ -671,7 +671,7 @@
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
     if (status == Message_Status_Sending) {
         if ([message.conversation isEqual:self.conversation]) {
-            [self appendMessages:@[message] newMessage:YES highlightId:0];
+            [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
         }
     }
     
@@ -701,11 +701,11 @@
     
     self.modelList = [[NSMutableArray alloc] init];
     
-    [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId];
+    [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
     self.highlightMessageId = 0;
 }
 
-- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId {
+- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom {
     if (messages.count == 0) {
         return;
     }
@@ -785,7 +785,7 @@
   [self.collectionView reloadData];
     if (newMessage || self.modelList.count == messages.count) {
         if(isAtButtom) {
-            [self scrollToBottom:YES];
+            forceButtom = true;
         }
     } else {
         CGFloat offset = 0;
@@ -798,6 +798,9 @@
         [UIView animateWithDuration:0.2 animations:^{
             self.collectionView.contentOffset = CGPointMake(0, offset - 20);
         }];
+    }
+    if (forceButtom) {
+        [self scrollToBottom:YES];
     }
 }
 
