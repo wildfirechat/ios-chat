@@ -721,13 +721,15 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 
  @param userId 用户ID
  @param accpet 是否接受
+ @param extra 附加信息，如果接受，附加信息会添加到好友附加信息中
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)handleFriendRequest:(NSString *)userId
                      accept:(BOOL)accpet
-                  success:(void(^)(void))successBlock
-                    error:(void(^)(int error_code))errorBlock;
+                      extra:(NSString *)extra
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock;
 
 - (NSString *)getFriendAlias:(NSString *)friendId;
 
@@ -736,6 +738,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock;
 
+- (NSString *)getFriendExtra:(NSString *)friendId;
 /**
  查询用户是否被加入黑名单
  

@@ -1009,9 +1009,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (void)handleFriendRequest:(NSString *)userId
                      accept:(BOOL)accpet
+                      extra:(NSString *)extra
                     success:(void(^)())successBlock
                       error:(void(^)(int error_code))errorBlock {
-    mars::stn::handleFriendRequest([userId UTF8String], accpet, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::handleFriendRequest([userId UTF8String], accpet, extra ? [extra UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)deleteFriend:(NSString *)userId
@@ -1030,6 +1031,11 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock {
     mars::stn::setFriendAlias([friendId UTF8String], alias ? [alias UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (NSString *)getFriendExtra:(NSString *)friendId {
+    std::string extra = mars::stn::MessageDB::Instance()->GetFriendExtra([friendId UTF8String]);
+    return [NSString stringWithUTF8String:extra.c_str()];
 }
 
 - (BOOL)isBlackListed:(NSString *)userId {

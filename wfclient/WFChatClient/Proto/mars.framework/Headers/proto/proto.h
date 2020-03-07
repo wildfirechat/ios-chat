@@ -646,7 +646,7 @@ namespace mars{
         
         extern void loadFriendRequestFromRemote();
         extern void loadFriendFromRemote();
-        extern void handleFriendRequest(const std::string &userId, bool accept, GeneralOperationCallback *callback);
+        extern void handleFriendRequest(const std::string &userId, bool accept, const std::string &extra, GeneralOperationCallback *callback);
         extern void deleteFriend(const std::string &userId, GeneralOperationCallback *callback);
         extern void setFriendAlias(const std::string &userId, const std::string &alias, GeneralOperationCallback *callback);
         

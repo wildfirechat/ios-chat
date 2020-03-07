@@ -120,7 +120,7 @@
     [hud showAnimated:YES];
     
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] handleFriendRequest:targetUserId accept:YES success:^{
+    [[WFCCIMService sharedWFCIMService] handleFriendRequest:targetUserId accept:YES extra:nil success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             hud.hidden = YES;
             [ws.view makeToast:WFCString(@"UpdateDone")
