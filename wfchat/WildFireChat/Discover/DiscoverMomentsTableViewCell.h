@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DiscoverMomentsTableViewCell : UITableViewCell
 @property (nonatomic, strong)BubbleTipView *bubbleView;
-//#ifdef WFC_MOMENTS
+#ifdef WFC_MOMENTS
 @property (nonatomic, strong)WFMFeed *lastFeed;
-//#endif
+#endif
 @end
 
 NS_ASSUME_NONNULL_END
