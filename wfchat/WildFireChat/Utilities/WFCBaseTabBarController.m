@@ -11,6 +11,8 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
+#import <WFMomentUIKit/WFMomentUIKit.h>
+#import <WFMomentClient/WFMomentClient.h>
 
 #define kClassKey   @"rootVCClassString"
 #define kTitleKey   @"title"
@@ -69,6 +71,27 @@
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     self.settingNav = nav;
+
+#ifdef WFC_MOMENTS
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveComments:) name:kReceiveComments object:nil];
+#endif
+}
+
+- (void)onReceiveComments:(NSNotification *)notification {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateBadgeNumber];
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateBadgeNumber];
+}
+
+- (void)updateBadgeNumber {
+#ifdef WFC_MOMENTS
+    [self.tabBar showBadgeOnItemIndex:2 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
+#endif
 }
 
 - (void)setNewUser:(BOOL)newUser {
