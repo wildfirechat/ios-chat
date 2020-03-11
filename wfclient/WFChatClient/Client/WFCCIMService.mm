@@ -1106,6 +1106,45 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::uploadGeneralMedia(fileName == nil ? "" : [fileName UTF8String], std::string((char *)mediaData.bytes, mediaData.length), (int)mediaType, new GeneralUpdateMediaCallback(successBlock, progressBlock, errorBlock));
 }
 
+- (BOOL)syncUploadMedia:(NSString *)fileName
+              mediaData:(NSData *)mediaData
+              mediaType:(WFCCMediaType)mediaType
+                success:(void(^)(NSString *remoteUrl))successBlock
+            progress:(void(^)(long uploaded, long total))progressBlock
+                  error:(void(^)(int error_code))errorBlock {
+    NSCondition *condition = [[NSCondition alloc] init];
+    __block BOOL success = NO;
+
+    [condition lock];
+    [[WFCCIMService sharedWFCIMService] uploadMedia:fileName mediaData:mediaData mediaType:mediaType success:^(NSString *remoteUrl) {
+        success = YES;
+        [condition lock];
+        [condition signal];
+        [condition unlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            successBlock(remoteUrl);
+        });
+    } progress:^(long uploaded, long total) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            progressBlock(uploaded, total);
+        });
+    } error:^(int error_code) {
+        success = NO;
+        [condition lock];
+        [condition signal];
+        [condition unlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error_code);
+        });
+    }];
+    
+    [condition wait];
+    [condition unlock];
+    
+    return success;
+}
+
+
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values
             success:(void(^)())successBlock
               error:(void(^)(int error_code))errorBlock {
