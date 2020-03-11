@@ -10,6 +10,10 @@
 #import "ChatroomListViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WFChatClient/WFCCIMService.h>
+#import "DiscoverMomentsTableViewCell.h"
+#import <WFMomentClient/WFMomentClient.h>
+#import <WFMomentUIKit/WFMomentUIKit.h>
+
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -41,6 +45,17 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateBadgeNumber];
+}
+
+- (void)updateBadgeNumber {
+#ifdef WFC_MOMENTS
+    WFCCUnreadCount *unread = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type)] lines:@[@(1)]];
+    [self.tabBarController.tabBar showBadgeOnItemIndex:0 badgeValue:unread.unread];
+#endif
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,9 +105,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleDefault"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"styleDefault"];
+    UITableViewCell *cell;
+    if (indexPath.section == 0 && self.hasMoments) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"momentsCell"];
+        if (cell == nil) {
+            cell = [[DiscoverMomentsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"momentsCell"];
+        }
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"defaultCell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"defaultCell"];
+        }
     }
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -101,8 +124,27 @@
     
     if (indexPath.section == 0) {
         if (self.hasMoments) {
+            DiscoverMomentsTableViewCell *momentsCell = (DiscoverMomentsTableViewCell *)cell;
             cell.textLabel.text = LocalizedString(@"Moments");
             cell.imageView.image = [UIImage imageNamed:@"AlbumReflashIcon"];
+            momentsCell.bubbleView.hidden = NO;
+            [momentsCell.bubbleView setBubbleTipNumber:3];
+            __weak typeof(self)ws = self;
+#ifdef WFC_MOMENTS
+            NSMutableArray<WFMFeed *> *feeds = [[WFMomentService sharedService] restoreCache:nil];
+            if (feeds.count > 0) {
+                momentsCell.lastFeed = [feeds objectAtIndex:0];
+            } else {
+                [[WFMomentService sharedService] getFeeds:0 count:10 fromUser:nil success:^(NSArray<WFMFeed *> * _Nonnull feeds) {
+                    if (feeds.count) {
+                        [[WFMomentService sharedService] storeCache:feeds forUser:nil];
+                        [ws.tableView reloadData];
+                    }
+                } error:^(int error_code) {
+                    
+                }];
+            }
+#endif
         } else {
             cell.textLabel.text = LocalizedString(@"Chatroom");
             cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
