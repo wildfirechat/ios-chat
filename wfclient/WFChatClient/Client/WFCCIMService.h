@@ -495,6 +495,24 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
               error:(void(^)(int error_code))errorBlock;
 
 /**
+ 同步上传媒体(图片、语音、文件等)，成功或者失败之后才会返回
+ 
+ @param fileName 文件名，可为空
+ @param mediaData 媒体信息
+ @param mediaType 媒体类型
+ @param successBlock 成功的回调
+ @param progressBlock 上传进度的回调，注意仅当媒体内容大于300K才会有回调
+ @param errorBlock 失败的回调
+ 
+ @return 是否上传成功
+ */
+- (BOOL)syncUploadMedia:(NSString *)fileName
+              mediaData:(NSData *)mediaData
+              mediaType:(WFCCMediaType)mediaType
+                success:(void(^)(NSString *remoteUrl))successBlock
+               progress:(void(^)(long uploaded, long total))progressBlock
+                  error:(void(^)(int error_code))errorBlock;
+/**
  删除消息
  
  @param messageId 消息ID
