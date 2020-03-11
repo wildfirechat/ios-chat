@@ -58,13 +58,13 @@
     }
     return _lastFeedPortrait;
 }
-//#ifdef WFC_MOMENTS
+#ifdef WFC_MOMENTS
 - (void)setLastFeed:(WFMFeed *)lastFeed {
     _lastFeed = lastFeed;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:lastFeed.sender refresh:NO];
     
     [self.lastFeedPortrait sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-    if (lastFeed.serverTime > [[WFMomentService sharedService] getLastReadTimestamp]) {
+    if (lastFeed.serverTime > [[WFMomentService sharedService] getLastReadTimestamp]*1000) {
         [self.bubbleView2 setBubbleTipNumber:1];
         self.bubbleView2.hidden = NO;
     } else {
@@ -72,5 +72,5 @@
         self.bubbleView2.hidden = YES;
     }
 }
-//#endif
+#endif
 @end

@@ -40,7 +40,16 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+#ifdef WFC_MOMENTS
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveComments:) name:kReceiveComments object:nil];
+#endif
 }
+
+- (void)onReceiveComments:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -48,14 +57,6 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self updateBadgeNumber];
-}
-
-- (void)updateBadgeNumber {
-#ifdef WFC_MOMENTS
-    WFCCUnreadCount *unread = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type)] lines:@[@(1)]];
-    [self.tabBarController.tabBar showBadgeOnItemIndex:0 badgeValue:unread.unread];
-#endif
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -127,10 +128,16 @@
             DiscoverMomentsTableViewCell *momentsCell = (DiscoverMomentsTableViewCell *)cell;
             cell.textLabel.text = LocalizedString(@"Moments");
             cell.imageView.image = [UIImage imageNamed:@"AlbumReflashIcon"];
-            momentsCell.bubbleView.hidden = NO;
-            [momentsCell.bubbleView setBubbleTipNumber:3];
+            
             __weak typeof(self)ws = self;
 #ifdef WFC_MOMENTS
+            int unread = [[WFMomentService sharedService] getUnreadCount];
+            if (unread) {
+                momentsCell.bubbleView.hidden = NO;
+                [momentsCell.bubbleView setBubbleTipNumber:unread];
+            } else {
+                momentsCell.bubbleView.hidden = YES;
+            }
             NSMutableArray<WFMFeed *> *feeds = [[WFMomentService sharedService] restoreCache:nil];
             if (feeds.count > 0) {
                 momentsCell.lastFeed = [feeds objectAtIndex:0];
