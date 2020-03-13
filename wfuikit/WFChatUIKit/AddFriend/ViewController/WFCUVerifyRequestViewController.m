@@ -32,7 +32,20 @@
     self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + kStatusBarAndNavigationBarHeight, clientArea.size.width, 32)];
     WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     self.verifyField.font = [UIFont systemFontOfSize:16];
-    self.verifyField.text = [NSString stringWithFormat:WFCString(@"DefaultAddFriendReason"), me.displayName];
+    if(me.displayName){
+        self.verifyField.text = [NSString stringWithFormat:WFCString(@"DefaultAddFriendReason"), me.displayName];
+    }else {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if(!self.verifyField.text) {
+                WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+                if (me.displayName) {
+                    self.verifyField.text = [NSString stringWithFormat:WFCString(@"DefaultAddFriendReason"), me.displayName];
+                } else {
+                    self.verifyField.text = WFCString(@"DefaultAddFriendReason");
+                }
+            }
+        });
+    }
     self.verifyField.borderStyle = UITextBorderStyleRoundedRect;
     self.verifyField.clearButtonMode = UITextFieldViewModeAlways;
     
