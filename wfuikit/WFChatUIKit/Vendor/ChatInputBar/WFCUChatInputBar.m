@@ -20,6 +20,7 @@
 #import "UIView+Toast.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUContactListViewController.h"
+#import "MBProgressHUD.h"
 
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
@@ -1023,9 +1024,6 @@
 //    [self.delegate imageDidCapture:image];
 //}
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id> *)info {
-
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     if([mediaType isEqualToString:@"public.movie"]) {
         NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
@@ -1068,6 +1066,10 @@
         
         exportSession.shouldOptimizeForNetworkUse = YES;
         
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:picker.view animated:YES];
+        hud.label.text = @"处理中...";
+        [hud showAnimated:YES];
+        
         __weak typeof(self)ws = self;
         [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
          {
@@ -1076,9 +1078,15 @@
                  float memorySize = (float)data.length / 1024 / 1024;
                  NSLog(@"视频压缩后大小 %f", memorySize);
                  dispatch_async(dispatch_get_main_queue(), ^{
+                     [hud hideAnimated:YES];
+                     [picker dismissViewControllerAnimated:YES completion:nil];
                      [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:10];
                  });
              } else {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     [hud hideAnimated:YES];
+                     [picker dismissViewControllerAnimated:YES completion:nil];
+                 });
                  NSLog(@"压缩失败");
              }
              
@@ -1086,6 +1094,7 @@
         
 
     } else if ([mediaType isEqualToString:@"public.image"]) {
+        [picker dismissViewControllerAnimated:YES completion:nil];
         UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
         if (!image)
             image = [info objectForKey:UIImagePickerControllerOriginalImage];
