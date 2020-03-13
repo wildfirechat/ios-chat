@@ -1039,6 +1039,7 @@
         CMTime time = CMTimeMake(1, 2);
         CGImageRef oneRef = [generate1 copyCGImageAtTime:time actualTime:NULL error:&err];
         UIImage *thumbnail = [[UIImage alloc] initWithCGImage:oneRef];
+        thumbnail = [WFCCUtilities generateThumbnail:thumbnail withWidth:120 withHeight:120];
         
         AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];
         NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
