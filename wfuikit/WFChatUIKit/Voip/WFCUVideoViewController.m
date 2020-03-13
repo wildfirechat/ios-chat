@@ -45,6 +45,8 @@
 @property (nonatomic, assign) BOOL audioMuted;
 @property (nonatomic, assign) BOOL videoMuted;
 
+@property (nonatomic, assign) BOOL swapVideoView;
+
 @property (nonatomic, strong) WFAVCallSession *currentSession;
 
 @property (nonatomic, assign) WFAVVideoScalingType scalingType;
@@ -114,6 +116,7 @@
     
     self.smallVideoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
+    [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     [self.view addSubview:self.smallVideoView];
     
     [self checkAVPermission];
@@ -271,7 +274,16 @@
     }
     return _scalingButton;
 }
-
+- (void)setSwapVideoView:(BOOL)swapVideoView {
+    _swapVideoView = swapVideoView;
+    if (swapVideoView) {
+        [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
+        [self.currentSession setupRemoteVideoView:self.smallVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+    } else {
+        [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
+        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+    }
+}
 - (void)startConnectedTimer {
     [self stopConnectedTimer];
     self.connectedTimer = [NSTimer scheduledTimerWithTimeInterval:1
@@ -413,6 +425,13 @@
             break;
         }
 }
+
+- (void)onSmallVideoTaped:(id)sender {
+    if (self.currentSession.state == kWFAVEngineStateConnected) {
+        self.swapVideoView = !_swapVideoView;
+    }
+}
+
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         BOOL result = [self.currentSession muteVideo:!self.videoMuted];
@@ -430,8 +449,7 @@
             self.scalingType = kWFAVVideoScalingTypeAspectFit;
         }
         
-        [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+        self.swapVideoView = _swapVideoView;
     }
 }
 
@@ -538,8 +556,7 @@
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
-            [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+            self.swapVideoView = NO;
             self.stateLabel.text = WFCString(@"CallConnecting");
             self.smallVideoView.hidden = NO;
             self.downgradeButton.hidden = YES;
