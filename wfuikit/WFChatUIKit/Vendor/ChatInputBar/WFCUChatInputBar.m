@@ -953,6 +953,8 @@
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }
 #endif
+        picker.videoExportPreset = AVAssetExportPresetPassthrough;
+        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:picker.sourceType];
         [navi presentViewController:picker animated:YES completion:nil];
         [self checkAndAlertCameraAccessRight];
     } else if(itemTag == 2) {
@@ -1014,13 +1016,81 @@
 }
 
 #pragma mark - UIImagePickerControllerDelegate<NSObject>
-- (void)imagePickerController:(UIImagePickerController *)picker
-        didFinishPickingImage:(UIImage *)image
-                  editingInfo:(NSDictionary *)editingInfo {
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    [self.delegate imageDidCapture:image];
-}
+//- (void)imagePickerController:(UIImagePickerController *)picker
+//        didFinishPickingImage:(UIImage *)image
+//                  editingInfo:(NSDictionary *)editingInfo {
+//    [picker dismissViewControllerAnimated:YES completion:nil];
+//    [self.delegate imageDidCapture:image];
+//}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id> *)info {
 
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if([mediaType isEqualToString:@"public.movie"]) {
+        NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        NSString *url = [videoURL absoluteString];
+        url = [url stringByReplacingOccurrencesOfString:@"file:///private" withString:@""];
+        //获取视频的thumbnail
+        AVURLAsset *asset1 = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+        AVAssetImageGenerator *generate1 = [[AVAssetImageGenerator alloc] initWithAsset:asset1];
+        generate1.appliesPreferredTrackTransform = YES;
+        NSError *err = NULL;
+        CMTime time = CMTimeMake(1, 2);
+        CGImageRef oneRef = [generate1 copyCGImageAtTime:time actualTime:NULL error:&err];
+        UIImage *thumbnail = [[UIImage alloc] initWithCGImage:oneRef];
+        
+        AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];
+        NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+        
+        NSString *CompressionVideoPaht = [WFCCUtilities getDocumentPathWithComponent:@"/VIDEO"];
+        AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:@"AVAssetExportPresetLowQuality"];
+        
+        NSDateFormatter *formater = [[NSDateFormatter alloc] init];// 用时间, 给文件重新命名, 防止视频存储覆盖,
+        
+        [formater setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+        
+        NSFileManager *manager = [NSFileManager defaultManager];
+        
+        BOOL isExists = [manager fileExistsAtPath:CompressionVideoPaht];
+        if (!isExists) {
+             [manager createDirectoryAtPath:CompressionVideoPaht withIntermediateDirectories:YES attributes:nil error:nil];
+         }
+//        
+        NSString *resultPath = [CompressionVideoPaht stringByAppendingPathComponent:[NSString stringWithFormat:@"outputJFVideo-%@.mov", [formater stringFromDate:[NSDate date]]]];
+        
+        NSLog(@"resultPath = %@",resultPath);
+        
+        exportSession.outputURL = [NSURL fileURLWithPath:resultPath];
+        
+        exportSession.outputFileType = AVFileTypeMPEG4;
+        
+        exportSession.shouldOptimizeForNetworkUse = YES;
+        
+        __weak typeof(self)ws = self;
+        [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+         {
+             if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+                 NSData *data = [NSData dataWithContentsOfFile:resultPath];
+                 float memorySize = (float)data.length / 1024 / 1024;
+                 NSLog(@"视频压缩后大小 %f", memorySize);
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:10];
+                 });
+             } else {
+                 NSLog(@"压缩失败");
+             }
+             
+         }];
+        
+
+    } else if ([mediaType isEqualToString:@"public.image"]) {
+        UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
+        if (!image)
+            image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self.delegate imageDidCapture:image];
+    }
+}
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
