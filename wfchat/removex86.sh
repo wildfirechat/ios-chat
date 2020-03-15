@@ -1,6 +1,7 @@
 cd Frameworks
 
 echo "朋友圈的库如果不存在，脚本会报错误，可以忽略掉！"
+echo "打包时一定只能打开wfchat项目进行打包，不能打开ios-chat空间进行打包，原因请参考文档中的常见问题"
 
 #lipo WFChatUIKit.framework/WFChatUIKit -thin armv7 -output XXXX_armv7
 lipo WFChatUIKit.framework/WFChatUIKit -thin arm64 -output XXXX_arm64
