@@ -50,8 +50,6 @@
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *stateLabel;
 @property (nonatomic, strong) UILabel *connectTimeLabel;
-@property (nonatomic, assign) BOOL audioMuted;
-@property (nonatomic, assign) BOOL videoMuted;
 
 @property (nonatomic, strong) WFAVCallSession *currentSession;
 
@@ -95,8 +93,6 @@
         self.currentSession = session;
         self.currentSession.delegate = self;
         [self didChangeState:kWFAVEngineStateIncomming];
-        self.audioMuted = NO;
-        self.videoMuted = NO;
         [self rearrangeParticipants];
     }
     return self;
@@ -110,9 +106,6 @@
                                                                  conversation:conversation
                                                               sessionDelegate:self];
         self.currentSession = session;
-        self.audioMuted = NO;
-        self.videoMuted = NO;
-        
         [self rearrangeParticipants];
     }
     return self;
@@ -299,6 +292,7 @@
         _audioButton.backgroundColor = [UIColor clearColor];
         [_audioButton addTarget:self action:@selector(audioButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _audioButton.hidden = YES;
+        [self updateAudioButton];
         [self.view addSubview:_audioButton];
     }
     return _audioButton;
@@ -325,6 +319,7 @@
         _videoButton.backgroundColor = [UIColor clearColor];
         [_videoButton addTarget:self action:@selector(videoButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _videoButton.hidden = YES;
+        [self updateVideoButton];
         [self.view addSubview:_videoButton];
     }
     return _videoButton;
@@ -451,19 +446,18 @@
 
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        BOOL result = [self.currentSession muteAudio:!self.audioMuted];
-        if (result) {
-            self.audioMuted = !self.audioMuted;
-            if (self.audioMuted) {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateNormal];
-            } else {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
-            }
-            
-        }
+        [self.currentSession muteAudio:!self.currentSession.audioMuted];
+        [self updateAudioButton];
     }
 }
 
+- (void)updateAudioButton {
+    if (self.currentSession.audioMuted) {
+        [self.audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateNormal];
+    } else {
+        [self.audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
+    }
+}
 - (void)speakerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         [self.currentSession enableSpeaker:!self.currentSession.isSpeaker];
@@ -480,7 +474,7 @@
 }
 
 - (void)updateVideoButton {
-    if (self.videoMuted) {
+    if (self.currentSession.videoMuted) {
         [self.videoButton setImage:[UIImage imageNamed:@"disable_video"] forState:UIControlStateNormal];
     } else {
         [self.videoButton setImage:[UIImage imageNamed:@"enable_video"] forState:UIControlStateNormal];
@@ -540,10 +534,7 @@
 
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        BOOL result = [self.currentSession muteVideo:!self.videoMuted];
-        if (result) {
-            self.videoMuted = !self.videoMuted;
-        }
+        [self.currentSession muteVideo:!self.currentSession.isVideoMuted];
         [self updateVideoButton];
     }
 }
@@ -1030,21 +1021,21 @@
         
         if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             WFAVParticipantProfile *profile = self.currentSession.myProfile;
+            [cell setUserInfo:userInfo callProfile:profile];
             if (profile.videoMuted) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.smallScalingType];
             } else {
                 [self.currentSession setupLocalVideoView:cell scalingType:self.smallScalingType];
             }
-            [cell setUserInfo:userInfo callProfile:profile];
         } else {
             for (WFAVParticipantProfile *profile in self.currentSession.participants) {
                 if ([profile.userId isEqualToString:userId]) {
+                    [cell setUserInfo:userInfo callProfile:profile];
                     if (profile.videoMuted) {
                         [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:userId];
                     } else {
                         [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
                     }
-                    [cell setUserInfo:userInfo callProfile:profile];
                     break;
                 }
             }

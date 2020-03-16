@@ -404,6 +404,16 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 
 - (void)inviteNewParticipants:(NSArray<NSString *>*)targetIds;
 /**
+是否是关掉视频
+*/
+@property(nonatomic, assign, getter=isVideoMuted, readonly) BOOL videoMuted;
+
+/**
+是否是关掉音频
+*/
+@property(nonatomic, assign, getter=isAudioMuted, readonly) BOOL audioMuted;
+
+/**
  接听通话
  */
 - (void)answerCall:(BOOL)audioOnly;

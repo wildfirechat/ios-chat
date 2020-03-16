@@ -42,9 +42,6 @@
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *stateLabel;
 
-@property (nonatomic, assign) BOOL audioMuted;
-@property (nonatomic, assign) BOOL videoMuted;
-
 @property (nonatomic, assign) BOOL swapVideoView;
 
 @property (nonatomic, strong) WFAVCallSession *currentSession;
@@ -86,8 +83,6 @@
         self.currentSession = session;
         self.currentSession.delegate = self;
         [self didChangeState:kWFAVEngineStateIncomming];
-        self.audioMuted = NO;
-        self.videoMuted = NO;
     }
     return self;
 }
@@ -100,8 +95,6 @@
                                                                  conversation:conversation
                                                               sessionDelegate:self];
         self.currentSession = session;
-        self.audioMuted = NO;
-        self.videoMuted = NO;
     }
     return self;
 }
@@ -233,6 +226,7 @@
         _audioButton.backgroundColor = [UIColor clearColor];
         [_audioButton addTarget:self action:@selector(audioButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _audioButton.hidden = YES;
+        [self updateAudioButton];
         [self.view addSubview:_audioButton];
     }
     return _audioButton;
@@ -347,19 +341,18 @@
 
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        BOOL result = [self.currentSession muteAudio:!self.audioMuted];
-        if (result) {
-            self.audioMuted = !self.audioMuted;
-            if (self.audioMuted) {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateNormal];
-            } else {
-                [self.audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
-            }
-            
-        }
+        [self.currentSession muteAudio:!self.currentSession.audioMuted];
+        [self updateAudioButton];
     }
 }
 
+- (void)updateAudioButton {
+    if (self.currentSession.audioMuted) {
+        [self.audioButton setImage:[UIImage imageNamed:@"mute_hover"] forState:UIControlStateNormal];
+    } else {
+        [self.audioButton setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
+    }
+}
 - (void)speakerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         [self.currentSession enableSpeaker:!self.currentSession.isSpeaker];
@@ -434,10 +427,7 @@
 
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        BOOL result = [self.currentSession muteVideo:!self.videoMuted];
-        if (result) {
-            self.videoMuted = !self.videoMuted;
-        }
+        [self.currentSession muteVideo:!self.currentSession.isVideoMuted];
     }
 }
 
