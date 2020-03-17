@@ -568,7 +568,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
              serverTime:(long long)serverTime;
 
 /**
- 更新消息内容
+ 更新消息内容。只更新本地消息内容，无法更新服务器和远端。
  
  @param messageId 消息ID
  @param content 消息内容
@@ -577,7 +577,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
               content:(WFCCMessageContent *)content;
 
 /**
-更新消息状态，需要确保状态跟消息的方向相对应。一般情况下协议栈会自动处理好，不建议客户手动操作状态。
+更新消息状态，需要确保状态跟消息的方向相对应。一般情况下协议栈会自动处理好，不建议客户手动操作状态。。只更新本地消息内容，无法更新服务器和远端。
 
 @param messageId 消息ID
 @param status 消息状态
@@ -587,7 +587,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 - (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status;
 
 /**
- 插入消息
+ 插入消息。只插入到本地，无法更新服务器和远端。
  
  @param message 待插入的消息
  @return 插入消息的id
