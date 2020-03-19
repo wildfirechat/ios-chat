@@ -13,7 +13,7 @@
 #import "WFCCMessage.h"
 
 extern const NSString *SDKVERSION;
-#pragma mark - 频道通知定义
+#pragma mark - 通知定义
 //群组信息更新通知
 extern NSString *kGroupInfoUpdated;
 //群组成员更新通知
