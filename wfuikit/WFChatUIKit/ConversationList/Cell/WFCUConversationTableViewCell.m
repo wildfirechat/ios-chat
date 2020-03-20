@@ -11,7 +11,8 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
 #import "WFCUConfigManager.h"
-
+#import "UIColor+YH.h"
+#import <UIFont+YH.h>
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -110,7 +111,7 @@
         }
     } else {
         if (info.isTop) {
-            [self.contentView setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f]];
+            [self.contentView setBackgroundColor:[UIColor colorWithHexString:@"0xf7f7f7"]];
         } else {
             self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         }
@@ -230,7 +231,7 @@
     if (!_potraitView) {
         _potraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 12, 48, 48)];
         _potraitView.clipsToBounds = YES;
-        _potraitView.layer.cornerRadius = 8.f;
+        _potraitView.layer.cornerRadius = 4.f;
         [self.contentView addSubview:_potraitView];
     }
     return _potraitView;
@@ -248,7 +249,8 @@
 - (UILabel *)targetView {
     if (!_targetView) {
         _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
-        _targetView.font = [UIFont systemFontOfSize:16];
+        _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+        _targetView.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_targetView];
     }
     return _targetView;
@@ -256,10 +258,10 @@
 
 - (UILabel *)digestView {
     if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
-        _digestView.font = [UIFont systemFontOfSize:14];
+        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
+        _digestView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
-        _digestView.textColor = [UIColor grayColor];
+        _digestView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
         [self.contentView addSubview:_digestView];
     }
     return _digestView;
@@ -277,9 +279,9 @@
 - (UILabel *)timeView {
     if (!_timeView) {
         _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 16, 20, 52, 12)];
-        _timeView.font = [UIFont systemFontOfSize:11];
+        _timeView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
         _timeView.textAlignment = NSTextAlignmentRight;
-        _timeView.textColor = [UIColor grayColor];
+        _timeView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
         [self.contentView addSubview:_timeView];
     }
 
@@ -299,7 +301,7 @@
 - (UIView *)separator {
     if (!_separator) {
         _separator = [[UIView alloc] initWithFrame:CGRectMake(76, 71.5, [UIScreen mainScreen].bounds.size.width-76, 0.5)];
-        [_separator setBackgroundColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.f]];
+        [_separator setBackgroundColor:[UIColor colorWithHexString:@"0xe5e5e5"]];
         [self.contentView addSubview:_separator];
     }
     return _separator;

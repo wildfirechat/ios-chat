@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3105241D292C00B935D3 /* UIColor+YH.m */; };
+		149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3109241E300C00B935D3 /* UIFont+YH.m */; };
+		149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B311D242247E900B935D3 /* UIImage+ERCategory.m */; };
 		2BCEC536232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC531232E238E00D55E0D /* wfc.strings */; };
 		2BCEC537232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC534232E238E00D55E0D /* wfc.strings */; };
 		2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E0233627450004212B /* PushKit.framework */; };
@@ -62,7 +65,7 @@
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
-		2FF07F5D21F82E7200A78A62 /* WFCMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */; };
+		2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5121F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m */; };
 		2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */; };
 		2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */; };
 		6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 6E616D9B20AB3435002CB8BE /* LICENSE.md */; };
@@ -106,6 +109,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
+		149B3106241D292C00B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
+		149B3108241E300C00B935D3 /* UIFont+YH.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+YH.h"; sourceTree = "<group>"; };
+		149B3109241E300C00B935D3 /* UIFont+YH.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+YH.m"; sourceTree = "<group>"; };
+		149B311C242247E900B935D3 /* UIImage+ERCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ERCategory.h"; sourceTree = "<group>"; };
+		149B311D242247E900B935D3 /* UIImage+ERCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ERCategory.m"; sourceTree = "<group>"; };
 		2BCEC532232E238E00D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = wfc.strings; sourceTree = "<group>"; };
 		2BCEC535232E238E00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = wfc.strings; sourceTree = "<group>"; };
 		2BDCE7E0233627450004212B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
@@ -226,11 +235,11 @@
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
-		2FF07F4821F82E7200A78A62 /* WFCMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCMeTableViewCell.h; sourceTree = "<group>"; };
+		2FF07F4821F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCMeTableViewHeaderViewCell.h; sourceTree = "<group>"; };
 		2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSettingTableViewController.m; sourceTree = "<group>"; };
 		2FF07F4B21F82E7200A78A62 /* WFCMeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCMeTableViewController.h; sourceTree = "<group>"; };
 		2FF07F4C21F82E7200A78A62 /* WFCSecurityTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCSecurityTableViewController.h; sourceTree = "<group>"; };
-		2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCMeTableViewCell.m; sourceTree = "<group>"; };
+		2FF07F5121F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCMeTableViewHeaderViewCell.m; sourceTree = "<group>"; };
 		2FF07F5221F82E7200A78A62 /* WFCSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCSettingTableViewController.h; sourceTree = "<group>"; };
 		2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCAboutViewController.h; sourceTree = "<group>"; };
 		2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCMeTableViewController.m; sourceTree = "<group>"; };
@@ -291,6 +300,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		149B3101241D28B200B935D3 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				149B311C242247E900B935D3 /* UIImage+ERCategory.h */,
+				149B311D242247E900B935D3 /* UIImage+ERCategory.m */,
+				149B3106241D292C00B935D3 /* UIColor+YH.h */,
+				149B3105241D292C00B935D3 /* UIColor+YH.m */,
+				149B3108241E300C00B935D3 /* UIFont+YH.h */,
+				149B3109241E300C00B935D3 /* UIFont+YH.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		2BCBC82F23954AC4009321AD /* Moments */ = {
 			isa = PBXGroup;
 			children = (
@@ -362,6 +384,7 @@
 				2F1439FF217F5F3700B3E38A /* SDWebImage */,
 				2BF692E5232DBA840072036A /* Utilities */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
+				149B3101241D28B200B935D3 /* Category */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
 				2E1D20BB1FAF127100F4405D /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
@@ -613,20 +636,20 @@
 		2FF07F4621F82E7200A78A62 /* Me */ = {
 			isa = PBXGroup;
 			children = (
-				2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */,
-				2FF07F4821F82E7200A78A62 /* WFCMeTableViewCell.h */,
-				2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */,
-				2FF07F4B21F82E7200A78A62 /* WFCMeTableViewController.h */,
-				2FF07F4C21F82E7200A78A62 /* WFCSecurityTableViewController.h */,
-				2FF07F5121F82E7200A78A62 /* WFCMeTableViewCell.m */,
-				2FF07F5221F82E7200A78A62 /* WFCSettingTableViewController.h */,
 				2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */,
-				2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */,
-				2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */,
-				90E927F022DFF45F00F168BC /* WFCPrivacyTableViewController.h */,
-				90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */,
+				2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */,
 				2F50BE82237970780049CD39 /* WFCDiagnoseViewController.h */,
 				2F50BE83237970780049CD39 /* WFCDiagnoseViewController.m */,
+				2FF07F4821F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.h */,
+				2FF07F5121F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m */,
+				2FF07F4B21F82E7200A78A62 /* WFCMeTableViewController.h */,
+				2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */,
+				90E927F022DFF45F00F168BC /* WFCPrivacyTableViewController.h */,
+				90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */,
+				2FF07F4C21F82E7200A78A62 /* WFCSecurityTableViewController.h */,
+				2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */,
+				2FF07F5221F82E7200A78A62 /* WFCSettingTableViewController.h */,
+				2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -814,12 +837,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
 				2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
-				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewCell.m in Sources */,
+				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
 				2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
@@ -833,6 +857,7 @@
 				2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */,
 				2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
+				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
 				2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */,
@@ -854,6 +879,7 @@
 				2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */,
 				2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
 				2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */,
+				149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */,
 				90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
 				9085428B222A07280009713D /* UIImageView+CornerRadius.m in Sources */,
@@ -1025,7 +1051,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 29;
-				DEVELOPMENT_TEAM = AN6EJL87UZ;
+				DEVELOPMENT_TEAM = A96SWJ4QB5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1043,7 +1069,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.20;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.demo11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1061,9 +1087,9 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 29;
-				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				DEVELOPMENT_TEAM = A96SWJ4QB5;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1081,10 +1107,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.20;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};

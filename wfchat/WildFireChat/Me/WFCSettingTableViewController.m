@@ -15,7 +15,8 @@
 #import "WFCPrivacyViewController.h"
 #import "WFCPrivacyTableViewController.h"
 #import "WFCDiagnoseViewController.h"
-
+#import "UIColor+YH.h"
+#import "UIFont+YH.h"
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @end
@@ -24,12 +25,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    self.title = LocalizedString(@"Settings");
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.1)];
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
@@ -101,8 +103,23 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return 0.01;
+    } else {
+        return 9;
+    }
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectZero];
+    if (section == 0) {
+        return nil;
+    } else {
+        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 9)];
+        v.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+        return v;
+    }
+
 }
 
 //#pragma mark - Table view data source
@@ -128,6 +145,29 @@
 }
 
 
+- (UIEdgeInsets)hiddenSeparatorLine:(UITableViewCell *)cell {
+    return cell.separatorInset = UIEdgeInsetsMake(self.view.frame.size.width, 0, 0, 0);
+}
+
+- (void)showSeparatorLine:(UITableViewCell *)cell {
+    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+- (void)setLastCellSeperatorToLeft:(UITableViewCell*) cell
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+
+    if([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]){
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
     if (cell == nil) {
@@ -137,40 +177,53 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.accessoryView = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     if(indexPath.section == 0) {
         cell.textLabel.text = LocalizedString(@"PrivacySettings");
+        [self hiddenSeparatorLine:cell];
+
+
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
+            [self showSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"CurrentVersion");
             cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             cell.accessoryType = UITableViewCellAccessoryNone;
         } if (indexPath.row == 1) {
             cell.textLabel.text = LocalizedString(@"HelpFeedback");
+            [self showSeparatorLine:cell];
         } else if (indexPath.row == 2) {
             cell.textLabel.text = LocalizedString(@"AboutWFChat");
+            [self hiddenSeparatorLine:cell];
         }
     } else if(indexPath.section == 2) {
         if (indexPath.row == 0) {
             cell.textLabel.text = LocalizedString(@"UserAgreement");
+            [self showSeparatorLine:cell];
+
         } if (indexPath.row == 1) {
             cell.textLabel.text = LocalizedString(@"PrivacyPolicy");
+            [self hiddenSeparatorLine:cell];
         }
     } else if(indexPath.section == 3) {
         if (indexPath.row == 0) {
+            [self hiddenSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"Complain");
         }
     } else if (indexPath.section == 4) {
+        [self hiddenSeparatorLine:cell];
         cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 5) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];
         }
+       [self setLastCellSeperatorToLeft:cell];
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
         [btn setTitle:LocalizedString(@"Logout") forState:UIControlStateNormal];
-
-        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:btn];
     }
