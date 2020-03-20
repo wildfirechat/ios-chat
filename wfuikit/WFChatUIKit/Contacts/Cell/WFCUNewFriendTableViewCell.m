@@ -9,7 +9,8 @@
 #import "WFCUNewFriendTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface WFCUNewFriendTableViewCell ()
 
@@ -67,7 +68,8 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 19, [UIScreen mainScreen].bounds.size.width - 64, 16)];
-        _nameLabel.font = [UIFont systemFontOfSize:16];
+        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

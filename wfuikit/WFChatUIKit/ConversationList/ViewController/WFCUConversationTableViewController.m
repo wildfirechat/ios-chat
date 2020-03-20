@@ -28,7 +28,7 @@
 #import "WFCUContactTableViewCell.h"
 #import "QrCodeHelper.h"
 #import "WFCUConfigManager.h"
-
+#import "UIImage+ERCategory.h"
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 
@@ -56,6 +56,11 @@
     if (@available(iOS 13, *)) {
         self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
         self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        self.searchController.searchBar.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
+        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
+
+
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }

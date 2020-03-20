@@ -35,7 +35,7 @@ static WFCUConfigManager *sharedSingleton = nil;
     if (darkModel) {
         return [UIColor colorWithRed:33/255.f green:33/255.f blue:33/255.f alpha:1.0f];
     } else {
-        return [UIColor colorWithRed:243/255.f green:243/255.f blue:243/255.f alpha:1.0f];
+        return [UIColor whiteColor];
     }
 }
 

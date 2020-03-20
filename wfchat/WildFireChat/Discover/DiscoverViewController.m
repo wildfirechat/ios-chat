@@ -13,7 +13,8 @@
 #import "DiscoverMomentsTableViewCell.h"
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -31,8 +32,8 @@
         self.hasMoments = NO;
     }
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
-    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -66,6 +67,16 @@
 #ifdef WFC_MOMENTS
     [self.tabBarController.tabBar showBadgeOnItemIndex:2 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 9)];
+    view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 9;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

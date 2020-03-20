@@ -9,7 +9,8 @@
 #import "WFCUContactSelectTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "UIColor+YH.h"
+#import "UIFont+YH.h"
 @interface WFCUContactSelectTableViewCell()
 @property(nonatomic, strong)UIImageView *checkImageView;
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -43,7 +44,8 @@
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 19, [UIScreen mainScreen].bounds.size.width - 56 - 48, 16)];
-        _nameLabel.font = [UIFont systemFontOfSize:16];
+        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+               _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

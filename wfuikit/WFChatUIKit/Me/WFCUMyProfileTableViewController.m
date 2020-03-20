@@ -38,7 +38,7 @@
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.tableHeaderView = nil;
-    
+
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
@@ -147,7 +147,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     cell.tag = -1;
     [self addLabel:leftText onCell:cell isHeaderCell:NO isLeft:YES];
 //    if (rightText.length == 0) {
