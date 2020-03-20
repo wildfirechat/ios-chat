@@ -32,7 +32,7 @@
 #import "GroupInfoViewController.h"
 #import <Bugly/Bugly.h>
 #import "AppService.h"
-
+#import "UIColor+YH.h"
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -247,8 +247,8 @@
 }
 
 - (void)setupNavBar {
-    [WFCUConfigManager globalManager].naviBackgroudColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-    [WFCUConfigManager globalManager].naviTextColor = [UIColor whiteColor];
+    [WFCUConfigManager globalManager].naviBackgroudColor = [UIColor colorWithHexString:@"0xededed"];
+    [WFCUConfigManager globalManager].naviTextColor = [UIColor colorWithHexString:@"0c0c0c"];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
