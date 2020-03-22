@@ -505,7 +505,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)suspend {
   if(_bgTaskId != UIBackgroundTaskInvalid) {
       self.backgroudRunTime += 3;
-      if (mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) {
+      BOOL inCall = NO;
+      Class cls = NSClassFromString(@"WFAVEngineKit");
+      if (cls && [cls respondsToSelector:@selector(isCallActive)] && [cls performSelector:@selector(isCallActive)]) {
+          inCall = YES;
+      }
+      if ((mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) || (inCall && self.backgroudRunTime < 1800)) {
           [self checkBackGroundTask];
       } else {
     mars::stn::Reset();
