@@ -20,6 +20,11 @@ FOUNDATION_EXPORT const unsigned char WFAVEngineKitVersionString[];
 
 @class WFAVCallSession;
 
+#pragma mark - 通知定义
+//群组信息更新通知
+extern NSString *kCallStateUpdated;
+
+
 #pragma mark - 枚举值定义
 /**
  通话状态
@@ -130,7 +135,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRemoteHangup,
   kWFAVCallEndReasonOpenCameraFailure,
   kWFAVCallEndReasonTimeout,
-  kWFAVCallEndReasonAcceptByOtherClient
+  kWFAVCallEndReasonAcceptByOtherClient,
+  kWFAVCallEndReasonAllLeft,
+  kWFAVCallEndReasonRemoteBusy,
+  kWFAVCallEndReasonRemoteTimeout,
+  kWFAVCallEndReasonRemoteNetworkError
 };
 
 #pragma mark - 通话监听
