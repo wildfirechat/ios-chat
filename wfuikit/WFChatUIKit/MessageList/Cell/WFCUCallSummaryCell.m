@@ -68,9 +68,9 @@
             case kWFAVCallEndReasonRemoteTimeout:
                 text = @"对方未接听";
                 break;
-            case kWFAVCallEndReasonRemoteHangup:
-                text = @"对方已拒绝";
-                break;
+//            case kWFAVCallEndReasonRemoteHangup:
+//                text = @"对方已拒绝";
+//                break;
             case kWFAVCallEndReasonRemoteNetworkError:
                 text = @"网络错误";
                 break;
