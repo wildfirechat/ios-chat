@@ -119,6 +119,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMenuHidden:) name:UIMenuControllerDidHideMenuNotification object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallStateChanged:) name:kCallStateUpdated object:nil];
+    
     __weak typeof(self) ws = self;
     
   if(self.conversation.type == Single_Type) {
@@ -662,6 +664,19 @@
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
                 break;
             }
+        }
+    }
+}
+- (void)onCallStateChanged:(NSNotification *)notification {
+    long long messageUid = [[notification.userInfo objectForKey:@"messageUid"] longLongValue];
+    WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid];
+    
+    for (int i = 0; i < self.modelList.count; i++) {
+        WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+        if (model.message.messageUid == messageUid) {
+            model.message.content = msg.content;
+            [self.collectionView reloadData];
+            break;
         }
     }
 }
