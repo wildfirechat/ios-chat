@@ -747,7 +747,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (void)setMediaMessagePlayed:(long)messageId {
     WFCCMessage *message = [self getMessage:messageId];
-    if (!message || ![message.content isKindOfClass:[WFCCMediaMessageContent class]] || message.direction == MessageDirection_Send) {
+    if (!message) {
         return;
     }
     
