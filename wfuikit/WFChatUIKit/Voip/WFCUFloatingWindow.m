@@ -142,7 +142,9 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     }
 
     if ([self isVideoViewEnabledSession]) {
-        if (self.callSession.state == kWFAVEngineStateConnected) {
+        if (self.callSession.state == kWFAVEngineStateOutgoing) {
+            [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
+        } else if (self.callSession.state == kWFAVEngineStateConnected) {
             if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
             } else {
@@ -158,11 +160,13 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             [self.videoView addSubview:videoStopTips];
         }
     } else {
-        if (self.callSession.state == kWFAVEngineStateConnected) {
+        if (self.callSession.state == kWFAVEngineStateIdle) {
             [self.floatingButton setBackgroundColor:[UIColor clearColor]];
-        } else if (self.callSession.state == kWFAVEngineStateIdle) {
             [self.floatingButton setTitle:WFCString(@"Ended")
                                  forState:UIControlStateNormal];
+        } else {
+            [self.floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
+            forState:UIControlStateNormal];
         }
     }
 }
@@ -214,7 +218,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (UIButton *)floatingButton {
     if (!_floatingButton) {
         _floatingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        if (false /*self.callSession.mediaType == Audio*/) {
+        if (self.callSession.isAudioOnly) {
             [_floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
                              forState:UIControlStateNormal];
         } else {
@@ -350,11 +354,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 
 - (BOOL)isVideoViewEnabledSession {
-    if (YES/*self.callSession.mediaType == video && !self.callSession.isMultiCall*/) {
-        return YES;
-    } else {
-        return NO;
-    }
+    return !self.callSession.isAudioOnly;
 }
 
 #pragma mark - WFAVCallSessionDelegate
