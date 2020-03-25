@@ -4,13 +4,9 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/WFAVCallSession.h</key>
-		<data>
-		L4CiTQ97f7JJqOcW68TeH96XTHs=
-		</data>
 		<key>Headers/WFAVEngineKit.h</key>
 		<data>
-		h6NrWqY8fXBfeelIfkUcjkfmEdY=
+		Jh8SwnmLcF1FK1ofZKeuJtFX84M=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -23,26 +19,15 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/WFAVCallSession.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			L4CiTQ97f7JJqOcW68TeH96XTHs=
-			</data>
-			<key>hash2</key>
-			<data>
-			gz6tOGsfIzpt98g7lfQpjIDyDpdIKO2Eea4xuUhG2u0=
-			</data>
-		</dict>
 		<key>Headers/WFAVEngineKit.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			h6NrWqY8fXBfeelIfkUcjkfmEdY=
+			Jh8SwnmLcF1FK1ofZKeuJtFX84M=
 			</data>
 			<key>hash2</key>
 			<data>
-			WRFUb5tZphG6kk8pcqESNtBgDyOafBbVsIpv/LtvfFg=
+			NUZjGeI02IqWwQdf5TjIpcIgUBRPrKEmlCeXWglPMvo=
 			</data>
 		</dict>
 		<key>LICENSE.md</key>
