@@ -269,7 +269,7 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 - (void)clearAllUnreadStatus;
 
 /**
- 设置媒体消息已播放
+ 设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
  */
 - (void)setMediaMessagePlayed:(long)messageId;
 #pragma mark - 消息相关
