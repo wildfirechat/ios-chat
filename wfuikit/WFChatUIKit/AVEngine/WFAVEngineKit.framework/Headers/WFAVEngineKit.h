@@ -21,7 +21,7 @@ FOUNDATION_EXPORT const unsigned char WFAVEngineKitVersionString[];
 @class WFAVCallSession;
 
 #pragma mark - 通知定义
-//群组信息更新通知
+//通话状态更新通知
 extern NSString *kCallStateUpdated;
 
 
