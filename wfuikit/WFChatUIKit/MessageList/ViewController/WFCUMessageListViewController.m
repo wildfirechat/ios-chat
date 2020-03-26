@@ -679,6 +679,11 @@
             break;
         }
     }
+    if ([[notification.userInfo objectForKey:@"state"] intValue] == kWFAVEngineStateIncomming) {
+        if ([[[UIDevice currentDevice] systemVersion] rangeOfString:@"10."].location == 0) {
+            [self.chatInputBar resetInputBarStatue];
+        }
+    }
 }
 
 - (void)onSendingMessage:(NSNotification *)notification {
