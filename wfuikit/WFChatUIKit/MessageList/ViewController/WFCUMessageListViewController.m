@@ -121,6 +121,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallStateChanged:) name:kCallStateUpdated object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+    
     __weak typeof(self) ws = self;
     
   if(self.conversation.type == Single_Type) {
@@ -698,6 +700,10 @@
 }
 
 - (void)onMessageListChanged:(NSNotification *)notification {
+    [self reloadMessageList];
+}
+
+- (void)onSettingUpdated:(NSNotification *)notification {
     [self reloadMessageList];
 }
 
