@@ -31,6 +31,8 @@
 @property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, strong)UIImageView *failureView;
 @property (nonatomic, strong)UIImageView *maskView;
+
+@property (nonatomic, strong)UIImageView *tickView;
 @end
 
 @implementation WFCUMessageCell
@@ -173,6 +175,13 @@
       UIImage *image = self.bubbleView.image;
       self.bubbleView.image = [self.bubbleView.image
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, image.size.width * 0.2,image.size.height * 0.2, image.size.width * 0.8)];
+      
+      if (model.message.status == Message_Status_Readed) {
+          self.tickView.hidden = NO;
+          self.tickView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 18 , 14, 14);
+      } else {
+          self.tickView.hidden = YES;
+      }
   } else {
     CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
     self.portraitView.frame = CGRectMake(Portrait_Padding_Left, top, Portrait_Size, Portrait_Size);
@@ -203,6 +212,8 @@
       self.bubbleView.image = [self.bubbleView.image
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, image.size.width * 0.8,
                                                                                       image.size.height * 0.2, image.size.width * 0.2)];
+      
+      self.tickView.hidden = YES;
       
   }
     
@@ -250,7 +261,15 @@
         _maskView.frame = self.bubbleView.bounds;
     }
 }
-
+- (UIImageView *)tickView {
+    if (!_tickView) {
+        _tickView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        _tickView.image = [UIImage imageNamed:@"tick"];
+        _tickView.hidden = YES;
+        [self.contentView addSubview:_tickView];
+    }
+    return _tickView;
+}
 - (UIImageView *)portraitView {
   if (!_portraitView) {
     _portraitView = [[UIImageView alloc] init];
