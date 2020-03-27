@@ -721,7 +721,13 @@
             self.hasNewMessage = YES;
         }
     } else {
-        messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:15 withUser:self.privateChatUser];
+        int count = self.modelList.count;
+        if (count > 50) {
+            count = 50;
+        } else if(count == 0) {
+            count = 15;
+        }
+        messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser];
         [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
     }
     
