@@ -93,6 +93,8 @@
 @property (nonatomic, strong)UIActivityIndicatorView *footerActivityView;
 
 @property (nonatomic, strong)NSTimer *showTypingTimer;
+
+@property (nonatomic, assign)BOOL isShowingKeyboard;
 @end
 
 @implementation WFCUMessageListViewController
@@ -1236,22 +1238,35 @@
 }
 
 - (void)willChangeFrame:(CGRect)newFrame withDuration:(CGFloat)duration keyboardShowing:(BOOL)keyboardShowing {
-    [UIView animateWithDuration:duration animations:^{
-        CGRect frame = self.collectionView.frame;
-        CGFloat diff = MIN(frame.size.height, self.collectionView.contentSize.height) - newFrame.origin.y;
-        if(diff > 0) {
-            frame.origin.y = -diff;
-            self.collectionView.frame = frame;
-        } else {
+    NSLog(@"tttt%f,%f,%f,%f", newFrame.origin.x, newFrame.origin.y, newFrame.size.width, newFrame.size.height);
+    if (!self.isShowingKeyboard) {
+        self.isShowingKeyboard = YES;
+        [UIView animateWithDuration:duration animations:^{
+            CGRect frame = self.collectionView.frame;
+            CGFloat diff = MIN(frame.size.height, self.collectionView.contentSize.height) - newFrame.origin.y;
+            if(diff > 0) {
+                frame.origin.y = -diff;
+                self.collectionView.frame = frame;
+            } else {
+                self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
+            }
+        } completion:^(BOOL finished) {
             self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
+            
+            if (keyboardShowing) {
+                [self scrollToBottom:NO];
+            }
+            self.isShowingKeyboard = NO;
+        }];
+    } else {
+        if (self.collectionView.frame.size.height != newFrame.origin.y) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
+                [self scrollToBottom:NO];
+            });
         }
-    } completion:^(BOOL finished) {
-        self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
-        
-        if (keyboardShowing) {
-            [self scrollToBottom:NO];
-        }
-    }];
+    }
+    
 }
 
 - (UINavigationController *)requireNavi {
