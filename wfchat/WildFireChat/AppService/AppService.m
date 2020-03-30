@@ -200,12 +200,12 @@ static AppService *sharedSingleton = nil;
         if (uploadedFiles.count) {
             [uploadedFiles removeLastObject];
         }
-        
-        if (![uploadedFiles isKindOfClass:[NSMutableArray class]]) {
-            uploadedFiles = [[NSMutableArray alloc] init];
+        for (NSString *file in [logFiles copy]) {
+            NSString *name = [file componentsSeparatedByString:@"/"].lastObject;
+            if ([uploadedFiles containsObject:name]) {
+                [logFiles removeObject:file];
+            }
         }
-        
-        [logFiles removeObjectsInArray:uploadedFiles];
         
         
         __block NSString *errorMsg = nil;
@@ -222,18 +222,23 @@ static AppService *sharedSingleton = nil;
 
             [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
                 NSData *logData = [NSData dataWithContentsOfFile:logFile];
+                if (!logData.length) {
+                    logData = [@"empty" dataUsingEncoding:NSUTF8StringEncoding];
+                }
                 
                 NSString *fileName = [[NSURL URLWithString:logFile] lastPathComponent];
-                
                 [formData appendPartWithFileData:logData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
-                
             } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                
                 if ([responseObject isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *dict = (NSDictionary *)responseObject;
                     if([dict[@"code"] intValue] == 0) {
                         NSLog(@"上传成功");
                         success = YES;
+                        NSString *name = [logFile componentsSeparatedByString:@"/"].lastObject;
+                        [uploadedFiles removeObject:name];
+                        [uploadedFiles addObject:name];
+                        [[NSUserDefaults standardUserDefaults] setObject:uploadedFiles forKey:@"mars_uploaded_files"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
                     }
                 }
                 if (!success) {
@@ -248,11 +253,7 @@ static AppService *sharedSingleton = nil;
             
             dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
             
-            if (success) {
-                [uploadedFiles addObject:logFile];
-                [[NSUserDefaults standardUserDefaults] setObject:uploadedFiles forKey:@"mars_uploaded_files"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            } else {
+            if (!success) {
                 errorBlock(errorMsg);
                 return;
             }
