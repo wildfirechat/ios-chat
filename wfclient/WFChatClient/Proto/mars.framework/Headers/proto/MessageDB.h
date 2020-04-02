@@ -35,7 +35,7 @@ namespace mars {
             bool UpdateMessageTimeline(int64_t timeline, const std::string &node);
             int64_t GetMessageTimeline(std::string &node);
             int64_t GetSettingVersion();
-            bool UpdateUserSettings(const std::list<TUserSettingEntry> &settings);
+            bool UpdateUserSettings(std::list<TUserSettingEntry> &settings);
             std::string GetUserSetting(int scope, const std::string &key);
             std::map<std::string, std::string> GetUserSettings(int scope);
             
