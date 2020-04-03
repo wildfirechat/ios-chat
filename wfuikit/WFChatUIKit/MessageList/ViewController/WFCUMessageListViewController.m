@@ -244,15 +244,19 @@
         }
         self.loadingMore = YES;
         long lastIndex = 0;
-        long long lastUid = 0;
         if (weakSelf.modelList.count) {
             lastIndex = [weakSelf.modelList firstObject].message.messageId;
-            lastUid = [weakSelf.modelList firstObject].message.messageUid;
         }
         
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
             if (!messageList.count) {
+                long long lastUid = 0;
+                for (WFCUMessageModel *model in self.modelList) {
+                    if (model.message.messageUid > lastUid) {
+                        lastUid = model.message.messageUid;
+                    }
+                }
                 [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
                     NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
                     for (WFCCMessage *msg in messages) {
