@@ -251,9 +251,9 @@
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
             if (!messageList.count) {
-                long long lastUid = 0;
+                long long lastUid = self.modelList.lastObject.message.messageUid;
                 for (WFCUMessageModel *model in self.modelList) {
-                    if (model.message.messageUid > lastUid) {
+                    if (model.message.messageUid > 0 && model.message.messageUid < lastUid) {
                         lastUid = model.message.messageUid;
                     }
                 }
