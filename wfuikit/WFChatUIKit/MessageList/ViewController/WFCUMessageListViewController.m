@@ -120,8 +120,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageListChanged:) name:kMessageListChanged object:self.conversation];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMenuHidden:) name:UIMenuControllerDidHideMenuNotification object:nil];
-    
+
+#if WFCU_SUPPORT_VOIP
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallStateChanged:) name:kCallStateUpdated object:nil];
+#endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     
@@ -675,6 +677,8 @@
         }
     }
 }
+
+#if WFCU_SUPPORT_VOIP
 - (void)onCallStateChanged:(NSNotification *)notification {
     long long messageUid = [[notification.userInfo objectForKey:@"messageUid"] longLongValue];
     WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid];
@@ -693,6 +697,7 @@
         }
     }
 }
+#endif
 
 - (void)onSendingMessage:(NSNotification *)notification {
     WFCCMessage *message = [notification.userInfo objectForKey:@"message"];
