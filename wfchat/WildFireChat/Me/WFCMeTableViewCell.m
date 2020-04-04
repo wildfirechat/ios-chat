@@ -49,10 +49,9 @@
 
 - (UILabel *)userName {
     if (!_userName) {
-        _userName = [[UILabel alloc] initWithFrame:CGRectMake(72, 44, [UIScreen mainScreen].bounds.size.width - 64, 14)];
+        _userName = [[UILabel alloc] initWithFrame:CGRectMake(72, 44, [UIScreen mainScreen].bounds.size.width - 128, 14)];
         [_userName setFont:[UIFont systemFontOfSize:14]];
         _userName.textColor = [UIColor grayColor];
-        _userName.hidden = YES;
         [self.contentView addSubview:_userName];
     }
     return _userName;

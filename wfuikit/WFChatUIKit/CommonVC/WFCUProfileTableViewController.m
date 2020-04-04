@@ -92,11 +92,7 @@
         blacklistTitle = WFCString(@"Add2Blacklist");
     }
     
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), nil];
-    } else {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, nil];
-    }
+    actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), nil];
     
     [actionSheet showInView:self.view];
 }
@@ -121,27 +117,27 @@
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {
-        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 2, width - 64 - 8, 21)];
         self.aliasLabel.text = alias;
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 32, width - 64 - 8, 21)];
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 26, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
         
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 53, width - 64 - 8, 11)];
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 50, width - 64 - 8, 11)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     } else {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 20, width - 64 - 8, 21)];
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 12, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
         
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 42, width - 64 - 8, 21)];
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 38, width - 64 - 8, 11)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     }
     
-    self.userNameLabel.hidden = YES;
+    self.userNameLabel.hidden = NO;
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
