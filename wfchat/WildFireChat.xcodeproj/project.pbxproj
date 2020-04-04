@@ -19,7 +19,6 @@
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
-		2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; };
 		2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; };
 		2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6D217F7DA900B3E38A /* Emoj.plist */; };
 		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
@@ -66,9 +65,6 @@
 		2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */; };
 		2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */; };
 		6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 6E616D9B20AB3435002CB8BE /* LICENSE.md */; };
-		6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; };
-		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
@@ -96,9 +92,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
-				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
 				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
-				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,8 +277,6 @@
 				2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */,
 				2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */,
 				2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */,
-				2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */,
-				6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,7 +721,7 @@
 				TargetAttributes = {
 					2E1D1FF61FAF0AE600F4405D = {
 						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1022,11 +1014,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_TEAM = AN6EJL87UZ;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/framework",
@@ -1046,7 +1038,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = wfdemo2;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -1059,12 +1051,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 29;
-				DEVELOPMENT_TEAM = ZTJABWRJ5T;
-				ENABLE_BITCODE = NO;
+				DEVELOPMENT_TEAM = AN6EJL87UZ;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/framework",
@@ -1081,10 +1073,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.20;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
+				PROVISIONING_PROFILE_SPECIFIER = wfdemo2;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};

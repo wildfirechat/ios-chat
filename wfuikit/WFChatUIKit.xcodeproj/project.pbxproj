@@ -348,8 +348,6 @@
 		2FE689A921AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */; };
 		2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */; };
 		2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */; };
-		901E270721F152F600A163CB /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270421F152F600A163CB /* WebRTC.framework */; };
-		901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270521F152F600A163CB /* WFAVEngineKit.framework */; };
 		9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9029D0FC21C5D7930002EBAA /* WFCUCreateChannelViewController.h */; };
 		9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */; };
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
@@ -707,9 +705,6 @@
 		2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewController.h; sourceTree = "<group>"; };
 		2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUWaitingAnimationView.h; sourceTree = "<group>"; };
 		2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUWaitingAnimationView.m; sourceTree = "<group>"; };
-		901E270121F152F600A163CB /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
-		901E270421F152F600A163CB /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
-		901E270521F152F600A163CB /* WFAVEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = "<group>"; };
 		9029D0FC21C5D7930002EBAA /* WFCUCreateChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUCreateChannelViewController.h; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.h; sourceTree = SOURCE_ROOT; };
 		9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUCreateChannelViewController.m; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.m; sourceTree = SOURCE_ROOT; };
 		90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewCell.h; sourceTree = "<group>"; };
@@ -721,9 +716,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */,
 				2F550BF3217F4DCD00F56C26 /* WFChatClient.framework in Frameworks */,
-				901E270721F152F600A163CB /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1533,35 +1526,8 @@
 		901E26FF21F152B200A163CB /* AVEngine */ = {
 			isa = PBXGroup;
 			children = (
-				901E270021F152F600A163CB /* GoogleWebRTC */,
-				901E270521F152F600A163CB /* WFAVEngineKit.framework */,
 			);
 			path = AVEngine;
-			sourceTree = "<group>";
-		};
-		901E270021F152F600A163CB /* GoogleWebRTC */ = {
-			isa = PBXGroup;
-			children = (
-				901E270121F152F600A163CB /* LICENSE.md */,
-				901E270221F152F600A163CB /* Frameworks */,
-			);
-			path = GoogleWebRTC;
-			sourceTree = "<group>";
-		};
-		901E270221F152F600A163CB /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				901E270321F152F600A163CB /* frameworks */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		901E270321F152F600A163CB /* frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				901E270421F152F600A163CB /* WebRTC.framework */,
-			);
-			path = frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2154,7 +2120,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -2192,7 +2158,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",

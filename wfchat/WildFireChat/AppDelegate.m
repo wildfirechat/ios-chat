@@ -12,7 +12,7 @@
 //然后找到脚本“xcodescript.sh”，删除掉“cp -af WFChatUIKit/AVEngine/*  ${DST_DIR}/”这句话。
 //在删除掉ChatUIKit工程的WebRTC和WFAVEngineKit的依赖。
 //删除掉应用工程中的WebRTC.framework和WFAVEngineKit.framework。
-#define WFCU_SUPPORT_VOIP 1
+#define WFCU_SUPPORT_VOIP 0
 //#define WFCU_SUPPORT_VOIP 0
 
 #import "AppDelegate.h"
