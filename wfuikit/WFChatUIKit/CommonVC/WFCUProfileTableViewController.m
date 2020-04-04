@@ -145,11 +145,11 @@
     [self.headerCell addSubview:self.aliasLabel];
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        if (self.userInfo.mobile.length > 0) {
-            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            cell.textLabel.text = self.userInfo.mobile;
-            [self.cells addObject:cell];
-        }
+//        if (self.userInfo.mobile.length > 0) {
+//            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+//            cell.textLabel.text = self.userInfo.mobile;
+//            [self.cells addObject:cell];
+//        }
         
         if (self.userInfo.email.length > 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
