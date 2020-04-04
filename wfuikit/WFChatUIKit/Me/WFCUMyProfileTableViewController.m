@@ -101,10 +101,9 @@
     UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
     qrview.image = qrcode;
     [cell addSubview:qrview];
-    
 
-//    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
-//    [self.cells1 addObject:cell];
+    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
+    [self.cells1 addObject:cell];
 
     cell = [self getAttrCell:WFCString(@"Mobile") rightText:self.userInfo.mobile mutable:YES];
     cell.tag = Modify_Mobile;
