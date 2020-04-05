@@ -425,6 +425,9 @@ namespace mars{
             kUserSettingConversationSync = 7,
             kUserSettingMyChannels = 8,
             kUserSettingListenedChannels = 9,
+            kUserSettingPCOnline = 10,
+            kUserSettingConversationReaded = 11,
+            kUserSettingWebOnline = 12,
             
             kUserSettingCustomBegin = 1000
         };

@@ -82,6 +82,7 @@ namespace mars {
             
             int64_t getConversationReadMaxDt(int conversationType, const std::string &target, int line);
             bool updateConversationRead(int conversationType, const std::string &target, int line, int64_t dt);
+            bool updateConversationReaded(int conversationType, const std::string &target, int line, int64_t dt);
             std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, int limit);
             
             std::list<TConversationSearchresult> SearchConversations(const std::list<int> &conversationTypes, const std::list<int> lines, const std::string &keyword, int limit);
@@ -96,6 +97,8 @@ namespace mars {
             TGroupMember GetGroupMember(const std::string &groupId, const std::string &memberId);
             bool RemoveGroupAndMember(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
+            void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
+            void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members);
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
