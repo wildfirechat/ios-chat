@@ -359,10 +359,10 @@
 }
 
 - (void)updatePcSession {
-    NSString *pcOnline = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_PC_Online key:@""];
+    NSString *pcOnline = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_PC_Online key:@"PC"];
     
     if (@available(iOS 11.0, *)) {
-        if ([pcOnline isEqualToString:@"1"]) {
+        if (pcOnline.length) {
             self.tableView.tableHeaderView = self.pcSessionView;
         } else {
             self.tableView.tableHeaderView = nil;
@@ -442,8 +442,21 @@
 
 - (UIView *)pcSessionView {
     if (!_pcSessionView) {
+        BOOL darkMode = NO;
+        if (@available(iOS 13.0, *)) {
+            if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                darkMode = YES;
+            }
+        }
+        UIColor *bgColor;
+        if (darkMode) {
+            bgColor = [WFCUConfigManager globalManager].backgroudColor;
+        } else {
+            bgColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
+        }
+        
         _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
-        [_pcSessionView setBackgroundColor:[UIColor grayColor]];
+        [_pcSessionView setBackgroundColor:bgColor];
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
         iv.image = [UIImage imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
