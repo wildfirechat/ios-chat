@@ -21,7 +21,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUContactListViewController.h"
 #import "MBProgressHUD.h"
-
+#import "UIColor+YH.h"
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
@@ -113,7 +113,7 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-    
+    self.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
     CGRect parentRect = self.bounds;
     self.voiceSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
     [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
@@ -142,10 +142,6 @@
     [self.textInputView setReturnKeyType:UIReturnKeySend];
     self.textInputView.backgroundColor = [UIColor whiteColor];
     self.textInputView.enablesReturnKeyAutomatically = YES;
-    self.textInputView.layer.cornerRadius = 4;
-    self.textInputView.layer.masksToBounds = YES;
-    self.textInputView.layer.borderWidth = 0.5f;
-    self.textInputView.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
     self.textInputView.userInteractionEnabled = YES;
     [self addSubview:self.textInputView];
     

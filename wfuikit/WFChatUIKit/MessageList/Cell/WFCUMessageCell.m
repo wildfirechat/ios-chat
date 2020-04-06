@@ -15,8 +15,8 @@
 #define Name_Label_Height  14
 #define Name_Label_Padding  6
 #define Name_Client_Padding  2
-#define Portrait_Padding_Left 4
-#define Portrait_Padding_Right 4
+#define Portrait_Padding_Left 16
+#define Portrait_Padding_Right 16
 #define Portrait_Padding_Buttom 4
 
 #define Client_Arad_Buttom_Padding 8
@@ -159,7 +159,7 @@
     CGRect frame = self.frame;
     self.portraitView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right, top, Portrait_Size, Portrait_Size);
     if (model.showNameLabel) {
-      self.nameLabel.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right -Portrait_Padding_Left - Name_Label_Padding - 200, top, 200, Name_Label_Height);
+      self.nameLabel.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - 200, top, 200, Name_Label_Height);
       self.nameLabel.hidden = NO;
       self.nameLabel.textAlignment = NSTextAlignmentRight;
     } else {
@@ -169,24 +169,17 @@
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
       self.bubbleView.image = [UIImage imageNamed:@"sent_msg_background"];
-      self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right -Portrait_Padding_Left - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
+      self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
       
       UIImage *image = self.bubbleView.image;
       self.bubbleView.image = [self.bubbleView.image
-                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, image.size.width * 0.2,image.size.height * 0.2, image.size.width * 0.8)];
-      
-      if (model.message.status == Message_Status_Readed) {
-          self.tickView.hidden = NO;
-          self.tickView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 18 , 14, 14);
-      } else {
-          self.tickView.hidden = YES;
-      }
+                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.95, image.size.width * 0.2,image.size.height * 0.1, image.size.width * 0.05)];
   } else {
     CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
     self.portraitView.frame = CGRectMake(Portrait_Padding_Left, top, Portrait_Size, Portrait_Size);
     if (model.showNameLabel) {
-      self.nameLabel.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Portrait_Padding_Right + Name_Label_Padding, top, 200, Name_Label_Height);
+      self.nameLabel.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding, top, 200, Name_Label_Height);
       self.nameLabel.hidden = NO;
       self.nameLabel.textAlignment = NSTextAlignmentLeft;
       top +=  Name_Label_Height + Name_Client_Padding;
@@ -205,13 +198,20 @@
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
       self.bubbleView.image = [UIImage imageNamed:bubbleImageName];
-      self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Portrait_Padding_Right, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
+      self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Arraw, Client_Bubble_Top_Padding, size.width, size.height);
       
       UIImage *image = self.bubbleView.image;
+      CGFloat leftProtection = image.size.width * 0.8;
+      CGFloat rightProtection = image.size.width * 0.2;
+
+      if (self.bubbleView.frame.size.width < image.size.width) {
+          leftProtection = 17;
+          rightProtection = 12;
+      }
       self.bubbleView.image = [self.bubbleView.image
-                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, image.size.width * 0.8,
-                                                                                      image.size.height * 0.2, image.size.width * 0.2)];
+                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, leftProtection,
+                                                                                      image.size.height * 0.2, rightProtection)];
       
       self.tickView.hidden = YES;
       

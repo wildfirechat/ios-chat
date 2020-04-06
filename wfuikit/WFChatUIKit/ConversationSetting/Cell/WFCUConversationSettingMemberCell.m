@@ -10,7 +10,8 @@
 #import "SDWebImage.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUConfigManager.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface WFCUConversationSettingMemberCell ()
 @property(nonatomic, strong) NSObject *model;
@@ -25,26 +26,19 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.headerImageView.frame = CGRectMake(2, 2, self.frame.size.width - 4, self.frame.size.width - 4);
+    self.nameLabel.frame = CGRectMake(0, self.frame.size.width + 7, self.frame.size.width, 11);
+}
+
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _nameLabel.textColor = [UIColor blackColor];
+        _nameLabel.textColor = [UIColor colorWithHexString:@"0x7d7d7d"];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         _nameLabel.backgroundColor = [UIColor clearColor];
-        _nameLabel.font = [UIFont systemFontOfSize:14];
-        _nameLabel.hidden = YES;
-        
-        CGFloat nameLabelHeight = 16;
-
-        _nameLabel.frame =
-        CGRectMake(0, self.bounds.size.height - nameLabelHeight,
-                   self.bounds.size.width, nameLabelHeight);
-        if (nameLabelHeight > 0) {
-            _nameLabel.hidden = NO;
-        } else {
-            _nameLabel.hidden = YES;
-        }
-        
+        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:11];
         [[self contentView] addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -60,35 +54,20 @@
         
         _headerImageView.layer.borderWidth = 1;
         _headerImageView.layer.borderColor = [UIColor whiteColor].CGColor;
-        _headerImageView.layer.cornerRadius = 4;
+        _headerImageView.layer.cornerRadius = 8;
         _headerImageView.layer.masksToBounds = YES;
         _headerImageView.backgroundColor = [UIColor clearColor];
-        
         _headerImageView.layer.edgeAntialiasingMask =
         kCALayerLeftEdge | kCALayerRightEdge | kCALayerBottomEdge |
         kCALayerTopEdge;
-        
-        
-        CGFloat nameLabelHeight = 16;
-        CGFloat insideMargin = 5;
-        
-        
-        CGFloat minLength =
-        MIN(self.bounds.size.width,
-            self.bounds.size.height - nameLabelHeight - insideMargin);
-        
-        _headerImageView.frame = CGRectMake(
-                                                (self.bounds.size.width - minLength) / 2, 0, minLength, minLength);
-
-        
         [[self contentView] addSubview:_headerImageView];
     }
     return _headerImageView;
 }
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
-    self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+    self.contentView.backgroundColor = [UIColor whiteColor];
+//    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
     
     self.model = model;
     

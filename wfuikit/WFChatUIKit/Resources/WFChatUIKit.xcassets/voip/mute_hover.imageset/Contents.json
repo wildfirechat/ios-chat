@@ -1,21 +1,23 @@
 {
   "images" : [
     {
+      "filename" : "编组 4备份.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "编组 4备份@2x.png",
       "idiom" : "universal",
-      "filename" : "mute_hover@2x.png",
       "scale" : "2x"
     },
     {
+      "filename" : "编组 4备份@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
