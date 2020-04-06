@@ -33,7 +33,7 @@
 "CreateChannel"="新建频道";
 "SubscribedChannels"="订阅的频道";
 "SearchChannels"="搜索频道";
-"SendMessage"="发送消息";
+"SendMessage"="发消息";
 "DestroyChannel"="销毁频道";
 "UnscribeChannel"="取消订阅";
 "ModifyChannelName"="修改频道名称";
@@ -46,7 +46,7 @@
 "Video"="视频";
 "Scale"="缩放";
 "CallEnded"="通话已结束";
-"WaitingAccept"="等待对方接听";
+"WaitingAccept"="正在等待对方接受邀请...";
 "CallConnecting"="连接建立中...";
 "InvitingYou"="对方正在邀请您通话...";
 "AddFriend"="添加好友";
@@ -63,7 +63,7 @@
 "SetAlias"="设置备注";
 "RemoveFromBlacklist"="取消屏蔽";
 "Add2Blacklist"="屏蔽用户";
-"VOIPCall"="网络电话";
+"VOIPCall"="视频聊天";
 "VoiceCall"="语音通话";
 "VideoCall"="视频通话";
 "Blacklist"="黑名单";
@@ -153,7 +153,7 @@
 "ModifySocialAccount"="修改社交账号";
 "ModifyAddress"="修改地址";
 "ModifyCompanyInfo"="修改公司信息";
-"ModifyNickname"="修改昵称";
+"ModifyNickname"="设置昵称或别名";
 "MyInformation"="我的信息";
 "Male"="男";
 "Female"="女";
@@ -196,3 +196,6 @@
 "Chatroom"="聊天室";
 "Diagnose"="诊断";
 "MaxCount"="不能超过最大限制";
+"Rebot"="机器人";
+"UserInfomation"="用户信息";
+

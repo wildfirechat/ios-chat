@@ -23,7 +23,16 @@
     [super setSelected:selected animated:animated];
 
 }
-  
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (!self.isBig) {
+        _potraitView.frame = CGRectMake(16, 10, 40, 40);
+        _targetView.frame = CGRectMake(16 + 40 + 20, 11, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 100), 16);
+        _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+        _digestView.frame = CGRectMake(16 + 40 + 20, 11 + 16 + 8, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 20), 19);
+    }
+
+}
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
   
@@ -70,7 +79,6 @@
         [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];
         self.digestView.attributedText = attrStr;
     }
-    [self separator];
 }
 
 - (void)setInfo:(WFCCConversationInfo *)info {
@@ -113,7 +121,7 @@
         if (info.isTop) {
             [self.contentView setBackgroundColor:[UIColor colorWithHexString:@"0xf7f7f7"]];
         } else {
-            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+            self.contentView.backgroundColor = [UIColor whiteColor];
         }
     }
     
@@ -131,8 +139,6 @@
         self.statusView.hidden = YES;
     }
     [self updateDigestFrame:!self.statusView.hidden];
-    
-    [self separator];
 }
 
 - (void)updateDigestFrame:(BOOL)isSending {
@@ -298,12 +304,4 @@
     return _bubbleView;
 }
 
-- (UIView *)separator {
-    if (!_separator) {
-        _separator = [[UIView alloc] initWithFrame:CGRectMake(76, 71.5, [UIScreen mainScreen].bounds.size.width-76, 0.5)];
-        [_separator setBackgroundColor:[UIColor colorWithHexString:@"0xe5e5e5"]];
-        [self.contentView addSubview:_separator];
-    }
-    return _separator;
-}
 @end

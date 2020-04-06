@@ -8,7 +8,8 @@
 
 #import "WFCUMessageCellBase.h"
 #import "WFCUUtilities.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 @implementation WFCUMessageCellBase
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   return CGSizeMake(width, 80);
@@ -37,7 +38,8 @@
   if (model.showTimeLabel) {
     if (self.timeLabel == nil) {
       self.timeLabel = [[UILabel alloc] init];
-      _timeLabel.font = [UIFont systemFontOfSize:12.f];
+      _timeLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+        _timeLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
       
       [self.contentView addSubview:self.timeLabel];
     }

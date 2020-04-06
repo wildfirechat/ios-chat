@@ -30,7 +30,8 @@
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
 #import "WFCUGroupAnnouncementViewController.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -60,7 +61,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"会话详情";
     if (self.conversation.type == Single_Type) {
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.memberList = @[self.conversation.target];
@@ -72,10 +73,17 @@
         self.memberList = @[self.conversation.target];
     }
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 146)];
+    footerView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    self.tableView.tableFooterView = footerView;
+    if (self.conversation.type  != Group_Type) {
+        footerView.frame = CGRectMake(0, 0, 0, 0);
+    }
+    
     [self.view addSubview:self.tableView];
     
     if(self.conversation.type == Group_Type) {
@@ -154,7 +162,7 @@
 
 - (void)setupMemberCollectionView {
     if (self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
-        self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:5];
+        self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:16];
 
         if (self.conversation.type == Single_Type) {
             self.extraBtnNumber = 1;
@@ -185,26 +193,25 @@
         self.memberCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [self.memberCollectionViewLayout getHeigthOfItemCount:self.memberCollectionCount]) collectionViewLayout:self.memberCollectionViewLayout];
         self.memberCollectionView.delegate = self;
         self.memberCollectionView.dataSource = self;
-        
-        self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-        
+        self.memberCollectionView.backgroundColor = [UIColor whiteColor];
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
         if (self.showMoreMember) {
             UIView *head = [[UIView alloc] init];
             CGRect frame = self.memberCollectionView.frame;
-            frame.size.height += 36;
+            frame.size.height += 40;
             head.frame = frame;
             [head addSubview:self.memberCollectionView];
             
-            UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 36, frame.size.width, 36)];
+            UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width, 40)];
             [moreBtn setTitle:WFCString(@"ShowAllMembers") forState:UIControlStateNormal];
-            
+            moreBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
             [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            moreBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
             
-            head.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+            head.backgroundColor = [UIColor whiteColor];
             
             self.tableView.tableHeaderView = head;
         } else {
@@ -310,6 +317,35 @@
             }];
         }
     }
+}
+
+- (void)clearMessageAction {
+    __weak typeof(self)weakSelf = self;
+
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ConfirmDelete") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+    }];
+    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:WFCString(@"Delete") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [[WFCCIMService sharedWFCIMService] clearMessages:self.conversation];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
+            hud.label.text = WFCString(@"Deleted");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageListChanged object:weakSelf.conversation];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionDelete];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -437,7 +473,7 @@
 }
 
 - (BOOL)isQuitGroup:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 5 && indexPath.row == 0) {
+    if(self.conversation.type == Group_Type && indexPath.section == 4 && indexPath.row == 1) {
         return YES;
     }
     return NO;
@@ -465,10 +501,8 @@
             return 3; //消息免打扰，置顶聊天，保存到通讯录
         } else if(section == 3) {
             return 2; //群昵称，显示群昵称
-        } else if(section == 4) {
-            return 1; //清空聊天记录
-        } else if(section == 5) {
-            return 1; //删除退群
+        }  else if(section == 4) {
+            return 2; //清空聊天记录,删除退群
         }
     } else if(self.conversation.type == Single_Type) {
         if(section == 0) {
@@ -493,44 +527,59 @@
     return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 9;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,9)];
+    view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    return view;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self isGroupAnnouncementCell:indexPath]) {
         float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont systemFontOfSize:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
         if (height > 136) {
             height = 136;
         }
-        return height + 48;
+        return height + 50;
     }
-    return 48;
+    return 50;
 }
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectZero];
-}
+
 - (UITableViewCell *)cellOfTable:(UITableView *)tableView WithTitle:(NSString *)title withDetailTitle:(NSString *)detailTitle withDisclosureIndicator:(BOOL)withDI withSwitch:(BOOL)withSwitch withSwitchType:(SwitchType)type {
     if (withSwitch) {
         WFCUSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleSwitch"];
         if(cell == nil) {
             cell = [[WFCUSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"styleSwitch" conversation:self.conversation];
         }
+        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.detailTextLabel.text = nil;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.accessoryView = nil;
         cell.textLabel.text = title;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.type = type;
-      
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0 );
         return cell;
     } else {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
         }
+        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.textLabel.text = title;
         cell.detailTextLabel.text = detailTitle;
+        cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"0x9b9a9a"];
+        cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         cell.accessoryType = withDI ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-      
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0 );
+
         return cell;
     }
 }
@@ -548,7 +597,7 @@
       
       CGFloat width = [UIScreen mainScreen].bounds.size.width;
       UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
-      UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
+      UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
       qrview.image = qrcode;
       [cell addSubview:qrview];
       
@@ -563,9 +612,12 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"announcementCell"];
         }
         cell.textLabel.text = @"群公告";
+        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.detailTextLabel.text = self.groupAnnouncement.text;
         cell.detailTextLabel.numberOfLines = 10;
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+        cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+        cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"0x9b9a9a"];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -591,7 +643,22 @@
   } else if([self isShowNameCardCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:WFCString(@"ShowMemberNickname") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:YES withSwitchType:SwitchType_Conversation_Show_Alias];
   } else if ([self isClearMessageCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:WFCString(@"ClearChatHistory") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"buttonCell"];
+      if (cell == nil) {
+          cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
+          cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+          for (UIView *subView in cell.subviews) {
+              [subView removeFromSuperview];
+          }
+          UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
+          [btn setTitle:WFCString(@"ClearChatHistory") forState:UIControlStateNormal];
+
+          btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+          [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
+          [btn addTarget:self action:@selector(clearMessageAction) forControlEvents:UIControlEventTouchUpInside];
+          [cell addSubview:btn];
+      }
+      return cell;
   } else if([self isQuitGroup:indexPath]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"buttonCell"];
         if (cell == nil) {
@@ -599,17 +666,14 @@
             for (UIView *subView in cell.subviews) {
                 [subView removeFromSuperview];
             }
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 4, self.view.frame.size.width - 40, 40)];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
             if ([self isGroupOwner]) {
                 [btn setTitle:WFCString(@"DismissGroup") forState:UIControlStateNormal];
             } else {
                 [btn setTitle:WFCString(@"QuitGroup") forState:UIControlStateNormal];
             }
-            
-            btn.layer.cornerRadius = 5.f;
-            btn.layer.masksToBounds = YES;
-            
-            btn.backgroundColor = [UIColor redColor];
+            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onDeleteAndQuit:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:btn];
         }
@@ -641,11 +705,12 @@
 }
 
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.conversation.type == Single_Type) {
         return 3;
     } else if(self.conversation.type == Group_Type) {
-        return 6;
+        return 5;
     } else if(self.conversation.type == Channel_Type) {
         return 4;
     }
@@ -718,31 +783,6 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
   } else if([self isShowNameCardCell:indexPath]) {
     
-  } else if ([self isClearMessageCell:indexPath]) {
-      UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ConfirmDelete") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-
-      UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-
-      }];
-      UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:WFCString(@"Delete") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-          [[WFCCIMService sharedWFCIMService] clearMessages:self.conversation];
-              MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
-              hud.label.text = WFCString(@"Deleted");
-              hud.mode = MBProgressHUDModeText;
-              hud.removeFromSuperViewOnHide = YES;
-              [hud hideAnimated:NO afterDelay:1.5];
-          
-          [[NSNotificationCenter defaultCenter] postNotificationName:kMessageListChanged object:weakSelf.conversation];
-      }];
-      
-      //把action添加到actionSheet里
-      [actionSheet addAction:actionDelete];
-      [actionSheet addAction:actionCancel];
-      
-      //相当于之前的[actionSheet show];
-      dispatch_async(dispatch_get_main_queue(), ^{
-          [self presentViewController:actionSheet animated:YES completion:nil];
-      });
   } else if([self isGroupQrCodeCell:indexPath]) {
       if (gQrCodeDelegate) {
           [gQrCodeDelegate showQrCodeViewController:self.navigationController type:QRType_Group target:self.groupInfo.target];
@@ -782,6 +822,7 @@
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         }
+        cell.headerImageView.layer.cornerRadius = 0;
     }
     return cell;
 }

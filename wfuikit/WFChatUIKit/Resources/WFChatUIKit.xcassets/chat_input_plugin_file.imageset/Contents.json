@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "编组 6.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "actionbar_file_icon.png",
+      "filename" : "编组 6@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "编组 6@3x.png",
       "scale" : "3x"
     }
   ],

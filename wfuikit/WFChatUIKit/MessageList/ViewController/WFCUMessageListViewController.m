@@ -50,7 +50,7 @@
 #endif
 
 #import "WFCUConfigManager.h"
-
+#import "WFCUSeletedUserViewController.h"
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -61,7 +61,7 @@
 @property(nonatomic, assign)long playingMessageId;
 @property(nonatomic, assign)BOOL loadingMore;
 @property(nonatomic, assign)BOOL hasMoreOld;
-  
+
 @property(nonatomic, strong)WFCCUserInfo *targetUser;
 @property(nonatomic, strong)WFCCGroupInfo *targetGroup;
 @property(nonatomic, strong)WFCCChannelInfo *targetChannel;
@@ -101,10 +101,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-  self.cellContentDict = [[NSMutableDictionary alloc] init];
-
-  [self initializedSubViews];
+    
+    self.cellContentDict = [[NSMutableDictionary alloc] init];
+    
+    [self initializedSubViews];
     self.firstAppear = YES;
     self.hasMoreOld = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onResetKeyboard:)];
@@ -129,31 +129,31 @@
     
     __weak typeof(self) ws = self;
     
-  if(self.conversation.type == Single_Type) {
-      [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-          if ([ws.conversation.target isEqualToString:note.object]) {
-              ws.targetUser = note.userInfo[@"userInfo"];
-          }
-      }];
-      
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
-  } else if(self.conversation.type == Group_Type) {
-      [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-          if ([ws.conversation.target isEqualToString:note.object]) {
-              ws.targetGroup = note.userInfo[@"groupInfo"];
-          }
-      }];
-      
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
-  } else if(self.conversation.type == Channel_Type) {
-      [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-          if ([ws.conversation.target isEqualToString:note.object]) {
-              ws.targetChannel = note.userInfo[@"channelInfo"];
-          }
-      }];
-      
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
-  }
+    if(self.conversation.type == Single_Type) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([ws.conversation.target isEqualToString:note.object]) {
+                ws.targetUser = note.userInfo[@"userInfo"];
+            }
+        }];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    } else if(self.conversation.type == Group_Type) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([ws.conversation.target isEqualToString:note.object]) {
+                ws.targetGroup = note.userInfo[@"groupInfo"];
+            }
+        }];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    } else if(self.conversation.type == Channel_Type) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([ws.conversation.target isEqualToString:note.object]) {
+                ws.targetChannel = note.userInfo[@"channelInfo"];
+            }
+        }];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    }
     
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithParentView:self.backgroundView conversation:self.conversation delegate:self];
     
@@ -173,7 +173,7 @@
             NSLog(@"join chatroom error");
             hud.mode = MBProgressHUDModeText;
             hud.label.text = WFCString(@"JoinChatroomFailure");
-//            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            //            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             hud.completionBlock = ^{
                 [ws.navigationController popViewControllerAnimated:YES];
@@ -287,15 +287,15 @@
             }
         });
     } else {
-            if (weakSelf.loadingNew || !weakSelf.hasNewMessage) {
-                return;
-            }
-            weakSelf.loadingNew = YES;
+        if (weakSelf.loadingNew || !weakSelf.hasNewMessage) {
+            return;
+        }
+        weakSelf.loadingNew = YES;
         
-            long lastIndex = 0;
-            if (self.modelList.count) {
-                lastIndex = [self.modelList lastObject].message.messageId;
-            }
+        long lastIndex = 0;
+        if (self.modelList.count) {
+            lastIndex = [self.modelList lastObject].message.messageId;
+        }
         
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:lastIndex count:-10 withUser:self.privateChatUser];
@@ -368,7 +368,7 @@
 }
 
 - (void)setTargetUser:(WFCCUserInfo *)targetUser {
-  _targetUser = targetUser;
+    _targetUser = targetUser;
     if(targetUser.friendAlias.length) {
         self.title = targetUser.friendAlias;
     } else if(targetUser.displayName.length == 0) {
@@ -379,9 +379,9 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
     self.navigationItem.backBarButtonItem.title = self.title;
 }
-  
+
 - (void)setTargetGroup:(WFCCGroupInfo *)targetGroup {
-  _targetGroup = targetGroup;
+    _targetGroup = targetGroup;
     if(targetGroup.name.length == 0) {
         self.title = WFCString(@"GroupChat");
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
@@ -390,7 +390,7 @@
         self.title = [NSString stringWithFormat:@"%@(%d)", targetGroup.name, (int)targetGroup.memberCount];
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
         self.navigationItem.backBarButtonItem.title = targetGroup.name;
-  }
+    }
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
     if (targetGroup.mute) {
         if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -448,7 +448,7 @@
 }
 
 - (void)scrollToBottom:(BOOL)animated {
-
+    
     NSUInteger rowCount = [self.collectionView numberOfItemsInSection:0];
     if (rowCount == 0) {
         return;
@@ -466,7 +466,7 @@
     [self.collectionView scrollToItemAtIndexPath:finalIndexPath
                                 atScrollPosition:UICollectionViewScrollPositionBottom
                                         animated:animated];
-
+    
 }
 
 - (void)initializedSubViews {
@@ -475,7 +475,7 @@
     _customFlowLayout.sectionInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
     _customFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     _customFlowLayout.headerReferenceSize = CGSizeMake(320.0f, 20.0f);
-  
+    
     UIEdgeInsets insets = UIEdgeInsetsZero;
     if (@available(iOS 11.0, *)) {
         insets = self.view.safeAreaInsets;
@@ -487,7 +487,7 @@
     [self.view addSubview:self.backgroundView];
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.backgroundView.bounds.size.width, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT) collectionViewLayout:_customFlowLayout];
-
+    
     [self.backgroundView addSubview:self.collectionView];
     
     self.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -575,7 +575,7 @@
 }
 
 - (void)onResetKeyboard:(id)sender {
-  [self.chatInputBar resetInputBarStatue];
+    [self.chatInputBar resetInputBarStatue];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -583,7 +583,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+    [super viewWillAppear:animated];
     [self.chatInputBar willAppear];
     if(self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
@@ -603,7 +603,7 @@
         }];
     }
     
-  self.tabBarController.tabBar.hidden = YES;
+    self.tabBarController.tabBar.hidden = YES;
     [self.collectionView reloadData];
     
     if (self.navigationController.viewControllers.count > 1) {          // 记录系统返回手势的代理
@@ -626,7 +626,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-  [super viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
     NSString *newDraft = self.chatInputBar.draft;
     if (![self.orignalDraft isEqualToString:newDraft]) {
         self.orignalDraft = newDraft;
@@ -752,7 +752,7 @@
     if (messages.count == 0) {
         return;
     }
-  
+    
     int count = 0;
     for (int i = 0; i < messages.count; i++) {
         WFCCMessage *message = [messages objectAtIndex:i];
@@ -825,7 +825,7 @@
         }
     }
     
-  [self.collectionView reloadData];
+    [self.collectionView reloadData];
     if (newMessage || self.modelList.count == messages.count) {
         if(isAtButtom) {
             forceButtom = true;
@@ -873,7 +873,7 @@
 }
 
 -(void)prepardToPlay:(WFCUMessageModel *)model {
-
+    
     if (self.playingMessageId == model.message.messageId) {
         [self stopPlayer];
     } else {
@@ -926,7 +926,7 @@
         
         if (!self.videoPlayerViewController) {
             self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
-//            self.videoPlayerViewController.delegate = self;
+            //            self.videoPlayerViewController.delegate = self;
             self.videoPlayerViewController.allowPortraitFullscreen = YES;
         } else {
             [self.videoPlayerViewController.view removeFromSuperview];
@@ -941,27 +941,27 @@
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-  return self.modelList.count;
+    return self.modelList.count;
 }
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-  WFCUMessageModel *model = self.modelList[indexPath.row];
-  NSString *objName = [NSString stringWithFormat:@"%d", [model.message.content.class getContentType]];
-  
-  WFCUMessageCellBase *cell = nil;
-  if(![self.cellContentDict objectForKey:@([model.message.content.class getContentType])]) {
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier:[NSString stringWithFormat:@"%d", [WFCCUnknownMessageContent getContentType]] forIndexPath:indexPath];
-  } else {
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier:objName forIndexPath:indexPath];
-  }
-  
-  cell.delegate = self;
+    WFCUMessageModel *model = self.modelList[indexPath.row];
+    NSString *objName = [NSString stringWithFormat:@"%d", [model.message.content.class getContentType]];
     
-  [[NSNotificationCenter defaultCenter] removeObserver:cell];
-  cell.model = model;
-  
-  return cell;
+    WFCUMessageCellBase *cell = nil;
+    if(![self.cellContentDict objectForKey:@([model.message.content.class getContentType])]) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:[NSString stringWithFormat:@"%d", [WFCCUnknownMessageContent getContentType]] forIndexPath:indexPath];
+    } else {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:objName forIndexPath:indexPath];
+    }
+    
+    cell.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:cell];
+    cell.model = model;
+    
+    return cell;
 }
 
 - (UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -986,13 +986,13 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-  
-  WFCUMessageModel *model = self.modelList[indexPath.row];
+    
+    WFCUMessageModel *model = self.modelList[indexPath.row];
     Class cellCls = self.cellContentDict[@([[model.message.content class] getContentType])];
-  if (!cellCls) {
-    cellCls = self.cellContentDict[@([[WFCCUnknownMessageContent class] getContentType])];
-  }
-  return [cellCls sizeForCell:model withViewWidth:self.collectionView.frame.size.width];
+    if (!cellCls) {
+        cellCls = self.cellContentDict[@([[WFCCUnknownMessageContent class] getContentType])];
+    }
+    return [cellCls sizeForCell:model withViewWidth:self.collectionView.frame.size.width];
 }
 
 #pragma mark - MessageCellDelegate
@@ -1035,9 +1035,9 @@
         
         [self prepardToPlay:model];
     } else if([model.message.content isKindOfClass:[WFCCLocationMessageContent class]]) {
-      WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)model.message.content;
-      WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
-      [self.navigationController pushViewController:vc animated:YES];
+        WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)model.message.content;
+        WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
+        [self.navigationController pushViewController:vc animated:YES];
     } else if ([model.message.content isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)model.message.content;
         WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
@@ -1087,18 +1087,18 @@
             }
         }
     }
-  WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-  vc.userId = model.message.fromUser;
-  vc.hidesBottomBarWhenPushed = YES;
-  [self.navigationController pushViewController:vc animated:YES];
+    WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+    vc.userId = model.message.fromUser;
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didLongPressMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([cell isKindOfClass:[WFCUMessageCellBase class]]) {
-//        if (!self.isFirstResponder) {
-//            [self becomeFirstResponder];
-//        }
-
+        //        if (!self.isFirstResponder) {
+        //            [self becomeFirstResponder];
+        //        }
+        
         [self displayMenu:(WFCUMessageCellBase *)cell];
     }
 }
@@ -1123,7 +1123,7 @@
                     [self.navigationController pushViewController:mvc animated:YES];
                 }
             }
-
+            
         }];
         [alertController addAction:cancelAction];
         [alertController addAction:okAction];
@@ -1164,7 +1164,7 @@
     [alertController addAction:cancelAction];
     [alertController addAction:callAction];
     [alertController addAction:copyAction];
-//    [alertController addAction:addContactAction];
+    //    [alertController addAction:addContactAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 #pragma mark - AVAudioPlayerDelegate
@@ -1199,8 +1199,8 @@
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-
-
+    
+    
 }
 #pragma mark - ChatInputBarDelegate
 - (void)imageDidCapture:(UIImage *)capturedImage {
@@ -1218,10 +1218,10 @@
 }
 
 - (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos {
-  if (stringContent.length == 0) {
-    return;
-  }
-  
+    if (stringContent.length == 0) {
+        return;
+    }
+    
     WFCCTextMessageContent *txtContent = [[WFCCTextMessageContent alloc] init];
     txtContent.text = stringContent;
     NSMutableArray *mentionTargets = [[NSMutableArray alloc] init];
@@ -1315,37 +1315,41 @@
         WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[self.conversation.target] conversation:self.conversation audioOnly:isAudioOnly];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     } else {
-      WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
-      pvc.selectContact = YES;
-      pvc.multiSelect = [WFAVEngineKit sharedEngineKit].supportMultiCall;
-        if (pvc.multiSelect) {
-            pvc.maxSelectCount = isAudioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
-            pvc.maxSelectCount -= 1;
-        }
+        //      WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
+        //      pvc.selectContact = YES;
+        //      pvc.multiSelect = [WFAVEngineKit sharedEngineKit].supportMultiCall;
+        //        if (pvc.multiSelect) {
+        //            pvc.maxSelectCount = isAudioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
+        //            pvc.maxSelectCount -= 1;
+        //        }
         
-      NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
-      [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
-      pvc.disableUsers = disabledUser;
-      NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
-      NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
-      for (WFCCGroupMember *member in members) {
-        [candidateUser addObject:member.memberId];
-      }
-      pvc.candidateUsers = candidateUser;
-      __weak typeof(self)ws = self;
-      pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-        UIViewController *videoVC;
-        if (self.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
-          videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
-        } else {
-          videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
+        WFCUSeletedUserViewController *vc = [[WFCUSeletedUserViewController alloc] init];
+        
+        NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
+        [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
+        vc.disableUserIds = disabledUser;
+        vc.maxSelectCount = isAudioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
+        vc.maxSelectCount -= 1;
+        NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
+        NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+        for (WFCCGroupMember *member in members) {
+            [candidateUser addObject:member.memberId];
         }
-        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
-      };
-      pvc.disableUsersSelected = YES;
-      
-      UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-      [self.navigationController presentViewController:navi animated:YES completion:nil];
+        vc.candidateUsers = candidateUser;
+        vc.type = Vertical;
+        __weak typeof(self)ws = self;
+        vc.selectResult = ^(NSArray<NSString *> * _Nonnull contacts) {
+            UIViewController *videoVC;
+            if (ws.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+                videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
+            } else {
+                videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
+            }
+            [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        };
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:vc];
+        navi.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.navigationController presentViewController:navi animated:YES completion:nil];
     }
 }
 #endif
@@ -1425,7 +1429,7 @@
         [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
-//        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
+        //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
         [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
         [items addObject:forwardItem];
     }
@@ -1579,6 +1583,6 @@
 }
 
 - (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end

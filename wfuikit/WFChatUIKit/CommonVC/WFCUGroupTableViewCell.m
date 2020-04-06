@@ -8,7 +8,8 @@
 
 #import "WFCUGroupTableViewCell.h"
 #import "SDWebImage.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 @interface WFCUGroupTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
 @property (strong, nonatomic) UILabel *name;
@@ -20,19 +21,29 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    _portrait.frame = CGRectMake(18, (self.frame.size.height - 40) / 2.0, 40, 40);
+    _name.frame = CGRectMake(18 + 40 + 9, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (18 + 40 + 9), 17);
 }
 
 - (UIImageView *)portrait {
     if (!_portrait) {
-        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 40, 40)];
-        [self.contentView addSubview:_portrait];
+        _portrait = [UIImageView new];
+        _portrait.layer.cornerRadius = 4.0f;
+        _portrait.layer.masksToBounds = YES;
     }
     return _portrait;
 }
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(56, 16, [UIScreen mainScreen].bounds.size.width - 64, 24)];
+        _name = [UILabel new];
+        _name.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+        _name.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
         [self.contentView addSubview:_name];
     }
     return _name;
