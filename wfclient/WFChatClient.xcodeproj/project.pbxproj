@@ -84,6 +84,8 @@
 		2F8742DE219C4FED00F65EBA /* WFCCChatroomMemberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8742D8219C4FED00F65EBA /* WFCCChatroomMemberInfo.m */; };
 		2F8742DF219C4FED00F65EBA /* WFCCChatroomMemberInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F8742D9219C4FED00F65EBA /* WFCCChatroomMemberInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F8742E0219C4FED00F65EBA /* WFCCChatroomInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */; };
+		2FD9513D243ACF3600EE4F60 /* WFCCPCOnlineInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD9513B243ACF3600EE4F60 /* WFCCPCOnlineInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2FD9513E243ACF3600EE4F60 /* WFCCPCOnlineInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9513C243ACF3600EE4F60 /* WFCCPCOnlineInfo.m */; };
 		2FEF332621BE93980087B6C2 /* WFCCChannelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEF332421BE93980087B6C2 /* WFCCChannelInfo.m */; };
 		2FEF332721BE93980087B6C2 /* WFCCChannelInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FEF332521BE93980087B6C2 /* WFCCChannelInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FF2A45D22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF2A45B22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m */; };
@@ -199,6 +201,8 @@
 		2F8742D8219C4FED00F65EBA /* WFCCChatroomMemberInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChatroomMemberInfo.m; sourceTree = "<group>"; };
 		2F8742D9219C4FED00F65EBA /* WFCCChatroomMemberInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChatroomMemberInfo.h; sourceTree = "<group>"; };
 		2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChatroomInfo.m; sourceTree = "<group>"; };
+		2FD9513B243ACF3600EE4F60 /* WFCCPCOnlineInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCPCOnlineInfo.h; sourceTree = "<group>"; };
+		2FD9513C243ACF3600EE4F60 /* WFCCPCOnlineInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCPCOnlineInfo.m; sourceTree = "<group>"; };
 		2FEF332421BE93980087B6C2 /* WFCCChannelInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelInfo.m; sourceTree = "<group>"; };
 		2FEF332521BE93980087B6C2 /* WFCCChannelInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChannelInfo.h; sourceTree = "<group>"; };
 		2FF2A45B22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupMuteNotificationContent.m; sourceTree = "<group>"; };
@@ -418,6 +422,8 @@
 				2F8742D7219C4FED00F65EBA /* WFCCUnreadCount.m */,
 				2FEF332521BE93980087B6C2 /* WFCCChannelInfo.h */,
 				2FEF332421BE93980087B6C2 /* WFCCChannelInfo.m */,
+				2FD9513B243ACF3600EE4F60 /* WFCCPCOnlineInfo.h */,
+				2FD9513C243ACF3600EE4F60 /* WFCCPCOnlineInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -452,6 +458,7 @@
 				2FF2A46122C4DDF5006A6D4C /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
 				2E6B51131FAE9B10006B6E31 /* WFCCConversation.h in Headers */,
 				90B1373C22D9D1CC005F103C /* WFCCGroupJoinTypeNotificationContent.h in Headers */,
+				2FD9513D243ACF3600EE4F60 /* WFCCPCOnlineInfo.h in Headers */,
 				2F19723722C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h in Headers */,
 				903EBB8C21357DDF00312C16 /* WFCCStickerMessageContent.h in Headers */,
 				2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */,
@@ -608,6 +615,7 @@
 				2E6B51181FAE9B10006B6E31 /* WFCCConversationSearchInfo.m in Sources */,
 				2E6B50C31FAE9B08006B6E31 /* app_callback.mm in Sources */,
 				6ECFB2C720A84C88001F91CB /* WFCCFileMessageContent.m in Sources */,
+				2FD9513E243ACF3600EE4F60 /* WFCCPCOnlineInfo.m in Sources */,
 				2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */,
 				2E6B50B81FAE990D006B6E31 /* wavwriter.mm in Sources */,
 				2E6B50C71FAE9B08006B6E31 /* WFCCNetworkService.mm in Sources */,
