@@ -1715,6 +1715,24 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return ids;
 }
 
+- (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos {
+    NSString *pcOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"PC"];
+    NSString *webOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"Web"];
+    NSString *wxOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"WX"];
+    
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    if (pcOnline.length) {
+        [output addObject:[WFCCPCOnlineInfo infoFromStr:pcOnline withType:PC_Online]];
+    }
+    if (webOnline.length) {
+        [output addObject:[WFCCPCOnlineInfo infoFromStr:webOnline withType:Web_Online]];
+    }
+    if (wxOnline.length) {
+        [output addObject:[WFCCPCOnlineInfo infoFromStr:wxOnline withType:WX_Online]];
+    }
+    return output;
+}
+
 - (NSString *)imageThumbPara {
     std::string cstr = mars::stn::GetImageThumbPara();
     if (cstr.empty()) {

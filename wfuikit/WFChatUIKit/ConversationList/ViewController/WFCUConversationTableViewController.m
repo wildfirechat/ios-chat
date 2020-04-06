@@ -359,10 +359,10 @@
 }
 
 - (void)updatePcSession {
-    NSString *pcOnline = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_PC_Online key:@"PC"];
+    NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
     
     if (@available(iOS 11.0, *)) {
-        if (pcOnline.length) {
+        if (onlines.count) {
             self.tableView.tableHeaderView = self.pcSessionView;
         } else {
             self.tableView.tableHeaderView = nil;
