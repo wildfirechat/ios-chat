@@ -29,6 +29,10 @@
 #import "QrCodeHelper.h"
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
+#import "WFCUSeletedUserViewController.h"
+
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 
@@ -78,7 +82,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     if (@available(iOS 11.0, *)) {
@@ -194,18 +197,13 @@
 }
 
 - (void)startChatAction:(id)sender {
-    WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
-    pvc.selectContact = YES;
-    pvc.multiSelect = YES;
-    pvc.showCreateChannel = YES;
+    WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
+    pvc.type = Horizontal;
+   UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+     navi.modalPresentationStyle = UIModalPresentationFullScreen;
   __weak typeof(self)ws = self;
-    pvc.createChannel = ^(void) {
-        WFCUCreateChannelViewController *vc = [[WFCUCreateChannelViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-    };
-    
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+        [navi dismissViewControllerAnimated:NO completion:nil];
       if (contacts.count == 1) {
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:contacts[0] line:0];
@@ -221,7 +219,7 @@
         [ws.navigationController pushViewController:vc animated:YES];
       }
     };
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+ 
     [self.navigationController presentViewController:navi animated:YES completion:nil];
 }
 
@@ -533,8 +531,9 @@
                 WFCUContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendCell"];
                 if (cell == nil) {
                     cell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendCell"];
-                    cell.big = YES;
                 }
+                cell.big = NO;
+                cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
                 cell.userId = self.searchFriendList[indexPath.row].userId;
                 return cell;
             }
@@ -546,6 +545,8 @@
                 if (cell == nil) {
                     cell = [[WFCUSearchGroupTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"groupCell"];
                 }
+                cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+
                 cell.groupSearchInfo = self.searchGroupList[indexPath.row];
                 return cell;
             }
@@ -557,6 +558,9 @@
                 if (cell == nil) {
                     cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"conversationCell"];
                 }
+                cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+                cell.big = NO;
+
                 cell.searchInfo = self.searchConversationList[indexPath.row];
                 return cell;
             }
@@ -568,38 +572,34 @@
         if (cell == nil) {
             cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"conversationCell"];
         }
+        cell.big = YES;
+        cell.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
         cell.info = self.conversations[indexPath.row];
         return cell;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-  return 72;
+    if (self.searchController.active) {
+        return 60;
+    } else {
+        return 72;
+    }
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)])
-    {
-        [cell setSeparatorInset:UIEdgeInsetsMake(0, 76, 0, 0)];
-    }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
-    {
-        [cell setLayoutMargins:UIEdgeInsetsMake(0, 76, 0, 0)];
-    }
-}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
   if (self.searchController.isActive) {
     
     if (self.searchConversationList.count + self.searchGroupList.count + self.searchFriendList.count > 0) {
-        UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
+        UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 32)];
+        header.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.tableView.frame.size.width, 32)];
         
-        label.font = [UIFont systemFontOfSize:13];
-        label.textColor = [UIColor grayColor];
+        label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
+        label.textColor = [UIColor colorWithHexString:@"0x828282"];
         label.textAlignment = NSTextAlignmentLeft;
-        label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         int sec = 0;
         if (self.searchFriendList.count) {
@@ -636,7 +636,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (self.searchController.isActive) {
-        return 20;
+        return 32;
     }
     return 0;
 }

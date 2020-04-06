@@ -29,6 +29,19 @@
     // Configure the view for the selected state
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (self.isBig) {
+          _portraitView.frame = CGRectMake(8, (self.frame.size.height - 52) / 2.0, 52, 52);
+        _nameLabel.frame = CGRectMake(72, (self.frame.size.height - 20) / 2.0, [UIScreen mainScreen].bounds.size.width - 64, 20);
+        _nameLabel.font = [UIFont systemFontOfSize:20];
+      } else {
+          _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
+          _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
+            _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+      }
+}
 - (void)onUserInfoUpdated:(NSNotification *)notification {
     WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
     if ([self.userId isEqualToString:userInfo.userId]) {
@@ -67,11 +80,7 @@
 
 - (UIImageView *)portraitView {
     if (!_portraitView) {
-        if (self.isBig) {
-            _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 52, 52)];
-        } else {
-            _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 36, 36)];
-        }
+        _portraitView = [UIImageView new];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
         [self.contentView addSubview:_portraitView];
@@ -81,13 +90,7 @@
 
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
-        if (self.isBig) {
-            _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 24, [UIScreen mainScreen].bounds.size.width - 64, 20)];
-            _nameLabel.font = [UIFont systemFontOfSize:20];
-        } else {
-            _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 19, [UIScreen mainScreen].bounds.size.width - 64, 16)];
-            _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-            _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];        }
+        _nameLabel = [UILabel new];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

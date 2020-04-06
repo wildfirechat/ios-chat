@@ -18,7 +18,9 @@
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
+#import "WFCUConfigManager.h"
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (strong, nonatomic)UILabel *aliasLabel;
@@ -36,9 +38,12 @@
 @property (strong, nonatomic)UITableViewCell *sendMessageCell;
 @property (strong, nonatomic)UITableViewCell *voipCallCell;
 @property (strong, nonatomic)UITableViewCell *addFriendCell;
+@property (strong, nonatomic)UITableViewCell *momentCell;
+
 
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<UITableViewCell *> *cells;
+@property (nonatomic, strong)NSMutableArray<UITableViewCell *> *headerCells;
 
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
 @end
@@ -47,7 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = WFCString(@"UserInfomation");
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         if ([ws.userId isEqualToString:note.object]) {
@@ -62,15 +67,32 @@
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
-    
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     
-    self.tableView.tableFooterView = [[UIView alloc] init];
-    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
+
+
     [self loadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+        keyWindow.tintAdjustmentMode = UIViewTintAdjustmentModeAutomatic;
+    [keyWindow tintColorDidChange];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+
+
+
 }
 
 - (void)onRightBtn:(id)sender {
@@ -105,9 +127,10 @@
     }
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     
-    self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 48, 48)];
+    self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 14, 58, 58)];
     
-    
+    self.portraitView.layer.cornerRadius = 10;
+    self.portraitView.layer.masksToBounds = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
     [self.portraitView addGestureRecognizer:tap];
     self.portraitView.userInteractionEnabled = YES;
@@ -117,8 +140,9 @@
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {
-        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 2, width - 64 - 8, 21)];
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
         self.aliasLabel.text = alias;
+        
         self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 26, width - 64 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
         
@@ -128,28 +152,47 @@
         self.userNameLabel.textColor = [UIColor grayColor];
     } else {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 12, width - 64 - 8, 21)];
+
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 23, width - 94 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
+        self.displayNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:20];
+        self.displayNameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 38, width - 64 - 8, 11)];
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 42, width - 64 - 8, 21)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     }
-    
-    self.userNameLabel.hidden = NO;
+    self.userNameLabel.hidden = YES;
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
     [self.headerCell addSubview:self.userNameLabel];
     [self.headerCell addSubview:self.aliasLabel];
-    
+    self.headerCells = [NSMutableArray new];
+    [self.headerCells addObject:self.headerCell];
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-//        if (self.userInfo.mobile.length > 0) {
-//            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-//            cell.textLabel.text = self.userInfo.mobile;
-//            [self.cells addObject:cell];
-//        }
+        UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
+        alisaCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
+        [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [alisaCell addSubview:btn];
+        [self showSeparatorLine:alisaCell];
+        [self.headerCells addObject:alisaCell];
+
+        if (self.userInfo.mobile.length > 0) {
+            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
+            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
+            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
+            [self.headerCell addSubview:self.mobileLabel];
+
+        }
         
         if (self.userInfo.email.length > 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
@@ -181,25 +224,43 @@
         for (UIView *subView in self.sendMessageCell.subviews) {
             [subView removeFromSuperview];
         }
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+        [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
         [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
-        [btn setBackgroundColor:[UIColor greenColor]];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
         [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
-        btn.layer.cornerRadius = 5.f;
-        btn.layer.masksToBounds = YES;
         [self.sendMessageCell addSubview:btn];
-
+        [self showSeparatorLine:self.sendMessageCell];
+        
+        self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
+        for (UIView *subView in self.momentCell.subviews) {
+               [subView removeFromSuperview];
+        }
+        
+        UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
+        [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
+        [momentButton setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
+        momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.momentCell addSubview:momentButton];
+        self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
 #if WFCU_SUPPORT_VOIP
         self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         for (UIView *subView in self.voipCallCell.subviews) {
             [subView removeFromSuperview];
         }
-        btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
+        btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+        [btn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
+        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
         [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
-        [btn setBackgroundColor:[UIColor blueColor]];
         [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
-        btn.layer.cornerRadius = 5.f;
-        btn.layer.masksToBounds = YES;
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
         [self.voipCallCell addSubview:btn];
 #endif
     } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
@@ -221,10 +282,22 @@
     [self.tableView reloadData];
 }
 
+- (UIEdgeInsets)hiddenSeparatorLine:(UITableViewCell *)cell {
+    return cell.separatorInset = UIEdgeInsetsMake(self.view.frame.size.width, 0, 0, 0);
+}
+
+- (void)showSeparatorLine:(UITableViewCell *)cell {
+    cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
 - (void)onViewPortrait:(id)sender {
     WFCUMyPortraitViewController *pvc = [[WFCUMyPortraitViewController alloc] init];
     pvc.userId = self.userId;
     [self.navigationController pushViewController:pvc animated:YES];
+}
+
+- (void)momentClick {
+    
 }
 
 
@@ -291,8 +364,14 @@
 #pragma mark - UITableViewDataSource<NSObject>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 1;
-    } else if(section == 1) {
+        return self.headerCells.count;
+    } else if (section == 1) {
+        if (self.momentCell) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else if(section == 2) {
         return self.cells.count;
     } else {
         if (self.sendMessageCell) {
@@ -304,10 +383,14 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"section:%ld",(long)indexPath.section);
     if (indexPath.section == 0) {
-        return self.headerCell;
+       return self.headerCells[indexPath.row];
     } else if (indexPath.section == 1) {
-        return self.cells[indexPath.row];
+        return self.momentCell;
+    } else if (indexPath.section == 1) {
+           
+           return self.cells[indexPath.row];
     } else {
         if (self.sendMessageCell) {
             if (indexPath.row == 0) {
@@ -323,9 +406,25 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.sendMessageCell || self.voipCallCell || self.addFriendCell) {
-        return 3;
+        return 4;
     } else {
         return 2;
+    }
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section != 0) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 10)];
+        view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+        return view;
+    } else {
+        return nil;
+    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return 0;
+    } else {
+        return 10;
     }
 }
 
@@ -337,15 +436,48 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return 64;
+        if (indexPath.row == 0) {
+            return 100;
+        } else {
+            return 50;
+        }
     } else if(indexPath.section == 1) {
-        return 48;
-    } else {
-        return 56;
+        if (self.momentCell) {
+            return 70;
+        } else {
+            return 0;
+        }
+    } else if(indexPath.section == 2) {
+            return 50;
+    }  else {
+        return 50;
     }
 }
 
 #pragma mark -  UIActionSheetDelegate <NSObject>
+- (void)setFriendNote {
+    WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
+    NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
+    gmvc.defaultValue = previousAlias;
+    gmvc.titleText = @"设置备注";
+    gmvc.canEmpty = YES;
+    __weak typeof(self)ws = self;
+    gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
+        if (![newValue isEqualToString:previousAlias]) {
+            [[WFCCIMService sharedWFCIMService] setFriend:self.userId alias:newValue success:^{
+                result(YES);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [ws loadData];
+                });
+            } error:^(int error_code) {
+                result(NO);
+            }];
+        }
+    };
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+}
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 0) {// friend
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
@@ -427,26 +559,7 @@
             }];
         }
     } else if(buttonIndex == 2) {// alias
-        WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
-        NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
-        gmvc.defaultValue = previousAlias;
-        gmvc.titleText = @"设置备注";
-        gmvc.canEmpty = YES;
-        __weak typeof(self)ws = self;
-        gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
-            if (![newValue isEqualToString:previousAlias]) {
-                [[WFCCIMService sharedWFCIMService] setFriend:self.userId alias:newValue success:^{
-                    result(YES);
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [ws loadData];
-                    });
-                } error:^(int error_code) {
-                    result(NO);
-                }];
-            }
-        };
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
+        [self setFriendNote];
     }
 }
 

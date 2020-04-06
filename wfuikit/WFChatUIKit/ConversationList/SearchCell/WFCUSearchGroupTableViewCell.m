@@ -8,7 +8,8 @@
 
 #import "WFCUSearchGroupTableViewCell.h"
 #import "SDWebImage.h"
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 @interface WFCUSearchGroupTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
 @property (strong, nonatomic) UILabel *name;
@@ -23,9 +24,21 @@
     // Initialization code
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat postionY = (self.frame.size.height - 40) / 2.0;
+    self.portrait.frame = CGRectMake(16, postionY, 40, 40);
+    self.name.frame = CGRectMake(10 + 40 + 20, postionY, [UIScreen mainScreen].bounds.size.width - (10 + 40 + 20), 20);
+    postionY += 15 + 8;
+    self.haveMember.frame  = CGRectMake(10 + 40 + 20, postionY, [UIScreen mainScreen].bounds.size.width - (10 + 40 + 20), 19);
+
+}
+
 - (UIImageView *)portrait {
     if (!_portrait) {
-        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 52, 52)];
+        _portrait = [UIImageView new];
+        _portrait.layer.cornerRadius = 4;
+        _portrait.layer.masksToBounds = YES;
         [self.contentView addSubview:_portrait];
     }
     return _portrait;
@@ -33,8 +46,9 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(72, 12, [UIScreen mainScreen].bounds.size.width - 64, 20)];
-        [_name setFont:[UIFont systemFontOfSize:18]];
+        _name = [UILabel new];
+        [_name setFont:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15]];
+        _name.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_name];
     }
     return _name;
@@ -42,9 +56,9 @@
 
 - (UILabel *)haveMember {
     if (!_haveMember) {
-        _haveMember = [[UILabel alloc] initWithFrame:CGRectMake(72, 36, [UIScreen mainScreen].bounds.size.width - 64, 19)];
-        [_haveMember setFont:[UIFont systemFontOfSize:14]];
-        _haveMember.textColor = [UIColor grayColor];
+        _haveMember = [UILabel new];
+        [_haveMember setFont:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12]];
+        _haveMember.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
         [self.contentView addSubview:_haveMember];
     }
     return _haveMember;
@@ -89,6 +103,7 @@
         [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
         [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
         
+        [string addAttribute:NSFontAttributeName value:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12] range:NSMakeRange(0, string.length)];
         NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupNameMatch")];
         [attrStr appendAttributedString:string];
         self.haveMember.attributedText = attrStr;
