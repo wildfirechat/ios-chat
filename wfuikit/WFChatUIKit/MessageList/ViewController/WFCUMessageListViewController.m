@@ -20,6 +20,7 @@
 #import "WFCUCallSummaryCell.h"
 #import "WFCUStickerCell.h"
 #import "WFCUVideoCell.h"
+#import "WFCURecallCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -520,7 +521,7 @@
     [self registerCell:[WFCUCallSummaryCell class] forContent:[WFCCCallStartMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCUnknownMessageContent class]];
-    [self registerCell:[WFCUInformationCell class] forContent:[WFCCRecallMessageContent class]];
+    [self registerCell:[WFCURecallCell class] forContent:[WFCCRecallMessageContent class]];
     
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
@@ -1166,6 +1167,10 @@
     [alertController addAction:copyAction];
 //    [alertController addAction:addContactAction];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+- (void)reeditRecalledMessage:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
+    WFCCRecallMessageContent *recall = (WFCCRecallMessageContent *)model.message.content;
+    [self.chatInputBar appendText:recall.originalSearchableContent];
 }
 #pragma mark - AVAudioPlayerDelegate
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
