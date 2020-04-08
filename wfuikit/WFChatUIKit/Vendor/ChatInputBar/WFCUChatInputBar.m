@@ -603,6 +603,11 @@
     }
 }
 
+- (void)appendText:(NSString *)text {
+    [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:text];
+    self.textInputView.text = [self.textInputView.text stringByAppendingString:text];
+}
+
 - (UIView *)emojInputView {
     if (!_emojInputView) {
         _emojInputView = [[WFCUFaceBoard alloc] init];
