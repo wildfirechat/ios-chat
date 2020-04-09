@@ -15,14 +15,11 @@
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
-    
-    payload.content = self.tip;
     return payload;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
-    self.tip = payload.content;
 }
 
 + (int)getContentType {
