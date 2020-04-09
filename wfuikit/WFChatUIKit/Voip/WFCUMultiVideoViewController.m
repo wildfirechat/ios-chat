@@ -936,7 +936,7 @@
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
                     [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
-                    self.stateLabel.text = @"视频已关闭";
+                    self.stateLabel.text = WFCString(@"VideoClosed");
                     self.stateLabel.hidden = NO;
                 } else {
                     [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
@@ -948,7 +948,7 @@
                     if ([profile.userId isEqualToString:userId]) {
                         if (profile.videoMuted) {
                             [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId];
-                            self.stateLabel.text = @"视频已关闭";
+                            self.stateLabel.text = WFCString(@"VideoClosed");
                             self.stateLabel.hidden = NO;
                         } else {
                             [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];
