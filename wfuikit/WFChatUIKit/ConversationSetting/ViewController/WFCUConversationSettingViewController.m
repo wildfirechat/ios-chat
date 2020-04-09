@@ -562,7 +562,7 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"announcementCell"];
         }
-        cell.textLabel.text = @"群公告";
+        cell.textLabel.text = WFCString(@"GroupAnnouncement");
         cell.detailTextLabel.text = self.groupAnnouncement.text;
         cell.detailTextLabel.numberOfLines = 10;
         cell.detailTextLabel.font = [UIFont systemFontOfSize:12];

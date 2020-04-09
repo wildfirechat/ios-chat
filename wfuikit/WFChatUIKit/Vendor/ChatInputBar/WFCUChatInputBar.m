@@ -158,7 +158,7 @@
     
     
     self.voiceInputBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_HEIGHT, CHAT_INPUT_BAR_PADDING, parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.voiceInputBtn setTitle:@"按下 说话" forState:UIControlStateNormal];
+    [self.voiceInputBtn setTitle:WFCString(@"HoldToTalk") forState:UIControlStateNormal];
     [self.voiceInputBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.voiceInputBtn.layer.cornerRadius = 4;
     self.voiceInputBtn.layer.masksToBounds = YES;
