@@ -46,6 +46,11 @@
 //正在输入消息
 #define MESSAGE_CONTENT_TYPE_TYPING 91
 
+//以上是打招呼的内容
+#define MESSAGE_FRIEND_GREETING 92
+//您已经添加XXX为好友了，可以愉快地聊天了
+#define MESSAGE_FRIEND_ADDED_NOTIFICATION 93
+
 //通知消息类型
 //创建群的通知消息
 #define MESSAGE_CONTENT_TYPE_CREATE_GROUP 104
