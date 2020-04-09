@@ -167,9 +167,10 @@
         
         [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:^{
             NSLog(@"join chatroom successs");
-            [ws sendChatroomWelcomeMessage];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [ws sendChatroomWelcomeMessage];
+            });
             [hud hideAnimated:YES];
-            [ws loadMoreMessage:YES];
         } error:^(int error_code) {
             NSLog(@"join chatroom error");
             hud.mode = MBProgressHUDModeText;
@@ -1252,7 +1253,6 @@
 }
 
 - (void)willChangeFrame:(CGRect)newFrame withDuration:(CGFloat)duration keyboardShowing:(BOOL)keyboardShowing {
-    NSLog(@"tttt%f,%f,%f,%f", newFrame.origin.x, newFrame.origin.y, newFrame.size.width, newFrame.size.height);
     if (!self.isShowingKeyboard) {
         self.isShowingKeyboard = YES;
         [UIView animateWithDuration:duration animations:^{
