@@ -44,103 +44,108 @@
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp/1000];
     NSDate *current = [[NSDate alloc] init];
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSInteger days = [calendar component:NSCalendarUnitDay fromDate:date];
-    NSInteger curDays = [calendar component:NSCalendarUnitDay fromDate:current];
-    if (days == curDays) {
+    
+    NSInteger years = [calendar component:NSCalendarUnitYear fromDate:date];
+    NSInteger curYears = [calendar component:NSCalendarUnitYear fromDate:current];
+
+    if ([calendar isDateInToday:date]) {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"HH:mm"];
         return [formatter stringFromDate:date];
-    } else if(days == curDays -1) {
+    } else if([calendar isDateInYesterday:date]) {
         return @"昨天";
     } else {
-        NSInteger weeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:date];
-        NSInteger curWeeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:current];
-        
-        NSInteger weekDays = [calendar component:NSCalendarUnitWeekday fromDate:date];
-        if (weeks == curWeeks) {
-            switch (weekDays) {
-                case 1:
-                    return @"周日";
-                    break;
-                case 2:
-                    return @"周一";
-                    break;
-                case 3:
-                    return @"周二";
-                    break;
-                case 4:
-                    return @"周三";
-                    break;
-                case 5:
-                    return @"周四";
-                    break;
-                case 6:
-                    return @"周五";
-                    break;
-                case 7:
-                    return @"周六";
-                    break;
-                    
-                default:
-                    break;
+        if (years == curYears) {
+            NSInteger weeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:date];
+            NSInteger curWeeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:current];
+            
+            NSInteger weekDays = [calendar component:NSCalendarUnitWeekday fromDate:date];
+            if (weeks == curWeeks) {
+                switch (weekDays) {
+                    case 1:
+                        return @"周日";
+                        break;
+                    case 2:
+                        return @"周一";
+                        break;
+                    case 3:
+                        return @"周二";
+                        break;
+                    case 4:
+                        return @"周三";
+                        break;
+                    case 5:
+                        return @"周四";
+                        break;
+                    case 6:
+                        return @"周五";
+                        break;
+                    case 7:
+                        return @"周六";
+                        break;
+                        
+                    default:
+                        break;
+                }
+                return [NSString stringWithFormat:@"周%ld", (long)weekDays];
+            } else {
+                NSInteger month = [calendar component:NSCalendarUnitMonth fromDate:date];
+                NSInteger day = [calendar component:NSCalendarUnitDay fromDate:date];
+                return [NSString stringWithFormat:@"%d月%d号", (int)month, (int)day];
             }
-            return [NSString stringWithFormat:@"周%ld", (long)weekDays];
         } else {
             NSInteger month = [calendar component:NSCalendarUnitMonth fromDate:date];
             NSInteger day = [calendar component:NSCalendarUnitDay fromDate:date];
-            return [NSString stringWithFormat:@"%d月%d号", (int)month, (int)day];
+            return [NSString stringWithFormat:@"%d年%d月%d号",(int)years,(int)month, (int)day];
         }
+        
     }
 }
+
 + (NSString *)formatTimeDetailLabel:(int64_t)timestamp {
     if (timestamp == 0) {
         return nil;
     }
     
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp/1000];
+    
     NSDate *current = [[NSDate alloc] init];
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSInteger days = [calendar component:NSCalendarUnitDay fromDate:date];
-    NSInteger curDays = [calendar component:NSCalendarUnitDay fromDate:current];
+    
+    NSInteger months = [calendar component:NSCalendarUnitMonth fromDate:date];
+    NSInteger curMonths = [calendar component:NSCalendarUnitMonth fromDate:current];
+    NSInteger years = [calendar component:NSCalendarUnitYear fromDate:date];
+    NSInteger curYears = [calendar component:NSCalendarUnitYear fromDate:current];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"HH:mm"];
-    NSString *time =  [formatter stringFromDate:date];
+    NSString *hourTimeStr =  [formatter stringFromDate:date];
     
-    if (days == curDays) {
-        return time;
-    } else if(days == curDays -1) {
-        return [NSString stringWithFormat:@"昨天 %@", time];
-    } else {
-        NSInteger weeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:date];
-        NSInteger curWeeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:current];
-        
-        NSInteger weekDays = [calendar component:NSCalendarUnitWeekday fromDate:date];
-        if (weeks == curWeeks) {
-            return [NSString stringWithFormat:@"%@ %@", [WFCUUtilities formatWeek:weekDays], time];
-        } /*else if (weeks == curWeeks - 1) {
-            if (weekDays == 1) {
-                return [NSString stringWithFormat:@"%@ %@", [Utilities formatWeek:weekDays], time];
-            } else {
-                return [NSString stringWithFormat:@"上%@ %@", [Utilities formatWeek:weekDays], time];
-            }
-        }*/ else {
-            NSInteger year = [calendar component:NSCalendarUnitYear fromDate:date];
-            NSInteger curYear = [calendar component:NSCalendarUnitYear fromDate:current];
-            
-            NSInteger month = [calendar component:NSCalendarUnitMonth fromDate:date];
-            NSInteger curMonth = [calendar component:NSCalendarUnitMonth fromDate:current];
-            if (month == curMonth) {
-                [formatter setDateFormat:@"dd'日'HH':'mm"];
-                return [formatter stringFromDate:date];
-            } else if (year == curYear) {
-                [formatter setDateFormat:@"MM'月'dd'日'HH':'mm"];
-                return [formatter stringFromDate:date];
-            } else {
-                [formatter setDateFormat:@"yyyy'年'MM'月'dd'日'HH':'mm"];
-                return [formatter stringFromDate:date];
-            }
+    NSInteger weeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:date];
+    NSInteger curWeeks = [calendar component:NSCalendarUnitWeekOfYear fromDate:current];
+    
+    
+    NSInteger weekDays = [calendar component:NSCalendarUnitWeekday fromDate:date];
+    if ([calendar isDateInToday:date]) {
+        return hourTimeStr;
+    } else if([calendar isDateInYesterday:date]) {
+        return [NSString stringWithFormat:@"昨天 %@", hourTimeStr];
+    } else if (years != curYears) {
+        [formatter setDateFormat:@"yyyy'年'MM'月'dd'日 'HH':'mm"];
+        return [formatter stringFromDate:date];
+    } else if(months != curMonths) {
+        if(weeks == curWeeks) {
+            return [NSString stringWithFormat:@"%@ %@", [WFCUUtilities formatWeek:weekDays], hourTimeStr];
         }
+        
+        [formatter setDateFormat:@"MM'月'dd'日 'HH':'mm"];
+        return [formatter stringFromDate:date];
+    } else {
+        if(weeks == curWeeks) {
+            return [NSString stringWithFormat:@"%@ %@", [WFCUUtilities formatWeek:weekDays], hourTimeStr];
+        }
+        [formatter setDateFormat:@"dd'日 'HH':'mm"];
+        return [formatter stringFromDate:date];
     }
 }
 + (NSString *)formatWeek:(NSUInteger)weekDays {
