@@ -12,8 +12,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ 主题类型
+
+ - ThemeType_WFChat: 野火风格
+ - ThemeType_White: 白色风格
+ */
+typedef NS_ENUM(NSInteger, WFCUThemeType) {
+    ThemeType_WFChat,
+    ThemeType_White
+};
+
 @interface WFCUConfigManager : NSObject
 + (WFCUConfigManager *)globalManager;
+
+- (void)setupNavBar;
+@property(nonatomic, assign)WFCUThemeType themeType;
 
 @property(nonatomic, strong)UIColor *backgroudColor;
 /*
