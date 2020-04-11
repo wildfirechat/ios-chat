@@ -70,7 +70,7 @@ alpha:1.0]
     UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     userNameLabel.text = @"手机号";
     userNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
-    userNameLabel.textColor = [UIColor colorWithHexString:@"0x7e7e7e"];
+    userNameLabel.textColor = [UIColor colorWithHexString:@"0x191919"];
     
     self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, userNameContainer.frame.size.width, 1.f)];
     self.userNameLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
@@ -85,7 +85,7 @@ alpha:1.0]
     self.userNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.userNameField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    topPos += inputHeight;
+    topPos += inputHeight + 1;
 
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
