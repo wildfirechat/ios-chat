@@ -539,9 +539,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self isGroupAnnouncementCell:indexPath]) {
-        float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont systemFontOfSize:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
-        if (height > 136) {
-            height = 136;
+        float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
+        if (height > 12 * 3.2) {
+            height = 12 * 3.2;
         }
         return height + 50;
     }
@@ -615,7 +615,8 @@
         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.detailTextLabel.text = self.groupAnnouncement.text;
-        cell.detailTextLabel.numberOfLines = 10;
+        cell.detailTextLabel.numberOfLines = 3;
+//        cell.detailTextLabel.numberOfLines = 10;
         cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
         cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"0x9b9a9a"];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

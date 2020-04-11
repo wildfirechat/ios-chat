@@ -17,11 +17,11 @@
 #import "WFCUSeletedUserSearchResultViewController.h"
 #import "UIView+Toast.h"
 
-#define SearchBarMinWidth 150
+#define SearchBarMinWidth 70
 //#import "WFCCIMService.h"
 @interface WFCUSeletedUserViewController ()
 <UITableViewDataSource, UITableViewDelegate,
-UICollectionViewDataSource,
+UICollectionViewDataSource, UICollectionViewDelegate,
 UISearchBarDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)UIView *topView;
@@ -73,7 +73,7 @@ UISearchBarDelegate>
     resultVC.dataSource = self.dataSource;
       resultVC.needSection = self.type == Horizontal;
     resultVC.selectedUser = ^(WFCUSelectedUserInfo * _Nonnull user) {
-             [weakSelf refreshSeletedUser:user];
+             [weakSelf toggelSeletedUser:user];
     };
     UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:resultVC];
     naviVC.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -173,13 +173,13 @@ UISearchBarDelegate>
     if (self.type == Vertical) {
         WFCUSelectedUserInfo *user = nil;
         user = self.dataSource[indexPath.row];
-        [self refreshSeletedUser:user];
+        [self toggelSeletedUser:user];
     } else {
         NSString *key = self.sectionKeys[indexPath.section];
         NSArray *users = self.sectionDictionary[key];
         WFCUSelectedUserInfo *user = nil;
         user = users[indexPath.row];
-        [self refreshSeletedUser:user];
+        [self toggelSeletedUser:user];
     }
 }
 
@@ -195,6 +195,12 @@ UISearchBarDelegate>
     return self.selectedUsers.count;
 }
 
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self toggelSeletedUser:self.selectedUsers[indexPath.row]];
+}
+
+
 #pragma mark - private
 - (void)resizeAllView {
     CGFloat topSpace = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
@@ -209,7 +215,7 @@ UISearchBarDelegate>
         self.selectedUserCollectionView.frame = CGRectMake(16, 0, self.view.frame.size.width - 16 * 2, collectionViewHeight);
         self.searchBar.frame = CGRectMake(16, collectionViewHeight + 12, self.view.frame.size.width - 16 * 2, 38);
         self.topView.frame = CGRectMake(0, topSpace, self.view.frame.size.width, collectionViewHeight + 12 + 26 + 16);
-        self.tableView.frame = CGRectMake(0, topSpace + collectionViewHeight + 12 + 26 + 16, self.view.frame.size.width, self.view.frame.size.height - (collectionViewHeight + 12 + 26 + 16));
+        self.tableView.frame = CGRectMake(0, topSpace + collectionViewHeight + 12 + 26 + 16, self.view.frame.size.width, self.view.frame.size.height - (collectionViewHeight + 12 + 26 + 16 + topSpace));
     } else {
         CGFloat collectionViewWidth = 0;
         CGFloat collectionMaxWidth = self.view.frame.size.width - (16 + SearchBarMinWidth + 8 * 2);
@@ -219,10 +225,10 @@ UISearchBarDelegate>
         } else {
             collectionViewWidth = contentSize.width;
         }
-        self.selectedUserCollectionView.frame = CGRectMake(16, 6, collectionViewWidth, 24);
-        self.searchBar.frame = CGRectMake(16 + collectionViewWidth + 8, 0, self.view.frame.size.width - (16 + collectionViewWidth + 8 * 2), 36);
-        self.topView.frame = CGRectMake(0, topSpace, self.view.frame.size.width, 44);
-        self.tableView.frame = CGRectMake(0, topSpace + 44, self.view.frame.size.width, self.view.frame.size.height - 44);
+        self.selectedUserCollectionView.frame = CGRectMake(16, 6, collectionViewWidth, 40);
+        self.searchBar.frame = CGRectMake(16 + collectionViewWidth + 8, 0, self.view.frame.size.width - (16 + collectionViewWidth + 8 * 2), 52);
+        self.topView.frame = CGRectMake(0, topSpace, self.view.frame.size.width, 60);
+        self.tableView.frame = CGRectMake(0, topSpace + 60, self.view.frame.size.width, self.view.frame.size.height - (60 + topSpace + 2));
         
     }
     
@@ -387,7 +393,7 @@ UISearchBarDelegate>
     });
 }
 
-- (BOOL)refreshSeletedUser:(WFCUSelectedUserInfo *)user {
+- (BOOL)toggelSeletedUser:(WFCUSelectedUserInfo *)user {
     if (user.selectedStatus == Disable) {
         return NO;
     } else if (user.selectedStatus == Checked) {
@@ -404,6 +410,16 @@ UISearchBarDelegate>
         [self.selectedUsers addObject:user];
         NSIndexPath *insertIndexPath = [NSIndexPath indexPathForItem:self.selectedUsers.count - 1 inSection:0];
         [self.selectedUserCollectionView insertItemsAtIndexPaths:@[insertIndexPath]];
+        __weak typeof(self)weakSelf = self;
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (weakSelf.type == Vertical) {
+                [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+            } else {
+                [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+            }
+            
+        });
     }
     [self setDoneButtonStyleAndContent:self.selectedUsers.count > 0];
     NSIndexPath *indexPath = nil;
@@ -445,7 +461,7 @@ UISearchBarDelegate>
             flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
             rect = CGRectMake(16, 0, self.view.frame.size.width - 16 * 2, 1);
         } else {
-            flowLayout.itemSize = CGSizeMake(24, 24);
+            flowLayout.itemSize = CGSizeMake(40, 40);
             flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
             rect = CGRectMake(16, 6, 1, 24);
             
@@ -480,7 +496,7 @@ UISearchBarDelegate>
         _topView = [UIView new];
         if (self.type == Horizontal) {
             _topView.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-            UIView *insertView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 36)];
+            UIView *insertView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 52)];
             insertView.backgroundColor = [UIColor whiteColor];
             [_topView addSubview:insertView];
         }
