@@ -11,6 +11,7 @@
 #import "SDWebImage.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUContactTableViewCell ()
 
@@ -54,7 +55,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:userId];
-
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     if(userInfo.userId.length == 0) {
@@ -91,6 +91,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [UILabel new];
+        _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;
