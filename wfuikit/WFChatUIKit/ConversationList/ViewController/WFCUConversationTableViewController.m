@@ -244,8 +244,7 @@
     self.conversations = [[NSMutableArray alloc] init];
     
     [self initSearchUIAndTableView];
-    
-    
+    self.extendedLayoutIncludesOpaqueBars = true;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     
     

@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initSearchUIAndData];
+    self.extendedLayoutIncludesOpaqueBars = true;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
