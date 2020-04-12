@@ -244,7 +244,7 @@
     self.conversations = [[NSMutableArray alloc] init];
     
     [self initSearchUIAndTableView];
-    self.extendedLayoutIncludesOpaqueBars = true;
+    self.definesPresentationContext = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     
     
@@ -950,11 +950,12 @@
     self.isSearchConversationListExpansion = NO;
     self.isSearchGroupListExpansion = NO;
     self.tabBarController.tabBar.hidden = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = NO;
-    
+    self.extendedLayoutIncludesOpaqueBars = NO;
 }
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
