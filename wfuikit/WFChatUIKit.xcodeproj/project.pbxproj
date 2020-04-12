@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B528392243C3004009AF8F5 /* WFCURecallCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B528390243C3004009AF8F5 /* WFCURecallCell.h */; };
-		2B528393243C3004009AF8F5 /* WFCURecallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B528391243C3004009AF8F5 /* WFCURecallCell.m */; };
-		2B528397243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B528395243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.h */; };
-		2B528398243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B528396243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
 		2BEF789E23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF789223F6A84C000DE285 /* WFCUParticipantCollectionViewCell.m */; };
@@ -361,10 +357,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2B528390243C3004009AF8F5 /* WFCURecallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCURecallCell.h; sourceTree = "<group>"; };
-		2B528391243C3004009AF8F5 /* WFCURecallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURecallCell.m; sourceTree = "<group>"; };
-		2B528395243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
-		2B528396243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
 		2BCEC52D232E10DF00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/wfc.strings; sourceTree = "<group>"; };
 		2BCEC52F232E10E900D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc.strings"; sourceTree = "<group>"; };
 		2BD671A22336E821007A9FEC /* WFCUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConfigManager.h; sourceTree = "<group>"; };
@@ -738,16 +730,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B528394243C365C009AF8F5 /* YBAttributeTextTapAction */ = {
-			isa = PBXGroup;
-			children = (
-				2B528395243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.h */,
-				2B528396243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.m */,
-			);
-			name = YBAttributeTextTapAction;
-			path = ../../../wfchat/WildFireChat/YBAttributeTextTapAction;
-			sourceTree = "<group>";
-		};
 		2F143A66217F7D4100B3E38A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -866,8 +848,6 @@
 		2F550EB3217F5CC000F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				2B528390243C3004009AF8F5 /* WFCURecallCell.h */,
-				2B528391243C3004009AF8F5 /* WFCURecallCell.m */,
 				2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */,
 				2F550EB5217F5CC000F56C26 /* WFCULocationCell.h */,
 				2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */,
@@ -979,7 +959,6 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				2B528394243C365C009AF8F5 /* YBAttributeTextTapAction */,
 				2F550EF3217F5CC000F56C26 /* ChatInputBar */,
 				2F550F1F217F5CC100F56C26 /* CCHMapClusterController */,
 				2F550F3C217F5CC100F56C26 /* Pinyin */,
@@ -1706,7 +1685,6 @@
 				2F551092217F5CC200F56C26 /* WFCULocationCell.h in Headers */,
 				2F5511EF217F5CC300F56C26 /* AttributedLabel.h in Headers */,
 				2F5511ED217F5CC300F56C26 /* TabbarButton.h in Headers */,
-				2B528397243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.h in Headers */,
 				2F5510CA217F5CC200F56C26 /* WFCUPluginBoardView.h in Headers */,
 				2F5510FF217F5CC200F56C26 /* CCHMapTree.h in Headers */,
 				2BEF78A323F6A84D000DE285 /* WFCUFloatingWindow.h in Headers */,
@@ -1719,7 +1697,6 @@
 				2F5511C9217F5CC300F56C26 /* SDWebImagePrefetcher.h in Headers */,
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
 				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
-				2B528392243C3004009AF8F5 /* WFCURecallCell.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
@@ -2009,7 +1986,6 @@
 				2F5511DC217F5CC300F56C26 /* TYShowAlertView.m in Sources */,
 				2F55110A217F5CC200F56C26 /* pinyin.c in Sources */,
 				2F5511FE217F5CC300F56C26 /* WFCUConversationSettingMemberCell.m in Sources */,
-				2B528398243C365C009AF8F5 /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */,
 				2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */,
 				2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */,
@@ -2027,7 +2003,6 @@
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
-				2B528393243C3004009AF8F5 /* WFCURecallCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,
 				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
