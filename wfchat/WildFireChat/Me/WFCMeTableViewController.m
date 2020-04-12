@@ -112,6 +112,7 @@
         
         WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:YES];
         cell.userInfo = me;
+        cell.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
         return cell;
     } else {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleDefault"];
