@@ -13,7 +13,7 @@
 #import "WFCMeTableViewController.h"
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #import <WFMomentClient/WFMomentClient.h>
-
+#import "UIImage+ERCategory.h"
 #define kClassKey   @"rootVCClassString"
 #define kTitleKey   @"title"
 #define kImgKey     @"imageName"
@@ -62,10 +62,10 @@
     [self addChildViewController:nav];
     
     vc = [WFCMeTableViewController new];
-    vc.title = LocalizedString(@"Settings");
+    vc.title = LocalizedString(@"Me");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
-    item.title = LocalizedString(@"Settings");
+    item.title = LocalizedString(@"Me");
     item.image = [UIImage imageNamed:@"tabbar_me"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_me_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];

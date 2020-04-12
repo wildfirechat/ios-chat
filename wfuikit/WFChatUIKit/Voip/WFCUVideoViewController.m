@@ -17,8 +17,8 @@
 #endif
 #import "SDWebImage.h"
 #import <WFChatClient/WFCCConversation.h>
-
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
     ,WFAVCallSessionDelegate
@@ -39,6 +39,8 @@
 @property (nonatomic, strong) UIButton *minimizeButton;
 
 @property (nonatomic, strong) UIImageView *portraitView;
+@property (nonatomic, strong) UIImageView *backGroudPortraitView;
+
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *stateLabel;
 
@@ -123,19 +125,21 @@
     self.portraitView = [[UIImageView alloc] init];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     self.portraitView.layer.masksToBounds = YES;
-    self.portraitView.layer.cornerRadius = 8.f;
+    self.portraitView.layer.cornerRadius = 10.f;
+    self.portraitView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.portraitView.layer.borderWidth = 1.0;
     [self.view addSubview:self.portraitView];
     
     
     self.userNameLabel = [[UILabel alloc] init];
-    self.userNameLabel.font = [UIFont systemFontOfSize:26];
+    self.userNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:27];
     self.userNameLabel.text = user.displayName;
-    self.userNameLabel.textColor = [UIColor whiteColor];
+    self.userNameLabel.textColor = [UIColor colorWithHexString:@"0xffffff"];
     [self.view addSubview:self.userNameLabel];
     
     self.stateLabel = [[UILabel alloc] init];
-    self.stateLabel.font = [UIFont systemFontOfSize:16];
-    self.stateLabel.textColor = [UIColor whiteColor];
+    self.stateLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+    self.stateLabel.textColor = [UIColor colorWithHexString:@"0xB4B4B6"];
     [self.view addSubview:self.stateLabel];
     
     [self updateTopViewFrame];
@@ -460,28 +464,37 @@
 }
 
 - (void)updateTopViewFrame {
+    CGFloat containerWidth = self.view.bounds.size.width;
+    CGFloat containerHeight = self.view.bounds.size.height;
+
     if (self.currentSession.isAudioOnly) {
-        CGFloat containerWidth = self.view.bounds.size.width;
         
-        self.portraitView.frame = CGRectMake((containerWidth-64)/2, kStatusBarAndNavigationBarHeight, 64, 64);;
+        CGFloat postionY = (containerHeight - 110) / 2.0 - 70;
+        self.portraitView.frame = CGRectMake((containerWidth-110)/2, postionY, 110, 110);;
         
-        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
+        postionY += 110 + 16;
+        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, postionY, 240, 27);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 26 + 8, 240, 26);
+        postionY += 12 + 27;
+        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, postionY, 240, 26);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
     } else {
-        self.portraitView.frame = CGRectMake(16, kStatusBarAndNavigationBarHeight, 64, 64);
-        self.userNameLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 8, 240, 26);
+        CGFloat postionX = containerWidth - 16 - 62;
+        self.portraitView.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight, 62, 62);
+        postionX -= (13 + 240);
+        self.userNameLabel.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight + 8, 240, 26);
+        self.userNameLabel.textAlignment = NSTextAlignmentRight;
+
         if(![NSThread isMainThread]) {
             NSLog(@"error not main thread");
         }
-        self.userNameLabel.textAlignment = NSTextAlignmentLeft;
         if(self.currentSession.state == kWFAVEngineStateConnected) {
             self.stateLabel.frame = CGRectMake(54, 30, 240, 20);
         } else {
             self.stateLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
         }
+        self.stateLabel.hidden = YES;
         self.stateLabel.textAlignment = NSTextAlignmentLeft;
     }
 }

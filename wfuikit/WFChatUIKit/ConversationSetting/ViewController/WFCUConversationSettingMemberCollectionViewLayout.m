@@ -24,7 +24,7 @@
     self = [super init];
     if (self) {
         self.itemMargin = itemMargin;
-        self.itemsPerLine = 4;
+        self.itemsPerLine = 5;
     }
     return self;
 }
@@ -76,8 +76,9 @@
     if (itemCount == 0) {
         return 0;
     } else {
-        int lines = (itemCount - 1) / 4 + 1;
+        int lines = (itemCount - 1) / 5 + 1;
         CGFloat height = self.itemAreaWidth * lines;
+        height += 12;
         return height;
     }
 }

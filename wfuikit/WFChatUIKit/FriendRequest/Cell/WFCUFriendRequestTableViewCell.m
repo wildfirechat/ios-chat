@@ -9,7 +9,8 @@
 #import "WFCUFriendRequestTableViewCell.h"
 #import "SDWebImage.h"
 #import <WFChatClient/WFCChatClient.h>
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface WFCUFriendRequestTableViewCell()
 @property (nonatomic, strong)UIImageView *portraitView;
@@ -39,21 +40,23 @@
         [view removeFromSuperview];
     }
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    self.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
+    self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 40, 40)];
+    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20,11, width - 128, 16)];
+    self.nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+    self.nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+    self.reasonLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20, 11 + 15 + 6, width - 128, 14)];
+    self.reasonLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+    self.reasonLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
     
-    self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 10, 36, 36)];
-    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(52, 8, width - 128, 16)];
-    self.nameLabel.font = [UIFont systemFontOfSize:16];
-    self.reasonLabel = [[UILabel alloc] initWithFrame:CGRectMake(52, 32, width - 128, 14)];
-    self.reasonLabel.font = [UIFont systemFontOfSize:14];
-    self.reasonLabel.textColor = [UIColor grayColor];
-    
-    self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectMake(width - 68, 13, 64, 28)];
+    self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectMake(width - (46 + 16), 16, 46, 28)];
+    [self.acceptBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.acceptBtn setTitle:WFCString(@"Accept") forState:UIControlStateNormal];
-    [self.acceptBtn setBackgroundColor:[UIColor greenColor]];
+    [self.acceptBtn setBackgroundColor:[UIColor colorWithHexString:@"0x4764DC"]];
     self.acceptBtn.layer.cornerRadius = 4.f;
     self.acceptBtn.layer.masksToBounds = YES;
-    self.acceptBtn.titleLabel.font = [UIFont systemFontOfSize:14.f];
-    [self.acceptBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.acceptBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.acceptBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
     
     [self.contentView addSubview:self.portraitView];
     [self.contentView addSubview:self.nameLabel];
@@ -81,8 +84,8 @@
     }
     if (friendRequest.status == 0 && !expired) {
         [self.acceptBtn setTitle:WFCString(@"Accept") forState:UIControlStateNormal];
-        [self.acceptBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [self.acceptBtn setBackgroundColor:[UIColor greenColor]];
+        [self.acceptBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.acceptBtn setBackgroundColor:[UIColor colorWithHexString:@"0x4764DC"]];
         [self.acceptBtn setEnabled:YES];
     } else if (friendRequest.status == 1) {
         [self.acceptBtn setTitle:WFCString(@"Accepted") forState:UIControlStateNormal];

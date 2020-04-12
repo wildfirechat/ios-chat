@@ -13,6 +13,7 @@
 #import "WFCUGroupMemberTableViewController.h"
 #import "WFCUInviteGroupMemberViewController.h"
 #import "UIView+Toast.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUFavGroupTableViewController ()
 @property (nonatomic, strong)NSMutableArray<WFCCGroupInfo *> *groups;
@@ -25,6 +26,7 @@
     self.groups = [[NSMutableArray alloc] init];
     self.title = WFCString(@"MyGroup");
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
 - (void)refreshList {
@@ -109,7 +111,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 56;
+    return 51;
 }
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {

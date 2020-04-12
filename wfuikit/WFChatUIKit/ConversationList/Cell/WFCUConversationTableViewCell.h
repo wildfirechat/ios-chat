@@ -21,5 +21,6 @@
 @property (nonatomic, strong)BubbleTipView *bubbleView;
 @property (nonatomic, strong)WFCCConversationInfo *info;
 @property (nonatomic, strong)WFCCConversationSearchInfo *searchInfo;
-@property (strong, nonatomic)UIView *separator;
+@property (nonatomic, assign, getter=isBig)BOOL big;
+
 @end
