@@ -140,13 +140,13 @@
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {
-        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, width - 64 - 8, 21)];
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 8, width - 64 - 8, 21)];
         self.aliasLabel.text = alias;
         
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 26, width - 64 - 8, 21)];
+        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 32, width - 94 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
         
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 50, width - 64 - 8, 11)];
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 60, width - 94 - 8, 11)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
@@ -158,12 +158,11 @@
         self.displayNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:20];
         self.displayNameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 42, width - 64 - 8, 21)];
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 50, width - 94 - 8, 21)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     }
-    self.userNameLabel.hidden = YES;
     
     [self.headerCell addSubview:self.portraitView];
     [self.headerCell addSubview:self.displayNameLabel];
@@ -185,14 +184,14 @@
         [self showSeparatorLine:alisaCell];
         [self.headerCells addObject:alisaCell];
 
-        if (self.userInfo.mobile.length > 0) {
-            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
-            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
-            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
-            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
-            [self.headerCell addSubview:self.mobileLabel];
-
-        }
+//        if (self.userInfo.mobile.length > 0) {
+//            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
+//            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+//            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
+//            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
+//            [self.headerCell addSubview:self.mobileLabel];
+//
+//        }
         
         if (self.userInfo.email.length > 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];

@@ -29,7 +29,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.headerImageView.frame = CGRectMake(2, 2, self.frame.size.width - 4, self.frame.size.width - 4);
-    self.nameLabel.frame = CGRectMake(0, self.frame.size.width + 7, self.frame.size.width, 11);
+    self.nameLabel.frame = CGRectMake(0, self.frame.size.width + 3, self.frame.size.width, 11);
 }
 
 - (UILabel *)nameLabel {

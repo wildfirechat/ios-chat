@@ -230,7 +230,8 @@
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
         [btn setTitle:LocalizedString(@"Logout") forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        [btn setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"]
+                  forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:btn];
     }
