@@ -132,8 +132,7 @@ static NSMutableDictionary *hanziStringDict = nil;
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
-    self.extendedLayoutIncludesOpaqueBars = true;
-    
+
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     [self.view addSubview:self.tableView];
     
@@ -670,10 +669,12 @@ static NSMutableDictionary *hanziStringDict = nil;
 #pragma mark - UISearchControllerDelegate
 - (void)didPresentSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = NO;
+    self.extendedLayoutIncludesOpaqueBars = NO;
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {

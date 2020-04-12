@@ -45,7 +45,7 @@
 
     self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type)] lines:@[@(0)]] mutableCopy];
 
-    self.extendedLayoutIncludesOpaqueBars = true;
+    self.extendedLayoutIncludesOpaqueBars = YES;
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
