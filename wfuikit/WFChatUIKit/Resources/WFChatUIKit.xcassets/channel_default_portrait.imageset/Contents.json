@@ -5,8 +5,8 @@
       "scale" : "1x"
     },
     {
+      "filename" : "channel.@2x.png",
       "idiom" : "universal",
-      "filename" : "icons8-megaphone-filled-100-4.png",
       "scale" : "2x"
     },
     {
@@ -15,7 +15,7 @@
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
