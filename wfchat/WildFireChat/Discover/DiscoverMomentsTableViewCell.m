@@ -54,6 +54,8 @@
 - (UIImageView *)lastFeedPortrait {
     if (!_lastFeedPortrait) {
         _lastFeedPortrait = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 8, 32, 32)];
+        _lastFeedPortrait.layer.cornerRadius = 5.f;
+        _lastFeedPortrait.layer.masksToBounds = YES;
         [self.contentView addSubview:_lastFeedPortrait];
     }
     return _lastFeedPortrait;
