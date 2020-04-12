@@ -300,7 +300,7 @@
 - (void)momentClick {
     Class cls = NSClassFromString(@"SDTimeLineTableViewController");
     UIViewController *vc = [[cls alloc] init];
-    [vc performSelector:@selector(setUserId:) withObject:self.userId];
+    [vc performSelector:@selector(setUserId:) withObject:self.userId]; 
     [self.navigationController pushViewController:vc animated:YES];
 }
 
