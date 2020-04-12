@@ -76,7 +76,7 @@
     self.messages = [[NSMutableArray alloc] init];
     [self initSearchUIAndTableView];
 
-    
+    self.extendedLayoutIncludesOpaqueBars = true;
     [self.searchController.searchBar setText:self.keyword];
     self.searchController.active = YES;
 }

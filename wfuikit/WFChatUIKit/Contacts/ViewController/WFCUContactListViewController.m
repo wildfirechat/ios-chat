@@ -132,6 +132,7 @@ static NSMutableDictionary *hanziStringDict = nil;
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
+    self.extendedLayoutIncludesOpaqueBars = true;
     
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     [self.view addSubview:self.tableView];
