@@ -14,7 +14,6 @@
 @interface WFCUContactSelectTableViewCell()
 @property(nonatomic, strong)UIImageView *checkImageView;
 @property(nonatomic, strong)UIImageView *portraitView;
-@property(nonatomic, strong)UILabel *nameLabel;
 @end
 
 @implementation WFCUContactSelectTableViewCell

@@ -13,4 +13,5 @@
 @property(nonatomic, assign)BOOL multiSelect;
 @property(nonatomic, assign)BOOL checked;
 @property(nonatomic, assign)BOOL disabled;
+@property(nonatomic, strong)UILabel *nameLabel;
 @end

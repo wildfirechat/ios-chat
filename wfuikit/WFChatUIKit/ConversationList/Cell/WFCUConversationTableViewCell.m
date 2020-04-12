@@ -149,6 +149,7 @@
     }
 }
 - (void)update:(WFCCConversation *)conversation {
+    self.targetView.textColor = [WFCUConfigManager globalManager].textColor;
     if(conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:conversation.target refresh:NO];
         if(userInfo.userId.length == 0) {
@@ -176,7 +177,7 @@
     }
     
     self.potraitView.layer.cornerRadius = 4.f;
-    
+    self.digestView.attributedText = nil;
     if (_info.draft.length) {
         NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[Draft]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
         
@@ -256,7 +257,7 @@
     if (!_targetView) {
         _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
         _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
-        _targetView.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+        _targetView.textColor = [WFCUConfigManager globalManager].textColor;
         [self.contentView addSubview:_targetView];
     }
     return _targetView;

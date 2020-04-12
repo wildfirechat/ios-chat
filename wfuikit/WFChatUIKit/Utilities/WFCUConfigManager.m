@@ -116,7 +116,7 @@ static WFCUConfigManager *sharedSingleton = nil;
     if (darkModel) {
         return [UIColor whiteColor];
     } else {
-        return [UIColor blackColor];
+        return [UIColor colorWithHexString:@"0x1d1d1d"];
     }
 }
 
