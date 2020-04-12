@@ -357,28 +357,19 @@ UISearchBarDelegate>
 }
 
 - (void)cancel {
-    UINavigationBar *bar = [UINavigationBar appearance];
-    bar.barTintColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-    bar.tintColor = [WFCUConfigManager globalManager].naviTextColor;
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor};
-    bar.barStyle = UIBarStyleDefault;
+    [[WFCUConfigManager globalManager] setupNavBar];
     
-    if (@available(iOS 13, *)) {
-        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
-        bar.standardAppearance = navBarAppearance;
-        bar.scrollEdgeAppearance = navBarAppearance;
-        navBarAppearance.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[WFCUConfigManager globalManager].naviTextColor};
-    }
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)finish {
+    [[WFCUConfigManager globalManager] setupNavBar];
     NSMutableArray *selectedUserIds = [NSMutableArray new];
     for (WFCUSelectedUserInfo *user in self.selectedUsers) {
         [selectedUserIds addObject:user.userId];
     }
     self.selectResult(selectedUserIds);
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {
