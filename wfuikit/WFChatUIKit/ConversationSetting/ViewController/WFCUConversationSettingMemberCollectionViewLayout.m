@@ -78,9 +78,7 @@
     } else {
         int lines = (itemCount - 1) / 5 + 1;
         CGFloat height = self.itemAreaWidth * lines;
-        if (lines == 1) {
-            height += 15;
-        }
+        height += 12;
         return height;
     }
 }

@@ -162,7 +162,7 @@
 
 - (void)setupMemberCollectionView {
     if (self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
-        self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:16];
+        self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:8];
 
         if (self.conversation.type == Single_Type) {
             self.extraBtnNumber = 1;
@@ -182,8 +182,8 @@
                 self.extraBtnNumber = 1;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             }
-            if (self.memberCollectionCount > Group_Member_Visible_Lines * 4) {
-                self.memberCollectionCount = Group_Member_Visible_Lines * 4;
+            if (self.memberCollectionCount > Group_Member_Visible_Lines * 5) {
+                self.memberCollectionCount = Group_Member_Visible_Lines * 5;
                 self.showMoreMember = YES;
             }
         } else if(self.conversation.type == Channel_Type) {
@@ -199,15 +199,15 @@
         if (self.showMoreMember) {
             UIView *head = [[UIView alloc] init];
             CGRect frame = self.memberCollectionView.frame;
-            frame.size.height += 40;
+            frame.size.height += 36;
             head.frame = frame;
             [head addSubview:self.memberCollectionView];
             
-            UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width, 40)];
+            UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width, 36)];
             [moreBtn setTitle:WFCString(@"ShowAllMembers") forState:UIControlStateNormal];
             moreBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
             [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-            moreBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+            moreBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
             
