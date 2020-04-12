@@ -218,21 +218,7 @@
         }
     }
     
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        for (UIView *subView in self.sendMessageCell.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-        [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-        [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-        [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
-        [self.sendMessageCell addSubview:btn];
-        [self showSeparatorLine:self.sendMessageCell];
-        
+    if(NSClassFromString(@"SDTimeLineTableViewController")) {
         self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
         for (UIView *subView in self.momentCell.subviews) {
                [subView removeFromSuperview];
@@ -247,6 +233,22 @@
         [self.momentCell addSubview:momentButton];
         self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
         self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+        self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        for (UIView *subView in self.sendMessageCell.subviews) {
+            [subView removeFromSuperview];
+        }
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+        [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+        [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+        [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
+        [self.sendMessageCell addSubview:btn];
+        [self showSeparatorLine:self.sendMessageCell];
         
 #if WFCU_SUPPORT_VOIP
         self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
@@ -296,7 +298,10 @@
 }
 
 - (void)momentClick {
-    
+    Class cls = NSClassFromString(@"SDTimeLineTableViewController");
+    UIViewController *vc = [[cls alloc] init];
+    [vc performSelector:@selector(setUserId:) withObject:self.userId];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -388,7 +393,6 @@
     } else if (indexPath.section == 1) {
         return self.momentCell;
     } else if (indexPath.section == 1) {
-           
            return self.cells[indexPath.row];
     } else {
         if (self.sendMessageCell) {
