@@ -17,6 +17,7 @@ AccountSafety="账户与安全";
 MessageNotification="新消息通知";
 ChangePassword="修改密码";
 PrivacySettings="隐私设置";
+Theme="主题";
 CurrentVersion="当前版本";
 HelpFeedback="帮助与反馈";
 AboutWFChat="关于野火IM";
@@ -26,3 +27,6 @@ Complain="举报";
 Blacklist="黑名单";
 Logout="退出登录";
 Moments="朋友圈";
+Me="我的";
+Rebot="机器人";
+

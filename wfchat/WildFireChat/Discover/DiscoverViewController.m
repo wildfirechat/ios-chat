@@ -13,30 +13,39 @@
 #import "DiscoverMomentsTableViewCell.h"
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
-
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, assign)BOOL hasMoments;
+@property (nonatomic, strong)NSMutableArray *dataSource;
 @end
 
 @implementation DiscoverViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataSource = [NSMutableArray arrayWithArray:@[@{@"title":LocalizedString(@"Chatroom"),@"image":@"discover_chatroom",@"des":@"chatroom"},
+        @{@"title":LocalizedString(@"Rebot"),@"image":@"rebot",@"des":@"rebot"},
+        @{@"title":LocalizedString(@"Channel"),
+          @"image":@"chat_channel",@"des":@"channel"},
+        @{@"title":LocalizedString(@"DevDocs"),
+          @"image":@"dev_docs",@"des":@"Dev"}]];
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
+        [self.dataSource insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
         self.hasMoments = YES;
     } else {
         self.hasMoments = NO;
     }
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
-    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.01)];
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
@@ -68,46 +77,65 @@
 #endif
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 9)];
+    view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 9;
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 48;
+    return 53;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        if(self.hasMoments) {
-            UIViewController *vc = [[NSClassFromString(@"SDTimeLineTableViewController") alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        } else {
-            ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
-        if (self.hasMoments) {
-            ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        } else {
-            WFCUBrowserViewController *vc = [[WFCUBrowserViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            vc.url = @"http://docs.wildfirechat.cn";
-            [self.navigationController pushViewController:vc animated:YES];
-        }
+    
+    NSString *des = self.dataSource[indexPath.section][@"des"];
+    if ([des isEqualToString:@"moment"]) {
+         UIViewController *vc = [[NSClassFromString(@"SDTimeLineTableViewController") alloc] init];
+                   vc.hidesBottomBarWhenPushed = YES;
+                   [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([des isEqualToString:@"chatroom"]) {
+        ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+                  [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([des isEqualToString:@"channel"]) {
+        WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];;
+        channelVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:channelVC animated:YES];
+    }
+    
+    if ([des isEqualToString:@"rebot"]) {
+            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+            mvc.conversation = [[WFCCConversation alloc] init];
+            mvc.conversation.type = Single_Type;
+            mvc.conversation.target = @"FireRobot";
+            mvc.conversation.line = 0;
         
-    } else if (indexPath.section == 2 && indexPath.row == 0) {
+            mvc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:mvc animated:YES];
+        
+    }
+    
+
+    if ([des isEqualToString:@"Dev"]) {
         WFCUBrowserViewController *vc = [[WFCUBrowserViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         vc.url = @"http://docs.wildfirechat.cn";
         [self.navigationController pushViewController:vc animated:YES];
     }
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.hasMoments) {
-        return 3;
-    }
-    return 2;
+    return self.dataSource.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -131,13 +159,12 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.accessoryView = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if (indexPath.section == 0) {
-        if (self.hasMoments) {
+    cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+    cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+    cell.textLabel.text = self.dataSource[indexPath.section][@"title"];
+    cell.imageView.image = [UIImage imageNamed:self.dataSource[indexPath.section][@"image"]];
+    if (indexPath.section == 0 && self.hasMoments) {
             DiscoverMomentsTableViewCell *momentsCell = (DiscoverMomentsTableViewCell *)cell;
-            cell.textLabel.text = LocalizedString(@"Moments");
-            cell.imageView.image = [UIImage imageNamed:@"AlbumReflashIcon"];
-            
             __weak typeof(self)ws = self;
 #ifdef WFC_MOMENTS
             int unread = [[WFMomentService sharedService] getUnreadCount];
@@ -161,25 +188,7 @@
                 }];
             }
 #endif
-        } else {
-            cell.textLabel.text = LocalizedString(@"Chatroom");
-            cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
         }
-    } else if(indexPath.section == 1) {
-        if (self.hasMoments) {
-            cell.textLabel.text = LocalizedString(@"Chatroom");
-            cell.imageView.image = [UIImage imageNamed:@"discover_chatroom"];
-        } else {
-            cell.textLabel.text = LocalizedString(@"DevDocs");
-            cell.imageView.image = [UIImage imageNamed:@"dev_docs"];
-        }
-    } else if(indexPath.section == 2) {
-        if (self.hasMoments) {
-            cell.textLabel.text = LocalizedString(@"DevDocs");
-            cell.imageView.image = [UIImage imageNamed:@"dev_docs"];
-        }
-    }
-    
     return cell;
 }
 
