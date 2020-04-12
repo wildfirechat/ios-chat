@@ -365,7 +365,8 @@ static NSMutableDictionary *hanziStringDict = nil;
                 contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
                 [contactCell refresh];
                 contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-
+                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             } else if(indexPath.row == 1) {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -375,7 +376,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                 contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
                 contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
-                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -385,7 +386,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
-                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             }
         } else {
@@ -430,7 +431,7 @@ static NSMutableDictionary *hanziStringDict = nil;
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             selectCell.userId = userInfo.userId;
         }
-
+        selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
         cell = selectCell;
     } else {
 #define REUSEIDENTIFY @"resueCell"
@@ -446,7 +447,8 @@ static NSMutableDictionary *hanziStringDict = nil;
 
               contactCell.nameLabel.text = WFCString(@"NewFriend");
               contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
-                cell = contactCell;
+              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+              cell = contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
                 if (contactCell == nil) {
@@ -456,7 +458,8 @@ static NSMutableDictionary *hanziStringDict = nil;
 
               contactCell.nameLabel.text = WFCString(@"Group");
               contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
-                cell = contactCell;
+              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+              cell = contactCell;
             }
         } else {
             WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -466,6 +469,7 @@ static NSMutableDictionary *hanziStringDict = nil;
             
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             contactCell.userId = userInfo.userId;
+            contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = contactCell;
         }
     }
