@@ -248,7 +248,6 @@
 
 
 - (void)setupNavBar {
-    [WFCUConfigManager globalManager].themeType = ThemeType_White;
     [[WFCUConfigManager globalManager] setupNavBar];
 }
 

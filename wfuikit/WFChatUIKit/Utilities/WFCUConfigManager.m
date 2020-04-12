@@ -23,6 +23,23 @@ static WFCUConfigManager *sharedSingleton = nil;
     return sharedSingleton;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _themeType = [[NSUserDefaults standardUserDefaults] integerForKey:@"WFC_THEME_TYPE"];
+    }
+    return self;
+}
+
+-(void)setThemeType:(WFCUThemeType)themeType {
+    _themeType = themeType;
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:themeType forKey:@"WFC_THEME_TYPE"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self setupNavBar];
+}
+
 - (void)setupNavBar {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     

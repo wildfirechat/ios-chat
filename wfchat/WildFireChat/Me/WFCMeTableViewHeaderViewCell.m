@@ -10,6 +10,7 @@
 #import "SDWebImage.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import <WFChatUIKit/WFChatUIKit.h>
 
 @interface WFCMeTableViewHeaderViewCell ()
 @property (strong, nonatomic) UIImageView *portrait;
@@ -27,7 +28,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+    
 }
 
 - (UIImageView *)portrait {
@@ -45,6 +46,7 @@
     if (!_displayName) {
         _displayName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64, [UIScreen mainScreen].bounds.size.width - 64, 32)];
         [_displayName setFont:[UIFont pingFangSCWithWeight:FontWeightStyleSemibold size:20]];
+        _displayName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_displayName];
     }
     return _displayName;
@@ -54,7 +56,7 @@
     if (!_userName) {
         _userName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64 + 32 + 8, [UIScreen mainScreen].bounds.size.width - 128, 14)];
         [_userName setFont:[UIFont systemFontOfSize:14]];
-        _userName.textColor = [UIColor grayColor];
+        _userName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_userName];
     }
     return _userName;

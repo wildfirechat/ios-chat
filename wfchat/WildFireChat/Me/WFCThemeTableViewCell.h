@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCThemeTableViewCell : UITableViewCell
-
+@property(nonatomic, assign)BOOL checked;
 @end
 
 NS_ASSUME_NONNULL_END

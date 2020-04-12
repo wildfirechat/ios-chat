@@ -9,6 +9,7 @@
 #import "WFCThemeTableViewController.h"
 #import "UIColor+YH.h"
 #import "WFCThemeTableViewCell.h"
+#import <WFChatUIKit/WFChatUIKit.h>
 
 @interface WFCThemeTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -33,7 +34,17 @@
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
 }
+- (void)displayUpdatedAlert {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"修改成功！请退回到应用主页面查看效果。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
+    }];
+    
+    [alert addAction:action2];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 2;
@@ -42,8 +53,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCThemeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[WFCThemeTableViewCell alloc] init];
+        cell = [[WFCThemeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
+    
+    if (indexPath.row == ThemeType_WFChat) {
+        cell.textLabel.text = @"蓝色";
+    } else if(indexPath.row == ThemeType_White) {
+        cell.textLabel.text = @"白色";
+    }
+    
+    if ([WFCUConfigManager globalManager].themeType == indexPath.row) {
+        cell.checked = YES;
+    } else {
+        cell.checked = NO;
+    }
+    
     return cell;
 }
 
@@ -53,6 +77,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.row != [WFCUConfigManager globalManager].themeType) {
+        [WFCUConfigManager globalManager].themeType = indexPath.row;
+        [self.tableView reloadData];
+        [self displayUpdatedAlert];
+    }
 }
 @end
