@@ -44,13 +44,13 @@
     } else {
         memberCollectionCount = (int)self.memberList.count + 1;
     }
-    self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:5];
+    self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:16];
     
     self.memberCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self.memberCollectionViewLayout];
     self.memberCollectionView.delegate = self;
     self.memberCollectionView.dataSource = self;
     
-    self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    self.memberCollectionView.backgroundColor = [UIColor whiteColor];
     [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
     
     [self.view addSubview:self.memberCollectionView];

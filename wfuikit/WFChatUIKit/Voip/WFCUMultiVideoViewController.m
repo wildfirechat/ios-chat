@@ -20,7 +20,7 @@
 #import <WFChatClient/WFCCConversation.h>
 #import "WFCUPortraitCollectionViewCell.h"
 #import "WFCUParticipantCollectionViewLayout.h"
-#import "WFCUContactListViewController.h"
+#import "WFCUSeletedUserViewController.h"
 #import "UIView+Toast.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
@@ -70,7 +70,8 @@
 #define ButtonSize 60
 #define BottomPadding 36
 #define SmallVideoView 120
-
+#define OperationTitleFont 10
+#define OperationButtonSize 50
 
 #define PortraitItemSize 48
 #define PortraitLabelSize 16
@@ -257,9 +258,9 @@
     if (!_addParticipantButton) {
         _addParticipantButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26, 30, 30)];
         
-        [_addParticipantButton setImage:[UIImage imageNamed:@"bar_plus"] forState:UIControlStateNormal];
-        [_addParticipantButton setImage:[UIImage imageNamed:@"bar_plus"] forState:UIControlStateHighlighted];
-        [_addParticipantButton setImage:[UIImage imageNamed:@"bar_plus"] forState:UIControlStateSelected];
+        [_addParticipantButton setImage:[UIImage imageNamed:@"plus-circle"] forState:UIControlStateNormal];
+        [_addParticipantButton setImage:[UIImage imageNamed:@"plus-circle"] forState:UIControlStateHighlighted];
+        [_addParticipantButton setImage:[UIImage imageNamed:@"plus-circle"] forState:UIControlStateSelected];
         
         _addParticipantButton.backgroundColor = [UIColor clearColor];
         [_addParticipantButton addTarget:self action:@selector(addParticipantButtonDidTap:) forControlEvents:UIControlEventTouchDown];
@@ -408,13 +409,11 @@
 }
 
 - (void)addParticipantButtonDidTap:(UIButton *)button {
-    WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
-    pvc.selectContact = YES;
-    pvc.multiSelect = YES;
+    WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
     
     NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
     [disabledUser addObjectsFromArray:self.participants];
-    pvc.disableUsers = disabledUser;
+    pvc.disableUserIds = disabledUser;
     
     NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
     NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.currentSession.conversation.target forceUpdate:NO];
@@ -429,10 +428,9 @@
             [ws.currentSession inviteNewParticipants:contacts];
         }
     };
-    
-    pvc.disableUsersSelected = YES;
-    
+        
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+    navi.modalPresentationStyle = UIModalPresentationFullScreen;
     dispatch_async(dispatch_get_main_queue(), ^{
         [ws presentViewController:navi animated:YES completion:nil];
     });
@@ -936,7 +934,7 @@
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
                     [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
-                    self.stateLabel.text = @"视频已关闭";
+                    self.stateLabel.text = WFCString(@"VideoClosed");
                     self.stateLabel.hidden = NO;
                 } else {
                     [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
@@ -948,7 +946,7 @@
                     if ([profile.userId isEqualToString:userId]) {
                         if (profile.videoMuted) {
                             [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId];
-                            self.stateLabel.text = @"视频已关闭";
+                            self.stateLabel.text = WFCString(@"VideoClosed");
                             self.stateLabel.hidden = NO;
                         } else {
                             [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];

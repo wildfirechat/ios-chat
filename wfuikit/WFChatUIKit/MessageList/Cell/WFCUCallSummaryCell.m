@@ -22,8 +22,9 @@
 #define TEXT_LABEL_LEFT_PADDING 30
 #define TEXT_LABEL_RIGHT_PADDING 30
 
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
-
+#endif
 @implementation WFCUCallSummaryCell
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -57,6 +58,7 @@
         text = [text stringByAppendingFormat:@"%02lld:", mins];
         text = [text stringByAppendingFormat:@"%02lld", second];
     } else {
+#if WFCU_SUPPORT_VOIP
         switch (startContent.status) {
             case kWFAVCallEndReasonAcceptByOtherClient:
                 text = @"其它端已接听";
@@ -78,6 +80,7 @@
         if ([WFAVEngineKit sharedEngineKit].supportMultiCall && (startContent.status == kWFAVCallEndReasonRemoteHangup)) {
             text = @"对方已拒绝";
         }
+#endif
     }
     
     return text;

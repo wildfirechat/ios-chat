@@ -50,7 +50,7 @@
 "CallConnecting"="Connecting...";
 "InvitingYou"="Inviting you...";
 "AddFriend"="Add friend";
-"SearchUserHint"="Search to add friend";
+"SearchUserHint"="Input account/phonenumber to search";
 "AddFriendReasonHint"="Please input apply reason and wait agreement";
 "DefaultAddFriendReason"="I'm %@";
 "Send"="Send";
@@ -196,3 +196,8 @@
 "Chatroom"="Chatroom";
 "Diagnose"="Diagnose";
 "MaxCount"="Exceed max count!";
+"GroupAnnouncement"="Group announcement";
+"HoldToTalk"="Hold to talk";
+"VideoClosed"="Video closed";
+"Rebot"="Rebot";
+"UserInfomation"="User infomation";

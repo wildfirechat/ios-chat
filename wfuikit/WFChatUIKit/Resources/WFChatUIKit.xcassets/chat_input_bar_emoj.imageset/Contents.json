@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "形状.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "chatting_biaoqing_btn_normal@2x.png",
+      "filename" : "形状@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "形状@3x.png",
       "scale" : "3x"
     }
   ],

@@ -38,7 +38,7 @@
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.tableHeaderView = nil;
-    
+
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
@@ -101,10 +101,9 @@
     UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
     qrview.image = qrcode;
     [cell addSubview:qrview];
-    
 
-//    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
-//    [self.cells1 addObject:cell];
+    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:NO];
+    [self.cells1 addObject:cell];
 
     cell = [self getAttrCell:WFCString(@"Mobile") rightText:self.userInfo.mobile mutable:YES];
     cell.tag = Modify_Mobile;
@@ -148,7 +147,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     cell.tag = -1;
     [self addLabel:leftText onCell:cell isHeaderCell:NO isLeft:YES];
 //    if (rightText.length == 0) {

@@ -18,6 +18,7 @@
 #import "UIView+Toast.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUConfigManager.h"
+#import "UIImage+ERCategory.h"
 
 @interface WFCUForwardViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -44,7 +45,7 @@
 
     self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type)] lines:@[@(0)]] mutableCopy];
 
-    
+    self.extendedLayoutIncludesOpaqueBars = YES;
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -54,6 +55,8 @@
     if (@available(iOS 13, *)) {
         self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
         self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
+        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }

@@ -9,11 +9,11 @@
 #import "WFCUContactSelectTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
-
+#import "UIColor+YH.h"
+#import "UIFont+YH.h"
 @interface WFCUContactSelectTableViewCell()
 @property(nonatomic, strong)UIImageView *checkImageView;
 @property(nonatomic, strong)UIImageView *portraitView;
-@property(nonatomic, strong)UILabel *nameLabel;
 @end
 
 @implementation WFCUContactSelectTableViewCell
@@ -25,14 +25,14 @@
 
 - (UIImageView *)checkImageView {
     if (!_checkImageView) {
-        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 44, 18, 20, 20)];
+        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 18, 20, 20)];
         [self.contentView addSubview:_checkImageView];
     }
     return _checkImageView;
 }
 - (UIImageView *)portraitView {
     if (!_portraitView) {
-        _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 40, 40)];
+        _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 8, 40, 40)];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
         [self.contentView addSubview:_portraitView];
@@ -42,8 +42,9 @@
 
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 19, [UIScreen mainScreen].bounds.size.width - 56 - 48, 16)];
-        _nameLabel.font = [UIFont systemFontOfSize:16];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
+        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+               _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

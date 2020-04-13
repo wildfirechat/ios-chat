@@ -32,7 +32,7 @@
 #import "GroupInfoViewController.h"
 #import <Bugly/Bugly.h>
 #import "AppService.h"
-
+#import "UIColor+YH.h"
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -246,29 +246,11 @@
     });
 }
 
+
 - (void)setupNavBar {
-    [WFCUConfigManager globalManager].naviBackgroudColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-    [WFCUConfigManager globalManager].naviTextColor = [UIColor whiteColor];
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-    UINavigationBar *bar = [UINavigationBar appearance];
-    bar.barTintColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-    bar.tintColor = [WFCUConfigManager globalManager].naviTextColor;
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor};
-    bar.barStyle = UIBarStyleDefault;
-    
-    if (@available(iOS 13, *)) {
-        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
-        bar.standardAppearance = navBarAppearance;
-        bar.scrollEdgeAppearance = navBarAppearance;
-        navBarAppearance.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[WFCUConfigManager globalManager].naviTextColor};
-    }
-    
-    [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];
-    [UITabBar appearance].translucent = NO;
+    [[WFCUConfigManager globalManager] setupNavBar];
 }
+
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];
 }

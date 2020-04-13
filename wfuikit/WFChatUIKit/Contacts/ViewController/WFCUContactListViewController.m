@@ -22,7 +22,9 @@
 #import "WFCUFavChannelTableViewController.h"
 #import "WFCUConfigManager.h"
 #import "UIView+Toast.h"
-
+#import "UIImage+ERCategory.h"
+#import "UIFont+YH.h"
+#import "UIColor+YH.h"
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<WFCCUserInfo *> *dataArray;
@@ -80,6 +82,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.tableView.tableHeaderView = nil;
@@ -91,7 +94,7 @@ static NSMutableDictionary *hanziStringDict = nil;
             [self updateRightBarBtn];
         }
     } else {
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_add_friend"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
@@ -110,6 +113,8 @@ static NSMutableDictionary *hanziStringDict = nil;
     if (@available(iOS 13, *)) {
         self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
         self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
+        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }
@@ -127,8 +132,8 @@ static NSMutableDictionary *hanziStringDict = nil;
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
-    
-    self.tableView.sectionIndexColor = [UIColor grayColor];
+
+    self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     [self.view addSubview:self.tableView];
     
     [self.view bringSubviewToFront:self.activityIndicator];
@@ -354,19 +359,23 @@ static NSMutableDictionary *hanziStringDict = nil;
                 if (contactCell == nil) {
                     contactCell = [[WFCUNewFriendTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newFriendCell"];
                 }
+                
                 contactCell.nameLabel.text = WFCString(@"NewFriend");
                 contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
                 [contactCell refresh];
+                contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             } else if(indexPath.row == 1) {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
                 if (contactCell == nil) {
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
-                
+                contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
                 contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
-                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -376,7 +385,7 @@ static NSMutableDictionary *hanziStringDict = nil;
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
-                
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             }
         } else {
@@ -421,7 +430,7 @@ static NSMutableDictionary *hanziStringDict = nil;
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             selectCell.userId = userInfo.userId;
         }
-
+        selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
         cell = selectCell;
     } else {
 #define REUSEIDENTIFY @"resueCell"
@@ -433,17 +442,23 @@ static NSMutableDictionary *hanziStringDict = nil;
                     contactCell = [[WFCUNewFriendTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newFriendCell"];
                 }
                 [contactCell refresh];
+                contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+
               contactCell.nameLabel.text = WFCString(@"NewFriend");
               contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
-                cell = contactCell;
+              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+              cell = contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
                 if (contactCell == nil) {
                     contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSEIDENTIFY];
                 }
+                contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+
               contactCell.nameLabel.text = WFCString(@"Group");
               contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
-                cell = contactCell;
+              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+              cell = contactCell;
             }
         } else {
             WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
@@ -453,12 +468,14 @@ static NSMutableDictionary *hanziStringDict = nil;
             
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             contactCell.userId = userInfo.userId;
+            contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = contactCell;
         }
     }
     if (cell == nil) {
         NSLog(@"error");
     }
+    cell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     return cell;
 }
 
@@ -500,7 +517,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     if (section == 0) {
         return 0;
     }
-    return 21;
+    return 30;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -524,19 +541,20 @@ static NSMutableDictionary *hanziStringDict = nil;
     if (title == nil || title.length == 0) {
         return nil;
     }
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 21)];
-    label.font = [UIFont systemFontOfSize:13];
-    label.textColor = [UIColor grayColor];
+
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+    view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, self.view.frame.size.width, 30)];
+    label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
+    label.textColor = [UIColor colorWithHexString:@"0x828282"];
     label.textAlignment = NSTextAlignmentLeft;
-    label.text = [NSString stringWithFormat:@"  %@", title];
-    
-    
-    label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-    return label;
+    label.text = [NSString stringWithFormat:@"%@", title];
+    [view addSubview:label];
+    return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 56;
+    return 51;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {
@@ -651,10 +669,12 @@ static NSMutableDictionary *hanziStringDict = nil;
 #pragma mark - UISearchControllerDelegate
 - (void)didPresentSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = NO;
+    self.extendedLayoutIncludesOpaqueBars = NO;
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
