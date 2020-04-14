@@ -815,6 +815,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.WFChatClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 arm64e";
 				WARNING_CFLAGS = "";
@@ -852,6 +853,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.WFChatClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 arm64e";
 				WARNING_CFLAGS = "";

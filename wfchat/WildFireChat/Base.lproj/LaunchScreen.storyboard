@@ -29,11 +29,11 @@
                                 <rect key="frame" x="138.66666666666666" y="112" width="136.99999999999997" height="138"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="野火" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sna-TE-jWh">
-                                <rect key="frame" x="183" y="278" width="48" height="68"/>
+                                <rect key="frame" x="178" y="278" width="58" height="68"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="68" id="hl5-mF-IXn"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="PingFangSC-Medium" family="PingFang SC" pointSize="24"/>
+                                <fontDescription key="fontDescription" name="PingFangSC-Medium" family="PingFang SC" pointSize="29"/>
                                 <color key="textColor" red="0.70588235294117641" green="0.70588235294117641" blue="0.71372549019607845" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
