@@ -26,7 +26,7 @@
     payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
     payload.searchableContent = @"[动态表情]";
-    payload.mediaType = Media_Type_File;
+    payload.mediaType = Media_Type_STICKER;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
     
