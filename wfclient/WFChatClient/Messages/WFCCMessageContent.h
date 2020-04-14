@@ -18,15 +18,19 @@
  - Media_Type_File: 文件
  - Media_Type_PORTRAIT: 头像
  - Media_Type_FAVORITE: 收藏
+ - Media_Type_STICKER：动态表情
+ - Media_Type_MOMENTS：朋友圈
  */
 typedef NS_ENUM(NSInteger, WFCCMediaType) {
     Media_Type_GENERAL = 0,
     Media_Type_IMAGE = 1,
     Media_Type_VOICE = 2,
     Media_Type_VIDEO = 3,
-    Media_Type_File = 4,
+    Media_Type_FILE = 4,
     Media_Type_PORTRAIT = 5,
-    Media_Type_FAVORITE = 6
+    Media_Type_FAVORITE = 6,
+    Media_Type_STICKER = 7,
+    Media_Type_MOMENTS = 8
 };
 
 
