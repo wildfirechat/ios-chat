@@ -28,7 +28,7 @@
     payload.contentType = [self.class getContentType];
     payload.searchableContent = [NSString stringWithFormat:@"[文件] %@", self.name];
     payload.content = [NSString stringWithFormat:@"%ld", (long)self.size];
-    payload.mediaType = Media_Type_File;
+    payload.mediaType = Media_Type_FILE;
     
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
