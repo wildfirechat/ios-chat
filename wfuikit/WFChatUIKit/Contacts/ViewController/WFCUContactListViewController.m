@@ -396,16 +396,16 @@ static NSMutableDictionary *hanziStringDict = nil;
     
     if (self.selectContact) {
 #define SELECT_REUSEIDENTIFY @"resueSelectCell"
-        WFCUContactSelectTableViewCell *selectCell = [tableView dequeueReusableCellWithIdentifier:SELECT_REUSEIDENTIFY];
-        if (selectCell == nil) {
-            selectCell = [[WFCUContactSelectTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SELECT_REUSEIDENTIFY];
-            selectCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        WFCCUserInfo *userInfo = dataSource[indexPath.row];
-        selectCell.friendUid = userInfo.userId;
-        selectCell.multiSelect = self.multiSelect;
-        
         if (self.multiSelect && !self.withoutCheckBox) {
+            WFCUContactSelectTableViewCell *selectCell = [tableView dequeueReusableCellWithIdentifier:SELECT_REUSEIDENTIFY];
+            if (selectCell == nil) {
+                selectCell = [[WFCUContactSelectTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SELECT_REUSEIDENTIFY];
+                selectCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            WFCCUserInfo *userInfo = dataSource[indexPath.row];
+            selectCell.friendUid = userInfo.userId;
+            selectCell.multiSelect = self.multiSelect;
+            
             if ([self.selectedContacts containsObject:userInfo.userId]) {
                 selectCell.checked = YES;
             } else {
@@ -421,6 +421,9 @@ static NSMutableDictionary *hanziStringDict = nil;
             } else {
                 selectCell.disabled = NO;
             }
+            
+            selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+            cell = selectCell;
         } else {
             WFCUContactTableViewCell *selectCell = [tableView dequeueReusableCellWithIdentifier:REUSEIDENTIFY];
             if (selectCell == nil) {
@@ -429,9 +432,10 @@ static NSMutableDictionary *hanziStringDict = nil;
             
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             selectCell.userId = userInfo.userId;
+            
+            selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+            cell = selectCell;
         }
-        selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-        cell = selectCell;
     } else {
 #define REUSEIDENTIFY @"resueCell"
         
