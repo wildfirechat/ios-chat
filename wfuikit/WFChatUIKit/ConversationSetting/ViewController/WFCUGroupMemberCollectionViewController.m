@@ -44,7 +44,7 @@
     } else {
         memberCollectionCount = (int)self.memberList.count + 1;
     }
-    self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:16];
+    self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:8];
     
     self.memberCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self.memberCollectionViewLayout];
     self.memberCollectionView.delegate = self;
