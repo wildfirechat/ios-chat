@@ -562,13 +562,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             tmsg.to.push_back([obj UTF8String]);
         }
     }
-    
+    message.status = Message_Status_Sending;
     fillTMessage(tmsg, conversation, content);
     message.fromUser = [WFCCNetworkService sharedInstance].userId;
     
     mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
     
     return message;
+}
+
+- (BOOL)sendSavedMessage:(WFCCMessage *)message
+          expireDuration:(int)expireDuration
+                 success:(void(^)(long long messageUid, long long timestamp))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+    
+    if(mars::stn::sendMessageEx(message.messageId, new IMSendMessageCallback(message, successBlock, nil, errorBlock), expireDuration)) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)recall:(WFCCMessage *)msg
