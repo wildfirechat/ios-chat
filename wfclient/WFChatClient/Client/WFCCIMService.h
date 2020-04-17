@@ -477,6 +477,20 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                    success:(void(^)(long long messageUid, long long timestamp))successBlock
                   progress:(void(^)(long uploaded, long total))progressBlock
                      error:(void(^)(int error_code))errorBlock;
+
+/**
+ 发送已保存消息，消息状态必须是发送中或者发送失败
+
+ @param message 已经存储在本地待发送的消息
+ @param expireDuration 消息的有效期，0不限期，单位秒
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ @return 协议栈是否可以发送
+ */
+- (BOOL)sendSavedMessage:(WFCCMessage *)message
+          expireDuration:(int)expireDuration
+                 success:(void(^)(long long messageUid, long long timestamp))successBlock
+                   error:(void(^)(int error_code))errorBlock;
 /**
  撤回消息
  
