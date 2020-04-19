@@ -1337,7 +1337,8 @@
         [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
         vc.disableUserIds = disabledUser;
         vc.maxSelectCount = isAudioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
-        vc.maxSelectCount -= 1;
+        vc.groupId = self.targetGroup.target;
+//        vc.maxSelectCount -= 1;
         NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
         NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
         for (WFCCGroupMember *member in members) {

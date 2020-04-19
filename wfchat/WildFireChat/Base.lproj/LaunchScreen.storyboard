@@ -34,7 +34,7 @@
                                     <constraint firstAttribute="height" constant="68" id="hl5-mF-IXn"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="PingFangSC-Medium" family="PingFang SC" pointSize="24"/>
-                                <color key="textColor" red="0.70588235294117641" green="0.70588235294117641" blue="0.71372549019607845" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>

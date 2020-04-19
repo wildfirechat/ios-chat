@@ -25,6 +25,8 @@ typedef NS_ENUM(NSInteger, WFCUSeletedUserHeaderViewLayoutType) {
 
 @property (nonatomic, assign)int maxSelectCount;//当多选时有效，0不限制。
 
+@property (nonatomic, strong)NSString *groupId;
+
 @property (nonatomic, strong)NSArray *candidateUsers;
 @property (nonatomic, strong)NSArray *disableUserIds;
 /// 布局类型为布局Vertical: 行数最大值为2
