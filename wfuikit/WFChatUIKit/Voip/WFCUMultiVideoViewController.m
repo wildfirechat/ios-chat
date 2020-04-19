@@ -933,6 +933,15 @@
 - (void)reloadVideoUI {
     if (!self.currentSession.audioOnly) {
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
+            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+            CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
+            
+            if (self.participants.count - 1 > 3) {
+                self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth * 2 + layout.minimumLineSpacing);
+            } else {
+                self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth);
+            }
+            
             _speakingView.hidden = YES;
             NSString *userId = [self.participants lastObject];
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
