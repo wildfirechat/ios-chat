@@ -415,12 +415,16 @@
     [disabledUser addObjectsFromArray:self.participants];
     pvc.disableUserIds = disabledUser;
     
+    pvc.maxSelectCount = self.currentSession.audioOnly ? [WFAVEngineKit sharedEngineKit].maxAudioCallCount : [WFAVEngineKit sharedEngineKit].maxVideoCallCount;
+    pvc.groupId = self.currentSession.conversation.target;
+    
     NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
     NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.currentSession.conversation.target forceUpdate:NO];
     for (WFCCGroupMember *member in members) {
       [candidateUser addObject:member.memberId];
     }
     pvc.candidateUsers = candidateUser;
+    pvc.type = Vertical;
     
     __weak typeof(self)ws = self;
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
