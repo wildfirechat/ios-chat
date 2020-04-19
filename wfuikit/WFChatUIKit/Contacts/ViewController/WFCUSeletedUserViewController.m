@@ -377,7 +377,9 @@ UISearchBarDelegate>
     [[WFCUConfigManager globalManager] setupNavBar];
     NSMutableArray *selectedUserIds = [NSMutableArray new];
     for (WFCUSelectedUserInfo *user in self.selectedUsers) {
-        [selectedUserIds addObject:user.userId];
+        if (user.selectedStatus == Checked) {
+            [selectedUserIds addObject:user.userId];
+        }
     }
     self.selectResult(selectedUserIds);
     [self dismissViewControllerAnimated:NO completion:nil];
