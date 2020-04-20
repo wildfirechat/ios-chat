@@ -40,4 +40,7 @@
 + (NSString *)getDocumentPathWithComponent:(NSString *)componentPath;
 
 + (CGSize)imageScaleSize:(CGSize)imageSize targetSize:(CGSize)targetSize thumbnailPoint:(CGPoint *)thumbnailPoint;
+
+
++ (UIImage *)imageWithRightOrientation:(UIImage *)aImage;
 @end
