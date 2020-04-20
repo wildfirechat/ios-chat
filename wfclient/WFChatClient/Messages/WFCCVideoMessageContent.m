@@ -17,7 +17,7 @@
 + (instancetype)contentPath:(NSString *)localPath thumbnail:(UIImage *)image {
     WFCCVideoMessageContent *content = [[WFCCVideoMessageContent alloc] init];
     content.localPath = localPath;
-    content.thumbnail = image;
+    content.thumbnail = [WFCCUtilities imageWithRightOrientation:image];
     
     return content;
 }
