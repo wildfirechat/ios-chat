@@ -480,11 +480,12 @@
         self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, postionY, 240, 26);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
     } else {
-        CGFloat postionX = containerWidth - 16 - 62;
+        CGFloat postionX = 16;
         self.portraitView.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight, 62, 62);
-        postionX -= (13 + 240);
+        postionX += 62;
+        postionX += 8;
         self.userNameLabel.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight + 8, 240, 26);
-        self.userNameLabel.textAlignment = NSTextAlignmentRight;
+        self.userNameLabel.textAlignment = NSTextAlignmentLeft;
 
         if(![NSThread isMainThread]) {
             NSLog(@"error not main thread");
@@ -492,9 +493,9 @@
         if(self.currentSession.state == kWFAVEngineStateConnected) {
             self.stateLabel.frame = CGRectMake(54, 30, 240, 20);
         } else {
-            self.stateLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
+            self.stateLabel.frame = CGRectMake(88, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
         }
-        self.stateLabel.hidden = YES;
+//        self.stateLabel.hidden = YES;
         self.stateLabel.textAlignment = NSTextAlignmentLeft;
     }
 }
