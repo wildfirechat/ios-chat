@@ -141,6 +141,36 @@ public:
     }
 };
 
+class IMGeneralStringCallback : public mars::stn::GeneralStringCallback {
+private:
+    void(^m_successBlock)(NSString *generalStr);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGeneralStringCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(std::string str) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock([NSString stringWithUTF8String:str.c_str()]);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMGeneralStringCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+
 class RecallMessageCallback : public mars::stn::GeneralOperationCallback {
 private:
     void(^m_successBlock)();
@@ -1743,6 +1773,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         [output addObject:[WFCCPCOnlineInfo infoFromStr:wxOnline withType:WX_Online]];
     }
     return output;
+}
+
+- (void)getAuthorizedMediaUrl:(WFCCMediaType)mediaType
+                    mediaPath:(NSString *)mediaPath
+                      success:(void(^)(NSString *authorizedUrl))successBlock
+                        error:(void(^)(int error_code))errorBlock {
+    mars::stn::getAuthorizedMediaUrl(mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
 - (NSString *)imageThumbPara {
