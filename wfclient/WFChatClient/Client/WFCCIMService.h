@@ -1199,6 +1199,19 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 */
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos;
 
+
+/**
+获取媒体文件授权访问地址
+
+@param mediaType 媒体类型
+@param mediaPath 媒体Path
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)getAuthorizedMediaUrl:(WFCCMediaType)mediaType
+                    mediaPath:(NSString *)mediaPath
+                      success:(void(^)(NSString *authorizedUrl))successBlock
+                        error:(void(^)(int error_code))errorBlock;
 /**
  获取图片缩略图参数
  
