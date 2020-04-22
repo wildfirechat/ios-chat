@@ -638,9 +638,16 @@ namespace mars{
         
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         
+        //请使用loadRemoteConversationMessages
         extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+    
+        extern void loadRemoteConversationMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+    
+        extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
         
         extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
+    
+        extern void getAuthorizedMediaUrl(int mediaType, const std::string &mediaUrl, GeneralStringCallback *callback);
         
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
         
