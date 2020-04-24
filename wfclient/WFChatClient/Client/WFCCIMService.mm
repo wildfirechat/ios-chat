@@ -1775,11 +1775,17 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return output;
 }
 
+- (void)kickoffPCClient:(NSString *)pcClientId
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    mars::stn::KickoffPCClient([pcClientId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (void)getAuthorizedMediaUrl:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::getAuthorizedMediaUrl(mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::getAuthorizedMediaUrl((int)mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
 - (NSString *)imageThumbPara {

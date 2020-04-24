@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCUGroupAnnouncement.h"
-
+#import <WFChatClient/WFCChatClient.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
        announcement:(NSString *)announcement
             success:(void(^)(long timestamp))successBlock
               error:(void(^)(int error_code))errorBlock;
+
+- (void)showPCSessionViewController:(UIViewController *)baseController
+                          pcClient:(WFCCPCOnlineInfo *)clientInfo;
 @end
 
 NS_ASSUME_NONNULL_END

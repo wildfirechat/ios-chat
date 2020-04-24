@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "AFNetworking.h"
 #import "WFCConfig.h"
+#import "PCSessionViewController.h"
 
 static AppService *sharedSingleton = nil;
 
@@ -262,5 +263,11 @@ static AppService *sharedSingleton = nil;
         successBlock();
     });
     
+}
+
+- (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo {
+    PCSessionViewController *vc = [[PCSessionViewController alloc] init];
+    vc.pcClientInfo = clientInfo;
+    [baseController.navigationController pushViewController:vc animated:YES];
 }
 @end

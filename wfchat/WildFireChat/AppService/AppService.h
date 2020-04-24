@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import <WFChatClient/WFCChatClient.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pcConfirmLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock;
+
+- (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo;
 @end
 
 NS_ASSUME_NONNULL_END

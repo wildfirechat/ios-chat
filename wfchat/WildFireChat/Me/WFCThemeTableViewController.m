@@ -62,7 +62,7 @@
         cell.textLabel.text = @"白色";
     }
     
-    if ([WFCUConfigManager globalManager].themeType == indexPath.row) {
+    if ([WFCUConfigManager globalManager].colorType == indexPath.row) {
         cell.checked = YES;
     } else {
         cell.checked = NO;
@@ -77,8 +77,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row != [WFCUConfigManager globalManager].themeType) {
-        [WFCUConfigManager globalManager].themeType = indexPath.row;
+    if (indexPath.row != [WFCUConfigManager globalManager].colorType) {
+        [WFCUConfigManager globalManager].colorType = indexPath.row;
         [self.tableView reloadData];
         [self displayUpdatedAlert];
     }
