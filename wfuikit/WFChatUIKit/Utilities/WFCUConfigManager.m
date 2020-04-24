@@ -26,13 +26,13 @@ static WFCUConfigManager *sharedSingleton = nil;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _themeType = [[NSUserDefaults standardUserDefaults] integerForKey:@"WFC_THEME_TYPE"];
+        _colorType = [[NSUserDefaults standardUserDefaults] integerForKey:@"WFC_THEME_TYPE"];
     }
     return self;
 }
 
--(void)setThemeType:(WFCUThemeType)themeType {
-    _themeType = themeType;
+-(void)setColorType:(WFCUThemeType)themeType {
+    _colorType = themeType;
     
     [[NSUserDefaults standardUserDefaults] setInteger:themeType forKey:@"WFC_THEME_TYPE"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -75,9 +75,9 @@ static WFCUConfigManager *sharedSingleton = nil;
     if (darkModel) {
         return [UIColor colorWithRed:33/255.f green:33/255.f blue:33/255.f alpha:1.0f];
     } else {
-        if (self.themeType == ThemeType_WFChat) {
+        if (self.colorType == ThemeType_WFChat) {
             return [UIColor colorWithRed:243/255.f green:243/255.f blue:243/255.f alpha:1.0f];
-        } else if (self.themeType == ThemeType_White) {
+        } else if (self.colorType == ThemeType_White) {
             return [UIColor colorWithHexString:@"0xededed"];
         }
         return [UIColor whiteColor];
@@ -134,9 +134,9 @@ static WFCUConfigManager *sharedSingleton = nil;
     if (darkModel) {
         return [UIColor colorWithRed:39/255.f green:39/255.f blue:39/255.f alpha:1.0f];
     } else {
-        if (self.themeType == ThemeType_WFChat) {
+        if (self.colorType == ThemeType_WFChat) {
             return [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
-        } else if(self.themeType == ThemeType_White) {
+        } else if(self.colorType == ThemeType_White) {
             return [UIColor colorWithHexString:@"0xededed"];;
         }
         return [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0f];
@@ -157,9 +157,9 @@ static WFCUConfigManager *sharedSingleton = nil;
     if (darkModel) {
         return [UIColor whiteColor];
     } else {
-        if (self.themeType == ThemeType_WFChat) {
+        if (self.colorType == ThemeType_WFChat) {
             return [UIColor blackColor];
-        } else if(self.themeType == ThemeType_White) {
+        } else if(self.colorType == ThemeType_White) {
             [UIColor colorWithHexString:@"0c0c0c"];
         }
         return [UIColor blackColor];

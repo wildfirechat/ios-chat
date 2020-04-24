@@ -1199,7 +1199,16 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 */
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos;
 
+/**
+踢掉PC或者Web
 
+@param pcClientId PC或Web端的clientId
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)kickoffPCClient:(NSString *)pcClientId
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int error_code))errorBlock;
 /**
 获取媒体文件授权访问地址
 
