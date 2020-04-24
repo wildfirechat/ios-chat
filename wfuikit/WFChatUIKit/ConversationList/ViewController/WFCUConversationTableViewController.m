@@ -464,8 +464,19 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, 100, 20)];
         label.text = WFCString(@"PCLogined");
         [_pcSessionView addSubview:label];
+        _pcSessionView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];
+        [_pcSessionView addGestureRecognizer:tap];
     }
     return _pcSessionView;
+}
+
+- (void)onTapPCBar:(id)sender {
+    NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    if ([[WFCUConfigManager globalManager].appServiceProvider respondsToSelector:@selector(showPCSessionViewController:pcClient:)]) {
+        [[WFCUConfigManager globalManager].appServiceProvider showPCSessionViewController:self pcClient:[onlines objectAtIndex:0]];
+    }
+    
 }
 
 #pragma mark - Table view data source
