@@ -14,12 +14,15 @@
  - Single_Type: 单聊
  - Group_Type: 群组
  - Chatroom_Type: 聊天室
+ - Channel_Type: 频道
+ - Things_Type: 物联网
  */
 typedef NS_ENUM(NSInteger, WFCCConversationType) {
     Single_Type,
     Group_Type,
     Chatroom_Type,
     Channel_Type,
+    Things_Type,
 } ;
 
 /**
