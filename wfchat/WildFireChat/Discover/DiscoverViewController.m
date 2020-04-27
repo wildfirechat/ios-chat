@@ -11,8 +11,10 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WFChatClient/WFCCIMService.h>
 #import "DiscoverMomentsTableViewCell.h"
+#ifdef WFC_MOMENTS
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
+#endif
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 
