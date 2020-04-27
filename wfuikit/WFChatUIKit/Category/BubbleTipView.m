@@ -64,7 +64,7 @@
     }
     return self;
 }
-- (instancetype)initWithParentView:(UIView *)parentView {
+- (instancetype)initWithSuperView:(UIView *)parentView {
     if ((self = [self initWithFrame:CGRectZero])) {
         [parentView addSubview:self];
     }

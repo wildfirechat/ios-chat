@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 + (WFCUConfigManager *)globalManager;
 
 - (void)setupNavBar;
-@property(nonatomic, assign)WFCUThemeType colorType;
+@property(nonatomic, assign)WFCUThemeType selectedTheme;
 
 @property(nonatomic, strong)UIColor *backgroudColor;
 /*
