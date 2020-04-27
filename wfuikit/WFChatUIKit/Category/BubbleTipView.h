@@ -25,7 +25,7 @@
 
 @property(nonatomic) BOOL isShowNotificationNumber;
 
-- (instancetype)initWithParentView:(UIView *)parentView;
+- (instancetype)initWithSuperView:(UIView *)parentView;
 
 - (void)setBubbleTipNumber:(int)msgCount;
 @end
