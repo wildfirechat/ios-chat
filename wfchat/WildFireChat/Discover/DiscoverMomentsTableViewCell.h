@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#ifdef WFC_MOMENTS
 #import <WFMomentClient/WFMomentClient.h>
-
+#endif
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DiscoverMomentsTableViewCell : UITableViewCell
