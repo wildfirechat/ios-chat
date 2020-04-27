@@ -31,7 +31,7 @@
 - (BubbleTipView *)bubbleView {
     if (!_bubbleView) {
         if(self.textLabel) {
-            _bubbleView = [[BubbleTipView alloc] initWithParentView:self.textLabel];
+            _bubbleView = [[BubbleTipView alloc] initWithSuperView:self.textLabel];
             _bubbleView.hidden = YES;
             _bubbleView.isShowNotificationNumber = YES;
         }
@@ -42,7 +42,7 @@
 - (BubbleTipView *)bubbleView2 {
     if (!_bubbleView2) {
         if(self.lastFeedPortrait) {
-            _bubbleView2 = [[BubbleTipView alloc] initWithParentView:self.lastFeedPortrait];
+            _bubbleView2 = [[BubbleTipView alloc] initWithSuperView:self.lastFeedPortrait];
             _bubbleView2.hidden = YES;
             _bubbleView2.bubbleTipPositionAdjustment = CGPointMake(-25, -8);
             _bubbleView2.isShowNotificationNumber = NO;

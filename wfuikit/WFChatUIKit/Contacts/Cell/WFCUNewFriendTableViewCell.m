@@ -54,7 +54,7 @@
 - (BubbleTipView *)bubbleView {
     if (!_bubbleView) {
         if (self.portraitView) {
-            _bubbleView = [[BubbleTipView alloc] initWithParentView:self.contentView];
+            _bubbleView = [[BubbleTipView alloc] initWithSuperView:self.contentView];
             _bubbleView.hidden = YES;
         }
     }
