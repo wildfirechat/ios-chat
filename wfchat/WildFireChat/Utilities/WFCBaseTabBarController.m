@@ -11,8 +11,10 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
+#ifdef WFC_MOMENTS
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #import <WFMomentClient/WFMomentClient.h>
+#endif
 #import "UIImage+ERCategory.h"
 #define kClassKey   @"rootVCClassString"
 #define kTitleKey   @"title"
