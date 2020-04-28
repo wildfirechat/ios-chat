@@ -192,9 +192,10 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 /**
  断开连接
 
- @param clearSession 是否清除Session信息
+ @param disablePush   是否停止推送，clearSession为YES时无意义。
+ @param clearSession 是否清除Session信息，如果清楚本地历史消息将全部清除。
  */
-- (void)disconnect:(BOOL)clearSession;
+- (void)disconnect:(BOOL)disablePush clearSession:(BOOL)clearSession;
 
 /**
  设置服务器信息。host可以是IP，可以是域名，如果是域名的话只支持主域名或www域名，二级域名不支持！

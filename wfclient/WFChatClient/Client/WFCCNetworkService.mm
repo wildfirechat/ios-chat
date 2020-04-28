@@ -386,7 +386,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
   if (!_logined || kConnectionStatusRejected == status) {
     dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-      [self disconnect:YES];
+      [self disconnect:YES clearSession:YES];
     });
     return;
   }
@@ -662,18 +662,25 @@ static WFCCNetworkService * sharedSingleton = nil;
     return [self connect:self.serverHost];
 }
 
-- (void)disconnect:(BOOL)clearSession {
-  _logined = NO;
+- (void)disconnect:(BOOL)disablePush clearSession:(BOOL)clearSession {
+    _logined = NO;
     self.userId = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
         self.currentConnectionStatus = kConnectionStatusLogout;
     });
     [[WFCCNetworkStatus sharedInstance] Stop];
+    int flag = 0;
+    if (clearSession) {
+        flag = 8;
+    } else if(disablePush) {
+        flag = 1;
+    }
+    
   if (mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusConnected && mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusReceiving) {
-    mars::stn::Disconnect(clearSession ? 8 : 0);
+    mars::stn::Disconnect(flag);
     [self destroyMars];
   } else {
-    mars::stn::Disconnect(clearSession ? 8 : 0);
+    mars::stn::Disconnect(flag);
   }
 }
 
