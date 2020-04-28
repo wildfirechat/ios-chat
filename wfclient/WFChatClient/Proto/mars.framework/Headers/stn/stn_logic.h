@@ -116,6 +116,10 @@ namespace stn{
     // when you change svr ip, you must call this function.
 	extern void (*RedoTasks)();
     
+
+    // stop all task
+    extern void (*StopAllTasks)();
+
     // stop and clear all task
 	extern void (*ClearTasks)();
     
