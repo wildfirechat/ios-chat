@@ -347,10 +347,16 @@ static WFCCNetworkService * sharedSingleton = nil;
         NSMutableArray *messageList = [messages mutableCopy];
         for (WFCCMessage *message in messages) {
             for (id<ReceiveMessageFilter> filter in self.messageFilterList) {
-                if ([filter onReceiveMessage:message]) {
-                    [messageList removeObject:message];
+                @try {
+                    if ([filter onReceiveMessage:message]) {
+                        [messageList removeObject:message];
+                        break;
+                    }
+                } @catch (NSException *exception) {
+                    NSLog(@"%@", exception);
                     break;
                 }
+                
             }
         }
         
