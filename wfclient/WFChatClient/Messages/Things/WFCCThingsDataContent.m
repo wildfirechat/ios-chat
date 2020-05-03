@@ -1,17 +1,17 @@
 //
-//  WFCCThingsData0Content.m
+//  WFCCThingsDataContent.m
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/8/16.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCThingsData0Content.h"
+#import "WFCCThingsDataContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
 
 
-@implementation WFCCThingsData0Content
+@implementation WFCCThingsDataContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.binaryContent = self.data;
@@ -24,7 +24,7 @@
 }
 
 + (int)getContentType {
-    return THINGS_CONTENT_TYPE_DATA0;
+    return THINGS_CONTENT_TYPE_DATA;
 }
 
 + (int)getContentFlags {
