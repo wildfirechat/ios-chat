@@ -335,6 +335,12 @@
     [self refreshLeftButton];
 }
 
+- (void)onDeleteMessages:(NSNotification *)notification {
+    [self refreshList];
+    [self refreshLeftButton];
+}
+
+
 - (void)onClearAllUnread:(NSNotification *)notification {
     if ([notification.object intValue] == 0) {
         [[WFCCIMService sharedWFCIMService] clearAllUnreadStatus];
@@ -396,6 +402,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecallMessages:) name:kRecallMessages object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeleteMessages:) name:kDeleteMessages object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     }

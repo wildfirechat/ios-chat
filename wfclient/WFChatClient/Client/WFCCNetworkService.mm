@@ -95,6 +95,12 @@ public:
             [m_delegate onRecallMessage:messageUid];
         }
     }
+    
+    void onDeleteMessage(long long messageUid) {
+        if (m_delegate) {
+            [m_delegate onDeleteMessage:messageUid];
+        }
+    }
     id<ReceiveMessageDelegate> m_delegate;
 };
 
@@ -341,7 +347,14 @@ static WFCCNetworkService * sharedSingleton = nil;
         }
     });
 }
-
+- (void)onDeleteMessage:(long long)messageUid {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kDeleteMessages object:@(messageUid)];
+        if ([self.receiveMessageDelegate respondsToSelector:@selector(onDeleteMessage:)]) {
+            [self.receiveMessageDelegate onDeleteMessage:messageUid];
+        }
+    });
+}
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableArray *messageList = [messages mutableCopy];

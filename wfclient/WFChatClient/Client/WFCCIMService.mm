@@ -21,6 +21,7 @@ NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kConnectionStatusChanged = @"kConnectionStatusChanged";
 NSString *kReceiveMessages = @"kReceiveMessages";
 NSString *kRecallMessages = @"kRecallMessages";
+NSString *kDeleteMessages = @"kDeleteMessages";
 
 class IMSendMessageCallback : public mars::stn::SendMsgCallback {
 private:
@@ -1265,7 +1266,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 
 - (BOOL)deleteMessage:(long)messageId {
-    return mars::stn::MessageDB::Instance()->DeleteMessage(messageId);
+    return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;
+}
+
+- (void)deleteMessage:(long long)messageUidd
+              success:(void(^)(void))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    mars::stn::deleteRemoteMessage(messageUidd, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
@@ -1825,5 +1832,9 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (void)commitTransaction {
     mars::stn::MessageDB::Instance()->CommitTransaction();
+}
+
+- (BOOL)isCommercialServer {
+    return mars::stn::IsCommercialServer() == true;
 }
 @end
