@@ -145,6 +145,12 @@
     [self updateTopViewFrame];
     
     [self didChangeState:self.currentSession.state];//update ui
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onDeviceOrientationDidChange)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    [self onDeviceOrientationDidChange];
 }
 
 - (UIButton *)hangupButton {
@@ -732,6 +738,76 @@
             }
         }];
     }
+}
+//1.决定当前界面是否开启自动转屏，如果返回NO，后面两个方法也不会被调用，只是会支持默认的方向
+- (BOOL)shouldAutorotate {
+      return YES;
+}
+
+//2.返回支持的旋转方向
+//iPad设备上，默认返回值UIInterfaceOrientationMaskAllButUpSideDwon
+//iPad设备上，默认返回值是UIInterfaceOrientationMaskAll
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+     return UIDeviceOrientationLandscapeLeft | UIDeviceOrientationLandscapeRight | UIDeviceOrientationPortrait;
+}
+
+//3.返回进入界面默认显示方向
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+     return UIInterfaceOrientationPortrait;
+}
+
+- (BOOL)onDeviceOrientationDidChange{
+    //获取当前设备Device
+    UIDevice *device = [UIDevice currentDevice] ;
+    //识别当前设备的旋转方向
+    CGRect smallVideoFrame = CGRectZero;
+    CGFloat width = self.view.bounds.size.width;
+    CGFloat height = self.view.bounds.size.height;
+    switch (device.orientation) {
+        case UIDeviceOrientationFaceUp:
+            NSLog(@"屏幕幕朝上平躺");
+            break;
+
+        case UIDeviceOrientationFaceDown:
+            NSLog(@"屏幕朝下平躺");
+            break;
+
+        case UIDeviceOrientationUnknown:
+            //系统当前无法识别设备朝向，可能是倾斜
+            NSLog(@"未知方向");
+            break;
+
+        case UIDeviceOrientationLandscapeLeft:
+            self.smallVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+            self.bigVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+            smallVideoFrame = CGRectMake(width - SmallVideoView - 8, height - 8 - kStatusBarAndNavigationBarHeight + 64 - SmallVideoView - SmallVideoView/3 - kTabbarSafeBottomMargin, SmallVideoView * 4 /3, SmallVideoView);
+            NSLog(@"屏幕向左橫置");
+            break;
+
+        case UIDeviceOrientationLandscapeRight:
+            self.smallVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            self.bigVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            smallVideoFrame = CGRectMake(8-SmallVideoView/3, 8 + kStatusBarAndNavigationBarHeight - 64+SmallVideoView/3, SmallVideoView * 4 /3, SmallVideoView);
+            NSLog(@"屏幕向右橫置");
+            break;
+
+        case UIDeviceOrientationPortrait:
+            self.smallVideoView.transform = CGAffineTransformMakeRotation(0);
+            self.bigVideoView.transform = CGAffineTransformMakeRotation(0);
+            smallVideoFrame = CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3);
+            NSLog(@"屏幕直立");
+            break;
+
+        case UIDeviceOrientationPortraitUpsideDown:
+            NSLog(@"屏幕直立，上下顛倒");
+            break;
+
+        default:
+            NSLog(@"無法识别");
+            break;
+    }
+    self.smallVideoView.frame = smallVideoFrame;
+    return YES;
 }
 #endif
 @end

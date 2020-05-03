@@ -51,8 +51,8 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     [self updateWindow];
     [self registerTelephonyEvent];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onOrientationChanged:)
-                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
+                                             selector:@selector(onDeviceOrientationDidChange:)
+                                                 name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self addProximityMonitoringObserver];
 }
@@ -67,7 +67,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     };
 }
 
-- (void)onOrientationChanged:(NSNotification *)notification {
+- (void)onDeviceOrientationDidChange:(NSNotification *)notification {
     [self updateWindow];
 }
 
@@ -101,6 +101,23 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     }
 }
 
+//1.决定当前界面是否开启自动转屏，如果返回NO，后面两个方法也不会被调用，只是会支持默认的方向
+- (BOOL)shouldAutorotate {
+      return YES;
+}
+
+//2.返回支持的旋转方向
+//iPad设备上，默认返回值UIInterfaceOrientationMaskAllButUpSideDwon
+//iPad设备上，默认返回值是UIInterfaceOrientationMaskAll
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+     return UIDeviceOrientationLandscapeLeft | UIDeviceOrientationLandscapeRight | UIDeviceOrientationPortrait;
+}
+
+//3.返回进入界面默认显示方向
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+     return UIInterfaceOrientationPortrait;
+}
+
 - (void)updateWindow {
     CGFloat posX = [[[NSUserDefaults standardUserDefaults] objectForKey:kFloatingWindowPosX] floatValue];
     CGFloat posY = [[[NSUserDefaults standardUserDefaults] objectForKey:kFloatingWindowPosY] floatValue];
@@ -110,16 +127,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     posX = (posX + 30) > screenBounds.size.width ? (screenBounds.size.width - 30) : posX;
     posY = (posY + 48) > screenBounds.size.height ? (screenBounds.size.height - 48) : posY;
 
-    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft &&
-        [self isSupportOrientation:UIInterfaceOrientationLandscapeLeft]) {
+    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft) {
         self.window.transform = CGAffineTransformMakeRotation(M_PI / 2);
         self.window.frame = CGRectMake(posX, posY, 64, 96);
         self.floatingButton.frame = CGRectMake(0, 0, 96, 64);
         if ([self isVideoViewEnabledSession]) {
             self.videoView.frame = CGRectMake(0, 0, 96, 64);
         }
-    } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight &&
-               [self isSupportOrientation:UIInterfaceOrientationLandscapeRight]) {
+    } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
         self.window.transform = CGAffineTransformMakeRotation(-M_PI / 2);
         self.window.frame = CGRectMake(posX, posY, 64, 96);
         self.floatingButton.frame = CGRectMake(0, 0, 96, 64);
@@ -127,8 +142,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             self.videoView.frame = CGRectMake(0, 0, 96, 64);
         }
     } else {
-        if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown &&
-            [self isSupportOrientation:UIInterfaceOrientationPortraitUpsideDown]) {
+        if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown) {
             self.window.transform = CGAffineTransformMakeRotation(M_PI);
         } else {
             self.window.transform = CGAffineTransformMakeRotation(0);
@@ -240,28 +254,19 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     return _floatingButton;
 }
 
-- (BOOL)isSupportOrientation:(UIInterfaceOrientation)orientation {
-    UIInterfaceOrientationMask mask =
-        [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.window];
-    return mask & (1 << orientation);
-}
-
 - (void)handlePanGestures:(UIPanGestureRecognizer *)paramSender {
     if (paramSender.state != UIGestureRecognizerStateEnded && paramSender.state != UIGestureRecognizerStateFailed) {
         CGPoint location = [paramSender locationInView:[UIApplication sharedApplication].windows[0]];
 
-        if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft &&
-            [self isSupportOrientation:UIInterfaceOrientationLandscapeLeft]) {
+        if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft) {
             CGFloat tmp = location.x;
             location.x = [UIScreen mainScreen].bounds.size.height - location.y;
             location.y = tmp;
-        } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight &&
-                   [self isSupportOrientation:UIInterfaceOrientationLandscapeRight]) {
+        } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
             CGFloat tmp = location.x;
             location.x = location.y;
             location.y = [UIScreen mainScreen].bounds.size.width - tmp;
-        } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown &&
-                   [self isSupportOrientation:UIInterfaceOrientationPortraitUpsideDown]) {
+        } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown) {
             CGFloat tmp = location.x;
             location.x = [UIScreen mainScreen].bounds.size.height - location.y;
             location.y = [UIScreen mainScreen].bounds.size.width - tmp;
@@ -280,7 +285,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
         CGRect screenBounds = [UIScreen mainScreen].bounds;
         BOOL isLandscape = screenBounds.size.width > screenBounds.size.height;
-        if (isLandscape && [self isSupportOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation]) {
+        if (isLandscape) {
             if (frame.origin.y + frame.size.height > [UIScreen mainScreen].bounds.size.width) {
                 frame.origin.y = [UIScreen mainScreen].bounds.size.width - 2 - frame.size.height;
             }
