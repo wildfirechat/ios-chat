@@ -116,6 +116,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecallMessages:) name:kRecallMessages object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeleteMessages:) name:kDeleteMessages object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendingMessage:) name:kSendingMessageStatusUpdated object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageListChanged:) name:kMessageListChanged object:self.conversation];
@@ -679,6 +681,19 @@
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
                 break;
             }
+        }
+    }
+}
+
+- (void)onDeleteMessages:(NSNotification *)notification {
+    long long messageUid = [notification.object longLongValue];
+    WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid];
+    for (int i = 0; i < self.modelList.count; i++) {
+        WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+        if (model.message.messageUid == messageUid) {
+            [self.modelList removeObject:model];
+            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+            break;
         }
     }
 }
@@ -1513,10 +1528,59 @@
     [self.chatInputBar paste:sender];
 }
 
+- (void)deleteMessageUI:(WFCCMessage *)message {
+    for (int i = 0; i < self.modelList.count; i++) {
+        WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+        if (model.message.messageUid == message.messageUid) {
+            [self.modelList removeObject:model];
+            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+            break;
+        }
+    }
+}
+
 -(void)performDelete:(UIMenuController *)sender {
-    [[WFCCIMService sharedWFCIMService] deleteMessage:self.cell4Menu.model.message.messageId];
-    [self.modelList removeObject:self.cell4Menu.model];
-    [self.collectionView deleteItemsAtIndexPaths:@[[self.collectionView indexPathForCell:self.cell4Menu]]];
+    __weak typeof(self)ws = self;
+    WFCCMessage *message = self.cell4Menu.model.message;
+    
+    if (![[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
+        [ws deleteMessageUI:message];
+        return;
+    }
+    
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    UIAlertAction *actionDeleteLocal = [UIAlertAction actionWithTitle:WFCString(@"DeleteLocal") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
+        [ws deleteMessageUI:message];
+    }];
+    
+    UIAlertAction *actionDeleteRemote2 = [UIAlertAction actionWithTitle:WFCString(@"DeleteAllEndpoint") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.label.text = WFCString(@"Deleting");
+        [hud showAnimated:YES];
+        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageUid success:^{
+            [ws deleteMessageUI:message];
+            [hud hideAnimated:YES];
+        } error:^(int error_code) {
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = WFCString(@"DeleteFailed");
+            [hud hideAnimated:YES afterDelay:1.f];
+        }];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionDeleteLocal];
+    [actionSheet addAction:actionDeleteRemote2];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 -(void)performCopy:(UIMenuItem *)sender {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B2492E9245D3982007268E3 /* WFCCDeleteMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B2492E7245D3982007268E3 /* WFCCDeleteMessageContent.h */; };
+		2B2492EA245D3982007268E3 /* WFCCDeleteMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2492E8245D3982007268E3 /* WFCCDeleteMessageContent.m */; };
 		2B5FD8792375A55800C41A72 /* WFCCPTextMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B5FD8772375A55800C41A72 /* WFCCPTextMessageContent.m */; };
 		2B5FD87A2375A55800C41A72 /* WFCCPTextMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B5FD8782375A55800C41A72 /* WFCCPTextMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B50A01FAE98E6006B6E31 /* WFCChatClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -132,6 +134,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2B2492E7245D3982007268E3 /* WFCCDeleteMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCDeleteMessageContent.h; sourceTree = "<group>"; };
+		2B2492E8245D3982007268E3 /* WFCCDeleteMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCDeleteMessageContent.m; sourceTree = "<group>"; };
 		2B5FD8772375A55800C41A72 /* WFCCPTextMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCPTextMessageContent.m; sourceTree = "<group>"; };
 		2B5FD8782375A55800C41A72 /* WFCCPTextMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCPTextMessageContent.h; sourceTree = "<group>"; };
 		2E6B509B1FAE98E6006B6E31 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -373,6 +377,8 @@
 				2E6B50DE1FAE9B10006B6E31 /* WFCCQuitGroupNotificationContent.m */,
 				2E6B50DF1FAE9B10006B6E31 /* WFCCSoundMessageContent.h */,
 				2E6B50E01FAE9B10006B6E31 /* WFCCSoundMessageContent.m */,
+				2B2492E7245D3982007268E3 /* WFCCDeleteMessageContent.h */,
+				2B2492E8245D3982007268E3 /* WFCCDeleteMessageContent.m */,
 				6ECFB2C620A84C88001F91CB /* WFCCFileMessageContent.h */,
 				6ECFB2C520A84C88001F91CB /* WFCCFileMessageContent.m */,
 				2E6B50E11FAE9B10006B6E31 /* WFCCTextMessageContent.h */,
@@ -533,6 +539,7 @@
 				2F77099F2453DCB10020DB77 /* WFCCThingsData1Content.h in Headers */,
 				2E6B510B1FAE9B10006B6E31 /* WFCCSoundMessageContent.h in Headers */,
 				2EE6A4881FB290FC007953BC /* Common.h in Headers */,
+				2B2492E9245D3982007268E3 /* WFCCDeleteMessageContent.h in Headers */,
 				2E6B510D1FAE9B10006B6E31 /* WFCCTextMessageContent.h in Headers */,
 				2E6B51091FAE9B10006B6E31 /* WFCCQuitGroupNotificationContent.h in Headers */,
 				2E6B511F1FAE9B10006B6E31 /* WFCCUserInfo.h in Headers */,
@@ -665,6 +672,7 @@
 				2F7709A22453DCB10020DB77 /* WFCCThingsLostEventContent.m in Sources */,
 				2E6B50B81FAE990D006B6E31 /* wavwriter.mm in Sources */,
 				2E6B50C71FAE9B08006B6E31 /* WFCCNetworkService.mm in Sources */,
+				2B2492EA245D3982007268E3 /* WFCCDeleteMessageContent.m in Sources */,
 				2E6B510A1FAE9B10006B6E31 /* WFCCQuitGroupNotificationContent.m in Sources */,
 				2E6B51061FAE9B10006B6E31 /* WFCCMessageContent.m in Sources */,
 				2E6B50FA1FAE9B10006B6E31 /* WFCCCreateGroupNotificationContent.m in Sources */,

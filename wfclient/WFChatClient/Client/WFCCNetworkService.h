@@ -98,6 +98,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 
 @optional
 - (void)onRecallMessage:(long long)messageUid;
+- (void)onDeleteMessage:(long long)messageUid;
 @end
 
 /**
