@@ -8,6 +8,7 @@
 
 #import "DiscoverViewController.h"
 #import "ChatroomListViewController.h"
+#import "DeviceTableViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WFChatClient/WFCCIMService.h>
 #import "DiscoverMomentsTableViewCell.h"
@@ -33,7 +34,8 @@
         @{@"title":LocalizedString(@"Channel"),
           @"image":@"chat_channel",@"des":@"channel"},
         @{@"title":LocalizedString(@"DevDocs"),
-          @"image":@"dev_docs",@"des":@"Dev"}]];
+          @"image":@"dev_docs",@"des":@"Dev"},@{@"title":@"Things",
+          @"image":@"discover_things",@"des":@"Things"}]];
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
         [self.dataSource insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
@@ -131,6 +133,12 @@
         WFCUBrowserViewController *vc = [[WFCUBrowserViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         vc.url = @"http://docs.wildfirechat.cn";
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([des isEqualToString:@"Things"]) {
+        DeviceTableViewController *vc = [[DeviceTableViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
 

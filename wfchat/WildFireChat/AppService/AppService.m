@@ -147,8 +147,6 @@ static AppService *sharedSingleton = nil;
     } error:^(NSError * _Nonnull error) {
         errorBlock(-1);
     }];
-    
-    
 }
 
 - (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
@@ -269,5 +267,68 @@ static AppService *sharedSingleton = nil;
     PCSessionViewController *vc = [[PCSessionViewController alloc] init];
     vc.pcClientInfo = clientInfo;
     [baseController.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)addDevice:(NSString *)name
+         deviceId:(NSString *)deviceId
+            owner:(NSArray<NSString *> *)owners
+          success:(void(^)(Device *device))successBlock
+            error:(void(^)(int error_code))errorBlock {
+    NSString *path = @"/things/add_device";
+    
+    NSDictionary *extraDict = @{@"name":name};
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:extraDict options:0 error:0];
+    NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSDictionary *param = @{@"deviceId":deviceId, @"owners":owners, @"extra":dataStr};
+    [self post:path data:param success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            successBlock(nil);
+        } else {
+            errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1);
+    }];
+}
+
+- (void)getMyDevices:(void(^)(NSArray<Device *> *devices))successBlock
+               error:(void(^)(int error_code))errorBlock {
+    NSString *path = @"/things/list_device";
+    [self post:path data:nil success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if ([dict[@"result"] isKindOfClass:[NSArray class]]) {
+                NSMutableArray *output = [[NSMutableArray alloc] init];
+                NSArray<NSDictionary *> *ds = (NSArray *)dict[@"result"];
+                for (NSDictionary *d in ds) {
+                    Device *device = [[Device alloc] init];
+                    device.deviceId = [d objectForKey:@"deviceId"];
+                    device.secret = [d objectForKey:@"secret"];
+                    device.token = [d objectForKey:@"token"];
+                    device.owners = [d objectForKey:@"owners"];
+                    
+                    NSString *extra = d[@"extra"];
+                    if (extra.length) {
+                        NSData *jsonData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+                        NSError *err;
+                        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                            options:NSJSONReadingMutableContainers
+                                                                              error:&err];
+                        if(!err) {
+                            device.name = dic[@"name"];
+                        }
+                    }
+                    [output addObject:device];
+                }
+                successBlock(output);
+            } else {
+                errorBlock(-1);
+            }
+        } else {
+            errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1);
+    }];
 }
 @end
