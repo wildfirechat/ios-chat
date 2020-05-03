@@ -100,6 +100,8 @@ public:
     std::map<std::string, std::string> headers;
 	std::vector<std::string> longlink_host_list;
     bool isRoute;
+    bool isUpload;
+    int  uploadSize;
 };
 
 enum TaskFailHandleType {

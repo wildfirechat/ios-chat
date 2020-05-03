@@ -609,6 +609,7 @@ namespace mars{
         public:
             virtual void onReceiveMessage(const std::list<TMessage> &messageList, bool hasMore) = 0;
             virtual void onRecallMessage(const std::string operatorId, long long messageUid) = 0;
+            virtual void onDeleteMessage(long long messageUid) = 0;
         };
         
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
@@ -637,7 +638,7 @@ namespace mars{
         
         
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
-        
+        extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
         //请使用loadRemoteConversationMessages
         extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
     
@@ -719,6 +720,8 @@ namespace mars{
         extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
     
         extern void KickoffPCClient(const std::string &pcClientId, GeneralOperationCallback *callback);
+    
+        extern bool IsCommercialServer();
     }
 }
 

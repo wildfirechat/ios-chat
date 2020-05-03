@@ -201,3 +201,7 @@
 "VideoClosed"="Video closed";
 "Rebot"="Rebot";
 "UserInfomation"="User infomation";
+"Deleting"="Deleting...";
+"DeleteFailed"="Delete failed!";
+"DeleteAllEndpoint"="Delete all endpoint";
+"DeleteLocal"="Delete local";

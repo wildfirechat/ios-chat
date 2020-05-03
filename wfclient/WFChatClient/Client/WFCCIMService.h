@@ -27,6 +27,8 @@ extern NSString *kSendingMessageStatusUpdated;
 extern NSString *kConnectionStatusChanged;
 extern NSString *kReceiveMessages;
 extern NSString *kRecallMessages;
+extern NSString *kDeleteMessages;
+
 #pragma mark - 枚举值定义
 /**
  修改个人信息的内容
@@ -544,7 +546,19 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param messageId 消息ID
  @return 是否删除成功
  */
-- (BOOL)deleteMessage:(long)messageId;
+- (void)deleteMessage:(long)messageId;
+
+/**
+ 删除本地和远端的消息
+ 
+ @param messageId 消息ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)deleteMessage:(long long)messageUidd
+              success:(void(^)(void))successBlock
+                error:(void(^)(int error_code))errorBlock;
+
 
 /**
  删除会话中的消息
@@ -1241,4 +1255,9 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
 */
 - (void)commitTransaction;
+
+/**
+ 是否是商业版IM服务。
+ */
+- (BOOL)isCommercialServer;
 @end

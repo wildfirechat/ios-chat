@@ -39,6 +39,8 @@
 
 //撤回消息
 #define MESSAGE_CONTENT_TYPE_RECALL 80
+//删除消息，请勿直接发送此消息，此消息是服务器端删除时的同步消息
+#define MESSAGE_CONTENT_TYPE_DELETE 81
 
 //提醒消息
 #define MESSAGE_CONTENT_TYPE_TIP 90
