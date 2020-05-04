@@ -1542,45 +1542,8 @@
 -(void)performDelete:(UIMenuController *)sender {
     __weak typeof(self)ws = self;
     WFCCMessage *message = self.cell4Menu.model.message;
-    
-    if (![[WFCCIMService sharedWFCIMService] isCommercialServer]) {
-        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
-        [ws deleteMessageUI:message];
-        return;
-    }
-    
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    
-    UIAlertAction *actionDeleteLocal = [UIAlertAction actionWithTitle:WFCString(@"DeleteLocal") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
-        [ws deleteMessageUI:message];
-    }];
-    
-    UIAlertAction *actionDeleteRemote2 = [UIAlertAction actionWithTitle:WFCString(@"DeleteAllEndpoint") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-        hud.label.text = WFCString(@"Deleting");
-        [hud showAnimated:YES];
-        [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageUid success:^{
-            [ws deleteMessageUI:message];
-            [hud hideAnimated:YES];
-        } error:^(int error_code) {
-            hud.mode = MBProgressHUDModeText;
-            hud.label.text = WFCString(@"DeleteFailed");
-            [hud hideAnimated:YES afterDelay:1.f];
-        }];
-    }];
-    
-    //把action添加到actionSheet里
-    [actionSheet addAction:actionDeleteLocal];
-    [actionSheet addAction:actionDeleteRemote2];
-    [actionSheet addAction:actionCancel];
-    
-    //相当于之前的[actionSheet show];
-    [self presentViewController:actionSheet animated:YES completion:nil];
+    [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
+    [ws deleteMessageUI:message];
 }
 
 -(void)performCopy:(UIMenuItem *)sender {

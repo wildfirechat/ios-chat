@@ -549,18 +549,6 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)deleteMessage:(long)messageId;
 
 /**
- 删除本地和远端的消息
- 
- @param messageId 消息ID
- @param successBlock 成功的回调
- @param errorBlock 失败的回调
- */
-- (void)deleteMessage:(long long)messageUidd
-              success:(void(^)(void))successBlock
-                error:(void(^)(int error_code))errorBlock;
-
-
-/**
  删除会话中的消息
  
  @param conversation 会话
