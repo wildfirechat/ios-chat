@@ -1269,12 +1269,6 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;
 }
 
-- (void)deleteMessage:(long long)messageUidd
-              success:(void(^)(void))successBlock
-                error:(void(^)(int error_code))errorBlock {
-    mars::stn::deleteRemoteMessage(messageUidd, new IMGeneralOperationCallback(successBlock, errorBlock));
-}
-
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
     if (keyword.length == 0) {
         return nil;
