@@ -193,7 +193,7 @@
         self.memberCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [self.memberCollectionViewLayout getHeigthOfItemCount:self.memberCollectionCount]) collectionViewLayout:self.memberCollectionViewLayout];
         self.memberCollectionView.delegate = self;
         self.memberCollectionView.dataSource = self;
-        self.memberCollectionView.backgroundColor = [UIColor whiteColor];
+        self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
         if (self.showMoreMember) {
@@ -211,7 +211,7 @@
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
             [head addSubview:moreBtn];
             
-            head.backgroundColor = [UIColor whiteColor];
+            head.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
             
             self.tableView.tableHeaderView = head;
         } else {
@@ -555,7 +555,7 @@
             cell = [[WFCUSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"styleSwitch" conversation:self.conversation];
         }
         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+        cell.textLabel.textColor = [WFCUConfigManager globalManager].textColor;
         cell.detailTextLabel.text = nil;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.accessoryView = nil;
@@ -570,10 +570,8 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
         }
         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.textLabel.text = title;
         cell.detailTextLabel.text = detailTitle;
-        cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"0x9b9a9a"];
         cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         cell.accessoryType = withDI ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
         cell.accessoryView = nil;
@@ -614,12 +612,9 @@
 
         cell.textLabel.text = WFCString(@"GroupAnnouncement");
         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        cell.textLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         cell.detailTextLabel.text = self.groupAnnouncement.text;
         cell.detailTextLabel.numberOfLines = 3;
-//        cell.detailTextLabel.numberOfLines = 10;
         cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
-        cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"0x9b9a9a"];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;

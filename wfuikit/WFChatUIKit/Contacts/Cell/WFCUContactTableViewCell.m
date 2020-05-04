@@ -40,7 +40,6 @@
           _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
           _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
             _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-            _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
       }
 }
 - (void)onUserInfoUpdated:(NSNotification *)notification {

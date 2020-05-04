@@ -25,8 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     int offset = 0;
     if (self.announcement.author.length && self.announcement.text.length) {
         self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + 16, 48, 48)];

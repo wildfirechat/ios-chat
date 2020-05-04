@@ -82,7 +82,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.tableView.tableHeaderView = nil;
@@ -547,10 +547,8 @@ static NSMutableDictionary *hanziStringDict = nil;
     }
 
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, self.view.frame.size.width, 30)];
     label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
-    label.textColor = [UIColor colorWithHexString:@"0x828282"];
     label.textAlignment = NSTextAlignmentLeft;
     label.text = [NSString stringWithFormat:@"%@", title];
     [view addSubview:label];
@@ -582,6 +580,9 @@ static NSMutableDictionary *hanziStringDict = nil;
   return index;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *dataSource;
