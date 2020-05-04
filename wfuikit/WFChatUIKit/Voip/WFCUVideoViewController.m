@@ -107,6 +107,8 @@
     
     self.scalingType = kWFAVVideoScalingTypeAspectBalanced;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
+    UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
+    [self.bigVideoView addGestureRecognizer:tapBigVideo];
     [self.view addSubview:self.bigVideoView];
     
     self.smallVideoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3)];
@@ -503,6 +505,35 @@
         }
 //        self.stateLabel.hidden = YES;
         self.stateLabel.textAlignment = NSTextAlignmentLeft;
+    }
+}
+
+- (void)onClickedBigVideoView:(id)sender {
+    if (self.currentSession.state != kWFAVEngineStateConnected) {
+        return;
+    }
+    
+    if (self.currentSession.audioOnly) {
+        return;
+    }
+    
+    if (self.smallVideoView.hidden) {
+        if (self.hangupButton.hidden) {
+            self.hangupButton.hidden = NO;
+            self.audioButton.hidden = NO;
+            self.switchCameraButton.hidden = NO;
+            self.smallVideoView.hidden = NO;
+            self.minimizeButton.hidden = NO;
+            self.downgradeButton.hidden = NO;
+        } else {
+            self.hangupButton.hidden = YES;
+            self.audioButton.hidden = YES;
+            self.downgradeButton.hidden = YES;
+            self.switchCameraButton.hidden = YES;
+            self.minimizeButton.hidden = YES;
+        }
+    } else {
+        self.smallVideoView.hidden = YES;
     }
 }
 
