@@ -9,6 +9,7 @@
 #import "WFCUMessageNotificationViewController.h"
 #import "WFCUSwitchTableViewCell.h"
 #import "UIColor+YH.h"
+#import <WFChatUIKit/WFChatUIKit.h>
 
 @interface WFCUMessageNotificationViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -22,7 +23,7 @@
     self.title = WFCString(@"NewMessageNotification");
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
-    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -41,6 +42,10 @@
     return 48;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return 0.1;
@@ -54,7 +59,7 @@
         return nil;
     } else {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 9)];
-        view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+        view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         return view;
 
     }

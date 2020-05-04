@@ -34,7 +34,7 @@
         
     }
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.indicatorView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4 - 10);
     self.indicatorView.hidden = YES;
     [self.view addSubview:self.indicatorView];
@@ -48,7 +48,7 @@
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 - 20, 160, 40)];
     [self.startButton  setTitle:@"测试网络" forState:UIControlStateNormal];
     [self.startButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
-    [self.startButton setBackgroundColor:[WFCUConfigManager globalManager].naviBackgroudColor];
+    [self.startButton setBackgroundColor:[UIColor greenColor]];
     self.startButton.layer.masksToBounds = YES;
     self.startButton.layer.cornerRadius = 5.0;
     

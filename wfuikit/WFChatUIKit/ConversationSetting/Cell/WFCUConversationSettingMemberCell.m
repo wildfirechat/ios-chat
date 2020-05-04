@@ -21,7 +21,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     }
     return self;
 }
@@ -35,9 +35,9 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _nameLabel.textColor = [UIColor colorWithHexString:@"0x7d7d7d"];
+        _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
-        _nameLabel.backgroundColor = [UIColor clearColor];
+        _nameLabel.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:11];
         [[self contentView] addSubview:_nameLabel];
     }
@@ -66,7 +66,7 @@
 }
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
-    self.contentView.backgroundColor = [UIColor whiteColor];
+    self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 //    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
     
     self.model = model;
