@@ -67,7 +67,7 @@
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -84,15 +84,10 @@
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
         keyWindow.tintAdjustmentMode = UIViewTintAdjustmentModeAutomatic;
     [keyWindow tintColorDidChange];
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
-
-
-
 }
 
 - (void)onRightBtn:(id)sender {
@@ -156,7 +151,6 @@
         self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 23, width - 94 - 8, 21)];
         self.displayNameLabel.text = self.userInfo.displayName;
         self.displayNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:20];
-        self.displayNameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         
         self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 50, width - 94 - 8, 21)];
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
@@ -176,7 +170,7 @@
 
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
         [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
+        [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -226,7 +220,7 @@
         
         UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
         [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
-        [momentButton setTitleColor:[UIColor colorWithHexString:@"0x1d1d1d"] forState:UIControlStateNormal];
+        [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
@@ -244,7 +238,7 @@
         [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
         btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
         [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+        [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
         [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
         [self.sendMessageCell addSubview:btn];
@@ -417,7 +411,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section != 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 10)];
-        view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+        view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         return view;
     } else {
         return nil;
