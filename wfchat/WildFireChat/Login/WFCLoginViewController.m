@@ -70,7 +70,6 @@ alpha:1.0]
     UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     userNameLabel.text = @"手机号";
     userNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
-    userNameLabel.textColor = [UIColor colorWithHexString:@"0x191919"];
     
     self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, userNameContainer.frame.size.width, 1.f)];
     self.userNameLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
@@ -91,7 +90,6 @@ alpha:1.0]
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     passwordLabel.text = @"验证码";
     passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
-    passwordLabel.textColor = [UIColor colorWithHexString:@"0x191919"];
     
     
     self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
