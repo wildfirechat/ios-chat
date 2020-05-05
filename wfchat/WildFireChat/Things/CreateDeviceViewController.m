@@ -8,7 +8,7 @@
 
 #import "CreateDeviceViewController.h"
 #import "AppService.h"
-
+#import "MBProgressHUD.h"
 @interface CreateDeviceViewController () <UITextFieldDelegate>
 @property (nonatomic, strong)UITextField *deviceNameField;
 @property (nonatomic, strong)UITextField *deviceIdField;
@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     CGFloat width = self.view.frame.size.width;
     
@@ -45,11 +45,25 @@
 }
 
 - (void)onCreateBtn:(id)sender {
+    self.createBtn.enabled = NO;
+    
     __weak typeof(self) ws = self;
+    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"创建中...";
+    [hud showAnimated:YES];
+    
     [[AppService sharedAppService] addDevice:self.deviceNameField.text deviceId:self.deviceIdField.text owner:@[[WFCCNetworkService sharedInstance].userId] success:^(Device * _Nonnull device) {
+        [hud hideAnimated:NO];
         [ws.navigationController popViewControllerAnimated:YES];
     } error:^(int error_code) {
+        [hud hideAnimated:NO];
+        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"创建失败";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
         NSLog(@"Create device error!!!!");
+        ws.createBtn.enabled = YES;
     }];
 }
 - (void)textDidChange:(id<UITextInput>)textInput {

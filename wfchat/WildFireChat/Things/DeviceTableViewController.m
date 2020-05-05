@@ -11,6 +11,7 @@
 #import "CreateDeviceViewController.h"
 #import "Device.h"
 #import "AppService.h"
+#import "MBProgressHUD.h"
 
 @interface DeviceTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -33,15 +34,28 @@
     [self.view addSubview:self.tableView];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    __weak typeof(self)ws = self;
+    __weak typeof(self) ws = self;
+    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"获取中...";
+    [hud showAnimated:YES];
+    
     [[AppService sharedAppService] getMyDevices:^(NSArray<Device *> * _Nonnull devices) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            ws.devices = devices;
-            [ws.tableView reloadData];
-        });
-    } error:^(int error_code) {
+        [hud hideAnimated:NO];
         
+        ws.devices = devices;
+        [ws.tableView reloadData];
+    } error:^(int error_code) {
+        [hud hideAnimated:NO];
+        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"获取失败";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
     }];
 }
 

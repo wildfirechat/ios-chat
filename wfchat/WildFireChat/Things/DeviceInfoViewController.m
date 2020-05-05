@@ -7,6 +7,8 @@
 //
 
 #import "DeviceInfoViewController.h"
+#import <WFChatClient/WFCChatClient.h>
+#import "MBProgressHUD.h"
 
 @interface DeviceInfoViewController ()
 @property(nonatomic, strong)UILabel *nameLabel;
@@ -33,6 +35,33 @@
     self.tokenLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 176, width - 32, 20)];
     self.tokenLabel.text = [NSString stringWithFormat:@"设备令牌：%@", self.device.token];
     [self.view addSubview:self.tokenLabel];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送给我" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+}
+
+- (void)onRightBtn:(id)sender {
+    __weak typeof(self) ws = self;
+    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"发送中...";
+    [hud showAnimated:YES];
+    
+    WFCCConversation *conv = [WFCCConversation conversationWithType:Single_Type target:[WFCCNetworkService sharedInstance].userId line:0];
+    WFCCTextMessageContent *textContent = [WFCCTextMessageContent contentWith:[NSString stringWithFormat:@"DeviceName:%@, \nDeviceId:%@, \nToken:%@", self.device.name, self.device.deviceId, self.device.token]];
+    [[WFCCIMService sharedWFCIMService] send:conv content:textContent success:^(long long messageUid, long long timestamp) {
+        [hud hideAnimated:NO];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"发送成功";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
+    } error:^(int error_code) {
+        [hud hideAnimated:NO];
+        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"发送失败";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
+    }];
 }
 
 /*
