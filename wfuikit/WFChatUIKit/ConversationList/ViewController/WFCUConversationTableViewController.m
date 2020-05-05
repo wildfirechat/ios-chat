@@ -91,6 +91,7 @@
     self.definesPresentationContext = YES;
     
     [self updatePcSession];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
