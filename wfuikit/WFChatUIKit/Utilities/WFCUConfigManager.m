@@ -165,4 +165,23 @@ static WFCUConfigManager *sharedSingleton = nil;
         return [UIColor blackColor];
     }
 }
+
+- (UIColor *)separateColor {
+    if (_separateColor) {
+        return _separateColor;
+    }
+    BOOL darkModel = NO;
+    if (@available(iOS 13.0, *)) {
+        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkModel = YES;
+        }
+    }
+    
+    if (darkModel) {
+        return [UIColor colorWithHexString:@"0x3f3f3f"];
+    } else {
+        return [UIColor colorWithHexString:@"0xe7e7e7"];
+    }
+    
+}
 @end
