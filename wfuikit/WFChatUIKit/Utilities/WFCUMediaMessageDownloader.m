@@ -86,6 +86,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     NSError *error = nil;
     NSString *downloadDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
     if (![fileManager fileExistsAtPath:downloadDir isDirectory:&isDir]) {
+        isDir = YES;
         if(![fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:&error]) {
             errorBlock(msg.messageUid, -1);
             NSLog(@"Error, create download folder error");
@@ -111,10 +112,10 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         return NO;
     }
     
-    NSString *savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%ld", mediaContent.remoteUrl.hash]];
+    NSString *savedPath = [downloadDir stringByAppendingPathComponent:mediaContent.remoteUrl.lastPathComponent];
     
     if ([mediaContent isKindOfClass:[WFCCSoundMessageContent class]]) {
-        savedPath = [NSString stringWithFormat:@"%@.wav", savedPath];
+//        savedPath = [NSString stringWithFormat:@"%@.wav", savedPath];
     } else if([mediaContent isKindOfClass:[WFCCVideoMessageContent class]]) {
         savedPath = [NSString stringWithFormat:@"%@.mp4", savedPath];
     } else if([mediaContent isKindOfClass:[WFCCImageMessageContent class]]) {
