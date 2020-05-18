@@ -103,12 +103,6 @@ public:
             [m_delegate onDeleteMessage:messageUid];
         }
     }
-    id<ReceiveMessageDelegate> m_delegate;
-};
-
-class MDCB : public mars::stn::MessageDeliveredCallback {
-public:
-    MDCB(id<ReceiveMessageDelegate> delegate) : m_delegate(delegate) {}
     
     void onUserReceivedMessage(const std::map<std::string, int64_t> &userReceived) {
         if (m_delegate && !userReceived.empty()) {
@@ -116,13 +110,6 @@ public:
             [m_delegate onMessageDelivered:ds];
         }
     }
-    
-    id<ReceiveMessageDelegate> m_delegate;
-};
-
-class MRCB : public mars::stn::MessageReadedCallback {
-public:
-    MRCB(id<ReceiveMessageDelegate> delegate) : m_delegate(delegate) {}
     
     void onUserReadedMessage(const std::list<mars::stn::TReadEntry> &userReceived) {
         if (m_delegate && !userReceived.empty()) {
@@ -133,8 +120,6 @@ public:
     
     id<ReceiveMessageDelegate> m_delegate;
 };
-
-
 
 WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     WFCCUserInfo *userInfo = [[WFCCUserInfo alloc] init];
@@ -646,8 +631,6 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshFriendListCallback(new GFLCB(self));
     mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
   mars::stn::setRefreshSettingCallback(new GSCB(self));
-  mars::stn::setMessageDeliveredCallback(new MDCB(self));
-  mars::stn::setMessageReadedCallback(new MRCB(self));
   mars::baseevent::OnCreate();
 }
 - (BOOL)connect:(NSString *)host {
