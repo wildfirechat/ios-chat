@@ -16,4 +16,13 @@
   model.showTimeLabel = showTime;
   return model;
 }
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.deliveryRate = -1;
+        self.readRate = -1;
+    }
+    return self;
+}
 @end

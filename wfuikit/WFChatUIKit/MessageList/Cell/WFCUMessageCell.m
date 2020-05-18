@@ -10,6 +10,7 @@
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
+#import "ZCCCircleProgressView.h"
 
 #define Portrait_Size 40
 #define Name_Label_Height  14
@@ -32,7 +33,7 @@
 @property (nonatomic, strong)UIImageView *failureView;
 @property (nonatomic, strong)UIImageView *maskView;
 
-@property (nonatomic, strong)UIImageView *tickView;
+@property (nonatomic, strong)ZCCCircleProgressView *progressView;
 @end
 
 @implementation WFCUMessageCell
@@ -175,6 +176,63 @@
       UIImage *image = self.bubbleView.image;
       self.bubbleView.image = [self.bubbleView.image
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.95, image.size.width * 0.2,image.size.height * 0.1, image.size.width * 0.05)];
+      if(model.message.status == Message_Status_Sent || model.message.status == Message_Status_Readed) {
+          if (model.message.conversation.type == Single_Type) {
+              if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
+                  [self.progressView setProgress:1 subProgress:1];
+              } else if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
+                  [self.progressView setProgress:0 subProgress:1];
+              } else {
+                  [self.progressView setProgress:0 subProgress:0];
+              }
+              self.progressView.hidden = NO;
+          } else if(model.message.conversation.type == Group_Type) {
+              long long messageTS = model.message.serverTime;
+              
+              WFCCGroupInfo *groupInfo = nil;
+              if (model.deliveryRate == -1) {
+                  __block int delieveriedCount = 0;
+
+                  [model.deliveryDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+                      if ([obj longLongValue] >= messageTS) {
+                          delieveriedCount++;
+                      }
+                  }];
+                  groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
+                  model.deliveryRate = (float)delieveriedCount/(groupInfo.memberCount - 1);
+              }
+              if (model.readRate == -1) {
+                  __block int readedCount = 0;
+
+                  [model.readDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+                      if ([obj longLongValue] >= messageTS) {
+                          readedCount++;
+                      }
+                  }];
+                  if (!groupInfo) {
+                      groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
+                  }
+                  
+                  model.readRate = (float)readedCount/(groupInfo.memberCount - 1);
+              }
+            
+              
+              if (model.deliveryRate < model.readRate) {
+                  model.deliveryRate = model.readRate;
+              }
+              
+              [self.progressView setProgress:model.readRate subProgress:model.deliveryRate];
+              self.progressView.hidden = NO;
+          } else {
+              self.progressView.hidden = YES;
+          }
+      } else {
+          self.progressView.hidden = YES;
+      }
+      
+      if (self.progressView.hidden == NO) {
+          self.progressView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
+      }
   } else {
     CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
     self.portraitView.frame = CGRectMake(Portrait_Padding_Left, top, Portrait_Size, Portrait_Size);
@@ -213,8 +271,7 @@
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, leftProtection,
                                                                                       image.size.height * 0.2, rightProtection)];
       
-      self.tickView.hidden = YES;
-      
+      self.progressView.hidden = YES;
   }
     
     NSString *groupId = nil;
@@ -261,15 +318,16 @@
         _maskView.frame = self.bubbleView.bounds;
     }
 }
-- (UIImageView *)tickView {
-    if (!_tickView) {
-        _tickView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-        _tickView.image = [UIImage imageNamed:@"tick"];
-        _tickView.hidden = YES;
-        [self.contentView addSubview:_tickView];
+
+- (ZCCCircleProgressView *)progressView {
+    if (!_progressView) {
+        _progressView = [[ZCCCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+        _progressView.hidden = YES;
+        [self.contentView addSubview:_progressView];
     }
-    return _tickView;
+    return _progressView;
 }
+
 - (UIImageView *)portraitView {
   if (!_portraitView) {
     _portraitView = [[UIImageView alloc] init];
