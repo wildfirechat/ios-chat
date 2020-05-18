@@ -28,6 +28,8 @@ extern NSString *kConnectionStatusChanged;
 extern NSString *kReceiveMessages;
 extern NSString *kRecallMessages;
 extern NSString *kDeleteMessages;
+extern NSString *kMessageDelivered;
+extern NSString *kMessageReaded;
 
 #pragma mark - 枚举值定义
 /**
@@ -286,6 +288,11 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
  */
 - (void)setMediaMessagePlayed:(long)messageId;
+
+- (NSMutableDictionary<NSString *, NSNumber *> *)getConversationRead:(WFCCConversation *)conversation;
+- (NSMutableDictionary<NSString *, NSNumber *> *)getMessageDelivery:(WFCCConversation *)conversation;
+- (long long)getMessageDeliveryByUser:(NSString *)userId;
+
 #pragma mark - 消息相关
 /**
  获取消息

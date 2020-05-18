@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string>
 #include <list>
+#include <map>
 #include <vector>
 
 
@@ -68,12 +69,12 @@ namespace mars{
             kEcMarsLocalTaskParam = -12,
             kEcMarsLocalCgiFrequcencyLimit = -13,
             kEcMarsLocalChannelID = -14,
-        
+
             kEcMarsLongFirstPkgTimeout = -500,
             kEcMarsLongPkgPkgTimeout = -501,
             kEcMarsLongReadWriteTimeout = -502,
             kEcMarsLongTaskTimeout = -503,
-        
+
             kEcMarsSocketNetworkChange = -10086,
             kEcMarsSocketMakeSocketPrepared = -10087,
             kEcMarsSocketWritenWithNonBlock = -10088,
@@ -86,11 +87,11 @@ namespace mars{
             kEcMarsHttpParseStatusLine = -10195,
             kEcMarsNetMsgXPHandleBufferErr = -10504,
             kEcMarsDnsMakeSocketPrepared = -10606,
-            
+
             //proto error code
             kEcProtoCorruptData = -100001,
             kEcProtoInvalideParameter = -100002,
-            
+
             //server error code
             kEcServerSecrectKeyMismatch = 1,
             kEcServerInvalidData = 2,
@@ -118,12 +119,12 @@ namespace mars{
             kEcServerNotExist = 253,
             kEcServerNotImplement = 254,
         };
-        
+
         class TSerializable {
         public:
             TSerializable() {}
             virtual ~TSerializable() {}
-            
+
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const = 0;
             virtual void Unserialize(const Value& value) = 0;
@@ -133,7 +134,7 @@ namespace mars{
             static std::string list2Json(std::list<int> &is);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TGroupInfo : public TSerializable {
         public:
             TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0) {}
@@ -155,7 +156,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TGroupMember : public TSerializable {
         public:
             TGroupMember() : type(0), updateDt(0) {}
@@ -170,8 +171,8 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
-        
+
+
         class TUserInfo : public TSerializable {
         public:
             TUserInfo() : gender(0), type(0), deleted(0), updateDt(0) {}
@@ -198,7 +199,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TChatroomInfo : public TSerializable {
         public:
             TChatroomInfo()  : title(""), desc(""), portrait(""), memberCount(0), createDt(0), updateDt(0), extra(""), state(0) {}
@@ -217,7 +218,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TChatroomMemberInfo : public TSerializable {
         public:
             TChatroomMemberInfo()  : memberCount(0) {}
@@ -229,7 +230,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TChannelInfo : public TSerializable {
         public:
             TChannelInfo() : status(0), updateDt(0), automatic(0) {}
@@ -250,7 +251,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TMessageContent : public TSerializable {
         public:
             TMessageContent() : type(0), mediaType(0), mentionedType(0) {}
@@ -267,7 +268,7 @@ namespace mars{
             mentionedType(c.mentionedType),
             mentionedTargets(c.mentionedTargets),
             extra(c.extra) {}
-            
+
             TMessageContent operator=(const TMessageContent &c) {
                 type = c.type;
                 searchableContent = c.searchableContent;
@@ -292,7 +293,7 @@ namespace mars{
             int mediaType;
             std::string remoteMediaUrl;
             std::string localMediaPath;
-            
+
             int mentionedType;
             std::list<std::string> mentionedTargets;
             std::string extra;
@@ -303,7 +304,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         typedef enum {
             Message_Status_Sending,
             Message_Status_Sent,
@@ -314,15 +315,15 @@ namespace mars{
             Message_Status_Readed,
             Message_Status_Played
         } MessageStatus;
-        
+
         class TMessage : public TSerializable {
         public:
             TMessage() : conversationType(0), line(0), messageId(-1), direction(0), status(Message_Status_Sending), messageUid(0), timestamp(0) {}
-            
+
             int conversationType;
             std::string target;
             int line;
-            
+
             std::string from;
             TMessageContent content;
             long messageId;
@@ -337,7 +338,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TUnreadCount : public TSerializable {
         public:
             TUnreadCount():unread(0),unreadMention(0),unreadMentionAll(0){}
@@ -349,7 +350,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+    
         class TConversation : public TSerializable {
         public:
             TConversation() : conversationType(0), line(0), lastMessage() , timestamp(0), unreadCount(), isTop(false), isSilent(false) {}
@@ -368,7 +369,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TConversationSearchresult : public TSerializable {
         public:
             TConversationSearchresult() : conversationType(0), line(0), marchedMessage(), timestamp(0), marchedCount(0)  {}
@@ -385,7 +386,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TGroupSearchResult : public TSerializable {
         public:
             TGroupSearchResult() : marchedType(-1)  {}
@@ -398,7 +399,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         class TFriendRequest : public TSerializable {
         public:
             TFriendRequest() : direction(0), status(0), readStatus(0), timestamp(0) {}
@@ -414,7 +415,7 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
-        
+
         enum UserSettingScope {
             kUserSettingConversationSilent = 1,
             kUserSettingGlobalSilent = 2,
@@ -428,11 +429,11 @@ namespace mars{
             kUserSettingPCOnline = 10,
             kUserSettingConversationReaded = 11,
             kUserSettingWebOnline = 12,
-            
+
             kUserSettingCustomBegin = 1000
         };
 
-        
+
         class TUserSettingEntry : public TSerializable {
         public:
             TUserSettingEntry() : scope(kUserSettingCustomBegin), updateDt(0) {}
@@ -446,6 +447,33 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
+    
+        class TReadEntry : public TSerializable {
+                public:
+                    TReadEntry() : conversationType(0), line(0), readDt(0) {}
+                    std::string userId;
+                    int conversationType;
+                    std::string target;
+                    int line;
+                    int64_t readDt;
+                    virtual ~TReadEntry(){}
+        #if WFCHAT_PROTO_SERIALIZABLE
+                    virtual void Serialize(void *writer) const;
+                    virtual void Unserialize(const Value& value);
+        #endif //WFCHAT_PROTO_SERIALIZABLE
+        };
+    
+        class TDeliveryEntry : public TSerializable {
+        public:
+            TDeliveryEntry() : rcvdDt(0) {}
+            std::string userId;
+            int64_t rcvdDt;
+            virtual ~TDeliveryEntry(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+        };
         
         class GeneralStringCallback {
         public:
@@ -453,7 +481,7 @@ namespace mars{
             virtual void onFalure(int errorCode) = 0;
             virtual ~GeneralStringCallback() {}
         };
-        
+
         class UploadMediaCallback {
         public:
             virtual void onSuccess(std::string key) = 0;
@@ -461,7 +489,7 @@ namespace mars{
             virtual void onProgress(int current, int total) = 0;
             virtual ~UploadMediaCallback() {}
         };
-        
+
         class SendMsgCallback {
         public:
             virtual void onPrepared(long messageId, int64_t savedTime) = 0;
@@ -471,7 +499,7 @@ namespace mars{
             virtual void onProgress(int uploaded, int total) = 0;
             virtual ~SendMsgCallback() {}
         };
-        
+
         class UpdateMediaCallback {
         public:
             virtual void onSuccess(const std::string &remoteUrl) = 0;
@@ -479,93 +507,93 @@ namespace mars{
             virtual void onProgress(int current, int total) = 0;
             virtual ~UpdateMediaCallback() {}
         };
-        
-        
+
+
         class SearchUserCallback {
         public:
             virtual void onSuccess(const std::list<TUserInfo> &users, const std::string &keyword, int page) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~SearchUserCallback() {}
         };
-        
+
         class SearchChannelCallback {
         public:
             virtual void onSuccess(const std::list<TChannelInfo> &channels, const std::string &keyword) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~SearchChannelCallback() {}
         };
-        
+
         class CreateGroupCallback {
         public:
             virtual void onSuccess(std::string groupId) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~CreateGroupCallback() {}
         };
-        
+
         class CreateChannelCallback {
         public:
             virtual void onSuccess(const TChannelInfo &channelInfo) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~CreateChannelCallback() {}
         };
-        
+
         class GeneralOperationCallback {
         public:
             virtual void onSuccess() = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GeneralOperationCallback() {}
         };
-        
+
         class LoadRemoteMessagesCallback {
         public:
             virtual void onSuccess(const std::list<TMessage> &messageList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~LoadRemoteMessagesCallback() {}
         };
-        
+
         class GetChatroomInfoCallback {
         public:
             virtual void onSuccess(const TChatroomInfo &info) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetChatroomInfoCallback() {}
         };
-        
+
         class GetChatroomMemberInfoCallback {
         public:
             virtual void onSuccess(const TChatroomMemberInfo &info) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetChatroomMemberInfoCallback() {}
         };
-        
+
         class GetGroupInfoCallback {
         public:
             virtual void onSuccess(const std::list<mars::stn::TGroupInfo> &groupInfoList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetGroupInfoCallback() {}
         };
-        
+
         class GetGroupMembersCallback {
         public:
             virtual void onSuccess(const std::string &groupId, const std::list<mars::stn::TGroupMember> &groupMemberList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetGroupMembersCallback() {}
         };
-        
-        
+
+
         class GetChannelInfoCallback {
         public:
             virtual void onSuccess(const std::list<mars::stn::TChannelInfo> &channelInfoList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetChannelInfoCallback() {}
         };
-        
+
         class GetUserInfoCallback {
         public:
             virtual void onSuccess(const std::list<TUserInfo> &userInfoList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetUserInfoCallback() {}
         };
-        
+
         class GetMyFriendsCallback {
         public:
             virtual void onSuccess(std::list<std::string> friendIdList) = 0;
@@ -579,13 +607,26 @@ namespace mars{
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetFriendRequestCallback() {}
         };
-      
+
       class GetSettingCallback {
       public:
         virtual void onSuccess(bool hasNewRequest) = 0;
         virtual void onFalure(int errorCode) = 0;
         virtual ~GetSettingCallback() {}
       };
+    
+    class MessageDeliveredCallback {
+    public:
+      virtual void onUserReceivedMessage(const std::map<std::string, int64_t> &userReceived) = 0;
+      virtual ~MessageDeliveredCallback() {}
+    };
+    
+    class MessageReadedCallback {
+    public:
+      virtual void onUserReadedMessage(const std::list<TReadEntry> &userReceived) = 0;
+      virtual ~MessageReadedCallback() {}
+    };
+    
         enum ConnectionStatus {
             kConnectionStatusSecretKeyMismatch = -6,
             kConnectionStatusTokenIncorrect = -5,
@@ -597,98 +638,104 @@ namespace mars{
             kConnectionStatusConnected = 1,
             kConnectionStatusReceiving = 2
         };
-        
-        
-        
+
+
+
         class ConnectionStatusCallback {
         public:
             virtual void onConnectionStatusChanged(ConnectionStatus connectionStatus) = 0;
         };
-        
+
         class ReceiveMessageCallback {
         public:
             virtual void onReceiveMessage(const std::list<TMessage> &messageList, bool hasMore) = 0;
             virtual void onRecallMessage(const std::string operatorId, long long messageUid) = 0;
             virtual void onDeleteMessage(long long messageUid) = 0;
         };
-        
+
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
+    
+        extern void setMessageDeliveredCallback(MessageDeliveredCallback *callback);
+        extern void setMessageReadedCallback(MessageReadedCallback *callback);
+    
+    
+    
         extern void setDNSResult(std::vector<std::string> serverIPs);
         extern void setRefreshUserInfoCallback(GetUserInfoCallback *callback);
         extern void setRefreshGroupInfoCallback(GetGroupInfoCallback *callback);
         extern void setRefreshGroupMemberCallback(GetGroupMembersCallback *callback);
-        
+
         extern void setRefreshChannelInfoCallback(GetChannelInfoCallback *callback);
         extern void setRefreshFriendListCallback(GetMyFriendsCallback *callback);
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
         extern ConnectionStatus getConnectionStatus();
-        
+
         extern int64_t getServerDeltaTime();
         extern void setDeviceToken(const std::string &appName, const std::string &deviceToken, int pushType);
-        
+
         extern long (*sendMessage)(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
-    
+
         extern bool (*sendMessageEx)(long messageId, SendMsgCallback *callback, int expireDuration);
-        
-        
+
+
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
         //请使用loadRemoteConversationMessages
         extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
-    
+
         extern void loadRemoteConversationMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
-    
+
         extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
-        
+
         extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
-    
+
         extern void getAuthorizedMediaUrl(int mediaType, const std::string &mediaUrl, GeneralStringCallback *callback);
-        
+
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
-        
+
         extern int modifyUserSetting(int scope, const std::string &key, const std::string &value, GeneralOperationCallback *callback);
-        
+
         extern void searchUser(const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
         extern void sendFriendRequest(const std::string &userId, const std::string &reason, GeneralOperationCallback *callback);
-        
+
         extern void loadFriendRequestFromRemote();
         extern void loadFriendFromRemote();
         extern void handleFriendRequest(const std::string &userId, bool accept, const std::string &extra, GeneralOperationCallback *callback);
         extern void deleteFriend(const std::string &userId, GeneralOperationCallback *callback);
         extern void setFriendAlias(const std::string &userId, const std::string &alias, GeneralOperationCallback *callback);
-        
+
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
-        
+
         extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::list<std::string> &groupMembers, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
-        
+
         extern void (*addMembers)(const std::string &groupId, const std::list<std::string> &members, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*kickoffMembers)(const std::string &groupId, const std::list<std::string> &members, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*quitGroup)(const std::string &groupId, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*dismissGroup)(const std::string &groupId, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*getGroupInfo)(const std::list<std::pair<std::string, int64_t>> &groupIdList, GetGroupInfoCallback *callback);
-        
+
         extern void (*modifyGroupInfo)(const std::string &groupId, int type, const std::string &newValue, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*modifyGroupAlias)(const std::string &groupId, const std::string &newAlias, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*getGroupMembers)(const std::string &groupId, int64_t updateDt);
-        
+
         extern void (*transferGroup)(const std::string &groupId, const std::string &newOwner, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void SetGroupManager(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
-        
+
         extern void (*getUserInfo)(const std::list<std::pair<std::string, int64_t>> &userReqList, GetUserInfoCallback *callback);
-        
+
         extern void reloadGroupInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &groupReqList);
         extern void reloadUserInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &userReqList);
         extern void reloadGroupMembersFromRemote(const std::string &groupId, int64_t updateDt);
@@ -698,30 +745,38 @@ namespace mars{
         extern void quitChatroom(const std::string &chatroomId, GeneralOperationCallback *callback);
         extern void getChatroomInfo(const std::string &chatroomId, int64_t lastUpdateDt, GetChatroomInfoCallback *callback);
         extern void getChatroomMemberInfo(const std::string &chatroomId, int maxCount, GetChatroomMemberInfoCallback *callback);
-        
-        extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt);
-        
-        
+
+        extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt, const std::list<std::string> &senders = std::list<std::string>());
+
+
         extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
-        
+
         extern void modifyChannelInfo(const std::string &channelId, int type, const std::string &newValue, GeneralOperationCallback *callback);
-        
+
         extern void transferChannel(const std::string &channelId, const std::string &newOwner, GeneralOperationCallback *callback);
-        
+
         extern void destoryChannel(const std::string &channelId, GeneralOperationCallback *callback);
-        
-        
+
+
         extern void searchChannel(const std::string &keyword, bool puzzy, SearchChannelCallback *callback);
-        
+
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
-        
+
         extern std::string GetImageThumbPara();
-    
+
         extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
-    
+
         extern void KickoffPCClient(const std::string &pcClientId, GeneralOperationCallback *callback);
-    
+
         extern bool IsCommercialServer();
+
+        extern bool filesystem_exists(const std::string &path);
+		extern bool filesystem_create_directories(const std::string &path);
+        extern bool filesystem_copy_file(const std::string &source, const std::string &dest, bool overwrite);
+		extern bool filesystem_copy_files(const std::string &source, const std::string &dest);
+        extern bool filesystem_remove(const std::string &path);
+		extern void filesystem_copy_directory(const std::string &strSourceDir, const std::string &strDestDir);
+		
     }
 }
 
