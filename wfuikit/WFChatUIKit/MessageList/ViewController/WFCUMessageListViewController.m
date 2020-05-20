@@ -52,6 +52,10 @@
 
 #import "WFCUConfigManager.h"
 #import "WFCUSeletedUserViewController.h"
+
+#import "WFCUReceiptViewController.h"
+
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -1338,6 +1342,11 @@
 - (void)reeditRecalledMessage:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     WFCCRecallMessageContent *recall = (WFCCRecallMessageContent *)model.message.content;
     [self.chatInputBar appendText:recall.originalSearchableContent];
+}
+- (void)didTapReceiptView:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
+    WFCUReceiptViewController *receipt = [[WFCUReceiptViewController alloc] init];
+    receipt.message = model.message;
+    [self.navigationController pushViewController:receipt animated:YES];
 }
 #pragma mark - AVAudioPlayerDelegate
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {

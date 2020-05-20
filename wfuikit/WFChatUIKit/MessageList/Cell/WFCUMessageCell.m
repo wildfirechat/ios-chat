@@ -33,7 +33,7 @@
 @property (nonatomic, strong)UIImageView *failureView;
 @property (nonatomic, strong)UIImageView *maskView;
 
-@property (nonatomic, strong)ZCCCircleProgressView *progressView;
+@property (nonatomic, strong)ZCCCircleProgressView *receiptView;
 @end
 
 @implementation WFCUMessageCell
@@ -179,13 +179,13 @@
       if((model.message.status == Message_Status_Sent || model.message.status == Message_Status_Readed) && [[WFCCIMService sharedWFCIMService] isReceiptEnable]) {
           if (model.message.conversation.type == Single_Type) {
               if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
-                  [self.progressView setProgress:1 subProgress:1];
+                  [self.receiptView setProgress:1 subProgress:1];
               } else if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
-                  [self.progressView setProgress:0 subProgress:1];
+                  [self.receiptView setProgress:0 subProgress:1];
               } else {
-                  [self.progressView setProgress:0 subProgress:0];
+                  [self.receiptView setProgress:0 subProgress:0];
               }
-              self.progressView.hidden = NO;
+              self.receiptView.hidden = NO;
           } else if(model.message.conversation.type == Group_Type) {
               long long messageTS = model.message.serverTime;
               
@@ -221,17 +221,17 @@
                   model.deliveryRate = model.readRate;
               }
               
-              [self.progressView setProgress:model.readRate subProgress:model.deliveryRate];
-              self.progressView.hidden = NO;
+              [self.receiptView setProgress:model.readRate subProgress:model.deliveryRate];
+              self.receiptView.hidden = NO;
           } else {
-              self.progressView.hidden = YES;
+              self.receiptView.hidden = YES;
           }
       } else {
-          self.progressView.hidden = YES;
+          self.receiptView.hidden = YES;
       }
       
-      if (self.progressView.hidden == NO) {
-          self.progressView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
+      if (self.receiptView.hidden == NO) {
+          self.receiptView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
       }
   } else {
     CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
@@ -271,7 +271,7 @@
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, leftProtection,
                                                                                       image.size.height * 0.2, rightProtection)];
       
-      self.progressView.hidden = YES;
+      self.receiptView.hidden = YES;
   }
     
     NSString *groupId = nil;
@@ -306,6 +306,11 @@
     }
 }
 
+- (void)onTapReceiptView:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(didTapReceiptView:withModel:)] && self.model.message.conversation.type == Group_Type) {
+        [self.delegate didTapReceiptView:self withModel:self.model];
+    }
+}
 - (void)setMaskImage:(UIImage *)maskImage{
     if (_maskView == nil) {
         _maskView = [[UIImageView alloc] initWithImage:maskImage];
@@ -319,13 +324,15 @@
     }
 }
 
-- (ZCCCircleProgressView *)progressView {
-    if (!_progressView) {
-        _progressView = [[ZCCCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
-        _progressView.hidden = YES;
-        [self.contentView addSubview:_progressView];
+- (ZCCCircleProgressView *)receiptView {
+    if (!_receiptView) {
+        _receiptView = [[ZCCCircleProgressView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+        _receiptView.hidden = YES;
+        _receiptView.userInteractionEnabled = YES;
+        [_receiptView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapReceiptView:)]];
+        [self.contentView addSubview:_receiptView];
     }
-    return _progressView;
+    return _receiptView;
 }
 
 - (UIImageView *)portraitView {
