@@ -134,6 +134,7 @@
 		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
 		2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		2E1D1FF71FAF0AE600F4405D /* WildFireChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildFireChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E1D1FF71FAF0AE600F4405D /* 野火通.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火通.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2E1D20011FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
