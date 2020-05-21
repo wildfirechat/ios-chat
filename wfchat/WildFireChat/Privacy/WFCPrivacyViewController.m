@@ -8,6 +8,7 @@
 
 #import "WFCPrivacyViewController.h"
 #import <WebKit/WebKit.h>
+#import "WFCConfig.h"
 
 @interface WFCPrivacyViewController ()
 @property(nonatomic, strong)WKWebView *webview;
@@ -22,10 +23,11 @@
     
     NSString *path;
     if (self.isPrivacy) {
-        path = @"http://www.wildfirechat.cn/firechat_user_privacy.html";
+        path = USER_PRIVACY_URL;
     } else {
-        path = @"http://www.wildfirechat.cn/firechat_user_agreement.html";
+        path = USER_AGREEMENT_URL;
     }
+    
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:path]]];
     
     
