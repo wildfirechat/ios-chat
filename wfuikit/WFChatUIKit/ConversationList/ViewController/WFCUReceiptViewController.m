@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
     if (self.message.conversation.type != Group_Type) {
         [self.navigationController popViewControllerAnimated:YES];
         return;
@@ -37,13 +38,13 @@
     
     int64_t sendTime = self.message.serverTime;
     [self.deliveryDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([obj longLongValue] > sendTime) {
+        if ([obj longLongValue] >= sendTime) {
             [self.deliveredUserIds addObject:key];
         }
     }];
     
     [self.readDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([obj longLongValue] > sendTime) {
+        if ([obj longLongValue] >= sendTime) {
             [self.readedUserIds addObject:key];
         }
     }];
@@ -57,10 +58,14 @@
             [self.unDeliveredUserIds addObject:member.memberId];
         }
         
-        if (![self.unReadedUserIds containsObject:member.memberId]) {
+        if (![self.readedUserIds containsObject:member.memberId]) {
             [self.unReadedUserIds addObject:member.memberId];
         }
     }
+    [self.deliveredUserIds removeObject:self.message.fromUser];
+    [self.unDeliveredUserIds removeObject:self.message.fromUser];
+    [self.readedUserIds removeObject:self.message.fromUser];
+    [self.unReadedUserIds removeObject:self.message.fromUser];
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.view.bounds];
     label.numberOfLines = 0;
