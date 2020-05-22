@@ -33,7 +33,8 @@ namespace mars {
             bool DeleteMessageByUid(int64_t messageUid);
             
             bool UpdateMessageTimeline(int64_t timeline, const std::string &node);
-            int64_t GetMessageTimeline(std::string &node);
+            bool UpdateRecvAndReadTimeline(int64_t timeline, bool isRead);
+            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead);
             int64_t GetSettingVersion();
             bool UpdateUserSettings(std::list<TUserSettingEntry> &settings);
             std::string GetUserSetting(int scope, const std::string &key);
@@ -74,6 +75,7 @@ namespace mars {
             TUnreadCount GetUnreadCount(int conversationType, const std::string &target, int line);
             
             TUnreadCount GetUnreadCount(const std::list<int> &conversationTypes, const std::list<int> lines);
+            std::list<std::string> GetUnreadMsgSender(int conversationType, const std::string &target, int line);
             bool ClearUnreadStatus(int conversationType, const std::string &target, int line);
             bool ClearUnreadStatus(const std::list<int> &conversationTypes, const std::list<int> lines);
             bool ClearAllUnreadStatus();
@@ -99,6 +101,7 @@ namespace mars {
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
             void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members);
+            int UpdateGroupManager(const std::string &groupId, const std::list<std::string> &members, int setOrDelete);
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
@@ -120,6 +123,8 @@ namespace mars {
             std::list<TFriendRequest> getFriendRequest(int direction);
             
             long InsertFriendOrReplace(const std::string &friendUid, int state, int blacked, int64_t timestamp, const std::string &alias, const std::string &extra);
+            long UpdateFriendAlias(const std::string &friendUid, const std::string &alias);
+            long UpdateBlacklist(const std::string &friendUid, int blacked);
             
             bool DeleteFriend(const std::string &friendUid);
             
@@ -137,6 +142,13 @@ namespace mars {
             void CommitTransaction();
             friend class LoadRemoteMessagesPublishCallback;
             std::list<TConversation> GetConversationListOld(const std::list<int> &conversationTypes, const std::list<int> &lines);
+            
+            long InsertRead(const TReadEntry &entry);
+            long InsertDelivery(const TDeliveryEntry &entry);
+            
+            std::map<std::string, int64_t> GetConversationRead(int conversationType, const std::string &target, int line);
+            std::map<std::string, int64_t> GetDelivery(int conversationType, const std::string &target);
+            int64_t GetDelivery(std::string userId);
         private:
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
