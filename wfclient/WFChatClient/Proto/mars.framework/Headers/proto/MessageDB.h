@@ -15,6 +15,7 @@ namespace mars {
     namespace stn {
         class UpdateConversationData;
         class LoadRemoteMessagesPublishCallback;
+        class SyncReadEntry;
         class MessageDB {
             
         private:
@@ -41,6 +42,7 @@ namespace mars {
             std::map<std::string, std::string> GetUserSettings(int scope);
             
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall);
+            bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp);
             bool updateConversationIsTop(int conversationType, const std::string &target, int line, bool istop);
             bool updateConversationIsSilent(int conversationType, const std::string &target, int line, bool issilent);
             bool updateConversationDraft(int conversationType, const std::string &target, int line, const std::string &draft);
@@ -149,6 +151,10 @@ namespace mars {
             std::map<std::string, int64_t> GetConversationRead(int conversationType, const std::string &target, int line);
             std::map<std::string, int64_t> GetDelivery(int conversationType, const std::string &target);
             int64_t GetDelivery(std::string userId);
+            
+            long saveConversationSync(int conversatinType, const std::string &target, int line, int64_t readedDt, const std::list<std::string> &senders);
+            SyncReadEntry loadConversationSync();
+            bool deleteConvSync(long _id);
         private:
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
