@@ -878,7 +878,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (void)setConversation:(WFCCConversation *)conversation draft:(NSString *)draft {
-    mars::stn::MessageDB::Instance()->updateConversationDraft(conversation.type, [conversation.target UTF8String], conversation.line, draft ? [draft UTF8String] : "");
+    mars::stn::MessageDB::Instance()->updateConversationDraft((int)conversation.type, [conversation.target UTF8String], conversation.line, draft ? [draft UTF8String] : "");
+}
+
+- (void)setConversation:(WFCCConversation *)conversation
+              timestamp:(long long)timestamp {
+    mars::stn::MessageDB::Instance()->updateConversationTimestamp((int)conversation.type, [conversation.target UTF8String], conversation.line, timestamp);
 }
 
 class IMSearchUserCallback : public mars::stn::SearchUserCallback {
