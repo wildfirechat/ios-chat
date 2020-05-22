@@ -92,7 +92,7 @@ public:
         }
     }
     
-    void onRecallMessage(const std::string operatorId, long long messageUid) {
+    void onRecallMessage(const std::string &operatorId, long long messageUid) {
         if (m_delegate) {
             [m_delegate onRecallMessage:messageUid];
         }

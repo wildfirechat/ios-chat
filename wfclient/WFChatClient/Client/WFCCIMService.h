@@ -250,6 +250,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)setConversation:(WFCCConversation *)conversation
                   draft:(NSString *)draft;
 
+/**
+ 更新会话的时间
+ 
+ @param conversation 会话
+ @param timestamp 时间戳
+ */
+- (void)setConversation:(WFCCConversation *)conversation
+              timestamp:(long long)timestamp;
+
 #pragma mark - 未读数相关
 /**
  获取指定类型会话的未读数
