@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCCMessage.h"
+#import "WFCCReadReport.h"
+#import "WFCCDeliveryReport.h"
 
 extern const NSString *SDKVERSION;
 #pragma mark - 通知定义
@@ -99,6 +101,19 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @optional
 - (void)onRecallMessage:(long long)messageUid;
 - (void)onDeleteMessage:(long long)messageUid;
+
+/**
+消息已送达到目标用户的回调
+
+@param delivereds 送达报告
+*/
+
+- (void)onMessageDelivered:(NSArray<WFCCDeliveryReport *> *)delivereds;
+
+/**
+消息已读的监听
+*/
+- (void)onMessageReaded:(NSArray<WFCCReadReport *> *)readeds;
 @end
 
 /**

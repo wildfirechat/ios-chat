@@ -18,4 +18,10 @@
 @property (nonatomic, assign)int mediaDownloadProgress;
 @property (nonatomic, assign)BOOL voicePlaying;
 @property (nonatomic, assign)BOOL highlighted;
+
+@property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *deliveryDict;
+@property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *readDict;
+
+@property (nonatomic, assign)float deliveryRate;
+@property (nonatomic, assign)float readRate;
 @end

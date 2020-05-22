@@ -22,6 +22,8 @@ NSString *kConnectionStatusChanged = @"kConnectionStatusChanged";
 NSString *kReceiveMessages = @"kReceiveMessages";
 NSString *kRecallMessages = @"kRecallMessages";
 NSString *kDeleteMessages = @"kDeleteMessages";
+NSString *kMessageDelivered = @"kMessageDelivered";
+NSString *kMessageReaded = @"kMessageReaded";
 
 class IMSendMessageCallback : public mars::stn::SendMsgCallback {
 private:
@@ -463,6 +465,28 @@ NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &me
     return messages;
 }
 
+NSMutableArray* convertProtoDeliveryList(const std::map<std::string, int64_t> &userReceived) {
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    for(std::map<std::string, int64_t>::const_iterator it = userReceived.begin(); it != userReceived.end(); ++it) {
+        [messages addObject:[WFCCDeliveryReport delivered:[NSString stringWithUTF8String:it->first.c_str()] timestamp:it->second]];
+    }
+    
+    return messages;
+}
+
+NSMutableArray* convertProtoReadedList(const std::list<mars::stn::TReadEntry> &userReceived) {
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    for(std::list<mars::stn::TReadEntry>::const_iterator it = userReceived.begin(); it != userReceived.end(); ++it) {
+        [messages addObject:[WFCCReadReport readed:[WFCCConversation conversationWithType:(WFCCConversationType)it->conversationType target:[NSString stringWithUTF8String:it->target.c_str()] line:it->line] userId:[NSString stringWithUTF8String:it->userId.c_str()] timestamp:it->readDt]];
+    }
+    
+    return messages;
+}
+
+
+
 static WFCCConversationInfo* convertConversationInfo(const mars::stn::TConversation &tConv) {
     WFCCConversationInfo *info = [[WFCCConversationInfo alloc] init];
     info.conversation = [[WFCCConversation alloc] init];
@@ -795,6 +819,33 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
     
     mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, mars::stn::Message_Status_Played);
+}
+
+
+- (NSMutableDictionary<NSString *, NSNumber *> *)getConversationRead:(WFCCConversation *)conversation {
+    std::map<std::string, int64_t> reads = mars::stn::MessageDB::Instance()->GetConversationRead((int)conversation.type, [conversation.target UTF8String], conversation.line);
+    NSMutableDictionary *ret = [[NSMutableDictionary alloc] init];
+    
+    for (std::map<std::string, int64_t>::iterator it = reads.begin(); it != reads.end(); ++it) {
+        [ret setValue:@(it->second) forKey:[NSString stringWithUTF8String:it->first.c_str()]];
+    }
+    
+    return ret;
+}
+
+- (NSMutableDictionary<NSString *, NSNumber *> *)getMessageDelivery:(WFCCConversation *)conversation {
+    std::map<std::string, int64_t> reads = mars::stn::MessageDB::Instance()->GetDelivery((int)conversation.type, [conversation.target UTF8String]);
+    NSMutableDictionary *ret = [[NSMutableDictionary alloc] init];
+    
+    for (std::map<std::string, int64_t>::iterator it = reads.begin(); it != reads.end(); ++it) {
+        [ret setValue:@(it->second) forKey:[NSString stringWithUTF8String:it->first.c_str()]];
+    }
+    
+    return ret;
+}
+
+- (long long)getMessageDeliveryByUser:(NSString *)userId {
+    return mars::stn::MessageDB::Instance()->GetDelivery([userId UTF8String]);
 }
 
 - (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
@@ -1830,5 +1881,9 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (BOOL)isCommercialServer {
     return mars::stn::IsCommercialServer() == true;
+}
+
+- (BOOL)isReceiptEnable {
+    return mars::stn::IsReceiptEnabled() == true;
 }
 @end
