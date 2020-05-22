@@ -26,6 +26,8 @@
 
 const NSString *SDKVERSION = @"0.1";
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
+extern NSMutableArray* convertProtoDeliveryList(const std::map<std::string, int64_t> &userReceived);
+extern NSMutableArray* convertProtoReadedList(const std::list<mars::stn::TReadEntry> &userReceived);
 
 NSString *kGroupInfoUpdated = @"kGroupInfoUpdated";
 NSString *kGroupMemberUpdated = @"kGroupMemberUpdated";
@@ -101,6 +103,21 @@ public:
             [m_delegate onDeleteMessage:messageUid];
         }
     }
+    
+    void onUserReceivedMessage(const std::map<std::string, int64_t> &userReceived) {
+        if (m_delegate && !userReceived.empty()) {
+            NSMutableArray *ds = convertProtoDeliveryList(userReceived);
+            [m_delegate onMessageDelivered:ds];
+        }
+    }
+    
+    void onUserReadedMessage(const std::list<mars::stn::TReadEntry> &userReceived) {
+        if (m_delegate && !userReceived.empty()) {
+            NSMutableArray *ds = convertProtoReadedList(userReceived);
+            [m_delegate onMessageReaded:ds];
+        }
+    }
+    
     id<ReceiveMessageDelegate> m_delegate;
 };
 
@@ -376,6 +393,27 @@ static WFCCNetworkService * sharedSingleton = nil;
         [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messageList];
         [self.receiveMessageDelegate onReceiveMessage:messageList hasMore:hasMore];
     });
+}
+
+- (void)onMessageReaded:(NSArray<WFCCReadReport *> *)readeds {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageReaded object:readeds];
+        
+        if ([self.receiveMessageDelegate respondsToSelector:@selector(onMessageReaded:)]) {
+            [self.receiveMessageDelegate onMessageReaded:readeds];
+        }
+    });
+}
+
+- (void)onMessageDelivered:(NSArray<WFCCDeliveryReport *> *)delivereds {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageDelivered object:delivereds];
+        
+        if ([self.receiveMessageDelegate respondsToSelector:@selector(onMessageDelivered:)]) {
+            [self.receiveMessageDelegate onMessageDelivered:delivereds];
+        }
+    });
+    
 }
 
 - (void)addReceiveMessageFilter:(id<ReceiveMessageFilter>)filter {
@@ -819,6 +857,7 @@ static WFCCNetworkService * sharedSingleton = nil;
         mars::baseevent::OnNetworkChange();
     }
 }
+
 
 @end
 
