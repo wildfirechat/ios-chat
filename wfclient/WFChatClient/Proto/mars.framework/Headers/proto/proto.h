@@ -638,7 +638,7 @@ namespace mars{
         class ReceiveMessageCallback {
         public:
             virtual void onReceiveMessage(const std::list<TMessage> &messageList, bool hasMore) = 0;
-            virtual void onRecallMessage(const std::string operatorId, long long messageUid) = 0;
+            virtual void onRecallMessage(const std::string &operatorId, long long messageUid) = 0;
             virtual void onDeleteMessage(long long messageUid) = 0;
             virtual void onUserReceivedMessage(const std::map<std::string, int64_t> &userReceived) = 0;
             virtual void onUserReadedMessage(const std::list<TReadEntry> &userReceived) = 0;
@@ -732,7 +732,7 @@ namespace mars{
         extern void getChatroomInfo(const std::string &chatroomId, int64_t lastUpdateDt, GetChatroomInfoCallback *callback);
         extern void getChatroomMemberInfo(const std::string &chatroomId, int maxCount, GetChatroomMemberInfoCallback *callback);
 
-        extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt, const std::list<std::string> &senders = std::list<std::string>());
+        extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt, const std::list<std::string> &senders = std::list<std::string>(), long syncId = -1);
 
 
         extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
@@ -755,14 +755,15 @@ namespace mars{
         extern void KickoffPCClient(const std::string &pcClientId, GeneralOperationCallback *callback);
 
         extern bool IsCommercialServer();
+        extern bool IsReceiptEnabled();
 
         extern bool filesystem_exists(const std::string &path);
-        extern bool filesystem_create_directories(const std::string &path);
+		extern bool filesystem_create_directories(const std::string &path);
         extern bool filesystem_copy_file(const std::string &source, const std::string &dest, bool overwrite);
-        extern bool filesystem_copy_files(const std::string &source, const std::string &dest);
+		extern bool filesystem_copy_files(const std::string &source, const std::string &dest);
         extern bool filesystem_remove(const std::string &path);
-        extern void filesystem_copy_directory(const std::string &strSourceDir, const std::string &strDestDir);
-        
+		extern void filesystem_copy_directory(const std::string &strSourceDir, const std::string &strDestDir);
+		
     }
 }
 
