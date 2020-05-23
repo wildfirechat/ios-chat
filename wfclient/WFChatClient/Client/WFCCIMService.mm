@@ -1888,7 +1888,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return mars::stn::IsCommercialServer() == true;
 }
 
-- (BOOL)isReceiptEnable {
+- (BOOL)isReceiptEnabled {
     return mars::stn::IsReceiptEnabled() == true;
 }
 @end
