@@ -67,6 +67,7 @@
 "VoiceCall"="语音通话";
 "VideoCall"="视频通话";
 "Blacklist"="黑名单";
+"MsgReceipt"="消息回执";
 "Delete"="删除";
 "SearchContact"="搜索联系人";
 "NumberOfContacts"="%d 位联系人";

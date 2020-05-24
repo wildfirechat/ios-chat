@@ -1,5 +1,5 @@
 //
-//  ManagerTableViewController.h
+//  GroupMuteTableViewController.h
 //  WFChatUIKit
 //
 //  Created by heavyrain lee on 2019/6/26.

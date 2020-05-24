@@ -106,6 +106,12 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_PC_Online = 10,
+    //不能直接使用，协议栈内会使用此值
+    UserSetting_Conversation_Readed = 11,
+    //不能直接使用，协议栈内会使用此值
+    UserSetting_WebOnline = 12,
+    //不能直接使用，协议栈内会使用此值
+    UserSetting_DisableRecipt = 13,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -1005,7 +1011,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
  @param groupId 群ID
  @param isSet    设置或取消
- @param memberId    成员ID
+ @param memberIds    成员ID
  @param notifyLines 默认传 @[@(0)]
  @param notifyContent 通知消息
  @param successBlock 成功的回调
@@ -1013,11 +1019,30 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  */
 - (void)setGroupManager:(NSString *)groupId
                   isSet:(BOOL)isSet
-              memberIds:(NSArray<NSString *> *)memberId
+              memberIds:(NSArray<NSString *> *)memberIds
             notifyLines:(NSArray<NSNumber *> *)notifyLines
           notifyContent:(WFCCMessageContent *)notifyContent
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+ 设置群成员禁言，仅专业版支持
+ 
+ @param groupId 群ID
+ @param isSet    设置或取消
+ @param memberIds    成员ID
+ @param notifyLines 默认传 @[@(0)]
+ @param notifyContent 通知消息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)muteGroupMember:(NSString *)groupId
+                     isSet:(BOOL)isSet
+                 memberIds:(NSArray<NSString *> *)memberIds
+               notifyLines:(NSArray<NSNumber *> *)notifyLines
+             notifyContent:(WFCCMessageContent *)notifyContent
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock;
 /**
  获取当前用户收藏的群组
  
@@ -1089,20 +1114,78 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 
 
+/**
+是否全局静音
 
+@return YES，当前用户全局静音；NO，没有全局静音
+*/
 - (BOOL)isGlobalSlient;
+
+/**
+修改全局静音状态
+
+@param slient 是否静音
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
 - (void)setGlobalSlient:(BOOL)slient
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+是否隐藏推送详情
+
+@return YES，隐藏推送详情，提示“您收到一条消息”；NO，推送显示消息摘要
+*/
 - (BOOL)isHiddenNotificationDetail;
+
+/**
+修改全局静音状态
+
+@param hidden 是否静音
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
 - (void)setHiddenNotificationDetail:(BOOL)hidden
                             success:(void(^)(void))successBlock
                               error:(void(^)(int error_code))errorBlock;
+
+/**
+是否隐藏群组会话中群成员昵称显示
+
+@return YES，群组会话中不显示群成员昵称；NO，显示
+*/
 - (BOOL)isHiddenGroupMemberName:(NSString *)groupId;
+
+/**
+修改隐藏群组会话中群成员昵称显示状态
+
+@param hidden 是否隐藏
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
 - (void)setHiddenGroupMemberName:(BOOL)hidden
                            group:(NSString *)groupId
                          success:(void(^)(void))successBlock
                            error:(void(^)(int error_code))errorBlock;
+/**
+当前用户是否启用消息回执功能，仅专业版有效
+
+@return YES，开启消息回执功能；NO，关闭个人的消息回执功能。
+@disscussion 仅当服务器开启这个功能才有效
+*/
+- (BOOL)isUserEnableReceipt;
+/**
+修改当前用户是否启用消息回执功能，仅专业版有效
+
+@param enable 是否开启
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+ @disscussion 仅当服务器开启这个功能才有效
+*/
+- (void)setUserEnableReceipt:(BOOL)enable
+                success:(void(^)(void))successBlock
+                       error:(void(^)(int error_code))errorBlock;
 
 #pragma mark - 聊天室相关
 - (void)joinChatroom:(NSString *)chatroomId
