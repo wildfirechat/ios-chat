@@ -67,6 +67,7 @@
 "VoiceCall"="Voice call";
 "VideoCall"="Video call";
 "Blacklist"="Black list";
+"MsgReceipt"="Message receipt";
 "Delete"="Delete";
 "SearchContact"="Search contact";
 "NumberOfContacts"="%d contact(s)";

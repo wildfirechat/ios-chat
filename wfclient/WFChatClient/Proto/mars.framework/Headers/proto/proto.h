@@ -40,6 +40,7 @@
 #define MESSAGE_CONTENT_TYPE_CHANGE_PRIVATECHAT 115
 #define MESSAGE_CONTENT_TYPE_CHANGE_SEARCHABLE 116
 #define MESSAGE_CONTENT_TYPE_SET_MANAGER 117
+#define MESSAGE_CONTENT_TYPE_MUTE_MEMBER 118
 
 
 
@@ -429,6 +430,7 @@ namespace mars{
             kUserSettingPCOnline = 10,
             kUserSettingConversationReaded = 11,
             kUserSettingWebOnline = 12,
+            kUserSettingDisableRecipt = 13,
 
             kUserSettingCustomBegin = 1000
         };
@@ -719,6 +721,8 @@ namespace mars{
         extern void (*transferGroup)(const std::string &groupId, const std::string &newOwner, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void SetGroupManager(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+    
+        extern void MuteGroupMember(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void (*getUserInfo)(const std::list<std::pair<std::string, int64_t>> &userReqList, GetUserInfoCallback *callback);
 

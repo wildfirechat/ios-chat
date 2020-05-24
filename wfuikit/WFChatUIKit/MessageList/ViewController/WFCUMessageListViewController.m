@@ -158,6 +158,13 @@
             }
         }];
         
+        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([ws.conversation.target isEqualToString:note.object]) {
+                ws.targetGroup = ws.targetGroup;
+            }
+            
+        }];
+        
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     } else if(self.conversation.type == Channel_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -407,7 +414,8 @@
         self.navigationItem.backBarButtonItem.title = targetGroup.name;
     }
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
-    if (targetGroup.mute) {
+    WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
+    if (targetGroup.mute || member.type == Member_Type_Muted) {
         if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             self.chatInputBar.inputBarStatus =  defaultStatus;
         } else {
