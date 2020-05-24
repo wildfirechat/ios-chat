@@ -54,3 +54,5 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/UITabBar+badge.h>
 
 #import <WFChatUIKit/WFCUFavChannelTableViewController.h>
+#import <WFChatUIKit/WFCUGeneralModifyViewController.h>
+
