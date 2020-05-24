@@ -283,7 +283,13 @@ static AppService *sharedSingleton = nil;
     NSDictionary *param = @{@"deviceId":deviceId, @"owners":owners, @"extra":dataStr};
     [self post:path data:param success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock(nil);
+            Device *device = [[Device alloc] init];
+            device.deviceId = dict[@"deviceId"];
+            device.name = name;
+            device.token = dict[@"token"];
+            device.secret = dict[@"secret"];
+            device.owners = owners;
+            successBlock(device);
         } else {
             errorBlock([dict[@"code"] intValue]);
         }
@@ -324,6 +330,22 @@ static AppService *sharedSingleton = nil;
             } else {
                 errorBlock(-1);
             }
+        } else {
+            errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1);
+    }];
+}
+
+- (void)delDevice:(NSString *)deviceId
+          success:(void(^)(Device *device))successBlock
+            error:(void(^)(int error_code))errorBlock {
+    NSString *path = @"/things/del_device";
+    NSDictionary *param = @{@"deviceId":deviceId};
+    [self post:path data:param success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            successBlock(nil);
         } else {
             errorBlock([dict[@"code"] intValue]);
         }

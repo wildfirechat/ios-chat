@@ -36,6 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getMyDevices:(void(^)(NSArray<Device *> *devices))successBlock
                error:(void(^)(int error_code))errorBlock;
+
+- (void)delDevice:(NSString *)deviceId
+          success:(void(^)(Device *device))successBlock
+            error:(void(^)(int error_code))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
