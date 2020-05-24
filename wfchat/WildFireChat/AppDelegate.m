@@ -241,7 +241,8 @@
             [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:YES];
         } else if (status == kConnectionStatusLogout) {
             UIViewController *loginVC = [[WFCLoginViewController alloc] init];
-            self.window.rootViewController = loginVC;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            self.window.rootViewController = nav;
         } 
     });
 }
