@@ -104,6 +104,7 @@ namespace mars {
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
             void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members);
             int UpdateGroupManager(const std::string &groupId, const std::list<std::string> &members, int setOrDelete);
+            int UpdateGroupMemberMute(const std::string &groupId, const std::list<std::string> &members, int setOrDelete);
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);

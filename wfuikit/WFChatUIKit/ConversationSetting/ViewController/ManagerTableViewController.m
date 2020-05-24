@@ -98,11 +98,11 @@
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[owner.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         cell.textLabel.text = owner.displayName;
     } else if(indexPath.section == 1) {
-        if (indexPath.row == self.managerList.count) {
+        if (indexPath.row == 0) {
             cell.imageView.image = [UIImage imageNamed:@"plus"];
             cell.textLabel.text = WFCString(@"AddManager");
         } else {
-            WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row].memberId  refresh:NO];
+            WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
             [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[manager.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             cell.textLabel.text = manager.displayName;
         }
@@ -113,7 +113,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 || (indexPath.section == 1 && indexPath.row == self.managerList.count)) {
+    if (indexPath.section == 0 || (indexPath.section == 1 && indexPath.row == 0)) {
         return NO;
     }
     return YES;
@@ -122,9 +122,9 @@
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:WFCString(@"RemoveManager") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
 
         __weak typeof(self)ws = self;
-        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
+        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
             for (WFCCGroupMember *member in ws.managerList) {
-                if ([member.memberId isEqualToString:[ws.managerList objectAtIndex:indexPath.row].memberId]) {
+                if ([member.memberId isEqualToString:[ws.managerList objectAtIndex:indexPath.row-1].memberId]) {
                     [ws.managerList removeObject:member];
                     [ws.tableView reloadData];
                     break;
@@ -172,7 +172,7 @@
     if (indexPath.section == 0) {
         
     } else if(indexPath.section == 1) {
-        if (indexPath.row == self.managerList.count) {
+        if (indexPath.row == 0) {
             [self selectMemberToAdd];
         } else {
             

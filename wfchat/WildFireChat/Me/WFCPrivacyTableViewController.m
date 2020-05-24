@@ -44,7 +44,7 @@
     if (indexPath.section == 0) {
         WFCUBlackListViewController *vc = [[WFCUBlackListViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    } else if(indexPath.section == 1) {
+    } else if(indexPath.section == 2) {
         UIViewController *vc = [[NSClassFromString(@"MomentSettingsTableViewController") alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -57,9 +57,9 @@
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (NSClassFromString(@"MomentSettingsTableViewController")) {
-        return 2;
+        return 3;
     }
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -67,28 +67,51 @@
         return 1;
     } else if(section == 1) {
         return 1;
+    } else if(section == 2) {
+       return 1;
     }
+    
     return 0;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
-    }
-    
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.accessoryView = nil;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if (indexPath.section == 0) {
-        cell.textLabel.text = LocalizedString(@"Blacklist");
+    if (indexPath.section == 0 || indexPath.section == 2) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
+        }
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if(indexPath.section == 2) {
+            cell.textLabel.text = LocalizedString(@"Moments");
+        } else {
+            cell.textLabel.text = LocalizedString(@"Blacklist");
+        }
+        return cell;;
     } else if(indexPath.section == 1) {
-        cell.textLabel.text = LocalizedString(@"Moments");
+        WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
+        switchCell.textLabel.text = LocalizedString(@"MsgReceipt");
+        if ([[WFCCIMService sharedWFCIMService] isUserEnableReceipt]) {
+            switchCell.on = YES;
+        } else {
+            switchCell.on = NO;
+        }
+        __weak typeof(self)ws = self;
+        [switchCell setOnSwitch:^(BOOL value, void (^result)(BOOL success)) {
+            [[WFCCIMService sharedWFCIMService] setUserEnableReceipt:value success:^{
+                result(YES);
+            } error:^(int error_code) {
+                [ws.view makeToast:@"网络错误"];
+                result(NO);
+            }];
+        }];
+        
+        return switchCell;
     }
-    
-    return cell;
+    return nil;
 }
 
 @end
