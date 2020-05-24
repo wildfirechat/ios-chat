@@ -149,12 +149,12 @@ alpha:1.0]
     
     self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 28 - kTabbarSafeBottomMargin, self.view.bounds.size.width-32, 28)];
     self.privacyLabel.textAlignment = NSTextAlignmentCenter;
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"登录即代表你已同意《野火IM用户协议》和《野火IM隐私政策》" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"登录即代表你已同意《野火通用户协议》和《野火通隐私政策》" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
                                                                                                                      NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
     [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
-                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(9, 10)];
+                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(9, 9)];
     [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
-                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(20, 10)];
+                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(19, 9)];
     self.privacyLabel.attributedText = text ;
     __weak typeof(self)ws = self;
     [self.privacyLabel yb_addAttributeTapActionWithRanges:@[NSStringFromRange(NSMakeRange(9, 8)), NSStringFromRange(NSMakeRange(18, 8))] tapClicked:^(UILabel *label, NSString *string, NSRange range, NSInteger index) {
