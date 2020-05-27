@@ -291,6 +291,12 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  */
 - (void)clearUnreadStatus:(WFCCConversation *)conversation;
 
+/**
+清空会话未读数
+
+@param conversationTypes 会话类型
+@param lines 线路
+*/
 - (void)clearUnreadStatus:(NSArray<NSNumber *> *)conversationTypes
                               lines:(NSArray<NSNumber *> *)lines;
 
@@ -301,12 +307,26 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 /**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
+ 
+ @param messageId 消息ID
  */
 - (void)setMediaMessagePlayed:(long)messageId;
 
+/**
+获取会话内已读状态
+
+@param conversation 会话
+@return 会话的每个用户的已读时间
+*/
 - (NSMutableDictionary<NSString *, NSNumber *> *)getConversationRead:(WFCCConversation *)conversation;
+
+/**
+获取会话内已送达状态
+
+@param conversation 会话
+@return 会话的每个用户的已送达时间
+*/
 - (NSMutableDictionary<NSString *, NSNumber *> *)getMessageDelivery:(WFCCConversation *)conversation;
-- (long long)getMessageDeliveryByUser:(NSString *)userId;
 
 #pragma mark - 消息相关
 /**
@@ -568,7 +588,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param messageId 消息ID
  @return 是否删除成功
  */
-- (void)deleteMessage:(long)messageId;
+- (BOOL)deleteMessage:(long)messageId;
 
 /**
  删除会话中的消息
