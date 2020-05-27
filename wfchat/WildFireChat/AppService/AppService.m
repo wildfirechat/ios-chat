@@ -263,6 +263,24 @@ static AppService *sharedSingleton = nil;
     
 }
 
+- (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/change_name" data:@{@"newName":newName} success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            successBlock();
+        } else {
+            NSString *errmsg;
+            if ([dict[@"code"] intValue] == 17) {
+                errmsg = @"用户名已经存在";
+            } else {
+                errmsg = @"网络错误";
+            }
+            errorBlock([dict[@"code"] intValue], errmsg);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo {
     PCSessionViewController *vc = [[PCSessionViewController alloc] init];
     vc.pcClientInfo = clientInfo;

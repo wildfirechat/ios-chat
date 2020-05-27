@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showPCSessionViewController:(UIViewController *)baseController
                           pcClient:(WFCCPCOnlineInfo *)clientInfo;
+
+- (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

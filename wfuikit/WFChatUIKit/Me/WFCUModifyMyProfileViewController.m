@@ -11,7 +11,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUConfigManager.h"
 
-@interface WFCUModifyMyProfileViewController () <UITextFieldDelegate, UITextInputDelegate>
+@interface WFCUModifyMyProfileViewController () <UITextFieldDelegate>
 @property(nonatomic, strong)UITextField *textField;
 @end
 
@@ -55,6 +55,10 @@
             title = WFCString(@"ModifyNickname");
             defaultValue = userInfo.displayName;
             break;
+        case 100:
+            title = @"修改账户名";
+            defaultValue = userInfo.name;
+            break;
         default:
             break;
     }
@@ -77,19 +81,36 @@
     hud.label.text = WFCString(@"Updating");
     [hud showAnimated:YES];
     
-    [[WFCCIMService sharedWFCIMService] modifyMyInfo:@{@(self.modifyType):self.textField.text} success:^{
-        [hud hideAnimated:NO];
-        self.onModified(self.modifyType, self.textField.text);
-        [ws.navigationController popViewControllerAnimated:YES];
-    } error:^(int error_code) {
-        [hud hideAnimated:NO];
-        
-        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.label.text = WFCString(@"UpdateFailure");
-        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-        [hud hideAnimated:YES afterDelay:1.f];
-    }];
+    if (self.modifyType == 100) {
+        [[WFCUConfigManager globalManager].appServiceProvider changeName:self.textField.text success:^{
+            [hud hideAnimated:NO];
+            self.onModified(self.modifyType, self.textField.text);
+            [ws.navigationController popViewControllerAnimated:YES];
+        } error:^(int errorCode, NSString * _Nonnull message) {
+            [hud hideAnimated:NO];
+            
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = message;
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+        }];
+    } else {
+        [[WFCCIMService sharedWFCIMService] modifyMyInfo:@{@(self.modifyType):self.textField.text} success:^{
+            [hud hideAnimated:NO];
+            self.onModified(self.modifyType, self.textField.text);
+            [ws.navigationController popViewControllerAnimated:YES];
+        } error:^(int error_code) {
+            [hud hideAnimated:NO];
+            
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = WFCString(@"UpdateFailure");
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+        }];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -103,20 +124,13 @@
         _textField.borderStyle = UITextBorderStyleRoundedRect;
         _textField.clearButtonMode = UITextFieldViewModeAlways;
         _textField.delegate = self;
-        _textField.inputDelegate = self;
+        [_textField addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_textField];
     }
     return _textField;
 }
 
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self onDone:textField];
-    return YES;
-}
-
-#pragma mark - UITextInputDelegate
-- (void)textDidChange:(nullable id <UITextInput>)textInput {
+- (void)textFieldChange:(UITextField *)field {
     if (self.textField.text.length) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
     } else {
@@ -124,19 +138,9 @@
     }
 }
 
-- (void)selectionDidChange:(nullable id<UITextInput>)textInput {
-    
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self onDone:textField];
+    return YES;
 }
-
-
-- (void)selectionWillChange:(nullable id<UITextInput>)textInput {
-    
-}
-
-
-- (void)textWillChange:(nullable id<UITextInput>)textInput {
-
-}
-
 
 @end
