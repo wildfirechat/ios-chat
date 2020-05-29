@@ -112,10 +112,12 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         return NO;
     }
     
-    NSString *savedPath = [downloadDir stringByAppendingPathComponent:mediaContent.remoteUrl.lastPathComponent];
+    NSString *savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%ld", mediaContent.remoteUrl.hash]];
     
     if ([mediaContent isKindOfClass:[WFCCSoundMessageContent class]]) {
-//        savedPath = [NSString stringWithFormat:@"%@.wav", savedPath];
+        if ([mediaContent.remoteUrl pathExtension].length) {
+            savedPath = [savedPath stringByAppendingFormat:@".%@", [mediaContent.remoteUrl pathExtension]];
+        }
     } else if([mediaContent isKindOfClass:[WFCCVideoMessageContent class]]) {
         savedPath = [NSString stringWithFormat:@"%@.mp4", savedPath];
     } else if([mediaContent isKindOfClass:[WFCCImageMessageContent class]]) {
