@@ -1930,4 +1930,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 - (BOOL)isReceiptEnabled {
     return mars::stn::IsReceiptEnabled() == true;
 }
+
+- (void)sendConferenceRequest:(long long)sessionId
+                         room:(long long)roomId
+                      request:(NSString *)request
+                         data:(NSString *)data
+                      success:(void(^)(NSString *authorizedUrl))successBlock
+                        error:(void(^)(int error_code))errorBlock {
+    mars::stn::sendConferenceRequest(sessionId, roomId, [request UTF8String], data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
+}
 @end

@@ -645,6 +645,11 @@ namespace mars{
             virtual void onUserReceivedMessage(const std::map<std::string, int64_t> &userReceived) = 0;
             virtual void onUserReadedMessage(const std::list<TReadEntry> &userReceived) = 0;
         };
+    
+        class ConferenceEventCallback {
+        public:
+            virtual void onConferenceEvent(const std::string &event) = 0;
+        };
 
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
@@ -652,6 +657,7 @@ namespace mars{
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
+        extern void setConferenceEventCallback(ConferenceEventCallback *callback);
     
         extern void setDNSResult(std::vector<std::string> serverIPs);
         extern void setRefreshUserInfoCallback(GetUserInfoCallback *callback);
@@ -760,7 +766,9 @@ namespace mars{
 
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
-
+    
+    extern void sendConferenceRequest(int64_t sessionId, int64_t roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
+    
         extern bool filesystem_exists(const std::string &path);
 		extern bool filesystem_create_directories(const std::string &path);
         extern bool filesystem_copy_file(const std::string &source, const std::string &dest, bool overwrite);
