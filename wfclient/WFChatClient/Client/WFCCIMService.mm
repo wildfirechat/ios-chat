@@ -1544,6 +1544,9 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (WFCCGroupMember *)getGroupMember:(NSString *)groupId
                            memberId:(NSString *)memberId {
+    if (!groupId || !memberId) {
+        return nil;
+    }
     mars::stn::TGroupMember tmember = mars::stn::MessageDB::Instance()->GetGroupMember([groupId UTF8String], [memberId UTF8String]);
     if (tmember.memberId == [memberId UTF8String]) {
         WFCCGroupMember *member = [WFCCGroupMember new];
