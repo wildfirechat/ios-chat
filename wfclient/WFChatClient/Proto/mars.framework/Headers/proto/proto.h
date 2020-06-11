@@ -160,12 +160,13 @@ namespace mars{
 
         class TGroupMember : public TSerializable {
         public:
-            TGroupMember() : type(0), updateDt(0) {}
+            TGroupMember() : type(0), updateDt(0), createDt(0) {}
             std::string groupId;
             std::string memberId;
             std::string alias;
             int type;
             int64_t updateDt;
+            int64_t createDt;
             virtual ~TGroupMember() {}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
