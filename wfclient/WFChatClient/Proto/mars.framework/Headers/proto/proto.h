@@ -767,7 +767,7 @@ namespace mars{
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
     
-    extern void sendConferenceRequest(int64_t sessionId, int64_t roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
+    extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
     
         extern bool filesystem_exists(const std::string &path);
 		extern bool filesystem_create_directories(const std::string &path);

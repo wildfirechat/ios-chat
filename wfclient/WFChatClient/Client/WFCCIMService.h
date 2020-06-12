@@ -1374,7 +1374,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (BOOL)isReceiptEnabled;
 
 - (void)sendConferenceRequest:(long long)sessionId
-                         room:(long long)roomId
+                         room:(NSString *)roomId
                       request:(NSString *)request
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
