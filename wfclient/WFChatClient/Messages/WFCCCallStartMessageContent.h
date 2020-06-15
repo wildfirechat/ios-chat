@@ -49,4 +49,6 @@ WFAVCallEndReason
  */
 @property (nonatomic, assign, getter=isAudioOnly)BOOL audioOnly;
 
+@property (nonatomic, strong)NSString *pin;
+
 @end

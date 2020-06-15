@@ -28,6 +28,9 @@
     if (self.status) {
         [dataDict setObject:@(self.status) forKey:@"s"];
     }
+    if (self.pin) {
+        [dataDict setObject:self.pin forKey:@"p"];
+    }
     
     [dataDict setObject:self.targetIds forKey:@"ts"];
     //多人音视频与单人音视频兼容
@@ -53,6 +56,7 @@
         self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
         self.targetIds = dictionary[@"ts"];
+        self.pin = dictionary[@"p"];
         if (self.targetIds.count == 0) {
             NSString *target = dictionary[@"t"];
             NSMutableArray *arr = [[NSMutableArray alloc] init];

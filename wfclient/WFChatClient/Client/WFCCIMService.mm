@@ -1937,6 +1937,6 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::sendConferenceRequest(sessionId, [roomId UTF8String], [request UTF8String], data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
 }
 @end
