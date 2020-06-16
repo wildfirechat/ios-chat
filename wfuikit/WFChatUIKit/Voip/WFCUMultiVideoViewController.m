@@ -142,7 +142,8 @@
     CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth) collectionViewLayout:layout];
+    int lines = ([self.currentSession participantIds].count + 2) /3;
+    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth*lines) collectionViewLayout:layout];
     
     self.smallCollectionView.dataSource = self;
     self.smallCollectionView.delegate = self;
