@@ -44,6 +44,14 @@
 		2BEF78A923F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BEF789D23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h */; };
 		2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */; };
 		2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */; };
+		2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */; };
+		2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B12499A21A00FD3575 /* WFCUConferenceViewController.h */; };
+		2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B52499A30500FD3575 /* WFCUCreateConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F1EB5B82499A30500FD3575 /* WFCUCreateConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B62499A30500FD3575 /* WFCUCreateConferenceViewController.m */; };
+		2F1EB5BB2499AA5E00FD3575 /* WFCUConferenceInviteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B92499AA5E00FD3575 /* WFCUConferenceInviteViewController.h */; };
+		2F1EB5BC2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5BA2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m */; };
+		2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5C12499AFF900FD3575 /* WFCUConferenceInviteCell.h */; };
+		2F1EB5C42499AFF900FD3575 /* WFCUConferenceInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5C22499AFF900FD3575 /* WFCUConferenceInviteCell.m */; };
 		2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */; };
 		2F341A4F235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F341A4D235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F341A50235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F341A4E235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m */; };
@@ -423,6 +431,14 @@
 		2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchGroupTableViewCell.m; sourceTree = "<group>"; };
 		2F143A68217F7D4100B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
 		2F143A69217F7D4100B3E38A /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Emoj.plist; sourceTree = "<group>"; };
+		2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceViewController.m; sourceTree = "<group>"; };
+		2F1EB5B12499A21A00FD3575 /* WFCUConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceViewController.h; sourceTree = "<group>"; };
+		2F1EB5B52499A30500FD3575 /* WFCUCreateConferenceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCreateConferenceViewController.h; sourceTree = "<group>"; };
+		2F1EB5B62499A30500FD3575 /* WFCUCreateConferenceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCreateConferenceViewController.m; sourceTree = "<group>"; };
+		2F1EB5B92499AA5E00FD3575 /* WFCUConferenceInviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceInviteViewController.h; sourceTree = "<group>"; };
+		2F1EB5BA2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceInviteViewController.m; sourceTree = "<group>"; };
+		2F1EB5C12499AFF900FD3575 /* WFCUConferenceInviteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceInviteCell.h; sourceTree = "<group>"; };
+		2F1EB5C22499AFF900FD3575 /* WFCUConferenceInviteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceInviteCell.m; sourceTree = "<group>"; };
 		2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUTextCell.h; sourceTree = "<group>"; };
 		2F341A4D235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupAnnouncement.h; sourceTree = "<group>"; };
 		2F341A4E235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupAnnouncement.m; sourceTree = "<group>"; };
@@ -811,6 +827,19 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		2F1EB5B42499A2CA00FD3575 /* Conference */ = {
+			isa = PBXGroup;
+			children = (
+				2F1EB5B92499AA5E00FD3575 /* WFCUConferenceInviteViewController.h */,
+				2F1EB5BA2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m */,
+				2F1EB5B12499A21A00FD3575 /* WFCUConferenceViewController.h */,
+				2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */,
+				2F1EB5B52499A30500FD3575 /* WFCUCreateConferenceViewController.h */,
+				2F1EB5B62499A30500FD3575 /* WFCUCreateConferenceViewController.m */,
+			);
+			path = Conference;
+			sourceTree = "<group>";
+		};
 		2F341A4C235EF11700F0D1B6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -830,6 +859,7 @@
 		2F4991052189239E005F6A84 /* Voip */ = {
 			isa = PBXGroup;
 			children = (
+				2F1EB5B42499A2CA00FD3575 /* Conference */,
 				2BEF789723F6A84D000DE285 /* WFCUFloatingWindow.h */,
 				2BEF789C23F6A84D000DE285 /* WFCUFloatingWindow.m */,
 				2BEF789323F6A84C000DE285 /* WFCUMultiVideoViewController.h */,
@@ -943,6 +973,8 @@
 				2F550EBA217F5CC000F56C26 /* WFCUVoiceCell.m */,
 				2FD550EA2442AA0B00B3EE09 /* WFCURecallCell.h */,
 				2FD550EB2442AA0B00B3EE09 /* WFCURecallCell.m */,
+				2F1EB5C12499AFF900FD3575 /* WFCUConferenceInviteCell.h */,
+				2F1EB5C22499AFF900FD3575 /* WFCUConferenceInviteCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1672,6 +1704,7 @@
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
+				2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */,
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
@@ -1697,6 +1730,7 @@
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
 				2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
+				2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageNotificationViewController.h in Headers */,
 				2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */,
 				2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */,
@@ -1768,6 +1802,7 @@
 				2F5510BE217F5CC200F56C26 /* WFCUSearchViewController.h in Headers */,
 				2F551197217F5CC200F56C26 /* SDRefreshHeaderView.h in Headers */,
 				2F551104217F5CC200F56C26 /* CCHMapClusterAnnotation.h in Headers */,
+				2F1EB5BB2499AA5E00FD3575 /* WFCUConferenceInviteViewController.h in Headers */,
 				2BEF78A123F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.h in Headers */,
 				2F5511D1217F5CC300F56C26 /* TYShowAlertView.h in Headers */,
 				2F5511FC217F5CC300F56C26 /* WFCUConversationSettingMemberCell.h in Headers */,
@@ -1804,6 +1839,7 @@
 				1450EA8924389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.h in Headers */,
 				2FD550EC2442AA0B00B3EE09 /* WFCURecallCell.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
+				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
 				2F5511AF217F5CC300F56C26 /* FLAnimatedImageView.h in Headers */,
@@ -1993,6 +2029,7 @@
 				2F55121B217F5CC300F56C26 /* WFCUMessageNotificationViewController.m in Sources */,
 				2F5511C4217F5CC300F56C26 /* NSImage+WebCache.m in Sources */,
 				2F55120A217F5CC300F56C26 /* WFCUConversationTableViewController.m in Sources */,
+				2F1EB5C42499AFF900FD3575 /* WFCUConferenceInviteCell.m in Sources */,
 				2F551167217F5CC200F56C26 /* AFURLResponseSerialization.m in Sources */,
 				2F551112217F5CC200F56C26 /* VideoPlayerSampleViewController.m in Sources */,
 				2F551115217F5CC200F56C26 /* FullScreenView.m in Sources */,
@@ -2004,6 +2041,7 @@
 				2F5511C7217F5CC300F56C26 /* UIView+WebCacheOperation.m in Sources */,
 				2F551195217F5CC200F56C26 /* SDRefreshFooterView.m in Sources */,
 				2F5510E3217F5CC200F56C26 /* WFCUEmotionTextAttachment.m in Sources */,
+				2F1EB5BC2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m in Sources */,
 				2F5511AB217F5CC300F56C26 /* FLAnimatedImageView+WebCache.m in Sources */,
 				1450EA8A24389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.m in Sources */,
 				2F341A50235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m in Sources */,
@@ -2031,6 +2069,7 @@
 				2F551126217F5CC200F56C26 /* VideoPlayerView.m in Sources */,
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
+				2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */,
 				2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */,
 				2F5511D9217F5CC300F56C26 /* TYAlertDropDownAnimation.m in Sources */,
 				2F5EB44522C2EE1900BC8C90 /* GroupMuteTableViewController.m in Sources */,
@@ -2044,6 +2083,7 @@
 				2F5511A0217F5CC200F56C26 /* UIImage+WebP.m in Sources */,
 				2F551192217F5CC200F56C26 /* SDRefreshHeaderView.m in Sources */,
 				2F5511CC217F5CC300F56C26 /* UIButton+WebCache.m in Sources */,
+				2F1EB5B82499A30500FD3575 /* WFCUCreateConferenceViewController.m in Sources */,
 				2F551113217F5CC200F56C26 /* VideoPlayerSampleView.m in Sources */,
 				2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m in Sources */,
 				2F5511BE217F5CC300F56C26 /* SDWebImageDownloaderOperation.m in Sources */,
