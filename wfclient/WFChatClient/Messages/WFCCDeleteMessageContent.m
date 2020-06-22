@@ -27,20 +27,6 @@
     //注意：在proto层收到撤回命令或主动撤回成功会直接更新被撤回的消息，如果修改encode&decode，需要同步修改
     self.operatorId = payload.content;
     self.messageUid = [[[NSString alloc] initWithData:payload.binaryContent encoding:NSUTF8StringEncoding] longLongValue];
-    if (self.extra.length) {
-        NSError *__error = nil;
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.extra dataUsingEncoding:NSUTF8StringEncoding]
-                                                                   options:kNilOptions
-                                                                     error:&__error];
-        if (!__error) {
-            self.originalSender = dictionary[@"s"];
-            self.originalContentType = [dictionary[@"t"] intValue];
-            self.originalSearchableContent = dictionary[@"sc"];
-            self.originalContent = dictionary[@"c"];
-            self.originalExtra = dictionary[@"e"];
-            self.originalMessageTimestamp = [dictionary[@"ts"] longLongValue];
-        }
-    }
 }
 
 + (int)getContentType {
