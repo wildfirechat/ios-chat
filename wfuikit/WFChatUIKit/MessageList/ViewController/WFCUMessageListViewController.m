@@ -922,6 +922,8 @@
     }
     
     int count = 0;
+    NSMutableArray *modifiedAliasUsers = [[NSMutableArray alloc] init];
+    
     for (int i = 0; i < messages.count; i++) {
         WFCCMessage *message = [messages objectAtIndex:i];
         
@@ -969,6 +971,10 @@
             [self.modelList addObject:model];
             if (messages.count == 1) {
                 [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.modelList.count - 1 inSection:0]]];
+            }
+            
+            if (self.conversation.type == Group_Type && [message.content isKindOfClass:[WFCCModifyGroupAliasNotificationContent class]]) {
+                [modifiedAliasUsers addObject:message.fromUser];
             }
         } else {
             if (self.modelList.count > 0 && (self.modelList[0].message.serverTime - message.serverTime < 60 * 1000) && i != 0) {
@@ -1024,6 +1030,23 @@
     }
     if (forceButtom) {
         [self scrollToBottom:YES];
+    }
+    
+    if (modifiedAliasUsers.count) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSArray<NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+            NSMutableArray *needUpdateItems = [[NSMutableArray alloc] init];
+            for (NSIndexPath *item in visibleItems) {
+                WFCUMessageModel *model = [self.modelList objectAtIndex:item.row];
+                if ([modifiedAliasUsers containsObject:model.message.fromUser]) {
+                    [needUpdateItems addObject:item];
+                }
+            }
+            if (needUpdateItems.count) {
+                [self.collectionView reloadItemsAtIndexPaths:needUpdateItems];
+            }
+        });
+        
     }
 }
 
