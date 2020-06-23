@@ -772,6 +772,7 @@
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
       [[WFCCIMService sharedWFCIMService] modifyGroupAlias:self.conversation.target alias:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
         result(YES);
+          [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
       } error:^(int error_code) {
         result(NO);
       }];
