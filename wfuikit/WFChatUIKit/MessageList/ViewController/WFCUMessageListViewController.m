@@ -333,7 +333,7 @@
                 [mutableMessages insertObject:msg atIndex:j];
                 [mutableMessages removeObjectAtIndex:j+1];
             }
-            [NSThread sleepForTimeInterval:3];
+            [NSThread sleepForTimeInterval:0.5];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO];
                 weakSelf.loadingNew = NO;
@@ -962,10 +962,7 @@
                 showTime = NO;
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive && self.showAlias showTime:showTime];
-            if (highlightId > 0 && message.messageId == highlightId) {
-                model.highlighted = YES;
-            }
-            
+
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList addObject:model];
@@ -981,10 +978,7 @@
                 self.modelList[0].showTimeLabel = NO;
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive&&self.showAlias showTime:YES];
-            if (highlightId > 0 && message.messageId == highlightId) {
-                model.highlighted = YES;
-            }
-            
+
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList insertObject:model atIndex:0];
@@ -996,7 +990,7 @@
     }
     
     BOOL isAtButtom = NO;
-    if (newMessage) {
+    if (newMessage && !self.hasNewMessage) {
         if (@available(iOS 12.0, *)) {
             CGPoint offset = self.collectionView.contentOffset;
             CGSize size = self.collectionView.contentSize;
@@ -1028,7 +1022,21 @@
             self.collectionView.contentOffset = CGPointMake(0, offset - 20);
         }];
     }
-    if (forceButtom) {
+    
+    if (highlightId > 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            int row = 0;
+            for (int i = 0; i < self.modelList.count; i++) {
+                WFCUMessageModel *model = self.modelList[i];
+                if (model.message.messageId == highlightId) {
+                    row = i;
+                    model.highlighted = YES;
+                    break;
+                }
+            }
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+        });
+    } else if (forceButtom) {
         [self scrollToBottom:YES];
     }
     
@@ -1401,7 +1409,7 @@
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (self.hasNewMessage && targetContentOffset->y == (scrollView.contentSize.height - scrollView.bounds.size.height)) {
+    if (self.hasNewMessage && ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
         [self loadMoreMessage:NO];
     }
     if (targetContentOffset->y == 0 && self.hasMoreOld) {
