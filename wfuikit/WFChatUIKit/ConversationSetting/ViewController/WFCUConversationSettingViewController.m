@@ -728,6 +728,8 @@
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
       [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Name newValue:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
         result(YES);
+          weakSelf.groupInfo.name = newValue;
+          [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
       } error:^(int error_code) {
         result(NO);
       }];
