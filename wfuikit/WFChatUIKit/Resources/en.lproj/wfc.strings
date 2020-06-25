@@ -119,9 +119,13 @@
 "ManagerInviteOnly"="Only manager invite";
 "GroupVisiable"="Group visiablity";
 "GroupCanbeSearch"="Group can be searched";
+"GroupHistoryMessageAviable"="Group history message aviable";
+"GroupHistoryMessageNotAviable"="Group history message not aviable";
 "GroupCannotSearch"="Group can not be searched";
 "MemberManage"="Member manage";
-"JoinGroupSetting"="Join group setting";
+"GroupGeneralSetting"="Group general setting";
+"GroupMaxMember"="Group max member count";
+"GroupHistoryMessage"="Group history message";
 "ManagerSetting"="Manager setting";
 "AddManager"="Add manager";
 "RemoveManager"="Remove manager";

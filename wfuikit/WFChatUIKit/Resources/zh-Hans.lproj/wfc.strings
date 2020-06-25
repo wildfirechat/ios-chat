@@ -118,10 +118,14 @@
 "MemberInviteOnly"="群成员可以拉人";
 "ManagerInviteOnly"="只能群管理拉人";
 "GroupVisiable"="群的可见性";
+"GroupHistoryMessageAviable"="群历史消息可见";
+"GroupHistoryMessageNotAviable"="群历史消息不可见";
 "GroupCanbeSearch"="群可以被查找";
 "GroupCannotSearch"="群不可以被查找";
 "MemberManage"="成员管理";
-"JoinGroupSetting"="加群设置";
+"GroupGeneralSetting"="群通用设置";
+"GroupHistoryMessage"="群历史消息";
+"GroupMaxMember"="群最大成员数";
 "ManagerSetting"="管理员设置";
 "AddManager"="添加管理员";
 "RemoveManager"="移除管理员";

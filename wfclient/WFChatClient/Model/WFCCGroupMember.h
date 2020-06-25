@@ -48,4 +48,9 @@ typedef NS_ENUM(NSInteger, WFCCGroupMemberType) {
  */
 @property(nonatomic, assign)WFCCGroupMemberType type;
 
+/**
+ 群成员加入时间戳
+*/
+@property(nonatomic, assign)long long createTime;
+
 @end
