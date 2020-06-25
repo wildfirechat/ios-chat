@@ -65,3 +65,5 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCPCOnlineInfo.h>
 #import <WFChatClient/WFCCDeliveryReport.h>
 #import <WFChatClient/WFCCReadReport.h>
+#import <WFChatClient/WFCCEnums.h>
+

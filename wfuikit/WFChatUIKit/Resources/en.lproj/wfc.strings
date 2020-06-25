@@ -136,6 +136,7 @@
 "InputGropNameHint"="Input group name(optional)";
 "GroupChat"="Group chat";
 "CreateGroupFailure"="Create group failure";
+"ExceedGroupMaxMemberCount"="Exceed max member count";
 "ForwardSuccess"="Forward success";
 "ForwardFailure"="Forward failure";
 "CreateNewChat"="Create new chat";

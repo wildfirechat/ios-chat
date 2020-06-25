@@ -845,7 +845,11 @@
               [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
                 
             } error:^(int error_code) {
-              
+                if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
+                    [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
+                } else {
+                    [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                }
             }];
         };
         pvc.disableUsersSelected = YES;
