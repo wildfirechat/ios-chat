@@ -698,14 +698,14 @@
             }
             self.switchCameraButton.hidden = NO;
             self.smallCollectionView.hidden = NO;
-//            self.minimizeButton.hidden = NO;
+            self.minimizeButton.hidden = NO;
             self.addParticipantButton.hidden = NO;
         } else {
             self.hangupButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
-//            self.minimizeButton.hidden = YES;
+            self.minimizeButton.hidden = YES;
             self.addParticipantButton.hidden = YES;
         }
     } else {
