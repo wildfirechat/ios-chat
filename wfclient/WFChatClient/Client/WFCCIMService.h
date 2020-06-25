@@ -64,7 +64,9 @@ typedef NS_ENUM(NSInteger, ModifyGroupInfoType) {
     Modify_Group_Mute = 3,
     Modify_Group_JoinType = 4,
     Modify_Group_PrivateChat = 5,
-    Modify_Group_Searchable = 6
+    Modify_Group_Searchable = 6,
+    Modify_Group_History_Message = 7,
+    Modify_Group_Max_Member_Count = 8
 };
 
 
