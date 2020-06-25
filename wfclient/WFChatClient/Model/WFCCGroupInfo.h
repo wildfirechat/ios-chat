@@ -80,4 +80,14 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
  群搜索状态，0 群可以被搜索到；1 群不会被搜索到
  */
 @property (nonatomic, assign)int searchable;
+
+/**
+ 群成员是否可以加载加入之前的历史消息，0不可以；1可以
+ */
+@property (nonatomic, assign)int historyMessage;
+
+/**
+ 群的最大成员数，可以通过server api来修改
+ */
+@property (nonatomic, assign)int maxMemberCount;
 @end
