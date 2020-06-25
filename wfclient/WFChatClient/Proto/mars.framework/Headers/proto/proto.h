@@ -138,7 +138,7 @@ namespace mars{
 
         class TGroupInfo : public TSerializable {
         public:
-            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0) {}
+            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0), historyMessage(0), maxMemberCount(0) {}
             std::string target;
             std::string name;
             std::string portrait;
@@ -151,6 +151,8 @@ namespace mars{
             int joinType;
             int privateChat;
             int searchable;
+            int historyMessage;
+            int maxMemberCount;
             virtual ~TGroupInfo() {}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;

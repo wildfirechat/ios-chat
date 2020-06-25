@@ -1035,6 +1035,8 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     groupInfo.joinType = tgi.joinType;
     groupInfo.privateChat = tgi.privateChat;
     groupInfo.searchable = tgi.searchable;
+    groupInfo.historyMessage = tgi.historyMessage;
+    groupInfo.maxMemberCount = tgi.maxMemberCount;
     return groupInfo;
 }
 
@@ -1537,6 +1539,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         member.memberId = [NSString stringWithUTF8String:it->memberId.c_str()];
         member.alias = [NSString stringWithUTF8String:it->alias.c_str()];
         member.type = (WFCCGroupMemberType)it->type;
+        member.createTime = it->createDt;
         [output addObject:member];
     }
     return output;
@@ -1554,6 +1557,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         member.memberId = memberId;
         member.alias = [NSString stringWithUTF8String:tmember.alias.c_str()];
         member.type = (WFCCGroupMemberType)tmember.type;
+        member.createTime = tmember.createDt;
         return member;
     }
     return nil;

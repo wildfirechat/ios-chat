@@ -86,6 +86,17 @@
         } else if(indexPath.row == 1) {
             cell.textLabel.text = WFCString(@"GroupVisiable");
             cell.detailTextLabel.text = WFCString(@"GroupCannotSearch");
+        } else if(indexPath.row == 2) {
+            cell.textLabel.text = WFCString(@"GroupHistoryMessage");
+            if (self.groupInfo.historyMessage > 0) {
+                cell.detailTextLabel.text = WFCString(@"GroupHistoryMessageAviable");
+            } else {
+                cell.detailTextLabel.text = WFCString(@"GroupHistoryMessageNotAviable");
+            }
+            
+        } else if(indexPath.row == 3) {
+            cell.textLabel.text = WFCString(@"GroupMaxMember");
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", self.groupInfo.maxMemberCount];
         }
     }
     
@@ -99,7 +110,11 @@
         }
         return 2;//设置禁言，群成员权限
     } else if(section == 1) {
-        return 2;//加群方式，查找权限
+        if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+            return 4;//加群方式，查找权限，历史消息，最大成员数
+        } else {
+            return 2;//加群方式，查找权限
+        }
     }
     return 0;
 }
@@ -108,7 +123,7 @@
     if (section == 0) {
         return WFCString(@"MemberManage");
     } else if(section == 1) {
-        return WFCString(@"JoinGroupSetting");
+        return WFCString(@"GroupGeneralSetting");
     }
     return nil;
 }
@@ -214,7 +229,36 @@
             [alertController addAction:verifyAction];
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
-        }
+        } else if(indexPath.row == 2) {
+                UIAlertController* alertController = [UIAlertController alertControllerWithTitle:WFCString(@"GroupHistoryMessage") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+                
+                // Create cancel action.
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    
+                }];
+                [alertController addAction:cancelAction];
+                
+            UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_History_Message newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                        self.groupInfo.historyMessage = 1;
+                                    } error:^(int error_code) {
+                                        [self.view makeToast:@"设置失败"];
+                                    }];
+                }];
+                [alertController addAction:openAction];
+                
+            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageNotAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_History_Message newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                        self.groupInfo.historyMessage = 0;
+                    } error:^(int error_code) {
+                        [self.view makeToast:@"设置失败"];
+                    }];
+                }];
+                [alertController addAction:verifyAction];
+                
+                [self.navigationController presentViewController:alertController animated:YES completion:nil];
+            }
+        
     }
     
 }
