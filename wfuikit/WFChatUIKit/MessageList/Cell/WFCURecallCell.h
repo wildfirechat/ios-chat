@@ -10,4 +10,6 @@
 
 @interface WFCURecallCell : WFCUMessageCellBase
 @property (nonatomic, strong)UILabel *infoLabel;
+@property (nonatomic, strong)UIButton *reeditButton;
+@property (nonatomic, strong)UIView *recallContainer;
 @end
