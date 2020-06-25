@@ -523,14 +523,14 @@
             self.audioButton.hidden = NO;
             self.switchCameraButton.hidden = NO;
             self.smallVideoView.hidden = NO;
-//            self.minimizeButton.hidden = NO;
+            self.minimizeButton.hidden = NO;
             self.downgradeButton.hidden = NO;
         } else {
             self.hangupButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.downgradeButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
-//            self.minimizeButton.hidden = YES;
+            self.minimizeButton.hidden = YES;
         }
     } else {
         self.smallVideoView.hidden = YES;
