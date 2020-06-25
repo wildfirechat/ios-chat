@@ -210,6 +210,7 @@
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 10);
         CGRect frame = self.bounds;
         frame.size.height = EMOJ_FACE_VIEW_HEIGHT;
         _collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
@@ -249,52 +250,48 @@
     }
 }
 
+- (int)pagesOfIndexPath:(NSIndexPath *)item {
+    int pages = 0;
+    for (int i = 0; i < item.section; i++) {
+        pages += [self collectionView:self.collectionView numberOfItemsInSection:i];
+    }
+    pages += item.row;
+    return pages;
+}
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     if (scrollView == self.collectionView) {
-        [self scrollAndUpdatePage:scrollView];
-    }
-}
-
-- (void)scrollAndUpdatePage:(UIScrollView *)scrollView {
-    NSArray<NSIndexPath *> *items = [_collectionView indexPathsForVisibleItems];
-    if (items.count == 2) {
-        UICollectionViewCell *cell0 = [_collectionView cellForItemAtIndexPath:items[0]];
-        UICollectionViewCell *cell1 = [_collectionView cellForItemAtIndexPath:items[1]];
-        CGPoint rect0 = [cell0 convertPoint:CGPointZero toView:nil];
-        CGPoint rect1 = [cell1 convertPoint:CGPointZero toView:nil];
-        
-        NSIndexPath *selectedOne;
-        
-        if (rect0.x > 0) {
-            if (rect0.x < width/2) {
-                selectedOne = items[0];
-            } else {
-                selectedOne = items[1];
-            }
-        } else {
-            if (rect1.x < width/2) {
+        NSArray<NSIndexPath *> *items = [_collectionView indexPathsForVisibleItems];
+        if (items.count == 2) {
+            int pages0 = [self pagesOfIndexPath:items[0]];
+            int pages1 = [self pagesOfIndexPath:items[1]];
+            
+            UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+            CGFloat offset0 = pages0 * (self.collectionView.bounds.size.width + layout.minimumLineSpacing);
+            CGFloat offset1 = pages1 * (self.collectionView.bounds.size.width + layout.minimumInteritemSpacing);
+            
+            NSIndexPath *selectedOne;
+            if (ABS(offset0-targetContentOffset->x) > ABS(offset1 - targetContentOffset->x)) {
+                targetContentOffset->x = offset1;
                 selectedOne = items[1];
             } else {
+                targetContentOffset->x = offset0;
                 selectedOne = items[0];
             }
+            
+            if (items[1].section != items[0].section) {
+                self.facePageControl.numberOfPages = [self getPagesCount:selectedOne.section];
+                self.selectedTableRow = selectedOne.section;
+            }
+            
+            [self.facePageControl setCurrentPage:selectedOne.row];
+            [self.facePageControl updateCurrentPageDisplay];
+        } else if(items.count == 1) {
+            int pages0 = [self pagesOfIndexPath:items[0]];
+            
+            UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+            CGFloat offset0 = pages0 * (self.collectionView.bounds.size.width + layout.minimumLineSpacing);
+            targetContentOffset->x = offset0;
         }
-        
-        
-        [_collectionView scrollToItemAtIndexPath:selectedOne atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
-    
-        if (items[1].section != items[0].section) {
-            self.facePageControl.numberOfPages = [self getPagesCount:selectedOne.section];
-            self.selectedTableRow = selectedOne.section;
-        }
-    
-        [self.facePageControl setCurrentPage:selectedOne.row];
-        [self.facePageControl updateCurrentPageDisplay];
-    }
-}
-
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    if (scrollView == self.collectionView) {
-        [self scrollAndUpdatePage:scrollView];
     }
 }
 
