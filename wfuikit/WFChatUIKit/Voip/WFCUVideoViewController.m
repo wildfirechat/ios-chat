@@ -195,7 +195,7 @@
         
         _minimizeButton.backgroundColor = [UIColor clearColor];
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _minimizeButton.hidden = YES;
+//        _minimizeButton.hidden = YES;
         [self.view addSubview:_minimizeButton];
     }
     return _minimizeButton;
@@ -523,14 +523,14 @@
             self.audioButton.hidden = NO;
             self.switchCameraButton.hidden = NO;
             self.smallVideoView.hidden = NO;
-            self.minimizeButton.hidden = NO;
+//            self.minimizeButton.hidden = NO;
             self.downgradeButton.hidden = NO;
         } else {
             self.hangupButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.downgradeButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
-            self.minimizeButton.hidden = YES;
+//            self.minimizeButton.hidden = YES;
         }
     } else {
         self.smallVideoView.hidden = YES;
@@ -585,6 +585,7 @@
             
             self.userNameLabel.hidden = NO;
             self.portraitView.hidden = NO;
+            self.minimizeButton.hidden = NO;
             [self updateTopViewFrame];
             
             break;
@@ -687,6 +688,7 @@
                 self.downgradeButton.hidden = NO;
                 self.downgradeButton.frame = [self getToAudioButtonFrame];
             }
+            self.minimizeButton.hidden = NO;
             break;
         default:
             break;
