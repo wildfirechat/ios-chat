@@ -121,9 +121,13 @@
     if ([self.currentSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
     } else {
-        [self.participants insertObject:[WFCCNetworkService sharedInstance].userId atIndex:[self.participants indexOfObject:self.currentSession.initiator]];
-        [self.participants removeObject:self.currentSession.initiator];
-        [self.participants addObject:self.currentSession.initiator];
+        if ([self.participants containsObject:self.currentSession.initiator]) {
+            [self.participants insertObject:[WFCCNetworkService sharedInstance].userId atIndex:[self.participants indexOfObject:self.currentSession.initiator]];
+            [self.participants removeObject:self.currentSession.initiator];
+            [self.participants addObject:self.currentSession.initiator];
+        } else {
+            [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
+        }
     }
 }
 
@@ -256,7 +260,7 @@
         
         _minimizeButton.backgroundColor = [UIColor clearColor];
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _minimizeButton.hidden = YES;
+        _minimizeButton.hidden = NO;
         [self.view addSubview:_minimizeButton];
     }
     return _minimizeButton;
@@ -694,14 +698,14 @@
             }
             self.switchCameraButton.hidden = NO;
             self.smallCollectionView.hidden = NO;
-            self.minimizeButton.hidden = NO;
+//            self.minimizeButton.hidden = NO;
             self.addParticipantButton.hidden = NO;
         } else {
             self.hangupButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
-            self.minimizeButton.hidden = YES;
+//            self.minimizeButton.hidden = YES;
             self.addParticipantButton.hidden = YES;
         }
     } else {
@@ -760,6 +764,7 @@
             
             self.userNameLabel.hidden = YES;
             self.portraitView.hidden = YES;
+            self.minimizeButton.hidden = NO;
             [self updateTopViewFrame];
             
             break;
@@ -862,6 +867,7 @@
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
+            self.minimizeButton.hidden = NO;
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             self.stateLabel.text = WFCString(@"InvitingYou");

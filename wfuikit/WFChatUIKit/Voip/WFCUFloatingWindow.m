@@ -156,9 +156,16 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     }
 
     if ([self isVideoViewEnabledSession]) {
-        if (self.callSession.state == kWFAVEngineStateOutgoing) {
+        if (self.callSession.state == kWFAVEngineStateIncomming) {
+            [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+            self.videoView.hidden = YES;
+        } else if (self.callSession.state == kWFAVEngineStateOutgoing) {
+            self.videoView.hidden = NO;
+            [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
             [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
         } else if (self.callSession.state == kWFAVEngineStateConnected) {
+            self.videoView.hidden = NO;
+            [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
             if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
             } else {
@@ -172,6 +179,9 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             videoStopTips.text = WFCString(@"Ended");
             videoStopTips.textColor = HEXCOLOR(0x0195ff);
             [self.videoView addSubview:videoStopTips];
+        } else { //connecting...
+            self.videoView.hidden = NO;
+            [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
         }
     } else {
         if (self.callSession.state == kWFAVEngineStateIdle) {
@@ -179,8 +189,15 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             [self.floatingButton setTitle:WFCString(@"Ended")
                                  forState:UIControlStateNormal];
         } else {
-            [self.floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
+            if (self.callSession.state == kWFAVEngineStateOutgoing) {
+                [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+            } else if (self.callSession.state == kWFAVEngineStateIncomming) {
+                [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+            } else {
+                [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
+                [self.floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
             forState:UIControlStateNormal];
+            }
         }
     }
 }
@@ -232,16 +249,18 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (UIButton *)floatingButton {
     if (!_floatingButton) {
         _floatingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        if (self.callSession.isAudioOnly) {
-            [_floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
-                             forState:UIControlStateNormal];
-        } else {
-            [_floatingButton setImage:[UIImage imageNamed:@"floatingvideo"]
-                             forState:UIControlStateNormal];
-        }
+//        if (self.callSession.isAudioOnly) {
+//            [_floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
+//                             forState:UIControlStateNormal];
+//        } else {
+//            [_floatingButton setImage:[UIImage imageNamed:@"floatingvideo"]
+//                             forState:UIControlStateNormal];
+//        }
         [_floatingButton setTitle:@"" forState:UIControlStateNormal];
         _floatingButton.backgroundColor = [UIColor clearColor];
         _floatingButton.frame = CGRectMake(0, 0, 64, 96);
+        [_floatingButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        _floatingButton.titleLabel.font = [UIFont systemFontOfSize:14];
         CGRect windowFrame = self.window.frame;
         windowFrame.size.width = _floatingButton.frame.size.width;
         windowFrame.size.height = _floatingButton.frame.size.height;
@@ -376,6 +395,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             break;
             
         default:
+            [self updateWindow];
             break;
     }
 }
