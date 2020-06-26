@@ -649,9 +649,9 @@
             sec++;
             if (sec-1 == indexPath.section) {
                 if (self.isSearchConversationListExpansion) {
-                    WFCUConversationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"conversationCell"];
+                    WFCUConversationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchConversationCell"];
                     if (cell == nil) {
-                        cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"conversationCell"];
+                        cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchConversationCell"];
                     }
                     cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
                     cell.big = NO;
@@ -666,9 +666,9 @@
                         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
-                        WFCUConversationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"conversationCell"];
+                        WFCUConversationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchConversationCell"];
                         if (cell == nil) {
-                            cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"conversationCell"];
+                            cell = [[WFCUConversationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchConversationCell"];
                         }
                         if (indexPath.row == 1) {
                             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
