@@ -13,6 +13,7 @@
 #import "ZCCCircleProgressView.h"
 
 #define Portrait_Size 40
+#define SelectView_Size 20
 #define Name_Label_Height  14
 #define Name_Label_Padding  6
 #define Name_Client_Padding  2
@@ -34,6 +35,8 @@
 @property (nonatomic, strong)UIImageView *maskView;
 
 @property (nonatomic, strong)ZCCCircleProgressView *receiptView;
+
+@property (nonatomic, strong)UIImageView *selectView;
 @end
 
 @implementation WFCUMessageCell
@@ -106,6 +109,7 @@
         _failureView.hidden = YES;
     }
 }
+
 -(void)onStatusChanged:(NSNotification *)notification {
     WFCCMessageStatus newStatus = (WFCCMessageStatus)[[notification.userInfo objectForKey:@"status"] integerValue];
     self.model.message.status = newStatus;
@@ -156,11 +160,13 @@
 
     
   if (model.message.direction == MessageDirection_Send) {
+      CGFloat selectViewOffset = model.selecting ? SelectView_Size + Portrait_Padding_Right : 0;
+      
     CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
     CGRect frame = self.frame;
-    self.portraitView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right, top, Portrait_Size, Portrait_Size);
+    self.portraitView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - selectViewOffset, top, Portrait_Size, Portrait_Size);
     if (model.showNameLabel) {
-      self.nameLabel.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - 200, top, 200, Name_Label_Height);
+      self.nameLabel.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - 200 - selectViewOffset, top, 200, Name_Label_Height);
       self.nameLabel.hidden = NO;
       self.nameLabel.textAlignment = NSTextAlignmentRight;
     } else {
@@ -170,7 +176,7 @@
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
       self.bubbleView.image = [UIImage imageNamed:@"sent_msg_background"];
-      self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
+      self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side - selectViewOffset, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
       
       UIImage *image = self.bubbleView.image;
@@ -274,6 +280,21 @@
       
       self.receiptView.hidden = YES;
   }
+    
+    if (model.selecting) {
+        self.selectView.hidden = NO;
+        if (model.selected) {
+            self.selectView.image = [UIImage imageNamed:@"multi_selected"];
+        } else {
+            self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+        }
+        CGFloat top = [WFCUMessageCellBase hightForTimeLabel:model];
+        CGRect frame = self.selectView.frame;
+        frame.origin.y = top;
+        self.selectView.frame = frame;
+    } else {
+        self.selectView.hidden = YES;
+    }
     
     NSString *groupId = nil;
     if (self.model.message.conversation.type == Group_Type) {
@@ -410,9 +431,35 @@
     return _failureView;
 }
 
+- (UIImageView *)selectView {
+    if(!_selectView) {
+        CGFloat top = [WFCUMessageCellBase hightForTimeLabel:self.model];
+        CGRect frame = self.frame;
+        frame = CGRectMake(frame.size.width - SelectView_Size - Portrait_Padding_Right, top, SelectView_Size, SelectView_Size);
+        
+        _selectView = [[UIImageView alloc] initWithFrame:frame];
+        _selectView.image = [UIImage imageNamed:@"multi_unselected"];
+        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelect:)];
+        [_selectView addGestureRecognizer:tap];
+        _selectView.userInteractionEnabled = YES;
+        [self.contentView addSubview:_selectView];
+    }
+    return _selectView;
+}
+
+- (void)onSelect:(id)sender {
+    self.model.selected = !self.model.selected;
+    if (self.model.selected) {
+        self.selectView.image = [UIImage imageNamed:@"multi_selected"];
+    } else {
+        self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+    }
+}
+
 - (void)onResend:(id)sender {
     [self.delegate didTapResendBtn:self.model];
 }
+
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

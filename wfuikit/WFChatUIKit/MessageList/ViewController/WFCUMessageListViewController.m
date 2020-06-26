@@ -55,6 +55,8 @@
 
 #import "WFCUReceiptViewController.h"
 
+#import "UIColor+YH.h"
+#import "WFCUConversationTableViewController.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -103,12 +105,17 @@
 
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *deliveryDict;
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *readDict;
+
+@property (nonatomic, assign)BOOL multiSelecting;
+@property (nonatomic, strong)UIView *multiSelectPanel;
 @end
 
 @implementation WFCUMessageListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self removeControllerStackIfNeed];
     
     self.cellContentDict = [[NSMutableDictionary alloc] init];
     
@@ -142,15 +149,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     
     __weak typeof(self) ws = self;
-    
     if(self.conversation.type == Single_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
                 ws.targetUser = note.userInfo[@"userInfo"];
             }
         }];
-        
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     } else if(self.conversation.type == Group_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
@@ -164,17 +168,15 @@
             }
             
         }];
-        
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     } else if(self.conversation.type == Channel_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
                 ws.targetChannel = note.userInfo[@"channelInfo"];
             }
         }];
-        
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     }
+    
+    [self setupNavigationItem];
     
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
     
@@ -216,6 +218,53 @@
             [[WFCCIMService sharedWFCIMService] getUserInfos:memberIds inGroup:self.conversation.target];
         });
     }
+}
+
+//The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
+- (void)removeControllerStackIfNeed {
+    //highlightMessageId will be positive if the VC pushed from search VC
+    if (self.highlightMessageId > 0) {
+        if (self.navigationController.viewControllers.count < 3) {
+            return;
+        }
+        NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+        BOOL foundParent = NO;
+        NSMutableArray *tobeDeleteVCs = [[NSMutableArray alloc] init];
+        for (int i = (int)controllers.count - 2; i >=0; i--) {
+            UIViewController *controller = controllers[i];
+            if ([controller isKindOfClass:[WFCUConversationTableViewController class]]) {
+                foundParent = YES;
+                break;
+            } else {
+                [tobeDeleteVCs addObject:controller];
+            }
+        }
+        
+        if (foundParent) {
+            [controllers removeObjectsInArray:tobeDeleteVCs];
+            self.navigationController.viewControllers = [controllers copy];
+        }
+    }
+}
+
+- (void)setupNavigationItem {
+    if (self.multiSelecting) {
+        self.navigationItem.rightBarButtonItem = nil;
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onMultiSelectCancel:)];
+    } else {
+        if(self.conversation.type == Single_Type) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        } else if(self.conversation.type == Group_Type) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        } else if(self.conversation.type == Channel_Type) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        }
+        self.navigationItem.leftBarButtonItem = nil;
+    }
+}
+
+- (void)onMultiSelectCancel:(id)sender {
+    self.multiSelecting = !self.multiSelecting;
 }
 
 - (void)setLoadingMore:(BOOL)loadingMore {
@@ -468,6 +517,51 @@
             }
         }
     }
+}
+
+- (void)setMultiSelecting:(BOOL)multiSelecting {
+    _multiSelecting = multiSelecting;
+    if (multiSelecting) {
+        for (WFCUMessageModel *model in self.modelList) {
+            model.selecting = YES;
+            model.selected = NO;
+        }
+        self.multiSelectPanel.hidden = NO;
+    } else {
+        for (WFCUMessageModel *model in self.modelList) {
+            model.selecting = NO;
+            model.selected = NO;
+        }
+        self.multiSelectPanel.hidden = YES;
+    }
+    
+    [self setupNavigationItem];
+    [self.collectionView reloadData];
+}
+- (UIView *)multiSelectPanel {
+    if (!_multiSelectPanel) {
+        _multiSelectPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, self.backgroundView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
+        _multiSelectPanel.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
+        UIButton *deleteBtn = [[UIButton alloc] initWithFrame:_multiSelectPanel.bounds];
+        [deleteBtn setTitle:@"Delete" forState:UIControlStateNormal];
+        [deleteBtn addTarget:self action:@selector(onDeleteMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
+        [deleteBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_multiSelectPanel addSubview:deleteBtn];
+        [self.backgroundView addSubview:_multiSelectPanel];
+    }
+    return _multiSelectPanel;
+}
+
+- (void)onDeleteMultiSelectedMessage:(id)sender {
+    NSMutableArray *deletedModels = [[NSMutableArray alloc] init];
+    for (WFCUMessageModel *model in self.modelList) {
+        if (model.selected) {
+            [[WFCCIMService sharedWFCIMService] deleteMessage:model.message.messageId];
+            [deletedModels addObject:model];
+        }
+    }
+    [self.modelList removeObjectsInArray:deletedModels];
+    self.multiSelecting = NO;
 }
 
 - (void)scrollToBottom:(BOOL)animated {
@@ -962,7 +1056,8 @@
                 showTime = NO;
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive && self.showAlias showTime:showTime];
-
+            model.selecting = self.multiSelecting;
+            model.selected = NO;
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList addObject:model];
@@ -978,7 +1073,8 @@
                 self.modelList[0].showTimeLabel = NO;
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive&&self.showAlias showTime:YES];
-
+            model.selecting = self.multiSelecting;
+            model.selected = NO;
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList insertObject:model atIndex:0];
@@ -1194,6 +1290,7 @@
     }
     return nil;
 }
+
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1622,6 +1719,7 @@
     UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Forward") action:@selector(performForward:)];
     UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Recall") action:@selector(performRecall:)];
     UIMenuItem *complainItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Complain") action:@selector(performComplain:)];
+    UIMenuItem *multiSelectItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"MultiSelect") action:@selector(performMultiSelect:)];
     
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
@@ -1693,6 +1791,10 @@
         [items addObject:recallItem];
     }
     
+    if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
+        [items addObject:multiSelectItem];
+    }
+    
     [menu setMenuItems:items];
     self.cell4Menu = baseCell;
     
@@ -1706,7 +1808,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -1796,6 +1898,11 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+- (void)performMultiSelect:(UIMenuItem *)sender {
+    self.multiSelecting = !self.multiSelecting;
+}
+
 - (void)onMenuHidden:(id)sender {
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setMenuItems:nil];

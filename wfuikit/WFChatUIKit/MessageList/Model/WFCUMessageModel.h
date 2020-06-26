@@ -24,4 +24,8 @@
 
 @property (nonatomic, assign)float deliveryRate;
 @property (nonatomic, assign)float readRate;
+
+@property (nonatomic, assign)float selecting;
+
+@property (nonatomic, assign)float selected;
 @end
