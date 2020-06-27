@@ -89,15 +89,29 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 - (void)updateActiveTimer {
     long sec = [[NSDate date] timeIntervalSince1970] - self.callSession.connectedTime / 1000;
-    if (self.callSession.state == kWFAVEngineStateConnected && ![self isVideoViewEnabledSession]) {
+    if (self.callSession.state == kWFAVEngineStateConnected && ![self isVideoViewEnabled]) {
         NSString *timeStr;
         if (sec < 60 * 60) {
             timeStr = [NSString stringWithFormat:@"%02ld:%02ld", sec / 60, sec % 60];
         } else {
             timeStr = [NSString stringWithFormat:@"%02ld:%02ld:%02ld", sec / 60 / 60, (sec / 60) % 60, sec % 60];
         }
+        
+        BOOL showFloatingButton = NO;
+        if (!self.floatingButton.titleLabel.text) {
+            self.floatingButton.hidden = YES;
+            showFloatingButton = YES;
+        }
         [self.floatingButton setTitle:timeStr forState:UIControlStateNormal];
-        [self layoutTextUnderImageButton:self.floatingButton];
+        [self layoutTimeText:self.floatingButton];
+        
+        if (showFloatingButton) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.floatingButton setTitle:timeStr forState:UIControlStateNormal];
+                [self layoutTimeText:self.floatingButton];
+                self.floatingButton.hidden = NO;
+            });
+        }
     }
 }
 
@@ -131,14 +145,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         self.window.transform = CGAffineTransformMakeRotation(M_PI / 2);
         self.window.frame = CGRectMake(posX, posY, 64, 96);
         self.floatingButton.frame = CGRectMake(0, 0, 96, 64);
-        if ([self isVideoViewEnabledSession]) {
+        if ([self isVideoViewEnabled]) {
             self.videoView.frame = CGRectMake(0, 0, 96, 64);
         }
     } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
         self.window.transform = CGAffineTransformMakeRotation(-M_PI / 2);
         self.window.frame = CGRectMake(posX, posY, 64, 96);
         self.floatingButton.frame = CGRectMake(0, 0, 96, 64);
-        if ([self isVideoViewEnabledSession]) {
+        if ([self isVideoViewEnabled]) {
             self.videoView.frame = CGRectMake(0, 0, 96, 64);
         }
     } else {
@@ -150,12 +164,12 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
         self.window.frame = CGRectMake(posX, posY, 64, 96);
         self.floatingButton.frame = CGRectMake(0, 0, 64, 96);
-        if ([self isVideoViewEnabledSession]) {
+        if ([self isVideoViewEnabled]) {
             self.videoView.frame = CGRectMake(0, 0, 64, 96);
         }
     }
 
-    if ([self isVideoViewEnabledSession]) {
+    if ([self isVideoViewEnabled]) {
         if (self.callSession.state == kWFAVEngineStateIncomming) {
             [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
             self.videoView.hidden = YES;
@@ -249,16 +263,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (UIButton *)floatingButton {
     if (!_floatingButton) {
         _floatingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        if (self.callSession.isAudioOnly) {
-//            [_floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
-//                             forState:UIControlStateNormal];
-//        } else {
-//            [_floatingButton setImage:[UIImage imageNamed:@"floatingvideo"]
-//                             forState:UIControlStateNormal];
-//        }
         [_floatingButton setTitle:@"" forState:UIControlStateNormal];
         _floatingButton.backgroundColor = [UIColor clearColor];
-        _floatingButton.frame = CGRectMake(0, 0, 64, 96);
+        if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
+            _floatingButton.frame = CGRectMake(0, 0, 64, 96);
+        } else {
+            _floatingButton.frame = CGRectMake(0, 0, 96, 64);
+        }
+        
         [_floatingButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         _floatingButton.titleLabel.font = [UIFont systemFontOfSize:14];
         CGRect windowFrame = self.window.frame;
@@ -267,7 +279,6 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         self.window.frame = windowFrame;
 
         [_floatingButton addTarget:self action:@selector(touchedWindow:) forControlEvents:UIControlEventTouchUpInside];
-
         [self.window addSubview:_floatingButton];
     }
     return _floatingButton;
@@ -363,21 +374,20 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     staticWindow = nil;
 }
 
-- (void)layoutTextUnderImageButton:(UIButton *)button {
+- (void)layoutTimeText:(UIButton *)button {
+//    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [button setTitleColor:HEXCOLOR(0x0195ff) forState:UIControlStateNormal];
 
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, -button.imageView.frame.size.width,
-                                              -button.imageView.frame.size.height - 6 / 2, 0);
-    // button.imageEdgeInsets =
-    // UIEdgeInsetsMake(-button.titleLabel.frame.size.height-offset/2, 0, 0,
-    // -button.titleLabel.frame.size.width);
-    // 由于iOS8中titleLabel的size为0，用上面这样设置有问题，修改一下即可
-    button.imageEdgeInsets = UIEdgeInsetsMake(-button.titleLabel.intrinsicContentSize.height - 6 / 2,
-                                              0, 0, -button.titleLabel.intrinsicContentSize.width);
+    //top left buttom right
+    button.titleEdgeInsets = UIEdgeInsetsMake(button.imageView.frame.size.height / 2, -button.imageView.frame.size.width,
+                                              -button.imageView.frame.size.height, 0);
+
+    button.imageEdgeInsets = UIEdgeInsetsMake(0,
+                                              0, button.imageView.frame.size.height / 2, -button.titleLabel.bounds.size.width);
 }
 
-- (BOOL)isVideoViewEnabledSession {
+- (BOOL)isVideoViewEnabled {
     return !self.callSession.isAudioOnly;
 }
 
@@ -440,6 +450,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (void)didChangeMode:(BOOL)isAudioOnly {
     [self.videoView removeFromSuperview];
     [self initWindow];
+}
+
+- (void)didChangeInitiator:(NSString * _Nullable)initiator {
+    
 }
 
 - (void)addProximityMonitoringObserver {
