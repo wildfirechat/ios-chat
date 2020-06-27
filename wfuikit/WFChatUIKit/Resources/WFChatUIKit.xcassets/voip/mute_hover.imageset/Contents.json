@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "编组 4备份.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "编组 4备份@2x.png",
+      "filename" : "av_mute_hover.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "编组 4备份@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

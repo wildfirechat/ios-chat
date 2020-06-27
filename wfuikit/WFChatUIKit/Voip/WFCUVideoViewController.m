@@ -173,9 +173,16 @@
     if (!_answerButton) {
         _answerButton = [[UIButton alloc] init];
         
-        [_answerButton setImage:[UIImage imageNamed:@"answer"] forState:UIControlStateNormal];
-        [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateHighlighted];
-        [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateSelected];
+        if (self.currentSession.audioOnly) {
+            [_answerButton setImage:[UIImage imageNamed:@"answer"] forState:UIControlStateNormal];
+            [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateHighlighted];
+            [_answerButton setImage:[UIImage imageNamed:@"answer_hover"] forState:UIControlStateSelected];
+        } else {
+            [_answerButton setImage:[UIImage imageNamed:@"video_answer"] forState:UIControlStateNormal];
+            [_answerButton setImage:[UIImage imageNamed:@"video_answer_hover"] forState:UIControlStateHighlighted];
+            [_answerButton setImage:[UIImage imageNamed:@"video_answer_hover"] forState:UIControlStateSelected];
+        }
+        
         
         _answerButton.backgroundColor = [UIColor clearColor];
         [_answerButton addTarget:self action:@selector(answerButtonDidTap:) forControlEvents:UIControlEventTouchDown];
