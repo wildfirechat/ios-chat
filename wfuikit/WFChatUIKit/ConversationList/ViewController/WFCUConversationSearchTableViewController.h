@@ -12,4 +12,7 @@
 @interface WFCUConversationSearchTableViewController : UIViewController
 @property(nonatomic, strong)WFCCConversation *conversation;
 @property(nonatomic, strong)NSString *keyword;
+
+@property(nonatomic, assign)BOOL messageSelecting;
+@property(nonatomic, strong)NSMutableArray *selectedMessageIds;
 @end
