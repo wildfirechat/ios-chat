@@ -17,4 +17,7 @@
 
 //仅限于在Channel内使用。Channel的owner对订阅Channel单个用户发起一对一私聊
 @property (nonatomic, strong)NSString *privateChatUser;
+
+@property (nonatomic, assign)BOOL multiSelecting;
+@property (nonatomic, strong)NSMutableArray *selectedMessageIds;
 @end

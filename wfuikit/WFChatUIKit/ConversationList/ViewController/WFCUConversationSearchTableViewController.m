@@ -154,6 +154,8 @@
     mvc.conversation = self.messages[indexPath.row].conversation;
     mvc.highlightMessageId = self.messages[indexPath.row].messageId;
     mvc.highlightText = self.keyword;
+    mvc.multiSelecting = self.messageSelecting;
+    mvc.selectedMessageIds = self.selectedMessageIds;
     [self.navigationController pushViewController:mvc animated:YES];
 }
 
