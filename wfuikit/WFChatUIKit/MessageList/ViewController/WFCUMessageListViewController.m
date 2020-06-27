@@ -57,6 +57,7 @@
 
 #import "UIColor+YH.h"
 #import "WFCUConversationTableViewController.h"
+#import "WFCUConversationSearchTableViewController.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -106,7 +107,6 @@
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *deliveryDict;
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *readDict;
 
-@property (nonatomic, assign)BOOL multiSelecting;
 @property (nonatomic, strong)UIView *multiSelectPanel;
 @end
 
@@ -218,6 +218,10 @@
             [[WFCCIMService sharedWFCIMService] getUserInfos:memberIds inGroup:self.conversation.target];
         });
     }
+    
+    if (self.multiSelecting) {
+        self.multiSelectPanel.hidden = NO;
+    }
 }
 
 //The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
@@ -249,7 +253,7 @@
 
 - (void)setupNavigationItem {
     if (self.multiSelecting) {
-        self.navigationItem.rightBarButtonItem = nil;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStyleDone target:self action:@selector(onSearchBarBtn:)];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onMultiSelectCancel:)];
     } else {
         if(self.conversation.type == Single_Type) {
@@ -438,6 +442,23 @@
     [self.navigationController pushViewController:gvc animated:YES];
 }
 
+- (void)onSearchBarBtn:(id)sender {
+    if (self.multiSelecting) {
+        for (WFCUMessageModel *model in self.modelList) {
+            if (model.selected && ![self.selectedMessageIds containsObject:@(model.message.messageId)]) {
+                [self.selectedMessageIds addObject:@(model.message.messageId)];
+            }
+        }
+        
+        WFCUConversationSearchTableViewController *mvc = [[WFCUConversationSearchTableViewController alloc] init];
+        mvc.conversation = self.conversation;
+        mvc.hidesBottomBarWhenPushed = YES;
+        mvc.messageSelecting = YES;
+        mvc.selectedMessageIds = self.selectedMessageIds;
+        [self.navigationController pushViewController:mvc animated:YES];
+    }
+}
+
 - (void)setTargetUser:(WFCCUserInfo *)targetUser {
     _targetUser = targetUser;
     if(targetUser.friendAlias.length) {
@@ -526,12 +547,18 @@
             model.selecting = YES;
             model.selected = NO;
         }
+        
+        if (!self.selectedMessageIds) {
+            self.selectedMessageIds = [[NSMutableArray alloc] init];
+        }
+        
         self.multiSelectPanel.hidden = NO;
     } else {
         for (WFCUMessageModel *model in self.modelList) {
             model.selecting = NO;
             model.selected = NO;
         }
+        self.selectedMessageIds = nil;
         self.multiSelectPanel.hidden = YES;
     }
     
@@ -540,6 +567,9 @@
 }
 - (UIView *)multiSelectPanel {
     if (!_multiSelectPanel) {
+        if (!self.backgroundView) {
+            return nil;
+        }
         _multiSelectPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, self.backgroundView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
         _multiSelectPanel.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
         UIButton *deleteBtn = [[UIButton alloc] initWithFrame:_multiSelectPanel.bounds];
@@ -558,9 +588,16 @@
         if (model.selected) {
             [[WFCCIMService sharedWFCIMService] deleteMessage:model.message.messageId];
             [deletedModels addObject:model];
+            [self.selectedMessageIds removeObject:@(model.message.messageId)];
         }
     }
     [self.modelList removeObjectsInArray:deletedModels];
+    
+    //有可能是经过多次搜索，选中了当前model列表中没有包含的
+    for (NSNumber *IDS in self.selectedMessageIds) {
+        [[WFCCIMService sharedWFCIMService] deleteMessage:[IDS longValue]];
+    }
+    
     self.multiSelecting = NO;
 }
 
@@ -1057,7 +1094,7 @@
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive && self.showAlias showTime:showTime];
             model.selecting = self.multiSelecting;
-            model.selected = NO;
+            model.selected = [self.selectedMessageIds containsObject:@(message.messageId)];
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList addObject:model];
@@ -1074,7 +1111,7 @@
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive&&self.showAlias showTime:YES];
             model.selecting = self.multiSelecting;
-            model.selected = NO;
+            model.selected = [self.selectedMessageIds containsObject:@(message.messageId)];
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList insertObject:model atIndex:0];
