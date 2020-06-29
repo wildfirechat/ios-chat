@@ -620,6 +620,18 @@ namespace mars{
         virtual ~GetSettingCallback() {}
       };
     
+    class GetOneUserInfoCallback {
+    public:
+        virtual void onSuccess(const TUserInfo &tUserInfo) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetOneUserInfoCallback() {}
+    };
+    class GetOneGroupInfoCallback {
+    public:
+        virtual void onSuccess(const mars::stn::TGroupInfo &tGroupInfo) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetOneGroupInfoCallback() {}
+    };
     
         enum ConnectionStatus {
             kConnectionStatusSecretKeyMismatch = -6,
@@ -730,8 +742,11 @@ namespace mars{
         extern void (*getUserInfo)(const std::list<std::pair<std::string, int64_t>> &userReqList, GetUserInfoCallback *callback);
 
         extern void reloadGroupInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &groupReqList);
+        extern void reloadOneGroupInfo(const std::string &groupId, int64_t timestamp, GetOneGroupInfoCallback *callback);
         extern void reloadUserInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &userReqList);
+        extern void reloadOneUserInfo(const std::string &userId, int64_t timestamp, GetOneUserInfoCallback *callback);
         extern void reloadGroupMembersFromRemote(const std::string &groupId, int64_t updateDt);
+        extern void reloadGroupMembersEx(const std::string &groupId, int64_t updateDt, GetGroupMembersCallback *callback);
         extern void clearFriendRequestUnread(int64_t maxDt);
         extern std::string getJoinedChatroom();
         extern void joinChatroom(const std::string &chatroomId, GeneralOperationCallback *callback);

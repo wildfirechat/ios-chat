@@ -166,6 +166,9 @@ WFCCGroupInfo* convertGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.joinType = tgi.joinType;
     groupInfo.privateChat = tgi.privateChat;
     groupInfo.searchable = tgi.searchable;
+    groupInfo.historyMessage = tgi.historyMessage;
+    groupInfo.maxMemberCount = tgi.maxMemberCount;
+    groupInfo.updateTimestamp = tgi.updateDt;
     return groupInfo;
 }
 

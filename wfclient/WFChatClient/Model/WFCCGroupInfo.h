@@ -90,4 +90,10 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
  群的最大成员数，可以通过server api来修改
  */
 @property (nonatomic, assign)int maxMemberCount;
+
+/**
+ 群的最后更新日期
+ */
+@property (nonatomic, assign)long long updateTimestamp;
+
 @end
