@@ -7,6 +7,11 @@
 //
 
 #import "WFCCUtilities.h"
+#import <CommonCrypto/CommonDigest.h>
+#import "WFCCNetworkService.h"
+
+static NSMutableDictionary *wfcUrlImageDict;
+static NSLock *wfcImageLock;
 
 @implementation WFCCUtilities
 + (CGSize)imageScaleSize:(CGSize)imageSize targetSize:(CGSize)targetSize thumbnailPoint:(CGPoint *)thumbnailPoint {
@@ -214,5 +219,219 @@
     CGContextRelease(ctx);
     CGImageRelease(cgimg);
     return img;
+}
+
++ (NSString *)rf_EncryptMD5:(NSString *)str {
+    if (str.length<=0) return nil;
+
+    const char *cStr = [str UTF8String];
+    unsigned char digest[16];
+    CC_MD5( cStr, (unsigned int)strlen(cStr), digest );
+
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [output appendFormat:@"%02x", digest[i]];
+    }
+
+    return  output;
+}
+
++ (UIImage *)getUserImage:(NSString *)url {
+    [wfcImageLock lockBeforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    UIImage *image = [wfcUrlImageDict objectForKey:url];
+    if (!image) {
+        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+        if (wfcUrlImageDict.count > 50) {
+            [wfcUrlImageDict removeAllObjects];
+        }
+        
+        [wfcUrlImageDict setObject:image forKey:url];
+    }
+    [wfcImageLock unlock];
+    
+    return image;
+}
+
++ (void)generateNewGroupPortrait:(NSString *)groupId
+                           width:(int)PortraitWidth
+            defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
+
+    NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@", groupId]];
+    long now = [[[NSDate alloc] init] timeIntervalSince1970];
+    if (now - [createTime longLongValue] < 10 * 1000) {//防止连续刷新时，多次生成
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@(now) forKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@", groupId]];
+    
+    UIView *combineHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PortraitWidth, PortraitWidth)];
+    [combineHeadView setBackgroundColor:[UIColor colorWithRed:219.f/255 green:223.f/255 blue:224.f/255 alpha:1.f]];
+    
+    [[WFCCIMService sharedWFCIMService] getGroupMembers:groupId refresh:NO success:^(NSString *groupId, NSArray<WFCCGroupMember *> *members) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            if (!members.count) {
+                return;
+            }
+             
+            NSMutableArray *memberIds = [[NSMutableArray alloc] init];
+            for (WFCCGroupMember *member in members) {
+                [memberIds addObject:member.memberId];
+            }
+             
+            long long now = [[[NSDate alloc] init] timeIntervalSince1970];
+
+            int gridMemberCount = MIN((int)memberIds.count, 9);
+            
+            CGFloat padding = 5;
+
+            int numPerRow = 3;
+
+            if (gridMemberCount <= 4) {
+                numPerRow = 2;
+            }
+            int row = (int)(gridMemberCount - 1) / numPerRow + 1;
+            int column = numPerRow;
+            int firstCol = (int)(gridMemberCount - (row - 1)*column);
+                
+            CGFloat width = (PortraitWidth - padding) / numPerRow - padding;
+                
+            CGFloat Y = (PortraitWidth - (row * (width + padding) + padding))/2;
+
+            NSString *fullPath = @"";
+            for (int i = 0; i < row; i++) {
+                int c = column;
+                if (i == 0) {
+                    c = firstCol;
+                }
+                CGFloat X = (PortraitWidth - (c * (width + padding) + padding))/2;
+                for (int j = 0; j < c; j++) {
+                    __block UIImageView *imageView;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(X + j *(width + padding) + padding, Y + i * (width + padding) + padding, width, width)];
+                    });
+                     
+                    int index;
+                    if (i == 0) {
+                        index = j;
+                    } else {
+                        index = j + (i-1)*column + firstCol;
+                    }
+                    NSString *userId = [memberIds objectAtIndex:index];
+                    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                    fullPath = [NSString stringWithFormat:@"%@%@", fullPath, user.portrait?user.portrait:userId];
+                    
+                    UIImage *image;
+                    if (user.portrait.length) {
+                        image = [WFCCUtilities getUserImage:user.portrait];
+                        if (!image) {
+                            image = defaultUserPortraitBlock(user.userId);
+                        }
+                    } else {
+                        image = defaultUserPortraitBlock(user.userId);
+                    }
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        imageView.image = image;
+                        [combineHeadView addSubview:imageView];
+                    });
+                }
+            }
+             
+            __block UIImage *image;
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                UIGraphicsBeginImageContextWithOptions(combineHeadView.frame.size, NO, 2.0);
+                [combineHeadView.layer renderInContext:UIGraphicsGetCurrentContext()];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+            });
+             
+             
+            NSString *mdt = [WFCCUtilities rf_EncryptMD5:fullPath];
+            NSString *fileName = [NSString stringWithFormat:@"%@-%lld-%d-%@", groupId, now, PortraitWidth, mdt];
+
+            NSString *path = [[WFCCUtilities getDocumentPathWithComponent:@"/group_portrait"] stringByAppendingPathComponent:fileName];
+
+            NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+
+            [imgData writeToFile:path atomically:YES];
+
+
+            [[NSUserDefaults standardUserDefaults] setObject:path forKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@", groupId]];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+             
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"GroupPortraitChanged" object:groupId userInfo:@{@"path":path}];
+            });
+            
+        });
+    } error:^(int errorCode) {
+        
+    }];
+}
+
+//如果已经生成了，会立即返回地址。如果没有生成，会返回空，然后生成之后通知GroupPortraitChanged
++ (NSString *)getGroupGridPortrait:(NSString *)groupId
+                             width:(int)width
+               defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
+    //Setp1 检查是否有此群组的记录
+    NSString *path = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@", groupId]];
+    
+    if (!path.length) { //记录不存在，生成
+        [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+    } else { //记录存在
+        //修正沙盒路径
+        path = [WFCCUtilities getSendBoxFilePath:path];
+        
+        //检查文件是否存在
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:path]) { //文件存在
+            [[WFCCIMService sharedWFCIMService] getGroupInfo:groupId refresh:NO success:^(WFCCGroupInfo *groupInfo) {
+                //分析文件名，获取更新时间，hash值
+                //Path 格式为 groupId-updatetime-width-hash
+                NSString *str = path.lastPathComponent;
+                str = [str substringFromIndex:groupId.length];
+                NSArray *arr = [str componentsSeparatedByString:@"-"];
+                long long timestamp = [arr[1] longLongValue];
+                
+                
+                //检查群组日期，超过7天，或生成之后群组有更新，检查头像是否有变化是否需要重新生成
+                long long now = [[[NSDate alloc] init] timeIntervalSince1970];
+                if (timestamp + 7 * 24 * 3600 < now || timestamp*1000 < groupInfo.updateTimestamp) {
+                    [[WFCCIMService sharedWFCIMService] getGroupMembers:groupId refresh:NO success:^(NSString *groupId, NSArray<WFCCGroupMember *> *members) {
+                        if (!members.count) {
+                            return;
+                        }
+                        
+                        NSString *fullPath = @"";
+                        for (int i = 0; i < MIN(members.count, 9); i++) {
+                            NSString *userId = members[i].memberId;
+                            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                            fullPath = [NSString stringWithFormat:@"%@%@", fullPath, userInfo.portrait ? userInfo.portrait : userId];
+                        }
+                        
+                        NSString *mdt = [WFCCUtilities rf_EncryptMD5:fullPath];
+                        if (![mdt isEqualToString:arr[3]]) {
+                            [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+                        }
+                    } error:^(int errorCode) {
+                        //log here
+                    }];
+                }
+                
+            } error:^(int errorCode) {
+                //log here
+            }];
+            
+            return path;
+        } else { //文件不存在
+            [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+        }
+    }
+    return nil;
+}
+
++ (void)load {
+    wfcUrlImageDict = [[NSMutableDictionary alloc] init];
+    wfcImageLock = [[NSLock alloc] init];
 }
 @end

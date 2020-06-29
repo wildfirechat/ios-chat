@@ -157,6 +157,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId
                       refresh:(BOOL)refresh;
 
+- (WFCCUserInfo *)getUserInfo:(NSString *)userId inGroup:(NSString *)groupId refresh:(BOOL)refresh;
+
+- (NSArray<WFCCUserInfo *> *)getUserInfos:(NSArray<NSString *> *)userIds inGroup:(NSString *)groupId;
+
+- (void)getUserInfo:(NSString *)userId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+              error:(void(^)(int errorCode))errorBlock;
+
 - (void)searchUser:(NSString *)keyword
         searchType:(WFCCSearchUserType)searchType
               page:(int)page
@@ -719,6 +728,18 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 获取用户信息
+ 
+ @param userId 用户ID
+ @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUserInfo:(NSString *)userId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+            error:(void(^)(int errorCode))errorBlock;
 #pragma mark - 好友相关
 /**
  查询用户和当前用户是否是好友关系
@@ -870,6 +891,19 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                     forceUpdate:(BOOL)forceUpdate;
 
 /**
+ 获取群成员信息
+ 
+ @param groupId 群ID
+ @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getGroupMembers:(NSString *)groupId
+                refresh:(BOOL)refresh
+                success:(void(^)(NSString *groupId, NSArray<WFCCGroupMember *> *))successBlock
+                  error:(void(^)(int errorCode))errorBlock;
+
+/**
  获取群信息
  
  @param groupId 群ID
@@ -879,6 +913,18 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (WFCCGroupInfo *)getGroupInfo:(NSString *)groupId
                         refresh:(BOOL)refresh;
 
+/**
+ 获取群信息
+ 
+ @param groupId 群ID
+ @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getGroupInfo:(NSString *)groupId
+             refresh:(BOOL)refresh
+             success:(void(^)(WFCCGroupInfo *groupInfo))successBlock
+               error:(void(^)(int errorCode))errorBlock;
 /**
  获取群成员信息
  

@@ -11,6 +11,7 @@
 
 #include "mars/proto/proto.h"
 #include <map>
+#include <set>
 namespace mars {
     namespace stn {
         class UpdateConversationData;
@@ -95,10 +96,13 @@ namespace mars {
             std::list<TGroupSearchResult> SearchGroups(const std::string &keyword, int limit);
             
             TGroupInfo GetGroupInfo(const std::string &groupId, bool refresh);
+            void GetGroupInfo(const std::string &userId, bool refresh, GetOneGroupInfoCallback *callback);
+            void BatchRefreshGroupInfo(const std::set<std::string> &groupIds);
             long InsertGroupInfo(const TGroupInfo &groupInfo);
             bool UpdateGroupInfo(const std::string &groupId, int type, const std::string &newValue);
             std::list<TGroupMember> GetGroupMembers(const std::string &groupId, bool refresh);
             TGroupMember GetGroupMember(const std::string &groupId, const std::string &memberId);
+            void GetGroupMembers(const std::string &groupId, bool refresh, GetGroupMembersCallback *callback);
             bool RemoveGroupAndMember(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
@@ -109,6 +113,8 @@ namespace mars {
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
+            void GetUserInfo(const std::string &userId, bool refresh, GetOneUserInfoCallback *callback);
+            
             long InsertUserInfoOrReplace(const TUserInfo &userInfo);
             long UpdateMyInfo(const std::list<std::pair<int, std::string>> &infos);
             
