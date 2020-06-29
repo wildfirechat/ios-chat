@@ -333,9 +333,19 @@ public:
                 gi.target = [NSString stringWithUTF8String:tgi.target.c_str()];
                 gi.type = (WFCCGroupType)tgi.type;
                 gi.memberCount = tgi.memberCount;
+                gi.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
                 gi.name = [NSString stringWithUTF8String:tgi.name.c_str()];
                 gi.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
                 gi.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];
+
+                gi.mute = tgi.mute;
+                gi.joinType = tgi.joinType;
+                gi.privateChat = tgi.privateChat;
+                gi.searchable = tgi.searchable;
+                gi.historyMessage = tgi.historyMessage;
+                gi.maxMemberCount = tgi.maxMemberCount;
+                gi.updateTimestamp = tgi.updateDt;
+                
                 [ret addObject:gi];
             }
             
@@ -923,6 +933,43 @@ public:
     mars::stn::searchUser([keyword UTF8String], searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
+class IMGetOneUserInfoCallback : public mars::stn::GetOneUserInfoCallback {
+private:
+    void(^m_successBlock)(WFCCUserInfo *userInfo);
+    void(^m_errorBlock)(int errorCode);
+public:
+    IMGetOneUserInfoCallback(void(^successBlock)(WFCCUserInfo *machedUsers), void(^errorBlock)(int errorCode)) : m_successBlock(successBlock), m_errorBlock(errorBlock) {}
+    
+    void onSuccess(const mars::stn::TUserInfo &tUserInfo) {
+        m_successBlock(convertUserInfo(tUserInfo));
+        delete this;
+    }
+    
+    void onFalure(int errorCode) {
+        m_errorBlock(errorCode);
+        delete this;
+    }
+    
+    ~IMGetOneUserInfoCallback() {}
+};
+
+
+- (void)getUserInfo:(NSString *)userId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+              error:(void(^)(int errorCode))errorBlock {
+    if (!userId.length) {
+        return;
+    }
+    
+    if ([self.userSource respondsToSelector:@selector(getUserInfo:refresh:success:error:)]) {
+        [self.userSource getUserInfo:userId refresh:refresh success:successBlock error:errorBlock];
+        return;
+    }
+    
+    mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
+}
+
 - (BOOL)isMyFriend:(NSString *)userId {
     return mars::stn::MessageDB::Instance()->isMyFriend([userId UTF8String]);
 }
@@ -1037,6 +1084,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     groupInfo.searchable = tgi.searchable;
     groupInfo.historyMessage = tgi.historyMessage;
     groupInfo.maxMemberCount = tgi.maxMemberCount;
+    groupInfo.updateTimestamp = tgi.updateDt;
     return groupInfo;
 }
 
@@ -1159,6 +1207,14 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::blackListRequest([userId UTF8String], isBlackListed, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId refresh:(BOOL)refresh {
+    if (!userId) {
+        return nil;
+    }
+    
+    if ([self.userSource respondsToSelector:@selector(getUserInfo:refresh:)]) {
+        return [self.userSource getUserInfo:userId refresh:refresh];
+    }
+    
     return [self getUserInfo:userId inGroup:nil refresh:refresh];
 }
 
@@ -1167,8 +1223,8 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         return nil;
     }
     
-    if (self.userSource) {
-        return [self.userSource getUserInfo:userId refresh:refresh];
+    if ([self.userSource respondsToSelector:@selector(getUserInfo:inGroup:refresh:)]) {
+        return [self.userSource getUserInfo:userId inGroup:groupId refresh:refresh];
     }
     
     mars::stn::TUserInfo tui = mars::stn::MessageDB::Instance()->getUserInfo([userId UTF8String], groupId ? [groupId UTF8String] : "", refresh);
@@ -1182,6 +1238,10 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 - (NSArray<WFCCUserInfo *> *)getUserInfos:(NSArray<NSString *> *)userIds inGroup:(NSString *)groupId {
     if ([userIds count] == 0) {
         return nil;
+    }
+    
+    if ([self.userSource respondsToSelector:@selector(getUserInfos:inGroup:)]) {
+        return [self.userSource getUserInfos:userIds inGroup:groupId];;
     }
     
     std::list<std::string> strIds;
@@ -1545,6 +1605,55 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return output;
 }
 
+class IMGetGroupMembersCallback : public mars::stn::GetGroupMembersCallback {
+private:
+    void(^m_successBlock)(NSString *groupId, NSArray<WFCCGroupMember *> *memberList);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGetGroupMembersCallback(void(^successBlock)(NSString *groupId, NSArray<WFCCGroupMember *> *memberList), void(^errorBlock)(int error_code)) : mars::stn::GetGroupMembersCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    
+    void onSuccess(const std::string &groupId, const std::list<mars::stn::TGroupMember> &groupMemberList) {
+        NSMutableArray *output = [[NSMutableArray alloc] init];
+        for(std::list<mars::stn::TGroupMember>::const_iterator it = groupMemberList.begin(); it != groupMemberList.end(); it++) {
+            WFCCGroupMember *member = [WFCCGroupMember new];
+            member.groupId = [NSString stringWithUTF8String:it->groupId.c_str()];
+            member.memberId = [NSString stringWithUTF8String:it->memberId.c_str()];
+            member.alias = [NSString stringWithUTF8String:it->alias.c_str()];
+            member.type = (WFCCGroupMemberType)it->type;
+            member.createTime = it->createDt;
+            [output addObject:member];
+        }
+        NSString *gid = [NSString stringWithUTF8String:groupId.c_str()];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(m_successBlock) {
+                m_successBlock(gid, output);
+            }
+            delete this;
+        });
+        
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMGetGroupMembersCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+- (void)getGroupMembers:(NSString *)groupId
+                refresh:(BOOL)refresh
+                success:(void(^)(NSString *groupId, NSArray<WFCCGroupMember *> *))successBlock
+                  error:(void(^)(int errorCode))errorBlock {
+    mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], refresh, new IMGetGroupMembersCallback(successBlock, errorBlock));
+}
+
 - (WFCCGroupMember *)getGroupMember:(NSString *)groupId
                            memberId:(NSString *)memberId {
     if (!groupId || !memberId) {
@@ -1653,6 +1762,46 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     }
     mars::stn::TGroupInfo tgi = mars::stn::MessageDB::Instance()->GetGroupInfo([groupId UTF8String], refresh);
     return convertProtoGroupInfo(tgi);
+}
+
+class IMGetOneGroupInfoCallback : public mars::stn::GetOneGroupInfoCallback {
+private:
+    void(^m_successBlock)(WFCCGroupInfo *);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGetOneGroupInfoCallback(void(^successBlock)(WFCCGroupInfo *), void(^errorBlock)(int error_code)) : mars::stn::GetOneGroupInfoCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    
+    void onSuccess(const mars::stn::TGroupInfo &tgi) {
+        WFCCGroupInfo *gi = convertProtoGroupInfo(tgi);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(gi);
+            }
+                
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMGetOneGroupInfoCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+- (void)getGroupInfo:(NSString *)groupId
+             refresh:(BOOL)refresh
+             success:(void(^)(WFCCGroupInfo *groupInfo))successBlock
+               error:(void(^)(int errorCode))errorBlock {
+    mars::stn::MessageDB::Instance()->GetGroupInfo([groupId UTF8String], refresh, new IMGetOneGroupInfoCallback(successBlock, errorBlock));
 }
 
 - (NSString *)getUserSetting:(UserSettingScope)scope key:(NSString *)key {

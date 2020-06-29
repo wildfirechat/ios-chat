@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WFCCIMService.h"
 
 @interface WFCCUtilities : NSObject
 
@@ -43,4 +44,8 @@
 
 
 + (UIImage *)imageWithRightOrientation:(UIImage *)aImage;
+
++ (NSString *)getGroupGridPortrait:(NSString *)groupId
+                             width:(int)width
+               defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock;
 @end
