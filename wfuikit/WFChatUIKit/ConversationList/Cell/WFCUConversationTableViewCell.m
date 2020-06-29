@@ -56,7 +56,37 @@
 }
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
+#if !WFCU_GROUP_GRID_PORTRAIT
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+#else
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"GroupPortraitChanged" object:nil];
+
+    if (groupInfo.portrait.length) {
+        [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    } else {
+        __weak typeof(self)ws = self;
+        NSString *groupId = groupInfo.target;
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:groupInfo.target queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSString *path = [note.userInfo objectForKey:@"path"];
+            if ((ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
+                (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId])) {
+                [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            }
+        }];
+        [self.potraitView setImage:[UIImage imageNamed:@"group_default_portrait"]];
+        
+        
+        NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 defaultUserPortrait:^UIImage *(NSString *userId) {
+            return [UIImage imageNamed:@"PersonalChat"];
+        }];
+        
+        if (path) {
+            [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            [self.potraitView setImage:[UIImage imageWithContentsOfFile:path]];
+        }
+    }
+#endif
   
   if(groupInfo.name.length > 0) {
     self.targetView.text = groupInfo.name;
@@ -305,4 +335,7 @@
     return _bubbleView;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

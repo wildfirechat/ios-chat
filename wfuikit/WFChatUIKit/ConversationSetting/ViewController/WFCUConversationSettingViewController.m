@@ -17,7 +17,6 @@
 #import "WFCUSwitchTableViewCell.h"
 #import "WFCUCreateGroupViewController.h"
 #import "WFCUProfileTableViewController.h"
-#import "WFCUCreateGroupViewController.h"
 #import "GroupManageTableViewController.h"
 #import "WFCUGroupMemberCollectionViewController.h"
 
@@ -737,6 +736,7 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
   } else if ([self isGroupPortraitCell:indexPath]) {
+#if !WFCU_GROUP_GRID_PORTRAIT
       if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
           [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupPortraitHint") duration:1 position:CSToastPositionCenter];
           return;
@@ -750,6 +750,7 @@
     }
     
     [self.navigationController pushViewController:vc animated:YES];
+#endif
   } else if ([self isGroupManageCell:indexPath]) {
       GroupManageTableViewController *gmvc = [[GroupManageTableViewController alloc] init];
       gmvc.groupInfo = self.groupInfo;
@@ -856,6 +857,7 @@
       } else {
         [disabledUser addObject:self.conversation.target];
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+#if !WFCU_GROUP_GRID_PORTRAIT
             WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
             vc.memberIds = [contacts mutableCopy];
             if(![vc.memberIds containsObject:self.conversation.target]) {
@@ -881,7 +883,9 @@
                 mvc.hidesBottomBarWhenPushed = YES;
                 [nav pushViewController:mvc animated:YES];
             };
-            
+#else
+            [self createGroup:contacts];
+#endif
         };
         pvc.disableUsersSelected = YES;
       }
@@ -963,6 +967,60 @@
 //        }
     }
 }
+#if WFCU_GROUP_GRID_PORTRAIT
+- (void)createGroup:(NSArray<NSString *> *)contacts {
+    __weak typeof(self) ws = self;
+    NSMutableArray<NSString *> *memberIds = [contacts mutableCopy];
+    
+    if(![memberIds containsObject:self.conversation.target]) {
+      [memberIds insertObject:self.conversation.target atIndex:0];
+    }
+    
+    if (![memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        [memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
+    }
+
+    NSString *name;
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[memberIds objectAtIndex:0]  refresh:NO];
+    name = userInfo.displayName;
+    
+    for (int i = 1; i < MIN(8, memberIds.count); i++) {
+        userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[memberIds objectAtIndex:i]  refresh:NO];
+        if (userInfo.displayName.length > 0) {
+            if (name.length + userInfo.displayName.length + 1 > 16) {
+                name = [name stringByAppendingString:WFCString(@"Etc")];
+                break;
+            }
+            name = [name stringByAppendingFormat:@",%@", userInfo.displayName];
+        }
+    }
+    if (name.length == 0) {
+        name = WFCString(@"GroupChat");
+    }
+    
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+        NSLog(@"create group success");
+        
+        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+        mvc.conversation = [[WFCCConversation alloc] init];
+        mvc.conversation.type = Group_Type;
+        mvc.conversation.target = groupId;
+        mvc.conversation.line = 0;
+        
+        mvc.hidesBottomBarWhenPushed = YES;
+        UINavigationController *nav = self.navigationController;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [nav pushViewController:mvc animated:YES];
+
+    } error:^(int error_code) {
+        NSLog(@"create group failure");
+        [ws.view makeToast:WFCString(@"CreateGroupFailure")
+                    duration:2
+                    position:CSToastPositionCenter];
+
+    }];
+}
+#endif
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

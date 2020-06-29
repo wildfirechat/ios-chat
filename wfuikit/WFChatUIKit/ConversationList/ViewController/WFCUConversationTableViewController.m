@@ -31,6 +31,7 @@
 #import "UIImage+ERCategory.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "UIView+Toast.h"
 #import "WFCUSeletedUserViewController.h"
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
@@ -210,6 +211,7 @@
             mvc.hidesBottomBarWhenPushed = YES;
             [ws.navigationController pushViewController:mvc animated:YES];
         } else {
+#if !WFCU_GROUP_GRID_PORTRAIT
             WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
             vc.memberIds = [contacts mutableCopy];
             if (![vc.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
@@ -217,11 +219,61 @@
             }
             vc.hidesBottomBarWhenPushed = YES;
             [ws.navigationController pushViewController:vc animated:YES];
+#else
+            [self createGroup:contacts];
+#endif
         }
     };
     
     [self.navigationController presentViewController:navi animated:YES completion:nil];
 }
+
+#if WFCU_GROUP_GRID_PORTRAIT
+- (void)createGroup:(NSArray<NSString *> *)contacts {
+    __weak typeof(self) ws = self;
+    NSMutableArray<NSString *> *memberIds = [contacts mutableCopy];
+    if (![memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        [memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
+    }
+
+    NSString *name;
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[memberIds objectAtIndex:0]  refresh:NO];
+    name = userInfo.displayName;
+    
+    for (int i = 1; i < MIN(8, memberIds.count); i++) {
+        userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[memberIds objectAtIndex:i]  refresh:NO];
+        if (userInfo.displayName.length > 0) {
+            if (name.length + userInfo.displayName.length + 1 > 16) {
+                name = [name stringByAppendingString:WFCString(@"Etc")];
+                break;
+            }
+            name = [name stringByAppendingFormat:@",%@", userInfo.displayName];
+        }
+    }
+    if (name.length == 0) {
+        name = WFCString(@"GroupChat");
+    }
+    
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+        NSLog(@"create group success");
+        
+        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+        mvc.conversation = [[WFCCConversation alloc] init];
+        mvc.conversation.type = Group_Type;
+        mvc.conversation.target = groupId;
+        mvc.conversation.line = 0;
+        
+        mvc.hidesBottomBarWhenPushed = YES;
+        [ws.navigationController pushViewController:mvc animated:YES];
+    } error:^(int error_code) {
+        NSLog(@"create group failure");
+        [ws.view makeToast:WFCString(@"CreateGroupFailure")
+                    duration:2
+                    position:CSToastPositionCenter];
+
+    }];
+}
+#endif
 
 - (void)addFriendsAction:(id)sender {
     UIViewController *addFriendVC = [[WFCUFriendRequestViewController alloc] init];

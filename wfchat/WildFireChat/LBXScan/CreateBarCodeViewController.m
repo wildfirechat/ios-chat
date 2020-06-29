@@ -137,7 +137,20 @@
 
 - (void)setGroupInfo:(WFCCGroupInfo *)groupInfo {
     _groupInfo = groupInfo;
+    
+#if !WFCU_GROUP_GRID_PORTRAIT
     self.qrLogo = groupInfo.portrait;
+#else
+    if (groupInfo.portrait.length) {
+        self.qrLogo = groupInfo.portrait;
+    } else {
+        NSString *filePath = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:50 defaultUserPortrait:^UIImage *(NSString *userId) {
+            return [UIImage imageNamed:@"PersonalChat"];
+        }];
+        self.qrLogo = filePath;
+    }
+#endif
+    
     if (groupInfo.name.length) {
         self.labelStr = groupInfo.name;
     } else {
@@ -158,7 +171,16 @@
     __weak typeof(self)ws = self;
     dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
         CGSize logoSize=CGSizeMake(50, 50);
-        UIImage *logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.qrLogo]]];
+        UIImage *logo;
+        if ([NSURL URLWithString:qrLogo].baseURL) {
+            logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.qrLogo]]];
+        } else {
+            logo = [UIImage imageWithContentsOfFile:qrLogo];
+        }
+        if (!logo) {
+            logo = [UIImage imageNamed:@"group_default_portrait"];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             ws.logoImgView = [ws roundCornerWithImage:logo size:logoSize];
             ws.logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);

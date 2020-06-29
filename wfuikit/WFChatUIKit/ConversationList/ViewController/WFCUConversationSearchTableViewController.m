@@ -8,7 +8,6 @@
 
 #import "WFCUConversationSearchTableViewController.h"
 #import "WFCUContactListViewController.h"
-#import "WFCUCreateGroupViewController.h"
 #import "WFCUFriendRequestViewController.h"
 
 #import "WFCUMessageListViewController.h"

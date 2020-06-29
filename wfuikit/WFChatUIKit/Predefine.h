@@ -48,4 +48,7 @@ alpha:1.0]
 #define WFCU_SUPPORT_VOIP 1
 
 #define WFCString(key) NSLocalizedStringFromTable(key, @"wfc", nil)
+
+#define WFCU_GROUP_GRID_PORTRAIT 0
+
 #endif /* Predefine_h */
