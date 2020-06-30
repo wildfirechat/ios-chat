@@ -56,9 +56,9 @@
 }
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
-#if !WFCU_GROUP_GRID_PORTRAIT
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
-#else
+//#if !WFCU_GROUP_GRID_PORTRAIT
+//  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+//#else
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"GroupPortraitChanged" object:nil];
 
     if (groupInfo.portrait.length) {
@@ -86,7 +86,7 @@
             [self.potraitView setImage:[UIImage imageWithContentsOfFile:path]];
         }
     }
-#endif
+//#endif
   
   if(groupInfo.name.length > 0) {
     self.targetView.text = groupInfo.name;
