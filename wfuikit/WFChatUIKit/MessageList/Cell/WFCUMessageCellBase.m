@@ -24,6 +24,12 @@
     [self.delegate didTapMessageCell:self withModel:self.model];
 }
 
+- (void)onDoubleTaped:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(didDoubleTapMessageCell:withModel:)]) {
+        [self.delegate didDoubleTapMessageCell:self withModel:self.model];
+    }
+}
+
 - (void)onLongPressed:(id)sender {
     if ([sender isKindOfClass:[UILongPressGestureRecognizer class]]) {
         UILongPressGestureRecognizer *recognizer = (UILongPressGestureRecognizer *)sender;
