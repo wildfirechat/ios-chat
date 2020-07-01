@@ -59,6 +59,8 @@
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationSearchTableViewController.h"
 
+#import "WFCUTextMessageViewController.h"
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -1415,6 +1417,35 @@
             [self startPlay:model];
         }
     }
+}
+
+- (void)didDoubleTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
+    if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
+        WFCCTextMessageContent *txtMsgContent = (WFCCTextMessageContent *)model.message.content;
+        [self.chatInputBar resetInputBarStatue];
+        
+        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        textContainer.backgroundColor = self.view.backgroundColor;
+        
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
+         textView.text = txtMsgContent.text;
+        textView.textAlignment = NSTextAlignmentCenter;
+        textView.font = [UIFont systemFontOfSize:28];
+        textView.editable = NO;
+        textView.backgroundColor = self.view.backgroundColor;
+        
+        [textContainer addSubview:textView];
+        [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
+        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+    }
+}
+
+- (void)didTapTextMessageDetailView:(id)sender {
+    if ([sender isKindOfClass:[UIGestureRecognizer class]]) {
+        UIGestureRecognizer *gesture = (UIGestureRecognizer *)sender;
+        [gesture.view.superview removeFromSuperview];
+    }
+    NSLog(@"close windows");
 }
 
 - (void)didTapMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {

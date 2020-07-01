@@ -405,9 +405,16 @@
     if (!_bubbleView) {
         _bubbleView = [[UIImageView alloc] init];
         [self.contentView addSubview:_bubbleView];
+        [_bubbleView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)]];
+        
+        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onDoubleTaped:)];
+        doubleTapGesture.numberOfTapsRequired = 2;
+        doubleTapGesture.numberOfTouchesRequired = 1;
+        [_bubbleView addGestureRecognizer:doubleTapGesture];
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTaped:)];
         [_bubbleView addGestureRecognizer:tap];
-        [_bubbleView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)]];
+        [tap requireGestureRecognizerToFail:doubleTapGesture];
         tap.cancelsTouchesInView = NO;
         [_bubbleView setUserInteractionEnabled:YES];
     }
