@@ -27,4 +27,9 @@
  */
 @property (nonatomic, strong)UIImage *thumbnail;
 
+/**
+ 时长
+*/
+@property (nonatomic, assign)long duration;
+
 @end

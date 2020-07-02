@@ -10,7 +10,6 @@
 
 
 @class SDButton, SDPhotoBrowser;
-
 @protocol SDPhotoBrowserDelegate <NSObject>
 
 @required
@@ -21,6 +20,7 @@
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index;
 - (void)photoBrowserDidDismiss:(SDPhotoBrowser *)browser;
+- (void)photoBrowserShowAllView;
 @end
 
 
@@ -31,6 +31,8 @@
 @property (nonatomic, assign) NSInteger imageCount;
 
 @property (nonatomic, weak) id<SDPhotoBrowserDelegate> delegate;
+
+@property (nonatomic, assign)BOOL showAll;
 
 - (void)show;
 

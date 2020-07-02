@@ -59,6 +59,8 @@
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationSearchTableViewController.h"
 
+#import "WFCUMediaMessageGridViewController.h"
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
@@ -1266,11 +1268,10 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessageStartPlaying object:@(self.playingMessageId)];
     } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
-        NSURL *url = [NSURL fileURLWithPath:[videoMsg.localPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
         
         if (!self.videoPlayerViewController) {
             self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
-            //            self.videoPlayerViewController.delegate = self;
             self.videoPlayerViewController.allowPortraitFullscreen = YES;
         } else {
             [self.videoPlayerViewController.view removeFromSuperview];
@@ -1356,7 +1357,7 @@
         }
         SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
         browser.sourceImagesContainerView = self.backgroundView;
-        
+        browser.showAll = YES;
         browser.imageCount = self.imageMsgs.count;
         int i;
         for (i = 0; i < self.imageMsgs.count; i++) {
@@ -1401,19 +1402,7 @@
             [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
         }
         
-        if (videoMsg.localPath.length == 0) {
-            model.mediaDownloading = YES;
-            __weak typeof(self) weakSelf = self;
-            
-            [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
-                model.mediaDownloading = NO;
-                [weakSelf startPlay:model];
-            } error:^(long long messageUid, int error_code) {
-                model.mediaDownloading = NO;
-            }];
-        } else {
-            [self startPlay:model];
-        }
+        [self startPlay:model];
     }
 }
 
@@ -1765,7 +1754,11 @@
 - (void)photoBrowserDidDismiss:(SDPhotoBrowser *)browser {
     self.imageMsgs = nil;
 }
-
+- (void)photoBrowserShowAllView {
+    WFCUMediaMessageGridViewController *vc = [[WFCUMediaMessageGridViewController alloc] init];
+    vc.conversation = self.conversation;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     return self.navigationController.childViewControllers.count > 1;
