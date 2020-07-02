@@ -1589,6 +1589,18 @@
     [self sendMessage:videoContent];
 }
 
+- (void)imageDataDidSelect:(NSArray<UIImage *> *)selectedImages isFullImage:(BOOL)fullImage {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (UIImage *image in selectedImages) {
+            WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:image];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self sendMessage:imgContent];
+            });
+            [NSThread sleepForTimeInterval:0.2];
+        }
+    });
+}
+
 - (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos {
     if (stringContent.length == 0) {
         return;

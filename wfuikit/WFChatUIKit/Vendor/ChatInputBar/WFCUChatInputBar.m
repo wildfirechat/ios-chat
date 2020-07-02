@@ -25,6 +25,10 @@
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
+#import "DNImagePickerController.h"
+#import "DNAsset.h"
+#import <Photos/Photos.h>
+
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -44,7 +48,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate, DNImagePickerControllerDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -944,6 +948,7 @@
   
     self.inputBarStatus = ChatInputBarDefaultStatus;
     if (itemTag == 1) {
+#if 0
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
 #if TARGET_IPHONE_SIMULATOR
@@ -959,6 +964,12 @@
         picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:picker.sourceType];
         [navi presentViewController:picker animated:YES completion:nil];
         [self checkAndAlertCameraAccessRight];
+#else
+        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
+        imagePicker.imagePickerDelegate = self;
+        imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
+        [navi presentViewController:imagePicker animated:YES completion:nil];
+#endif
     } else if(itemTag == 2) {
 #if TARGET_IPHONE_SIMULATOR
         [self makeToast:@"模拟器不支持相机" duration:1 position:CSToastPositionCenter];
@@ -1180,6 +1191,173 @@
             [self.textInputView becomeFirstResponder];
         }
     });
+}
+#pragma mark - DNImagePickerControllerDelegate
+- (void)dnImagePickerController:(DNImagePickerController *)imagePicker
+                     sendImages:(NSArray *)images
+                    isFullImage:(BOOL)isFullImage {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
+    hud.label.text = @"处理中...";
+    [hud showAnimated:YES];
+    [self recursiveHandle:images isFullImage:isFullImage];
+}
+
+- (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
+    [imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)convertAvcompositionToAvasset:(AVComposition *)composition completion:(void (^)(AVAsset *asset))completion {
+    // 导出视频
+    AVAssetExportSession *exporter = [AVAssetExportSession exportSessionWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
+    // 生成一个文件路径
+    NSInteger randNumber = arc4random();
+    NSString *exportPath = [NSTemporaryDirectory() stringByAppendingString:[NSString stringWithFormat:@"%ldvideo.mov", randNumber]];
+    NSURL *exportURL = [NSURL fileURLWithPath:exportPath];
+    // 导出
+    if (exporter) {
+        exporter.outputURL = exportURL;  // 设置路径
+        exporter.outputFileType = AVFileTypeQuickTimeMovie;
+        exporter.shouldOptimizeForNetworkUse = YES;
+        [exporter exportAsynchronouslyWithCompletionHandler:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (AVAssetExportSessionStatusCompleted == exporter.status) {   // 导出完成
+                    NSURL *URL = exporter.outputURL;
+                    AVAsset *avAsset = [AVAsset assetWithURL:URL];
+                     if (completion) {
+                        completion(avAsset);
+                    }
+                } else {
+                    if (completion) {
+                        completion(nil);
+                    }
+                }
+            });
+        }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(nil);
+            }
+        });
+    }
+}
+- (void)handleVideo:(NSURL *)url photos:(NSMutableArray<DNAsset *> *)photos isFullImage:(BOOL)isFullImage {
+    AVURLAsset *asset1 = [[AVURLAsset alloc] initWithURL:url options:nil];
+    AVAssetImageGenerator *generate1 = [[AVAssetImageGenerator alloc] initWithAsset:asset1];
+    generate1.appliesPreferredTrackTransform = YES;
+    NSError *err = NULL;
+    CMTime time = CMTimeMake(1, 2);
+    CGImageRef oneRef = [generate1 copyCGImageAtTime:time actualTime:NULL error:&err];
+    UIImage *thumbnail = [[UIImage alloc] initWithCGImage:oneRef];
+    thumbnail = [WFCCUtilities generateThumbnail:thumbnail withWidth:120 withHeight:120];
+
+    AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:url options:nil];
+    NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+
+    NSString *CompressionVideoPaht = [WFCCUtilities getDocumentPathWithComponent:@"/VIDEO"];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:@"AVAssetExportPresetMediumQuality"];
+
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];// 用时间, 给文件重新命名, 防止视频存储覆盖,
+
+    [formater setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+
+    NSFileManager *manager = [NSFileManager defaultManager];
+
+    BOOL isExists = [manager fileExistsAtPath:CompressionVideoPaht];
+    if (!isExists) {
+         [manager createDirectoryAtPath:CompressionVideoPaht withIntermediateDirectories:YES attributes:nil error:nil];
+     }
+//
+    NSString *resultPath = [CompressionVideoPaht stringByAppendingPathComponent:[NSString stringWithFormat:@"outputJFVideo-%@.mov", [formater stringFromDate:[NSDate date]]]];
+
+    NSLog(@"resultPath = %@",resultPath);
+
+    exportSession.outputURL = [NSURL fileURLWithPath:resultPath];
+
+    exportSession.outputFileType = AVFileTypeMPEG4;
+
+    exportSession.shouldOptimizeForNetworkUse = YES;
+
+    __weak typeof(self)ws = self;
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+             NSData *data = [NSData dataWithContentsOfFile:resultPath];
+             float memorySize = (float)data.length / 1024 / 1024;
+             NSLog(@"视频压缩后大小 %f", memorySize);
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:10];
+             });
+             [ws recursiveHandle:photos isFullImage:isFullImage];
+         } else {
+             dispatch_async(dispatch_get_main_queue(), ^{
+             });
+             NSLog(@"压缩失败");
+         }
+
+     }];
+}
+- (void)recursiveHandle:(NSMutableArray<DNAsset *> *)photos isFullImage:(BOOL)isFullImage {
+    if (photos.count == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.parentView animated:YES];
+        });
+    }else{
+        DNAsset *item = photos[0];
+        [photos removeObjectAtIndex:0];
+        __weak typeof(self) weakself = self;
+        if (item.asset.mediaType == PHAssetMediaTypeVideo) {
+            PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+            options.version = PHImageRequestOptionsVersionCurrent;
+            options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+            PHAsset *phAsset = item.asset;
+            
+            PHImageManager *manager = [PHImageManager defaultManager];
+            [manager requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+
+                if ([asset isKindOfClass:[AVComposition class]]) {
+                    [weakself convertAvcompositionToAvasset:(AVComposition *)asset completion:^(AVAsset *asset) {
+                        AVURLAsset *urlAsset = (AVURLAsset *)asset;
+                        [weakself handleVideo:urlAsset.URL photos:photos isFullImage:isFullImage];
+                    }];
+                } else {
+                    AVURLAsset *urlAsset = (AVURLAsset *)asset;
+                    [weakself handleVideo:urlAsset.URL photos:photos isFullImage:isFullImage];
+                }
+                
+                
+            }];
+        } else if(item.asset.mediaType == PHAssetMediaTypeImage) {
+            PHImageRequestOptions *imageRequestOption = [[PHImageRequestOptions alloc] init];
+            imageRequestOption.networkAccessAllowed = YES;
+            PHCachingImageManager *cachingImageManager = [[PHCachingImageManager alloc] init];
+            cachingImageManager.allowsCachingHighQualityImages = NO;
+            [cachingImageManager
+             requestImageDataForAsset:item.asset
+             
+             options:imageRequestOption
+             
+             resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI,
+                                                                   UIImageOrientation orientation, NSDictionary *_Nullable info) {
+                   BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
+                   if (downloadFinined) {
+                       if ([weakself.delegate respondsToSelector:@selector(imageDidCapture:)]) {
+                           [weakself.delegate imageDidCapture:[UIImage imageWithData:imageData]];
+                       }
+                       
+                       [weakself recursiveHandle:photos isFullImage:isFullImage];
+                   }
+
+                   if ([info objectForKey:PHImageErrorKey]) {
+                       [weakself.parentView makeToast:@"下载图片失败"];
+                       [weakself recursiveHandle:photos isFullImage:isFullImage];
+                   }
+                                                       
+            }];
+        }
+        
+    }
+        
 }
 
 - (void)dealloc {
