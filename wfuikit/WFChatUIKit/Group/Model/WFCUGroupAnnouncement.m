@@ -20,11 +20,14 @@
 
 - (void)setData:(NSData *)data {
     if (data) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        self.groupId = [dict objectForKey:@"gid"];
-        self.author = [dict objectForKey:@"a"];
-        self.text = [dict objectForKey:@"t"];
-        self.timestamp = [[dict objectForKey:@"ts"] longValue];
+        NSError *__error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&__error];
+        if (!__error) {
+            self.groupId = [dict objectForKey:@"gid"];
+            self.author = [dict objectForKey:@"a"];
+            self.text = [dict objectForKey:@"t"];
+            self.timestamp = [[dict objectForKey:@"ts"] longValue];
+        }
     }
 }
 

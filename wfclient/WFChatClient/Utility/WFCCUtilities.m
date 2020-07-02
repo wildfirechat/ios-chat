@@ -258,7 +258,7 @@ static NSLock *wfcImageLock;
 
     NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@", groupId]];
     long now = [[[NSDate alloc] init] timeIntervalSince1970];
-    if (now - [createTime longLongValue] < 10 * 1000) {//防止连续刷新时，多次生成
+    if ((now - [createTime longLongValue]) < 15) {//防止连续刷新时，多次生成
         return;
     }
     

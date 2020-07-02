@@ -73,10 +73,13 @@
         self.remoteUrl = mediaPayload.remoteMediaUrl;
         self.localPath = mediaPayload.localMediaPath;
         
+        NSError *__error = nil;
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
                                                                    options:kNilOptions
-                                                                     error:nil];
-        self.duration = [dictionary[@"duration"] longValue];
+                                                                     error:&__error];
+        if (!__error) {
+            self.duration = [dictionary[@"duration"] longValue];
+        }
     }
 }
 

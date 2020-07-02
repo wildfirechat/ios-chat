@@ -78,6 +78,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
         self.hideTopViewWithControls = hideTopViewWithControls;
         self.topView = topView;
         self.previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
+        self.view.backgroundColor = [UIColor blackColor];
     }
     
     return self;
@@ -327,7 +328,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                              }
                              completion:nil];
         }
-        
+        self.fullscreenViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.fullscreenViewController animated:YES completion:^{
             if (self.isAlwaysFullscreen) {
                 self.videoPlayerView.frame = CGRectMake(self.videoPlayerView.superview.bounds.size.width / 2, self.videoPlayerView.superview.bounds.size.height / 2, 0, 0);

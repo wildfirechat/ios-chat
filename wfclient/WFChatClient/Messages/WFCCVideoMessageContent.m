@@ -11,7 +11,7 @@
 #import "WFCCIMService.h"
 #import "WFCCUtilities.h"
 #import "Common.h"
-
+#import <AVFoundation/AVFoundation.h>
 
 @implementation WFCCVideoMessageContent
 + (instancetype)contentPath:(NSString *)localPath thumbnail:(UIImage *)image {
@@ -19,6 +19,11 @@
     content.localPath = localPath;
     content.thumbnail = [WFCCUtilities imageWithRightOrientation:image];
     
+    NSURL *videoUrl = [NSURL URLWithString:localPath];
+    AVURLAsset *avUrl = [AVURLAsset assetWithURL:videoUrl];
+    CMTime time = [avUrl duration];
+    content.duration = ceil(time.value/time.timescale);
+
     return content;
 }
 - (WFCCMessagePayload *)encode {
@@ -30,6 +35,11 @@
     payload.mediaType = Media_Type_VIDEO;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:@(_duration) forKey:@"duration"];
+    payload.content = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:dict options:kNilOptions error:nil] encoding:NSUTF8StringEncoding];
+    
     return payload;
 }
 
@@ -40,6 +50,14 @@
         self.thumbnail = [UIImage imageWithData:payload.binaryContent];
         self.remoteUrl = mediaPayload.remoteMediaUrl;
         self.localPath = mediaPayload.localMediaPath;
+        
+        NSError *__error = nil;
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
+                                                                   options:kNilOptions
+                                                                     error:&__error];
+        if (!__error) {
+            self.duration = [dictionary[@"duration"] longValue];
+        }
     }
 }
 

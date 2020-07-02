@@ -26,7 +26,7 @@
     WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
     payload.extra = self.extra;
     payload.contentType = [self.class getContentType];
-    payload.searchableContent = [NSString stringWithFormat:@"[文件] %@", self.name];
+    payload.searchableContent = self.name;
     payload.content = [NSString stringWithFormat:@"%ld", (long)self.size];
     payload.mediaType = Media_Type_FILE;
     
