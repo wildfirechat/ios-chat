@@ -208,3 +208,13 @@
 "Rebot"="Rebot";
 "UserInfomation"="User infomation";
 "MultiSelect"="Multi select";
+"albumTitle" = "Photos";
+"cancel" = "Cancel";
+"send" = "send";
+"preview" = "preview";
+"fullImage" = "Full Image";
+"alertTitle" = "Tips";
+"alertContent" = "Can not select more than 9 photos";
+"alertButton" = "OK";
+"UnAuthorizedTip" = "Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"";
+

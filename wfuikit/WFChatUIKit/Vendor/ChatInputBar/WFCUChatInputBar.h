@@ -37,7 +37,7 @@
 - (void)videoDidCapture:(NSString *) videoPath thumbnail:(UIImage *)image duration:(long)duration;
 - (void)sightDidFinishRecord:(NSString*)url thumbnail:(UIImage*)image duration:(NSUInteger)duration;
 - (void)locationDidSelect:(CLLocationCoordinate2D)location locationName:(NSString *)locationName mapScreenShot:(UIImage *)mapScreenShot;
-- (void)imageDataDidSelect:(NSArray *)selectedImages;
+- (void)imageDataDidSelect:(NSArray<UIImage *> *)selectedImages isFullImage:(BOOL)fullImage;
 
 - (void)didSelectFiles:(NSArray *)files;
 #if WFCU_SUPPORT_VOIP
