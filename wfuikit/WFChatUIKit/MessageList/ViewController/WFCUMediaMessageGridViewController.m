@@ -18,6 +18,8 @@
 @property(nonatomic, strong)UICollectionView *collectionView;
 @property(nonatomic, strong)NSMutableArray<WFCCMessage *> *mediaMessages;
 @property(nonatomic, strong)WFCCMessage *selectedMsg;
+@property(nonatomic, assign)BOOL hasMore;
+
 
 @property(nonatomic, strong)VideoPlayerKit *videoPlayerViewController;
 @end
@@ -35,6 +37,7 @@
     width = width/countInLine - edgeInset - edgeInset;
     flowLayout.itemSize = CGSizeMake(width, width);
     
+    self.hasMore = YES;
     self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -47,7 +50,32 @@
 }
 
 - (void)loadMediaMessages {
-    self.mediaMessages = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_FILE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:0 count:20 withUser:nil] mutableCopy];
+    self.mediaMessages = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_FILE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:0 count:40 withUser:nil] mutableCopy];
+    if (self.mediaMessages.count < 40) {
+        self.hasMore = false;
+    }
+}
+- (void)loadMoreMessage {
+    NSMutableArray<WFCCMessage *> *moreMessages = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_FILE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:self.mediaMessages.lastObject.messageId count:20 withUser:nil] mutableCopy];
+    if (moreMessages.count < 20) {
+        self.hasMore = false;
+    }
+    [self.mediaMessages addObjectsFromArray:moreMessages];
+    [self.collectionView reloadData];
+}
+
+- (void)startPlayVideo:(WFCCVideoMessageContent *)videoMsg {
+    NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
+    if (!self.videoPlayerViewController) {
+        self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
+        self.videoPlayerViewController.allowPortraitFullscreen = YES;
+    } else {
+        [self.videoPlayerViewController.view removeFromSuperview];
+    }
+    
+    [self.view addSubview:self.videoPlayerViewController.view];
+    
+    [self.videoPlayerViewController playVideoWithTitle:@" " URL:url videoID:nil shareURL:nil isStreaming:NO playInFullScreen:YES];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -92,18 +120,10 @@
         [self startPlayVideo:videoMsg];
     }
 }
-- (void)startPlayVideo:(WFCCVideoMessageContent *)videoMsg {
-    NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
-    if (!self.videoPlayerViewController) {
-        self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
-        self.videoPlayerViewController.allowPortraitFullscreen = YES;
-    } else {
-        [self.videoPlayerViewController.view removeFromSuperview];
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (self.hasMore && ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
+        [self loadMoreMessage];
     }
-    
-    [self.view addSubview:self.videoPlayerViewController.view];
-    
-    [self.videoPlayerViewController playVideoWithTitle:@" " URL:url videoID:nil shareURL:nil isStreaming:NO playInFullScreen:YES];
 }
 
 #pragma mark - SDPhotoBrowserDelegate
