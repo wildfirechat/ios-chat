@@ -166,7 +166,7 @@
     }
     
     [_playerControlBar setFrame:CGRectMake(bounds.origin.x,
-                                           bounds.size.height - PLAYER_CONTROL_BAR_HEIGHT,
+                                           bounds.size.height - PLAYER_CONTROL_BAR_HEIGHT - kTabbarSafeBottomMargin,
                                            bounds.size.width,
                                            PLAYER_CONTROL_BAR_HEIGHT)];
     
