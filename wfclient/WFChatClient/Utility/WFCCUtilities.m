@@ -256,13 +256,13 @@ static NSLock *wfcImageLock;
                            width:(int)PortraitWidth
             defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
 
-    NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@", groupId]];
+    NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@_%d", groupId, PortraitWidth]];
     long now = [[[NSDate alloc] init] timeIntervalSince1970];
     if ((now - [createTime longLongValue]) < 15) {//防止连续刷新时，多次生成
         return;
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:@(now) forKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@", groupId]];
+    [[NSUserDefaults standardUserDefaults] setObject:@(now) forKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@_%d", groupId, PortraitWidth]];
     
     UIView *combineHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PortraitWidth, PortraitWidth)];
     [combineHeadView setBackgroundColor:[UIColor colorWithRed:219.f/255 green:223.f/255 blue:224.f/255 alpha:1.f]];
@@ -355,7 +355,7 @@ static NSLock *wfcImageLock;
             [imgData writeToFile:path atomically:YES];
 
 
-            [[NSUserDefaults standardUserDefaults] setObject:path forKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@", groupId]];
+            [[NSUserDefaults standardUserDefaults] setObject:path forKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@_%d", groupId, PortraitWidth]];
             [[NSUserDefaults standardUserDefaults] synchronize];
              
             
@@ -374,7 +374,7 @@ static NSLock *wfcImageLock;
                              width:(int)width
                defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
     //Setp1 检查是否有此群组的记录
-    NSString *path = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@", groupId]];
+    NSString *path = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@_%d", groupId, width]];
     
     if (!path.length) { //记录不存在，生成
         [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
