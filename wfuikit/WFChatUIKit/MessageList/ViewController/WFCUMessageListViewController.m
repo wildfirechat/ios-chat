@@ -1251,12 +1251,12 @@
     if ([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
         // Setup audio session
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        
+        [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
         
         [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
                                    error:nil];
         
+    
         
         WFCCSoundMessageContent *snc = (WFCCSoundMessageContent *)model.message.content;
         NSError *error = nil;
