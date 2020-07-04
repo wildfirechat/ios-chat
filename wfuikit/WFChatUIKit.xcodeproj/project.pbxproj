@@ -41,10 +41,8 @@
 		2BDF579724AD70C8003C1F08 /* DNAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF576D24AD70C8003C1F08 /* DNAlbum.h */; };
 		2BDF579924AD70C8003C1F08 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF577024AD70C8003C1F08 /* UIColor+Hex.m */; };
 		2BDF579A24AD70C8003C1F08 /* UIView+DNImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF577124AD70C8003C1F08 /* UIView+DNImagePicker.m */; };
-		2BDF579B24AD70C8003C1F08 /* UIViewController+DNImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF577224AD70C8003C1F08 /* UIViewController+DNImagePicker.m */; };
 		2BDF579C24AD70C8003C1F08 /* UIColor+Hex.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF577324AD70C8003C1F08 /* UIColor+Hex.h */; };
 		2BDF579D24AD70C8003C1F08 /* UIView+DNImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF577424AD70C8003C1F08 /* UIView+DNImagePicker.h */; };
-		2BDF579E24AD70C8003C1F08 /* UIViewController+DNImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF577524AD70C8003C1F08 /* UIViewController+DNImagePicker.h */; };
 		2BDF579F24AD70C8003C1F08 /* DNImagePickerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF577624AD70C8003C1F08 /* DNImagePickerHelper.m */; };
 		2BDF57A024AD70C8003C1F08 /* DNAlbumTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF577824AD70C8003C1F08 /* DNAlbumTableViewController.h */; };
 		2BDF57A124AD70C8003C1F08 /* DNImageFetchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF577924AD70C8003C1F08 /* DNImageFetchOperation.h */; };
@@ -461,10 +459,8 @@
 		2BDF576D24AD70C8003C1F08 /* DNAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAlbum.h; sourceTree = "<group>"; };
 		2BDF577024AD70C8003C1F08 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		2BDF577124AD70C8003C1F08 /* UIView+DNImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+DNImagePicker.m"; sourceTree = "<group>"; };
-		2BDF577224AD70C8003C1F08 /* UIViewController+DNImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DNImagePicker.m"; sourceTree = "<group>"; };
 		2BDF577324AD70C8003C1F08 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		2BDF577424AD70C8003C1F08 /* UIView+DNImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+DNImagePicker.h"; sourceTree = "<group>"; };
-		2BDF577524AD70C8003C1F08 /* UIViewController+DNImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DNImagePicker.h"; sourceTree = "<group>"; };
 		2BDF577624AD70C8003C1F08 /* DNImagePickerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNImagePickerHelper.m; sourceTree = "<group>"; };
 		2BDF577824AD70C8003C1F08 /* DNAlbumTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNAlbumTableViewController.h; sourceTree = "<group>"; };
 		2BDF577924AD70C8003C1F08 /* DNImageFetchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNImageFetchOperation.h; sourceTree = "<group>"; };
@@ -915,10 +911,8 @@
 			children = (
 				2BDF577024AD70C8003C1F08 /* UIColor+Hex.m */,
 				2BDF577124AD70C8003C1F08 /* UIView+DNImagePicker.m */,
-				2BDF577224AD70C8003C1F08 /* UIViewController+DNImagePicker.m */,
 				2BDF577324AD70C8003C1F08 /* UIColor+Hex.h */,
 				2BDF577424AD70C8003C1F08 /* UIView+DNImagePicker.h */,
-				2BDF577524AD70C8003C1F08 /* UIViewController+DNImagePicker.h */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1881,7 +1875,6 @@
 				2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */,
 				2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */,
 				2F5510B0217F5CC200F56C26 /* WFCUGroupMemberTableViewController.h in Headers */,
-				2BDF579E24AD70C8003C1F08 /* UIViewController+DNImagePicker.h in Headers */,
 				1450EA852438922800BF51FC /* WFCUUserSectionKeySupport.h in Headers */,
 				2F551100217F5CC200F56C26 /* CCHMapClusterControllerUtils.h in Headers */,
 				2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */,
@@ -2233,7 +2226,6 @@
 				2F551126217F5CC200F56C26 /* VideoPlayerView.m in Sources */,
 				2BDF579F24AD70C8003C1F08 /* DNImagePickerHelper.m in Sources */,
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
-				2BDF579B24AD70C8003C1F08 /* UIViewController+DNImagePicker.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
 				2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */,
 				2F5511D9217F5CC300F56C26 /* TYAlertDropDownAnimation.m in Sources */,

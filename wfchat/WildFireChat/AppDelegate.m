@@ -56,7 +56,10 @@
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     [[WFAVEngineKit sharedEngineKit] setVideoProfile:kWFAVVideoProfile360P swapWidthHeight:YES];
     [WFAVEngineKit sharedEngineKit].delegate = self;
+    [WFAVEngineKit sharedEngineKit].maxVideoCallCount = 4;
+    [WFAVEngineKit sharedEngineKit].maxAudioCallCount = 9;
 #endif
+    
     
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     
