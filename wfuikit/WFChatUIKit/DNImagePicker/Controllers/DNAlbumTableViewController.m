@@ -10,7 +10,6 @@
 #import "DNImagePickerController.h"
 #import "DNImageFlowViewController.h"
 #import "DNAlbumCell.h"
-#import "UIViewController+DNImagePicker.h"
 #import "DNUnAuthorizedTipsView.h"
 #import "DNImagePickerHelper.h"
 #import "DNAlbum.h"
@@ -45,9 +44,9 @@ static NSString* const dnalbumTableViewCellReuseIdentifier = @"dnalbumTableViewC
 #pragma mark - mark setup Data and View
 - (void)setupView {
     self.title = WFCString(@"albumTitle");
-    [self createBarButtonItemAtPosition:DNImagePickerNavigationBarPositionRight
-                                   text:WFCString(@"cancel")
-                                 action:@selector(cancelAction:)];
+
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"cancel") style:UIBarButtonItemStyleDone target:self action:@selector(cancelAction:)];
     
     [self.tableView registerClass:[DNAlbumCell class] forCellReuseIdentifier:dnalbumTableViewCellReuseIdentifier];
     UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
