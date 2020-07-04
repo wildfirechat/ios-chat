@@ -317,7 +317,20 @@ static NSLock *wfcImageLock;
                         index = j + (i-1)*column + firstCol;
                     }
                     NSString *userId = [memberIds objectAtIndex:index];
-                    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+                    
+                    
+                    __block WFCCUserInfo *user = nil;
+                    [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO success:^(WFCCUserInfo *userInfo) {
+                        user = userInfo;
+                        dispatch_semaphore_signal(sema);
+                    } error:^(int errorCode) {
+                        dispatch_semaphore_signal(sema);
+                    }];
+                    
+                    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+                    
+                    
                     fullPath = [NSString stringWithFormat:@"%@%@", fullPath, user.portrait?user.portrait:userId];
                     
                     UIImage *image;
