@@ -1229,15 +1229,18 @@
         
         WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)model.message.content;
         if (soundContent.localPath.length == 0) {
-            model.mediaDownloading = YES;
             __weak typeof(self) weakSelf = self;
             
-            [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
+            BOOL isDownloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
                 model.mediaDownloading = NO;
                 [weakSelf startPlay:model];
             } error:^(long long messageUid, int error_code) {
                 model.mediaDownloading = NO;
             }];
+            
+            if (isDownloading) {
+                model.mediaDownloading = YES;
+            }
             
         } else {
             [self startPlay:model];

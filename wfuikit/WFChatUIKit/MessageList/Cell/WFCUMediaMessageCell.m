@@ -17,13 +17,19 @@
 @implementation WFCUMediaMessageCell
 
 - (void)setModel:(WFCUMessageModel *)model {
-    if (self.model.message.messageUid != 0) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kMediaMessageStartDownloading object:@(self.model.message.messageUid)];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kMediaMessageDownloadFinished object:@(self.model.message.messageUid)];
-    }
     [super setModel:model];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStartDownloading:) name:kMediaMessageStartDownloading object:@(model.message.messageUid)];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDownloadFinished:) name:kMediaMessageDownloadFinished object:@(model.message.messageUid)];
+    __weak typeof(self)ws = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kMediaMessageStartDownloading object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([note.object longLongValue] == ws.model.message.messageUid) {
+            [ws onStartDownloading:ws];
+        }
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:kMediaMessageDownloadFinished object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        if ([note.object longLongValue] == ws.model.message.messageUid) {
+            [ws onDownloadFinished:ws];
+        }
+    }];
+    
     
     if (model.mediaDownloading) {
         [self onStartDownloading:self];

@@ -34,8 +34,7 @@
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
     __weak typeof(self) weakSelf = self;
     if (!stickerMsg.localPath.length) {
-        model.mediaDownloading = YES;
-        [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
+        BOOL downloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
             if (messageUid == weakSelf.model.message.messageUid) {
                 weakSelf.model.mediaDownloading = NO;
                 stickerMsg.localPath = localPath;
@@ -46,6 +45,9 @@
                 weakSelf.model.mediaDownloading = NO;
             }
         }];
+        if (downloading) {
+            model.mediaDownloading = YES;
+        }
     }
     
     self.thumbnailView.frame = self.bubbleView.bounds;
