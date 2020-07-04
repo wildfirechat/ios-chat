@@ -9,7 +9,6 @@
 #import "DNImageFlowViewController.h"
 #import "DNImagePickerController.h"
 #import "DNPhotoBrowser.h"
-#import "UIViewController+DNImagePicker.h"
 #import "UIView+DNImagePicker.h"
 #import "UIColor+Hex.h"
 #import "DNAssetsViewCell.h"
@@ -99,13 +98,7 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
 
 - (void)setupView {
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createBarButtonItemAtPosition:DNImagePickerNavigationBarPositionLeft
-                      statusNormalImage:[UIImage imageNamed:@"back_normal"]
-                   statusHighlightImage:[UIImage imageNamed:@"back_highlight"]
-                                 action:@selector(backButtonAction)];
-    [self createBarButtonItemAtPosition:DNImagePickerNavigationBarPositionRight
-                                   text:WFCString(@"cancel")
-                                 action:@selector(cancelAction)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"cancel") style:UIBarButtonItemStyleDone target:self action:@selector(cancelAction)];
     
     [self imageFlowCollectionView];
     
@@ -122,7 +115,7 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
     
     
     UIBarButtonItem *item4 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    item4.width = -10;
+//    item4.width = -10;
     
     [self setToolbarItems:@[item1,item2,item3,item4] animated:NO];
 }

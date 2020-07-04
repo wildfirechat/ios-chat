@@ -7,7 +7,6 @@
 //
 
 #import "DNPhotoBrowser.h"
-#import "UIViewController+DNImagePicker.h"
 #import "UIView+DNImagePicker.h"
 #import "DNSendButton.h"
 #import "DNFullImageButton.h"
@@ -78,7 +77,7 @@
     if (!_viewIsActive && [self.navigationController.viewControllers objectAtIndex:0] != self) {
         [self storePreviousNavBarAppearance];
     }
-    [self setNavBarAppearance:animated];
+//    [self setNavBarAppearance:animated];
     
     // Initial appearance
     if (!_viewHasAppearedInitially) {
@@ -127,10 +126,7 @@
     [self browserCollectionView];
     [self toolbar];
     [self setupBarButtonItems];
-    [self createBarButtonItemAtPosition:DNImagePickerNavigationBarPositionLeft
-                      statusNormalImage:[UIImage imageNamed:@"back_normal"]
-                   statusHighlightImage:[UIImage imageNamed:@"back_highlight"]
-                                 action:@selector(backButtonAction)];
+
     UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.checkButton];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
 }
@@ -146,7 +142,6 @@
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *item3 = [[UIBarButtonItem alloc] initWithCustomView:self.sendButton];
     UIBarButtonItem *item4 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    item4.width = -10;
 
     [self.toolbar setItems:@[item1,item2,item3,item4]];
 }
@@ -282,8 +277,8 @@
     if (!_checkButton) {
         _checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _checkButton.frame = CGRectMake(0, 0, 25, 25);
-        [_checkButton setBackgroundImage:[UIImage imageNamed:@"photo_check_selected"] forState:UIControlStateSelected];
-        [_checkButton setBackgroundImage:[UIImage imageNamed:@"photo_check_default"] forState:UIControlStateNormal];
+        [_checkButton setBackgroundImage:[UIImage imageNamed:@"multi_selected"] forState:UIControlStateSelected];
+        [_checkButton setBackgroundImage:[UIImage imageNamed:@"multi_unselected"] forState:UIControlStateNormal];
         [_checkButton addTarget:self action:@selector(checkButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkButton;

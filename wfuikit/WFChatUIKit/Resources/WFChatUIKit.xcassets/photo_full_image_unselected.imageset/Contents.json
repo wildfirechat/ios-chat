@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "photo_full_image_unselected-1.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "photo_full_image_unselected.pdf",
       "idiom" : "universal",
       "scale" : "2x"
     },
