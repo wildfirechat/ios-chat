@@ -187,6 +187,106 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     return YES;
 }
 
+- (BOOL)tryDownload:(NSString *)mediaPath
+                uid:(long long)uid
+          mediaType:(DownloadMediaType)mediaType
+            success:(void(^)(long long uid, NSString *localPath))successBlock
+              error:(void(^)(long long uid, int error_code))errorBlock {
+    
+    if (!uid) {
+        NSLog(@"Error, try download message have invalid uid");
+        errorBlock(0, -2);
+        return NO;
+    }
+    
+    if (!mediaPath.length) {
+        NSLog(@"Error, try download message with id %lld, but it's not media message", uid);
+        errorBlock(uid, -1);
+        return NO;
+    }
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    NSError *error = nil;
+    NSString *downloadDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
+    if (![fileManager fileExistsAtPath:downloadDir isDirectory:&isDir]) {
+        if(![fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+            errorBlock(uid, -1);
+            NSLog(@"Error, create download folder error");
+            return NO;
+        }
+        if (error) {
+            errorBlock(uid, -1);
+            NSLog(@"Error, create download folder error:%@", error);
+            return NO;
+        }
+    }
+    if (!isDir) {
+        errorBlock(uid, -1);
+        NSLog(@"Error, create download folder error");
+        return NO;
+    }
+    
+    //通知UI开始显示下载动画
+    [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageStartDownloading object:@(uid)];
+    
+    
+    if (self.downloadingMessages[mediaPath] != nil) {
+        return NO;
+    }
+    
+    NSString *savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%lld", mediaPath.hash]];
+    
+    switch (mediaType) {
+        case DownloadMediaType_Image:
+            savedPath = [NSString stringWithFormat:@"%@.jpg", savedPath];
+            break;
+        
+        case DownloadMediaType_Voice:
+            savedPath = [NSString stringWithFormat:@"%@.wav", savedPath];
+            break;
+            
+        case DownloadMediaType_Video:
+            savedPath = [NSString stringWithFormat:@"%@.mp4", savedPath];
+            break;
+            
+        case DownloadMediaType_File:
+            break;
+        default:
+            break;
+    }
+
+    
+    if ([fileManager fileExistsAtPath:savedPath]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            successBlock(uid, savedPath);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageDownloadFinished object:@(uid) userInfo:@{@"result":@(YES), @"localPath":savedPath}];
+        });
+        return NO;
+    }
+    
+    [self.downloadingMessages setObject:@(uid) forKey:mediaPath];
+    
+    [self downloadFileWithURL:mediaPath parameters:nil savedPath:savedPath downloadSuccess:^(NSURLResponse *response, NSURL *filePath) {
+        NSLog(@"download message content of %lld success", uid);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[WFCUMediaMessageDownloader sharedDownloader].downloadingMessages removeObjectForKey:mediaPath];
+            successBlock(uid, filePath.absoluteString);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageDownloadFinished object:@(uid) userInfo:@{@"result":@(YES), @"localPath":filePath.absoluteString}];
+        });
+    } downloadFailure:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[WFCUMediaMessageDownloader sharedDownloader].downloadingMessages removeObjectForKey:mediaPath];
+            errorBlock(uid, -1);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageDownloadFinished object:@(uid) userInfo:@{@"result":@(NO)}];
+        });
+        NSLog(@"download message content of %lld failure with error %@", uid, error);
+    } downloadProgress:^(NSProgress *downloadProgress) {
+        NSLog(@"总大小：%lld,当前大小:%lld",downloadProgress.totalUnitCount,downloadProgress.completedUnitCount);
+    }];
+    return YES;
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
