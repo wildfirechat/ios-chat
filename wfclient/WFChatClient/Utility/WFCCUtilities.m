@@ -237,6 +237,9 @@ static NSLock *wfcImageLock;
 }
 
 + (UIImage *)getUserImage:(NSString *)url {
+    if (!url.length) {
+        return nil;
+    }
     [wfcImageLock lockBeforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
     UIImage *image = [wfcUrlImageDict objectForKey:url];
     if (!image) {
