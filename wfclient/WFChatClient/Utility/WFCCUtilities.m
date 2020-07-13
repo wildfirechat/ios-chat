@@ -247,8 +247,9 @@ static NSLock *wfcImageLock;
         if (wfcUrlImageDict.count > 50) {
             [wfcUrlImageDict removeAllObjects];
         }
-        
-        [wfcUrlImageDict setObject:image forKey:url];
+        if (image) {
+            [wfcUrlImageDict setObject:image forKey:url];
+        }
     }
     [wfcImageLock unlock];
     
