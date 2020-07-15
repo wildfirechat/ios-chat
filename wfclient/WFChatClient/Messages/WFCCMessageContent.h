@@ -68,6 +68,10 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  推送内容
 */
 @property (nonatomic, strong)NSString *pushContent;
+/**
+ 推送数据
+*/
+@property (nonatomic, strong)NSString *pushData;
 
 /**
  内容
