@@ -440,6 +440,7 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     payload.contentType = tMessage->content.type;
     payload.searchableContent = [NSString stringWithUTF8String:tMessage->content.searchableContent.c_str()];
     payload.pushContent = [NSString stringWithUTF8String:tMessage->content.pushContent.c_str()];
+    payload.pushData = [NSString stringWithUTF8String:tMessage->content.pushData.c_str()];
     
     payload.content = [NSString stringWithUTF8String:tMessage->content.content.c_str()];
     payload.binaryContent = [NSData dataWithBytes:tMessage->content.binaryContent.c_str() length:tMessage->content.binaryContent.length()];
@@ -520,6 +521,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
     tmsgcontent.type = payload.contentType;
     tmsgcontent.searchableContent = [payload.searchableContent UTF8String] ? [payload.searchableContent UTF8String] : "";
     tmsgcontent.pushContent = [payload.pushContent UTF8String] ? [payload.pushContent UTF8String] : "";
+    tmsgcontent.pushData = [payload.pushData UTF8String] ? [payload.pushData UTF8String] : "";
     
     tmsgcontent.content = [payload.content UTF8String] ? [payload.content UTF8String] : "";
     if (payload.binaryContent != nil) {
@@ -528,7 +530,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
     tmsgcontent.localContent = [payload.localContent UTF8String] ? [payload.localContent UTF8String] : "";
     if ([payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
         WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
-        tmsgcontent.mediaType = mediaPayload.mediaType;
+        tmsgcontent.mediaType = (int)mediaPayload.mediaType;
         tmsgcontent.remoteMediaUrl = [mediaPayload.remoteMediaUrl UTF8String] ? [mediaPayload.remoteMediaUrl UTF8String] : "";
         tmsgcontent.localMediaPath = [mediaPayload.localMediaPath UTF8String] ? [mediaPayload.localMediaPath UTF8String] : "";
     }
@@ -542,7 +544,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
 
 
 static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCCMessageContent *content) {
-    tmsg.conversationType = conv.type;
+    tmsg.conversationType = (int)conv.type;
     tmsg.target = conv.target ? [conv.target UTF8String] : "";
     tmsg.line = conv.line;
     tmsg.from = mars::app::GetAccountUserName();
