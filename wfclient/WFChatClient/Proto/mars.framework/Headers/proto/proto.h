@@ -263,6 +263,7 @@ namespace mars{
             type(c.type),
             searchableContent(c.searchableContent),
             pushContent(c.pushContent),
+            pushData(c.pushData),
             content(c.content),
             binaryContent(c.binaryContent),
             localContent(c.localContent),
@@ -277,6 +278,7 @@ namespace mars{
                 type = c.type;
                 searchableContent = c.searchableContent;
                 pushContent = c.pushContent;
+                pushData = c.pushData;
                 content = c.content;
                 binaryContent = c.binaryContent;
                 localContent = c.localContent;
@@ -291,6 +293,7 @@ namespace mars{
             int type;
             std::string searchableContent;
             std::string pushContent;
+            std::string pushData;
             std::string content;
             std::string binaryContent;
             std::string localContent;
