@@ -1453,10 +1453,14 @@
             }
         }
     }
-    WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-    vc.userId = model.message.fromUser;
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser refresh:NO];
+    if (!userInfo.deleted) {
+        WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+        vc.userId = model.message.fromUser;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (void)didLongPressMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {

@@ -127,20 +127,25 @@ WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     userInfo.name = [NSString stringWithUTF8String:tui.name.c_str()];
     userInfo.portrait = [NSString stringWithUTF8String:tui.portrait.c_str()];
     
-    userInfo.displayName = [NSString stringWithUTF8String:tui.displayName.c_str()];
-    userInfo.gender = tui.gender;
-    userInfo.social = [NSString stringWithUTF8String:tui.social.c_str()];
-    userInfo.mobile = [NSString stringWithUTF8String:tui.mobile.c_str()];
-    userInfo.email = [NSString stringWithUTF8String:tui.email.c_str()];
-    userInfo.address = [NSString stringWithUTF8String:tui.address.c_str()];
-    userInfo.company = [NSString stringWithUTF8String:tui.company.c_str()];
-    userInfo.social = [NSString stringWithUTF8String:tui.social.c_str()];
+    userInfo.deleted = tui.deleted;
+    if (tui.deleted) {
+        userInfo.displayName = @"已删除用户";
+    } else {
+        userInfo.displayName = [NSString stringWithUTF8String:tui.displayName.c_str()];
+        userInfo.gender = tui.gender;
+        userInfo.social = [NSString stringWithUTF8String:tui.social.c_str()];
+        userInfo.mobile = [NSString stringWithUTF8String:tui.mobile.c_str()];
+        userInfo.email = [NSString stringWithUTF8String:tui.email.c_str()];
+        userInfo.address = [NSString stringWithUTF8String:tui.address.c_str()];
+        userInfo.company = [NSString stringWithUTF8String:tui.company.c_str()];
+        userInfo.social = [NSString stringWithUTF8String:tui.social.c_str()];
+        userInfo.friendAlias = [NSString stringWithUTF8String:tui.friendAlias.c_str()];
+        userInfo.groupAlias = [NSString stringWithUTF8String:tui.groupAlias.c_str()];
+    }
+    
     userInfo.extra = [NSString stringWithUTF8String:tui.extra.c_str()];
-    userInfo.friendAlias = [NSString stringWithUTF8String:tui.friendAlias.c_str()];
-    userInfo.groupAlias = [NSString stringWithUTF8String:tui.groupAlias.c_str()];
     userInfo.updateDt = tui.updateDt;
     userInfo.type = tui.type;
-    userInfo.deleted = tui.deleted;
     
     return userInfo;
 }
