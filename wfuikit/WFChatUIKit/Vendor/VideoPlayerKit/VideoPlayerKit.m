@@ -222,7 +222,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
     [self showControls];
     
     NSString *vidID = videoID ?: @"";
-    _currentVideoInfo = @{ @"title": title ?: @"", @"videoID": vidID, @"isStreaming": @(streaming), @"shareURL": shareURL ?: url};
+    _currentVideoInfo = @{ @"title": title ?: @"", @"videoID": vidID, @"isStreaming": @(streaming), @"shareURL": shareURL ? @"" : url};
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kVideoPlayerVideoChangedNotification
                                                         object:self

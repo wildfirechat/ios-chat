@@ -1273,6 +1273,11 @@
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
         NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
         
+        if (!url) {
+            [self.view makeToast:@"无法播放"];
+            return;
+        }
+        
         if (!self.videoPlayerViewController) {
             self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
             self.videoPlayerViewController.allowPortraitFullscreen = YES;
