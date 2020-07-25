@@ -100,7 +100,7 @@ void kz_dispatch_after(float time, dispatch_block_t block)
             }
             NSString *timeString = [name substringToIndex:(name.length-4)];
             NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
-            dateformate.dateFormat = @"yyyy-MM-dd_HH:mm:ss";
+            dateformate.dateFormat = @"yyyy-MM-dd_HH-mm-ss";
             NSDate *date = [dateformate dateFromString:timeString];
             model.recordTime = date;
             

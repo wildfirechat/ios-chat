@@ -1059,7 +1059,7 @@
         
         NSDateFormatter *formater = [[NSDateFormatter alloc] init];// 用时间, 给文件重新命名, 防止视频存储覆盖,
         
-        [formater setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+        [formater setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
         
         NSFileManager *manager = [NSFileManager defaultManager];
         
@@ -1259,7 +1259,7 @@
 
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];// 用时间, 给文件重新命名, 防止视频存储覆盖,
 
-    [formater setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+    [formater setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
 
     NSFileManager *manager = [NSFileManager defaultManager];
 
