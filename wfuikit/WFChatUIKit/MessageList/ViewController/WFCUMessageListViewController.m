@@ -1271,7 +1271,8 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessageStartPlaying object:@(self.playingMessageId)];
     } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
-        NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
+        NSURL *url = [NSURL fileURLWithPath:[videoMsg.localPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
         
         if (!url) {
             [self.view makeToast:@"无法播放"];
@@ -1410,7 +1411,19 @@
             [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
         }
         
-        [self startPlay:model];
+        if (videoMsg.localPath.length == 0) {
+            model.mediaDownloading = YES;
+            __weak typeof(self) weakSelf = self;
+            
+            [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
+                model.mediaDownloading = NO;
+                [weakSelf startPlay:model];
+            } error:^(long long messageUid, int error_code) {
+                model.mediaDownloading = NO;
+            }];
+        } else {
+            [self startPlay:model];
+        }
     }
 }
 
