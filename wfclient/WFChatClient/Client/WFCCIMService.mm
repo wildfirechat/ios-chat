@@ -1607,6 +1607,23 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return output;
 }
 
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                             type:(WFCCGroupMemberType)memberType {
+    std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembersByType([groupId UTF8String], (int)memberType);
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
+        WFCCGroupMember *member = [WFCCGroupMember new];
+        member.groupId = [NSString stringWithUTF8String:it->groupId.c_str()];
+        member.memberId = [NSString stringWithUTF8String:it->memberId.c_str()];
+        member.alias = [NSString stringWithUTF8String:it->alias.c_str()];
+        member.type = (WFCCGroupMemberType)it->type;
+        member.createTime = it->createDt;
+        [output addObject:member];
+    }
+    return output;
+}
+
+
 class IMGetGroupMembersCallback : public mars::stn::GetGroupMembersCallback {
 private:
     void(^m_successBlock)(NSString *groupId, NSArray<WFCCGroupMember *> *memberList);
