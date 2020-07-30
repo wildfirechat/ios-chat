@@ -885,10 +885,20 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
  @param groupId 群ID
  @param forceUpdate 是否强制从服务器更新，如果不刷新则从本地缓存中读取
- @return 群成员信息
+ @return 群成员信息列表
  */
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
                                     forceUpdate:(BOOL)forceUpdate;
+
+/**
+ 根据成员类型获取群成员信息
+ 
+ @param groupId 群ID
+ @param type 群成员类型
+ @return 群成员信息列表
+ */
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                                    type:(WFCCGroupMemberType)memberType;
 
 /**
  获取群成员信息
