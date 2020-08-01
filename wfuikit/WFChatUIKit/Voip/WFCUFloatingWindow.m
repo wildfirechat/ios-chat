@@ -176,14 +176,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         } else if (self.callSession.state == kWFAVEngineStateOutgoing) {
             self.videoView.hidden = NO;
             [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
-            [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
+            [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit];
         } else if (self.callSession.state == kWFAVEngineStateConnected) {
             self.videoView.hidden = NO;
             [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
             if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced];
+                [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit];
             } else {
-                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectBalanced forUser:self.focusUserId];
+                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserId];
             }
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
             UILabel *videoStopTips =

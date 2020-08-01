@@ -46,14 +46,16 @@ typedef NS_ENUM(NSInteger, WFAVEngineState) {
 /**
  缩放模式
 
- - kWFAVVideoScalingTypeAspectFit: 自适应
- - kWFAVVideoScalingTypeAspectFill: 拉伸
- - kWFAVVideoScalingTypeAspectBalanced: 平衡
+ - kWFAVVideoScalingTypeAspectFit: 填满屏幕，裁去多余部分。如果视图和视频的方向不一致，则缩放模式自动采用kWFAVVideoScalingTypeAspectFill模式，因为如果要是裁边会裁去过多内容。
+ - kWFAVVideoScalingTypeAspectFill: 显示所有内容，背景会留黑边
+ - kWFAVVideoScalingTypeAspectBalanced: 平衡，Fit和Fill折中
+ - kWFAVVideoScalingTypeScaleFill: 拉伸填满
  */
 typedef NS_ENUM(NSInteger, WFAVVideoScalingType) {
     kWFAVVideoScalingTypeAspectFit,
     kWFAVVideoScalingTypeAspectFill,
-    kWFAVVideoScalingTypeAspectBalanced
+    kWFAVVideoScalingTypeAspectBalanced,
+    kWFAVVideoScalingTypeScaleFill
 };
 
 /**
