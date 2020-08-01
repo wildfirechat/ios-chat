@@ -105,7 +105,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     
-    self.scalingType = kWFAVVideoScalingTypeAspectBalanced;
+    self.scalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
@@ -289,6 +289,9 @@
 }
 - (void)setSwapVideoView:(BOOL)swapVideoView {
     _swapVideoView = swapVideoView;
+    if (self.currentSession.state == kWFAVEngineStateIdle) {
+        return;
+    }
     if (swapVideoView) {
         [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
         [self.currentSession setupRemoteVideoView:self.smallVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
@@ -797,6 +800,10 @@
 }
 
 - (BOOL)onDeviceOrientationDidChange{
+    if (self.currentSession.state == kWFAVEngineStateIdle) {
+        return YES;
+    }
+    
     //获取当前设备Device
     UIDevice *device = [UIDevice currentDevice] ;
     //识别当前设备的旋转方向
@@ -805,48 +812,50 @@
     CGFloat height = self.view.bounds.size.height;
     switch (device.orientation) {
         case UIDeviceOrientationFaceUp:
-            NSLog(@"屏幕幕朝上平躺");
             break;
 
         case UIDeviceOrientationFaceDown:
-            NSLog(@"屏幕朝下平躺");
             break;
 
         case UIDeviceOrientationUnknown:
             //系统当前无法识别设备朝向，可能是倾斜
-            NSLog(@"未知方向");
             break;
 
         case UIDeviceOrientationLandscapeLeft:
             self.smallVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+            self.bigVideoView.frame = self.view.bounds;
             smallVideoFrame = CGRectMake(width - SmallVideoView - 8, height - 8 - kStatusBarAndNavigationBarHeight + 64 - SmallVideoView - SmallVideoView/3 - kTabbarSafeBottomMargin, SmallVideoView * 4 /3, SmallVideoView);
-            NSLog(@"屏幕向左橫置");
+            self.smallVideoView.frame = smallVideoFrame;
+            self.swapVideoView = _swapVideoView;
             break;
 
         case UIDeviceOrientationLandscapeRight:
             self.smallVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            self.bigVideoView.frame = self.view.bounds;
             smallVideoFrame = CGRectMake(8-SmallVideoView/3, 8 + kStatusBarAndNavigationBarHeight - 64+SmallVideoView/3, SmallVideoView * 4 /3, SmallVideoView);
-            NSLog(@"屏幕向右橫置");
+            self.smallVideoView.frame = smallVideoFrame;
+            self.swapVideoView = _swapVideoView;
             break;
 
         case UIDeviceOrientationPortrait:
             self.smallVideoView.transform = CGAffineTransformMakeRotation(0);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(0);
+            self.bigVideoView.frame = self.view.bounds;
             smallVideoFrame = CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3);
-            NSLog(@"屏幕直立");
+            self.smallVideoView.frame = smallVideoFrame;
+            self.swapVideoView = _swapVideoView;
             break;
 
         case UIDeviceOrientationPortraitUpsideDown:
-            NSLog(@"屏幕直立，上下顛倒");
             break;
 
         default:
             NSLog(@"無法识别");
             break;
     }
-    self.smallVideoView.frame = smallVideoFrame;
+    
     return YES;
 }
 #endif
