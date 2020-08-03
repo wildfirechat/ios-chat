@@ -482,6 +482,26 @@ namespace mars{
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
+    
+        class TFileRecord : public TSerializable {
+        public:
+            TFileRecord() : messageUid(0),conversationType(0), line(0),size(0),downloadCount(0), timestamp(0)  {}
+            int64_t messageUid;
+            std::string userId;
+            int conversationType;
+            std::string target;
+            int line;
+            std::string name;
+            std::string url;
+            int size;
+            int downloadCount;
+            long long timestamp;
+            virtual ~TFileRecord(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+        };
         
         class GeneralStringCallback {
         public:
@@ -557,6 +577,13 @@ namespace mars{
             virtual void onSuccess(const std::list<TMessage> &messageList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~LoadRemoteMessagesCallback() {}
+        };
+    
+        class LoadFileRecordCallback {
+        public:
+            virtual void onSuccess(const std::list<TFileRecord> &fileList) = 0;
+            virtual void onFalure(int errorCode) = 0;
+            virtual ~LoadFileRecordCallback() {}
         };
 
         class GetChatroomInfoCallback {
@@ -699,9 +726,13 @@ namespace mars{
 
         extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
+        extern void loadConversationFileRecords(const TConversation &conv, long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void loadMyFileRecords(long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void deleteFileRecords(long long messageUid, GeneralOperationCallback *callback);
+    
         extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
 
-        extern void getAuthorizedMediaUrl(int mediaType, const std::string &mediaUrl, GeneralStringCallback *callback);
+        extern void getAuthorizedMediaUrl(long long messageUid, int mediaType, const std::string &mediaUrl, GeneralStringCallback *callback);
 
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
 

@@ -1395,9 +1395,19 @@
         [self.navigationController pushViewController:vc animated:YES];
     } else if ([model.message.content isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)model.message.content;
-        WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
-        bvc.url = fileContent.remoteUrl;
-        [self.navigationController pushViewController:bvc animated:YES];
+        
+        __weak typeof(self)ws = self;
+        [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:model.message.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl) {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = authorizedUrl;
+            [ws.navigationController pushViewController:bvc animated:YES];
+        } error:^(int error_code) {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = fileContent.remoteUrl;
+            [ws.navigationController pushViewController:bvc animated:YES];
+        }];
+        
+        
     } else if ([model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
         WFCCCallStartMessageContent *callStartMsg = (WFCCCallStartMessageContent *)model.message.content;
 #if WFCU_SUPPORT_VOIP

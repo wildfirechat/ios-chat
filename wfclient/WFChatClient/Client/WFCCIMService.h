@@ -20,6 +20,7 @@
 #import "WFCCUnreadCount.h"
 #import "WFCCChannelInfo.h"
 #import "WFCCPCOnlineInfo.h"
+#import "WFCCFileRecord.h"
 
 #pragma mark - 频道通知定义
 //发送消息状态通知
@@ -1388,15 +1389,33 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)kickoffPCClient:(NSString *)pcClientId
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+
+- (void)getConversationFiles:(WFCCConversation *)conversation
+            beforeMessageUid:(long long)messageUid
+                       count:(int)count
+                     success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+                       error:(void(^)(int error_code))errorBlock;
+
+- (void)getMyFiles:(long long)beforeMessageUid
+             count:(int)count
+           success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+             error:(void(^)(int error_code))errorBlock;
+
+- (void)deleteFileRecord:(long long)messageUid
+                 success:(void(^)(void))successBlock
+                   error:(void(^)(int error_code))errorBlock;
 /**
 获取媒体文件授权访问地址
 
+@param messageUid 消息Uid
 @param mediaType 媒体类型
 @param mediaPath 媒体Path
 @param successBlock 成功的回调
 @param errorBlock 失败的回调
 */
-- (void)getAuthorizedMediaUrl:(WFCCMediaType)mediaType
+- (void)getAuthorizedMediaUrl:(long long)messageUid
+                    mediaType:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;

@@ -93,9 +93,10 @@ private:
 public:
     IMCreateGroupCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::CreateGroupCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
     void onSuccess(std::string groupId) {
+        NSString *nsstr = [NSString stringWithUTF8String:groupId.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
-                m_successBlock([NSString stringWithUTF8String:groupId.c_str()]);
+                m_successBlock(nsstr);
             }
             delete this;
         });
@@ -151,9 +152,10 @@ private:
 public:
     IMGeneralStringCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
     void onSuccess(std::string str) {
+        NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
-                m_successBlock([NSString stringWithUTF8String:str.c_str()]);
+                m_successBlock(nsstr);
             }
             delete this;
         });
@@ -281,6 +283,56 @@ public:
         m_errorBlock = nil;
     }
 };
+
+class IMLoadFileRecordCallback : public mars::stn::LoadFileRecordCallback {
+private:
+    void(^m_successBlock)(NSArray<WFCCFileRecord *> *files);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadFileRecordCallback(void(^successBlock)(NSArray<WFCCFileRecord *> *records), void(^errorBlock)(int error_code)) : mars::stn::LoadFileRecordCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TFileRecord> &fileList) {
+        NSMutableArray *output = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TFileRecord>::const_iterator it = fileList.begin(); it != fileList.end(); ++it) {
+            const mars::stn::TFileRecord &tfr = *it;
+            WFCCFileRecord *record = [[WFCCFileRecord alloc] init];
+            record.conversation = [[WFCCConversation alloc] init];
+            record.conversation.type = (WFCCConversationType)tfr.conversationType;
+            record.conversation.target = [NSString stringWithUTF8String:tfr.target.c_str()];
+            record.conversation.line = tfr.line;
+
+            record.messageUid = tfr.messageUid;
+            record.userId = [NSString stringWithUTF8String:tfr.userId.c_str()];
+            record.name = [NSString stringWithUTF8String:tfr.name.c_str()];
+            record.url = [NSString stringWithUTF8String:tfr.url.c_str()];
+            record.size = tfr.size;
+            record.downloadCount = tfr.downloadCount;
+            record.timestamp = tfr.timestamp;
+            
+            
+            [output addObject:record];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(output);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMLoadFileRecordCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 class IMGetChatroomMemberInfoCallback : public mars::stn::GetChatroomMemberInfoCallback {
 private:
     void(^m_successBlock)(WFCCChatroomMemberInfo *chatroomMemberInfo);
@@ -2052,11 +2104,39 @@ public:
     mars::stn::KickoffPCClient([pcClientId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
-- (void)getAuthorizedMediaUrl:(WFCCMediaType)mediaType
+- (void)getConversationFiles:(WFCCConversation *)conversation
+            beforeMessageUid:(long long)messageUid
+                       count:(int)count
+                     success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+                       error:(void(^)(int error_code))errorBlock {
+    mars::stn::TConversation conv;
+    conv.target = [conversation.target UTF8String];
+    conv.line = conversation.line;
+    conv.conversationType = (int)conversation.type;
+    
+    mars::stn::loadConversationFileRecords(conv, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+}
+
+- (void)getMyFiles:(long long)beforeMessageUid
+             count:(int)count
+           success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+             error:(void(^)(int error_code))errorBlock {
+    mars::stn::loadMyFileRecords(beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+}
+
+- (void)deleteFileRecord:(long long)messageUid
+                 success:(void(^)(void))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+        
+    mars::stn::deleteFileRecords(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+         
+- (void)getAuthorizedMediaUrl:(long long)messageUid
+                    mediaType:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::getAuthorizedMediaUrl((int)mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
 - (NSString *)imageThumbPara {
