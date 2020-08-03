@@ -217,4 +217,4 @@
 "alertContent" = "Can not select more than 9 photos";
 "alertButton" = "OK";
 "UnAuthorizedTip" = "Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"";
-
+"GroupFiles" = "Group files";

@@ -19,6 +19,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "GroupManageTableViewController.h"
 #import "WFCUGroupMemberCollectionViewController.h"
+#import "WFCUGroupFilesViewController.h"
 
 #import "MBProgressHUD.h"
 #import "WFCUMyProfileTableViewController.h"
@@ -478,6 +479,14 @@
     return NO;
 }
 
+- (BOOL)isGroupFileCell:(NSIndexPath *)indexPath {
+    if (self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 1) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (BOOL)isUnsubscribeChannel:(NSIndexPath *)indexPath {
     if (self.conversation.type == Channel_Type && indexPath.section == 3 && indexPath.row == 0) {
         return YES;
@@ -495,6 +504,9 @@
             }
             
         } else if(section == 1) {
+            if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+                return 2; //查找聊天内容, 群文件
+            }
             return 1; //查找聊天内容
         } else if(section == 2) {
             return 3; //消息免打扰，置顶聊天，保存到通讯录
@@ -696,6 +708,8 @@
           [cell addSubview:btn];
       }
       return cell;
+  } else if([self isGroupFileCell:indexPath]) {
+      return [self cellOfTable:tableView WithTitle:WFCString(@"GroupFiles") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   }
     return nil;
 }
@@ -792,6 +806,10 @@
       WFCUGroupAnnouncementViewController *vc = [[WFCUGroupAnnouncementViewController alloc] init];
       vc.announcement = self.groupAnnouncement;
       vc.isManager = [self isGroupManager];
+      [self.navigationController pushViewController:vc animated:YES];
+  } else if([self isGroupFileCell:indexPath]) {
+      WFCUGroupFilesViewController *vc = [[WFCUGroupFilesViewController alloc] init];
+      vc.conversation = self.conversation;
       [self.navigationController pushViewController:vc animated:YES];
   }
 }
