@@ -92,7 +92,7 @@
     [self.navigationController presentViewController:navi animated:YES completion:nil];
 }
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-
+    __weak typeof(self)ws = self;
     if (indexPath.section == 0) {
         WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
         if (cell == nil) {
@@ -100,6 +100,7 @@
             cell.textLabel.text = WFCString(@"MuteAll");
             cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.mute = value;
                     onDone(YES);
                 } error:^(int error_code) {
                     onDone(NO);
