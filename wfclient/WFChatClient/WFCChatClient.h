@@ -53,6 +53,7 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCGroupJoinTypeNotificationContent.h>
 #import <WFChatClient/WFCCGroupSetManagerNotificationContent.h>
 #import <WFChatClient/WFCCGroupMemberMuteNotificationContent.h>
+#import <WFChatClient/WFCCGroupMemberAllowNotificationContent.h>
 #import <WFChatClient/WFCCDeleteMessageContent.h>
 #import <WFChatClient/WFCCGroupMuteNotificationContent.h>
 
