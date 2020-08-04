@@ -1122,6 +1122,25 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
              notifyContent:(WFCCMessageContent *)notifyContent
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock;
+
+/**
+ 设置群成员允许名单，当设置群全局禁言时，仅群主/群管理/运行名单成员可以发言，仅专业版支持
+ 
+ @param groupId 群ID
+ @param isSet    设置或取消
+ @param memberIds    成员ID
+ @param notifyLines 默认传 @[@(0)]
+ @param notifyContent 通知消息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)allowGroupMember:(NSString *)groupId
+                   isSet:(BOOL)isSet
+               memberIds:(NSArray<NSString *> *)memberIds
+             notifyLines:(NSArray<NSNumber *> *)notifyLines
+           notifyContent:(WFCCMessageContent *)notifyContent
+                 success:(void(^)(void))successBlock
+                   error:(void(^)(int error_code))errorBlock;
 /**
  获取当前用户收藏的群组
  

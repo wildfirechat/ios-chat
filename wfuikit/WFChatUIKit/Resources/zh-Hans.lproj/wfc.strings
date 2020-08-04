@@ -113,6 +113,10 @@
 "Manager"="管理员";
 "MuteSetting"="禁言设置";
 "MemberPrivilege"="成员权限";
+"AllowList"="允许名单";
+"MuteMember"="添加禁言";
+"AllowMember"="添加允许";
+"MutedList"="已禁言列表";
 "JoinGroupPermission"="加群方式";
 "Free2Join"="不限制加入";
 "MemberInviteOnly"="群成员可以拉人";

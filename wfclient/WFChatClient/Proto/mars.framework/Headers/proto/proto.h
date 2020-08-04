@@ -41,6 +41,7 @@
 #define MESSAGE_CONTENT_TYPE_CHANGE_SEARCHABLE 116
 #define MESSAGE_CONTENT_TYPE_SET_MANAGER 117
 #define MESSAGE_CONTENT_TYPE_MUTE_MEMBER 118
+#define MESSAGE_CONTENT_TYPE_ALLOW_MEMBER 119
 
 
 
@@ -771,7 +772,7 @@ namespace mars{
 
         extern void SetGroupManager(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
     
-        extern void MuteGroupMember(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+        extern void MuteOrAllowGroupMember(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, bool isAllow, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void (*getUserInfo)(const std::list<std::pair<std::string, int64_t>> &userReqList, GetUserInfoCallback *callback);
 

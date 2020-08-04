@@ -1803,8 +1803,32 @@ public:
         memberList.push_back([member UTF8String]);
     }
     
-    mars::stn::MuteGroupMember([groupId UTF8String], memberList, isSet, lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::MuteOrAllowGroupMember([groupId UTF8String], memberList, isSet, false, lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
+
+- (void)allowGroupMember:(NSString *)groupId
+                     isSet:(BOOL)isSet
+                 memberIds:(NSArray<NSString *> *)memberIds
+               notifyLines:(NSArray<NSNumber *> *)notifyLines
+             notifyContent:(WFCCMessageContent *)notifyContent
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock {
+    mars::stn::TMessageContent tcontent;
+    fillTMessageContent(tcontent, notifyContent);
+    
+    std::list<int> lines;
+    for (NSNumber *number in notifyLines) {
+        lines.push_back([number intValue]);
+    }
+    
+    std::list<std::string> memberList;
+    for (NSString *member in memberIds) {
+        memberList.push_back([member UTF8String]);
+    }
+    
+    mars::stn::MuteOrAllowGroupMember([groupId UTF8String], memberList, isSet, true, lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (NSArray<NSString *> *)getFavGroups {
     NSDictionary *favGroupDict = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Favourite_Group];
     NSMutableArray *ids = [[NSMutableArray alloc] init];

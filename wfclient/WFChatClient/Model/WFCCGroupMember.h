@@ -15,12 +15,14 @@
  - Member_Type_Manager: 管理员
  - Member_Type_Owner: 群主
  - Member_Type_Muted: 被禁言
+ - Member_Type_Allowed: 被允许发言
  */
 typedef NS_ENUM(NSInteger, WFCCGroupMemberType) {
     Member_Type_Normal = 0,
     Member_Type_Manager,
     Member_Type_Owner,
-    Member_Type_Muted
+    Member_Type_Muted,
+    Member_Type_Allowed = 5
 } ;
 
 /**
