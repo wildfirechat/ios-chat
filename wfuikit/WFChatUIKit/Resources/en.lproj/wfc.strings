@@ -113,6 +113,10 @@
 "Manager"="Manager";
 "MuteSetting"="Mute setting";
 "MemberPrivilege"="Member privilege";
+"AllowList"="Allow list";
+"MuteMember"="Mute member";
+"AllowMember"="Allow member";
+"MutedList"="Muted list";
 "JoinGroupPermission"="Join group permission";
 "Free2Join"="Free to join";
 "MemberInviteOnly"="Only member invite";

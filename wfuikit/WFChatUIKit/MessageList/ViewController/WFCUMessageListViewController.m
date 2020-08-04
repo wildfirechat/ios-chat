@@ -490,6 +490,8 @@
     if (targetGroup.mute || member.type == Member_Type_Muted) {
         if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             self.chatInputBar.inputBarStatus =  defaultStatus;
+        } else if(targetGroup.mute && member.type == Member_Type_Allowed) {
+            self.chatInputBar.inputBarStatus =  defaultStatus;
         } else {
             WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
             if (gm.type == Member_Type_Manager) {
