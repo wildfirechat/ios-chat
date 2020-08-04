@@ -34,7 +34,12 @@
 }
 
 + (NSString *)getCallText:(WFCCCallStartMessageContent *)startContent {
-    NSString *text = WFCString(@"VOIPCall");
+    NSString *text;
+    if (startContent.isAudioOnly) {
+        text = WFCString(@"VoiceCall");
+    } else {
+        text = WFCString(@"VideoCall");
+    }
     if (startContent.connectTime > 0 && startContent.endTime > 0) {
         long long duration = startContent.endTime - startContent.connectTime;
         if (duration <= 0) {
