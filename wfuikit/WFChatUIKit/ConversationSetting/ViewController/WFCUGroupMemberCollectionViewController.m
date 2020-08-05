@@ -77,7 +77,7 @@
     __block BOOL isManager = false;
     [self.memberList enumerateObjectsUsingBlock:^(WFCCGroupMember * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj.memberId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            if (obj.type != Member_Type_Normal) {
+            if (obj.type == Member_Type_Manager || obj.type == Member_Type_Owner) {
                 isManager = YES;
             }
             *stop = YES;
