@@ -1883,7 +1883,7 @@
             NSArray *memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
             [memberList enumerateObjectsUsingBlock:^(WFCCGroupMember * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([obj.memberId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                    if (obj.type != Member_Type_Normal && ![msg.fromUser isEqualToString:obj.memberId]) {
+                    if ((obj.type == Member_Type_Manager || obj.type == Member_Type_Owner) && ![msg.fromUser isEqualToString:obj.memberId]) {
                         isManager = YES;
                     }
                     *stop = YES;
