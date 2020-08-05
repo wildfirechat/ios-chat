@@ -145,19 +145,20 @@ alpha:1.0]
     
     self.userNameField.text = savedName;
     
+    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetKeyboard:)]];
     
     self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 40 - kTabbarSafeBottomMargin, self.view.bounds.size.width-32, 40)];
     self.privacyLabel.textAlignment = NSTextAlignmentCenter;
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"登录即代表你已同意《野火通用户协议》和《野火通隐私政策》" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"登录即代表你已同意《野火IM用户协议》和《野火IM隐私政策》" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
                                                                                                                      NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
     [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
-                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(9, 9)];
+                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(9, 10)];
     [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
-                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(19, 9)];
+                          NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(20, 10)];
     self.privacyLabel.attributedText = text ;
     __weak typeof(self)ws = self;
-    [self.privacyLabel yb_addAttributeTapActionWithRanges:@[NSStringFromRange(NSMakeRange(9, 9)), NSStringFromRange(NSMakeRange(19, 9))] tapClicked:^(UILabel *label, NSString *string, NSRange range, NSInteger index) {
+    [self.privacyLabel yb_addAttributeTapActionWithRanges:@[NSStringFromRange(NSMakeRange(9, 10)), NSStringFromRange(NSMakeRange(20, 10))] tapClicked:^(UILabel *label, NSString *string, NSRange range, NSInteger index) {
         WFCPrivacyViewController * pvc = [[WFCPrivacyViewController alloc] init];
         pvc.isPrivacy = (range.location == 19);
         [ws.navigationController pushViewController:pvc animated:YES];
