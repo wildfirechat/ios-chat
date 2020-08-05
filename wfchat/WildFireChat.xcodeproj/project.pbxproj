@@ -133,7 +133,7 @@
 		2BDCE7E22336278E0004212B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
 		2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
-		2E1D1FF71FAF0AE600F4405D /* 野火通.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火通.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E1D1FF71FAF0AE600F4405D /* 野火IM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火IM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2E1D20011FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 		2E1D1FF81FAF0AE600F4405D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2E1D1FF71FAF0AE600F4405D /* 野火通.app */,
+				2E1D1FF71FAF0AE600F4405D /* 野火IM.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -786,7 +786,7 @@
 			);
 			name = WildFireChat;
 			productName = WildFireChat;
-			productReference = 2E1D1FF71FAF0AE600F4405D /* 野火通.app */;
+			productReference = 2E1D1FF71FAF0AE600F4405D /* 野火IM.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -800,7 +800,7 @@
 				TargetAttributes = {
 					2E1D1FF61FAF0AE600F4405D = {
 						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1104,10 +1104,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
-				DEVELOPMENT_TEAM = Y8356M2VAP;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 30;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1123,12 +1123,12 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.app;
-				PRODUCT_NAME = "野火通";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
+				PRODUCT_NAME = "野火IM";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
@@ -1141,10 +1141,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_IDENTITY = "Apple Distribution: FengYun Sun (ZTJABWRJ5T)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
-				DEVELOPMENT_TEAM = Y8356M2VAP;
+				CURRENT_PROJECT_VERSION = 30;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1160,12 +1160,12 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.app;
-				PRODUCT_NAME = "野火通";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
+				PRODUCT_NAME = "野火IM";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = dis;
+				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
