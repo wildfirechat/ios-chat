@@ -5,8 +5,8 @@
   Created by Heavyrain.lee on 2019/9/16.
   Copyright © 2019 WildFireChat. All rights reserved.
 */
-CFBundleName="野火通";
-CFBundleDisplayName="野火通";
+CFBundleName="野火IM";
+CFBundleDisplayName="野火IM";
 Message="消息";
 Contact="联系人";
 Discover="发现";
@@ -20,7 +20,7 @@ PrivacySettings="隐私设置";
 Theme="主题";
 CurrentVersion="当前版本";
 HelpFeedback="帮助与反馈";
-AboutWFChat="关于野火通";
+AboutWFChat="关于野火IM";
 UserAgreement="用户协议";
 PrivacyPolicy="隐私政策";
 Complain="举报";
