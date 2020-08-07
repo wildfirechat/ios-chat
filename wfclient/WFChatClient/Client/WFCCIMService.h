@@ -424,12 +424,18 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 /**
  搜索消息
  
- @param conversation 会话
+ @param conversation 会话，如果为空将搜索所有会话
  @param keyword 关键词
+ @param desc order
+ @param offset offset
+ @param limit limit
  @return 命中的消息
  */
 - (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
-                                  keyword:(NSString *)keyword;
+                                  keyword:(NSString *)keyword
+                                    order:(BOOL)desc
+                                    limit:(int)limit
+                                   offset:(int)offset;
 
 /**
  发送消息
