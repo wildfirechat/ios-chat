@@ -1488,6 +1488,7 @@
     if (!userInfo.deleted) {
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = model.message.fromUser;
+        vc.fromConversation = self.conversation;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }

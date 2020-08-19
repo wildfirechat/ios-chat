@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @class WFCCUserInfo;
+@class WFCCConversation;
 @interface WFCUProfileTableViewController : UIViewController
 @property (nonatomic, strong)NSString *userId;
+@property (nonatomic, strong)WFCCConversation *fromConversation;
 @end
