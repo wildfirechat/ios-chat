@@ -438,6 +438,23 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                    offset:(int)offset;
 
 /**
+ 获取某类会话信息
+ 
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param contentTypes 消息类型
+ @param keyword 关键字
+ @param fromIndex 起始index
+ @param count 总数
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)searchMessage:(NSArray<NSNumber *> *)conversationTypes
+                                    lines:(NSArray<NSNumber *> *)lines
+                             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                  keyword:(NSString *)keyword
+                                     from:(NSUInteger)fromIndex
+                                    count:(NSInteger)count;
+/**
  发送消息
 
  @param conversation 会话
