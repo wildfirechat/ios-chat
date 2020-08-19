@@ -809,7 +809,67 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         count = -count;
     }
     
-    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, messageStatus, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, (int)messageStatus, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    return convertProtoMessageList(messages, YES);
+}
+
+- (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
+                               conversation:(WFCCConversation *)conversation
+                               contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                       from:(NSUInteger)fromIndex
+                                      count:(NSInteger)count {
+    if (!userId.length || !conversation.target.length) {
+        return nil;
+    }
+    
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetUserMessages([userId UTF8String], (int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex);
+    return convertProtoMessageList(messages, YES);
+}
+
+- (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
+                          conversationTypes:(NSArray<NSNumber *> *)conversationTypes
+                                      lines:(NSArray<NSNumber *> *)lines
+                               contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                       from:(NSUInteger)fromIndex
+                                      count:(NSInteger)count {
+    
+    if (!userId.length || !conversationTypes.count) {
+        return nil;
+    }
+    
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetUserMessages([userId UTF8String], convtypes, ls, types, direction, (int)count, fromIndex);
     return convertProtoMessageList(messages, YES);
 }
 
@@ -821,7 +881,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::TConversation conv;
     conv.target = [conversation.target UTF8String];
     conv.line = conversation.line;
-    conv.conversationType = conversation.type;
+    conv.conversationType = (int)conversation.type;
     mars::stn::loadRemoteMessages(conv, beforeMessageUid, (int)count, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
 }
 

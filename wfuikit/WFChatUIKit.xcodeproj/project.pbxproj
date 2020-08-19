@@ -32,6 +32,8 @@
 		2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
+		2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */; };
+		2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
 		2BD8D72524D69B5300281B81 /* WFCUGroupFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */; };
@@ -383,7 +385,7 @@
 		2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108A217F5CC200F56C26 /* WFCUFriendRequestViewController.h */; };
 		2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55108B217F5CC200F56C26 /* WFCUFriendRequestViewController.m */; };
 		2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108D217F5CC200F56C26 /* WFCUMediaMessageDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108E217F5CC200F56C26 /* WFCUUtilities.h */; };
+		2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55108E217F5CC200F56C26 /* WFCUUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F55122B217F5CC300F56C26 /* WFCUMediaMessageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55108F217F5CC200F56C26 /* WFCUMediaMessageDownloader.m */; };
 		2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551090217F5CC200F56C26 /* WFCUUtilities.m */; };
 		2F5EB43C22C2E21A00BC8C90 /* GroupManageTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */; };
@@ -450,6 +452,8 @@
 		2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaMessageGridViewCell.m; sourceTree = "<group>"; };
 		2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCCircleProgressView.m; sourceTree = "<group>"; };
 		2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCCircleProgressView.h; sourceTree = "<group>"; };
+		2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUUserMessageListViewController.h; sourceTree = "<group>"; };
+		2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUUserMessageListViewController.m; sourceTree = "<group>"; };
 		2BCEC52D232E10DF00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/wfc.strings; sourceTree = "<group>"; };
 		2BCEC52F232E10E900D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc.strings"; sourceTree = "<group>"; };
 		2BD671A22336E821007A9FEC /* WFCUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConfigManager.h; sourceTree = "<group>"; };
@@ -1127,6 +1131,8 @@
 				2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */,
 				2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */,
 				2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */,
+				2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */,
+				2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1837,6 +1843,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
@@ -1877,7 +1884,6 @@
 				2F55121A217F5CC300F56C26 /* WFCUMyPortraitViewController.h in Headers */,
 				2F551211217F5CC300F56C26 /* WFCUContactListViewController.h in Headers */,
 				2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */,
-				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */,
 				2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */,
 				2F5510B0217F5CC200F56C26 /* WFCUGroupMemberTableViewController.h in Headers */,
@@ -1994,6 +2000,7 @@
 				2F5510B7217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.h in Headers */,
 				2F5510F8217F5CC200F56C26 /* CCHFadeInOutMapAnimator.h in Headers */,
 				2F5510CC217F5CC200F56C26 /* WFCUVoiceRecordView.h in Headers */,
+				2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */,
 				9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */,
 				2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */,
 				2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */,
@@ -2155,6 +2162,7 @@
 				2BDF57B224AD70C8003C1F08 /* DNUnAuthorizedTipsView.m in Sources */,
 				2F551102217F5CC200F56C26 /* CCHNearCenterMapClusterer.m in Sources */,
 				2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */,
+				2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */,
 				2F5511D8217F5CC300F56C26 /* UIView+TYAutoLayout.m in Sources */,
 				2F551099217F5CC200F56C26 /* WFCUTextCell.m in Sources */,
 				2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */,
