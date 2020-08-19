@@ -382,15 +382,50 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param messageStatus 消息状态
  @param fromIndex 起始index
  @param count 总数
+ @param user 对话用户
  @return 消息实体
  */
 - (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
-                                           lines:(NSArray<NSNumber *> *)lines
-                                   messageStatus:(WFCCMessageStatus)messageStatus
-                                            from:(NSUInteger)fromIndex
-                                           count:(NSInteger)count
-                                        withUser:(NSString *)user;
+                                  lines:(NSArray<NSNumber *> *)lines
+                          messageStatus:(WFCCMessageStatus)messageStatus
+                                   from:(NSUInteger)fromIndex
+                                  count:(NSInteger)count
+                               withUser:(NSString *)user;
 
+/**
+ 获取用户会话消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param userId 用户ID
+ @param conversation 会话
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
+                               conversation:(WFCCConversation *)conversation
+                               contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                       from:(NSUInteger)fromIndex
+                                      count:(NSInteger)count;
+
+/**
+ 获取用户某类会话信息
+ 
+ @param userId 用户ID
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
+                          conversationTypes:(NSArray<NSNumber *> *)conversationTypes
+                                      lines:(NSArray<NSNumber *> *)lines
+                               contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                       from:(NSUInteger)fromIndex
+                                      count:(NSInteger)count;
 /**
  获取服务器消息
  

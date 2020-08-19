@@ -21,6 +21,8 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUConfigManager.h"
+#import "WFCUUserMessageListViewController.h"
+
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (strong, nonatomic)UILabel *aliasLabel;
@@ -39,7 +41,7 @@
 @property (strong, nonatomic)UITableViewCell *voipCallCell;
 @property (strong, nonatomic)UITableViewCell *addFriendCell;
 @property (strong, nonatomic)UITableViewCell *momentCell;
-
+@property (nonatomic, strong)UITableViewCell *userMessagesCell;
 
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<UITableViewCell *> *cells;
@@ -210,6 +212,13 @@
             cell.textLabel.text = self.userInfo.social;
             [self.cells addObject:cell];
         }
+    }
+    
+    if (self.fromConversation.type == Group_Type) {
+        self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
+        [self.cells addObject:self.userMessagesCell];
     }
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
@@ -386,7 +395,7 @@
        return self.headerCells[indexPath.row];
     } else if (indexPath.section == 1) {
         return self.momentCell;
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
            return self.cells[indexPath.row];
     } else {
         if (self.sendMessageCell) {
@@ -429,6 +438,14 @@
     return @" ";
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if([tableView cellForRowAtIndexPath:indexPath] == self.userMessagesCell) {
+        WFCUUserMessageListViewController *vc = [[WFCUUserMessageListViewController alloc] init];
+        vc.userId = self.userId;
+        vc.conversation = self.fromConversation;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

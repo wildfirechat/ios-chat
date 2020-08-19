@@ -17,6 +17,8 @@ namespace mars {
         class UpdateConversationData;
         class LoadRemoteMessagesPublishCallback;
         class SyncReadEntry;
+        class RecyclableStatement;
+        class DB2;
         class MessageDB {
             
         private:
@@ -61,6 +63,9 @@ namespace mars {
             std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser);
             
             std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const int messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser);
+            
+            std::list<TMessage> GetUserMessages(const std::string &user, int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
+            std::list<TMessage> GetUserMessages(const std::string &user, const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
 
           
             TMessage GetMessageById(long messageId);
@@ -172,6 +177,8 @@ namespace mars {
             bool updateConversationUnread(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> lines, bool clearLastMessageId = false);
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
+            void getMsgFromStateMent(DB2 *db, RecyclableStatement &statementHandle, TMessage &msg);
+            
             static MessageDB* instance_;
         };
     
