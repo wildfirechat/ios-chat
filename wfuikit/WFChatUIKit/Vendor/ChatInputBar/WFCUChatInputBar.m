@@ -1003,16 +1003,47 @@
         [actionSheet showInView:self.parentView];
 #endif
     } else if(itemTag == 5) {
-        WFCUSelectFileViewController *sfvc = [[WFCUSelectFileViewController alloc] init];
-        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:sfvc];
-        __weak typeof(self) ws = self;
-        sfvc.selectResult = ^(NSArray *selectFiles) {
-            [ws.delegate didSelectFiles:selectFiles];
-        };
-        [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
+//        WFCUSelectFileViewController *sfvc = [[WFCUSelectFileViewController alloc] init];
+//        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:sfvc];
+//        __weak typeof(self) ws = self;
+//        sfvc.selectResult = ^(NSArray *selectFiles) {
+//            [ws.delegate didSelectFiles:selectFiles];
+//        };
+//        [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
+//        [self notifyTyping:4];
+        
+        NSArray*documentTypes =@[
+        @"public.data",
+        @"com.microsoft.powerpoint.ppt",
+        @"com.microsoft.word.doc",
+        @"com.microsoft.excel.xls",
+        @"com.microsoft.powerpoint.pptx",
+        @"com.microsoft.word.docx",
+        @"com.microsoft.excel.xlsx",
+        @"public.avi",
+        @"public.3gpp",
+        @"public.mpeg-4",
+        @"com.compuserve.gif",
+        @"public.jpeg",
+        @"public.png",
+        @"public.plain-text",
+        @"com.adobe.pdf"
+        ];
+        UIDocumentPickerViewController *DP = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:documentTypes inMode:UIDocumentPickerModeOpen];
+        DP.delegate = self;
+        if (@available(iOS 11.0, *)) {
+            DP.allowsMultipleSelection = YES;
+        } else {
+            // Fallback on earlier versions
+        }
+        DP.modalPresentationStyle = UIModalPresentationFullScreen;
+        [navi presentViewController:DP animated:YES completion:nil];
+        
         [self notifyTyping:4];
+        
     }
 }
+
 - (void)checkAndAlertCameraAccessRight {
     AVAuthorizationStatus authStatus =
     [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -1026,6 +1057,36 @@
                                   otherButtonTitles:nil, nil];
         [alertView show];
     }
+}
+
+#pragma mark  UIDocumentDelegate 文件选择回调
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    
+    NSMutableArray *arr = [NSMutableArray array];
+
+    for (NSURL *url in urls) {
+        
+        //获取授权
+           BOOL fileUrlAuthozied = [url startAccessingSecurityScopedResource];
+           if(fileUrlAuthozied){
+               //通过文件协调工具来得到新的文件地址，以此得到文件保护功能
+               NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+               NSError *error;
+               //读取文件
+               [fileCoordinator coordinateReadingItemAtURL:url options:0 error:&error byAccessor:^(NSURL *newURL) {
+                   if (!error) {
+                       [arr addObject:newURL.path];
+                   }
+               }];
+               [url stopAccessingSecurityScopedResource];
+               
+           }else{
+               NSLog(@"授权失败");
+           }
+    }
+    
+    //发送文件
+    [self.delegate didSelectFiles:arr];
 }
 
 #pragma mark - UIImagePickerControllerDelegate<NSObject>
