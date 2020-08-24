@@ -48,7 +48,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate, DNImagePickerControllerDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate, DNImagePickerControllerDelegate, UIDocumentPickerDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -1003,41 +1003,34 @@
         [actionSheet showInView:self.parentView];
 #endif
     } else if(itemTag == 5) {
-//        WFCUSelectFileViewController *sfvc = [[WFCUSelectFileViewController alloc] init];
-//        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:sfvc];
-//        __weak typeof(self) ws = self;
-//        sfvc.selectResult = ^(NSArray *selectFiles) {
-//            [ws.delegate didSelectFiles:selectFiles];
-//        };
-//        [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
-//        [self notifyTyping:4];
-        
         NSArray*documentTypes =@[
-        @"public.data",
-        @"com.microsoft.powerpoint.ppt",
-        @"com.microsoft.word.doc",
-        @"com.microsoft.excel.xls",
-        @"com.microsoft.powerpoint.pptx",
-        @"com.microsoft.word.docx",
-        @"com.microsoft.excel.xlsx",
-        @"public.avi",
-        @"public.3gpp",
-        @"public.mpeg-4",
-        @"com.compuserve.gif",
-        @"public.jpeg",
-        @"public.png",
-        @"public.plain-text",
-        @"com.adobe.pdf"
-        ];
-        UIDocumentPickerViewController *DP = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:documentTypes inMode:UIDocumentPickerModeOpen];
-        DP.delegate = self;
+                @"public.content",
+                @"public.data",
+                @"com.microsoft.powerpoint.ppt",
+                @"com.microsoft.word.doc",
+                @"com.microsoft.excel.xls",
+                @"com.microsoft.powerpoint.pptx",
+                @"com.microsoft.word.docx",
+                @"com.microsoft.excel.xlsx",
+                @"public.avi",
+                @"public.3gpp",
+                @"public.mpeg-4",
+                @"com.compuserve.gif",
+                @"public.jpeg",
+                @"public.png",
+                @"public.plain-text",
+                @"com.adobe.pdf"
+                ];
+
+        UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:documentTypes inMode:UIDocumentPickerModeOpen];
+        picker.delegate = self;
+        
         if (@available(iOS 11.0, *)) {
-            DP.allowsMultipleSelection = YES;
-        } else {
-            // Fallback on earlier versions
+            picker.allowsMultipleSelection = YES;
         }
-        DP.modalPresentationStyle = UIModalPresentationFullScreen;
-        [navi presentViewController:DP animated:YES completion:nil];
+        
+        picker.modalPresentationStyle = UIModalPresentationFullScreen;
+        [navi presentViewController:picker animated:YES completion:nil];
         
         [self notifyTyping:4];
         
@@ -1061,31 +1054,56 @@
 
 #pragma mark  UIDocumentDelegate 文件选择回调
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
-    
-    NSMutableArray *arr = [NSMutableArray array];
+
+    __block NSMutableArray *arr = [NSMutableArray array];
 
     for (NSURL *url in urls) {
-        
-        //获取授权
-           BOOL fileUrlAuthozied = [url startAccessingSecurityScopedResource];
-           if(fileUrlAuthozied){
-               //通过文件协调工具来得到新的文件地址，以此得到文件保护功能
-               NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
-               NSError *error;
-               //读取文件
-               [fileCoordinator coordinateReadingItemAtURL:url options:0 error:&error byAccessor:^(NSURL *newURL) {
-                   if (!error) {
-                       [arr addObject:newURL.path];
+       //获取授权
+       BOOL fileUrlAuthozied = [url startAccessingSecurityScopedResource];
+       if(fileUrlAuthozied){
+           //通过文件协调工具来得到新的文件地址，以此得到文件保护功能
+           NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+           NSError *error;
+           
+           [fileCoordinator coordinateReadingItemAtURL:url options:0 error:&error byAccessor:^(NSURL *newURL) {
+               if (!error) {
+                   NSData *fileData = [NSData dataWithContentsOfURL:newURL];
+                   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                   NSString *documentPath = [paths lastObject];
+                   NSString *tempDir = [documentPath stringByAppendingPathComponent:@"wf_send_files"];
+                   NSFileManager *fileManager = [NSFileManager defaultManager];
+                   
+                   bool isDir = NO;
+                   if (![fileManager fileExistsAtPath:tempDir isDirectory:&isDir]) {
+                       isDir = YES;
+                       NSError *err;
+                       if(![fileManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:&err]) {
+                           NSLog(@"Error, create temp folder error");
+                           return;
+                       }
+                       if (err) {
+                           NSLog(@"Error, create temp folder error:%@", err);
+                           return;
+                       }
                    }
-               }];
-               [url stopAccessingSecurityScopedResource];
-               
-           }else{
-               NSLog(@"授权失败");
-           }
+                   if (!isDir) {
+                       NSLog(@"Error, create temp folder error");
+                       return;
+                   }
+
+                   NSString *desFileName = [tempDir stringByAppendingPathComponent:[newURL lastPathComponent]];
+                   [fileData writeToFile:desFileName atomically:YES];
+                   [arr addObject:desFileName];
+               }
+           }];
+           
+           [url stopAccessingSecurityScopedResource];
+
+       }else{
+           NSLog(@"授权失败");
+       }
     }
-    
-    //发送文件
+
     [self.delegate didSelectFiles:arr];
 }
 
