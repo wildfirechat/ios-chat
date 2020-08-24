@@ -121,6 +121,20 @@ public:
     id<ReceiveMessageDelegate> m_delegate;
 };
 
+class CONFCB : public mars::stn::ConferenceEventCallback {
+public:
+  CONFCB(id<ConferenceEventDelegate> delegate) : m_delegate(delegate) {
+  }
+  void onConferenceEvent(const std::string &event) {
+    if (m_delegate) {
+        [m_delegate onConferenceEvent:[NSString stringWithUTF8String:event.c_str()]];
+    }
+  }
+    
+  id<ConferenceEventDelegate> m_delegate;
+};
+
+
 WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     WFCCUserInfo *userInfo = [[WFCCUserInfo alloc] init];
     userInfo.userId = [NSString stringWithUTF8String:tui.uid.c_str()];
@@ -294,7 +308,7 @@ public:
 
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -420,7 +434,12 @@ static WFCCNetworkService * sharedSingleton = nil;
             [self.receiveMessageDelegate onMessageDelivered:delivereds];
         }
     });
-    
+}
+
+- (void)onConferenceEvent:(NSString *)event {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.conferenceEventDelegate onConferenceEvent:event];
+    });
 }
 
 - (void)addReceiveMessageFilter:(id<ReceiveMessageFilter>)filter {
@@ -631,6 +650,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::app::SetCallback(mars::app::AppCallBack::Instance());
   mars::stn::setConnectionStatusCallback(new CSCB(self));
   mars::stn::setReceiveMessageCallback(new RPCB(self));
+    mars::stn::setConferenceEventCallback(new CONFCB(self));
   mars::stn::setRefreshUserInfoCallback(new GUCB(self));
   mars::stn::setRefreshGroupInfoCallback(new GGCB(self));
     mars::stn::setRefreshGroupMemberCallback(new GGMCB(self));
