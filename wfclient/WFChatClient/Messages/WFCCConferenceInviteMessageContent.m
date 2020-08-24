@@ -1,17 +1,17 @@
 //
-//  WFCCTextMessageContent.m
+//  WFCCConferenceInviteMessageContent.m
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/8/16.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCCallStartMessageContent.h"
+#import "WFCCConferenceInviteMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
 
 
-@implementation WFCCCallStartMessageContent
+@implementation WFCCConferenceInviteMessageContent
 - (WFCCMessagePayload *)encode {
     
     WFCCMessagePayload *payload = [super encode];
@@ -19,23 +19,24 @@
     payload.content = self.callId;
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-    if (self.connectTime) {
-        [dataDict setObject:@(self.connectTime) forKey:@"c"];
+    if (self.host) {
+        [dataDict setObject:self.host forKey:@"h"];
     }
-    if (self.endTime) {
-        [dataDict setObject:@(self.endTime) forKey:@"e"];
+    if (self.startTime) {
+        [dataDict setObject:@(self.startTime) forKey:@"s"];
     }
-    if (self.status) {
-        [dataDict setObject:@(self.status) forKey:@"s"];
+    if (self.title) {
+        [dataDict setObject:self.title forKey:@"t"];
+    }
+    if (self.desc) {
+        [dataDict setObject:self.desc forKey:@"d"];
     }
     if (self.pin) {
         [dataDict setObject:self.pin forKey:@"p"];
     }
     
-    [dataDict setObject:self.targetIds forKey:@"ts"];
-    //多人音视频与单人音视频兼容
-    [dataDict setObject:self.targetIds[0] forKey:@"t"];
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
+    [dataDict setValue:@(self.audience?1:0) forKey:@"audience"];
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
@@ -51,27 +52,22 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.connectTime = dictionary[@"c"] ? [dictionary[@"c"] longLongValue] : 0;
-        self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;
-        self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
+        self.host = dictionary[@"h"];
+        self.startTime = dictionary[@"s"] ? [dictionary[@"s"] longLongValue] : 0;
+        self.title = dictionary[@"t"];
+        self.desc = dictionary[@"d"];
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
-        self.targetIds = dictionary[@"ts"];
+        self.audience = [dictionary[@"audience"] intValue] ? YES : NO;
         self.pin = dictionary[@"p"];
-        if (self.targetIds.count == 0) {
-            NSString *target = dictionary[@"t"];
-            NSMutableArray *arr = [[NSMutableArray alloc] init];
-            [arr addObject:target];
-            self.targetIds = arr;
-        }
     }
 }
 
 + (int)getContentType {
-    return VOIP_CONTENT_TYPE_START;
+    return VOIP_CONTENT_CONFERENCE_INVITE;
 }
 
 + (int)getContentFlags {
-    return WFCCPersistFlag_PERSIST;
+    return WFCCPersistFlag_PERSIST_AND_COUNT;
 }
 
 + (void)load {
@@ -80,9 +76,9 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if (_audioOnly) {
-        return @"[语音通话]";
+        return @"[音频会议邀请]";
     } else {
-        return @"[视频通话]";
+        return @"[视频会议邀请]";
     }
 }
 @end

@@ -21,6 +21,7 @@
 #import "WFCUStickerCell.h"
 #import "WFCUVideoCell.h"
 #import "WFCURecallCell.h"
+#import "WFCUConferenceInviteCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -60,6 +61,7 @@
 #import "WFCUConversationSearchTableViewController.h"
 
 #import "WFCUMediaMessageGridViewController.h"
+#import "WFCUConferenceViewController.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -682,6 +684,7 @@
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCUnknownMessageContent class]];
     [self registerCell:[WFCURecallCell class] forContent:[WFCCRecallMessageContent class]];
+    [self registerCell:[WFCUConferenceInviteCell class] forContent:[WFCCConferenceInviteMessageContent class]];
     
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
@@ -1436,6 +1439,11 @@
         } else {
             [self startPlay:model];
         }
+    } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
+        WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
+        
+        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
+        [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
     }
 }
 
