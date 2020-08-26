@@ -304,6 +304,37 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                   conversation:(WFCCConversation *)conversation
                sessionDelegate:(id<WFAVCallSessionDelegate>)sessionDelegate;
 
+
+
+
+- (void)listConference:(void(^_Nullable)(NSArray<NSDictionary *> * _Nullable conferences))successBlock
+                 error:(void(^_Nullable)(int error_code))errorBlock;
+
+/**
+ 发起会议
+
+ @param audioOnly 是否语音会议
+ @param sessionDelegate 通话Session的监听
+ @return 通话Session
+ */
+- (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
+                                   audioOnly:(BOOL)audioOnly
+                                         pin:(NSString *_Nonnull)pin
+                                        host:(NSString *_Nullable)host
+                                       title:(NSString *_Nullable)title
+                                        desc:(NSString *_Nullable)desc
+                                    audience:(BOOL)audience
+                             sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
+
+- (WFAVCallSession *_Nonnull)joinConference:(NSString *_Nonnull)callId
+                                  audioOnly:(BOOL)audioOnly
+                                        pin:(NSString *_Nonnull)pin
+                                       host:(NSString *_Nullable)host
+                                      title:(NSString *_Nullable)title
+                                       desc:(NSString *_Nullable)desc
+                                   audience:(BOOL)audience
+                             sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
+
 /**
  开启画面预览
  */
@@ -394,9 +425,39 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, readonly)WFAVCallEndReason endReason;
 
 /**
- 是否是语音电话
+ 是否是扬声器
  */
 @property(nonatomic, assign, getter=isSpeaker, readonly)BOOL speaker;
+
+/**
+是否是会议
+*/
+@property(nonatomic, assign, getter=isConference, readonly) BOOL conference;
+
+/**
+是否观众，仅当会议有效
+*/
+@property(nonatomic, assign, getter=isAudience, readonly) BOOL audience;
+
+/**
+会议密码，仅当会议有效
+*/
+@property(nonatomic, strong) NSString * _Nullable pin;
+
+/**
+会议主持人，仅当会议有效
+*/
+@property(nonatomic, strong) NSString * _Nullable host;
+
+/**
+会议标题，仅当会议有效
+*/
+@property(nonatomic, strong) NSString * _Nullable title;
+
+/**
+会议描述，仅当会议有效
+*/
+@property(nonatomic, strong) NSString * _Nullable desc;
 
 
 /**
