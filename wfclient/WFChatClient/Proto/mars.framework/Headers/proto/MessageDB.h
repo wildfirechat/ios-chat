@@ -60,9 +60,11 @@ namespace mars {
             
             std::list<TMessage> GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser);
             
+            std::list<TMessage> GetMessagesByMessageStatus(int conversationType, const std::string &target, int line, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser);
+            
             std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser);
             
-            std::list<TMessage> GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const int messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser);
+            std::list<TMessage> GetMessagesByMessageStatus(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser);
             
             std::list<TMessage> GetUserMessages(const std::string &user, int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
             std::list<TMessage> GetUserMessages(const std::string &user, const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);

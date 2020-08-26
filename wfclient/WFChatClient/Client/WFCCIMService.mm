@@ -750,7 +750,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         count = -count;
     }
     
-    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    return convertProtoMessageList(messages, YES);
+}
+- (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
+                          messageStatus:(NSArray<NSNumber *> *)messageStatus
+                                   from:(NSUInteger)fromIndex
+                                  count:(NSInteger)count
+                               withUser:(NSString *)user {
+    std::list<int> types;
+    for (NSNumber *num in messageStatus) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessagesByMessageStatus((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
 }
 
@@ -787,7 +805,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
-                                   messageStatus:(WFCCMessageStatus)messageStatus
+                                   messageStatus:(NSArray<NSNumber *> *)messageStatus
                                             from:(NSUInteger)fromIndex
                                            count:(NSInteger)count
                                         withUser:(NSString *)user {
@@ -801,7 +819,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         ls.push_back([type intValue]);
     }
     
-    
+    std::list<int> status;
+    for (NSNumber *num in messageStatus) {
+        status.push_back(num.intValue);
+    }
 
     bool direction = true;
     if (count < 0) {
@@ -809,7 +830,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         count = -count;
     }
     
-    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, (int)messageStatus, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessagesByMessageStatus(convtypes, ls, status, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
 }
 

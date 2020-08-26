@@ -65,6 +65,9 @@
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
+
+@property (nonatomic, strong)NSMutableArray<WFCCMessage *> *mentionedMsgs;
+
 @property (nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *cellContentDict;
 
 @property(nonatomic) AVAudioPlayer *player;
@@ -1045,6 +1048,9 @@
             count = 15;
         }
         messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser];
+        
+        self.mentionedMsgs = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:self.privateChatUser] mutableCopy];
+        
         [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
     }
     
@@ -1307,6 +1313,16 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     WFCUMessageModel *model = self.modelList[indexPath.row];
     NSString *objName = [NSString stringWithFormat:@"%d", [model.message.content.class getContentType]];
+    
+    if (self.mentionedMsgs.count) {
+        for (WFCCMessage *msg in self.mentionedMsgs) {
+            if (msg.messageId == model.message.messageId) {
+                [self.mentionedMsgs removeObject:msg];
+                break;
+            }
+        }
+    }
+    
     
     WFCUMessageCellBase *cell = nil;
     if(![self.cellContentDict objectForKey:@([model.message.content.class getContentType])]) {
