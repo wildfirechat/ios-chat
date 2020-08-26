@@ -358,6 +358,22 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                withUser:(NSString *)user;
 
 /**
+ 获取消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
+ @param messageStatus 消息状态WFCCMessageStatus
+ @param fromIndex 起始index
+ @param count 总数
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
+                          messageStatus:(NSArray<NSNumber *> *)messageStatus
+                                   from:(NSUInteger)fromIndex
+                                  count:(NSInteger)count
+                               withUser:(NSString *)user;
+
+/**
  获取某类会话信息
  
  @param conversationTypes 会话类型
@@ -387,7 +403,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  */
 - (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                   lines:(NSArray<NSNumber *> *)lines
-                          messageStatus:(WFCCMessageStatus)messageStatus
+                          messageStatus:(NSArray<NSNumber *> *)messageStatus
                                    from:(NSUInteger)fromIndex
                                   count:(NSInteger)count
                                withUser:(NSString *)user;
