@@ -130,6 +130,19 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (BOOL)onReceiveMessage:(WFCCMessage *)message;
 @end
 
+/**
+ 会议事件的监听
+ */
+@protocol ConferenceEventDelegate <NSObject>
+
+/**
+ 会议事件的回调
+
+ @param event 事件
+ */
+- (void)onConferenceEvent:(NSString *)event;
+@end
+
 #pragma mark - 连接服务
 /**
  连接服务
@@ -153,6 +166,10 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  */
 @property(nonatomic, weak) id<ReceiveMessageDelegate> receiveMessageDelegate;
 
+/**
+会议事件监听
+*/
+@property(nonatomic, weak) id<ConferenceEventDelegate> conferenceEventDelegate;
 /**
  当前是否处于登陆状态
  */
