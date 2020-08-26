@@ -5,7 +5,7 @@
 #define MARS_REVISION "99765985"
 #define MARS_PATH "firechat"
 #define MARS_URL ""
-#define MARS_BUILD_TIME "2020-08-19 18:19:43"
+#define MARS_BUILD_TIME "2020-08-24 12:16:52"
 #define MARS_TAG ""
 
 #endif

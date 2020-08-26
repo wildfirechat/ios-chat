@@ -35,7 +35,8 @@
           @"image":@"chat_channel",@"des":@"channel"},
         @{@"title":LocalizedString(@"DevDocs"),
           @"image":@"dev_docs",@"des":@"Dev"},@{@"title":@"Things",
-          @"image":@"discover_things",@"des":@"Things"}]];
+          @"image":@"discover_things",@"des":@"Things"},@{@"title":@"Conference",
+          @"image":@"discover_things",@"des":@"Conference"}]];
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
         [self.dataSource insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
@@ -137,6 +138,12 @@
     
     if ([des isEqualToString:@"Things"]) {
         DeviceTableViewController *vc = [[DeviceTableViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([des isEqualToString:@"Conference"]) {
+        WFCUCreateConferenceViewController *vc = [[WFCUCreateConferenceViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
