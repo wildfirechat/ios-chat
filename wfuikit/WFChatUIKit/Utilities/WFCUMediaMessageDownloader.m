@@ -125,7 +125,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     
     if ([fileManager fileExistsAtPath:savedPath]) {
         mediaContent.localPath = savedPath;
-        [[WFCCIMService sharedWFCIMService] updateMessage:messageUid content:mediaContent];
+        [[WFCCIMService sharedWFCIMService] updateMessage:msg.messageId content:mediaContent];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             successBlock(msg.messageUid, savedPath);
