@@ -27,7 +27,24 @@
     [self.view addSubview:pcView];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 320, 200, 16)];
-    [label setText:@"确认电脑登陆"];
+    switch (self.platform) {
+        case PlatformType_Windows:
+            [label setText:@"确认 Windows 登陆"];
+            break;
+        case PlatformType_OSX:
+            [label setText:@"确认 Mac 登陆"];
+            break;
+        case PlatformType_WEB:
+            [label setText:@"确认浏览器登陆"];
+            break;
+        case Platform_Linux:
+            [label setText:@"确认 Linux 登陆"];
+            break;
+        default:
+            [label setText:@"确认电脑登陆"];
+            break;
+    }
+    
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
     
