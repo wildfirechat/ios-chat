@@ -244,7 +244,7 @@
                 }
             }
         }
-        if (!pcLoginRequest) {
+        if (pcLoginRequest) {
             if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
                 PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
                 vc2.sessionId = pcLoginRequest.sessionId;
