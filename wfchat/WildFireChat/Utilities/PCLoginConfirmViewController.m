@@ -102,7 +102,7 @@
         
         __weak typeof(self)ws = self;
         [hud setCompletionBlock:^{
-            [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [ws dismissViewControllerAnimated:YES completion:nil];
         }];
         [hud hideAnimated:YES afterDelay:1.f];
     }
