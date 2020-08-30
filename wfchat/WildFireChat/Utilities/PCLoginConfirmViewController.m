@@ -77,7 +77,8 @@
 }
 
 - (void)onLoginCancel:(id)sender {
-    //Todo clean app server pc session
+    [[AppService sharedAppService] pcCancelLogin:self.sessionId success:nil error:nil];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
