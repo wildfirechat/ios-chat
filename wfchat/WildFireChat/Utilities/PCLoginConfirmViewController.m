@@ -41,14 +41,31 @@
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 90, width - 200, 40)];
     [cancelBtn setTitle:@"取消登陆" forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [cancelBtn addTarget:self action:@selector(onLoginCancel:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *closeBtn = [[UIButton alloc] initWithFrame:CGRectMake(12, 12, 40, 40)];
+    [closeBtn setTitle:@"关闭" forState:UIControlStateNormal];
+    [closeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [closeBtn addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:loginBtn];
     [self.view addSubview:cancelBtn];
+    [self.view addSubview:closeBtn];
+    
     [self notifyScaned];
 }
 
 - (void)onLoginBtn:(id)sender {
     [self confirmLogin];
+}
+
+- (void)onLoginCancel:(id)sender {
+    //Todo clean app server pc session
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)onClose:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)notifyScaned {
@@ -85,7 +102,7 @@
         
         __weak typeof(self)ws = self;
         [hud setCompletionBlock:^{
-            [ws.navigationController popViewControllerAnimated:YES];
+            [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
         }];
         [hud hideAnimated:YES afterDelay:1.f];
     }

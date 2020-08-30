@@ -235,6 +235,26 @@
             }
         }
         
+    } else if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        WFCCPCLoginRequestMessageContent *pcLoginRequest;
+        for (WFCCMessage *msg in messages) {
+            if (([[NSDate date] timeIntervalSince1970] - (msg.serverTime - [WFCCNetworkService sharedInstance].serverDeltaTime)/1000) < 90) {
+                if ([msg.content isKindOfClass:[WFCCPCLoginRequestMessageContent class]]) {
+                    pcLoginRequest = (WFCCPCLoginRequestMessageContent *)msg.content;
+                }
+            }
+        }
+        if (!pcLoginRequest) {
+            if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
+                PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
+                vc2.sessionId = pcLoginRequest.sessionId;
+                vc2.platform = pcLoginRequest.platform;
+                vc2.modalPresentationStyle = UIModalPresentationFullScreen;
+                [self.window.rootViewController presentViewController:vc2 animated:YES completion:nil];
+            } else {
+                NSLog(@"怎么样才能模态弹出PC登录确认画面呢？");
+            }
+        }
     }
 }
 
@@ -277,11 +297,23 @@
         [navigator pushViewController:vc2 animated:YES];
         return YES;
     } else if ([str rangeOfString:@"wildfirechat://pcsession" options:NSCaseInsensitiveSearch].location == 0) {
-        NSString *sessionId = [str lastPathComponent];
+//        str = @"wildfirechat://pcsession/mysessionid?platform=3";
+        NSURL *URL = [NSURL URLWithString:str];
+        
+        NSString *sessionId = [URL lastPathComponent];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithCapacity:2];
+        NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:str];
+        [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [params setObject:obj.value forKey:obj.name];
+        }];
+        int platform = [params[@"platform"] intValue];
+        
+        
         PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
         vc2.sessionId = sessionId;
-        vc2.hidesBottomBarWhenPushed = YES;
-        [navigator pushViewController:vc2 animated:YES];
+        vc2.platform = platform;
+        vc2.modalPresentationStyle = UIModalPresentationFullScreen;
+        [navigator presentViewController:vc2 animated:YES completion:nil];
         return YES;
     }
     return NO;
@@ -413,6 +445,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     vc.scanResult = ^(NSString *str) {
         [ws handleUrl:str withNav:navigator];
     };
+    
     [navigator pushViewController:vc animated:YES];
 }
 @end

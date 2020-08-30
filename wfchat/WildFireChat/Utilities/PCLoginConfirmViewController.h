@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WFChatClient/WFCChatClient.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PCLoginConfirmViewController : UIViewController
 @property (nonatomic, strong)NSString *sessionId;
+@property (nonatomic, assign)WFCCPlatformType platform;
 @end
 
 NS_ASSUME_NONNULL_END
