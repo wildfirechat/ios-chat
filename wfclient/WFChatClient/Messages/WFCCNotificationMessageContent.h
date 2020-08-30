@@ -26,6 +26,6 @@
 /**
  通知消息
  */
-@interface WFCCNotificationMessageContent : WFCCMessageContent <    WFCCNotificationMessageContent>
+@interface WFCCNotificationMessageContent : WFCCMessageContent <WFCCNotificationMessageContent>
 
 @end

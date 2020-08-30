@@ -53,6 +53,11 @@
 //您已经添加XXX为好友了，可以愉快地聊天了
 #define MESSAGE_FRIEND_ADDED_NOTIFICATION 93
 
+//PC 端请求登录
+#define MESSAGE_PC_LOGIN_REQUSET 94
+
+
+
 //通知消息类型
 //创建群的通知消息
 #define MESSAGE_CONTENT_TYPE_CREATE_GROUP 104

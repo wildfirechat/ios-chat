@@ -286,7 +286,7 @@ static NSLock *wfcImageLock;
 
             int gridMemberCount = MIN((int)memberIds.count, 9);
             
-            CGFloat padding = 5;
+            CGFloat padding = 3;
 
             int numPerRow = 3;
 
