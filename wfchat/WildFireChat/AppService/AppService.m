@@ -34,12 +34,12 @@ static AppService *sharedSingleton = nil;
             NSString *userId = dict[@"result"][@"userId"];
             NSString *token = dict[@"result"][@"token"];
             BOOL newUser = [dict[@"result"][@"register"] boolValue];
-            successBlock(userId, token, newUser);
+            if(successBlock) successBlock(userId, token, newUser);
         } else {
-            errorBlock([dict[@"code"] intValue], dict[@"message"]);
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1, error.description);
+        if(errorBlock) errorBlock(-1, error.description);
     }];
 }
 
@@ -47,12 +47,12 @@ static AppService *sharedSingleton = nil;
     
     [self post:@"/send_code" data:@{@"mobile":phoneNumber} success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock();
+            if(successBlock) successBlock();
         } else {
-            errorBlock(@"error");
+            if(errorBlock) errorBlock(@"error");
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(error.localizedDescription);
+        if(errorBlock) errorBlock(error.localizedDescription);
     }];
 }
 
@@ -61,12 +61,12 @@ static AppService *sharedSingleton = nil;
     NSString *path = [NSString stringWithFormat:@"/scan_pc/%@", sessionId];
     [self post:path data:nil success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock();
+            if(successBlock) successBlock();
         } else {
-            errorBlock([dict[@"code"] intValue], @"Network error");
+            if(errorBlock) errorBlock([dict[@"code"] intValue], @"Network error");
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1, error.localizedDescription);
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
     }];
 }
 
@@ -75,12 +75,26 @@ static AppService *sharedSingleton = nil;
     NSDictionary *param = @{@"token":sessionId, @"user_id":[WFCCNetworkService sharedInstance].userId, @"quick_login":@(1)};
     [self post:path data:param success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock();
+            if(successBlock) successBlock();
         } else {
-            errorBlock([dict[@"code"] intValue], @"Network error");
+            if(errorBlock) errorBlock([dict[@"code"] intValue], @"Network error");
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1, error.localizedDescription);
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)pcCancelLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/cancel_pc";
+    NSDictionary *param = @{@"token":sessionId};
+    [self post:path data:param success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], @"Network error");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
     }];
 }
 
@@ -112,12 +126,12 @@ static AppService *sharedSingleton = nil;
             [[NSUserDefaults standardUserDefaults] setValue:an.data forKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            successBlock(an);
+            if(successBlock) successBlock(an);
         } else {
-            errorBlock([dict[@"code"] intValue]);
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1);
+        if(errorBlock) errorBlock(-1);
     }];
 }
 
@@ -140,12 +154,12 @@ static AppService *sharedSingleton = nil;
             [[NSUserDefaults standardUserDefaults] setValue:an.data forKey:[NSString stringWithFormat:@"wfc_group_an_%@", groupId]];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            successBlock(an.timestamp);
+            if(successBlock) successBlock(an.timestamp);
         } else {
-            errorBlock([dict[@"code"] intValue]);
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1);
+        if(errorBlock) errorBlock(-1);
     }];
 }
 
@@ -266,7 +280,7 @@ static AppService *sharedSingleton = nil;
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     [self post:@"/change_name" data:@{@"newName":newName} success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock();
+            if(successBlock) successBlock();
         } else {
             NSString *errmsg;
             if ([dict[@"code"] intValue] == 17) {
@@ -274,10 +288,10 @@ static AppService *sharedSingleton = nil;
             } else {
                 errmsg = @"网络错误";
             }
-            errorBlock([dict[@"code"] intValue], errmsg);
+            if(errorBlock) errorBlock([dict[@"code"] intValue], errmsg);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1, error.localizedDescription);
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
     }];
 }
 
@@ -307,12 +321,12 @@ static AppService *sharedSingleton = nil;
             device.token = dict[@"token"];
             device.secret = dict[@"secret"];
             device.owners = owners;
-            successBlock(device);
+            if(successBlock) successBlock(device);
         } else {
-            errorBlock([dict[@"code"] intValue]);
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1);
+        if(errorBlock) errorBlock(-1);
     }];
 }
 
@@ -344,15 +358,15 @@ static AppService *sharedSingleton = nil;
                     }
                     [output addObject:device];
                 }
-                successBlock(output);
+                if(successBlock) successBlock(output);
             } else {
-                errorBlock(-1);
+                if(errorBlock) errorBlock(-1);
             }
         } else {
-            errorBlock([dict[@"code"] intValue]);
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1);
+        if(errorBlock) errorBlock(-1);
     }];
 }
 
@@ -363,12 +377,12 @@ static AppService *sharedSingleton = nil;
     NSDictionary *param = @{@"deviceId":deviceId};
     [self post:path data:param success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
-            successBlock(nil);
+            if(successBlock) successBlock(nil);
         } else {
             errorBlock([dict[@"code"] intValue]);
         }
     } error:^(NSError * _Nonnull error) {
-        errorBlock(-1);
+        if(errorBlock) errorBlock(-1);
     }];
 }
 @end
