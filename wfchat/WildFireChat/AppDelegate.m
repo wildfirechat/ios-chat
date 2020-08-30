@@ -245,7 +245,20 @@
             }
         }
         if (pcLoginRequest) {
+            __block UINavigationController *nav;
             if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
+                nav = (UINavigationController *)self.window.rootViewController;
+            } else if ([self.window.rootViewController isKindOfClass:[UITabBarController class]]) {
+                UITabBarController *tab = (UITabBarController *)self.window.rootViewController;
+                [tab.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj isKindOfClass:[UINavigationController class]]) {
+                        nav = obj;
+                        *stop = YES;
+                    }
+                }];
+            }
+            
+            if (nav) {
                 PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
                 vc2.sessionId = pcLoginRequest.sessionId;
                 vc2.platform = pcLoginRequest.platform;
@@ -254,6 +267,7 @@
             } else {
                 NSLog(@"怎么样才能模态弹出PC登录确认画面呢？");
             }
+            
         }
     }
 }

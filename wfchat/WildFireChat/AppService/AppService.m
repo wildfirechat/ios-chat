@@ -72,7 +72,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)pcConfirmLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/confirm_pc";
-    NSDictionary *param = @{@"token":sessionId, @"user_id":[WFCCNetworkService sharedInstance].userId, @"quick_login":@(YES)};
+    NSDictionary *param = @{@"token":sessionId, @"user_id":[WFCCNetworkService sharedInstance].userId, @"quick_login":@(1)};
     [self post:path data:param success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             successBlock();
