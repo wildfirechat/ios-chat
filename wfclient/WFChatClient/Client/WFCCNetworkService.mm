@@ -747,6 +747,10 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)disconnect:(BOOL)disablePush clearSession:(BOOL)clearSession {
+    if(!_logined) {
+        return;
+    }
+    
     _logined = NO;
     self.userId = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
