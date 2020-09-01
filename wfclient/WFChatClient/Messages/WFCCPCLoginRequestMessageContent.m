@@ -40,7 +40,7 @@
                                                                  error:&__error];
     if (!__error) {
         self.sessionId = dictionary[@"t"];
-        self.platform = [dictionary[@"n"] intValue];
+        self.platform = [dictionary[@"p"] intValue];
     }
 }
 
