@@ -276,10 +276,18 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == kConnectionStatusRejected || status == kConnectionStatusTokenIncorrect || status == kConnectionStatusSecretKeyMismatch) {
             [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:YES];
+            
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } else if (status == kConnectionStatusLogout) {
             UIViewController *loginVC = [[WFCLoginViewController alloc] init];
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
             self.window.rootViewController = nav;
+            
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } 
     });
 }
