@@ -319,11 +319,14 @@ public:
 @property(nonatomic, strong)NSTimer *forceConnectTimer;
 @property(nonatomic, strong)NSTimer *suspendTimer;
 @property(nonatomic, strong)NSTimer *endBgTaskTimer;
-@property(nonatomic, strong)NSString *backupDeviceToken;
-@property(nonatomic, strong)NSString *backupVoipDeviceToken;
+@property(nonatomic, strong)NSString *deviceToken;
+@property(nonatomic, strong)NSString *voipDeviceToken;
 
 @property(nonatomic, assign)BOOL requestProxying;
 @property(nonatomic, strong) NSMutableArray *messageFilterList;
+
+@property(nonatomic, assign)BOOL deviceTokenUploaded;
+@property(nonatomic, assign)BOOL voipDeviceTokenUploaded;
 - (void)reportEvent_OnForeground:(BOOL)isForeground;
 
 @property(nonatomic, assign)NSUInteger backgroudRunTime;
@@ -479,12 +482,12 @@ static WFCCNetworkService * sharedSingleton = nil;
   dispatch_async(dispatch_get_main_queue(), ^{
     self.currentConnectionStatus = status;
     if (status == kConnectionStatusConnected) {
-        if (self.backupDeviceToken.length) {
-            [self setDeviceToken:self.backupDeviceToken];
+        if (self.deviceToken.length && !self.deviceTokenUploaded) {
+            [self setDeviceToken:self.deviceToken];
         }
         
-        if (self.backupVoipDeviceToken.length) {
-            [self setVoipDeviceToken:self.backupVoipDeviceToken];
+        if (self.voipDeviceToken.length && !self.voipDeviceTokenUploaded) {
+            [self setVoipDeviceToken:self.voipDeviceToken];
         }
     }
   });
@@ -732,6 +735,8 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
     
   _logined = YES;
+    self.deviceTokenUploaded = NO;
+    self.voipDeviceTokenUploaded = NO;
     mars::app::AppCallBack::Instance()->SetAccountUserName([userId UTF8String]);
     [self createMars];
     self.userId = userId;
@@ -764,6 +769,8 @@ static WFCCNetworkService * sharedSingleton = nil;
         flag = 1;
     }
     
+    flag = 1;
+    
   if (mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusConnected && mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusReceiving) {
     mars::stn::Disconnect(flag);
     [self destroyMars];
@@ -792,18 +799,21 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)setDeviceToken:(NSString *)token {
-  if (token.length == 0) {
-    return;
-  }
-  
-  if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
-    self.backupDeviceToken = token;
-    return;
-  }
+    if (token.length == 0) {
+        return;
+    }
+
+    self.deviceToken = token;
+
+    if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
+        self.deviceTokenUploaded = NO;
+        return;
+    }
   
     NSString *appName =
     [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], mars::app::AppCallBack::Instance()->GetPushType());
+    self.deviceTokenUploaded =YES;
 }
 
 - (void)setVoipDeviceToken:(NSString *)token {
@@ -811,14 +821,17 @@ static WFCCNetworkService * sharedSingleton = nil;
         return;
     }
     
+    self.voipDeviceToken = token;
+    
     if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
-        self.backupVoipDeviceToken = token;
+        self.voipDeviceTokenUploaded = NO;
         return;
     }
     
     NSString *appName =
     [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], 2);
+    self.voipDeviceTokenUploaded = YES;
 }
 
 - (NSString *)encodedCid {
