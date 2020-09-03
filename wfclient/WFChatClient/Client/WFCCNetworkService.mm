@@ -769,8 +769,6 @@ static WFCCNetworkService * sharedSingleton = nil;
         flag = 1;
     }
     
-    flag = 1;
-    
   if (mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusConnected && mars::stn::getConnectionStatus() != mars::stn::kConnectionStatusReceiving) {
     mars::stn::Disconnect(flag);
     [self destroyMars];
