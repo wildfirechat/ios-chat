@@ -368,12 +368,16 @@ UISearchBarDelegate>
 }
 
 - (void)cancel {
+    [_selectedUserCollectionView removeObserver:self forKeyPath:@"contentSize"];
+    
     [[WFCUConfigManager globalManager] setupNavBar];
     
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)finish {
+    [_selectedUserCollectionView removeObserver:self forKeyPath:@"contentSize"];
+    
     [[WFCUConfigManager globalManager] setupNavBar];
     NSMutableArray *selectedUserIds = [NSMutableArray new];
     for (WFCUSelectedUserInfo *user in self.selectedUsers) {
