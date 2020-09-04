@@ -801,7 +801,7 @@ static WFCCNetworkService * sharedSingleton = nil;
         return;
     }
 
-    self.deviceToken = token;
+    _deviceToken = token;
 
     if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
         self.deviceTokenUploaded = NO;
@@ -819,7 +819,7 @@ static WFCCNetworkService * sharedSingleton = nil;
         return;
     }
     
-    self.voipDeviceToken = token;
+    _voipDeviceToken = token;
     
     if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
         self.voipDeviceTokenUploaded = NO;
