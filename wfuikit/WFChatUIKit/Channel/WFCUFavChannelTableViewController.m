@@ -29,6 +29,13 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:nil];
+}
+
+- (void)onSettingUpdated:(NSNotification *)notification {
+    [self refreshList];
 }
 
 - (void)onRightBarBtn:(id)sender {
@@ -66,11 +73,6 @@
         if (channelInfo) {
             channelInfo.channelId = channelId;
             [self.myChannels addObject:channelInfo];
-
-            __weak typeof(self)ws = self;
-            [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-                [ws onChannelInfoUpdated:note];
-            }];
         }
     }
     
@@ -80,10 +82,6 @@
         if (channelInfo) {
             channelInfo.channelId = channelId;
             [self.favChannels addObject:channelInfo];
-            __weak typeof(self)ws = self;
-            [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-                [ws onChannelInfoUpdated:note];
-            }];
         }
     }
     
@@ -92,10 +90,12 @@
 
 - (void)onChannelInfoUpdated:(NSNotification *)notification {
     WFCCChannelInfo *channelInfo = notification.userInfo[@"channelInfo"];
+    BOOL updated = NO;
     for (int i = 0; i < self.myChannels.count; i++) {
         if([self.myChannels[i].channelId isEqualToString:channelInfo.channelId]) {
             self.myChannels[i] = channelInfo;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            updated = YES;
         }
     }
     
@@ -103,7 +103,12 @@
         if([self.favChannels[i].channelId isEqualToString:channelInfo.channelId]) {
             self.favChannels[i] = channelInfo;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+            updated = YES;
         }
+    }
+    
+    if (!updated) {
+        [self refreshList];
     }
 }
 
