@@ -1535,24 +1535,27 @@
             [self.chatInputBar appendMention:model.message.fromUser name:sender.displayName];
         }
     } else if(self.conversation.type == Channel_Type) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"ChatWithSubscriber") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            if (model.message.direction == MessageDirection_Receive) {
-                WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
-                if ([channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                    WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                    mvc.conversation = [WFCCConversation conversationWithType:self.conversation.type target:self.conversation.target line:self.conversation.line];
-                    mvc.privateChatUser = model.message.fromUser;
-                    [self.navigationController pushViewController:mvc animated:YES];
-                }
-            }
+        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
+        if ([channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             
-        }];
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        [self presentViewController:alertController animated:YES completion:nil];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"ChatWithSubscriber") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                if (model.message.direction == MessageDirection_Receive) {
+                    WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
+                    if ([channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                        mvc.conversation = [WFCCConversation conversationWithType:self.conversation.type target:self.conversation.target line:self.conversation.line];
+                        mvc.privateChatUser = model.message.fromUser;
+                        [self.navigationController pushViewController:mvc animated:YES];
+                    }
+                }
+                
+            }];
+            [alertController addAction:cancelAction];
+            [alertController addAction:okAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
     }
 }
 - (void)didTapResendBtn:(WFCUMessageModel *)model {
