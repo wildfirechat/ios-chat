@@ -22,6 +22,7 @@
 #import "WFCUVideoCell.h"
 #import "WFCURecallCell.h"
 #import "WFCUConferenceInviteCell.h"
+#import "WFCUCardCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -688,6 +689,7 @@
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCUnknownMessageContent class]];
     [self registerCell:[WFCURecallCell class] forContent:[WFCCRecallMessageContent class]];
     [self registerCell:[WFCUConferenceInviteCell class] forContent:[WFCCConferenceInviteMessageContent class]];
+    [self registerCell:[WFCUCardCell class] forContent:[WFCCCardMessageContent class]];
     
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
@@ -1460,6 +1462,16 @@
         
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+    } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
+        WFCCCardMessageContent *card = (WFCCCardMessageContent *)model.message.content;
+        
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:card.userId refresh:NO];
+        if (!userInfo.deleted) {
+            WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+            vc.userId = card.userId;
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -1883,6 +1895,8 @@
         [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
+        [msg.content isKindOfClass:[WFCUCardCell class]] ||
         //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
         [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
         [items addObject:forwardItem];
