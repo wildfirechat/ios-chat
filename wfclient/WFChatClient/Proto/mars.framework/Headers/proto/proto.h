@@ -438,6 +438,7 @@ namespace mars{
             kUserSettingConversationReaded = 11,
             kUserSettingWebOnline = 12,
             kUserSettingDisableRecipt = 13,
+            kUserSettingFavouriteUser = 14,
 
             kUserSettingCustomBegin = 1000
         };
