@@ -44,7 +44,7 @@
 @end
 
 static NSMutableDictionary *hanziStringDict = nil;
-
+static NSString *wfcstar = @"☆";
 @implementation WFCUContactListViewController
 
 - (instancetype)init {
@@ -212,7 +212,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     } else {
         userIdList = [[WFCCIMService sharedWFCIMService] getMyFriendList:forceLoadFromRemote];
     }
-    self.dataArray = [[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil];
+    self.dataArray = [[[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil] mutableCopy];
     self.needSort = YES;
 }
 
@@ -550,6 +550,9 @@ static NSMutableDictionary *hanziStringDict = nil;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, self.view.frame.size.width, 30)];
     label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
     label.textAlignment = NSTextAlignmentLeft;
+    if ([title isEqualToString:wfcstar]) {
+        title = @"星标好友";
+    }
     label.text = [NSString stringWithFormat:@"%@", title];
     [view addSubview:label];
     return view;
@@ -705,6 +708,7 @@ static NSMutableDictionary *hanziStringDict = nil;
     if (!userList)
         return nil;
     NSArray *_keys = @[
+                       wfcstar,
                        @"A",
                        @"B",
                        @"C",
@@ -738,7 +742,28 @@ static NSMutableDictionary *hanziStringDict = nil;
     NSMutableArray *_tempOtherArr = [NSMutableArray new];
     BOOL isReturn = NO;
     NSMutableDictionary *firstLetterDict = [[NSMutableDictionary alloc] init];
+    
+    NSArray<NSString *> *favUsers = [[WFCCIMService sharedWFCIMService] getFavUsers];
+    
+    NSMutableArray *favArrays = [[NSMutableArray alloc] init];
+    for (NSString *favUser in favUsers) {
+        for (WFCCUserInfo *userInfo in userList) {
+            if ([userInfo.userId isEqualToString:favUser]) {
+                [favArrays addObject:userInfo];
+                break;
+            }
+        }
+        
+    }
+    if (favArrays.count) {
+        [infoDic setObject:favArrays forKey:wfcstar];
+    }
+    
+    
     for (NSString *key in _keys) {
+        if ([key isEqualToString:wfcstar]) {
+            continue;
+        }
         if ([_tempOtherArr count]) {
             isReturn = YES;
         }
@@ -763,7 +788,6 @@ static NSMutableDictionary *hanziStringDict = nil;
             }
             
             
-        
             if ([firstLetter isEqualToString:key]) {
                 [tempArr addObject:user];
             }
@@ -791,6 +815,10 @@ static NSMutableDictionary *hanziStringDict = nil;
     if ([allKeys containsObject:@"#"]) {
         [allKeys removeObject:@"#"];
         [allKeys insertObject:@"#" atIndex:allKeys.count];
+    }
+    if ([allKeys containsObject:wfcstar]) {
+        [allKeys removeObject:wfcstar];
+        [allKeys insertObject:wfcstar atIndex:0];
     }
     NSMutableDictionary *resultDic = [NSMutableDictionary new];
     [resultDic setObject:infoDic forKey:@"infoDic"];
