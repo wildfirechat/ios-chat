@@ -28,6 +28,7 @@
 @property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
 @property (strong, nonatomic)UILabel *userNameLabel;
+@property (strong, nonatomic)UILabel *starLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
 
@@ -98,8 +99,14 @@
     
     NSString *friendTitle;
     NSString *blacklistTitle;
+    NSString *favTitle;
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         friendTitle = WFCString(@"DeleteFriend");
+        if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
+            favTitle = @"取消星标好友";
+        } else {
+            favTitle = @"设置星标好友";
+        }
     } else {
         friendTitle = WFCString(@"AddFriend");
         
@@ -111,7 +118,11 @@
         blacklistTitle = WFCString(@"Add2Blacklist");
     }
     
-    actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), nil];
+    if (favTitle) {
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), favTitle, nil];
+    } else {
+        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), nil];
+    }
     
     [actionSheet showInView:self.view];
 }
@@ -158,6 +169,15 @@
         self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
+    }
+    
+    if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
+        self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
+        self.starLabel.text = @"☆";
+        self.starLabel.font = [UIFont systemFontOfSize:18];
+        self.starLabel.textColor = [UIColor yellowColor];
+        
+        [self.headerCell addSubview:self.starLabel];
     }
     
     [self.headerCell addSubview:self.portraitView];
@@ -492,6 +512,39 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
+- (void)setFavUser {
+    BOOL isFav = [[WFCCIMService sharedWFCIMService] isFavUser:self.userId];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"处理中...";
+    [hud showAnimated:YES];
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] setFavUser:self.userId fav:!isFav success:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = @"处理成功";
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [ws loadData];
+            });
+        });
+    } error:^(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = @"处理失败";
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+        });
+    }];
+}
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 0) {// friend
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
@@ -574,6 +627,8 @@
         }
     } else if(buttonIndex == 2) {// alias
         [self setFriendNote];
+    } else if(buttonIndex == 3) {// fav
+        [self setFavUser];
     }
 }
 
