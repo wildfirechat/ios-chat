@@ -35,6 +35,8 @@
 #define MESSAGE_CONTENT_TYPE_IMAGETEXT 8
 //存储不计数文本消息
 #define MESSAGE_CONTENT_TYPE_P_TEXT 9
+//名片消息
+#define MESSAGE_CONTENT_TYPE_CARD 10
 
 
 //撤回消息
