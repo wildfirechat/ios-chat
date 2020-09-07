@@ -32,6 +32,8 @@
 		2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
+		2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4872505C7BE00162A2B /* WFCUCardCell.h */; };
+		2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B97D4882505C7BE00162A2B /* WFCUCardCell.m */; };
 		2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */; };
 		2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -460,6 +462,8 @@
 		2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaMessageGridViewCell.m; sourceTree = "<group>"; };
 		2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCCircleProgressView.m; sourceTree = "<group>"; };
 		2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCCircleProgressView.h; sourceTree = "<group>"; };
+		2B97D4872505C7BE00162A2B /* WFCUCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCardCell.h; sourceTree = "<group>"; };
+		2B97D4882505C7BE00162A2B /* WFCUCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCardCell.m; sourceTree = "<group>"; };
 		2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUUserMessageListViewController.h; sourceTree = "<group>"; };
 		2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUUserMessageListViewController.m; sourceTree = "<group>"; };
 		2BCEC52D232E10DF00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/wfc.strings; sourceTree = "<group>"; };
@@ -1143,6 +1147,8 @@
 				2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */,
 				2F1EB5C12499AFF900FD3575 /* WFCUConferenceInviteCell.h */,
 				2F1EB5C22499AFF900FD3575 /* WFCUConferenceInviteCell.m */,
+				2B97D4872505C7BE00162A2B /* WFCUCardCell.h */,
+				2B97D4882505C7BE00162A2B /* WFCUCardCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1932,6 +1938,7 @@
 				2F551160217F5CC200F56C26 /* SDBrowserImageView.h in Headers */,
 				2F5510E4217F5CC200F56C26 /* WFCULocationPoint.h in Headers */,
 				2F5511DE217F5CC300F56C26 /* TYAlertScaleFadeAnimation.h in Headers */,
+				2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */,
 				2F5511C0217F5CC300F56C26 /* SDWebImageManager.h in Headers */,
 				2F551164217F5CC200F56C26 /* AFNetworkReachabilityManager.h in Headers */,
 				2F55110E217F5CC200F56C26 /* VideoPlayerSampleView.h in Headers */,
@@ -2228,6 +2235,7 @@
 				2F55110D217F5CC200F56C26 /* AirplayActiveView.m in Sources */,
 				2F5511D3217F5CC300F56C26 /* TYAlertScaleFadeAnimation.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
+				2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */,
 				2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */,
 				2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */,
 				2F55121B217F5CC300F56C26 /* WFCUMessageNotificationViewController.m in Sources */,
