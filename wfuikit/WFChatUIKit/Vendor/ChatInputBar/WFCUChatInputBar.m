@@ -28,7 +28,9 @@
 #import "DNImagePickerController.h"
 #import "DNAsset.h"
 #import <Photos/Photos.h>
-
+#import "WFCUShareMessageView.h"
+#import "TYAlertController.h"
+#import "UIView+TYAlertView.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -1034,6 +1036,49 @@
         
         [self notifyTyping:4];
         
+    } else if(itemTag == 6) {
+        WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
+        pvc.selectContact = YES;
+        pvc.multiSelect = NO;
+        
+        pvc.withoutCheckBox = YES;
+        
+        __weak typeof(self)ws = self;
+        
+        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+            if (contacts.count == 1) {
+                WFCCCardMessageContent *card = [WFCCCardMessageContent cardWithUserId:contacts[0]];
+                WFCCMessage *message = [[WFCCMessage alloc] init];
+                message.content = card;
+                
+                
+                WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
+                    
+                shareView.conversation = ws.conversation;
+                shareView.message = message;
+                shareView.forwardDone = ^(BOOL success) {
+                    if (success) {
+                        [[ws.delegate requireNavi] dismissViewControllerAnimated:YES completion:nil];
+                    } else {
+                        [ws makeToast:WFCString(@"SendFailure") duration:1 position:CSToastPositionCenter];
+                    }
+                };
+            
+                TYAlertController *alertController = [TYAlertController alertControllerWithAlertView:shareView preferredStyle:TYAlertControllerStyleAlert];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[ws.delegate requireNavi] presentViewController:alertController animated:YES completion:nil];
+                });
+            }
+        };
+        
+        pvc.cancelSelect = ^(void) {
+            NSLog(@"canceled");
+        };
+        
+        
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+        [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
     }
 }
 
