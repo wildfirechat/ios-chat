@@ -1476,14 +1476,14 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 }
 
 - (BOOL)isUserEnableReceipt {
-    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSetting_DisableRecipt key:@""];
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_DisableRecipt key:@""];
     return ![strValue isEqualToString:@"1"];
 }
 
 - (void)setUserEnableReceipt:(BOOL)enable
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
-    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSetting_DisableRecipt key:@"" value:enable?@"0":@"1" success:^{
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_DisableRecipt key:@"" value:enable?@"0":@"1" success:^{
         if (successBlock) {
             successBlock();
         }
@@ -2337,4 +2337,28 @@ public:
                         error:(void(^)(int error_code))errorBlock {
     mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
 }
+
+- (NSArray<NSString *> *)getFavUsers {
+    NSDictionary *favUserDict = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Favourite_User];
+    NSMutableArray *ids = [[NSMutableArray alloc] init];
+    [favUserDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isEqualToString:@"1"]) {
+            [ids addObject:key];
+        }
+    }];
+    return ids;
+}
+
+- (BOOL)isFavUser:(NSString *)userId {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Favourite_User key:userId];
+    if ([strValue isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)setFavUser:(NSString *)userId fav:(BOOL)fav success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Favourite_User key:userId value:fav? @"1" : @"0" success:successBlock error:errorBlock];
+}
+
 @end
