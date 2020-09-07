@@ -110,11 +110,13 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_PC_Online = 10,
     //不能直接使用，协议栈内会使用此值
-    UserSetting_Conversation_Readed = 11,
+    UserSettingScope_Conversation_Readed = 11,
     //不能直接使用，协议栈内会使用此值
-    UserSetting_WebOnline = 12,
+    UserSettingScope_WebOnline = 12,
     //不能直接使用，协议栈内会使用此值
-    UserSetting_DisableRecipt = 13,
+    UserSettingScope_DisableRecipt = 13,
+    //不能直接使用
+    UserSettingScope_Favourite_User = 14,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -1359,6 +1361,29 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                 success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取当前用户星标用户
+ 
+ @return 当前用户星标用户
+ */
+- (NSArray<NSString *> *)getFavUsers;
+
+/**
+ 是否是星标用户
+ 
+ @return 是否是星标用户
+ */
+- (BOOL)isFavUser:(NSString *)userId;
+
+/**
+ 设置星标用户
+ 
+ @param userId 用户ID
+ @param fav 是否星标
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)setFavUser:(NSString *)userId fav:(BOOL)fav success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock;
 #pragma mark - 聊天室相关
 - (void)joinChatroom:(NSString *)chatroomId
              success:(void(^)(void))successBlock
