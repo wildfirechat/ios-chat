@@ -16,7 +16,7 @@
 }
 + (CGFloat)hightForTimeLabel:(WFCUMessageModel *)msgModel {
   if (msgModel.showTimeLabel) {
-    return 25;
+    return 27;
   }
   return 5;
 }
@@ -54,7 +54,7 @@
 
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(screenWidth, 8000)];
-    CGRect rect = CGRectMake((screenWidth - size.width)/2, 9, size.width, size.height);
+    CGRect rect = CGRectMake((screenWidth - size.width)/2, 7, size.width, size.height);
     _timeLabel.frame = rect;
   } else {
     _timeLabel.hidden = YES;
