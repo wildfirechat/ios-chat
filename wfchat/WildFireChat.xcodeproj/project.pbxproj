@@ -410,8 +410,8 @@
 				2E1D20BC1FAF127100F4405D /* Discover */,
 				2F1439FF217F5F3700B3E38A /* SDWebImage */,
 				2BF692E5232DBA840072036A /* Utilities */,
-				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				149B3101241D28B200B935D3 /* Category */,
+				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
 				2E1D20BB1FAF127100F4405D /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
@@ -800,7 +800,7 @@
 				TargetAttributes = {
 					2E1D1FF61FAF0AE600F4405D = {
 						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1104,8 +1104,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
@@ -1128,7 +1128,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "野火IM";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = wildfirechat_distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 arm64e";
 			};
