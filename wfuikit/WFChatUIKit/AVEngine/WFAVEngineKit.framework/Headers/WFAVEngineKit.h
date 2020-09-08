@@ -305,18 +305,14 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                sessionDelegate:(id<WFAVCallSessionDelegate>)sessionDelegate;
 
 
+/* 是否支持音视频会议 */
+@property(nonatomic, assign, readonly)BOOL supportConference;
 
-
+/* 此函数没有意义，仅为了兼容UI代码 */
 - (void)listConference:(void(^_Nullable)(NSArray<NSDictionary *> * _Nullable conferences))successBlock
                  error:(void(^_Nullable)(int error_code))errorBlock;
 
-/**
- 发起会议
-
- @param audioOnly 是否语音会议
- @param sessionDelegate 通话Session的监听
- @return 通话Session
- */
+/* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
                                    audioOnly:(BOOL)audioOnly
                                          pin:(NSString *_Nonnull)pin
@@ -326,6 +322,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                     audience:(BOOL)audience
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
+/* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)joinConference:(NSString *_Nonnull)callId
                                   audioOnly:(BOOL)audioOnly
                                         pin:(NSString *_Nonnull)pin
