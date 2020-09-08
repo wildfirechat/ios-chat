@@ -16,6 +16,7 @@
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #endif
+#import <WFAVEngineKit/WFAVEngineKit.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 
@@ -35,14 +36,17 @@
           @"image":@"chat_channel",@"des":@"channel"},
         @{@"title":LocalizedString(@"DevDocs"),
           @"image":@"dev_docs",@"des":@"Dev"},@{@"title":@"Things",
-          @"image":@"discover_things",@"des":@"Things"},@{@"title":@"Conference",
-          @"image":@"discover_things",@"des":@"Conference"}]];
+          @"image":@"discover_things",@"des":@"Things"}]];
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
         [self.dataSource insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
         self.hasMoments = YES;
     } else {
         self.hasMoments = NO;
+    }
+    
+    if ([WFAVEngineKit sharedEngineKit].supportConference) {
+        [self.dataSource addObject:@{@"title":@"Conference",@"image":@"discover_conference",@"des":@"Conference"}];
     }
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
