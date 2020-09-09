@@ -19,6 +19,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#import <WebRTC/WebRTC.h>
 #endif
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
@@ -58,6 +59,8 @@
     [WFAVEngineKit sharedEngineKit].delegate = self;
     [WFAVEngineKit sharedEngineKit].maxVideoCallCount = 4;
     [WFAVEngineKit sharedEngineKit].maxAudioCallCount = 9;
+    
+    //RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
 #endif
     
     
