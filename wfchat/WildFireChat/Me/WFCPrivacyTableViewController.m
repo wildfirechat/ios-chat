@@ -100,7 +100,7 @@
             switchCell.on = NO;
         }
         __weak typeof(self)ws = self;
-        [switchCell setOnSwitch:^(BOOL value, void (^result)(BOOL success)) {
+        [switchCell setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
             [[WFCCIMService sharedWFCIMService] setUserEnableReceipt:value success:^{
                 result(YES);
             } error:^(int error_code) {

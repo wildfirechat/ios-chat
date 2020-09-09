@@ -34,7 +34,7 @@
 - (void)onSwitch:(id)sender {
     BOOL value = _valueSwitch.on;
     __weak typeof(self)ws = self;
-    self.onSwitch(value, ^(BOOL success) {
+    self.onSwitch(value, self.type, ^(BOOL success) {
         if (success) {
             [ws.valueSwitch setOn:value];
         } else {

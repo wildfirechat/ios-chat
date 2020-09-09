@@ -10,13 +10,19 @@
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUConferenceViewController.h"
+#import "WFCUGeneralSwitchTableViewCell.h"
+#import "WFCUGeneralModifyViewController.h"
 
-@interface WFCUCreateConferenceViewController ()
-@property(nonatomic, strong)UITextField *conferenceTitle;
-@property(nonatomic, strong)UITextField *conferenceDesc;
-@property(nonatomic, strong)UISwitch *audioOnlySwitch;
-@property(nonatomic, strong)UISwitch *audienceSwitch;
-@property(nonatomic, strong)UIButton *startBtn;
+
+@interface WFCUCreateConferenceViewController () <UITableViewDelegate, UITableViewDataSource>
+@property(nonatomic, strong)NSString *conferenceTitle;
+@property(nonatomic, assign)BOOL audioOnlySwitch;
+@property(nonatomic, assign)BOOL audienceSwitch;
+
+@property(nonatomic, assign)long long startTime;
+@property(nonatomic, assign)long long duration;
+
+@property(nonatomic, strong)UITableView *tableView;
 @end
 
 @implementation WFCUCreateConferenceViewController
@@ -24,50 +30,181 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+    self.conferenceTitle = [NSString stringWithFormat:@"%@的会议", userInfo.displayName];
+    self.audioOnlySwitch = NO;
+    self.audienceSwitch = NO;
     
+    self.title = @"发起会议";
+    
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     CGRect bounds = self.view.bounds;
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, 100)];
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 40, bounds.size.width - 32, 40)];
+    [btn setTitle:WFCString(@"开始会议") forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn.backgroundColor = [UIColor blueColor];
+    btn.layer.masksToBounds = YES;
+    btn.layer.cornerRadius = 5.f;
+    [btn addTarget:self action:@selector(onStart:) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:btn];
+    footerView.userInteractionEnabled = YES;
+
     
-    CGFloat padding = 40;
-    CGFloat h = kStatusBarAndNavigationBarHeight+padding;
-    
-    self.conferenceTitle = [[UITextField alloc] initWithFrame:CGRectMake(16, h, bounds.size.width - 32, 32)];
-    self.conferenceTitle.placeholder = @"请输入会议标题";
-    self.conferenceTitle.text = [NSString stringWithFormat:@"%@的会议", userInfo.displayName];
-    [self.view addSubview:self.conferenceTitle];
-    
-    h+=padding;
-    self.conferenceDesc = [[UITextField alloc] initWithFrame:CGRectMake(16, h, bounds.size.width - 32, 32)];
-    self.conferenceDesc.placeholder = @"请输入会议描述";
-    [self.view addSubview:self.conferenceDesc];
-    
-    h+=padding;
-    UILabel *audioLable = [[UILabel alloc] initWithFrame:CGRectMake(bounds.size.width - 140 - 16, h, 80, 24)];
-    audioLable.text = @"开启视频";
-    [self.view addSubview:audioLable];
-    self.audioOnlySwitch = [[UISwitch alloc] initWithFrame:CGRectMake(bounds.size.width - 60 - 16, h, 60, 24)];
-    [self.view addSubview:self.audioOnlySwitch];
-    
-    h+=padding;
-    UILabel *audienceLable = [[UILabel alloc] initWithFrame:CGRectMake(bounds.size.width - 140 - 16, h, 80, 24)];
-    audienceLable.text = @"观众模式";
-    [self.view addSubview:audienceLable];
-    self.audienceSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(bounds.size.width - 60 - 16, h, 60, 24)];
-    [self.view addSubview:self.audienceSwitch];
-    
-    self.startBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 120, 40)];
-    self.startBtn.center = self.view.center;
-    [self.startBtn setTitle:@"开始" forState:UIControlStateNormal];
-    [self.startBtn setBackgroundColor:[UIColor greenColor]];
-    [self.startBtn addTarget:self action:@selector(onStart:) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:self.startBtn];
-    
+    self.tableView.tableFooterView = footerView;
+    [self.view addSubview:self.tableView];
+
+    [self.tableView reloadData];
 }
 
 - (void)onStart:(id)sender {
-    WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audienceSwitch.on pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle.text desc:self.conferenceDesc.text audience:self.audienceSwitch.on moCall:YES];
-    [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+    if (self.startTime == 0) {
+        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch moCall:YES];
+        [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+    } else {
+        //todo 发送会议邀请
+    }
+    
+}
+
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        UITableViewCell *titleCell = [tableView dequeueReusableCellWithIdentifier:@"title"];
+        if (!titleCell) {
+            titleCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"title"];
+        }
+        titleCell.textLabel.text = @"会议主题";
+        titleCell.detailTextLabel.text = self.conferenceTitle;
+        return titleCell;
+    } else if(indexPath.section == 1) {
+        UITableViewCell *timeCell = [tableView dequeueReusableCellWithIdentifier:@"time"];
+        if (!timeCell) {
+            timeCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"time"];
+            timeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+        if (indexPath.row == 0) {
+            timeCell.textLabel.text = @"开始时间";
+            if (self.startTime == 0) {
+                timeCell.detailTextLabel.text = @"现在";
+            } else {
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.startTime];
+                timeCell.detailTextLabel.text = date.description;
+            }
+            
+        } else {
+            timeCell.textLabel.text = @"结束时间";
+            if (self.duration == 0) {
+                timeCell.detailTextLabel.text = @"无限制";
+            } else {
+                timeCell.detailTextLabel.text = [NSString stringWithFormat:@"%lld秒", self.duration];
+            }
+        }
+        
+        return timeCell;
+    } else if(indexPath.section == 2) {
+        WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch"];
+        if (cell == nil) {
+            cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"switch"];
+        }
+        
+
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"开启视频";
+            cell.on = !self.audioOnlySwitch;
+        } else {
+            cell.textLabel.text = @"互动会议";
+            cell.on = !self.audienceSwitch;
+        }
+        cell.type = (int)indexPath.row;
+        cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
+            
+            if (type == 0) {
+                self.audioOnlySwitch = !self.audioOnlySwitch;
+            } else {
+                self.audienceSwitch = !self.audienceSwitch;
+            }
+            
+            onDone(YES);
+        };
+        
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
+}
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) { //title
+        return 1;
+    } else if(section == 1) { //start time
+        return 2;
+    } else if(section == 2) { //settings
+        return 2;
+    }
+    return 0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) { //title
+        return 60;
+    } else if(indexPath.section == 1) { //start time
+        return 45;
+    } else if(indexPath.section == 2) { //settings
+        return 45;
+    }
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    } else {
+        return nil;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) { //title
+        return 0;
+    } else if(section == 1) { //start time
+        return 5;
+    } else if(section == 2) { //settings
+        return 5;
+    } else if(section == 3) { // start button
+        return 5;
+    }
+    return 20;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        WFCUGeneralModifyViewController *vc = [[WFCUGeneralModifyViewController alloc] init];
+        vc.defaultValue = self.conferenceTitle;
+        vc.titleText = @"会议主题";
+        vc.noProgress = YES;
+        __weak typeof(self) ws = self;
+        vc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
+            if (newValue) {
+                ws.conferenceTitle = newValue;
+                [ws.tableView reloadData];
+                result(YES);
+            }
+        };
+        
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+    } else if(indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            //todo 选择开始时间
+        } else {
+            //todo 选择会议时长
+        }
+    }
 }
 @end
