@@ -98,7 +98,7 @@
         if (cell == nil) {
             cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
             cell.textLabel.text = WFCString(@"MuteAll");
-            cell.onSwitch = ^(BOOL value, void (^onDone)(BOOL success)) {
+            cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
                     ws.groupInfo.mute = value;
                     onDone(YES);

@@ -41,21 +41,29 @@
   [self.textField resignFirstResponder];
     __weak typeof(self) ws = self;
     
-    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = WFCString(@"Updating");
-    [hud showAnimated:YES];
+    __block MBProgressHUD *hud;
+    if (!self.noProgress) {
+        hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = WFCString(@"Updating");
+        [hud showAnimated:YES];
+    }
     
     self.tryModify(self.textField.text, ^(BOOL success) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [hud hideAnimated:NO];
+            if (!self.noProgress) {
+                [hud hideAnimated:NO];
+            }
+            
             if(success) {
                 [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
             } else {
-                hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = WFCString(@"UpdateFailure");
-                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                [hud hideAnimated:YES afterDelay:1.f];
+                if (!self.noProgress) {
+                    hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = WFCString(@"UpdateFailure");
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
+                }
             }
         });
     });

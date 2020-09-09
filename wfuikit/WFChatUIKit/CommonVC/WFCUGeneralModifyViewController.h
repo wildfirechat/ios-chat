@@ -13,4 +13,5 @@
 @property (nonatomic, strong)NSString *titleText;
 @property (nonatomic, assign)BOOL canEmpty;
 @property (nonatomic, strong)void (^tryModify)(NSString *newValue, void (^result)(BOOL success));
+@property (nonatomic, assign)BOOL noProgress;
 @end
