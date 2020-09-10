@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GroupInfoViewController : UIViewController
+@interface WFCUGroupInfoViewController : UIViewController
 @property(nonatomic, strong)NSString *groupId;
 @end
 

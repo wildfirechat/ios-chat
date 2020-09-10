@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
     Chatroom_Type,
     Channel_Type,
     Things_Type,
-} ;
+};
 
 /**
  会话

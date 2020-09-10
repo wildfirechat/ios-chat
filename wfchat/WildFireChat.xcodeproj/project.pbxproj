@@ -67,7 +67,6 @@
 		2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */; };
 		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
 		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
-		2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E8601222BA6180076B82B /* GroupInfoViewController.m */; };
 		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
 		2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC50B7A245273A700B36F8A /* PCSessionViewController.m */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
@@ -250,8 +249,6 @@
 		2F94FC9422291813005BD461 /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
 		2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
 		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
-		2F9E8600222BA6180076B82B /* GroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupInfoViewController.h; sourceTree = "<group>"; };
-		2F9E8601222BA6180076B82B /* GroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupInfoViewController.m; sourceTree = "<group>"; };
 		2FBF915E232F6A47003521FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FBF9160232F6A5E003521FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FC50B7A245273A700B36F8A /* PCSessionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSessionViewController.m; sourceTree = "<group>"; };
@@ -369,8 +366,6 @@
 				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
 				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
 				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
-				2F9E8600222BA6180076B82B /* GroupInfoViewController.h */,
-				2F9E8601222BA6180076B82B /* GroupInfoViewController.m */,
 				2FC50B7B245273A700B36F8A /* PCSessionViewController.h */,
 				2FC50B7A245273A700B36F8A /* PCSessionViewController.m */,
 			);
@@ -886,7 +881,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
-				2F9E8602222BA6180076B82B /* GroupInfoViewController.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,

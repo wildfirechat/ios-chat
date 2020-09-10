@@ -64,6 +64,9 @@
 #import "WFCUMediaMessageGridViewController.h"
 #import "WFCUConferenceViewController.h"
 
+#import "WFCUGroupInfoViewController.h"
+#import "WFCUChannelProfileViewController.h"
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 
@@ -1465,13 +1468,28 @@
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
         WFCCCardMessageContent *card = (WFCCCardMessageContent *)model.message.content;
         
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:card.userId refresh:NO];
-        if (!userInfo.deleted) {
-            WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-            vc.userId = card.userId;
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+        if (card.type == CardType_User) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:card.targetId refresh:NO];
+            if (!userInfo.deleted) {
+                WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+                vc.userId = card.targetId;
+                vc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+        } else if(card.type == CardType_Group) {
+            WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
+            vc2.groupId = card.targetId;
+            vc2.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc2 animated:YES];
+        } else if(card.type == CardType_Channel) {
+            WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
+            pvc.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:card.targetId refresh:NO];
+            if (pvc.channelInfo) {
+                pvc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:pvc animated:YES];
+            }
         }
+        
     }
 }
 
