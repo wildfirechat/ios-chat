@@ -1047,7 +1047,7 @@
         
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
             if (contacts.count == 1) {
-                WFCCCardMessageContent *card = [WFCCCardMessageContent cardWithUserId:contacts[0]];
+                WFCCCardMessageContent *card = [WFCCCardMessageContent cardWithTarget:contacts[0] type:CardType_User];
                 WFCCMessage *message = [[WFCCMessage alloc] init];
                 message.content = card;
                 

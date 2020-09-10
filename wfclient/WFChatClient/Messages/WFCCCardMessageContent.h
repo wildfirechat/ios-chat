@@ -8,6 +8,13 @@
 
 #import "WFCCMessageContent.h"
 
+
+typedef NS_ENUM(NSInteger, WFCCCardType) {
+    CardType_User = 0,
+    CardType_Group = 1,
+    CardType_Channel = 3
+};
+
 /**
  名片消息
  */
@@ -16,15 +23,21 @@
 /**
  构造方法
 
- @param userId 用户Id
+ @param targetId 目标Id
+ @param type 类型，0 用户，1 群组， 3 频道。
  @return 名片消息
  */
-+ (instancetype)cardWithUserId:(NSString *)userId;
++ (instancetype)cardWithTarget:(NSString *)targetId type:(WFCCCardType)type;
+
+/**
+  名片类型
+ */
+@property (nonatomic, assign)WFCCCardType type;
 
 /**
  用户ID
  */
-@property (nonatomic, strong)NSString *userId;
+@property (nonatomic, strong)NSString *targetId;
 
 /**
  用户号
