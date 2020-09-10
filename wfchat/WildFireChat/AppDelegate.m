@@ -30,7 +30,6 @@
 #import "PCLoginConfirmViewController.h"
 #import "QQLBXScanViewController.h"
 #import "StyleDIY.h"
-#import "GroupInfoViewController.h"
 #import <Bugly/Bugly.h>
 #import "AppService.h"
 #import "UIColor+YH.h"
@@ -316,7 +315,7 @@
         return YES;
     } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
         NSString *groupId = [str lastPathComponent];
-        GroupInfoViewController *vc2 = [[GroupInfoViewController alloc] init];
+        WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
         vc2.groupId = groupId;
         vc2.hidesBottomBarWhenPushed = YES;
         [navigator pushViewController:vc2 animated:YES];

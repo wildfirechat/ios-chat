@@ -6,13 +6,13 @@
 //  Copyright © 2019 WildFireChat. All rights reserved.
 //
 
-#import "GroupInfoViewController.h"
+#import "WFCUGroupInfoViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "SDWebImage.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 
 
-@interface GroupInfoViewController ()
+@interface WFCUGroupInfoViewController ()
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;
 @property (nonatomic, strong)UIImageView *groupProtraitView;
 @property (nonatomic, strong)UILabel *groupNameLabel;
@@ -21,7 +21,7 @@
 @property (nonatomic, assign)BOOL isJoined;
 @end
 
-@implementation GroupInfoViewController
+@implementation WFCUGroupInfoViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
