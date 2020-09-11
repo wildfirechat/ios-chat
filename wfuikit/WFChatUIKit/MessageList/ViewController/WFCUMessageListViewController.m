@@ -1679,6 +1679,17 @@
     [self sendMessage:imgContent];
 }
 
+-(void)gifDidCapture:(NSData *)gifData {
+    //save gif
+    NSString *fileName = [NSString stringWithFormat:@"temp_gif_data%@%f", [WFCCNetworkService sharedInstance].userId, [[NSDate alloc] init].timeIntervalSince1970];
+    NSString *fileDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
+    NSString *filePath = [fileDir stringByAppendingPathComponent:fileName];
+    [gifData writeToFile:filePath atomically:YES];
+    
+    WFCCStickerMessageContent *stickerContent = [WFCCStickerMessageContent contentFrom:filePath];
+    [self sendMessage:stickerContent];
+}
+
 - (void)videoDidCapture:(NSString *)videoPath thumbnail:(UIImage *)image duration:(long)duration {
     WFCCVideoMessageContent *videoContent = [WFCCVideoMessageContent contentPath:videoPath thumbnail:image];
     [self sendMessage:videoContent];
