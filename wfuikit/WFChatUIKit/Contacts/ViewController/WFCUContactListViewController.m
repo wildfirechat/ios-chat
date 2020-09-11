@@ -551,7 +551,7 @@ static NSString *wfcstar = @"☆";
     label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
     label.textAlignment = NSTextAlignmentLeft;
     if ([title isEqualToString:wfcstar]) {
-        title = @"星标好友";
+        title = @"☆ 星标好友";
     }
     label.text = [NSString stringWithFormat:@"%@", title];
     [view addSubview:label];
