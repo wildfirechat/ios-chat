@@ -235,6 +235,23 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)targetId;
 
+
+@optional
+/**
+语音音量报告
+
+@param volume 音量
+@param userId 用户Id
+*/
+- (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *_Nonnull)userId;
+
+/**
+用户类型改变
+
+@param audience 是否是观众
+@param userId 用户Id
+*/
+- (void)didChangeType:(BOOL)audience ofUser:(NSString *_Nonnull)userId;
 @end
 
 #pragma mark - 通话引擎
@@ -362,7 +379,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, readonly)long long startTime;
 @property(nonatomic, assign, readonly)WFAVEngineState state;
 @property(nonatomic, assign, readonly)BOOL videoMuted;
-
+@property(nonatomic, assign, readonly)BOOL audience;
 @end
 
 #pragma mark - 通话Session
@@ -435,6 +452,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 是否观众，仅当会议有效
 */
 @property(nonatomic, assign, getter=isAudience, readonly) BOOL audience;
+
+/**
+会议新加入成名缺省状态，是否观众，仅当会议有效
+*/
+@property(nonatomic, assign) BOOL defaultAudience;
 
 /**
 会议密码，仅当会议有效
