@@ -1461,10 +1461,11 @@
             [self startPlay:model];
         }
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
-        WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
-        
-        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
-        [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+        if ([WFAVEngineKit sharedEngineKit].supportConference) {
+            WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;   
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
+            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+        }
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
         WFCCCardMessageContent *card = (WFCCCardMessageContent *)model.message.content;
         
