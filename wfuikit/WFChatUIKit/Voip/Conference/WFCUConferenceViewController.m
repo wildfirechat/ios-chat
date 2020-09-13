@@ -63,9 +63,13 @@
 @property (nonatomic, strong) NSTimer *connectedTimer;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *participants;
+@property (nonatomic, strong) NSMutableArray<NSString *> *audiences;
 
 //视频时，大屏用户正在说话
 @property (nonatomic, strong)UIImageView *speakingView;
+
+@property (nonatomic, strong)NSString *focusUser;
+
 #endif
 @end
 
@@ -160,13 +164,32 @@
  */
 - (void)rearrangeParticipants {
     self.participants = [[NSMutableArray alloc] init];
-    [self.participants addObjectsFromArray:self.currentSession.participantIds];
-    if ([self.currentSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
+    self.audiences = [[NSMutableArray alloc] init];
+    
+    
+    NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
+    for (WFAVParticipantProfile *p in ps) {
+        if (p.audience) {
+            [self.audiences addObject:p.userId];
+        } else {
+            [self.participants addObject:p.userId];
+        }
+    }
+    
+    [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
+    
+    if (self.focusUser && [self.participants containsObject:self.focusUser]) {
+        if ([self.participants containsObject:self.currentSession.host]) {
+            [self.participants removeObject:self.currentSession.host];
+            [self.participants insertObject:self.currentSession.host atIndex:0];
+        }
+
+        [self setFocusUser:_focusUser];
     } else {
-        [self.participants insertObject:[WFCCNetworkService sharedInstance].userId atIndex:[self.participants indexOfObject:self.currentSession.initiator]];
-        [self.participants removeObject:self.currentSession.initiator];
-        [self.participants addObject:self.currentSession.initiator];
+        if ([self.participants containsObject:self.currentSession.host]) {
+            [self.participants removeObject:self.currentSession.host];
+            [self.participants addObject:self.currentSession.host];
+        }
     }
 }
 
@@ -174,8 +197,8 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     
-    self.smallScalingType = kWFAVVideoScalingTypeAspectFill;
-    self.bigScalingType = kWFAVVideoScalingTypeAspectBalanced;
+    self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
+    self.bigScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
@@ -421,10 +444,10 @@
 }
 
 - (void)setFocusUser:(NSString *)userId {
+    _focusUser = userId;
     if (userId) {
         [self.participants removeObject:userId];
         [self.participants addObject:userId];
-        [self reloadVideoUI];
     }
 }
 
@@ -454,6 +477,7 @@
     [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession];
         [vc setFocusUser:focusUser];
+        [vc reloadVideoUI];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
     
@@ -470,7 +494,7 @@
     invite.host = self.currentSession.host;
     invite.title = self.currentSession.title;
     invite.desc = self.currentSession.desc;
-    invite.audience = self.currentSession.audience;
+    invite.audience = self.currentSession.defaultAudience;
     
     pvc.invite = invite;
     
@@ -543,42 +567,60 @@
 - (BOOL)onDeviceOrientationDidChange{
     //获取当前设备Device
     UIDevice *device = [UIDevice currentDevice] ;
-
+    NSString *lastUser;
     switch (device.orientation) {
         case UIDeviceOrientationFaceUp:
-            NSLog(@"屏幕幕朝上平躺");
+//            NSLog(@"屏幕幕朝上平躺");
             break;
 
         case UIDeviceOrientationFaceDown:
-            NSLog(@"屏幕朝下平躺");
+            //NSLog(@"屏幕朝下平躺");
             break;
 
         case UIDeviceOrientationUnknown:
             //系统当前无法识别设备朝向，可能是倾斜
-            NSLog(@"未知方向");
+            //NSLog(@"未知方向");
             break;
 
         case UIDeviceOrientationLandscapeLeft:
             self.bigVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
-            NSLog(@"屏幕向左橫置");
+            self.bigVideoView.frame = self.view.bounds;
+            lastUser = [self.participants lastObject];
+            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
+            } else {
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+            }
             break;
 
         case UIDeviceOrientationLandscapeRight:
             self.bigVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-            NSLog(@"屏幕向右橫置");
+            self.bigVideoView.frame = self.view.bounds;
+            lastUser = [self.participants lastObject];
+            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
+            } else {
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+            }
             break;
 
         case UIDeviceOrientationPortrait:
             self.bigVideoView.transform = CGAffineTransformMakeRotation(0);
-            NSLog(@"屏幕直立");
+            self.bigVideoView.frame = self.view.bounds;
+            lastUser = [self.participants lastObject];
+            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
+            } else {
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+            }
             break;
 
         case UIDeviceOrientationPortraitUpsideDown:
-            NSLog(@"屏幕直立，上下顛倒");
+//            NSLog(@"屏幕直立，上下顛倒");
             break;
 
         default:
-            NSLog(@"無法识别");
+//            NSLog(@"無法识别");
             break;
     }
     
@@ -961,7 +1003,7 @@
     if ([self.participants containsObject:userId] || [userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return;
     }
-    [self.participants insertObject:userId atIndex:0];
+    [self rearrangeParticipants];
     [self reloadVideoUI];
 }
 
@@ -970,7 +1012,7 @@
 }
 
 - (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
-    [self.participants removeObject:userId];
+    [self rearrangeParticipants];
     [self reloadVideoUI];
     
     
@@ -1002,6 +1044,10 @@
     
 }
 
+- (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId {
+    [self rearrangeParticipants];
+    [self reloadVideoUI];
+}
 - (void)checkAVPermission {
     [self checkCapturePermission:nil];
     [self checkRecordPermission:nil];
