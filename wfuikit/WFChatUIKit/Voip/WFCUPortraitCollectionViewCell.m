@@ -7,7 +7,7 @@
 //
 #if WFCU_SUPPORT_VOIP
 #import "WFCUPortraitCollectionViewCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface WFCUPortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;

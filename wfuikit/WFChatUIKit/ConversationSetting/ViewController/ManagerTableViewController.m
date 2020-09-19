@@ -7,7 +7,7 @@
 //
 
 #import "ManagerTableViewController.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "WFCUContactListViewController.h"
 
 @interface ManagerTableViewController () <UITableViewDelegate, UITableViewDataSource>

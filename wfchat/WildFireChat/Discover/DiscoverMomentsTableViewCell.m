@@ -7,7 +7,7 @@
 //
 
 #import "DiscoverMomentsTableViewCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 
 @interface DiscoverMomentsTableViewCell ()

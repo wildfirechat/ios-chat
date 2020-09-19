@@ -8,7 +8,7 @@
 
 #import "WFCMeTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCSettingTableViewController.h"
 #import "WFCSecurityTableViewController.h"

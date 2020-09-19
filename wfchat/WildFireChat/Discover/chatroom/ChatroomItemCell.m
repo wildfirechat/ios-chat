@@ -7,7 +7,7 @@
 //
 
 #import "ChatroomItemCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @implementation ChatroomItemCell
 - (void)setChatroomInfo:(WFCCChatroomInfo *)chatroomInfo {

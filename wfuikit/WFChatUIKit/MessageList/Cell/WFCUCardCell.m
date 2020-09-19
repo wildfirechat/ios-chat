@@ -10,7 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
 #import "UILabel+YBAttributeTextTapAction.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 
 #define TEXT_TOP_PADDING 6

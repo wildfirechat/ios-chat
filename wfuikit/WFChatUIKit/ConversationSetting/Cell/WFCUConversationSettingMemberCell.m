@@ -7,7 +7,7 @@
 //
 
 #import "WFCUConversationSettingMemberCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
