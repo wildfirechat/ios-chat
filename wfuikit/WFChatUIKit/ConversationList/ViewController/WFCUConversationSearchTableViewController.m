@@ -12,7 +12,7 @@
 
 #import "WFCUMessageListViewController.h"
 
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "WFCUUtilities.h"
 #import "UITabBar+badge.h"
 #import "KxMenu.h"

@@ -8,7 +8,7 @@
 
 #import "WFCUGroupInfoViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 
 

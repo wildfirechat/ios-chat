@@ -7,7 +7,7 @@
 //
 
 #import "WFCUProfileTableViewController.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUMessageListViewController.h"
 #import "MBProgressHUD.h"

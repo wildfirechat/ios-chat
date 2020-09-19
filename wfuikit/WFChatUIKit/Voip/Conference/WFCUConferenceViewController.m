@@ -16,7 +16,7 @@
 #import "WFCUFloatingWindow.h"
 #import "WFCUParticipantCollectionViewCell.h"
 #endif
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCCConversation.h>
 #import "WFCUPortraitCollectionViewCell.h"
 #import "WFCUParticipantCollectionViewLayout.h"

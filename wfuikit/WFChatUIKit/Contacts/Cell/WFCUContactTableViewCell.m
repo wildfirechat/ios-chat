@@ -8,7 +8,7 @@
 
 #import "WFCUContactTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "WFCUConfigManager.h"

@@ -9,7 +9,7 @@
 #import "WFCUMessageCell.h"
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "ZCCCircleProgressView.h"
 
 #define Portrait_Size 40

@@ -7,7 +7,7 @@
 //
 
 #import "WFCUGroupTableViewCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 @interface WFCUGroupTableViewCell()

@@ -8,7 +8,7 @@
 
 #import "WFCUBlackListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface WFCUBlackListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)  UITableView *tableView;

@@ -7,7 +7,8 @@
 //
 
 #import "WFCUSelectedUserCollectionViewCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
+
 @implementation WFCUSelectedUserCollectionViewCell
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

@@ -8,11 +8,11 @@
 
 #import "WFCUStickerCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "YLImageView.h"
-#import "YLGIFImage.h"
 #import "WFCUMediaMessageDownloader.h"
-@interface WFCUStickerCell ()
+#import <SDWebImage/SDWebImage.h>
 
+@interface WFCUStickerCell ()
+@property (nonatomic, strong)UIImageView *thumbnailView;
 @end
 
 @implementation WFCUStickerCell
@@ -52,7 +52,7 @@
     
     self.thumbnailView.frame = self.bubbleView.bounds;
     if (stickerMsg.localPath.length) {
-        self.thumbnailView.image = [YLGIFImage imageWithContentsOfFile:stickerMsg.localPath];
+        [self.thumbnailView sd_setImageWithURL:[NSURL fileURLWithPath:stickerMsg.localPath]];
     } else {
         self.thumbnailView.image = nil;
     }
@@ -61,7 +61,7 @@
 
 - (UIImageView *)thumbnailView {
     if (!_thumbnailView) {
-        _thumbnailView = [[YLImageView alloc] init];
+        _thumbnailView = [[UIImageView alloc] init];
         [self.bubbleView addSubview:_thumbnailView];
     }
     return _thumbnailView;

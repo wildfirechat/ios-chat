@@ -7,7 +7,7 @@
 //
 
 #import "WFCUImagePreviewViewController.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface WFCUImagePreviewViewController ()
 @property (nonatomic, strong)UIScrollView *scrollView;
