@@ -9,7 +9,7 @@
 #import "WFCUAddFriendViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"

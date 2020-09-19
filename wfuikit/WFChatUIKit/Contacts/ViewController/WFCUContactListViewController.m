@@ -8,7 +8,7 @@
 
 #import "WFCUContactListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "WFCUProfileTableViewController.h"
 #import "WFCUContactSelectTableViewCell.h"
 #import "WFCUContactTableViewCell.h"

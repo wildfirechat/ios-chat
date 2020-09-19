@@ -8,7 +8,7 @@
 
 #import "WFCUMyPortraitViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "MBProgressHUD.h"
 #import "WFCUUtilities.h"
 #import "SDPhotoBrowser.h"

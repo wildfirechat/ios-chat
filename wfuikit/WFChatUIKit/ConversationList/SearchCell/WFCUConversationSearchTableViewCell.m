@@ -9,7 +9,7 @@
 #import "WFCUConversationSearchTableViewCell.h"
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "WFCUConfigManager.h"
 
 @implementation WFCUConversationSearchTableViewCell

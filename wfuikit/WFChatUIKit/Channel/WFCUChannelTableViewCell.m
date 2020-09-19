@@ -7,7 +7,7 @@
 //
 
 #import "WFCUChannelTableViewCell.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface WFCUChannelTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;

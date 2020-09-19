@@ -9,7 +9,7 @@
 #import "WFCUShareMessageView.h"
 #import "UIView+TYAlertView.h"
 #import "UITextView+Placeholder.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface WFCUShareMessageView ()
 @property (weak, nonatomic) IBOutlet UIImageView *portraitImageView;

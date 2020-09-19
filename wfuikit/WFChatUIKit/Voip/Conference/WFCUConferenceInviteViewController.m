@@ -7,7 +7,7 @@
 //
 
 #import "WFCUConferenceInviteViewController.h"
-#import "SDWebImage.h"
+#import <SDWebImage/SDWebImage.h>
 #import "WFCUForwardMessageCell.h"
 #import "WFCUContactTableViewCell.h"
 #import "WFCUSearchGroupTableViewCell.h"
