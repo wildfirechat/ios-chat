@@ -227,7 +227,7 @@
 
 - (UIPageControl *)facePageControl {
     if (!_facePageControl) {
-        _facePageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(width/2-50, EMOJ_FACE_VIEW_HEIGHT, 100, EMOJ_PAGE_CONTROL_HEIGHT)];
+        _facePageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(width/2-100, EMOJ_FACE_VIEW_HEIGHT, 200, EMOJ_PAGE_CONTROL_HEIGHT)];
         [_facePageControl addTarget:self
                             action:@selector(pageChange:)
                   forControlEvents:UIControlEventValueChanged];
@@ -240,6 +240,10 @@
         [self.tabView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
         
         _facePageControl.currentPage = 0;
+        if (@available(iOS 14.0, *)) {
+            _facePageControl.backgroundStyle = UIPageControlBackgroundStyleProminent;
+            _facePageControl.allowsContinuousInteraction = YES;
+        }
     }
     return _facePageControl;
 }
