@@ -25,7 +25,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
         self.valueSwitch = [[UISwitch alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 56, 8, 40, 40)];
-        [self addSubview:self.valueSwitch];
+        [self.contentView addSubview:self.valueSwitch];
         [self.valueSwitch addTarget:self action:@selector(onSwitch:) forControlEvents:UIControlEventValueChanged];
     }
     return self;
