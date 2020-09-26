@@ -633,14 +633,14 @@ namespace mars{
 
         class GetMyFriendsCallback {
         public:
-            virtual void onSuccess(std::list<std::string> friendIdList) = 0;
+            virtual void onSuccess(const std::list<std::string> &friendIdList) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetMyFriendsCallback() {}
         };
 
         class GetFriendRequestCallback {
         public:
-            virtual void onSuccess(bool hasNewRequest) = 0;
+            virtual void onSuccess(const std::list<std::string> &newRequests) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetFriendRequestCallback() {}
         };
