@@ -142,6 +142,7 @@ namespace mars {
             
             long InsertFriendRequestOrReplace(const TFriendRequest &friendRequest);
             std::list<TFriendRequest> getFriendRequest(int direction);
+            TFriendRequest getFriendRequest(const std::string &userId, int direction);
             
             long InsertFriendOrReplace(const std::string &friendUid, int state, int blacked, int64_t timestamp, const std::string &alias, const std::string &extra);
             long UpdateFriendAlias(const std::string &friendUid, const std::string &alias);
