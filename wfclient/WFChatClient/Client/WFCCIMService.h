@@ -864,6 +864,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (NSArray<WFCCFriendRequest *> *)getOutgoingFriendRequest;
 
 /**
+ 获取某一条好友请求记录
+ @param uerId 对方用户ID
+ @param direction 0 发送的好友请求；1 收到的好友请求。
+ 
+ @return 好友请求
+ */
+- (WFCCFriendRequest *)getFriendRequest:(NSString *)uerId direction:(int)direction;
+
+/**
  从服务器更新好友请求
  */
 - (void)loadFriendRequestFromRemote;
