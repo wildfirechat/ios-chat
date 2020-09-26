@@ -52,6 +52,8 @@
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
+    
 #if WFCU_SUPPORT_VOIP
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     [[WFAVEngineKit sharedEngineKit] setVideoProfile:kWFAVVideoProfile360P swapWidthHeight:YES];
@@ -172,6 +174,36 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [WFCCNetworkService stopLog];
+}
+
+- (void)onFriendRequestUpdated:(NSNotification *)notification {
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        NSArray<NSString *> *newRequests = notification.object;
+        
+        if (!newRequests.count) {
+            return;
+        }
+        
+        UILocalNotification *localNote = [[UILocalNotification alloc] init];
+        if (@available(iOS 8.2, *)) {
+            localNote.alertTitle = @"收到好友邀请";
+        }
+        
+        if (newRequests.count == 1) {
+            [[WFCCIMService sharedWFCIMService] getUserInfo:newRequests[0] refresh:NO success:^(WFCCUserInfo *userInfo) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    WFCCFriendRequest *request = [[WFCCIMService sharedWFCIMService] getFriendRequest:newRequests[0] direction:1];
+                    localNote.alertBody = [NSString stringWithFormat:@"%@:%@", userInfo.displayName, request.reason];
+                    [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
+                });
+                        } error:^(int errorCode) {
+                            
+                        }];
+        } else if(newRequests.count > 1) {
+            localNote.alertBody = [NSString stringWithFormat:@"您收到 %ld 条好友请求", newRequests.count];
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
+        }
+    }
 }
 
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
