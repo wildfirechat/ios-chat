@@ -565,6 +565,29 @@ static WFCCConversationInfo* convertConversationInfo(const mars::stn::TConversat
     return info;
 }
 
+static WFCCFriendRequest* convertFriendRequest(const mars::stn::TFriendRequest &tRequest) {
+    if (tRequest.target.empty()) {
+        return nil;
+    }
+    WFCCFriendRequest *request = [[WFCCFriendRequest alloc] init];
+    request.direction = tRequest.direction;
+    request.target = [NSString stringWithUTF8String:tRequest.target.c_str()];
+    request.reason = [NSString stringWithUTF8String:tRequest.reason.c_str()];
+    request.status = tRequest.status;
+    request.readStatus = tRequest.readStatus;
+    request.timestamp = tRequest.timestamp;
+    return request;
+}
+
+static NSArray<WFCCFriendRequest *>* convertFriendRequests(std::list<mars::stn::TFriendRequest> &tRequests) {
+    NSMutableArray *ret = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TFriendRequest>::iterator it = tRequests.begin(); it != tRequests.end(); it++) {
+        WFCCFriendRequest *request = convertFriendRequest(*it);
+        [ret addObject:request];
+    }
+    return ret;
+}
+
 static WFCCIMService * sharedSingleton = nil;
 
 static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMessageContent *content) {
@@ -1076,12 +1099,16 @@ public:
     IMGetOneUserInfoCallback(void(^successBlock)(WFCCUserInfo *machedUsers), void(^errorBlock)(int errorCode)) : m_successBlock(successBlock), m_errorBlock(errorBlock) {}
     
     void onSuccess(const mars::stn::TUserInfo &tUserInfo) {
-        m_successBlock(convertUserInfo(tUserInfo));
+        if(m_successBlock) {
+            m_successBlock(convertUserInfo(tUserInfo));
+        }
         delete this;
     }
     
     void onFalure(int errorCode) {
-        m_errorBlock(errorCode);
+        if(m_errorBlock) {
+            m_errorBlock(errorCode);
+        }
         delete this;
     }
     
@@ -1245,34 +1272,23 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 }
 
 
-- (NSArray<WFCCFriendRequest *> *)convertFriendRequest:(std::list<mars::stn::TFriendRequest>)tRequests {
-    NSMutableArray *ret = [[NSMutableArray alloc] init];
-    for (std::list<mars::stn::TFriendRequest>::iterator it = tRequests.begin(); it != tRequests.end(); it++) {
-        WFCCFriendRequest *request = [[WFCCFriendRequest alloc] init];
-        mars::stn::TFriendRequest *tRequest = &(*it);
-        request.direction = tRequest->direction;
-        request.target = [NSString stringWithUTF8String:tRequest->target.c_str()];
-        request.reason = [NSString stringWithUTF8String:tRequest->reason.c_str()];
-        request.status = tRequest->status;
-        request.readStatus = tRequest->readStatus;
-        request.timestamp = tRequest->timestamp;
-        [ret addObject:request];
-    }
-    return ret;
-}
-
 - (void)loadFriendRequestFromRemote {
     mars::stn::loadFriendRequestFromRemote();
 }
 
 - (NSArray<WFCCFriendRequest *> *)getIncommingFriendRequest {
     std::list<mars::stn::TFriendRequest> tRequests = mars::stn::MessageDB::Instance()->getFriendRequest(1);
-    return [self convertFriendRequest:tRequests];
+    return convertFriendRequests(tRequests);
 }
 
 - (NSArray<WFCCFriendRequest *> *)getOutgoingFriendRequest {
     std::list<mars::stn::TFriendRequest> tRequests = mars::stn::MessageDB::Instance()->getFriendRequest(0);
-    return [self convertFriendRequest:tRequests];
+    return convertFriendRequests(tRequests);
+}
+
+- (WFCCFriendRequest *)getFriendRequest:(NSString *)userId direction:(int)direction {
+    mars::stn::TFriendRequest tRequest = mars::stn::MessageDB::Instance()->getFriendRequest([userId UTF8String], direction);
+    return convertFriendRequest(tRequest);
 }
 
 - (void)clearUnreadFriendRequestStatus {
