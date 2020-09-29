@@ -5,6 +5,5 @@
 
 原因是chat隐式依赖uikit和client，必须把uikit和client编译之后才会建立依赖关系。同理uikit隐式依赖client，编译uikit之前要先编译client。依赖关系建立之后就正常使用了。
 
-另外对xcode版本有依赖，xcode12暂时只能用真机，模拟器无法运行，xcode11使用正常
 
 祝您使用愉快！
