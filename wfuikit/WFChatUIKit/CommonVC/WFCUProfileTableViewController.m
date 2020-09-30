@@ -253,7 +253,11 @@
         momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
-        [self.momentCell.contentView addSubview:momentButton];
+        if (@available(iOS 14, *)) {
+            [self.momentCell.contentView addSubview:momentButton];
+        } else {
+            [self.momentCell addSubview:momentButton];
+        }
         self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
         self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -270,7 +274,11 @@
         [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
         [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
-        [self.sendMessageCell.contentView addSubview:btn];
+        if (@available(iOS 14, *)) {
+            [self.sendMessageCell.contentView addSubview:btn];
+        } else {
+            [self.sendMessageCell addSubview:btn];
+        }
         [self showSeparatorLine:self.sendMessageCell];
         
 #if WFCU_SUPPORT_VOIP
@@ -285,7 +293,11 @@
         [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
         [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-        [self.voipCallCell.contentView addSubview:btn];
+        if (@available(iOS 14, *)) {
+            [self.voipCallCell.contentView addSubview:btn];
+        } else {
+            [self.voipCallCell addSubview:btn];
+        }
 #endif
     } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
         
@@ -300,7 +312,11 @@
         [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
         btn.layer.cornerRadius = 5.f;
         btn.layer.masksToBounds = YES;
-        [self.addFriendCell.contentView addSubview:btn];
+        if (@available(iOS 14, *)) {
+            [self.addFriendCell.contentView addSubview:btn];
+        } else {
+            [self.addFriendCell addSubview:btn];
+        }
         
     }
     [self.tableView reloadData];
