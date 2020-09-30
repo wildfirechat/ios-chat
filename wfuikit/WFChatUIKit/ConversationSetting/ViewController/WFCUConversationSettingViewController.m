@@ -664,7 +664,11 @@
           btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
           [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
           [btn addTarget:self action:@selector(clearMessageAction) forControlEvents:UIControlEventTouchUpInside];
-          [cell.contentView addSubview:btn];
+          if (@available(iOS 14, *)) {
+              [cell.contentView addSubview:btn];
+          } else {
+              [cell addSubview:btn];
+          }
       }
       return cell;
   } else if([self isQuitGroup:indexPath]) {
@@ -683,7 +687,11 @@
             btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onDeleteAndQuit:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.contentView addSubview:btn];
+            if (@available(iOS 14, *)) {
+                [cell.contentView addSubview:btn];
+            } else {
+                [cell addSubview:btn];
+            }
         }
         return cell;
   } else if([self isUnsubscribeChannel:indexPath]) {
@@ -705,7 +713,11 @@
           
           btn.backgroundColor = [UIColor redColor];
           [btn addTarget:self action:@selector(onDeleteAndQuit:) forControlEvents:UIControlEventTouchUpInside];
-          [cell.contentView addSubview:btn];
+          if (@available(iOS 14, *)) {
+              [cell.contentView addSubview:btn];
+          } else {
+              [cell addSubview:btn];
+          }
       }
       return cell;
   } else if([self isGroupFileCell:indexPath]) {
