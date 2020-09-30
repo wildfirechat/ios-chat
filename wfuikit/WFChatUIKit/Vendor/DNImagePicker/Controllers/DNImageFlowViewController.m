@@ -76,6 +76,7 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     self.navigationController.toolbarHidden = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

@@ -179,6 +179,7 @@
     CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [self.attributedText length]), path, NULL);
     
     if (frame == NULL) {
+        CFRelease(framesetter);
         CFRelease(path);
         return NSNotFound;
     }
@@ -190,6 +191,7 @@
     //NSLog(@"num lines: %d", numberOfLines);
     
     if (numberOfLines == 0) {
+        CFRelease(framesetter);
         CFRelease(frame);
         CFRelease(path);
         return NSNotFound;
@@ -231,6 +233,7 @@
         }
     }
     
+    CFRelease(framesetter);
     CFRelease(frame);
     CFRelease(path);
     
