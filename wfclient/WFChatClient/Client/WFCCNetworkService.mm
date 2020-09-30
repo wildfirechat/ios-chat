@@ -590,7 +590,7 @@ static WFCCNetworkService * sharedSingleton = nil;
                                                      target:self
                                                    selector:@selector(suspend)
                                                    userInfo:nil
-                                                    repeats:NO];
+                                                    repeats:YES];
 
 }
 - (void)suspend {
@@ -604,8 +604,12 @@ static WFCCNetworkService * sharedSingleton = nil;
       if ((mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) || (inCall && self.backgroudRunTime < 1800)) {
           [self checkBackGroundTask];
       } else {
-    mars::stn::Reset();
-    _endBgTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1
+          if (_suspendTimer) {
+            [_suspendTimer invalidate];
+            _suspendTimer = nil;
+          }
+          mars::stn::ClearTasks();
+          _endBgTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1
                                                        target:self
                                                      selector:@selector(endBgTask)
                                                      userInfo:nil
