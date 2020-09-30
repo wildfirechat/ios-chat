@@ -96,6 +96,7 @@ int encode_amr(const char* infile, const char* outfile) {
     amr = Encoder_Interface_init(0);
     out = fopen(outfile, "wb");
     if (!out) {
+        free(inputBuf);
         perror(outfile);
         return 1;
     }
