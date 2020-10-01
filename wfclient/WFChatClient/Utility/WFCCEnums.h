@@ -95,6 +95,10 @@ typedef NS_ENUM(NSInteger, WFCCErrorCode) {
     //proto error code
     ERROR_CODE_Proto_CorruptData = -100001,
     ERROR_CODE_Proto_InvalideParameter = -100002,
+    //消息内容超过最大值，最大值为200KB，建议不超过15KB。
+    ERROR_CODE_Proto_Content_Exceed_Max_Size = -100003,
+    //媒体内容超过最大值，最大值为100MB
+    ERROR_CODE_Proto_Media_Exceed_Max_Size = -100004,
 };
 
 #endif /* WFCCEnums_h */
