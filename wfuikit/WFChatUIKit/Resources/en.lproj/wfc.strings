@@ -9,6 +9,7 @@
 "Ok"="Ok";
 "Cancel"="Cancel";
 "Message"="Message";
+"NumberOfMessage"="Message(%d)";
 "GroupName"="Group name";
 "Back"="Back";
 "BackMore"="Back(...)";
