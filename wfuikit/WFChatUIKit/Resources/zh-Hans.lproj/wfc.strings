@@ -9,6 +9,7 @@
 "Ok"="确定";
 "Cancel"="取消";
 "Message"="信息";
+"NumberOfMessage"="信息(%d)";
 "GroupName"="群聊名称";
 "Back"="返回";
 "BackMore"="返回...";
