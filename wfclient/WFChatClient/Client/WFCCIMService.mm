@@ -1054,6 +1054,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->updateConversationTimestamp((int)conversation.type, [conversation.target UTF8String], conversation.line, timestamp);
 }
 
+- (long)getFirstUnreadMessageId:(WFCCConversation *)conversation {
+    return mars::stn::MessageDB::Instance()->GetConversationFirstUnreadMessageId((int)conversation.type, [conversation.target UTF8String], conversation.line);
+}
+
 class IMSearchUserCallback : public mars::stn::SearchUserCallback {
 private:
     void(^m_successBlock)(NSArray<WFCCUserInfo *> *machedUsers);
