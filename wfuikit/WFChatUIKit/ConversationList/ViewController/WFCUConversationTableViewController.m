@@ -315,7 +315,12 @@
 }
 
 - (void)updateConnectionStatus:(ConnectionStatus)status {
+    [self updateTitle];
+}
+
+- (void)updateTitle {
     UIView *title;
+    ConnectionStatus status = [WFCCNetworkService sharedInstance].currentConnectionStatus;
     if (status != kConnectionStatusConnecting && status != kConnectionStatusReceiving) {
         UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 40, 0, 80, 44)];
         
@@ -326,8 +331,19 @@
             case kConnectionStatusUnconnected:
                 navLabel.text = WFCString(@"NotConnect");
                 break;
-            case kConnectionStatusConnected:
-                navLabel.text = WFCString(@"Message");
+            case kConnectionStatusConnected: {
+                int count = 0;
+                for (WFCCConversationInfo *info in self.conversations) {
+                    if (!info.isSilent) {
+                        count += info.unreadCount.unread;
+                    }
+                }
+                if (count) {
+                    navLabel.text = [NSString stringWithFormat:WFCString(@"NumberOfMessage"), count];
+                } else {
+                    navLabel.text = WFCString(@"Message");
+                }
+            }
                 break;
                 
             default:
@@ -335,7 +351,7 @@
         }
         
         navLabel.textColor = [WFCUConfigManager globalManager].naviTextColor;
-        navLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18];
+        navLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
         
         navLabel.textAlignment = NSTextAlignmentCenter;
         title = navLabel;
@@ -361,7 +377,6 @@
     }
     self.navigationItem.titleView = title;
 }
-
 - (void)onConnectionStatusChanged:(NSNotification *)notification {
     ConnectionStatus status = [notification.object intValue];
     [self updateConnectionStatus:status];
@@ -416,6 +431,7 @@
         }
     }
     [self.tabBarController.tabBar showBadgeOnItemIndex:0 badgeValue:count];
+    [self updateTitle];
 }
 
 - (void)updatePcSession {
