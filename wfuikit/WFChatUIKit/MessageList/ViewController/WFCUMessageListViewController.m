@@ -67,7 +67,7 @@
 #import "WFCUGroupInfoViewController.h"
 #import "WFCUChannelProfileViewController.h"
 
-@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
+@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 
 @property (nonatomic, strong)NSMutableArray<WFCCMessage *> *mentionedMsgs;
@@ -117,8 +117,17 @@
 
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *deliveryDict;
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *readDict;
+@property (nonatomic, strong)NSMutableSet<NSNumber *> *nMsgSet;
 
 @property (nonatomic, strong)UIView *multiSelectPanel;
+
+@property (nonatomic, assign)long firstUnreadMessageId;
+@property (nonatomic, assign)int unreadMessageCount;
+
+@property (nonatomic, strong)UIButton *unreadButton;
+@property (nonatomic, strong)UIButton *mentionedButton;
+@property (nonatomic, strong)UIButton *newMsgTipButton;
+
 @end
 
 @implementation WFCUMessageListViewController
@@ -233,6 +242,8 @@
     if (self.multiSelecting) {
         self.multiSelectPanel.hidden = NO;
     }
+    
+    self.nMsgSet = [[NSMutableSet alloc] init];
 }
 
 //The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
@@ -324,7 +335,7 @@
     }
 }
 
-- (void)loadMoreMessage:(BOOL)isHistory {
+- (void)loadMoreMessage:(BOOL)isHistory completion:(void (^ __nullable)(BOOL more))completion {
     __weak typeof(self) weakSelf = self;
     if (isHistory) {
         if (self.loadingMore) {
@@ -357,6 +368,9 @@
                             [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
                         }
                         weakSelf.loadingMore = NO;
+                        if (completion) {
+                            completion(messages.count > 0);
+                        }
                     });
                 } error:^(int error_code) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -369,6 +383,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
                     weakSelf.loadingMore = NO;
+                    if (completion) {
+                        completion(messageList.count > 0);
+                    }
                 });
             }
         });
@@ -401,10 +418,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO];
                 weakSelf.loadingNew = NO;
+                if (completion) {
+                    completion(messageList.count > 0);
+                }
             });
         });
-        
-        
     }
 }
 - (void)sendChatroomWelcomeMessage {
@@ -634,6 +652,7 @@
                                 atScrollPosition:UICollectionViewScrollPositionBottom
                                         animated:animated];
     
+    [self dismissNewMsgTip];
 }
 
 - (void)initializedSubViews {
@@ -1046,15 +1065,30 @@
             self.hasNewMessage = YES;
         }
     } else {
+        BOOL firstIn = NO;
         int count = (int)self.modelList.count;
         if (count > 50) {
             count = 50;
         } else if(count == 0) {
             count = 15;
+            firstIn = YES;
         }
         messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser];
         
         self.mentionedMsgs = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:self.privateChatUser] mutableCopy];
+        
+        if (self.mentionedMsgs.count) {
+            [self showMentionedLabel];
+        }
+        
+        if (firstIn) {
+            WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
+            if (info.unreadCount.unread >= 10 && info.unreadCount.unread < 300) { //如果消息太多了就没有必要显示新消息了
+                self.unreadMessageCount = info.unreadCount.unread;
+                self.firstUnreadMessageId = [[WFCCIMService sharedWFCIMService] getFirstUnreadMessageId:self.conversation];
+                [self showUnreadLabel];
+            }
+        }
         
         [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
     }
@@ -1063,6 +1097,132 @@
     
     [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
     self.highlightMessageId = 0;
+}
+
+- (void)showMentionedLabel {
+    if (!self.mentionedButton) {
+        CGRect bount = self.view.bounds;
+        self.mentionedButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 240, 0, 30)];
+        self.mentionedButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [self.mentionedButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        self.mentionedButton.backgroundColor = [UIColor whiteColor];
+        self.mentionedButton.layer.cornerRadius = 15;
+        self.mentionedButton.layer.borderColor = [UIColor blackColor].CGColor;
+        [self.mentionedButton addTarget:self action:@selector(onMentionedBtn:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.mentionedButton];
+        [UIView animateWithDuration:0.8 animations:^{
+            self.mentionedButton.frame = CGRectMake(bount.size.width - 85, 240, 100, 30);
+        }];
+    }
+    [self.mentionedButton setTitle:[NSString stringWithFormat:@"%d 条@消息", self.mentionedMsgs.count] forState:UIControlStateNormal];
+}
+
+- (void)dismissMentionedLabel {
+    CGRect bount = self.view.bounds;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.mentionedButton.frame = CGRectMake(bount.size.width+15, 240, 0, 30);
+        } completion:^(BOOL finished) {
+            [self.mentionedButton removeFromSuperview];
+            self.mentionedButton = nil;
+        }];
+}
+
+- (void)onMentionedBtn:(id)sender {
+    if (![self checkLastMentionedMsgLoaded]) {
+        [self loadMoreToLastMention];
+    } else {
+        [self scrollToLastMentionedMessage];
+    }
+}
+
+- (void)loadMoreToLastMention {
+    __weak typeof(self)ws = self;
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+    [self loadMoreMessage:YES completion:^(BOOL more){
+        if (more && ![ws checkLastMentionedMsgLoaded]) {
+            [ws loadMoreToLastMention];
+        } else {
+            [ws scrollToLastMentionedMessage];
+        }
+    }];
+}
+
+- (void)scrollToLastMentionedMessage {
+    for (int i = 0; i < self.modelList.count; i++) {
+        if (self.modelList[i].message.messageId == self.mentionedMsgs.firstObject.messageId) {
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+        }
+    }
+}
+
+- (BOOL)checkLastMentionedMsgLoaded {
+    for (WFCUMessageModel *model in self.modelList) {
+        if (model.message.messageId == self.mentionedMsgs.firstObject.messageId) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)showUnreadLabel {
+    CGRect bount = self.view.bounds;
+    self.unreadButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 200, 0, 30)];
+    [self.unreadButton setTitle:[NSString stringWithFormat:@"%d 条新消息", self.unreadMessageCount] forState:UIControlStateNormal];
+    self.unreadButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    [self.unreadButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    self.unreadButton.backgroundColor = [UIColor whiteColor];
+    self.unreadButton.layer.cornerRadius = 15;
+    self.unreadButton.layer.borderColor = [UIColor blackColor].CGColor;
+    [self.unreadButton addTarget:self action:@selector(onUnreadBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.unreadButton];
+    [UIView animateWithDuration:0.6 animations:^{
+        self.unreadButton.frame = CGRectMake(bount.size.width - 85, 200, 100, 30);
+    }];
+}
+
+- (void)dismissUnreadLabel {
+    CGRect bount = self.view.bounds;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.unreadButton.frame = CGRectMake(bount.size.width+15, 200, 0, 30);
+        } completion:^(BOOL finished) {
+            [self.unreadButton removeFromSuperview];
+            self.unreadButton = nil;
+        }];
+}
+
+- (void)onUnreadBtn:(id)sender {
+    [self dismissUnreadLabel];
+    if (![self checkFirstUnreadMsgLoaded]) {
+        [self loadMoreToFirstUnread];
+    } else {
+        [self scrollToFirstUnreadMessage];
+    }
+}
+- (BOOL)checkFirstUnreadMsgLoaded {
+    for (WFCUMessageModel *model in self.modelList) {
+        if (model.message.messageId <= self.firstUnreadMessageId) {
+            return YES;
+        }
+    }
+    return NO;
+}
+- (void)loadMoreToFirstUnread {
+    __weak typeof(self)ws = self;
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+    [self loadMoreMessage:YES completion:^(BOOL more){
+        if (more && ![ws checkFirstUnreadMsgLoaded]) {
+            [ws loadMoreToFirstUnread];
+        } else {
+            [ws scrollToFirstUnreadMessage];
+        }
+    }];
+}
+- (void)scrollToFirstUnreadMessage {
+    for (int i = 0; i < self.modelList.count; i++) {
+        if (self.modelList[i].message.messageId == self.firstUnreadMessageId) {
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+        }
+    }
 }
 
 - (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom {
@@ -1123,6 +1283,8 @@
             if (self.conversation.type == Group_Type && [message.content isKindOfClass:[WFCCModifyGroupAliasNotificationContent class]]) {
                 [modifiedAliasUsers addObject:message.fromUser];
             }
+            
+            [self.nMsgSet addObject:@(message.messageId)];
         } else {
             if (self.modelList.count > 0 && (self.modelList[0].message.serverTime - message.serverTime < 60 * 1000) && i != 0) {
                 self.modelList[0].showTimeLabel = NO;
@@ -1207,8 +1369,40 @@
         });
         
     }
+    
+    if (newMessage && !isAtButtom && self.nMsgSet.count > 0) {
+        [self showNewMsgTip];
+    } else {
+        [self dismissNewMsgTip];
+    }
 }
 
+- (void)showNewMsgTip {
+    [self.newMsgTipButton setTitle:[NSString stringWithFormat:@"%ld", self.nMsgSet.count] forState:UIControlStateNormal];
+    self.newMsgTipButton.hidden = NO;
+}
+
+- (void)dismissNewMsgTip {
+    [self.nMsgSet removeAllObjects];
+    _newMsgTipButton.hidden = YES;
+}
+
+- (UIButton *)newMsgTipButton {
+    if (!_newMsgTipButton) {
+        _newMsgTipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 36, self.chatInputBar.frame.origin.y - 40, 24, 24)];
+        _newMsgTipButton.layer.cornerRadius = 12;
+        _newMsgTipButton.titleLabel.font = [UIFont systemFontOfSize:8];
+        _newMsgTipButton.layer.borderColor = [UIColor blackColor].CGColor;
+        _newMsgTipButton.backgroundColor = [UIColor blueColor];
+        [_newMsgTipButton addTarget:self action:@selector(onNewMsgTipBtn:) forControlEvents:UIControlEventTouchUpInside];
+        [_newMsgTipButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.backgroundView addSubview:_newMsgTipButton];
+    }
+    return _newMsgTipButton;;
+}
+- (void)onNewMsgTipBtn:(id)sender {
+    [self scrollToBottom:YES];
+}
 - (WFCUMessageModel *)modelOfMessage:(long)messageId {
     if (messageId <= 0) {
         return nil;
@@ -1319,16 +1513,6 @@
     WFCUMessageModel *model = self.modelList[indexPath.row];
     NSString *objName = [NSString stringWithFormat:@"%d", [model.message.content.class getContentType]];
     
-    if (self.mentionedMsgs.count) {
-        for (WFCCMessage *msg in self.mentionedMsgs) {
-            if (msg.messageId == model.message.messageId) {
-                [self.mentionedMsgs removeObject:msg];
-                break;
-            }
-        }
-    }
-    
-    
     WFCUMessageCellBase *cell = nil;
     if(![self.cellContentDict objectForKey:@([model.message.content.class getContentType])]) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:[NSString stringWithFormat:@"%d", [WFCCUnknownMessageContent getContentType]] forIndexPath:indexPath];
@@ -1364,6 +1548,43 @@
     return nil;
 }
 
+#pragma mark -UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    WFCUMessageModel *model = self.modelList[indexPath.row];
+    
+    if (self.mentionedMsgs.count) {
+        for (WFCCMessage *msg in self.mentionedMsgs) {
+            if (msg.messageId == model.message.messageId) {
+                [self.mentionedMsgs removeObject:msg];
+                if (!self.mentionedMsgs.count) {
+                    [self dismissMentionedLabel];
+                } else {
+                    [self showMentionedLabel];
+                }
+                break;
+            }
+        }
+    }
+    
+    if (self.unreadMessageCount) {
+        if (self.firstUnreadMessageId >= model.message.messageId) {
+            self.unreadMessageCount = 0;
+            self.firstUnreadMessageId = 0;
+            [self dismissUnreadLabel];
+        }
+    }
+    
+    if (self.nMsgSet.count) {
+        if ([self.nMsgSet containsObject:@(model.message.messageId)]) {
+            [self.nMsgSet removeObject:@(model.message.messageId)];
+            if (self.nMsgSet.count) {
+                [self showNewMsgTip];
+            } else {
+                [self dismissNewMsgTip];
+            }
+        }
+    }
+}
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1658,10 +1879,10 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     if (self.hasNewMessage && ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
-        [self loadMoreMessage:NO];
+        [self loadMoreMessage:NO completion:nil];
     }
-    if (targetContentOffset->y == 0 && self.hasMoreOld) {
-        [self loadMoreMessage:YES];
+    if (targetContentOffset->y <= 0 && self.hasMoreOld) {
+        [self loadMoreMessage:YES completion:nil];
     }
     
 }
