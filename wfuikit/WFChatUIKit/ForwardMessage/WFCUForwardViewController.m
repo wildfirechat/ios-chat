@@ -89,6 +89,7 @@
     
     shareView.conversation = conversation;
     shareView.message = self.message;
+    shareView.messages = self.messages;
     __weak typeof(self)ws = self;
     shareView.forwardDone = ^(BOOL success) {
         if (success) {
