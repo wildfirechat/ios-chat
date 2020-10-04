@@ -28,7 +28,7 @@
 
 @protocol WFCUChatInputBarDelegate <NSObject>
 @optional
-- (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos;
+- (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos withQuoteInfo:(WFCCQuoteInfo *)quoteInfo;
 
 - (void)recordDidBegin;
 - (void)recordDidCancel;
@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 @property(nonatomic, strong)NSString *draft;
 
 - (BOOL)appendMention:(NSString *)userId name:(NSString *)userName;
+- (BOOL)appendQuote:(long long)messageUid;
 - (void)paste:(id)sender;
 - (void)willAppear;
 - (void)appendText:(NSString *)text;
