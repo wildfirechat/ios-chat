@@ -20,6 +20,12 @@
   }
   return 5;
 }
++ (CGFloat)hightForLastReadLabel:(WFCUMessageModel *)msgModel {
+    if (msgModel.lastReadMessage) {
+        return 30;
+    }
+    return 0;
+}
 - (void)onTaped:(id)sender {
     [self.delegate didTapMessageCell:self withModel:self.model];
 }
@@ -40,7 +46,33 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
   _model = model;
+    CGFloat offset = 5;
+    if (model.lastReadMessage) {
+        if (!self.lastReadContainerView) {
+            self.lastReadContainerView = [[UIView alloc] initWithFrame:CGRectMake(8, offset, screenWidth-16, 20)];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 10, screenWidth-16, 1)];
+            line.backgroundColor = [UIColor grayColor];
+            [self.lastReadContainerView addSubview:line];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+            label.text = WFCString(@"last_read_here");
+            label.font = [UIFont systemFontOfSize:16];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor grayColor];
+            CGSize size = [WFCUUtilities getTextDrawingSize:label.text font:label.font constrainedSize:CGSizeMake(screenWidth-16, 8000)];
+            size.width += 16;
+            label.frame = CGRectMake((screenWidth - 16 - size.width)/2, offset, size.width, 20);
+            [self.lastReadContainerView addSubview:label];
+        }
+        offset += 20;
+    } else {
+        [self.lastReadContainerView removeFromSuperview];
+        self.lastReadContainerView = nil;
+    }
+    
   if (model.showTimeLabel) {
     if (self.timeLabel == nil) {
       self.timeLabel = [[UILabel alloc] init];
@@ -52,9 +84,9 @@
     _timeLabel.hidden = NO;
     _timeLabel.text = [WFCUUtilities formatTimeDetailLabel:model.message.serverTime];
 
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
     CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(screenWidth, 8000)];
-    CGRect rect = CGRectMake((screenWidth - size.width)/2, 7, size.width, size.height);
+    CGRect rect = CGRectMake((screenWidth - size.width)/2, offset + 7, size.width, size.height);
     _timeLabel.frame = rect;
   } else {
     _timeLabel.hidden = YES;
