@@ -25,6 +25,7 @@
 @optional
 - (void)didTapReceiptView:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
 - (void)didDoubleTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
+- (void)didTapQuoteLabel:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
 @end
 
 @interface WFCUMessageCellBase : UICollectionViewCell

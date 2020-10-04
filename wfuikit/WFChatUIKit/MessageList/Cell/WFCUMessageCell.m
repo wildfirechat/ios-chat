@@ -357,6 +357,8 @@
                 self.quoteLabel.numberOfLines = 0;
                 self.quoteLabel.layer.cornerRadius = 3.f;
                 self.quoteLabel.layer.masksToBounds = YES;
+                self.quoteLabel.userInteractionEnabled = YES;
+                [self.quoteLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteLabelTaped:)]];
                 [self.contentView addSubview:self.quoteLabel];
             }
             CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
@@ -371,7 +373,11 @@
         }
     }
 }
-
+- (void)onQuoteLabelTaped:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(didTapQuoteLabel:withModel:)]) {
+        [self.delegate didTapQuoteLabel:self withModel:self.model];
+    }
+}
 - (void)onTapReceiptView:(id)sender {
     if ([self.delegate respondsToSelector:@selector(didTapReceiptView:withModel:)] && self.model.message.conversation.type == Group_Type) {
         [self.delegate didTapReceiptView:self withModel:self.model];
