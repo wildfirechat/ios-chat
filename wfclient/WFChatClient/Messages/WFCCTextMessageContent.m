@@ -18,6 +18,13 @@
     payload.searchableContent = self.text;
     payload.mentionedType = self.mentionedType;
     payload.mentionedTargets = self.mentionedTargets;
+    if (self.quoteInfo) {
+        NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+        [dataDict setObject:[self.quoteInfo encode] forKey:@"quote"];
+        payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                                               options:kNilOptions
+                                                                                 error:nil];
+    }
     return payload;
 }
 
@@ -26,6 +33,19 @@
     self.text = payload.searchableContent;
     self.mentionedType = payload.mentionedType;
     self.mentionedTargets = payload.mentionedTargets;
+    if (payload.binaryContent.length) {
+        NSError *__error = nil;
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
+                                                                   options:kNilOptions
+                                                                     error:&__error];
+        if (!__error) {
+            NSDictionary *quoteDict = dictionary[@"quote"];
+            if (quoteDict) {
+                self.quoteInfo = [[WFCCQuoteInfo alloc] init];
+                [self.quoteInfo decode:quoteDict];
+            }
+        }
+    }
 }
 
 + (int)getContentType {

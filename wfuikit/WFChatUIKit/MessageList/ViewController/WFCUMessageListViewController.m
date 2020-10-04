@@ -1709,7 +1709,7 @@
     });
 }
 
-- (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos {
+- (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos withQuoteInfo:(WFCCQuoteInfo *)quoteInfo {
     if (stringContent.length == 0) {
         return;
     }
@@ -1730,6 +1730,7 @@
     if (txtContent.mentionedType == 1) {
         txtContent.mentionedTargets = [mentionTargets copy];
     }
+    txtContent.quoteInfo = quoteInfo;
     
     [self sendMessage:txtContent];
 }
@@ -1899,6 +1900,7 @@
     UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Recall") action:@selector(performRecall:)];
     UIMenuItem *complainItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Complain") action:@selector(performComplain:)];
     UIMenuItem *multiSelectItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"MultiSelect") action:@selector(performMultiSelect:)];
+    UIMenuItem *quote = [[UIMenuItem alloc]initWithTitle:WFCString(@"Quote") action:@selector(performQuote:)];
     
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
@@ -1976,6 +1978,12 @@
         [items addObject:multiSelectItem];
     }
     
+    if (msg.messageUid > 0) {
+        if ([msg.content.class getContentFlags] & 0x2) {
+            [items addObject:quote];
+        }
+    }
+    
     [menu setMenuItems:items];
     self.cell4Menu = baseCell;
     
@@ -1989,7 +1997,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -2082,6 +2090,12 @@
 
 - (void)performMultiSelect:(UIMenuItem *)sender {
     self.multiSelecting = !self.multiSelecting;
+}
+
+- (void)performQuote:(UIMenuItem *)sender {
+    if (self.cell4Menu.model.message) {
+        [self.chatInputBar appendQuote:self.cell4Menu.model.message.messageUid];
+    }
 }
 
 - (void)onMenuHidden:(id)sender {
