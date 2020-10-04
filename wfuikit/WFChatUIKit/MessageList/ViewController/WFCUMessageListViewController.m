@@ -69,7 +69,7 @@
 #import "WFCUChannelProfileViewController.h"
 
 #import "WFCUQuoteViewController.h"
-
+#import "WFCUCompositeMessageViewController.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -1544,7 +1544,10 @@
                 [self.navigationController pushViewController:pvc animated:YES];
             }
         }
-        
+    } else if([model.message.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
+        WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
+        vc.compositeContent = (WFCCCompositeMessageContent *)model.message.content;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

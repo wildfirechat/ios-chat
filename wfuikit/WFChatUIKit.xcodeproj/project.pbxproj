@@ -358,6 +358,8 @@
 		2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551090217F5CC200F56C26 /* WFCUUtilities.m */; };
 		2F56F6A82529E43900B829C4 /* WFCUCompositeCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F56F6A62529E43900B829C4 /* WFCUCompositeCell.h */; };
 		2F56F6A92529E43900B829C4 /* WFCUCompositeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */; };
+		2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F56F6B22529EE0F00B829C4 /* WFCUCompositeMessageViewController.h */; };
+		2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6B32529EE0F00B829C4 /* WFCUCompositeMessageViewController.m */; };
 		2F5EB43C22C2E21A00BC8C90 /* GroupManageTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */; };
 		2F5EB43D22C2E21A00BC8C90 /* GroupManageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB43B22C2E21A00BC8C90 /* GroupManageTableViewController.m */; };
 		2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB43E22C2E6BB00BC8C90 /* ManagerTableViewController.h */; };
@@ -757,6 +759,8 @@
 		2F551090217F5CC200F56C26 /* WFCUUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUUtilities.m; sourceTree = "<group>"; };
 		2F56F6A62529E43900B829C4 /* WFCUCompositeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCompositeCell.h; sourceTree = "<group>"; };
 		2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeCell.m; sourceTree = "<group>"; };
+		2F56F6B22529EE0F00B829C4 /* WFCUCompositeMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCompositeMessageViewController.h; sourceTree = "<group>"; };
+		2F56F6B32529EE0F00B829C4 /* WFCUCompositeMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeMessageViewController.m; sourceTree = "<group>"; };
 		2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupManageTableViewController.h; sourceTree = "<group>"; };
 		2F5EB43B22C2E21A00BC8C90 /* GroupManageTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupManageTableViewController.m; sourceTree = "<group>"; };
 		2F5EB43E22C2E6BB00BC8C90 /* ManagerTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ManagerTableViewController.h; sourceTree = "<group>"; };
@@ -1098,6 +1102,8 @@
 				2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */,
 				2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */,
 				2F535BFE25296E6600C9AF09 /* WFCUQuoteViewController.m */,
+				2F56F6B22529EE0F00B829C4 /* WFCUCompositeMessageViewController.h */,
+				2F56F6B32529EE0F00B829C4 /* WFCUCompositeMessageViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1866,6 +1872,7 @@
 				2F5510CD217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
+				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
 				2F5511DA217F5CC300F56C26 /* TYAlertView.h in Headers */,
 				2F551092217F5CC200F56C26 /* WFCULocationCell.h in Headers */,
@@ -2153,6 +2160,7 @@
 				2F551106217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.m in Sources */,
 				2F551153217F5CC200F56C26 /* KZVideoPlayer.m in Sources */,
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,
+				2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */,
 				2F5510FA217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
