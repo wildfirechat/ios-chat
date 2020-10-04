@@ -17,6 +17,8 @@
 		2B6336762470DAB2008D6B38 /* WFCCDeliveryReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B6336742470DAB2008D6B38 /* WFCCDeliveryReport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B6336792470DB7E008D6B38 /* WFCCReadReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B6336772470DB7E008D6B38 /* WFCCReadReport.m */; };
 		2B63367A2470DB7E008D6B38 /* WFCCReadReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B6336782470DB7E008D6B38 /* WFCCReadReport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B785A5425294C0D003CBF78 /* WFCCQuoteInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B785A5225294C0D003CBF78 /* WFCCQuoteInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B785A5525294C0D003CBF78 /* WFCCQuoteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B785A5325294C0D003CBF78 /* WFCCQuoteInfo.m */; };
 		2B97D4852505BACF00162A2B /* WFCCCardMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4832505BACF00162A2B /* WFCCCardMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B97D4862505BACF00162A2B /* WFCCCardMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B97D4842505BACF00162A2B /* WFCCCardMessageContent.m */; };
 		2BA6622824CFD23B00E28BC5 /* WFCCGroupMemberMuteNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BA6622624CFD23B00E28BC5 /* WFCCGroupMemberMuteNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -159,6 +161,8 @@
 		2B6336742470DAB2008D6B38 /* WFCCDeliveryReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCDeliveryReport.h; sourceTree = "<group>"; };
 		2B6336772470DB7E008D6B38 /* WFCCReadReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCReadReport.m; sourceTree = "<group>"; };
 		2B6336782470DB7E008D6B38 /* WFCCReadReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCReadReport.h; sourceTree = "<group>"; };
+		2B785A5225294C0D003CBF78 /* WFCCQuoteInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCQuoteInfo.h; sourceTree = "<group>"; };
+		2B785A5325294C0D003CBF78 /* WFCCQuoteInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCQuoteInfo.m; sourceTree = "<group>"; };
 		2B97D4832505BACF00162A2B /* WFCCCardMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCCardMessageContent.h; sourceTree = "<group>"; };
 		2B97D4842505BACF00162A2B /* WFCCCardMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCardMessageContent.m; sourceTree = "<group>"; };
 		2BA6622624CFD23B00E28BC5 /* WFCCGroupMemberMuteNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupMemberMuteNotificationContent.h; sourceTree = "<group>"; };
@@ -502,6 +506,8 @@
 				2B6336732470DAB2008D6B38 /* WFCCDeliveryReport.m */,
 				2BD8D71B24D68FCD00281B81 /* WFCCFileRecord.h */,
 				2BD8D71C24D68FCD00281B81 /* WFCCFileRecord.m */,
+				2B785A5225294C0D003CBF78 /* WFCCQuoteInfo.h */,
+				2B785A5325294C0D003CBF78 /* WFCCQuoteInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -562,6 +568,7 @@
 				2E6B50F71FAE9B10006B6E31 /* WFCCAddGroupeMemberNotificationContent.h in Headers */,
 				2E6B50F91FAE9B10006B6E31 /* WFCCCreateGroupNotificationContent.h in Headers */,
 				6ED103DC20AE5C9700D4A59C /* WFCCTipNotificationMessageContent.h in Headers */,
+				2B785A5425294C0D003CBF78 /* WFCCQuoteInfo.h in Headers */,
 				2E6B50FD1FAE9B10006B6E31 /* WFCCImageMessageContent.h in Headers */,
 				2F8742DC219C4FED00F65EBA /* WFCCUnreadCount.h in Headers */,
 				2F8742DF219C4FED00F65EBA /* WFCCChatroomMemberInfo.h in Headers */,
@@ -710,6 +717,7 @@
 				2FB87C6E243EF0FE0078A199 /* WFCCFriendGreetingMessageContent.m in Sources */,
 				90B044461FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m in Sources */,
 				2FB87C70243EF0FE0078A199 /* WFCCFriendAddedMessageContent.m in Sources */,
+				2B785A5525294C0D003CBF78 /* WFCCQuoteInfo.m in Sources */,
 				903EBB8B21357DDF00312C16 /* WFCCStickerMessageContent.m in Sources */,
 				2B6336792470DB7E008D6B38 /* WFCCReadReport.m in Sources */,
 				2E6B51141FAE9B10006B6E31 /* WFCCConversation.m in Sources */,
