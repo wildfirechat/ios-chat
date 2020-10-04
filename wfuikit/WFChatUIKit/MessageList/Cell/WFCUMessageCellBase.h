@@ -29,10 +29,13 @@
 
 @interface WFCUMessageCellBase : UICollectionViewCell
 @property (nonatomic, strong)UILabel *timeLabel;
+@property (nonatomic, strong)UIView *lastReadContainerView;
+@property (nonatomic, strong)UILabel *quoteLabel;
 @property (nonatomic, strong)WFCUMessageModel *model;
 @property (nonatomic, weak)id<WFCUMessageCellDelegate> delegate;
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width;
 + (CGFloat)hightForTimeLabel:(WFCUMessageModel *)msgModel;
++ (CGFloat)hightForLastReadLabel:(WFCUMessageModel *)msgModel;
 
 - (void)onTaped:(id)sender;
 - (void)onLongPressed:(id)sender;
