@@ -43,7 +43,45 @@
     __strong WFCCConversation *conversation = self.conversation;
     __strong void (^forwardDone)(BOOL success) = self.forwardDone;
     
-    [[WFCCIMService sharedWFCIMService] send:conversation content:self.message.content success:^(long long messageUid, long long timestamp) {
+    if (self.message) {
+        [[WFCCIMService sharedWFCIMService] send:conversation content:self.message.content success:^(long long messageUid, long long timestamp) {
+            if (textMsg) {
+                [[WFCCIMService sharedWFCIMService] send:conversation content:textMsg success:^(long long messageUid, long long timestamp) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (forwardDone) {
+                            forwardDone(YES);
+                        }
+                    });
+                } error:^(int error_code) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (forwardDone) {
+                            forwardDone(NO);
+                        }
+                    });
+                }];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (forwardDone) {
+                        forwardDone(YES);
+                    }
+                });
+            }
+        } error:^(int error_code) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (forwardDone) {
+                    forwardDone(NO);
+                }
+            });
+        }];
+    } else {
+        for (WFCCMessage *msg in self.messages) {
+            [[WFCCIMService sharedWFCIMService] send:conversation content:msg.content success:^(long long messageUid, long long timestamp) {
+                
+            } error:^(int error_code) {
+                
+            }];
+            [NSThread sleepForTimeInterval:0.1];
+        }
         if (textMsg) {
             [[WFCCIMService sharedWFCIMService] send:conversation content:textMsg success:^(long long messageUid, long long timestamp) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -59,19 +97,11 @@
                 });
             }];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (forwardDone) {
-                    forwardDone(YES);
-                }
-            });
-        }
-    } error:^(int error_code) {
-        dispatch_async(dispatch_get_main_queue(), ^{
             if (forwardDone) {
-                forwardDone(NO);
+                forwardDone(YES);
             }
-        });
-    }];
+        }
+    }
 }
 
 - (IBAction)cancelAction:(id)sender {
@@ -118,6 +148,14 @@
 
 - (void)setMessage:(WFCCMessage *)message {
     _message = message;
-    self.digestLabel.text = [message.content digest:message];
+    if (message) {
+        self.digestLabel.text = [message.content digest:message];
+    }
+}
+- (void)setMessages:(NSArray<WFCCMessage *> *)messages {
+    _messages = messages;
+    if (messages.count) {
+        self.digestLabel.text = [NSString stringWithFormat:@"[逐条转发]共%d条消息", messages.count];
+    }
 }
 @end

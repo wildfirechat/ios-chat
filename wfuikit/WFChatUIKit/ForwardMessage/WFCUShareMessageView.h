@@ -12,5 +12,6 @@
 @interface WFCUShareMessageView : UIView
 @property(nonatomic, strong)WFCCConversation *conversation;
 @property(nonatomic, strong)WFCCMessage *message;
+@property(nonatomic, strong)NSArray<WFCCMessage *> *messages;
 @property(nonatomic, strong)void (^forwardDone)(BOOL success);
 @end

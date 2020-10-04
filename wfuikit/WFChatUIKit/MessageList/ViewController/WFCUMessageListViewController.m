@@ -23,6 +23,7 @@
 #import "WFCURecallCell.h"
 #import "WFCUConferenceInviteCell.h"
 #import "WFCUCardCell.h"
+#import "WFCUCompositeCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -588,11 +589,18 @@
         }
         _multiSelectPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, self.backgroundView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
         _multiSelectPanel.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
-        UIButton *deleteBtn = [[UIButton alloc] initWithFrame:_multiSelectPanel.bounds];
+        UIButton *deleteBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
         [deleteBtn setTitle:@"Delete" forState:UIControlStateNormal];
         [deleteBtn addTarget:self action:@selector(onDeleteMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
         [deleteBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [_multiSelectPanel addSubview:deleteBtn];
+        
+        UIButton *forwardBtn = [[UIButton alloc] initWithFrame:CGRectMake(_multiSelectPanel.bounds.size.width/2, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
+        [forwardBtn setTitle:@"转发" forState:UIControlStateNormal];
+        [forwardBtn addTarget:self action:@selector(onForwardMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
+        [forwardBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [_multiSelectPanel addSubview:forwardBtn];
+        
         [self.backgroundView addSubview:_multiSelectPanel];
     }
     return _multiSelectPanel;
@@ -615,6 +623,48 @@
     }
     
     self.multiSelecting = NO;
+}
+
+- (void)onForwardMultiSelectedMessage:(id)sender {
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    for (WFCUMessageModel *model in self.modelList) {
+        if (model.selected) {
+            [messages addObject:model.message];
+        }
+    }
+    
+    [self.selectedMessageIds removeAllObjects];
+    self.multiSelecting = NO;
+    
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *oneByOneAction = [UIAlertAction actionWithTitle:WFCString(@"Fwd1By1") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
+        controller.messages = messages;
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navi animated:YES completion:nil];
+        
+    }];
+    UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:WFCString(@"FwdAllIn1") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCCCompositeMessageContent *compositeContent = [[WFCCCompositeMessageContent alloc] init];
+        compositeContent.targetName = self.title;
+        compositeContent.messages = messages;
+        WFCCMessage *msg = [[WFCCMessage alloc] init];
+        msg.content = compositeContent;
+        
+        WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
+        controller.message = msg;
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navi animated:YES completion:nil];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:oneByOneAction];
+    [alertController addAction:AllInOneAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)scrollToBottom:(BOOL)animated {
@@ -696,6 +746,7 @@
     [self registerCell:[WFCURecallCell class] forContent:[WFCCRecallMessageContent class]];
     [self registerCell:[WFCUConferenceInviteCell class] forContent:[WFCCConferenceInviteMessageContent class]];
     [self registerCell:[WFCUCardCell class] forContent:[WFCCCardMessageContent class]];
+    [self registerCell:[WFCUCompositeCell class] forContent:[WFCCCompositeMessageContent class]];
     
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
