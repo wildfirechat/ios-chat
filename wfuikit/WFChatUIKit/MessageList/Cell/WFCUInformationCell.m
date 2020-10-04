@@ -25,7 +25,7 @@
 @implementation WFCUInformationCell
 
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    CGFloat height = [super hightForTimeLabel:msgModel];
+    CGFloat height = [super hightForHeaderArea:msgModel];
     NSString *infoText;
     if ([msgModel.message.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
         WFCCNotificationMessageContent *content = (WFCCNotificationMessageContent *)msgModel.message.content;
@@ -37,8 +37,6 @@
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING + TEXT_TOP_PADDING + TEXT_BUTTOM_PADDING;
     size.height += height;
     return CGSizeMake(width, size.height);
-    
-    return CGSizeZero;
 }
 
 - (void)setModel:(WFCUMessageModel *)model {

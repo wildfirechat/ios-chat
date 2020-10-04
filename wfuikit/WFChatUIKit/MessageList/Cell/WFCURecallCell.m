@@ -28,7 +28,7 @@
     return digest;
 }
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    CGFloat height = [super hightForTimeLabel:msgModel];
+    CGFloat height = [super hightForHeaderArea:msgModel];
     NSString *infoText = [WFCURecallCell recallMsg:(WFCCRecallMessageContent *)msgModel.message.content];
     
     CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
