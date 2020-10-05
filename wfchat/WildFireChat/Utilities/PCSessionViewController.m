@@ -31,12 +31,32 @@
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
     
-    UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 150, width - 200, 40)];
-    [logoutBtn setBackgroundColor:[UIColor greenColor]];
+    UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(90, height - 150, width - 180, 36)];
+    [logoutBtn setBackgroundColor:[UIColor redColor]];
     [logoutBtn setTitle:@"退出电脑登录" forState:UIControlStateNormal];
     logoutBtn.layer.masksToBounds = YES;
     logoutBtn.layer.cornerRadius = 5.f;
     [logoutBtn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    if (infos.count) {
+        if (infos[0].platform == PlatformType_Windows) {
+            [logoutBtn setTitle:@"退出 Windows 登录" forState:UIControlStateNormal];
+            [label setText:@"Windows 已登录"];
+        } else if(infos[0].platform == PlatformType_OSX) {
+            [logoutBtn setTitle:@"退出 Mac 登录" forState:UIControlStateNormal];
+            [label setText:@"Mac 已登录"];
+        } else if(infos[0].platform == PlatformType_Linux) {
+            [logoutBtn setTitle:@"退出 Linux 登录" forState:UIControlStateNormal];
+            [label setText:@"Linux 已登录"];
+        } else if(infos[0].platform == PlatformType_WEB) {
+            [logoutBtn setTitle:@"退出 Web 登录" forState:UIControlStateNormal];
+            [label setText:@"Web 已登录"];
+        } else if(infos[0].platform == PlatformType_WX) {
+            [logoutBtn setTitle:@"退出小程序登录" forState:UIControlStateNormal];
+            [label setText:@"小程序已登录"];
+        }
+    }
     
     
     [self.view addSubview:logoutBtn];
