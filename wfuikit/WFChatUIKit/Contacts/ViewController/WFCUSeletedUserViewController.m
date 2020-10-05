@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by Zack Zhang on 2020/4/2.
-//  Copyright © 2020 Tom Lee. All rights reserved.
+//  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
 #import "WFCUSeletedUserViewController.h"
