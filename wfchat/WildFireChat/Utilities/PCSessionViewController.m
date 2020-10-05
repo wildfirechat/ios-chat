@@ -12,7 +12,7 @@
 #import "AppService.h"
 
 @interface PCSessionViewController ()
-
+@property(nonatomic, strong)UIButton *muteBtn;
 @end
 
 @implementation PCSessionViewController
@@ -22,16 +22,50 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
-    UIImageView *pcView = [[UIImageView alloc] initWithFrame:CGRectMake((width - 200)/2, 120, 200, 200)];
+    UIImageView *pcView = [[UIImageView alloc] initWithFrame:CGRectMake((width - 200)/2, 100, 200, 200)];
     pcView.image = [UIImage imageNamed:@"pc"];
     [self.view addSubview:pcView];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 320, 200, 16)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 300, 200, 16)];
     [label setText:@"电脑已登录"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
     
-    UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(90, height - 150, width - 180, 36)];
+    self.muteBtn = [[UIButton alloc] initWithFrame:CGRectMake((width-width/3)/2-35, 336, 70, 70)];
+    [self.muteBtn setImage:[UIImage imageNamed:@"mute_notification"] forState:UIControlStateNormal];
+    [self.muteBtn setImage:[UIImage imageNamed:@"mute_notification_hover"] forState:UIControlStateSelected];
+    self.muteBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
+    self.muteBtn.layer.cornerRadius = 35;
+    self.muteBtn.layer.masksToBounds = YES;
+    if ([[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
+        [self.muteBtn setSelected:YES];
+        self.muteBtn.backgroundColor = [UIColor colorWithRed:62.f/255 green:100.f/255 blue:228.f/255 alpha:1.f];
+    }
+    [self.muteBtn addTarget:self action:@selector(onMuteBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.muteBtn];
+    UILabel *muteLabel = [[UILabel alloc] initWithFrame:CGRectMake((width-width/3)/2-35, 410, 70, 15)];
+    [muteLabel setText:@"手机静音"];
+    [muteLabel setFont:[UIFont systemFontOfSize:12]];
+    [muteLabel setTextColor:[UIColor grayColor]];
+    [muteLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.view addSubview:muteLabel];
+    
+    UIButton *fileBtn = [[UIButton alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 336, 70, 70)];
+    [fileBtn setImage:[UIImage imageNamed:@"pc_file_transfer"] forState:UIControlStateNormal];
+    [fileBtn setImage:[UIImage imageNamed:@"pc_file_transfer"] forState:UIControlStateSelected];
+    fileBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
+    fileBtn.layer.cornerRadius = 35;
+    fileBtn.layer.masksToBounds = YES;
+    [self.view addSubview:fileBtn];
+    UILabel *fileLabel = [[UILabel alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 410, 70, 15)];
+    [fileLabel setText:@"传输文件"];
+    [fileLabel setFont:[UIFont systemFontOfSize:12]];
+    [fileLabel setTextColor:[UIColor grayColor]];
+    [fileLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.view addSubview:fileLabel];
+    
+    
+    UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(90, height - 120, width - 180, 36)];
     [logoutBtn setBackgroundColor:[UIColor redColor]];
     [logoutBtn setTitle:@"退出电脑登录" forState:UIControlStateNormal];
     logoutBtn.layer.masksToBounds = YES;
@@ -92,5 +126,20 @@
         }];
         [hud hideAnimated:YES afterDelay:1.f];
     }
+}
+- (void)onMuteBtn:(id)sender {
+    BOOL pre = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] muteNotificationWhenPcOnline:!pre success:^{
+        if ([[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
+            ws.muteBtn.selected = YES;
+            ws.muteBtn.backgroundColor = [UIColor colorWithRed:62.f/255 green:100.f/255 blue:228.f/255 alpha:1.f];
+        } else {
+            ws.muteBtn.selected = NO;
+            ws.muteBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
+        }
+    } error:^(int error_code) {
+        
+    }];
 }
 @end
