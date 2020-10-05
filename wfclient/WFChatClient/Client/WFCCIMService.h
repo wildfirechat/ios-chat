@@ -117,6 +117,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_DisableRecipt = 13,
     //不能直接使用
     UserSettingScope_Favourite_User = 14,
+    //不能直接使用
+    UserSettingScope_Mute_When_PC_Online = 15,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -1517,6 +1519,23 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
+/**
+ PC/Web在线时，是否发送通知
+
+ @return 是否通知
+ */
+- (BOOL)isMuteNotificationWhenPcOnline;
+
+/**
+ 设置PC/Web在线时，是否发送通知
+
+ @param isMute 是否通知
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)muteNotificationWhenPcOnline:(BOOL)isMute
+                             success:(void(^)(void))successBlock
+                               error:(void(^)(int error_code))errorBlock;
 
 - (void)getConversationFiles:(WFCCConversation *)conversation
             beforeMessageUid:(long long)messageUid

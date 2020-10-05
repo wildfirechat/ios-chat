@@ -2263,6 +2263,20 @@ public:
     mars::stn::KickoffPCClient([pcClientId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (BOOL)isMuteNotificationWhenPcOnline {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Mute_When_PC_Online key:@""];
+    if ([strValue isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)muteNotificationWhenPcOnline:(BOOL)isMute
+                             success:(void(^)(void))successBlock
+                               error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Mute_When_PC_Online key:@"" value:isMute? @"1" : @"0" success:successBlock error:errorBlock];
+}
+
 - (void)getConversationFiles:(WFCCConversation *)conversation
             beforeMessageUid:(long long)messageUid
                        count:(int)count
