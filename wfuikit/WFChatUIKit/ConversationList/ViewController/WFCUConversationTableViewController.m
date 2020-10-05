@@ -538,7 +538,21 @@
         iv.image = [UIImage imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, 100, 20)];
-        label.text = WFCString(@"PCLogined");
+        NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+        if (infos.count) {
+            if (infos[0].platform == PlatformType_Windows) {
+                label.text = @"Windows 已登录";
+            } else if(infos[0].platform == PlatformType_OSX) {
+                label.text = @"Mac 已登录";
+            } else if(infos[0].platform == PlatformType_Linux) {
+                label.text = @"Linux 已登录";
+            } else if(infos[0].platform == PlatformType_WEB) {
+                label.text = @"Web 已登录";
+            } else if(infos[0].platform == PlatformType_WX) {
+                label.text = @"小程序已登录";
+            }
+        }
+        
         [_pcSessionView addSubview:label];
         _pcSessionView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];

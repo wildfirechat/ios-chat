@@ -18,7 +18,7 @@
         NSArray<NSString *> *parts = [strInfo componentsSeparatedByString:@"|"];
         if (parts.count >= 4) {
             info.timestamp = [parts[0] longLongValue];
-            info.type = [parts[1] intValue];
+            info.platform = [parts[1] intValue];
             info.clientId = parts[2];
             info.clientName = parts[3];
         }
