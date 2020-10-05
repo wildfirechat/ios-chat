@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by dali on 2020/1/21.
-//  Copyright © 2020 Tom Lee. All rights reserved.
+//  Copyright © 2020 WildFireChat. All rights reserved.
 //
 #if WFCU_SUPPORT_VOIP
 #import "WFCUParticipantCollectionViewLayout.h"

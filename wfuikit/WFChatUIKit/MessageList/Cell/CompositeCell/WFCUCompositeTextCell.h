@@ -1,17 +1,17 @@
 //
-//  WFCUQuoteViewController.h
+//  WFCUCompositeTextCell.h
 //  WFChatUIKit
 //
 //  Created by Tom Lee on 2020/10/4.
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "WFCUCompositeBaseCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUQuoteViewController : UIViewController
-@property (nonatomic, assign)long long messageUid;
+@interface WFCUCompositeTextCell : WFCUCompositeBaseCell
+@property(nonatomic, strong)UILabel *contentLabel;
 @end
 
 NS_ASSUME_NONNULL_END

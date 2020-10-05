@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by Tom Lee on 2020/6/17.
-//  Copyright © 2020 Tom Lee. All rights reserved.
+//  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
 #import "WFCUCreateConferenceViewController.h"
