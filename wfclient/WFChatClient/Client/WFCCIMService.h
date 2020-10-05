@@ -148,8 +148,8 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_Windows = 3,
     PlatformType_OSX = 4,
     PlatformType_WEB = 5,
-    Platform_WX = 6,
-    Platform_Linux = 7
+    PlatformType_WX = 6,
+    PlatformType_Linux = 7
 } ;
 
 #pragma mark - 用户源

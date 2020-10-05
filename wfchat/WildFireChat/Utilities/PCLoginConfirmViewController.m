@@ -37,7 +37,7 @@
         case PlatformType_WEB:
             [label setText:@"确认浏览器登陆"];
             break;
-        case Platform_Linux:
+        case PlatformType_Linux:
             [label setText:@"确认 Linux 登陆"];
             break;
         default:
