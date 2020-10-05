@@ -590,7 +590,7 @@
         _multiSelectPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, self.backgroundView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
         _multiSelectPanel.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
         UIButton *deleteBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
-        [deleteBtn setTitle:@"Delete" forState:UIControlStateNormal];
+        [deleteBtn setTitle:WFCString(@"Delete") forState:UIControlStateNormal];
         [deleteBtn addTarget:self action:@selector(onDeleteMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
         [deleteBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [_multiSelectPanel addSubview:deleteBtn];
@@ -641,16 +641,25 @@
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *oneByOneAction = [UIAlertAction actionWithTitle:WFCString(@"Fwd1By1") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *oneByOneAction = [UIAlertAction actionWithTitle:@"逐条转发" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
         controller.messages = messages;
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
         [self.navigationController presentViewController:navi animated:YES completion:nil];
         
     }];
-    UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:WFCString(@"FwdAllIn1") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:@"合并转发" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCCompositeMessageContent *compositeContent = [[WFCCCompositeMessageContent alloc] init];
-        compositeContent.targetName = self.title;
+        if (self.conversation.type == Single_Type) {
+            WFCCUserInfo *myself = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+            compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", self.title, myself.displayName];
+        } else if (self.conversation.type == Group_Type) {
+            compositeContent.title = @"群的聊天记录";
+        } else if (self.conversation.type == Channel_Type) {
+            compositeContent.title = @"频道的聊天记录";
+        } else {
+            compositeContent.title = @"聊天记录";
+        }
         compositeContent.messages = messages;
         WFCCMessage *msg = [[WFCCMessage alloc] init];
         msg.content = compositeContent;

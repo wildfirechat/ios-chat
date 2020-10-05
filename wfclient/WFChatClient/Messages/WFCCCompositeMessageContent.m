@@ -15,7 +15,7 @@
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
-    payload.content = self.targetName;
+    payload.content = self.title;
 
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     NSMutableArray *arrays = [[NSMutableArray alloc] init];
@@ -72,6 +72,15 @@
         if (payload.extra.length) {
             [msgDict setObject:payload.extra forKey:@"ce"];
         }
+        if ([payload isKindOfClass:WFCCMediaMessagePayload.class]) {
+            WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
+            if (mediaPayload.mediaType) {
+                [msgDict setObject:@(mediaPayload.mediaType) forKey:@"mt"];
+            }
+            if (mediaPayload.remoteMediaUrl) {
+                [msgDict setObject:mediaPayload.remoteMediaUrl forKey:@"mru"];
+            }
+        }
 
         [arrays addObject:msgDict];
     }
@@ -85,7 +94,7 @@
 
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
-    self.targetName = payload.content;
+    self.title = payload.content;
 
     NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:payload.binaryContent];
     
@@ -107,7 +116,7 @@
             msg.status = [msgDict[@"status"] intValue];
             msg.serverTime = [msgDict[@"serverTime"] longLongValue];
             
-            WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+            WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
             payload.contentType = [msgDict[@"ctype"] intValue];
             payload.searchableContent = msgDict[@"csc"];
             payload.pushContent = msgDict[@"cpc"];
@@ -117,6 +126,8 @@
             payload.mentionedType = [msgDict[@"cmt"] intValue];
             payload.mentionedTargets = msgDict[@"cmts"];
             payload.extra = msgDict[@"ce"];
+            payload.mediaType = [msgDict[@"mt"] intValue];
+            payload.remoteMediaUrl = msgDict[@"mru"];
             
             msg.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
             [messages addObject:msg];
@@ -141,6 +152,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[聊天记录]";
+    return [NSString stringWithFormat:@"[聊天记录]:%@", self.title];
 }
 @end

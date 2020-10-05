@@ -364,6 +364,10 @@
 		2F56F6BB252A07AF00B829C4 /* WFCUCompositeBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6B9252A07AF00B829C4 /* WFCUCompositeBaseCell.m */; };
 		2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F56F6BD252A088100B829C4 /* WFCUCompositeTextCell.h */; };
 		2F56F6C0252A088100B829C4 /* WFCUCompositeTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6BE252A088100B829C4 /* WFCUCompositeTextCell.m */; };
+		2F56F6CA252AA14000B829C4 /* WFCUCompositeUnknownCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6C8252AA14000B829C4 /* WFCUCompositeUnknownCell.m */; };
+		2F56F6CB252AA14000B829C4 /* WFCUCompositeUnknownCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F56F6C9252AA14000B829C4 /* WFCUCompositeUnknownCell.h */; };
+		2F56F6CF252AAF5F00B829C4 /* WFCUCompositeImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6CD252AAF5F00B829C4 /* WFCUCompositeImageCell.m */; };
+		2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F56F6CE252AAF5F00B829C4 /* WFCUCompositeImageCell.h */; };
 		2F5EB43C22C2E21A00BC8C90 /* GroupManageTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */; };
 		2F5EB43D22C2E21A00BC8C90 /* GroupManageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB43B22C2E21A00BC8C90 /* GroupManageTableViewController.m */; };
 		2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB43E22C2E6BB00BC8C90 /* ManagerTableViewController.h */; };
@@ -769,6 +773,10 @@
 		2F56F6B9252A07AF00B829C4 /* WFCUCompositeBaseCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeBaseCell.m; sourceTree = "<group>"; };
 		2F56F6BD252A088100B829C4 /* WFCUCompositeTextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCompositeTextCell.h; sourceTree = "<group>"; };
 		2F56F6BE252A088100B829C4 /* WFCUCompositeTextCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeTextCell.m; sourceTree = "<group>"; };
+		2F56F6C8252AA14000B829C4 /* WFCUCompositeUnknownCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeUnknownCell.m; sourceTree = "<group>"; };
+		2F56F6C9252AA14000B829C4 /* WFCUCompositeUnknownCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCompositeUnknownCell.h; sourceTree = "<group>"; };
+		2F56F6CD252AAF5F00B829C4 /* WFCUCompositeImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCompositeImageCell.m; sourceTree = "<group>"; };
+		2F56F6CE252AAF5F00B829C4 /* WFCUCompositeImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCompositeImageCell.h; sourceTree = "<group>"; };
 		2F5EB43A22C2E21A00BC8C90 /* GroupManageTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupManageTableViewController.h; sourceTree = "<group>"; };
 		2F5EB43B22C2E21A00BC8C90 /* GroupManageTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupManageTableViewController.m; sourceTree = "<group>"; };
 		2F5EB43E22C2E6BB00BC8C90 /* ManagerTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ManagerTableViewController.h; sourceTree = "<group>"; };
@@ -1696,6 +1704,10 @@
 				2F56F6B9252A07AF00B829C4 /* WFCUCompositeBaseCell.m */,
 				2F56F6BD252A088100B829C4 /* WFCUCompositeTextCell.h */,
 				2F56F6BE252A088100B829C4 /* WFCUCompositeTextCell.m */,
+				2F56F6C9252AA14000B829C4 /* WFCUCompositeUnknownCell.h */,
+				2F56F6C8252AA14000B829C4 /* WFCUCompositeUnknownCell.m */,
+				2F56F6CE252AAF5F00B829C4 /* WFCUCompositeImageCell.h */,
+				2F56F6CD252AAF5F00B829C4 /* WFCUCompositeImageCell.m */,
 			);
 			path = CompositeCell;
 			sourceTree = "<group>";
@@ -1799,6 +1811,7 @@
 				2F551110217F5CC200F56C26 /* VideoPlayerKit.h in Headers */,
 				149B310F241E65D500B935D3 /* UIFont+YH.h in Headers */,
 				2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */,
+				2F56F6CB252AA14000B829C4 /* WFCUCompositeUnknownCell.h in Headers */,
 				2BDF57B724AD70C8003C1F08 /* DNFullImageButton.h in Headers */,
 				2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */,
 				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
@@ -1950,6 +1963,7 @@
 				2F5510F9217F5CC200F56C26 /* CCHNearCenterMapClusterer.h in Headers */,
 				2F55119A217F5CC200F56C26 /* UITextView+Placeholder.h in Headers */,
 				2BDF57B624AD70C8003C1F08 /* DNBadgeLabel.h in Headers */,
+				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
 				2BDF579724AD70C8003C1F08 /* DNAlbum.h in Headers */,
 				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
@@ -2193,6 +2207,7 @@
 				2F5510BA217F5CC200F56C26 /* WFCUGroupMemberTableViewController.m in Sources */,
 				2F3A6C1D219EE941009A8B4B /* WFCUStickerItem.m in Sources */,
 				2BDF579524AD70C8003C1F08 /* DNAsset.m in Sources */,
+				2F56F6CF252AAF5F00B829C4 /* WFCUCompositeImageCell.m in Sources */,
 				2BDF57A724AD70C8003C1F08 /* DNPhotoBrowser.m in Sources */,
 				2F5511DD217F5CC300F56C26 /* TYBaseAnimation.m in Sources */,
 				2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */,
@@ -2257,6 +2272,7 @@
 				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
 				2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */,
+				2F56F6CA252AA14000B829C4 /* WFCUCompositeUnknownCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
