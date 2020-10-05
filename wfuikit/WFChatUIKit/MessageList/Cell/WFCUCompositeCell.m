@@ -38,7 +38,7 @@
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCCompositeMessageContent *content = (WFCCCompositeMessageContent *)msgModel.message.content;
     
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.targetName font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
     
     CGSize contentSize = [WFCUUtilities getTextDrawingSize:[WFCUCompositeCell digestContent:content inConversation:msgModel.message.conversation] font:[UIFont systemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
     
@@ -91,11 +91,11 @@
     
     WFCCCompositeMessageContent *content = (WFCCCompositeMessageContent *)model.message.content;
     
-    self.targetNameLabel.text = content.targetName;
+    self.targetNameLabel.text = content.title;
     self.contentLabel.text = [self.class digestContent:content inConversation:model.message.conversation];
     
     CGFloat width = self.contentArea.frame.size.width;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.targetName font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
     
     CGSize contentSize = [WFCUUtilities getTextDrawingSize:self.contentLabel.text font:[UIFont systemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
     
