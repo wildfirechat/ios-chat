@@ -212,6 +212,10 @@
         int count = unreadCount.unread;
         [UIApplication sharedApplication].applicationIconBadgeNumber = count;
         
+        BOOL pcOnline = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos].count > 0;
+        BOOL muteWhenPcOnline = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
+        
+        
         for (WFCCMessage *msg in messages) {
             //当在后台活跃时收到新消息，需要弹出本地通知。有一种可能时客户端已经收到远程推送，然后由于voip/backgroud fetch在后台拉活了应用，此时会收到接收下来消息，因此需要避免重复通知
             if (([[NSDate date] timeIntervalSince1970] - (msg.serverTime - [WFCCNetworkService sharedInstance].serverDeltaTime)/1000) > 3) {
@@ -225,6 +229,15 @@
             int flag = (int)[msg.content.class performSelector:@selector(getContentFlags)];
             WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:msg.conversation];
             if((flag & 0x03) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+                
+            if (msg.status != Message_Status_Mentioned && msg.status != Message_Status_AllMentioned && [[WFCCIMService sharedWFCIMService] isGlobalSlient]) {
+                continue;
+            }
+                
+            if (msg.status != Message_Status_Mentioned && msg.status != Message_Status_AllMentioned && pcOnline && muteWhenPcOnline) {
+                continue;
+            }
+                
               UILocalNotification *localNote = [[UILocalNotification alloc] init];
               
               localNote.alertBody = [msg digest];
