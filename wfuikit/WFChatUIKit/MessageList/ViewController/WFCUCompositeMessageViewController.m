@@ -31,7 +31,7 @@
     
     [self setupTableHeaderView];
     
-    self.title = self.compositeContent.targetName;
+    self.title = self.compositeContent.title;
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];

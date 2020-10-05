@@ -8,6 +8,9 @@
 
 #import "WFCUCompositeBaseCell.h"
 #import "WFCUCompositeTextCell.h"
+#import "WFCUCompositeUnknownCell.h"
+#import "WFCUCompositeImageCell.h"
+
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 
@@ -32,15 +35,19 @@
 }
 
 + (instancetype)cellOfMessage:(WFCCMessage *)message {
+    WFCUCompositeBaseCell *cell;
     if ([message.content isKindOfClass:[WFCCTextMessageContent class]]) {
-        
-        WFCUCompositeTextCell *cell = [[WFCUCompositeTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([message.content class])];
-        for (UIView *view in cell.contentView.subviews) {
-            [view removeFromSuperview];
-        }
-        return cell;
+        cell = [[WFCUCompositeTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([message.content class])];
+    } else if([message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        cell = [[WFCUCompositeImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([message.content class])];
+    } else {
+        cell = [[WFCUCompositeUnknownCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([message.content class])];
     }
-    return nil;
+    
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
+    return cell;
 }
 
 + (CGFloat)heightForMessage:(WFCCMessage *)message {
