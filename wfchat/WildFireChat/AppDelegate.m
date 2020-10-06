@@ -69,6 +69,7 @@
     
     
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
+    [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];

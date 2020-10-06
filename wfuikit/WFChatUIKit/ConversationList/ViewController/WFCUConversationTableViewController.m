@@ -440,6 +440,10 @@
     if (@available(iOS 11.0, *)) {
         if (onlines.count) {
             self.tableView.tableHeaderView = self.pcSessionView;
+            if (![[NSUserDefaults standardUserDefaults] boolForKey:@"wfc_uikit_had_pc_session"]) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"wfc_uikit_had_pc_session"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
         } else {
             self.tableView.tableHeaderView = nil;
         }

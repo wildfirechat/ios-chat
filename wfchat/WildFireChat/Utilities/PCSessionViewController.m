@@ -8,8 +8,10 @@
 
 #import "PCSessionViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatUIKit/WFChatUIKit.h>
 #import "MBProgressHUD.h"
 #import "AppService.h"
+
 
 @interface PCSessionViewController ()
 @property(nonatomic, strong)UIButton *muteBtn;
@@ -56,6 +58,7 @@
     fileBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
     fileBtn.layer.cornerRadius = 35;
     fileBtn.layer.masksToBounds = YES;
+    [fileBtn addTarget:self action:@selector(onFileBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:fileBtn];
     UILabel *fileLabel = [[UILabel alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 410, 70, 15)];
     [fileLabel setText:@"传输文件"];
@@ -127,6 +130,7 @@
         [hud hideAnimated:YES afterDelay:1.f];
     }
 }
+
 - (void)onMuteBtn:(id)sender {
     BOOL pre = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
     __weak typeof(self)ws = self;
@@ -141,5 +145,15 @@
     } error:^(int error_code) {
         
     }];
+}
+
+- (void)onFileBtn:(id)sender {
+    if ([WFCUConfigManager globalManager].fileTransferId) {
+        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+        mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:[WFCUConfigManager globalManager].fileTransferId line:0];
+    
+        mvc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:mvc animated:YES];
+    }
 }
 @end
