@@ -7,7 +7,7 @@
 //
 
 #import "WFCCMessageContent.h"
-
+#import "WFCCQuoteInfo.h"
 /**
  文本消息
  */
@@ -36,4 +36,9 @@
  提醒对象，mentionedType 1时有效
  */
 @property (nonatomic, strong)NSArray<NSString *> *mentionedTargets;
+
+/**
+ 引用信息
+ */
+@property (nonatomic, strong)WFCCQuoteInfo *quoteInfo;
 @end

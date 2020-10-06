@@ -35,6 +35,8 @@
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
 
+#define CHAT_INPUT_QUOTE_PADDING 5
+
 @implementation WFCUMetionInfo
 - (instancetype)initWithType:(int)type target:(NSString *)target range:(NSRange)range {
     self = [super init];
@@ -69,6 +71,10 @@
 @property (nonatomic, strong)UIView *emojInputView;
 @property (nonatomic, strong)UIView *pluginInputView;
 
+@property (nonatomic, strong)UIView *quoteContainerView;
+@property (nonatomic, strong)UILabel *quoteLabel;
+@property (nonatomic, strong)UIButton *quoteDeleteBtn;
+
 @property(nonatomic, weak)id<WFCUChatInputBarDelegate> delegate;
 
 @property (nonatomic, strong)WFCUVoiceRecordView *recordView;
@@ -89,6 +95,8 @@
 @property (nonatomic, strong)UIColor *textInputViewTintColor;
 
 @property (nonatomic, assign)CGRect backupFrame;
+
+@property (nonatomic, strong)WFCCQuoteInfo *quoteInfo;
 @end
 
 @implementation WFCUChatInputBar
@@ -481,9 +489,20 @@
         if (self.textInputView.isFirstResponder) {
             [self.textInputView resignFirstResponder];
         }
+        
         [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        CGFloat diff = 0;
+        if (self.textInputView.frame.size.height != CHAT_INPUT_BAR_ICON_SIZE) {
+            diff = self.textInputView.frame.size.height - CHAT_INPUT_BAR_ICON_SIZE;
+        }
+        if (self.quoteContainerView && !self.quoteContainerView.hidden) {
+            self.quoteContainerView.hidden = YES;
+            diff += self.quoteContainerView.frame.size.height + CHAT_INPUT_QUOTE_PADDING;
+        }
+        [self extendUp:-diff];
     } else {
         [self.textInputView setHidden:NO];
+        self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
         [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
     }
@@ -493,6 +512,7 @@
     _emojInput = emojInput;
     if (emojInput) {
         [self.textInputView setHidden:NO];
+        self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
         self.textInputView.inputView = self.emojInputView;
         if (!self.textInputView.isFirstResponder) {
@@ -500,6 +520,9 @@
         }
         [self.textInputView reloadInputViews];
         [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
+            [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
+        }
     } else {
         [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     }
@@ -509,12 +532,17 @@
     _pluginInput = pluginInput;
     if (pluginInput) {
         [self.textInputView setHidden:NO];
+        self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
         self.textInputView.inputView = self.pluginInputView;
         if (!self.textInputView.isFirstResponder) {
             [self.textInputView becomeFirstResponder];
         }
         [self.textInputView reloadInputViews];
+        self.quoteContainerView.hidden = NO;
+        if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
+            [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
+        }
     }
 }
 
@@ -522,6 +550,7 @@
     _textInput = textInput;
     if (textInput) {
         [self.textInputView setHidden:NO];
+        self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
         self.textInputView.inputView = nil;
         if (!self.textInputView.isFirstResponder && _inputBarStatus == ChatInputBarKeyboardStatus) {
@@ -529,6 +558,9 @@
         }
         if (_inputBarStatus == ChatInputBarKeyboardStatus) {
             [self.textInputView reloadInputViews];
+        }
+        if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
+            [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
         }
     }
     
@@ -687,6 +719,96 @@
         return NO;
     }
 }
+- (void)clearQuoteInfo {
+    self.quoteInfo = nil;
+}
+- (void)onQuoteDelBtn:(id)sender {
+    if (self.quoteInfo.messageUid) {
+        [self clearQuoteInfo];
+        [self updateQuoteView:YES];
+    }
+}
+
+- (void)updateQuoteView:(BOOL)updateFrame {
+    if (self.inputBarStatus == ChatInputBarMuteStatus) {
+        return;
+    }
+    
+    if (self.inputBarStatus == ChatInputBarDefaultStatus || self.inputBarStatus == ChatInputBarRecordStatus) {
+        self.inputBarStatus = ChatInputBarKeyboardStatus;
+    }
+    
+    if (self.quoteInfo.messageUid) {
+        NSString *textContent = [NSString stringWithFormat:@"%@:%@", self.quoteInfo.userDisplayName, self.quoteInfo.messageDigest];
+        
+        CGFloat deleteBtnWidth = 10;
+        CGRect textViewFrame = self.textInputView.frame;
+        CGSize size = [WFCUUtilities getTextDrawingSize:textContent font:[UIFont systemFontOfSize:12] constrainedSize:CGSizeMake(textViewFrame.size.width-CHAT_INPUT_QUOTE_PADDING-CHAT_INPUT_QUOTE_PADDING-deleteBtnWidth-CHAT_INPUT_QUOTE_PADDING, 30)];
+        size.height += 4;
+        
+        self.quoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(CHAT_INPUT_QUOTE_PADDING, 0, textViewFrame.size.width-CHAT_INPUT_QUOTE_PADDING-CHAT_INPUT_QUOTE_PADDING-deleteBtnWidth, size.height)];
+        self.quoteLabel.font = [UIFont systemFontOfSize:12];
+        self.quoteLabel.textColor = [UIColor grayColor];
+        self.quoteLabel.text = textContent;
+        self.quoteLabel.numberOfLines = 0;
+        self.quoteDeleteBtn = [[UIButton alloc] initWithFrame:CGRectMake(textViewFrame.size.width-deleteBtnWidth-CHAT_INPUT_QUOTE_PADDING, (size.height-deleteBtnWidth)/2, deleteBtnWidth, deleteBtnWidth)];
+        [self.quoteDeleteBtn setTitle:@"x" forState:UIControlStateNormal];
+        [self.quoteDeleteBtn addTarget:self action:@selector(onQuoteDelBtn:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.quoteContainerView = [[UIView alloc] initWithFrame:CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y+textViewFrame.size.height+CHAT_INPUT_QUOTE_PADDING, textViewFrame.size.width, size.height)];
+        self.quoteContainerView.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.f];
+        
+        [self.quoteContainerView addSubview:self.quoteLabel];
+        [self.quoteContainerView addSubview:self.quoteDeleteBtn];
+        [self addSubview:self.quoteContainerView];
+        if (updateFrame) {
+            [self extendUp:(size.height + CHAT_INPUT_QUOTE_PADDING)];
+        }
+    } else {
+        CGFloat quoteHeight = self.quoteContainerView.frame.size.height;
+        [self.quoteLabel removeFromSuperview];
+        self.quoteLabel = nil;
+        [self.quoteDeleteBtn removeFromSuperview];
+        self.quoteDeleteBtn = nil;
+        [self.quoteContainerView removeFromSuperview];
+        self.quoteContainerView = nil;
+        if (updateFrame) {
+            [self extendUp: -quoteHeight - CHAT_INPUT_QUOTE_PADDING];
+        }
+    }
+}
+
+- (BOOL)appendQuote:(long long)messageUid {
+    if (self.quoteInfo) {
+        [self clearQuoteInfo];
+        [self updateQuoteView:NO];
+    }
+    self.quoteInfo = [[WFCCQuoteInfo alloc] initWithMessageUid:messageUid];
+    [self updateQuoteView:YES];
+    return self.quoteInfo != nil;
+}
+
+- (void)extendUp:(CGFloat)diff {
+    CGRect baseFrame = self.frame;
+    CGRect voiceFrame = self.voiceSwitchBtn.frame;
+    CGRect emojFrame = self.emojSwitchBtn.frame;
+    CGRect extendFrame = self.pluginSwitchBtn.frame;
+    
+    baseFrame.size.height += diff;
+    baseFrame.origin.y -= diff;
+    
+    voiceFrame.origin.y += diff;
+    emojFrame.origin.y += diff;
+    extendFrame.origin.y += diff;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.frame = baseFrame;
+        self.voiceSwitchBtn.frame = voiceFrame;
+        self.emojSwitchBtn.frame = emojFrame;
+        self.pluginSwitchBtn.frame = extendFrame;
+    }];
+    [self.delegate willChangeFrame:baseFrame withDuration:0.5 keyboardShowing:YES];
+}
 
 - (void)paste:(id)sender {
     [self.textInputView paste:sender];
@@ -747,8 +869,10 @@
 }
 
 - (void)sendAndCleanTextView {
-    [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos];
+    [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos withQuoteInfo:self.quoteInfo];
     self.textInputView.text = nil;
+    [self clearQuoteInfo];
+    [self updateQuoteView:NO];
     [self.mentionInfos removeAllObjects];
     [self changeTextViewHeight:32 needUpdateText:NO updateRange:NSMakeRange(0, 0)];
 }
@@ -865,25 +989,34 @@
     CGRect extendFrame = self.pluginSwitchBtn.frame;
     
     CGFloat diff = 0;
+    CGFloat quoteHeight = 0;
+    if (self.quoteContainerView) {
+        quoteHeight = self.quoteContainerView.frame.size.height + CHAT_INPUT_QUOTE_PADDING;
+    }
     if (height <= 32.f) {
         tvFrame.size.height = 32.f;
-        diff = (48.f - baseFrame.size.height);
+        diff = (48.f - baseFrame.size.height + quoteHeight);
         baseFrame.size.height = 48.f;
     } else if (height > 32.f && height < 50.f) {
         tvFrame.size.height = 50.f;
-        diff = (66.f - baseFrame.size.height);
+        diff = (66.f - baseFrame.size.height + quoteHeight);
         baseFrame.size.height = 66.f;
     } else {
         tvFrame.size.height = 65.f;
-        diff = (81.f - baseFrame.size.height);
+        diff = (81.f - baseFrame.size.height + quoteHeight);
         baseFrame.size.height = 81.f;
+    }
+    if (self.quoteContainerView) {
+        baseFrame.size.height += quoteHeight;
+        CGRect quoteFrame = self.quoteContainerView.frame;
+        quoteFrame.origin.y = tvFrame.origin.y + tvFrame.size.height + CHAT_INPUT_QUOTE_PADDING;
+        self.quoteContainerView.frame = quoteFrame;
     }
     
     baseFrame.origin.y -= diff;
     voiceFrame.origin.y += diff;
     emojFrame.origin.y += diff;
     extendFrame.origin.y += diff;
-    
     
     float duration = 0.5f;
     [self.delegate willChangeFrame:baseFrame withDuration:duration keyboardShowing:YES];

@@ -25,14 +25,16 @@
 @optional
 - (void)didTapReceiptView:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
 - (void)didDoubleTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
+- (void)didTapQuoteLabel:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model;
 @end
 
 @interface WFCUMessageCellBase : UICollectionViewCell
 @property (nonatomic, strong)UILabel *timeLabel;
+@property (nonatomic, strong)UIView *lastReadContainerView;
 @property (nonatomic, strong)WFCUMessageModel *model;
 @property (nonatomic, weak)id<WFCUMessageCellDelegate> delegate;
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width;
-+ (CGFloat)hightForTimeLabel:(WFCUMessageModel *)msgModel;
++ (CGFloat)hightForHeaderArea:(WFCUMessageModel *)msgModel;
 
 - (void)onTaped:(id)sender;
 - (void)onLongPressed:(id)sender;
