@@ -61,7 +61,7 @@
             [msgDict setObject:payload.content forKey:@"cc"];
         }
         if (payload.binaryContent.length) {
-            [msgDict setObject:payload.binaryContent forKey:@"cbc"];
+            [msgDict setObject:[payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed] forKey:@"cbc"];
         }
         if (payload.mentionedType) {
             [msgDict setObject:@(payload.mentionedType) forKey:@"cmt"];
@@ -87,7 +87,9 @@
     [dataDict setObject:arrays forKey:@"ms"];
     
 
-    payload.binaryContent = [NSKeyedArchiver archivedDataWithRootObject:dataDict];
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                            options:kNilOptions
+                                                              error:nil];
 
     return payload;
 }
@@ -96,10 +98,13 @@
     [super decode:payload];
     self.title = payload.content;
 
-    NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:payload.binaryContent];
+    NSError *__error = nil;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
+                                                               options:kNilOptions
+                                                                 error:&__error];
     
     NSMutableArray<WFCCMessage *> *messages = [[NSMutableArray alloc] init];
-    if (dictionary && [dictionary[@"ms"] isKindOfClass:[NSArray class]]) {
+    if (!__error && dictionary && [dictionary[@"ms"] isKindOfClass:[NSArray class]]) {
         NSArray *arrays = (NSArray *)dictionary[@"ms"];
         for (NSDictionary *msgDict in arrays) {
             WFCCMessage *msg = [[WFCCMessage alloc] init];
@@ -122,7 +127,7 @@
             payload.pushContent = msgDict[@"cpc"];
             payload.pushData = msgDict[@"cpd"];
             payload.content = msgDict[@"cc"];
-            payload.binaryContent = msgDict[@"cbc"];
+            payload.binaryContent = [[NSData alloc] initWithBase64EncodedString:msgDict[@"cbc"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
             payload.mentionedType = [msgDict[@"cmt"] intValue];
             payload.mentionedTargets = msgDict[@"cmts"];
             payload.extra = msgDict[@"ce"];
