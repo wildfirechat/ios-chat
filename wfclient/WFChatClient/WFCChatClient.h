@@ -61,6 +61,7 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCThingsDataContent.h>
 #import <WFChatClient/WFCCThingsLostEventContent.h>
 #import <WFChatClient/WFCCConferenceInviteMessageContent.h>
+#import <WFChatClient/WFCCCompositeMessageContent.h>
 #import <WFChatClient/WFCCConversation.h>
 #import <WFChatClient/WFCCConversationInfo.h>
 #import <WFChatClient/WFCCConversationSearchInfo.h>
@@ -76,5 +77,6 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCDeliveryReport.h>
 #import <WFChatClient/WFCCReadReport.h>
 #import <WFChatClient/WFCCFileRecord.h>
+#import <WFChatClient/WFCCQuoteInfo.h>
 #import <WFChatClient/WFCCEnums.h>
 

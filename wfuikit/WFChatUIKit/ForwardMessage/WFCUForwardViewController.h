@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUForwardViewController : UIViewController
 @property (nonatomic, strong) WFCCMessage *message;
+//可以转发一条或者转发多条
+@property (nonatomic, strong) NSArray<WFCCMessage *> *messages;
 @end
 
 NS_ASSUME_NONNULL_END
