@@ -211,6 +211,13 @@ static NSString *wfcstar = @"☆";
         userIdList = self.candidateUsers;
     } else {
         userIdList = [[WFCCIMService sharedWFCIMService] getMyFriendList:forceLoadFromRemote];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"wfc_uikit_had_pc_session"]) {
+            if (![userIdList containsObject:[WFCUConfigManager globalManager].fileTransferId]) {
+                NSMutableArray *ma = [userIdList mutableCopy];
+                [ma addObject:[WFCUConfigManager globalManager].fileTransferId];
+                userIdList = [ma copy];
+            }
+        }
     }
     self.dataArray = [[[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil] mutableCopy];
     self.needSort = YES;

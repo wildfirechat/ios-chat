@@ -28,3 +28,5 @@ NSString *ICE_PASSWORD = @"wfchat";
 //用户协议和隐私政策，上线前请替换成您自己的内容
 NSString *USER_PRIVACY_URL = @"https://www.wildfirechat.cn/wildfirechat_user_privacy.html";
 NSString *USER_AGREEMENT_URL = @"https://www.wildfirechat.cn/wildfirechat_user_agreement.html";
+
+NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
