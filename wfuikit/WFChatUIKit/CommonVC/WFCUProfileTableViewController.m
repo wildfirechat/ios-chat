@@ -278,83 +278,8 @@
     [self.headerCell addSubview:self.aliasLabel];
     self.headerCells = [NSMutableArray new];
     [self.headerCells addObject:self.headerCell];
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
-        alisaCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
-        [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
-        [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
-        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [alisaCell.contentView addSubview:btn];
-        [self showSeparatorLine:alisaCell];
-        [self.headerCells addObject:alisaCell];
-
-//        if (self.userInfo.mobile.length > 0) {
-//            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
-//            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
-//            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
-//            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
-//            [self.headerCell addSubview:self.mobileLabel];
-//
-//        }
-        
-        if (self.userInfo.email.length > 0) {
-            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            cell.textLabel.text = self.userInfo.email;
-            [self.cells addObject:cell];
-        }
-        
-        if (self.userInfo.address.length) {
-            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            cell.textLabel.text = self.userInfo.address;
-            [self.cells addObject:cell];
-        }
-        
-        if (self.userInfo.company.length) {
-            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            cell.textLabel.text = self.userInfo.company;
-            [self.cells addObject:cell];
-        }
-        
-        if (self.userInfo.social.length) {
-            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            cell.textLabel.text = self.userInfo.social;
-            [self.cells addObject:cell];
-        }
-    }
     
-    if (self.fromConversation.type == Group_Type) {
-        self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
-        [self.cells addObject:self.userMessagesCell];
-    }
-    
-    if(NSClassFromString(@"SDTimeLineTableViewController")) {
-        self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
-        for (UIView *subView in self.momentCell.subviews) {
-               [subView removeFromSuperview];
-        }
-        
-        UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
-        [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
-        [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-        momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-        momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
-        if (@available(iOS 14, *)) {
-            [self.momentCell.contentView addSubview:momentButton];
-        } else {
-            [self.momentCell addSubview:momentButton];
-        }
-        self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+    if (self.userInfo.type == 1) {
         self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         for (UIView *subView in self.sendMessageCell.subviews) {
             [subView removeFromSuperview];
@@ -371,45 +296,140 @@
         } else {
             [self.sendMessageCell addSubview:btn];
         }
-        [self showSeparatorLine:self.sendMessageCell];
-        
-#if WFCU_SUPPORT_VOIP
-        self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        for (UIView *subView in self.voipCallCell.subviews) {
-            [subView removeFromSuperview];
-        }
-        btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-        [btn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
-        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-        [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
-        [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
-        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-        if (@available(iOS 14, *)) {
-            [self.voipCallCell.contentView addSubview:btn];
-        } else {
-            [self.voipCallCell addSubview:btn];
-        }
-#endif
-    } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
-        
     } else {
-        self.addFriendCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        for (UIView *subView in self.addFriendCell.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
-        [btn setTitle:WFCString(@"AddFriend") forState:UIControlStateNormal];
-        [btn setBackgroundColor:[UIColor greenColor]];
-        [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
-        btn.layer.cornerRadius = 5.f;
-        btn.layer.masksToBounds = YES;
-        if (@available(iOS 14, *)) {
-            [self.addFriendCell.contentView addSubview:btn];
-        } else {
-            [self.addFriendCell addSubview:btn];
+        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+            UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
+            alisaCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
+            [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
+            [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
+            btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            [alisaCell.contentView addSubview:btn];
+            [self showSeparatorLine:alisaCell];
+            [self.headerCells addObject:alisaCell];
+
+    //        if (self.userInfo.mobile.length > 0) {
+    //            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
+    //            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+    //            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
+    //            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
+    //            [self.headerCell addSubview:self.mobileLabel];
+    //
+    //        }
+            
+            if (self.userInfo.email.length > 0) {
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                cell.textLabel.text = self.userInfo.email;
+                [self.cells addObject:cell];
+            }
+            
+            if (self.userInfo.address.length) {
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                cell.textLabel.text = self.userInfo.address;
+                [self.cells addObject:cell];
+            }
+            
+            if (self.userInfo.company.length) {
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                cell.textLabel.text = self.userInfo.company;
+                [self.cells addObject:cell];
+            }
+            
+            if (self.userInfo.social.length) {
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                cell.textLabel.text = self.userInfo.social;
+                [self.cells addObject:cell];
+            }
         }
         
+        if (self.fromConversation.type == Group_Type) {
+            self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+            self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
+            [self.cells addObject:self.userMessagesCell];
+        }
+        
+        if(NSClassFromString(@"SDTimeLineTableViewController")) {
+            self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
+            for (UIView *subView in self.momentCell.subviews) {
+                   [subView removeFromSuperview];
+            }
+            
+            UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
+            [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
+            [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+            momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
+            if (@available(iOS 14, *)) {
+                [self.momentCell.contentView addSubview:momentButton];
+            } else {
+                [self.momentCell addSubview:momentButton];
+            }
+            self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+            self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+            for (UIView *subView in self.sendMessageCell.subviews) {
+                [subView removeFromSuperview];
+            }
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+            [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+            [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
+            [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+            [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
+            if (@available(iOS 14, *)) {
+                [self.sendMessageCell.contentView addSubview:btn];
+            } else {
+                [self.sendMessageCell addSubview:btn];
+            }
+            [self showSeparatorLine:self.sendMessageCell];
+            
+    #if WFCU_SUPPORT_VOIP
+            self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+            for (UIView *subView in self.voipCallCell.subviews) {
+                [subView removeFromSuperview];
+            }
+            btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+            [btn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
+            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+            [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
+            [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+            if (@available(iOS 14, *)) {
+                [self.voipCallCell.contentView addSubview:btn];
+            } else {
+                [self.voipCallCell addSubview:btn];
+            }
+    #endif
+        } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
+            
+        } else {
+            self.addFriendCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+            for (UIView *subView in self.addFriendCell.subviews) {
+                [subView removeFromSuperview];
+            }
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
+            [btn setTitle:WFCString(@"AddFriend") forState:UIControlStateNormal];
+            [btn setBackgroundColor:[UIColor greenColor]];
+            [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
+            btn.layer.cornerRadius = 5.f;
+            btn.layer.masksToBounds = YES;
+            if (@available(iOS 14, *)) {
+                [self.addFriendCell.contentView addSubview:btn];
+            } else {
+                [self.addFriendCell addSubview:btn];
+            }
+            
+        }
     }
     [self.tableView reloadData];
 }
@@ -510,7 +530,10 @@
         return self.cells.count;
     } else {
         if (self.sendMessageCell) {
-            return 2;
+            if (self.voipCallCell) {
+                return 2;
+            }
+            return 1;
         } else {
             return 1;
         }
