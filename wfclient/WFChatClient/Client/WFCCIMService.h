@@ -281,6 +281,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)setConversation:(WFCCConversation *)conversation
               timestamp:(long long)timestamp;
 
+/**
+ 获取会话列表第一条未读消息Id
+ 
+ @param conversation 会话
+ 
+ @return 会话中最早一条未读消息Id
+ */
+- (long)getFirstUnreadMessageId:(WFCCConversation *)conversation;
+
 #pragma mark - 未读数相关
 /**
  获取指定类型会话的未读数
