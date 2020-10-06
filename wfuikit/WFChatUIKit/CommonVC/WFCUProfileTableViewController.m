@@ -23,7 +23,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUUserMessageListViewController.h"
 
-@interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
+@interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
@@ -94,37 +94,129 @@
 }
 
 - (void)onRightBtn:(id)sender {
-    NSString *title;
-    UIActionSheet *actionSheet;
+    __weak typeof(self)ws = self;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    NSString *friendTitle;
-    NSString *blacklistTitle;
-    NSString *favTitle;
-    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-        friendTitle = WFCString(@"DeleteFriend");
-        if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
-            favTitle = @"取消星标好友";
-        } else {
-            favTitle = @"设置星标好友";
-        }
-    } else {
-        friendTitle = WFCString(@"AddFriend");
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
+    }];
+    [actionSheet addAction:actionCancel];
+    
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+        UIAlertAction *deleteFriendAction = [UIAlertAction actionWithTitle:WFCString(@"DeleteFriend") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.label.text = @"处理中...";
+            [hud showAnimated:YES];
+            
+            [[WFCCIMService sharedWFCIMService] deleteFriend:ws.userId success:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [hud hideAnimated:YES];
+
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理成功";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
+                });
+            } error:^(int error_code) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [hud hideAnimated:YES];
+
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = @"处理失败";
+                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                    [hud hideAnimated:YES afterDelay:1.f];
+                });
+            }];
+        }];
+        
+        [actionSheet addAction:deleteFriendAction];
+    } else {
+        UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"AddFriend") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
+            vc.userId = ws.userId;
+            [ws.navigationController pushViewController:vc animated:YES];
+        }];
+        [actionSheet addAction:addFriendAction];
     }
     
     if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
-        blacklistTitle = WFCString(@"RemoveFromBlacklist");
+        UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"RemoveFromBlacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.label.text = @"处理中...";
+            [hud showAnimated:YES];
+            
+            [[WFCCIMService sharedWFCIMService] setBlackList:ws.userId isBlackListed:NO success:^{
+                [hud hideAnimated:YES];
+
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = @"处理成功";
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            } error:^(int error_code) {
+                [hud hideAnimated:YES];
+
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = @"处理失败";
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            }];
+        }];
+        [actionSheet addAction:addFriendAction];
     } else {
-        blacklistTitle = WFCString(@"Add2Blacklist");
+        UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"Add2Blacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.label.text = @"处理中...";
+            [hud showAnimated:YES];
+            
+            [[WFCCIMService sharedWFCIMService] setBlackList:ws.userId isBlackListed:YES success:^{
+                [hud hideAnimated:YES];
+
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = @"处理成功";
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            } error:^(int error_code) {
+                [hud hideAnimated:YES];
+
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = @"处理失败";
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            }];
+        }];
+        [actionSheet addAction:addFriendAction];
     }
     
-    if (favTitle) {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), favTitle, nil];
-    } else {
-        actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:friendTitle otherButtonTitles:blacklistTitle, WFCString(@"SetAlias"), nil];
+    
+    
+    UIAlertAction *aliasAction = [UIAlertAction actionWithTitle:WFCString(@"SetAlias") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [ws setFriendNote];
+    }];
+    [actionSheet addAction:aliasAction];
+    
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
+        if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
+            UIAlertAction *cancelStarAction = [UIAlertAction actionWithTitle:@"取消星标好友" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [ws setFavUser];
+            }];
+            [actionSheet addAction:cancelStarAction];
+        } else {
+            UIAlertAction *setStarAction = [UIAlertAction actionWithTitle:@"设置星标好友" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [ws setFavUser];
+            }];
+            [actionSheet addAction:setStarAction];
+        }
     }
     
-    [actionSheet showInView:self.view];
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 - (void)loadData {
     self.cells = [[NSMutableArray alloc] init];
@@ -504,7 +596,6 @@
     }
 }
 
-#pragma mark -  UIActionSheetDelegate <NSObject>
 - (void)setFriendNote {
     WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
     NSString *previousAlias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
@@ -561,92 +652,7 @@
         });
     }];
 }
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 0) {// friend
-        if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.label.text = @"处理中...";
-            [hud showAnimated:YES];
-            
-            [[WFCCIMService sharedWFCIMService] deleteFriend:self.userId success:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [hud hideAnimated:YES];
 
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.mode = MBProgressHUDModeText;
-                    hud.label.text = @"处理成功";
-                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                    [hud hideAnimated:YES afterDelay:1.f];
-                });
-            } error:^(int error_code) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [hud hideAnimated:YES];
-
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.mode = MBProgressHUDModeText;
-                    hud.label.text = @"处理失败";
-                    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                    [hud hideAnimated:YES afterDelay:1.f];
-                });
-            }];
-        } else {
-            WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
-            vc.userId = self.userId;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-    } else if(buttonIndex == 1) {// blacklist
-        if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
-            //0 取消屏蔽
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.label.text = @"处理中...";
-            [hud showAnimated:YES];
-            
-            [[WFCCIMService sharedWFCIMService] setBlackList:self.userId isBlackListed:NO success:^{
-                [hud hideAnimated:YES];
-
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理成功";
-                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                [hud hideAnimated:YES afterDelay:1.f];
-            } error:^(int error_code) {
-                [hud hideAnimated:YES];
-
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理失败";
-                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                [hud hideAnimated:YES afterDelay:1.f];
-            }];
-        } else {
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.label.text = @"处理中...";
-            [hud showAnimated:YES];
-            
-            [[WFCCIMService sharedWFCIMService] setBlackList:self.userId isBlackListed:YES success:^{
-                [hud hideAnimated:YES];
-
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理成功";
-                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                [hud hideAnimated:YES afterDelay:1.f];
-            } error:^(int error_code) {
-                [hud hideAnimated:YES];
-
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理失败";
-                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                [hud hideAnimated:YES afterDelay:1.f];
-            }];
-        }
-    } else if(buttonIndex == 2) {// alias
-        [self setFriendNote];
-    } else if(buttonIndex == 3) {// fav
-        [self setFavUser];
-    }
-}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
