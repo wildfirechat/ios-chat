@@ -19,6 +19,8 @@
 @property (nonatomic, assign)BOOL voicePlaying;
 @property (nonatomic, assign)BOOL highlighted;
 
+@property (nonatomic, assign)BOOL lastReadMessage;
+
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *deliveryDict;
 @property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *readDict;
 

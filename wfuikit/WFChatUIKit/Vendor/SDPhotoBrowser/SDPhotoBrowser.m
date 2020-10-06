@@ -211,7 +211,12 @@
         NSIndexPath *path = [NSIndexPath indexPathForItem:currentIndex inSection:0];
         sourceView = [view cellForItemAtIndexPath:path];
     }else {
-        sourceView = self.sourceImagesContainerView.subviews[0];
+        if (self.sourceImagesContainerView.subviews.count) {
+            sourceView = self.sourceImagesContainerView.subviews[0];
+        } else {
+            sourceView = self.sourceImagesContainerView;
+        }
+        
     }
     
     UIImageView *tempView = [[UIImageView alloc] init];
@@ -324,7 +329,12 @@
         NSIndexPath *path = [NSIndexPath indexPathForItem:self.currentImageIndex inSection:0];
         sourceView = [view cellForItemAtIndexPath:path];
     }else {
-        sourceView = self.sourceImagesContainerView.subviews[0];
+        if (self.sourceImagesContainerView.subviews.count) {
+            sourceView = self.sourceImagesContainerView.subviews[0];
+        } else {
+            sourceView = self.sourceImagesContainerView;
+        }
+        
     }
     CGRect rect = [self.sourceImagesContainerView convertRect:sourceView.frame toView:self];
     
