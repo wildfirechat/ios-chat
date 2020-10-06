@@ -127,7 +127,10 @@
             payload.pushContent = msgDict[@"cpc"];
             payload.pushData = msgDict[@"cpd"];
             payload.content = msgDict[@"cc"];
-            payload.binaryContent = [[NSData alloc] initWithBase64EncodedString:msgDict[@"cbc"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            if (msgDict[@"cbc"]) {
+                payload.binaryContent = [[NSData alloc] initWithBase64EncodedString:msgDict[@"cbc"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            }
+            
             payload.mentionedType = [msgDict[@"cmt"] intValue];
             payload.mentionedTargets = msgDict[@"cmts"];
             payload.extra = msgDict[@"ce"];
