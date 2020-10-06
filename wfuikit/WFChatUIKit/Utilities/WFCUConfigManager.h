@@ -42,6 +42,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, strong)UIColor *separateColor;
 
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
+
+@property(nonatomic, strong)NSString *fileTransferId;
 @end
 
 NS_ASSUME_NONNULL_END
