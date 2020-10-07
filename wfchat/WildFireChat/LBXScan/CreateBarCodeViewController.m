@@ -144,7 +144,7 @@
     if (groupInfo.portrait.length) {
         self.qrLogo = groupInfo.portrait;
     } else {
-        NSString *filePath = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:50 defaultUserPortrait:^UIImage *(NSString *userId) {
+        NSString *filePath = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:50 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
             return [UIImage imageNamed:@"PersonalChat"];
         }];
         self.qrLogo = filePath;

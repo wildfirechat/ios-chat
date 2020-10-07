@@ -389,12 +389,15 @@ static NSLock *wfcImageLock;
 //如果已经生成了，会立即返回地址。如果没有生成，会返回空，然后生成之后通知GroupPortraitChanged
 + (NSString *)getGroupGridPortrait:(NSString *)groupId
                              width:(int)width
+                generateIfNotExist:(BOOL)generateIfNotExist
                defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
     //Setp1 检查是否有此群组的记录
     NSString *path = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generated_portrait_%@_%d", groupId, width]];
     
     if (!path.length) { //记录不存在，生成
-        [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+        if (generateIfNotExist) {
+            [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+        }
     } else { //记录存在
         //修正沙盒路径
         path = [WFCCUtilities getSendBoxFilePath:path];
@@ -402,46 +405,50 @@ static NSLock *wfcImageLock;
         //检查文件是否存在
         NSFileManager* fileManager = [NSFileManager defaultManager];
         if ([fileManager fileExistsAtPath:path]) { //文件存在
-            [[WFCCIMService sharedWFCIMService] getGroupInfo:groupId refresh:NO success:^(WFCCGroupInfo *groupInfo) {
-                //分析文件名，获取更新时间，hash值
-                //Path 格式为 groupId-updatetime-width-hash
-                NSString *str = path.lastPathComponent;
-                str = [str substringFromIndex:groupId.length];
-                NSArray *arr = [str componentsSeparatedByString:@"-"];
-                long long timestamp = [arr[1] longLongValue];
-                
-                
-                //检查群组日期，超过7天，或生成之后群组有更新，检查头像是否有变化是否需要重新生成
-                long long now = [[[NSDate alloc] init] timeIntervalSince1970];
-                if (timestamp + 7 * 24 * 3600 < now || timestamp*1000 < groupInfo.updateTimestamp) {
-                    [[WFCCIMService sharedWFCIMService] getGroupMembers:groupId refresh:NO success:^(NSString *groupId, NSArray<WFCCGroupMember *> *members) {
-                        if (!members.count) {
-                            return;
-                        }
-                        
-                        NSString *fullPath = @"";
-                        for (int i = 0; i < MIN(members.count, 9); i++) {
-                            NSString *userId = members[i].memberId;
-                            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-                            fullPath = [NSString stringWithFormat:@"%@%@", fullPath, userInfo.portrait ? userInfo.portrait : userId];
-                        }
-                        
-                        NSString *mdt = [WFCCUtilities rf_EncryptMD5:fullPath];
-                        if (![mdt isEqualToString:arr[3]]) {
-                            [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
-                        }
-                    } error:^(int errorCode) {
-                        //log here
-                    }];
-                }
-                
-            } error:^(int errorCode) {
-                //log here
-            }];
-            
+            if (generateIfNotExist) {
+                [[WFCCIMService sharedWFCIMService] getGroupInfo:groupId refresh:NO success:^(WFCCGroupInfo *groupInfo) {
+                    //分析文件名，获取更新时间，hash值
+                    //Path 格式为 groupId-updatetime-width-hash
+                    NSString *str = path.lastPathComponent;
+                    str = [str substringFromIndex:groupId.length];
+                    NSArray *arr = [str componentsSeparatedByString:@"-"];
+                    long long timestamp = [arr[1] longLongValue];
+                    
+                    
+                    //检查群组日期，超过7天，或生成之后群组有更新，检查头像是否有变化是否需要重新生成
+                    long long now = [[[NSDate alloc] init] timeIntervalSince1970];
+                    if (timestamp + 7 * 24 * 3600 < now || timestamp*1000 < groupInfo.updateTimestamp) {
+                        [[WFCCIMService sharedWFCIMService] getGroupMembers:groupId refresh:NO success:^(NSString *groupId, NSArray<WFCCGroupMember *> *members) {
+                            if (!members.count) {
+                                return;
+                            }
+                            
+                            NSString *fullPath = @"";
+                            for (int i = 0; i < MIN(members.count, 9); i++) {
+                                NSString *userId = members[i].memberId;
+                                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                                fullPath = [NSString stringWithFormat:@"%@%@", fullPath, userInfo.portrait ? userInfo.portrait : userId];
+                            }
+                            
+                            NSString *mdt = [WFCCUtilities rf_EncryptMD5:fullPath];
+                            if (![mdt isEqualToString:arr[3]]) {
+                                [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+                            }
+                        } error:^(int errorCode) {
+                            //log here
+                        }];
+                    }
+                    
+                } error:^(int errorCode) {
+                    //log here
+                }];
+            }
+
             return path;
         } else { //文件不存在
-            [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+            if (generateIfNotExist) {
+                [WFCCUtilities generateNewGroupPortrait:groupId width:width defaultUserPortrait:defaultUserPortraitBlock];
+            }
         }
     }
     return nil;

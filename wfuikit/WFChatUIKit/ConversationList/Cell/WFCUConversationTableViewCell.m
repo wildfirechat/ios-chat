@@ -77,7 +77,7 @@
         [self.potraitView setImage:[UIImage imageNamed:@"group_default_portrait"]];
         
         
-        NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 defaultUserPortrait:^UIImage *(NSString *userId) {
+        NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
             return [UIImage imageNamed:@"PersonalChat"];
         }];
         
