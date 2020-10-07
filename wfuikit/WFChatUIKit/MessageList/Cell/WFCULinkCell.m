@@ -42,7 +42,7 @@
     [super setModel:model];
     
     WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)model.message.content;
-    CGFloat width = self.bounds.size.width;
+    CGFloat width = self.contentArea.bounds.size.width;
     CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 50)];
     
     CGFloat contentWidth = width - 56;

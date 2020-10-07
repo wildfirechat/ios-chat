@@ -12,8 +12,6 @@
 //此处id要与开发者中心创建时一致
 #define WFC_SHARE_APP_GROUP_ID @"group.cn.wildfirechat.messanger"
 
-#define WFC_SHARE_BACKUPED_APP_SERVER_COOKIES @"wfc_share_app_cookies"
-
 #define WFC_SHARE_BACKUPED_CONVERSATION_LIST @"wfc_share_conversation_list"
 
 #define WFC_SHARE_BACKUPED_GROUP_GRID_PORTRAIT_PATH @"group_grid_portrait"
