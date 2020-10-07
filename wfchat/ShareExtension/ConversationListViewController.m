@@ -53,12 +53,22 @@
 
 - (void)sendTo:(SharedConversation *)conversation {
     __weak typeof(self)ws = self;
-    [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
-        [ws showSuccess];
-    } error:^(NSString * _Nonnull message) {
-        NSLog(@"send msg failure %@", message);
-        [ws showFailure];
-    }];
+    if (self.textMessageContent.length) {
+        [[ShareAppService sharedAppService] sendTextMessage:conversation text:self.textMessageContent success:^(NSDictionary * _Nonnull dict) {
+            [ws showSuccess];
+        } error:^(NSString * _Nonnull message) {
+            [ws showFailure];
+        }];
+    } else if(self.url.length) {
+        [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
+            [ws showSuccess];
+        } error:^(NSString * _Nonnull message) {
+            NSLog(@"send msg failure %@", message);
+            [ws showFailure];
+        }];
+    } else {
+        
+    }
 }
 
 - (void)showSuccess {

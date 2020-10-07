@@ -53,6 +53,21 @@ static ShareAppService *sharedSingleton = nil;
          error:errorBlock];
 }
 
+- (void)sendTextMessage:(SharedConversation *)conversation text:(NSString *)text success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
+    [self post:@"/messages/send"
+          data:@{@"type":@(conversation.type),
+                 @"target":conversation.target,
+                 @"line":@(conversation.line),
+                 @"content_type":@(1),
+                 @"content_searchable":text
+          }
+       success:successBlock
+         error:errorBlock];
+}
+
+- (void)sendImageMessage:(SharedConversation *)conversation mediaUrl:(NSString *)mediaUrl thubnail:(UIImage *)thubnail success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
+    
+}
 
 - (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
