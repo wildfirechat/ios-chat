@@ -116,6 +116,8 @@
 		2F3A6C1B219EE941009A8B4B /* WFCUFaceButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C15219EE941009A8B4B /* WFCUFaceButton.h */; };
 		2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3A6C16219EE941009A8B4B /* WFCUStickerItem.h */; };
 		2F3A6C1D219EE941009A8B4B /* WFCUStickerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3A6C17219EE941009A8B4B /* WFCUStickerItem.m */; };
+		2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F444879252D72D5007A570E /* WFCULinkCell.m */; };
+		2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F44487A252D72D5007A570E /* WFCULinkCell.h */; };
 		2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F535BFF25296E6600C9AF09 /* WFCUQuoteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */; };
 		2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F535BFE25296E6600C9AF09 /* WFCUQuoteViewController.m */; };
@@ -521,6 +523,8 @@
 		2F3A6C15219EE941009A8B4B /* WFCUFaceButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUFaceButton.h; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUFaceButton.h; sourceTree = SOURCE_ROOT; };
 		2F3A6C16219EE941009A8B4B /* WFCUStickerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUStickerItem.h; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUStickerItem.h; sourceTree = SOURCE_ROOT; };
 		2F3A6C17219EE941009A8B4B /* WFCUStickerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUStickerItem.m; path = WFChatUIKit/Vendor/ChatInputBar/FaceBoard/WFCUStickerItem.m; sourceTree = SOURCE_ROOT; };
+		2F444879252D72D5007A570E /* WFCULinkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULinkCell.m; sourceTree = "<group>"; };
+		2F44487A252D72D5007A570E /* WFCULinkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCULinkCell.h; sourceTree = "<group>"; };
 		2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAppServiceProvider.h; sourceTree = "<group>"; };
 		2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUQuoteViewController.h; sourceTree = "<group>"; };
 		2F535BFE25296E6600C9AF09 /* WFCUQuoteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUQuoteViewController.m; sourceTree = "<group>"; };
@@ -1087,6 +1091,8 @@
 				2B97D4882505C7BE00162A2B /* WFCUCardCell.m */,
 				2F56F6A62529E43900B829C4 /* WFCUCompositeCell.h */,
 				2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */,
+				2F44487A252D72D5007A570E /* WFCULinkCell.h */,
+				2F444879252D72D5007A570E /* WFCULinkCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1780,6 +1786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
+				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
@@ -2251,6 +2258,7 @@
 				9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */,
 				2F55121C217F5CC300F56C26 /* WFCUModifyMyProfileViewController.m in Sources */,
 				2F5510F7217F5CC200F56C26 /* CCHMapClusterAnnotation.m in Sources */,
+				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,
 				2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */,
 				2F5511FB217F5CC300F56C26 /* WFCUSwitchTableViewCell.m in Sources */,

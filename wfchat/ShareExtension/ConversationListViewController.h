@@ -11,7 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ConversationListViewController : UIViewController
-
+@property(nonatomic, strong)NSString *textMessageContent;
+@property(nonatomic, strong)NSString *urlTitle;
+@property(nonatomic, strong)NSString *url;
+@property(nonatomic, strong)NSString *urlThumbnail;
+@property(nonatomic, strong)NSArray<NSURL *> *imagesURLs;
 @end
 
 NS_ASSUME_NONNULL_END

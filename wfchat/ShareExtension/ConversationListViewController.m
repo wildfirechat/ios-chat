@@ -10,6 +10,7 @@
 #import "SharedConversation.h"
 #import <SDWebImage/SDWebImage.h>
 #import "SharePredefine.h"
+#import "ShareAppService.h"
 
 @interface ConversationListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)NSData *cookiesData;
@@ -50,10 +51,19 @@
     return fileURL;
 }
 
+- (void)sendTo:(SharedConversation *)conversation {
+    [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
+            NSLog(@"send msg success");
+        } error:^(NSString * _Nonnull message) {
+            NSLog(@"send msg failure");
+        }];
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.sharedConversations.count;
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
@@ -83,5 +93,20 @@
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SharedConversation *sc = self.sharedConversations[indexPath.row];
+    
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:sc.title preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [ws sendTo:sc];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    
+    [alertController addAction:cancel];
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 @end
