@@ -27,16 +27,30 @@ static ShareAppService *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-- (void)sendTextMessage:(NSString *)phoneNumber success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
-    [self post:@"/send_code" data:@{@"mobile":phoneNumber} success:successBlock error:errorBlock];
-}
 
-- (void)sendLinkMessage:(NSString *)phoneNumber success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
-    [self post:@"/send_code" data:@{@"mobile":phoneNumber} success:successBlock error:errorBlock];
-}
-
-- (void)sendImageMessage:(NSString *)phoneNumber success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
-    [self post:@"/send_code" data:@{@"mobile":phoneNumber} success:successBlock error:errorBlock];
+- (void)sendLinkMessage:(SharedConversation *)conversation link:(NSString *)link title:(NSString *)title thumbnailLink:(NSString *)thumbnailLink success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+    
+    [dataDict setObject:link forKey:@"u"];
+    if (thumbnailLink) {
+        [dataDict setObject:thumbnailLink forKey:@"t"];
+    }
+    
+    NSData data = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                                           options:kNilOptions
+                                                                             error:nil];
+    
+    [self post:@"/send_message"
+          data:@{@"type":conversation.type,
+                 @"target":conversation.target,
+                 @"line":conversation.line,
+                 @"content_type":@(9),
+                 @"content_searchable":title,
+                 @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
+          }
+       success:successBlock
+         error:errorBlock];
 }
 
 

@@ -24,6 +24,7 @@
 #import "WFCUConferenceInviteCell.h"
 #import "WFCUCardCell.h"
 #import "WFCUCompositeCell.h"
+#import "WFCULinkCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -776,7 +777,7 @@
     [self registerCell:[WFCUConferenceInviteCell class] forContent:[WFCCConferenceInviteMessageContent class]];
     [self registerCell:[WFCUCardCell class] forContent:[WFCCCardMessageContent class]];
     [self registerCell:[WFCUCompositeCell class] forContent:[WFCCCompositeMessageContent class]];
-    
+    [self registerCell:[WFCULinkCell class] forContent:[WFCCLinkMessageContent class]];
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
