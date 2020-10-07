@@ -33,6 +33,8 @@
 #import <Bugly/Bugly.h>
 #import "AppService.h"
 #import "UIColor+YH.h"
+#import "SharedConversation.h"
+#import "SharePredefine.h"
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -159,8 +161,9 @@
     WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     [UIApplication sharedApplication].applicationIconBadgeNumber = unreadCount.unread + unreadFriendRequest;
+    
+    [self prepardDataForShareExtension];
 }
-
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
@@ -175,6 +178,65 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [WFCCNetworkService stopLog];
+}
+
+- (void)prepardDataForShareExtension {
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+        
+    //1. 保存app cookies
+    NSData *cookiesData = [[AppService sharedAppService] getAppServiceCookies];
+    [sharedDefaults setObject:cookiesData forKey:WFC_SHARE_BACKUPED_APP_SERVER_COOKIES];
+    
+    //2. 保存会话列表
+    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    NSMutableArray<SharedConversation *> *sharedConvs = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *needComposedGroupIds = [[NSMutableArray alloc] init];
+    for (WFCCConversationInfo *info in infos) {
+        SharedConversation *sc = [SharedConversation from:(int)info.conversation.type target:info.conversation.target line:info.conversation.line];
+        if (info.conversation.type == Single_Type) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:info.conversation.target refresh:NO];
+            if (!userInfo) {
+                continue;
+            }
+            sc.title = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+            sc.portraitUrl = userInfo.portrait;
+        } else if (info.conversation.type == Group_Type) {
+            WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:info.conversation.target refresh:NO];
+            if (!groupInfo) {
+                continue;
+            }
+            sc.title = groupInfo.name;
+            sc.portraitUrl = groupInfo.portrait;
+            if (!groupInfo.portrait.length) {
+                [needComposedGroupIds addObject:info.conversation.target];
+            }
+        } else if (info.conversation.type == Channel_Type) {
+            WFCCChannelInfo *ci = [[WFCCIMService sharedWFCIMService] getChannelInfo:info.conversation.target refresh:NO];
+            if (!ci) {
+                continue;
+            }
+            sc.title = ci.name;
+            sc.portraitUrl = ci.portrait;
+        }
+        [sharedConvs addObject:sc];
+    }
+    [sharedDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:sharedConvs] forKey:WFC_SHARE_BACKUPED_CONVERSATION_LIST];
+    
+    //3. 保存群拼接头像
+    //获取分组的共享目录
+    NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+    NSURL *portraitURL = [groupURL URLByAppendingPathComponent:WFC_SHARE_BACKUPED_GROUP_GRID_PORTRAIT_PATH];
+    for (NSString *groupId in needComposedGroupIds) {
+        //获取已经拼接好的头像，如果没有拼接会返回为空
+        NSString *file = [WFCCUtilities getGroupGridPortrait:groupId width:80 generateIfNotExist:NO defaultUserPortrait:^UIImage *(NSString *userId) {
+            return nil;
+        }];
+        
+        if (file.length) {
+            NSURL *fileURL = [portraitURL URLByAppendingPathComponent:groupId];
+            [[NSData dataWithContentsOfFile:file] writeToURL:fileURL atomically:YES];
+        }
+    }
 }
 
 - (void)onFriendRequestUpdated:(NSNotification *)notification {
