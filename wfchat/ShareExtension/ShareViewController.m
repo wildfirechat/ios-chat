@@ -12,6 +12,13 @@
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, assign)BOOL dataLoaded;
+
+//data
+@property(nonatomic, strong)NSString *textMessageContent;
+@property(nonatomic, strong)NSString *urlTitle;
+@property(nonatomic, strong)NSString *url;
+@property(nonatomic, strong)NSString *urlThumbnail;
+@property(nonatomic, strong)NSArray<NSURL *> *imagesURLs;
 @end
 
 @implementation ShareViewController
@@ -65,6 +72,7 @@
                     contentLabel.font = [UIFont systemFontOfSize:16];
                     [header addSubview: contentLabel];
                     
+                    self.urlTitle = item.attributedContentText.string;
                     
                     [provider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSURL *url = (NSURL *)item;
@@ -76,6 +84,7 @@
                                 CGRect frame = contentLabel.frame;
                                 frame.size.height = size.height;
                                 contentLabel.frame = frame;
+                                self.url = url.absoluteString;
                                 self.dataLoaded = YES;
                             });
                             
@@ -84,6 +93,7 @@
                                 if (portrait) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
                                         iconView.image = portrait;
+                                        self.urlThumbnail = favIcon;
                                     });
                                 }
                             });
@@ -95,11 +105,13 @@
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, 400)];
                     [header addSubview:imageView];
                     
+                    NSMutableArray *imageUrls = [[NSMutableArray alloc] init];
                     [provider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSLog(@"the value is %@", item);
                         NSURL *url = (NSURL *)item;
                         if ([url.scheme isEqual:@"file"]) {
                             self.dataLoaded = YES;
+                            [imageUrls addObject:url.absoluteString];
                             UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                             NSLog(@"the file size is %f,%f", image.size.width, image.size.height);
                             dispatch_async(dispatch_get_main_queue(), ^{
@@ -185,9 +197,14 @@
 
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"did select row %d", indexPath.row);
+    NSLog(@"did select row %ld", indexPath.row);
     if (indexPath.row == 0) {
         ConversationListViewController *vc = [[ConversationListViewController alloc] init];
+        vc.url = self.url;
+        vc.urlThumbnail = self.urlThumbnail;
+        vc.urlTitle = self.urlTitle;
+        vc.textMessageContent = self.textMessageContent;
+        vc.imagesURLs = self.imagesURLs;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
