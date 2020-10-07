@@ -8,6 +8,8 @@
 
 #import "ShareViewController.h"
 #import "ConversationListViewController.h"
+#import "ShareAppService.h"
+#import "WFCConfig.h"
 
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -86,6 +88,7 @@
                                 contentLabel.frame = frame;
                                 self.url = url.absoluteString;
                                 self.dataLoaded = YES;
+                                iconView.image = [UIImage imageNamed:@"DefaultLink"];
                             });
                             
                             dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -137,13 +140,6 @@
     [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
 }
 
-- (void)didSelectPost {
-    // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-    
-    // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-    [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
-}
-
 - (CGSize)getTextDrawingSize:(NSString *)text
                         font:(UIFont *)font
              constrainedSize:(CGSize)constrainedSize {
@@ -171,13 +167,64 @@
   }
 }
 
+- (void)sendTo:(SharedConversation *)conversation {
+    __weak typeof(self)ws = self;
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
+            [ws showSuccess];
+        } error:^(NSString * _Nonnull message) {
+            NSLog(@"send msg failure %@", message);
+            [ws showFailure];
+        }];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    
+    [alertController addAction:cancel];
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+- (void)showSuccess {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"已发送" message:@"您可以在野火IM中查看" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+    }];
+    
+    
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showFailure {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"网络错误" message:@"糟糕！网络出问题了！" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"算了吧" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+    }];
+    
+    
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (!self.dataLoaded) {
         return 0;
     }
-    return 2;
+    return 3;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -188,6 +235,8 @@
     
     if (indexPath.row == 0) {
         cell.textLabel.text = @"发给朋友";
+    } else if(indexPath.row == 1) {
+        cell.textLabel.text = @"发给自己";
     } else {
         cell.textLabel.text = @"分享到朋友圈";
     }
@@ -206,6 +255,13 @@
         vc.textMessageContent = self.textMessageContent;
         vc.imagesURLs = self.imagesURLs;
         [self.navigationController pushViewController:vc animated:YES];
+    } else if(indexPath.row == 1) {
+        SharedConversation *conversation = [[SharedConversation alloc] init];
+        conversation.type = 0;//Single_Type;
+        conversation.target = FILE_TRANSFER_ID;
+        conversation.line = 0;
+        conversation.title = @"自己";
+        [self sendTo:conversation];
     }
 }
 @end

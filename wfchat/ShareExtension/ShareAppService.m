@@ -45,7 +45,7 @@ static ShareAppService *sharedSingleton = nil;
           data:@{@"type":@(conversation.type),
                  @"target":conversation.target,
                  @"line":@(conversation.line),
-                 @"content_type":@(9),
+                 @"content_type":@(8),
                  @"content_searchable":title,
                  @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
           }
@@ -59,14 +59,8 @@ static ShareAppService *sharedSingleton = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    //在调用其他接口时需要把cookie传给后台，也就是设置cookie的过程
-    NSData *cookiesdata = [self getAppServiceCookies];//url和登陆时传的url 是同一个
-    if([cookiesdata length]) {
-        NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
-        NSHTTPCookie *cookie;
-        for (cookie in cookies) {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-        }
+    for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
     }
     
     [manager POST:[APP_SERVER_ADDRESS stringByAppendingPathComponent:path]
@@ -78,7 +72,7 @@ static ShareAppService *sharedSingleton = nil;
               dispatch_async(dispatch_get_main_queue(), ^{
                   successBlock(dict);
                   if([dict[@"code"] intValue] == 0) {
-                      if(successBlock) successBlock(dict);
+                      if(successBlock) successBlock(dict[@"result"]);
                   } else {
                       if(errorBlock) errorBlock(@"error");
                   }
@@ -91,8 +85,4 @@ static ShareAppService *sharedSingleton = nil;
           }];
 }
 
-- (NSData *)getAppServiceCookies {
-    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
-    return [sharedDefaults objectForKey:WFC_SHARE_BACKUPED_APP_SERVER_COOKIES];
-}
 @end
