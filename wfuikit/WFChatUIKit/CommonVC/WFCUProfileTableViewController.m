@@ -247,7 +247,7 @@
         self.displayNameLabel.text = self.userInfo.displayName;
         
         self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 60, width - 94 - 8, 11)];
-        self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
+        self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     } else {
@@ -258,7 +258,7 @@
         self.displayNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:20];
         
         self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 50, width - 94 - 8, 21)];
-        self.userNameLabel.text = [NSString stringWithFormat:@"野火ID:%@", self.userInfo.name];
+        self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
         self.userNameLabel.font = [UIFont systemFontOfSize:12];
         self.userNameLabel.textColor = [UIColor grayColor];
     }
