@@ -184,8 +184,14 @@
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
         
     //1. 保存app cookies
-    NSData *cookiesData = [[AppService sharedAppService] getAppServiceCookies];
-    [sharedDefaults setObject:cookiesData forKey:WFC_SHARE_BACKUPED_APP_SERVER_COOKIES];
+    NSData *cookiesdata = [[AppService sharedAppService] getAppServiceCookies];
+    if([cookiesdata length]) {
+        NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
+        NSHTTPCookie *cookie;
+        for (cookie in cookies) {
+            [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] setCookie:cookie];
+        }
+    }
     
     //2. 保存会话列表
     NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];

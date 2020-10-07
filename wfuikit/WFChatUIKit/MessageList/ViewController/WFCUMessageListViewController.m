@@ -1780,6 +1780,11 @@
         WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
         vc.compositeContent = (WFCCCompositeMessageContent *)model.message.content;
         [self.navigationController pushViewController:vc animated:YES];
+    } else if([model.message.content isKindOfClass:[WFCCLinkMessageContent class]]) {
+        WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)model.message.content;
+        WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+        bvc.url = content.url;
+        [self.navigationController pushViewController:bvc animated:YES];
     }
 }
 

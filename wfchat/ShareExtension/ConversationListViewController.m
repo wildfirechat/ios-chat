@@ -52,11 +52,41 @@
 }
 
 - (void)sendTo:(SharedConversation *)conversation {
+    __weak typeof(self)ws = self;
     [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
-            NSLog(@"send msg success");
-        } error:^(NSString * _Nonnull message) {
-            NSLog(@"send msg failure");
-        }];
+        [ws showSuccess];
+    } error:^(NSString * _Nonnull message) {
+        NSLog(@"send msg failure %@", message);
+        [ws showFailure];
+    }];
+}
+
+- (void)showSuccess {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"已发送" message:@"您可以在野火IM中查看" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+    }];
+    
+    
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showFailure {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"网络错误" message:@"糟糕！网络出问题了！" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"算了吧" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+    }];
+    
+    
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
