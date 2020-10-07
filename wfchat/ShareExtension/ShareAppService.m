@@ -37,14 +37,14 @@ static ShareAppService *sharedSingleton = nil;
         [dataDict setObject:thumbnailLink forKey:@"t"];
     }
     
-    NSData data = [NSJSONSerialization dataWithJSONObject:dataDict
+    NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
                                                                            options:kNilOptions
                                                                              error:nil];
     
-    [self post:@"/send_message"
-          data:@{@"type":conversation.type,
+    [self post:@"/messages/send"
+          data:@{@"type":@(conversation.type),
                  @"target":conversation.target,
-                 @"line":conversation.line,
+                 @"line":@(conversation.line),
                  @"content_type":@(9),
                  @"content_searchable":title,
                  @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
@@ -93,8 +93,6 @@ static ShareAppService *sharedSingleton = nil;
 
 - (NSData *)getAppServiceCookies {
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
-        
     return [sharedDefaults objectForKey:WFC_SHARE_BACKUPED_APP_SERVER_COOKIES];
-    
 }
 @end
