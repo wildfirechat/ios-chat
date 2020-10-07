@@ -122,11 +122,17 @@
                             });
                         }
                     }];
+                } else if ([provider hasItemConformingToTypeIdentifier:@"public.plain-text"]) {
+                    self.textMessageContent = item.attributedContentText.string;
+                    header.frame = CGRectMake(0, 0, width, 132);
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 132)];
+                    label.numberOfLines = 0;
+                    label.text = item.attributedContentText.string;
+                    [header addSubview:label];
+                    self.dataLoaded = YES;
                 }
             }
         }
-        NSLog(@"userinfo: %@", item.userInfo);
-        
     }
     return header;
 }
@@ -173,12 +179,22 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
-            [ws showSuccess];
-        } error:^(NSString * _Nonnull message) {
-            NSLog(@"send msg failure %@", message);
-            [ws showFailure];
-        }];
+        if (self.textMessageContent.length) {
+            [[ShareAppService sharedAppService] sendTextMessage:conversation text:self.textMessageContent success:^(NSDictionary * _Nonnull dict) {
+                [ws showSuccess];
+            } error:^(NSString * _Nonnull message) {
+                [ws showFailure];
+            }];
+        } else if(self.url.length) {
+            [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
+                [ws showSuccess];
+            } error:^(NSString * _Nonnull message) {
+                NSLog(@"send msg failure %@", message);
+                [ws showFailure];
+            }];
+        } else {
+            
+        }
     }];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
