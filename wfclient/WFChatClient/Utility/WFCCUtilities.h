@@ -47,5 +47,6 @@
 
 + (NSString *)getGroupGridPortrait:(NSString *)groupId
                              width:(int)width
+                generateIfNotExist:(BOOL)generateIfNotExist
                defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock;
 @end
