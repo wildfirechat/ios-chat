@@ -224,3 +224,4 @@
 "alertButton" = "OK";
 "UnAuthorizedTip" = "Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"";
 "GroupFiles" = "Group files";
+"last_read_here"="Last read here";

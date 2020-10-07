@@ -1285,7 +1285,7 @@
 - (void)scrollToFirstUnreadMessage {
     for (int i = 0; i < self.modelList.count; i++) {
         if (self.modelList[i].message.messageId == self.firstUnreadMessageId) {
-            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
         }
     }
 }
@@ -1355,6 +1355,9 @@
                 self.modelList[0].showTimeLabel = NO;
             }
             WFCUMessageModel *model = [WFCUMessageModel modelOf:message showName:message.direction == MessageDirection_Receive&&self.showAlias showTime:YES];
+            if (self.firstUnreadMessageId && message.messageId == self.firstUnreadMessageId) {
+                model.lastReadMessage = YES;
+            }
             model.selecting = self.multiSelecting;
             model.selected = [self.selectedMessageIds containsObject:@(message.messageId)];
             model.deliveryDict = self.deliveryDict;
