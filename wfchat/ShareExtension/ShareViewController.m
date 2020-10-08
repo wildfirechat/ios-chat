@@ -326,7 +326,7 @@
     if (!self.dataLoaded) {
         return 0;
     }
-    return 3;
+    return 2;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
