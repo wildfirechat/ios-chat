@@ -22,6 +22,8 @@
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *urlThumbnail;
 @property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
+
+@property(nonatomic, strong)NSString *fileUrl;
 @end
 
 @implementation ShareViewController
@@ -55,7 +57,21 @@
         if (item.attachments.count) {
             for (NSItemProvider *provider in item.attachments) {
                 NSLog(@"the provider is %@", provider);
-                if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
+                header.frame = CGRectMake(0, 0, width, 40);
+                UILabel *fileLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, width, 24)];
+                [header addSubview:fileLabel];
+                if ([provider hasItemConformingToTypeIdentifier:@"public.file-url"]) {
+                    [provider loadItemForTypeIdentifier:@"public.file-url" options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
+                        NSURL *url = (NSURL *)item;
+                        NSString *fileName = url.absoluteString.lastPathComponent;
+                        NSLog(@"file name is %@", fileName);
+                        self.fileUrl = url.absoluteString;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            fileLabel.text = fileName;
+                            self.dataLoaded = YES;
+                        });
+                    }];
+                } else if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
                     //链接
                     header.frame = CGRectMake(0, 0, width, 132);
                     UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 100, 100)];
@@ -103,14 +119,18 @@
                             });
                         }
                     }];
-                } else if ([provider hasItemConformingToTypeIdentifier:@"public.jpeg"]) {
+                } else if ([provider hasItemConformingToTypeIdentifier:@"public.jpeg"] || [provider hasItemConformingToTypeIdentifier:@"public.png"]) {
                     header.frame = CGRectMake(0, 0, width, 400);
                     
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, 400)];
                     [header addSubview:imageView];
                     
                     self.imageUrls = [[NSMutableArray alloc] init];
-                    [provider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
+                    NSString *typeIdentifier = @"public.jpeg";
+                    if ([provider hasItemConformingToTypeIdentifier:@"public.png"]) {
+                        typeIdentifier = @"public.png";
+                    }
+                    [provider loadItemForTypeIdentifier:typeIdentifier options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSLog(@"the value is %@", item);
                         NSURL *url = (NSURL *)item;
                         if ([url.scheme isEqual:@"file"]) {
@@ -199,7 +219,7 @@
                 NSLog(@"send msg failure %@", message);
                 [ws showFailure];
             }];
-        } else if(self.imageUrls.count){
+        } else if(self.imageUrls.count) {
             [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
                 
             } success:^(NSString *url){
@@ -216,6 +236,24 @@
                     [ws showFailure];
                 }];
                 
+            } error:^(NSString * _Nonnull errorMsg) {
+                [ws showFailure];
+            }];
+        } else if(self.fileUrl.length) {
+            [[ShareAppService sharedAppService] uploadFiles:self.fileUrl mediaType:4 progress:^(int sentcount, int total) {
+                
+            } success:^(NSString * _Nonnull url) {
+                long long size = 0;
+                NSFileManager* manager = [NSFileManager defaultManager];
+                if ([manager fileExistsAtPath:self.fileUrl]){
+                    size = [[manager attributesOfItemAtPath:self.fileUrl error:nil] fileSize];
+                }
+                NSString *fileName = self.fileUrl.lastPathComponent;
+                [[ShareAppService sharedAppService] sendFileMessage:conversation mediaUrl:url fileName:fileName size:size success:^(NSDictionary * _Nonnull dict) {
+                    [ws showSuccess];
+                } error:^(NSString * _Nonnull message) {
+                    [ws showFailure];
+                }];
             } error:^(NSString * _Nonnull errorMsg) {
                 [ws showFailure];
             }];
@@ -308,6 +346,7 @@
         vc.urlTitle = self.urlTitle;
         vc.textMessageContent = self.textMessageContent;
         vc.imageUrls = self.imageUrls;
+        vc.fileUrl = self.fileUrl;
         [self.navigationController pushViewController:vc animated:YES];
     } else if(indexPath.row == 1) {
         SharedConversation *conversation = [[SharedConversation alloc] init];

@@ -88,6 +88,24 @@
         } error:^(NSString * _Nonnull errorMsg) {
             [ws showFailure];
         }];
+    } else if(self.fileUrl.length) {
+        [[ShareAppService sharedAppService] uploadFiles:self.fileUrl mediaType:4 progress:^(int sentcount, int total) {
+            
+        } success:^(NSString * _Nonnull url) {
+            long long size = 0;
+            NSFileManager* manager = [NSFileManager defaultManager];
+            if ([manager fileExistsAtPath:self.fileUrl]){
+                size = [[manager attributesOfItemAtPath:self.fileUrl error:nil] fileSize];
+            }
+            NSString *fileName = self.fileUrl.lastPathComponent;
+            [[ShareAppService sharedAppService] sendFileMessage:conversation mediaUrl:url fileName:fileName size:size success:^(NSDictionary * _Nonnull dict) {
+                [ws showSuccess];
+            } error:^(NSString * _Nonnull message) {
+                [ws showFailure];
+            }];
+        } error:^(NSString * _Nonnull errorMsg) {
+            [ws showFailure];
+        }];
     }
 }
 
