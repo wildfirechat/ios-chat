@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)sendImageMessage:(SharedConversation *)conversation mediaUrl:(NSString *)mediaUrl thubnail:(UIImage *)thubnail success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock;
 
+- (void)sendFileMessage:(SharedConversation *)conversation mediaUrl:(NSString *)mediaUrl fileName:(NSString *)fileName size:(long long)size success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock;
+
 - (void)uploadFiles:(NSString *)file
           mediaType:(int)mediaType
            progress:(void(^)(int sentcount, int total))progressBlock
