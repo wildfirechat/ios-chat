@@ -82,6 +82,22 @@ static ShareAppService *sharedSingleton = nil;
          error:errorBlock];
 }
 
+- (void)sendFileMessage:(SharedConversation *)conversation mediaUrl:(NSString *)mediaUrl fileName:(NSString *)fileName size:(long long)size success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
+    
+    [self post:@"/messages/send"
+          data:@{@"type":@(conversation.type),
+                 @"target":conversation.target,
+                 @"line":@(conversation.line),
+                 @"content_type":@(5),
+                 @"content_media_type":@(4),
+                 @"content_remote_url":mediaUrl,
+                 @"content_searchable":fileName,
+                 @"content":[NSString stringWithFormat:@"%lld", size]
+          }
+       success:successBlock
+         error:errorBlock];
+}
+
 - (void)uploadFiles:(NSString *)file
           mediaType:(int)mediaType
            progress:(void(^)(int sentcount, int total))progressBlock
