@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *urlTitle;
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *urlThumbnail;
-@property(nonatomic, strong)NSArray<NSURL *> *imagesURLs;
+@property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
 @end
 
 NS_ASSUME_NONNULL_END

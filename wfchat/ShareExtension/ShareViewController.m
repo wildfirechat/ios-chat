@@ -10,6 +10,7 @@
 #import "ConversationListViewController.h"
 #import "ShareAppService.h"
 #import "WFCConfig.h"
+#import "ShareUtility.h"
 
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -20,7 +21,7 @@
 @property(nonatomic, strong)NSString *urlTitle;
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *urlThumbnail;
-@property(nonatomic, strong)NSArray<NSURL *> *imagesURLs;
+@property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
 @end
 
 @implementation ShareViewController
@@ -108,20 +109,26 @@
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, 400)];
                     [header addSubview:imageView];
                     
-                    NSMutableArray *imageUrls = [[NSMutableArray alloc] init];
+                    self.imageUrls = [[NSMutableArray alloc] init];
                     [provider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSLog(@"the value is %@", item);
                         NSURL *url = (NSURL *)item;
                         if ([url.scheme isEqual:@"file"]) {
                             self.dataLoaded = YES;
-                            [imageUrls addObject:url.absoluteString];
+                            [self.imageUrls addObject:url.absoluteString];
                             UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                             NSLog(@"the file size is %f,%f", image.size.width, image.size.height);
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 imageView.image = image;
+                                NSExtensionItem *item = self.extensionContext.inputItems[0];
+                                if (item.attachments.count > 1) {
+                                    [self showImageLimit];
+                                }
                             });
                         }
                     }];
+                    
+                    break;
                 } else if ([provider hasItemConformingToTypeIdentifier:@"public.plain-text"]) {
                     self.textMessageContent = item.attributedContentText.string;
                     header.frame = CGRectMake(0, 0, width, 132);
@@ -192,10 +199,29 @@
                 NSLog(@"send msg failure %@", message);
                 [ws showFailure];
             }];
-        } else {
-            
+        } else if(self.imageUrls.count){
+            [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
+                
+            } success:^(NSString *url){
+                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrls[0]]]];
+                
+                UIImage *thumbnail = [ShareUtility generateThumbnail:image withWidth:120 withHeight:120];
+                [[ShareAppService sharedAppService] sendImageMessage:conversation
+                                                            mediaUrl:url
+                                                            thubnail:thumbnail
+                                                             success:^(NSDictionary * _Nonnull dict) {
+                    [ws showSuccess];
+                }
+                                                               error:^(NSString * _Nonnull message) {
+                    [ws showFailure];
+                }];
+                
+            } error:^(NSString * _Nonnull errorMsg) {
+                [ws showFailure];
+            }];
         }
     }];
+    
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
@@ -206,6 +232,18 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (void)showImageLimit {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"不支持发送多张图片" message:@"每次只能发送一张。如果您需要一次发送多张，请打开野火IM选择图片发送。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+
+    }];
+    
+    
+    [alertController addAction:action];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 - (void)showSuccess {
     __weak typeof(self)ws = self;
@@ -269,7 +307,7 @@
         vc.urlThumbnail = self.urlThumbnail;
         vc.urlTitle = self.urlTitle;
         vc.textMessageContent = self.textMessageContent;
-        vc.imagesURLs = self.imagesURLs;
+        vc.imageUrls = self.imageUrls;
         [self.navigationController pushViewController:vc animated:YES];
     } else if(indexPath.row == 1) {
         SharedConversation *conversation = [[SharedConversation alloc] init];

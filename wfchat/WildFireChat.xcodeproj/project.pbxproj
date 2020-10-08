@@ -86,6 +86,7 @@
 		2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */; };
 		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
 		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
+		2F97CDC9252EC7D90095DDFD /* ShareUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F97CDC8252EC7D90095DDFD /* ShareUtility.m */; };
 		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
 		2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC50B7A245273A700B36F8A /* PCSessionViewController.m */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
@@ -304,6 +305,8 @@
 		2F94FC9422291813005BD461 /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
 		2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
 		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
+		2F97CDC7252EC7D90095DDFD /* ShareUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareUtility.h; sourceTree = "<group>"; };
+		2F97CDC8252EC7D90095DDFD /* ShareUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareUtility.m; sourceTree = "<group>"; };
 		2FA2E90B251634070038635A /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
 		2FBF915E232F6A47003521FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FBF9160232F6A5E003521FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -610,6 +613,8 @@
 				2F444779252D475C007A570E /* Shares.xcassets */,
 				2F44485B252D52AE007A570E /* ShareAppService.h */,
 				2F44485C252D52AE007A570E /* ShareAppService.m */,
+				2F97CDC7252EC7D90095DDFD /* ShareUtility.h */,
+				2F97CDC8252EC7D90095DDFD /* ShareUtility.m */,
 			);
 			path = ShareExtension;
 			sourceTree = "<group>";
@@ -1060,6 +1065,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F97CDC9252EC7D90095DDFD /* ShareUtility.m in Sources */,
 				2F444870252D5339007A570E /* AFURLRequestSerialization.m in Sources */,
 				2F44485D252D52AE007A570E /* ShareAppService.m in Sources */,
 				2F444871252D5339007A570E /* AFNetworkReachabilityManager.m in Sources */,
