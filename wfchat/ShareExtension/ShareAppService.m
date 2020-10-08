@@ -66,7 +66,71 @@ static ShareAppService *sharedSingleton = nil;
 }
 
 - (void)sendImageMessage:(SharedConversation *)conversation mediaUrl:(NSString *)mediaUrl thubnail:(UIImage *)thubnail success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
+    NSData *data = UIImageJPEGRepresentation(thubnail, 0.4);
     
+    [self post:@"/messages/send"
+          data:@{@"type":@(conversation.type),
+                 @"target":conversation.target,
+                 @"line":@(conversation.line),
+                 @"content_type":@(3),
+                 @"content_media_type":@(1),
+                 @"content_remote_url":mediaUrl,
+                 @"content_searchable":@"[图片]",
+                 @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
+          }
+       success:successBlock
+         error:errorBlock];
+}
+
+- (void)uploadFiles:(NSString *)file
+          mediaType:(int)mediaType
+           progress:(void(^)(int sentcount, int total))progressBlock
+            success:(void(^)(NSString *url))successBlock
+              error:(void(^)(NSString *errorMsg))errorBlock {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
+        for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+        }
+        
+        NSString *url = [APP_SERVER_ADDRESS stringByAppendingFormat:@"/media/upload/%d", mediaType];
+    
+        [manager
+         POST:url
+         parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            NSData *logData = [NSData dataWithContentsOfURL:[NSURL URLWithString:file]];
+            if (!logData.length) {
+                logData = [@"empty" dataUsingEncoding:NSUTF8StringEncoding];
+            }
+            
+            NSString *fileName = [[NSURL URLWithString:file] lastPathComponent];
+            [formData appendPartWithFileData:logData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+        }
+         progress:^(NSProgress * progress) {
+            if (progressBlock) {
+                progressBlock((int)progress.completedUnitCount, (int)progress.totalUnitCount);
+            }
+        }
+         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *dict = (NSDictionary *)responseObject;
+                if([dict[@"code"] intValue] == 0) {
+                    NSDictionary *result = dict[@"result"];
+                    if (result && result[@"url"]) {
+                        successBlock(result[@"url"]);
+                        return;
+                    }
+                    
+                }
+            }
+            errorBlock(@"服务器响应错误");
+        }
+         failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"上传失败：%@", error);
+            errorBlock(error.localizedFailureReason);
+        }];
+    });
 }
 
 - (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
@@ -99,5 +163,6 @@ static ShareAppService *sharedSingleton = nil;
             });
           }];
 }
+
 
 @end
