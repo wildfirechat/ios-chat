@@ -35,6 +35,7 @@
           extensionItems, $extensionItem,
           SUBQUERY (
           $extensionItem.attachments, $attachment,
+          ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image" ||
           ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text" ||
           ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
           ).@count == 1

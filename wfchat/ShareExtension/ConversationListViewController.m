@@ -11,6 +11,8 @@
 #import <SDWebImage/SDWebImage.h>
 #import "SharePredefine.h"
 #import "ShareAppService.h"
+#import "ShareUtility.h"
+
 
 @interface ConversationListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)NSData *cookiesData;
@@ -66,8 +68,26 @@
             NSLog(@"send msg failure %@", message);
             [ws showFailure];
         }];
-    } else {
-        
+    } else if(self.imageUrls.count){
+        [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
+            
+        } success:^(NSString *url){
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrls[0]]]];
+            
+            UIImage *thumbnail = [ShareUtility generateThumbnail:image withWidth:120 withHeight:120];
+            [[ShareAppService sharedAppService] sendImageMessage:conversation
+                                                        mediaUrl:url
+                                                        thubnail:thumbnail
+                                                         success:^(NSDictionary * _Nonnull dict) {
+                [ws showSuccess];
+            }
+                                                           error:^(NSString * _Nonnull message) {
+                [ws showFailure];
+            }];
+            
+        } error:^(NSString * _Nonnull errorMsg) {
+            [ws showFailure];
+        }];
     }
 }
 
