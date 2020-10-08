@@ -11,6 +11,8 @@
 #import "ShareAppService.h"
 #import "WFCConfig.h"
 #import "ShareUtility.h"
+#import "MBProgressHUD.h"
+
 
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -55,6 +57,7 @@
         NSLog(@"title: %@", item.attributedTitle);
         NSLog(@"content: %@", item.attributedContentText.string);
         if (item.attachments.count) {
+            __weak typeof(self)ws = self;
             for (NSItemProvider *provider in item.attachments) {
                 NSLog(@"the provider is %@", provider);
                 header.frame = CGRectMake(0, 0, width, 40);
@@ -65,10 +68,10 @@
                         NSURL *url = (NSURL *)item;
                         NSString *fileName = url.absoluteString.lastPathComponent;
                         NSLog(@"file name is %@", fileName);
-                        self.fileUrl = url.absoluteString;
+                        ws.fileUrl = url.absoluteString;
                         dispatch_async(dispatch_get_main_queue(), ^{
                             fileLabel.text = fileName;
-                            self.dataLoaded = YES;
+                            ws.dataLoaded = YES;
                         });
                     }];
                 } else if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
@@ -99,12 +102,12 @@
                             NSString *favIcon = [NSString stringWithFormat:@"%@://%@/favicon.ico", url.scheme, url.host];
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 contentLabel.text = url.absoluteString;
-                                CGSize size = [self getTextDrawingSize:url.absoluteString font:contentLabel.font constrainedSize:CGSizeMake(width, 132 - 16 - titleSize.height - 8 - 8)];
+                                CGSize size = [ws getTextDrawingSize:url.absoluteString font:contentLabel.font constrainedSize:CGSizeMake(width, 132 - 16 - titleSize.height - 8 - 8)];
                                 CGRect frame = contentLabel.frame;
                                 frame.size.height = size.height;
                                 contentLabel.frame = frame;
-                                self.url = url.absoluteString;
-                                self.dataLoaded = YES;
+                                ws.url = url.absoluteString;
+                                ws.dataLoaded = YES;
                                 iconView.image = [UIImage imageNamed:@"DefaultLink"];
                             });
                             
@@ -113,7 +116,7 @@
                                 if (portrait) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
                                         iconView.image = portrait;
-                                        self.urlThumbnail = favIcon;
+                                        ws.urlThumbnail = favIcon;
                                     });
                                 }
                             });
@@ -134,15 +137,14 @@
                         NSLog(@"the value is %@", item);
                         NSURL *url = (NSURL *)item;
                         if ([url.scheme isEqual:@"file"]) {
-                            self.dataLoaded = YES;
-                            [self.imageUrls addObject:url.absoluteString];
+                            ws.dataLoaded = YES;
+                            [ws.imageUrls addObject:url.absoluteString];
                             UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                            NSLog(@"the file size is %f,%f", image.size.width, image.size.height);
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 imageView.image = image;
-                                NSExtensionItem *item = self.extensionContext.inputItems[0];
+                                NSExtensionItem *item = ws.extensionContext.inputItems[0];
                                 if (item.attachments.count > 1) {
-                                    [self showImageLimit];
+                                    [ws showImageLimit];
                                 }
                             });
                         }
@@ -206,24 +208,27 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        if (self.textMessageContent.length) {
-            [[ShareAppService sharedAppService] sendTextMessage:conversation text:self.textMessageContent success:^(NSDictionary * _Nonnull dict) {
+        [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        [MBProgressHUD HUDForView:ws.view].mode = MBProgressHUDModeDeterminate;
+        [MBProgressHUD HUDForView:ws.view].label.text = @"正在发送中...";
+        if (ws.textMessageContent.length) {
+            [[ShareAppService sharedAppService] sendTextMessage:conversation text:ws.textMessageContent success:^(NSDictionary * _Nonnull dict) {
                 [ws showSuccess];
             } error:^(NSString * _Nonnull message) {
                 [ws showFailure];
             }];
-        } else if(self.url.length) {
-            [[ShareAppService sharedAppService] sendLinkMessage:conversation link:self.url title:self.urlTitle thumbnailLink:self.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
+        } else if(ws.url.length) {
+            [[ShareAppService sharedAppService] sendLinkMessage:conversation link:ws.url title:ws.urlTitle thumbnailLink:ws.urlThumbnail success:^(NSDictionary * _Nonnull dict) {
                 [ws showSuccess];
             } error:^(NSString * _Nonnull message) {
                 NSLog(@"send msg failure %@", message);
                 [ws showFailure];
             }];
-        } else if(self.imageUrls.count) {
-            [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
-                
+        } else if(ws.imageUrls.count) {
+            [[ShareAppService sharedAppService] uploadFiles:ws.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
+                [ws showProgress:sentcount total:dataSize];
             } success:^(NSString *url){
-                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrls[0]]]];
+                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.imageUrls[0]]]];
                 
                 UIImage *thumbnail = [ShareUtility generateThumbnail:image withWidth:120 withHeight:120];
                 [[ShareAppService sharedAppService] sendImageMessage:conversation
@@ -239,16 +244,13 @@
             } error:^(NSString * _Nonnull errorMsg) {
                 [ws showFailure];
             }];
-        } else if(self.fileUrl.length) {
-            [[ShareAppService sharedAppService] uploadFiles:self.fileUrl mediaType:4 progress:^(int sentcount, int total) {
-                
+        } else if(ws.fileUrl.length) {
+            __block int size = 0;
+            [[ShareAppService sharedAppService] uploadFiles:ws.fileUrl mediaType:4 progress:^(int sentcount, int total) {
+                size = total;
+                [ws showProgress:sentcount total:total];
             } success:^(NSString * _Nonnull url) {
-                long long size = 0;
-                NSFileManager* manager = [NSFileManager defaultManager];
-                if ([manager fileExistsAtPath:self.fileUrl]){
-                    size = [[manager attributesOfItemAtPath:self.fileUrl error:nil] fileSize];
-                }
-                NSString *fileName = self.fileUrl.lastPathComponent;
+                NSString *fileName = ws.fileUrl.lastPathComponent;
                 [[ShareAppService sharedAppService] sendFileMessage:conversation mediaUrl:url fileName:fileName size:size success:^(NSDictionary * _Nonnull dict) {
                     [ws showSuccess];
                 } error:^(NSString * _Nonnull message) {
@@ -282,8 +284,16 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
+- (void)showProgress:(int)sent total:(int)total {
+    NSLog(@"progress %d %d", sent, total);
+    __weak typeof(self)ws = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [MBProgressHUD HUDForView:ws.view].progress = (float)sent/total;
+    });
+}
 
 - (void)showSuccess {
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
     __weak typeof(self)ws = self;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"已发送" message:@"您可以在野火IM中查看" preferredStyle:UIAlertControllerStyleAlert];
     
