@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)uploadFiles:(NSString *)file
           mediaType:(int)mediaType
+          fullImage:(BOOL)fullImage
            progress:(void(^)(int sentcount, int total))progressBlock
             success:(void(^)(NSString *url))successBlock
               error:(void(^)(NSString *errorMsg))errorBlock;

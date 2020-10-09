@@ -18,13 +18,19 @@
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, assign)BOOL dataLoaded;
 
-//data
+//文本
 @property(nonatomic, strong)NSString *textMessageContent;
+
+//链接
 @property(nonatomic, strong)NSString *urlTitle;
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *urlThumbnail;
+
+//图片
+@property(nonatomic, assign)BOOL *fullImage;
 @property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
 
+//文件
 @property(nonatomic, strong)NSString *fileUrl;
 @end
 
@@ -225,7 +231,7 @@
                 [ws showFailure];
             }];
         } else if(ws.imageUrls.count) {
-            [[ShareAppService sharedAppService] uploadFiles:ws.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
+            [[ShareAppService sharedAppService] uploadFiles:ws.imageUrls[0] mediaType:1 fullImage:self.fullImage progress:^(int sentcount, int dataSize) {
                 [ws showProgress:sentcount total:dataSize];
             } success:^(NSString *url){
                 UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.imageUrls[0]]]];
@@ -246,7 +252,7 @@
             }];
         } else if(ws.fileUrl.length) {
             __block int size = 0;
-            [[ShareAppService sharedAppService] uploadFiles:ws.fileUrl mediaType:4 progress:^(int sentcount, int total) {
+            [[ShareAppService sharedAppService] uploadFiles:ws.fileUrl mediaType:4 fullImage:YES progress:^(int sentcount, int total) {
                 size = total;
                 [ws showProgress:sentcount total:total];
             } success:^(NSString * _Nonnull url) {
@@ -356,6 +362,7 @@
         vc.urlTitle = self.urlTitle;
         vc.textMessageContent = self.textMessageContent;
         vc.imageUrls = self.imageUrls;
+        vc.fullImage = self.fullImage;
         vc.fileUrl = self.fileUrl;
         [self.navigationController pushViewController:vc animated:YES];
     } else if(indexPath.row == 1) {
