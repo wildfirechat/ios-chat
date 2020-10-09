@@ -991,7 +991,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  根据成员类型获取群成员信息
  
  @param groupId 群ID
- @param type 群成员类型
+ @param memberType 群成员类型
  @return 群成员信息列表
  */
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
