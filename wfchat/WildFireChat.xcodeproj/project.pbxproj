@@ -48,7 +48,6 @@
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
 		2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */; };
 		2F444776252D441D007A570E /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E90B251634070038635A /* SDWebImage.framework */; };
-		2F444777252D441D007A570E /* SDWebImage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E90B251634070038635A /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F44477A252D475C007A570E /* Shares.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F444779252D475C007A570E /* Shares.xcassets */; };
 		2F444859252D520B007A570E /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2F44485D252D52AE007A570E /* ShareAppService.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F44485C252D52AE007A570E /* ShareAppService.m */; };
@@ -131,17 +130,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2F444778252D441D007A570E /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				2F444777252D441D007A570E /* SDWebImage.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2F56F6FF252C956700B829C4 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -899,7 +887,6 @@
 				2F56F6EF252C956700B829C4 /* Sources */,
 				2F56F6F0252C956700B829C4 /* Frameworks */,
 				2F56F6F1252C956700B829C4 /* Resources */,
-				2F444778252D441D007A570E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1285,7 +1272,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1303,7 +1290,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "野火IM";
@@ -1322,7 +1309,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = ZTJABWRJ5T;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1340,7 +1327,7 @@
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "野火IM";
