@@ -581,13 +581,14 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     
-    BOOL hasMentionInfo = NO;
-    NSString *text = nil;
+    BOOL textDraft = YES;
+    NSString *text = draft;
     NSMutableArray<WFCUMetionInfo *> *mentionInfos = [[NSMutableArray alloc] init];
+    WFCCQuoteInfo *quoteInfo = nil;
+    
     if (!__error) {
-        if (dictionary[@"text"] != nil && [dictionary[@"mentions"] isKindOfClass:[NSArray class]]) {
-            hasMentionInfo = YES;
-            text = dictionary[@"text"];
+        if ([dictionary[@"mentions"] isKindOfClass:[NSArray class]]) {
+            textDraft = NO;
             NSArray *mentions = dictionary[@"mentions"];
             [mentions enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSDictionary *dic = (NSDictionary *)obj;
@@ -598,35 +599,49 @@
                 [mentionInfos addObject:mentionInfo];
             }];
         }
+        
+        if ([dictionary[@"quote"] isKindOfClass:[NSDictionary class]]) {
+            textDraft = NO;
+            quoteInfo = [[WFCCQuoteInfo alloc] init];
+            [quoteInfo decode:dictionary[@"quote"]];
+        }
+        
+        if (!textDraft) {
+            text = dictionary[@"text"];
+        }
     }
     
-    if (hasMentionInfo) {
-        draft = text;
-    }
     //防止弹出@选项
-    if ([draft isEqualToString:@"@"]) {
-        draft = @"@ ";
+    if ([text isEqualToString:@"@"]) {
+        text = @"@ ";
     }
     
-    [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:draft];
-    self.textInputView.text = draft;
+    [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:text];
+    self.textInputView.text = text;
     self.mentionInfos = mentionInfos;
+    self.quoteInfo = quoteInfo;
 }
 
 - (NSString *)draft {
-    if (self.mentionInfos.count) {
+    if (self.mentionInfos.count || self.quoteInfo) {
         NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
         [dataDict setObject:self.textInputView.text forKey:@"text"];
-        NSMutableArray *mentions = [[NSMutableArray alloc] init];
-        [self.mentionInfos enumerateObjectsUsingBlock:^(WFCUMetionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-            [dic setObject:obj.target forKey:@"target"];
-            [dic setObject:@(obj.mentionType) forKey:@"type"];
-            [dic setObject:@(obj.range.location) forKey:@"loc"];
-            [dic setObject:@(obj.range.length) forKey:@"len"];
-            [mentions addObject:dic];
-        }];
-        [dataDict setObject:mentions forKey:@"mentions"];
+        if (self.mentionInfos.count) {
+            NSMutableArray *mentions = [[NSMutableArray alloc] init];
+            [self.mentionInfos enumerateObjectsUsingBlock:^(WFCUMetionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+                [dic setObject:obj.target forKey:@"target"];
+                [dic setObject:@(obj.mentionType) forKey:@"type"];
+                [dic setObject:@(obj.range.location) forKey:@"loc"];
+                [dic setObject:@(obj.range.length) forKey:@"len"];
+                [mentions addObject:dic];
+            }];
+            [dataDict setObject:mentions forKey:@"mentions"];
+        }
+        if (self.quoteInfo) {
+            NSDictionary *quoteDict = [self.quoteInfo encode];
+            [dataDict setObject:quoteDict forKey:@"quote"];
+        }
         
         NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
                                                                 options:kNilOptions
