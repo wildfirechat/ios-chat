@@ -10,7 +10,7 @@
 #import "AFNetworking.h"
 #import "WFCConfig.h"
 #import "SharePredefine.h"
-
+#import "ShareUtility.h"
 
 static ShareAppService *sharedSingleton = nil;
 
@@ -100,6 +100,7 @@ static ShareAppService *sharedSingleton = nil;
 
 - (void)uploadFiles:(NSString *)file
           mediaType:(int)mediaType
+          fullImage:(BOOL)fullImage
            progress:(void(^)(int sentcount, int total))progressBlock
             success:(void(^)(NSString *url))successBlock
               error:(void(^)(NSString *errorMsg))errorBlock {
@@ -115,13 +116,22 @@ static ShareAppService *sharedSingleton = nil;
         [manager
          POST:url
          parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-            NSData *logData = [NSData dataWithContentsOfURL:[NSURL URLWithString:file]];
-            if (!logData.length) {
-                logData = [@"empty" dataUsingEncoding:NSUTF8StringEncoding];
-            }
-            
             NSString *fileName = [[NSURL URLWithString:file] lastPathComponent];
-            [formData appendPartWithFileData:logData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+
+            if (mediaType == 1 && !fullImage) {
+                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:file]]];
+                image = [ShareUtility generateThumbnail:image withWidth:1024 withHeight:1024];
+                NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+                
+                [formData appendPartWithFileData:imgData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+            } else {
+                NSData *logData = [NSData dataWithContentsOfURL:[NSURL URLWithString:file]];
+                if (!logData.length) {
+                    logData = [@"empty" dataUsingEncoding:NSUTF8StringEncoding];
+                }
+                
+                [formData appendPartWithFileData:logData name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+            }
         }
          progress:^(NSProgress * progress) {
             if (progressBlock) {

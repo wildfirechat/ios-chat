@@ -72,7 +72,7 @@
             [ws showFailure];
         }];
     } else if(self.imageUrls.count){
-        [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 progress:^(int sentcount, int dataSize) {
+        [[ShareAppService sharedAppService] uploadFiles:self.imageUrls[0] mediaType:1 fullImage:self.fullImage progress:^(int sentcount, int dataSize) {
             [ws showProgress:sentcount total:dataSize];
         } success:^(NSString *url){
             NSLog(@"sent done, url is %@", url);
@@ -95,7 +95,7 @@
         }];
     } else if(self.fileUrl.length) {
         __block int size = 0;
-        [[ShareAppService sharedAppService] uploadFiles:self.fileUrl mediaType:4 progress:^(int sentcount, int total) {
+        [[ShareAppService sharedAppService] uploadFiles:self.fileUrl mediaType:4 fullImage:YES progress:^(int sentcount, int total) {
             size = total;
             [ws showProgress:sentcount total:total];
         } success:^(NSString * _Nonnull url) {
