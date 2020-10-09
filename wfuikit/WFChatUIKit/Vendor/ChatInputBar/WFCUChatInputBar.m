@@ -616,10 +616,15 @@
         text = @"@ ";
     }
     
-    [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:text];
+    
     self.textInputView.text = text;
     self.mentionInfos = mentionInfos;
-    self.quoteInfo = quoteInfo;
+    if (quoteInfo) {
+        self.quoteInfo = quoteInfo;
+        [self updateQuoteView:NO showKeyboard:NO];
+    }
+    
+    [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:text];
 }
 
 - (NSString *)draft {
@@ -740,16 +745,16 @@
 - (void)onQuoteDelBtn:(id)sender {
     if (self.quoteInfo.messageUid) {
         [self clearQuoteInfo];
-        [self updateQuoteView:YES];
+        [self updateQuoteView:YES showKeyboard:YES];
     }
 }
 
-- (void)updateQuoteView:(BOOL)updateFrame {
+- (void)updateQuoteView:(BOOL)updateFrame showKeyboard:(BOOL)showKeyboard {
     if (self.inputBarStatus == ChatInputBarMuteStatus) {
         return;
     }
     
-    if (self.inputBarStatus == ChatInputBarDefaultStatus || self.inputBarStatus == ChatInputBarRecordStatus) {
+    if (showKeyboard && (self.inputBarStatus == ChatInputBarDefaultStatus || self.inputBarStatus == ChatInputBarRecordStatus)) {
         self.inputBarStatus = ChatInputBarKeyboardStatus;
     }
     
@@ -796,10 +801,10 @@
 - (BOOL)appendQuote:(long long)messageUid {
     if (self.quoteInfo) {
         [self clearQuoteInfo];
-        [self updateQuoteView:NO];
+        [self updateQuoteView:NO showKeyboard:YES];
     }
     self.quoteInfo = [[WFCCQuoteInfo alloc] initWithMessageUid:messageUid];
-    [self updateQuoteView:YES];
+    [self updateQuoteView:YES showKeyboard:YES];
     return self.quoteInfo != nil;
 }
 
@@ -887,7 +892,7 @@
     [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos withQuoteInfo:self.quoteInfo];
     self.textInputView.text = nil;
     [self clearQuoteInfo];
-    [self updateQuoteView:NO];
+    [self updateQuoteView:NO showKeyboard:YES];
     [self.mentionInfos removeAllObjects];
     [self changeTextViewHeight:32 needUpdateText:NO updateRange:NSMakeRange(0, 0)];
 }

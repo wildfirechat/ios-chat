@@ -840,7 +840,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.chatInputBar willAppear];
+    if (!self.firstAppear) {
+        [self.chatInputBar willAppear];
+    }
     if(self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.targetUser = userInfo;
