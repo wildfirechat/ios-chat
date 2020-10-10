@@ -14,6 +14,7 @@
 
 static AppService *sharedSingleton = nil;
 
+#define WFC_APPSERVER_COOKIES @"WFC_APPSERVER_COOKIES"
 @implementation AppService 
 + (AppService *)sharedAppService {
     if (sharedSingleton == nil) {
@@ -186,7 +187,7 @@ static AppService *sharedSingleton = nil;
             //Save cookies
             NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:APP_SERVER_ADDRESS]];
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookies];
-            [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"WFC_APPSERVER_COOKIES"];
+            [[NSUserDefaults standardUserDefaults] setObject:data forKey:WFC_APPSERVER_COOKIES];
         
               NSDictionary *dict = responseObject;
               dispatch_async(dispatch_get_main_queue(), ^{
@@ -387,7 +388,11 @@ static AppService *sharedSingleton = nil;
 }
 
 - (NSData *)getAppServiceCookies {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"WFC_APPSERVER_COOKIES"];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:WFC_APPSERVER_COOKIES];
+}
+
+- (void)clearAppServiceCookies {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_APPSERVER_COOKIES];
 }
 
 @end
