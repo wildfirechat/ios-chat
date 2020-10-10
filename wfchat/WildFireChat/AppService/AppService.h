@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
             error:(void(^)(int error_code))errorBlock;
 
 - (NSData *)getAppServiceCookies;
+
+- (void)clearAppServiceCookies;
 @end
 
 NS_ASSUME_NONNULL_END

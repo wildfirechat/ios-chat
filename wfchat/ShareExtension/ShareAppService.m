@@ -190,5 +190,7 @@ static ShareAppService *sharedSingleton = nil;
           }];
 }
 
-
+- (BOOL)isLogin {
+    return [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]].count > 0;
+}
 @end
