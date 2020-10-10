@@ -40,6 +40,23 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    if (![[ShareAppService sharedAppService] isLogin]) {
+        __weak typeof(self)ws = self;
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"没有登录" message:@"请先登录野火IM" preferredStyle:UIAlertControllerStyleAlert];
+        
+        
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+        }];
+        
+        [alertController addAction:cancel];
+        
+        [ws presentViewController:alertController animated:YES completion:nil];
+        
+        return;
+    }
+    
     self.dataLoaded = NO;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];

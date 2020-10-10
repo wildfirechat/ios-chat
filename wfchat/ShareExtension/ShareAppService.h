@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
            progress:(void(^)(int sentcount, int total))progressBlock
             success:(void(^)(NSString *url))successBlock
               error:(void(^)(NSString *errorMsg))errorBlock;
+
+- (BOOL)isLogin;
 @end
 
 NS_ASSUME_NONNULL_END
