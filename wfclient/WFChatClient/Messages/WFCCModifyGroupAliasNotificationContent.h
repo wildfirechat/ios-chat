@@ -19,7 +19,7 @@
 @property (nonatomic, strong)NSString *groupId;
 
 /**
- 群成员ID
+ 操作者用户ID
  */
 @property (nonatomic, strong)NSString *operateUser;
 
@@ -27,5 +27,10 @@
  群昵称
  */
 @property (nonatomic, strong)NSString *alias;
+
+/**
+ 被修改昵称的用户，如果为空为修改operator的群昵称。
+ */
+@property (nonatomic, strong)NSString *memberId;
 
 @end
