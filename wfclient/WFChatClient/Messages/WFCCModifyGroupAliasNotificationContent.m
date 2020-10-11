@@ -28,6 +28,10 @@
         [dataDict setObject:self.groupId forKey:@"g"];
     }
     
+    if (self.memberId) {
+        [dataDict setObject:self.memberId forKey:@"m"];
+    }
+    
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
@@ -46,6 +50,7 @@
         self.operateUser = dictionary[@"o"];
         self.alias = dictionary[@"n"];
         self.groupId = dictionary[@"g"];
+        self.memberId = dictionary[@"m"];
     }
 }
 
@@ -70,19 +75,33 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = [NSString stringWithFormat:@"你修改群名片为：%@", self.alias];
+        formatMsg = @"你修改";
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         
-        if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名片为：%@", userInfo.friendAlias, self.alias];
+        if (self.memberId.length && userInfo.groupAlias.length) {
+            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.groupAlias];
+        } else if (userInfo.friendAlias.length > 0) {
+            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.friendAlias];
         } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名片为：%@", userInfo.displayName, self.alias];
+            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.displayName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名片为：%@", self.operateUser, self.alias];
+            formatMsg = [NSString stringWithFormat:@"%@修改", self.operateUser];
         }
     }
     
+    if (self.memberId.length) {
+        WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
+        if (member.friendAlias.length > 0) {
+            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.friendAlias];
+        } else if (member.displayName.length > 0) {
+            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.displayName];
+        } else {
+            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", self.memberId];
+        }
+    }
+    
+    formatMsg = [formatMsg stringByAppendingFormat:@"群昵称为%@", self.alias];
     return formatMsg;
 }
 @end
