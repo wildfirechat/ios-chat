@@ -14,8 +14,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** Corresponds to webrtc::Priority. */
+typedef NS_ENUM(NSInteger, RTCPriority) {
+  RTCPriorityVeryLow,
+  RTCPriorityLow,
+  RTCPriorityMedium,
+  RTCPriorityHigh
+};
+
 RTC_OBJC_EXPORT
-@interface RTCRtpEncodingParameters : NSObject
+@interface RTC_OBJC_TYPE (RTCRtpEncodingParameters) : NSObject
+
+/** The idenfifier for the encoding layer. This is used in simulcast. */
+@property(nonatomic, copy, nullable) NSString *rid;
 
 /** Controls whether the encoding is currently transmitted. */
 @property(nonatomic, assign) BOOL isActive;
@@ -40,8 +51,19 @@ RTC_OBJC_EXPORT
  */
 @property(nonatomic, copy, nullable) NSNumber *numTemporalLayers;
 
+/** Scale the width and height down by this factor for video. If nil,
+ * implementation default scaling factor will be used.
+ */
+@property(nonatomic, copy, nullable) NSNumber *scaleResolutionDownBy;
+
 /** The SSRC being used by this encoding. */
 @property(nonatomic, readonly, nullable) NSNumber *ssrc;
+
+/** The relative bitrate priority. */
+@property(nonatomic, assign) double bitratePriority;
+
+/** The relative DiffServ Code Point priority. */
+@property(nonatomic, assign) RTCPriority networkPriority;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
