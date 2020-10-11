@@ -1148,7 +1148,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                   error:(void(^)(int error_code))errorBlock;
 
 /**
- 修改群昵称
+ 修改自己的群昵称
 
  @param groupId 群ID
  @param newAlias 昵称
@@ -1163,6 +1163,24 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
            notifyContent:(WFCCMessageContent *)notifyContent
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 修改群成员的昵称，群主可以修改所有人，群管理员可以修改普通成员的群昵称
+
+ @param groupId 群ID
+ @param newAlias 昵称
+ @param notifyLines 默认传 @[@(0)]
+ @param notifyContent 通知消息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)modifyGroupMemberAlias:(NSString *)groupId
+                      memberId:(NSString *)memberId
+                         alias:(NSString *)newAlias
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                 notifyContent:(WFCCMessageContent *)notifyContent
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock;
 
 /**
  转移群主

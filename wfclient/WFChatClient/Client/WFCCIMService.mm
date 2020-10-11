@@ -1782,6 +1782,25 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::modifyGroupAlias([groupId UTF8String], [newAlias UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (void)modifyGroupMemberAlias:(NSString *)groupId
+                      memberId:(NSString *)memberId
+                         alias:(NSString *)newAlias
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                 notifyContent:(WFCCMessageContent *)notifyContent
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock {
+    mars::stn::TMessageContent tcontent;
+    fillTMessageContent(tcontent, notifyContent);
+    
+    std::list<int> lines;
+    for (NSNumber *number in notifyLines) {
+        lines.push_back([number intValue]);
+    }
+    
+    
+    mars::stn::modifyGroupMemberAlias([groupId UTF8String], [memberId UTF8String], [newAlias UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
                              forceUpdate:(BOOL)forceUpdate {
     std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], forceUpdate);
