@@ -86,10 +86,10 @@
     if ([msgModel.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msgModel.message.content;
         if (txtContent.quoteInfo) {
-            CGFloat quoteWidth = width - Portrait_Size - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
+            CGFloat quoteWidth = width - Portrait_Size - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left - 8;
             NSString *quoteTxt = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, txtContent.quoteInfo.messageDigest];
-            CGSize size = [WFCUUtilities getTextDrawingSize:quoteTxt font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 36)];
-            size.height += 4;
+            CGSize size = [WFCUUtilities getTextDrawingSize:quoteTxt font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 44)];
+            size.height += 12;
             size.width = width;
             return size;
         }
@@ -346,29 +346,44 @@
         model.highlighted = NO;
     }
     
-    self.quoteLabel.hidden = YES;
+    self.quoteContainer.hidden = YES;
     if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)model.message.content;
         if (txtContent.quoteInfo) {
             if (!self.quoteLabel) {
                 self.quoteLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-                self.quoteLabel.backgroundColor = [UIColor grayColor];
                 self.quoteLabel.font = [UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE];
                 self.quoteLabel.numberOfLines = 0;
                 self.quoteLabel.layer.cornerRadius = 3.f;
                 self.quoteLabel.layer.masksToBounds = YES;
                 self.quoteLabel.userInteractionEnabled = YES;
+                self.quoteLabel.textColor = [UIColor grayColor];
                 [self.quoteLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQuoteLabelTaped:)]];
-                [self.contentView addSubview:self.quoteLabel];
+                
+                self.quoteContainer = [[UIView alloc] initWithFrame:CGRectZero];
+                self.quoteContainer.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.f];
+                self.quoteContainer.layer.cornerRadius = 3.f;
+                self.quoteContainer.layer.masksToBounds = YES;
+                [self.quoteContainer addSubview:self.quoteLabel];
+                [self.contentView addSubview:self.quoteContainer];
             }
             CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-            if (model.message.direction == MessageDirection_Send) {
-                self.quoteLabel.frame = CGRectMake(self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Another_Side - selectViewOffset, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
-            } else {
-                self.quoteLabel.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding + Bubble_Padding_Arraw, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
-            }
             
-            self.quoteLabel.hidden = NO;
+            CGRect frame;
+            if (model.message.direction == MessageDirection_Send) {
+                frame = CGRectMake(self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Another_Side - selectViewOffset, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
+            } else {
+                frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding + Bubble_Padding_Arraw, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
+            }
+            self.quoteContainer.frame = frame;
+            frame = self.quoteContainer.bounds;
+            frame.size.height -= 8;
+            frame.size.width -= 8;
+            frame.origin.x += 4;
+            frame.origin.y += 4;
+            self.quoteLabel.frame = frame;
+            
+            self.quoteContainer.hidden = NO;
             self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, txtContent.quoteInfo.messageDigest];
         }
     }
