@@ -60,6 +60,8 @@
 "SendFailure"="Send failure！";
 "Done"="Done";
 "OpenInBrowser"="Open in browser";
+"SendToFriend"="Send to friends";
+"SendToMoments"="Send to moments";
 "DeleteFriend"="Delete friend";
 "SetAlias"="Set alias";
 "RemoveFromBlacklist"="Remove from black list";
