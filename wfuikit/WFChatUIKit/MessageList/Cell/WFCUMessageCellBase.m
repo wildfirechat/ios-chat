@@ -20,7 +20,7 @@
 + (CGFloat)hightForHeaderArea:(WFCUMessageModel *)msgModel {
     CGFloat offset;
     if (msgModel.showTimeLabel) {
-        offset = 27;
+        offset = 30;
     } else {
         offset = 5;
     }
@@ -102,7 +102,7 @@
 
     
     CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(screenWidth, 8000)];
-    CGRect rect = CGRectMake((screenWidth - size.width)/2, offset + 7, size.width, size.height);
+    CGRect rect = CGRectMake((screenWidth - size.width)/2, offset + 5, size.width, size.height);
     _timeLabel.frame = rect;
   } else {
     _timeLabel.hidden = YES;
