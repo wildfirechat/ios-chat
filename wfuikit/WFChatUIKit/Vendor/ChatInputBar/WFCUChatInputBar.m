@@ -616,8 +616,6 @@
         text = @"@ ";
     }
     
-    
-    self.textInputView.text = text;
     self.mentionInfos = mentionInfos;
     if (quoteInfo) {
         self.quoteInfo = quoteInfo;
@@ -625,6 +623,7 @@
     }
     
     [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(0, 0) replacementText:text];
+    self.textInputView.text = text;
 }
 
 - (NSString *)draft {
