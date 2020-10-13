@@ -60,6 +60,8 @@
 "SendFailure"="发送失败！";
 "Done"="完成";
 "OpenInBrowser"="浏览器打开";
+"SendToFriend"="发送给好友";
+"SendToMoments"="发送到朋友圈";
 "DeleteFriend"="删除好友";
 "SetAlias"="设置备注";
 "RemoveFromBlacklist"="取消屏蔽";
