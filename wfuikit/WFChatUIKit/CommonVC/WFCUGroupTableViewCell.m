@@ -35,6 +35,7 @@
         _portrait = [UIImageView new];
         _portrait.layer.cornerRadius = 4.0f;
         _portrait.layer.masksToBounds = YES;
+        [self.contentView addSubview:_portrait];
     }
     return _portrait;
 }
@@ -63,5 +64,30 @@
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
     }
     [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    
+    if (groupInfo.portrait.length) {
+        [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    } else {
+        __weak typeof(self)ws = self;
+        NSString *groupId = groupInfo.target;
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:groupInfo.target queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSString *path = [note.userInfo objectForKey:@"path"];
+            if ([ws.groupInfo.target isEqualToString:groupId]) {
+                [ws.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            }
+        }];
+        [self.portrait setImage:[UIImage imageNamed:@"group_default_portrait"]];
+        
+        
+        NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
+            return [UIImage imageNamed:@"PersonalChat"];
+        }];
+        
+        if (path) {
+            [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            [self.portrait setImage:[UIImage imageWithContentsOfFile:path]];
+        }
+    }
 }
 @end
