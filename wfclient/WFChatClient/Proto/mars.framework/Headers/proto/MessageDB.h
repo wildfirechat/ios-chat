@@ -95,6 +95,7 @@ namespace mars {
             
             int64_t getConversationReadMaxDt(int conversationType, const std::string &target, int line);
             bool updateConversationRead(int conversationType, const std::string &target, int line, int64_t dt);
+            bool updateLineRead(int conversationType, int line, int64_t dt);
             bool updateConversationReaded(int conversationType, const std::string &target, int line, int64_t dt);
             std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, int limit);
             std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, bool desc, int limit, int offset);
@@ -180,7 +181,8 @@ namespace mars {
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
             bool updateConversationUnread(int conversationType, const std::string &target, int line);
-            bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> lines, bool clearLastMessageId = false);
+            bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> &lines, bool clearLastMessageId = false);
+            bool clearAllConversationUnread(bool clearLastMessageId = false);
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
             void getMsgFromStateMent(DB2 *db, RecyclableStatement &statementHandle, TMessage &msg);
             
