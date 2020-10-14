@@ -119,6 +119,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Favourite_User = 14,
     //不能直接使用
     UserSettingScope_Mute_When_PC_Online = 15,
+    //不能直接使用
+    UserSettingScope_Lines_Readed = 16,
     
     
     //自定义用户设置，请使用1000以上的key
