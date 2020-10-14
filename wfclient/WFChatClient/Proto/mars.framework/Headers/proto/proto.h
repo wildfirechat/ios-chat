@@ -439,6 +439,8 @@ namespace mars{
             kUserSettingWebOnline = 12,
             kUserSettingDisableRecipt = 13,
             kUserSettingFavouriteUser = 14,
+            kUserSettingMuteWhenPCOnline = 15,
+            kUserSettingLinesReaded = 16,
 
             kUserSettingCustomBegin = 1000
         };
