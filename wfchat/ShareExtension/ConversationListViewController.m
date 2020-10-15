@@ -8,11 +8,11 @@
 
 #import "ConversationListViewController.h"
 #import "SharedConversation.h"
-#import <SDWebImage/SDWebImage.h>
+#import "ShareUtility.h"
 #import "SharePredefine.h"
 #import "ShareAppService.h"
-#import "ShareUtility.h"
 #import "MBProgressHUD.h"
+#import "ConversationCell.h"
 
 @interface ConversationListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)NSData *cookiesData;
@@ -43,14 +43,6 @@
         
     NSError *error = nil;
     self.sharedConversations = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:[SharedConversation class] fromData:[sharedDefaults objectForKey:WFC_SHARE_BACKUPED_CONVERSATION_LIST] error:&error];
-}
-
-- (NSURL *)getSavedGroupGridPortrait:(NSString *)groupId {
-    NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:WFC_SHARE_APP_GROUP_ID];
-    NSURL *portraitURL = [groupURL URLByAppendingPathComponent:WFC_SHARE_BACKUPED_GROUP_GRID_PORTRAIT_PATH];
-    NSURL *fileURL = [portraitURL URLByAppendingPathComponent:groupId];
-    
-    return fileURL;
 }
 
 - (void)sendTo:(SharedConversation *)conversation {
@@ -158,30 +150,19 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    ConversationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[ConversationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0 );
         
     }
-    SharedConversation *sc = self.sharedConversations[indexPath.row];
-    cell.textLabel.text = sc.title;
-    if (sc.type == 0) { //Single_Type
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-    } else if(sc.type == 1) {  //Group_Type
-        if (sc.portraitUrl) {
-            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"GroupChat"]];
-        } else {
-            [cell.imageView sd_setImageWithURL:[self getSavedGroupGridPortrait:sc.target] placeholderImage:[UIImage imageNamed:@"GroupChat"]];
-        }
-    } else if(sc.type == 3) { //Channel_Type
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"ChannelChat"]];
-    }
-    
+    cell.conversation = self.sharedConversations[indexPath.row];
+
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 46;
+    return 56;
 }
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

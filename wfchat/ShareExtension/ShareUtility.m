@@ -7,6 +7,7 @@
 //
 
 #import "ShareUtility.h"
+#import "SharePredefine.h"
 
 @implementation ShareUtility
 + (CGSize)imageScaleSize:(CGSize)imageSize targetSize:(CGSize)targetSize thumbnailPoint:(CGPoint *)thumbnailPoint {
@@ -107,6 +108,14 @@
     UIGraphicsEndImageContext();
     return  targetImage;
     
+}
+
++ (NSURL *)getSavedGroupGridPortrait:(NSString *)groupId {
+    NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:WFC_SHARE_APP_GROUP_ID];
+    NSURL *portraitURL = [groupURL URLByAppendingPathComponent:WFC_SHARE_BACKUPED_GROUP_GRID_PORTRAIT_PATH];
+    NSURL *fileURL = [portraitURL URLByAppendingPathComponent:groupId];
+    
+    return fileURL;
 }
 
 @end
