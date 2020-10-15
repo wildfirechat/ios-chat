@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIImage *)generateThumbnail:(UIImage *)image
                      withWidth:(CGFloat)targetWidth
                     withHeight:(CGFloat)targetHeight;
+
++ (NSURL *)getSavedGroupGridPortrait:(NSString *)groupId;
 @end
 
 NS_ASSUME_NONNULL_END
