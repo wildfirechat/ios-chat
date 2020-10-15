@@ -64,7 +64,6 @@
             label.font = [UIFont systemFontOfSize:16];
             label.textAlignment = NSTextAlignmentCenter;
             label.textColor = [UIColor grayColor];
-            label.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
             label.layer.cornerRadius = 5.f;
             label.layer.masksToBounds = YES;
             CGSize size = [WFCUUtilities getTextDrawingSize:label.text font:label.font constrainedSize:CGSizeMake(screenWidth-16, 8000)];
