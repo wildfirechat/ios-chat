@@ -33,7 +33,7 @@
     [self.view addSubview:self.activityView];
     
     __weak typeof(self)ws = self;
-    [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation beforeMessageUid:0 count:20 success:^(NSArray<WFCCFileRecord *> *files) {
+    [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:0 count:20 success:^(NSArray<WFCCFileRecord *> *files) {
         ws.fileRecords = [files mutableCopy];
         [ws.tableView reloadData];
         ws.activityView.hidden = YES;
