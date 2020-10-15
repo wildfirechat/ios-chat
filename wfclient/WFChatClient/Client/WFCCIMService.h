@@ -312,11 +312,11 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (WFCCUnreadCount *)getUnreadCount:(WFCCConversation *)conversation;
 
 /**
- 清空会话未读数
+ 清空会话未读数。仅清理本地消息的未读数，没有同步到其他端，如果多端使用，请避免使用此方法
  
  @param conversation 会话
  */
-- (void)clearUnreadStatus:(WFCCConversation *)conversation;
+- (void)clearUnreadStatus:(WFCCConversation *)conversation DEPRECATED_MSG_ATTRIBUTE("use clearUnreadStatus:lines: instead");
 
 /**
 清空会话未读数
