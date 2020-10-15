@@ -1566,17 +1566,43 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                              success:(void(^)(void))successBlock
                                error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取会话文件。conversation不为空时，获取该会话内的文件记录；当conversation为空时，获取用户收到的所有文件记录。
+
+ @param conversation 会话
+ @param fromUser 该用户发送的文件，如果为空返回所有文件
+ @param messageUid 起始记录的UID
+ @param count count
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getConversationFiles:(WFCCConversation *)conversation
+                    fromUser:(NSString *)fromUser
             beforeMessageUid:(long long)messageUid
                        count:(int)count
                      success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                        error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取当前用法发送的文件。
+
+ @param beforeMessageUid 起始记录的UID
+ @param count count
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getMyFiles:(long long)beforeMessageUid
              count:(int)count
            success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
              error:(void(^)(int error_code))errorBlock;
 
+/**
+ 删除文件记录。发送者可以删除，另外如果在群里，群主和管理员也可以删除。
+
+ @param messageUid 起始记录的UID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)deleteFileRecord:(long long)messageUid
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;

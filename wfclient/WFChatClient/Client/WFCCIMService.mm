@@ -2301,16 +2301,18 @@ public:
 }
 
 - (void)getConversationFiles:(WFCCConversation *)conversation
+                    fromUser:(NSString *)userId
             beforeMessageUid:(long long)messageUid
                        count:(int)count
                      success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                        error:(void(^)(int error_code))errorBlock {
     mars::stn::TConversation conv;
-    conv.target = [conversation.target UTF8String];
+    conv.target = conversation.target ? [conversation.target UTF8String] : "";
     conv.line = conversation.line;
     conv.conversationType = (int)conversation.type;
     
-    mars::stn::loadConversationFileRecords(conv, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    std::string fromUser = userId ? [userId UTF8String] : "";
+    mars::stn::loadConversationFileRecords(conv, fromUser, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)getMyFiles:(long long)beforeMessageUid
