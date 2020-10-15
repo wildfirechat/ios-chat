@@ -221,10 +221,12 @@
         return;
     }
     
-    //[self stopPlayer];
-    
+    __weak typeof(self)ws = self;
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
+            if (!ws.recordView.superview) {
+                return;
+            }
             AVAudioSession *session = [AVAudioSession sharedInstance];
             [session setCategory:AVAudioSessionCategoryRecord error:nil];
             BOOL r = [session setActive:YES error:nil];
