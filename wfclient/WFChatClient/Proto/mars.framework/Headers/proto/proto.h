@@ -736,7 +736,7 @@ namespace mars{
 
         extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
-        extern void loadConversationFileRecords(const TConversation &conv, long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void loadConversationFileRecords(const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
         extern void loadMyFileRecords(long long beforeUid, int count, LoadFileRecordCallback *callback);
         extern void deleteFileRecords(long long messageUid, GeneralOperationCallback *callback);
     
