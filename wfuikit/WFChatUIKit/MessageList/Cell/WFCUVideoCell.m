@@ -33,7 +33,7 @@
     WFCCVideoMessageContent *imgContent = (WFCCVideoMessageContent *)model.message.content;
     self.thumbnailView.frame = self.bubbleView.bounds;
     self.thumbnailView.image = imgContent.thumbnail;
-    self.videoCoverView.frame = CGRectMake((self.bubbleView.bounds.size.width - 80)/2, (self.bubbleView.bounds.size.height - 80)/2, 80, 80);
+    self.videoCoverView.frame = CGRectMake((self.bubbleView.bounds.size.width - 40)/2, (self.bubbleView.bounds.size.height - 40)/2, 40, 40);
     self.videoCoverView.image = [UIImage imageNamed:@"video_msg_cover"];
 }
 
