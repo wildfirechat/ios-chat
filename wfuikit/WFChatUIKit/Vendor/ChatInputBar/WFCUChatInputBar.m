@@ -16,7 +16,6 @@
 #import "WFCULocationViewController.h"
 #import "WFCULocationPoint.h"
 #import "WFCUSelectFileViewController.h"
-#import "KZVideoViewController.h"
 #import "UIView+Toast.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUContactListViewController.h"
@@ -25,12 +24,11 @@
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
-#import "DNImagePickerController.h"
-#import "DNAsset.h"
 #import <Photos/Photos.h>
 #import "WFCUShareMessageView.h"
 #import "TYAlertController.h"
 #import "UIView+TYAlertView.h"
+#import <ZLPhotoBrowser/ZLPhotoBrowser-Swift.h>
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -52,7 +50,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, KZVideoViewControllerDelegate, DNImagePickerControllerDelegate, UIDocumentPickerDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, UIDocumentPickerDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -1102,30 +1100,24 @@
 - (void)onItemClicked:(NSUInteger)itemTag {
     UINavigationController *navi = [self.delegate requireNavi];
   
+    __weak typeof(self)weakself = self;
     self.inputBarStatus = ChatInputBarDefaultStatus;
     if (itemTag == 1) {
-#if 0
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-#if TARGET_IPHONE_SIMULATOR
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-#else
-        if (itemTag == 1) {
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        } else if(itemTag == 2){
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        }
-#endif
-        picker.videoExportPreset = AVAssetExportPresetPassthrough;
-        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:picker.sourceType];
-        [navi presentViewController:picker animated:YES completion:nil];
-        [self checkAndAlertCameraAccessRight];
-#else
-        DNImagePickerController *imagePicker = [[DNImagePickerController alloc] init];
-        imagePicker.imagePickerDelegate = self;
-        imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
-        [navi presentViewController:imagePicker animated:YES completion:nil];
-#endif
+        [ZLPhotoConfiguration default].allowSelectImage = YES;
+        [ZLPhotoConfiguration default].allowSelectVideo = YES;
+        [ZLPhotoConfiguration default].maxSelectCount = 9;
+        [ZLPhotoConfiguration default].allowMixSelect = false;
+        [ZLPhotoConfiguration default].allowTakePhotoInLibrary = false;
+        [ZLPhotoConfiguration default].allowEditImage = true;
+        [ZLPhotoConfiguration default].allowEditVideo = true;
+        
+        ZLPhotoPreviewSheet *ps = [[ZLPhotoPreviewSheet alloc] initWithSelectedAssets:@[]];
+        ps.selectImageBlock = ^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+            NSMutableArray *photos = [[NSMutableArray alloc] init];
+            [photos addObjectsFromArray:assets];
+            [weakself recursiveHandle:photos isFullImage:isOriginal];
+        };
+        [ps showPhotoLibraryWithSender:[self.delegate requireNavi]];
     } else if(itemTag == 2) {
 #if TARGET_IPHONE_SIMULATOR
         [self makeToast:@"模拟器不支持相机" duration:1 position:CSToastPositionCenter];
@@ -1133,12 +1125,50 @@
         picker.delegate = self;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [navi presentViewController:picker animated:YES completion:nil];
-        [self checkAndAlertCameraAccessRight];
 #else
-        KZVideoViewController *videoVC = [[KZVideoViewController alloc] init];
-        videoVC.delegate = self;
-        [videoVC startAnimationWithType:KZVideoViewShowTypeSingle selectExist:NO];
-        double now = [[NSDate date] timeIntervalSince1970];
+        [self checkAndAlertCameraAccessRight];
+        
+        [ZLPhotoConfiguration default].allowEditVideo = YES;
+        ZLCustomCamera *cc = [[ZLCustomCamera alloc] init];
+        cc.takeDoneBlock = ^(UIImage * _Nullable image, NSURL * _Nullable url) {
+            NSLog(@"select the image");
+            if (image) {
+                [self.delegate imageDidCapture:image];
+            } else {
+                NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+                
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentPath = [paths lastObject];
+                NSString *tempDir = [documentPath stringByAppendingPathComponent:@"wf_send_video"];
+                NSFileManager *fileManager = [NSFileManager defaultManager];
+                
+                bool isDir = NO;
+                if (![fileManager fileExistsAtPath:tempDir isDirectory:&isDir]) {
+                    isDir = YES;
+                    NSError *err;
+                    if(![fileManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:&err]) {
+                        NSLog(@"Error, create temp folder error");
+                        return;
+                    }
+                    if (err) {
+                        NSLog(@"Error, create temp folder error:%@", err);
+                        return;
+                    }
+                }
+                if (!isDir) {
+                    NSLog(@"Error, create temp folder error");
+                    return;
+                }
+
+                NSString *desFileName = [tempDir stringByAppendingPathComponent:[url lastPathComponent]];
+                [data writeToFile:desFileName atomically:YES];
+                
+                UIImage *thumb = [self getVideoThumbnailWithUrl:url second:1];
+                
+                [self.delegate videoDidCapture:desFileName thumbnail:thumb duration:10];
+            }
+        };
+        [[self.delegate requireNavi] showDetailViewController:cc sender:nil];
         [self notifyTyping:2];
 #endif
     } else if(itemTag == 3){
@@ -1249,6 +1279,48 @@
                                   otherButtonTitles:nil, nil];
         [alertView show];
     }
+}
+
+#define k_THUMBNAIL_IMG_WIDTH  120//缩略图及cell大小
+#define k_FPS 1//一秒想取多少帧
+
+//这本来是个异步调用，但写成这种方便大家看和复制来直接测试
+- (UIImage*)getVideoThumbnailWithUrl:(NSURL*)videoUrl second:(CGFloat)second
+{
+    if (!videoUrl)
+    {
+        NSLog(@"WARNING:videoUrl为空");
+        return nil;
+    }
+    AVURLAsset *urlSet = [AVURLAsset assetWithURL:videoUrl];
+    AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlSet];
+    imageGenerator.appliesPreferredTrackTransform = YES;
+    imageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
+    
+    /*
+     如果不需要获取缩略图，就设置为NO，如果需要获取缩略图，则maximumSize为获取的最大尺寸。
+     以BBC为例，getThumbnail = NO时，打印宽高数据为：1920*1072。
+     getThumbnail = YES时，maximumSize为100*100。打印宽高数据为：100*55.
+     注：不乘[UIScreen mainScreen].scale，会发现缩略图在100*100很虚。
+     */
+    BOOL getThumbnail = YES;
+    if (getThumbnail)
+    {
+        CGFloat width = [UIScreen mainScreen].scale * k_THUMBNAIL_IMG_WIDTH;
+        imageGenerator.maximumSize =  CGSizeMake(width, width);
+    }
+    NSError *error = nil;
+    CMTime time = CMTimeMake(second,k_FPS);
+    CMTime actucalTime;
+    CGImageRef cgImage = [imageGenerator copyCGImageAtTime:time actualTime:&actucalTime error:&error];
+    if (error) {
+        NSLog(@"ERROR:获取视频图片失败,%@",error.domain);
+    }
+    CMTimeShow(actucalTime);
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    NSLog(@"imageWidth=%f,imageHeight=%f",image.size.width,image.size.height);
+    CGImageRelease(cgImage);
+    return image;
 }
 
 #pragma mark  UIDocumentDelegate 文件选择回调
@@ -1414,18 +1486,6 @@
     }
 }
 
-#pragma mark - KZVideoViewControllerDelegate
-- (void)videoViewController:(KZVideoViewController *)videoController didCaptureImage:(UIImage *)image {
-    [self.delegate imageDidCapture:image];
-}
-- (void)videoViewController:(KZVideoViewController *)videoController didRecordVideo:(KZVideoModel *)videoModel {
-    [self.delegate videoDidCapture:videoModel.videoAbsolutePath thumbnail:[UIImage imageWithContentsOfFile:videoModel.thumAbsolutePath] duration:10];
-}
-
-- (void)videoViewControllerDidCancel:(KZVideoViewController *)videoController {
-
-}
-
 #pragma mark - WFCUMentionUserDelegate
 - (void)didMentionType:(int)type user:(NSString *)userId range:(NSRange)range text:(NSString *)text {
     [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(range.location, 0) replacementText:text];
@@ -1470,19 +1530,6 @@
         }
     });
 }
-#pragma mark - DNImagePickerControllerDelegate
-- (void)dnImagePickerController:(DNImagePickerController *)imagePicker
-                     sendImages:(NSArray *)images
-                    isFullImage:(BOOL)isFullImage {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
-    hud.label.text = @"处理中...";
-    [hud showAnimated:YES];
-    [self recursiveHandle:images isFullImage:isFullImage];
-}
-
-- (void)dnImagePickerControllerDidCancel:(DNImagePickerController *)imagePicker {
-    [imagePicker dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)convertAvcompositionToAvasset:(AVComposition *)composition completion:(void (^)(AVAsset *asset))completion {
     // 导出视频
@@ -1519,7 +1566,7 @@
         });
     }
 }
-- (void)handleVideo:(NSURL *)url photos:(NSMutableArray<DNAsset *> *)photos isFullImage:(BOOL)isFullImage {
+- (void)handleVideo:(NSURL *)url photos:(NSMutableArray<PHAsset *> *)photos isFullImage:(BOOL)isFullImage {
     AVURLAsset *asset1 = [[AVURLAsset alloc] initWithURL:url options:nil];
     AVAssetImageGenerator *generate1 = [[AVAssetImageGenerator alloc] initWithAsset:asset1];
     generate1.appliesPreferredTrackTransform = YES;
@@ -1575,20 +1622,20 @@
 
      }];
 }
-- (void)recursiveHandle:(NSMutableArray<DNAsset *> *)photos isFullImage:(BOOL)isFullImage {
+- (void)recursiveHandle:(NSMutableArray<PHAsset *> *)photos isFullImage:(BOOL)isFullImage {
     if (photos.count == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.parentView animated:YES];
         });
     }else{
-        DNAsset *item = photos[0];
+        PHAsset *phAsset = photos[0];
         [photos removeObjectAtIndex:0];
         __weak typeof(self) weakself = self;
-        if (item.asset.mediaType == PHAssetMediaTypeVideo) {
+        if (phAsset.mediaType == PHAssetMediaTypeVideo) {
             PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
             options.version = PHImageRequestOptionsVersionCurrent;
             options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-            PHAsset *phAsset = item.asset;
+            
             
             PHImageManager *manager = [PHImageManager defaultManager];
             [manager requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
@@ -1605,13 +1652,13 @@
                 
                 
             }];
-        } else if(item.asset.mediaType == PHAssetMediaTypeImage) {
+        } else if(phAsset.mediaType == PHAssetMediaTypeImage) {
             PHImageRequestOptions *imageRequestOption = [[PHImageRequestOptions alloc] init];
             imageRequestOption.networkAccessAllowed = YES;
             PHCachingImageManager *cachingImageManager = [[PHCachingImageManager alloc] init];
             cachingImageManager.allowsCachingHighQualityImages = NO;
             [cachingImageManager
-             requestImageDataForAsset:item.asset
+             requestImageDataForAsset:phAsset
              
              options:imageRequestOption
              

@@ -64,6 +64,8 @@
 		2F56F6FA252C956700B829C4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56F6F8252C956700B829C4 /* MainInterface.storyboard */; };
 		2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2F56F6F3252C956700B829C4 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2F56F706252CA99A00B829C4 /* ConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F705252CA99A00B829C4 /* ConversationListViewController.m */; };
+		2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; };
+		2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
@@ -152,6 +154,7 @@
 				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
 				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
 				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
+				2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */,
 				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -254,6 +257,7 @@
 		2F56F6FB252C956700B829C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F56F704252CA99A00B829C4 /* ConversationListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationListViewController.h; sourceTree = "<group>"; };
 		2F56F705252CA99A00B829C4 /* ConversationListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationListViewController.m; sourceTree = "<group>"; };
+		2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
 		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
 		2F70C7392417DB6C0058BD27 /* DiscoverMomentsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiscoverMomentsTableViewCell.h; sourceTree = "<group>"; };
 		2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiscoverMomentsTableViewCell.m; sourceTree = "<group>"; };
@@ -358,6 +362,7 @@
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
+				2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */,
 				2F1A2896251647E3001350B6 /* SDWebImage.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
@@ -536,6 +541,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */,
 				2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */,
 				2BDCE7E22336278E0004212B /* CallKit.framework */,
 				2BDCE7E0233627450004212B /* PushKit.framework */,

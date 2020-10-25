@@ -1,0 +1,65 @@
+"previewCamera" = "カメラ";
+"previewCameraRecord" = "撮影";
+"previewAlbum" = "アルバム";
+"previewCancel" = "キャンセル";
+
+"originalPhoto" = "完全な画像";
+"done" = "確定";
+"ok" = "確定";
+"editFinish" = "完了";
+
+"back" = "戻る";
+
+"edit" = "編集";
+"save" = "保存";
+"revert" = "元に戻す";
+
+"photo" = "写真";
+"preview" = "プレビュー";
+
+"noPhotoTips" = "写真でない";
+"notAllowMixSelect" = "ビデオを選択できません";
+
+"loading" = "ロード中，お待ち下さい";
+"hudLoading" = "後ほど...";
+
+"saveImageError" = "画像の保存に失敗しました";
+"exceededMaxSelectCount" = "最大選択数: %ld";
+"longerThanMaxVideoDuration" = "%ldsより長い動画は選択できません";
+"shorterThanMaxVideoDuration" = "％ldsより短い動画は選択できません";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "動画の最大選択数: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "動画の最小選択数: %ld";
+
+"noCameraAuthority" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
+"noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";
+"noMicrophoneAuthority" = "「設定」->「プライパシー」->「マイク」から、%@があなたのデバイスのマイクにアクセスする許可をしてください";
+"cameraUnavailable" = "カメラは利用できません";
+
+"iCloudPhotoLoadFaild" = "写真のライブラリをダウンロードした後の再試行";
+"iCloudVideoLoadFaild" = "iCloudから同期できません";
+
+"imageLoadFailed" = "ロード失敗";
+"saveVideoError" = "ビデオの保存に失敗しました";
+"timeout" = "要求タイムアウト";
+
+"customCameraTips" = "タップして撮影、長押しで記録";
+"customCameraTakePhotoTips" = "タップして撮影";
+"customCameraRecordVideoTips" = "長押しで記録";
+"minRecordTimeTips" = "%lds以上記録する";
+
+"cameraRoll" = "最近の項目";
+"panoramas" = "パノラマ";
+"videos" = "ビデオ";
+"favorites" = "お気に入り";
+"timelapses" = "タイムラプス";
+"recentlyAdded" = "最後に追加した項目";
+"bursts" = "バースト";
+"slomoVideos" = "スローモーション";
+"selfPortraits" = "セルフイー";
+"screenshots" = "スクリーンショット";
+"depthEffect" = "ポートレート";
+"livePhotos" = "Live Photos";
+"animated" = "アニメーション";
+"myPhotoStream" = "マイフォトストリーム";
+
+"noTitleAlbumListPlaceholder" = "画像すべて";

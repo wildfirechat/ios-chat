@@ -91,6 +91,7 @@
 		2BEF78A723F6A84D000DE285 /* WFCUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */; };
 		2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF789C23F6A84D000DE285 /* WFCUFloatingWindow.m */; };
 		2BEF78A923F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BEF789D23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h */; };
+		2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */; };
 		2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */; };
 		2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */; };
 		2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */; };
@@ -496,6 +497,7 @@
 		2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVideoViewController.m; sourceTree = "<group>"; };
 		2BEF789C23F6A84D000DE285 /* WFCUFloatingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFloatingWindow.m; sourceTree = "<group>"; };
 		2BEF789D23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUParticipantCollectionViewCell.h; sourceTree = "<group>"; };
+		2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
 		2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSearchGroupTableViewCell.h; sourceTree = "<group>"; };
 		2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchGroupTableViewCell.m; sourceTree = "<group>"; };
 		2F143A68217F7D4100B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
@@ -826,6 +828,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */,
 				2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */,
 				901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */,
 				2F550BF3217F4DCD00F56C26 /* WFChatClient.framework in Frameworks */,
@@ -930,6 +933,14 @@
 				2BDF579224AD70C8003C1F08 /* DNBrowserCell.m */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2F0BD9102537424500A7B674 /* ZLPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */,
+			);
+			path = ZLPhotoBrowser;
 			sourceTree = "<group>";
 		};
 		2F143A66217F7D4100B3E38A /* Resources */ = {
@@ -1190,6 +1201,7 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2F0BD9102537424500A7B674 /* ZLPhotoBrowser */,
 				2FA2E6E025158CBA0038635A /* SDWebImage */,
 				2BDF576724AD70C8003C1F08 /* DNImagePicker */,
 				2B63367B24716864008D6B38 /* ZCCCircleProgressView */,
@@ -2437,6 +2449,7 @@
 					"$(PROJECT_DIR)/WFChatUIKit/AVEngine/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WFChatUIKit/AVEngine",
 					"$(PROJECT_DIR)/WFChatUIKit/Vendor/SDWebImage",
+					"$(PROJECT_DIR)/WFChatUIKit/Vendor/ZLPhotoBrowser",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
@@ -2476,6 +2489,7 @@
 					"$(PROJECT_DIR)/WFChatUIKit/AVEngine/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WFChatUIKit/AVEngine",
 					"$(PROJECT_DIR)/WFChatUIKit/Vendor/SDWebImage",
+					"$(PROJECT_DIR)/WFChatUIKit/Vendor/ZLPhotoBrowser",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
