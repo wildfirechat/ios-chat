@@ -23,3 +23,4 @@ lipo -create $BIN_DIR_TMP/*-${TARGET_NAME}.framework/${TARGET_NAME} -output ${BI
 cp -af ${BIN_DIR}/* ${DST_DIR}/
 cp -af WFChatUIKit/Resources/*  ${DST_DIR}/
 cp -af WFChatUIKit/AVEngine/*  ${DST_DIR}/
+cp -af WFChatUIKit/Vendor/ZLPhotoBrowser/*  ${DST_DIR}/
