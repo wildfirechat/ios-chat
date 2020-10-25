@@ -598,9 +598,14 @@ static WFCCNetworkService * sharedSingleton = nil;
       self.backgroudRunTime += 3;
       BOOL inCall = NO;
       Class cls = NSClassFromString(@"WFAVEngineKit");
+      
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
       if (cls && [cls respondsToSelector:@selector(isCallActive)] && [cls performSelector:@selector(isCallActive)]) {
           inCall = YES;
       }
+#pragma clang diagnostic pop
+      
       if ((mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) || (inCall && self.backgroudRunTime < 1800)) {
           [self checkBackGroundTask];
       } else {
