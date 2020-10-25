@@ -759,7 +759,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (WFCCConversationInfo *)getConversationInfo:(WFCCConversation *)conversation {
-    mars::stn::TConversation tConv = mars::stn::MessageDB::Instance()->GetConversation(conversation.type, [conversation.target UTF8String], conversation.line);
+    mars::stn::TConversation tConv = mars::stn::MessageDB::Instance()->GetConversation((int)conversation.type, [conversation.target UTF8String], conversation.line);
     return convertConversationInfo(tConv);
 }
 - (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation contentTypes:(NSArray<NSNumber *> *)contentTypes from:(NSUInteger)fromIndex count:(NSInteger)count withUser:(NSString *)user {
@@ -940,7 +940,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (WFCCUnreadCount *)getUnreadCount:(WFCCConversation *)conversation {
-    mars::stn::TUnreadCount tcount = mars::stn::MessageDB::Instance()->GetUnreadCount(conversation.type, [conversation.target UTF8String], conversation.line);
+    mars::stn::TUnreadCount tcount = mars::stn::MessageDB::Instance()->GetUnreadCount((int)conversation.type, [conversation.target UTF8String], conversation.line);
     return [WFCCUnreadCount countOf:tcount.unread mention:tcount.unreadMention mentionAll:tcount.unreadMentionAll];
 }
 
@@ -959,7 +959,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (void)clearUnreadStatus:(WFCCConversation *)conversation {
-    mars::stn::MessageDB::Instance()->ClearUnreadStatus(conversation.type, [conversation.target UTF8String], conversation.line);
+    mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)conversation.type, [conversation.target UTF8String], conversation.line);
 }
 
 - (void)clearUnreadStatus:(NSArray<NSNumber *> *)conversationTypes
@@ -1027,15 +1027,15 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (void)removeConversation:(WFCCConversation *)conversation clearMessage:(BOOL)clearMessage {
-    mars::stn::MessageDB::Instance()->RemoveConversation(conversation.type, [conversation.target UTF8String], conversation.line, clearMessage);
+    mars::stn::MessageDB::Instance()->RemoveConversation((int)conversation.type, [conversation.target UTF8String], conversation.line, clearMessage);
 }
 
 - (void)clearMessages:(WFCCConversation *)conversation {
-    mars::stn::MessageDB::Instance()->ClearMessages(conversation.type, [conversation.target UTF8String], conversation.line);
+    mars::stn::MessageDB::Instance()->ClearMessages((int)conversation.type, [conversation.target UTF8String], conversation.line);
 }
 
 - (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before {
-    mars::stn::MessageDB::Instance()->ClearMessages(conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, before);
+    mars::stn::MessageDB::Instance()->ClearMessages((int)conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, before);
 }
 - (void)setConversation:(WFCCConversation *)conversation top:(BOOL)top
                 success:(void(^)(void))successBlock
@@ -1092,7 +1092,7 @@ public:
         return;
     }
     
-    mars::stn::searchUser([keyword UTF8String], searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser([keyword UTF8String], (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
 class IMGetOneUserInfoCallback : public mars::stn::GetOneUserInfoCallback {
@@ -1662,7 +1662,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     for (NSNumber *number in notifyLines) {
         lines.push_back([number intValue]);
     }
-    mars::stn::createGroup(groupId == nil ? "" : [groupId UTF8String], groupName == nil ? "" : [groupName UTF8String], groupPortrait == nil ? "" : [groupPortrait UTF8String], type, memberList, lines, tcontent, new IMCreateGroupCallback(successBlock, errorBlock));
+    mars::stn::createGroup(groupId == nil ? "" : [groupId UTF8String], groupName == nil ? "" : [groupName UTF8String], groupPortrait == nil ? "" : [groupPortrait UTF8String], (int)type, memberList, lines, tcontent, new IMCreateGroupCallback(successBlock, errorBlock));
 }
 
 - (void)addMembers:(NSArray *)members
@@ -2061,12 +2061,12 @@ public:
     if (!key) {
         key = @"";
     }
-    std::string str = mars::stn::MessageDB::Instance()->GetUserSetting(scope, [key UTF8String]);
+    std::string str = mars::stn::MessageDB::Instance()->GetUserSetting((int)scope, [key UTF8String]);
     return [NSString stringWithUTF8String:str.c_str()];
 }
 
 - (NSDictionary<NSString *, NSString *> *)getUserSettings:(UserSettingScope)scope {
-    std::map<std::string, std::string> settings = mars::stn::MessageDB::Instance()->GetUserSettings(scope);
+    std::map<std::string, std::string> settings = mars::stn::MessageDB::Instance()->GetUserSettings((int)scope);
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     for (std::map<std::string, std::string>::iterator it = settings.begin() ; it != settings.end(); it++) {
         NSString *key = [NSString stringWithUTF8String:it->first.c_str()];
@@ -2079,7 +2079,7 @@ public:
 - (void)setUserSetting:(UserSettingScope)scope key:(NSString *)key value:(NSString *)value
                success:(void(^)())successBlock
                  error:(void(^)(int error_code))errorBlock {
-    mars::stn::modifyUserSetting(scope, [key UTF8String], [value UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::modifyUserSetting((int)scope, [key UTF8String], [value UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)setConversation:(WFCCConversation *)conversation silent:(BOOL)silent
@@ -2222,7 +2222,7 @@ public:
                  newValue:(NSString *)newValue
                   success:(void(^)(void))successBlock
                     error:(void(^)(int error_code))errorBlock {
-    mars::stn::modifyChannelInfo([channelId UTF8String], type, [newValue UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::modifyChannelInfo([channelId UTF8String], (int)type, [newValue UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)searchChannel:(NSString *)keyword success:(void(^)(NSArray<WFCCChannelInfo *> *machedChannels))successBlock error:(void(^)(int errorCode))errorBlock {
