@@ -358,7 +358,7 @@ static NSString *wfcstar = @"☆";
     if (selectCell == nil) {
         selectCell = [[WFCUContactSelectTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SELECT_REUSEIDENTIFY];
         selectCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        selectCell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+        selectCell.separatorInset = UIEdgeInsetsMake(0, 102, 0, 0);
     }
     return selectCell;
 }
@@ -561,7 +561,7 @@ static NSString *wfcstar = @"☆";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 51;
+    return 52;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {
