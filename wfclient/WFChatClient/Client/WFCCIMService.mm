@@ -1514,7 +1514,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     }];
 }
 
-- (void)getNoDistrubingTimes:(void(^)(int startMins, int endMins))resultBlock
+- (void)getNoDisturbingTimes:(void(^)(int startMins, int endMins))resultBlock
                        error:(void(^)(int error_code))errorBlock {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_No_Disturbing key:@""];
     if (strValue.length) {
@@ -1532,14 +1532,14 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     
 }
 
-- (void)setNoDistrubingTimes:(int)startMins
+- (void)setNoDisturbingTimes:(int)startMins
                      endMins:(int)endMins
                      success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock {
     [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_No_Disturbing key:@"" value:[NSString stringWithFormat:@"%d|%d", startMins, endMins] success:successBlock error:errorBlock];
 }
 
-- (void)clearNoDistrubingTimes:(void(^)(void))successBlock
+- (void)clearNoDisturbingTimes:(void(^)(void))successBlock
                          error:(void(^)(int error_code))errorBlock {
     [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_No_Disturbing key:@"" value:@"" success:successBlock error:errorBlock];
 }
