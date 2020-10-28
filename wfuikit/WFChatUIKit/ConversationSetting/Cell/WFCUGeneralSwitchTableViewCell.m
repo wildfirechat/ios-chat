@@ -11,7 +11,6 @@
 
 
 @interface WFCUGeneralSwitchTableViewCell()
-@property(nonatomic, strong)UISwitch *valueSwitch;
 @end
 
 @implementation WFCUGeneralSwitchTableViewCell
@@ -34,13 +33,15 @@
 - (void)onSwitch:(id)sender {
     BOOL value = _valueSwitch.on;
     __weak typeof(self)ws = self;
-    self.onSwitch(value, self.type, ^(BOOL success) {
-        if (success) {
-            [ws.valueSwitch setOn:value];
-        } else {
-            [ws.valueSwitch setOn:!value];
-        }
-    });
+    if (self.onSwitch) {
+        self.onSwitch(value, self.type, ^(BOOL success) {
+            if (success) {
+                [ws.valueSwitch setOn:value];
+            } else {
+                [ws.valueSwitch setOn:!value];
+            }
+        });
+    }
 }
 
 - (void)setOn:(BOOL)on {

@@ -1514,6 +1514,36 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     }];
 }
 
+- (void)getNoDistrubingTimes:(void(^)(int startMins, int endMins))resultBlock
+                       error:(void(^)(int error_code))errorBlock {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_No_Disturbing key:@""];
+    if (strValue.length) {
+        NSArray<NSString *> *arrs = [strValue componentsSeparatedByString:@"|"];
+        if (arrs.count == 2) {
+            int startMins = [arrs[0] intValue];
+            int endMins = [arrs[1] intValue];
+            resultBlock(startMins, endMins);
+        } else {
+            errorBlock(-1);
+        }
+    } else {
+        errorBlock(-1);
+    }
+    
+}
+
+- (void)setNoDistrubingTimes:(int)startMins
+                     endMins:(int)endMins
+                     success:(void(^)(void))successBlock
+                       error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_No_Disturbing key:@"" value:[NSString stringWithFormat:@"%d|%d", startMins, endMins] success:successBlock error:errorBlock];
+}
+
+- (void)clearNoDistrubingTimes:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_No_Disturbing key:@"" value:@"" success:successBlock error:errorBlock];
+}
+
 - (BOOL)isHiddenNotificationDetail {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Hidden_Notification_Detail key:@""];
     return [strValue isEqualToString:@"1"];
