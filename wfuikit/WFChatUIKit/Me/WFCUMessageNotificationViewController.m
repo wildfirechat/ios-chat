@@ -10,9 +10,15 @@
 #import "WFCUSwitchTableViewCell.h"
 #import "UIColor+YH.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "WFCUGeneralSwitchTableViewCell.h"
+#import "WFCUSelectNoDisturbingTimeViewController.h"
 
 @interface WFCUMessageNotificationViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
+
+@property(nonatomic, assign)BOOL isNoDisturb;
+@property(nonatomic, assign)int startMins;
+@property(nonatomic, assign)int endMins;
 @end
 
 @implementation WFCUMessageNotificationViewController
@@ -31,6 +37,22 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+    NSInteger interval = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]];
+    
+    self.startMins = 21 * 60 - interval/60; //本地21:00
+    self.endMins = 7 * 60 - interval/60;  //本地7:00
+    if (self.endMins < 0) {
+        self.endMins += 24 * 60;
+    }
+    
+    [[WFCCIMService sharedWFCIMService] getNoDistrubingTimes:^(int startMins, int endMins) {
+        self.startMins = startMins;
+        self.endMins = endMins;
+        self.isNoDisturb = YES;
+    } error:^(int error_code) {
+        self.isNoDisturb = NO;
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,7 +89,7 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -75,12 +97,62 @@
         return 1;
     } else if (section == 1) {
         return 1;
+    } else if (section == 2) {
+        if (self.isNoDisturb) {
+            return 2;
+        }
+        return 1;
     }
     return 0;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch"];
+            if(cell == nil) {
+                cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"switch"];
+            }
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textLabel.text = @"免打扰";
+            cell.on = self.isNoDisturb;
+            __weak typeof(self)ws = self;
+            cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
+                if (value) {
+                    [[WFCCIMService sharedWFCIMService] setNoDistrubingTimes:ws.startMins endMins:ws.endMins success:^{
+                        ws.isNoDisturb = YES;
+                        [ws.tableView reloadData];
+                        handleBlock(YES);
+                    } error:^(int error_code) {
+                        handleBlock(NO);
+                    }];
+                } else {
+                    [[WFCCIMService sharedWFCIMService] clearNoDistrubingTimes:^{
+                        ws.isNoDisturb = NO;
+                        [ws.tableView reloadData];
+                        handleBlock(YES);
+                    } error:^(int error_code) {
+                        handleBlock(NO);
+                    }];
+                }
+            };
+            return cell;
+        } else {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+            }
+            cell.textLabel.text = @"以下时段静音";
+            NSInteger interval = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%02d:%02d-%02d:%02d", (self.startMins/60+(int)interval/3600)%24, self.startMins%60, (self.endMins/60+(int)interval/3600)%24, self.endMins%60];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
+        }
+    }
     WFCUSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleSwitch"];
     if(cell == nil) {
         cell = [[WFCUSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"styleSwitch" conversation:nil];
@@ -101,4 +173,23 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2 && indexPath.row == 1) {
+        WFCUSelectNoDisturbingTimeViewController *vc = [[WFCUSelectNoDisturbingTimeViewController alloc] init];
+        vc.startMins = self.startMins;
+        vc.endMins = self.endMins;
+        __weak typeof(self)ws = self;
+        vc.onSelectTime = ^(int startMins, int endMins) {
+            ws.startMins = startMins;
+            ws.endMins = endMins;
+            
+            [[WFCCIMService sharedWFCIMService] setNoDistrubingTimes:ws.startMins endMins:ws.endMins success:^{
+                ws.isNoDisturb = YES;
+                [ws.tableView reloadData];
+            } error:^(int error_code) {
+            }];
+        };
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 @end

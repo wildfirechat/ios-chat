@@ -121,6 +121,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Mute_When_PC_Online = 15,
     //不能直接使用
     UserSettingScope_Lines_Readed = 16,
+    //不能直接使用
+    UserSettingScope_No_Disturbing = 17,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -1347,6 +1349,37 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                   error:(void(^)(int error_code))errorBlock;
 
 /**
+获取免打扰时间
+
+ @param resultBlock 免打扰时间回调，时间为UTC 0点开始的分钟数，需要转换成当地时间。
+ @param errorBlock 不存在时调用，error_code为-1
+*/
+- (void)getNoDistrubingTimes:(void(^)(int startMins, int endMins))resultBlock
+                       error:(void(^)(int error_code))errorBlock;
+
+/**
+修改免打扰时间
+
+@param startMins 起始时间，一天中的分钟数，时间为UTC，需要转换成当地时间。
+@param endMins 结束时间，一天中的分钟数。可以小于startMins，如果小于表示隔夜。
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)setNoDistrubingTimes:(int)startMins
+                     endMins:(int)endMins
+                     success:(void(^)(void))successBlock
+                       error:(void(^)(int error_code))errorBlock;
+
+/**
+取消免打扰时间
+
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)clearNoDistrubingTimes:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock;
+
+/**
 是否隐藏推送详情
 
 @return YES，隐藏推送详情，提示“您收到一条消息”；NO，推送显示消息摘要
@@ -1400,6 +1433,8 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)setUserEnableReceipt:(BOOL)enable
                 success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock;
+
+
 
 /**
  获取当前用户星标用户

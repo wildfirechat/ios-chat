@@ -40,6 +40,8 @@
 		2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
+		2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */; };
+		2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */; };
 		2BD8D72524D69B5300281B81 /* WFCUGroupFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */; };
 		2BD8D72624D69B5400281B81 /* WFCUGroupFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */; };
 		2BDF579324AD70C8003C1F08 /* DNImagePickerHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF576824AD70C8003C1F08 /* DNImagePickerHelper.h */; };
@@ -446,6 +448,8 @@
 		2BCEC52F232E10E900D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc.strings"; sourceTree = "<group>"; };
 		2BD671A22336E821007A9FEC /* WFCUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConfigManager.h; sourceTree = "<group>"; };
 		2BD671A32336E821007A9FEC /* WFCUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConfigManager.m; sourceTree = "<group>"; };
+		2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUSelectNoDisturbingTimeViewController.h; sourceTree = "<group>"; };
+		2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUSelectNoDisturbingTimeViewController.m; sourceTree = "<group>"; };
 		2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupFilesViewController.h; sourceTree = "<group>"; };
 		2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupFilesViewController.m; sourceTree = "<group>"; };
 		2BDF576824AD70C8003C1F08 /* DNImagePickerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNImagePickerHelper.h; sourceTree = "<group>"; };
@@ -1662,6 +1666,8 @@
 				2F551084217F5CC100F56C26 /* WFCUMyPortraitViewController.m */,
 				2F551076217F5CC100F56C26 /* WFCUMyProfileTableViewController.h */,
 				2F551080217F5CC100F56C26 /* WFCUMyProfileTableViewController.m */,
+				2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */,
+				2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -1977,6 +1983,7 @@
 				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
 				2BDF579724AD70C8003C1F08 /* DNAlbum.h in Headers */,
+				2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */,
 				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
 				2BDF57B424AD70C8003C1F08 /* DNAssetsViewCell.h in Headers */,
 				2F55115F217F5CC200F56C26 /* SDPhotoBrowser.h in Headers */,
@@ -2102,6 +2109,7 @@
 				2F5510EB217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.m in Sources */,
 				2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */,
 				2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */,
+				2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */,
 				2F56F6BB252A07AF00B829C4 /* WFCUCompositeBaseCell.m in Sources */,
 				2BDF57AB24AD70C8003C1F08 /* DNAssetsViewCell.m in Sources */,
 				14349FA724362A6600FE38B3 /* WFCUSeletedUserViewController.m in Sources */,

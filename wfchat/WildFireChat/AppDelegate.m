@@ -286,6 +286,35 @@
         int count = unreadCount.unread;
         [UIApplication sharedApplication].applicationIconBadgeNumber = count;
         
+        __block BOOL isNoDisturbing = NO;
+        [[WFCCIMService sharedWFCIMService] getNoDistrubingTimes:^(int startMins, int endMins) {
+            NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *nowCmps = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate date]];
+            int nowMins = (int)(nowCmps.hour * 60 + nowCmps.minute);
+            if (endMins > startMins) {
+                if (endMins > nowMins && nowMins > startMins) {
+                    isNoDisturbing = YES;
+                }
+            } else {
+                if (endMins < nowMins || nowMins < startMins) {
+                    isNoDisturbing = YES;
+                }
+            }
+            
+        } error:^(int error_code) {
+            
+        }];
+        
+        //免打扰
+        if (isNoDisturbing) {
+            return;
+        }
+        
+        //全局静音
+        if ([[WFCCIMService sharedWFCIMService] isGlobalSlient]) {
+            return;
+        }
+        
         BOOL pcOnline = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos].count > 0;
         BOOL muteWhenPcOnline = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
         
@@ -303,10 +332,7 @@
             int flag = (int)[msg.content.class performSelector:@selector(getContentFlags)];
             WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:msg.conversation];
             if((flag & 0x03) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
-                
-            if (msg.status != Message_Status_Mentioned && msg.status != Message_Status_AllMentioned && [[WFCCIMService sharedWFCIMService] isGlobalSlient]) {
-                continue;
-            }
+
                 
             if (msg.status != Message_Status_Mentioned && msg.status != Message_Status_AllMentioned && pcOnline && muteWhenPcOnline) {
                 continue;
