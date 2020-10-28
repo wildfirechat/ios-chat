@@ -46,7 +46,7 @@
         self.endMins += 24 * 60;
     }
     
-    [[WFCCIMService sharedWFCIMService] getNoDistrubingTimes:^(int startMins, int endMins) {
+    [[WFCCIMService sharedWFCIMService] getNoDisturbingTimes:^(int startMins, int endMins) {
         self.startMins = startMins;
         self.endMins = endMins;
         self.isNoDisturb = YES;
@@ -123,7 +123,7 @@
             __weak typeof(self)ws = self;
             cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 if (value) {
-                    [[WFCCIMService sharedWFCIMService] setNoDistrubingTimes:ws.startMins endMins:ws.endMins success:^{
+                    [[WFCCIMService sharedWFCIMService] setNoDisturbingTimes:ws.startMins endMins:ws.endMins success:^{
                         ws.isNoDisturb = YES;
                         [ws.tableView reloadData];
                         handleBlock(YES);
@@ -131,7 +131,7 @@
                         handleBlock(NO);
                     }];
                 } else {
-                    [[WFCCIMService sharedWFCIMService] clearNoDistrubingTimes:^{
+                    [[WFCCIMService sharedWFCIMService] clearNoDisturbingTimes:^{
                         ws.isNoDisturb = NO;
                         [ws.tableView reloadData];
                         handleBlock(YES);
@@ -183,7 +183,7 @@
             ws.startMins = startMins;
             ws.endMins = endMins;
             
-            [[WFCCIMService sharedWFCIMService] setNoDistrubingTimes:ws.startMins endMins:ws.endMins success:^{
+            [[WFCCIMService sharedWFCIMService] setNoDisturbingTimes:ws.startMins endMins:ws.endMins success:^{
                 ws.isNoDisturb = YES;
                 [ws.tableView reloadData];
             } error:^(int error_code) {

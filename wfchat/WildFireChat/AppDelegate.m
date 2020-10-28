@@ -287,7 +287,7 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber = count;
         
         __block BOOL isNoDisturbing = NO;
-        [[WFCCIMService sharedWFCIMService] getNoDistrubingTimes:^(int startMins, int endMins) {
+        [[WFCCIMService sharedWFCIMService] getNoDisturbingTimes:^(int startMins, int endMins) {
             NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
             NSDateComponents *nowCmps = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate date]];
             int nowMins = (int)(nowCmps.hour * 60 + nowCmps.minute);

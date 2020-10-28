@@ -1354,7 +1354,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param resultBlock 免打扰时间回调，时间为UTC 0点开始的分钟数，需要转换成当地时间。
  @param errorBlock 不存在时调用，error_code为-1
 */
-- (void)getNoDistrubingTimes:(void(^)(int startMins, int endMins))resultBlock
+- (void)getNoDisturbingTimes:(void(^)(int startMins, int endMins))resultBlock
                        error:(void(^)(int error_code))errorBlock;
 
 /**
@@ -1365,7 +1365,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 @param successBlock 成功的回调
 @param errorBlock 失败的回调
 */
-- (void)setNoDistrubingTimes:(int)startMins
+- (void)setNoDisturbingTimes:(int)startMins
                      endMins:(int)endMins
                      success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock;
@@ -1376,7 +1376,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 @param successBlock 成功的回调
 @param errorBlock 失败的回调
 */
-- (void)clearNoDistrubingTimes:(void(^)(void))successBlock
+- (void)clearNoDisturbingTimes:(void(^)(void))successBlock
                          error:(void(^)(int error_code))errorBlock;
 
 /**
