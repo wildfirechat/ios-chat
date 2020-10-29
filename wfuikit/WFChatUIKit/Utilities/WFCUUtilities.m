@@ -223,4 +223,14 @@
         return originalImage;
     }
 }
+
++ (NSString *)formatSizeLable:(int64_t)size {
+    if (size < 1024) {
+        return [NSString stringWithFormat:@"%lldB", size];
+    } else if(size < 1024*1024) {
+        return [NSString stringWithFormat:@"%lldK", size/1024];
+    } else {
+        return [NSString stringWithFormat:@"%.2fM", size/1024.f/1024];
+    }
+}
 @end
