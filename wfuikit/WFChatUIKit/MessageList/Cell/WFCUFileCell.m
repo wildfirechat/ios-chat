@@ -8,6 +8,7 @@
 
 #import "WFCUFileCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUUtilities.h"
 
 @implementation WFCUFileCell
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -53,14 +54,7 @@
     
     self.fileImageView.image = [UIImage imageNamed:fileImage];
     self.fileNameLabel.text = fileContent.name;
-    if (fileContent.size < 1024) {
-        self.sizeLabel.text = [NSString stringWithFormat:@"%ldB", fileContent.size];
-    } else if(fileContent.size < 1024*1024) {
-        self.sizeLabel.text = [NSString stringWithFormat:@"%ldK", fileContent.size/1024];
-    } else {
-        self.sizeLabel.text = [NSString stringWithFormat:@"%.2fM", fileContent.size/1024.f/1024];
-    }
-    
+    self.sizeLabel.text = [WFCUUtilities formatSizeLable:fileContent.size];
 }
 
 - (UIImageView *)fileImageView {
