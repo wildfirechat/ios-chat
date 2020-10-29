@@ -28,6 +28,8 @@
 		2B07FBE2247562D90035C4DF /* WFCUReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */; };
 		2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B15F1B62509E285007022BC /* WFCUGroupInfoViewController.m */; };
 		2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */; };
+		2B1F50DB254A59F800E6B93B /* WFCUFileRecordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */; };
 		2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */; };
 		2B46D4D924ACC64300721792 /* WFCUMediaMessageGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */; };
 		2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */; };
@@ -434,6 +436,8 @@
 		2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReceiptViewController.m; sourceTree = "<group>"; };
 		2B15F1B62509E285007022BC /* WFCUGroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupInfoViewController.m; sourceTree = "<group>"; };
 		2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupInfoViewController.h; sourceTree = "<group>"; };
+		2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFileRecordTableViewCell.h; sourceTree = "<group>"; };
+		2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFileRecordTableViewCell.m; sourceTree = "<group>"; };
 		2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMediaMessageGridViewController.h; sourceTree = "<group>"; };
 		2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMediaMessageGridViewController.m; sourceTree = "<group>"; };
 		2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaMessageGridViewCell.h; sourceTree = "<group>"; };
@@ -1524,6 +1528,8 @@
 				2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */,
 				2F551052217F5CC100F56C26 /* WFCUSwitchTableViewCell.h */,
 				2F551050217F5CC100F56C26 /* WFCUSwitchTableViewCell.m */,
+				2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */,
+				2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1872,6 +1878,7 @@
 				2F3A6C1B219EE941009A8B4B /* WFCUFaceButton.h in Headers */,
 				2F5511D4217F5CC300F56C26 /* TYBaseAnimation.h in Headers */,
 				2F55110B217F5CC200F56C26 /* VideoPlayerSampleViewController.h in Headers */,
+				2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */,
 				2BD8D72524D69B5300281B81 /* WFCUGroupFilesViewController.h in Headers */,
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
@@ -2201,6 +2208,7 @@
 				2F55116B217F5CC200F56C26 /* AFURLRequestSerialization.m in Sources */,
 				2BEF78A523F6A84D000DE285 /* WFCUPortraitCollectionViewCell.m in Sources */,
 				2BDF57AD24AD70C8003C1F08 /* DNFullImageButton.m in Sources */,
+				2B1F50DB254A59F800E6B93B /* WFCUFileRecordTableViewCell.m in Sources */,
 				2BDF579A24AD70C8003C1F08 /* UIView+DNImagePicker.m in Sources */,
 				149B3110241E65D500B935D3 /* UIColor+YH.m in Sources */,
 				2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */,
