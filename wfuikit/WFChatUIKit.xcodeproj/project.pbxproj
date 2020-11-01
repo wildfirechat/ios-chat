@@ -385,6 +385,8 @@
 		2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */; };
 		2F5EB44C22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F5EB44A22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h */; };
 		2F5EB44D22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5EB44B22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m */; };
+		2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F638919254E3FE30084EEA6 /* WFCUFavoriteItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */; };
 		2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F7381F42308F72F00213421 /* WFCUGroupMemberCollectionViewController.h */; };
 		2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7381F52308F72F00213421 /* WFCUGroupMemberCollectionViewController.m */; };
 		2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */; };
@@ -801,6 +803,8 @@
 		2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUGeneralSwitchTableViewCell.m; sourceTree = "<group>"; };
 		2F5EB44A22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupMemberControlTableViewController.h; sourceTree = "<group>"; };
 		2F5EB44B22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupMemberControlTableViewController.m; sourceTree = "<group>"; };
+		2F638919254E3FE30084EEA6 /* WFCUFavoriteItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFavoriteItem.h; sourceTree = "<group>"; };
+		2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFavoriteItem.m; sourceTree = "<group>"; };
 		2F7381F42308F72F00213421 /* WFCUGroupMemberCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupMemberCollectionViewController.h; sourceTree = "<group>"; };
 		2F7381F52308F72F00213421 /* WFCUGroupMemberCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupMemberCollectionViewController.m; sourceTree = "<group>"; };
 		2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchChannelViewController.m; sourceTree = "<group>"; };
@@ -1715,6 +1719,8 @@
 				2BD671A22336E821007A9FEC /* WFCUConfigManager.h */,
 				2BD671A32336E821007A9FEC /* WFCUConfigManager.m */,
 				2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */,
+				2F638919254E3FE30084EEA6 /* WFCUFavoriteItem.h */,
+				2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1820,6 +1826,7 @@
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
+				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */,
 				2BEF789F23F6A84D000DE285 /* WFCUMultiVideoViewController.h in Headers */,
@@ -2227,6 +2234,7 @@
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,
 				2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */,
 				2F5510FA217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.m in Sources */,
+				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
