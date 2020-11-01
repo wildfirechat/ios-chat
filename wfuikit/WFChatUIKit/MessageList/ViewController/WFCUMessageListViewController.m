@@ -72,6 +72,9 @@
 #import "WFCUQuoteViewController.h"
 #import "WFCUCompositeMessageViewController.h"
 
+#import "WFCUFavoriteItem.h"
+
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -2296,7 +2299,8 @@
     UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Recall") action:@selector(performRecall:)];
     UIMenuItem *complainItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Complain") action:@selector(performComplain:)];
     UIMenuItem *multiSelectItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"MultiSelect") action:@selector(performMultiSelect:)];
-    UIMenuItem *quote = [[UIMenuItem alloc]initWithTitle:WFCString(@"Quote") action:@selector(performQuote:)];
+    UIMenuItem *quoteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Quote") action:@selector(performQuote:)];
+    UIMenuItem *favoriteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Favorite") action:@selector(performFavorite:)];
     
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
@@ -2376,8 +2380,18 @@
     
     if (msg.messageUid > 0) {
         if ([msg.content.class getContentFlags] & 0x2) {
-            [items addObject:quote];
+            [items addObject:quoteItem];
         }
+    }
+    
+    if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
+        [items addObject:favoriteItem];
     }
     
     [menu setMenuItems:items];
@@ -2393,7 +2407,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -2491,6 +2505,94 @@
 - (void)performQuote:(UIMenuItem *)sender {
     if (self.cell4Menu.model.message) {
         [self.chatInputBar appendQuote:self.cell4Menu.model.message.messageUid];
+    }
+}
+
+- (void)performFavorite:(UIMenuItem *)sender {
+    if (self.cell4Menu.model.message) {
+        WFCUFavoriteItem *item = [[WFCUFavoriteItem alloc] init];
+        item.sender = self.cell4Menu.model.message.fromUser;
+        item.conversation = self.cell4Menu.model.message.conversation;
+        if (self.cell4Menu.model.message.conversation.type == Single_Type) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
+            item.origin = userInfo.displayName;
+        } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
+            WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
+            item.origin = groupInfo.name;
+        } else if (self.cell4Menu.model.message.conversation.type == Channel_Type) {
+            WFCCChannelInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
+            item.origin = groupInfo.name;
+        }
+        
+        if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
+            WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)self.cell4Menu.model.message.content;
+            
+            item.favType = MESSAGE_CONTENT_TYPE_TEXT;
+            item.title = textContent.text;
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
+            WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_SOUND;
+            item.url = soundContent.remoteUrl;
+            NSDictionary *dict = @{@"duration":@(soundContent.duration)};
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                    options:kNilOptions
+                                                             error:nil];
+            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+            WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_IMAGE;
+            item.url = imgContent.remoteUrl;
+            NSData *thumbData = UIImageJPEGRepresentation(imgContent.thumbnail, 0.45);
+            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]};
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                    options:kNilOptions
+                                                             error:nil];
+            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
+            WFCCVideoMessageContent *imgContent = (WFCCVideoMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_VIDEO;
+            item.url = imgContent.remoteUrl;
+            NSData *thumbData = UIImageJPEGRepresentation(imgContent.thumbnail, 0.45);
+            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]};
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                    options:kNilOptions
+                                                             error:nil];
+            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCLocationMessageContent class]]) {
+            WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_LOCATION;
+            item.title = locContent.title;
+            NSData *thumbData = UIImageJPEGRepresentation(locContent.thumbnail, 0.45);
+            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed], @"long":@(locContent.coordinate.longitude), @"lat":@(locContent.coordinate.latitude)};
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                    options:kNilOptions
+                                                             error:nil];
+            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCLinkMessageContent class]]) {
+            WFCCLinkMessageContent *linkContent = (WFCCLinkMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_LINK;
+            item.title = linkContent.title;
+            item.thumbUrl = linkContent.thumbnailUrl;
+            item.url = linkContent.url;
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
+            WFCCCompositeMessageContent *compositeContent = (WFCCCompositeMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE;
+            item.title = compositeContent.title;
+            
+            WFCCMessagePayload *payload = [compositeContent encode];
+            item.data = [payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+        } else {
+            NSLog(@"Error, not implement!!!!");
+            return;
+        }
+        __weak typeof(self)ws = self;
+        [[WFCUConfigManager globalManager].appServiceProvider addFavoriteItem:item success:^{
+            NSLog(@"added");
+            [ws.view makeToast:@"已收藏" duration:1 position:CSToastPositionCenter];
+        } error:^(int error_code) {
+            NSLog(@"add failure");
+            [ws.view makeToast:@"网络错误" duration:1 position:CSToastPositionCenter];
+        }];
     }
 }
 
