@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WFCUGroupAnnouncement.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUFavoriteItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,6 +27,20 @@ NS_ASSUME_NONNULL_BEGIN
                           pcClient:(WFCCPCOnlineInfo *)clientInfo;
 
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+
+- (void)getFavoriteItems:(int )startId
+                   count:(int)count
+                     success:(void(^)(NSArray<WFCUFavoriteItem *> *items, BOOL hasMore))successBlock
+                       error:(void(^)(int error_code))errorBlock;
+
+- (void)addFavoriteItem:(WFCUFavoriteItem *)item
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
+- (void)removeFavoriteItem:(int)favId
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

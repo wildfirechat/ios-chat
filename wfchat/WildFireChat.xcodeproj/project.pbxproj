@@ -68,6 +68,11 @@
 		2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; };
 		2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
+		2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */; };
+		2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638927254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m */; };
+		2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F63892B254E81910084EEA6 /* WFCFavoriteUnknownCell.m */; };
+		2F638930254E82B90084EEA6 /* WFCFavoriteTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F63892F254E82B90084EEA6 /* WFCFavoriteTextCell.m */; };
+		2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638933254E8FAB0084EEA6 /* WFCFavoriteImageCell.m */; };
 		2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
@@ -261,6 +266,16 @@
 		2F56F705252CA99A00B829C4 /* ConversationListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationListViewController.m; sourceTree = "<group>"; };
 		2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
 		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
+		2F638920254E5A7E0084EEA6 /* WFCFavoriteTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteTableViewController.h; sourceTree = "<group>"; };
+		2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteTableViewController.m; sourceTree = "<group>"; };
+		2F638926254E7D8A0084EEA6 /* WFCFavoriteBaseCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteBaseCell.h; sourceTree = "<group>"; };
+		2F638927254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteBaseCell.m; sourceTree = "<group>"; };
+		2F63892A254E81910084EEA6 /* WFCFavoriteUnknownCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteUnknownCell.h; sourceTree = "<group>"; };
+		2F63892B254E81910084EEA6 /* WFCFavoriteUnknownCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteUnknownCell.m; sourceTree = "<group>"; };
+		2F63892E254E82B90084EEA6 /* WFCFavoriteTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteTextCell.h; sourceTree = "<group>"; };
+		2F63892F254E82B90084EEA6 /* WFCFavoriteTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteTextCell.m; sourceTree = "<group>"; };
+		2F638932254E8FAB0084EEA6 /* WFCFavoriteImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteImageCell.h; sourceTree = "<group>"; };
+		2F638933254E8FAB0084EEA6 /* WFCFavoriteImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteImageCell.m; sourceTree = "<group>"; };
 		2F70C7392417DB6C0058BD27 /* DiscoverMomentsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiscoverMomentsTableViewCell.h; sourceTree = "<group>"; };
 		2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiscoverMomentsTableViewCell.m; sourceTree = "<group>"; };
 		2F7268F721F7136600E05F9C /* WFCPrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyViewController.h; sourceTree = "<group>"; };
@@ -505,6 +520,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				2F63891F254E5A500084EEA6 /* Favorite */,
 				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
 				2FA2E82025158E0D0038635A /* SDWebImage */,
 				2F94FAAF24551D54007713CD /* Things */,
@@ -636,6 +652,31 @@
 				2F97CDC8252EC7D90095DDFD /* ShareUtility.m */,
 			);
 			path = ShareExtension;
+			sourceTree = "<group>";
+		};
+		2F63891F254E5A500084EEA6 /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				2F638925254E7D640084EEA6 /* Cell */,
+				2F638920254E5A7E0084EEA6 /* WFCFavoriteTableViewController.h */,
+				2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
+		2F638925254E7D640084EEA6 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2F638926254E7D8A0084EEA6 /* WFCFavoriteBaseCell.h */,
+				2F638927254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m */,
+				2F63892A254E81910084EEA6 /* WFCFavoriteUnknownCell.h */,
+				2F63892B254E81910084EEA6 /* WFCFavoriteUnknownCell.m */,
+				2F63892E254E82B90084EEA6 /* WFCFavoriteTextCell.h */,
+				2F63892F254E82B90084EEA6 /* WFCFavoriteTextCell.m */,
+				2F638932254E8FAB0084EEA6 /* WFCFavoriteImageCell.h */,
+				2F638933254E8FAB0084EEA6 /* WFCFavoriteImageCell.m */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		2F7268F621F7136600E05F9C /* Privacy */ = {
@@ -1026,6 +1067,7 @@
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
+				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
@@ -1033,6 +1075,7 @@
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
 				2F94FB8D22291577005BD461 /* LBXScanViewStyle.m in Sources */,
 				2F94FB9022291577005BD461 /* LBXScanView.m in Sources */,
+				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
@@ -1047,6 +1090,7 @@
 				2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */,
 				2F4B0EB0245C231D000A41C6 /* DeviceInfoViewController.m in Sources */,
 				2F4B0EAD245BFD22000A41C6 /* Device.m in Sources */,
+				2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */,
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
@@ -1057,6 +1101,7 @@
 				90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */,
 				90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */,
 				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
+				2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */,
 				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
@@ -1064,6 +1109,7 @@
 				2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */,
 				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,
 				2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */,
+				2F638930254E82B90084EEA6 /* WFCFavoriteTextCell.m in Sources */,
 				90854287222A06870009713D /* CreateBarCodeViewController.m in Sources */,
 				2F5527C0252CB33E00B0CDCB /* SharedConversation.m in Sources */,
 				2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */,

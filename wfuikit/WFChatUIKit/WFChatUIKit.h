@@ -52,6 +52,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 #import <WFChatUIKit/WFCUAppServiceProvider.h>
 #import <WFChatUIKit/WFCUGroupAnnouncement.h>
+#import <WFChatUIKit/WFCUFavoriteItem.h>
 
 #import <WFChatUIKit/BubbleTipView.h>
 #import <WFChatUIKit/UITabBar+badge.h>

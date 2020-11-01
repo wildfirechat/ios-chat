@@ -14,6 +14,9 @@
 #import "WFCSecurityTableViewController.h"
 #import "WFCMeTableViewHeaderViewCell.h"
 #import "UIColor+YH.h"
+#import "WFCFavoriteTableViewController.h"
+
+
 @interface WFCMeTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)UIImageView *portraitView;
@@ -56,6 +59,8 @@
     self.itemDataSource = @[
         @{@"title":LocalizedString(@"MessageNotification"),
           @"image":@"notification_setting"},
+        @{@"title":LocalizedString(@"Favorite"),
+          @"image":@"favorite_settings"},
         @{@"title":LocalizedString(@"AccountSafety"),
           @"image":@"safe_setting"},
         @{@"title":LocalizedString(@"Settings"),
@@ -77,7 +82,7 @@
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -145,12 +150,14 @@
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     } else if (indexPath.section == 1) {
-        
         WFCUMessageNotificationViewController *mnvc = [[WFCUMessageNotificationViewController alloc] init];
         mnvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:mnvc animated:YES];
-
-    } else if(indexPath.section == 2) {
+    } else if (indexPath.section == 2) {
+        WFCFavoriteTableViewController *mnvc = [[WFCFavoriteTableViewController alloc] init];
+        mnvc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:mnvc animated:YES];
+    } else if(indexPath.section == 3) {
         WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
         stvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:stvc animated:YES];
