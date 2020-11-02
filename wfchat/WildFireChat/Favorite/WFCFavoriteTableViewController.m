@@ -13,6 +13,8 @@
 #import "WFCFavoriteTextCell.h"
 #import "WFCFavoriteUnknownCell.h"
 #import "WFCFavoriteImageCell.h"
+#import "WFCFavoriteFileCell.h"
+
 
 @interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -89,6 +91,11 @@
         if (!cell) {
             cell = [[WFCFavoriteImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"image"];
         }
+    } else if(favType == MESSAGE_CONTENT_TYPE_FILE) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"file"];
+        if (!cell) {
+            cell = [[WFCFavoriteFileCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"file"];
+        }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"unknown"];
         if (!cell) {
@@ -99,40 +106,56 @@
     return cell;
 }
 #pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.items.count;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCUFavoriteItem *favItem = self.items[indexPath.row];
+    WFCUFavoriteItem *favItem = self.items[indexPath.section];
     
     WFCFavoriteBaseCell *cell = [self cellOfFavType:favItem.favType tableView:tableView];
     cell.favoriteItem = favItem;
     
     return cell;
 }
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 5;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 5)];
+}
+
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCUFavoriteItem *favItem = self.items[indexPath.row];
+    WFCUFavoriteItem *favItem = self.items[indexPath.section];
     return [[[self cellOfFavType:favItem.favType tableView:tableView] class] heightOf:favItem];
 }
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        WFCUFavoriteItem *favItem = self.items[indexPath.row];
+        WFCUFavoriteItem *favItem = self.items[indexPath.section];
         [[AppService sharedAppService] removeFavoriteItem:favItem.favId success:^{
             
         } error:^(int error_code) {
             
         }];
         
-        [self.items removeObjectAtIndex:indexPath.row];
+        [self.items removeObjectAtIndex:indexPath.section];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }

@@ -99,6 +99,7 @@
 		2FB28E652538183C00DDD387 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB28E642538183C00DDD387 /* ConversationCell.m */; };
 		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
 		2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC50B7A245273A700B36F8A /* PCSessionViewController.m */; };
+		2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
@@ -329,6 +330,8 @@
 		2FBF9160232F6A5E003521FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FC50B7A245273A700B36F8A /* PCSessionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSessionViewController.m; sourceTree = "<group>"; };
 		2FC50B7B245273A700B36F8A /* PCSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSessionViewController.h; sourceTree = "<group>"; };
+		2FCF7216254FD092006CF53B /* WFCFavoriteFileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteFileCell.h; sourceTree = "<group>"; };
+		2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteFileCell.m; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -675,6 +678,8 @@
 				2F63892F254E82B90084EEA6 /* WFCFavoriteTextCell.m */,
 				2F638932254E8FAB0084EEA6 /* WFCFavoriteImageCell.h */,
 				2F638933254E8FAB0084EEA6 /* WFCFavoriteImageCell.m */,
+				2FCF7216254FD092006CF53B /* WFCFavoriteFileCell.h */,
+				2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1119,6 +1124,7 @@
 				2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
 				2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */,
 				149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */,
+				2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */,
 				90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
 				9085428B222A07280009713D /* UIImageView+CornerRadius.m in Sources */,

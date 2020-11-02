@@ -2390,6 +2390,7 @@
         [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
         [items addObject:favoriteItem];
     }
@@ -2514,7 +2515,7 @@
         item.sender = self.cell4Menu.model.message.fromUser;
         item.conversation = self.cell4Menu.model.message.conversation;
         if (self.cell4Menu.model.message.conversation.type == Single_Type) {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
             item.origin = userInfo.displayName;
         } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
@@ -2581,8 +2582,19 @@
             
             WFCCMessagePayload *payload = [compositeContent encode];
             item.data = [payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCFileMessageContent class]]) {
+            WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)self.cell4Menu.model.message.content;
+            item.favType = MESSAGE_CONTENT_TYPE_FILE;
+            item.title = fileContent.name;
+            item.url = fileContent.remoteUrl;
+            NSDictionary *dict = @{@"size":@(fileContent.size)};
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                    options:kNilOptions
+                                                             error:nil];
+            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         } else {
             NSLog(@"Error, not implement!!!!");
+            [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
             return;
         }
         __weak typeof(self)ws = self;
