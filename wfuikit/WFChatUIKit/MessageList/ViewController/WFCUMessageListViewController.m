@@ -2093,6 +2093,7 @@
 
 - (void)videoDidCapture:(NSString *)videoPath thumbnail:(UIImage *)image duration:(long)duration {
     WFCCVideoMessageContent *videoContent = [WFCCVideoMessageContent contentPath:videoPath thumbnail:image];
+    videoContent.duration = duration;
     [self sendMessage:videoContent];
 }
 
@@ -2391,6 +2392,7 @@
         [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
         [items addObject:favoriteItem];
     }
@@ -2554,7 +2556,7 @@
             item.favType = MESSAGE_CONTENT_TYPE_VIDEO;
             item.url = imgContent.remoteUrl;
             NSData *thumbData = UIImageJPEGRepresentation(imgContent.thumbnail, 0.45);
-            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]};
+            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed], @"duration":@(imgContent.duration)};
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict
                                                                     options:kNilOptions
                                                              error:nil];
@@ -2597,6 +2599,7 @@
             [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
             return;
         }
+        
         __weak typeof(self)ws = self;
         [[WFCUConfigManager globalManager].appServiceProvider addFavoriteItem:item success:^{
             NSLog(@"added");
