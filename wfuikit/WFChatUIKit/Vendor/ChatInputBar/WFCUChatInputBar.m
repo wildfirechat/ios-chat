@@ -1165,7 +1165,11 @@
                 
                 UIImage *thumb = [self getVideoThumbnailWithUrl:url second:1];
                 
-                [self.delegate videoDidCapture:desFileName thumbnail:thumb duration:10];
+                AVURLAsset * asset = [AVURLAsset assetWithURL:url];
+                CMTime   time = [asset duration];
+                int seconds = ceil(time.value/time.timescale);
+                
+                [self.delegate videoDidCapture:desFileName thumbnail:thumb duration:seconds];
             }
         };
         [[self.delegate requireNavi] showDetailViewController:cc sender:nil];
@@ -1603,6 +1607,8 @@
 
     exportSession.shouldOptimizeForNetworkUse = YES;
 
+    CMTime time2 = [asset1 duration];
+    int seconds = ceil(time2.value/time2.timescale);
     __weak typeof(self)ws = self;
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
@@ -1611,7 +1617,7 @@
              float memorySize = (float)data.length / 1024 / 1024;
              NSLog(@"视频压缩后大小 %f", memorySize);
              dispatch_async(dispatch_get_main_queue(), ^{
-                 [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:10];
+                 [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:seconds];
              });
              [ws recursiveHandle:photos isFullImage:isFullImage];
          } else {
@@ -1635,7 +1641,6 @@
             PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
             options.version = PHImageRequestOptionsVersionCurrent;
             options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-            
             
             PHImageManager *manager = [PHImageManager defaultManager];
             [manager requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
