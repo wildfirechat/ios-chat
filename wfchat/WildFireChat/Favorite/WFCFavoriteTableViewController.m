@@ -14,7 +14,11 @@
 #import "WFCFavoriteUnknownCell.h"
 #import "WFCFavoriteImageCell.h"
 #import "WFCFavoriteFileCell.h"
-
+#import "WFCFavoriteLocationCell.h"
+#import "WFCFavoriteSoundCell.h"
+#import "WFCFavoriteVideoCell.h"
+#import "WFCFavoriteLinkCell.h"
+#import "WFCFavoriteCompositeCell.h"
 
 @interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -96,6 +100,31 @@
         if (!cell) {
             cell = [[WFCFavoriteFileCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"file"];
         }
+    } else if(favType == MESSAGE_CONTENT_TYPE_LOCATION) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"location"];
+        if (!cell) {
+            cell = [[WFCFavoriteLocationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"location"];
+        }
+    } else if(favType == MESSAGE_CONTENT_TYPE_SOUND) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"sound"];
+        if (!cell) {
+            cell = [[WFCFavoriteSoundCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"sound"];
+        }
+    } else if(favType == MESSAGE_CONTENT_TYPE_VIDEO) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"video"];
+        if (!cell) {
+            cell = [[WFCFavoriteVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"video"];
+        }
+    } else if(favType == MESSAGE_CONTENT_TYPE_LINK) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"link"];
+        if (!cell) {
+            cell = [[WFCFavoriteLinkCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"link"];
+        }
+    } else if(favType == MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"composite"];
+        if (!cell) {
+            cell = [[WFCFavoriteCompositeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"composite"];
+        }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"unknown"];
         if (!cell) {
@@ -126,7 +155,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 5;
+    return 10;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -134,7 +163,7 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 5)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 10)];
 }
 
 #pragma mark - UITableViewDelegate
