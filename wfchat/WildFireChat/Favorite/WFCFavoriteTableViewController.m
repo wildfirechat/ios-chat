@@ -20,12 +20,15 @@
 #import "WFCFavoriteLinkCell.h"
 #import "WFCFavoriteCompositeCell.h"
 
+
 @interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, strong)NSMutableArray<WFCUFavoriteItem *> *items;
 @property(nonatomic, assign)BOOL hasMore;
 @property(nonatomic, assign)BOOL loading;
+
+@property(nonatomic, strong)WFCFavoriteBaseCell *selectedCell;
 @end
 
 @implementation WFCFavoriteTableViewController
@@ -43,12 +46,116 @@
     [self.view addSubview:self.tableView];
     self.items = [[NSMutableArray alloc] init];
     
+    [self loadMoreData];
+    [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCell:)]];
+    [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongTapCell:)]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self loadMoreData];
 }
+
+- (void)onTapCell:(UITapGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateRecognized) {
+        CGPoint point = [gestureRecognizer locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+        if (indexPath) {
+            
+        }
+    }
+}
+
+- (void)onLongTapCell:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateRecognized) {
+        CGPoint point = [gestureRecognizer locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+        if (indexPath) {
+            UIMenuController *menu = [UIMenuController sharedMenuController];
+
+            UIMenuItem *deleteItem = [[UIMenuItem alloc]initWithTitle:@"删除" action:@selector(performDelete:)];
+            UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:@"转发" action:@selector(performForward:)];
+            UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:@"拷贝" action:@selector(performCopy:)];
+
+            self.selectedCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if (@available(iOS 13.0, *)) {
+                [menu showMenuFromView:self.tableView rect:CGRectMake(point.x, point.y, 1, 1)];
+            } else {
+                [menu setTargetRect:CGRectMake(point.x, point.y, 1, 1) inView:self.tableView];
+            }
+            
+            WFCUFavoriteItem *item = self.selectedCell.favoriteItem;
+            
+            NSMutableArray *items = [[NSMutableArray alloc] init];
+            if (item.favType == MESSAGE_CONTENT_TYPE_TEXT) {
+                [items addObject:copyItem];
+            }
+            [items addObject:deleteItem];
+            [items addObject:forwardItem];
+            
+            [menu setMenuItems:items];
+            [menu setMenuVisible:YES];
+        }
+    }
+    
+}
+
+
+
+-(BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(performDelete:) || action == @selector(performForward:)) {
+        return YES; //显示自定义的菜单项
+    } else {
+        if (action == @selector(performCopy:)) {
+            if (self.selectedCell && self.selectedCell.favoriteItem.favType == MESSAGE_CONTENT_TYPE_TEXT) {
+                return YES;
+            }
+        }
+        return NO;
+    }
+    
+    return NO;//[super canPerformAction:action withSender:sender];
+}
+
+-(void)performDelete:(UIMenuController *)sender {
+    WFCUFavoriteItem *favItem = self.selectedCell.favoriteItem;
+    
+    [[AppService sharedAppService] removeFavoriteItem:favItem.favId success:^{
+        
+    } error:^(int error_code) {
+        
+    }];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:self.selectedCell];
+    [self.items removeObjectAtIndex:indexPath.section];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+-(void)performForward:(UIMenuController *)sender {
+    WFCCMessage *message = [[WFCCMessage alloc] init];
+    WFCUFavoriteItem *item = self.selectedCell.favoriteItem;
+    message.content = [item toContent];
+    if (!message.content) {
+        return;
+    }
+    
+    WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
+    controller.message = message;
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:navi animated:YES completion:nil];
+}
+
+-(void)performCopy:(UIMenuController *)sender {
+    if (self.selectedCell && self.selectedCell.favoriteItem.favType == MESSAGE_CONTENT_TYPE_TEXT) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = self.selectedCell.favoriteItem.title;
+        [self.view makeToast:@"已拷贝" duration:1 position:CSToastPositionCenter];
+    }
+}
+
 - (void)loadMoreData {
     if (!self.loading) {
         self.loading = YES;
