@@ -308,7 +308,7 @@
 		2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551038217F5CC100F56C26 /* WFCUForwardViewController.m */; };
 		2F5511E7217F5CC300F56C26 /* WFCUForwardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551039217F5CC100F56C26 /* WFCUForwardMessageCell.m */; };
 		2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55103A217F5CC100F56C26 /* WFCUShareMessageView.m */; };
-		2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55103B217F5CC100F56C26 /* WFCUForwardViewController.h */; };
+		2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55103B217F5CC100F56C26 /* WFCUForwardViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5511EB217F5CC300F56C26 /* WFCUShareMessageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55103D217F5CC100F56C26 /* WFCUShareMessageView.h */; };
 		2F5511EC217F5CC300F56C26 /* WFCUForwardMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55103E217F5CC100F56C26 /* WFCUForwardMessageCell.h */; };
 		2F5511ED217F5CC300F56C26 /* TabbarButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551040217F5CC100F56C26 /* TabbarButton.h */; };
@@ -1824,6 +1824,7 @@
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
 				2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */,
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
+				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
 				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
@@ -1955,7 +1956,6 @@
 				2F5EB44C22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h in Headers */,
 				2F5511E4217F5CC300F56C26 /* YLImageView.h in Headers */,
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
-				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
 				1450EA8924389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.h in Headers */,
 				2FD550EC2442AA0B00B3EE09 /* WFCURecallCell.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,

@@ -11,6 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class WFCCConversation;
+@class WFCCMessageContent;
+
 
 @interface WFCUFavoriteItem : NSObject
 @property(nonatomic, assign)int favId;
@@ -23,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *thumbUrl;
 @property(nonatomic, strong)NSString *data;
+
++ (WFCUFavoriteItem *)itemFromContent:(WFCCMessageContent *)content;
+- (WFCCMessageContent *)toContent;
 @end
 
 NS_ASSUME_NONNULL_END
