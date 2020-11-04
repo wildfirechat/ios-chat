@@ -2513,7 +2513,12 @@
 
 - (void)performFavorite:(UIMenuItem *)sender {
     if (self.cell4Menu.model.message) {
-        WFCUFavoriteItem *item = [[WFCUFavoriteItem alloc] init];
+        WFCUFavoriteItem *item = [WFCUFavoriteItem itemFromContent:self.cell4Menu.model.message.content];
+        if (!item) {
+            [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
+            return;
+        }
+        
         item.sender = self.cell4Menu.model.message.fromUser;
         item.conversation = self.cell4Menu.model.message.conversation;
         if (self.cell4Menu.model.message.conversation.type == Single_Type) {
@@ -2525,80 +2530,11 @@
         } else if (self.cell4Menu.model.message.conversation.type == Channel_Type) {
             WFCCChannelInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
             item.origin = groupInfo.name;
+        } else {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
+            item.origin = userInfo.displayName;
         }
         
-        if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
-            WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)self.cell4Menu.model.message.content;
-            
-            item.favType = MESSAGE_CONTENT_TYPE_TEXT;
-            item.title = textContent.text;
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
-            WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_SOUND;
-            item.url = soundContent.remoteUrl;
-            NSDictionary *dict = @{@"duration":@(soundContent.duration)};
-            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
-                                                                    options:kNilOptions
-                                                             error:nil];
-            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
-            WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_IMAGE;
-            item.url = imgContent.remoteUrl;
-            NSData *thumbData = UIImageJPEGRepresentation(imgContent.thumbnail, 0.45);
-            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]};
-            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
-                                                                    options:kNilOptions
-                                                             error:nil];
-            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
-            WFCCVideoMessageContent *imgContent = (WFCCVideoMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_VIDEO;
-            item.url = imgContent.remoteUrl;
-            NSData *thumbData = UIImageJPEGRepresentation(imgContent.thumbnail, 0.45);
-            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed], @"duration":@(imgContent.duration)};
-            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
-                                                                    options:kNilOptions
-                                                             error:nil];
-            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCLocationMessageContent class]]) {
-            WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_LOCATION;
-            item.title = locContent.title;
-            NSData *thumbData = UIImageJPEGRepresentation(locContent.thumbnail, 0.45);
-            NSDictionary *dict = @{@"thumb":[thumbData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed], @"long":@(locContent.coordinate.longitude), @"lat":@(locContent.coordinate.latitude)};
-            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
-                                                                    options:kNilOptions
-                                                             error:nil];
-            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCLinkMessageContent class]]) {
-            WFCCLinkMessageContent *linkContent = (WFCCLinkMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_LINK;
-            item.title = linkContent.title;
-            item.thumbUrl = linkContent.thumbnailUrl;
-            item.url = linkContent.url;
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
-            WFCCCompositeMessageContent *compositeContent = (WFCCCompositeMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE;
-            item.title = compositeContent.title;
-            
-            WFCCMessagePayload *payload = [compositeContent encode];
-            item.data = [payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCFileMessageContent class]]) {
-            WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)self.cell4Menu.model.message.content;
-            item.favType = MESSAGE_CONTENT_TYPE_FILE;
-            item.title = fileContent.name;
-            item.url = fileContent.remoteUrl;
-            NSDictionary *dict = @{@"size":@(fileContent.size)};
-            NSData *data = [NSJSONSerialization dataWithJSONObject:dict
-                                                                    options:kNilOptions
-                                                             error:nil];
-            item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        } else {
-            NSLog(@"Error, not implement!!!!");
-            [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
-            return;
-        }
         
         __weak typeof(self)ws = self;
         [[WFCUConfigManager globalManager].appServiceProvider addFavoriteItem:item success:^{
