@@ -49,10 +49,27 @@
     [self loadMoreData];
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCell:)]];
     [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongTapCell:)]];
+    
+    self.title = @"我的收藏";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+}
+
+- (void)showItem:(WFCUFavoriteItem *)item {
+    switch (item.favType) {
+        case MESSAGE_CONTENT_TYPE_TEXT:
+        case MESSAGE_CONTENT_TYPE_SOUND:
+        case MESSAGE_CONTENT_TYPE_IMAGE:
+        case MESSAGE_CONTENT_TYPE_VIDEO:
+        case MESSAGE_CONTENT_TYPE_LOCATION:
+        case MESSAGE_CONTENT_TYPE_LINK:
+        case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
+        case MESSAGE_CONTENT_TYPE_FILE:
+        default:
+            break;
+    }
 }
 
 - (void)onTapCell:(UITapGestureRecognizer *)gestureRecognizer {
@@ -60,7 +77,9 @@
         CGPoint point = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
         if (indexPath) {
-            
+            self.selectedCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            WFCUFavoriteItem *item = self.selectedCell.favoriteItem;
+            [self showItem:item];
         }
     }
 }
