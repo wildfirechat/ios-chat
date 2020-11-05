@@ -41,6 +41,7 @@
     if (!_iconView) {
         _iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 56, 56)];
         _iconView.image = [UIImage imageNamed:@"file_icon"];
+        _iconView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
         [self.contentArea addSubview:_iconView];
     }
     return _iconView;
