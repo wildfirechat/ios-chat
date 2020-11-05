@@ -21,7 +21,15 @@
 #import "WFCFavoriteCompositeCell.h"
 
 
-@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate>
+//是否iPhoneX YES:iPhoneX屏幕 NO:传统屏幕
+#define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f ||[UIScreen mainScreen].bounds.size.height == 844.0f ||[UIScreen mainScreen].bounds.size.height == 926.0f)
+
+#define kStatusBarAndNavigationBarHeight (kIs_iPhoneX ? 88.f : 64.f)
+
+#define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
+
+
+@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, SDPhotoBrowserDelegate>
 @property(nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, strong)NSMutableArray<WFCUFavoriteItem *> *items;
@@ -29,6 +37,7 @@
 @property(nonatomic, assign)BOOL loading;
 
 @property(nonatomic, strong)WFCFavoriteBaseCell *selectedCell;
+@property(nonatomic, strong)VideoPlayerKit *videoPlayerViewController;
 @end
 
 @implementation WFCFavoriteTableViewController
@@ -60,16 +69,89 @@
 - (void)showItem:(WFCUFavoriteItem *)item {
     switch (item.favType) {
         case MESSAGE_CONTENT_TYPE_TEXT:
+        {
+            UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            textContainer.backgroundColor = [UIColor whiteColor];
+            
+            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
+            
+             textView.text = self.selectedCell.favoriteItem.title;
+            textView.textAlignment = NSTextAlignmentCenter;
+            textView.font = [UIFont systemFontOfSize:28];
+            textView.editable = NO;
+            textView.backgroundColor = self.view.backgroundColor;
+            
+            [textContainer addSubview:textView];
+            [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
+            [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_SOUND:
+            break;
         case MESSAGE_CONTENT_TYPE_IMAGE:
+        {
+            SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+            browser.sourceImagesContainerView = self.view;
+            browser.imageCount = 1;
+            browser.currentImageIndex = 0;
+            browser.delegate = self;
+            [browser show]; // 展示图片浏览器
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_VIDEO:
+        {
+            
+            if (!self.videoPlayerViewController) {
+                self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
+                self.videoPlayerViewController.allowPortraitFullscreen = YES;
+            } else {
+                [self.videoPlayerViewController.view removeFromSuperview];
+            }
+            
+            [self.view addSubview:self.videoPlayerViewController.view];
+            
+            [self.videoPlayerViewController playVideoWithTitle:@" " URL:[NSURL URLWithString:self.selectedCell.favoriteItem.url] videoID:nil shareURL:nil isStreaming:NO playInFullScreen:YES];
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_LOCATION:
+        {
+            WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)[self.selectedCell.favoriteItem toContent];
+            WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_LINK:
+        {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = self.selectedCell.favoriteItem.url;
+            [self.navigationController pushViewController:bvc animated:YES];
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
+        {
+            WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
+            vc.compositeContent = (WFCCCompositeMessageContent *)[self.selectedCell.favoriteItem toContent];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
         case MESSAGE_CONTENT_TYPE_FILE:
+        {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = self.selectedCell.favoriteItem.url;
+            [self.navigationController pushViewController:bvc animated:YES];
+        }
+            break;
         default:
             break;
     }
+}
+
+- (void)didTapTextMessageDetailView:(id)sender {
+    if ([sender isKindOfClass:[UIGestureRecognizer class]]) {
+        UIGestureRecognizer *gesture = (UIGestureRecognizer *)sender;
+        [gesture.view.superview removeFromSuperview];
+    }
+    NSLog(@"close windows");
 }
 
 - (void)onTapCell:(UITapGestureRecognizer *)gestureRecognizer {
@@ -314,4 +396,19 @@
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+#pragma mark SDPhotoBrowserDelegate
+- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
+    WFCUFavoriteItem *favoriteItem = self.selectedCell.favoriteItem;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    NSString *thumbStr = dict[@"thumb"];
+    NSData *thumbData = [[NSData alloc] initWithBase64EncodedString:thumbStr options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    UIImage *image = [UIImage imageWithData:thumbData];
+    return image;
+}
+
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
+    WFCUFavoriteItem *favoriteItem = self.selectedCell.favoriteItem;
+    return [NSURL URLWithString:favoriteItem.url];
+}
+
 @end

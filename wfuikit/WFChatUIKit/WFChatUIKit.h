@@ -48,6 +48,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/VideoPlayer.h>
 #import <WFChatUIKit/VideoPlayerView.h>
 #import <WFChatUIKit/AirplayActiveView.h>
+#import <WFChatUIKit/SDPhotoBrowser.h>
 
 #import <WFChatUIKit/WFCUConfigManager.h>
 
@@ -62,4 +63,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 #import <WFChatUIKit/WFCUFavChannelTableViewController.h>
 #import <WFChatUIKit/WFCUGeneralModifyViewController.h>
+#import <WFChatUIKit/WFCUCompositeMessageViewController.h>
+#import <WFChatUIKit/WFCULocationViewController.h>
+#import <WFChatUIKit/WFCULocationPoint.h>
 

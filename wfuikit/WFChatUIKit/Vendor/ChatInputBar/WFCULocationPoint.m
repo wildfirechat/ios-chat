@@ -7,6 +7,7 @@
 //
 
 #import "WFCULocationPoint.h"
+
 @implementation WFCULocationPoint
 - (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate andTitle:(NSString *)title{
     self = [super init];
