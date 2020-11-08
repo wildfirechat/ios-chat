@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCFavoriteSoundCell : WFCFavoriteBaseCell
-
+@property(nonatomic, assign)BOOL isPlaying;
 @end
 
 NS_ASSUME_NONNULL_END
