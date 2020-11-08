@@ -19,6 +19,8 @@
 #import "WFCFavoriteVideoCell.h"
 #import "WFCFavoriteLinkCell.h"
 #import "WFCFavoriteCompositeCell.h"
+#import "AFNetworking.h"
+#import <AVFoundation/AVFoundation.h>
 
 
 //是否iPhoneX YES:iPhoneX屏幕 NO:传统屏幕
@@ -29,7 +31,7 @@
 #define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
 
 
-@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, SDPhotoBrowserDelegate>
+@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, SDPhotoBrowserDelegate, AVAudioPlayerDelegate>
 @property(nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, strong)NSMutableArray<WFCUFavoriteItem *> *items;
@@ -38,6 +40,10 @@
 
 @property(nonatomic, strong)WFCFavoriteBaseCell *selectedCell;
 @property(nonatomic, strong)VideoPlayerKit *videoPlayerViewController;
+
+@property(nonatomic, strong)AVAudioPlayer *player;
+@property(nonatomic, assign)BOOL isPlayingSound;
+@property(nonatomic, strong)WFCUFavoriteItem *playingSoundItem;
 @end
 
 @implementation WFCFavoriteTableViewController
@@ -66,6 +72,64 @@
     [super viewDidAppear:animated];
 }
 
+- (void)playSound:(WFCUFavoriteItem *)item {
+    __weak typeof(self)ws = self;
+    NSString *downloadDir = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *filePath;
+    if ([item.url.pathExtension isEqual:@"mp3"]) {
+        filePath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"fav_sound_%d.mp3", item.favId]];
+    } else {
+        filePath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"fav_sound_%d.amr", item.favId]];
+    }
+    self.isPlayingSound = YES;
+    self.playingSoundItem = item;
+    [self downloadFileWithURL:item.url savedPath:filePath downloadSuccess:^(NSURLResponse *response, NSURL *path) {
+        NSLog(@"sound downloaded!");
+        if (!self.isPlayingSound || self.playingSoundItem != item) {
+            return;
+        }
+        
+        if (ws.player) {
+            [ws.player stop];
+        }
+        
+        ws.player = [[AVAudioPlayer alloc] initWithData:[[WFCCIMService sharedWFCIMService] getWavData:filePath] error:nil];
+        [ws.player prepareToPlay];
+        ws.player.delegate = self;
+        [ws.player play];
+    } downloadFailure:^(NSError *error) {
+        [ws.view makeToast:@"下载失败!" duration:1 position:CSToastPositionCenter];
+    }];
+}
+
+- (void)stopPlaySound {
+    self.isPlayingSound = NO;
+    self.playingSoundItem = nil;
+    [self.player stop];
+    self.player = nil;
+}
+
+- (void)downloadFileWithURL:(NSString*)requestURLString
+                  savedPath:(NSString*)savedPath
+            downloadSuccess:(void (^)(NSURLResponse *response, NSURL *filePath))success
+            downloadFailure:(void (^)(NSError *error))failure {
+    AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+    NSMutableURLRequest *request =[serializer requestWithMethod:@"GET" URLString:requestURLString parameters:nil error:nil];
+    NSURLSessionDownloadTask *task = [[AFHTTPSessionManager manager] downloadTaskWithRequest:request progress:nil destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        return [NSURL fileURLWithPath:[savedPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(error){
+                failure(error);
+            }else{
+                success(response,filePath);
+            }
+        });
+    }];
+    
+    [task resume];
+}
+
 - (void)showItem:(WFCUFavoriteItem *)item {
     switch (item.favType) {
         case MESSAGE_CONTENT_TYPE_TEXT:
@@ -86,7 +150,13 @@
             [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
         }
             break;
-        case MESSAGE_CONTENT_TYPE_SOUND:
+        case MESSAGE_CONTENT_TYPE_SOUND: {
+            if (self.isPlayingSound) {
+                [self stopPlaySound];
+            } else {
+                [self playSound:item];
+            }
+        }
             break;
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
@@ -144,6 +214,11 @@
         default:
             break;
     }
+}
+
+- (void)setIsPlayingSound:(BOOL)isPlayingSound {
+    _isPlayingSound = isPlayingSound;
+    [self.tableView reloadData];
 }
 
 - (void)didTapTextMessageDetailView:(id)sender {
@@ -355,6 +430,14 @@
     
     WFCFavoriteBaseCell *cell = [self cellOfFavType:favItem.favType tableView:tableView];
     cell.favoriteItem = favItem;
+    if (favItem.favType == MESSAGE_CONTENT_TYPE_SOUND) {
+        WFCFavoriteSoundCell *soundCell = (WFCFavoriteSoundCell *)cell;
+        if (self.isPlayingSound && self.playingSoundItem == favItem) {
+            soundCell.isPlaying = YES;
+        } else {
+            soundCell.isPlaying = NO;
+        }
+    }
     
     return cell;
 }
@@ -396,7 +479,7 @@
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
-#pragma mark SDPhotoBrowserDelegate
+#pragma mark - SDPhotoBrowserDelegate
 - (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
     WFCUFavoriteItem *favoriteItem = self.selectedCell.favoriteItem;
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
@@ -411,4 +494,12 @@
     return [NSURL URLWithString:favoriteItem.url];
 }
 
+#pragma mark - AVAudioPlayerDelegate
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    [self stopPlaySound];
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError * __nullable)error {
+    [self stopPlaySound];
+}
 @end
