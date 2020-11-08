@@ -36,18 +36,12 @@
     
     self.localPath = amrPath;
 }
+
 - (NSData *)getWavData {
-    if ([@"mp3" isEqualToString:[self.localPath pathExtension]]) {
-        return [NSData dataWithContentsOfFile:self.localPath];
+    if (!self.localPath) {
+        return nil;
     } else {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    decode_amr([self.localPath UTF8String], data);
-    
-//    UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
-//    NSString *amrPath = [[WFCCUtilities getDocumentPathWithComponent:@"/Vioce"] stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.wav", recordTime]];
-//    
-//    [data writeToFile:amrPath atomically:YES];
-    return data;
+        return [[WFCCIMService sharedWFCIMService] getWavData:self.localPath];
     }
 }
 

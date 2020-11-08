@@ -1655,6 +1655,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                     mediaPath:(NSString *)mediaPath
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
+
+/**
+amr文件转成wav数据
+
+@param amrPath amr文件路径
+@return wav数据
+*/
+- (NSData *)getWavData:(NSString *)amrPath;
+
 /**
  获取图片缩略图参数
  
