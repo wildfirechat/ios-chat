@@ -15,7 +15,7 @@
 #import "WFCCGroupSearchInfo.h"
 #import "WFCCUnknownMessageContent.h"
 #import "WFCCRecallMessageContent.h"
-
+#import "wav_amr.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kConnectionStatusChanged = @"kConnectionStatusChanged";
@@ -2365,6 +2365,16 @@ public:
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
     mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+}
+
+- (NSData *)getWavData:(NSString *)amrPath {
+    if ([@"mp3" isEqualToString:[amrPath pathExtension]]) {
+        return [NSData dataWithContentsOfFile:amrPath];
+    } else {
+        NSMutableData *data = [[NSMutableData alloc] init];
+        decode_amr([amrPath UTF8String], data);
+        return data;
+    }
 }
 
 - (NSString *)imageThumbPara {
