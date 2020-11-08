@@ -194,7 +194,7 @@
 
 - (UIButton *)minimizeButton {
     if (!_minimizeButton) {
-        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26, 30, 30)];
+        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 32, 30, 30)];
         
         [_minimizeButton setImage:[UIImage imageNamed:@"minimize"] forState:UIControlStateNormal];
         [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
@@ -512,7 +512,7 @@
             NSLog(@"error not main thread");
         }
         if(self.currentSession.state == kWFAVEngineStateConnected) {
-            self.stateLabel.frame = CGRectMake(54, 30, 240, 20);
+            self.stateLabel.frame = CGRectMake(54, 36, 240, 20);
         } else {
             self.stateLabel.frame = CGRectMake(88, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
         }
