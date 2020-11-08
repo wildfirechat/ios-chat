@@ -13,6 +13,7 @@
 @interface WFCFavoriteSoundCell ()
 @property(nonatomic, strong)UIImageView *iconView;
 @property(nonatomic, strong)UILabel *nameLabel;
+@property(nonatomic, strong)NSTimer *animateTimeer;
 @end
 
 @implementation WFCFavoriteSoundCell
@@ -33,6 +34,28 @@
 
 + (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
     return 56;
+}
+
+- (void)setIsPlaying:(BOOL)isPlaying {
+    _isPlaying = isPlaying;
+    if (isPlaying) {
+        __weak typeof(self)ws = self;
+        if (@available(iOS 10.0, *)) {
+            self.animateTimeer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                if((NSUInteger)[NSDate date].timeIntervalSince1970 % 2) {
+                    ws.iconView.image = nil;
+                } else {
+                    ws.iconView.image = [UIImage imageNamed:@"sound_icon"];
+                }
+            }];
+        } else {
+            // Fallback on earlier versions
+        }
+    } else {
+        [self.animateTimeer invalidate];
+        self.animateTimeer = nil;
+        self.iconView.image = [UIImage imageNamed:@"sound_icon"];
+    }
 }
 
 - (UIImageView *)iconView {
