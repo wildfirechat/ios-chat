@@ -441,7 +441,6 @@ namespace mars{
             kUserSettingFavouriteUser = 14,
             kUserSettingMuteWhenPCOnline = 15,
             kUserSettingLinesReaded = 16,
-            kUserSettingNoDisturbing = 17,
 
             kUserSettingCustomBegin = 1000
         };
