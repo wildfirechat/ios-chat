@@ -19,6 +19,8 @@
 #import "WFCUContactListViewController.h"
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
+#import <WFChatClient/WFCChatClient.h>
+
 
 @interface WFCUForwardViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;

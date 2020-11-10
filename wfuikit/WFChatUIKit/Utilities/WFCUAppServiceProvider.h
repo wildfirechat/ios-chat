@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCUGroupAnnouncement.h"
-#import <WFChatClient/WFCChatClient.h>
 #import "WFCUFavoriteItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class WFCCPCOnlineInfo;
 @protocol WFCUAppServiceProvider <NSObject>
 - (void)getGroupAnnouncement:(NSString *)groupId
                      success:(void(^)(WFCUGroupAnnouncement *))successBlock

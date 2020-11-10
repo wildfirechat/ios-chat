@@ -8,6 +8,7 @@
 #import <WebKit/WebKit.h>
 #import "WFCUBrowserViewController.h"
 #import "WFCUForwardViewController.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @interface WFCUBrowserViewController ()
 @property (nonatomic, strong)WKWebView *webView;

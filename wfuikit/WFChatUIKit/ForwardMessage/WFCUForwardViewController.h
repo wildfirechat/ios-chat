@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WFChatClient/WFCChatClient.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class WFCCMessage;
 @interface WFCUForwardViewController : UIViewController
 @property (nonatomic, strong) WFCCMessage *message;
 //可以转发一条或者转发多条
