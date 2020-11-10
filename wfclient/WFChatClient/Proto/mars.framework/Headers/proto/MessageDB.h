@@ -170,6 +170,8 @@ namespace mars {
             long InsertRead(const TReadEntry &entry);
             long InsertDelivery(const TDeliveryEntry &entry);
             
+            bool RemoveGroupRead(const std::string &groupId, const std::string &userId);
+            
             std::map<std::string, int64_t> GetConversationRead(int conversationType, const std::string &target, int line);
             std::map<std::string, int64_t> GetDelivery(int conversationType, const std::string &target);
             int64_t GetDelivery(std::string userId);
