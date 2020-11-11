@@ -58,7 +58,7 @@ static WFCUConfigManager *sharedSingleton = nil;
     }
     
     [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];
-    [UITabBar appearance].translucent = NO;
+    [UITabBar appearance].translucent = YES;
 }
 
 - (UIColor *)backgroudColor {
