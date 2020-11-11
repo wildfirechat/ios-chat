@@ -800,7 +800,7 @@
 - (BOOL)appendQuote:(long long)messageUid {
     if (self.quoteInfo) {
         [self clearQuoteInfo];
-        [self updateQuoteView:NO showKeyboard:YES];
+        [self updateQuoteView:YES showKeyboard:YES];
     }
     self.quoteInfo = [[WFCCQuoteInfo alloc] initWithMessageUid:messageUid];
     [self updateQuoteView:YES showKeyboard:YES];
