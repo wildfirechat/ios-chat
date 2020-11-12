@@ -19,7 +19,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "GroupManageTableViewController.h"
 #import "WFCUGroupMemberCollectionViewController.h"
-#import "WFCUGroupFilesViewController.h"
+#import "WFCUFilesViewController.h"
 
 #import "MBProgressHUD.h"
 #import "WFCUMyProfileTableViewController.h"
@@ -820,7 +820,7 @@
       vc.isManager = [self isGroupManager];
       [self.navigationController pushViewController:vc animated:YES];
   } else if([self isGroupFileCell:indexPath]) {
-      WFCUGroupFilesViewController *vc = [[WFCUGroupFilesViewController alloc] init];
+      WFCUFilesViewController *vc = [[WFCUFilesViewController alloc] init];
       vc.conversation = self.conversation;
       [self.navigationController pushViewController:vc animated:YES];
   }

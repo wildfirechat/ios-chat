@@ -1,5 +1,5 @@
 //
-//  WFCUGroupFilesViewController.h
+//  WFCUFilesViewController.h
 //  WFChatUIKit
 //
 //  Created by dali on 2020/8/2.
@@ -10,7 +10,7 @@
 @class WFCCConversation;
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUGroupFilesViewController : UIViewController
+@interface WFCUFilesViewController : UIViewController
 @property(nonatomic, strong)WFCCConversation *conversation;
 @end
 
