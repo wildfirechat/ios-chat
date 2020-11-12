@@ -33,6 +33,7 @@
         self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         
     }
+    self.indicatorView.color = [UIColor grayColor];
     
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.indicatorView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4 - 10);
