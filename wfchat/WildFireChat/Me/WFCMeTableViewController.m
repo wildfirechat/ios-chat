@@ -160,7 +160,9 @@
         mnvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:mnvc animated:YES];
     } else if(indexPath.section == 3) {
-        
+        WFCUFilesEntryViewController *fevc = [[WFCUFilesEntryViewController alloc] init];
+        fevc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:fevc animated:YES];
     } else if(indexPath.section == 4) {
         WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
         stvc.hidesBottomBarWhenPushed = YES;

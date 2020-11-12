@@ -17,6 +17,7 @@
 @property(nonatomic, strong)UIActivityIndicatorView *activityView;
 
 @property(nonatomic, strong)NSMutableArray<WFCCFileRecord *> *fileRecords;
+@property(nonatomic, assign)BOOL hasMore;
 @end
 
 @implementation WFCUFilesViewController
@@ -35,19 +36,68 @@
     self.activityView.center = self.view.center;
     [self.view addSubview:self.activityView];
     
-    self.title = WFCString(@"GroupFiles");
+    if (self.myFiles) {
+        self.title = @"我的文件";
+    } else if(self.userFiles) {
+        WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
+        if (user.friendAlias.length) {
+            self.title = [NSString stringWithFormat:@"%@ 的文件", user.friendAlias];
+        } else if (user.displayName.length) {
+            self.title = [NSString stringWithFormat:@"%@ 的文件", user.displayName];
+        } else {
+            self.title = @"文件";
+        }
+    } else if(self.conversation) {
+        self.title = @"会话文件";
+    } else {
+        self.title = @"所有文件";
+    }
+
+    self.hasMore = YES;
+    self.fileRecords = [[NSMutableArray alloc] init];
+    [self loadMoreData];
+}
+
+- (void)loadMoreData {
+    if (!self.hasMore) {
+        return;
+    }
     
     __weak typeof(self)ws = self;
-    [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:0 count:20 success:^(NSArray<WFCCFileRecord *> *files) {
-        ws.fileRecords = [files mutableCopy];
+    long long lastId = 0;
+    if (self.fileRecords.count) {
+        lastId = self.fileRecords.lastObject.messageUid;
+    }
+    self.activityView.hidden = NO;
+    
+    [self loadData:0 count:20 success:^(NSArray<WFCCFileRecord *> *files) {
+        [ws.fileRecords addObjectsFromArray:files];
         [ws.tableView reloadData];
         ws.activityView.hidden = YES;
+        if (files.count < 20) {
+            self.hasMore = NO;
+        }
     } error:^(int error_code) {
         NSLog(@"load fire record error %d", error_code);
         ws.activityView.hidden = YES;
     }];
 }
 
+- (void)loadData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+           error:(void(^)(int error_code))errorBlock {
+    if (self.myFiles) {
+        [[WFCCIMService sharedWFCIMService] getMyFiles:startPos count:count success:successBlock error:errorBlock];
+    } else if(self.userFiles) {
+        [[WFCCIMService sharedWFCIMService] getConversationFiles:nil fromUser:self.userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+    } else {
+        [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+    }
+}
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (self.hasMore && ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
+        [self loadMoreData];
+    }
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     WFCUFileRecordTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -92,6 +142,7 @@
     
     return NO;
 }
+
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         WFCCFileRecord *record = self.fileRecords[indexPath.row];
