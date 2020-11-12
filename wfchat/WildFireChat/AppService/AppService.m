@@ -214,6 +214,8 @@ static AppService *sharedSingleton = nil;
         //但需要上传最后一条已经上传日志，因为那个日志文件可能在上传之后继续写入了，所以需要继续上传
         if (uploadedFiles.count) {
             [uploadedFiles removeLastObject];
+        } else {
+            uploadedFiles = [[NSMutableArray alloc] init];
         }
         for (NSString *file in [logFiles copy]) {
             NSString *name = [file componentsSeparatedByString:@"/"].lastObject;
