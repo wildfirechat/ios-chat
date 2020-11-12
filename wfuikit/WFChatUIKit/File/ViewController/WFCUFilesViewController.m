@@ -10,14 +10,20 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUFileRecordTableViewCell.h"
 #import "WFCUBrowserViewController.h"
+#import "WFCUConfigManager.h"
+#import "UIImage+ERCategory.h"
 
-
-@interface WFCUFilesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface WFCUFilesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating>
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)UIActivityIndicatorView *activityView;
 
+@property (nonatomic, strong)UISearchController *searchController;
+@property(nonatomic, strong)NSMutableArray<WFCCFileRecord *> *searchedRecords;
+
 @property(nonatomic, strong)NSMutableArray<WFCCFileRecord *> *fileRecords;
 @property(nonatomic, assign)BOOL hasMore;
+@property(nonatomic, assign)BOOL searchMore;
+@property(nonatomic, strong)NSString *keyword;
 @end
 
 @implementation WFCUFilesViewController
@@ -25,10 +31,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.delegate = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    if (@available(iOS 13, *)) {
+        self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
+        self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
+        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
+    } else {
+        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+    }
+    
+    
+    if (@available(iOS 9.1, *)) {
+        self.searchController.obscuresBackgroundDuringPresentation = NO;
+    }
+    self.searchController.searchBar.placeholder = WFCString(@"Search");
+    
+    
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.searchController = _searchController;
+    } else {
+        self.tableView.tableHeaderView = _searchController.searchBar;
+    }
+    
     [self.view addSubview:self.tableView];
     
     
@@ -70,7 +103,7 @@
     }
     self.activityView.hidden = NO;
     
-    [self loadData:0 count:20 success:^(NSArray<WFCCFileRecord *> *files) {
+    [self loadData:lastId count:20 success:^(NSArray<WFCCFileRecord *> *files) {
         [ws.fileRecords addObjectsFromArray:files];
         [ws.tableView reloadData];
         ws.activityView.hidden = YES;
@@ -93,9 +126,54 @@
         [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
     }
 }
+
+
+- (void)searchMoreData {
+    if (!self.searchMore) {
+        return;
+    }
+    
+    __weak typeof(self)ws = self;
+    long long lastId = 0;
+    if (self.searchedRecords.count) {
+        lastId = self.searchedRecords.lastObject.messageUid;
+    }
+    self.activityView.hidden = NO;
+    
+    [self searchData:lastId count:20 success:^(NSArray<WFCCFileRecord *> *files) {
+        [ws.searchedRecords addObjectsFromArray:files];
+        [ws.tableView reloadData];
+        ws.activityView.hidden = YES;
+        if (files.count < 20) {
+            self.searchMore = NO;
+        }
+    } error:^(int error_code) {
+        NSLog(@"load fire record error %d", error_code);
+        ws.activityView.hidden = YES;
+    }];
+}
+
+- (void)searchData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+           error:(void(^)(int error_code))errorBlock {
+    if (self.myFiles) {
+        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:[WFCCNetworkService sharedInstance].userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+    } else if(self.userFiles) {
+        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:self.userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+    } else {
+        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:self.conversation fromUser:nil beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+    }
+}
+
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (self.hasMore && ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
-        [self loadMoreData];
+    if (ceil(targetContentOffset->y)+1 >= ceil(scrollView.contentSize.height - scrollView.bounds.size.height)) {
+        if (!self.searchController.active && self.hasMore) {
+            [self loadMoreData];
+        }
+        
+        if (self.searchController.active && self.searchMore) {
+            [self searchMoreData];
+        }
     }
 }
 
@@ -105,23 +183,43 @@
         cell = [[WFCUFileRecordTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     
-    WFCCFileRecord *record = self.fileRecords[indexPath.row];
+    WFCCFileRecord *record;
+    if (self.searchController.active) {
+        record = self.searchedRecords[indexPath.row];
+    } else {
+        record = self.fileRecords[indexPath.row];
+    }
     
     cell.fileRecord = record;
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.searchController.active) {
+        return self.searchedRecords.count;
+    }
     return self.fileRecords.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCCFileRecord *record = self.fileRecords[indexPath.row];
+    WFCCFileRecord *record;
+    if (self.searchController.active) {
+        record = self.searchedRecords[indexPath.row];
+    } else {
+        record = self.fileRecords[indexPath.row];
+    }
+    
     return [WFCUFileRecordTableViewCell sizeOfRecord:record withCellWidth:self.view.bounds.size.width];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCCFileRecord *record = self.fileRecords[indexPath.row];
+    WFCCFileRecord *record;
+    if (self.searchController.active) {
+        record = self.searchedRecords[indexPath.row];
+    } else {
+        record = self.fileRecords[indexPath.row];
+    }
+    
     if ([record.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return YES;
     } else if(record.conversation.type == Group_Type) {
@@ -145,7 +243,13 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        WFCCFileRecord *record = self.fileRecords[indexPath.row];
+        WFCCFileRecord *record;
+        if (self.searchController.active) {
+            record = self.searchedRecords[indexPath.row];
+        } else {
+            record = self.fileRecords[indexPath.row];
+        }
+        
         __weak typeof(self) ws = self;
         [[WFCCIMService sharedWFCIMService] deleteFileRecord:record.messageUid success:^{
             [ws.fileRecords removeObject:record];
@@ -157,7 +261,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCCFileRecord *record = self.fileRecords[indexPath.row];
+    WFCCFileRecord *record;
+    if (self.searchController.active) {
+        record = self.searchedRecords[indexPath.row];
+    } else {
+        record = self.fileRecords[indexPath.row];
+    }
+    
     __weak typeof(self)ws = self;
     [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:record.messageUid mediaType:Media_Type_FILE mediaPath:record.url success:^(NSString *authorizedUrl) {
         WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
@@ -169,4 +279,29 @@
         [ws.navigationController pushViewController:bvc animated:YES];
     }];
 }
+
+#pragma mark - UISearchControllerDelegate
+- (void)didPresentSearchController:(UISearchController *)searchController {
+    self.searchController.view.frame = self.view.bounds;
+    self.tabBarController.tabBar.hidden = YES;
+    self.extendedLayoutIncludesOpaqueBars = YES;
+}
+
+- (void)willDismissSearchController:(UISearchController *)searchController {
+    self.tabBarController.tabBar.hidden = NO;
+    self.extendedLayoutIncludesOpaqueBars = NO;
+}
+
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSString *searchString = [self.searchController.searchBar text];
+    self.searchedRecords = [[NSMutableArray alloc] init];
+    self.searchMore = YES;
+    self.keyword = searchString;
+    if (searchString.length) {
+        [self searchMoreData];
+    }
+    
+    [self.tableView reloadData];
+}
+
 @end
