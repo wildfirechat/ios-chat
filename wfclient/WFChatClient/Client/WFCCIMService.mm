@@ -2358,7 +2358,27 @@ public:
         
     mars::stn::deleteFileRecords(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
-         
+       
+- (void)searchFiles:(NSString *)keyword
+       conversation:(WFCCConversation *)conversation
+           fromUser:(NSString *)userId
+   beforeMessageUid:(long long)messageUid
+              count:(int)count
+            success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    if (!keyword.length) {
+        errorBlock(-1);
+        return;
+    }
+    mars::stn::TConversation conv;
+    conv.target = conversation.target ? [conversation.target UTF8String] : "";
+    conv.line = conversation.line;
+    conv.conversationType = (int)conversation.type;
+    
+    std::string fromUser = userId ? [userId UTF8String] : "";
+    mars::stn::searchConversationFileRecords([keyword UTF8String], conv, fromUser, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+}
+
 - (void)getAuthorizedMediaUrl:(long long)messageUid
                     mediaType:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath

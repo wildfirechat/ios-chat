@@ -1641,6 +1641,26 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)deleteFileRecord:(long long)messageUid
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 搜索文件。conversation不为空时，搜索该会话内的文件记录；当conversation为空时，搜索用户收到的所有文件记录。
+
+ @param keyword 关键字
+ @param conversation 会话
+ @param fromUser 该用户发送的文件，如果为空返回所有文件
+ @param messageUid 起始记录的UID
+ @param count count
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)searchFiles:(NSString *)keyword
+       conversation:(WFCCConversation *)conversation
+           fromUser:(NSString *)fromUser
+   beforeMessageUid:(long long)messageUid
+              count:(int)count
+            success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
 /**
 获取媒体文件授权访问地址
 
