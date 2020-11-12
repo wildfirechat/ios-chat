@@ -1,25 +1,25 @@
 //
-//  WFCUGroupFilesViewController.m
+//  WFCUFilesViewController.m
 //  WFChatUIKit
 //
 //  Created by dali on 2020/8/2.
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
-#import "WFCUGroupFilesViewController.h"
+#import "WFCUFilesViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUFileRecordTableViewCell.h"
 #import "WFCUBrowserViewController.h"
 
 
-@interface WFCUGroupFilesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface WFCUFilesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)UIActivityIndicatorView *activityView;
 
 @property(nonatomic, strong)NSMutableArray<WFCCFileRecord *> *fileRecords;
 @end
 
-@implementation WFCUGroupFilesViewController
+@implementation WFCUFilesViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

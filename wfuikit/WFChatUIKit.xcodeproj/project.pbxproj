@@ -44,8 +44,8 @@
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
 		2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */; };
 		2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */; };
-		2BD8D72524D69B5300281B81 /* WFCUGroupFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */; };
-		2BD8D72624D69B5400281B81 /* WFCUGroupFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */; };
+		2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D72324D69B5300281B81 /* WFCUFilesViewController.h */; };
+		2BD8D72624D69B5400281B81 /* WFCUFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD8D72424D69B5300281B81 /* WFCUFilesViewController.m */; };
 		2BDF579324AD70C8003C1F08 /* DNImagePickerHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BDF576824AD70C8003C1F08 /* DNImagePickerHelper.h */; };
 		2BDF579424AD70C8003C1F08 /* DNAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF576A24AD70C8003C1F08 /* DNAlbum.m */; };
 		2BDF579524AD70C8003C1F08 /* DNAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF576B24AD70C8003C1F08 /* DNAsset.m */; };
@@ -456,8 +456,8 @@
 		2BD671A32336E821007A9FEC /* WFCUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConfigManager.m; sourceTree = "<group>"; };
 		2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUSelectNoDisturbingTimeViewController.h; sourceTree = "<group>"; };
 		2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUSelectNoDisturbingTimeViewController.m; sourceTree = "<group>"; };
-		2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupFilesViewController.h; sourceTree = "<group>"; };
-		2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupFilesViewController.m; sourceTree = "<group>"; };
+		2BD8D72324D69B5300281B81 /* WFCUFilesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFilesViewController.h; sourceTree = "<group>"; };
+		2BD8D72424D69B5300281B81 /* WFCUFilesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFilesViewController.m; sourceTree = "<group>"; };
 		2BDF576824AD70C8003C1F08 /* DNImagePickerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNImagePickerHelper.h; sourceTree = "<group>"; };
 		2BDF576A24AD70C8003C1F08 /* DNAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAlbum.m; sourceTree = "<group>"; };
 		2BDF576B24AD70C8003C1F08 /* DNAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNAsset.m; sourceTree = "<group>"; };
@@ -892,8 +892,8 @@
 		2BBC9CF1255CEC07007DA28A /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */,
-				2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */,
+				2BD8D72324D69B5300281B81 /* WFCUFilesViewController.h */,
+				2BD8D72424D69B5300281B81 /* WFCUFilesViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1914,7 +1914,7 @@
 				2F5511D4217F5CC300F56C26 /* TYBaseAnimation.h in Headers */,
 				2F55110B217F5CC200F56C26 /* VideoPlayerSampleViewController.h in Headers */,
 				2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */,
-				2BD8D72524D69B5300281B81 /* WFCUGroupFilesViewController.h in Headers */,
+				2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */,
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
@@ -2162,7 +2162,7 @@
 				2F5510B8217F5CC200F56C26 /* WFCUImagePreviewViewController.m in Sources */,
 				2F5510C6217F5CC200F56C26 /* WFCUFavGroupTableViewController.m in Sources */,
 				2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */,
-				2BD8D72624D69B5400281B81 /* WFCUGroupFilesViewController.m in Sources */,
+				2BD8D72624D69B5400281B81 /* WFCUFilesViewController.m in Sources */,
 				149B3112241E65D500B935D3 /* UIFont+YH.m in Sources */,
 				2FD550ED2442AA0B00B3EE09 /* WFCURecallCell.m in Sources */,
 				2F5510A3217F5CC200F56C26 /* WFCUImageCell.m in Sources */,
