@@ -65,7 +65,7 @@
     
     [self setFileIcon:fileRecord.name];
     self.nameLabel.text = self.fileRecord.name;
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(self.bounds.size.width - 74, 48)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
     self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
     NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
