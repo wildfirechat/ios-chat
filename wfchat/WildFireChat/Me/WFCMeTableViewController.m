@@ -61,6 +61,8 @@
           @"image":@"notification_setting"},
         @{@"title":LocalizedString(@"Favorite"),
           @"image":@"favorite_settings"},
+        @{@"title":LocalizedString(@"File"),
+          @"image":@"file_settings"},
         @{@"title":LocalizedString(@"AccountSafety"),
           @"image":@"safe_setting"},
         @{@"title":LocalizedString(@"Settings"),
@@ -82,7 +84,7 @@
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return self.itemDataSource.count+1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -158,6 +160,8 @@
         mnvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:mnvc animated:YES];
     } else if(indexPath.section == 3) {
+        
+    } else if(indexPath.section == 4) {
         WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
         stvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:stvc animated:YES];

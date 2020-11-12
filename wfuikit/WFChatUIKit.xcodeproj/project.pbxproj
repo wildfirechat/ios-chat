@@ -871,6 +871,33 @@
 			path = ZCCCircleProgressView;
 			sourceTree = "<group>";
 		};
+		2BBC9CEE255CEBD9007DA28A /* File */ = {
+			isa = PBXGroup;
+			children = (
+				2BBC9CF1255CEC07007DA28A /* ViewController */,
+				2BBC9CF0255CEBF5007DA28A /* Cell */,
+			);
+			path = File;
+			sourceTree = "<group>";
+		};
+		2BBC9CF0255CEBF5007DA28A /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */,
+				2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		2BBC9CF1255CEC07007DA28A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */,
+				2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		2BDF576724AD70C8003C1F08 /* DNImagePicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1031,6 +1058,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				2BBC9CEE255CEBD9007DA28A /* File */,
 				901E26FF21F152B200A163CB /* AVEngine */,
 				2F9CE41921BFE5A4005E1BE1 /* Channel */,
 				2F4991052189239E005F6A84 /* Voip */,
@@ -1532,8 +1560,6 @@
 				2F5EB44722C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m */,
 				2F551052217F5CC100F56C26 /* WFCUSwitchTableViewCell.h */,
 				2F551050217F5CC100F56C26 /* WFCUSwitchTableViewCell.m */,
-				2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */,
-				2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1555,8 +1581,6 @@
 				2F551056217F5CC100F56C26 /* WFCUConversationSettingViewController.m */,
 				2F7381F42308F72F00213421 /* WFCUGroupMemberCollectionViewController.h */,
 				2F7381F52308F72F00213421 /* WFCUGroupMemberCollectionViewController.m */,
-				2BD8D72324D69B5300281B81 /* WFCUGroupFilesViewController.h */,
-				2BD8D72424D69B5300281B81 /* WFCUGroupFilesViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
