@@ -2352,10 +2352,21 @@ public:
     mars::stn::loadMyFileRecords(beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
+- (void)searchMyFiles:(NSString *)keyword
+     beforeMessageUid:(long long)beforeMessageUid
+                count:(int)count
+              success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    if (!keyword.length) {
+        errorBlock(-1);
+        return;
+    }
+    mars::stn::searchMyFileRecords([keyword UTF8String], beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+}
+
 - (void)deleteFileRecord:(long long)messageUid
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock {
-        
     mars::stn::deleteFileRecords(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
        

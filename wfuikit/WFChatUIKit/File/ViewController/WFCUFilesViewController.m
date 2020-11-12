@@ -156,7 +156,7 @@
 - (void)searchData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
            error:(void(^)(int error_code))errorBlock {
     if (self.myFiles) {
-        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:[WFCCNetworkService sharedInstance].userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] searchMyFiles:self.keyword beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
     } else if(self.userFiles) {
         [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:self.userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
     } else {

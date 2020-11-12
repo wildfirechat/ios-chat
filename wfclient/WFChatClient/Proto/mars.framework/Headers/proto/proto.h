@@ -740,6 +740,7 @@ namespace mars{
         extern void loadMyFileRecords(long long beforeUid, int count, LoadFileRecordCallback *callback);
         extern void deleteFileRecords(long long messageUid, GeneralOperationCallback *callback);
         extern void searchConversationFileRecords(const std::string &keyword, const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void searchMyFileRecords(const std::string &keyword, long long beforeUid, int count, LoadFileRecordCallback *callback);
     
         extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
 

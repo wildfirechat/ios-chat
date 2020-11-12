@@ -1619,7 +1619,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                        error:(void(^)(int error_code))errorBlock;
 
 /**
- 获取当前用法发送的文件。
+ 获取当前用户发送的文件。
 
  @param beforeMessageUid 起始记录的UID
  @param count count
@@ -1660,6 +1660,21 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
               count:(int)count
             success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
               error:(void(^)(int error_code))errorBlock;
+
+/**
+ 搜索当前用户发送的文件。
+
+ @param keyword 关键字
+ @param beforeMessageUid 起始记录的UID
+ @param count count
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)searchMyFiles:(NSString *)keyword
+     beforeMessageUid:(long long)beforeMessageUid
+                count:(int)count
+              success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
+                error:(void(^)(int error_code))errorBlock;
 
 /**
 获取媒体文件授权访问地址
