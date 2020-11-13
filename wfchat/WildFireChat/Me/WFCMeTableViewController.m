@@ -23,6 +23,12 @@
 @property (nonatomic, strong)NSArray *itemDataSource;
 @end
 
+#define Notification_Setting_Cell   0
+#define Favorite_Settings_Cell      1
+#define File_Settings_Cell 2
+#define Safe_Setting_Cell 3
+#define More_Setting_Cell 4
+
 @implementation WFCMeTableViewController
 
 - (void)viewDidLoad {
@@ -56,20 +62,23 @@
         }
     }];
     
-    self.itemDataSource = @[
-        @{@"title":LocalizedString(@"MessageNotification"),
-          @"image":@"notification_setting"},
-        @{@"title":LocalizedString(@"Favorite"),
-          @"image":@"favorite_settings"},
-        @{@"title":LocalizedString(@"File"),
-          @"image":@"file_settings"},
-        @{@"title":LocalizedString(@"AccountSafety"),
-          @"image":@"safe_setting"},
-        @{@"title":LocalizedString(@"Settings"),
-          @"image":@"MoreSetting"}
-    ];
+    if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+        self.itemDataSource = @[
+            @{@"title":LocalizedString(@"MessageNotification"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
+            @{@"title":LocalizedString(@"Favorite"), @"image":@"favorite_settings", @"type":@(Favorite_Settings_Cell)},
+            @{@"title":LocalizedString(@"File"), @"image":@"file_settings", @"type":@(File_Settings_Cell)},
+            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)},
+            @{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}
+        ];
+    } else {
+        self.itemDataSource = @[
+            @{@"title":LocalizedString(@"MessageNotification"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
+            @{@"title":LocalizedString(@"Favorite"), @"image":@"favorite_settings", @"type":@(Favorite_Settings_Cell)},
+            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)},
+            @{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}
+        ];
+    }
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -151,29 +160,30 @@
         WFCUMyProfileTableViewController *vc = [[WFCUMyProfileTableViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    } else if (indexPath.section == 1) {
-        WFCUMessageNotificationViewController *mnvc = [[WFCUMessageNotificationViewController alloc] init];
-        mnvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:mnvc animated:YES];
-    } else if (indexPath.section == 2) {
-        WFCFavoriteTableViewController *mnvc = [[WFCFavoriteTableViewController alloc] init];
-        mnvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:mnvc animated:YES];
-    } else if(indexPath.section == 3) {
-        WFCUFilesEntryViewController *fevc = [[WFCUFilesEntryViewController alloc] init];
-        fevc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:fevc animated:YES];
-    } else if(indexPath.section == 4) {
-        WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
-        stvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:stvc animated:YES];
     } else {
-        WFCSettingTableViewController *vc = [[WFCSettingTableViewController alloc] init];
-               vc.hidesBottomBarWhenPushed = YES;
-               [self.navigationController pushViewController:vc animated:YES];
+        int type = [self.itemDataSource[indexPath.section-1][@"type"] intValue];
+        if (type == Notification_Setting_Cell) {
+           WFCUMessageNotificationViewController *mnvc = [[WFCUMessageNotificationViewController alloc] init];
+           mnvc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:mnvc animated:YES];
+       } else if (type == Favorite_Settings_Cell) {
+           WFCFavoriteTableViewController *mnvc = [[WFCFavoriteTableViewController alloc] init];
+           mnvc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:mnvc animated:YES];
+       } else if(type == File_Settings_Cell) {
+           WFCUFilesEntryViewController *fevc = [[WFCUFilesEntryViewController alloc] init];
+           fevc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:fevc animated:YES];
+       } else if(type == Safe_Setting_Cell) {
+           WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
+           stvc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:stvc animated:YES];
+       } else if(type == More_Setting_Cell) {
+           WFCSettingTableViewController *vc = [[WFCSettingTableViewController alloc] init];
+                  vc.hidesBottomBarWhenPushed = YES;
+                  [self.navigationController pushViewController:vc animated:YES];
+       }
     }
-    
-  
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
@@ -182,8 +192,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
-
-    
 }
 
 - (void)dealloc {

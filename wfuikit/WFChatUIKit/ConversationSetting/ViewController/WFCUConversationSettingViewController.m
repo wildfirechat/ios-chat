@@ -479,8 +479,10 @@
     return NO;
 }
 
-- (BOOL)isGroupFileCell:(NSIndexPath *)indexPath {
+- (BOOL)isFilesCell:(NSIndexPath *)indexPath {
     if (self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 1) {
+        return YES;
+    } else if (self.conversation.type == Single_Type && indexPath.section == 0 && indexPath.row == 1) {
         return YES;
     }
     
@@ -517,6 +519,9 @@
         }
     } else if(self.conversation.type == Single_Type) {
         if(section == 0) {
+            if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+                return 2; //查找聊天内容, 群文件
+            }
             return 1; //查找聊天内容
         } else if(section == 1) {
             return 2; //消息免打扰，置顶聊天
@@ -720,8 +725,8 @@
           }
       }
       return cell;
-  } else if([self isGroupFileCell:indexPath]) {
-      return [self cellOfTable:tableView WithTitle:WFCString(@"GroupFiles") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+  } else if([self isFilesCell:indexPath]) {
+      return [self cellOfTable:tableView WithTitle:WFCString(@"ConvFiles") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   }
     return nil;
 }
@@ -819,7 +824,7 @@
       vc.announcement = self.groupAnnouncement;
       vc.isManager = [self isGroupManager];
       [self.navigationController pushViewController:vc animated:YES];
-  } else if([self isGroupFileCell:indexPath]) {
+  } else if([self isFilesCell:indexPath]) {
       WFCUFilesViewController *vc = [[WFCUFilesViewController alloc] init];
       vc.conversation = self.conversation;
       [self.navigationController pushViewController:vc animated:YES];
