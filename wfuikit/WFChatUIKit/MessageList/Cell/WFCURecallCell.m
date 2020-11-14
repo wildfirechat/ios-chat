@@ -101,7 +101,7 @@
 - (UIButton *)reeditButton {
     if (!_reeditButton) {
         _reeditButton = [[UIButton alloc] init];
-        [_reeditButton setTitle:@"重新编辑" forState:UIControlStateNormal];
+        [_reeditButton setTitle:WFCString(@"重新编辑") forState:UIControlStateNormal];
         [_reeditButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [_reeditButton setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
         [_reeditButton addTarget:self action:@selector(onReeditBtn:) forControlEvents:UIControlEventTouchDown];
