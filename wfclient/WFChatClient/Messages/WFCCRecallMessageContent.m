@@ -60,18 +60,19 @@
     return [self digest:message];
 }
 
+
 - (NSString *)digest:(WFCCMessage *)message {
     if ([self.operatorId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        return @"你撤回了一条消息";
+        return WFCCString(@"你撤回了一条消息");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId refresh:NO];
         if (userInfo.friendAlias.length) {
-            return [NSString stringWithFormat:@"%@撤回了一条消息", userInfo.friendAlias];
+            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.friendAlias];
         }
         if (userInfo.displayName != nil) {
-            return [NSString stringWithFormat:@"%@撤回了一条消息", userInfo.displayName];
+            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.displayName];
         }
-        return [NSString stringWithFormat:@"用户<%@>撤回了一条消息", self.operatorId];
+        return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), self.operatorId];
     }
 }
 @end

@@ -228,3 +228,6 @@
 "ConvFiles" = "Conversation files";
 "last_read_here"="Last read here";
 "Favorite"="Favorite";
+"重新编辑"="Reedit";
+"你撤回了一条消息"="You recall a message. ";
+"%@撤回了一条消息"="%@ recall a message. ";
