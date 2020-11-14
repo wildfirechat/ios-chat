@@ -88,6 +88,7 @@
 		2E6B511F1FAE9B10006B6E31 /* WFCCUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50F51FAE9B10006B6E31 /* WFCCUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B51201FAE9B10006B6E31 /* WFCCUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50F61FAE9B10006B6E31 /* WFCCUserInfo.m */; };
 		2EE6A4881FB290FC007953BC /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EE6A4871FB290FC007953BC /* Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F001FAA255F8AB7006F8DE8 /* PrefixHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F001FA9255F8AB7006F8DE8 /* PrefixHeader.h */; };
 		2F19723622C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F19723422C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m */; };
 		2F19723722C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F19723522C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1A931821B250F5006625CD /* WFCCTypingMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -238,6 +239,7 @@
 		2E6B50F51FAE9B10006B6E31 /* WFCCUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCUserInfo.h; sourceTree = "<group>"; };
 		2E6B50F61FAE9B10006B6E31 /* WFCCUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCUserInfo.m; sourceTree = "<group>"; };
 		2EE6A4871FB290FC007953BC /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		2F001FA9255F8AB7006F8DE8 /* PrefixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.h; sourceTree = "<group>"; };
 		2F19723422C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupSetManagerNotificationContent.m; sourceTree = "<group>"; };
 		2F19723522C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupSetManagerNotificationContent.h; sourceTree = "<group>"; };
 		2F1A931821B250F5006625CD /* WFCCTypingMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCTypingMessageContent.h; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				2E6B50A61FAE990D006B6E31 /* amr */,
 				2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */,
 				2E6B509F1FAE98E6006B6E31 /* Info.plist */,
+				2F001FA9255F8AB7006F8DE8 /* PrefixHeader.h */,
 			);
 			path = WFChatClient;
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				2E6B50C61FAE9B08006B6E31 /* WFCCNetworkService.h in Headers */,
 				2BD8D71D24D68FCD00281B81 /* WFCCFileRecord.h in Headers */,
 				2E6B50C41FAE9B08006B6E31 /* WFCCIMService.h in Headers */,
+				2F001FAA255F8AB7006F8DE8 /* PrefixHeader.h in Headers */,
 				2F56F6A22529D04500B829C4 /* WFCCCompositeMessageContent.h in Headers */,
 				2E6B50B31FAE990D006B6E31 /* wav_amr.h in Headers */,
 				2E6B50C21FAE9B08006B6E31 /* app_callback.h in Headers */,
@@ -936,6 +940,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
+				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/WFChatClient/PrefixHeader.h";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WFChatClient/Proto/**";
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -974,6 +979,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
+				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/WFChatClient/PrefixHeader.h";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WFChatClient/Proto/**";
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
