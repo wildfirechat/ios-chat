@@ -212,7 +212,7 @@ class GUCB : public mars::stn::GetUserInfoCallback {
   GUCB(id<RefreshUserInfoDelegate> delegate) : m_delegate(delegate) {}
   
   void onSuccess(const std::list<mars::stn::TUserInfo> &userInfoList) {
-      if(m_delegate) {
+      if(m_delegate && !userInfoList.empty()) {
           [m_delegate onUserInfoUpdated:converUserInfos(userInfoList)];
       }
   }
