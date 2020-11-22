@@ -501,10 +501,13 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     payload.remoteMediaUrl = [NSString stringWithUTF8String:tMessage->content.remoteMediaUrl.c_str()];
     payload.localMediaPath = [NSString stringWithUTF8String:tMessage->content.localMediaPath.c_str()];
     payload.mentionedType = tMessage->content.mentionedType;
-  NSMutableArray *mentionedType = [[NSMutableArray alloc] init];
-  for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
-    [mentionedType addObject:[NSString stringWithUTF8String:(*it).c_str()]];
-  }
+    
+    NSMutableArray *mentionedTargets = [[NSMutableArray alloc] init];
+    for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
+        [mentionedTargets addObject:[NSString stringWithUTF8String:(*it).c_str()]];
+    }
+    payload.mentionedTargets = mentionedTargets;
+    
     payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
   
     ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
