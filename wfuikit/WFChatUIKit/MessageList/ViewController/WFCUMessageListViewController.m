@@ -763,7 +763,7 @@
     
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCCreateGroupNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCAddGroupeMemberNotificationContent class]];
-    [self registerCell:[WFCUInformationCell class] forContent:[WFCCKickoffGroupMemberNotificaionContent class]];
+    [self registerCell:[WFCUInformationCell class] forContent:[WFCCKickoffGroupMemberNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCQuitGroupNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCDismissGroupNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTransferGroupOwnerNotificationContent class]];
