@@ -1,5 +1,5 @@
 //
-//  WFCCKickoffGroupMemberNotificaionContent.h
+//  WFCCKickoffGroupMemberNotificationContent.h
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/9/20.
@@ -11,7 +11,7 @@
 /**
  群组踢人的通知消息
  */
-@interface WFCCKickoffGroupMemberNotificaionContent : WFCCNotificationMessageContent
+@interface WFCCKickoffGroupMemberNotificationContent : WFCCNotificationMessageContent
 
 /**
  群组ID

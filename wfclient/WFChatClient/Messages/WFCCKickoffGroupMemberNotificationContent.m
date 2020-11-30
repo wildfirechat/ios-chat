@@ -1,18 +1,18 @@
 //
-//  WFCCKickoffGroupMemberNotificaionContent.m
+//  WFCCKickoffGroupMemberNotificationContent.m
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/9/20.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCKickoffGroupMemberNotificaionContent.h"
+#import "WFCCKickoffGroupMemberNotificationContent.h"
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
 
 
-@implementation WFCCKickoffGroupMemberNotificaionContent
+@implementation WFCCKickoffGroupMemberNotificationContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
