@@ -53,8 +53,8 @@
 		2E6B50FC1FAE9B10006B6E31 /* WFCCDismissGroupNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50D01FAE9B10006B6E31 /* WFCCDismissGroupNotificationContent.m */; };
 		2E6B50FD1FAE9B10006B6E31 /* WFCCImageMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50D11FAE9B10006B6E31 /* WFCCImageMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B50FE1FAE9B10006B6E31 /* WFCCImageMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50D21FAE9B10006B6E31 /* WFCCImageMessageContent.m */; };
-		2E6B50FF1FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E6B51001FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.m */; };
+		2E6B50FF1FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E6B51001FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m */; };
 		2E6B51011FAE9B10006B6E31 /* WFCCMediaMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50D51FAE9B10006B6E31 /* WFCCMediaMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E6B51021FAE9B10006B6E31 /* WFCCMediaMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50D61FAE9B10006B6E31 /* WFCCMediaMessageContent.m */; };
 		2E6B51031FAE9B10006B6E31 /* WFCCMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50D71FAE9B10006B6E31 /* WFCCMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -204,8 +204,8 @@
 		2E6B50D01FAE9B10006B6E31 /* WFCCDismissGroupNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCDismissGroupNotificationContent.m; sourceTree = "<group>"; };
 		2E6B50D11FAE9B10006B6E31 /* WFCCImageMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCImageMessageContent.h; sourceTree = "<group>"; };
 		2E6B50D21FAE9B10006B6E31 /* WFCCImageMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCImageMessageContent.m; sourceTree = "<group>"; };
-		2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCKickoffGroupMemberNotificaionContent.h; sourceTree = "<group>"; };
-		2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCKickoffGroupMemberNotificaionContent.m; sourceTree = "<group>"; };
+		2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCKickoffGroupMemberNotificationContent.h; sourceTree = "<group>"; };
+		2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCKickoffGroupMemberNotificationContent.m; sourceTree = "<group>"; };
 		2E6B50D51FAE9B10006B6E31 /* WFCCMediaMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCMediaMessageContent.h; sourceTree = "<group>"; };
 		2E6B50D61FAE9B10006B6E31 /* WFCCMediaMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCMediaMessageContent.m; sourceTree = "<group>"; };
 		2E6B50D71FAE9B10006B6E31 /* WFCCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCMessage.h; sourceTree = "<group>"; };
@@ -408,8 +408,8 @@
 				2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */,
 				903EBB8A21357DDF00312C16 /* WFCCStickerMessageContent.h */,
 				903EBB8921357DDF00312C16 /* WFCCStickerMessageContent.m */,
-				2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.h */,
-				2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.m */,
+				2E6B50D31FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.h */,
+				2E6B50D41FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m */,
 				2E6B50D51FAE9B10006B6E31 /* WFCCMediaMessageContent.h */,
 				2E6B50D61FAE9B10006B6E31 /* WFCCMediaMessageContent.m */,
 				2E6B50D71FAE9B10006B6E31 /* WFCCMessage.h */,
@@ -609,7 +609,7 @@
 				90B0444A1FEFDC1A00AFE79B /* WFCCChangeGroupNameNotificationContent.h in Headers */,
 				90B044471FEFD6BA00AFE79B /* WFCCUnknownMessageContent.h in Headers */,
 				90B0444E1FEFDC4D00AFE79B /* WFCCModifyGroupAliasNotificationContent.h in Headers */,
-				2E6B50FF1FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.h in Headers */,
+				2E6B50FF1FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.h in Headers */,
 				2E6B510B1FAE9B10006B6E31 /* WFCCSoundMessageContent.h in Headers */,
 				2EE6A4881FB290FC007953BC /* Common.h in Headers */,
 				2E6B510D1FAE9B10006B6E31 /* WFCCTextMessageContent.h in Headers */,
@@ -727,7 +727,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E6B50FE1FAE9B10006B6E31 /* WFCCImageMessageContent.m in Sources */,
-				2E6B51001FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificaionContent.m in Sources */,
+				2E6B51001FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m in Sources */,
 				2E6B50C91FAE9B08006B6E31 /* WFCCNetworkStatus.m in Sources */,
 				2F444875252D6E51007A570E /* WFCCLinkMessageContent.m in Sources */,
 				2E6B511A1FAE9B10006B6E31 /* WFCCFriendRequest.m in Sources */,
