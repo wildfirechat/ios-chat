@@ -54,7 +54,7 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.size = CGSizeMake([dictionary[@"x"] floatValue], [dictionary[@"x"] floatValue]);
+        self.size = CGSizeMake([dictionary[@"x"] floatValue], [dictionary[@"y"] floatValue]);
     }
 }
 
