@@ -6,12 +6,12 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCQuitGroupVisiableNotificationContent.h"
+#import "WFCCQuitGroupVisibleNotificationContent.h"
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
 
-@implementation WFCCQuitGroupVisiableNotificationContent
+@implementation WFCCQuitGroupVisibleNotificationContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
@@ -45,7 +45,7 @@
 }
 
 + (int)getContentType {
-    return MESSAGE_CONTENT_TYPE_QUIT_GROUP_VISIABLE_NOTIFICATION;
+    return MESSAGE_CONTENT_TYPE_QUIT_GROUP_VISIBLE_NOTIFICATION;
 }
 
 + (int)getContentFlags {
