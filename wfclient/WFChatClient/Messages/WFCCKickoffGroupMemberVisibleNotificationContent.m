@@ -6,13 +6,13 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCKickoffGroupMemberVisiableNotificationContent.h"
+#import "WFCCKickoffGroupMemberVisibleNotificationContent.h"
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
 
 
-@implementation WFCCKickoffGroupMemberVisiableNotificationContent
+@implementation WFCCKickoffGroupMemberVisibleNotificationContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.contentType = [self.class getContentType];
@@ -50,7 +50,7 @@
 }
 
 + (int)getContentType {
-    return MESSAGE_CONTENT_TYPE_KICKOF_GROUP_MEMBER_VISIABLE_NOTIFICATION;
+    return MESSAGE_CONTENT_TYPE_KICKOF_GROUP_MEMBER_VISIBLE_NOTIFICATION;
 }
 
 + (int)getContentFlags {
