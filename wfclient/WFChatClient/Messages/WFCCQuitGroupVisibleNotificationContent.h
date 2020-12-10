@@ -11,7 +11,7 @@
 /**
  退群的通知消息
  */
-@interface WFCCQuitGroupVisiableNotificationContent : WFCCNotificationMessageContent
+@interface WFCCQuitGroupVisibleNotificationContent : WFCCNotificationMessageContent
 
 /**
  群组ID
