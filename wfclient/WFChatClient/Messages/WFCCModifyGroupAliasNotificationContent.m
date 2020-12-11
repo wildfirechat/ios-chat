@@ -77,7 +77,12 @@
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         formatMsg = @"你修改";
     } else {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
+        WFCCUserInfo *userInfo;
+        if([self.operateUser isEqualToString:self.memberId]) {
+            userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser refresh:NO];
+        } else {
+            userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
+        }
         
         if (self.memberId.length && userInfo.groupAlias.length) {
             formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.groupAlias];
@@ -90,14 +95,18 @@
         }
     }
     
-    if (self.memberId.length) {
-        WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
-        if (member.friendAlias.length > 0) {
-            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.friendAlias];
-        } else if (member.displayName.length > 0) {
-            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.displayName];
+    if (self.memberId.length && ![self.memberId isEqualToString:self.operateUser]) {
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.memberId]) {
+            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", @"你"];
         } else {
-            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", self.memberId];
+            WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
+            if (member.friendAlias.length > 0) {
+                formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.friendAlias];
+            } else if (member.displayName.length > 0) {
+                formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.displayName];
+            } else {
+                formatMsg = [formatMsg stringByAppendingFormat:@"%@的", self.memberId];
+            }
         }
     }
     
