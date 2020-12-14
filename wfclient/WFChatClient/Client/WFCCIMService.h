@@ -426,6 +426,22 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                withUser:(NSString *)user;
 
 /**
+ 获取消息
+ @discuss 获取从fromTime起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
+ @param contentTypes 消息类型
+ @param fromTime 起始index
+ @param count 总数
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
+                           contentTypes:(NSArray<NSNumber *> *)contentTypes
+                               fromTime:(NSUInteger)fromTime
+                                  count:(NSInteger)count
+                               withUser:(NSString *)user;
+
+/**
  获取用户会话消息
  @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
  
