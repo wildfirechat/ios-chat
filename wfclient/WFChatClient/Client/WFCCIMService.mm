@@ -779,6 +779,26 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
 }
+
+- (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
+                           contentTypes:(NSArray<NSNumber *> *)contentTypes
+                               fromTime:(NSUInteger)fromTime
+                                  count:(NSInteger)count
+                               withUser:(NSString *)user {
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessagesByTimes((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromTime, user ? [user UTF8String] : "");
+    return convertProtoMessageList(messages, YES);
+}
+
 - (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
                           messageStatus:(NSArray<NSNumber *> *)messageStatus
                                    from:(NSUInteger)fromIndex
