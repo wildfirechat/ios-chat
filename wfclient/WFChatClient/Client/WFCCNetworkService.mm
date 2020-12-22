@@ -823,6 +823,12 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], mars::app::AppCallBack::Instance()->GetPushType());
     self.deviceTokenUploaded =YES;
 }
+- (void)setBackupAddressStrategy:(int)strategy {
+    mars::stn::setBackupAddressStrategy(strategy);
+}
+- (void)setBackupAddress:(NSString *)host port:(int)port {
+    mars::stn::setBackupAddress([host UTF8String], port);
+}
 
 - (void)setVoipDeviceToken:(NSString *)token {
     if (token.length == 0) {
