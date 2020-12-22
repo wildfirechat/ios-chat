@@ -93,12 +93,12 @@ public:
     void*       user_context;  // user
     std::string report_arg;  // user for cgi report
     
-    std::vector<std::string> shortlink_host_list;
+    std::vector<std::pair<std::string, int>> shortlink_host_list;
     virtual ~Task(){}
     virtual const std::string description() const;
 
     std::map<std::string, std::string> headers;
-	std::vector<std::string> longlink_host_list;
+	std::vector<std::pair<std::string, int>> longlink_host_list;
     bool isRoute;
     bool isUpload;
     int  uploadSize;

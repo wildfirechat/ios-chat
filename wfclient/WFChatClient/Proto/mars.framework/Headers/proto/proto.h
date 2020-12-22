@@ -703,6 +703,8 @@ namespace mars{
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);
+        extern void setBackupAddressStrategy(int strategy);
+        extern void setBackupAddress(const std::string &host, int port);
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);

@@ -273,6 +273,12 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)forceConnect:(NSUInteger)second;
 
 - (void)cancelForceConnect;
+
+/*
+ 设置备选服务地址，仅专业版支持，一般用于政企单位内外网两种网络环境。
+ */
+- (void)setBackupAddressStrategy:(int)strategy;
+- (void)setBackupAddress:(NSString *)host port:(int)port;
 @end
 
 #endif
