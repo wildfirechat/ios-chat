@@ -85,7 +85,10 @@
             }
         } else if(indexPath.row == 1) {
             cell.textLabel.text = WFCString(@"GroupVisiable");
-            cell.detailTextLabel.text = WFCString(@"GroupCannotSearch");
+            if(self.groupInfo.searchable == 0)
+                cell.detailTextLabel.text = WFCString(@"GroupCanbeSearch");
+            else
+                cell.detailTextLabel.text = WFCString(@"GroupCannotSearch");
         } else if(indexPath.row == 2) {
             cell.textLabel.text = WFCString(@"GroupHistoryMessage");
             if (self.groupInfo.historyMessage > 0) {
@@ -97,6 +100,7 @@
         } else if(indexPath.row == 3) {
             cell.textLabel.text = WFCString(@"GroupMaxMember");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", self.groupInfo.maxMemberCount];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     
@@ -152,6 +156,7 @@
     [self.navigationController pushViewController:gmcvc animated:YES];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self)ws = self;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             if ([self isGroupOwner]) {
@@ -179,31 +184,31 @@
             [alertController addAction:cancelAction];
             
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"Free2Join") style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
-//                    self.groupInfo.joinType = 0;
-//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.joinType = 0;
+                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
-                    [self.view makeToast:@"设置失败"];
+                    [ws.view makeToast:@"设置失败"];
                 }];
             }];
             [alertController addAction:openAction];
             
             UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"MemberInviteOnly") style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
-//                    self.groupInfo.joinType = 1;
-//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.joinType = 1;
+                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
-                    [self.view makeToast:@"设置失败"];
+                    [ws.view makeToast:@"设置失败"];
                 }];
             }];
             [alertController addAction:verifyAction];
             
             UIAlertAction *normalAction = [UIAlertAction actionWithTitle:WFCString(@"ManagerInviteOnly") style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
-//                    self.groupInfo.joinType = 2;
-//                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.joinType = 2;
+                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 } error:^(int error_code) {
-                    [self.view makeToast:@"设置失败"];
+                    [ws.view makeToast:@"设置失败"];
                 }];
             }];
             [alertController addAction:normalAction];
@@ -218,15 +223,25 @@
             }];
             [alertController addAction:cancelAction];
             
-            UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCanbeSearch") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                
+            UIAlertAction *canSearchAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCanbeSearch") style:self.groupInfo.searchable == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.searchable = 1;
+                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                                } error:^(int error_code) {
+                                    [ws.view makeToast:@"设置失败"];
+                                }];
             }];
-            [alertController addAction:openAction];
+            [alertController addAction:canSearchAction];
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCannotSearch") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                
+            UIAlertAction *cantSearchAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCannotSearch") style:self.groupInfo.searchable == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.searchable = 0;
+                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                                } error:^(int error_code) {
+                                    [ws.view makeToast:@"设置失败"];
+                                }];
             }];
-            [alertController addAction:verifyAction];
+            [alertController addAction:cantSearchAction];
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
         } else if(indexPath.row == 2) {
@@ -239,19 +254,21 @@
                 [alertController addAction:cancelAction];
                 
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
-                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_History_Message newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
-                        self.groupInfo.historyMessage = 1;
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                        ws.groupInfo.historyMessage = 1;
+                        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                                     } error:^(int error_code) {
-                                        [self.view makeToast:@"设置失败"];
+                                        [ws.view makeToast:@"设置失败"];
                                     }];
                 }];
                 [alertController addAction:openAction];
                 
             UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageNotAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_History_Message newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
-                        self.groupInfo.historyMessage = 0;
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                        ws.groupInfo.historyMessage = 0;
+                        [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                     } error:^(int error_code) {
-                        [self.view makeToast:@"设置失败"];
+                        [ws.view makeToast:@"设置失败"];
                     }];
                 }];
                 [alertController addAction:verifyAction];
