@@ -2140,19 +2140,29 @@
 - (void)recordDidEnd:(NSString *)dataUri duration:(long)duration error:(NSError *)error {
     [self sendMessage:[WFCCSoundMessageContent soundMessageContentForWav:dataUri duration:duration]];
 }
+- (BOOL)isEqualRect:(CGRect)first second:(CGRect)second {
+    return first.origin.x == second.origin.x
+       && first.origin.y == second.origin.y
+       && first.size.width == second.size.width
+       && first.size.height == second.size.height;
+}
 
 - (void)willChangeFrame:(CGRect)newFrame withDuration:(CGFloat)duration keyboardShowing:(BOOL)keyboardShowing {
     if (!self.isShowingKeyboard) {
+        CGRect frame = self.collectionView.frame;
+        CGFloat diff = MIN(frame.size.height, self.collectionView.contentSize.height) - newFrame.origin.y;
+        if(diff > 0) {
+            frame.origin.y = -diff;
+        } else {
+            frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
+        }
+        if([self isEqualRect:frame second:self.collectionView.frame]) {
+            return;
+        }
+        
         self.isShowingKeyboard = YES;
         [UIView animateWithDuration:duration animations:^{
-            CGRect frame = self.collectionView.frame;
-            CGFloat diff = MIN(frame.size.height, self.collectionView.contentSize.height) - newFrame.origin.y;
-            if(diff > 0) {
-                frame.origin.y = -diff;
-                self.collectionView.frame = frame;
-            } else {
-                self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
-            }
+            self.collectionView.frame = frame;
         } completion:^(BOOL finished) {
             self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
             
