@@ -13,11 +13,12 @@
 
 @implementation WFCCUnknownMessageContent
 - (WFCCMessagePayload *)encode {
-    return nil;
+    return self.orignalPayload;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
     self.orignalType = payload.contentType;
+    self.orignalPayload = payload;
 }
 
 + (int)getContentType {
