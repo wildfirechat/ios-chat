@@ -1321,7 +1321,7 @@
             continue;
         }
         
-        if (!([message.content.class getContentFlags] & 0x1)) {
+        if (message.messageId == 0) {
             continue;
         }
         BOOL duplcated = NO;

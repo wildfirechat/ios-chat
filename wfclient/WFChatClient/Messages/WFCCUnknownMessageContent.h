@@ -14,8 +14,14 @@
 @interface WFCCUnknownMessageContent : WFCCMessageContent
 
 /**
- 消息类型
+ 原消息类型
  */
 @property (nonatomic, assign)NSInteger orignalType;
+
+
+/**
+ 原消息Payload
+ */
+@property (nonatomic, strong)WFCCMessagePayload *orignalPayload;
 
 @end
