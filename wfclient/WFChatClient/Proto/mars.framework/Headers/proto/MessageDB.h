@@ -27,7 +27,7 @@ namespace mars {
             
         public:
             static MessageDB* Instance();
-            long InsertMessage(TMessage &msg, bool updateConversationTime = true, std::list<UpdateConversationData*> *delayUpdateDatas = NULL);
+            long InsertMessage(TMessage &msg, bool updateConversationTime = true, std::list<UpdateConversationData*> *delayUpdateDatas = NULL, int remote_flag = 0);
             
             void RegisterMessageFlag(int type, int flag);
             bool UpdateMessageContent(long messageId, TMessageContent &msgConstnet);
