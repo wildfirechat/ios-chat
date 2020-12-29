@@ -2446,6 +2446,8 @@ public:
     if(message.status >= Message_Status_Unread) {
         tmsg.direction = 1;
     }
+    if(!message.fromUser)
+        message.fromUser = [WFCCNetworkService sharedInstance].userId;
     
     tmsg.from = [message.fromUser UTF8String];
     
