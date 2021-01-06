@@ -314,11 +314,11 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (WFCCUnreadCount *)getUnreadCount:(WFCCConversation *)conversation;
 
 /**
- 清空会话未读数。仅清理本地消息的未读数，没有同步到其他端，如果多端使用，请避免使用此方法
+ 清空会话未读数。
  
  @param conversation 会话
  */
-- (void)clearUnreadStatus:(WFCCConversation *)conversation DEPRECATED_MSG_ATTRIBUTE("use clearUnreadStatus:lines: instead");
+- (void)clearUnreadStatus:(WFCCConversation *)conversation;
 
 /**
 清空会话未读数
@@ -330,9 +330,9 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                               lines:(NSArray<NSNumber *> *)lines;
 
 /**
- 清空所有会话的未读数
+ 清空所有会话的未读数。仅清理本地消息的未读数，没有同步到其他端，如果多端使用，请避免使用此方法
  */
-- (void)clearAllUnreadStatus;
+- (void)clearAllUnreadStatus DEPRECATED_MSG_ATTRIBUTE("use clearUnreadStatus:lines: instead");
 
 /**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
