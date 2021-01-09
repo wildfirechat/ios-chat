@@ -51,6 +51,7 @@
 @property (nonatomic, assign) BOOL firstAppear;
 
 @property (nonatomic, strong) UIView *pcSessionView;
+@property (nonatomic, strong) UILabel *pcSessionLabel;
 @end
 
 @implementation WFCUConversationTableViewController
@@ -91,7 +92,6 @@
     }
     self.definesPresentationContext = YES;
     
-    [self updatePcSession];
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
@@ -483,6 +483,7 @@
     [self updateConnectionStatus:[WFCCNetworkService sharedInstance].currentConnectionStatus];
     [self refreshList];
     [self refreshLeftButton];
+    [self updatePcSession];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -541,27 +542,32 @@
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
         iv.image = [UIImage imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, 100, 20)];
-        NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
-        if (infos.count) {
-            if (infos[0].platform == PlatformType_Windows) {
-                label.text = @"Windows 已登录";
-            } else if(infos[0].platform == PlatformType_OSX) {
-                label.text = @"Mac 已登录";
-            } else if(infos[0].platform == PlatformType_Linux) {
-                label.text = @"Linux 已登录";
-            } else if(infos[0].platform == PlatformType_WEB) {
-                label.text = @"Web 已登录";
-            } else if(infos[0].platform == PlatformType_WX) {
-                label.text = @"小程序已登录";
-            }
-        }
-        
-        [_pcSessionView addSubview:label];
+        self.pcSessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, self.view.bounds.size.width - 68 - 16, 20)];
+        self.pcSessionLabel.font = [UIFont systemFontOfSize:16];
+        [_pcSessionView addSubview:self.pcSessionLabel];
         _pcSessionView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];
         [_pcSessionView addGestureRecognizer:tap];
     }
+    NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    self.pcSessionLabel.text = nil;
+    if (infos.count) {
+        if (infos[0].platform == PlatformType_Windows) {
+            self.pcSessionLabel.text = @"Windows 已登录";
+        } else if(infos[0].platform == PlatformType_OSX) {
+            self.pcSessionLabel.text = @"Mac 已登录";
+        } else if(infos[0].platform == PlatformType_Linux) {
+            self.pcSessionLabel.text = @"Linux 已登录";
+        } else if(infos[0].platform == PlatformType_WEB) {
+            self.pcSessionLabel.text = @"Web 已登录";
+        } else if(infos[0].platform == PlatformType_WX) {
+            self.pcSessionLabel.text = @"小程序已登录";
+        }
+        if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
+            self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingString:@"，手机通知已关闭"];
+        }
+    }
+    
     return _pcSessionView;
 }
 
