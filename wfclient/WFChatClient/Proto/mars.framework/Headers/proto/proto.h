@@ -507,6 +507,49 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
         
+    class TMomentsMedia {
+    public:
+        TMomentsMedia():width(0), height(0) {}
+        virtual ~TMomentsMedia() {}
+        std::string mediaUrl;
+        std::string thumbUrl;
+        int width;
+        int height;
+    };
+    
+    class TMomentsComment {
+    public:
+        TMomentsComment():feedId(0), commentId(0), replyId(0), type(0), serverTime(0) {}
+        virtual ~TMomentsComment() {}
+        int64_t feedId;
+        int64_t commentId;
+        int64_t replyId;
+        std::string sender;
+        int type;
+        std::string text;
+        std::string replyTo;
+        int64_t serverTime;
+        std::string extra;
+    };
+    
+    class TMomentsFeed {
+    public:
+        TMomentsFeed():feedId(0), type(0), serverTime(0), hasMore(0) {}
+        virtual ~TMomentsFeed() {}
+        int64_t feedId;
+        std::string sender;
+        int type;
+        std::string text;
+        std::list<TMomentsMedia> medias;
+        std::list<std::string> mentionedUsers;
+        std::list<std::string> toUsers;
+        std::list<std::string> excludeUsers;
+        int64_t serverTime;
+        std::string extra;
+        std::list<TMomentsComment> comments;
+        int hasMore;
+    };
+    
         class GeneralStringCallback {
         public:
             virtual void onSuccess(std::string key) = 0;
@@ -829,7 +872,7 @@ namespace mars{
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
     
-    extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
+        extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
     
         extern bool filesystem_exists(const std::string &path);
 		extern bool filesystem_create_directories(const std::string &path);
@@ -837,6 +880,9 @@ namespace mars{
 		extern bool filesystem_copy_files(const std::string &source, const std::string &dest);
         extern bool filesystem_remove(const std::string &path);
 		extern void filesystem_copy_directory(const std::string &strSourceDir, const std::string &strDestDir);
+        extern bool GetFeeds(std::string data, std::list<TMomentsFeed> &feeds, bool gzip);
+        extern bool GetFeed(std::string data, TMomentsFeed &feed, bool gzip);
+        extern bool GetComments(std::string data, std::list<TMomentsComment> &feeds, bool gzip);
 		
     }
 }
