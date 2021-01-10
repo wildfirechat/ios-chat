@@ -78,6 +78,7 @@
             @{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}
         ];
     }
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

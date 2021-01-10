@@ -57,7 +57,7 @@
     [self.tableView reloadData];
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [self.view addSubview:self.tableView];
-    
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 #ifdef WFC_MOMENTS
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveComments:) name:kReceiveComments object:nil];
 #endif

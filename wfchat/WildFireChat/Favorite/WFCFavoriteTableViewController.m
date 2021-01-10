@@ -64,7 +64,7 @@
     [self loadMoreData];
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCell:)]];
     [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongTapCell:)]];
-    
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.title = @"我的收藏";
 }
 
@@ -135,7 +135,7 @@
         case MESSAGE_CONTENT_TYPE_TEXT:
         {
             UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            textContainer.backgroundColor = [UIColor whiteColor];
+            textContainer.backgroundColor = self.view.backgroundColor;
             
             UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
             
