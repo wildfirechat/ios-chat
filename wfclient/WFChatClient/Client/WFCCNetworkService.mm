@@ -207,6 +207,112 @@ NSArray<WFCCChannelInfo *>* convertChannelInfos(const std::list<mars::stn::TChan
     return out;
 }
 
+NSMutableDictionary *convertTComment(const mars::stn::TMomentsComment &tcomment) {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@(tcomment.type) forKey:@"type"];
+    
+    if (tcomment.commentId) {
+        [dict setObject:@(tcomment.commentId) forKey:@"commentId"];
+    }
+    
+    if (tcomment.feedId) {
+        [dict setObject:@(tcomment.feedId) forKey:@"feedId"];
+    }
+    if(tcomment.replyId) {
+        [dict setObject:@(tcomment.replyId) forKey:@"replyId"];
+    }
+    if (!tcomment.sender.empty()) {
+        [dict setObject:[NSString stringWithUTF8String:tcomment.sender.c_str()] forKey:@"sender"];
+    }
+    
+    if (!tcomment.text.empty()) {
+        [dict setObject:[NSString stringWithUTF8String:tcomment.text.c_str()] forKey:@"text"];
+    }
+    
+    if (tcomment.serverTime) {
+        [dict setObject:@(tcomment.serverTime) forKey:@"serverTime"];
+    }
+    
+    
+    if (!tcomment.replyTo.empty()) {
+        [dict setObject:[NSString stringWithUTF8String:tcomment.replyTo.c_str()] forKey:@"replyTo"];
+    }
+    
+    if (!tcomment.extra.empty()) {
+        [dict setObject:[NSString stringWithUTF8String:tcomment.extra.c_str()] forKey:@"extra"];
+    }
+    return dict;
+}
+
+NSMutableDictionary *convertTFeed(const mars::stn::TMomentsFeed &tfeed) {
+    NSMutableDictionary *dataDict = [[NSMutableDictionary alloc] init];
+
+    [dataDict setObject:@(tfeed.type) forKey:@"type"];
+    
+    if (tfeed.feedId) {
+        [dataDict setObject:@(tfeed.feedId) forKey:@"feedId"];
+    }
+    if (!tfeed.sender.empty()) {
+        [dataDict setObject:[NSString stringWithUTF8String:tfeed.sender.c_str()] forKey:@"sender"];
+    }
+    if (!tfeed.text.empty()) {
+        [dataDict setObject:[NSString stringWithUTF8String:tfeed.text.c_str()] forKey:@"text"];
+    }
+    
+    if (tfeed.serverTime) {
+        [dataDict setObject:@(tfeed.serverTime) forKey:@"timestamp"];
+    }
+    
+    if (!tfeed.medias.empty()) {
+        NSMutableArray *entrys = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TMomentsMedia>::const_iterator it2 = tfeed.medias.begin(); it2 != tfeed.medias.end(); it2++) {
+            NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
+            [entryDict setObject:[NSString stringWithUTF8String:it2->mediaUrl.c_str()] forKey:@"m"];
+            [entryDict setObject:@(it2->width) forKey:@"w"];
+            [entryDict setObject:@(it2->height) forKey:@"h"];
+            if(!it2->thumbUrl.empty()) {
+                [entryDict setObject:[NSString stringWithUTF8String:it2->thumbUrl.c_str()] forKey:@"t"];
+            }
+            [entrys addObject:entryDict];
+        }
+        [dataDict setObject:entrys forKey:@"medias"];
+    }
+    
+    if (!tfeed.toUsers.empty()) {
+        NSMutableArray *entrys = [[NSMutableArray alloc] init];
+        for (std::list<std::string>::const_iterator it2 = tfeed.toUsers.begin(); it2 != tfeed.toUsers.end(); ++it2) {
+            [entrys addObject:[NSString stringWithUTF8String:it2->c_str()]];
+        }
+        [dataDict setObject:entrys forKey:@"to"];
+    }
+    
+    if (!tfeed.excludeUsers.empty()) {
+        NSMutableArray *entrys = [[NSMutableArray alloc] init];
+        for (std::list<std::string>::const_iterator it2 = tfeed.excludeUsers.begin(); it2 != tfeed.excludeUsers.end(); ++it2) {
+            [entrys addObject:[NSString stringWithUTF8String:it2->c_str()]];
+        }
+        [dataDict setObject:entrys forKey:@"ex"];
+    }
+    
+    if (!tfeed.extra.empty()) {
+        [dataDict setObject:[NSString stringWithUTF8String:tfeed.extra.c_str()] forKey:@"extra"];
+    }
+    
+    if (!tfeed.comments.empty()) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TMomentsComment>::const_iterator it2 = tfeed.comments.begin(); it2 != tfeed.comments.end(); it2++) {
+            NSMutableDictionary *dict = convertTComment(*it2);
+            [arr addObject:dict];
+        }
+        [dataDict setObject:arr forKey:@"comments"];
+    }
+    if(tfeed.hasMore) {
+        [dataDict setObject:@(YES) forKey:@"hasMore"];
+    }
+    
+    return dataDict;
+}
+
 class GUCB : public mars::stn::GetUserInfoCallback {
   public:
   GUCB(id<RefreshUserInfoDelegate> delegate) : m_delegate(delegate) {}
@@ -907,6 +1013,40 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (NSData *)decodeData:(NSData *)data {
     std::string encodeData = mars::stn::GetDecodeData(std::string((char *)data.bytes, data.length));
     return [[NSData alloc] initWithBytes:encodeData.c_str() length:encodeData.length()];
+}
+
+
+- (NSData *)decodeData:(NSData *)data gzip:(BOOL)gzip type:(int)type {
+    std::string strData((char *)data.bytes, data.length);
+    if(type == 0) {
+        std::list<mars::stn::TMomentsFeed> feeds;
+        if(mars::stn::GetFeeds(strData, feeds, gzip?true:false)) {
+            NSMutableArray<NSMutableDictionary *> *arr = [[NSMutableArray alloc] init];
+            for (std::list<mars::stn::TMomentsFeed>::iterator it = feeds.begin(); it != feeds.end(); ++it) {
+                NSMutableDictionary *dataDict = convertTFeed(*it);
+                [arr addObject:dataDict];
+            }
+            return [NSJSONSerialization dataWithJSONObject:arr options:kNilOptions error:nil];
+        }
+    } else if(type == 1) {
+        mars::stn::TMomentsFeed feed;
+        if(mars::stn::GetFeed(strData, feed, gzip?true:false)) {
+            NSMutableDictionary *dataDict = convertTFeed(feed);
+            return [NSJSONSerialization dataWithJSONObject:dataDict options:kNilOptions error:nil];
+        }
+    } else if(type == 2) {
+        std::list<mars::stn::TMomentsComment> comments;
+        if(mars::stn::GetComments(strData, comments, gzip?true:false)) {
+            NSMutableArray<NSMutableDictionary *> *arr = [[NSMutableArray alloc] init];
+            for (std::list<mars::stn::TMomentsComment>::iterator it = comments.begin(); it != comments.end(); ++it) {
+                NSMutableDictionary *dataDict = convertTComment(*it);
+                [arr addObject:dataDict];
+            }
+            return [NSJSONSerialization dataWithJSONObject:arr options:kNilOptions error:nil];
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark WFCCNetworkStatusDelegate
