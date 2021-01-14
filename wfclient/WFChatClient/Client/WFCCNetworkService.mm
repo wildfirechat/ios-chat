@@ -901,6 +901,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     return [NSString stringWithUTF8String:mars::stn::GetHost().c_str()];
 }
 
+- (NSString *)getHostEx {
+    return [NSString stringWithUTF8String:mars::stn::GetHostEx().c_str()];
+}
+
 - (void)destroyMars {
   [[WFCCNetworkStatus sharedInstance] Stop];
     mars::baseevent::OnDestroy();
