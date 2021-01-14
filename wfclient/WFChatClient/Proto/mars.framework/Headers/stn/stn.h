@@ -263,6 +263,7 @@ extern std::string GetDecodeData(std::string data);
     
 //获取Host
 extern std::string GetHost();
+extern std::string GetHostEx();
 //底层询问上层http网络检查的域名列表 
 extern void (*RequestNetCheckShortLinkHosts)(std::vector<std::string>& _hostlist);
 //底层向上层上报cgi执行结果 
