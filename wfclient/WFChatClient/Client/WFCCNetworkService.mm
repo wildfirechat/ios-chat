@@ -629,7 +629,7 @@ static WFCCNetworkService * sharedSingleton = nil;
                                                  object:nil];
       [[NSNotificationCenter defaultCenter] addObserver:self
                                                selector:@selector(onAppResume)
-                                                   name:UIApplicationWillEnterForegroundNotification
+                                                   name:UIApplicationDidBecomeActiveNotification
                                                  object:nil];
       [[NSNotificationCenter defaultCenter] addObserver:self
                                                selector:@selector(onAppTerminate)
