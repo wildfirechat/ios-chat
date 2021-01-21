@@ -791,6 +791,10 @@ static WFCCNetworkService * sharedSingleton = nil;
       });
     }
   });
+    
+    [self reportEvent_OnForeground:YES];
+    mars::stn::MakesureLonglinkConnected();
+    
     if (newDB) {
         return YES;
     }
