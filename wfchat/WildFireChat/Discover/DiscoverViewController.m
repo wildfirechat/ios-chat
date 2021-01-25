@@ -32,7 +32,7 @@
     [super viewDidLoad];
     self.dataSource = [NSMutableArray arrayWithArray:@[
                        @{@"title":LocalizedString(@"Chatroom"),@"image":@"discover_chatroom",@"des":@"chatroom"},
-                       @{@"title":LocalizedString(@"Rebot"),@"image":@"rebot",@"des":@"rebot"},
+                       @{@"title":LocalizedString(@"Robot"),@"image":@"robot",@"des":@"robot"},
                        @{@"title":LocalizedString(@"Channel"), @"image":@"chat_channel",@"des":@"channel"},
                        @{@"title":LocalizedString(@"DevDocs"), @"image":@"dev_docs",@"des":@"Dev"}
 //                     @{@"title":@"Things", @"image":@"discover_things",@"des":@"Things"}
@@ -120,7 +120,7 @@
         [self.navigationController pushViewController:channelVC animated:YES];
     }
     
-    if ([des isEqualToString:@"rebot"]) {
+    if ([des isEqualToString:@"robot"]) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [[WFCCConversation alloc] init];
             mvc.conversation.type = Single_Type;
