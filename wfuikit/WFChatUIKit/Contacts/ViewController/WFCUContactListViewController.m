@@ -25,6 +25,9 @@
 #import "UIImage+ERCategory.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUPinyinUtility.h"
+
+
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<WFCCUserInfo *> *dataArray;
@@ -520,8 +523,12 @@ static NSString *wfcstar = @"☆";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return 0;
+    if (self.selectContact || self.searchController.active) {
+        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+            if (section == 0) {
+                return 0;
+            }
+        }
     }
     return 30;
 }
@@ -696,9 +703,17 @@ static NSString *wfcstar = @"☆";
         NSString *searchString = [self.searchController.searchBar text];
         if (self.searchList!= nil) {
             [self.searchList removeAllObjects];
-            for (WFCCUserInfo *friend in self.dataArray) {
-                if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
-                    [self.searchList addObject:friend];
+            if(searchString.length) {
+                WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
+                BOOL isChinese = [pu isChinese:searchString];
+                for (WFCCUserInfo *friend in self.dataArray) {
+                    if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+                        [self.searchList addObject:friend];
+                    } else if(!isChinese) {
+                        if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
+                            [self.searchList addObject:friend];
+                        }
+                    }
                 }
             }
         }
