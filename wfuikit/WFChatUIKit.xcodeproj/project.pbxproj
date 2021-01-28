@@ -26,6 +26,8 @@
 		149B3112241E65D500B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B310E241E65D500B935D3 /* UIFont+YH.m */; };
 		2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B07FBDF247562D90035C4DF /* WFCUReceiptViewController.h */; };
 		2B07FBE2247562D90035C4DF /* WFCUReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */; };
+		2B14FC8F25C23D3600684B91 /* WFCUPinyinUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B14FC8D25C23D3600684B91 /* WFCUPinyinUtility.h */; };
+		2B14FC9025C23D3600684B91 /* WFCUPinyinUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B14FC8E25C23D3600684B91 /* WFCUPinyinUtility.m */; };
 		2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B15F1B62509E285007022BC /* WFCUGroupInfoViewController.m */; };
 		2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */; };
@@ -34,6 +36,7 @@
 		2B46D4D924ACC64300721792 /* WFCUMediaMessageGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */; };
 		2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */; };
 		2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */; };
+		2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
 		2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4872505C7BE00162A2B /* WFCUCardCell.h */; };
@@ -440,6 +443,8 @@
 		149B310E241E65D500B935D3 /* UIFont+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+YH.m"; sourceTree = "<group>"; };
 		2B07FBDF247562D90035C4DF /* WFCUReceiptViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReceiptViewController.h; sourceTree = "<group>"; };
 		2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReceiptViewController.m; sourceTree = "<group>"; };
+		2B14FC8D25C23D3600684B91 /* WFCUPinyinUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPinyinUtility.h; sourceTree = "<group>"; };
+		2B14FC8E25C23D3600684B91 /* WFCUPinyinUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPinyinUtility.m; sourceTree = "<group>"; };
 		2B15F1B62509E285007022BC /* WFCUGroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupInfoViewController.m; sourceTree = "<group>"; };
 		2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupInfoViewController.h; sourceTree = "<group>"; };
 		2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFileRecordTableViewCell.h; sourceTree = "<group>"; };
@@ -448,6 +453,7 @@
 		2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMediaMessageGridViewController.m; sourceTree = "<group>"; };
 		2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaMessageGridViewCell.h; sourceTree = "<group>"; };
 		2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaMessageGridViewCell.m; sourceTree = "<group>"; };
+		2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCCircleProgressView.m; sourceTree = "<group>"; };
 		2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCCircleProgressView.h; sourceTree = "<group>"; };
 		2B97D4872505C7BE00162A2B /* WFCUCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCardCell.h; sourceTree = "<group>"; };
@@ -997,6 +1003,7 @@
 		2F143A66217F7D4100B3E38A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */,
 				14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */,
 				2F55103C217F5CC100F56C26 /* WFCUShareMessageView.xib */,
 				2F143A68217F7D4100B3E38A /* Stickers.bundle */,
@@ -1351,6 +1358,8 @@
 			children = (
 				2F550F3D217F5CC100F56C26 /* pinyin.h */,
 				2F550F3E217F5CC100F56C26 /* pinyin.c */,
+				2B14FC8D25C23D3600684B91 /* WFCUPinyinUtility.h */,
+				2B14FC8E25C23D3600684B91 /* WFCUPinyinUtility.m */,
 			);
 			path = Pinyin;
 			sourceTree = "<group>";
@@ -1972,6 +1981,7 @@
 				2F5510AF217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.h in Headers */,
 				2F5511EB217F5CC300F56C26 /* WFCUShareMessageView.h in Headers */,
 				2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */,
+				2B14FC8F25C23D3600684B91 /* WFCUPinyinUtility.h in Headers */,
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
@@ -2120,6 +2130,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				14349F62243392E300FE38B3 /* WFChatUIKit.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2279,6 +2290,7 @@
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
 				2F551194217F5CC200F56C26 /* UIView+SDExtension.m in Sources */,
+				2B14FC9025C23D3600684B91 /* WFCUPinyinUtility.m in Sources */,
 				2F5510BA217F5CC200F56C26 /* WFCUGroupMemberTableViewController.m in Sources */,
 				2F3A6C1D219EE941009A8B4B /* WFCUStickerItem.m in Sources */,
 				2BDF579524AD70C8003C1F08 /* DNAsset.m in Sources */,
