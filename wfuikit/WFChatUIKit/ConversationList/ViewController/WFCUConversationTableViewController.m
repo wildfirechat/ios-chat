@@ -24,6 +24,7 @@
 #import "KxMenu.h"
 #import "UIImage+ERCategory.h"
 #import "MBProgressHUD.h"
+#import "WFCUPinyinUtility.h"
 
 #import "WFCUContactTableViewCell.h"
 #import "QrCodeHelper.h"
@@ -1069,11 +1070,30 @@
     self.extendedLayoutIncludesOpaqueBars = NO;
 }
 
+- (NSArray<WFCCUserInfo *> *)searchFriends:(NSString *)searchString {
+    NSMutableArray<WFCCUserInfo *> *result = [[NSMutableArray alloc] init];
+    if(searchString.length) {
+        WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
+        NSArray<WFCCUserInfo *> *dataArray = [[WFCCIMService sharedWFCIMService] getUserInfos:[[WFCCIMService sharedWFCIMService] getMyFriendList:NO] inGroup:nil];
+        BOOL isChinese = [pu isChinese:searchString];
+        for (WFCCUserInfo *friend in dataArray) {
+            if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+                [result addObject:friend];
+            } else if(!isChinese) {
+                if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
+                    [result addObject:friend];
+                }
+            }
+        }
+    }
+    return result;
+}
+
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchString = [self.searchController.searchBar text];
     if (searchString.length) {
         self.searchConversationList = [[WFCCIMService sharedWFCIMService] searchConversation:searchString inConversation:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
-        self.searchFriendList = [[WFCCIMService sharedWFCIMService] searchFriends:searchString];
+        self.searchFriendList = [self searchFriends:searchString];
         self.searchGroupList = [[WFCCIMService sharedWFCIMService] searchGroups:searchString];
     } else {
         self.searchConversationList = nil;
