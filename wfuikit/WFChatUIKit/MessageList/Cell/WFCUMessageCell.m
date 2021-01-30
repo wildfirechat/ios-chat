@@ -11,6 +11,8 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import "ZCCCircleProgressView.h"
+#import "WFCUConfigManager.h"
+
 
 #define Portrait_Size 40
 #define SelectView_Size 20
@@ -211,7 +213,11 @@
               } else {
                   [self.receiptView setProgress:0 subProgress:0];
               }
-              self.receiptView.hidden = NO;
+              if([model.message.conversation.target isEqualToString:[WFCUConfigManager globalManager].fileTransferId]) {
+                  self.receiptView.hidden = YES;
+              } else {
+                  self.receiptView.hidden = NO;
+              }
           } else if(model.message.conversation.type == Group_Type) {
               long long messageTS = model.message.serverTime;
               
