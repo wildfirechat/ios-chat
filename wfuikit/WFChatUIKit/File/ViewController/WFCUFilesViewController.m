@@ -23,6 +23,7 @@
 @property(nonatomic, strong)NSMutableArray<WFCCFileRecord *> *fileRecords;
 @property(nonatomic, assign)BOOL hasMore;
 @property(nonatomic, assign)BOOL searchMore;
+@property(nonatomic, assign)BOOL isLoading;
 @property(nonatomic, strong)NSString *keyword;
 @end
 
@@ -95,6 +96,9 @@
     if (!self.hasMore) {
         return;
     }
+    if(self.isLoading) {
+        return;
+    }
     
     __weak typeof(self)ws = self;
     long long lastId = 0;
@@ -102,20 +106,59 @@
         lastId = self.fileRecords.lastObject.messageUid;
     }
     self.activityView.hidden = NO;
+    [self.activityView startAnimating];
+    self.isLoading = YES;
     
     [self loadData:lastId count:20 success:^(NSArray<WFCCFileRecord *> *files) {
         [ws.fileRecords addObjectsFromArray:files];
         [ws.tableView reloadData];
         ws.activityView.hidden = YES;
+        [ws.activityView stopAnimating];
+        ws.isLoading = NO;
         if (files.count < 20) {
             self.hasMore = NO;
         }
     } error:^(int error_code) {
         NSLog(@"load fire record error %d", error_code);
         ws.activityView.hidden = YES;
+        [ws.activityView stopAnimating];
+        ws.isLoading = NO;
     }];
 }
 
+- (void)setIsLoading:(BOOL)isLoading {
+    _isLoading = isLoading;
+    [self updateTableViewFooter];
+}
+
+- (void)setHasMore:(BOOL)hasMore {
+    _hasMore = hasMore;
+    [self updateTableViewFooter];
+}
+
+- (void)updateTableViewFooter {
+    if(!_hasMore) {
+        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 21)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
+        line.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
+        [footView addSubview:line];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 1, self.view.frame.size.width, 20)];
+        label.text = @"已经加载完了";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont systemFontOfSize:12];
+        label.textColor = [UIColor grayColor];
+        [footView addSubview:label];
+        self.tableView.tableFooterView = footView;
+    } else if(_isLoading) {
+        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [footView addSubview:activityView];
+        activityView.center = footView.center;
+        self.tableView.tableFooterView = footView;
+    } else {
+        self.tableView.tableFooterView = nil;
+    }
+}
 - (void)loadData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
            error:(void(^)(int error_code))errorBlock {
     if (self.myFiles) {
@@ -279,6 +322,7 @@
         [ws.navigationController pushViewController:bvc animated:YES];
     }];
 }
+
 
 #pragma mark - UISearchControllerDelegate
 - (void)didPresentSearchController:(UISearchController *)searchController {
