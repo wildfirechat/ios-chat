@@ -249,9 +249,13 @@
         fileImage = @"file_type_text";
     } else if([extName isEqualToString:@"jpg"] || [extName isEqualToString:@"png"] || [extName isEqualToString:@"jpeg"]) {
         fileImage = @"file_type_image";
-    } else if([extName isEqualToString:@"mp3"] || [extName isEqualToString:@"amr"] || [extName isEqualToString:@"ogg"]) {
+    } else if([extName isEqualToString:@"mp3"] || [extName isEqualToString:@"amr"] || [extName isEqualToString:@"acm"] || [extName isEqualToString:@"aif"]) {
         fileImage = @"file_type_audio";
-    } else if([extName isEqualToString:@"mp4"] || [extName isEqualToString:@"amr"] || [extName isEqualToString:@"ogg"]) {
+    } else if([extName isEqualToString:@"mp4"] || [extName isEqualToString:@"avi"]
+              || [extName isEqualToString:@"mov"] || [extName isEqualToString:@"asf"]
+              || [extName isEqualToString:@"wmv"] || [extName isEqualToString:@"mpeg"]
+              || [extName isEqualToString:@"ogg"] || [extName isEqualToString:@"mkv"]
+              || [extName isEqualToString:@"rmvb"] || [extName isEqualToString:@"f4v"]) {
         fileImage = @"file_type_video";
     } else if([extName isEqualToString:@"exe"]) {
         fileImage = @"file_type_exe";
