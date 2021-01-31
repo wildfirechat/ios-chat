@@ -40,24 +40,7 @@
 
 - (void)setFileIcon:(NSString *)fileName {
     NSString *ext = [[fileName pathExtension] lowercaseString];
-    NSString *fileImage = nil;
-    if ([ext isEqualToString:@"doc"] || [ext isEqualToString:@"docx"] || [ext isEqualToString:@"pages"]) {
-        fileImage = @"doc_image";
-    } else if ([ext isEqualToString:@"xls"] || [ext isEqualToString:@"xlsx"] || [ext isEqualToString:@"numbers"]) {
-        fileImage = @"xls_image";
-    } else if ([ext isEqualToString:@"ppt"] || [ext isEqualToString:@"pptx"] || [ext isEqualToString:@"keynote"]) {
-        fileImage = @"ppt_image";
-    } else if ([ext isEqualToString:@"pdf"]) {
-        fileImage = @"pdf_image";
-    } else if([ext isEqualToString:@"html"] || [ext isEqualToString:@"htm"]) {
-        fileImage = @"html_image";
-    } else if([ext isEqualToString:@"txt"]) {
-        fileImage = @"txt_image";
-    } else if([ext isEqualToString:@"jpg"] || [ext isEqualToString:@"png"]) {
-        fileImage = @"img_image";
-    }
-    fileImage = @"file";
-    self.iconView.image = [UIImage imageNamed:fileImage];
+    self.iconView.image = [WFCUUtilities imageForExt:ext];
 }
 
 - (void)setFileRecord:(WFCCFileRecord *)fileRecord {
