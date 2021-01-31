@@ -233,4 +233,36 @@
         return [NSString stringWithFormat:@"%.2fM", size/1024.f/1024];
     }
 }
++ (UIImage *)imageForExt:(NSString *)extName {
+    NSString *fileImage = nil;
+    if ([extName isEqualToString:@"doc"] || [extName isEqualToString:@"docx"] || [extName isEqualToString:@"pages"]) {
+        fileImage = @"file_type_word";
+    } else if ([extName isEqualToString:@"xls"] || [extName isEqualToString:@"xlsx"] || [extName isEqualToString:@"numbers"]) {
+        fileImage = @"file_type_xls";
+    } else if ([extName isEqualToString:@"ppt"] || [extName isEqualToString:@"pptx"] || [extName isEqualToString:@"keynote"]) {
+        fileImage = @"file_type_ppt";
+    } else if ([extName isEqualToString:@"pdf"]) {
+        fileImage = @"file_type_pdf";
+    } else if([extName isEqualToString:@"html"] || [extName isEqualToString:@"htm"]) {
+        fileImage = @"file_type_html";
+    } else if([extName isEqualToString:@"txt"]) {
+        fileImage = @"file_type_text";
+    } else if([extName isEqualToString:@"jpg"] || [extName isEqualToString:@"png"] || [extName isEqualToString:@"jpeg"]) {
+        fileImage = @"file_type_image";
+    } else if([extName isEqualToString:@"mp3"] || [extName isEqualToString:@"amr"] || [extName isEqualToString:@"ogg"]) {
+        fileImage = @"file_type_audio";
+    } else if([extName isEqualToString:@"mp4"] || [extName isEqualToString:@"amr"] || [extName isEqualToString:@"ogg"]) {
+        fileImage = @"file_type_video";
+    } else if([extName isEqualToString:@"exe"]) {
+        fileImage = @"file_type_exe";
+    } else if([extName isEqualToString:@"xml"]) {
+        fileImage = @"file_type_xml";
+    } else if([extName isEqualToString:@"zip"] || [extName isEqualToString:@"rar"]
+              || [extName isEqualToString:@"gzip"] || [extName isEqualToString:@"gz"]) {
+        fileImage = @"file_type_zip";
+    } else {
+        fileImage = @"file_type_unknown";
+    }
+    return [UIImage imageNamed:fileImage];
+}
 @end
