@@ -433,6 +433,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
+- (void)didChangeAudioRoute {
+    
+}
+
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
     
 }
