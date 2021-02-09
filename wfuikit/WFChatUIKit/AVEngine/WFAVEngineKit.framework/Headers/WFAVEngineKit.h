@@ -252,6 +252,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @param userId 用户Id
 */
 - (void)didChangeType:(BOOL)audience ofUser:(NSString *_Nonnull)userId;
+
+/**
+音频播放port发送改变，当蓝牙设备/耳机 连接/断开连接时回调
+*/
+- (void)didChangeAudioRoute;
 @end
 
 #pragma mark - 通话引擎
@@ -542,6 +547,20 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  切换前后摄像头
  */
 - (void)switchCamera;
+
+/**
+ 是否是蓝牙设备连接
+
+ @return 是否是蓝牙设备连接
+ */
+- (BOOL)isBluetoothSpeaker;
+
+/**
+ 是否是耳机连接
+
+ @return 是否是耳机连接
+ */
+- (BOOL)isHeadsetPluggedIn;
 
 /**
  设置本地视频视图Container
