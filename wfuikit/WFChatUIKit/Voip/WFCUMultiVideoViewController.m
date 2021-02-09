@@ -487,6 +487,12 @@
 }
 
 - (void)updateSpeakerButton {
+    if([self.currentSession isHeadsetPluggedIn] || [self.currentSession isBluetoothSpeaker]) {
+        self.speakerButton.enabled = NO;
+    } else {
+        self.speakerButton.enabled = YES;
+    }
+    
     if (!self.currentSession.isSpeaker) {
         [self.speakerButton setImage:[UIImage imageNamed:@"speaker"] forState:UIControlStateNormal];
     } else {
@@ -997,6 +1003,10 @@
 
 - (void)didGetStats:(NSArray *)stats {
     
+}
+
+- (void)didChangeAudioRoute {
+    [self updateSpeakerButton];
 }
 
 - (void)checkAVPermission {
