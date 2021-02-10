@@ -12,6 +12,8 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUConfigManager.h"
+#import "WFCUPinyinUtility.h"
+
 @interface WFCUSeletedUserSearchResultViewController ()<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 @property (nonatomic, strong)UISearchBar *searchBar;
 @property (nonatomic, strong)NSMutableArray *results;
@@ -26,13 +28,8 @@
     self.searchBar.backgroundColor = [UIColor clearColor];
     self.searchBar.placeholder = @"搜索";
     
-    if (self.needSection) {
-        self.view.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-         self.tableView.backgroundColor =  [WFCUConfigManager globalManager].naviBackgroudColor;
-    } else {
-        self.view.backgroundColor = [UIColor colorWithHexString:@"0x1f2026"];
-        self.tableView.backgroundColor = [UIColor colorWithHexString:@"0x1f2026"];
-    }
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
     for (UIView *sView in self.searchBar.subviews[0].subviews) {
         if([sView isKindOfClass:NSClassFromString(@"UISearchBarBackground")]){
@@ -46,23 +43,27 @@
     [self.view addSubview:self.tableView];
 }
 
-
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-        NSMutableArray <WFCUSelectedUserInfo *>*searchList = [NSMutableArray new];
-        for (WFCUSelectedUserInfo *friend in self.dataSource) {
-            if ([friend.displayName.lowercaseString containsString:searchBar.text.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchBar.text.lowercaseString]) {
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchString {
+    NSMutableArray <WFCUSelectedUserInfo *>*searchList = [NSMutableArray new];
+    WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
+    BOOL isChinese = [pu isChinese:searchString];
+    for (WFCUSelectedUserInfo *friend in self.dataSource) {
+        if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+            [searchList addObject:friend];
+        } else if(!isChinese) {
+            if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
                 [searchList addObject:friend];
             }
         }
-        self.results = searchList;
-        [self sortAndRefreshWithList:searchList];
+    }
+    
+    self.results = searchList;
+    [self sortAndRefreshWithList:searchList];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
-
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -125,9 +126,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (self.needSection) {
-        if (section == 0) {
-            return 0;
-        }
         return 30;
         
     } else {
@@ -156,19 +154,31 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-       if (!self.needSection) {
-           WFCUSelectedUserInfo *user = nil;
-           user = self.results[indexPath.row];
-           self.selectedUser(user);
-        }  else {
-           NSString *key = self.sectionKeys[indexPath.section];
-            NSArray *users = self.sectionDictionary[key];
-             WFCUSelectedUserInfo *user = users[indexPath.row];
-            self.selectedUser(user);
-       }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        });
+    WFCUSelectedUserInfo *user = nil;
+    if (!self.needSection) {
+        user = self.results[indexPath.row];
+        self.selectedUser(user);
+     }  else {
+        NSString *key = self.sectionKeys[indexPath.section];
+        NSArray *users = self.sectionDictionary[key];
+        user = users[indexPath.row];
+        self.selectedUser(user);
+    }
+    
+    __weak typeof(self)ws = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        for (NSString *key in ws.sectionKeys) {
+            NSArray *users = ws.sectionDictionary[key];
+            for (WFCUSelectedUserInfo *u in users) {
+                if ([u isEqual:user]) {
+                    NSInteger section = [ws.sectionKeys indexOfObject:key];
+                    NSInteger row =  [users indexOfObject:u];
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+            }
+        }
+    });
 }
 
 - (UITableView *)tableView {
