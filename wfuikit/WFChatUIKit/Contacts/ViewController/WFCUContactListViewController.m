@@ -529,6 +529,9 @@ static NSString *wfcstar = @"☆";
                 return 0;
             }
         }
+    } else {
+        if(section == 0)
+            return 0;
     }
     return 30;
 }

@@ -171,9 +171,6 @@ UISearchBarDelegate>
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (self.type == Horizontal) {
-        if (section == 0) {
-            return 0;
-        }
         return 30;
         
     } else {
@@ -430,19 +427,20 @@ UISearchBarDelegate>
         });
     }
     [self setDoneButtonStyleAndContent:self.selectedUsers.count > 0];
-    NSIndexPath *indexPath = nil;
+
     if (self.type == Vertical) {
-       indexPath = [NSIndexPath indexPathForRow:[self.dataSource indexOfObject:user] inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.dataSource indexOfObject:user] inSection:0];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else {
-        indexPath = [self getSectionIndexPath:user];
+        [self reloadCellForUser:user];
     }
     
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
     return YES;
     
 }
 
-- (NSIndexPath *)getSectionIndexPath:(WFCUSelectedUserInfo *)user {
+- (void)reloadCellForUser:(WFCUSelectedUserInfo *)user {
     NSIndexPath *indexPath = nil;
     
     for (NSString *key in self.sectionKeys) {
@@ -452,10 +450,10 @@ UISearchBarDelegate>
                 NSInteger section = [self.sectionKeys indexOfObject:key];
                 NSInteger row =  [users indexOfObject:u];
                 indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }
         }
     }
-    return indexPath;
 }
 
 #pragma mark - lazy load

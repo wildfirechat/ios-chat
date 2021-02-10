@@ -9,6 +9,8 @@
 #import "WFCUUserSectionKeySupport.h"
 #import "pinyin.h"
 #import "WFCUSelectedUserInfo.h"
+#import <WFChatClient/WFCChatClient.h>
+
 static NSMutableDictionary *hanziStringDictory = nil;
 
 @implementation WFCUUserSectionKeySupport
@@ -16,6 +18,7 @@ static NSMutableDictionary *hanziStringDictory = nil;
     if (!userList)
         return nil;
     NSArray *_keys = @[
+                       @"☆",
                        @"A",
                        @"B",
                        @"C",
@@ -47,9 +50,31 @@ static NSMutableDictionary *hanziStringDictory = nil;
     
     NSMutableDictionary *infoDic = [NSMutableDictionary new];
     NSMutableArray *_tempOtherArr = [NSMutableArray new];
+    
+    NSArray<NSString *> *favUsers = [[WFCCIMService sharedWFCIMService] getFavUsers];
+    
+    NSMutableArray *favArrays = [[NSMutableArray alloc] init];
+    for (NSString *favUser in favUsers) {
+        for (WFCCUserInfo *userInfo in userList) {
+            if ([userInfo.userId isEqualToString:favUser]) {
+                [favArrays addObject:userInfo];
+                break;
+            }
+        }
+        
+    }
+    
+    if (favArrays.count) {
+        [infoDic setObject:favArrays forKey:@"☆"];
+    }
+    
     BOOL isReturn = NO;
     NSMutableDictionary *firstLetterDict = [[NSMutableDictionary alloc] init];
     for (NSString *key in _keys) {
+        if ([key isEqualToString:@"☆"]) {
+            continue;
+        }
+        
         if ([_tempOtherArr count]) {
             isReturn = YES;
         }
@@ -103,6 +128,11 @@ static NSMutableDictionary *hanziStringDictory = nil;
         [allKeys removeObject:@"#"];
         [allKeys insertObject:@"#" atIndex:allKeys.count];
     }
+    if ([allKeys containsObject:@"☆"]) {
+        [allKeys removeObject:@"☆"];
+        [allKeys insertObject:@"☆" atIndex:0];
+    }
+    
     NSMutableDictionary *resultDic = [NSMutableDictionary new];
     [resultDic setObject:infoDic forKey:@"infoDic"];
     [resultDic setObject:allKeys forKey:@"allKeys"];
