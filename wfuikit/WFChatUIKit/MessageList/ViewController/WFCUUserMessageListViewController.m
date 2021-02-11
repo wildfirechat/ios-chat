@@ -30,7 +30,7 @@
     
     self.messages = [[[WFCCIMService sharedWFCIMService] getUserMessages:self.userId conversation:self.conversation contentTypes:nil from:0 count:20] mutableCopy];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
