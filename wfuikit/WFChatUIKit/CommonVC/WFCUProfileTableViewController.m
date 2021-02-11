@@ -348,7 +348,11 @@
         if (self.fromConversation.type == Group_Type) {
             self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
+            if([self.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                self.userMessagesCell.textLabel.text = @"查看我的消息";
+            } else {
+                self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
+            }
             [self.cells addObject:self.userMessagesCell];
         }
         
@@ -565,6 +569,8 @@
     if (self.sendMessageCell || self.voipCallCell || self.addFriendCell) {
         return 4;
     } else {
+        if(self.cells.count > 0)
+            return 3;
         return 2;
     }
 }
