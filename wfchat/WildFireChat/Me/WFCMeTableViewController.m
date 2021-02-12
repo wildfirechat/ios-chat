@@ -53,6 +53,10 @@
             // Fallback on earlier versions
         }
     }
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300)];
+    header.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+    self.tableView.tableHeaderView = header;
+    self.tableView.contentInset = UIEdgeInsetsMake(-300, 0, 0, 0);
     [self.view addSubview:self.tableView];
     
     __weak typeof(self)ws = self;
@@ -103,7 +107,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return 0.01;
+        return 0;
     } else {
         return 9;
     }
