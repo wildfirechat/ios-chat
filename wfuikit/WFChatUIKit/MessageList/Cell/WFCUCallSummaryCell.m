@@ -124,7 +124,6 @@
         _infoLabel.numberOfLines = 0;
         _infoLabel.font = [UIFont systemFontOfSize:14];
         
-        _infoLabel.textColor = [UIColor whiteColor];
         _infoLabel.numberOfLines = 0;
         _infoLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _infoLabel.textAlignment = NSTextAlignmentCenter;
@@ -132,7 +131,6 @@
         _infoLabel.layer.masksToBounds = YES;
         _infoLabel.layer.cornerRadius = 5.f;
         _infoLabel.textAlignment = NSTextAlignmentCenter;
-        _infoLabel.textColor = [UIColor blackColor];
         _infoLabel.userInteractionEnabled = YES;
         
         [self.contentArea addSubview:_infoLabel];
