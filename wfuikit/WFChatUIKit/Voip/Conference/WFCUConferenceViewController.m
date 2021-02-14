@@ -315,7 +315,7 @@
 
 - (UIButton *)minimizeButton {
     if (!_minimizeButton) {
-        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26, 30, 30)];
+        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
         
         [_minimizeButton setImage:[UIImage imageNamed:@"minimize"] forState:UIControlStateNormal];
         [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
@@ -331,7 +331,7 @@
 
 - (UIButton *)addParticipantButton {
     if (!_addParticipantButton) {
-        _addParticipantButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26, 30, 30)];
+        _addParticipantButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
         
         [_addParticipantButton setImage:[UIImage imageNamed:@"plus-circle"] forState:UIControlStateNormal];
         [_addParticipantButton setImage:[UIImage imageNamed:@"plus-circle"] forState:UIControlStateHighlighted];
@@ -782,7 +782,7 @@
             self.videoButton.hidden = YES;
             self.switchCameraButton.hidden = YES;
             self.minimizeButton.hidden = YES;
-            self.addParticipantButton.hidden = NO;
+            self.addParticipantButton.hidden = YES;
         }
     } else {
         self.smallCollectionView.hidden = YES;
