@@ -19,4 +19,5 @@
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId;
 - (void)kickoff:(NSString *)userId inConference:(NSString *)conferenceId;
+- (void)requestChangeModel:(BOOL)isAudience inConference:(NSString *)conferenceId;
 @end

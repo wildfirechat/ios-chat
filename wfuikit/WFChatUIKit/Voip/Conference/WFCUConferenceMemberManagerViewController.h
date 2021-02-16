@@ -1,5 +1,5 @@
 //
-//  WFCUConverenceMemberManagerViewController.h
+//  WFCUConferenceMemberManagerViewController.h
 //  WFChatUIKit
 //
 //  Created by Tom Lee on 2021/2/15.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUConverenceMemberManagerViewController : UIViewController
+@interface WFCUConferenceMemberManagerViewController : UIViewController
 
 @end
 

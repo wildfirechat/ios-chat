@@ -69,4 +69,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
             
         }];
 }
+
+- (void)requestChangeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
+    if([conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
+        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
+    }
+}
 @end

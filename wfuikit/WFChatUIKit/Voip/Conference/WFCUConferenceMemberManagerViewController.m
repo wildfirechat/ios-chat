@@ -1,12 +1,12 @@
 //
-//  WFCUConverenceMemberManagerViewController.m
+//  WFCUConferenceMemberManagerViewController.m
 //  WFChatUIKit
 //
 //  Created by Tom Lee on 2021/2/15.
 //  Copyright © 2021 Tom Lee. All rights reserved.
 //
 
-#import "WFCUConverenceMemberManagerViewController.h"
+#import "WFCUConferenceMemberManagerViewController.h"
 #import "UIColor+YH.h"
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUConfigManager.h"
@@ -16,15 +16,14 @@
 #import "WFCUConferenceInviteViewController.h"
 
 
-
-@interface WFCUConverenceMemberManagerViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@interface WFCUConferenceMemberManagerViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)UISearchBar *searchBar;
 @property (nonatomic, strong) NSMutableArray<WFCUConferenceMember *> *participants;
 @property (nonatomic, strong) NSMutableArray<WFCUConferenceMember *> *audiences;
 @end
 
-@implementation WFCUConverenceMemberManagerViewController
+@implementation WFCUConferenceMemberManagerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -58,6 +57,10 @@
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMemberChanged:) name:@"kConferenceMemberChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceEnded:) name:@"kConferenceEnded" object:nil];
+    
     [self loadData];
     [self.tableView reloadData];
 }
@@ -97,6 +100,14 @@
             [self.participants insertObject:member atIndex:0];
         }
     }
+}
+- (void)onConferenceMemberChanged:(id)sender {
+    [self loadData];
+    [self.tableView reloadData];
+}
+
+- (void)onConferenceEnded:(id)sender {
+    [self onClose:nil];
 }
 
 - (void)onClose:(id)sender {
@@ -200,6 +211,29 @@
             [[WFCUConferenceManager sharedInstance] kickoff:member.userId inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
         }];
         [alertController addAction:action3];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else if(member.isMe) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"成员互动管理" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:actionCancel];
+        
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[WFCUConferenceManager sharedInstance] requestChangeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+        }];
+        
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"退出互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[WFCUConferenceManager sharedInstance] requestChangeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+        }];
+        
+        if(indexPath.section == 0) {
+            [alertController addAction:action2];
+        } else {
+            [alertController addAction:action1];
+        }
         
         [self presentViewController:alertController animated:YES completion:nil];
     }
