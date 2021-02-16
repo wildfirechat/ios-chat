@@ -14,6 +14,8 @@
 #import "WFCUConferenceManager.h"
 #import "WFCUConferenceMemberTableViewCell.h"
 #import "WFCUConferenceInviteViewController.h"
+#import "WFCUPinyinUtility.h"
+#import "WFCUProfileTableViewController.h"
 
 
 @interface WFCUConferenceMemberManagerViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
@@ -27,39 +29,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 90)];
-    UIView *barView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    barView.layer.cornerRadius = 10;
-    barView.layer.masksToBounds = YES;
-    barView.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-    UIButton *closeBtn = [[UIButton alloc] initWithFrame:CGRectMake(8, 18, 40, 24)];
-    [closeBtn setTitle:@"关闭" forState:UIControlStateNormal];
-    [closeBtn addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
-    UIButton *inviteBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-8-40, 18, 40, 24)];
-    [inviteBtn setTitle:@"邀请" forState:UIControlStateNormal];
-    [inviteBtn addTarget:self action:@selector(onInvite:) forControlEvents:UIControlEventTouchUpInside];
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 50, self.view.bounds.size.width, 40)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"搜索";
     self.searchBar.barStyle = UIBarStyleDefault;
-    [barView addSubview:closeBtn];
-    [barView addSubview:inviteBtn];
-    [topView addSubview:barView];
-    [topView addSubview:self.searchBar];
-    [self.view addSubview:topView];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, topView.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - topView.frame.size.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView registerClass:[WFCUConferenceMemberTableViewCell class] forCellReuseIdentifier:@"cell"];
+    self.tableView.tableHeaderView = self.searchBar;
+    
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"邀请" style:UIBarButtonItemStyleDone target:self action:@selector(onInvite:)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMemberChanged:) name:@"kConferenceMemberChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceEnded:) name:@"kConferenceEnded" object:nil];
+    self.title = @"参会人员";
     
     [self loadData];
     [self.tableView reloadData];
@@ -76,6 +66,10 @@
         member.isHost = [p.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
         member.isVideoEnabled = !p.videoMuted;
         member.isMe = NO;
+        if(self.searchBar.isFirstResponder && ![self isMatchSearchText:member.userId]) {
+            continue;
+        }
+        
         if (p.audience) {
             [self.audiences addObject:member];
         } else {
@@ -86,21 +80,47 @@
             }
         }
     }
+    
+    
     WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
     member.userId = [WFCCNetworkService sharedInstance].userId;
     member.isHost = [member.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
     member.isVideoEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
     member.isMe = YES;
-    if([WFAVEngineKit sharedEngineKit].currentSession.audience) {
-        [self.audiences insertObject:member atIndex:0];
-    } else {
-        if(self.participants.count && self.participants[0].isHost) {
-            [self.participants insertObject:member atIndex:1];
+    if(!self.searchBar.isFirstResponder || [self isMatchSearchText:member.userId]) {
+        if([WFAVEngineKit sharedEngineKit].currentSession.audience) {
+            [self.audiences insertObject:member atIndex:0];
         } else {
-            [self.participants insertObject:member atIndex:0];
+            if(self.participants.count && self.participants[0].isHost) {
+                [self.participants insertObject:member atIndex:1];
+            } else {
+                [self.participants insertObject:member atIndex:0];
+            }
         }
     }
 }
+
+- (BOOL)isMatchSearchText:(NSString *)userId {
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+    NSString *searchString = self.searchBar.text;
+    BOOL matched = NO;
+    if([userInfo.displayName containsString:searchString] || [userInfo.friendAlias containsString:searchString]) {
+        matched = YES;
+    } else {
+        WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
+        if(![pu isChinese:searchString]) {
+            if([pu isMatch:userInfo.displayName ofPinYin:searchString] || [pu isMatch:userInfo.friendAlias ofPinYin:searchString]) {
+                matched = YES;
+            }
+        }
+    }
+    return matched;;
+}
+
+- (void)onResetKeyboard:(id)sender {
+    [self.searchBar resignFirstResponder];
+}
+
 - (void)onConferenceMemberChanged:(id)sender {
     [self loadData];
     [self.tableView reloadData];
@@ -130,7 +150,6 @@
     pvc.invite = invite;
     
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-    navi.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:navi animated:YES completion:nil];
 }
@@ -152,7 +171,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if(section == 0) {
-        return @"参会者";
+        return @"互动成员";
     } else {
         return @"听众";
     }
@@ -180,84 +199,94 @@
     } else {
         member = self.audiences[indexPath.row];
     }
+    __weak typeof(self)ws = self;
     
-    if(member.isHost) {
-        return;
-    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"成员管理" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    UIAlertAction *showProfile = [UIAlertAction actionWithTitle:@"查看用户信息" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+        vc.userId = member.userId;
+        vc.hidesBottomBarWhenPushed = YES;
+        [ws.navigationController pushViewController:vc animated:YES];
+    }];
+    
+    UIAlertAction *requestPublish = [UIAlertAction actionWithTitle:@"邀请参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    }];
+    
+    UIAlertAction *requestUnpublish = [UIAlertAction actionWithTitle:@"取消互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    }];
+    
+    UIAlertAction *requestQuit = [UIAlertAction actionWithTitle:@"移除成员" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] kickoff:member.userId inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    }];
+    
+    UIAlertAction *publish = [UIAlertAction actionWithTitle:@"参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] requestChangeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    }];
+    
+    UIAlertAction *unpublish = [UIAlertAction actionWithTitle:@"退出互动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] requestChangeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    }];
+    
+    [alertController addAction:actionCancel];
+    [alertController addAction:showProfile];
     if([[WFAVEngineKit sharedEngineKit].currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"成员互动管理" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alertController addAction:actionCancel];
-        
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"邀请参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
-        }];
-        
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
-        }];
-        
-        if(indexPath.section == 0) {
-            [alertController addAction:action2];
-        } else {
-            [alertController addAction:action1];
+        if(!member.isHost) {
+            if(indexPath.section == 0) {
+                [alertController addAction:requestUnpublish];
+            } else {
+                [alertController addAction:requestPublish];
+            }
+            [alertController addAction:requestQuit];
         }
-        
-        UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"移除成员" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-            [[WFCUConferenceManager sharedInstance] kickoff:member.userId inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
-        }];
-        [alertController addAction:action3];
-        
-        [self presentViewController:alertController animated:YES completion:nil];
     } else if(member.isMe) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"成员互动管理" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alertController addAction:actionCancel];
-        
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [[WFCUConferenceManager sharedInstance] requestChangeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
-        }];
-        
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"退出互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [[WFCUConferenceManager sharedInstance] requestChangeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
-        }];
-        
         if(indexPath.section == 0) {
-            [alertController addAction:action2];
+            [alertController addAction:unpublish];
         } else {
-            [alertController addAction:action1];
+            [alertController addAction:publish];
         }
-        
-        [self presentViewController:alertController animated:YES completion:nil];
     }
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
-
--(BOOL)canBecomeFirstResponder {
+#pragma mark - UISearchBarDelegate
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     return YES;
 }
 
--(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(performDelete:) || action == @selector(performInvite:) || action == @selector(performCancel:)) {
-        return YES; //显示自定义的菜单项
-    } else {
-        return NO;
-    }
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [self loadData];
+    [self.tableView reloadData];
+    self.searchBar.showsCancelButton = YES;
 }
 
-- (void)performDelete:(id)sender {
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    return YES;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [self loadData];
+    [self.tableView reloadData];
+    self.searchBar.showsCancelButton = NO;
+    self.searchBar.text = nil;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self loadData];
+    [self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
 }
-- (void)performInvite:(id)sender {
-    
-}
-- (void)performCancel:(id)sender {
-    
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self.searchBar resignFirstResponder];
 }
 @end
