@@ -127,6 +127,10 @@ typedef NS_ENUM(NSInteger, WFAVVideoProfile) {
  - kWFAVCallEndReasonOpenCameraFailure: 摄像头错误
  - kWFAVCallEndReasonTimeout: 未接听
  - kWFAVCallEndReasonAcceptByOtherClient: 被其它端接听
+ - kWFAVCallEndReasonRemoteBusy: 对方忙线中
+ - kWFAVCallEndReasonRemoteTimeout：对方未接听
+ - kWFAVCallEndReasonRemoteNetworkError：对方网络错误
+ - kWFAVCallEndReasonRoomDestroyed：会议室被销毁
  */
 typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonUnknown = 0,
@@ -141,7 +145,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonAllLeft,
   kWFAVCallEndReasonRemoteBusy,
   kWFAVCallEndReasonRemoteTimeout,
-  kWFAVCallEndReasonRemoteNetworkError
+  kWFAVCallEndReasonRemoteNetworkError,
+  kWFAVCallEndReasonRoomDestroyed
 };
 
 #pragma mark - 通话监听
@@ -577,5 +582,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  @param scalingType 缩放模式
  */
 - (void)setupRemoteVideoView:(UIView *)videoContainerView scalingType:(WFAVVideoScalingType)scalingType forUser:(NSString *)targetId;
+
+
+/* 此函数没有意义，仅为了兼容UI代码 */
+- (void)leaveConference:(BOOL)destroy;
+
+/* 此函数没有意义，仅为了兼容UI代码 */
+- (void)switchAudience:(BOOL)audience;
 @end
 
