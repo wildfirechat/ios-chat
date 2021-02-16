@@ -429,9 +429,24 @@
 }
 
 - (void)hanupButtonDidTap:(UIButton *)button {
-    if(self.currentSession.state != kWFAVEngineStateIdle) {
-        [self.currentSession endCall];
-    }
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"如果您想让与会人员继续开会，请选择退出会议" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"退出会议" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        if(ws.currentSession.state != kWFAVEngineStateIdle) {
+            [ws.currentSession leaveConference:NO];
+        }
+    }];
+    [alertController addAction:action1];
+    
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"结束会议" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        if(ws.currentSession.state != kWFAVEngineStateIdle) {
+            [ws.currentSession leaveConference:NO];
+        }
+    }];
+    [alertController addAction:action2];
+    
+    [ws presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)managerButtonDidTap:(UIButton *)button {
