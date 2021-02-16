@@ -23,7 +23,7 @@
 #import "WFCUSeletedUserViewController.h"
 #import "UIView+Toast.h"
 #import "WFCUConferenceInviteViewController.h"
-#import "WFCUConverenceMemberManagerViewController.h"
+#import "WFCUConferenceMemberManagerViewController.h"
 #import "WFCUConferenceManager.h"
 
 
@@ -358,7 +358,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:12];
     [btn setTitleEdgeInsets:UIEdgeInsetsMake((btn.imageView.frame.size.height+24)/2 ,-btn.imageView.frame.size.width, 0.0,0.0)];
     [btn setImageEdgeInsets:UIEdgeInsetsMake((-btn.titleLabel.frame.size.height-24)/2, 0.0,0.0, -btn.titleLabel.bounds.size.width)];
-    btn.titleLabel.textColor = [UIColor grayColor];
+    [btn setTitleColor:[UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1] forState:UIControlStateNormal];
     [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
     [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateHighlighted];
     [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateSelected];
@@ -433,7 +433,7 @@
 }
 
 - (void)managerButtonDidTap:(UIButton *)button {
-    WFCUConverenceMemberManagerViewController *vc = [[WFCUConverenceMemberManagerViewController alloc] init];
+    WFCUConferenceMemberManagerViewController *vc = [[WFCUConferenceMemberManagerViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -487,6 +487,8 @@
     } else {
         [self.audioButton setImage:[UIImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
     }
+    
+    self.audioButton.enabled = !self.currentSession.audience;
 }
 - (void)speakerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
@@ -515,6 +517,7 @@
     } else {
         [self.videoButton setImage:[UIImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
     }
+    self.videoButton.enabled = !self.currentSession.audience;
 }
 
 //1.决定当前界面是否开启自动转屏，如果返回NO，后面两个方法也不会被调用，只是会支持默认的方向
@@ -849,14 +852,8 @@
                 self.portraitCollectionView.hidden = YES;
             }
             
-            
-//            if (!_currentSession.isAudioOnly) {
-                self.userNameLabel.hidden = YES;
-                self.portraitView.hidden = YES;
-//            } else {
-//                self.userNameLabel.hidden = NO;
-//                self.portraitView.hidden = NO;
-//            }
+            self.userNameLabel.hidden = YES;
+            self.portraitView.hidden = YES;
             [self updateConnectedTimeLabel];
             [self startConnectedTimer];
             [self updateTopViewFrame];
@@ -925,17 +922,23 @@
     }
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceEnded" object:nil];
+    [self.view makeToast:@"会议已结束" duration:1 position:CSToastPositionCenter];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
     });
 }
 
 - (void)didParticipantJoined:(NSString *)userId {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
+    
     if ([self.participants containsObject:userId] || [userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return;
     }
     [self rearrangeParticipants];
     [self reloadVideoUI];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+    [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
 }
 
 - (void)didParticipantConnected:(NSString *)userId {
@@ -943,6 +946,8 @@
 }
 
 - (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
+    
     [self rearrangeParticipants];
     [self reloadVideoUI];
     
@@ -976,8 +981,20 @@
 }
 
 - (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     [self rearrangeParticipants];
     [self reloadVideoUI];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+    if(audience) {
+        [self.view makeToast:[NSString stringWithFormat:@"%@ 结束了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+    } else {
+        [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+    }
+    
+    if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        [self updateAudioButton];
+        [self updateVideoButton];
+    }
 }
 
 - (void)didChangeAudioRoute {
