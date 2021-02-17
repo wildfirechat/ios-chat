@@ -10,8 +10,10 @@
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCallCenter.h>
 #import <UIKit/UIKit.h>
+#import "WFCUConferenceManager.h"
 
-@interface WFCUFloatingWindow () <WFAVCallSessionDelegate>
+
+@interface WFCUFloatingWindow () <WFAVCallSessionDelegate, WFCUConferenceManagerDelegate>
 
 @property(nonatomic, strong) NSTimer *activeTimer;
 @property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession);
@@ -55,6 +57,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self addProximityMonitoringObserver];
+    [WFCUConferenceManager sharedInstance].delegate = self;
 }
 
 - (void)registerTelephonyEvent {
@@ -480,5 +483,18 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 - (void)proximityStatueChanged:(NSNotificationCenter *)notification {
     
 }
+
+- (void)onChangeModeRequest:(BOOL)isAudience {
+    if(isAudience) {
+        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
+    } else {
+        //Todo 该怎么处理？
+    }
+}
+
+- (void)onKickoffRequest {
+    [[WFAVEngineKit sharedEngineKit].currentSession endCall];
+}
+
 @end
 #endif
