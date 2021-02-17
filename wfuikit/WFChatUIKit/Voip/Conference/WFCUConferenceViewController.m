@@ -441,7 +441,7 @@
     
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"结束会议" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         if(ws.currentSession.state != kWFAVEngineStateIdle) {
-            [ws.currentSession leaveConference:NO];
+            [ws.currentSession leaveConference:YES];
         }
     }];
     [alertController addAction:action2];
