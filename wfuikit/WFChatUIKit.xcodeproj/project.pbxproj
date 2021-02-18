@@ -24,6 +24,12 @@
 		149B3110241E65D500B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B310C241E65D500B935D3 /* UIColor+YH.m */; };
 		149B3111241E65D500B935D3 /* UIColor+YH.h in Headers */ = {isa = PBXBuildFile; fileRef = 149B310D241E65D500B935D3 /* UIColor+YH.h */; };
 		149B3112241E65D500B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B310E241E65D500B935D3 /* UIFont+YH.m */; };
+		2B07312725DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B07312525DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B07312825DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07312625DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m */; };
+		2B07312C25DDE910005EE603 /* WFCUPushToTalkListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B07312A25DDE910005EE603 /* WFCUPushToTalkListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B07312D25DDE910005EE603 /* WFCUPushToTalkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07312B25DDE910005EE603 /* WFCUPushToTalkListViewController.m */; };
+		2B07313125DDE927005EE603 /* WFCUPushToTalkViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B07312F25DDE927005EE603 /* WFCUPushToTalkViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2B07313225DDE927005EE603 /* WFCUPushToTalkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07313025DDE927005EE603 /* WFCUPushToTalkViewController.m */; };
 		2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B07FBDF247562D90035C4DF /* WFCUReceiptViewController.h */; };
 		2B07FBE2247562D90035C4DF /* WFCUReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */; };
 		2B14FC8F25C23D3600684B91 /* WFCUPinyinUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B14FC8D25C23D3600684B91 /* WFCUPinyinUtility.h */; };
@@ -39,6 +45,12 @@
 		2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
+		2B8352B925DE090B00BA0800 /* WFCUPTTFloatingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8352B725DE090B00BA0800 /* WFCUPTTFloatingWindow.m */; };
+		2B8352BA25DE090B00BA0800 /* WFCUPTTFloatingWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B8352B825DE090B00BA0800 /* WFCUPTTFloatingWindow.h */; };
+		2B8352BE25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B8352BC25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.h */; };
+		2B8352BF25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8352BD25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.m */; };
+		2B8352D025DE291E00BA0800 /* WFCUPTTInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */; };
+		2B8352D125DE291E00BA0800 /* WFCUPTTInviteCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */; };
 		2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4872505C7BE00162A2B /* WFCUCardCell.h */; };
 		2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B97D4882505C7BE00162A2B /* WFCUCardCell.m */; };
 		2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */; };
@@ -453,6 +465,12 @@
 		149B310C241E65D500B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
 		149B310D241E65D500B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
 		149B310E241E65D500B935D3 /* UIFont+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+YH.m"; sourceTree = "<group>"; };
+		2B07312525DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPushToTalkCreateViewController.h; sourceTree = "<group>"; };
+		2B07312625DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPushToTalkCreateViewController.m; sourceTree = "<group>"; };
+		2B07312A25DDE910005EE603 /* WFCUPushToTalkListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPushToTalkListViewController.h; sourceTree = "<group>"; };
+		2B07312B25DDE910005EE603 /* WFCUPushToTalkListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPushToTalkListViewController.m; sourceTree = "<group>"; };
+		2B07312F25DDE927005EE603 /* WFCUPushToTalkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPushToTalkViewController.h; sourceTree = "<group>"; };
+		2B07313025DDE927005EE603 /* WFCUPushToTalkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPushToTalkViewController.m; sourceTree = "<group>"; };
 		2B07FBDF247562D90035C4DF /* WFCUReceiptViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReceiptViewController.h; sourceTree = "<group>"; };
 		2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReceiptViewController.m; sourceTree = "<group>"; };
 		2B14FC8D25C23D3600684B91 /* WFCUPinyinUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPinyinUtility.h; sourceTree = "<group>"; };
@@ -468,6 +486,12 @@
 		2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCCircleProgressView.m; sourceTree = "<group>"; };
 		2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCCircleProgressView.h; sourceTree = "<group>"; };
+		2B8352B725DE090B00BA0800 /* WFCUPTTFloatingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPTTFloatingWindow.m; sourceTree = "<group>"; };
+		2B8352B825DE090B00BA0800 /* WFCUPTTFloatingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPTTFloatingWindow.h; sourceTree = "<group>"; };
+		2B8352BC25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPushToTalkMemberListViewController.h; sourceTree = "<group>"; };
+		2B8352BD25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPushToTalkMemberListViewController.m; sourceTree = "<group>"; };
+		2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPTTInviteCell.m; sourceTree = "<group>"; };
+		2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPTTInviteCell.h; sourceTree = "<group>"; };
 		2B97D4872505C7BE00162A2B /* WFCUCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCardCell.h; sourceTree = "<group>"; };
 		2B97D4882505C7BE00162A2B /* WFCUCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCardCell.m; sourceTree = "<group>"; };
 		2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUUserMessageListViewController.h; sourceTree = "<group>"; };
@@ -900,6 +924,24 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		2B07312425DDE8A3005EE603 /* PTT */ = {
+			isa = PBXGroup;
+			children = (
+				2B8352C125DE268300BA0800 /* message */,
+				2B07312525DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h */,
+				2B07312625DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m */,
+				2B07312A25DDE910005EE603 /* WFCUPushToTalkListViewController.h */,
+				2B07312B25DDE910005EE603 /* WFCUPushToTalkListViewController.m */,
+				2B07312F25DDE927005EE603 /* WFCUPushToTalkViewController.h */,
+				2B07313025DDE927005EE603 /* WFCUPushToTalkViewController.m */,
+				2B8352B825DE090B00BA0800 /* WFCUPTTFloatingWindow.h */,
+				2B8352B725DE090B00BA0800 /* WFCUPTTFloatingWindow.m */,
+				2B8352BC25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.h */,
+				2B8352BD25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.m */,
+			);
+			path = PTT;
+			sourceTree = "<group>";
+		};
 		2B63367B24716864008D6B38 /* ZCCCircleProgressView */ = {
 			isa = PBXGroup;
 			children = (
@@ -907,6 +949,13 @@
 				2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */,
 			);
 			path = ZCCCircleProgressView;
+			sourceTree = "<group>";
+		};
+		2B8352C125DE268300BA0800 /* message */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = message;
 			sourceTree = "<group>";
 		};
 		2BBC9CEE255CEBD9007DA28A /* File */ = {
@@ -1108,6 +1157,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				2B07312425DDE8A3005EE603 /* PTT */,
 				2BBC9CEE255CEBD9007DA28A /* File */,
 				901E26FF21F152B200A163CB /* AVEngine */,
 				2F9CE41921BFE5A4005E1BE1 /* Channel */,
@@ -1194,6 +1244,8 @@
 				2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */,
 				2F44487A252D72D5007A570E /* WFCULinkCell.h */,
 				2F444879252D72D5007A570E /* WFCULinkCell.m */,
+				2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */,
+				2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1923,9 +1975,12 @@
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
+				2B07312725DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
+				2B07313125DDE927005EE603 /* WFCUPushToTalkViewController.h in Headers */,
 				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
 				2BBC9CF5255CED1F007DA28A /* WFCUFilesEntryViewController.h in Headers */,
+				2B07312C25DDE910005EE603 /* WFCUPushToTalkListViewController.h in Headers */,
 				2F5510E4217F5CC200F56C26 /* WFCULocationPoint.h in Headers */,
 				2F5510E6217F5CC200F56C26 /* WFCULocationViewController.h in Headers */,
 				2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */,
@@ -1947,6 +2002,7 @@
 				1450EA912439679500BF51FC /* WFCUSelectedUserInfo.h in Headers */,
 				2F551229217F5CC300F56C26 /* WFCUMediaMessageDownloader.h in Headers */,
 				2BDF57B124AD70C8003C1F08 /* DNSendButton.h in Headers */,
+				2B8352BE25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.h in Headers */,
 				2F341A4F235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h in Headers */,
 				2BEF78A623F6A84D000DE285 /* WFCUVideoViewController.h in Headers */,
 				2F55115F217F5CC200F56C26 /* SDPhotoBrowser.h in Headers */,
@@ -1977,6 +2033,7 @@
 				2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */,
 				2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */,
 				2F55121A217F5CC300F56C26 /* WFCUMyPortraitViewController.h in Headers */,
+				2B8352D125DE291E00BA0800 /* WFCUPTTInviteCell.h in Headers */,
 				2F551211217F5CC300F56C26 /* WFCUContactListViewController.h in Headers */,
 				2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */,
 				2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */,
@@ -1987,6 +2044,7 @@
 				2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */,
 				2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */,
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
+				2B8352BA25DE090B00BA0800 /* WFCUPTTFloatingWindow.h in Headers */,
 				2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */,
 				2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */,
 				2F55115E217F5CC200F56C26 /* SDWaitingView.h in Headers */,
@@ -2270,6 +2328,7 @@
 				1450EA922439679500BF51FC /* WFCUSelectedUserInfo.m in Sources */,
 				2F5510F1217F5CC200F56C26 /* CCHMapClusterController.m in Sources */,
 				2F551213217F5CC300F56C26 /* WFCUAddFriendViewController.m in Sources */,
+				2B07312D25DDE910005EE603 /* WFCUPushToTalkListViewController.m in Sources */,
 				2F55110D217F5CC200F56C26 /* AirplayActiveView.m in Sources */,
 				2F5511D3217F5CC300F56C26 /* TYAlertScaleFadeAnimation.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
@@ -2306,6 +2365,7 @@
 				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
 				2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */,
 				2BDF57A924AD70C8003C1F08 /* DNImageFetchOperation.m in Sources */,
+				2B07312825DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m in Sources */,
 				2F5EB43D22C2E21A00BC8C90 /* GroupManageTableViewController.m in Sources */,
 				2F55109F217F5CC200F56C26 /* WFCULocationCell.m in Sources */,
 				2F5511E1217F5CC300F56C26 /* YLGIFImage.m in Sources */,
@@ -2342,6 +2402,7 @@
 				2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */,
 				2F5511F8217F5CC300F56C26 /* UITabBar+badge.m in Sources */,
 				2F5511F5217F5CC300F56C26 /* UIImage+ERCategory.m in Sources */,
+				2B8352B925DE090B00BA0800 /* WFCUPTTFloatingWindow.m in Sources */,
 				2F551192217F5CC200F56C26 /* SDRefreshHeaderView.m in Sources */,
 				2F1EB5B82499A30500FD3575 /* WFCUCreateConferenceViewController.m in Sources */,
 				2F551113217F5CC200F56C26 /* VideoPlayerSampleView.m in Sources */,
@@ -2350,6 +2411,7 @@
 				2F5510B4217F5CC200F56C26 /* WFCUGeneralModifyViewController.m in Sources */,
 				2BDF579924AD70C8003C1F08 /* UIColor+Hex.m in Sources */,
 				2F5510A1217F5CC200F56C26 /* WFCUMessageCellBase.m in Sources */,
+				2B07313225DDE927005EE603 /* WFCUPushToTalkViewController.m in Sources */,
 				2F551106217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.m in Sources */,
 				2F551153217F5CC200F56C26 /* KZVideoPlayer.m in Sources */,
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,
@@ -2360,6 +2422,7 @@
 				2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
+				2B8352BF25DE254500BA0800 /* WFCUPushToTalkMemberListViewController.m in Sources */,
 				2F551194217F5CC200F56C26 /* UIView+SDExtension.m in Sources */,
 				2B14FC9025C23D3600684B91 /* WFCUPinyinUtility.m in Sources */,
 				2F5510BA217F5CC200F56C26 /* WFCUGroupMemberTableViewController.m in Sources */,
@@ -2398,6 +2461,7 @@
 				2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */,
 				2F55116E217F5CC200F56C26 /* AFSecurityPolicy.m in Sources */,
 				2F55120D217F5CC300F56C26 /* WFCUContactSelectTableViewCell.m in Sources */,
+				2B8352D025DE291E00BA0800 /* WFCUPTTInviteCell.m in Sources */,
 				2BDF579424AD70C8003C1F08 /* DNAlbum.m in Sources */,
 				2F3A6C1A219EE941009A8B4B /* WFCUFaceButton.m in Sources */,
 				1450EA8E243960C600BF51FC /* WFCUSelectedUserTableViewCell.m in Sources */,

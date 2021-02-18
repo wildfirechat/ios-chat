@@ -34,6 +34,9 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUForwardViewController.h>
 #import <WFChatUIKit/WFCUFilesEntryViewController.h>
 #import <WFChatUIKit/WFCUFilesViewController.h>
+#import <WFChatUIKit/WFCUPushToTalkCreateViewController.h>
+#import <WFChatUIKit/WFCUPushToTalkViewController.h>
+#import <WFChatUIKit/WFCUPushToTalkListViewController.h>
 
 #import <WFChatUIKit/QrCodeHelper.h>
 #import <WFChatUIKit/WFCUBrowserViewController.h>

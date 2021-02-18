@@ -1,19 +1,20 @@
 //
-//  ViewController.h
-//  WFDemo
+//  WFCUPushToTalkViewController.h
+//  WFChatUIKit
 //
-//  Created by heavyrain on 17/9/27.
-//  Copyright © 2017年 WildFireChat. All rights reserved.
+//  Created by dali on 2021/2/18.
+//  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @class WFAVCallSession;
 @class WFCCConversation;
-@class WFCCConferenceInviteMessageContent;
-@interface WFCUConferenceViewController : UIViewController
+@class WFCCPTTInviteMessageContent;
+
+@interface WFCUPushToTalkViewController : UIViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session;
-- (instancetype)initWithInvite:(WFCCConferenceInviteMessageContent *)invite;
+- (instancetype)initWithInvite:(WFCCPTTInviteMessageContent *)invite;
 
 - (instancetype)initWithCallId:(NSString *_Nullable)callId
                      audioOnly:(BOOL)audioOnly
@@ -23,5 +24,5 @@
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
                         moCall:(BOOL)moCall;
-@end
 
+@end

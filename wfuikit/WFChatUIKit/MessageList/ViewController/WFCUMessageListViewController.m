@@ -25,6 +25,9 @@
 #import "WFCUCardCell.h"
 #import "WFCUCompositeCell.h"
 #import "WFCULinkCell.h"
+#import "WFCUPTTInviteCell.h"
+
+
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -73,6 +76,8 @@
 #import "WFCUCompositeMessageViewController.h"
 
 #import "WFCUFavoriteItem.h"
+
+#import "WFCUPushToTalkViewController.h"
 
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
@@ -783,6 +788,8 @@
     [self registerCell:[WFCUCardCell class] forContent:[WFCCCardMessageContent class]];
     [self registerCell:[WFCUCompositeCell class] forContent:[WFCCCompositeMessageContent class]];
     [self registerCell:[WFCULinkCell class] forContent:[WFCCLinkMessageContent class]];
+    [self registerCell:[WFCUPTTInviteCell class] forContent:[WFCCPTTInviteMessageContent class]];
+    
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
@@ -1760,6 +1767,12 @@
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;   
             WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
+            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+        }
+    } else if([model.message.content isKindOfClass:[WFCCPTTInviteMessageContent class]]) {
+        if ([WFAVEngineKit sharedEngineKit].supportConference) {
+            WFCCPTTInviteMessageContent *invite = (WFCCPTTInviteMessageContent *)model.message.content;
+            WFCUPushToTalkViewController *vc = [[WFCUPushToTalkViewController alloc] initWithInvite:invite];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         }
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
