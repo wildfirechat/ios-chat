@@ -1,8 +1,8 @@
 //
-//  WFCUConferenceMemberManagerViewController.h
+//  WFCUPushToTalkCreateViewController.h
 //  WFChatUIKit
 //
-//  Created by Tom Lee on 2021/2/15.
+//  Created by dali on 2021/2/18.
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUConferenceMemberManagerViewController : UIViewController
+@interface WFCUPushToTalkCreateViewController : UIViewController
 
 @end
 
