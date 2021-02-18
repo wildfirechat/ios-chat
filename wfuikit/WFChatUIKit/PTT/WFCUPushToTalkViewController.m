@@ -65,7 +65,6 @@
     if (self) {
         self.currentSession = session;
         self.currentSession.delegate = self;
-        [self rearrangeParticipants];
     }
     return self;
 }
@@ -87,7 +86,6 @@
         
         
         [self didChangeState:kWFAVEngineStateIncomming];
-        [self rearrangeParticipants];
     }
     return self;
 }
@@ -119,10 +117,6 @@
             [self didChangeState:kWFAVEngineStateIncomming];
         
         }
-        
-        
-        
-        [self rearrangeParticipants];
     }
     return self;
 }
@@ -138,7 +132,7 @@
     layout2.itemSpace = 6;
     CGRect bounds = self.view.bounds;
     
-    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, bounds.size.height - BottomPadding - ButtonSize - (PortraitItemSize + PortraitLabelSize)*3 - PortraitLabelSize, bounds.size.width - 32, (PortraitItemSize + PortraitLabelSize)*3 + PortraitLabelSize) collectionViewLayout:layout2];
+    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, 120 + kStatusBarAndNavigationBarHeight + 20, bounds.size.width - 32, bounds.size.height - 300 - kTabbarSafeBottomMargin) collectionViewLayout:layout2];
     self.portraitCollectionView.dataSource = self;
     self.portraitCollectionView.delegate = self;
     [self.portraitCollectionView registerClass:[WFCUPortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
@@ -159,9 +153,8 @@
     [self.view addSubview:self.talkButton];
     
     self.exitButton.hidden = NO;
-    self.membersButton.hidden = NO;
-    [self updateRightNaviBar];
     
+    [self rearrangeParticipants];
     [self checkAVPermission];
 }
 
@@ -356,8 +349,10 @@
 }
 
 - (void)didChangeState:(WFAVEngineState)state {
-    if(state == kWFAVEngineStateConnected && !self.currentSession.audience) {
-        [self.currentSession switchAudience:YES];
+    if(state == kWFAVEngineStateConnected) {
+        if(!self.currentSession.audience) {
+            [self.currentSession switchAudience:YES];
+        }
     }
 }
 
@@ -382,7 +377,7 @@
 }
 
 - (void)didParticipantLeft:(NSString * _Nonnull)userId withReason:(WFAVCallEndReason)reason {
-    
+    [self rearrangeParticipants];
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack * _Nonnull)remoteVideoTrack fromUser:(NSString * _Nonnull)userId {
@@ -403,6 +398,9 @@
     } else {
         
     }
+    
+    [self.currentSession enableSpeaker:YES];
+    [self rearrangeParticipants];
 }
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
