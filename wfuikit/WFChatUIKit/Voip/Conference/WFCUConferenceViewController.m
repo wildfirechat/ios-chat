@@ -449,7 +449,7 @@
         
         [ws presentViewController:alertController animated:YES completion:nil];
     } else {
-        [ws.currentSession leaveConference:NO];
+        [self.currentSession leaveConference:NO];
     }
 }
 
