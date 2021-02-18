@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUConferenceInviteViewController : UIViewController
-@property (nonatomic, strong) WFCCConferenceInviteMessageContent *invite;
+@property (nonatomic, strong) WFCCMessageContent *invite;
 @end
 
 NS_ASSUME_NONNULL_END
