@@ -393,11 +393,8 @@
 }
 
 - (void)onMessageUpdated:(NSNotification *)notification {
-    NSArray<WFCCMessage *> *messages = notification.object;
-    if ([messages count]) {
-        [self refreshList];
-        [self refreshLeftButton];
-    }
+    [self refreshList];
+    [self refreshLeftButton];
 }
 
 - (void)onSettingUpdated:(NSNotification *)notification {
