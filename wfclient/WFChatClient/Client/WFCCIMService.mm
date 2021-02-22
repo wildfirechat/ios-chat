@@ -2169,20 +2169,24 @@ public:
     WFCCMessage *message = [[WFCCMessage alloc] init];
     message.conversation = conversation;
     message.content = content;
+    
     mars::stn::TMessage tmsg;
     fillTMessage(tmsg, conversation, content);
     
-    if(status >= Message_Status_Unread) {
+    if(status >= Message_Status_Mentioned) {
         tmsg.direction = 1;
+        message.direction = MessageDirection_Receive;
         if(conversation.type == Single_Type) {
             tmsg.from = [conversation.target UTF8String];
         } else {
             tmsg.from = [sender UTF8String];
         }
     }
+    message.status = status;
     tmsg.status = (mars::stn::MessageStatus)status;
     
     if(serverTime > 0) {
+        message.serverTime = serverTime;
         tmsg.timestamp = serverTime;
     }
     
@@ -2191,6 +2195,7 @@ public:
     
     message.fromUser = sender;
     if (notify) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:@[message]];
         [[WFCCNetworkService sharedInstance].receiveMessageDelegate onReceiveMessage:@[message] hasMore:NO];
     }
     return message;
