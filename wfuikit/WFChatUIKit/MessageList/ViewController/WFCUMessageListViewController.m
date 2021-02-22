@@ -174,6 +174,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageListChanged:) name:kMessageListChanged object:self.conversation];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMenuHidden:) name:UIMenuControllerDidHideMenuNotification object:nil];
 
 #if WFCU_SUPPORT_VOIP
@@ -957,6 +959,31 @@
             [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
             break;
         }
+    }
+}
+
+- (void)onMessageUpdated:(NSNotification *)notification {
+    long messageId = [notification.object longValue];
+    BOOL isUpdated = NO;
+    for (WFCUMessageModel *model in self.modelList) {
+        if(model.message.messageId == messageId) {
+            model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+            isUpdated = YES;
+            break;
+        }
+    }
+    
+    if(isUpdated) {
+        [self.modelList sortUsingComparator:^NSComparisonResult(WFCUMessageModel *obj1, WFCUMessageModel *obj2) {
+            if (obj1.message.serverTime > obj2.message.serverTime) {
+                return NSOrderedDescending;
+            } else if(obj1.message.serverTime == obj2.message.serverTime) {
+                return NSOrderedSame;
+            } else {
+                return NSOrderedAscending;
+            }
+        }];
+        [self.collectionView reloadData];
     }
 }
 
