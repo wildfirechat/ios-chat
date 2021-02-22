@@ -24,6 +24,7 @@ NSString *kRecallMessages = @"kRecallMessages";
 NSString *kDeleteMessages = @"kDeleteMessages";
 NSString *kMessageDelivered = @"kMessageDelivered";
 NSString *kMessageReaded = @"kMessageReaded";
+NSString *kMessageUpdated = @"kMessageUpdated";
 
 class IMSendMessageCallback : public mars::stn::SendMsgCallback {
 private:
@@ -1039,14 +1040,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return mars::stn::MessageDB::Instance()->GetDelivery([userId UTF8String]);
 }
 
-- (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
-    WFCCMessage *message = [self getMessage:messageId];
-    if (!message) {
-        return NO;
+- (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
+    bool updated = mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
+    if(updated) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
     }
-    
-    mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
-    return YES;
+    return updated ? YES : NO;
 }
 
 - (void)removeConversation:(WFCCConversation *)conversation clearMessage:(BOOL)clearMessage {
@@ -2205,7 +2204,21 @@ public:
               content:(WFCCMessageContent *)content {
     mars::stn::TMessageContent tmc;
     fillTMessageContent(tmc, content);
-    mars::stn::MessageDB::Instance()->UpdateMessageContent(messageId, tmc);
+    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContent(messageId, tmc);
+    if(updated) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
+    }
+}
+
+- (void)updateMessage:(long)messageId
+              content:(WFCCMessageContent *)content
+            timestamp:(long long)timestamp {
+    mars::stn::TMessageContent tmc;
+    fillTMessageContent(tmc, content);
+    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContentAndTime(messageId, tmc, timestamp);
+    if(updated) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
+    }
 }
 
 - (void)registerMessageContent:(Class)contentClass {

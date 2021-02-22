@@ -31,6 +31,7 @@ namespace mars {
             
             void RegisterMessageFlag(int type, int flag);
             bool UpdateMessageContent(long messageId, TMessageContent &msgConstnet);
+            bool UpdateMessageContentAndTime(long messageId, TMessageContent &msgConstnet, int64_t timestamp);
             bool DeleteMessage(long messageId);
             
             bool UpdateMessageContentByUid(int64_t messageUid, TMessageContent &msgConstnet);

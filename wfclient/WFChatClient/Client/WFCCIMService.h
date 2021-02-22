@@ -31,6 +31,7 @@ extern NSString *kRecallMessages;
 extern NSString *kDeleteMessages;
 extern NSString *kMessageDelivered;
 extern NSString *kMessageReaded;
+extern NSString *kMessageUpdated;
 
 #pragma mark - 枚举值定义
 /**
@@ -766,6 +767,17 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
               content:(WFCCMessageContent *)content;
 
 /**
+ 更新消息内容及时间。只更新本地消息内容，无法更新服务器和远端。
+ 
+ @param messageId 消息ID
+ @param content   消息内容
+ @param timestamp 消息时间戳
+ */
+- (void)updateMessage:(long)messageId
+              content:(WFCCMessageContent *)content
+            timestamp:(long long)timestamp;
+
+/**
 更新消息状态，需要确保状态跟消息的方向相对应。一般情况下协议栈会自动处理好，不建议客户手动操作状态。。只更新本地消息内容，无法更新服务器和远端。
 
 @param messageId 消息ID
@@ -773,7 +785,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
 @return YES 更新成功。NO 消息不存在，或者状态与消息方向不匹配
 */
-- (bool)updateMessage:(long)messageId status:(WFCCMessageStatus)status;
+- (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status;
 
 /**
  插入消息。只插入到本地，无法更新服务器和远端。

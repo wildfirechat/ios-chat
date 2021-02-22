@@ -311,6 +311,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendingMessageStatusUpdated:) name:kSendingMessageStatusUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
     
     self.firstAppear = YES;
 }
@@ -384,6 +385,14 @@
 }
 
 - (void)onReceiveMessages:(NSNotification *)notification {
+    NSArray<WFCCMessage *> *messages = notification.object;
+    if ([messages count]) {
+        [self refreshList];
+        [self refreshLeftButton];
+    }
+}
+
+- (void)onMessageUpdated:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
     if ([messages count]) {
         [self refreshList];
