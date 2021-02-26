@@ -23,8 +23,28 @@
             WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
             self.userDisplayName = user.displayName;
             self.messageDigest = [msg.content digest:msg];
+            NSUInteger maxBytes = 120;
             if (self.messageDigest.length > 48) {
-                self.messageDigest = [self.messageDigest substringToIndex:48];
+                __block NSUInteger seenBytes = 0;
+                __block NSUInteger truncLength = 0;
+                NSRange fullLength = (NSRange){0, [self.messageDigest length]};
+                [self.messageDigest enumerateSubstringsInRange:fullLength
+                                      options:NSStringEnumerationByComposedCharacterSequences
+                                   usingBlock:
+                    ^(NSString *substring, NSRange substringRange,
+                      NSRange _, BOOL *stop)
+                    {
+                        seenBytes += [substring lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+                        if( seenBytes > maxBytes ){
+                            *stop = YES;
+                            return;
+                        }
+                        else {
+                            truncLength += substringRange.length;
+                        }
+                }];
+
+                self.messageDigest = [self.messageDigest substringToIndex:truncLength];
             }
         } else {
             return nil;
