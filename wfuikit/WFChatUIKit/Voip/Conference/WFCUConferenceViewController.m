@@ -38,6 +38,7 @@
 >
 #if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
+@property (nonatomic, strong) UIImageView *bigVideoPortraitView;
 @property (nonatomic, strong) UICollectionView *smallCollectionView;
 
 @property (nonatomic, strong) UICollectionView *portraitCollectionView;
@@ -208,15 +209,20 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
+    
     self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
+    self.bigVideoPortraitView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemWidth)];
+    self.bigVideoPortraitView.center = self.bigVideoView.center;
+    [self.bigVideoView addSubview:self.bigVideoPortraitView];
     [self.view addSubview:self.bigVideoView];
     
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
+    
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     int lines = (int)([self.currentSession participantIds].count + 2) /3;
@@ -1148,7 +1154,8 @@
                         break;
                     }
                 }
-                
+                WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             }
             [self.smallCollectionView reloadData];
         } else {
