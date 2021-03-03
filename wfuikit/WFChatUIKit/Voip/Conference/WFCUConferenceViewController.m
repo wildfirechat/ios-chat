@@ -75,8 +75,6 @@
 
 @property(nonatomic, strong)UIView *bottomBarView;
 
-@property(nonatomic, assign)BOOL quitAfterWarning;
-
 #endif
 @end
 
@@ -849,7 +847,6 @@
                 self.videoButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
-                [self.currentSession enableSpeaker:YES];
                 self.audioButton.hidden = NO;
                 self.switchCameraButton.hidden = NO;
                 self.videoButton.hidden = NO;
@@ -952,7 +949,11 @@
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceEnded" object:nil];
     [self.view makeToast:@"会议已结束" duration:1 position:CSToastPositionCenter];
-    if(!self.quitAfterWarning) {
+    if(reason == kWFAVCallEndReasonRoomNotExist) {
+        [self restartConference];
+    } else if(reason == kWFAVCallEndReasonRoomParticipantsFull) {
+        [self rejoinConferenceAsAudience];
+    } else {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
         });
@@ -1003,52 +1004,8 @@
 }
 
 - (void)didError:(NSError *)error {
-    if([error.domain isEqualToString:@"room_not_exist"]) {
-        self.quitAfterWarning = YES;
-        if([self.currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            __weak typeof(self)ws = self;
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议未开始或者已经结束，请点击启动来开始会议" preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
-            }];
-            [alertController addAction:action1];
-            
-            BOOL audioOnly = self.currentSession.isAudioOnly;
-            BOOL defaultAudience = self.currentSession.defaultAudience;
-            NSString *title = self.currentSession.title;
-            NSString *desc = self.currentSession.desc;
-            NSString *conferenceId = self.currentSession.callId;
-            NSString *pin = self.currentSession.pin;
-            
-            
-            UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"启动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
-                
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience moCall:YES];
-                    [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
-                });
-            }];
-            [alertController addAction:action2];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [ws presentViewController:alertController animated:YES completion:nil];
-            });
-        } else {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.host refresh:NO];
-            
-            __weak typeof(self)ws = self;
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] preferredStyle:UIAlertControllerStyleAlert];
-
-            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
-            }];
-            [alertController addAction:action1];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [ws presentViewController:alertController animated:YES completion:nil];
-            });
-        }
+    if([error.domain isEqualToString:@"room_participants_full"]) {
+        [self.view makeToast:@"发言人数已满，无法切换到发言人!" duration:1 position:CSToastPositionCenter];
     }
 }
 
@@ -1115,6 +1072,85 @@
                 complete(granted);
             }
         }];
+    }
+}
+
+- (void)rejoinConferenceAsAudience {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议发言人数已满，是否以观众身份入会？" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+    }];
+    [alertController addAction:action1];
+    
+    BOOL audioOnly = self.currentSession.isAudioOnly;
+    NSString *title = self.currentSession.title;
+    NSString *desc = self.currentSession.desc;
+    NSString *conferenceId = self.currentSession.callId;
+    NSString *pin = self.currentSession.pin;
+    NSString *host = self.currentSession.host;
+    
+    
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES moCall:NO];
+            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+        });
+    }];
+    [alertController addAction:action2];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ws presentViewController:alertController animated:YES completion:nil];
+    });
+}
+
+- (void)restartConference {
+    if([self.currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        __weak typeof(self)ws = self;
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议未开始或者已经结束，请点击启动来开始会议" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+        }];
+        [alertController addAction:action1];
+        
+        BOOL audioOnly = self.currentSession.isAudioOnly;
+        BOOL defaultAudience = self.currentSession.defaultAudience;
+        NSString *title = self.currentSession.title;
+        NSString *desc = self.currentSession.desc;
+        NSString *conferenceId = self.currentSession.callId;
+        NSString *pin = self.currentSession.pin;
+        
+        
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"启动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience moCall:YES];
+                [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+            });
+        }];
+        [alertController addAction:action2];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ws presentViewController:alertController animated:YES completion:nil];
+        });
+    } else {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.host refresh:NO];
+        
+        __weak typeof(self)ws = self;
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+        }];
+        [alertController addAction:action1];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ws presentViewController:alertController animated:YES completion:nil];
+        });
     }
 }
 - (void)reloadVideoUI {
