@@ -146,7 +146,9 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRemoteBusy,
   kWFAVCallEndReasonRemoteTimeout,
   kWFAVCallEndReasonRemoteNetworkError,
-  kWFAVCallEndReasonRoomDestroyed
+  kWFAVCallEndReasonRoomDestroyed,
+  kWFAVCallEndReasonRoomNotExist,
+  kWFAVCallEndReasonRoomParticipantsFull
 };
 
 #pragma mark - 通话监听
@@ -292,6 +294,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 最大视频通话路数，单人音视频默认为2，无法修改。
 */
 @property(nonatomic, assign)int maxVideoCallCount;
+
+/*
+是否更新邀请消息的时间。当为YES时，StartCall消息会被更新为结束时间。
+*/
+@property(nonatomic, assign)BOOL updateCallStartMessageTimestamp;
+
 /**
  添加ICE服务地址和鉴权
 
