@@ -550,6 +550,16 @@ namespace mars{
         int hasMore;
     };
     
+    class TUploadMediaUrlEntry {
+    public:
+        TUploadMediaUrlEntry():type(0) {}
+        virtual ~TUploadMediaUrlEntry() {}
+        std::string uploadUrl;
+        std::string backupUploadUrl;
+        std::string mediaUrl;
+        int type;
+    };
+    
         class GeneralStringCallback {
         public:
             virtual void onSuccess(std::string key) = 0;
@@ -564,6 +574,13 @@ namespace mars{
             virtual void onProgress(int current, int total) = 0;
             virtual ~UploadMediaCallback() {}
         };
+    
+    class GetUploadMediaUrlCallback {
+    public:
+        virtual void onSuccess(const TUploadMediaUrlEntry &urlEntry) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetUploadMediaUrlCallback() {}
+    };
 
         class SendMsgCallback {
         public:
@@ -582,6 +599,13 @@ namespace mars{
             virtual void onProgress(int current, int total) = 0;
             virtual ~UpdateMediaCallback() {}
         };
+    
+    class GetAuthorizedMediaUrlCallback {
+    public:
+        virtual void onSuccess(const std::string &remoteUrl, const std::string &backupRemoteUrl) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetAuthorizedMediaUrlCallback() {}
+    };
 
 
         class SearchUserCallback {
@@ -789,7 +813,8 @@ namespace mars{
     
         extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
 
-        extern void getAuthorizedMediaUrl(long long messageUid, int mediaType, const std::string &mediaUrl, GeneralStringCallback *callback);
+        extern void getAuthorizedMediaUrl(long long messageUid, int mediaType, const std::string &mediaUrl, GetAuthorizedMediaUrlCallback *callback);
+        extern void getUploadMediaUrl(const std::string fileName, int mediaType, GetUploadMediaUrlCallback *callback);
 
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
 
@@ -871,6 +896,8 @@ namespace mars{
 
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
+        extern bool HasMediaPresignedUrl();
+        extern bool HasMediaBackupUrl();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
     
