@@ -702,6 +702,26 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                 success:(void(^)(NSString *remoteUrl))successBlock
                progress:(void(^)(long uploaded, long total))progressBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取上传接口，用来上传大文件。只有专业版才支持，使用前先调用isSupportBigFilesUpload检查是否支持
+ 
+ @param fileName 文件名
+ @param mediaType 媒体类型
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUploadUrl:(NSString *)fileName
+           mediaType:(WFCCMediaType)mediaType
+            success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
+/**
+ 是否支持大文件上传
+ 
+ @return YES支持大文件上传，调用getUploadUrl:getUploadUrl:success:error:方法获取到上传url，然后再在应用层上传。
+ */
+- (BOOL)isSupportBigFilesUpload;
 /**
  删除消息
  
@@ -1710,13 +1730,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 @param messageUid 消息Uid
 @param mediaType 媒体类型
 @param mediaPath 媒体Path
-@param successBlock 成功的回调
+@param successBlock 成功的回调，backupAuthorizedUrl仅当支持双网环境才有意义
 @param errorBlock 失败的回调
 */
 - (void)getAuthorizedMediaUrl:(long long)messageUid
                     mediaType:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath
-                      success:(void(^)(NSString *authorizedUrl))successBlock
+                      success:(void(^)(NSString *authorizedUrl, NSString *backupAuthorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
 /**
