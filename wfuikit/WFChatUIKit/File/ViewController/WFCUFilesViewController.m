@@ -312,7 +312,7 @@
     }
     
     __weak typeof(self)ws = self;
-    [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:record.messageUid mediaType:Media_Type_FILE mediaPath:record.url success:^(NSString *authorizedUrl) {
+    [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:record.messageUid mediaType:Media_Type_FILE mediaPath:record.url success:^(NSString *authorizedUrl, NSString *backupUrl) {
         WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
         bvc.url = authorizedUrl;
         [ws.navigationController pushViewController:bvc animated:YES];
