@@ -21,7 +21,7 @@
 @property(nonatomic, strong)UIButton *fileActionButton;
 @end
 
-#define SIZE_WIDTH 40
+#define SIZE_WIDTH 60
 #define BUTTON_WIDTH 80
 
 @implementation WFCUUploadFileTableViewCell
@@ -86,7 +86,6 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
-    NSLog(@"%@,%@,%@",keyPath, object, change);
     [self updateUI];
 }
 
