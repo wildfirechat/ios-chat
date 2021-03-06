@@ -176,6 +176,40 @@ public:
     }
 };
 
+class IMGetAuthorizedMediaUrlCallback : public mars::stn::GetAuthorizedMediaUrlCallback {
+private:
+    void(^m_successBlock)(NSString *url, NSString *backupUrl);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGetAuthorizedMediaUrlCallback(void(^successBlock)(NSString *url, NSString *backupUrl), void(^errorBlock)(int error_code)) : mars::stn::GetAuthorizedMediaUrlCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::string &url, const std::string &backupUrl) {
+        NSString *nsstr = [NSString stringWithUTF8String:url.c_str()];
+        NSString *nsbstr = nil;
+        if(!backupUrl.empty()) {
+            nsbstr = [NSString stringWithUTF8String:backupUrl.c_str()];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(nsstr, nsbstr);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMGetAuthorizedMediaUrlCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 
 class RecallMessageCallback : public mars::stn::GeneralOperationCallback {
 private:
@@ -461,6 +495,42 @@ public:
     }
     
   ~GeneralUpdateMediaCallback() {
+    m_successBlock = nil;
+    m_errorBlock = nil;
+  }
+};
+
+class IMGetUploadMediaUrlCallback : public mars::stn::GetUploadMediaUrlCallback {
+public:
+    void(^m_successBlock)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type);
+  void(^m_errorBlock)(int error_code);
+  void(^m_progressBlock)(long uploaded, long total);
+  
+    IMGetUploadMediaUrlCallback(void(^successBlock)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type), void(^errorBlock)(int error_code)) : mars::stn::GetUploadMediaUrlCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {}
+  
+    void onSuccess(const mars::stn::TUploadMediaUrlEntry &urlEntry) {
+      NSString *uploadUrl = [NSString stringWithUTF8String:urlEntry.uploadUrl.c_str()];
+        NSString *mediaUrl = [NSString stringWithUTF8String:urlEntry.mediaUrl.c_str()];
+        NSString *backupUrl = [NSString stringWithUTF8String:urlEntry.backupUploadUrl.c_str()];
+        int type = urlEntry.type;
+      dispatch_async(dispatch_get_main_queue(), ^{
+          if (m_successBlock) {
+              m_successBlock(uploadUrl, mediaUrl, backupUrl, type);
+          }
+          delete this;
+      });
+  }
+  
+  void onFalure(int errorCode) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+          if (m_errorBlock) {
+              m_errorBlock(errorCode);
+          }
+          delete this;
+      });
+  }
+    
+  ~IMGetUploadMediaUrlCallback() {
     m_successBlock = nil;
     m_errorBlock = nil;
   }
@@ -1482,6 +1552,16 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     return success;
 }
 
+- (void)getUploadUrl:(NSString *)fileName
+           mediaType:(WFCCMediaType)mediaType
+            success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
+               error:(void(^)(int error_code))errorBlock {
+    mars::stn::getUploadMediaUrl(fileName == nil ? "" : [fileName UTF8String], (int)mediaType, new IMGetUploadMediaUrlCallback(successBlock, errorBlock));
+}
+
+- (BOOL)isSupportBigFilesUpload {
+    return mars::stn::HasMediaPresignedUrl() ? YES : NO;
+}
 
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values
             success:(void(^)())successBlock
@@ -2434,9 +2514,9 @@ public:
 - (void)getAuthorizedMediaUrl:(long long)messageUid
                     mediaType:(WFCCMediaType)mediaType
                     mediaPath:(NSString *)mediaPath
-                      success:(void(^)(NSString *authorizedUrl))successBlock
+                      success:(void(^)(NSString *authorizedUrl, NSString *backupAuthorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGetAuthorizedMediaUrlCallback(successBlock, errorBlock));
 }
 
 - (NSData *)getWavData:(NSString *)amrPath {
