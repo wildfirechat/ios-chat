@@ -2243,7 +2243,7 @@
                 [alertController addAction:actionCancel];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
-                break;
+                return;
             }
         }
     }
