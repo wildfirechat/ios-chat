@@ -65,6 +65,10 @@
         [self.fileActionButton setTitle:@"重新上传" forState:UIControlStateNormal];
         [self.fileActionButton setBackgroundColor:[UIColor redColor]];
     } else if(self.bigFileModel.state == 4) {
+        self.fileStateLabel.text = @"网络错误，上传失败";
+        [self.fileActionButton setTitle:@"重新上传" forState:UIControlStateNormal];
+        [self.fileActionButton setBackgroundColor:[UIColor grayColor]];
+    } else if(self.bigFileModel.state == 5) {
         self.fileStateLabel.text = @"消息已发送";
         [self.fileActionButton setTitle:@"已发送" forState:UIControlStateDisabled];
         [self.fileActionButton setBackgroundColor:[UIColor grayColor]];

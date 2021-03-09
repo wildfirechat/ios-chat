@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUUploadFileModel : NSObject
 @property(nonatomic, strong)WFCCFileMessageContent *bigFileContent;
-@property(nonatomic, assign)int state; //0 未上传, 1 上传中，2 上传成功，3 取消发送，4 消息发送成功
+@property(nonatomic, assign)int state; //0 未上传, 1 上传中，2 上传成功，3 取消发送，4 上传失败，5 消息发送成功
 @property(nonatomic, assign)float uploadProgress;
 @property(nonatomic, strong)NSURLSessionUploadTask *uploadTask;
 @end

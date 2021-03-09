@@ -81,8 +81,12 @@
                 model.state = 0;
             } else {
                 NSLog(@"done");
-                model.state = 2;
-                model.bigFileContent.remoteUrl = remoteUrl;
+                if(((NSHTTPURLResponse *)response).statusCode != 200) {
+                    model.state = 4;
+                } else {
+                    model.state = 2;
+                    model.bigFileContent.remoteUrl = remoteUrl;
+                }
             }
             ws.uploadingModel = nil;
         });
@@ -99,7 +103,7 @@
 }
 
 - (void)didTapSend:(WFCUUploadFileTableViewCell *)cell model:(WFCUUploadFileModel *)model {
-    model.state = 4;
+    model.state = 5;
     [[WFCCIMService sharedWFCIMService] send:self.conversation content:model.bigFileContent success:^(long long messageUid, long long timestamp) {
             
         } error:^(int error_code) {
