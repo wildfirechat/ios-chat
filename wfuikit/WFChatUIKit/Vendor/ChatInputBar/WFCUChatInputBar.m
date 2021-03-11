@@ -1329,9 +1329,13 @@
 
 #pragma mark  UIDocumentDelegate 文件选择回调
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
-
+    [controller dismissViewControllerAnimated:NO completion:nil];
     __block NSMutableArray *arr = [NSMutableArray array];
 
+    [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
+    [MBProgressHUD HUDForView:self.parentView].mode = MBProgressHUDModeDeterminate;
+    [MBProgressHUD HUDForView:self.parentView].label.text = @"正在处理中...";
+    
     for (NSURL *url in urls) {
        //获取授权
        BOOL fileUrlAuthozied = [url startAccessingSecurityScopedResource];
@@ -1378,7 +1382,7 @@
            NSLog(@"授权失败");
        }
     }
-
+    [MBProgressHUD hideHUDForView:self.parentView animated:YES];
     [self.delegate didSelectFiles:arr];
 }
 
