@@ -61,7 +61,7 @@
         [self.fileActionButton setTitle:@"发送" forState:UIControlStateNormal];
         [self.fileActionButton setBackgroundColor:[UIColor greenColor]];
     } else if(self.bigFileModel.state == 3) {
-        self.fileStateLabel.text = @"已取消或上传错误";
+        self.fileStateLabel.text = @"已取消";
         [self.fileActionButton setTitle:@"重新上传" forState:UIControlStateNormal];
         [self.fileActionButton setBackgroundColor:[UIColor redColor]];
     } else if(self.bigFileModel.state == 4) {

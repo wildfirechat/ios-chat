@@ -10,6 +10,7 @@
 #import "WFCUConfigManager.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUploadFileTableViewCell.h"
+#import "AFNetworking.h"
 
 @implementation WFCUUploadFileModel
 @end
@@ -59,10 +60,14 @@
     
     __weak typeof(self)ws = self;
     [[WFCCIMService sharedWFCIMService] getUploadUrl:model.bigFileContent.name mediaType:0 success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
-        [ws upload:uploadUrl file:model.bigFileContent.localPath model:model remoteUrl:downloadUrl];
-        } error:^(int error_code) {
-            ws.uploadingModel = nil;
-        }];
+        if(type == 1) {
+            [ws uploadQiniu:uploadUrl file:model.bigFileContent.localPath model:model remoteUrl:downloadUrl];
+        } else {
+            [ws upload:uploadUrl file:model.bigFileContent.localPath model:model remoteUrl:downloadUrl];
+        }
+    } error:^(int error_code) {
+        ws.uploadingModel = nil;
+    }];
 }
 
 - (void)upload:(NSString *)url file:(NSString *)file model:(WFCUUploadFileModel *)model remoteUrl:(NSString *)remoteUrl {
@@ -78,7 +83,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if(error) {
                 NSLog(@"error %@", error.localizedDescription);
-                model.state = 0;
+                model.state = 4;
             } else {
                 NSLog(@"done");
                 if(((NSHTTPURLResponse *)response).statusCode != 200) {
@@ -93,6 +98,47 @@
     }];
     model.state = 1;
     [model.uploadTask resume];
+}
+
+- (void)uploadQiniu:(NSString *)url file:(NSString *)file model:(WFCUUploadFileModel *)model remoteUrl:(NSString *)remoteUrl {
+    NSArray *array = [url componentsSeparatedByString:@"?"];
+    url = array[0];
+    NSString *token = array[1];
+    NSString *key = array[2];
+    
+    AFHTTPSessionManager *manage = [AFHTTPSessionManager manager];
+    [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    manage.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manage.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manage.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/html", @"text/json", @"text/javascript",@"text/plain", nil];
+
+    __weak typeof(self)ws = self;
+    model.state = 1;
+    [manage POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFormData:[key dataUsingEncoding:NSUTF8StringEncoding] name:@"key"];
+        [formData appendPartWithFormData:[token dataUsingEncoding:NSUTF8StringEncoding] name:@"token"];
+        [formData appendPartWithFileURL:[NSURL fileURLWithPath:file] name:@"file" fileName:@"fileName" mimeType:@"application/octet-stream" error:nil];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(ws.uploadingModel) {
+                ws.uploadingModel.uploadProgress = uploadProgress.completedUnitCount * 1.f / uploadProgress.totalUnitCount;
+                NSLog(@"upload progress %f", ws.uploadingModel.uploadProgress);
+            }
+        });
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            model.state = 2;
+            model.bigFileContent.remoteUrl = remoteUrl;
+            ws.uploadingModel = nil;
+        });
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"error %@", error.localizedDescription);
+            model.state = 4;
+            ws.uploadingModel = nil;
+        });
+    }];
 }
 
 - (void)didTapCancelUpload:(WFCUUploadFileTableViewCell *)cell model:(WFCUUploadFileModel *)model {
