@@ -15,7 +15,6 @@
 #import "WFCUUtilities.h"
 #import "WFCULocationViewController.h"
 #import "WFCULocationPoint.h"
-#import "WFCUSelectFileViewController.h"
 #import "UIView+Toast.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUContactListViewController.h"
