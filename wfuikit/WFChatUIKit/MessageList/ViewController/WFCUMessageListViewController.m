@@ -2115,15 +2115,21 @@
         return;
     }
     
-    WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:capturedImage];
+    UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
+    NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_IMAGE];
+
+    NSString *path = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.jpg", recordTime++]];
+        
+        
+    WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:capturedImage cachePath:path];
     [self sendMessage:imgContent];
 }
 
 -(void)gifDidCapture:(NSData *)gifData {
     //save gif
     UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
-    
-    NSString *filePath = [[WFCCUtilities getDocumentPathWithComponent:@"/IMG"] stringByAppendingPathComponent:[NSString stringWithFormat:@"gif%lld.jpg", recordTime]];
+    NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_STICKER];
+    NSString *filePath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"gif%lld.jpg", recordTime]];
     
     [gifData writeToFile:filePath atomically:YES];
     
@@ -2139,8 +2145,13 @@
 
 - (void)imageDataDidSelect:(NSArray<UIImage *> *)selectedImages isFullImage:(BOOL)fullImage {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
+        NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_IMAGE];
+
         for (UIImage *image in selectedImages) {
-            WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:image];
+            NSString *path = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.jpg", recordTime++]];
+            
+            WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:image cachePath:path];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [self sendMessage:imgContent];
             });
@@ -2176,8 +2187,14 @@
 }
 
 - (void)recordDidEnd:(NSString *)dataUri duration:(long)duration error:(NSError *)error {
-    [self sendMessage:[WFCCSoundMessageContent soundMessageContentForWav:dataUri duration:duration]];
+    NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_VOICE];
+
+    UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
+    NSString *amrPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.amr", recordTime]];
+    
+    [self sendMessage:[WFCCSoundMessageContent soundMessageContentForWav:dataUri destinationAmrPath:amrPath duration:duration]];
 }
+
 - (BOOL)isEqualRect:(CGRect)first second:(CGRect)second {
     return first.origin.x == second.origin.x
        && first.origin.y == second.origin.y

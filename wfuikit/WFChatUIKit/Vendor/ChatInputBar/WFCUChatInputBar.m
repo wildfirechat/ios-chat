@@ -29,6 +29,8 @@
 #import "TYAlertController.h"
 #import "UIView+TYAlertView.h"
 #import <ZLPhotoBrowser/ZLPhotoBrowser-Swift.h>
+#import "WFCUConfigManager.h"
+
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -1136,31 +1138,8 @@
                 [self.delegate imageDidCapture:image];
             } else {
                 NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-                
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *documentPath = [paths lastObject];
-                NSString *tempDir = [documentPath stringByAppendingPathComponent:@"wf_send_video"];
-                NSFileManager *fileManager = [NSFileManager defaultManager];
-                
-                bool isDir = NO;
-                if (![fileManager fileExistsAtPath:tempDir isDirectory:&isDir]) {
-                    isDir = YES;
-                    NSError *err;
-                    if(![fileManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:&err]) {
-                        NSLog(@"Error, create temp folder error");
-                        return;
-                    }
-                    if (err) {
-                        NSLog(@"Error, create temp folder error:%@", err);
-                        return;
-                    }
-                }
-                if (!isDir) {
-                    NSLog(@"Error, create temp folder error");
-                    return;
-                }
-
-                NSString *desFileName = [tempDir stringByAppendingPathComponent:[url lastPathComponent]];
+                NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_VIDEO];
+                NSString *desFileName = [cacheDir stringByAppendingPathComponent:[url lastPathComponent]];
                 [data writeToFile:desFileName atomically:YES];
                 
                 UIImage *thumb = [self getVideoThumbnailWithUrl:url second:1];
@@ -1347,30 +1326,8 @@
            [fileCoordinator coordinateReadingItemAtURL:url options:0 error:&error byAccessor:^(NSURL *newURL) {
                if (!error) {
                    NSData *fileData = [NSData dataWithContentsOfURL:newURL];
-                   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                   NSString *documentPath = [paths lastObject];
-                   NSString *tempDir = [documentPath stringByAppendingPathComponent:@"wf_send_files"];
-                   NSFileManager *fileManager = [NSFileManager defaultManager];
-                   
-                   bool isDir = NO;
-                   if (![fileManager fileExistsAtPath:tempDir isDirectory:&isDir]) {
-                       isDir = YES;
-                       NSError *err;
-                       if(![fileManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:&err]) {
-                           NSLog(@"Error, create temp folder error");
-                           return;
-                       }
-                       if (err) {
-                           NSLog(@"Error, create temp folder error:%@", err);
-                           return;
-                       }
-                   }
-                   if (!isDir) {
-                       NSLog(@"Error, create temp folder error");
-                       return;
-                   }
-
-                   NSString *desFileName = [tempDir stringByAppendingPathComponent:[newURL lastPathComponent]];
+                   NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_FILE];
+                   NSString *desFileName = [cacheDir stringByAppendingPathComponent:[newURL lastPathComponent]];
                    [fileData writeToFile:desFileName atomically:YES];
                    [arr addObject:desFileName];
                }

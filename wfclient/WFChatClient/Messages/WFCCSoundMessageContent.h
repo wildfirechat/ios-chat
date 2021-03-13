@@ -17,23 +17,18 @@
  构造方法
 
  @param wavPath 文件路径
+ @param amrPath 转化为amr的存储路径
  @param duration 时间
  @return 语音消息
  */
 + (instancetype)soundMessageContentForWav:(NSString *)wavPath
+                       destinationAmrPath:(NSString *)amrPath
                                  duration:(long)duration;
 
 /**
  时间
  */
 @property (nonatomic, assign)long duration;
-
-/**
- 设置wav内容
-
- @param voiceData wav数据
- */
-- (void)updateAmrData:(NSData *)voiceData;
 
 /**
  获取语音消息的wav数据
