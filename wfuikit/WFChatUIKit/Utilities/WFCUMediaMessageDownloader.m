@@ -9,6 +9,8 @@
 #import "WFCUMediaMessageDownloader.h"
 #import "AFNetworking.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUConfigManager.h"
+#import "WFCUUtilities.h"
 
 static WFCUMediaMessageDownloader *sharedSingleton = nil;
 
@@ -81,35 +83,15 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         return NO;
     }
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDir;
-    NSError *error = nil;
-    NSString *downloadDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
-    if (![fileManager fileExistsAtPath:downloadDir isDirectory:&isDir]) {
-        isDir = YES;
-        if(![fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:&error]) {
-            errorBlock(msg.messageUid, -1);
-            NSLog(@"Error, create download folder error");
-            return NO;
-        }
-        if (error) {
-            errorBlock(msg.messageUid, -1);
-            NSLog(@"Error, create download folder error:%@", error);
-            return NO;
-        }
-    }
-    if (!isDir) {
-        errorBlock(msg.messageUid, -1);
-        NSLog(@"Error, create download folder error");
-        return NO;
-    }
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[msg.content encode];
+    NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:msg.conversation mediaType:payload.mediaType];
     
     if (self.downloadingMessages[mediaContent.remoteUrl] != nil) {
         return NO;
     }
     
-    NSString *savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%ld", mediaContent.remoteUrl.hash]];
-    
+    NSString *savedPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%lld", messageUid]];
+
     if ([mediaContent isKindOfClass:[WFCCSoundMessageContent class]]) {
         if ([mediaContent.remoteUrl pathExtension].length) {
             savedPath = [savedPath stringByAppendingFormat:@".%@", [mediaContent.remoteUrl pathExtension]];
@@ -120,9 +102,11 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         savedPath = [NSString stringWithFormat:@"%@.jpg", savedPath];
     } else if([mediaContent isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *content = (WFCCFileMessageContent *)mediaContent;
-        savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld-%@", mediaContent.remoteUrl.hash, content.name]];
+        savedPath = [cacheDir stringByAppendingPathComponent:content.name];
     }
     
+    savedPath = [WFCUUtilities getUnduplicatedPath:savedPath];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:savedPath]) {
         mediaContent.localPath = savedPath;
         [[WFCCIMService sharedWFCIMService] updateMessage:msg.messageId content:mediaContent];
@@ -205,27 +189,38 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         return NO;
     }
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDir;
-    NSError *error = nil;
-    NSString *downloadDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
-    if (![fileManager fileExistsAtPath:downloadDir isDirectory:&isDir]) {
-        if(![fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+    WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:uid];
+    
+    NSString *cacheDir;
+    if(msg) {
+        WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[msg.content encode];
+        cacheDir = [[WFCUConfigManager globalManager] cachePathOf:msg.conversation mediaType:payload.mediaType];
+        
+    } else {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        BOOL isDir;
+        NSError *error = nil;
+        NSString *downloadDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:@"/download"];
+        if (![fileManager fileExistsAtPath:downloadDir isDirectory:&isDir]) {
+            if(![fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+                errorBlock(uid, -1);
+                NSLog(@"Error, create download folder error");
+                return NO;
+            }
+            if (error) {
+                errorBlock(uid, -1);
+                NSLog(@"Error, create download folder error:%@", error);
+                return NO;
+            }
+        }
+        if (!isDir) {
             errorBlock(uid, -1);
             NSLog(@"Error, create download folder error");
             return NO;
         }
-        if (error) {
-            errorBlock(uid, -1);
-            NSLog(@"Error, create download folder error:%@", error);
-            return NO;
-        }
+        cacheDir = downloadDir;
     }
-    if (!isDir) {
-        errorBlock(uid, -1);
-        NSLog(@"Error, create download folder error");
-        return NO;
-    }
+    
     
     //通知UI开始显示下载动画
     [[NSNotificationCenter defaultCenter] postNotificationName:kMediaMessageStartDownloading object:@(uid)];
@@ -235,8 +230,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
         return NO;
     }
     
-    NSString *savedPath = [downloadDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%lld", mediaPath.hash]];
-    
+    NSString *savedPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%lld", uid]];
     switch (mediaType) {
         case DownloadMediaType_Image:
             savedPath = [NSString stringWithFormat:@"%@.jpg", savedPath];
@@ -251,12 +245,19 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
             break;
             
         case DownloadMediaType_File:
+            if(msg && [msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
+                WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+                savedPath = [cacheDir stringByAppendingPathComponent:fileContent.name];
+            } else {
+                savedPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"file_%lld", uid]];
+            }
             break;
         default:
             break;
     }
-
+    savedPath = [WFCUUtilities getUnduplicatedPath:savedPath];
     
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:savedPath]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             successBlock(uid, savedPath);
