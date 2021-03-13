@@ -198,20 +198,16 @@
 		2F5510C6217F5CC200F56C26 /* WFCUFavGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EF1217F5CC000F56C26 /* WFCUFavGroupTableViewController.m */; };
 		2F5510C7217F5CC200F56C26 /* WFCULocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EF4217F5CC000F56C26 /* WFCULocationViewController.m */; };
 		2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EF5217F5CC000F56C26 /* WFCUPluginItemView.h */; };
-		2F5510C9217F5CC200F56C26 /* WFCUSelectFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EF6217F5CC000F56C26 /* WFCUSelectFileViewController.m */; };
 		2F5510CA217F5CC200F56C26 /* WFCUPluginBoardView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EF7217F5CC000F56C26 /* WFCUPluginBoardView.h */; };
 		2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EF8217F5CC000F56C26 /* WFCUChatInputBar.h */; };
 		2F5510CC217F5CC200F56C26 /* WFCUVoiceRecordView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */; };
-		2F5510CD217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EFA217F5CC000F56C26 /* WFCUSelectedFileCollectionViewCell.h */; };
 		2F5510E3217F5CC200F56C26 /* WFCUEmotionTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F14217F5CC100F56C26 /* WFCUEmotionTextAttachment.m */; };
 		2F5510E4217F5CC200F56C26 /* WFCULocationPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F15217F5CC100F56C26 /* WFCULocationPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510E5217F5CC200F56C26 /* WFCUPluginItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */; };
 		2F5510E6217F5CC200F56C26 /* WFCULocationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F17217F5CC100F56C26 /* WFCULocationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510E7217F5CC200F56C26 /* WFCUChatInputBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F18217F5CC100F56C26 /* WFCUChatInputBar.m */; };
 		2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */; };
-		2F5510E9217F5CC200F56C26 /* WFCUSelectFileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F1A217F5CC100F56C26 /* WFCUSelectFileViewController.h */; };
 		2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */; };
-		2F5510EB217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1C217F5CC100F56C26 /* WFCUSelectedFileCollectionViewCell.m */; };
 		2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */; };
 		2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */; };
 		2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */; };
@@ -649,20 +645,16 @@
 		2F550EF1217F5CC000F56C26 /* WFCUFavGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFavGroupTableViewController.m; sourceTree = "<group>"; };
 		2F550EF4217F5CC000F56C26 /* WFCULocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULocationViewController.m; sourceTree = "<group>"; };
 		2F550EF5217F5CC000F56C26 /* WFCUPluginItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPluginItemView.h; sourceTree = "<group>"; };
-		2F550EF6217F5CC000F56C26 /* WFCUSelectFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSelectFileViewController.m; sourceTree = "<group>"; };
 		2F550EF7217F5CC000F56C26 /* WFCUPluginBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPluginBoardView.h; sourceTree = "<group>"; };
 		2F550EF8217F5CC000F56C26 /* WFCUChatInputBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUChatInputBar.h; sourceTree = "<group>"; };
 		2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVoiceRecordView.h; sourceTree = "<group>"; };
-		2F550EFA217F5CC000F56C26 /* WFCUSelectedFileCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSelectedFileCollectionViewCell.h; sourceTree = "<group>"; };
 		2F550F14217F5CC100F56C26 /* WFCUEmotionTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUEmotionTextAttachment.m; sourceTree = "<group>"; };
 		2F550F15217F5CC100F56C26 /* WFCULocationPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCULocationPoint.h; sourceTree = "<group>"; };
 		2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPluginItemView.m; sourceTree = "<group>"; };
 		2F550F17217F5CC100F56C26 /* WFCULocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCULocationViewController.h; sourceTree = "<group>"; };
 		2F550F18217F5CC100F56C26 /* WFCUChatInputBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUChatInputBar.m; sourceTree = "<group>"; };
 		2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPluginBoardView.m; sourceTree = "<group>"; };
-		2F550F1A217F5CC100F56C26 /* WFCUSelectFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSelectFileViewController.h; sourceTree = "<group>"; };
 		2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUEmotionTextAttachment.h; sourceTree = "<group>"; };
-		2F550F1C217F5CC100F56C26 /* WFCUSelectedFileCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSelectedFileCollectionViewCell.m; sourceTree = "<group>"; };
 		2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceRecordView.m; sourceTree = "<group>"; };
 		2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULocationPoint.m; sourceTree = "<group>"; };
 		2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCHMapTreeUtils.m; sourceTree = "<group>"; };
@@ -1392,10 +1384,6 @@
 				2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */,
 				2F550EF5217F5CC000F56C26 /* WFCUPluginItemView.h */,
 				2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */,
-				2F550EFA217F5CC000F56C26 /* WFCUSelectedFileCollectionViewCell.h */,
-				2F550F1C217F5CC100F56C26 /* WFCUSelectedFileCollectionViewCell.m */,
-				2F550F1A217F5CC100F56C26 /* WFCUSelectFileViewController.h */,
-				2F550EF6217F5CC000F56C26 /* WFCUSelectFileViewController.m */,
 				2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */,
 				2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */,
 			);
@@ -2128,7 +2116,6 @@
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
-				2F5510CD217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
@@ -2170,7 +2157,6 @@
 				2F5511EC217F5CC300F56C26 /* WFCUForwardMessageCell.h in Headers */,
 				2BDF579D24AD70C8003C1F08 /* UIView+DNImagePicker.h in Headers */,
 				2F551150217F5CC200F56C26 /* KZVideoListViewController.h in Headers */,
-				2F5510E9217F5CC200F56C26 /* WFCUSelectFileViewController.h in Headers */,
 				2F55118F217F5CC200F56C26 /* UIView+SDExtension.h in Headers */,
 				2BDF579624AD70C8003C1F08 /* DNAsset.h in Headers */,
 				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
@@ -2315,7 +2301,6 @@
 				2F55116D217F5CC200F56C26 /* AFNetworkReachabilityManager.m in Sources */,
 				2BDF57B324AD70C8003C1F08 /* DNAlbumCell.m in Sources */,
 				2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */,
-				2F5510EB217F5CC200F56C26 /* WFCUSelectedFileCollectionViewCell.m in Sources */,
 				2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */,
 				2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */,
 				2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */,
@@ -2478,7 +2463,6 @@
 				2F36433421C136C400904CAB /* WFCUFavChannelTableViewController.m in Sources */,
 				2F551220217F5CC300F56C26 /* WFCUMyProfileTableViewController.m in Sources */,
 				1450EA81243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.m in Sources */,
-				2F5510C9217F5CC200F56C26 /* WFCUSelectFileViewController.m in Sources */,
 				2BEF78A423F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.m in Sources */,
 				2F55120C217F5CC300F56C26 /* WFCUContactTableViewCell.m in Sources */,
 				2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */,
