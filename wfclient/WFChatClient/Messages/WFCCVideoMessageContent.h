@@ -31,5 +31,4 @@
  时长
 */
 @property (nonatomic, assign)long duration;
-
 @end
