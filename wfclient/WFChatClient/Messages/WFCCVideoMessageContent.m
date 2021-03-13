@@ -38,6 +38,7 @@
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:@(_duration) forKey:@"duration"];
+    [dict setObject:@(_duration) forKey:@"d"];
     payload.content = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:dict options:kNilOptions error:nil] encoding:NSUTF8StringEncoding];
     
     return payload;
@@ -57,6 +58,9 @@
                                                                      error:&__error];
         if (!__error) {
             self.duration = [dictionary[@"duration"] longValue];
+            if(self.duration == 0) {
+                self.duration = [dictionary[@"d"] longValue];
+            }
         }
     }
 }
