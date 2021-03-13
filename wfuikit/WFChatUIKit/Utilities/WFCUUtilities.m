@@ -269,4 +269,15 @@
     }
     return [UIImage imageNamed:fileImage];
 }
+
++ (NSString *)getUnduplicatedPath:(NSString *)path {
+    int count = 1;
+    NSString *fileName = [path stringByDeletingPathExtension];
+    NSString *fileExt = [path pathExtension];
+    while ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        path = [[NSString stringWithFormat:@"%@(%d)", fileName, count++] stringByAppendingPathExtension:fileExt];
+    }
+    
+    return path;
+}
 @end
