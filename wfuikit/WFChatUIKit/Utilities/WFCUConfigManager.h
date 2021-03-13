@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <WFChatClient/WFCChatClient.h>
 #import "WFCUAppServiceProvider.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -44,6 +45,10 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
 
 @property(nonatomic, strong)NSString *fileTransferId;
+
+@property(nonatomic, strong)NSString *conversationFilesDir;
+
+- (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
 @end
 
 NS_ASSUME_NONNULL_END

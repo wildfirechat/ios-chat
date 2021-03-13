@@ -9,6 +9,7 @@
 #import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
 
+
 static WFCUConfigManager *sharedSingleton = nil;
 @implementation WFCUConfigManager
 
@@ -17,6 +18,7 @@ static WFCUConfigManager *sharedSingleton = nil;
         @synchronized (self) {
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCUConfigManager alloc] init];
+                sharedSingleton.conversationFilesDir = @"ConversationResource";
             }
         }
     }
@@ -183,5 +185,30 @@ static WFCUConfigManager *sharedSingleton = nil;
         return [UIColor colorWithHexString:@"0xe7e7e7"];
     }
     
+}
+
+//file path document/conversationresource/conv_line/conv_type/conv_target/mediatype/
+- (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentDirectory stringByAppendingPathComponent:self.conversationFilesDir];
+    path = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%d/%d/%@", conversation.line, (int)conversation.type, conversation.target]];
+    
+    NSString *type = @"general";
+    if(mediaType == Media_Type_IMAGE) type = @"image";
+    else if(mediaType == Media_Type_VOICE) type = @"voice";
+    else if(mediaType == Media_Type_VIDEO) type = @"video";
+    else if(mediaType == Media_Type_PORTRAIT) type = @"portrait";
+    else if(mediaType == Media_Type_FAVORITE) type = @"favorite";
+    else if(mediaType == Media_Type_STICKER) type = @"sticker";
+    else if(mediaType == Media_Type_MOMENTS) type = @"moments";
+    
+    path = [path stringByAppendingPathComponent:type];
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return path;
 }
 @end

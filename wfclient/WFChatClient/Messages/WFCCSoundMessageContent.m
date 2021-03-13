@@ -13,28 +13,16 @@
 #import "Common.h"
 
 @implementation WFCCSoundMessageContent
-+ (instancetype)soundMessageContentForWav:(NSString *)wavPath duration:(long)duration {
++ (instancetype)soundMessageContentForWav:(NSString *)wavPath
+                       destinationAmrPath:(NSString *)amrPath
+                                 duration:(long)duration {
     WFCCSoundMessageContent *soundMsg = [[WFCCSoundMessageContent alloc] init];
     soundMsg.duration = duration;
-    
-    UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
-    
-    NSString *amrPath = [[WFCCUtilities getDocumentPathWithComponent:@"/Vioce"] stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.amr", recordTime]];
-    
     encode_amr([wavPath UTF8String], [amrPath UTF8String]);
     
     soundMsg.localPath = amrPath;
     
     return soundMsg;
-}
-
-- (void)updateAmrData:(NSData *)voiceData {
-    UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
-    
-    NSString *amrPath = [[WFCCUtilities getDocumentPathWithComponent:@"/Vioce"] stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.amr", recordTime]];
-    [voiceData writeToFile:amrPath atomically:YES];
-    
-    self.localPath = amrPath;
 }
 
 - (NSData *)getWavData {
