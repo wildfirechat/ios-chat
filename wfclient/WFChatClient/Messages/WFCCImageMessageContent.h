@@ -18,9 +18,11 @@
  构造方法
 
  @param image 图片
+ @param path 图片存储路径
+ 
  @return 图片消息
  */
-+ (instancetype)contentFrom:(UIImage *)image;
++ (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path;
 
 /**
  缩略图，自动生成
