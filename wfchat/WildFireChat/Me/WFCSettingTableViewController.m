@@ -227,7 +227,7 @@
         }
     } else if (indexPath.section == 5) {
         [self hiddenSeparatorLine:cell];
-        cell.textLabel.text = LocalizedString(@"Diagnose");
+        cell.textLabel.text = WFCString(@"Diagnose");
     } else if (indexPath.section == 6) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {

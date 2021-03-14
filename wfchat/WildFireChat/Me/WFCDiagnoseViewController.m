@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = LocalizedString(@"Diagnose");
+    self.title = WFCString(@"Diagnose");
     
     if (@available(iOS 13.0, *)) {
         self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];

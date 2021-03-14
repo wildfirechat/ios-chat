@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUMediaMessageDownloader.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUUtilities.h"
 
 @interface WFCUStickerCell ()
 @property (nonatomic, strong)UIImageView *thumbnailView;
@@ -33,7 +34,7 @@
     
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
     __weak typeof(self) weakSelf = self;
-    if (!stickerMsg.localPath.length) {
+    if (!stickerMsg.localPath.length || ![WFCUUtilities isFileExist:stickerMsg.localPath]) {
         BOOL downloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
             if (messageUid == weakSelf.model.message.messageUid) {
                 weakSelf.model.mediaDownloading = NO;
@@ -51,7 +52,7 @@
     }
     
     self.thumbnailView.frame = self.bubbleView.bounds;
-    if (stickerMsg.localPath.length) {
+    if (stickerMsg.localPath.length && [WFCUUtilities isFileExist:stickerMsg.localPath]) {
         [self.thumbnailView sd_setImageWithURL:[NSURL fileURLWithPath:stickerMsg.localPath]];
     } else {
         self.thumbnailView.image = nil;

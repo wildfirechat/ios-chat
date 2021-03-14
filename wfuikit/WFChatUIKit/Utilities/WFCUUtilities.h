@@ -18,4 +18,5 @@
 + (NSString *)formatSizeLable:(int64_t)size;
 + (UIImage *)imageForExt:(NSString *)extName;
 + (NSString *)getUnduplicatedPath:(NSString *)path;
++ (BOOL)isFileExist:(NSString *)filePath;
 @end

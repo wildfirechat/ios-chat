@@ -78,7 +78,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     }
     
     WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)msg.content;
-    if (mediaContent.localPath.length) {
+    if (mediaContent.localPath.length && [WFCUUtilities isFileExist:mediaContent.localPath]) {
         successBlock(msg.messageUid, mediaContent.localPath);
         return NO;
     }
