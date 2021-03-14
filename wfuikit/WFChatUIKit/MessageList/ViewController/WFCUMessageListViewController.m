@@ -80,6 +80,9 @@
 #import "WFCUPushToTalkViewController.h"
 #import "WFCUUploadBigFilesViewController.h"
 
+#import "WFCUUtilities.h"
+
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -1547,7 +1550,7 @@
         self.playingMessageId = model.message.messageId;
         
         WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)model.message.content;
-        if (soundContent.localPath.length == 0) {
+        if (soundContent.localPath.length == 0 || ![WFCUUtilities isFileExist:soundContent.localPath]) {
             __weak typeof(self) weakSelf = self;
             
             BOOL isDownloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
@@ -1775,7 +1778,7 @@
             [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
         }
         
-        if (videoMsg.localPath.length == 0) {
+        if (videoMsg.localPath.length == 0 || ![WFCUUtilities isFileExist:videoMsg.localPath]) {
             model.mediaDownloading = YES;
             __weak typeof(self) weakSelf = self;
             
@@ -2306,7 +2309,7 @@
 }
 
 - (void)saveStickerRemoteUrl:(WFCCStickerMessageContent *)stickerContent {
-    if (stickerContent.localPath.length && stickerContent.remoteUrl.length) {
+    if (stickerContent.localPath.length && [WFCUUtilities isFileExist:stickerContent.localPath] && stickerContent.remoteUrl.length) {
         [[NSUserDefaults standardUserDefaults] setObject:stickerContent.remoteUrl forKey:[NSString stringWithFormat:@"sticker_remote_for_%ld", stickerContent.localPath.hash]];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
