@@ -63,7 +63,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 #import <WFChatUIKit/BubbleTipView.h>
 #import <WFChatUIKit/UITabBar+badge.h>
-
+#import <WFChatUIKit/Predefine.h>
 #import <WFChatUIKit/WFCUUtilities.h>
 
 #import <WFChatUIKit/WFCUFavChannelTableViewController.h>

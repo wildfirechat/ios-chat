@@ -61,6 +61,7 @@
 		2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BBC9CFB255D0007007DA28A /* WFCUConversationFilesViewController.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
+		2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551036217F5CC100F56C26 /* Predefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */; };
 		2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */; };
 		2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D72324D69B5300281B81 /* WFCUFilesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1983,6 +1984,7 @@
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
+				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
 				2B07312725DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2B07313125DDE927005EE603 /* WFCUPushToTalkViewController.h in Headers */,
