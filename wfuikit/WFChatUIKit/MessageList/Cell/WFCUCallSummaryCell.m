@@ -65,25 +65,55 @@
     } else {
 #if WFCU_SUPPORT_VOIP
         switch (startContent.status) {
+            case kWFAVCallEndReasonUnknown:
+                text = @"未接通";
+                break;
+            case kWFAVCallEndReasonBusy:
+                text = @"线路忙";
+                break;
+            case kWFAVCallEndReasonSignalError:
+                text = @"网络错误";
+                break;
+            case kWFAVCallEndReasonHangup:
+                text = @"已拒绝";
+                break;
+            case kWFAVCallEndReasonMediaError:
+                text = @"网络错误";
+                break;
+            case kWFAVCallEndReasonRemoteHangup:
+                text = @"对方已拒绝";
+            case kWFAVCallEndReasonOpenCameraFailure:
+                text = @"网络错误";
+                break;
+            case kWFAVCallEndReasonTimeout:
+                text = @"未接听";
+                break;
             case kWFAVCallEndReasonAcceptByOtherClient:
                 text = @"其它端已接听";
                 break;
-            case kWFAVCallEndReasonBusy:
+            case kWFAVCallEndReasonAllLeft:
+                text = @"通话已结束";
+                break;
             case kWFAVCallEndReasonRemoteBusy:
-                text = @"线路忙";
+                text = @"对方线路忙";
                 break;
             case kWFAVCallEndReasonRemoteTimeout:
                 text = @"对方未接听";
                 break;
             case kWFAVCallEndReasonRemoteNetworkError:
-                text = @"网络错误";
+                text = @"对方网络错误";
                 break;
-                
+            case kWFAVCallEndReasonRoomDestroyed:
+                text = @"通话已结束";
+                break;
+            case kWFAVCallEndReasonRoomNotExist:
+                text = @"通话已结束";
+                break;
+            case kWFAVCallEndReasonRoomParticipantsFull:
+                text = @"已达到最大参与人数";
+                break;
             default:
                 break;
-        }
-        if ([WFAVEngineKit sharedEngineKit].supportMultiCall && (startContent.status == kWFAVCallEndReasonRemoteHangup)) {
-            text = @"对方已拒绝";
         }
 #endif
     }
