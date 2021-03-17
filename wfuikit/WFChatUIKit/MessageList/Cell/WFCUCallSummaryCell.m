@@ -75,13 +75,13 @@
                 text = @"网络错误";
                 break;
             case kWFAVCallEndReasonHangup:
-                text = @"已拒绝";
+                text = @"已取消";
                 break;
             case kWFAVCallEndReasonMediaError:
                 text = @"网络错误";
                 break;
             case kWFAVCallEndReasonRemoteHangup:
-                text = @"对方已拒绝";
+                text = @"对方已取消";
             case kWFAVCallEndReasonOpenCameraFailure:
                 text = @"网络错误";
                 break;
