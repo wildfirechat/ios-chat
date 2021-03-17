@@ -82,6 +82,7 @@
                 break;
             case kWFAVCallEndReasonRemoteHangup:
                 text = @"对方已取消";
+                break;
             case kWFAVCallEndReasonOpenCameraFailure:
                 text = @"网络错误";
                 break;
