@@ -336,6 +336,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)clearAllUnreadStatus DEPRECATED_MSG_ATTRIBUTE("use clearUnreadStatus:lines: instead");
 
 /**
+ 清空消息未读。
+ 
+ @param messageId 消息ID
+ @discuss 这个函数只能清除本地的状态，不能同步到服务器或者其他端。建议一般情况下不要用这个接口。
+ */
+- (void)clearMessageUnreadStatus:(long)messageId;
+
+/**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
  
  @param messageId 消息ID
