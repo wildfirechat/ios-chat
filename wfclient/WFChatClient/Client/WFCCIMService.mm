@@ -1073,6 +1073,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->ClearAllUnreadStatus();
 }
 
+- (void)clearMessageUnreadStatus:(long)messageId {
+    if(messageId) {
+        mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId);
+    }
+}
 
 - (void)setMediaMessagePlayed:(long)messageId {
     WFCCMessage *message = [self getMessage:messageId];
