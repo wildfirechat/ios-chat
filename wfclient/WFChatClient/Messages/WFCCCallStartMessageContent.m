@@ -71,7 +71,7 @@
 }
 
 + (int)getContentFlags {
-    return WFCCPersistFlag_PERSIST;
+    return WFCCPersistFlag_PERSIST_AND_COUNT;
 }
 
 + (void)load {
