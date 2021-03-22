@@ -18,7 +18,7 @@
 @property(nonatomic, strong)NSString *secret;
 @property(nonatomic, strong)NSString *callback;
 
-//0 public; 1 private; 2 destoryed
+//https://docs.wildfirechat.net/base_knowledge/channel.html##频道状态
 @property(nonatomic, assign)int status;
 @property(nonatomic, assign)long long updateDt;
 @end
