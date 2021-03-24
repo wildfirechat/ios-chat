@@ -773,16 +773,18 @@
             self.connectTimeLabel.hidden = YES;
             self.hangupButton.hidden = NO;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
-            self.switchCameraButton.hidden = YES;
+            
+            self.audioButton.frame = [self getButtomLeftButtonFrame];
+            self.audioButton.hidden = NO;
             if (self.currentSession.isAudioOnly) {
-                self.speakerButton.hidden = YES;
+                self.speakerButton.hidden = NO;
+                self.switchCameraButton.hidden = YES;
                 [self updateSpeakerButton];
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
-                self.audioButton.hidden = YES;
-                self.audioButton.frame = [self getButtomLeftButtonFrame];
             } else {
                 self.speakerButton.hidden = YES;
-                self.audioButton.hidden = YES;
+                self.switchCameraButton.hidden = NO;
+                self.switchCameraButton.frame = [self getButtomRightButtonFrame];
             }
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
@@ -801,12 +803,24 @@
         case kWFAVEngineStateConnecting:
             self.answerButton.hidden = YES;
             self.hangupButton.hidden = NO;
-            self.speakerButton.hidden = YES;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
-            self.switchCameraButton.hidden = YES;
-            self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
+            self.audioButton.frame = [self getButtomLeftButtonFrame];
+            self.audioButton.hidden = NO;
+            self.audioButton.enabled = NO;
+            if (self.currentSession.isAudioOnly) {
+                self.speakerButton.hidden = NO;
+                self.speakerButton.enabled = NO;
+                self.switchCameraButton.hidden = YES;
+                self.speakerButton.frame = [self getButtomRightButtonFrame];
+            } else {
+                self.speakerButton.hidden = YES;
+                self.switchCameraButton.hidden = NO;
+                self.switchCameraButton.enabled = NO;
+                self.switchCameraButton.frame = [self getButtomRightButtonFrame];
+            }
+            
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             if (self.currentSession.audioOnly) {
                 self.smallCollectionView.hidden = YES;
@@ -831,20 +845,21 @@
             self.connectTimeLabel.hidden = NO;
             self.stateLabel.hidden = YES;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
+            self.audioButton.hidden = NO;
+            self.audioButton.enabled = YES;
+            self.audioButton.frame = [self getButtomLeftButtonFrame];
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
+                self.speakerButton.enabled = YES;
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
                 [self updateSpeakerButton];
-                self.audioButton.hidden = NO;
-                self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = YES;
                 self.videoButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
                 [self.currentSession enableSpeaker:YES];
-                self.audioButton.hidden = NO;
-                self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = NO;
+                self.switchCameraButton.enabled = YES;
                 self.switchCameraButton.frame = [self getButtomRightButtonFrame];
                 self.videoButton.hidden = NO;
             }
