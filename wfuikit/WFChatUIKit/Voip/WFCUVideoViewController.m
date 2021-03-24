@@ -584,17 +584,19 @@
             self.answerButton.hidden = YES;
             self.hangupButton.hidden = NO;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
-            self.switchCameraButton.hidden = YES;
+            self.audioButton.frame = [self getButtomLeftButtonFrame];
+            
             if (self.currentSession.isAudioOnly) {
-                self.speakerButton.hidden = YES;
                 [self updateSpeakerButton];
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
-                self.audioButton.hidden = YES;
-                self.audioButton.frame = [self getButtomLeftButtonFrame];
+                self.speakerButton.hidden = NO;
+                self.switchCameraButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
-                self.audioButton.hidden = YES;
+                self.switchCameraButton.frame = [self getButtomRightButtonFrame];
+                self.switchCameraButton.hidden = NO;
             }
+            self.audioButton.hidden = NO;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
@@ -613,8 +615,19 @@
             self.hangupButton.hidden = NO;
             self.speakerButton.hidden = YES;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
+            self.audioButton.frame = [self getButtomLeftButtonFrame];
             self.switchCameraButton.hidden = YES;
-            self.audioButton.hidden = YES;
+            self.audioButton.hidden = NO;
+            self.audioButton.enabled = NO;
+            if (self.currentSession.isAudioOnly) {
+                self.speakerButton.hidden = NO;
+                self.speakerButton.enabled = NO;
+                self.speakerButton.frame = [self getButtomRightButtonFrame];
+            } else {
+                self.switchCameraButton.hidden = NO;
+                self.switchCameraButton.enabled = NO;
+                self.switchCameraButton.frame = [self getButtomRightButtonFrame];
+            }
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             self.swapVideoView = NO;
@@ -626,19 +639,21 @@
             self.answerButton.hidden = YES;
             self.hangupButton.hidden = NO;
             self.hangupButton.frame = [self getButtomCenterButtonFrame];
+            self.audioButton.hidden = NO;
+            self.audioButton.enabled = YES;
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
+                self.speakerButton.enabled = YES;
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
                 [self updateSpeakerButton];
-                self.audioButton.hidden = NO;
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
                 [self.currentSession enableSpeaker:YES];
-                self.audioButton.hidden = NO;
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = NO;
+                self.switchCameraButton.enabled = YES;
                 self.switchCameraButton.frame = [self getButtomRightButtonFrame];
             }
             self.videoButton.hidden = YES;
