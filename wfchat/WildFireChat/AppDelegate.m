@@ -499,62 +499,73 @@
 #if WFCU_SUPPORT_VOIP
 #pragma mark - WFAVEngineDelegate
 - (void)didReceiveCall:(WFAVCallSession *)session {
-    UIViewController *videoVC;
-    if (session.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
-        videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:session];
-    } else {
-        videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
-    }
-    
-    [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        UILocalNotification *localNote = [[UILocalNotification alloc] init];
+    //收到来电通知后等待200毫秒，检查session有效后再弹出通知。原因是当当前用户不在线时如果有人来电并挂断，当前用户再连接后，会出现先弹来电界面，再消失的画面。
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIncomming) {
+            return;
+        }
         
-        localNote.alertBody = @"来电话了";
+        UIViewController *videoVC;
+        if (session.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+            videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:session];
+        } else {
+            videoVC = [[WFCUVideoViewController alloc] initWithSession:session];
+        }
         
-            WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.participantIds[0] refresh:NO];
-            if (sender.displayName) {
-                if (@available(iOS 8.2, *)) {
-                    localNote.alertTitle = sender.displayName;
-                } else {
-                    // Fallback on earlier versions
-                    
+        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+            UILocalNotification *localNote = [[UILocalNotification alloc] init];
+            
+            localNote.alertBody = @"来电话了";
+            
+                WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.participantIds[0] refresh:NO];
+                if (sender.displayName) {
+                    if (@available(iOS 8.2, *)) {
+                        localNote.alertTitle = sender.displayName;
+                    } else {
+                        // Fallback on earlier versions
+                        
+                    }
                 }
-            }
-        
-        localNote.soundName = @"ring.caf";
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
-        });
-    }
+            
+            localNote.soundName = @"ring.caf";
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
+            });
+        }
+    });
+    
 }
 
 - (void)shouldStartRing:(BOOL)isIncoming {
-    
-    if([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, systemAudioCallback, NULL);
-        AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
-    } else {
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        //默认情况按静音或者锁屏键会静音
-        [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:nil];
-        [audioSession setActive:YES error:nil];
-        
-        if (self.audioPlayer) {
-            [self shouldStopRing];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
+            if([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, systemAudioCallback, NULL);
+                AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
+            } else {
+                AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+                //默认情况按静音或者锁屏键会静音
+                [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:nil];
+                [audioSession setActive:YES error:nil];
+                
+                if (self.audioPlayer) {
+                    [self shouldStopRing];
+                }
+                
+                NSURL *url = [[NSBundle mainBundle] URLForResource:@"ring" withExtension:@"mp3"];
+                NSError *error = nil;
+                self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+                if (!error) {
+                    self.audioPlayer.numberOfLoops = -1;
+                    self.audioPlayer.volume = 1.0;
+                    [self.audioPlayer prepareToPlay];
+                    [self.audioPlayer play];
+                }
+            }
         }
-        
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"ring" withExtension:@"mp3"];
-        NSError *error = nil;
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        if (!error) {
-            self.audioPlayer.numberOfLoops = -1;
-            self.audioPlayer.volume = 1.0;
-            [self.audioPlayer prepareToPlay];
-            [self.audioPlayer play];
-        }
-    }
+    });
 }
 
 void systemAudioCallback (SystemSoundID soundID, void* clientData) {
