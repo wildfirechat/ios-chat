@@ -710,6 +710,10 @@
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
     }];
+    
+    if(self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarEmojiStatus) {
+        _inputBarStatus = ChatInputBarDefaultStatus;
+    }
 }
 
 -(void)keyboardDidHide:(NSNotification *)notification{
