@@ -753,6 +753,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     return;
   }
   [self reportEvent_OnForeground:YES];
+  mars::baseevent::OnNetworkChange();
   mars::stn::MakesureLonglinkConnected();
   [self endBgTask];
 }
