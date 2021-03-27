@@ -181,7 +181,7 @@
         [[WFAVEngineKit sharedEngineKit] startPreview];
     }
     
-    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.initiator inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.inviter inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
@@ -1138,6 +1138,10 @@
     [self reloadVideoUI];
     
     return canSwitch;
+}
+
+- (void)didChangeInitiator:(NSString *_Nullable)initiator {
+    NSLog(@"didChangeInitiator:%@", initiator);
 }
 
 #pragma mark - UICollectionViewDataSource

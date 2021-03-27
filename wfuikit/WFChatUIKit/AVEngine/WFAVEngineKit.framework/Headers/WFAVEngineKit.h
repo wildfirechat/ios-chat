@@ -417,6 +417,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, strong, readonly) NSString *clientId;
 
 /**
+邀请者用户ID，与initiator的区别是：initiator是当前通话的管理者，全局只有同一个用户，如果initiator退出，会选举出新的initiator；
+ inviter为邀请当前用户的邀请者，一直保持不变。
+*/
+@property(nonatomic, strong, readonly) NSString * _Nullable inviter;
+
+/**
  通话Session的事件监听
  */
 @property(nonatomic, weak)id<WFAVCallSessionDelegate> delegate;
