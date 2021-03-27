@@ -92,7 +92,7 @@ static WFCCNetworkStatus * sharedSingleton = nil;
     
     SCNetworkConnectionFlags connFlags = [self connFlags];
    
-    if(m_delWFCNetworkStatus != nil && connFlags != 0) {
+    if(m_delWFCNetworkStatus != nil) {
         [m_delWFCNetworkStatus ReachabilityChange:connFlags];
     }
 

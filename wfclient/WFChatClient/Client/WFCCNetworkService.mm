@@ -1060,7 +1060,10 @@ static WFCCNetworkService * sharedSingleton = nil;
 #pragma mark WFCCNetworkStatusDelegate
 -(void) ReachabilityChange:(UInt32)uiFlags {
     if ((uiFlags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {
-        mars::baseevent::OnNetworkChange();
+            mars::baseevent::OnNetworkChange();
+    } else if(!uiFlags) {
+        if(self.currentConnectionStatus == kConnectionStatusConnected)
+            mars::baseevent::OnNetworkChange();
     }
 }
 
