@@ -42,6 +42,7 @@
 #endif
     UNUserNotificationCenterDelegate, QrCodeDelegate>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property(nonatomic, strong) UILocalNotification *localCallNotification;
 @end
 
 @implementation AppDelegate
@@ -514,25 +515,27 @@
         
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-            UILocalNotification *localNote = [[UILocalNotification alloc] init];
+            self.localCallNotification = [[UILocalNotification alloc] init];
             
-            localNote.alertBody = @"来电话了";
+            self.localCallNotification.alertBody = @"来电话了";
             
                 WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.participantIds[0] refresh:NO];
                 if (sender.displayName) {
                     if (@available(iOS 8.2, *)) {
-                        localNote.alertTitle = sender.displayName;
+                        self.localCallNotification.alertTitle = sender.displayName;
                     } else {
                         // Fallback on earlier versions
                         
                     }
                 }
             
-            localNote.soundName = @"ring.caf";
+            self.localCallNotification.soundName = @"ring.caf";
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
+                [[UIApplication sharedApplication] scheduleLocalNotification:self.localCallNotification];
             });
+        } else {
+            self.localCallNotification = nil;
         }
     });
     
@@ -584,6 +587,10 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         self.audioPlayer = nil;
         [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     }
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground && self.localCallNotification) {
+        [[UIApplication sharedApplication] cancelLocalNotification:self.localCallNotification];
+    }
+    self.localCallNotification = nil;
 }
 #endif
 #pragma mark - UNUserNotificationCenterDelegate
