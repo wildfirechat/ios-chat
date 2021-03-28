@@ -176,6 +176,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 - (void)shouldStopRing;
 
+/**
+ 电话终止，一般用于未接听或者挂掉时的通知使用，UI界面需要根据CallSession的回调判断电话终止。
+ */
+- (void)didCallEnded:(WFAVCallEndReason) reason duration:(int)callDuration;
 @end
 
 /**
