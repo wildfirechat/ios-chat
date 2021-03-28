@@ -519,7 +519,7 @@
             
             self.localCallNotification.alertBody = @"来电话了";
             
-                WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.participantIds[0] refresh:NO];
+                WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.inviter refresh:NO];
                 if (sender.displayName) {
                     if (@available(iOS 8.2, *)) {
                         self.localCallNotification.alertTitle = sender.displayName;
@@ -587,11 +587,40 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         self.audioPlayer = nil;
         [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     }
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground && self.localCallNotification) {
-        [[UIApplication sharedApplication] cancelLocalNotification:self.localCallNotification];
-    }
-    self.localCallNotification = nil;
 }
+
+- (void)didCallEnded:(WFAVCallEndReason)reason duration:(int)callDuration {
+    //在后台时，如果电话挂断，清除掉来电通知，如果未接听超时或者未接通对方挂掉，弹出结束本地通知。
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        if(self.localCallNotification) {
+            [[UIApplication sharedApplication] cancelLocalNotification:self.localCallNotification];
+            self.localCallNotification = nil;
+        }
+        
+        if(reason == kWFAVCallEndReasonTimeout || (reason == kWFAVCallEndReasonRemoteHangup && callDuration == 0)) {
+            UILocalNotification *callEndNotification = [[UILocalNotification alloc] init];
+            if(reason == kWFAVCallEndReasonTimeout) {
+                callEndNotification.alertBody = @"来电未接听";
+            } else {
+                callEndNotification.alertBody = @"来电已取消";
+            }
+            if (@available(iOS 8.2, *)) {
+                self.localCallNotification.alertTitle = @"网络通话";
+                if([WFAVEngineKit sharedEngineKit].currentSession.inviter) {
+                    WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFAVEngineKit sharedEngineKit].currentSession.inviter refresh:NO];
+                    if (sender.displayName) {
+                        self.localCallNotification.alertTitle = sender.displayName;
+                    }
+                }
+            }
+            
+            //应该播放挂断的声音
+//            self.localCallNotification.soundName = @"ring.caf";
+            [[UIApplication sharedApplication] scheduleLocalNotification:callEndNotification];
+        }
+    }
+}
+
 #endif
 #pragma mark - UNUserNotificationCenterDelegate
 //将要推送
