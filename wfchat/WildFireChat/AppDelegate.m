@@ -499,6 +499,7 @@
 
 #if WFCU_SUPPORT_VOIP
 #pragma mark - WFAVEngineDelegate
+//voip 当可以使用pushkit时，如果有来电或者结束，会唤起应用，收到来电通知/电话结束通知，弹出通知。
 - (void)didReceiveCall:(WFAVCallSession *)session {
     //收到来电通知后等待200毫秒，检查session有效后再弹出通知。原因是当当前用户不在线时如果有人来电并挂断，当前用户再连接后，会出现先弹来电界面，再消失的画面。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -622,6 +623,56 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 }
 
 #endif
+
+//voip 当无法使用pushkit时，需要使用backgroup推送，在这里弹出来电通知和取消来电通知
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    if([userInfo[@"voip"] boolValue]) {
+        if([userInfo[@"voip_type"] intValue] == 1) { //incomming call
+            NSDictionary *aps = userInfo[@"aps"];
+            if(aps && aps[@"alert"]) {
+                NSString *title = aps[@"alert"][@"title"];
+                NSString *body = aps[@"alert"][@"body"];
+                NSString *sound = aps[@"sound"];
+                
+                self.localCallNotification = [[UILocalNotification alloc] init];
+                
+                self.localCallNotification.alertBody = body;
+                if (@available(iOS 8.2, *)) {
+                    self.localCallNotification.alertTitle = title;
+                } else {
+                    // Fallback on earlier versions
+                }
+                
+                self.localCallNotification.soundName = @"ring.caf";
+                [[UIApplication sharedApplication] scheduleLocalNotification:self.localCallNotification];
+            }
+        } else if([userInfo[@"voip_type"] intValue] == 2) {
+            if(self.localCallNotification) {
+                [[UIApplication sharedApplication] cancelLocalNotification:self.localCallNotification];
+                self.localCallNotification = nil;
+            }
+            
+            NSDictionary *aps = userInfo[@"aps"];
+            if(aps && aps[@"alert"]) {
+                NSString *title = aps[@"alert"][@"title"];
+                NSString *body = aps[@"alert"][@"body"];
+                NSString *sound = aps[@"sound"];
+                UILocalNotification *callEndNotification = [[UILocalNotification alloc] init];
+                callEndNotification.alertBody = body;
+                    
+                if (@available(iOS 8.2, *)) {
+                    self.localCallNotification.alertTitle = title;
+                }
+                    
+                    //应该播放挂断的声音
+        //            self.localCallNotification.soundName = @"ring.caf";
+                [[UIApplication sharedApplication] scheduleLocalNotification:callEndNotification];
+            }
+        }
+    }
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
 #pragma mark - UNUserNotificationCenterDelegate
 //将要推送
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(ios(10.0)){
