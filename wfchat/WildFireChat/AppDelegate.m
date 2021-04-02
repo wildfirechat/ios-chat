@@ -516,6 +516,9 @@
         
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+            if(self.localCallNotification) {
+                [[UIApplication sharedApplication] scheduleLocalNotification:self.localCallNotification];
+            }
             self.localCallNotification = [[UILocalNotification alloc] init];
             
             self.localCallNotification.alertBody = @"来电话了";
