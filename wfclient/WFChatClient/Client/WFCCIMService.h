@@ -124,6 +124,12 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Lines_Readed = 16,
     //不能直接使用
     UserSettingScope_No_Disturbing = 17,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Conversation_Clear_Message = 18,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Conversation_Draft = 19,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Disable_Sync_Draft = 20,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -294,6 +300,17 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @return 会话中最早一条未读消息Id
  */
 - (long)getFirstUnreadMessageId:(WFCCConversation *)conversation;
+
+/**
+ 清除远端会话消息，仅专业版支持。
+ 
+ @param conversation 会话
+ @param successBlock 删除成功
+ @param errorBlock 删除失败
+ */
+- (void)clearRemoteConversationMessage:(WFCCConversation *)conversation
+                               success:(void(^)(void))successBlock
+                                 error:(void(^)(int error_code))errorBlock;
 
 #pragma mark - 未读数相关
 /**
@@ -730,6 +747,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @return YES支持大文件上传，调用getUploadUrl:getUploadUrl:success:error:方法获取到上传url，然后再在应用层上传。
  */
 - (BOOL)isSupportBigFilesUpload;
+
 /**
  删除消息
  
@@ -737,6 +755,17 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @return 是否删除成功
  */
 - (BOOL)deleteMessage:(long)messageId;
+
+/**
+ 删除远端消息，仅专业版支持。
+ 
+ @param messageUid 消息UID
+ @param successBlock 删除成功
+ @param errorBlock 删除失败
+ */
+- (void)deleteRemoteMessage:(long long)messageUid
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock;
 
 /**
  删除会话中的消息
@@ -1391,18 +1420,36 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 @return YES，当前用户全局静音；NO，没有全局静音
 */
-- (BOOL)isGlobalSlient;
+- (BOOL)isGlobalSilent;
 
 /**
 修改全局静音状态
 
-@param slient 是否静音
+@param silent 是否静音
 @param successBlock 成功的回调
 @param errorBlock 失败的回调
 */
-- (void)setGlobalSlient:(BOOL)slient
+- (void)setGlobalSilent:(BOOL)silent
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+是否开启草稿同步
+
+@return YES，同步；NO，不同步
+*/
+- (BOOL)isEnableSyncDraft;
+
+/**
+修改是否开启草稿同步
+
+@param enable 是否同步
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)setEnableSyncDraft:(BOOL)enable
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock;
 
 /**
 获取免打扰时间
