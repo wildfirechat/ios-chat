@@ -1155,6 +1155,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return mars::stn::MessageDB::Instance()->GetConversationFirstUnreadMessageId((int)conversation.type, [conversation.target UTF8String], conversation.line);
 }
 
+- (void)clearRemoteConversationMessage:(WFCCConversation *)conversation
+                               success:(void(^)(void))successBlock
+                                 error:(void(^)(int error_code))errorBlock {
+    mars::stn::clearRemoteConversationMessages(conversation.type, [conversation.target UTF8String], conversation.line, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 class IMSearchUserCallback : public mars::stn::SearchUserCallback {
 private:
     void(^m_successBlock)(NSArray<WFCCUserInfo *> *machedUsers);
@@ -1583,15 +1589,34 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::modifyMyInfo(infos, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
-- (BOOL)isGlobalSlient {
+- (BOOL)isGlobalSilent {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Global_Silent key:@""];
     return [strValue isEqualToString:@"1"];
 }
 
-- (void)setGlobalSlient:(BOOL)slient
+- (void)setGlobalSilent:(BOOL)silent
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
-    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Global_Silent key:@"" value:slient?@"1":@"0" success:^{
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Global_Silent key:@"" value:silent?@"1":@"0" success:^{
+        if (successBlock) {
+            successBlock();
+        }
+    } error:^(int error_code) {
+        if (errorBlock) {
+            errorBlock(error_code);
+        }
+    }];
+}
+
+- (BOOL)isEnableSyncDraft {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Disable_Sync_Draft key:@""];
+    return [strValue isEqualToString:@"1"];
+}
+
+- (void)setEnableSyncDraft:(BOOL)enable
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Disable_Sync_Draft key:@"" value:enable?@"1":@"0" success:^{
         if (successBlock) {
             successBlock();
         }
@@ -1695,6 +1720,12 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (BOOL)deleteMessage:(long)messageId {
     return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;
+}
+
+- (void)deleteRemoteMessage:(long long)messageUid
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock  {
+    mars::stn::deleteRemoteMessage(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
