@@ -447,6 +447,10 @@ namespace mars{
             kUserSettingFavouriteUser = 14,
             kUserSettingMuteWhenPCOnline = 15,
             kUserSettingLinesReaded = 16,
+            kUserSettingNoDisturbing = 17,
+            kUserSettingConversationClearMessage = 18,
+            kUserSettingConversationDraft = 19,
+            kUserSettingEnableSyncDraft = 20,
 
             kUserSettingCustomBegin = 1000
         };
@@ -810,6 +814,8 @@ namespace mars{
         extern void loadRemoteConversationMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
         extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+    
+        extern void clearRemoteConversationMessages(int conversationType, const std::string &target, int line, GeneralOperationCallback *callback);
 
         extern void loadConversationFileRecords(const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
         extern void loadMyFileRecords(long long beforeUid, int count, LoadFileRecordCallback *callback);
