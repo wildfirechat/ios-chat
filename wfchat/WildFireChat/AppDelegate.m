@@ -314,7 +314,7 @@
         }
         
         //全局静音
-        if ([[WFCCIMService sharedWFCIMService] isGlobalSlient]) {
+        if ([[WFCCIMService sharedWFCIMService] isGlobalSilent]) {
             return;
         }
         
