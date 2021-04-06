@@ -2550,10 +2550,10 @@
     [self.chatInputBar paste:sender];
 }
 
-- (void)deleteMessageUI:(WFCCMessage *)message {
+- (void)deleteMessageUI:(long long)messageId {
     for (int i = 0; i < self.modelList.count; i++) {
         WFCUMessageModel *model = [self.modelList objectAtIndex:i];
-        if (model.message.messageUid == message.messageUid) {
+        if (model.message.messageId == messageId) {
             [self.modelList removeObject:model];
             [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
             break;
@@ -2561,11 +2561,48 @@
     }
 }
 
+- (void)deleteMessage:(long)messageId {
+    [[WFCCIMService sharedWFCIMService] deleteMessage:messageId];
+    [self deleteMessageUI:messageId];
+}
+
 -(void)performDelete:(UIMenuController *)sender {
-    __weak typeof(self)ws = self;
     WFCCMessage *message = self.cell4Menu.model.message;
-    [[WFCCIMService sharedWFCIMService] deleteMessage:message.messageId];
-    [ws deleteMessageUI:message];
+    if([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+        __weak typeof(self)weakSelf = self;
+
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ConfirmDelete") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+        }];
+        
+        UIAlertAction *actionLocalDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteLocalMsg") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf deleteMessage:message.messageId];
+        }];
+        
+        UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+            hud.label.text = WFCString(@"Deleting");
+            [hud showAnimated:YES];
+            [[WFCCIMService sharedWFCIMService] deleteRemoteMessage:message.messageUid success:^{
+                [weakSelf deleteMessageUI:message.messageId];
+                [hud hideAnimated:YES];
+            } error:^(int error_code) {
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"DeleteFailed");
+                [hud hideAnimated:YES afterDelay:1.f];
+            }];
+        }];
+        
+        [actionSheet addAction:actionLocalDelete];
+        [actionSheet addAction:actionRemoteDelete];
+        [actionSheet addAction:actionCancel];
+        
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    } else {
+        [self deleteMessage:message.messageId];
+    }
 }
 
 -(void)performCopy:(UIMenuItem *)sender {

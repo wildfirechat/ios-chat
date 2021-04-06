@@ -72,6 +72,10 @@
 "Blacklist"="Black list";
 "MsgReceipt"="Message receipt";
 "Delete"="Delete";
+"Deleting"="Deleting";
+"DeleteLocalMsg"="Only delete local message";
+"DeleteRemoteMsg"="Delete remote message also";
+"DeleteFailed"="Delete failed";
 "SearchContact"="Search contact";
 "NumberOfContacts"="%d contact(s)";
 "NewFriend"="New friend";
