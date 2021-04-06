@@ -72,6 +72,10 @@
 "Blacklist"="黑名单";
 "MsgReceipt"="消息回执";
 "Delete"="删除";
+"Deleting"="删除中";
+"DeleteLocalMsg"="仅删除本地消息";
+"DeleteRemoteMsg"="删除服务器及其他端消息";
+"DeleteFailed"="删除失败";
 "SearchContact"="搜索联系人";
 "NumberOfContacts"="%d 位联系人";
 "NewFriend"="新朋友";
