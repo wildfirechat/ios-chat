@@ -165,6 +165,7 @@
 "NewMessageNotification"="新消息通知";
 "ReceiveNewMessageNotification"="接收新消息通知";
 "NotificationShowMessageDetail"="通知显示消息详情";
+"SyncDraft"="同步草稿";
 "ModifyEmail"="修改邮箱";
 "ModifyMobile"="修改电话";
 "ModifySocialAccount"="修改社交账号";

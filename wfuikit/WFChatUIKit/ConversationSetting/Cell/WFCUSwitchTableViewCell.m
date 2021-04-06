@@ -86,6 +86,13 @@
                 
             }];
             break;
+        case SwitchType_Setting_Sync_Draft:
+            [[WFCCIMService sharedWFCIMService] setEnableSyncDraft:value success:^{
+                
+            } error:^(int error_code) {
+                
+            }];
+            break;
         default:
             break;
     }
@@ -114,6 +121,10 @@
             value = ![[WFCCIMService sharedWFCIMService] isHiddenNotificationDetail];
             break;
         }
+        case SwitchType_Setting_Sync_Draft: {
+            value = [[WFCCIMService sharedWFCIMService] isEnableSyncDraft];
+            break;
+        }
         case SwitchType_Conversation_Show_Alias: {
             value = ![[WFCCIMService sharedWFCIMService] isHiddenGroupMemberName:_conversation.target];
             break;
@@ -130,7 +141,7 @@
 
 - (void)setType:(SwitchType)type {
     _type = type;
-    if (_conversation || type == SwitchType_Setting_Global_Silent || type == SwitchType_Setting_Show_Notification_Detail) {
+    if (_conversation || type == SwitchType_Setting_Global_Silent || type == SwitchType_Setting_Show_Notification_Detail || type == SwitchType_Setting_Sync_Draft) {
         [self updateView];
     }
 }
