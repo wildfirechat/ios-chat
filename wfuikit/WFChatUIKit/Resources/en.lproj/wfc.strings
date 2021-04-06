@@ -165,6 +165,7 @@
 "NewMessageNotification"="New message notification";
 "ReceiveNewMessageNotification"="Receive new message notification";
 "NotificationShowMessageDetail"="Notification show message detail";
+"SyncDraft"="Sync draft";
 "ModifyEmail"="Modify email";
 "ModifyMobile"="Modify mobile";
 "ModifySocialAccount"="Modify social account";

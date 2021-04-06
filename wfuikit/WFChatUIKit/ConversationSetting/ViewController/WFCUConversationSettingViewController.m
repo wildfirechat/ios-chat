@@ -327,7 +327,7 @@
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
     }];
-    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:WFCString(@"Delete") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionLocalDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteLocalMsg") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[WFCCIMService sharedWFCIMService] clearMessages:self.conversation];
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
             hud.label.text = WFCString(@"Deleted");
@@ -338,8 +338,32 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kMessageListChanged object:weakSelf.conversation];
     }];
     
+    UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+        hud.label.text = WFCString(@"Deleting");
+        [hud showAnimated:YES];
+        
+        [[WFCCIMService sharedWFCIMService] clearRemoteConversationMessage:weakSelf.conversation success:^{
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
+            hud.label.text = WFCString(@"Deleted");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMessageListChanged object:weakSelf.conversation];
+        } error:^(int error_code) {
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:NO];
+            hud.label.text = WFCString(@"DeleteFailed");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        }];
+    }];
+    
     //把action添加到actionSheet里
-    [actionSheet addAction:actionDelete];
+    [actionSheet addAction:actionLocalDelete];
+    [actionSheet addAction:actionRemoteDelete];
     [actionSheet addAction:actionCancel];
     
     //相当于之前的[actionSheet show];

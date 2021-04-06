@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, SwitchType) {
     SwitchType_Conversation_Show_Alias = 4,
     SwitchType_Setting_Global_Silent = 5,
     SwitchType_Setting_Show_Notification_Detail = 6,
+    SwitchType_Setting_Sync_Draft = 7,
 };
 
 @interface WFCUSwitchTableViewCell : UITableViewCell
