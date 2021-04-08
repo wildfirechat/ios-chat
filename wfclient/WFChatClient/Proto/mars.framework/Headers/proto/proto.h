@@ -450,7 +450,7 @@ namespace mars{
             kUserSettingNoDisturbing = 17,
             kUserSettingConversationClearMessage = 18,
             kUserSettingConversationDraft = 19,
-            kUserSettingEnableSyncDraft = 20,
+            kUserSettingDisableSyncDraft = 20,
 
             kUserSettingCustomBegin = 1000
         };
@@ -910,6 +910,7 @@ namespace mars{
         extern bool IsReceiptEnabled();
         extern bool HasMediaPresignedUrl();
         extern bool HasMediaBackupUrl();
+        extern bool IsGlobalDisableSyncDraft();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, const std::string &data, GeneralStringCallback *callback);
     

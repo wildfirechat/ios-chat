@@ -1610,13 +1610,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
 
 - (BOOL)isEnableSyncDraft {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Disable_Sync_Draft key:@""];
-    return [strValue isEqualToString:@"1"];
+    return ![strValue isEqualToString:@"1"];
 }
 
 - (void)setEnableSyncDraft:(BOOL)enable
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock {
-    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Disable_Sync_Draft key:@"" value:enable?@"1":@"0" success:^{
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Disable_Sync_Draft key:@"" value:enable?@"0":@"1" success:^{
         if (successBlock) {
             successBlock();
         }
