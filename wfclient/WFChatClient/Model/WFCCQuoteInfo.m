@@ -55,23 +55,30 @@
 
 - (NSDictionary *)encode {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:@(self.messageUid) forKey:@"u"];
+    [dict setObject:@(self.messageUid) forKey:@"messageUid"];
     if (self.userId.length) {
-        [dict setObject:self.userId forKey:@"i"];
+        [dict setObject:self.userId forKey:@"userId"];
     }
     if (self.userDisplayName.length) {
-        [dict setObject:self.userDisplayName forKey:@"n"];
+        [dict setObject:self.userDisplayName forKey:@"userDisplayName"];
     }
     if (self.messageDigest.length) {
-        [dict setObject:self.messageDigest forKey:@"d"];
+        [dict setObject:self.messageDigest forKey:@"messageDigest"];
     }
     return [dict copy];
 }
 
 - (void)decode:(NSDictionary *)dictData {
-    self.messageUid = [dictData[@"u"] longLongValue];
-    self.userId = dictData[@"i"];
-    self.userDisplayName = dictData[@"n"];
-    self.messageDigest = dictData[@"d"];
+    if(dictData[@"messageUid"]) {
+        self.messageUid = [dictData[@"messageUid"] longLongValue];
+        self.userId = dictData[@"userId"];
+        self.userDisplayName = dictData[@"userDisplayName"];
+        self.messageDigest = dictData[@"messageDigest"];
+    } else {
+        self.messageUid = [dictData[@"u"] longLongValue];
+        self.userId = dictData[@"i"];
+        self.userDisplayName = dictData[@"n"];
+        self.messageDigest = dictData[@"d"];
+    }
 }
 @end

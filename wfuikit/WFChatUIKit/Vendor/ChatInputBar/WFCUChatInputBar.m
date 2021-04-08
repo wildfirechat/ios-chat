@@ -596,23 +596,32 @@
             [mentions enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSDictionary *dic = (NSDictionary *)obj;
                 WFCUMetionInfo *mentionInfo = [[WFCUMetionInfo alloc] init];
-                mentionInfo.target = dic[@"target"];
-                mentionInfo.mentionType = [dic[@"type"] intValue];
-                mentionInfo.range = NSMakeRange([dic[@"loc"] integerValue], [dic[@"len"] integerValue]);
+                if(dic[@"uid"] || dic[@"isMentionAll"]) {
+                    mentionInfo.target = dic[@"uid"];
+                    mentionInfo.mentionType = [dic[@"isMentionAll"] boolValue] ? 2 : 1;
+                    mentionInfo.range = NSMakeRange([dic[@"start"] integerValue], [dic[@"end"] integerValue]-[dic[@"start"] integerValue]);
+                } else {
+                    mentionInfo.target = dic[@"target"];
+                    mentionInfo.mentionType = [dic[@"type"] intValue];
+                    mentionInfo.range = NSMakeRange([dic[@"loc"] integerValue], [dic[@"len"] integerValue]);
+                }
                 [mentionInfos addObject:mentionInfo];
             }];
         }
         
-        if ([dictionary[@"quote"] isKindOfClass:[NSDictionary class]]) {
+        if ([dictionary[@"quote"] isKindOfClass:[NSDictionary class]] || [dictionary[@"quoteInfo"] isKindOfClass:[NSDictionary class]]) {
             textDraft = NO;
             quoteInfo = [[WFCCQuoteInfo alloc] init];
-            [quoteInfo decode:dictionary[@"quote"]];
+            if([dictionary[@"quoteInfo"] isKindOfClass:[NSDictionary class]])
+                [quoteInfo decode:dictionary[@"quoteInfo"]];
+            else if([dictionary[@"quote"] isKindOfClass:[NSDictionary class]])
+                [quoteInfo decode:dictionary[@"quote"]];
         }
         
         if([dictionary[@"content"] isKindOfClass:[NSString class]]) {
             //兼容android与web端
             text = dictionary[@"content"];
-        } else if (!textDraft) {
+        } else if([dictionary[@"text"] isKindOfClass:[NSString class]]) {
             text = dictionary[@"text"];
         }
     }
@@ -640,17 +649,17 @@
             NSMutableArray *mentions = [[NSMutableArray alloc] init];
             [self.mentionInfos enumerateObjectsUsingBlock:^(WFCUMetionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                [dic setObject:obj.target forKey:@"target"];
-                [dic setObject:@(obj.mentionType) forKey:@"type"];
-                [dic setObject:@(obj.range.location) forKey:@"loc"];
-                [dic setObject:@(obj.range.length) forKey:@"len"];
+                [dic setObject:obj.target forKey:@"uid"];
+                [dic setObject:obj.mentionType==2?@(YES):@(NO) forKey:@"isMentionAll"];
+                [dic setObject:@(obj.range.location) forKey:@"start"];
+                [dic setObject:@(obj.range.location+obj.range.length) forKey:@"end"];
                 [mentions addObject:dic];
             }];
             [dataDict setObject:mentions forKey:@"mentions"];
         }
         if (self.quoteInfo) {
             NSDictionary *quoteDict = [self.quoteInfo encode];
-            [dataDict setObject:quoteDict forKey:@"quote"];
+            [dataDict setObject:quoteDict forKey:@"quoteInfo"];
         }
         
         NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
