@@ -2614,6 +2614,10 @@ public:
     return mars::stn::IsReceiptEnabled() == true;
 }
 
+- (BOOL)isGlobalDisableSyncDraft {
+    return mars::stn::IsGlobalDisableSyncDraft() == true;
+}
+
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
                       request:(NSString *)request

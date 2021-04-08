@@ -89,7 +89,11 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    if([[WFCCIMService sharedWFCIMService] isCommercialServer] && ![[WFCCIMService sharedWFCIMService] isGlobalDisableSyncDraft]) {
+        return 4;
+    } else {
+        return 3;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
