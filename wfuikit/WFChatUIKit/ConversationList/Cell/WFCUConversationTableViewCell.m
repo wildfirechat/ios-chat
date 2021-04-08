@@ -216,11 +216,12 @@
                                                                    options:kNilOptions
                                                                      error:&__error];
         
-        BOOL hasMentionInfo = NO;
         NSString *text = _info.draft;
         if (!__error) {
-            if ([dictionary[@"mentions"] isKindOfClass:[NSArray class]] || [dictionary[@"quote"] isKindOfClass:[NSDictionary class]]) {
-                hasMentionInfo = YES;
+            //兼容android/web端
+            if([dictionary[@"content"] isKindOfClass:[NSString class]]) {
+                text = dictionary[@"content"];
+            } else if([dictionary[@"text"] isKindOfClass:[NSString class]]) {
                 text = dictionary[@"text"];
             }
         }

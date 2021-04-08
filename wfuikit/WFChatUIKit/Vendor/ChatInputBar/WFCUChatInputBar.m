@@ -96,6 +96,8 @@
 @property (nonatomic, assign)CGRect backupFrame;
 
 @property (nonatomic, strong)WFCCQuoteInfo *quoteInfo;
+
+@property(nonatomic, strong)NSTimer *saveDraftTimer;
 @end
 
 @implementation WFCUChatInputBar
@@ -607,7 +609,10 @@
             [quoteInfo decode:dictionary[@"quote"]];
         }
         
-        if (!textDraft) {
+        if([dictionary[@"content"] isKindOfClass:[NSString class]]) {
+            //兼容android与web端
+            text = dictionary[@"content"];
+        } else if (!textDraft) {
             text = dictionary[@"text"];
         }
     }
@@ -630,7 +635,7 @@
 - (NSString *)draft {
     if (self.mentionInfos.count || self.quoteInfo) {
         NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-        [dataDict setObject:self.textInputView.text forKey:@"text"];
+        [dataDict setObject:self.textInputView.text forKey:@"content"];
         if (self.mentionInfos.count) {
             NSMutableArray *mentions = [[NSMutableArray alloc] init];
             [self.mentionInfos enumerateObjectsUsingBlock:^(WFCUMetionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -660,6 +665,27 @@
 - (void)appendText:(NSString *)text {
     [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:text];
     self.textInputView.text = [self.textInputView.text stringByAppendingString:text];
+}
+
+- (NSString *)getDraftText:(NSString *)draft {
+    if(!draft) {
+        return nil;
+    }
+    NSError *__error = nil;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[draft dataUsingEncoding:NSUTF8StringEncoding]
+                                                               options:kNilOptions
+                                                                 error:&__error];
+    
+    NSString *text = draft;
+    if (!__error) {
+        if([dictionary[@"content"] isKindOfClass:[NSString class]]) {
+            //兼容android与web端
+            text = dictionary[@"content"];
+        } else if ([dictionary[@"text"] isKindOfClass:[NSString class]]) {
+            text = dictionary[@"text"];
+        }
+    }
+    return text;
 }
 
 - (UIView *)emojInputView {
@@ -893,6 +919,11 @@
 }
 
 - (void)sendAndCleanTextView {
+    if(self.saveDraftTimer) {
+        [self.saveDraftTimer invalidate];
+        self.saveDraftTimer = nil;
+    }
+    
     [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos withQuoteInfo:self.quoteInfo];
     self.textInputView.text = nil;
     [self clearQuoteInfo];
@@ -1088,6 +1119,21 @@
 - (void)textViewDidChange:(UITextView *)textView {
     if (textView.text.length > 0) {
         [self notifyTyping:0];
+    }
+    
+    if(self.saveDraftTimer) {
+        [self.saveDraftTimer invalidate];
+        self.saveDraftTimer = nil;
+    }
+    if([self.delegate respondsToSelector:@selector(needSaveDraft)]) {
+        __weak typeof(self)ws = self;
+        if (@available(iOS 10.0, *)) {
+            self.saveDraftTimer = [NSTimer scheduledTimerWithTimeInterval:3 repeats:NO block:^(NSTimer * _Nonnull timer) {
+                [ws.delegate needSaveDraft];
+            }];
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
 
