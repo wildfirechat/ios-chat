@@ -2248,12 +2248,12 @@
             self.isShowingKeyboard = NO;
         }];
     } else {
-        if (self.collectionView.frame.size.height != newFrame.origin.y) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self.collectionView.frame.size.height != newFrame.origin.y) {
                 self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, newFrame.origin.y);
-                [self scrollToBottom:NO];
-            });
-        }
+                [self scrollToBottom:YES];
+            }
+        });
     }
     
 }
