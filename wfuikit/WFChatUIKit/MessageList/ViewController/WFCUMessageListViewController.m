@@ -1154,7 +1154,14 @@
 }
 
 - (void)onSettingUpdated:(NSNotification *)notification {
+    WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
     [self reloadMessageList];
+    NSString *orignalDraftText = [self.chatInputBar getDraftText:self.orignalDraft];
+    NSString *draftText = [self.chatInputBar getDraftText:info.draft];
+    if(![orignalDraftText isEqualToString:draftText]) {
+        self.orignalDraft = info.draft;
+        self.chatInputBar.draft = info.draft;
+    }
 }
 
 - (void)reloadMessageList {
@@ -2186,7 +2193,18 @@
     }
     txtContent.quoteInfo = quoteInfo;
     
+    if(self.orignalDraft) {
+        self.orignalDraft = nil;
+        [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:nil];
+    }
+    
     [self sendMessage:txtContent];
+    
+}
+
+- (void)needSaveDraft {
+    self.orignalDraft = self.chatInputBar.draft;
+    [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:self.orignalDraft];
 }
 
 - (void)recordDidEnd:(NSString *)dataUri duration:(long)duration error:(NSError *)error {
