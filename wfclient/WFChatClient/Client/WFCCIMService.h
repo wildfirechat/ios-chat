@@ -1833,6 +1833,14 @@ amr文件转成wav数据
 */
 - (BOOL)isReceiptEnabled;
 
+/*
+ 是否应用关闭草稿同步功能
+ */
+- (BOOL)isGlobalDisableSyncDraft;
+
+/*
+ 音视频会议相关
+ */
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
                       request:(NSString *)request
