@@ -135,6 +135,10 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     
+    if(self.currentSession.state == kWFAVEngineStateIdle) {
+        [self didCallEndWithReason:self.currentSession.endReason];
+        return;
+    }
     self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
