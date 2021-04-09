@@ -46,6 +46,9 @@
     }
     return self;
 }
+-(void)setRange:(NSRange)range {
+    _range = range;
+}
 @end
 
 //@implementation TextInfo
@@ -1027,9 +1030,11 @@
                 needUpdateText = YES;
             }
         } else {
-            for (WFCUMetionInfo *mentionInfo in self.mentionInfos) {
-                if (range.location <= mentionInfo.range.location) {
-                    mentionInfo.range = NSMakeRange(mentionInfo.range.location - range.length + text.length, mentionInfo.range.length);
+            if(self.textInputView.text.length) {
+                for (WFCUMetionInfo *mentionInfo in self.mentionInfos) {
+                    if (range.location <= mentionInfo.range.location) {
+                        mentionInfo.range = NSMakeRange(mentionInfo.range.location - range.length + text.length, mentionInfo.range.length);
+                    }
                 }
             }
         }
