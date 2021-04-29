@@ -74,12 +74,13 @@
     if (self) {
         self.currentSession = [[WFAVEngineKit sharedEngineKit]
                                joinConference:invite.callId
-                                    audioOnly:true
+                                    audioOnly:YES
                                         pin:invite.pin
                                host:invite.host
                                title:invite.title
                                desc:invite.desc
-                               audience:true
+                               audience:YES
+                               advanced:NO
                                sessionDelegate:self];
         
         
@@ -101,7 +102,7 @@
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience advanced:NO sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -113,6 +114,7 @@
                                title:title
                                desc:desc
                                audience:audience
+                                   advanced:NO
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
         

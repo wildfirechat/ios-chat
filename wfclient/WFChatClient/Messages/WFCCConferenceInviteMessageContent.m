@@ -37,6 +37,7 @@
     
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
     [dataDict setValue:@(self.audience?1:0) forKey:@"audience"];
+    [dataDict setValue:@(self.advanced?1:0) forKey:@"advanced"];
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
@@ -58,6 +59,7 @@
         self.desc = dictionary[@"d"];
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
         self.audience = [dictionary[@"audience"] intValue] ? YES : NO;
+        self.advanced = [dictionary[@"advanced"] intValue] ? YES : NO;
         self.pin = dictionary[@"p"];
     }
 }
