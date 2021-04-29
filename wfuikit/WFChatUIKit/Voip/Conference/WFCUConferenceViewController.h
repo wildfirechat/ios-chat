@@ -22,6 +22,7 @@
                          title:(NSString *_Nullable)title
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
+                       advanced:(BOOL)advance
                         moCall:(BOOL)moCall;
 @end
 

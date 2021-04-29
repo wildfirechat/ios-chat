@@ -2621,11 +2621,11 @@ public:
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
                       request:(NSString *)request
-                      advance:(BOOL)advance
+                     advanced:(BOOL)advanced
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], advance?true:false, data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], advanced?true:false, data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
 - (NSArray<NSString *> *)getFavUsers {
