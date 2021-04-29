@@ -120,6 +120,7 @@
                                title:invite.title
                                desc:invite.desc
                                audience:invite.audience
+                               advanced:invite.advanced
                                sessionDelegate:self];
         
         
@@ -137,11 +138,12 @@
                          title:(NSString *_Nullable)title
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
+                      advanced:(BOOL)advanced
                         moCall:(BOOL)moCall {
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience advanced:advanced sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -153,6 +155,7 @@
                                title:title
                                desc:desc
                                audience:audience
+                                   advanced:advanced
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
         
@@ -473,25 +476,6 @@
      }];
     
     [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
-}
-
-- (void)addParticipantButtonDidTap:(UIButton *)button {
-    WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
-    
-    WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
-    invite.callId = self.currentSession.callId;
-    invite.pin = self.currentSession.pin;
-    invite.audioOnly = self.currentSession.audioOnly;
-    invite.host = self.currentSession.host;
-    invite.title = self.currentSession.title;
-    invite.desc = self.currentSession.desc;
-    invite.audience = self.currentSession.defaultAudience;
-    
-    pvc.invite = invite;
-    
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-
-    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (void)switchCameraButtonDidTap:(UIButton *)button {
@@ -1090,13 +1074,14 @@
     NSString *conferenceId = self.currentSession.callId;
     NSString *pin = self.currentSession.pin;
     NSString *host = self.currentSession.host;
+    BOOL advanced = self.currentSession.isAdvanced;
     
     
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES moCall:NO];
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced moCall:NO];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         });
     }];
@@ -1123,13 +1108,14 @@
         NSString *desc = self.currentSession.desc;
         NSString *conferenceId = self.currentSession.callId;
         NSString *pin = self.currentSession.pin;
+        BOOL advanced = self.currentSession.isAdvanced;
         
         
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"启动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience moCall:YES];
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced moCall:YES];
                 [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
             });
         }];
