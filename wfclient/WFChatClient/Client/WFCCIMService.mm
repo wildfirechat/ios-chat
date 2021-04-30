@@ -2624,7 +2624,17 @@ public:
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
-    mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
+    [self sendConferenceRequest:sessionId room:roomId request:request data:data success:successBlock error:errorBlock];
+}
+
+- (void)sendConferenceRequest:(long long)sessionId
+                         room:(NSString *)roomId
+                      request:(NSString *)request
+                     advanced:(BOOL)advanced
+                         data:(NSString *)data
+                      success:(void(^)(NSString *authorizedUrl))successBlock
+                        error:(void(^)(int error_code))errorBlock {
+    mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], advanced?true:false, data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
 - (NSArray<NSString *> *)getFavUsers {
