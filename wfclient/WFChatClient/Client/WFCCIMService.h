@@ -1847,4 +1847,12 @@ amr文件转成wav数据
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
+
+- (void)sendConferenceRequest:(long long)sessionId
+                         room:(NSString *)roomId
+                      request:(NSString *)request
+                     advanced:(BOOL)advanced
+                         data:(NSString *)data
+                      success:(void(^)(NSString *authorizedUrl))successBlock
+                        error:(void(^)(int error_code))errorBlock;
 @end
