@@ -122,7 +122,7 @@
             cell.textLabel.text = @"互动会议";
             cell.on = !self.audienceSwitch;
         } else if(indexPath.row == 2) {
-            cell.textLabel.attributedText = [[NSAttributedString alloc] initWithString:@"大型会议" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            cell.textLabel.attributedText = [[NSAttributedString alloc] initWithString:@"超级会议" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
             cell.on = self.advanceConference;
         }
         
@@ -135,6 +135,14 @@
                 self.audienceSwitch = !self.audienceSwitch;
             } else if(type == 2) {
                 self.advanceConference = !self.advanceConference;
+                
+                WFCUGeneralSwitchTableViewCell *audienceSwitch = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
+                if(self.advanceConference) {
+                    audienceSwitch.on = NO;
+                    audienceSwitch.valueSwitch.enabled = NO;
+                } else {
+                    audienceSwitch.valueSwitch.enabled = YES;
+                }
             }
             
             onDone(YES);
