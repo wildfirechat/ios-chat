@@ -359,6 +359,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                        title:(NSString *_Nullable)title
                                         desc:(NSString *_Nullable)desc
                                     audience:(BOOL)audience
+                                    advanced:(BOOL)advanced
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
@@ -369,6 +370,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                       title:(NSString *_Nullable)title
                                        desc:(NSString *_Nullable)desc
                                    audience:(BOOL)audience
+                                   advanced:(BOOL)advanced
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
 /**
@@ -487,6 +489,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign) BOOL defaultAudience;
 
 /**
+是否高级会议模式，仅当会议有效
+*/
+@property(nonatomic, assign, getter=isAdvanced, readonly) BOOL advanced;
+
+/**
 会议密码，仅当会议有效
 */
 @property(nonatomic, strong) NSString * _Nullable pin;
@@ -506,6 +513,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 */
 @property(nonatomic, strong) NSString * _Nullable desc;
 
+/**
+ 应用内屏幕分享。仅音视频高级版支持
+ */
+@property(nonatomic, assign, getter=isInAppScreenSharing)BOOL inAppScreenSharing;
 
 /**
 通话成员（不包含自己）
