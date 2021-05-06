@@ -50,6 +50,7 @@
 @property (nonatomic, strong) UIButton *scalingButton;
 @property (nonatomic, strong) UIButton *minimizeButton;
 @property (nonatomic, strong) UIButton *managerButton;
+@property (nonatomic, strong) UIButton *screenSharingButton;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -378,7 +379,7 @@
     if(!_bottomBarView) {
         _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin)];
         _bottomBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
-        CGFloat btnWidth = self.view.bounds.size.width/4;
+        CGFloat btnWidth = self.view.bounds.size.width/5;
         
         self.audioButton = [self createBarButtom:@"静音" imageName:@"conference_audio" selectedImageName:@"conference_audio" select:@selector(audioButtonDidTap:) frame:CGRectMake(0, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.audioButton];
@@ -387,13 +388,34 @@
         [_bottomBarView addSubview:self.videoButton];
         
         self.speakerButton = [self createBarButtom:@"扬声器" imageName:@"conference_speaker" selectedImageName:@"conference_speaker" select:@selector(speakerButtonDidTap:) frame:CGRectMake(btnWidth, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
-        self.speakerButton.hidden = YES;
         [_bottomBarView addSubview:self.speakerButton];
         
-        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*2, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        if(self.currentSession.state == kWFAVEngineStateConnected) {
+            if(self.currentSession.audioOnly) {
+                self.videoButton.hidden = YES;
+                self.speakerButton.hidden = NO;
+            } else {
+                self.videoButton.hidden = NO;
+                self.speakerButton.hidden = YES;
+            }
+        } else {
+            self.videoButton.hidden = YES;
+            self.speakerButton.hidden = YES;
+        }
+        
+        self.screenSharingButton = [self createBarButtom:@"屏幕共享" imageName:@"conference_screen_sharing" selectedImageName:@"conference_screen_sharing_hover" select:@selector(screenSharingButtonDidTap:) frame:CGRectMake(btnWidth*2, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        if(self.currentSession.state == kWFAVEngineStateConnected)
+            self.screenSharingButton.hidden = NO;
+        else
+            self.screenSharingButton.hidden = YES;
+        [self updateScreenSharingButton];
+        [_bottomBarView addSubview:self.screenSharingButton];
+        
+        
+        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*3, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.managerButton];
         
-        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*3, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*4, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.hangupButton];
         
         [self.view addSubview:_bottomBarView];
@@ -464,6 +486,16 @@
     WFCUConferenceMemberManagerViewController *vc = [[WFCUConferenceMemberManagerViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
+}
+
+
+- (void)screenSharingButtonDidTap:(UIButton *)button {
+    [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
+    [self updateScreenSharingButton];
+}
+
+- (void)updateScreenSharingButton {
+    self.screenSharingButton.selected = self.currentSession.isInAppScreenSharing;
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
@@ -762,6 +794,7 @@
             self.bigVideoView.hidden = YES;
             self.minimizeButton.hidden = YES;
             self.speakerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             self.managerButton.hidden = YES;
             self.bottomBarView.hidden = YES;
             [self updateTopViewFrame];
@@ -779,6 +812,7 @@
                 self.audioButton.hidden = YES;
             }
             self.managerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
@@ -800,6 +834,7 @@
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             self.managerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             if (self.currentSession.audioOnly) {
                 self.smallCollectionView.hidden = YES;
@@ -823,6 +858,7 @@
             self.connectTimeLabel.hidden = NO;
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
+            self.screenSharingButton.hidden = NO;
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 [self updateSpeakerButton];
