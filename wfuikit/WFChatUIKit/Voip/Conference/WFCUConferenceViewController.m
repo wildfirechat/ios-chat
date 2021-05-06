@@ -50,6 +50,7 @@
 @property (nonatomic, strong) UIButton *scalingButton;
 @property (nonatomic, strong) UIButton *minimizeButton;
 @property (nonatomic, strong) UIButton *managerButton;
+@property (nonatomic, strong) UIButton *screenSharingButton;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -120,6 +121,7 @@
                                title:invite.title
                                desc:invite.desc
                                audience:invite.audience
+                               advanced:invite.advanced
                                sessionDelegate:self];
         
         
@@ -137,11 +139,12 @@
                          title:(NSString *_Nullable)title
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
+                      advanced:(BOOL)advanced
                         moCall:(BOOL)moCall {
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience advanced:advanced sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -153,6 +156,7 @@
                                title:title
                                desc:desc
                                audience:audience
+                                   advanced:advanced
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
         
@@ -375,7 +379,7 @@
     if(!_bottomBarView) {
         _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin)];
         _bottomBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
-        CGFloat btnWidth = self.view.bounds.size.width/4;
+        CGFloat btnWidth = self.view.bounds.size.width/5;
         
         self.audioButton = [self createBarButtom:@"静音" imageName:@"conference_audio" selectedImageName:@"conference_audio" select:@selector(audioButtonDidTap:) frame:CGRectMake(0, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.audioButton];
@@ -384,13 +388,34 @@
         [_bottomBarView addSubview:self.videoButton];
         
         self.speakerButton = [self createBarButtom:@"扬声器" imageName:@"conference_speaker" selectedImageName:@"conference_speaker" select:@selector(speakerButtonDidTap:) frame:CGRectMake(btnWidth, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
-        self.speakerButton.hidden = YES;
         [_bottomBarView addSubview:self.speakerButton];
         
-        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*2, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        if(self.currentSession.state == kWFAVEngineStateConnected) {
+            if(self.currentSession.audioOnly) {
+                self.videoButton.hidden = YES;
+                self.speakerButton.hidden = NO;
+            } else {
+                self.videoButton.hidden = NO;
+                self.speakerButton.hidden = YES;
+            }
+        } else {
+            self.videoButton.hidden = YES;
+            self.speakerButton.hidden = YES;
+        }
+        
+        self.screenSharingButton = [self createBarButtom:@"屏幕共享" imageName:@"conference_screen_sharing" selectedImageName:@"conference_screen_sharing_hover" select:@selector(screenSharingButtonDidTap:) frame:CGRectMake(btnWidth*2, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        if(self.currentSession.state == kWFAVEngineStateConnected)
+            self.screenSharingButton.hidden = NO;
+        else
+            self.screenSharingButton.hidden = YES;
+        [self updateScreenSharingButton];
+        [_bottomBarView addSubview:self.screenSharingButton];
+        
+        
+        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*3, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.managerButton];
         
-        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*3, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*4, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.hangupButton];
         
         [self.view addSubview:_bottomBarView];
@@ -463,6 +488,16 @@
     [self presentViewController:nav animated:YES completion:nil];
 }
 
+
+- (void)screenSharingButtonDidTap:(UIButton *)button {
+    [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
+    [self updateScreenSharingButton];
+}
+
+- (void)updateScreenSharingButton {
+    self.screenSharingButton.selected = self.currentSession.isInAppScreenSharing;
+}
+
 - (void)minimizeButtonDidTap:(UIButton *)button {
     __block NSString *focusUser = [self.participants lastObject];
     [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession) {
@@ -473,25 +508,6 @@
      }];
     
     [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
-}
-
-- (void)addParticipantButtonDidTap:(UIButton *)button {
-    WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
-    
-    WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
-    invite.callId = self.currentSession.callId;
-    invite.pin = self.currentSession.pin;
-    invite.audioOnly = self.currentSession.audioOnly;
-    invite.host = self.currentSession.host;
-    invite.title = self.currentSession.title;
-    invite.desc = self.currentSession.desc;
-    invite.audience = self.currentSession.defaultAudience;
-    
-    pvc.invite = invite;
-    
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-
-    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (void)switchCameraButtonDidTap:(UIButton *)button {
@@ -778,6 +794,7 @@
             self.bigVideoView.hidden = YES;
             self.minimizeButton.hidden = YES;
             self.speakerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             self.managerButton.hidden = YES;
             self.bottomBarView.hidden = YES;
             [self updateTopViewFrame];
@@ -795,6 +812,7 @@
                 self.audioButton.hidden = YES;
             }
             self.managerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
@@ -816,6 +834,7 @@
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             self.managerButton.hidden = YES;
+            self.screenSharingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             if (self.currentSession.audioOnly) {
                 self.smallCollectionView.hidden = YES;
@@ -839,6 +858,7 @@
             self.connectTimeLabel.hidden = NO;
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
+            self.screenSharingButton.hidden = NO;
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 [self updateSpeakerButton];
@@ -1090,13 +1110,14 @@
     NSString *conferenceId = self.currentSession.callId;
     NSString *pin = self.currentSession.pin;
     NSString *host = self.currentSession.host;
+    BOOL advanced = self.currentSession.isAdvanced;
     
     
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES moCall:NO];
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced moCall:NO];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         });
     }];
@@ -1123,13 +1144,14 @@
         NSString *desc = self.currentSession.desc;
         NSString *conferenceId = self.currentSession.callId;
         NSString *pin = self.currentSession.pin;
+        BOOL advanced = self.currentSession.isAdvanced;
         
         
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"启动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience moCall:YES];
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced moCall:YES];
                 [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
             });
         }];

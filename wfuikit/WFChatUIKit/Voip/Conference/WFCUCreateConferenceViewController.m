@@ -18,6 +18,7 @@
 @property(nonatomic, strong)NSString *conferenceTitle;
 @property(nonatomic, assign)BOOL audioOnlySwitch;
 @property(nonatomic, assign)BOOL audienceSwitch;
+@property(nonatomic, assign)BOOL advanceConference;
 
 @property(nonatomic, assign)long long startTime;
 @property(nonatomic, assign)long long duration;
@@ -34,6 +35,7 @@
     self.conferenceTitle = [NSString stringWithFormat:@"%@的会议", userInfo.displayName];
     self.audioOnlySwitch = NO;
     self.audienceSwitch = NO;
+    self.advanceConference = NO;
     
     self.title = @"发起会议";
     
@@ -62,7 +64,7 @@
 
 - (void)onStart:(id)sender {
     if (self.startTime == 0) {
-        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch moCall:YES];
+        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch advanced:self.advanceConference moCall:YES];
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
     } else {
         //todo 发送会议邀请
@@ -116,17 +118,31 @@
         if (indexPath.row == 0) {
             cell.textLabel.text = @"开启视频";
             cell.on = !self.audioOnlySwitch;
-        } else {
+        } else if(indexPath.row == 1){
             cell.textLabel.text = @"互动会议";
             cell.on = !self.audienceSwitch;
+        } else if(indexPath.row == 2) {
+            cell.textLabel.attributedText = [[NSAttributedString alloc] initWithString:@"超级会议" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            cell.on = self.advanceConference;
         }
+        
         cell.type = (int)indexPath.row;
         cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
             
             if (type == 0) {
                 self.audioOnlySwitch = !self.audioOnlySwitch;
-            } else {
+            } else if(type == 1) {
                 self.audienceSwitch = !self.audienceSwitch;
+            } else if(type == 2) {
+                self.advanceConference = !self.advanceConference;
+                
+                WFCUGeneralSwitchTableViewCell *audienceSwitch = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
+                if(self.advanceConference) {
+                    audienceSwitch.on = NO;
+                    audienceSwitch.valueSwitch.enabled = NO;
+                } else {
+                    audienceSwitch.valueSwitch.enabled = YES;
+                }
             }
             
             onDone(YES);
@@ -146,7 +162,7 @@
     } else if(section == 1) { //start time
         return 2;
     } else if(section == 2) { //settings
-        return 2;
+        return 3;
     }
     return 0;
 }

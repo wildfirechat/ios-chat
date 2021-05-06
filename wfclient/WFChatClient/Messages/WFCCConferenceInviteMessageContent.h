@@ -52,4 +52,9 @@
 */
 @property (nonatomic, assign)BOOL audience;
 
+/*
+ 是否是高级会议模式
+*/
+@property (nonatomic, assign)BOOL advanced;
+
 @end
