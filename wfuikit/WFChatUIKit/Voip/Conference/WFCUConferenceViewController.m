@@ -76,6 +76,7 @@
 
 @property(nonatomic, strong)UIView *bottomBarView;
 
+@property(nonatomic, strong)NSTimer *hidePanelTimer;
 #endif
 @end
 
@@ -302,6 +303,7 @@
     self.bottomBarView.hidden = NO;
     
     [WFCUConferenceManager sharedInstance].delegate = self;
+    [self startHidePanelTimer];
 }
 
 - (UIButton *)minimizeButton {
@@ -742,34 +744,55 @@
         return;
     }
     
-    if (self.smallCollectionView.hidden) {
-        if (self.bottomBarView.hidden) {
-            self.bottomBarView.hidden = NO;
-            [UIView animateWithDuration:0.5 animations:^{
-                self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin);
-            }];
-            
-            if (self.currentSession.audioOnly) {
-                self.videoButton.hidden = YES;
-            } else {
-                self.videoButton.hidden = NO;
-            }
-            self.switchCameraButton.hidden = NO;
-            self.smallCollectionView.hidden = NO;
-            self.minimizeButton.hidden = NO;
-            self.connectTimeLabel.hidden = NO;
-        } else {
-            [UIView animateWithDuration:0.5 animations:^{
-                self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-            } completion:^(BOOL finished) {
-                self.bottomBarView.hidden = YES;
-            }];
-            self.switchCameraButton.hidden = YES;
-            self.minimizeButton.hidden = YES;
-            self.connectTimeLabel.hidden = YES;
-        }
+    if (self.bottomBarView.hidden) {
+        [self showPanel];
     } else {
-        self.smallCollectionView.hidden = YES;
+        [self hidePanel];
+    }
+}
+
+- (void)showPanel {
+    self.bottomBarView.hidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin);
+    }];
+    
+    if (self.currentSession.audioOnly) {
+        self.videoButton.hidden = YES;
+    } else {
+        self.videoButton.hidden = NO;
+    }
+    self.switchCameraButton.hidden = NO;
+    self.smallCollectionView.hidden = NO;
+    self.minimizeButton.hidden = NO;
+    self.connectTimeLabel.hidden = NO;
+    [self startHidePanelTimer];
+}
+
+- (void)hidePanel {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
+    } completion:^(BOOL finished) {
+        self.bottomBarView.hidden = YES;
+    }];
+    self.switchCameraButton.hidden = YES;
+    self.minimizeButton.hidden = YES;
+    self.connectTimeLabel.hidden = YES;
+}
+
+- (void)startHidePanelTimer {
+    if(self.currentSession.isAudioOnly) {
+        return;
+    }
+    
+    [self.hidePanelTimer invalidate];
+    __weak typeof(self)ws = self;
+    if (@available(iOS 10.0, *)) {
+        self.hidePanelTimer = [NSTimer scheduledTimerWithTimeInterval:3 repeats:NO block:^(NSTimer * _Nonnull timer) {
+            [ws hidePanel];
+        }];
+    } else {
+        // Fallback on earlier versions
     }
 }
 
