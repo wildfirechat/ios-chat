@@ -51,6 +51,8 @@ namespace mars {
             bool updateConversationIsSilent(int conversationType, const std::string &target, int line, bool issilent, bool createIfNotExist = true);
             bool updateConversationDraft(int conversationType, const std::string &target, int line, const std::string &draft, bool syncRemote = true);
             
+            std::string getConversationDraft(int conversationType, const std::string &target, int line);
+            
             TConversation GetConversation(int conversationType, const std::string &target, int line);
             std::list<TConversation> GetConversationList(const std::list<int> &conversationTypes, const std::list<int> &lines);
             
