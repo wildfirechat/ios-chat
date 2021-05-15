@@ -44,36 +44,37 @@
         if (msg.serverTime) {
             [msgDict setValue:@(msg.serverTime) forKey:@"serverTime"];
         }
-        WFCCMessagePayload *payload = [msg.content encode];
-        if (payload.contentType) {
-            [msgDict setValue:@(payload.contentType) forKey:@"ctype"];
+        WFCCMessagePayload *msgPayload = [msg.content encode];
+        if (msgPayload.contentType) {
+            [msgDict setValue:@(msgPayload.contentType) forKey:@"ctype"];
         }
-        if (payload.searchableContent.length) {
-            [msgDict setObject:payload.searchableContent forKey:@"csc"];
+        if (msgPayload.searchableContent.length) {
+            [msgDict setObject:msgPayload.searchableContent forKey:@"csc"];
+            payload.searchableContent = [NSString stringWithFormat:@"%@%@ ", payload.searchableContent, msgPayload.searchableContent];   
         }
-        if (payload.pushContent.length) {
-            [msgDict setObject:payload.pushContent forKey:@"cpc"];
+        if (msgPayload.pushContent.length) {
+            [msgDict setObject:msgPayload.pushContent forKey:@"cpc"];
         }
-        if (payload.pushData.length) {
-            [msgDict setObject:payload.pushData forKey:@"cpd"];
+        if (msgPayload.pushData.length) {
+            [msgDict setObject:msgPayload.pushData forKey:@"cpd"];
         }
-        if (payload.content.length) {
-            [msgDict setObject:payload.content forKey:@"cc"];
+        if (msgPayload.content.length) {
+            [msgDict setObject:msgPayload.content forKey:@"cc"];
         }
-        if (payload.binaryContent.length) {
-            [msgDict setObject:[payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed] forKey:@"cbc"];
+        if (msgPayload.binaryContent.length) {
+            [msgDict setObject:[msgPayload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed] forKey:@"cbc"];
         }
-        if (payload.mentionedType) {
-            [msgDict setObject:@(payload.mentionedType) forKey:@"cmt"];
+        if (msgPayload.mentionedType) {
+            [msgDict setObject:@(msgPayload.mentionedType) forKey:@"cmt"];
         }
-        if (payload.mentionedTargets.count) {
-            [msgDict setObject:payload.mentionedTargets forKey:@"cmts"];
+        if (msgPayload.mentionedTargets.count) {
+            [msgDict setObject:msgPayload.mentionedTargets forKey:@"cmts"];
         }
-        if (payload.extra.length) {
-            [msgDict setObject:payload.extra forKey:@"ce"];
+        if (msgPayload.extra.length) {
+            [msgDict setObject:msgPayload.extra forKey:@"ce"];
         }
-        if ([payload isKindOfClass:WFCCMediaMessagePayload.class]) {
-            WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
+        if ([msgPayload isKindOfClass:WFCCMediaMessagePayload.class]) {
+            WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)msgPayload;
             if (mediaPayload.mediaType) {
                 [msgDict setObject:@(mediaPayload.mediaType) forKey:@"mt"];
             }
