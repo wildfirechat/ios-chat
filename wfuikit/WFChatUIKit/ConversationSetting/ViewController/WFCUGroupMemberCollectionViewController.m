@@ -14,6 +14,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "WFCUConfigManager.h"
 #import "UIView+Toast.h"
+#import "WFCUEnum.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -132,8 +133,18 @@
         for (WFCCGroupMember *member in self.memberList) {
             [disabledUser addObject:member.memberId];
         }
+        
+        
+
+        NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+        NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                                   options:kNilOptions
+                                                                                     error:nil];
+        NSString *memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+
+        
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.groupId notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.groupId memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:YES];
                 
             } error:^(int error_code) {
@@ -203,6 +214,8 @@
         
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = userId;
+        vc.sourceType = FriendSource_Group;
+        vc.sourceTargetId = self.groupId;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }

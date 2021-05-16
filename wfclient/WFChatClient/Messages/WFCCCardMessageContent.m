@@ -31,6 +31,9 @@
     if (self.type) {
         [dataDict setObject:@(self.type) forKey:@"t"];
     }
+    if(self.fromUser) {
+        [dataDict setObject:self.fromUser forKey:@"f"];
+    }
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
                                                               error:nil];
@@ -51,6 +54,7 @@
         self.displayName = dictionary[@"d"];
         self.portrait = dictionary[@"p"];
         self.type = [dictionary[@"t"] intValue];
+        self.fromUser = dictionary[@"f"];
     }
 }
 
@@ -63,10 +67,11 @@
 }
 
 
-+ (instancetype)cardWithTarget:(NSString *)targetId type:(WFCCCardType)type {
++ (instancetype)cardWithTarget:(NSString *)targetId type:(WFCCCardType)type from:(NSString *)fromUser {
     WFCCCardMessageContent *content = [[WFCCCardMessageContent alloc] init];
     content.targetId = targetId;
     content.type = type;
+    content.fromUser = fromUser;
     if (type == 0) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:targetId refresh:NO];
         content.name = userInfo.name;

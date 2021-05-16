@@ -61,8 +61,21 @@
     hud.label.text = WFCString(@"Sending");
     [hud showAnimated:YES];
     
+    NSString *extraStr = nil;
+    if(self.sourceType) {
+        NSMutableDictionary *sourceDict = [[NSMutableDictionary alloc] init];
+        [sourceDict setValue:@(self.sourceType) forKey:@"t"/*type*/];
+        [sourceDict setValue:self.sourceTargetId forKey:@"i"/*targetId*/];
+        NSDictionary *extraDict = @{@"s"/*source*/:sourceDict};
+        
+        NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                               options:kNilOptions
+                                                                                 error:nil];
+        extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+    }
+    
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] sendFriendRequest:self.userId reason:self.verifyField.text success:^{
+    [[WFCCIMService sharedWFCIMService] sendFriendRequest:self.userId reason:self.verifyField.text extra:extraStr success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hideAnimated:YES];
             

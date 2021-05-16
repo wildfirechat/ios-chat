@@ -13,7 +13,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
-
+#import "WFCUEnum.h"
 
 @interface WFCUCreateGroupViewController () <UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -285,8 +285,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
   
 - (void)createGroup:(NSString *)groupName portrait:(NSString *)portraitUrl members:(NSArray<NSString *> *)memberIds {
+    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                               options:kNilOptions
+                                                                                 error:nil];
+    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+    
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl type:GroupType_Restricted members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         if (ws.onSuccess) {
             dispatch_async(dispatch_get_main_queue(), ^{

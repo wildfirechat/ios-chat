@@ -12,7 +12,6 @@
 #import "WFCUMessageListViewController.h"
 #import "MBProgressHUD.h"
 #import "WFCUMyPortraitViewController.h"
-#import "WFCUVerifyRequestViewController.h"
 #import "WFCUGeneralModifyViewController.h"
 #import "UIView+Toast.h"
 #import "WFCUUtilities.h"

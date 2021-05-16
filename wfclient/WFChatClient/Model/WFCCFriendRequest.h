@@ -29,6 +29,11 @@
 @property(nonatomic, strong)NSString *reason;
 
 /**
+ 请求扩展信息
+ */
+@property(nonatomic, strong)NSString *extra;
+
+/**
  接受状态
  */
 @property(nonatomic, assign)int status;

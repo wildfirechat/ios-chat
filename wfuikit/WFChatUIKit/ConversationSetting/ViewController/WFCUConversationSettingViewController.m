@@ -32,6 +32,7 @@
 #import "WFCUGroupAnnouncementViewController.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUEnum.h"
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -900,8 +901,15 @@
         for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
             [disabledUser addObject:member.memberId];
         }
+          
+          NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+          NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                                     options:kNilOptions
+                                                                                       error:nil];
+          NSString *memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+          
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
               [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
                 
             } error:^(int error_code) {
@@ -1057,7 +1065,13 @@
         name = WFCString(@"GroupChat");
     }
     
-    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                               options:kNilOptions
+                                                                                 error:nil];
+    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+    
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];

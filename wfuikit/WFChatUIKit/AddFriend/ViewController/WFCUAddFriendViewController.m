@@ -99,6 +99,7 @@
         
         WFCUProfileTableViewController *pvc = [[WFCUProfileTableViewController alloc] init];
         pvc.userId = userInfo.userId;
+        pvc.sourceType = FriendSource_Search;
         [self.navigationController pushViewController:pvc animated:YES];
     }
 }

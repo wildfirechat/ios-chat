@@ -1818,6 +1818,8 @@
             if (!userInfo.deleted) {
                 WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
                 vc.userId = card.targetId;
+                vc.sourceType = FriendSource_Card;
+                vc.sourceTargetId = card.fromUser;
                 vc.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -1896,6 +1898,10 @@
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = model.message.fromUser;
         vc.fromConversation = self.conversation;
+        if(self.conversation.type == Group_Type) {
+            vc.sourceType = FriendSource_Group;
+            vc.sourceTargetId = self.conversation.target;
+        }
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -2053,6 +2059,8 @@
                     if (!userInfo.deleted) {
                         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
                         vc.userId = card.targetId;
+                        vc.sourceType = FriendSource_Card;
+                        vc.sourceTargetId = card.fromUser;
                         vc.hidesBottomBarWhenPushed = YES;
                         [self.navigationController pushViewController:vc animated:YES];
                     }
