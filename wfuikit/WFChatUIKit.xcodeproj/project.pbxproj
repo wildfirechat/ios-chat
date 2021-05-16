@@ -420,6 +420,7 @@
 		2FB7125A25DA042900FD2E83 /* WFCUConferenceMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7125825DA042900FD2E83 /* WFCUConferenceMember.m */; };
 		2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB7125C25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h */; };
 		2FB7125F25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7125D25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m */; };
+		2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB87A65265122F900790A26 /* WFCUEnum.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FBDAB9125DA41FD00FEF2C3 /* WFCUConferenceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FBDAB8F25DA41FD00FEF2C3 /* WFCUConferenceManager.h */; };
 		2FBDAB9225DA41FD00FEF2C3 /* WFCUConferenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */; };
 		2FBDAB9C25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */; };
@@ -869,6 +870,7 @@
 		2FB7125825DA042900FD2E83 /* WFCUConferenceMember.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceMember.m; sourceTree = "<group>"; };
 		2FB7125C25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceMemberTableViewCell.h; sourceTree = "<group>"; };
 		2FB7125D25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceMemberTableViewCell.m; sourceTree = "<group>"; };
+		2FB87A65265122F900790A26 /* WFCUEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUEnum.h; sourceTree = "<group>"; };
 		2FBDAB8F25DA41FD00FEF2C3 /* WFCUConferenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceManager.h; sourceTree = "<group>"; };
 		2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceManager.m; sourceTree = "<group>"; };
 		2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceChangeModelContent.h; sourceTree = "<group>"; };
@@ -1158,6 +1160,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				2FB87A64265122E100790A26 /* Enum */,
 				2B07312425DDE8A3005EE603 /* PTT */,
 				2BBC9CEE255CEBD9007DA28A /* File */,
 				901E26FF21F152B200A163CB /* AVEngine */,
@@ -1922,6 +1925,14 @@
 			path = Message;
 			sourceTree = "<group>";
 		};
+		2FB87A64265122E100790A26 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				2FB87A65265122F900790A26 /* WFCUEnum.h */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
 		2FD550F32442AA5800B3EE09 /* YBAttributeTextTapAction */ = {
 			isa = PBXGroup;
 			children = (
@@ -1985,7 +1996,9 @@
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
+				2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */,
 				2B07312725DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h in Headers */,
+				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2B07313125DDE927005EE603 /* WFCUPushToTalkViewController.h in Headers */,
 				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
@@ -2033,7 +2046,6 @@
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
 				2FB7125925DA042900FD2E83 /* WFCUConferenceMember.h in Headers */,
 				2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */,
-				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageNotificationViewController.h in Headers */,
 				2BDF57AC24AD70C8003C1F08 /* DNAlbumCell.h in Headers */,

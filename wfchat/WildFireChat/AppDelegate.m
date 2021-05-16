@@ -460,17 +460,40 @@
 - (BOOL)handleUrl:(NSString *)str withNav:(UINavigationController *)navigator {
     NSLog(@"str scanned %@", str);
     if ([str rangeOfString:@"wildfirechat://user" options:NSCaseInsensitiveSearch].location == 0) {
-        NSString *userId = [str lastPathComponent];
+        //wildfirechat://user/userId?from=fromUserId
+        NSURLComponents *components = [NSURLComponents componentsWithString:str];
+        NSString *fromUserId;
+        for (NSURLQueryItem *item in components.queryItems) {
+            if([@"from" isEqualToString:item.name]) {
+                fromUserId = item.value;
+                break;
+            }
+        }
+        NSString *userId = components.path.lastPathComponent;
         WFCUProfileTableViewController *vc2 = [[WFCUProfileTableViewController alloc] init];
         vc2.userId = userId;
+        vc2.sourceType = FriendSource_QrCode;
+        vc2.sourceTargetId = fromUserId;
         vc2.hidesBottomBarWhenPushed = YES;
         
         [navigator pushViewController:vc2 animated:YES];
         return YES;
     } else if ([str rangeOfString:@"wildfirechat://group" options:NSCaseInsensitiveSearch].location == 0) {
-        NSString *groupId = [str lastPathComponent];
+        //wildfirechat://group/groupId?from=fromUserId
+        NSURLComponents *components = [NSURLComponents componentsWithString:str];
+        NSString *fromUserId;
+        for (NSURLQueryItem *item in components.queryItems) {
+            if([@"from" isEqualToString:item.name]) {
+                fromUserId = item.value;
+                break;
+            }
+        }
+        NSString *groupId = components.path.lastPathComponent;
+
         WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
         vc2.groupId = groupId;
+        vc2.sourceType = GroupMemberSource_QrCode;
+        vc2.sourceTargetId = fromUserId;
         vc2.hidesBottomBarWhenPushed = YES;
         [navigator pushViewController:vc2 animated:YES];
         return YES;

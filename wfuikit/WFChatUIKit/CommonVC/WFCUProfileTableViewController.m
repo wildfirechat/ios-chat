@@ -137,6 +137,8 @@
         UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"AddFriend") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
             vc.userId = ws.userId;
+            vc.sourceType = ws.sourceType;
+            vc.sourceTargetId = ws.sourceTargetId;
             [ws.navigationController pushViewController:vc animated:YES];
         }];
         [actionSheet addAction:addFriendAction];
@@ -512,6 +514,8 @@
 - (void)onAddFriendBtn:(id)sender {
     WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];
     vc.userId = self.userId;
+    vc.sourceType = self.sourceType;
+    vc.sourceTargetId = self.sourceTargetId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

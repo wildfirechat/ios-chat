@@ -34,6 +34,7 @@
 #import "UIColor+YH.h"
 #import "UIView+Toast.h"
 #import "WFCUSeletedUserViewController.h"
+#import "WFCUEnum.h"
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
@@ -255,7 +256,14 @@
         name = WFCString(@"GroupChat");
     }
     
-    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted members:memberIds notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
+    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                                               options:kNilOptions
+                                                                                 error:nil];
+    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+
+    
+    [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
