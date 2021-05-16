@@ -48,6 +48,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupMemberType) {
 @property(nonatomic, strong)NSString *alias;
 
 /**
+ 群成员扩展信息
+ */
+@property(nonatomic, strong)NSString *extra;
+
+/**
  群成员类型
  */
 @property(nonatomic, assign)WFCCGroupMemberType type;

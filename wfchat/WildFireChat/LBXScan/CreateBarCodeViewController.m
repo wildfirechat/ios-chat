@@ -47,7 +47,7 @@
     
     __weak typeof(self) ws = self;
     if (self.qrType == QRType_User) {
-        self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@", self.target];
+        self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
             if ([ws.target isEqualToString:notification.object]) {
@@ -57,7 +57,7 @@
         
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     } else if(self.qrType == QRType_Group) {
-        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@", self.target];
+        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
         [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
             if ([ws.target isEqualToString:notification.object]) {
