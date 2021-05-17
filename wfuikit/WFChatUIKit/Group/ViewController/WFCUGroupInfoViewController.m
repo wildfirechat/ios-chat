@@ -87,20 +87,20 @@
     } else {
         __weak typeof(self) ws = self;
         NSString *memberExtra = nil;
-        if(self.sourceType) {
-            NSDictionary *extraDict;
-            if(self.sourceTargetId.length) {
-                extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(self.sourceType), @"i"/*targetId*/:self.sourceTargetId}};
-            } else {
-                extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(self.sourceType)}};
-            }
-            
-            NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-                                                                                   options:kNilOptions
-                                                                                     error:nil];
-            memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
-
-        }
+//        if(self.sourceType) {
+//            NSDictionary *extraDict;
+//            if(self.sourceTargetId.length) {
+//                extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(self.sourceType), @"i"/*targetId*/:self.sourceTargetId}};
+//            } else {
+//                extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(self.sourceType)}};
+//            }
+//            
+//            NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+//                                                                                   options:kNilOptions
+//                                                                                     error:nil];
+//            memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+//
+//        }
         [[WFCCIMService sharedWFCIMService] addMembers:@[[WFCCNetworkService sharedInstance].userId] toGroup:self.groupId memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
             [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:YES];
             ws.isJoined = YES;
