@@ -136,11 +136,12 @@
         
         
 
-        NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
-        NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-                                                                                   options:kNilOptions
-                                                                                     error:nil];
-        NSString *memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+        NSString *memberExtra = nil;
+//        NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+//        NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+//                                                                                   options:kNilOptions
+//                                                                                     error:nil];
+//        NSString *memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
 
         
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {

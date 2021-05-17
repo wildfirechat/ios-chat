@@ -285,11 +285,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
   
 - (void)createGroup:(NSString *)groupName portrait:(NSString *)portraitUrl members:(NSArray<NSString *> *)memberIds {
-    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
-    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-                                                                               options:kNilOptions
-                                                                                 error:nil];
-    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+    NSString *extraStr = nil;
+//    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
+//    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+//                                                                               options:kNilOptions
+//                                                                                 error:nil];
+//    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
     
     __weak typeof(self) ws = self;
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:groupName portrait:portraitUrl type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
