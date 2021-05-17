@@ -176,6 +176,7 @@ namespace mars{
             int type;
             int64_t updateDt;
             int64_t createDt;
+            std::string extra;
             virtual ~TGroupMember() {}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
@@ -420,6 +421,7 @@ namespace mars{
             int direction;
             std::string target;
             std::string reason;
+            std::string extra;
             int status;
             int readStatus;
             int64_t timestamp;
@@ -428,6 +430,20 @@ namespace mars{
             virtual void Serialize(void *writer) const;
             virtual void Unserialize(const Value& value);
 #endif //WFCHAT_PROTO_SERIALIZABLE
+        };
+    
+        class TFriend : public TSerializable {
+        public:
+            TFriend() : timestamp(0) {}
+            std::string userId;
+            std::string alias;
+            std::string extra;
+            int64_t timestamp;
+            virtual ~TFriend(){}
+    #if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+    #endif //WFCHAT_PROTO_SERIALIZABLE
         };
 
         enum UserSettingScope {
@@ -833,7 +849,7 @@ namespace mars{
         extern int modifyUserSetting(int scope, const std::string &key, const std::string &value, GeneralOperationCallback *callback);
 
         extern void searchUser(const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
-        extern void sendFriendRequest(const std::string &userId, const std::string &reason, GeneralOperationCallback *callback);
+        extern void sendFriendRequest(const std::string &userId, const std::string &reason, const std::string &extra, GeneralOperationCallback *callback);
 
         extern void loadFriendRequestFromRemote();
         extern void loadFriendFromRemote();
@@ -843,9 +859,9 @@ namespace mars{
 
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
 
-        extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::list<std::string> &groupMembers, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
+        extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::string &groupExtra, const std::list<std::string> &groupMembers, const std::string &memberExtra, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
 
-        extern void (*addMembers)(const std::string &groupId, const std::list<std::string> &members, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+        extern void (*addMembers)(const std::string &groupId, const std::list<std::string> &members, const std::string &extra, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void (*kickoffMembers)(const std::string &groupId, const std::list<std::string> &members, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 

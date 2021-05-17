@@ -125,7 +125,7 @@ namespace mars {
             bool RemoveAllGroupMember(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
-            void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members);
+            void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members, const std::string &extra);
             int UpdateGroupManager(const std::string &groupId, const std::list<std::string> &members, int setOrDelete);
             int UpdateGroupMemberMuteOrAllow(const std::string &groupId, const std::list<std::string> &members, int setOrDelete, bool isAllow);
             int UpdateGroupMemberAlias(const std::string &groupId, const std::string &memberId, const std::string &alias);
@@ -140,6 +140,7 @@ namespace mars {
             bool isMyFriend(const std::string &userId);
             bool isBlackListed(const std::string &userId);
             std::list<std::string> getMyFriendList(bool refresh);
+            std::list<TFriend> getFriendList(bool refresh);
             std::list<std::string> getBlackList(bool refresh);
             
             std::string GetFriendAlias(const std::string &friendId);
