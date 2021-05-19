@@ -19,6 +19,9 @@
 @property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession);
 @property(nonatomic, strong) CTCallCenter *callCenter;
 @property(nonatomic, strong) NSString *focusUserId;
+
+@property(nonatomic, assign)CGFloat winWidth;
+@property(nonatomic, assign)CGFloat winHeight;
 @end
 
 static WFCUFloatingWindow *staticWindow = nil;
@@ -172,7 +175,19 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         }
     }
 
-    if ([self isVideoViewEnabled]) {
+    if(self.callSession.isInAppScreenSharing) {
+        self.window.frame = CGRectMake(posX, posY, 64, 64);
+        self.window.layer.cornerRadius = 32;
+        self.window.layer.masksToBounds = YES;
+        self.floatingButton.frame = CGRectMake(0, 0, 64, 64);
+        self.floatingButton.layer.cornerRadius = 32;
+        self.floatingButton.layer.masksToBounds = YES;
+        
+        [self.floatingButton setTitle:@"结束分享" forState:UIControlStateNormal];
+        [self.floatingButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.floatingButton setBackgroundColor:[UIColor redColor]];
+        self.videoView.hidden = YES;
+    } else if ([self isVideoViewEnabled]) {
         if (self.callSession.state == kWFAVEngineStateIncomming) {
             [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
             self.videoView.hidden = YES;
@@ -345,6 +360,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 
 - (void)touchedWindow:(id)sender {
+    if(self.callSession.isInAppScreenSharing) {
+        [self.callSession setInAppScreenSharing:NO];
+    }
+    
     [self hideCallFloatingWindow];
     if (self.touchedBlock) {
         self.touchedBlock(self.callSession);

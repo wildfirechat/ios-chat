@@ -494,6 +494,9 @@
 - (void)screenSharingButtonDidTap:(UIButton *)button {
     [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
     [self updateScreenSharingButton];
+    if(self.currentSession.isInAppScreenSharing) {
+        [self minimizeButtonDidTap:nil];
+    }
 }
 
 - (void)updateScreenSharingButton {
