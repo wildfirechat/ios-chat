@@ -558,6 +558,7 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     ret.toUsers = toUsers;
     ret.direction = (WFCCMessageDirection)tMessage->direction;
     ret.status = (WFCCMessageStatus)tMessage->status;
+    ret.localExtra = [NSString stringWithUTF8String:tMessage->localExtra.c_str()];
     
     WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
     payload.contentType = tMessage->content.type;
@@ -580,7 +581,7 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     payload.mentionedTargets = mentionedTargets;
     
     payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
-  
+    
     ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
     return ret;
 }
@@ -1089,6 +1090,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, mars::stn::Message_Status_Played);
 }
 
+- (BOOL)setMessage:(long)messageId localExtra:(NSString *)extra {
+    return mars::stn::MessageDB::Instance()->setMessageLocalExtra(messageId, extra ? [extra UTF8String] : "") ? YES : NO;
+}
 
 - (NSMutableDictionary<NSString *, NSNumber *> *)getConversationRead:(WFCCConversation *)conversation {
     std::map<std::string, int64_t> reads = mars::stn::MessageDB::Instance()->GetConversationRead((int)conversation.type, [conversation.target UTF8String], conversation.line);
@@ -2603,6 +2607,7 @@ public:
     
     tmsg.status = (mars::stn::MessageStatus)message.status;
     tmsg.timestamp = message.serverTime;
+    tmsg.localExtra = [message.localExtra UTF8String];
     
     long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
     message.messageId = msgId;

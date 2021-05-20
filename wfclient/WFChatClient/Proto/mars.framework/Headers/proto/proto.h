@@ -347,6 +347,7 @@ namespace mars{
             int64_t messageUid;
             int64_t timestamp;
             std::list<std::string> to;
+            std::string localExtra;
             virtual ~TMessage(){}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;

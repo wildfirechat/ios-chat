@@ -44,6 +44,10 @@
         if (msg.serverTime) {
             [msgDict setValue:@(msg.serverTime) forKey:@"serverTime"];
         }
+        if(msg.localExtra) {
+            [msgDict setValue:msg.localExtra forKey:@"le"];
+        }
+        
         WFCCMessagePayload *msgPayload = [msg.content encode];
         if (msgPayload.contentType) {
             [msgDict setValue:@(msgPayload.contentType) forKey:@"ctype"];
@@ -121,6 +125,7 @@
             msg.direction = [msgDict[@"direction"] intValue];
             msg.status = [msgDict[@"status"] intValue];
             msg.serverTime = [msgDict[@"serverTime"] longLongValue];
+            msg.localExtra = msgDict[@"le"];
             
             WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
             payload.contentType = [msgDict[@"ctype"] intValue];

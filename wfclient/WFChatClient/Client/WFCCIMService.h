@@ -369,6 +369,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)setMediaMessagePlayed:(long)messageId;
 
 /**
+ 设置消息的本地附加信息，注意信息不在多端之间同步。
+ 
+ @param messageId 消息ID
+ @param extra          附加信息
+ 
+ @return YES更新成功，NO消息不存在
+ */
+- (BOOL)setMessage:(long)messageId localExtra:(NSString *)extra;
+/**
 获取会话内已读状态
 
 @param conversation 会话
