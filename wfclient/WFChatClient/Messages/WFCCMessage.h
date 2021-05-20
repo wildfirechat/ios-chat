@@ -92,6 +92,11 @@ typedef NS_ENUM(NSInteger, WFCCMessageStatus) {
  */
 @property (nonatomic, assign)long long serverTime;
 
+/**
+ 消息本地附加信息
+ */
+@property (nonatomic, strong)NSString * localExtra;
+
 - (NSString *)digest;
 
 @end

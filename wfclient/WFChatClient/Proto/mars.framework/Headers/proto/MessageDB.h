@@ -86,6 +86,8 @@ namespace mars {
             bool updateMessageRemoteMediaUrl(long messageId, const std::string &remoteMediaUrl);
             bool updateMessageLocalMediaPath(long messageId, const std::string &localMediaPath);
             
+            bool setMessageLocalExtra(long messageId, const std::string &extra);
+            
             int GetMsgTotalCount(int conversationType, const std::string &target, int line);
             
             TUnreadCount GetUnreadCount(int conversationType, const std::string &target, int line);
