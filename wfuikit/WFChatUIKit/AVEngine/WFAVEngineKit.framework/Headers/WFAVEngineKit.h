@@ -360,6 +360,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                         desc:(NSString *_Nullable)desc
                                     audience:(BOOL)audience
                                     advanced:(BOOL)advanced
+                                      record:(BOOL)record
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
