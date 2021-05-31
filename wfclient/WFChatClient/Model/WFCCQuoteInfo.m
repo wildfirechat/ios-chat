@@ -55,15 +55,15 @@
 
 - (NSDictionary *)encode {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:@(self.messageUid) forKey:@"messageUid"];
+    [dict setObject:@(self.messageUid) forKey:@"u"];
     if (self.userId.length) {
-        [dict setObject:self.userId forKey:@"userId"];
+        [dict setObject:self.userId forKey:@"i"];
     }
     if (self.userDisplayName.length) {
-        [dict setObject:self.userDisplayName forKey:@"userDisplayName"];
+        [dict setObject:self.userDisplayName forKey:@"n"];
     }
     if (self.messageDigest.length) {
-        [dict setObject:self.messageDigest forKey:@"messageDigest"];
+        [dict setObject:self.messageDigest forKey:@"d"];
     }
     return [dict copy];
 }
