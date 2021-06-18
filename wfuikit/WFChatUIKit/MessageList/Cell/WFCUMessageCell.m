@@ -113,6 +113,7 @@
         } else {
             [_activityIndicatorView stopAnimating];
             _activityIndicatorView.hidden = YES;
+            [self updateReceiptView];
         }
         
         if (self.model.message.status == Message_Status_Send_Failure) {
@@ -171,7 +172,7 @@
       }
   }
 }
-  
+
 - (void)setModel:(WFCUMessageModel *)model {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatusChanged:) name:kSendingMessageStatusUpdated object:
@@ -204,67 +205,7 @@
       self.bubbleView.image = [self.bubbleView.image
                                          resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.95, image.size.width * 0.2,image.size.height * 0.1, image.size.width * 0.05)];
       
-      if([model.message.content.class getContentFlags] == WFCCPersistFlag_PERSIST_AND_COUNT && (model.message.status == Message_Status_Sent || model.message.status == Message_Status_Readed) && [[WFCCIMService sharedWFCIMService] isReceiptEnabled] && [[WFCCIMService sharedWFCIMService] isUserEnableReceipt] && ![model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
-          if (model.message.conversation.type == Single_Type) {
-              if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
-                  [self.receiptView setProgress:1 subProgress:1];
-              } else if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
-                  [self.receiptView setProgress:0 subProgress:1];
-              } else {
-                  [self.receiptView setProgress:0 subProgress:0];
-              }
-              if([model.message.conversation.target isEqualToString:[WFCUConfigManager globalManager].fileTransferId]) {
-                  self.receiptView.hidden = YES;
-              } else {
-                  self.receiptView.hidden = NO;
-              }
-          } else if(model.message.conversation.type == Group_Type) {
-              long long messageTS = model.message.serverTime;
-              
-              WFCCGroupInfo *groupInfo = nil;
-              if (model.deliveryRate == -1) {
-                  __block int delieveriedCount = 0;
-
-                  [model.deliveryDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-                      if ([obj longLongValue] >= messageTS) {
-                          delieveriedCount++;
-                      }
-                  }];
-                  groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
-                  model.deliveryRate = (float)delieveriedCount/(groupInfo.memberCount - 1);
-              }
-              if (model.readRate == -1) {
-                  __block int readedCount = 0;
-
-                  [model.readDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-                      if ([obj longLongValue] >= messageTS) {
-                          readedCount++;
-                      }
-                  }];
-                  if (!groupInfo) {
-                      groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
-                  }
-                  
-                  model.readRate = (float)readedCount/(groupInfo.memberCount - 1);
-              }
-            
-              
-              if (model.deliveryRate < model.readRate) {
-                  model.deliveryRate = model.readRate;
-              }
-              
-              [self.receiptView setProgress:model.readRate subProgress:model.deliveryRate];
-              self.receiptView.hidden = NO;
-          } else {
-              self.receiptView.hidden = YES;
-          }
-      } else {
-          self.receiptView.hidden = YES;
-      }
-      
-      if (self.receiptView.hidden == NO) {
-          self.receiptView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
-      }
+      [self updateReceiptView];
   } else {
     CGFloat top = [WFCUMessageCellBase hightForHeaderArea:model];
     self.portraitView.frame = CGRectMake(Portrait_Padding_Left, top, Portrait_Size, Portrait_Size);
@@ -394,6 +335,74 @@
         }
     }
 }
+
+- (void)updateReceiptView {
+    WFCUMessageModel *model = self.model;
+    if (model.message.direction == MessageDirection_Send) {
+        if([model.message.content.class getContentFlags] == WFCCPersistFlag_PERSIST_AND_COUNT && (model.message.status == Message_Status_Sent || model.message.status == Message_Status_Readed) && [[WFCCIMService sharedWFCIMService] isReceiptEnabled] && [[WFCCIMService sharedWFCIMService] isUserEnableReceipt] && ![model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+            if (model.message.conversation.type == Single_Type) {
+                if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
+                    [self.receiptView setProgress:1 subProgress:1];
+                } else if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
+                    [self.receiptView setProgress:0 subProgress:1];
+                } else {
+                    [self.receiptView setProgress:0 subProgress:0];
+                }
+                if([model.message.conversation.target isEqualToString:[WFCUConfigManager globalManager].fileTransferId]) {
+                    self.receiptView.hidden = YES;
+                } else {
+                    self.receiptView.hidden = NO;
+                }
+            } else if(model.message.conversation.type == Group_Type) {
+                long long messageTS = model.message.serverTime;
+                
+                WFCCGroupInfo *groupInfo = nil;
+                if (model.deliveryRate == -1) {
+                    __block int delieveriedCount = 0;
+
+                    [model.deliveryDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+                        if ([obj longLongValue] >= messageTS) {
+                            delieveriedCount++;
+                        }
+                    }];
+                    groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
+                    model.deliveryRate = (float)delieveriedCount/(groupInfo.memberCount - 1);
+                }
+                if (model.readRate == -1) {
+                    __block int readedCount = 0;
+
+                    [model.readDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+                        if ([obj longLongValue] >= messageTS) {
+                            readedCount++;
+                        }
+                    }];
+                    if (!groupInfo) {
+                        groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:model.message.conversation.target refresh:NO];
+                    }
+                    
+                    model.readRate = (float)readedCount/(groupInfo.memberCount - 1);
+                }
+              
+                
+                if (model.deliveryRate < model.readRate) {
+                    model.deliveryRate = model.readRate;
+                }
+                
+                [self.receiptView setProgress:model.readRate subProgress:model.deliveryRate];
+                self.receiptView.hidden = NO;
+            } else {
+                self.receiptView.hidden = YES;
+            }
+        } else {
+            self.receiptView.hidden = YES;
+        }
+        
+        if (self.receiptView.hidden == NO) {
+            self.receiptView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
+        }
+    }
+}
+
 - (void)onQuoteLabelTaped:(id)sender {
     if ([self.delegate respondsToSelector:@selector(didTapQuoteLabel:withModel:)]) {
         [self.delegate didTapQuoteLabel:self withModel:self.model];
