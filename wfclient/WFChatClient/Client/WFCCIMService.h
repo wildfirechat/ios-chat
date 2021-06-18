@@ -26,6 +26,7 @@
 #pragma mark - 频道通知定义
 //发送消息状态通知
 extern NSString *kSendingMessageStatusUpdated;
+extern NSString *kUploadMediaMessageProgresse;
 extern NSString *kConnectionStatusChanged;
 extern NSString *kReceiveMessages;
 extern NSString *kRecallMessages;

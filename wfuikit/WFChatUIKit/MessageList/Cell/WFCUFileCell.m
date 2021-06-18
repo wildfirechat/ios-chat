@@ -41,6 +41,10 @@
     self.sizeLabel.text = [WFCUUtilities formatSizeLable:fileContent.size];
 }
 
+- (UIView *)getProgressParentView {
+    return self.fileImageView;
+}
+
 - (UIImageView *)fileImageView {
     if (!_fileImageView) {
         _fileImageView = [[UIImageView alloc] init];

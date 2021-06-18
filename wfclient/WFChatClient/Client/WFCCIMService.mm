@@ -18,6 +18,7 @@
 #import "wav_amr.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
+NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
 NSString *kConnectionStatusChanged = @"kConnectionStatusChanged";
 NSString *kReceiveMessages = @"kReceiveMessages";
 NSString *kRecallMessages = @"kRecallMessages";
@@ -67,6 +68,9 @@ public:
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
             mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
+        });
     }
     
     void onProgress(int uploaded, int total) {
@@ -74,6 +78,8 @@ public:
             if (m_progressBlock) {
                 m_progressBlock(uploaded, total);
             }
+            float progress = (uploaded * 1.f)/total;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(progress), @"finish":@(NO)}];
         });
     }
     

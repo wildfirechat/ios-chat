@@ -67,4 +67,7 @@
     
 }
 
+- (UIView *)getProgressParentView {
+    return self.thumbnailView;
+}
 @end
