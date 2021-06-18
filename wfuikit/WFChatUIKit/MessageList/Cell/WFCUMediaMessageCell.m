@@ -8,10 +8,13 @@
 
 #import "WFCUMediaMessageCell.h"
 #import "WFCUMediaMessageDownloader.h"
+#import "HWCircleView.h"
 
 @interface WFCUMediaMessageCell ()
 @property (nonatomic, strong)UIView *maskView;
 @property (nonatomic, strong)UIActivityIndicatorView *activityView;
+
+@property (nonatomic, strong)HWCircleView *progressView;
 @end
 
 @implementation WFCUMediaMessageCell
@@ -30,11 +33,35 @@
         }
     }];
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:kUploadMediaMessageProgresse object:@(model.message.messageId) queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            float progress = [note.userInfo[@"progress"] floatValue];
+            BOOL finish = [note.userInfo[@"finish"] boolValue];
+            [ws updateUploadProgress:progress finish:finish];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kSendingMessageStatusUpdated object:@(model.message.messageId) queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            WFCCMessageStatus newStatus = (WFCCMessageStatus)[[note.userInfo objectForKey:@"status"] integerValue];
+        if(newStatus == Message_Status_Sent || newStatus == Message_Status_Send_Failure) {
+            [ws updateUploadProgress:1 finish:YES];
+        }
+    }];
+    
     
     if (model.mediaDownloading) {
         [self onStartDownloading:self];
     } else {
         [self onDownloadFinished:self];
+    }
+}
+
+- (void)updateUploadProgress:(float)progress finish:(BOOL)finish {
+    if(finish) {
+        self.progressView.hidden = YES;
+    } else {
+        UIView *parentView = [self getProgressParentView];
+        self.progressView.hidden = NO;
+        self.progressView.progress = progress;
+        [parentView bringSubviewToFront:self.progressView];
     }
 }
 
@@ -76,6 +103,18 @@
             [self setModel:self.model];
         }
     }
+}
+
+- (UIView *)progressView {
+    if(!_progressView) {
+        _progressView = [[HWCircleView alloc] initWithFrame:[self getProgressParentView].bounds];
+        [[self getProgressParentView] addSubview:_progressView];
+    }
+    return _progressView;
+}
+
+- (UIView *)getProgressParentView {
+    return nil;
 }
 
 - (void)dealloc {

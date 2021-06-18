@@ -405,6 +405,8 @@
 		2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */; };
 		2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F7381F42308F72F00213421 /* WFCUGroupMemberCollectionViewController.h */; };
 		2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7381F52308F72F00213421 /* WFCUGroupMemberCollectionViewController.m */; };
+		2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F765FA7267C28B600E3B365 /* HWCircleView.h */; };
+		2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F765FA8267C28B600E3B365 /* HWCircleView.m */; };
 		2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */; };
 		2F9CE41D21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9CE41B21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h */; };
 		2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9CE41E21BFE63C005E1BE1 /* WFCUChannelProfileViewController.h */; };
@@ -855,6 +857,8 @@
 		2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFavoriteItem.m; sourceTree = "<group>"; };
 		2F7381F42308F72F00213421 /* WFCUGroupMemberCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupMemberCollectionViewController.h; sourceTree = "<group>"; };
 		2F7381F52308F72F00213421 /* WFCUGroupMemberCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupMemberCollectionViewController.m; sourceTree = "<group>"; };
+		2F765FA7267C28B600E3B365 /* HWCircleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HWCircleView.h; sourceTree = "<group>"; };
+		2F765FA8267C28B600E3B365 /* HWCircleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HWCircleView.m; sourceTree = "<group>"; };
 		2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchChannelViewController.m; sourceTree = "<group>"; };
 		2F9CE41B21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSearchChannelViewController.h; sourceTree = "<group>"; };
 		2F9CE41E21BFE63C005E1BE1 /* WFCUChannelProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUChannelProfileViewController.h; sourceTree = "<group>"; };
@@ -1350,6 +1354,7 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2F765FA6267C28A500E3B365 /* HWCircleView */,
 				2F0BD9102537424500A7B674 /* ZLPhotoBrowser */,
 				2FA2E6E025158CBA0038635A /* SDWebImage */,
 				2BDF576724AD70C8003C1F08 /* DNImagePicker */,
@@ -1871,6 +1876,15 @@
 			path = CompositeCell;
 			sourceTree = "<group>";
 		};
+		2F765FA6267C28A500E3B365 /* HWCircleView */ = {
+			isa = PBXGroup;
+			children = (
+				2F765FA7267C28B600E3B365 /* HWCircleView.h */,
+				2F765FA8267C28B600E3B365 /* HWCircleView.m */,
+			);
+			path = HWCircleView;
+			sourceTree = "<group>";
+		};
 		2F9CE41921BFE5A4005E1BE1 /* Channel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2209,6 +2223,7 @@
 				14349FA624362A6600FE38B3 /* WFCUSeletedUserViewController.h in Headers */,
 				2F55116F217F5CC200F56C26 /* AFHTTPSessionManager.h in Headers */,
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
+				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
 				2FBDABA125DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h in Headers */,
 				90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */,
 				2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */,
@@ -2501,6 +2516,7 @@
 				2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */,
 				2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */,
 				2F3A6C18219EE941009A8B4B /* WFCUFaceBoard.m in Sources */,
+				2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */,
 				9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */,
 				2F55121C217F5CC300F56C26 /* WFCUModifyMyProfileViewController.m in Sources */,
 				2F5510F7217F5CC200F56C26 /* CCHMapClusterAnnotation.m in Sources */,
