@@ -49,8 +49,8 @@
 //退群的可见通知消息
 //#define MESSAGE_CONTENT_TYPE_QUIT_GROUP_VISIBLE_NOTIFICATION 121
 
-#define MESSAGE_CONTENT_TYPE_CHANGE_EXTRA 122
-
+#define MESSAGE_CONTENT_TYPE_CHANGE_GROUP_EXTRA 122
+#define MESSAGE_CONTENT_TYPE_CHANGE_GROUP_MEMBER_EXTRA 123
 
 
 #if WFCHAT_PROTO_SERIALIZABLE
@@ -877,6 +877,8 @@ namespace mars{
         extern void (*modifyGroupAlias)(const std::string &groupId, const std::string &newAlias, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
     
         extern void modifyGroupMemberAlias(const std::string &groupId, const std::string &memberId, const std::string &newAlias, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+    
+        extern void modifyGroupMemberExtra(const std::string &groupId, const std::string &memberId, const std::string &extra, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void (*getGroupMembers)(const std::string &groupId, int64_t updateDt);
 
