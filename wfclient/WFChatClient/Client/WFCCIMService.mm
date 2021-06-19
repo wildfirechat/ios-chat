@@ -1999,6 +1999,33 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
     mars::stn::modifyGroupMemberAlias([groupId UTF8String], [memberId UTF8String], [newAlias UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (void)modifyGroupMemberExtra:(NSString *)groupId
+                         extra:(NSString *)extra
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                 notifyContent:(WFCCMessageContent *)notifyContent
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock {
+    [self modifyGroupMemberExtra:groupId memberId:[WFCCNetworkService sharedInstance].userId extra:extra notifyLines:notifyLines notifyContent:notifyContent success:successBlock error:errorBlock];
+}
+
+- (void)modifyGroupMemberExtra:(NSString *)groupId
+                      memberId:(NSString *)memberId
+                         extra:(NSString *)extra
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                 notifyContent:(WFCCMessageContent *)notifyContent
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int error_code))errorBlock {
+    mars::stn::TMessageContent tcontent;
+    fillTMessageContent(tcontent, notifyContent);
+    
+    std::list<int> lines;
+    for (NSNumber *number in notifyLines) {
+        lines.push_back([number intValue]);
+    }
+    
+    mars::stn::modifyGroupMemberExtra([groupId UTF8String], [memberId UTF8String], [extra UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
     WFCCGroupMember *member = [[WFCCGroupMember alloc] init];
     member.groupId = [NSString stringWithUTF8String:tm.groupId.c_str()];
