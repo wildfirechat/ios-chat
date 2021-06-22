@@ -1123,6 +1123,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (long long)getMessageDeliveryByUser:(NSString *)userId {
+    if(!userId) {
+        return 0;
+    }
     return mars::stn::MessageDB::Instance()->GetDelivery([userId UTF8String]);
 }
 
@@ -1200,6 +1203,10 @@ public:
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock {
+    
+    if(keyword.length == 0) {
+        successBlock(@[]);
+    }
     
     if (self.userSource) {
         [self.userSource searchUser:keyword searchType:searchType page:page success:successBlock error:errorBlock];
@@ -1869,6 +1876,12 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
      notifyContent:(WFCCMessageContent *)notifyContent
            success:(void(^)())successBlock
              error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
 
     std::list<std::string> memberList;
     for (NSString *member in members) {
@@ -1893,6 +1906,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                success:(void(^)())successBlock
                  error:(void(^)(int error_code))errorBlock {
 
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     std::list<std::string> memberList;
     for (NSString *member in members) {
         memberList.push_back([member UTF8String]);
@@ -1915,6 +1935,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
           success:(void(^)())successBlock
             error:(void(^)(int error_code))errorBlock {
 
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -1932,6 +1959,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
              success:(void(^)())successBlock
                error:(void(^)(int error_code))errorBlock {
 
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -1951,6 +1985,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
     
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -1969,6 +2010,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                  success:(void(^)())successBlock
                    error:(void(^)(int error_code))errorBlock {
     
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -1977,7 +2025,7 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
         lines.push_back([number intValue]);
     }
     
-    mars::stn::modifyGroupAlias([groupId UTF8String], [newAlias UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::modifyGroupAlias([groupId UTF8String], newAlias ? [newAlias UTF8String] : "", lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)modifyGroupMemberAlias:(NSString *)groupId
@@ -1987,6 +2035,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                  notifyContent:(WFCCMessageContent *)notifyContent
                        success:(void(^)(void))successBlock
                          error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -2015,6 +2070,13 @@ WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
                  notifyContent:(WFCCMessageContent *)notifyContent
                        success:(void(^)(void))successBlock
                          error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -2039,6 +2101,10 @@ WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
 
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
                              forceUpdate:(BOOL)forceUpdate {
+    if(groupId.length == 0) {
+        return nil;
+    }
+    
     std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], forceUpdate);
     NSMutableArray *output = [[NSMutableArray alloc] init];
     for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
@@ -2050,6 +2116,10 @@ WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
 
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
                              type:(WFCCGroupMemberType)memberType {
+    if(groupId.length == 0) {
+        return nil;
+    }
+    
     std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembersByType([groupId UTF8String], (int)memberType);
     NSMutableArray *output = [[NSMutableArray alloc] init];
     for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
@@ -2101,6 +2171,14 @@ public:
                 refresh:(BOOL)refresh
                 success:(void(^)(NSString *groupId, NSArray<WFCCGroupMember *> *))successBlock
                   error:(void(^)(int errorCode))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
+    
     mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], refresh, new IMGetGroupMembersCallback(successBlock, errorBlock));
 }
 
@@ -2128,6 +2206,14 @@ public:
         notifyContent:(WFCCMessageContent *)notifyContent
               success:(void(^)())successBlock
                 error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -2146,6 +2232,13 @@ public:
           notifyContent:(WFCCMessageContent *)notifyContent
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
+    
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
@@ -2169,6 +2262,13 @@ public:
              notifyContent:(WFCCMessageContent *)notifyContent
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -2192,6 +2292,13 @@ public:
              notifyContent:(WFCCMessageContent *)notifyContent
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, notifyContent);
     
@@ -2275,6 +2382,13 @@ public:
              refresh:(BOOL)refresh
              success:(void(^)(WFCCGroupInfo *groupInfo))successBlock
                error:(void(^)(int errorCode))errorBlock {
+    if(groupId.length == 0) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    
     mars::stn::MessageDB::Instance()->GetGroupInfo([groupId UTF8String], refresh, new IMGetOneGroupInfoCallback(successBlock, errorBlock));
 }
 
