@@ -188,6 +188,7 @@ namespace mars {
             SyncReadEntry loadConversationSync();
             bool deleteConvSync(long _id);
         private:
+            int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
             bool updateConversationUnread(int conversationType, const std::string &target, int line);
