@@ -1368,7 +1368,7 @@ public:
     ~IMSearchChannelCallback() {}
 };
 
-WFCCGroupInfo *convertProtoGroupInfo(mars::stn::TGroupInfo tgi) {
+WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     if (tgi.target.empty()) {
         return nil;
     }
@@ -2189,13 +2189,7 @@ public:
     }
     mars::stn::TGroupMember tmember = mars::stn::MessageDB::Instance()->GetGroupMember([groupId UTF8String], [memberId UTF8String]);
     if (tmember.memberId == [memberId UTF8String]) {
-        WFCCGroupMember *member = [WFCCGroupMember new];
-        member.groupId = groupId;
-        member.memberId = memberId;
-        member.alias = [NSString stringWithUTF8String:tmember.alias.c_str()];
-        member.type = (WFCCGroupMemberType)tmember.type;
-        member.createTime = tmember.createDt;
-        return member;
+        return convertProtoGroupMember(tmember);
     }
     return nil;
 }
