@@ -42,7 +42,7 @@ NSString *kChannelInfoUpdated = @"kChannelInfoUpdated";
 @end
 
 @protocol RefreshGroupMemberDelegate <NSObject>
-- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMember;
+- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMembers;
 @end
 
 @protocol RefreshChannelInfoDelegate <NSObject>
@@ -171,34 +171,17 @@ NSArray<WFCCUserInfo *>* converUserInfos(const std::list<mars::stn::TUserInfo> &
     return out;
 }
 
-WFCCGroupInfo* convertGroupInfo(const mars::stn::TGroupInfo &tgi) {
-    WFCCGroupInfo *groupInfo = [[WFCCGroupInfo alloc] init];
-    groupInfo.type = (WFCCGroupType)tgi.type;
-    groupInfo.target = [NSString stringWithUTF8String:tgi.target.c_str()];
-    groupInfo.name = [NSString stringWithUTF8String:tgi.name.c_str()];
-    groupInfo.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];;
-    groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
-    groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
-    groupInfo.memberCount = tgi.memberCount;
-    groupInfo.mute = tgi.mute;
-    groupInfo.joinType = tgi.joinType;
-    groupInfo.privateChat = tgi.privateChat;
-    groupInfo.searchable = tgi.searchable;
-    groupInfo.historyMessage = tgi.historyMessage;
-    groupInfo.maxMemberCount = tgi.maxMemberCount;
-    groupInfo.updateTimestamp = tgi.updateDt;
-    return groupInfo;
-}
-
 extern WFCCChannelInfo *convertProtoChannelInfo(const mars::stn::TChannelInfo &tci);
-
+extern WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm);
+extern WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi);
 NSArray<WFCCGroupInfo *>* convertGroupInfos(const std::list<mars::stn::TGroupInfo> &groupInfoList) {
     NSMutableArray *out = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TGroupInfo>::const_iterator it = groupInfoList.begin(); it != groupInfoList.end(); it++) {
-        [out addObject:convertGroupInfo(*it)];
+        [out addObject:convertProtoGroupInfo(*it)];
     }
     return out;
 }
+
 NSArray<WFCCChannelInfo *>* convertChannelInfos(const std::list<mars::stn::TChannelInfo> &channelInfoList) {
     NSMutableArray *out = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TChannelInfo>::const_iterator it = channelInfoList.begin(); it != channelInfoList.end(); it++) {
@@ -348,7 +331,13 @@ public:
     
     void onSuccess(const std::string &groupId, const std::list<mars::stn::TGroupMember> &groupMemberList) {
         if(m_delegate && !groupMemberList.empty()) {
-            [m_delegate onGroupMemberUpdated:[NSString stringWithUTF8String:groupId.c_str()] members:nil];
+            NSMutableArray *output = [[NSMutableArray alloc] init];
+            for(std::list<mars::stn::TGroupMember>::const_iterator it = groupMemberList.begin(); it != groupMemberList.end(); it++) {
+                WFCCGroupMember *member = convertProtoGroupMember(*it);
+                [output addObject:member];
+            }
+            
+            [m_delegate onGroupMemberUpdated:[NSString stringWithUTF8String:groupId.c_str()] members:output];
         }
     }
     void onFalure(int errorCode) {
@@ -974,9 +963,9 @@ static WFCCNetworkService * sharedSingleton = nil;
   });
 }
 
-- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMember {
+- (void)onGroupMemberUpdated:(NSString *)groupId members:(NSArray<WFCCGroupMember *> *)updatedGroupMembers {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberUpdated object:groupId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGroupMemberUpdated object:groupId userInfo:@{@"members":updatedGroupMembers}];
     });
 }
 
