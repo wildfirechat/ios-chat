@@ -11,9 +11,25 @@
 
 
 @implementation WFCUFavoriteItem
-+ (WFCUFavoriteItem *)itemFromContent:(WFCCMessageContent *)content {
++ (WFCUFavoriteItem *)itemFromMessage:(WFCCMessage *)message {
     WFCUFavoriteItem *item = [[WFCUFavoriteItem alloc] init];
+    item.messageUid = message.messageUid;
+    item.conversation = message.conversation;
+    item.timestamp = message.serverTime;
+    item.sender = message.fromUser;
     
+    if(message.conversation.type == Single_Type) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:message.conversation.target refresh:NO];
+        item.origin = userInfo.displayName;
+    } else if(message.conversation.type == Group_Type) {
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:message.conversation.target refresh:NO];
+        item.origin = groupInfo.name;
+    } else if(message.conversation.type == Channel_Type) {
+        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:message.conversation.target refresh:NO];
+        item.origin = channelInfo.name;
+    }
+    
+    WFCCMessageContent *content = message.content;
     if ([content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)content;
         
@@ -89,11 +105,15 @@
     return item;
 }
 
-- (WFCCMessageContent *)toContent {
+- (WFCCMessage *)toMessage {
+    WFCCMessage *msg = [[WFCCMessage alloc] init];
+    msg.conversation = self.conversation;
+    msg.fromUser = self.sender;
+    msg.serverTime = self.timestamp;
     switch (self.favType) {
         case MESSAGE_CONTENT_TYPE_TEXT:
         {
-            return [WFCCTextMessageContent contentWith:self.title];
+            msg.content = [WFCCTextMessageContent contentWith:self.title];
         }
         case MESSAGE_CONTENT_TYPE_SOUND:
         {
@@ -103,7 +123,7 @@
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
             soundCnt.duration = [dict[@"duration"] intValue];
             
-            return soundCnt;
+            msg.content = soundCnt;
         }
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
@@ -116,7 +136,7 @@
             NSData *thumbData = [[NSData alloc] initWithBase64EncodedString:thumbStr options:NSDataBase64DecodingIgnoreUnknownCharacters];
             imageCnt.thumbnail = [UIImage imageWithData:thumbData];
             
-            return imageCnt;
+            msg.content = imageCnt;
         }
         case MESSAGE_CONTENT_TYPE_VIDEO:
         {
@@ -130,7 +150,7 @@
             videoCnt.thumbnail = [UIImage imageWithData:thumbData];
             videoCnt.duration = [dict[@"duration"] intValue];
             
-            return videoCnt;
+            msg.content = videoCnt;
         }
         case MESSAGE_CONTENT_TYPE_LOCATION:
         {
@@ -147,7 +167,7 @@
             double longitude = [dict[@"long"] doubleValue];
             locationCnt.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
             
-            return locationCnt;
+            msg.content = locationCnt;
         }
         case MESSAGE_CONTENT_TYPE_LINK:
         {
@@ -156,7 +176,7 @@
             linkCnt.thumbnailUrl = self.thumbUrl;
             linkCnt.title = self.title;
 
-            return linkCnt;
+            msg.content = linkCnt;
         }
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
@@ -168,7 +188,7 @@
             payload.binaryContent = binaryData;
             [compositeCnt decode:payload];
             
-            return compositeCnt;
+            msg.content = compositeCnt;
         }
         case MESSAGE_CONTENT_TYPE_FILE:
         {
@@ -179,7 +199,7 @@
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
             fileCnt.size = [dict[@"size"] intValue];
             
-            return fileCnt;
+            msg.content = fileCnt;
         }
         default:
             break;
