@@ -185,7 +185,7 @@
             break;
         case MESSAGE_CONTENT_TYPE_LOCATION:
         {
-            WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)[self.selectedCell.favoriteItem toContent];
+            WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)[self.selectedCell.favoriteItem toMessage].content;
             WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -200,7 +200,7 @@
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
             WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
-            vc.compositeContent = (WFCCCompositeMessageContent *)[self.selectedCell.favoriteItem toContent];
+            vc.compositeContent = (WFCCCompositeMessageContent *)[self.selectedCell.favoriteItem toMessage].content;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -313,7 +313,7 @@
 -(void)performForward:(UIMenuController *)sender {
     WFCCMessage *message = [[WFCCMessage alloc] init];
     WFCUFavoriteItem *item = self.selectedCell.favoriteItem;
-    message.content = [item toContent];
+    message.content = [item toMessage].content;
     if (!message.content) {
         return;
     }

@@ -406,6 +406,7 @@ static AppService *sharedSingleton = nil;
                 WFCUFavoriteItem *item = [[WFCUFavoriteItem alloc] init];
                 item.conversation = [WFCCConversation conversationWithType:[d[@"convType"] intValue] target:d[@"convTarget"] line:[d[@"convLine"] intValue]];
                 item.favId = [d[@"id"] intValue];
+                item.messageUid = [d[@"messageUid"] longLongValue];
                 item.timestamp = [d[@"timestamp"] longLongValue];
                 item.url = d[@"url"];
                 item.favType = [d[@"type"] intValue];
@@ -431,6 +432,7 @@ static AppService *sharedSingleton = nil;
                   error:(void(^)(int error_code))errorBlock {
     NSString *path = @"/fav/add";
     NSDictionary *param = @{@"type":@(item.favType),
+                            @"messageUid":@(item.messageUid),
                             @"convType":@(item.conversation.type),
                             @"convLine":@(item.conversation.line),
                             @"convTarget":item.conversation.target?item.conversation.target:@"",
