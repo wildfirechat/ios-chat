@@ -2698,7 +2698,7 @@
 
 - (void)performFavorite:(UIMenuItem *)sender {
     if (self.cell4Menu.model.message) {
-        WFCUFavoriteItem *item = [WFCUFavoriteItem itemFromContent:self.cell4Menu.model.message.content];
+        WFCUFavoriteItem *item = [WFCUFavoriteItem itemFromMessage:self.cell4Menu.model.message];
         if (!item) {
             [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
             return;
