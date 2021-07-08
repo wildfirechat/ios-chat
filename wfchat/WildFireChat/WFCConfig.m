@@ -10,7 +10,7 @@
 
 //可以是IP，可以是域名，如果是域名的话只支持主域名或www域名或im或imtest的二级域名，其它二级域名不支持！
 //例如：example.com或www.example.com或im.example.com或imtest.example.com是支持的；xx.example.com或xx.yy.example.com是不支持的。如果是专业版必须用域名，社区版建议也用域名。
-NSString *IM_SERVER_HOST = @"wildfirechat.net";
+NSString *IM_SERVER_HOST = @"192.168.1.6";
 
 
 // App Server默认使用的是8888端口，替换为自己部署的服务时需要注意端口别填错了，使用http访问appserver时，需要确保appserver的配置文件中的wfc.all_client_support_ssl参数为false
@@ -18,8 +18,8 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 // 如果您使用web-chat，由于最新chrome浏览器的策略，只有使用https才能带上cookie访问appserver的接口，所以就必须使
 // wfc.all_client_support_ssl为tue，所以客户端也必须使用https的应用服务地址
 
-//NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
-NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
+NSString *APP_SERVER_ADDRESS = @"http://192.168.1.6:8888";
+//NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务仅供用户测试和体验，上线时请切换成你们自己的服务。
