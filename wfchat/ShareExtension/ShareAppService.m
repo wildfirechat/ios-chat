@@ -164,8 +164,16 @@ static ShareAppService *sharedSingleton = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
-    for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+    NSString *authToken = [sharedDefaults objectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
+    
+#define AUTHORIZATION_HEADER @"authToken"
+    if(authToken.length) {
+        [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
+    } else {
+        for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+        }
     }
     
     [manager POST:[APP_SERVER_ADDRESS stringByAppendingPathComponent:path]
@@ -191,6 +199,8 @@ static ShareAppService *sharedSingleton = nil;
 }
 
 - (BOOL)isLogin {
-    return [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]].count > 0;
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];
+
+    return [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]].count > 0 || [sharedDefaults objectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
 }
 @end

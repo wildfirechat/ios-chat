@@ -54,7 +54,8 @@
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
-    
+    [[WFCCNetworkService sharedInstance] setBackupAddressStrategy:0];
+//    [[WFCCNetworkService sharedInstance] setBackupAddress:@"192.168.1.120" port:80];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
     
 #if WFCU_SUPPORT_VOIP
@@ -187,17 +188,22 @@
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
         
     //1. 保存app cookies
-    NSData *cookiesdata = [[AppService sharedAppService] getAppServiceCookies];
-    if([cookiesdata length]) {
-        NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
-        NSHTTPCookie *cookie;
-        for (cookie in cookies) {
-            [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] setCookie:cookie];
-        }
+    NSString *authToken = [[AppService sharedAppService] getAppServiceAuthToken];
+    if(authToken.length) {
+        [sharedDefaults setObject:authToken forKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
     } else {
-        NSArray *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]];
-        for (NSHTTPCookie *cookie in cookies) {
-            [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:cookie];
+        NSData *cookiesdata = [[AppService sharedAppService] getAppServiceCookies];
+        if([cookiesdata length]) {
+            NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
+            NSHTTPCookie *cookie;
+            for (cookie in cookies) {
+                [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] setCookie:cookie];
+            }
+        } else {
+            NSArray *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]];
+            for (NSHTTPCookie *cookie in cookies) {
+                [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:cookie];
+            }
         }
     }
     
@@ -432,9 +438,8 @@
             
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            [[AppService sharedAppService] clearAppServiceCookies];
-            
         } else if (status == kConnectionStatusLogout) {
             UIViewController *loginVC = [[WFCLoginViewController alloc] init];
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
@@ -442,8 +447,8 @@
             
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            [[AppService sharedAppService] clearAppServiceCookies];
         } 
     });
 }
