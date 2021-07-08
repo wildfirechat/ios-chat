@@ -44,8 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
             error:(void(^)(int error_code))errorBlock;
 
 - (NSData *)getAppServiceCookies;
+- (NSString *)getAppServiceAuthToken;
 
-- (void)clearAppServiceCookies;
+//清除应用服务认证cookies和认证token
+- (void)clearAppServiceAuthInfos;
 @end
 
 NS_ASSUME_NONNULL_END

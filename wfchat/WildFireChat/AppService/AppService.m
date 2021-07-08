@@ -12,10 +12,16 @@
 #import "WFCConfig.h"
 #import "PCSessionViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "SharePredefine.h"
+
 
 static AppService *sharedSingleton = nil;
 
 #define WFC_APPSERVER_COOKIES @"WFC_APPSERVER_COOKIES"
+#define WFC_APPSERVER_AUTH_TOKEN  @"WFC_APPSERVER_AUTH_TOKEN"
+
+#define AUTHORIZATION_HEADER @"authToken"
+
 @implementation AppService 
 + (AppService *)sharedAppService {
     if (sharedSingleton == nil) {
@@ -31,7 +37,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
     
-    [self post:@"/login" data:@{@"mobile":user, @"code":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(Platform_iOS)} success:^(NSDictionary *dict) {
+    [self post:@"/login" data:@{@"mobile":user, @"code":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(Platform_iOS)} isLogin:YES success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             NSString *userId = dict[@"result"][@"userId"];
             NSString *token = dict[@"result"][@"token"];
@@ -47,7 +53,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)sendCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
     
-    [self post:@"/send_code" data:@{@"mobile":phoneNumber} success:^(NSDictionary *dict) {
+    [self post:@"/send_code" data:@{@"mobile":phoneNumber} isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -61,7 +67,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)pcScaned:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = [NSString stringWithFormat:@"/scan_pc/%@", sessionId];
-    [self post:path data:nil success:^(NSDictionary *dict) {
+    [self post:path data:nil isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -75,7 +81,7 @@ static AppService *sharedSingleton = nil;
 - (void)pcConfirmLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/confirm_pc";
     NSDictionary *param = @{@"token":sessionId, @"user_id":[WFCCNetworkService sharedInstance].userId, @"quick_login":@(1)};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -89,7 +95,7 @@ static AppService *sharedSingleton = nil;
 - (void)pcCancelLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/cancel_pc";
     NSDictionary *param = @{@"token":sessionId};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -115,7 +121,7 @@ static AppService *sharedSingleton = nil;
     
     NSString *path = @"/get_group_announcement";
     NSDictionary *param = @{@"groupId":groupId};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0 || [dict[@"code"] intValue] == 12) {
             WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
             an.groupId = groupId;
@@ -144,7 +150,7 @@ static AppService *sharedSingleton = nil;
     
     NSString *path = @"/put_group_announcement";
     NSDictionary *param = @{@"groupId":groupId, @"author":[WFCCNetworkService sharedInstance].userId, @"text":announcement};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             WFCUGroupAnnouncement *an = [[WFCUGroupAnnouncement alloc] init];
             an.groupId = groupId;
@@ -165,18 +171,23 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
-- (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
+- (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
     //在调用其他接口时需要把cookie传给后台，也就是设置cookie的过程
-    NSData *cookiesdata = [self getAppServiceCookies];//url和登陆时传的url 是同一个
-    if([cookiesdata length]) {
-        NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
-        NSHTTPCookie *cookie;
-        for (cookie in cookies) {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    NSString *authToken = [self getAppServiceAuthToken];
+    if(authToken.length) {
+        [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
+    } else {
+        NSData *cookiesdata = [self getAppServiceCookies];//url和登陆时传的url 是同一个
+        if([cookiesdata length]) {
+            NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
+            NSHTTPCookie *cookie;
+            for (cookie in cookies) {
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+            }
         }
     }
     
@@ -184,16 +195,26 @@ static AppService *sharedSingleton = nil;
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if(isLogin) { //鉴权信息
+                NSString *appToken;
+                if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+                    NSHTTPURLResponse *r = (NSHTTPURLResponse *)task.response;
+                    appToken = [r allHeaderFields][AUTHORIZATION_HEADER];
+                }
+
+                if(appToken.length) {
+                    [[NSUserDefaults standardUserDefaults] setObject:appToken forKey:WFC_APPSERVER_AUTH_TOKEN];
+                } else {
+                    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:APP_SERVER_ADDRESS]];
+                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookies];
+                    [[NSUserDefaults standardUserDefaults] setObject:data forKey:WFC_APPSERVER_COOKIES];
+                }
+            }
         
-            //Save cookies
-            NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:APP_SERVER_ADDRESS]];
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookies];
-            [[NSUserDefaults standardUserDefaults] setObject:data forKey:WFC_APPSERVER_COOKIES];
-        
-              NSDictionary *dict = responseObject;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  successBlock(dict);
-              });
+            NSDictionary *dict = responseObject;
+            dispatch_async(dispatch_get_main_queue(), ^{
+              successBlock(dict);
+            });
           }
           failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -282,7 +303,7 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
-    [self post:@"/change_name" data:@{@"newName":newName} success:^(NSDictionary *dict) {
+    [self post:@"/change_name" data:@{@"newName":newName} isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -317,7 +338,7 @@ static AppService *sharedSingleton = nil;
     NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
     NSDictionary *param = @{@"deviceId":deviceId, @"owners":owners, @"extra":dataStr};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             Device *device = [[Device alloc] init];
             device.deviceId = dict[@"deviceId"];
@@ -337,7 +358,7 @@ static AppService *sharedSingleton = nil;
 - (void)getMyDevices:(void(^)(NSArray<Device *> *devices))successBlock
                error:(void(^)(int error_code))errorBlock {
     NSString *path = @"/things/list_device";
-    [self post:path data:nil success:^(NSDictionary *dict) {
+    [self post:path data:nil isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if ([dict[@"result"] isKindOfClass:[NSArray class]]) {
                 NSMutableArray *output = [[NSMutableArray alloc] init];
@@ -379,7 +400,7 @@ static AppService *sharedSingleton = nil;
             error:(void(^)(int error_code))errorBlock {
     NSString *path = @"/things/del_device";
     NSDictionary *param = @{@"deviceId":deviceId};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock(nil);
         } else {
@@ -396,7 +417,7 @@ static AppService *sharedSingleton = nil;
                    error:(void(^)(int error_code))errorBlock {
     NSString *path = @"/fav/list";
     NSDictionary *param = @{@"id":@(startId), @"count":@(count)};
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             NSDictionary *result = dict[@"result"];
             BOOL hasMore = [result[@"hasMore"] boolValue];
@@ -444,7 +465,7 @@ static AppService *sharedSingleton = nil;
                             @"data":item.data?item.data:@""
     };
     
-    [self post:path data:param success:^(NSDictionary *dict) {
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -460,7 +481,7 @@ static AppService *sharedSingleton = nil;
                      error:(void(^)(int error_code))errorBlock {
     NSString *path = [NSString stringWithFormat:@"/fav/del/%d", favId];
     
-    [self post:path data:nil success:^(NSDictionary *dict) {
+    [self post:path data:nil isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -475,8 +496,23 @@ static AppService *sharedSingleton = nil;
     return [[NSUserDefaults standardUserDefaults] objectForKey:WFC_APPSERVER_COOKIES];
 }
 
-- (void)clearAppServiceCookies {
+- (NSString *)getAppServiceAuthToken {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:WFC_APPSERVER_AUTH_TOKEN];
+}
+
+- (void)clearAppServiceAuthInfos {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_APPSERVER_COOKIES];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_APPSERVER_AUTH_TOKEN];
+    
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+        
+    //1. 保存app cookies
+    
+        [sharedDefaults removeObjectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
+    NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies];
+    [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:obj];
+    }];
 }
 
 @end
