@@ -100,7 +100,7 @@ DeviceInfo AppCallBack::GetDeviceInfo() {
     NSString *deviceString = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 
     
-    info.clientid = [[UIDevice currentDevice].identifierForVendor.UUIDString cStringUsingEncoding:NSUTF8StringEncoding];
+    info.clientid = [[[WFCCNetworkService sharedInstance] getClientId] UTF8String];
     info.platform = PlatformType_iOS;
     
     info.packagename = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"] UTF8String];
