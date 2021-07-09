@@ -8,8 +8,7 @@
 
 #import "WFCConfig.h"
 
-//可以是IP，可以是域名，如果是域名的话只支持主域名或www域名或im或imtest的二级域名，其它二级域名不支持！
-//例如：example.com或www.example.com或im.example.com或imtest.example.com是支持的；xx.example.com或xx.yy.example.com是不支持的。如果是专业版必须用域名，社区版建议也用域名。
+//域名，注意不能带http头，也不能带端口。
 NSString *IM_SERVER_HOST = @"wildfirechat.net";
 
 
