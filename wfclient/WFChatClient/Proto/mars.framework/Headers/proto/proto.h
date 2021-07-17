@@ -794,6 +794,7 @@ namespace mars{
             virtual void onConferenceEvent(const std::string &event) = 0;
         };
 
+        extern void useEncryptSM4();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);

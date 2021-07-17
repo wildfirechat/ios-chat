@@ -205,6 +205,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 */
 + (NSArray<NSString *> *)getLogFilesPath;
 
+/*
+ 使用国密加密。注意必须和服务器同时配置，否则无法连接。
+ */
+- (void)useSM4;
+
 /**
  获取客户端id
  
