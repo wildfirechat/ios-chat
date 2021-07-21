@@ -51,7 +51,7 @@
     [Bugly startWithAppId:@"6f54460b01"];
     
     [WFCCNetworkService startLog];
-    [[WFCCNetworkService sharedInstance] useSM4];
+//    [[WFCCNetworkService sharedInstance] useSM4];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
