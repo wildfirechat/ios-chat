@@ -713,7 +713,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 @interface WFCCIMService ()
 @property(nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *MessageContentMaps;
+@property(nonatomic, assign)BOOL defaultSilentWhenPCOnline;
 @end
+
 @implementation WFCCIMService
 + (WFCCIMService *)sharedWFCIMService {
     if (sharedSingleton == nil) {
@@ -2637,9 +2639,13 @@ public:
 - (BOOL)isMuteNotificationWhenPcOnline {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Mute_When_PC_Online key:@""];
     if ([strValue isEqualToString:@"1"]) {
-        return YES;
+        return !self.defaultSilentWhenPCOnline;
     }
-    return NO;
+    return self.defaultSilentWhenPCOnline;
+}
+
+- (void)setDefaultSilentWhenPcOnline:(BOOL)defaultSilent {
+    self.defaultSilentWhenPCOnline = defaultSilent;
 }
 
 - (void)muteNotificationWhenPcOnline:(BOOL)isMute
