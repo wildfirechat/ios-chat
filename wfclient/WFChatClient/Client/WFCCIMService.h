@@ -1751,6 +1751,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (BOOL)isMuteNotificationWhenPcOnline;
 
 /**
+ 设置PC/Web在线时，手机是否默认静音。缺省值为NO，如果IM服务配置server.mobile_default_silent_when_pc_online 为true时，需要调用此函数设置为YES。
+
+ @param defaultSilent 缺省值是否为静音。
+ */
+- (void)setDefaultSilentWhenPcOnline:(BOOL)defaultSilent;
+
+/**
  设置PC/Web在线时，是否发送通知
 
  @param isMute 是否通知
