@@ -723,6 +723,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCCIMService alloc] init];
                 sharedSingleton.MessageContentMaps = [[NSMutableDictionary alloc] init];
+                sharedSingleton.defaultSilentWhenPCOnline = YES;
             }
         }
     }
