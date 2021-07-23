@@ -59,9 +59,9 @@
 //    [[WFCCNetworkService sharedInstance] setBackupAddress:@"192.168.1.120" port:80];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
     
-    //当PC/Web在线时手机端是否静音，默认不静音。如果修改为默认静音，需要打开下面函数。
-    //另外需要IM服务配置server.mobile_default_silent_when_pc_online为true。必须保持与服务器同步。
-    //[[WFCCIMService sharedWFCIMService] setDefaultSilentWhenPcOnline:YES];
+    //当PC/Web在线时手机端是否静音，默认静音。如果修改为默认不静音，需要打开下面函数。
+    //另外需要IM服务配置server.mobile_default_silent_when_pc_online为false。必须保持与服务器同步。
+    //[[WFCCIMService sharedWFCIMService] setDefaultSilentWhenPcOnline:NO];
 
 #if WFCU_SUPPORT_VOIP
     //音视频高级版不需要stun/turn服务，请注释掉下面这行。单人版和多人版需要turn服务，请自己部署然后修改配置文件。
