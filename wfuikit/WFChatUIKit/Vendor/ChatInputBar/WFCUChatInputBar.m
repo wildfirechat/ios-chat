@@ -1664,6 +1664,7 @@
         __weak typeof(self) weakself = self;
         if (phAsset.mediaType == PHAssetMediaTypeVideo) {
             PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+            options.networkAccessAllowed = YES;
             options.version = PHImageRequestOptionsVersionCurrent;
             options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
             
