@@ -9,7 +9,7 @@
 #import "WFCCNotificationMessageContent.h"
 
 /**
- 建群的通知消息
+ 设置/取消群管理员通知消息
  */
 @interface WFCCGroupSetManagerNotificationContent : WFCCNotificationMessageContent
 
@@ -24,7 +24,7 @@
 @property (nonatomic, strong)NSString *operatorId;
 
 /**
- 操作
+ 操作，0取消管理员，1设置为管理员。
  */
 @property (nonatomic, strong)NSString *type;
 
