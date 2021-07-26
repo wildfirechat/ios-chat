@@ -427,7 +427,8 @@ static AppService *sharedSingleton = nil;
                 WFCUFavoriteItem *item = [[WFCUFavoriteItem alloc] init];
                 item.conversation = [WFCCConversation conversationWithType:[d[@"convType"] intValue] target:d[@"convTarget"] line:[d[@"convLine"] intValue]];
                 item.favId = [d[@"id"] intValue];
-                item.messageUid = [d[@"messageUid"] longLongValue];
+                if(![d[@"messageUid"] isEqual:[NSNull null]])
+                    item.messageUid = [d[@"messageUid"] longLongValue];
                 item.timestamp = [d[@"timestamp"] longLongValue];
                 item.url = d[@"url"];
                 item.favType = [d[@"type"] intValue];
