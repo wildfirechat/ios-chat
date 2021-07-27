@@ -934,7 +934,6 @@
 		2B07312425DDE8A3005EE603 /* PTT */ = {
 			isa = PBXGroup;
 			children = (
-				2B8352C125DE268300BA0800 /* message */,
 				2B07312525DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.h */,
 				2B07312625DDE8E5005EE603 /* WFCUPushToTalkCreateViewController.m */,
 				2B07312A25DDE910005EE603 /* WFCUPushToTalkListViewController.h */,
@@ -956,13 +955,6 @@
 				2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */,
 			);
 			path = ZCCCircleProgressView;
-			sourceTree = "<group>";
-		};
-		2B8352C125DE268300BA0800 /* message */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = message;
 			sourceTree = "<group>";
 		};
 		2BBC9CEE255CEBD9007DA28A /* File */ = {
@@ -2558,6 +2550,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2621,6 +2614,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
