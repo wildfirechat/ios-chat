@@ -970,7 +970,9 @@
     BOOL isUpdated = NO;
     for (WFCUMessageModel *model in self.modelList) {
         if(model.message.messageId == messageId) {
-            model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+            if(model.message.conversation.type != Chatroom_Type) {
+                model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+            }
             isUpdated = YES;
             break;
         }
