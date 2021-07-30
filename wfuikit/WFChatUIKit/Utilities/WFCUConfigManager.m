@@ -8,7 +8,7 @@
 
 #import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
-
+#import <WFChatClient/WFCChatClient.h>
 
 static WFCUConfigManager *sharedSingleton = nil;
 @implementation WFCUConfigManager

@@ -97,7 +97,7 @@ alpha:1.0]
     self.passwordLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
     
     
-    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87, inputHeight - 1)];
+    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
     self.passwordField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.passwordField.placeholder = @"请输入验证码";
     self.passwordField.returnKeyType = UIReturnKeyDone;
