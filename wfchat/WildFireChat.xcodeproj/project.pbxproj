@@ -33,7 +33,6 @@
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
-		2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; };
 		2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; };
 		2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6D217F7DA900B3E38A /* Emoj.plist */; };
 		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
@@ -101,6 +100,8 @@
 		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
 		2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC50B7A245273A700B36F8A /* PCSessionViewController.m */; };
 		2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */; };
+		2FE1F6DC2525AF4000715557 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE1F6DB2525AF4000715557 /* WFAVEngineKit.framework */; };
+		2FE1F6DD2525AF4000715557 /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE1F6DB2525AF4000715557 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */; };
 		2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */; };
 		2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F4921F82E7200A78A62 /* WFCSettingTableViewController.m */; };
@@ -115,7 +116,6 @@
 		6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 6E616D9B20AB3435002CB8BE /* LICENSE.md */; };
 		6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; };
 		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
@@ -165,6 +165,7 @@
 			files = (
 				2F1A2897251647E3001350B6 /* SDWebImage.framework in Embed Frameworks */,
 				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
+				2FE1F6DD2525AF4000715557 /* WFAVEngineKit.framework in Embed Frameworks */,
 				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
 				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
 				2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */,
@@ -339,6 +340,7 @@
 		2FC50B7B245273A700B36F8A /* PCSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSessionViewController.h; sourceTree = "<group>"; };
 		2FCF7216254FD092006CF53B /* WFCFavoriteFileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteFileCell.h; sourceTree = "<group>"; };
 		2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteFileCell.m; sourceTree = "<group>"; };
+		2FE1F6DB2525AF4000715557 /* WFAVEngineKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -397,6 +399,7 @@
 			files = (
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
+				2FE1F6DC2525AF4000715557 /* WFAVEngineKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
 				2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */,
@@ -412,7 +415,6 @@
 				2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */,
 				2B99E540254555EA00B3452D /* ZLPhotoBrowser.framework in Frameworks */,
 				2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */,
-				2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */,
 				6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +584,7 @@
 			children = (
 				2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */,
 				2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */,
+				2FE1F6DB2525AF4000715557 /* WFAVEngineKit.framework */,
 				2BDCE7E22336278E0004212B /* CallKit.framework */,
 				2BDCE7E0233627450004212B /* PushKit.framework */,
 				905177512243CDA60020A2AC /* libc++.tbd */,

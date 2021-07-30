@@ -77,6 +77,8 @@
 @property(nonatomic, strong)UIView *bottomBarView;
 
 @property(nonatomic, strong)NSTimer *hidePanelTimer;
+
+@property (nonatomic, assign) BOOL smallVideo;
 #endif
 @end
 
@@ -175,7 +177,7 @@
 - (void)rearrangeParticipants {
     self.participants = [[NSMutableArray alloc] init];
     self.audiences = [[NSMutableArray alloc] init];
-    
+    self.smallVideo = YES;
     
     NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
     for (WFAVParticipantProfile *p in ps) {
@@ -492,11 +494,15 @@
 
 
 - (void)screenSharingButtonDidTap:(UIButton *)button {
-    [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
-    [self updateScreenSharingButton];
-    if(self.currentSession.isInAppScreenSharing) {
-        [self minimizeButtonDidTap:nil];
-    }
+//    [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
+//    [self updateScreenSharingButton];
+//    if(self.currentSession.isInAppScreenSharing) {
+//        [self minimizeButtonDidTap:nil];
+//    }
+    self.smallVideo = !self.smallVideo;
+    [self.currentSession.participantIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.currentSession switchStream:self.smallVideo ofUser:obj];
+    }];
 }
 
 - (void)updateScreenSharingButton {
@@ -981,7 +987,7 @@
     }
 }
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
-    NSLog(@"user %@ report volume %ld", userId, volume);
+//    NSLog(@"user %@ report volume %ld", userId, volume);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
     if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
         if (volume > 1000) {

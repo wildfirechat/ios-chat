@@ -962,7 +962,7 @@
     }
 }
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
-    NSLog(@"user %@ report volume %ld", userId, volume);
+//    NSLog(@"user %@ report volume %ld", userId, volume);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
     if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
         if (volume > 1000) {
