@@ -984,7 +984,7 @@
                 pvc.showMentionAll = YES;
                 pvc.mentionAll = ^{
                     NSString *text = WFCString(@"@All");
-                    [ws didMentionType:2 user:nil range:NSMakeRange(range.location, text.length) text:text];
+                    [ws didMentionType:2 user:@"" range:NSMakeRange(range.location, text.length) text:text];
                 };
             }
             
@@ -1664,6 +1664,7 @@
         __weak typeof(self) weakself = self;
         if (phAsset.mediaType == PHAssetMediaTypeVideo) {
             PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+            options.networkAccessAllowed = YES;
             options.version = PHImageRequestOptionsVersionCurrent;
             options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
             
