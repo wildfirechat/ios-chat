@@ -673,7 +673,9 @@
             
             if (self.currentSession.isAudioOnly) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.scalingType];
-                [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                if(self.currentSession.participantIds.count > 0) {
+                    [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                }
                 self.smallVideoView.hidden = YES;
                 self.bigVideoView.hidden = YES;
                 
@@ -681,8 +683,10 @@
                 [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateHighlighted];
                 [_downgradeButton setImage:[UIImage imageNamed:@"to_video_hover"] forState:UIControlStateSelected];
             } else {
-                [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                if(self.currentSession.participantIds.count > 0) {
+                    [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
+                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                }
                 self.smallVideoView.hidden = NO;
                 self.bigVideoView.hidden = NO;
                 
