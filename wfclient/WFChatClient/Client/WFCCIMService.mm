@@ -160,6 +160,7 @@ public:
     IMGeneralStringCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
     void onSuccess(std::string str) {
         NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
+        NSLog(@"On conference response %@", nsstr);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
                 m_successBlock(nsstr);
@@ -2803,6 +2804,7 @@ public:
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
+    NSLog(@"send conf:%@, data:%@", request, data);
     mars::stn::sendConferenceRequest(sessionId, roomId?[roomId UTF8String]:"", [request UTF8String], advanced?true:false, data ? [data UTF8String]:"", new IMGeneralStringCallback(successBlock, errorBlock));
 }
 
