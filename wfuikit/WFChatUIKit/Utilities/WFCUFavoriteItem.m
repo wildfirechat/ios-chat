@@ -115,6 +115,7 @@
         {
             msg.content = [WFCCTextMessageContent contentWith:self.title];
         }
+            break;
         case MESSAGE_CONTENT_TYPE_SOUND:
         {
             WFCCSoundMessageContent *soundCnt = [[WFCCSoundMessageContent alloc] init];
@@ -125,6 +126,7 @@
             
             msg.content = soundCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
             WFCCImageMessageContent *imageCnt = [[WFCCImageMessageContent alloc] init];
@@ -138,6 +140,7 @@
             
             msg.content = imageCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_VIDEO:
         {
             WFCCVideoMessageContent *videoCnt = [[WFCCVideoMessageContent alloc] init];
@@ -152,6 +155,7 @@
             
             msg.content = videoCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_LOCATION:
         {
             WFCCLocationMessageContent *locationCnt = [[WFCCLocationMessageContent alloc] init];
@@ -169,6 +173,7 @@
             
             msg.content = locationCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_LINK:
         {
             WFCCLinkMessageContent *linkCnt = [[WFCCLinkMessageContent alloc] init];
@@ -178,6 +183,7 @@
 
             msg.content = linkCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
             WFCCCompositeMessageContent *compositeCnt = [[WFCCCompositeMessageContent alloc] init];
@@ -190,6 +196,7 @@
             
             msg.content = compositeCnt;
         }
+            break;
         case MESSAGE_CONTENT_TYPE_FILE:
         {
             WFCCFileMessageContent *fileCnt = [[WFCCFileMessageContent alloc] init];
@@ -201,9 +208,10 @@
             
             msg.content = fileCnt;
         }
+            break;
         default:
             break;
     }
-    return nil;
+    return msg;
 }
 @end
