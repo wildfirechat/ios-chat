@@ -10,7 +10,6 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUConferenceChangeModelContent.h"
-#import "WFCUConferenceKickoffMemberContent.h"
 
 
 static WFCUConferenceManager *sharedSingleton = nil;
@@ -37,11 +36,6 @@ static WFCUConferenceManager *sharedSingleton = nil;
                 if([changeModelCnt.conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
                     [self.delegate onChangeModeRequest:changeModelCnt.isAudience];
                 }
-            } else if([msg.content isKindOfClass:[WFCUConferenceKickoffMemberContent class]]) {
-                WFCUConferenceKickoffMemberContent *content = (WFCUConferenceKickoffMemberContent *)msg.content;
-                if([content.conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
-                    [self.delegate onKickoffRequest];
-                }
             }
         }
     }
@@ -51,17 +45,6 @@ static WFCUConferenceManager *sharedSingleton = nil;
     WFCUConferenceChangeModelContent *cnt = [[WFCUConferenceChangeModelContent alloc] init];
     cnt.conferenceId = conferenceId;
     cnt.isAudience = isAudience;
-    WFCCConversation *conv = [WFCCConversation conversationWithType:Single_Type target:userId line:0];
-    [[WFCCIMService sharedWFCIMService] send:conv content:cnt success:^(long long messageUid, long long timestamp) {
-            
-        } error:^(int error_code) {
-            
-        }];
-}
-
-- (void)kickoff:(NSString *)userId inConference:(NSString *)conferenceId {
-    WFCUConferenceKickoffMemberContent *cnt = [[WFCUConferenceKickoffMemberContent alloc] init];
-    cnt.conferenceId = conferenceId;
     WFCCConversation *conv = [WFCCConversation conversationWithType:Single_Type target:userId line:0];
     [[WFCCIMService sharedWFCIMService] send:conv content:cnt success:^(long long messageUid, long long timestamp) {
             

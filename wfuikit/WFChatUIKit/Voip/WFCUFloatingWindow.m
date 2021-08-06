@@ -510,10 +510,5 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         //Todo 该怎么处理？
     }
 }
-
-- (void)onKickoffRequest {
-    [[WFAVEngineKit sharedEngineKit].currentSession endCall];
-}
-
 @end
 #endif

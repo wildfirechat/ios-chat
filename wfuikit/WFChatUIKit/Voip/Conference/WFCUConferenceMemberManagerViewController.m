@@ -224,7 +224,12 @@
     }];
     
     UIAlertAction *requestQuit = [UIAlertAction actionWithTitle:@"移除成员" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [[WFCUConferenceManager sharedInstance] kickoff:member.userId inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+        WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
+        [currentSession kickoffParticipant:member.userId success:^{
+            NSLog(@"kickoff success");
+        } error:^(int error_code) {
+            NSLog(@"kickoff error");
+        }];
     }];
     
     UIAlertAction *publish = [UIAlertAction actionWithTitle:@"参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {

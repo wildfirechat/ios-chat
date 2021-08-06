@@ -426,9 +426,5 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     }
 }
 
-- (void)onKickoffRequest {
-    [[WFAVEngineKit sharedEngineKit].currentSession endCall];
-}
-
 @end
 #endif
