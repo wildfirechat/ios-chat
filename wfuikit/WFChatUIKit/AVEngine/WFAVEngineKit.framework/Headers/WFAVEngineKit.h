@@ -351,6 +351,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 - (void)listConference:(void(^_Nullable)(NSArray<NSDictionary *> * _Nullable conferences))successBlock
                  error:(void(^_Nullable)(int error_code))errorBlock;
 
+/* 此属性没有意义，仅为了兼容UI代码 */
+@property(nonatomic, assign) BOOL disableDualStreamMode;
+
+
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
                                    audioOnly:(BOOL)audioOnly
@@ -619,5 +623,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (void)switchAudience:(BOOL)audience;
+
+/* 此函数没有意义，仅为了兼容UI代码 */
+- (void)kickoffParticipant:(NSString *_Nonnull)participant
+                   success:(void(^_Nullable)(void))successBlock
+                     error:(void(^_Nullable)(int error_code))errorBlock;
 @end
 

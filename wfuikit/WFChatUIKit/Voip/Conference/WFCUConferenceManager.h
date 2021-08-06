@@ -10,7 +10,6 @@
 
 @protocol WFCUConferenceManagerDelegate <NSObject>
 -(void)onChangeModeRequest:(BOOL)isAudience;
--(void)onKickoffRequest;
 @end
 
 @interface WFCUConferenceManager : NSObject
