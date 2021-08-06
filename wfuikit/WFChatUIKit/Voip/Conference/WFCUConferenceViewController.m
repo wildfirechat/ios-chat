@@ -1083,6 +1083,9 @@
     NSLog(@"did change initiator");
 }
 
+- (void)didMuteStateChanged:(NSArray<NSString *> *_Nonnull)userIds {
+    [self reloadVideoUI];
+}
 
 - (void)checkAVPermission {
     [self checkCapturePermission:nil];
