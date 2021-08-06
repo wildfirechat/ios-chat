@@ -427,8 +427,6 @@
 		2FBDAB9225DA41FD00FEF2C3 /* WFCUConferenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */; };
 		2FBDAB9C25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */; };
 		2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB9B25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m */; };
-		2FBDABA125DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FBDAB9F25DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h */; };
-		2FBDABA225DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDABA025DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.m */; };
 		2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */; };
 		2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */; };
 		2FD550EC2442AA0B00B3EE09 /* WFCURecallCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD550EA2442AA0B00B3EE09 /* WFCURecallCell.h */; };
@@ -879,8 +877,6 @@
 		2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceManager.m; sourceTree = "<group>"; };
 		2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceChangeModelContent.h; sourceTree = "<group>"; };
 		2FBDAB9B25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceChangeModelContent.m; sourceTree = "<group>"; };
-		2FBDAB9F25DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceKickoffMemberContent.h; sourceTree = "<group>"; };
-		2FBDABA025DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceKickoffMemberContent.m; sourceTree = "<group>"; };
 		2FD2EE7E218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUVerifyRequestViewController.h; sourceTree = "<group>"; };
 		2FD2EE7F218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUVerifyRequestViewController.m; sourceTree = "<group>"; };
 		2FD550EA2442AA0B00B3EE09 /* WFCURecallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCURecallCell.h; sourceTree = "<group>"; };
@@ -1925,8 +1921,6 @@
 			children = (
 				2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */,
 				2FBDAB9B25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m */,
-				2FBDAB9F25DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h */,
-				2FBDABA025DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.m */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -2216,7 +2210,6 @@
 				2F55116F217F5CC200F56C26 /* AFHTTPSessionManager.h in Headers */,
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
 				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
-				2FBDABA125DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.h in Headers */,
 				90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */,
 				2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */,
 				2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */,
@@ -2379,7 +2372,6 @@
 				2F5511D5217F5CC300F56C26 /* TYAlertFadeAnimation.m in Sources */,
 				2BDF57A624AD70C8003C1F08 /* DNImagePickerController.m in Sources */,
 				2F551195217F5CC200F56C26 /* SDRefreshFooterView.m in Sources */,
-				2FBDABA225DA7DB700FEF2C3 /* WFCUConferenceKickoffMemberContent.m in Sources */,
 				2F5510E3217F5CC200F56C26 /* WFCUEmotionTextAttachment.m in Sources */,
 				2FE8FC9725F313BD007DB331 /* WFCUUploadBigFilesViewController.m in Sources */,
 				2F1EB5BC2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m in Sources */,

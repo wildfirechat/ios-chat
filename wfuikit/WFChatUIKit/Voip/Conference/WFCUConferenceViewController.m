@@ -1389,7 +1389,4 @@
     }
 }
 
-- (void)onKickoffRequest {
-    [[WFAVEngineKit sharedEngineKit].currentSession endCall];
-}
 @end
