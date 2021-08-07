@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WFCUConferenceMember : NSObject
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, assign)BOOL isHost;
-@property (nonatomic, assign)BOOL isMuted;
+@property (nonatomic, assign)BOOL isAudioEnabled;
 @property (nonatomic, assign)BOOL isVideoEnabled;
 @property (nonatomic, assign)BOOL isMe;
 @end
