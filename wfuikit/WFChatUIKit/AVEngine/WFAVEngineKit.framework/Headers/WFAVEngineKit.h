@@ -408,6 +408,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, readonly)long long startTime;
 @property(nonatomic, assign, readonly)WFAVEngineState state;
 @property(nonatomic, assign, readonly)BOOL videoMuted;
+@property(nonatomic, assign, readonly)BOOL audioMuted;
 @property(nonatomic, assign, readonly)BOOL audience;
 @end
 
