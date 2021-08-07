@@ -65,6 +65,7 @@
         member.userId = p.userId;
         member.isHost = [p.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
         member.isVideoEnabled = !p.videoMuted;
+        member.isAudioEnabled = !p.audioMuted;
         member.isMe = NO;
         if(self.searchBar.isFirstResponder && ![self isMatchSearchText:member.userId]) {
             continue;
@@ -86,6 +87,7 @@
     member.userId = [WFCCNetworkService sharedInstance].userId;
     member.isHost = [member.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
     member.isVideoEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
+    member.isAudioEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted;
     member.isMe = YES;
     if(!self.searchBar.isFirstResponder || [self isMatchSearchText:member.userId]) {
         if([WFAVEngineKit sharedEngineKit].currentSession.audience) {
@@ -242,15 +244,14 @@
     
     [alertController addAction:actionCancel];
     [alertController addAction:showProfile];
-    if([[WFAVEngineKit sharedEngineKit].currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        if(!member.isHost) {
-            if(indexPath.section == 0) {
-                [alertController addAction:requestUnpublish];
-            } else {
-                [alertController addAction:requestPublish];
-            }
-            [alertController addAction:requestQuit];
+    
+    if([[WFAVEngineKit sharedEngineKit].currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId] && !member.isMe) {
+        if(indexPath.section == 0) {
+            [alertController addAction:requestUnpublish];
+        } else {
+            [alertController addAction:requestPublish];
         }
+        [alertController addAction:requestQuit];
     } else if(member.isMe) {
         if(indexPath.section == 0) {
             [alertController addAction:unpublish];
