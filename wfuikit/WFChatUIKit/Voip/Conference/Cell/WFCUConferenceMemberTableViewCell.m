@@ -14,6 +14,9 @@
 @property(nonatomic, strong)UIImageView *portraitView;
 @property(nonatomic, strong)UILabel *nameLabel;
 @property(nonatomic, strong)UILabel *extraLabel;
+@property(nonatomic, strong)UIImageView *audioImageView;
+@property(nonatomic, strong)UIImageView *videoImageView;
+
 @end
 
 @implementation WFCUConferenceMemberTableViewCell
@@ -49,6 +52,23 @@
         self.extraLabel.hidden = YES;
         self.nameLabel.frame = CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 40);
     }
+    if(member.isAudience) {
+        self.audioImageView.hidden = YES;
+        self.videoImageView.hidden = YES;
+    } else {
+        self.audioImageView.hidden = NO;
+        self.videoImageView.hidden = NO;
+        if(member.isAudioEnabled) {
+            self.audioImageView.image = [UIImage imageNamed:@"conference_audio"];
+        } else {
+            self.audioImageView.image = [UIImage imageNamed:@"conference_audio_mute_hover"];
+        }
+        if(member.isVideoEnabled) {
+            self.videoImageView.image = [UIImage imageNamed:@"conference_video"];
+        } else {
+            self.videoImageView.image = [UIImage imageNamed:@"conference_video_mute_hover"];
+        }
+    }
 }
 
 - (UIImageView *)portraitView {
@@ -78,6 +98,21 @@
         [self.contentView addSubview:_extraLabel];
     }
     return _extraLabel;
+}
+- (UIImageView *)videoImageView {
+    if(!_videoImageView) {
+        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24)];
+        [self.contentView addSubview:_videoImageView];
+    }
+    return _videoImageView;
+}
+
+- (UIImageView *)audioImageView {
+    if(!_audioImageView) {
+        _audioImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24)];
+        [self.contentView addSubview:_audioImageView];
+    }
+    return _audioImageView;
 }
 
 @end
