@@ -49,6 +49,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMemberChanged:) name:@"kConferenceMemberChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceEnded:) name:@"kConferenceEnded" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMutedStateChanged:) name:@"kConferenceMutedStateChanged" object:nil];
     self.title = @"参会人员";
     
     [self loadData];
@@ -67,6 +68,8 @@
         member.isVideoEnabled = !p.videoMuted;
         member.isAudioEnabled = !p.audioMuted;
         member.isMe = NO;
+        member.isAudience = p.audience;
+        
         if(self.searchBar.isFirstResponder && ![self isMatchSearchText:member.userId]) {
             continue;
         }
@@ -130,6 +133,11 @@
 
 - (void)onConferenceEnded:(id)sender {
     [self onClose:nil];
+}
+
+- (void)onConferenceMutedStateChanged:(id)sender {
+    [self loadData];
+    [self.tableView reloadData];
 }
 
 - (void)onClose:(id)sender {

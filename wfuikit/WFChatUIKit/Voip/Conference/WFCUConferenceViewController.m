@@ -1085,6 +1085,7 @@
 
 - (void)didMuteStateChanged:(NSArray<NSString *> *_Nonnull)userIds {
     [self reloadVideoUI];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMutedStateChanged" object:nil];
 }
 
 - (void)checkAVPermission {
