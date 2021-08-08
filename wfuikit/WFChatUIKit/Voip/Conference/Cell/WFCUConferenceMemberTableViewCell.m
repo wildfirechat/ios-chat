@@ -56,8 +56,16 @@
         self.audioImageView.hidden = YES;
         self.videoImageView.hidden = YES;
     } else {
-        self.audioImageView.hidden = NO;
-        self.videoImageView.hidden = NO;
+        if(member.isAudioOnly) {
+            self.audioImageView.hidden = NO;
+            self.videoImageView.hidden = YES;
+            self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24);
+        } else {
+            self.audioImageView.hidden = NO;
+            self.videoImageView.hidden = NO;
+            self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24);
+        }
+        
         if(member.isAudioEnabled) {
             self.audioImageView.image = [UIImage imageNamed:@"conference_audio"];
         } else {
