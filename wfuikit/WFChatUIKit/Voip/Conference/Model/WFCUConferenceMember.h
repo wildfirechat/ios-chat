@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign)BOOL isVideoEnabled;
 @property (nonatomic, assign)BOOL isMe;
 @property (nonatomic, assign)BOOL isAudience;
+@property (nonatomic, assign)BOOL isAudioOnly;
 @end
 
 NS_ASSUME_NONNULL_END
