@@ -60,6 +60,7 @@
     self.participants = [[NSMutableArray alloc] init];
     self.audiences = [[NSMutableArray alloc] init];
     
+    WFAVCallSession *callSession = [WFAVEngineKit sharedEngineKit].currentSession;
     NSArray<WFAVParticipantProfile *> *ps =  [WFAVEngineKit sharedEngineKit].currentSession.participants;
     for (WFAVParticipantProfile *p in ps) {
         WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
@@ -69,6 +70,7 @@
         member.isAudioEnabled = !p.audioMuted;
         member.isMe = NO;
         member.isAudience = p.audience;
+        member.isAudioOnly = callSession.audioOnly;
         
         if(self.searchBar.isFirstResponder && ![self isMatchSearchText:member.userId]) {
             continue;
@@ -88,10 +90,12 @@
     
     WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
     member.userId = [WFCCNetworkService sharedInstance].userId;
-    member.isHost = [member.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
-    member.isVideoEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
-    member.isAudioEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted;
+    member.isHost = [member.userId isEqualToString:callSession.host];
+    member.isVideoEnabled = !callSession.isVideoMuted;
+    member.isAudioEnabled = !callSession.isAudioMuted;
     member.isMe = YES;
+    member.isAudience = callSession.isAudience;
+    member.isAudioOnly = callSession.audioOnly;
     if(!self.searchBar.isFirstResponder || [self isMatchSearchText:member.userId]) {
         if([WFAVEngineKit sharedEngineKit].currentSession.audience) {
             [self.audiences insertObject:member atIndex:0];
