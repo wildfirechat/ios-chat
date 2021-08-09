@@ -219,7 +219,6 @@
 }
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIViewController *vc;
     if (indexPath.row == 0 && indexPath.section == 0) {
         WFCUMyPortraitViewController *pvc = [[WFCUMyPortraitViewController alloc] init];
         pvc.userId = [WFCCNetworkService sharedInstance].userId;
