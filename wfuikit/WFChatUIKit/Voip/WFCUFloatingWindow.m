@@ -203,6 +203,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             } else {
                 [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserId];
             }
+            [self updateVideoView];
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
             UILabel *videoStopTips =
                 [[UILabel alloc] initWithFrame:CGRectMake(0, self.videoView.frame.size.height / 2 - 10,
@@ -233,7 +234,26 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         }
     }
 }
-
+- (void)updateVideoView {
+    __block BOOL isMuted = NO;
+    if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        isMuted = [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
+    } else {
+        [[[WFAVEngineKit sharedEngineKit].currentSession participants] enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if([obj isEqual:self.focusUserId]) {
+                isMuted = obj.videoMuted;
+                *stop = YES;
+            }
+        }];
+    }
+    if(isMuted) {
+        [self.floatingButton setTitle:@"视频关闭"
+                             forState:UIControlStateNormal];
+        self.videoView.hidden = YES;
+    } else {
+        self.videoView.hidden = NO;
+    }
+}
 - (UIWindow *)window {
     if (!_window) {
         CGFloat posX = [[[NSUserDefaults standardUserDefaults] objectForKey:kFloatingWindowPosX] floatValue];
@@ -482,6 +502,11 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
+- (void)didMuteStateChanged:(NSArray<NSString *> *)userIds {
+    if(![WFAVEngineKit sharedEngineKit].currentSession.isAudioOnly) {
+        [self updateVideoView];
+    }
+}
 - (void)addProximityMonitoringObserver {
     [UIDevice currentDevice].proximityMonitoringEnabled = YES;
 
