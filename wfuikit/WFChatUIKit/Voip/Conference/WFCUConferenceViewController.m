@@ -291,16 +291,16 @@
     
     
     [self updateTopViewFrame];
+    self.bottomBarView.hidden = NO;
+    
     
     [self didChangeState:self.currentSession.state];//update ui
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onDeviceOrientationDidChange)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self onDeviceOrientationDidChange];
-    self.bottomBarView.hidden = NO;
     
     [WFCUConferenceManager sharedInstance].delegate = self;
     [self startHidePanelTimer];
@@ -381,8 +381,9 @@
     if(!_bottomBarView) {
         _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin)];
         _bottomBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
-        CGFloat btnWidth = self.view.bounds.size.width/5;
+        CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
         
+        int index = 1;
         self.audioButton = [self createBarButtom:@"静音" imageName:@"conference_audio" selectedImageName:@"conference_audio" select:@selector(audioButtonDidTap:) frame:CGRectMake(0, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.audioButton];
         
@@ -405,19 +406,23 @@
             self.speakerButton.hidden = YES;
         }
         
-        self.screenSharingButton = [self createBarButtom:@"屏幕共享" imageName:@"conference_screen_sharing" selectedImageName:@"conference_screen_sharing_hover" select:@selector(screenSharingButtonDidTap:) frame:CGRectMake(btnWidth*2, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
-        if(self.currentSession.state == kWFAVEngineStateConnected)
-            self.screenSharingButton.hidden = NO;
-        else
-            self.screenSharingButton.hidden = YES;
-        [self updateScreenSharingButton];
-        [_bottomBarView addSubview:self.screenSharingButton];
+        index++;
+        if(!self.currentSession.isAudioOnly) {
+            self.screenSharingButton = [self createBarButtom:@"屏幕共享" imageName:@"conference_screen_sharing" selectedImageName:@"conference_screen_sharing_hover" select:@selector(screenSharingButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+            
+            if(self.currentSession.state == kWFAVEngineStateConnected)
+                self.screenSharingButton.hidden = NO;
+            else
+                self.screenSharingButton.hidden = YES;
+            [self updateScreenSharingButton];
+            [_bottomBarView addSubview:self.screenSharingButton];
+        }
         
         
-        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*3, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.managerButton];
         
-        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*4, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.hangupButton];
         
         [self.view addSubview:_bottomBarView];
@@ -897,6 +902,8 @@
                 self.switchCameraButton.hidden = NO;
                 self.videoButton.hidden = NO;
             }
+            [self updateAudioButton];
+            [self updateVideoButton];
             
             self.scalingButton.hidden = YES;
             self.minimizeButton.hidden = NO;
