@@ -10,9 +10,11 @@
 #import "MBProgressHUD.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUConfigManager.h"
+#import "UIView+Toast.h"
 
 @interface WFCUModifyMyProfileViewController () <UITextFieldDelegate>
 @property(nonatomic, strong)UITextField *textField;
+@property(nonatomic, assign)BOOL isAccount;
 @end
 
 @implementation WFCUModifyMyProfileViewController
@@ -23,6 +25,7 @@
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     NSString *title = nil;
     NSString *defaultValue = nil;
+    self.isAccount = NO;
     switch (self.modifyType) {
         case Modify_Email:
             title = WFCString(@"ModifyEmail");
@@ -58,12 +61,15 @@
         case 100:
             title = @"修改账户名";
             defaultValue = userInfo.name;
+            self.isAccount = YES;
+            self.textField.keyboardType = UIKeyboardTypeASCIICapable;
             break;
         default:
             break;
     }
     
     self.textField.text = defaultValue;
+    self.textField.returnKeyType = UIReturnKeyDone;
     [self setTitle:title];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
@@ -128,6 +134,16 @@
         [self.view addSubview:_textField];
     }
     return _textField;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"] invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    BOOL ret = [string isEqualToString:filtered];
+    if(!ret) {
+        [self.view makeToast:@"不支持的字符！仅支持英文字母和数字！" duration:0.5 position:CSToastPositionCenter];
+    }
+    return ret;
 }
 
 - (void)textFieldChange:(UITextField *)field {
