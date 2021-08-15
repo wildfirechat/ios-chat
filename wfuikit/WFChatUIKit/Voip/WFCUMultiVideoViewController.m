@@ -852,6 +852,7 @@
             self.audioButton.hidden = NO;
             self.audioButton.enabled = YES;
             self.audioButton.frame = [self getButtomLeftButtonFrame];
+            [self.currentSession enableSpeaker:YES];
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 self.speakerButton.enabled = YES;
@@ -861,7 +862,6 @@
                 self.videoButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
-                [self.currentSession enableSpeaker:YES];
                 self.switchCameraButton.hidden = NO;
                 self.switchCameraButton.enabled = YES;
                 self.switchCameraButton.frame = [self getButtomRightButtonFrame];
