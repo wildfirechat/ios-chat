@@ -1248,9 +1248,9 @@
                         break;
                     }
                 }
-                WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-                [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             }
+            WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+            [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             [self.smallCollectionView reloadData];
         } else {
             [self.portraitCollectionView reloadData];
