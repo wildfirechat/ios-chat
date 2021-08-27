@@ -15,10 +15,14 @@
 @property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
 
 @property (nonatomic, strong)UIImageView *speakingView;
+
+@property(nonatomic, strong)NSString *userId;
 @end
 
 @implementation WFCUParticipantCollectionViewCell
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
+    self.userId = userInfo.userId;
+    
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
 
     if (profile.state == kWFAVEngineStateIncomming
@@ -37,17 +41,19 @@
     }
     _speakingView.hidden = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:userInfo.userId];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
 }
 
 - (void)onVolumeUpdated:(NSNotification *)notification {
-    NSInteger volume = [notification.userInfo[@"volume"] integerValue];
-    if (volume > 1000) {
-        self.speakingView.hidden = NO;
-        [self bringSubviewToFront:self.speakingView];
-    } else {
-        self.speakingView.hidden = YES;
+    if([notification.object isEqual:self.userId]) {
+        NSInteger volume = [notification.userInfo[@"volume"] integerValue];
+        if (volume > 1000) {
+            self.speakingView.hidden = NO;
+            [self bringSubviewToFront:self.speakingView];
+        } else {
+            self.speakingView.hidden = YES;
+        }
     }
 }
 
