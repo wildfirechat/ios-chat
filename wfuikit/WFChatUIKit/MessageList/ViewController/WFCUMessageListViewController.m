@@ -175,7 +175,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendingMessage:) name:kSendingMessageStatusUpdated object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageListChanged:) name:kMessageListChanged object:self.conversation];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageListChanged:) name:kMessageListChanged object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
     
@@ -1152,7 +1152,9 @@
 }
 
 - (void)onMessageListChanged:(NSNotification *)notification {
-    [self reloadMessageList];
+    if([notification.object isEqual:self.conversation]) {
+        [self reloadMessageList];
+    }
 }
 
 - (void)onSettingUpdated:(NSNotification *)notification {

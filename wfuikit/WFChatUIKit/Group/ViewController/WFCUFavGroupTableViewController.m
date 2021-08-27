@@ -38,9 +38,9 @@
         if (groupInfo) {
             groupInfo.target = groupId;
             [self.groups addObject:groupInfo];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:groupId];
         }
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
     [self.tableView reloadData];
 }
 
