@@ -292,9 +292,6 @@
     return _scalingButton;
 }
 - (void)setSwapVideoView:(BOOL)swapVideoView {
-    if (_swapVideoView == swapVideoView) {
-        return;
-    }
     _swapVideoView = swapVideoView;
     if (self.currentSession.state == kWFAVEngineStateIdle) {
         return;
