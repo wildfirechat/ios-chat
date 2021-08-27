@@ -135,9 +135,11 @@
 }
 
 -(void)onStatusChanged:(NSNotification *)notification {
-    WFCCMessageStatus newStatus = (WFCCMessageStatus)[[notification.userInfo objectForKey:@"status"] integerValue];
-    self.model.message.status = newStatus;
-    [self updateStatus];
+    if(self.model.message.messageId == [notification.object longLongValue]) {
+        WFCCMessageStatus newStatus = (WFCCMessageStatus)[[notification.userInfo objectForKey:@"status"] integerValue];
+        self.model.message.status = newStatus;
+        [self updateStatus];
+    }
 }
   
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -175,8 +177,7 @@
 
 - (void)setModel:(WFCUMessageModel *)model {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatusChanged:) name:kSendingMessageStatusUpdated object:
-    @(model.message.messageId)];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatusChanged:) name:kSendingMessageStatusUpdated object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:
    model.message.fromUser];
   

@@ -15,6 +15,7 @@
 @property (nonatomic, strong)UIImageView *stateLabel;
 
 @property (nonatomic, strong)UIImageView *speakingView;
+
 @end
 
 @implementation WFCUPortraitCollectionViewCell
@@ -26,17 +27,19 @@
     
     _speakingView.hidden = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:userInfo.userId];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
 }
 
 - (void)onVolumeUpdated:(NSNotification *)notification {
-    NSInteger volume = [notification.userInfo[@"volume"] integerValue];
-    if (volume > 1000) {
-        self.speakingView.hidden = NO;
-        [self bringSubviewToFront:self.speakingView];
-    } else {
-        self.speakingView.hidden = YES;
+    if([notification.object isEqual:self.userInfo.userId]) {
+        NSInteger volume = [notification.userInfo[@"volume"] integerValue];
+        if (volume > 1000) {
+            self.speakingView.hidden = NO;
+            [self bringSubviewToFront:self.speakingView];
+        } else {
+            self.speakingView.hidden = YES;
+        }
     }
 }
 
