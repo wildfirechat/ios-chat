@@ -296,7 +296,7 @@
     if (self.currentSession.state == kWFAVEngineStateIdle) {
         return;
     }
-    if (swapVideoView) {
+    if (swapVideoView || self.currentSession.state == kWFAVEngineStateOutgoing) {
         [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
         [self.currentSession setupRemoteVideoView:self.smallVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
     } else {
