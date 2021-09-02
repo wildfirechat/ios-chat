@@ -81,6 +81,8 @@
                                desc:invite.desc
                                audience:YES
                                advanced:NO
+                               muteAudio:NO
+                               muteVideo:NO
                                sessionDelegate:self];
         
         
@@ -115,6 +117,8 @@
                                desc:desc
                                audience:audience
                                    advanced:NO
+                                   muteAudio:NO
+                                   muteVideo:NO
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
         

@@ -376,6 +376,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                        desc:(NSString *_Nullable)desc
                                    audience:(BOOL)audience
                                    advanced:(BOOL)advanced
+                                  muteAudio:(BOOL)muteAudio
+                                  muteVideo:(BOOL)muteVideo
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
 /**

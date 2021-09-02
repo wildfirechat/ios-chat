@@ -123,6 +123,8 @@
                                desc:invite.desc
                                audience:invite.audience
                                advanced:invite.advanced
+                               muteAudio:NO
+                               muteVideo:NO
                                sessionDelegate:self];
         
         
@@ -158,6 +160,8 @@
                                desc:desc
                                audience:audience
                                    advanced:advanced
+                                   muteAudio:NO
+                                   muteVideo:NO
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
         
