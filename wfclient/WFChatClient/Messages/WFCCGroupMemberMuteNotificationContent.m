@@ -91,9 +91,15 @@
         formatMsg = [NSString stringWithFormat:@"%@ 取消禁言了", formatMsg];
     }
     
+    int count = 0;
+    if([self.targetIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        count++;
+    }
+    
     for (NSString *member in self.targetIds) {
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            formatMsg = [formatMsg stringByAppendingString:@" 你"];
+            continue;
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member refresh:NO];
             if (userInfo.displayName.length > 0) {
@@ -101,7 +107,15 @@
             } else {
                 formatMsg = [formatMsg stringByAppendingFormat:@" %@", member];
             }
+            count++;
+            if(count >= 4) {
+                break;
+            }
         }
+    }
+    
+    if(self.targetIds.count > count) {
+        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.targetIds.count];
     }
 
     return formatMsg;
