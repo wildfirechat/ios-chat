@@ -517,7 +517,6 @@
     [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession];
         [vc setFocusUser:focusUser];
-        [vc reloadVideoUI];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
     
@@ -663,6 +662,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self reloadVideoUI];
     if (_currentSession.state == kWFAVEngineStateConnected) {
         [self updateConnectedTimeLabel];
         [self startConnectedTimer];
@@ -939,6 +939,7 @@
             [self updateConnectedTimeLabel];
             [self startConnectedTimer];
             [self updateTopViewFrame];
+            [self reloadVideoUI];
             break;
         case kWFAVEngineStateIncomming:
             self.connectTimeLabel.hidden = YES;
