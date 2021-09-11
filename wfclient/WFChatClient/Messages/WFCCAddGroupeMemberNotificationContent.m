@@ -99,9 +99,15 @@
         }
     }
     
+    int count = 0;
+    if([self.invitees containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        count++;
+    }
+
     for (NSString *member in self.invitees) {
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            formatMsg = [formatMsg stringByAppendingString:@" 你"];
+            continue;
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member refresh:NO];
             if (userInfo.displayName.length > 0) {
@@ -109,7 +115,16 @@
             } else {
                 formatMsg = [formatMsg stringByAppendingFormat:@" %@", member];
             }
+            
+            count++;
+            if(count >= 4) {
+                break;
+            }
         }
+    }
+    
+    if(self.invitees.count > count) {
+        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.invitees.count];
     }
     formatMsg = [formatMsg stringByAppendingString:@"加入了群聊"];
     return formatMsg;

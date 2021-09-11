@@ -72,7 +72,7 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *from;
-    NSString *targets;
+    NSString *targets = @"";
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
         from = @"你";
     } else {
@@ -88,10 +88,16 @@
         }
     }
     
+    int count = 0;
+    if([self.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        targets = [targets stringByAppendingString:@" 你"];
+        count++;
+    }
+    
     for (NSString *memberId in self.memberIds) {
         NSString *target;
         if ([[WFCCNetworkService sharedInstance].userId isEqualToString:memberId]) {
-            target = @"你";
+            continue;
         } else {
             WFCCUserInfo *memberUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId inGroup:self.groupId refresh:NO];
             if (memberUserInfo.friendAlias.length > 0) {
@@ -109,6 +115,14 @@
         } else {
             targets = [NSString stringWithFormat:@"%@,%@", targets, target];
         }
+        count++;
+        if(count >= 4) {
+            break;
+        }
+    }
+    
+    if(self.memberIds.count > count) {
+        targets = [targets stringByAppendingFormat:@" 等%ld名成员", self.memberIds.count];
     }
     
     if ([self.type isEqualToString:@"1"]) {

@@ -82,9 +82,14 @@
         }
     }
     
+    int count = 0;
+    if([self.kickedMembers containsObject:[WFCCNetworkService sharedInstance].userId]) {
+        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        count++;
+    }
     for (NSString *member in self.kickedMembers) {
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            formatMsg = [formatMsg stringByAppendingString:@" 你"];
+            continue;
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member inGroup:self.groupId refresh:NO];
             if (userInfo.friendAlias.length > 0) {
@@ -96,8 +101,14 @@
             } else {
                 formatMsg = [formatMsg stringByAppendingFormat:@" 用户<%@>", member];
             }
-
+            count++;
+            if(count >= 4) {
+                break;
+            }
         }
+    }
+    if(self.kickedMembers.count > count) {
+        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.kickedMembers.count];
     }
     formatMsg = [formatMsg stringByAppendingString:@"移出群聊"];
     return formatMsg;
