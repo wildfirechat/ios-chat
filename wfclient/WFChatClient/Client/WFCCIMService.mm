@@ -2652,7 +2652,10 @@ public:
 - (void)muteNotificationWhenPcOnline:(BOOL)isMute
                              success:(void(^)(void))successBlock
                                error:(void(^)(int error_code))errorBlock {
-    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Mute_When_PC_Online key:@"" value:isMute? @"1" : @"0" success:successBlock error:errorBlock];
+    if(!self.defaultSilentWhenPCOnline) {
+        isMute = !isMute;
+    }
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Mute_When_PC_Online key:@"" value:isMute? @"0" : @"1" success:successBlock error:errorBlock];
 }
 
 - (void)getConversationFiles:(WFCCConversation *)conversation
