@@ -93,6 +93,13 @@
                 
             }];
             break;
+            break;
+        case SwitchType_Setting_Voip_Silent:
+            [[WFCCIMService sharedWFCIMService] setVoipNotificationSilent:!value success:^{
+               
+            } error:^(int error_code) {
+               
+            }];
         default:
             break;
     }
@@ -133,6 +140,10 @@
             value = [[WFCCIMService sharedWFCIMService] isFavGroup:self.conversation.target];
             break;
         }
+        case SwitchType_Setting_Voip_Silent: {
+            value = ![[WFCCIMService sharedWFCIMService] isVoipNotificationSilent];
+            break;
+        }
         default:
             break;
     }
@@ -141,7 +152,7 @@
 
 - (void)setType:(SwitchType)type {
     _type = type;
-    if (_conversation || type == SwitchType_Setting_Global_Silent || type == SwitchType_Setting_Show_Notification_Detail || type == SwitchType_Setting_Sync_Draft) {
+    if (_conversation || type == SwitchType_Setting_Global_Silent || type == SwitchType_Setting_Show_Notification_Detail || type == SwitchType_Setting_Sync_Draft || type == SwitchType_Setting_Voip_Silent) {
         [self updateView];
     }
 }

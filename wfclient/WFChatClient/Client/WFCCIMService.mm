@@ -1645,6 +1645,24 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }];
 }
 
+- (BOOL)isVoipNotificationSilent {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Voip_Silent key:@""];
+    return [strValue isEqualToString:@"1"];
+}
+
+- (void)setVoipNotificationSilent:(BOOL)silent
+                          success:(void(^)(void))successBlock
+                            error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Voip_Silent key:@"" value:silent?@"1":@"0" success:^{
+        if (successBlock) {
+            successBlock();
+        }
+    } error:^(int error_code) {
+        if (errorBlock) {
+            errorBlock(error_code);
+        }
+    }];
+}
 - (BOOL)isEnableSyncDraft {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Disable_Sync_Draft key:@""];
     return ![strValue isEqualToString:@"1"];

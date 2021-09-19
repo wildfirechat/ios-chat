@@ -132,6 +132,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Conversation_Draft = 19,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Disable_Sync_Draft = 20,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Voip_Silent = 21,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -1489,6 +1491,24 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)setGlobalSilent:(BOOL)silent
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+是否实时音视频通知面打扰。服务器端2021.9.20后支持分别设置通知免打扰和实时音视频免打扰
+
+@return YES，当前用户音视频不通知；NO，当前用户音视频通知
+*/
+- (BOOL)isVoipNotificationSilent;
+
+/**
+修改实时音视频通知面打扰。服务器端2021.9.20后支持分别设置通知免打扰和实时音视频免打扰
+
+@param silent 是否静音
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)setVoipNotificationSilent:(BOOL)silent
+                          success:(void(^)(void))successBlock
+                            error:(void(^)(int error_code))errorBlock;
 
 /**
 是否开启草稿同步

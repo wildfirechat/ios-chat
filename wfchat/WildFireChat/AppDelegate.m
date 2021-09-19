@@ -549,6 +549,10 @@
         
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+            if([[WFCCIMService sharedWFCIMService] isVoipNotificationSilent]) {
+                NSLog(@"用户设置禁止voip通知，忽略来电提醒");
+                return;
+            }
             if(self.localCallNotification) {
                 [[UIApplication sharedApplication] scheduleLocalNotification:self.localCallNotification];
             }
@@ -582,6 +586,10 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming || [WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateOutgoing) {
             if([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                if([[WFCCIMService sharedWFCIMService] isVoipNotificationSilent]) {
+                    NSLog(@"用户设置禁止voip通知，忽略来电震动");
+                    return;
+                }
                 AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, systemAudioCallback, NULL);
                 AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
             } else {
