@@ -436,9 +436,20 @@
     }
 }
 
+- (void)jumpToLoginViewController:(BOOL)isKickedOff {
+    WFCLoginViewController *loginVC = [[WFCLoginViewController alloc] init];
+    loginVC.isKickedOff = YES;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    self.window.rootViewController = nav;
+}
+
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (status == kConnectionStatusRejected || status == kConnectionStatusTokenIncorrect || status == kConnectionStatusSecretKeyMismatch) {
+        if (status == kConnectionStatusRejected || status == kConnectionStatusTokenIncorrect || status == kConnectionStatusSecretKeyMismatch || status == kConnectionStatusKickedoff) {
+            if(status == kConnectionStatusKickedoff) {
+                [self jumpToLoginViewController:YES];
+            }
+            
             [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:NO];
             
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
@@ -446,9 +457,17 @@
             [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
         } else if (status == kConnectionStatusLogout) {
-            UIViewController *loginVC = [[WFCLoginViewController alloc] init];
-            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
-            self.window.rootViewController = nav;
+            BOOL alreadyShowLoginVC = NO;
+            if([self.window.rootViewController isKindOfClass:UINavigationController.class]) {
+                UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
+                if(nav.viewControllers.count == 1 && [nav.viewControllers[0] isKindOfClass:WFCLoginViewController.class]) {
+                    alreadyShowLoginVC = YES;
+                }
+            }
+            
+            if(!alreadyShowLoginVC) {
+                [self jumpToLoginViewController:NO];
+            }
             
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];

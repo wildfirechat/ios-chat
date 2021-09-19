@@ -35,6 +35,7 @@ extern NSString *kChannelInfoUpdated;
 /**
  连接状态
 
+ - kConnectionStatusKickedoff 多端登录被迫下线。
  - kConnectionStatusSecretKeyMismatch 密钥错误
  - kConnectionStatusTokenIncorrect Token错误
  - kConnectionStatusServerDown 服务器关闭
@@ -46,6 +47,8 @@ extern NSString *kChannelInfoUpdated;
  - kConnectionStatusReceiving: 获取离线消息中，可忽略
  */
 typedef NS_ENUM(NSInteger, ConnectionStatus) {
+  //错误码kConnectionStatusKickedoff是IM服务2021.9.15之后的版本才支持，并且打开服务器端开关server.client_support_kickoff_event
+  kConnectionStatusKickedoff = -7,
   kConnectionStatusSecretKeyMismatch = -6,
   kConnectionStatusTokenIncorrect = -5,
   kConnectionStatusServerDown = -4,
