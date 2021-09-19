@@ -167,9 +167,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
-    int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = unreadCount.unread + unreadFriendRequest;
+    [self updateBadgeNumber];
     
     [self prepardDataForShareExtension];
 }
@@ -294,109 +292,41 @@
     }
 }
 
+- (BOOL)shouldMuteNotification {
+    BOOL isNoDisturbing = [[WFCCIMService sharedWFCIMService] isNoDisturbing];
+    
+    
+    //免打扰
+    if (isNoDisturbing) {
+        return YES;
+    }
+    
+    //全局静音
+    if ([[WFCCIMService sharedWFCIMService] isGlobalSilent]) {
+        return YES;
+    }
+    
+    
+    BOOL pcOnline = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos].count > 0;
+    BOOL muteWhenPcOnline = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
+    
+    if(pcOnline && muteWhenPcOnline) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
-        int count = unreadCount.unread;
-        [UIApplication sharedApplication].applicationIconBadgeNumber = count;
+        NSInteger count = [self updateBadgeNumber];
         
-        __block BOOL isNoDisturbing = NO;
-        [[WFCCIMService sharedWFCIMService] getNoDisturbingTimes:^(int startMins, int endMins) {
-            NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-            NSDateComponents *nowCmps = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate date]];
-            int nowMins = (int)(nowCmps.hour * 60 + nowCmps.minute);
-            if (endMins > startMins) {
-                if (endMins > nowMins && nowMins > startMins) {
-                    isNoDisturbing = YES;
-                }
-            } else {
-                if (endMins < nowMins || nowMins < startMins) {
-                    isNoDisturbing = YES;
-                }
-            }
-            
-        } error:^(int error_code) {
-            
-        }];
-        
-        //免打扰
-        if (isNoDisturbing) {
+        if([self shouldMuteNotification]) {
             return;
         }
-        
-        //全局静音
-        if ([[WFCCIMService sharedWFCIMService] isGlobalSilent]) {
-            return;
-        }
-        
-        BOOL pcOnline = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos].count > 0;
-        BOOL muteWhenPcOnline = [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline];
-        
         
         for (WFCCMessage *msg in messages) {
-            //当在后台活跃时收到新消息，需要弹出本地通知。有一种可能时客户端已经收到远程推送，然后由于voip/backgroud fetch在后台拉活了应用，此时会收到接收下来消息，因此需要避免重复通知
-            if (([[NSDate date] timeIntervalSince1970] - (msg.serverTime - [WFCCNetworkService sharedInstance].serverDeltaTime)/1000) > 3) {
-                continue;
-            }
-            
-            if (msg.direction == MessageDirection_Send) {
-                continue;
-            }
-            
-            int flag = (int)[msg.content.class performSelector:@selector(getContentFlags)];
-            WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:msg.conversation];
-            if((flag & 0x03) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
-
-                
-            if (msg.status != Message_Status_Mentioned && msg.status != Message_Status_AllMentioned && pcOnline && muteWhenPcOnline) {
-                continue;
-            }
-                
-              UILocalNotification *localNote = [[UILocalNotification alloc] init];
-              
-              localNote.alertBody = [msg digest];
-              if (msg.conversation.type == Single_Type) {
-                WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
-                if (sender.displayName) {
-                    if (@available(iOS 8.2, *)) {
-                        localNote.alertTitle = sender.displayName;
-                    } else {
-                        // Fallback on earlier versions
-                    }
-                }
-              } else if(msg.conversation.type == Group_Type) {
-                  WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:msg.conversation.target refresh:NO];
-                  WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
-                  if (sender.displayName && group.name) {
-                      if (@available(iOS 8.2, *)) {
-                          localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.displayName, group.name];
-                      } else {
-                          // Fallback on earlier versions
-                      }
-                  }else if (sender.displayName) {
-                      if (@available(iOS 8.2, *)) {
-                          localNote.alertTitle = sender.displayName;
-                      } else {
-                          // Fallback on earlier versions
-                      }
-                  }
-                  if (msg.status == Message_Status_Mentioned || msg.status == Message_Status_AllMentioned) {
-                      if (sender.displayName) {
-                          localNote.alertBody = [NSString stringWithFormat:@"%@在群里@了你", sender.displayName];
-                      } else {
-                          localNote.alertBody = @"有人在群里@了你";
-                      }
-                          
-                  }
-              }
-              
-              localNote.applicationIconBadgeNumber = count;
-              localNote.userInfo = @{@"conversationType" : @(msg.conversation.type), @"conversationTarget" : msg.conversation.target, @"conversationLine" : @(msg.conversation.line) };
-              
-                dispatch_async(dispatch_get_main_queue(), ^{
-                  [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
-                });
-            }
+            [self notificationForMessage:msg badgeCount:count];
         }
         
     } else if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
@@ -434,6 +364,110 @@
             
         }
     }
+}
+- (void)notificationForMessage:(WFCCMessage *)msg badgeCount:(NSInteger)count {
+    //当在后台活跃时收到新消息，需要弹出本地通知。有一种可能时客户端已经收到远程推送，然后由于voip/backgroud fetch在后台拉活了应用，此时会收到接收下来消息，因此需要避免重复通知
+    if (([[NSDate date] timeIntervalSince1970] - (msg.serverTime - [WFCCNetworkService sharedInstance].serverDeltaTime)/1000) > 3) {
+        return;
+    }
+    
+    if (msg.direction == MessageDirection_Send) {
+        return;
+    }
+    
+    int flag = (int)[msg.content.class performSelector:@selector(getContentFlags)];
+    WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:msg.conversation];
+    if(((flag & 0x03) || [msg.content isKindOfClass:[WFCCRecallMessageContent class]]) && !info.isSilent && ![msg.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+
+      UILocalNotification *localNote = [[UILocalNotification alloc] init];
+        if([[WFCCIMService sharedWFCIMService] isHiddenNotificationDetail] && ![msg.content isKindOfClass:[WFCCRecallMessageContent class]]) {
+            localNote.alertBody = @"您收到了新消息";
+        } else {
+            localNote.alertBody = [msg digest];
+        }
+      if (msg.conversation.type == Single_Type) {
+        WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
+        if (sender.displayName) {
+            if (@available(iOS 8.2, *)) {
+                localNote.alertTitle = sender.displayName;
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+      } else if(msg.conversation.type == Group_Type) {
+          WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:msg.conversation.target refresh:NO];
+          WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
+          if (sender.displayName && group.name) {
+              if (@available(iOS 8.2, *)) {
+                  localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.displayName, group.name];
+              } else {
+                  // Fallback on earlier versions
+              }
+          }else if (sender.displayName) {
+              if (@available(iOS 8.2, *)) {
+                  localNote.alertTitle = sender.displayName;
+              } else {
+                  // Fallback on earlier versions
+              }
+          }
+          if (msg.status == Message_Status_Mentioned || msg.status == Message_Status_AllMentioned) {
+              if (sender.displayName) {
+                  localNote.alertBody = [NSString stringWithFormat:@"%@在群里@了你", sender.displayName];
+              } else {
+                  localNote.alertBody = @"有人在群里@了你";
+              }
+                  
+          }
+      }
+        
+      localNote.applicationIconBadgeNumber = count;
+        localNote.userInfo = @{@"conversationType" : @(msg.conversation.type), @"conversationTarget" : msg.conversation.target, @"conversationLine" : @(msg.conversation.line), @"messageUid":@(msg.messageUid) };
+    
+      
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
+        });
+    }
+}
+
+- (NSInteger)updateBadgeNumber {
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
+    int count = unreadCount.unread + unreadFriendRequest;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = count;
+    return count;
+}
+
+- (void)onRecallMessage:(long long)messageUid {
+    [self cancelNotification:messageUid];
+    NSInteger count = [self updateBadgeNumber];
+    
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        if([self shouldMuteNotification]) {
+            return;
+        }
+        WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid];
+        if(msg) {
+            [self notificationForMessage:msg badgeCount:count];
+        }
+    }
+}
+
+- (void)onDeleteMessage:(long long)messageUid {
+    [self cancelNotification:messageUid];
+    [self updateBadgeNumber];
+}
+
+- (BOOL)cancelNotification:(long long)messageUid {
+    __block BOOL canceled = NO;
+    [[[UIApplication sharedApplication] scheduledLocalNotifications] enumerateObjectsUsingBlock:^(UILocalNotification * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj.userInfo[@"messageUid"] longLongValue] == messageUid) {
+            [[UIApplication sharedApplication] cancelLocalNotification:obj];
+            *stop = YES;
+            canceled = YES;
+        }
+    }];
+    return YES;
 }
 
 - (void)jumpToLoginViewController:(BOOL)isKickedOff {

@@ -1560,6 +1560,11 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                          error:(void(^)(int error_code))errorBlock;
 
 /**
+ 当前时间是否是免打扰
+ */
+- (BOOL)isNoDisturbing;
+
+/**
 是否隐藏推送详情
 
 @return YES，隐藏推送详情，提示“您收到一条消息”；NO，推送显示消息摘要
