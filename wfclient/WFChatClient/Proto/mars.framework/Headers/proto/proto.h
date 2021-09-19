@@ -106,6 +106,7 @@ namespace mars{
             kEcServerServerError = 4,
             kEcServerNotModified = 5,
             kEcServerTokenIncorrect = 6,
+            kEcServerKickedOff = 7,
             kEcServerUserForbidden = 8,
             kEcServerNotInGroup = 9,
             kEcServerInvalidMessage = 10,
@@ -468,6 +469,7 @@ namespace mars{
             kUserSettingConversationClearMessage = 18,
             kUserSettingConversationDraft = 19,
             kUserSettingDisableSyncDraft = 20,
+            kUserSettingVoipSilent = 21,
 
             kUserSettingCustomBegin = 1000
         };
@@ -762,6 +764,7 @@ namespace mars{
     };
     
         enum ConnectionStatus {
+            kConnectionStatusKickedOff = -7,
             kConnectionStatusSecretKeyMismatch = -6,
             kConnectionStatusTokenIncorrect = -5,
             kConnectionStatusServerDown = -4,
