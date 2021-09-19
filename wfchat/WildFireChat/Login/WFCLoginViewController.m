@@ -173,6 +173,21 @@ alpha:1.0]
     self.navigationController.navigationBar.hidden = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if(self.isKickedOff) {
+        self.isKickedOff = NO;
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:@"您的账号已在其他手机登录" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+
+        [actionSheet addAction:actionCancel];
+        
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
