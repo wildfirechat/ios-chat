@@ -164,6 +164,7 @@
 "OperationFailure"="操作失败";
 "NewMessageNotification"="新消息通知";
 "ReceiveNewMessageNotification"="接收新消息通知";
+"ReceiveVoipNotification"="接收语音或视频来电通知";
 "NotificationShowMessageDetail"="通知显示消息详情";
 "SyncDraft"="同步草稿";
 "ModifyEmail"="修改邮箱";
