@@ -164,6 +164,7 @@
 "OperationFailure"="Operation failure";
 "NewMessageNotification"="New message notification";
 "ReceiveNewMessageNotification"="Receive new message notification";
+"ReceiveVoipNotification"="Receive call notification";
 "NotificationShowMessageDetail"="Notification show message detail";
 "SyncDraft"="Sync draft";
 "ModifyEmail"="Modify email";
