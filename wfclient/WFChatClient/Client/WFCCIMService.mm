@@ -1731,6 +1731,28 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_No_Disturbing key:@"" value:@"" success:successBlock error:errorBlock];
 }
 
+- (BOOL)isNoDisturbing {
+    __block BOOL isNoDisturbing = NO;
+    [self getNoDisturbingTimes:^(int startMins, int endMins) {
+        NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *nowCmps = [calendar components:NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate date]];
+        int nowMins = (int)(nowCmps.hour * 60 + nowCmps.minute);
+        if (endMins > startMins) {
+            if (endMins > nowMins && nowMins > startMins) {
+                isNoDisturbing = YES;
+            }
+        } else {
+            if (endMins < nowMins || nowMins < startMins) {
+                isNoDisturbing = YES;
+            }
+        }
+        
+    } error:^(int error_code) {
+        
+    }];
+    return isNoDisturbing;
+}
+
 - (BOOL)isHiddenNotificationDetail {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Hidden_Notification_Detail key:@""];
     return [strValue isEqualToString:@"1"];
