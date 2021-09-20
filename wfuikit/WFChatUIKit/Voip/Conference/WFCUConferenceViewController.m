@@ -220,7 +220,7 @@
     CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
     
     self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
-    self.bigScalingType = kWFAVVideoScalingTypeAspectFit;
+    self.bigScalingType = kWFAVVideoScalingTypeAspectBalanced;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
