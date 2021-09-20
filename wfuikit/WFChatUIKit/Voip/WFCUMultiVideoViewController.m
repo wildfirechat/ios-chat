@@ -140,7 +140,7 @@
         return;
     }
     self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
-    self.bigScalingType = kWFAVVideoScalingTypeAspectFit;
+    self.bigScalingType = kWFAVVideoScalingTypeAspectBalanced;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
