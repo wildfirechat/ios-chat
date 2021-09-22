@@ -1742,7 +1742,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                 isNoDisturbing = YES;
             }
         } else {
-            if (endMins < nowMins || nowMins < startMins) {
+            if (endMins > nowMins || nowMins > startMins) {
                 isNoDisturbing = YES;
             }
         }
