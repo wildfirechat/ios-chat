@@ -21,6 +21,9 @@
     [super viewDidLoad];
     CGRect frame = self.view.frame;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
