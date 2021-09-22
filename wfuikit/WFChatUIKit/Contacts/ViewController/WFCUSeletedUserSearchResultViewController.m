@@ -186,6 +186,9 @@
         _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        if (@available(iOS 15, *)) {
+            _tableView.sectionHeaderTopPadding = 0;
+        }
         [_tableView registerClass:[WFCUSelectedUserTableViewCell class] forCellReuseIdentifier:@"selectedUserT"];
         _tableView.tableFooterView = [UIView new];
     }

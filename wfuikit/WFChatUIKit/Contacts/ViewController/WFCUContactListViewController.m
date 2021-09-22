@@ -85,6 +85,9 @@ static NSString *wfcstar = @"☆";
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;

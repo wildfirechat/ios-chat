@@ -81,6 +81,9 @@
     
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

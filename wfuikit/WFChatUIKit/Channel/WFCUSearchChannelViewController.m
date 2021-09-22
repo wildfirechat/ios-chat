@@ -63,6 +63,9 @@
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     if (@available(iOS 11.0, *)) {

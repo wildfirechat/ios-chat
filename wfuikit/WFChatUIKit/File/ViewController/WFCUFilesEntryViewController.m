@@ -23,6 +23,9 @@
     self.title = @"文件";
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];

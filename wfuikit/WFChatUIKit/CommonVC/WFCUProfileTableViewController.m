@@ -73,6 +73,9 @@
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     
