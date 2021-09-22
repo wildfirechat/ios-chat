@@ -31,7 +31,9 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     CGRect bounds = self.view.bounds;
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, 100)];
     UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 40, bounds.size.width - 32, 40)];

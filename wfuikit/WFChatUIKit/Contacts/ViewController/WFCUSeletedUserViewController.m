@@ -477,6 +477,9 @@ UISearchBarDelegate>
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        if (@available(iOS 15, *)) {
+            _tableView.sectionHeaderTopPadding = 0;
+        }
         _tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         

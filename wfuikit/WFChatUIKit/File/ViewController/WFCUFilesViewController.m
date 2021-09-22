@@ -56,7 +56,9 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchController;
     } else {

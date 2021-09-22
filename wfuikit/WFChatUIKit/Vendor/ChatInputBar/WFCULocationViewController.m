@@ -66,6 +66,9 @@
         [self.view addSubview:self.locationTableView];
         self.locationTableView.delegate = self;
         self.locationTableView.dataSource = self;
+        if (@available(iOS 15, *)) {
+            self.locationTableView.sectionHeaderTopPadding = 0;
+        }
         
         self.mapView.showsUserLocation = YES;
         self.annotationLayer = [CALayer layer];

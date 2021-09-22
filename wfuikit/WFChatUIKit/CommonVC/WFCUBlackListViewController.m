@@ -23,6 +23,9 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    if (@available(iOS 15, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
     self.dataArr = [[[WFCCIMService sharedWFCIMService] getBlackList:YES] mutableCopy];
     [self.tableView reloadData];
     [self.view addSubview:self.tableView];
