@@ -472,7 +472,7 @@
 
 - (void)jumpToLoginViewController:(BOOL)isKickedOff {
     WFCLoginViewController *loginVC = [[WFCLoginViewController alloc] init];
-    loginVC.isKickedOff = YES;
+    loginVC.isKickedOff = isKickedOff;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
     self.window.rootViewController = nav;
 }
