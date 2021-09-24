@@ -816,7 +816,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     if (msg == nil) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"recall msg failure, message not exist");
-            errorBlock(-1);
+            if(errorBlock) {
+                errorBlock(-1);
+            }
         });
         return;
     }
@@ -1261,6 +1263,8 @@ public:
 }
 
 - (BOOL)isMyFriend:(NSString *)userId {
+    if(!userId)
+        return NO;
     return mars::stn::MessageDB::Instance()->isMyFriend([userId UTF8String]);
 }
 
@@ -1289,6 +1293,9 @@ public:
 }
 
 - (NSArray<WFCCUserInfo *> *)searchFriends:(NSString *)keyword {
+    if(!keyword)
+        return nil;
+    
     std::list<mars::stn::TUserInfo> friends = mars::stn::MessageDB::Instance()->SearchFriends([keyword UTF8String], 50);
     NSMutableArray<WFCCUserInfo *> *ret = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TUserInfo>::iterator it = friends.begin(); it != friends.end(); it++) {
@@ -1395,6 +1402,8 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 
 
 - (NSArray<WFCCGroupSearchInfo *> *)searchGroups:(NSString *)keyword {
+    if(!keyword)
+        return nil;
     std::list<mars::stn::TGroupSearchResult> groups = mars::stn::MessageDB::Instance()->SearchGroups([keyword UTF8String], 50);
     NSMutableArray<WFCCGroupSearchInfo *> *ret = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TGroupSearchResult>::iterator it = groups.begin(); it != groups.end(); it++) {
@@ -1430,6 +1439,8 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 }
 
 - (WFCCFriendRequest *)getFriendRequest:(NSString *)userId direction:(int)direction {
+    if(!userId)
+        return nil;
     mars::stn::TFriendRequest tRequest = mars::stn::MessageDB::Instance()->getFriendRequest([userId UTF8String], direction);
     return convertFriendRequest(tRequest);
 }
@@ -1447,7 +1458,13 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                     extra:(NSString *)extra
                   success:(void(^)())successBlock
                     error:(void(^)(int error_code))errorBlock {
-    mars::stn::sendFriendRequest([userId UTF8String], [reason UTF8String], extra ? [extra UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
+    if(!userId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    mars::stn::sendFriendRequest([userId UTF8String], reason ? [reason UTF8String] : "", extra ? [extra UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 
@@ -1456,16 +1473,32 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                       extra:(NSString *)extra
                     success:(void(^)())successBlock
                       error:(void(^)(int error_code))errorBlock {
+    if(!userId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::handleFriendRequest([userId UTF8String], accpet, extra ? [extra UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)deleteFriend:(NSString *)userId
              success:(void(^)())successBlock
                error:(void(^)(int error_code))errorBlock {
+    if(!userId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::deleteFriend([userId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSString *)getFriendAlias:(NSString *)friendId {
+    if(!friendId) {
+        return nil;
+    }
+    
     std::string strAlias = mars::stn::MessageDB::Instance()->GetFriendAlias([friendId UTF8String]);
     return [NSString stringWithUTF8String:strAlias.c_str()];
 }
@@ -1474,15 +1507,25 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
             alias:(NSString *)alias
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock {
+    if(!friendId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::setFriendAlias([friendId UTF8String], alias ? [alias UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSString *)getFriendExtra:(NSString *)friendId {
+    if(!friendId)
+        return nil;
     std::string extra = mars::stn::MessageDB::Instance()->GetFriendExtra([friendId UTF8String]);
     return [NSString stringWithUTF8String:extra.c_str()];
 }
 
 - (BOOL)isBlackListed:(NSString *)userId {
+    if(!userId)
+        return NO;
     return mars::stn::MessageDB::Instance()->isBlackListed([userId UTF8String]);
 }
 
@@ -1499,6 +1542,12 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
        isBlackListed:(BOOL)isBlackListed
              success:(void(^)(void))successBlock
                error:(void(^)(int error_code))errorBlock {
+    if(!userId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::blackListRequest([userId UTF8String], isBlackListed, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId refresh:(BOOL)refresh {
@@ -1711,12 +1760,15 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
             int endMins = [arrs[1] intValue];
             resultBlock(startMins, endMins);
         } else {
-            errorBlock(-1);
+            if(errorBlock) {
+                errorBlock(-1);
+            }
         }
     } else {
-        errorBlock(-1);
+        if(errorBlock) {
+            errorBlock(-1);
+        }
     }
-    
 }
 
 - (void)setNoDisturbingTimes:(int)startMins
@@ -2329,7 +2381,7 @@ public:
              notifyContent:(WFCCMessageContent *)notifyContent
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock {
-    if(groupId.length == 0) {
+    if(!groupId.length) {
         if(errorBlock) {
             errorBlock(-1);
         }
@@ -2419,7 +2471,7 @@ public:
              refresh:(BOOL)refresh
              success:(void(^)(WFCCGroupInfo *groupInfo))successBlock
                error:(void(^)(int errorCode))errorBlock {
-    if(groupId.length == 0) {
+    if(!groupId.length) {
         if(errorBlock) {
             errorBlock(-1);
         }
@@ -2556,12 +2608,24 @@ public:
 - (void)joinChatroom:(NSString *)chatroomId
              success:(void(^)(void))successBlock
                error:(void(^)(int error_code))errorBlock {
+    if(!chatroomId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::joinChatroom([chatroomId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)quitChatroom:(NSString *)chatroomId
              success:(void(^)(void))successBlock
                error:(void(^)(int error_code))errorBlock {
+    if(!chatroomId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::quitChatroom([chatroomId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
@@ -2569,6 +2633,12 @@ public:
                 upateDt:(long long)updateDt
                 success:(void(^)(WFCCChatroomInfo *chatroomInfo))successBlock
                   error:(void(^)(int error_code))errorBlock {
+    if(!chatroomId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::getChatroomInfo([chatroomId UTF8String], updateDt, new IMGetChatroomInfoCallback(chatroomId, successBlock, errorBlock));
 }
 
@@ -2578,6 +2648,12 @@ public:
                         error:(void(^)(int error_code))errorBlock {
     if (maxCount <= 0) {
         maxCount = 30;
+    }
+    if(!chatroomId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
     }
     mars::stn::getChatroomMemberInfo([chatroomId UTF8String], maxCount, new IMGetChatroomMemberInfoCallback(successBlock, errorBlock));
 }
@@ -2592,17 +2668,26 @@ public:
     if (!extra) {
         extra = @"";
     }
-    mars::stn::createChannel("", [channelName UTF8String], [channelPortrait UTF8String], status, [desc UTF8String], [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
+    mars::stn::createChannel("", [channelName UTF8String], channelPortrait ? [channelPortrait UTF8String] : "", status, desc?[desc UTF8String]:"", [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
 }
 
 - (void)destoryChannel:(NSString *)channelId
               success:(void(^)(void))successBlock
                 error:(void(^)(int error_code))errorBlock {
+    if(!channelId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::destoryChannel([channelId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (WFCCChannelInfo *)getChannelInfo:(NSString *)channelId
                             refresh:(BOOL)refresh {
+    if(!channelId) {
+        return nil;
+    }
     mars::stn::TChannelInfo tgi = mars::stn::MessageDB::Instance()->GetChannelInfo([channelId UTF8String], refresh);
     
     return convertProtoChannelInfo(tgi);
@@ -2613,11 +2698,21 @@ public:
                  newValue:(NSString *)newValue
                   success:(void(^)(void))successBlock
                     error:(void(^)(int error_code))errorBlock {
+    if(!channelId || !newValue) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::modifyChannelInfo([channelId UTF8String], (int)type, [newValue UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)searchChannel:(NSString *)keyword success:(void(^)(NSArray<WFCCChannelInfo *> *machedChannels))successBlock error:(void(^)(int errorCode))errorBlock {
     
+    if(!keyword.length) {
+        successBlock(@[]);
+        return;
+    }
     mars::stn::searchChannel([keyword UTF8String], YES, new IMSearchChannelCallback(successBlock, errorBlock));
 }
 
@@ -2629,6 +2724,12 @@ public:
 }
 
 - (void)listenChannel:(NSString *)channelId listen:(BOOL)listen success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock {
+    if(!channelId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::listenChannel([channelId UTF8String], listen, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
@@ -2674,6 +2775,12 @@ public:
 - (void)kickoffPCClient:(NSString *)pcClientId
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
+    if(!pcClientId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::KickoffPCClient([pcClientId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
@@ -2726,7 +2833,9 @@ public:
               success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                 error:(void(^)(int error_code))errorBlock {
     if (!keyword.length) {
-        errorBlock(-1);
+        if(errorBlock) {
+            errorBlock(-1);
+        }
         return;
     }
     mars::stn::searchMyFileRecords([keyword UTF8String], beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
@@ -2746,7 +2855,9 @@ public:
             success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
               error:(void(^)(int error_code))errorBlock {
     if (!keyword.length) {
-        errorBlock(-1);
+        if(errorBlock) {
+            errorBlock(-1);
+        }
         return;
     }
     mars::stn::TConversation conv;
@@ -2798,7 +2909,7 @@ public:
     
     tmsg.status = (mars::stn::MessageStatus)message.status;
     tmsg.timestamp = message.serverTime;
-    tmsg.localExtra = [message.localExtra UTF8String];
+    tmsg.localExtra = message.localExtra ? [message.localExtra UTF8String] : "";
     
     long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
     message.messageId = msgId;
