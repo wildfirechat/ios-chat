@@ -361,7 +361,7 @@ alpha:1.0]
 }
 
 - (BOOL)isValidNumber {
-    NSString * MOBILE = @"^((1[34578]))\\d{9}$";
+    NSString * MOBILE = @"^((1[23456789]))\\d{9}$";
     NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
     if (self.userNameField.text.length == 11 && ([regextestmobile evaluateWithObject:self.userNameField.text] == YES)) {
         return YES;
