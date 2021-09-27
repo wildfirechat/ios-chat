@@ -799,6 +799,7 @@ namespace mars{
 
         extern void useEncryptSM4();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
+        extern void setLiteMode(bool liteMode);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);
         extern void setBackupAddressStrategy(int strategy);
