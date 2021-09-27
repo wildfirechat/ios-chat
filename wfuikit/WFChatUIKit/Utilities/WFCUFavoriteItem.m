@@ -114,6 +114,7 @@
         case MESSAGE_CONTENT_TYPE_TEXT:
         {
             msg.content = [WFCCTextMessageContent contentWith:self.title];
+            break;
         }
         case MESSAGE_CONTENT_TYPE_SOUND:
         {
@@ -124,6 +125,7 @@
             soundCnt.duration = [dict[@"duration"] intValue];
             
             msg.content = soundCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
@@ -137,6 +139,7 @@
             imageCnt.thumbnail = [UIImage imageWithData:thumbData];
             
             msg.content = imageCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_VIDEO:
         {
@@ -151,6 +154,7 @@
             videoCnt.duration = [dict[@"duration"] intValue];
             
             msg.content = videoCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_LOCATION:
         {
@@ -168,6 +172,7 @@
             locationCnt.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
             
             msg.content = locationCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_LINK:
         {
@@ -177,6 +182,7 @@
             linkCnt.title = self.title;
 
             msg.content = linkCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
@@ -189,6 +195,7 @@
             [compositeCnt decode:payload];
             
             msg.content = compositeCnt;
+            break;
         }
         case MESSAGE_CONTENT_TYPE_FILE:
         {
@@ -200,10 +207,17 @@
             fileCnt.size = [dict[@"size"] intValue];
             
             msg.content = fileCnt;
+            break;
         }
         default:
+        {
+            WFCCUnknownMessageContent *unknownCnt = [[WFCCUnknownMessageContent alloc] init];
+            unknownCnt.orignalType = self.favType;
+            msg.content = unknownCnt;
             break;
+        }
+            
     }
-    return nil;
+    return msg;
 }
 @end
