@@ -833,6 +833,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::useEncryptSM4();
 }
 
+- (void)setLiteMode:(BOOL)isLiteMode {
+    mars::stn::setLiteMode(isLiteMode ? true:false);
+}
+
 #define WFC_CLIENT_ID @"wfc_client_id"
 - (NSString *)getClientId {
     //当应用在appstore上架后，开发者账户下的所有应用在同一个手机上具有相同的vendor id。详情请参考(IDFV(identifierForVendor)使用陷阱)https://easeapi.com/blog/blog/63-ios-idfv.html

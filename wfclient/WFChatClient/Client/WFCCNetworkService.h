@@ -214,6 +214,15 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)useSM4;
 
 /**
+ 设置Lite模式。
+ Lite模式下，协议栈不存储数据库，不同步所有信息，只能收发消息，接收消息只接收连接以后发送的消息。
+ 此函数只能在connect之前调用。
+ 
+ @param isLiteMode 是否Lite模式
+ */
+- (void)setLiteMode:(BOOL)isLiteMode;
+
+/**
  获取客户端id
  
  @return 客户端ID
