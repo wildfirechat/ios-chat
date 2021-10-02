@@ -107,6 +107,8 @@
 		2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5121F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m */; };
 		2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */; };
 		2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */; };
+		2FF72265270698850059B5D6 /* PushToTalkCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF72264270698850059B5D6 /* PushToTalkCreateViewController.m */; };
+		2FF7226827069A610059B5D6 /* PttChannelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7226727069A610059B5D6 /* PttChannelInfo.m */; };
 		2FFDDC982551545300CEFDBB /* WFCFavoriteLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDC962551545300CEFDBB /* WFCFavoriteLocationCell.m */; };
 		2FFDDC9C255158FA00CEFDBB /* WFCFavoriteSoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDC9B255158FA00CEFDBB /* WFCFavoriteSoundCell.m */; };
 		2FFDDCA025515D9000CEFDBB /* WFCFavoriteVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDC9E25515D9000CEFDBB /* WFCFavoriteVideoCell.m */; };
@@ -351,6 +353,10 @@
 		2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCAboutViewController.h; sourceTree = "<group>"; };
 		2FF07F5421F82E7200A78A62 /* WFCMeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCMeTableViewController.m; sourceTree = "<group>"; };
 		2FF07F5521F82E7200A78A62 /* WFCSecurityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCSecurityTableViewController.m; sourceTree = "<group>"; };
+		2FF72263270698850059B5D6 /* PushToTalkCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PushToTalkCreateViewController.h; path = ../../../wfuikit/WFChatUIKit/PTT/PushToTalkCreateViewController.h; sourceTree = "<group>"; };
+		2FF72264270698850059B5D6 /* PushToTalkCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PushToTalkCreateViewController.m; path = ../../../wfuikit/WFChatUIKit/PTT/PushToTalkCreateViewController.m; sourceTree = "<group>"; };
+		2FF7226627069A610059B5D6 /* PttChannelInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PttChannelInfo.h; sourceTree = "<group>"; };
+		2FF7226727069A610059B5D6 /* PttChannelInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PttChannelInfo.m; sourceTree = "<group>"; };
 		2FFDDC962551545300CEFDBB /* WFCFavoriteLocationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteLocationCell.m; sourceTree = "<group>"; };
 		2FFDDC972551545300CEFDBB /* WFCFavoriteLocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteLocationCell.h; sourceTree = "<group>"; };
 		2FFDDC9A255158FA00CEFDBB /* WFCFavoriteSoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteSoundCell.h; sourceTree = "<group>"; };
@@ -540,6 +546,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				2FF72262270698670059B5D6 /* PTT */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
 				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
 				2FA2E82025158E0D0038635A /* SDWebImage */,
@@ -880,6 +887,17 @@
 			path = Me;
 			sourceTree = "<group>";
 		};
+		2FF72262270698670059B5D6 /* PTT */ = {
+			isa = PBXGroup;
+			children = (
+				2FF72263270698850059B5D6 /* PushToTalkCreateViewController.h */,
+				2FF72264270698850059B5D6 /* PushToTalkCreateViewController.m */,
+				2FF7226627069A610059B5D6 /* PttChannelInfo.h */,
+				2FF7226727069A610059B5D6 /* PttChannelInfo.m */,
+			);
+			path = PTT;
+			sourceTree = "<group>";
+		};
 		6E616D9A20AB3435002CB8BE /* GoogleWebRTC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1100,9 +1118,11 @@
 				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
+				2FF7226827069A610059B5D6 /* PttChannelInfo.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
+				2FF72265270698850059B5D6 /* PushToTalkCreateViewController.m in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
 				2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */,
