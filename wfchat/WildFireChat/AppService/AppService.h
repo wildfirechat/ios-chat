@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PttChannelInfo;
+
 @interface AppService : NSObject <WFCUAppServiceProvider>
 + (AppService *)sharedAppService;
 
@@ -42,6 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)delDevice:(NSString *)deviceId
           success:(void(^)(Device *device))successBlock
             error:(void(^)(int error_code))errorBlock;
+
+- (void)createPttChannel:(PttChannelInfo *)channelInfo success:(void(^)(NSString *channelId))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+- (void)destroyPttChannel:(NSString *)channelId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 - (NSData *)getAppServiceCookies;
 - (NSString *)getAppServiceAuthToken;
