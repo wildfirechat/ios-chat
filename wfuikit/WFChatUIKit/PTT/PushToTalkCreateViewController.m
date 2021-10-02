@@ -1,25 +1,27 @@
 //
-//  WFCUPushToTalkCreateViewController.m
+//  PushToTalkCreateViewController.m
 //  WFChatUIKit
 //
 //  Created by dali on 2021/2/18.
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
-#import "WFCUPushToTalkCreateViewController.h"
+#import "PushToTalkCreateViewController.h"
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
-#import "WFCUPushToTalkViewController.h"
-#import "WFCUGeneralModifyViewController.h"
+#import <WFChatUIKit/WFChatUIKit.h>
+#import "AppService.h"
+#import "PttChannelInfo.h"
 
-@interface WFCUPushToTalkCreateViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@interface PushToTalkCreateViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)NSString *channelTitle;
 @property(nonatomic, strong)NSString *channelDesc;
 
 @property(nonatomic, strong)UITableView *tableView;
 @end
 
-@implementation WFCUPushToTalkCreateViewController
+@implementation PushToTalkCreateViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -54,8 +56,18 @@
 }
 
 - (void)onStart:(id)sender {
-    WFCUPushToTalkViewController *vc = [[WFCUPushToTalkViewController alloc] initWithCallId:nil audioOnly:YES pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.channelTitle desc:self.channelDesc audience:YES moCall:YES];
-    [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+    PttChannelInfo *info = [[PttChannelInfo alloc] init];
+    info.channelTitle = self.channelTitle;
+    info.owner = [WFCCNetworkService sharedInstance].userId;
+    info.pin = @"1234";
+    
+    [[AppService sharedAppService] createPttChannel:info success:^(NSString * _Nonnull channelId) {
+        WFCUPushToTalkViewController *vc = [[WFCUPushToTalkViewController alloc] initWithCallId:channelId audioOnly:YES pin:info.pin host:info.owner title:info.channelTitle];
+        [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+    
 }
 
 

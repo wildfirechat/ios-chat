@@ -13,7 +13,7 @@
 #import "PCSessionViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "SharePredefine.h"
-
+#import "PttChannelInfo.h"
 
 static AppService *sharedSingleton = nil;
 
@@ -408,6 +408,34 @@ static AppService *sharedSingleton = nil;
         }
     } error:^(NSError * _Nonnull error) {
         if(errorBlock) errorBlock(-1);
+    }];
+}
+
+- (void)createPttChannel:(PttChannelInfo *)channelInfo success:(void(^)(NSString *channelId))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/ptt/create" data:[channelInfo toDictionary] isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            NSString *channelId = dict[@"result"];
+            channelInfo.channelId = channelId;
+            successBlock(channelId);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)destroyPttChannel:(NSString *)channelId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:[NSString stringWithFormat:@"/ptt/destroy/%@", channelId] data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock();
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
     }];
 }
 
