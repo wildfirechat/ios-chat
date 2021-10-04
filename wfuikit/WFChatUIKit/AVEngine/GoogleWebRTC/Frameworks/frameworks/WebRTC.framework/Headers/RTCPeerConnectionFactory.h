@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -60,6 +60,13 @@ RTC_OBJC_EXPORT
  */
 - (RTC_OBJC_TYPE(RTCVideoSource) *)videoSource;
 
+/** Initialize a generic RTCVideoSource with he posibility of marking
+ * it as usable for screen sharing. The RTCVideoSource should be
+ * passed to a RTCVideoCapturer implementation, e.g.
+ * RTCCameraVideoCapturer, in order to produce frames.
+ */
+- (RTC_OBJC_TYPE(RTCVideoSource) *)videoSourceForScreenCast:(BOOL)forScreenCast;
+
 /** Initialize an RTCVideoTrack with a source and an id. */
 - (RTC_OBJC_TYPE(RTCVideoTrack) *)videoTrackWithSource:(RTC_OBJC_TYPE(RTCVideoSource) *)source
                                                trackId:(NSString *)trackId;
@@ -70,7 +77,7 @@ RTC_OBJC_EXPORT
 /** Initialize an RTCPeerConnection with a configuration, constraints, and
  *  delegate.
  */
-- (RTC_OBJC_TYPE(RTCPeerConnection) *)
+- (nullable RTC_OBJC_TYPE(RTCPeerConnection) *)
     peerConnectionWithConfiguration:(RTC_OBJC_TYPE(RTCConfiguration) *)configuration
                         constraints:(RTC_OBJC_TYPE(RTCMediaConstraints) *)constraints
                            delegate:(nullable id<RTC_OBJC_TYPE(RTCPeerConnectionDelegate)>)delegate;
