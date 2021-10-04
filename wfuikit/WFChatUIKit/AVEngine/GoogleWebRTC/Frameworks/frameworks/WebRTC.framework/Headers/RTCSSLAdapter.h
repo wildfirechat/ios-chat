@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 /**
  * Initialize and clean up the SSL library. Failure is fatal. These call the

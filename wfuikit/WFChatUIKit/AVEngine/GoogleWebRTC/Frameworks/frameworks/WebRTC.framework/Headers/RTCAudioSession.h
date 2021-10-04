@@ -11,7 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,7 +63,7 @@ RTC_OBJC_EXPORT
 // TODO(tkchin): Maybe handle SilenceSecondaryAudioHintNotification.
 
 - (void)audioSession:(RTC_OBJC_TYPE(RTCAudioSession) *)session
-    didChangeCanPlayOrRecord:(BOOL)canPlayOrRecord;
+    didChangeCanPlayOrRecord:(BOOL)canPlayOrRecord disableMicrophone:(BOOL)disableMicrophone;
 
 /** Called on a WebRTC thread when the audio device is notified to begin
  *  playback or recording.
@@ -99,6 +99,9 @@ RTC_OBJC_EXPORT
     failedToSetActive:(BOOL)active
                 error:(NSError *)error;
 
+- (void)audioSession:(RTC_OBJC_TYPE(RTCAudioSession) *)audioSession
+    audioUnitStartFailedWithError:(NSError *)error;
+
 @end
 
 /** This is a protocol used to inform RTCAudioSession when the audio session
@@ -122,7 +125,7 @@ RTC_OBJC_EXPORT
  *  WebRTC and the application layer are avoided.
  *
  *  RTCAudioSession also coordinates activation so that the audio session is
- *  activated only once. See |setActive:error:|.
+ *  activated only once. See `setActive:error:`.
  */
 RTC_OBJC_EXPORT
 @interface RTC_OBJC_TYPE (RTCAudioSession) : NSObject <RTC_OBJC_TYPE(RTCAudioSessionActivationDelegate)>
@@ -137,8 +140,6 @@ RTC_OBJC_EXPORT
  *  AVAudioSession.
  */
 @property(nonatomic, readonly) BOOL isActive;
-/** Whether RTCAudioSession is currently locked for configuration. */
-@property(nonatomic, readonly) BOOL isLocked;
 
 /** If YES, WebRTC will not initialize the audio unit automatically when an
  *  audio track is ready for playout or recording. Instead, applications should
@@ -160,6 +161,10 @@ RTC_OBJC_EXPORT
  *  we are able to prevent the abrupt cutoff.
  */
 @property(nonatomic, assign) BOOL isAudioEnabled;
+
+/** if YES, WebRTC will not initialize microphone when active audio unit.
+ */
+@property(nonatomic, assign) BOOL isDisableMicrophone;
 
 // Proxy properties.
 @property(readonly) NSString *category;
@@ -211,9 +216,9 @@ RTC_OBJC_EXPORT
 /** Relinquishes exclusive access to the audio session. */
 - (void)unlockForConfiguration;
 
-/** If |active|, activates the audio session if it isn't already active.
+/** If `active`, activates the audio session if it isn't already active.
  *  Successful calls must be balanced with a setActive:NO when activation is no
- *  longer required. If not |active|, deactivates the audio session if one is
+ *  longer required. If not `active`, deactivates the audio session if one is
  *  active and this is the last balanced call. When deactivating, the
  *  AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation option is passed to
  *  AVAudioSession.
@@ -221,7 +226,7 @@ RTC_OBJC_EXPORT
 - (BOOL)setActive:(BOOL)active error:(NSError **)outError;
 
 // The following methods are proxies for the associated methods on
-// AVAudioSession. |lockForConfiguration| must be called before using them
+// AVAudioSession. `lockForConfiguration` must be called before using them
 // otherwise they will fail with kRTCAudioSessionErrorLockRequired.
 
 - (BOOL)setCategory:(NSString *)category
@@ -247,13 +252,13 @@ RTC_OBJC_EXPORT
     /** Applies the configuration to the current session. Attempts to set all
      *  properties even if previous ones fail. Only the last error will be
      *  returned.
-     *  |lockForConfiguration| must be called first.
+     *  `lockForConfiguration` must be called first.
      */
     - (BOOL)setConfiguration : (RTC_OBJC_TYPE(RTCAudioSessionConfiguration) *)configuration error
     : (NSError **)outError;
 
 /** Convenience method that calls both setConfiguration and setActive.
- *  |lockForConfiguration| must be called first.
+ *  `lockForConfiguration` must be called first.
  */
 - (BOOL)setConfiguration:(RTC_OBJC_TYPE(RTCAudioSessionConfiguration) *)configuration
                   active:(BOOL)active

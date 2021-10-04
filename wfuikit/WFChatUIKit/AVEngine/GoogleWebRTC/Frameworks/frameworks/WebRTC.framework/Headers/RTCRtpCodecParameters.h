@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +31,7 @@ RTC_EXTERN const NSString *const kRTCVp8CodecName;
 RTC_EXTERN const NSString *const kRTCVp9CodecName;
 RTC_EXTERN const NSString *const kRTCH264CodecName;
 
-/** Defined in http://w3c.github.io/webrtc-pc/#idl-def-RTC_OBJC_TYPE(RTCRtpCodecParameters) */
+/** Defined in https://www.w3.org/TR/webrtc/#idl-def-rtcrtpcodecparameters */
 RTC_OBJC_EXPORT
 @interface RTC_OBJC_TYPE (RTCRtpCodecParameters) : NSObject
 
@@ -66,7 +66,7 @@ RTC_OBJC_EXPORT
 /** The "format specific parameters" field from the "a=fmtp" line in the SDP */
 @property(nonatomic, readonly, nonnull) NSDictionary *parameters;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)init;
 
 @end
 

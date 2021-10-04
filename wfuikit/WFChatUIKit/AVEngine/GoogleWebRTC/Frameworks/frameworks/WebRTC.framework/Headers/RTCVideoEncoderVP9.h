@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoEncoder.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoEncoder.h>
 
 RTC_OBJC_EXPORT
 @interface RTC_OBJC_TYPE (RTCVideoEncoderVP9) : NSObject
@@ -21,5 +21,7 @@ RTC_OBJC_EXPORT
  * used independently from the RTCPeerConnectionFactory.
  */
 + (id<RTC_OBJC_TYPE(RTCVideoEncoder)>)vp9Encoder;
+
++ (bool)isSupported;
 
 @end

@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCCodecSpecificInfo.h"
-#import "RTCMacros.h"
+#import <WebRTC/RTCCodecSpecificInfo.h>
+#import <WebRTC/RTCMacros.h>
 
 /** Class for H264 specific config. */
 typedef NS_ENUM(NSUInteger, RTCH264PacketizationMode) {

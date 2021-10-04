@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoEncoderFactory.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoEncoderFactory.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -10,9 +10,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoCodecInfo.h"
-#import "RTCVideoEncoder.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoCodecInfo.h>
+#import <WebRTC/RTCVideoEncoder.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

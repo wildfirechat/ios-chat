@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 @class RTC_OBJC_TYPE(RTCConfiguration);
 @class RTC_OBJC_TYPE(RTCDataChannel);
@@ -80,6 +80,12 @@ typedef NS_ENUM(NSInteger, RTCStatsOutputLevel) {
   RTCStatsOutputLevelStandard,
   RTCStatsOutputLevelDebug,
 };
+
+typedef void (^RTCCreateSessionDescriptionCompletionHandler)(RTC_OBJC_TYPE(RTCSessionDescription) *
+                                                                 _Nullable sdp,
+                                                             NSError *_Nullable error);
+
+typedef void (^RTCSetSessionDescriptionCompletionHandler)(NSError *_Nullable error);
 
 @class RTC_OBJC_TYPE(RTCPeerConnection);
 
@@ -168,7 +174,7 @@ RTC_OBJC_EXPORT
  */
 @property(nonatomic, weak, nullable) id<RTC_OBJC_TYPE(RTCPeerConnectionDelegate)> delegate;
 /** This property is not available with RTCSdpSemanticsUnifiedPlan. Please use
- *  |senders| instead.
+ *  `senders` instead.
  */
 @property(nonatomic, readonly) NSArray<RTC_OBJC_TYPE(RTCMediaStream) *> *localStreams;
 @property(nonatomic, readonly, nullable) RTC_OBJC_TYPE(RTCSessionDescription) * localDescription;
@@ -201,7 +207,7 @@ RTC_OBJC_EXPORT
 
 - (instancetype)init NS_UNAVAILABLE;
 
-/** Sets the PeerConnection's global configuration to |configuration|.
+/** Sets the PeerConnection's global configuration to `configuration`.
  *  Any changes to STUN/TURN servers or ICE candidate policy will affect the
  *  next gathering phase, and cause the next call to createOffer to generate
  *  new ICE credentials. Note that the BUNDLE and RTCP-multiplexing policies
@@ -213,7 +219,12 @@ RTC_OBJC_EXPORT
 - (void)close;
 
 /** Provide a remote candidate to the ICE Agent. */
-- (void)addIceCandidate:(RTC_OBJC_TYPE(RTCIceCandidate) *)candidate;
+- (void)addIceCandidate:(RTC_OBJC_TYPE(RTCIceCandidate) *)candidate
+    DEPRECATED_MSG_ATTRIBUTE("Please use addIceCandidate:completionHandler: instead");
+
+/** Provide a remote candidate to the ICE Agent. */
+- (void)addIceCandidate:(RTC_OBJC_TYPE(RTCIceCandidate) *)candidate
+      completionHandler:(void (^)(NSError *_Nullable error))completionHandler;
 
 /** Remove a group of remote candidates from the ICE Agent. */
 - (void)removeIceCandidates:(NSArray<RTC_OBJC_TYPE(RTCIceCandidate) *> *)candidates;
@@ -232,14 +243,14 @@ RTC_OBJC_EXPORT
 
 /** Add a new media stream track to be sent on this peer connection, and return
  *  the newly created RTCRtpSender. The RTCRtpSender will be
- * associated with the streams specified in the |streamIds| list.
+ * associated with the streams specified in the `streamIds` list.
  *
  *  Errors: If an error occurs, returns nil. An error can occur if:
  *  - A sender already exists for the track.
  *  - The peer connection is closed.
  */
-- (RTC_OBJC_TYPE(RTCRtpSender) *)addTrack:(RTC_OBJC_TYPE(RTCMediaStreamTrack) *)track
-                                streamIds:(NSArray<NSString *> *)streamIds;
+- (nullable RTC_OBJC_TYPE(RTCRtpSender) *)addTrack:(RTC_OBJC_TYPE(RTCMediaStreamTrack) *)track
+                                         streamIds:(NSArray<NSString *> *)streamIds;
 
 /** With PlanB semantics, removes an RTCRtpSender from this peer connection.
  *
@@ -254,7 +265,7 @@ RTC_OBJC_EXPORT
  *  transceivers. Adding a transceiver will cause future calls to CreateOffer
  *  to add a media description for the corresponding transceiver.
  *
- *  The initial value of |mid| in the returned transceiver is nil. Setting a
+ *  The initial value of `mid` in the returned transceiver is nil. Setting a
  *  new session description may change it to a non-nil value.
  *
  *  https://w3c.github.io/webrtc-pc/#dom-rtcpeerconnection-addtransceiver
@@ -271,42 +282,50 @@ RTC_OBJC_EXPORT
  *  of the transceiver (and sender/receiver) will be derived from the kind of
  *  the track.
  */
-- (RTC_OBJC_TYPE(RTCRtpTransceiver) *)addTransceiverWithTrack:
+- (nullable RTC_OBJC_TYPE(RTCRtpTransceiver) *)addTransceiverWithTrack:
     (RTC_OBJC_TYPE(RTCMediaStreamTrack) *)track;
-- (RTC_OBJC_TYPE(RTCRtpTransceiver) *)
+- (nullable RTC_OBJC_TYPE(RTCRtpTransceiver) *)
     addTransceiverWithTrack:(RTC_OBJC_TYPE(RTCMediaStreamTrack) *)track
                        init:(RTC_OBJC_TYPE(RTCRtpTransceiverInit) *)init;
 
 /** Adds a transceiver with the given kind. Can either be RTCRtpMediaTypeAudio
  *  or RTCRtpMediaTypeVideo.
  */
-- (RTC_OBJC_TYPE(RTCRtpTransceiver) *)addTransceiverOfType:(RTCRtpMediaType)mediaType;
-- (RTC_OBJC_TYPE(RTCRtpTransceiver) *)addTransceiverOfType:(RTCRtpMediaType)mediaType
-                                                      init:(RTC_OBJC_TYPE(RTCRtpTransceiverInit) *)
-                                                               init;
+- (nullable RTC_OBJC_TYPE(RTCRtpTransceiver) *)addTransceiverOfType:(RTCRtpMediaType)mediaType;
+- (nullable RTC_OBJC_TYPE(RTCRtpTransceiver) *)
+    addTransceiverOfType:(RTCRtpMediaType)mediaType
+                    init:(RTC_OBJC_TYPE(RTCRtpTransceiverInit) *)init;
+
+/** Tells the PeerConnection that ICE should be restarted. This triggers a need
+ * for negotiation and subsequent offerForConstraints:completionHandler call will act as if
+ * RTCOfferAnswerOptions::ice_restart is true.
+ */
+- (void)restartIce;
 
 /** Generate an SDP offer. */
 - (void)offerForConstraints:(RTC_OBJC_TYPE(RTCMediaConstraints) *)constraints
-          completionHandler:(nullable void (^)(RTC_OBJC_TYPE(RTCSessionDescription) * _Nullable sdp,
-                                               NSError *_Nullable error))completionHandler;
+          completionHandler:(RTCCreateSessionDescriptionCompletionHandler)completionHandler;
 
 /** Generate an SDP answer. */
 - (void)answerForConstraints:(RTC_OBJC_TYPE(RTCMediaConstraints) *)constraints
-           completionHandler:
-               (nullable void (^)(RTC_OBJC_TYPE(RTCSessionDescription) * _Nullable sdp,
-                                  NSError *_Nullable error))completionHandler;
+           completionHandler:(RTCCreateSessionDescriptionCompletionHandler)completionHandler;
 
 /** Apply the supplied RTCSessionDescription as the local description. */
 - (void)setLocalDescription:(RTC_OBJC_TYPE(RTCSessionDescription) *)sdp
-          completionHandler:(nullable void (^)(NSError *_Nullable error))completionHandler;
+          completionHandler:(RTCSetSessionDescriptionCompletionHandler)completionHandler;
+
+/** Creates an offer or answer (depending on current signaling state) and sets
+ * it as the local session description. */
+- (void)setLocalDescriptionWithCompletionHandler:
+    (RTCSetSessionDescriptionCompletionHandler)completionHandler;
 
 /** Apply the supplied RTCSessionDescription as the remote description. */
 - (void)setRemoteDescription:(RTC_OBJC_TYPE(RTCSessionDescription) *)sdp
-           completionHandler:(nullable void (^)(NSError *_Nullable error))completionHandler;
+           completionHandler:(RTCSetSessionDescriptionCompletionHandler)completionHandler;
 
 /** Limits the bandwidth allocated for all RTP streams sent by this
  *  PeerConnection. Nil parameters will be unchanged. Setting
- * |currentBitrateBps| will force the available bitrate estimate to the given
+ * `currentBitrateBps` will force the available bitrate estimate to the given
  *  value. Returns YES if the parameters were successfully updated.
  */
 - (BOOL)setBweMinBitrateBps:(nullable NSNumber *)minBitrateBps
@@ -346,7 +365,7 @@ typedef void (^RTCStatisticsCompletionHandler)(RTC_OBJC_TYPE(RTCStatisticsReport
 @interface RTC_OBJC_TYPE (RTCPeerConnection)
 (Stats)
 
-    /** Gather stats for the given RTCMediaStreamTrack. If |mediaStreamTrack| is nil
+    /** Gather stats for the given RTCMediaStreamTrack. If `mediaStreamTrack` is nil
      *  statistics are gathered for all tracks.
      */
     - (void)statsForTrack

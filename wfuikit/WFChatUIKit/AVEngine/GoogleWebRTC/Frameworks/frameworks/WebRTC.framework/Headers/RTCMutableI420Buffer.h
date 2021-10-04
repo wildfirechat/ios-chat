@@ -10,8 +10,8 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-#import "RTCI420Buffer.h"
-#import "RTCMutableYUVPlanarBuffer.h"
+#import <WebRTC/RTCI420Buffer.h>
+#import <WebRTC/RTCMutableYUVPlanarBuffer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

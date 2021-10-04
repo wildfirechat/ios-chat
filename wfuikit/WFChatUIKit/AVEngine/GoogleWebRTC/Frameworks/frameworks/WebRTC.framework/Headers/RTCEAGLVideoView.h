@@ -11,9 +11,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoRenderer.h"
-#import "RTCVideoViewShading.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoRenderer.h>
+#import <WebRTC/RTCVideoViewShading.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

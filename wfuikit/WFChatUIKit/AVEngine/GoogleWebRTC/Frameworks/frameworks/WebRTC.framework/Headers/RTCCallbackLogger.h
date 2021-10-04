@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCLogging.h"
-#import "RTCMacros.h"
+#import <WebRTC/RTCLogging.h>
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

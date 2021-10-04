@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +23,7 @@ RTC_OBJC_EXPORT
 /** Whether reduced size RTCP is configured or compound RTCP. */
 @property(nonatomic, assign) BOOL isReducedSize;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)init;
 
 @end
 

@@ -10,9 +10,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCMediaStreamTrack.h"
-#import "RTCRtpParameters.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCMediaStreamTrack.h>
+#import <WebRTC/RTCRtpParameters.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, RTCRtpMediaType) {
   RTCRtpMediaTypeAudio,
   RTCRtpMediaTypeVideo,
   RTCRtpMediaTypeData,
+  RTCRtpMediaTypeUnsupported,
 };
 
 @class RTC_OBJC_TYPE(RTCRtpReceiver);

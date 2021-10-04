@@ -11,8 +11,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoCapturer.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoCapturer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,7 +40,7 @@ NS_EXTENSION_UNAVAILABLE_IOS("Camera not available in app extensions.")
 - (void)startCaptureWithDevice:(AVCaptureDevice *)device
                         format:(AVCaptureDeviceFormat *)format
                            fps:(NSInteger)fps
-             completionHandler:(nullable void (^)(NSError *))completionHandler;
+             completionHandler:(nullable void (^)(NSError *_Nullable))completionHandler;
 // Stops the capture session asynchronously and notifies callback on completion.
 - (void)stopCaptureWithCompletionHandler:(nullable void (^)(void))completionHandler;
 

@@ -10,11 +10,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCRtcpParameters.h"
-#import "RTCRtpCodecParameters.h"
-#import "RTCRtpEncodingParameters.h"
-#import "RTCRtpHeaderExtension.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCRtcpParameters.h>
+#import <WebRTC/RTCRtpCodecParameters.h>
+#import <WebRTC/RTCRtpEncodingParameters.h>
+#import <WebRTC/RTCRtpHeaderExtension.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,7 +51,7 @@ RTC_OBJC_EXPORT
  */
 @property(nonatomic, copy, nullable) NSNumber *degradationPreference;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)init;
 
 @end
 

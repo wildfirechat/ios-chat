@@ -10,8 +10,8 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoFrameBuffer.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoFrameBuffer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
-#import "RTCVideoEncoder.h"
+#import <WebRTC/RTCMacros.h>
+#import <WebRTC/RTCVideoEncoder.h>
 
 RTC_OBJC_EXPORT
 @interface RTC_OBJC_TYPE (RTCVideoEncoderVP8) : NSObject
