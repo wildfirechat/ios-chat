@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 /**
  * Represents the session description type. This exposes the same types that are
@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, RTCSdpType) {
   RTCSdpTypeOffer,
   RTCSdpTypePrAnswer,
   RTCSdpTypeAnswer,
+  RTCSdpTypeRollback,
 };
 
 NS_ASSUME_NONNULL_BEGIN

@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RTCMacros.h"
+#import <WebRTC/RTCMacros.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +26,7 @@ RTC_OBJC_EXPORT
 /** Whether the header extension is encrypted or not. */
 @property(nonatomic, readonly, getter=isEncrypted) BOOL encrypted;
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)init;
 
 @end
 
