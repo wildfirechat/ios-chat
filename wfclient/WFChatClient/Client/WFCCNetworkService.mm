@@ -446,7 +446,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     // init xlog
 #if DEBUG
     xlogger_SetLevel(kLevelVerbose);
-    appender_set_console_log(false);
+    appender_set_console_log(true);
 #else
     xlogger_SetLevel(kLevelInfo);
     appender_set_console_log(false);
