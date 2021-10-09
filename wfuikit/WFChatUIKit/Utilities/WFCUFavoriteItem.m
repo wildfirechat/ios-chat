@@ -116,7 +116,6 @@
             msg.content = [WFCCTextMessageContent contentWith:self.title];
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_SOUND:
         {
             WFCCSoundMessageContent *soundCnt = [[WFCCSoundMessageContent alloc] init];
@@ -128,7 +127,6 @@
             msg.content = soundCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
             WFCCImageMessageContent *imageCnt = [[WFCCImageMessageContent alloc] init];
@@ -143,7 +141,6 @@
             msg.content = imageCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_VIDEO:
         {
             WFCCVideoMessageContent *videoCnt = [[WFCCVideoMessageContent alloc] init];
@@ -159,7 +156,6 @@
             msg.content = videoCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_LOCATION:
         {
             WFCCLocationMessageContent *locationCnt = [[WFCCLocationMessageContent alloc] init];
@@ -178,7 +174,6 @@
             msg.content = locationCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_LINK:
         {
             WFCCLinkMessageContent *linkCnt = [[WFCCLinkMessageContent alloc] init];
@@ -189,7 +184,6 @@
             msg.content = linkCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
             WFCCCompositeMessageContent *compositeCnt = [[WFCCCompositeMessageContent alloc] init];
@@ -203,7 +197,6 @@
             msg.content = compositeCnt;
             break;
         }
-            break;
         case MESSAGE_CONTENT_TYPE_FILE:
         {
             WFCCFileMessageContent *fileCnt = [[WFCCFileMessageContent alloc] init];
@@ -216,7 +209,6 @@
             msg.content = fileCnt;
             break;
         }
-            break;
         default:
         {
             WFCCUnknownMessageContent *unknownCnt = [[WFCCUnknownMessageContent alloc] init];
