@@ -864,6 +864,10 @@ namespace mars{
         extern void setFriendAlias(const std::string &userId, const std::string &alias, GeneralOperationCallback *callback);
 
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
+    
+        extern void requireLock(const std::string &lockId, int64_t duration, GeneralOperationCallback *callback);
+    
+        extern void releaseLock(const std::string &lockId, GeneralOperationCallback *callback);
 
         extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::string &groupExtra, const std::list<std::string> &groupMembers, const std::string &memberExtra, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
 
