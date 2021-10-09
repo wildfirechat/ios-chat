@@ -562,11 +562,13 @@ static WFCCNetworkService * sharedSingleton = nil;
     if (_currentConnectionStatus != currentConnectionStatus) {
         _currentConnectionStatus = currentConnectionStatus;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kConnectionStatusChanged object:@(_currentConnectionStatus)];
-        
-        if (_connectionStatusDelegate) {
-            [_connectionStatusDelegate onConnectionStatusChanged:currentConnectionStatus];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kConnectionStatusChanged object:@(_currentConnectionStatus)];
+            
+            if (_connectionStatusDelegate) {
+                [_connectionStatusDelegate onConnectionStatusChanged:currentConnectionStatus];
+            }
+        });
     }
 }
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
