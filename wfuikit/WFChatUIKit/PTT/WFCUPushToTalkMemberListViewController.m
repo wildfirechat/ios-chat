@@ -10,7 +10,7 @@
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUConferenceInviteViewController.h"
 #import "WFCUConferenceMember.h"
-#import "WFCUPTTMemberCell.h"
+#import "WFCUConferenceMemberTableViewCell.h"
 
 @interface WFCUPushToTalkMemberListViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UITableView *tableView;
@@ -30,7 +30,7 @@
         self.tableView.sectionHeaderTopPadding = 0;
     }
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableView registerClass:[WFCUPTTMemberCell class] forCellReuseIdentifier:@"cell"];
+    [self.tableView registerClass:[WFCUConferenceMemberTableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableView];
     
     [self loadData];
@@ -53,6 +53,19 @@
         } else {
             [self.participants addObject:member];
         }
+    }
+    
+    
+    WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
+    member.userId = [WFCCNetworkService sharedInstance].userId;
+    member.isHost = [member.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
+    member.isVideoEnabled = ![WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
+    member.isMe = YES;
+    
+    if(self.participants.count && self.participants[0].isHost) {
+        [self.participants insertObject:member atIndex:1];
+    } else {
+        [self.participants insertObject:member atIndex:0];
     }
 }
 
@@ -79,7 +92,7 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    WFCUPTTMemberCell *cell = (WFCUPTTMemberCell *)[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    WFCUConferenceMemberTableViewCell *cell = (WFCUConferenceMemberTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"cell"];
     cell.member = self.participants[indexPath.row];
     return cell;
 }
