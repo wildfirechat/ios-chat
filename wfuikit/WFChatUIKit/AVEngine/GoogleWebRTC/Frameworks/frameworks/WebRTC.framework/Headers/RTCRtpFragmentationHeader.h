@@ -14,14 +14,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** QP thresholds for encoder. Corresponds to webrtc::VideoEncoder::QpThresholds. */
+/** Information for header. Corresponds to webrtc::RTPFragmentationHeader. */
 RTC_OBJC_EXPORT
-@interface RTC_OBJC_TYPE (RTCVideoEncoderQpThresholds) : NSObject
+@interface RTC_OBJC_TYPE (RTCRtpFragmentationHeader) : NSObject
 
-- (instancetype)initWithThresholdsLow:(NSInteger)low high:(NSInteger)high;
-
-@property(nonatomic, readonly) NSInteger low;
-@property(nonatomic, readonly) NSInteger high;
+@property(nonatomic, strong) NSArray<NSNumber *> *fragmentationOffset;
+@property(nonatomic, strong) NSArray<NSNumber *> *fragmentationLength;
+@property(nonatomic, strong) NSArray<NSNumber *> *fragmentationTimeDiff;
+@property(nonatomic, strong) NSArray<NSNumber *> *fragmentationPlType;
 
 @end
 

@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WebRTC/RTCMacros.h>
+#import "RTCMacros.h"
 
 /** The only valid value for the following if set is kRTCFieldTrialEnabledValue. */
 RTC_EXTERN NSString * const kRTCFieldTrialAudioSendSideBweKey;

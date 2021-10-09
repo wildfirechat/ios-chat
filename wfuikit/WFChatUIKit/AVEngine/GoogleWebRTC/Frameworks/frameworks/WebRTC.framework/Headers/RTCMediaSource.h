@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WebRTC/RTCMacros.h>
+#import "RTCMacros.h"
 
 typedef NS_ENUM(NSInteger, RTCSourceState) {
   RTCSourceStateInitializing,
