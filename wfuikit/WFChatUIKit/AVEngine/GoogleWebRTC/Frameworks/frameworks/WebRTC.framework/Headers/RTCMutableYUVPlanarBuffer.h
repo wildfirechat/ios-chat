@@ -10,7 +10,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-#import <WebRTC/RTCYUVPlanarBuffer.h>
+#import "RTCYUVPlanarBuffer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
