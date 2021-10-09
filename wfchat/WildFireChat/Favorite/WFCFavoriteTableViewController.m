@@ -480,7 +480,8 @@
         }];
         
         [self.items removeObjectAtIndex:indexPath.section];
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:indexPath.section];
+        [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 #pragma mark - SDPhotoBrowserDelegate
