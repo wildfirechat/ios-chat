@@ -10,8 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WebRTC/RTCMacros.h>
-#import <WebRTC/RTCVideoFrame.h>
+#import "RTCMacros.h"
+#import "RTCVideoFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,6 +44,7 @@ RTC_OBJC_EXPORT
 @property(nonatomic, assign) int64_t encodeFinishMs;
 @property(nonatomic, assign) RTCFrameType frameType;
 @property(nonatomic, assign) RTCVideoRotation rotation;
+@property(nonatomic, assign) BOOL completeFrame;
 @property(nonatomic, strong) NSNumber *qp;
 @property(nonatomic, assign) RTCVideoContentType contentType;
 

@@ -10,25 +10,27 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WebRTC/RTCCodecSpecificInfo.h>
-#import <WebRTC/RTCEncodedImage.h>
-#import <WebRTC/RTCMacros.h>
-#import <WebRTC/RTCVideoEncoderQpThresholds.h>
-#import <WebRTC/RTCVideoEncoderSettings.h>
-#import <WebRTC/RTCVideoFrame.h>
+#import "RTCCodecSpecificInfo.h"
+#import "RTCEncodedImage.h"
+#import "RTCMacros.h"
+#import "RTCRtpFragmentationHeader.h"
+#import "RTCVideoEncoderQpThresholds.h"
+#import "RTCVideoEncoderSettings.h"
+#import "RTCVideoFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /** Callback block for encoder. */
 typedef BOOL (^RTCVideoEncoderCallback)(RTC_OBJC_TYPE(RTCEncodedImage) * frame,
-                                        id<RTC_OBJC_TYPE(RTCCodecSpecificInfo)> info);
+                                        id<RTC_OBJC_TYPE(RTCCodecSpecificInfo)> info,
+                                        RTC_OBJC_TYPE(RTCRtpFragmentationHeader) * header);
 
 /** Protocol for encoder implementations. */
 RTC_OBJC_EXPORT
 @protocol RTC_OBJC_TYPE
 (RTCVideoEncoder)<NSObject>
 
-- (void)setCallback:(nullable RTCVideoEncoderCallback)callback;
+    - (void)setCallback : (RTCVideoEncoderCallback)callback;
 - (NSInteger)startEncodeWithSettings:(RTC_OBJC_TYPE(RTCVideoEncoderSettings) *)settings
                        numberOfCores:(int)numberOfCores;
 - (NSInteger)releaseEncoder;
@@ -42,17 +44,6 @@ RTC_OBJC_EXPORT
  *  keep the QP from the encoded images within the given range. Returning nil from this function
  *  disables quality scaling. */
 - (nullable RTC_OBJC_TYPE(RTCVideoEncoderQpThresholds) *)scalingSettings;
-
-/** Resolutions should be aligned to this value. */
-@property(nonatomic, readonly) NSInteger resolutionAlignment;
-
-/** If enabled, resolution alignment is applied to all simulcast layers simultaneously so that when
-    scaled, all resolutions comply with 'resolutionAlignment'. */
-@property(nonatomic, readonly) BOOL applyAlignmentToAllSimulcastLayers;
-
-/** If YES, the reciever is expected to resample/scale the source texture to the expected output
-    size. */
-@property(nonatomic, readonly) BOOL supportsNativeHandle;
 
 @end
 
