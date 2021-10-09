@@ -42,8 +42,13 @@
 #define PTT_STATUS_CONNTCTING 1
 #define PTT_STATUS_CONNTCTED 2
 
-@interface WFCUPushToTalkViewController () <WFAVCallSessionDelegate>
+@interface WFCUPushToTalkViewController () <WFAVCallSessionDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
+@property (nonatomic, strong) UICollectionView *portraitCollectionView;
+
 @property (nonatomic, strong) WFAVCallSession *currentSession;
+
+@property (nonatomic, strong) NSMutableArray<NSString *> *participants;
+@property (nonatomic, strong) NSMutableArray<NSString *> *audiences;
 
 @property (nonatomic, strong) UILabel *statusLabel;
 @property (nonatomic, assign) int status; //PTT_STATUS_IDLE idle, PTT_STATUS_CONNTCTING 抢麦中，PTT_STATUS_CONNTCTED 正在发言
@@ -52,11 +57,6 @@
 @property (nonatomic, strong) UIButton *membersButton;
 
 @property (nonatomic, strong) UIButton *talkButton;
-
-@property (nonatomic, strong) NSString *talkingUserId;
-
-@property(nonatomic, strong)UIImageView *talkingUserImageView;
-@property(nonatomic, strong)UILabel *talkingUserLabel;
 @end
 
 @implementation WFCUPushToTalkViewController
@@ -73,12 +73,20 @@
     self = [super init];
     if (self) {
         self.currentSession = [[WFAVEngineKit sharedEngineKit]
-                               joinPttChannel:invite.callId
+                               joinConference:invite.callId
                                     audioOnly:YES
                                         pin:invite.pin
-                           host:invite.host
-                           title:invite.title
-                           sessionDelegate:self];
+                               host:invite.host
+                               title:invite.title
+                               desc:invite.desc
+                               audience:YES
+                               advanced:NO
+                               muteAudio:NO
+                               muteVideo:NO
+                               sessionDelegate:self];
+        
+        
+        
         
         [self didChangeState:kWFAVEngineStateIncomming];
     }
@@ -89,17 +97,32 @@
                      audioOnly:(BOOL)audioOnly
                            pin:(NSString *_Nullable)pin
                           host:(NSString *_Nullable)host
-                         title:(NSString *_Nullable)title {
+                         title:(NSString *_Nullable)title
+                          desc:(NSString *_Nullable)desc
+                      audience:(BOOL)audience
+                        moCall:(BOOL)moCall {
     self = [super init];
     if (self) {
+        if (moCall) {
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience advanced:NO record:NO sessionDelegate:self];
+            
+            [self didChangeState:kWFAVEngineStateOutgoing];
+        } else {
             self.currentSession = [[WFAVEngineKit sharedEngineKit]
-                                   joinPttChannel:callId
+                                   joinConference:callId
                                         audioOnly:audioOnly
                                             pin:pin
                                host:host
                                title:title
+                               desc:desc
+                               audience:audience
+                                   advanced:NO
+                                   muteAudio:NO
+                                   muteVideo:NO
                                sessionDelegate:self];
             [self didChangeState:kWFAVEngineStateIncomming];
+        
+        }
     }
     return self;
 }
@@ -115,7 +138,12 @@
     layout2.itemSpace = 6;
     CGRect bounds = self.view.bounds;
     
-    self.talkingUserId = self.currentSession.pttTalkingMember;
+    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, 120 + kStatusBarAndNavigationBarHeight + 20, bounds.size.width - 32, bounds.size.height - 300 - kTabbarSafeBottomMargin) collectionViewLayout:layout2];
+    self.portraitCollectionView.dataSource = self;
+    self.portraitCollectionView.delegate = self;
+    [self.portraitCollectionView registerClass:[WFCUPortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
+    self.portraitCollectionView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.portraitCollectionView];
     
     CGFloat talkBtnSize = 80;
     self.talkButton = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width/2 - talkBtnSize/2, bounds.size.height - talkBtnSize/2 - 180 - kTabbarSafeBottomMargin, talkBtnSize, talkBtnSize)];
@@ -134,28 +162,8 @@
     
     [self rearrangeParticipants];
     [self checkAVPermission];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
 }
 
-- (void)setTalkingUserId:(NSString *)talkingUserId {
-    _talkingUserId = talkingUserId;
-    if(talkingUserId) {
-        self.talkingUserImageView.hidden = NO;
-        self.talkingUserLabel.hidden = NO;
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:talkingUserId refresh:NO];
-        [self.talkingUserImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
-        self.talkingUserLabel.text = userInfo.displayName;
-    } else {
-        self.talkingUserImageView.hidden = YES;
-        self.talkingUserImageView.image = nil;
-        self.talkingUserLabel.hidden = YES;
-        self.talkingUserLabel.text = nil;
-    }
-}
-
-- (void)onUserInfoUpdated:(NSNotification *)notification {
-    [self setTalkingUserId:_talkingUserId];
-}
 
 - (void)checkAVPermission {
     [self checkRecordPermission:nil];
@@ -172,21 +180,18 @@
 }
 
 - (void)updateRightNaviBar {
-    [self.membersButton setTitle:[NSString stringWithFormat:@"(%ld)", self.currentSession.participantIds.count] forState:UIControlStateNormal];
+    [self.membersButton setTitle:[NSString stringWithFormat:@"(%ld)", self.audiences.count + self.participants.count] forState:UIControlStateNormal];
 }
 
 - (void)onTalkBtnDown:(id)sender {
     self.status = PTT_STATUS_CONNTCTING;
-    __weak typeof(self)ws = self;
-    [self.currentSession requestTalk:^{
-        ws.status = PTT_STATUS_CONNTCTED;
-    } error:^(int error_code) {
-        ws.status = PTT_STATUS_IDLE;
-    }];
+    [self.currentSession switchAudience:NO];
 }
 
 - (void)onTalkBtnUp:(id)sender {
-    [self.currentSession releaseTalk];
+    if(!self.currentSession.audience) {
+        [self.currentSession switchAudience:YES];
+    }
     self.status = PTT_STATUS_IDLE;
 }
 
@@ -229,6 +234,10 @@
 }
 
 - (void)minimize {
+    if(self.status != PTT_STATUS_IDLE) {
+        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+    }
+    
     [WFCUPTTFloatingWindow startCallFloatingWindow:self.currentSession withTouchedBlock:^(WFAVCallSession *callSession) {
         WFCUPushToTalkViewController *vc = [[WFCUPushToTalkViewController alloc] initWithSession:callSession];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
@@ -274,36 +283,9 @@
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, 120)];
         _statusLabel.center = CGPointMake(self.view.bounds.size.width/2, 120 + kStatusBarAndNavigationBarHeight);
         [_statusLabel setTextColor:[UIColor whiteColor]];
-        _statusLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_statusLabel];
     }
     return _statusLabel;
-}
-#define TAKLING_IMAGE_VIEW_SIZE 80
-#define TAKLING_LABEL_WIDTH 120
-#define TAKLING_LABEL_HEIGHT 20
-- (UIImageView *)talkingUserImageView {
-    if(!_talkingUserImageView) {
-        _talkingUserImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, TAKLING_IMAGE_VIEW_SIZE, TAKLING_IMAGE_VIEW_SIZE)];
-        CGPoint point = self.view.center;
-        point.y -= TAKLING_LABEL_HEIGHT;
-        _talkingUserImageView.center = point;
-        _talkingUserImageView.layer.cornerRadius = 10.f;
-        _talkingUserImageView.layer.masksToBounds = YES;
-        [self.view addSubview:_talkingUserImageView];
-    }
-    return _talkingUserImageView;
-}
-
-- (UILabel *)talkingUserLabel {
-    if(!_talkingUserLabel) {
-        CGRect bound = self.view.bounds;
-        _talkingUserLabel = [[UILabel alloc] initWithFrame:CGRectMake((bound.size.width - TAKLING_LABEL_WIDTH)/2, bound.size.height/2 + TAKLING_IMAGE_VIEW_SIZE/2 - TAKLING_LABEL_HEIGHT + 12, TAKLING_LABEL_WIDTH, TAKLING_LABEL_HEIGHT)];
-        _talkingUserLabel.textAlignment = NSTextAlignmentCenter;
-        _talkingUserLabel.textColor = [UIColor whiteColor];
-        [self.view addSubview:_talkingUserLabel];
-    }
-    return _talkingUserLabel;
 }
 
 - (UIButton *)exitButton {
@@ -332,7 +314,31 @@
  session的participantIds是除了自己外的所有成员。这里把自己也加入列表，然后把发起者放到最后面。
  */
 - (void)rearrangeParticipants {
+    self.participants = [[NSMutableArray alloc] init];
+    self.audiences = [[NSMutableArray alloc] init];
+    
+    
+    NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
+    for (WFAVParticipantProfile *p in ps) {
+        if (p.audience) {
+            [self.audiences addObject:p.userId];
+        } else {
+            [self.participants addObject:p.userId];
+        }
+    }
+    if(self.currentSession.isAudience) {
+        [self.audiences addObject:[WFCCNetworkService sharedInstance].userId];
+    } else {
+        [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
+    }
+    
+    if ([self.participants containsObject:self.currentSession.host]) {
+        [self.participants removeObject:self.currentSession.host];
+        [self.participants addObject:self.currentSession.host];
+    }
+    
     [self updateRightNaviBar];
+    [self.portraitCollectionView reloadData];
 }
 
 
@@ -349,7 +355,11 @@
 }
 
 - (void)didChangeState:(WFAVEngineState)state {
-
+    if(state == kWFAVEngineStateConnected) {
+        if(!self.currentSession.audience) {
+            [self.currentSession switchAudience:YES];
+        }
+    }
 }
 
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack * _Nonnull)localVideoTrack {
@@ -374,9 +384,6 @@
 
 - (void)didParticipantLeft:(NSString * _Nonnull)userId withReason:(WFAVCallEndReason)reason {
     [self rearrangeParticipants];
-    if([self.talkingUserId isEqualToString:userId]) {
-        self.talkingUserId = nil;
-    }
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack * _Nonnull)remoteVideoTrack fromUser:(NSString * _Nonnull)userId {
@@ -392,14 +399,53 @@
 }
 
 - (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId {
+    if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        self.status = audience ? PTT_STATUS_IDLE : PTT_STATUS_CONNTCTED;
+    } else {
+        
+    }
+    
+    [self.currentSession enableSpeaker:YES];
+    [self rearrangeParticipants];
+}
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if (self.currentSession.audioOnly && (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected)) {
+        return self.participants.count;
+    }
+    
+    return 0;
+}
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *userId = self.participants[indexPath.row];
+    
+    WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
+    
+    cell.itemSize = PortraitItemSize;
+    cell.labelSize = PortraitLabelSize;
+    
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    cell.userInfo = userInfo;
+    
+    if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        cell.profile = self.currentSession.myProfile;
+    } else {
+        for (WFAVParticipantProfile *profile in self.currentSession.participants) {
+            if ([profile.userId isEqualToString:userId]) {
+                cell.profile = profile;
+                break;
+            }
+        }
+    }
+    
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
-- (void)didPttTalking:(NSString *)userId {
-    self.talkingUserId = userId;
-}
-
-- (void)didPttIdle {
-    self.talkingUserId = nil;
-}
 @end

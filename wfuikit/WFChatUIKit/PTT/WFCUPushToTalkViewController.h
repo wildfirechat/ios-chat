@@ -20,6 +20,9 @@
                      audioOnly:(BOOL)audioOnly
                            pin:(NSString *_Nullable)pin
                           host:(NSString *_Nullable)host
-                         title:(NSString *_Nullable)title;
+                         title:(NSString *_Nullable)title
+                          desc:(NSString *_Nullable)desc
+                      audience:(BOOL)audience
+                        moCall:(BOOL)moCall;
 
 @end

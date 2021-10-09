@@ -380,17 +380,6 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                   muteVideo:(BOOL)muteVideo
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-- (WFAVCallSession *_Nonnull)joinPttChannel:(NSString *_Nonnull)channelId
-                                  audioOnly:(BOOL)audioOnly
-                                        pin:(NSString *_Nullable)pin
-                                       host:(NSString *_Nullable)host
-                                      title:(NSString *_Nullable)title
-                             sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
-
-
-
 /**
  开启画面预览
  */
@@ -642,21 +631,5 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 - (void)kickoffParticipant:(NSString *_Nonnull)participant
                    success:(void(^_Nullable)(void))successBlock
                      error:(void(^_Nullable)(int error_code))errorBlock;
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-@property(nonatomic, assign, readonly) BOOL isPtt;
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-@property(nonatomic, strong, readonly) NSString * _Nullable pttTalkingMember;
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-- (void)leavePttChannel;
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-- (void)requestTalk:(void(^_Nullable)(void))successBlock
-              error:(void(^_Nullable)(int error_code))errorBlock;
-
-/* 此函数没有意义，仅为了兼容UI代码 */
-- (void)releaseTalk;
 @end
 

@@ -19,7 +19,6 @@
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
-#import "PushToTalkCreateViewController.h"
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -48,7 +47,7 @@
     
     if ([WFAVEngineKit sharedEngineKit].supportConference) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Conference"),@"image":@"discover_conference",@"des":@"Conference"}];
-        [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
+//        [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
     }
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
@@ -157,7 +156,7 @@
     }
     
     if ([des isEqualToString:@"Push to Talk"]) {
-        PushToTalkCreateViewController *vc = [[PushToTalkCreateViewController alloc] init];
+        WFCUPushToTalkCreateViewController *vc = [[WFCUPushToTalkCreateViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
