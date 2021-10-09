@@ -1,5 +1,5 @@
 //
-//  PushToTalkCreateViewController.h
+//  WFCUPushToTalkCreateViewController.h
 //  WFChatUIKit
 //
 //  Created by dali on 2021/2/18.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PushToTalkCreateViewController : UIViewController
+@interface WFCUPushToTalkCreateViewController : UIViewController
 
 @end
 
