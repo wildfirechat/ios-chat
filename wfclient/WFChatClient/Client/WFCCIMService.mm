@@ -2983,4 +2983,16 @@ public:
     [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Favourite_User key:userId value:fav? @"1" : @"0" success:successBlock error:errorBlock];
 }
 
+- (void)requireLock:(NSString *)lockId
+           duration:(NSUInteger)duration
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    mars::stn::requireLock([lockId UTF8String], duration, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (void)releaseLock:(NSString *)lockId
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    mars::stn::releaseLock([lockId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
 @end

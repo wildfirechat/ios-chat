@@ -1944,4 +1944,13 @@ amr文件转成wav数据
                          data:(NSString *)data
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
+
+- (void)requireLock:(NSString *)lockId
+           duration:(NSUInteger)duration
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
+- (void)releaseLock:(NSString *)lockId
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
 @end
