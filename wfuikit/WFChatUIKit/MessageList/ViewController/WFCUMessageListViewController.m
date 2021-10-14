@@ -76,8 +76,6 @@
 #import "WFCUCompositeMessageViewController.h"
 
 #import "WFCUFavoriteItem.h"
-
-#import "WFCUPushToTalkViewController.h"
 #import "WFCUUploadBigFilesViewController.h"
 
 #import "WFCUUtilities.h"
@@ -1806,12 +1804,6 @@
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;   
             WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
-            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
-        }
-    } else if([model.message.content isKindOfClass:[WFCCPTTInviteMessageContent class]]) {
-        if ([WFAVEngineKit sharedEngineKit].supportConference) {
-            WFCCPTTInviteMessageContent *invite = (WFCCPTTInviteMessageContent *)model.message.content;
-            WFCUPushToTalkViewController *vc = [[WFCUPushToTalkViewController alloc] initWithInvite:invite];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         }
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
