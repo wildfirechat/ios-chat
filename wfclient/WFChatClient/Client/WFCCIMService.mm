@@ -1622,25 +1622,20 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 
     [condition lock];
     [[WFCCIMService sharedWFCIMService] uploadMedia:fileName mediaData:mediaData mediaType:mediaType success:^(NSString *remoteUrl) {
+        successBlock(remoteUrl);
+        
         success = YES;
         [condition lock];
         [condition signal];
         [condition unlock];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            successBlock(remoteUrl);
-        });
     } progress:^(long uploaded, long total) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            progressBlock(uploaded, total);
-        });
+        progressBlock(uploaded, total);
     } error:^(int error_code) {
+        errorBlock(error_code);
         success = NO;
         [condition lock];
         [condition signal];
         [condition unlock];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            errorBlock(error_code);
-        });
     }];
     
     [condition wait];
