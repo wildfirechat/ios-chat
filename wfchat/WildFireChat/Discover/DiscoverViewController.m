@@ -12,7 +12,6 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WFChatClient/WFCCIMService.h>
 #import "DiscoverMomentsTableViewCell.h"
-#import "WFCPttListViewController.h"
 #ifdef WFC_MOMENTS
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
@@ -50,9 +49,9 @@
         [self.dataSource addObject:@{@"title":LocalizedString(@"Conference"),@"image":@"discover_conference",@"des":@"Conference"}];
     }
     
-//    if(NSClassFromString(@"WFPttClient")) {
-//        [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
-//    }
+    if(NSClassFromString(@"WFPttClient") && NSClassFromString(@"WFPttChannelListViewController")) {
+        [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
+    }
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.delegate = self;
@@ -160,7 +159,7 @@
     }
     
     if ([des isEqualToString:@"Push to Talk"]) {
-        WFCPttListViewController *vc = [[WFCPttListViewController alloc] init];
+        UIViewController *vc = [[NSClassFromString(@"WFPttChannelListViewController") alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
