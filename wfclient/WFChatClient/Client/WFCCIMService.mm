@@ -61,7 +61,9 @@ public:
     void onPrepared(long messageId, int64_t savedTime) {
         m_message.messageId = messageId;
         m_message.serverTime = savedTime;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
+        });
     }
     void onMediaUploaded(std::string remoteUrl) {
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
