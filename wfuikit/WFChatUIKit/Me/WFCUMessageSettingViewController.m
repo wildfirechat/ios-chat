@@ -6,14 +6,14 @@
 //  Copyright © 2018 WildFireChat. All rights reserved.
 //
 
-#import "WFCUMessageNotificationViewController.h"
+#import "WFCUMessageSettingViewController.h"
 #import "WFCUSwitchTableViewCell.h"
 #import "UIColor+YH.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUSelectNoDisturbingTimeViewController.h"
 
-@interface WFCUMessageNotificationViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface WFCUMessageSettingViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, assign)BOOL isNoDisturb;
@@ -21,7 +21,7 @@
 @property(nonatomic, assign)int endMins;
 @end
 
-@implementation WFCUMessageNotificationViewController
+@implementation WFCUMessageSettingViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -92,11 +92,14 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    int count = 4;
     if([[WFCCIMService sharedWFCIMService] isCommercialServer] && ![[WFCCIMService sharedWFCIMService] isGlobalDisableSyncDraft]) {
-        return 5;
-    } else {
-        return 4;
+        count ++;
     }
+    if(NSClassFromString(@"WFPttClient")) {
+        count ++;
+    }
+    return count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -112,6 +115,8 @@
         }
         return 1;
     } else if(section == 4) {
+        return 1;
+    } else if(section == 5) {
         return 1;
     }
     return 0;
@@ -181,9 +186,31 @@
     } else if(indexPath.section == 2) {
         cell.textLabel.text = WFCString(@"NotificationShowMessageDetail");
         cell.type = SwitchType_Setting_Show_Notification_Detail;
-    } else if(indexPath.section == 4) {
-        cell.textLabel.text = WFCString(@"SyncDraft");
-        cell.type = SwitchType_Setting_Sync_Draft;
+    } else if(indexPath.section == 4 || indexPath.section == 5) {
+        if(indexPath.section == 4 && [[WFCCIMService sharedWFCIMService] isCommercialServer] && ![[WFCCIMService sharedWFCIMService] isGlobalDisableSyncDraft]) {
+            cell.textLabel.text = WFCString(@"SyncDraft");
+            cell.type = SwitchType_Setting_Sync_Draft;
+        } else {
+            if(NSClassFromString(@"WFPttClient")) {
+                WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch2"];
+                if(cell == nil) {
+                    cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"switch2"];
+                }
+                cell.detailTextLabel.text = nil;
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.accessoryView = nil;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.textLabel.text = @"对讲保持后台激活";
+                cell.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
+                
+                cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
+                    [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
+                    [[NSClassFromString(@"WFPttClient") performSelector:@selector(sharedClient)] performSelector:@selector(setPlaySilent:) withObject:@(value)];
+                };
+                return cell;
+            }
+        }
+        
     }
     
     
