@@ -36,7 +36,6 @@
 #import "SharedConversation.h"
 #import "SharePredefine.h"
 #import "PttUIKit.h"
-//#import <PttClient/WFPttClient.h>
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -89,8 +88,12 @@
        NSClassFromString(@"WFPttChannelListViewController")) {
         NSObject *pttKit = [NSClassFromString(@"WFPttKit") performSelector:@selector(sharedKit)];
         [pttKit performSelector:@selector(setDelegate:) withObject:self];
+
+        BOOL keepBackgroundAlive = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
         
-//        [WFPttClient sharedClient].playSilent = YES;
+        if(keepBackgroundAlive) {
+            [[NSClassFromString(@"WFPttClient") performSelector:@selector(sharedClient)] performSelector:@selector(setPlaySilent:) withObject:@(YES)];
+        }
     }
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];

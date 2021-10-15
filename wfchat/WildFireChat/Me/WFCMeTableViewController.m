@@ -71,7 +71,7 @@
     
     if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
         self.itemDataSource = @[
-            @{@"title":LocalizedString(@"MessageNotification"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
+            @{@"title":LocalizedString(@"Message"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
             @{@"title":LocalizedString(@"Favorite"), @"image":@"favorite_settings", @"type":@(Favorite_Settings_Cell)},
             @{@"title":LocalizedString(@"File"), @"image":@"file_settings", @"type":@(File_Settings_Cell)},
             @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)},
@@ -171,7 +171,7 @@
     } else {
         int type = [self.itemDataSource[indexPath.section-1][@"type"] intValue];
         if (type == Notification_Setting_Cell) {
-           WFCUMessageNotificationViewController *mnvc = [[WFCUMessageNotificationViewController alloc] init];
+           WFCUMessageSettingViewController *mnvc = [[WFCUMessageSettingViewController alloc] init];
            mnvc.hidesBottomBarWhenPushed = YES;
            [self.navigationController pushViewController:mnvc animated:YES];
        } else if (type == Favorite_Settings_Cell) {

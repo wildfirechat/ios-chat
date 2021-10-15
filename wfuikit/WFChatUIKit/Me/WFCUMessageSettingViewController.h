@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WFCUMessageNotificationViewController : UIViewController
+@interface WFCUMessageSettingViewController : UIViewController
 
 @end

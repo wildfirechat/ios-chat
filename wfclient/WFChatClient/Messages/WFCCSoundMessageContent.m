@@ -25,6 +25,15 @@
     return soundMsg;
 }
 
++ (instancetype)soundMessageContentForAmr:(NSString *)amrPath
+                                 duration:(long)duration {
+    WFCCSoundMessageContent *soundMsg = [[WFCCSoundMessageContent alloc] init];
+    soundMsg.duration = duration;
+    soundMsg.localPath = amrPath;
+    
+    return soundMsg;
+}
+
 - (NSData *)getWavData {
     if (!self.localPath) {
         return nil;
