@@ -49,7 +49,9 @@
         [self.dataSource addObject:@{@"title":LocalizedString(@"Conference"),@"image":@"discover_conference",@"des":@"Conference"}];
     }
     
-    if(NSClassFromString(@"WFPttClient") && NSClassFromString(@"WFPttChannelListViewController")) {
+    if(NSClassFromString(@"WFPttClient") &&
+       NSClassFromString(@"WFPttKit") &&
+       NSClassFromString(@"WFPttChannelListViewController")) {
         [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
     }
     
