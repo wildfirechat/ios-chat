@@ -25,6 +25,17 @@
                        destinationAmrPath:(NSString *)amrPath
                                  duration:(long)duration;
 
+
+/**
+ 构造方法
+
+ @param amrPath amr的存储路径
+ @param duration 时间
+ @return 语音消息
+ */
++ (instancetype)soundMessageContentForAmr:(NSString *)amrPath
+                                 duration:(long)duration;
+
 /**
  时间
  */

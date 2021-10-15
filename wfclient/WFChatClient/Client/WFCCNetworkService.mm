@@ -805,11 +805,13 @@ static WFCCNetworkService * sharedSingleton = nil;
     if (ws.logined &&[UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self onAppResume];
         [self startBackgroundTask];
-        ws.forceConnectTimer = [NSTimer scheduledTimerWithTimeInterval:second
+        if(second > 0) {
+            ws.forceConnectTimer = [NSTimer scheduledTimerWithTimeInterval:second
                                                          target:self
                                                        selector:@selector(forceConnectTimeOut)
                                                        userInfo:nil
                                                         repeats:NO];
+        }
     }
   });
 }
