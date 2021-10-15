@@ -41,7 +41,7 @@
     
     WFCCPTTInviteMessageContent *content = (WFCCPTTInviteMessageContent *)model.message.content;
 
-    self.titleLabel.text = [NSString stringWithFormat:@"会议邀请:%@", content.title];
+    self.titleLabel.text = [NSString stringWithFormat:@"对讲邀请:%@", content.title];
     if(content.desc.length) {
         self.infoLabel.text = content.desc;
     } else {

@@ -339,6 +339,7 @@
 		2FC50B7B245273A700B36F8A /* PCSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSessionViewController.h; sourceTree = "<group>"; };
 		2FCF7216254FD092006CF53B /* WFCFavoriteFileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteFileCell.h; sourceTree = "<group>"; };
 		2FCF7217254FD092006CF53B /* WFCFavoriteFileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteFileCell.m; sourceTree = "<group>"; };
+		2FDB9F9527192022004A1E96 /* PttUIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PttUIKit.h; sourceTree = "<group>"; };
 		2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCLoginViewController.m; sourceTree = "<group>"; };
 		2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCLoginViewController.h; sourceTree = "<group>"; };
 		2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCAboutViewController.m; sourceTree = "<group>"; };
@@ -540,6 +541,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				2FDB9F9427191FFB004A1E96 /* Ptt */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
 				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
 				2FA2E82025158E0D0038635A /* SDWebImage */,
@@ -844,6 +846,14 @@
 				2FA2E90B251634070038635A /* SDWebImage.framework */,
 			);
 			path = SDWebImage;
+			sourceTree = "<group>";
+		};
+		2FDB9F9427191FFB004A1E96 /* Ptt */ = {
+			isa = PBXGroup;
+			children = (
+				2FDB9F9527192022004A1E96 /* PttUIKit.h */,
+			);
+			path = Ptt;
 			sourceTree = "<group>";
 		};
 		2FEA5D6721F4AC8900280B23 /* Login */ = {
