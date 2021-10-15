@@ -676,6 +676,11 @@ static WFCCIMService * sharedSingleton = nil;
 
 static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMessageContent *content) {
     WFCCMessagePayload *payload = [content encode];
+    if(!payload.contentType) {
+        NSLog(@"****************************************");
+        NSLog(@"Error, message content net set content type %@", content.class);
+        NSLog(@"****************************************");
+    }
     payload.extra = content.extra;
     tmsgcontent.type = payload.contentType;
     tmsgcontent.searchableContent = [payload.searchableContent UTF8String] ? [payload.searchableContent UTF8String] : "";
@@ -2594,6 +2599,11 @@ public:
     int contenttype;
     if (class_getClassMethod(contentClass, @selector(getContentType))) {
         contenttype = [contentClass getContentType];
+        if(self.MessageContentMaps[@(contenttype)]) {
+            NSLog(@"****************************************");
+            NSLog(@"Error, duplicate message content type %d", contenttype);
+            NSLog(@"****************************************");
+        }
         self.MessageContentMaps[@(contenttype)] = contentClass;
         int contentflag = [contentClass getContentFlags];
         mars::stn::MessageDB::Instance()->RegisterMessageFlag(contenttype, contentflag);

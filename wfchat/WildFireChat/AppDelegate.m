@@ -35,12 +35,14 @@
 #import "UIColor+YH.h"
 #import "SharedConversation.h"
 #import "SharePredefine.h"
+#import "PttUIKit.h"
+//#import <PttClient/WFPttClient.h>
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
     WFAVEngineDelegate,
 #endif
-    UNUserNotificationCenterDelegate, QrCodeDelegate>
+    UNUserNotificationCenterDelegate, QrCodeDelegate, WFPttKitDelegate>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property(nonatomic, strong) UILocalNotification *localCallNotification;
 @end
@@ -82,6 +84,14 @@
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     
+    if(NSClassFromString(@"WFPttClient") &&
+       NSClassFromString(@"WFPttKit") &&
+       NSClassFromString(@"WFPttChannelListViewController")) {
+        NSObject *pttKit = [NSClassFromString(@"WFPttKit") performSelector:@selector(sharedKit)];
+        [pttKit performSelector:@selector(setDelegate:) withObject:self];
+        
+//        [WFPttClient sharedClient].playSilent = YES;
+    }
 
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
     NSString *savedUserId = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedUserId"];
@@ -819,5 +829,21 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     };
     
     [navigator pushViewController:vc animated:YES];
+}
+#pragma mark - PttUIKitDelegate
+- (void)willShareChannel:(NSString *)channelId channelName:(NSString *)channelName owner:(NSString *)owner portrait:(NSString *)portrait navController:(UINavigationController *)navController {
+    WFCCPTTInviteMessageContent *invite = [[WFCCPTTInviteMessageContent alloc] init];
+    invite.callId = channelId;
+    invite.title = channelName;
+    invite.host = owner;
+    invite.desc = portrait;
+    
+    WFCCMessage *message = [[WFCCMessage alloc] init];
+    message.content = invite;
+    
+    WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
+    controller.message = message;
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
+    [navController presentViewController:navi animated:YES completion:nil];
 }
 @end
