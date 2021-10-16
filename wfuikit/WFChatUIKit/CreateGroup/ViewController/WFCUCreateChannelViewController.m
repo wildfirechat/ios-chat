@@ -231,12 +231,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         } error:^(int error_code) {
             NSLog(@"send channel msg failure");
         }];
-        [ws.view makeToast:WFCString(@"ChannelCreateFailure")
-                  duration:2
-                  position:CSToastPositionCenter];
         [ws.navigationController popViewControllerAnimated:YES];
     } error:^(int error_code) {
         NSLog(@"create channel error%d", error_code);
+        [ws.view makeToast:WFCString(@"ChannelCreateFailure")
+                  duration:2
+                  position:CSToastPositionCenter];
     }];
     
 }
