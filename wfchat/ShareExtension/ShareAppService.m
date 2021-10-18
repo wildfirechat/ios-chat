@@ -13,6 +13,7 @@
 #import "ShareUtility.h"
 
 static ShareAppService *sharedSingleton = nil;
+#define AUTHORIZATION_HEADER @"authToken"
 
 @implementation ShareAppService
 + (ShareAppService *)sharedAppService {
@@ -107,9 +108,18 @@ static ShareAppService *sharedSingleton = nil;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
-        for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+        
+        NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+        NSString *authToken = [sharedDefaults objectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
+        
+        if(authToken.length) {
+            [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
+        } else {
+            for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+            }
         }
+
         
         NSString *url = [APP_SERVER_ADDRESS stringByAppendingFormat:@"/media/upload/%d", mediaType];
     
@@ -167,7 +177,6 @@ static ShareAppService *sharedSingleton = nil;
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
     NSString *authToken = [sharedDefaults objectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
     
-#define AUTHORIZATION_HEADER @"authToken"
     if(authToken.length) {
         [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
     } else {
