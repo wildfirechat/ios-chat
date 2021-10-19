@@ -1,7 +1,7 @@
 "previewCamera" = "Camera";
 "previewCameraRecord" = "Record";
 "previewAlbum" = "Album";
-"previewCancel" = "Cancel";
+"cancel" = "Cancel";
 
 "originalPhoto" = "Full Image";
 "done" = "Done";
@@ -9,9 +9,7 @@
 "editFinish" = "Done";
 
 "back" = "Back";
-
 "edit" = "Edit";
-"save" = "Save";
 "revert" = "Undo";
 
 "photo" = "Photos";
@@ -20,31 +18,33 @@
 "noPhotoTips" = "No Photo";
 "notAllowMixSelect" = "Unable to select video";
 
-"loading" = "loading，waiting please";
+"loading" = "loading, waiting please";
 "hudLoading" = "waiting...";
 
-"saveImageError" = "Failed to save the image";
-"exceededMaxSelectCount" = "Max select count: %ld";
+"exceededMaxSelectCount" = "Max count for selection: %ld";
 "longerThanMaxVideoDuration" = "Unable to select video with a duration longer than %lds";
 "shorterThanMaxVideoDuration" = "Unable to select video with a duration shorter than %lds";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Video max select count: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "Video min select count: %ld";
+"exceededMaxVideoSelectCount" = "Max count for video selection: %ld";
+"lessThanMinVideoSelectCount" = "Min count for video selection: %ld";
 
-"noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
-"noPhotoLibratyAuthority" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
-"noMicrophoneAuthority" = "Please allow %@ to access your device's microphone in \"Settings\"->\"Privacy\"->\"Microphone\"";
+"noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\" > \"Privacy\" > \"Camera\"";
+"noPhotoLibratyAuthority" = "Please allow %@ to access your album in \"Settings\" > \"Privacy\" > \"Photos\"";
+"noMicrophoneAuthority" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access.";
 "cameraUnavailable" = "Camera is unavailable";
+"keepRecording" = "Keep Recording";
+"gotoSettings" = "Go to Settings";
 
-"iCloudPhotoLoadFaild" = "Retry after download in photo ablum";
 "iCloudVideoLoadFaild" = "Unable to sync from iCloud";
-
 "imageLoadFailed" = "loading failed";
+
+"save" = "Save";
+"saveImageError" = "Failed to save the image";
 "saveVideoError" = "Failed to save the video";
 "timeout" = "Request timed out";
 
 "customCameraTips" = "Tap to take photo and hold to record video";
 "customCameraTakePhotoTips" = "Tap to take photo";
-"customCameraRecordVideoTips" = "hold to record video";
+"customCameraRecordVideoTips" = "Hold to record video";
 "minRecordTimeTips" = "Record at least %lds";
 
 "cameraRoll" = "Recents";
@@ -58,8 +58,10 @@
 "selfPortraits" = "Selfies";
 "screenshots" = "Screenshots";
 "depthEffect" = "Portrait";
-"livePhotos" = "Live Photo";
+"livePhotos" = "Live Photos";
 "animated" = "Animated";
 "myPhotoStream" = "My Photo Stream";
 
 "noTitleAlbumListPlaceholder" = "All Photos";
+"unableToAccessAllPhotos" = "Unable to access all photos in the album.\nAllow access to \"All Photos\" in \"Photos\".";
+"textStickerRemoveTips" = "Drag here to remove";
