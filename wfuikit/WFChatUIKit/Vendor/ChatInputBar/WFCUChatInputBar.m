@@ -1637,6 +1637,14 @@
 
     CMTime time2 = [asset1 duration];
     int seconds = ceil(time2.value/time2.timescale);
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
+        [MBProgressHUD HUDForView:self.parentView].mode = MBProgressHUDModeDeterminate;
+        [MBProgressHUD HUDForView:self.parentView].label.text = @"正在处理中...";
+    });
+    
     __weak typeof(self)ws = self;
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
@@ -1645,11 +1653,14 @@
              float memorySize = (float)data.length / 1024 / 1024;
              NSLog(@"视频压缩后大小 %f", memorySize);
              dispatch_async(dispatch_get_main_queue(), ^{
+                 [MBProgressHUD hideHUDForView:self.parentView animated:YES];
                  [ws.delegate videoDidCapture:resultPath thumbnail:thumbnail duration:seconds];
              });
              [ws recursiveHandle:photos isFullImage:isFullImage];
          } else {
              dispatch_async(dispatch_get_main_queue(), ^{
+                 [MBProgressHUD hideHUDForView:self.parentView animated:YES];
+                 [self.parentView makeToast:@"视频处理失败" duration:1 position:CSToastPositionCenter];
              });
              NSLog(@"压缩失败");
          }
