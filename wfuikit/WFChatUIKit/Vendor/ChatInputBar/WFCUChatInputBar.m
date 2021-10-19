@@ -1171,10 +1171,13 @@
         [ZLPhotoConfiguration default].allowSelectImage = YES;
         [ZLPhotoConfiguration default].allowSelectVideo = YES;
         [ZLPhotoConfiguration default].maxSelectCount = 9;
-        [ZLPhotoConfiguration default].allowMixSelect = false;
-        [ZLPhotoConfiguration default].allowTakePhotoInLibrary = false;
-        [ZLPhotoConfiguration default].allowEditImage = true;
-        [ZLPhotoConfiguration default].allowEditVideo = true;
+        [ZLPhotoConfiguration default].allowMixSelect = NO;
+        [ZLPhotoConfiguration default].allowTakePhotoInLibrary = NO;
+        [ZLPhotoConfiguration default].allowEditImage = YES;
+        [ZLPhotoConfiguration default].allowEditVideo = YES;
+        //视频最大时长，默认是5分钟，可以更改为更大
+        [ZLPhotoConfiguration default].maxSelectVideoDuration = 300;
+        [ZLPhotoConfiguration default].maxEditVideoTime = 300;
         
         ZLPhotoPreviewSheet *ps = [[ZLPhotoPreviewSheet alloc] initWithSelectedAssets:@[]];
         ps.selectImageBlock = ^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
