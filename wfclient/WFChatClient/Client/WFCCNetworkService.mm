@@ -811,10 +811,12 @@ static WFCCNetworkService * sharedSingleton = nil;
             } else {
                 NSLog(@"音视频SDK是多人版");
             }
-            if(![avEngineKit performSelector:@selector(checkAddress:) withObject:host]) {
-                NSLog(@"***********************");
-                NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
-                NSLog(@"***********************");
+            if([avEngineKit respondsToSelector:@selector(checkAddress)]) {
+                if(![avEngineKit performSelector:@selector(checkAddress:) withObject:host]) {
+                    NSLog(@"***********************");
+                    NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
+                    NSLog(@"***********************");
+                }
             }
         }
     }
