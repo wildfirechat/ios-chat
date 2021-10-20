@@ -793,6 +793,68 @@ static WFCCNetworkService * sharedSingleton = nil;
     return NO;
 }
 
+
+- (void)setServerAddress:(NSString *)host {
+    [self checkSDKHost:host];
+    
+    self.serverHost = host;
+}
+
+- (BOOL)checkSDKHost:(NSString *)host {
+    if(NSClassFromString(@"WFAVEngineKit")) {
+        NSObject *avEngineKit = [NSClassFromString(@"WFAVEngineKit") performSelector:@selector(sharedEngineKit)];
+        BOOL supportConference = [avEngineKit performSelector:@selector(supportConference)];
+        BOOL supportMultiCall = [avEngineKit performSelector:@selector(supportMultiCall)];
+        if(supportConference || supportMultiCall) {
+            if(supportConference) {
+                NSLog(@"音视频SDK是高级版");
+            } else {
+                NSLog(@"音视频SDK是多人版");
+            }
+            if(![avEngineKit performSelector:@selector(checkAddress:) withObject:host]) {
+                NSLog(@"***********************");
+                NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
+                NSLog(@"***********************");
+            }
+        }
+    }
+    
+    
+    if(NSClassFromString(@"WFMomentService")) {
+        NSObject *momentClient = [NSClassFromString(@"WFMomentService") performSelector:@selector(sharedService)];
+        if([momentClient respondsToSelector:@selector(checkAddress:)]) {
+            if(![momentClient performSelector:@selector(checkAddress:) withObject:host]) {
+                NSLog(@"***********************");
+                NSLog(@"错误，朋友圈SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
+                NSLog(@"***********************");
+                return NO;
+            }
+        }
+        Class momentUIKitCls = NSClassFromString(@"SDTimeLineTableViewController");
+        if(!momentUIKitCls) {
+            NSLog(@"***********************");
+            NSLog(@"错误，朋友圈SDK存在但UI代码不存在，请集成UI代码 https://github.com/wildfirechat/ios-momentkit。如果您自己来实现UI，请忽略掉此提示");
+            NSLog(@"***********************");
+        }
+    }
+    
+    if(NSClassFromString(@"WFPttClient")) {
+        NSObject *pttClient = [NSClassFromString(@"WFPttClient") performSelector:@selector(sharedClient)];
+        if(![pttClient performSelector:@selector(checkAddress:) withObject:host]) {
+            NSLog(@"***********************");
+            NSLog(@"错误，对讲SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
+            NSLog(@"***********************");
+            return NO;
+        }
+        if(!NSClassFromString(@"WFPttKit")) {
+            NSLog(@"***********************");
+            NSLog(@"错误，对讲SDK存在但UI代码不存在，请集成UI代码 https://github.com/wildfirechat/ios-pttkit。如果您自己来实现UI，请忽略掉此提示");
+            NSLog(@"***********************");
+        }
+    }
+    return YES;
+}
+
 - (void)forceConnectTimeOut {
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self onAppSuspend];
@@ -912,10 +974,6 @@ static WFCCNetworkService * sharedSingleton = nil;
   } else {
     mars::stn::Disconnect(flag);
   }
-}
-
-- (void)setServerAddress:(NSString *)host {
-    self.serverHost = host;
 }
 
 - (NSString *)getHost {
