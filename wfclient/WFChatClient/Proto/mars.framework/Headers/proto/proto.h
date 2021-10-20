@@ -82,6 +82,7 @@ namespace mars{
             kEcMarsLongPkgPkgTimeout = -501,
             kEcMarsLongReadWriteTimeout = -502,
             kEcMarsLongTaskTimeout = -503,
+            kEcMarsLongLinkNotEstablished = -504,
 
             kEcMarsSocketNetworkChange = -10086,
             kEcMarsSocketMakeSocketPrepared = -10087,
