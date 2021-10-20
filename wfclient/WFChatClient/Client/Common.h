@@ -40,6 +40,9 @@
 //组合消息
 #define MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE 11
 
+//Dumy1
+#define MESSAGE_CONTENT_TYPE_DUMY1 21
+
 //撤回消息
 #define MESSAGE_CONTENT_TYPE_RECALL 80
 //删除消息，请勿直接发送此消息，此消息是服务器端删除时的同步消息
