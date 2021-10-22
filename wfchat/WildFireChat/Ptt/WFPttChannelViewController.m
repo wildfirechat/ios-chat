@@ -149,14 +149,8 @@
 }
 
 - (void)playPttRing:(NSString *)ring {
-    NSURL *url = [[NSBundle mainBundle] URLForResource:ring withExtension:@"m4a"];
-    NSError *error = nil;
-    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    if (!error) {
-        audioPlayer.numberOfLoops = 0;
-        audioPlayer.volume = 1.0;
-        [audioPlayer prepareToPlay];
-        [audioPlayer play];
+    if([[UIApplication sharedApplication].delegate respondsToSelector:@selector(playPttRing:)]) {
+        [[UIApplication sharedApplication].delegate performSelector:@selector(playPttRing:) withObject:ring];
     }
 }
 
