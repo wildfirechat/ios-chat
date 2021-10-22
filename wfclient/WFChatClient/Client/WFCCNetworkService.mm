@@ -848,11 +848,6 @@ static WFCCNetworkService * sharedSingleton = nil;
             NSLog(@"***********************");
             return NO;
         }
-        if(!NSClassFromString(@"WFPttKit")) {
-            NSLog(@"***********************");
-            NSLog(@"错误，对讲SDK存在但UI代码不存在，请集成UI代码 https://github.com/wildfirechat/ios-pttkit。如果您自己来实现UI，请忽略掉此提示");
-            NSLog(@"***********************");
-        }
     }
     return YES;
 }
