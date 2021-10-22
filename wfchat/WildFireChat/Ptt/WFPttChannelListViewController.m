@@ -39,7 +39,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTalkingBegain:) name:kWFPttTalkingBegainNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTalkingBegin:) name:kWFPttTalkingBeginNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTalkingEnd:) name:kWFPttTalkingEndNotification object:nil];
 }
@@ -52,7 +52,7 @@
     [self loadData];
 }
 
-- (void)onTalkingBegain:(NSNotification *)notification {
+- (void)onTalkingBegin:(NSNotification *)notification {
     [self loadData];
 }
 

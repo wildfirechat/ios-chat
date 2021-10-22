@@ -35,12 +35,19 @@
 #import "UIColor+YH.h"
 #import "SharedConversation.h"
 #import "SharePredefine.h"
+#ifdef WFC_PTT
+#import <PttClient/WFPttClient.h>
+#endif
 
 @interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
     WFAVEngineDelegate,
 #endif
-    UNUserNotificationCenterDelegate, QrCodeDelegate>
+    UNUserNotificationCenterDelegate, QrCodeDelegate
+#ifdef WFC_PTT
+,WFPttDelegate
+#endif
+>
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property(nonatomic, strong) UILocalNotification *localCallNotification;
 @end
@@ -84,12 +91,10 @@
     
 #ifdef WFC_PTT
     //初始化对讲SDK
-    if(NSClassFromString(@"WFPttClient")) {
-        BOOL keepBackgroundAlive = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
-        
-        if(keepBackgroundAlive) {
-            [[NSClassFromString(@"WFPttClient") performSelector:@selector(sharedClient)] performSelector:@selector(setPlaySilent:) withObject:@(YES)];
-        }
+    [WFPttClient sharedClient].delegate = self;
+    BOOL keepBackgroundAlive = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
+    if(keepBackgroundAlive) {
+        [[WFPttClient sharedClient] setPlaySilent:@(YES)];
     }
 #endif //WFC_PTT
     
@@ -831,4 +836,34 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     [navigator pushViewController:vc animated:YES];
 }
 
+#ifdef WFC_PTT
+- (void)playPttRing:(NSString *)ring {
+    NSURL *url = [[NSBundle mainBundle] URLForResource:ring withExtension:@"m4a"];
+    NSError *error = nil;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    if (!error) {
+        self.audioPlayer.numberOfLoops = 0;
+        self.audioPlayer.volume = 1.0;
+        [self.audioPlayer prepareToPlay];
+        [self.audioPlayer play];
+    }
+}
+
+#pragma - mark WFPttDelegate
+- (void)didChannel:(NSString *)channelId startTalkingUser:(NSString *)userId {
+    [self playPttRing:@"ptt_begin"];
+}
+
+- (void)didChannel:(NSString *)channelId endTalkingUser:(NSString *)userId {
+    [self playPttRing:@"ptt_end"];
+}
+
+- (void)didSubscriberChanged:(NSString *)channelId {
+    
+}
+
+- (void)didChannel:(NSString *)channelId receiveData:(NSString *)data from:(NSString *)userId {
+    
+}
+#endif
 @end
