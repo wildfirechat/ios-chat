@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
 /**
  会话
  */
-@interface WFCCConversation : NSObject
+@interface WFCCConversation : NSObject <NSCopying>
 
 /**
  构造方法
