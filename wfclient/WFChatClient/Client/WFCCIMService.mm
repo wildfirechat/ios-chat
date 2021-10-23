@@ -43,7 +43,9 @@ public:
             if (m_successBlock) {
                 m_successBlock(messageUid, timestamp);
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sent), @"messageUid":@(messageUid), @"timestamp":@(timestamp)}];
+            if(m_message.messageId) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sent), @"messageUid":@(messageUid), @"timestamp":@(timestamp)}];
+            }
             delete this;
 
         });
@@ -54,25 +56,31 @@ public:
             if (m_errorBlock) {
                 m_errorBlock(errorCode);
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Send_Failure)}];
+            if(m_message.messageId) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Send_Failure)}];
+            }
             delete this;
         });
     }
     void onPrepared(long messageId, int64_t savedTime) {
         m_message.messageId = messageId;
         m_message.serverTime = savedTime;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
-        });
+        if(m_message.messageId) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
+            });
+        }
     }
     void onMediaUploaded(std::string remoteUrl) {
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
             mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
-        });
+        if(m_message.messageId) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
+            });
+        }
     }
     
     void onProgress(int uploaded, int total) {
@@ -80,8 +88,10 @@ public:
             if (m_progressBlock) {
                 m_progressBlock(uploaded, total);
             }
-            float progress = (uploaded * 1.f)/total;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(progress), @"finish":@(NO)}];
+            if(m_message.messageId) {
+                float progress = (uploaded * 1.f)/total;
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(progress), @"finish":@(NO)}];
+            }
         });
     }
     
@@ -2512,6 +2522,10 @@ public:
                 success:(void(^)())successBlock
                   error:(void(^)(int error_code))errorBlock {
     [self setUserSetting:(UserSettingScope)mars::stn::kUserSettingConversationSilent key:[NSString stringWithFormat:@"%zd-%d-%@", conversation.type, conversation.line, conversation.target] value:silent ? @"1" : @"0" success:successBlock error:errorBlock];
+}
+
+- (BOOL)isConversationSilent:(WFCCConversation *)conversation {
+    return [@"1" isEqualToString:[self getUserSetting:UserSettingScope_Conversation_Silent key:[NSString stringWithFormat:@"%zd-%d-%@", conversation.type, conversation.line, conversation.target]]];
 }
 
 - (WFCCMessageContent *)messageContentFromPayload:(WFCCMessagePayload *)payload {

@@ -279,6 +279,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                   error:(void(^)(int error_code))errorBlock;
 
 /**
+ 获取会话是否免打扰状态
+ 
+ @param conversation 会话
+ @return 会话是否免打扰
+ */
+- (BOOL)isConversationSilent:(WFCCConversation *)conversation;
+/**
  设置会话草稿
  
  @param conversation 会话
