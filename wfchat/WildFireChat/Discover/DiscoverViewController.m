@@ -48,12 +48,6 @@
     if ([WFAVEngineKit sharedEngineKit].supportConference) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Conference"),@"image":@"discover_conference",@"des":@"Conference"}];
     }
-#ifdef WFC_PTT
-    if(NSClassFromString(@"WFPttClient") &&
-       NSClassFromString(@"WFPttChannelListViewController")) {
-        [self.dataSource addObject:@{@"title":@"对讲机",@"image":@"discover_intercom",@"des":@"Push to Talk"}];
-    }
-#endif //WFC_PTT
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.delegate = self;
@@ -159,13 +153,6 @@
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
-#ifdef WFC_PTT
-    if ([des isEqualToString:@"Push to Talk"]) {
-        UIViewController *vc = [[NSClassFromString(@"WFPttChannelListViewController") alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-#endif //WFC_PTT
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

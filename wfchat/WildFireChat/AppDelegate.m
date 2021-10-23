@@ -96,6 +96,8 @@
     if(keepBackgroundAlive) {
         [[WFPttClient sharedClient] setPlaySilent:@(YES)];
     }
+    BOOL pttEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_ENABLED"];
+    [WFPttClient sharedClient].enablePtt = pttEnabled;
 #endif //WFC_PTT
     
     NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
@@ -850,20 +852,12 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 }
 
 #pragma - mark WFPttDelegate
-- (void)didChannel:(NSString *)channelId startTalkingUser:(NSString *)userId {
+- (void)didConversation:(WFCCConversation *)conversation startTalkingUser:(NSString *)userId {
     [self playPttRing:@"ptt_begin"];
 }
 
-- (void)didChannel:(NSString *)channelId endTalkingUser:(NSString *)userId {
+- (void)didConversation:(WFCCConversation *)conversation endTalkingUser:(NSString *)userId {
     [self playPttRing:@"ptt_end"];
-}
-
-- (void)didSubscriberChanged:(NSString *)channelId {
-    
-}
-
-- (void)didChannel:(NSString *)channelId receiveData:(NSString *)data from:(NSString *)userId {
-    
 }
 #endif
 @end

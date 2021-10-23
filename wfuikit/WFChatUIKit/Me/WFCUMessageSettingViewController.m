@@ -12,6 +12,9 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUSelectNoDisturbingTimeViewController.h"
+#ifdef WFC_PTT
+#import <PttClient/WFPttClient.h>
+#endif
 
 @interface WFCUMessageSettingViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -96,9 +99,9 @@
     if([[WFCCIMService sharedWFCIMService] isCommercialServer] && ![[WFCCIMService sharedWFCIMService] isGlobalDisableSyncDraft]) {
         count ++;
     }
-    if(NSClassFromString(@"WFPttClient")) {
-        count ++;
-    }
+#ifdef WFC_PTT
+    count ++;
+#endif
     return count;
 }
 
@@ -115,9 +118,27 @@
         }
         return 1;
     } else if(section == 4) {
+        if([[WFCCIMService sharedWFCIMService] isCommercialServer] && ![[WFCCIMService sharedWFCIMService] isGlobalDisableSyncDraft]) {
+            return 1;
+            //草稿
+        } else {
+            //Ptt
+#ifdef WFC_PTT
+            if([WFPttClient sharedClient].enablePtt) {
+                return 2;
+            }
+            return 1;
+#endif
+        }
         return 1;
     } else if(section == 5) {
+        //Ptt
+#ifdef WFC_PTT
+        if([WFPttClient sharedClient].enablePtt) {
+            return 2;
+        }
         return 1;
+#endif
     }
     return 0;
 }
@@ -191,24 +212,37 @@
             cell.textLabel.text = WFCString(@"SyncDraft");
             cell.type = SwitchType_Setting_Sync_Draft;
         } else {
-            if(NSClassFromString(@"WFPttClient")) {
-                WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch2"];
-                if(cell == nil) {
-                    cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"switch2"];
-                }
-                cell.detailTextLabel.text = nil;
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.accessoryView = nil;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+#ifdef WFC_PTT
+            WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch2"];
+            if(cell == nil) {
+                cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"switch2"];
+            }
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            if(indexPath.row == 0) {
+                cell.textLabel.text = @"开启对讲功能";
+                cell.on = [WFPttClient sharedClient].enablePtt;
+                __weak typeof(self)ws = self;
+                cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
+                    [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"WFC_PTT_ENABLED"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [WFPttClient sharedClient].enablePtt = value;
+                    [ws.tableView reloadData];
+                };
+            } else {
                 cell.textLabel.text = @"对讲保持后台激活";
                 cell.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
                 
                 cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                     [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"WFC_PTT_BACKGROUND_KEEPALIVE"];
-                    [[NSClassFromString(@"WFPttClient") performSelector:@selector(sharedClient)] performSelector:@selector(setPlaySilent:) withObject:@(value)];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [WFPttClient sharedClient].playSilent = @(value);
                 };
-                return cell;
             }
+            return cell;
+#endif
         }
         
     }
