@@ -13,5 +13,5 @@
 @end
 
 @interface WFCUPluginBoardView : UIView
-- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withVoip;
+- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withVoip withPtt:(BOOL)withPtt;
 @end

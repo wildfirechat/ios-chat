@@ -29,6 +29,10 @@
 #import "UIView+TYAlertView.h"
 #import <ZLPhotoBrowser/ZLPhotoBrowser-Swift.h>
 #import "WFCUConfigManager.h"
+#ifdef WFC_PTT
+#import <PttClient/WFPttClient.h>
+#import "WFPttViewController.h"
+#endif
 
 
 #define CHAT_INPUT_BAR_PADDING 8
@@ -715,7 +719,12 @@
 #else
         BOOL hasVoip = NO;
 #endif
-        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip];
+#ifdef WFC_PTT
+        BOOL hasPtt = [WFPttClient sharedClient].enablePtt && (self.conversation.type == Single_Type || self.conversation.type == Group_Type);
+#else
+        BOOL hasPtt = NO;
+#endif
+        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt];
     }
     return _pluginInputView;
 }
@@ -1313,6 +1322,14 @@
         
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
         [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
+    } else if(itemTag == 7) {
+#ifdef WFC_PTT
+        WFPttViewController *vc = [[WFPttViewController alloc] init];
+        vc.conversation = self.conversation;
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:vc];
+        navi.modalPresentationStyle = UIModalPresentationFullScreen;
+        [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
+#endif
     }
 }
 

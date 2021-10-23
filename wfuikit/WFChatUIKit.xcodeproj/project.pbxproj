@@ -39,8 +39,6 @@
 		2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
-		2B8352D025DE291E00BA0800 /* WFCUPTTInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */; };
-		2B8352D125DE291E00BA0800 /* WFCUPTTInviteCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */; };
 		2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4872505C7BE00162A2B /* WFCUCardCell.h */; };
 		2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B97D4882505C7BE00162A2B /* WFCUCardCell.m */; };
 		2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */; };
@@ -423,6 +421,10 @@
 		2FD550ED2442AA0B00B3EE09 /* WFCURecallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD550EB2442AA0B00B3EE09 /* WFCURecallCell.m */; };
 		2FD550F62442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD550F42442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h */; };
 		2FD550F72442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD550F52442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m */; };
+		2FDF870F2723DBCB00AC6C36 /* PttClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF870E2723DBCB00AC6C36 /* PttClient.framework */; };
+		2FDF87102723DBCB00AC6C36 /* PttClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF870E2723DBCB00AC6C36 /* PttClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2FDF87152723E01100AC6C36 /* WFPttViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FDF87132723E01100AC6C36 /* WFPttViewController.h */; };
+		2FDF87162723E01100AC6C36 /* WFPttViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDF87142723E01100AC6C36 /* WFPttViewController.m */; };
 		2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */; };
 		2FE689A921AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */; };
 		2FE8FC9625F313BD007DB331 /* WFCUUploadBigFilesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FE8FC9425F313BD007DB331 /* WFCUUploadBigFilesViewController.h */; };
@@ -438,6 +440,20 @@
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
 		90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2FDF87112723DBCB00AC6C36 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2FDF87102723DBCB00AC6C36 /* PttClient.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WFChatUIKit.xcassets; sourceTree = "<group>"; };
@@ -472,8 +488,6 @@
 		2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCCircleProgressView.m; sourceTree = "<group>"; };
 		2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCCircleProgressView.h; sourceTree = "<group>"; };
-		2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPTTInviteCell.m; sourceTree = "<group>"; };
-		2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPTTInviteCell.h; sourceTree = "<group>"; };
 		2B97D4872505C7BE00162A2B /* WFCUCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCardCell.h; sourceTree = "<group>"; };
 		2B97D4882505C7BE00162A2B /* WFCUCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCardCell.m; sourceTree = "<group>"; };
 		2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUUserMessageListViewController.h; sourceTree = "<group>"; };
@@ -863,6 +877,9 @@
 		2FD550EB2442AA0B00B3EE09 /* WFCURecallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURecallCell.m; sourceTree = "<group>"; };
 		2FD550F42442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
 		2FD550F52442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
+		2FDF870E2723DBCB00AC6C36 /* PttClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PttClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FDF87132723E01100AC6C36 /* WFPttViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFPttViewController.h; sourceTree = "<group>"; };
+		2FDF87142723E01100AC6C36 /* WFPttViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFPttViewController.m; sourceTree = "<group>"; };
 		2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewController.m; sourceTree = "<group>"; };
 		2FE689A721AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewController.h; sourceTree = "<group>"; };
 		2FE8FC9425F313BD007DB331 /* WFCUUploadBigFilesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUUploadBigFilesViewController.h; sourceTree = "<group>"; };
@@ -885,6 +902,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FDF870F2723DBCB00AC6C36 /* PttClient.framework in Frameworks */,
 				2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */,
 				2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */,
 				901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */,
@@ -1115,6 +1133,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				2FDF87122723DFFD00AC6C36 /* Ptt */,
 				2FB87A64265122E100790A26 /* Enum */,
 				2BBC9CEE255CEBD9007DA28A /* File */,
 				901E26FF21F152B200A163CB /* AVEngine */,
@@ -1147,6 +1166,7 @@
 		2F550BEA217F4DCD00F56C26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FDF870E2723DBCB00AC6C36 /* PttClient.framework */,
 				2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */,
 			);
 			path = Frameworks;
@@ -1202,8 +1222,6 @@
 				2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */,
 				2F44487A252D72D5007A570E /* WFCULinkCell.h */,
 				2F444879252D72D5007A570E /* WFCULinkCell.m */,
-				2B8352CF25DE291E00BA0800 /* WFCUPTTInviteCell.h */,
-				2B8352CE25DE291E00BA0800 /* WFCUPTTInviteCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1904,6 +1922,15 @@
 			path = YBAttributeTextTapAction;
 			sourceTree = "<group>";
 		};
+		2FDF87122723DFFD00AC6C36 /* Ptt */ = {
+			isa = PBXGroup;
+			children = (
+				2FDF87132723E01100AC6C36 /* WFPttViewController.h */,
+				2FDF87142723E01100AC6C36 /* WFPttViewController.m */,
+			);
+			path = Ptt;
+			sourceTree = "<group>";
+		};
 		2FE8FC9925F316C5007DB331 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2013,8 +2040,8 @@
 				2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */,
 				2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */,
 				2F55121A217F5CC300F56C26 /* WFCUMyPortraitViewController.h in Headers */,
-				2B8352D125DE291E00BA0800 /* WFCUPTTInviteCell.h in Headers */,
 				2F551211217F5CC300F56C26 /* WFCUContactListViewController.h in Headers */,
+				2FDF87152723E01100AC6C36 /* WFPttViewController.h in Headers */,
 				2F3A6C19219EE941009A8B4B /* WFCUFaceBoard.h in Headers */,
 				2F7381F62308F72F00213421 /* WFCUGroupMemberCollectionViewController.h in Headers */,
 				2F3A6C1C219EE941009A8B4B /* WFCUStickerItem.h in Headers */,
@@ -2186,6 +2213,7 @@
 				2F550BDC217F4D7B00F56C26 /* Frameworks */,
 				2F550BDD217F4D7B00F56C26 /* Resources */,
 				2F550BF6217F502600F56C26 /* ShellScript */,
+				2FDF87112723DBCB00AC6C36 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2281,6 +2309,7 @@
 				2BDF57B224AD70C8003C1F08 /* DNUnAuthorizedTipsView.m in Sources */,
 				2F551102217F5CC200F56C26 /* CCHNearCenterMapClusterer.m in Sources */,
 				2FB7125F25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m in Sources */,
+				2FDF87162723E01100AC6C36 /* WFPttViewController.m in Sources */,
 				2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */,
 				2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */,
 				2F5511D8217F5CC300F56C26 /* UIView+TYAutoLayout.m in Sources */,
@@ -2433,7 +2462,6 @@
 				2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */,
 				2F55116E217F5CC200F56C26 /* AFSecurityPolicy.m in Sources */,
 				2F55120D217F5CC300F56C26 /* WFCUContactSelectTableViewCell.m in Sources */,
-				2B8352D025DE291E00BA0800 /* WFCUPTTInviteCell.m in Sources */,
 				2BDF579424AD70C8003C1F08 /* DNAlbum.m in Sources */,
 				2F3A6C1A219EE941009A8B4B /* WFCUFaceButton.m in Sources */,
 				1450EA8E243960C600BF51FC /* WFCUSelectedUserTableViewCell.m in Sources */,
