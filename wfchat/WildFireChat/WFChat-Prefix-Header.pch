@@ -21,6 +21,7 @@
 
 #define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
 
+//对讲功能开关，在ChatKit工程也有同样的一个开关，需要保持同步
 //#define WFC_PTT
 
 #endif /* WFChat_Prefix_Header_pch */

@@ -43,15 +43,17 @@
 @property (nonatomic, strong)NSMutableArray *pluginItems;
 @property (nonatomic, weak)id<WFCUPluginBoardViewDelegate> delegate;
 @property (nonatomic, assign)BOOL hasVoip;
+@property (nonatomic, assign)BOOL hasPtt;
 @end
 
 @implementation WFCUPluginBoardView
-- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip {
+- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt {
     CGFloat width = [UIScreen mainScreen].bounds.size.width-16;
     self = [super initWithFrame:CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT)];
     if (self) {
         self.delegate = delegate;
         self.hasVoip = withWoip;
+        self.hasPtt = withPtt;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         int FACE_COUNT_ALL = (int)self.pluginItems.count;
@@ -85,27 +87,24 @@
 
 - (NSMutableArray *)pluginItems {
     if (!_pluginItems) {
-        if (self.hasVoip) {
-            _pluginItems = [@[
-                              [[PluginItem alloc] initWithTitle:WFCString(@"Album") image:[UIImage imageNamed:@"chat_input_plugin_album"] tag:1],
-                              [[PluginItem alloc] initWithTitle:@"拍摄" image:[UIImage imageNamed:@"chat_input_plugin_camera"] tag:2],
-                              [[PluginItem alloc] initWithTitle:@"位置" image:[UIImage imageNamed:@"chat_input_plugin_location"] tag:3],
+        _pluginItems = [@[
+                          [[PluginItem alloc] initWithTitle:WFCString(@"Album") image:[UIImage imageNamed:@"chat_input_plugin_album"] tag:1],
+                          [[PluginItem alloc] initWithTitle:@"拍摄" image:[UIImage imageNamed:@"chat_input_plugin_camera"] tag:2],
+                          [[PluginItem alloc] initWithTitle:@"位置" image:[UIImage imageNamed:@"chat_input_plugin_location"] tag:3],
+                          [[PluginItem alloc] initWithTitle:@"文件" image:[UIImage imageNamed:@"chat_input_plugin_file"] tag:5],
+                          [[PluginItem alloc] initWithTitle:@"名片" image:[UIImage imageNamed:@"chat_input_plugin_card"] tag:6]
+                          ] mutableCopy];
+
 #if WFCU_SUPPORT_VOIP
-                              [[PluginItem alloc] initWithTitle:@"视频通话" image:[UIImage imageNamed:@"chat_input_plugin_video_call"] tag:4],
-#endif
-                              [[PluginItem alloc] initWithTitle:@"文件" image:[UIImage imageNamed:@"chat_input_plugin_file"] tag:5],
-                              [[PluginItem alloc] initWithTitle:@"名片" image:[UIImage imageNamed:@"chat_input_plugin_card"] tag:6]
-                              ] mutableCopy];
-        } else {
-            _pluginItems = [@[
-                              [[PluginItem alloc] initWithTitle:WFCString(@"Album") image:[UIImage imageNamed:@"chat_input_plugin_album"] tag:1],
-                              [[PluginItem alloc] initWithTitle:@"拍摄" image:[UIImage imageNamed:@"chat_input_plugin_camera"] tag:2],
-                              [[PluginItem alloc] initWithTitle:@"位置" image:[UIImage imageNamed:@"chat_input_plugin_location"] tag:3],
-                              [[PluginItem alloc] initWithTitle:@"文件" image:[UIImage imageNamed:@"chat_input_plugin_file"] tag:5],
-                              [[PluginItem alloc] initWithTitle:@"名片" image:[UIImage imageNamed:@"chat_input_plugin_card"] tag:6]
-                              ] mutableCopy];
+        if (self.hasVoip) {
+            [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:@"视频通话" image:[UIImage imageNamed:@"chat_input_plugin_video_call"] tag:4] atIndex:2];
         }
-        
+#endif
+#ifdef WFC_PTT
+        if(self.hasPtt) {
+            [_pluginItems addObject:[[PluginItem alloc] initWithTitle:@"对讲" image:[UIImage imageNamed:@"chat_input_plugin_intercom"] tag:7]];
+        }
+#endif
     }
     return _pluginItems;
 }
