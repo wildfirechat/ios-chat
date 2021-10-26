@@ -217,6 +217,7 @@
 "MaxCount"="不能超过最大限制";
 "GroupAnnouncement"="群公告";
 "HoldToTalk"="按下 说话";
+"PushToTalk"="按下 对讲";
 "VideoClosed"="视频已关闭";
 "Robot"="机器人";
 "UserInfomation"="用户信息";
