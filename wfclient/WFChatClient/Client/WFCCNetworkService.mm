@@ -1016,6 +1016,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setBackupAddress([host UTF8String], port);
 }
 
+- (void)setProtoUserAgent:(NSString *)userAgent {
+    mars::stn::setUserAgent([userAgent UTF8String]);
+}
+
 - (void)setVoipDeviceToken:(NSString *)token {
     if (token.length == 0) {
         return;

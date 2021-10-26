@@ -296,6 +296,13 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  */
 - (void)setBackupAddressStrategy:(int)strategy;
 - (void)setBackupAddress:(NSString *)host port:(int)port;
+
+/*
+ 设置协议栈短连接User agent。
+ 
+ @param userAgent  User agent
+ */
+- (void)setProtoUserAgent:(NSString *)userAgent;
 @end
 
 #endif
