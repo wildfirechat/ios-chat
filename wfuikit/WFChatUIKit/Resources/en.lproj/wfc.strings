@@ -217,6 +217,7 @@
 "MaxCount"="Exceed max count!";
 "GroupAnnouncement"="Group announcement";
 "HoldToTalk"="Hold to talk";
+"PushToTalk"="Push to talk";
 "VideoClosed"="Video closed";
 "Robot"="Robot";
 "UserInfomation"="User infomation";

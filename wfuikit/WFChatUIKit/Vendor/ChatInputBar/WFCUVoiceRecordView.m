@@ -60,7 +60,16 @@
     }
     return self;
 }
-
+#ifdef WFC_PTT
+- (void)setIsPtt:(BOOL)isPtt {
+    _isPtt = isPtt;
+    if(isPtt) {
+        _textLabel.text = @"松开结束对接";
+        _upCancelText = @"松开结束对接";
+        _loosenCancelText = @"松开结束对接";
+    }
+}
+#endif
 #pragma mark - setter
 - (void)setVoiceMessageAnimationImages:(NSArray *)voiceMessageAnimationImages
 {
