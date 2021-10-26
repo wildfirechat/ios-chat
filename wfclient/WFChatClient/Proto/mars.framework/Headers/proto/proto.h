@@ -869,6 +869,8 @@ namespace mars{
         extern void requireLock(const std::string &lockId, int64_t duration, GeneralOperationCallback *callback);
     
         extern void releaseLock(const std::string &lockId, GeneralOperationCallback *callback);
+    
+        extern void setUserAgent(const std::string &userAgent);
 
         extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::string &groupExtra, const std::list<std::string> &groupMembers, const std::string &memberExtra, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
 

@@ -154,7 +154,7 @@ class HeaderFields {
     static const char* const kStringContentEncoding;
     static const char* const KStringAcceptEncoding;
     static const char* const KStringContentRange;
-    static const char* const KStringMicroMessenger;
+    static std::string KStringMicroMessenger;
     static const char* const KStringRange;
     static const char* const KStringLocation;
     static const char* const KStringReferer;
