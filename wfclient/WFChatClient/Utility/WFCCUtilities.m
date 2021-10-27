@@ -111,8 +111,33 @@ static NSLock *wfcImageLock;
     
     UIGraphicsEndImageContext();
     return  targetImage;
-    
 }
+
++ (UIImage *)image:(UIImage *)image scaleInSize:(CGSize)size {
+    CGFloat originWidth = image.size.width;
+    CGFloat originHeight = image.size.height;
+    if(originWidth * originHeight > size.width * size.height) {
+        return image;
+    }
+    CGFloat scale = originWidth/size.width < originHeight/size.height ? originHeight/size.height : originWidth/size.width;
+    
+    CGFloat scaledWidth = originWidth/scale;
+    CGFloat scaledHeight = originHeight/scale;
+    
+    //处理那种长条型图片
+    if(originWidth/originHeight > 3 || originHeight/originWidth > 3) {
+        scaledWidth *= sqrt(MAX(originWidth/originHeight, originHeight/originWidth));
+        originHeight *= sqrt(MAX(originWidth/originHeight, originHeight/originWidth));
+    }
+    
+    UIGraphicsBeginImageContext(CGSizeMake(scaledWidth, scaledHeight));
+    CGRect rect = CGRectMake(0, 0, scaledWidth, scaledHeight);
+    [image drawInRect:rect];
+    
+    UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
+    return targetImage;
+}
+
 + (NSString *)getSendBoxFilePath:(NSString *)localPath {
     if ([[NSFileManager defaultManager] fileExistsAtPath:localPath]) {
         return localPath;

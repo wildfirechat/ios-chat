@@ -2120,7 +2120,7 @@
     
 }
 #pragma mark - ChatInputBarDelegate
-- (void)imageDidCapture:(UIImage *)capturedImage {
+- (void)imageDidCapture:(UIImage *)capturedImage fullImage:(BOOL)fullImage{
     if (!capturedImage) {
         return;
     }
@@ -2131,7 +2131,7 @@
     NSString *path = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.jpg", recordTime++]];
         
         
-    WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:capturedImage cachePath:path];
+    WFCCImageMessageContent *imgContent = [WFCCImageMessageContent contentFrom:capturedImage cachePath:path fullImage:fullImage];
     [self sendMessage:imgContent];
 }
 

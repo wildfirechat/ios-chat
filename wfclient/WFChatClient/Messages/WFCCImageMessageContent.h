@@ -15,7 +15,7 @@
 @interface WFCCImageMessageContent : WFCCMediaMessageContent
 
 /**
- 构造方法
+ 构造方法，会把Image存储到path中。
 
  @param image 图片
  @param path 图片存储路径
@@ -23,6 +23,17 @@
  @return 图片消息
  */
 + (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path;
+
+/**
+ 构造方法，会把Image存储到path中。
+
+ @param image 图片
+ @param path 图片存储路径
+ @param fullImage 是否发送原图
+ 
+ @return 图片消息
+ */
++ (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path fullImage:(BOOL)fullImage;
 
 /**
  缩略图，自动生成

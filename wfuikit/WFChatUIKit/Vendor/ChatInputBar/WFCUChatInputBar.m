@@ -1361,7 +1361,7 @@
         cc.takeDoneBlock = ^(UIImage * _Nullable image, NSURL * _Nullable url) {
             NSLog(@"select the image");
             if (image) {
-                [self.delegate imageDidCapture:image];
+                [self.delegate imageDidCapture:image fullImage:NO];
             } else {
                 NSData *data = [[NSData alloc] initWithContentsOfURL:url];
                 NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_VIDEO];
@@ -1579,12 +1579,6 @@
 }
 
 #pragma mark - UIImagePickerControllerDelegate<NSObject>
-//- (void)imagePickerController:(UIImagePickerController *)picker
-//        didFinishPickingImage:(UIImage *)image
-//                  editingInfo:(NSDictionary *)editingInfo {
-//    [picker dismissViewControllerAnimated:YES completion:nil];
-//    [self.delegate imageDidCapture:image];
-//}
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id> *)info {
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     if([mediaType isEqualToString:@"public.movie"]) {
@@ -1660,7 +1654,7 @@
         UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
         if (!image)
             image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [self.delegate imageDidCapture:image];
+        [self.delegate imageDidCapture:image fullImage:NO];
     }
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -1881,8 +1875,8 @@
                    if (downloadFinined) {
                        if ([weakself isGifWithImageData:imageData] && [weakself.delegate respondsToSelector:@selector(gifDidCapture:)]) {
                            [weakself.delegate gifDidCapture:imageData];
-                       } else if ([weakself.delegate respondsToSelector:@selector(imageDidCapture:)]) {
-                           [weakself.delegate imageDidCapture:[UIImage imageWithData:imageData]];
+                       } else if ([weakself.delegate respondsToSelector:@selector(imageDidCapture:fullImage:)]) {
+                           [weakself.delegate imageDidCapture:[UIImage imageWithData:imageData] fullImage:isFullImage];
                        }
                        
                        [weakself recursiveHandle:photos isFullImage:isFullImage];
