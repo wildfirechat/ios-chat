@@ -23,7 +23,14 @@
                      withWidth:(CGFloat)targetWidth
                     withHeight:(CGFloat)targetHeight;
 
+/**
+ 缩小图片
 
+ @param image 原图
+ @param size 宽度
+ @return 缩小到size范围内的Image
+ */
++ (UIImage *)image:(UIImage *)image scaleInSize:(CGSize)size;
 /**
  获取对应的沙盒路径
 

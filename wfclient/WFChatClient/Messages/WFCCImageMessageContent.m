@@ -18,10 +18,18 @@
 
 @implementation WFCCImageMessageContent
 + (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path {
+    return [WFCCImageMessageContent contentFrom:image cachePath:path fullImage:NO];
+}
+
++ (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path fullImage:(BOOL)fullImage {
     WFCCImageMessageContent *content = [[WFCCImageMessageContent alloc] init];
     
-    image = [WFCCUtilities generateThumbnail:image withWidth:1024 withHeight:1024];
+    if(!fullImage) {
+        image = [WFCCUtilities image:image scaleInSize:CGSizeMake(1024, 1024)];
+    }
+    
     NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+        
     
     [imgData writeToFile:path atomically:YES];
     
