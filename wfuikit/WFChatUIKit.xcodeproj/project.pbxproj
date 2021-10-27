@@ -421,8 +421,6 @@
 		2FD550ED2442AA0B00B3EE09 /* WFCURecallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD550EB2442AA0B00B3EE09 /* WFCURecallCell.m */; };
 		2FD550F62442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD550F42442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h */; };
 		2FD550F72442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD550F52442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m */; };
-		2FDF870F2723DBCB00AC6C36 /* PttClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF870E2723DBCB00AC6C36 /* PttClient.framework */; };
-		2FDF87102723DBCB00AC6C36 /* PttClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF870E2723DBCB00AC6C36 /* PttClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2FDF87152723E01100AC6C36 /* WFPttViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FDF87132723E01100AC6C36 /* WFPttViewController.h */; };
 		2FDF87162723E01100AC6C36 /* WFPttViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDF87142723E01100AC6C36 /* WFPttViewController.m */; };
 		2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */; };
@@ -448,7 +446,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2FDF87102723DBCB00AC6C36 /* PttClient.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -877,7 +874,6 @@
 		2FD550EB2442AA0B00B3EE09 /* WFCURecallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURecallCell.m; sourceTree = "<group>"; };
 		2FD550F42442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
 		2FD550F52442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
-		2FDF870E2723DBCB00AC6C36 /* PttClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PttClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FDF87132723E01100AC6C36 /* WFPttViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFPttViewController.h; sourceTree = "<group>"; };
 		2FDF87142723E01100AC6C36 /* WFPttViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFPttViewController.m; sourceTree = "<group>"; };
 		2FE689A621AE9C0100DE54CC /* WFCUConversationSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewController.m; sourceTree = "<group>"; };
@@ -902,7 +898,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FDF870F2723DBCB00AC6C36 /* PttClient.framework in Frameworks */,
 				2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */,
 				2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */,
 				901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */,
@@ -1166,7 +1161,6 @@
 		2F550BEA217F4DCD00F56C26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2FDF870E2723DBCB00AC6C36 /* PttClient.framework */,
 				2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */,
 			);
 			path = Frameworks;
