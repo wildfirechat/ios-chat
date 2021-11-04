@@ -304,6 +304,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 */
 @property(nonatomic, assign)BOOL updateCallStartMessageTimestamp;
 
+/*
+ 是否使用距离传感器，默认为YES
+ */
+@property(nonatomic, assign)BOOL enableProximitySensor;
+
 /**
  添加ICE服务地址和鉴权
 
