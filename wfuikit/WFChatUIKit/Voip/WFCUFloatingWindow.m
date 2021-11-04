@@ -59,7 +59,6 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                                              selector:@selector(onDeviceOrientationDidChange:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
-    [self addProximityMonitoringObserver];
     [WFCUConferenceManager sharedInstance].delegate = self;
 }
 
@@ -439,7 +438,6 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         case kWFAVEngineStateIdle:
             [self updateWindow];
             [self performSelector:@selector(clearCallFloatingWindow) withObject:nil afterDelay:2];
-            [self removeProximityMonitoringObserver];
             break;
             
         case kWFAVEngineStateConnected:
@@ -506,22 +504,6 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     if(![WFAVEngineKit sharedEngineKit].currentSession.isAudioOnly) {
         [self updateVideoView];
     }
-}
-- (void)addProximityMonitoringObserver {
-    [UIDevice currentDevice].proximityMonitoringEnabled = YES;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(proximityStatueChanged:)
-                                                 name:UIDeviceProximityStateDidChangeNotification
-                                               object:nil];
-}
-
-- (void)removeProximityMonitoringObserver {
-    [UIDevice currentDevice].proximityMonitoringEnabled = NO;
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIDeviceProximityStateDidChangeNotification
-                                                  object:nil];
 }
 
 - (void)proximityStatueChanged:(NSNotificationCenter *)notification {
