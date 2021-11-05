@@ -400,23 +400,23 @@
   }
   return NO;
 }
-
-- (BOOL)isGroupPortraitCell:(NSIndexPath *)indexPath {
-  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 1) {
-    return YES;
-  }
-  return NO;
-}
+//
+//- (BOOL)isGroupPortraitCell:(NSIndexPath *)indexPath {
+//  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 1) {
+//    return YES;
+//  }
+//  return NO;
+//}
 
 - (BOOL)isGroupQrCodeCell:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 2) {
+    if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 1) {
         return YES;
     }
     return NO;
 }
 
 - (BOOL)isGroupManageCell:(NSIndexPath *)indexPath {
-  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 3) {
+  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 2) {
     if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
         return YES;
     } else {
@@ -429,11 +429,11 @@
 - (BOOL)isGroupAnnouncementCell:(NSIndexPath *)indexPath {
     if(self.conversation.type == Group_Type && indexPath.section == 0) {
         if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
-            if (indexPath.row == 4) {
+            if (indexPath.row == 3) {
                 return YES;
             }
         } else {
-            if (indexPath.row == 3) {
+            if (indexPath.row == 2) {
                 return YES;
             }
         }
@@ -527,9 +527,9 @@
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
             if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
-                return 5; //群名称，群头像，群二维码，群管理，群公告
+                return 4; //群名称，群二维码，群管理，群公告
             } else {
-                return 4; //群名称，群头像，群二维码，群公告
+                return 3; //群名称，群二维码，群公告
             }
             
         } else if(section == 1) {
@@ -627,12 +627,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath  {
   if ([self isGroupNameCell:indexPath]) {
     return [self cellOfTable:tableView WithTitle:WFCString(@"GroupName") withDetailTitle:self.groupInfo.name withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-  } else if ([self isGroupPortraitCell:indexPath]) {
-    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"ChangePortrait") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-    UIImageView *portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 56, 8, 40, 40)];
-    [portraitView sd_setImageWithURL:[NSURL URLWithString:[self.groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
-    cell.accessoryView = portraitView;
-    return cell;
+//  } else if ([self isGroupPortraitCell:indexPath]) {
+//    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"ChangePortrait") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+//    UIImageView *portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 56, 8, 40, 40)];
+//    [portraitView sd_setImageWithURL:[NSURL URLWithString:[self.groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+//    cell.accessoryView = portraitView;
+//    return cell;
   } else if([self isGroupQrCodeCell:indexPath]) {
     UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"GroupQRCode") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
       
@@ -793,22 +793,20 @@
     };
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
-  } else if ([self isGroupPortraitCell:indexPath]) {
-#if !WFCU_GROUP_GRID_PORTRAIT
-      if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
-          [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupPortraitHint") duration:1 position:CSToastPositionCenter];
-          return;
-      }
-    WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
-    vc.isModifyPortrait = YES;
-    vc.groupId = self.groupInfo.target;
-    vc.memberIds = [[NSMutableArray alloc] init];
-    for (WFCCGroupMember *member in self.memberList) {
-      [vc.memberIds addObject:member.memberId];
-    }
-    
-    [self.navigationController pushViewController:vc animated:YES];
-#endif
+//  } else if ([self isGroupPortraitCell:indexPath]) {
+//      if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
+//          [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupPortraitHint") duration:1 position:CSToastPositionCenter];
+//          return;
+//      }
+//    WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
+//    vc.isModifyPortrait = YES;
+//    vc.groupId = self.groupInfo.target;
+//    vc.memberIds = [[NSMutableArray alloc] init];
+//    for (WFCCGroupMember *member in self.memberList) {
+//      [vc.memberIds addObject:member.memberId];
+//    }
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
   } else if ([self isGroupManageCell:indexPath]) {
       GroupManageTableViewController *gmvc = [[GroupManageTableViewController alloc] init];
       gmvc.groupInfo = self.groupInfo;
@@ -928,35 +926,7 @@
       } else {
         [disabledUser addObject:self.conversation.target];
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-#if !WFCU_GROUP_GRID_PORTRAIT
-            WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
-            vc.memberIds = [contacts mutableCopy];
-            if(![vc.memberIds containsObject:self.conversation.target]) {
-              [vc.memberIds insertObject:self.conversation.target atIndex:0];
-            }
-            
-            if(![vc.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
-                [vc.memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
-            }
-            
-            vc.hidesBottomBarWhenPushed = YES;
-            UINavigationController *nav = self.navigationController;
-            [self.navigationController popToRootViewControllerAnimated:NO];
-            [nav pushViewController:vc animated:YES];
-            
-            vc.onSuccess = ^(NSString *groupId) {
-                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                mvc.conversation = [[WFCCConversation alloc] init];
-                mvc.conversation.type = Group_Type;
-                mvc.conversation.target = groupId;
-                mvc.conversation.line = 0;
-                
-                mvc.hidesBottomBarWhenPushed = YES;
-                [nav pushViewController:mvc animated:YES];
-            };
-#else
             [self createGroup:contacts];
-#endif
         };
         pvc.disableUsersSelected = YES;
       }
@@ -1038,7 +1008,7 @@
 //        }
     }
 }
-#if WFCU_GROUP_GRID_PORTRAIT
+
 - (void)createGroup:(NSArray<NSString *> *)contacts {
     __weak typeof(self) ws = self;
     NSMutableArray<NSString *> *memberIds = [contacts mutableCopy];
@@ -1070,12 +1040,6 @@
     }
     
     NSString *extraStr = nil;
-//    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
-//    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-//                                                                               options:kNilOptions
-//                                                                                 error:nil];
-//    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
-    
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         
@@ -1098,7 +1062,6 @@
 
     }];
 }
-#endif
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
