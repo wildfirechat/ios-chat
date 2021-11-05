@@ -9,7 +9,7 @@
 #import "WFCConfig.h"
 
 //域名，注意不能带http头，也不能带端口。
-NSString *IM_SERVER_HOST = @"wildfirechat.net";
+NSString *IM_SERVER_HOST = @"47.112.147.8";
 
 
 // App Server默认使用的是8888端口，替换为自己部署的服务时需要注意端口别填错了，使用http访问appserver时，需要确保appserver的配置文件中的wfc.all_client_support_ssl参数为false
@@ -18,7 +18,7 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 // wfc.all_client_support_ssl为tue，所以客户端也必须使用https的应用服务地址
 
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
-NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
+NSString *APP_SERVER_ADDRESS = @"http://47.112.147.8:8888";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务仅供用户测试和体验，上线时请切换成你们自己的服务。
