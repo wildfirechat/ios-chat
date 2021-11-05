@@ -140,9 +140,6 @@
 - (void)setGroupInfo:(WFCCGroupInfo *)groupInfo {
     _groupInfo = groupInfo;
     
-//#if !WFCU_GROUP_GRID_PORTRAIT
-//    self.qrLogo = groupInfo.portrait;
-//#else
     if (groupInfo.portrait.length) {
         self.qrLogo = groupInfo.portrait;
     } else {
@@ -151,7 +148,6 @@
         }];
         self.qrLogo = filePath;
     }
-//#endif
     
     if (groupInfo.name.length) {
         self.labelStr = groupInfo.name;

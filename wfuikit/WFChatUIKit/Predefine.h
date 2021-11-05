@@ -49,8 +49,6 @@ alpha:1.0]
 
 #define WFCString(key) NSLocalizedStringFromTable(key, @"wfc", nil)
 
-#define WFCU_GROUP_GRID_PORTRAIT 0
-
 //对讲功能开关，在Chat工程也有同样的一个开关，需要保持同步
 //#define WFC_PTT
 

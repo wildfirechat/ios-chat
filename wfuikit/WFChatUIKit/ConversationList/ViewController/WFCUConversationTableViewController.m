@@ -216,24 +216,13 @@
             mvc.hidesBottomBarWhenPushed = YES;
             [ws.navigationController pushViewController:mvc animated:YES];
         } else {
-#if !WFCU_GROUP_GRID_PORTRAIT
-            WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
-            vc.memberIds = [contacts mutableCopy];
-            if (![vc.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
-                [vc.memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
-            }
-            vc.hidesBottomBarWhenPushed = YES;
-            [ws.navigationController pushViewController:vc animated:YES];
-#else
             [self createGroup:contacts];
-#endif
         }
     };
     
     [self.navigationController presentViewController:navi animated:YES completion:nil];
 }
 
-#if WFCU_GROUP_GRID_PORTRAIT
 - (void)createGroup:(NSArray<NSString *> *)contacts {
     __weak typeof(self) ws = self;
     NSMutableArray<NSString *> *memberIds = [contacts mutableCopy];
@@ -260,13 +249,6 @@
     }
     
     NSString *extraStr = nil;
-//    NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
-//    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-//                                                                               options:kNilOptions
-//                                                                                 error:nil];
-//    NSString *extraStr = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
-
-    
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         
@@ -286,7 +268,6 @@
 
     }];
 }
-#endif
 
 - (void)addFriendsAction:(id)sender {
     UIViewController *addFriendVC = [[WFCUFriendRequestViewController alloc] init];
