@@ -658,7 +658,7 @@ static NSString *wfcstar = @"☆";
             
             if ([self.selectedContacts containsObject:userInfo.userId]) {
                 [self.selectedContacts removeObject:userInfo.userId];
-                ((WFCUContactSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]).checked = NO;
+                [tableView reloadData];
             } else {
                 if (self.maxSelectCount > 0 && self.selectedContacts.count >= self.maxSelectCount) {
                     [self.view makeToast:WFCString(@"MaxCount")];
@@ -666,7 +666,7 @@ static NSString *wfcstar = @"☆";
                 }
                 
                 [self.selectedContacts addObject:userInfo.userId];
-                ((WFCUContactSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath]).checked = YES;
+                [tableView reloadData];
             }
             [self updateRightBarBtn];
         } else {
