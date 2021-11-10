@@ -8,7 +8,9 @@
 
 #import "WFCUConferenceManager.h"
 #import <WFChatClient/WFCChatClient.h>
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 #import "WFCUConferenceChangeModelContent.h"
 
 
@@ -28,6 +30,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
 }
 
 - (void)onReceiveMessages:(NSNotification *)notification {
+#if WFCU_SUPPORT_VOIP
     NSArray<WFCCMessage *> *messages = notification.object;
     if([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateConnected && [WFAVEngineKit sharedEngineKit].currentSession.isConference) {
         for (WFCCMessage *msg in messages) {
@@ -39,6 +42,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
             }
         }
     }
+#endif
 }
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
@@ -54,8 +58,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
 }
 
 - (void)requestChangeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
+#if WFCU_SUPPORT_VOIP
     if([conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
         [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
     }
+#endif
 }
 @end
