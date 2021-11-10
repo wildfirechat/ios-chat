@@ -11,6 +11,7 @@
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <sys/xattr.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "WFAVEngineKit_Import.h"
 
 #import "app_callback.h"
 #include <mars/baseevent/base_logic.h>
@@ -802,17 +803,24 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (BOOL)checkSDKHost:(NSString *)host {
     if(NSClassFromString(@"WFAVEngineKit")) {
-        NSObject *avEngineKit = [NSClassFromString(@"WFAVEngineKit") performSelector:@selector(sharedEngineKit)];
-        BOOL supportConference = [avEngineKit performSelector:@selector(supportConference)];
-        BOOL supportMultiCall = [avEngineKit performSelector:@selector(supportMultiCall)];
+        WFAVEngineKit *avEngineKit = [NSClassFromString(@"WFAVEngineKit") performSelector:@selector(sharedEngineKit)];
+        BOOL supportConference = NO;
+        if([avEngineKit respondsToSelector:@selector(supportConference)]) {
+            supportConference = avEngineKit.supportConference;
+        }
+        BOOL supportMultiCall = NO;
+        if([avEngineKit respondsToSelector:@selector(supportMultiCall)]) {
+            supportMultiCall = avEngineKit.supportMultiCall;
+        }
+        
         if(supportConference || supportMultiCall) {
             if(supportConference) {
                 NSLog(@"音视频SDK是高级版");
             } else {
                 NSLog(@"音视频SDK是多人版");
             }
-            if([avEngineKit respondsToSelector:@selector(checkAddress)]) {
-                if(![avEngineKit performSelector:@selector(checkAddress:) withObject:host]) {
+            if([avEngineKit respondsToSelector:@selector(checkAddress:)]) {
+                if(![avEngineKit checkAddress:host]) {
                     NSLog(@"***********************");
                     NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
                     NSLog(@"***********************");
