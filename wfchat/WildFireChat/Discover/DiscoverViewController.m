@@ -16,7 +16,9 @@
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #endif
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 
@@ -44,11 +46,11 @@
     } else {
         self.hasMoments = NO;
     }
-    
+#if WFCU_SUPPORT_VOIP
     if ([WFAVEngineKit sharedEngineKit].supportConference) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Conference"),@"image":@"discover_conference",@"des":@"Conference"}];
     }
-    
+#endif
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
