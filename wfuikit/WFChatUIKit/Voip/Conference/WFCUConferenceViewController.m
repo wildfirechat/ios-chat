@@ -1383,6 +1383,7 @@
 #endif
 #pragma mark - WFCUConferenceManagerDelegate
 -(void)onChangeModeRequest:(BOOL)isAudience {
+#if WFCU_SUPPORT_VOIP
     if(isAudience) {
         [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
     } else {
@@ -1400,6 +1401,7 @@
         
         [self presentViewController:alertController animated:YES completion:nil];
     }
+#endif
 }
 
 @end
