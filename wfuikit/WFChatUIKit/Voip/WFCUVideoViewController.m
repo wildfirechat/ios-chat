@@ -19,6 +19,7 @@
 #import <WFChatClient/WFCCConversation.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "UIView+Toast.h"
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
     ,WFAVCallSessionDelegate
@@ -778,6 +779,27 @@
 
 - (void)didChangeAudioRoute {
     [self updateSpeakerButton];
+}
+
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage {
+    //发送方丢包超过6为网络不好
+    if(lostPackage > 6) {
+        [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+    }
+}
+
+- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId {
+    //如果uplink ture对方网络不好，false您的网络不好
+    //接受方丢包超过10为网络不好
+    if(lostPackage > 10) {
+        if(uplink) {
+            NSLog(@"对方的网络不好");
+            [self.view makeToast:@"对方的网络不好" duration:3 position:CSToastPositionCenter];
+        } else {
+            NSLog(@"您的网络不好");
+            [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+        }
+    }
 }
 
 - (void)checkAVPermission {
