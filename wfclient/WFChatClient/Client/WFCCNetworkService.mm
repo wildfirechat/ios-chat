@@ -277,6 +277,13 @@ NSMutableDictionary *convertTFeed(const mars::stn::TMomentsFeed &tfeed) {
         }
         [dataDict setObject:entrys forKey:@"ex"];
     }
+    if (!tfeed.mentionedUsers.empty()) {
+        NSMutableArray *entrys = [[NSMutableArray alloc] init];
+        for (std::list<std::string>::const_iterator it2 = tfeed.mentionedUsers.begin(); it2 != tfeed.mentionedUsers.end(); ++it2) {
+            [entrys addObject:[NSString stringWithUTF8String:it2->c_str()]];
+        }
+        [dataDict setObject:entrys forKey:@"mu"];
+    }
     
     if (!tfeed.extra.empty()) {
         [dataDict setObject:[NSString stringWithUTF8String:tfeed.extra.c_str()] forKey:@"extra"];
