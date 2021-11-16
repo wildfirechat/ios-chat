@@ -238,8 +238,19 @@ public:
     RecallMessageCallback(WFCCMessage *msg, void(^successBlock)(), void(^errorBlock)(int error_code)) : mars::stn::GeneralOperationCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock), message(msg) {};
     void onSuccess() {
         WFCCRecallMessageContent *recallCnt = [[WFCCRecallMessageContent alloc] init];
+        WFCCMessagePayload *orignalPayload = [message.content encode];
+        
         recallCnt.operatorId = [WFCCNetworkService sharedInstance].userId;
         recallCnt.messageUid = message.messageUid;
+        recallCnt.originalSender = message.fromUser;
+        recallCnt.originalContent = orignalPayload.content;
+        recallCnt.originalSearchableContent = orignalPayload.searchableContent;
+        recallCnt.originalContentType = orignalPayload.contentType;
+        recallCnt.originalExtra = orignalPayload.extra;
+        recallCnt.originalMessageTimestamp = message.serverTime;
+        
+        message.fromUser = [WFCCNetworkService sharedInstance].userId;
+        message.serverTime = [[[NSDate alloc] init] timeIntervalSince1970];
         message.content = recallCnt;
         
         dispatch_async(dispatch_get_main_queue(), ^{
