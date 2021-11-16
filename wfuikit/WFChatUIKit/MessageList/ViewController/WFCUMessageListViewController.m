@@ -1137,7 +1137,7 @@
 - (void)onSendingMessage:(NSNotification *)notification {
     WFCCMessage *message = [notification.userInfo objectForKey:@"message"];
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
-    if (status == Message_Status_Sending && message.messageId > 0) {
+    if (status == Message_Status_Sending && message.messageId != 0) {
         if ([message.conversation isEqual:self.conversation]) {
             [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
         }
@@ -1521,7 +1521,7 @@
     [self scrollToBottom:YES];
 }
 - (WFCUMessageModel *)modelOfMessage:(long)messageId {
-    if (messageId <= 0) {
+    if (messageId == 0) {
         return nil;
     }
     for (WFCUMessageModel *model in self.modelList) {
@@ -2655,7 +2655,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
                 if (cell.model.message.messageId == messageId) {
-                    cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                    if(messageId > 0) {
+                        cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                    } else {
+                        //client will replace the message content
+                    }
                     [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
                 }
             });
