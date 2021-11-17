@@ -1673,7 +1673,6 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 #pragma mark - 频道相关
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
-               status:(int)status
                  desc:(NSString *)desc
                 extra:(NSString *)extra
             success:(void(^)(WFCCChannelInfo *channelInfo))successBlock
