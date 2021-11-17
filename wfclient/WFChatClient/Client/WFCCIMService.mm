@@ -2692,7 +2692,6 @@ public:
 
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
-               status:(int)status
                  desc:(NSString *)desc
                 extra:(NSString *)extra
               success:(void(^)(WFCCChannelInfo *channelInfo))successBlock
@@ -2700,7 +2699,8 @@ public:
     if (!extra) {
         extra = @"";
     }
-    mars::stn::createChannel("", [channelName UTF8String], channelPortrait ? [channelPortrait UTF8String] : "", status, desc?[desc UTF8String]:"", [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
+    //status只能是0，请参考 https://docs.wildfirechat.cn/base_knowledge/channel.html#频道属性
+    mars::stn::createChannel("", [channelName UTF8String], channelPortrait ? [channelPortrait UTF8String] : "", 0, desc?[desc UTF8String]:"", [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
 }
 
 - (void)destoryChannel:(NSString *)channelId
