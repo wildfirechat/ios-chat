@@ -1003,6 +1003,7 @@
 //        } else {
             WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
             vc.userId = userId;
+            vc.fromConversation = self.conversation;
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
 //        }
