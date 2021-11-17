@@ -23,9 +23,6 @@
 @property(nonatomic, strong)UILabel *descLabel;
 @property(nonatomic, strong)UITextField *descField;
 
-@property(nonatomic, strong)UILabel *openLabel;
-@property(nonatomic, strong)UISwitch *openSwitch;
-
 @property(nonatomic, strong)NSString *portraitUrl;
 
 @end
@@ -99,15 +96,7 @@
     
     top += 25;
     top += 16;
-    self.openLabel = [[UILabel alloc] initWithFrame:CGRectMake(namePadding, top, labelWidth, 25)];
-    self.openLabel.text = WFCString(@"Public");
-    self.openLabel.font = [UIFont systemFontOfSize:14];
-    [self.view addSubview:self.openLabel];
-    
-    
-    self.openSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(namePadding + labelWidth + labelFeildPadding, top, 60, 24)];
-    self.openSwitch.on = YES;
-    [self.view addSubview:self.openSwitch];
+
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Create") style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
     
@@ -222,7 +211,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 - (void)createChannel:(NSString *)portraitUrl {
     __weak typeof(self) ws = self;
     
-    [[WFCCIMService sharedWFCIMService] createChannel:self.nameField.text portrait:portraitUrl status:self.openSwitch.on ? 0 : 1 desc:self.descField.text extra:nil success:^(WFCCChannelInfo *channelInfo) {
+    [[WFCCIMService sharedWFCIMService] createChannel:self.nameField.text portrait:portraitUrl desc:self.descField.text extra:nil success:^(WFCCChannelInfo *channelInfo) {
         NSLog(@"create channel done");
         WFCCTipNotificationContent *tip = [[WFCCTipNotificationContent alloc] init];
         tip.tip = WFCString(@"ChannelCreated");
