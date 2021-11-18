@@ -504,24 +504,37 @@ static WFCCNetworkService * sharedSingleton = nil;
         }
     });
 }
-- (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableArray *messageList = [messages mutableCopy];
-        for (WFCCMessage *message in messages) {
-            for (id<ReceiveMessageFilter> filter in self.messageFilterList) {
-                @try {
-                    if ([filter onReceiveMessage:message]) {
-                        [messageList removeObject:message];
-                        break;
-                    }
-                } @catch (NSException *exception) {
-                    NSLog(@"%@", exception);
+
+- (NSArray<WFCCMessage *> *)filterReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
+    NSMutableArray *messageList = [messages mutableCopy];
+    for (WFCCMessage *message in messages) {
+        for (id<ReceiveMessageFilter> filter in self.messageFilterList) {
+            @try {
+                if ([filter onReceiveMessage:message]) {
+                    [messageList removeObject:message];
                     break;
                 }
-                
+            } @catch (NSException *exception) {
+                NSLog(@"%@", exception);
+                break;
             }
+            
         }
-        
+    }
+    return [messageList copy];
+}
+
+- (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
+    __block NSArray<WFCCMessage *> *messageList;
+    if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
+        messageList = [self filterReceiveMessage:messages hasMore:hasMore];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            messageList = [self filterReceiveMessage:messages hasMore:hasMore];
+        });
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messageList];
         [self.receiveMessageDelegate onReceiveMessage:messageList hasMore:hasMore];
     });
@@ -609,6 +622,7 @@ static WFCCNetworkService * sharedSingleton = nil;
         @synchronized (self) {
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCCNetworkService alloc] init];
+                [sharedSingleton addReceiveMessageFilter:[WFCCIMService sharedWFCIMService]];
             }
         }
     }
