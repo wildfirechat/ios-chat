@@ -1123,7 +1123,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync {
     int64_t messageUid = mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, 0);
-    if(sync) {
+    if(sync && messageUid) {
         WFCCMarkUnreadMessageContent *syncMsg = [[WFCCMarkUnreadMessageContent alloc] init];
         syncMsg.messageUid = messageUid;
         [[WFCCIMService sharedWFCIMService] send:conversation content:syncMsg expireDuration:86400 success:nil error:nil];
