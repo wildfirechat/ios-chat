@@ -824,9 +824,9 @@ namespace mars{
         extern int64_t getServerDeltaTime();
         extern void setDeviceToken(const std::string &appName, const std::string &deviceToken, int pushType);
 
-        extern long (*sendMessage)(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
+        extern long sendMessage(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
 
-        extern bool (*sendMessageEx)(long messageId, SendMsgCallback *callback, int expireDuration);
+        extern bool sendMessageEx(long messageId, SendMsgCallback *callback, int expireDuration);
 
 
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
