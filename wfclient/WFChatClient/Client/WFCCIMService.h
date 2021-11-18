@@ -198,13 +198,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
               error:(void(^)(int error_code))errorBlock;
 @end
 
+@protocol ReceiveMessageFilter;
 
 #pragma mark - IM服务
 
 /**
  IM服务
  */
-@interface WFCCIMService : NSObject
+@interface WFCCIMService : NSObject <ReceiveMessageFilter>
 
 /**
  IM服务单例
@@ -370,6 +371,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @discuss 这个函数只能清除本地的状态，不能同步到服务器或者其他端。建议一般情况下不要用这个接口。
  */
 - (void)clearMessageUnreadStatus:(long)messageId;
+
+/**
+ 设置会话的最后一条接收消息为未读状态。
+ 
+ @param conversation 会话
+ @param sync 是否同步到其它客户端
+ @return YES设置成功，NO消息不存在或已经存在未读。
+ */
+- (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync;
 
 /**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）

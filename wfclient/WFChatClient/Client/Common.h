@@ -43,6 +43,12 @@
 //Dumy1
 #define MESSAGE_CONTENT_TYPE_DUMY1 21
 
+//Dumy2
+#define MESSAGE_CONTENT_TYPE_DUMY2 22
+
+//同步标记未读
+#define MESSAGE_CONTENT_TYPE_MARK_UNREAD_SYNC 31
+
 //撤回消息
 #define MESSAGE_CONTENT_TYPE_RECALL 80
 //删除消息，请勿直接发送此消息，此消息是服务器端删除时的同步消息

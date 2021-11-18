@@ -15,6 +15,7 @@
 #import "WFCCGroupSearchInfo.h"
 #import "WFCCUnknownMessageContent.h"
 #import "WFCCRecallMessageContent.h"
+#import "WFCCMarkUnreadMessageContent.h"
 #import "wav_amr.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
@@ -1118,6 +1119,16 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     if(messageId) {
         mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId);
     }
+}
+
+- (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync {
+    int64_t messageUid = mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, 0);
+    if(sync) {
+        WFCCMarkUnreadMessageContent *syncMsg = [[WFCCMarkUnreadMessageContent alloc] init];
+        syncMsg.messageUid = messageUid;
+        [[WFCCIMService sharedWFCIMService] send:conversation content:syncMsg expireDuration:86400 success:nil error:nil];
+    }
+    return messageUid > 0;
 }
 
 - (void)setMediaMessagePlayed:(long)messageId {
@@ -3026,5 +3037,14 @@ public:
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock {
     mars::stn::releaseLock([lockId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (BOOL)onReceiveMessage:(WFCCMessage *)message {
+    if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]]) {
+        WFCCMarkUnreadMessageContent *markMsg = (WFCCMarkUnreadMessageContent*)message.content;
+        WFCCConversation *conversation = message.conversation;
+        mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, markMsg.messageUid);
+    }
+    return NO;
 }
 @end

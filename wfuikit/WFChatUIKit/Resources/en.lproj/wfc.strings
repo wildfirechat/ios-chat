@@ -238,3 +238,5 @@
 "重新编辑"="Reedit";
 "你撤回了一条消息"="You recall a message. ";
 "%@撤回了一条消息"="%@ recall a message. ";
+"MarkAsUnread"="Mark as unread";
+"MarkAsRead"="Mark as read";
