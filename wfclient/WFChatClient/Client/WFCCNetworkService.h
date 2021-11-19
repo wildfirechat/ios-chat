@@ -303,6 +303,14 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  @param userAgent  User agent
  */
 - (void)setProtoUserAgent:(NSString *)userAgent;
+
+/*
+ 添加协议栈短连接自定义header，value为空时清除该header。
+ 
+ @param header header
+ @param value  value
+ */
+- (void)addHttpHeader:(NSString *)header value:(NSString *)value;
 @end
 
 #endif

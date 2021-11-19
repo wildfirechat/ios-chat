@@ -1049,6 +1049,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setUserAgent([userAgent UTF8String]);
 }
 
+- (void)addHttpHeader:(NSString *)header value:(NSString *)value {
+    mars::stn::addHttpHeader([header UTF8String], value.length ? [value UTF8String] : "");
+}
+
 - (void)setVoipDeviceToken:(NSString *)token {
     if (token.length == 0) {
         return;
