@@ -98,7 +98,7 @@ namespace mars {
             bool ClearUnreadStatus(const std::list<int> &conversationTypes, const std::list<int> lines);
             bool ClearUnreadStatus(int messageId);
             bool ClearAllUnreadStatus();
-            int64_t SetLastReceivedMessageUnRead(int conversationType, const std::string &target, int line, int64_t lastMsgUid);
+            int64_t SetLastReceivedMessageUnRead(int conversationType, const std::string &target, int line, int64_t lastMsgUid, int64_t timestamp);
             int64_t getLastReceivedMessageUid(int conversationType, const std::string &target, int line);
             
             bool FailSendingMessages();
