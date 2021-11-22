@@ -19,4 +19,9 @@
   消息ID
  */
 @property (nonatomic, assign)int64_t messageUid;
+
+/**
+  时间戳
+ */
+@property (nonatomic, assign)int64_t timestamp;
 @end
