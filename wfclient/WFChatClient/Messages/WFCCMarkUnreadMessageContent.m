@@ -18,6 +18,7 @@
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     if (self.messageUid) {
         [dataDict setObject:@(self.messageUid) forKey:@"u"];
+        [dataDict setObject:@(self.timestamp) forKey:@"t"];
     }
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
@@ -36,6 +37,7 @@
                                                                  error:&__error];
     if (!__error) {
         self.messageUid = [dictionary[@"u"] longLongValue];
+        self.timestamp = [dictionary[@"t"] longLongValue];
     }
 }
 

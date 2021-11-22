@@ -1122,10 +1122,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync {
-    int64_t messageUid = mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, 0);
+    int64_t messageUid = mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, 0, 0);
     if(sync && messageUid) {
         WFCCMarkUnreadMessageContent *syncMsg = [[WFCCMarkUnreadMessageContent alloc] init];
         syncMsg.messageUid = messageUid;
+        syncMsg.timestamp = [self getMessageByUid:messageUid].serverTime;
         [[WFCCIMService sharedWFCIMService] send:conversation content:syncMsg expireDuration:86400 success:nil error:nil];
     }
     return messageUid > 0;
@@ -3043,7 +3044,7 @@ public:
     if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]]) {
         WFCCMarkUnreadMessageContent *markMsg = (WFCCMarkUnreadMessageContent*)message.content;
         WFCCConversation *conversation = message.conversation;
-        mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, markMsg.messageUid);
+        mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, markMsg.messageUid, markMsg.timestamp);
     }
     return NO;
 }
