@@ -371,7 +371,7 @@
                         lastUid = model.message.messageUid;
                     }
                 }
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
+                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
                     NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
                     for (WFCCMessage *msg in messages) {
                         [reversedMsgs insertObject:msg atIndex:0];

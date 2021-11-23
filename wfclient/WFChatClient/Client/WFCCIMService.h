@@ -543,6 +543,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)getRemoteMessages:(WFCCConversation *)conversation
                    before:(long long)beforeMessageUid
                     count:(NSUInteger)count
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock;
 /**
