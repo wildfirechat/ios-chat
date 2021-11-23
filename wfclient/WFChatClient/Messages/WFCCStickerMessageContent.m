@@ -22,9 +22,7 @@
 }
 
 - (WFCCMessagePayload *)encode {
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.extra = self.extra;
-    payload.contentType = [self.class getContentType];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.searchableContent = @"[动态表情]";
     payload.mediaType = Media_Type_STICKER;
     payload.remoteMediaUrl = self.remoteUrl;

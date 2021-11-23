@@ -14,7 +14,6 @@
 @implementation WFCCTextMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.searchableContent = self.text;
     payload.mentionedType = self.mentionedType;
     payload.mentionedTargets = self.mentionedTargets;

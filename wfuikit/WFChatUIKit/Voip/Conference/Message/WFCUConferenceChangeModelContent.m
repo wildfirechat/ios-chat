@@ -10,8 +10,7 @@
 
 @implementation WFCUConferenceChangeModelContent
 -(WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
-    payload.contentType = [self.class getContentType];
+    WFCCMessagePayload *payload = [super encode];
     payload.content = self.conferenceId;
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];

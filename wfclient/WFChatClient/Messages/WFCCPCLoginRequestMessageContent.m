@@ -14,7 +14,6 @@
 @implementation WFCCPCLoginRequestMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     if (self.sessionId) {
