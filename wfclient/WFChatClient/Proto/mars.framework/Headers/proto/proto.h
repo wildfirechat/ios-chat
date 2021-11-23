@@ -832,11 +832,11 @@ namespace mars{
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
         //请使用loadRemoteConversationMessages
-        extern void loadRemoteMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+        extern void loadRemoteMessages(const TConversation &conv, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
-        extern void loadRemoteConversationMessages(const TConversation &conv, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+        extern void loadRemoteConversationMessages(const TConversation &conv, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
-        extern void loadRemoteLineMessages(int type, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
+        extern void loadRemoteLineMessages(int type, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
     
         extern void clearRemoteConversationMessages(int conversationType, const std::string &target, int line, GeneralOperationCallback *callback);
 
