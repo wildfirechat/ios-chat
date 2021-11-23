@@ -14,7 +14,6 @@
 @implementation WFCCCompositeMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.content = self.title;
 
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];

@@ -14,7 +14,6 @@
 @implementation WFCCCardMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.content = self.targetId;
 
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];

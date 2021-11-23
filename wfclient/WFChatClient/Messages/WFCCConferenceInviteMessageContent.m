@@ -13,9 +13,7 @@
 
 @implementation WFCCConferenceInviteMessageContent
 - (WFCCMessagePayload *)encode {
-    
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.content = self.callId;
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];

@@ -14,7 +14,6 @@
 @implementation WFCCLinkMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.searchableContent = self.title;
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];

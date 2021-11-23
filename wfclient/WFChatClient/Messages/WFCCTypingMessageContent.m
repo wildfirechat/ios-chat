@@ -14,7 +14,6 @@
 @implementation WFCCTypingMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.content = [NSString stringWithFormat:@"%d", (int)self.type];
     return payload;
 }

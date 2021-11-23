@@ -14,7 +14,6 @@
 @implementation WFCCLocationMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     payload.searchableContent = self.title;
     payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.67);
     

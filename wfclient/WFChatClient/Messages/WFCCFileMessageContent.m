@@ -25,9 +25,7 @@ const static NSString *FILE_NAME_PREFIX = @"[文件] ";
 }
 
 - (WFCCMessagePayload *)encode {
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.extra = self.extra;
-    payload.contentType = [self.class getContentType];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.searchableContent = self.name;
     payload.content = [NSString stringWithFormat:@"%ld", (long)self.size];
     payload.mediaType = Media_Type_FILE;

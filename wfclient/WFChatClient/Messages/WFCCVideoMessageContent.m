@@ -27,9 +27,7 @@
     return content;
 }
 - (WFCCMessagePayload *)encode {
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.extra = self.extra;
-    payload.contentType = [self.class getContentType];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.searchableContent = @"[视频]";
     payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
     payload.mediaType = Media_Type_VIDEO;
