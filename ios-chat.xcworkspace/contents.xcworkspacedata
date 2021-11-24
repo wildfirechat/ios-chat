@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../proto2/mars/cmake_build/iOS/mars.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:wfchat/WildFireChat.xcodeproj">
    </FileRef>
    <FileRef
