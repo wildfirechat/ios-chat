@@ -72,7 +72,7 @@ public:
             });
         }
     }
-    void onMediaUploaded(std::string remoteUrl) {
+    void onMediaUploaded(const std::string &remoteUrl) {
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
             mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
@@ -112,7 +112,7 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMCreateGroupCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::CreateGroupCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(std::string groupId) {
+    void onSuccess(const std::string &groupId) {
         NSString *nsstr = [NSString stringWithUTF8String:groupId.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
@@ -171,7 +171,7 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMGeneralStringCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(std::string str) {
+    void onSuccess(const std::string &str) {
         NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
@@ -1692,9 +1692,10 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 
 - (void)getUploadUrl:(NSString *)fileName
            mediaType:(WFCCMediaType)mediaType
+         contentType:(NSString *)contentType
             success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
                error:(void(^)(int error_code))errorBlock {
-    mars::stn::getUploadMediaUrl(fileName == nil ? "" : [fileName UTF8String], (int)mediaType, new IMGetUploadMediaUrlCallback(successBlock, errorBlock));
+    mars::stn::getUploadMediaUrl(fileName == nil ? "" : [fileName UTF8String], (int)mediaType, contentType == nil ? "" : [contentType UTF8String], new IMGetUploadMediaUrlCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isSupportBigFilesUpload {
