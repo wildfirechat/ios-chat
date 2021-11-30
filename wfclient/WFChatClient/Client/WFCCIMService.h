@@ -764,11 +764,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
  @param fileName 文件名
  @param mediaType 媒体类型
+ @param contentType Http的ContentType header，为空时默认为"application/octet-stream"
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)getUploadUrl:(NSString *)fileName
            mediaType:(WFCCMediaType)mediaType
+         contentType:(NSString *)contentType
             success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
               error:(void(^)(int error_code))errorBlock;
 
