@@ -592,14 +592,14 @@ namespace mars{
     
         class GeneralStringCallback {
         public:
-            virtual void onSuccess(std::string key) = 0;
+            virtual void onSuccess(const std::string &key) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~GeneralStringCallback() {}
         };
 
         class UploadMediaCallback {
         public:
-            virtual void onSuccess(std::string key) = 0;
+            virtual void onSuccess(const std::string &key) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual void onProgress(int current, int total) = 0;
             virtual ~UploadMediaCallback() {}
@@ -615,7 +615,7 @@ namespace mars{
         class SendMsgCallback {
         public:
             virtual void onPrepared(long messageId, int64_t savedTime) = 0;
-            virtual void onMediaUploaded(std::string remoteUrl) = 0;
+            virtual void onMediaUploaded(const std::string &remoteUrl) = 0;
             virtual void onSuccess(long long messageUid, long long timestamp) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual void onProgress(int uploaded, int total) = 0;
@@ -654,7 +654,7 @@ namespace mars{
 
         class CreateGroupCallback {
         public:
-            virtual void onSuccess(std::string groupId) = 0;
+            virtual void onSuccess(const std::string &groupId) = 0;
             virtual void onFalure(int errorCode) = 0;
             virtual ~CreateGroupCallback() {}
         };
@@ -846,10 +846,10 @@ namespace mars{
         extern void searchConversationFileRecords(const std::string &keyword, const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
         extern void searchMyFileRecords(const std::string &keyword, long long beforeUid, int count, LoadFileRecordCallback *callback);
     
-        extern int uploadGeneralMedia(const std::string fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
+        extern int uploadGeneralMedia(const std::string &fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
 
         extern void getAuthorizedMediaUrl(long long messageUid, int mediaType, const std::string &mediaUrl, GetAuthorizedMediaUrlCallback *callback);
-        extern void getUploadMediaUrl(const std::string fileName, int mediaType, GetUploadMediaUrlCallback *callback);
+        extern void getUploadMediaUrl(const std::string &fileName, int mediaType, const std::string &contentType, GetUploadMediaUrlCallback *callback);
 
         extern int modifyMyInfo(const std::list<std::pair<int, std::string>> &infos, GeneralOperationCallback *callback);
 
@@ -897,9 +897,9 @@ namespace mars{
 
         extern void (*transferGroup)(const std::string &groupId, const std::string &newOwner, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
-        extern void SetGroupManager(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+        extern void SetGroupManager(const std::string &groupId, const std::list<std::string> &userIds, int setOrDelete, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
     
-        extern void MuteOrAllowGroupMember(const std::string &groupId, const std::list<std::string> userIds, int setOrDelete, bool isAllow, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+        extern void MuteOrAllowGroupMember(const std::string &groupId, const std::list<std::string> &userIds, int setOrDelete, bool isAllow, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
         extern void (*getUserInfo)(const std::list<std::pair<std::string, int64_t>> &userReqList, GetUserInfoCallback *callback);
 
@@ -919,7 +919,7 @@ namespace mars{
         extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt, const std::list<std::string> &senders = std::list<std::string>(), long syncId = -1);
 
 
-        extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
+        extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string &desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
 
         extern void modifyChannelInfo(const std::string &channelId, int type, const std::string &newValue, GeneralOperationCallback *callback);
 

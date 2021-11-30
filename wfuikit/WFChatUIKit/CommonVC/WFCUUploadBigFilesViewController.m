@@ -61,7 +61,7 @@
     }
     
     __weak typeof(self)ws = self;
-    [[WFCCIMService sharedWFCIMService] getUploadUrl:model.bigFileContent.name mediaType:0 success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+    [[WFCCIMService sharedWFCIMService] getUploadUrl:model.bigFileContent.name mediaType:0 contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
         if(type == 1) {
             [ws uploadQiniu:uploadUrl file:model.bigFileContent.localPath model:model remoteUrl:downloadUrl];
         } else {
