@@ -1,0 +1,3 @@
+上架常遇到的问题时提示“ERROR ITMS-90087: "Unsupported Architectures. The executable for XXXX contains unsupported architectures '[x86_64]'."，这是因为野火有些库是动态库，包含模拟器架构，上架时需要移除模拟器架构。可以参考“removex86.sh“文件，或者网上搜索如何移除模拟器架构。
+
+祝您使用愉快！
