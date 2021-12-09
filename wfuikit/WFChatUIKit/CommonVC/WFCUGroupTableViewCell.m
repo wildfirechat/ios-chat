@@ -71,9 +71,9 @@
         __weak typeof(self)ws = self;
         NSString *groupId = groupInfo.target;
         
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:groupInfo.target queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             NSString *path = [note.userInfo objectForKey:@"path"];
-            if ([ws.groupInfo.target isEqualToString:groupId]) {
+            if ([ws.groupInfo.target isEqualToString:groupId] && [groupId isEqualToString:note.object]) {
                 [ws.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
             }
         }];
