@@ -64,10 +64,11 @@
         __weak typeof(self)ws = self;
         NSString *groupId = groupInfo.target;
         
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:groupInfo.target queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             NSString *path = [note.userInfo objectForKey:@"path"];
-            if ((ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
-                (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId])) {
+            if ([groupId isEqualToString:note.object] && (
+                (ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
+                (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
                 [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
             }
         }];
