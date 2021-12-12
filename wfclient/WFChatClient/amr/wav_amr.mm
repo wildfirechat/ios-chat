@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include "interf_enc.h"
-#include "interf_dec.h"
+#include <interf_enc.h>
+#include <interf_dec.h>
 #include "wavreader.h"
 #include "wavwriter.h"
 

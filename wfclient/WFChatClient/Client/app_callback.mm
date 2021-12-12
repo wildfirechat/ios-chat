@@ -8,7 +8,6 @@
 
 #include "app_callback.h"
 
-#include <mars/comm/autobuffer.h>
 #import <UIKit/UIKit.h>
 #import "WFCCUtilities.h"
 #import "sys/utsname.h"

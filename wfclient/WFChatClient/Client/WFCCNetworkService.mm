@@ -14,12 +14,12 @@
 #import "WFAVEngineKit_Import.h"
 
 #import "app_callback.h"
-#include <mars/baseevent/base_logic.h>
-#include <mars/xlog/xlogger.h>
-#include <mars/xlog/xloggerbase.h>
-#include <mars/xlog/appender.h>
-#include <mars/proto/proto.h>
-#include <mars/stn/stn_logic.h>
+#include <baseevent/base_logic.h>
+#include <xlog/xlogger.h>
+#include <xlog/xloggerbase.h>
+#include <xlog/appender.h>
+#include <proto/proto.h>
+#include <stn/stn_logic.h>
 #include <list>
 #import "WFCCIMService.h"
 #import "WFCCNetworkStatus.h"
