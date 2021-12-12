@@ -411,6 +411,7 @@ public:
         for (std::list<std::string>::const_iterator it = info.olderMembers.begin(); it != info.olderMembers.end(); it++) {
             [members addObject:[NSString stringWithUTF8String:it->c_str()]];
         }
+        memberInfo.members = members;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
                 m_successBlock(memberInfo);
