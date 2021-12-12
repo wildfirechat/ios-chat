@@ -8,10 +8,10 @@
 
 #import "WFCCIMService.h"
 #import "WFCCMediaMessageContent.h"
-#import <mars/proto/MessageDB.h>
+#import <proto/MessageDB.h>
 #import <objc/runtime.h>
 #import "WFCCNetworkService.h"
-#import <mars/app/app.h>
+#import <app/app.h>
 #import "WFCCGroupSearchInfo.h"
 #import "WFCCUnknownMessageContent.h"
 #import "WFCCRecallMessageContent.h"
