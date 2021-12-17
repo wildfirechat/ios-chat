@@ -3049,7 +3049,7 @@ public:
 }
 
 - (BOOL)onReceiveMessage:(WFCCMessage *)message {
-    if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]]) {
+    if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]] && [message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         WFCCMarkUnreadMessageContent *markMsg = (WFCCMarkUnreadMessageContent*)message.content;
         WFCCConversation *conversation = message.conversation;
         mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, markMsg.messageUid, markMsg.timestamp);
