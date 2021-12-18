@@ -966,10 +966,19 @@
             return @[delete, setTop, clearUnread];
         }
     } else {
-        if (self.conversations[indexPath.row].isTop) {
-            return @[delete, setUntop, markAsUnread];
+        NSArray<WFCCMessage *> *readedMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversations[indexPath.row].conversation messageStatus:@[@(Message_Status_Readed), @(Message_Status_Played)] from:0 count:1 withUser:nil];
+        if(readedMsgs.count) {
+            if (self.conversations[indexPath.row].isTop) {
+                return @[delete, setUntop, markAsUnread];
+            } else {
+                return @[delete, setTop, markAsUnread];
+            }
         } else {
-            return @[delete, setTop, markAsUnread];
+            if (self.conversations[indexPath.row].isTop) {
+                return @[delete, setUntop];
+            } else {
+                return @[delete, setTop];
+            }
         }
     }
 };
