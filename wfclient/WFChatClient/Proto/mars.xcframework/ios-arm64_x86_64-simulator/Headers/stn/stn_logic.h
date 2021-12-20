@@ -44,7 +44,7 @@ namespace stn{
         virtual bool MakesureAuthed(const std::string& _host) = 0;
         
         //流量统计 
-        virtual void TrafficData(ssize_t _send, ssize_t _recv) = 0;
+        virtual void TrafficData(uint64_t _send, uint64_t _recv) = 0;
         
         //底层询问上层该host对应的ip列表 
         virtual std::vector<std::string> OnNewDns(const std::string& host) = 0;

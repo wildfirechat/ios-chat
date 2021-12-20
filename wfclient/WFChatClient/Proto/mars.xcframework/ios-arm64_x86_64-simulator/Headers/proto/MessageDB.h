@@ -129,7 +129,7 @@ namespace mars {
             bool RemoveAllGroupMember(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
-            void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members, const std::string &extra);
+            void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members, const std::string &extra, bool isCreate);
             int UpdateGroupManager(const std::string &groupId, const std::list<std::string> &members, int setOrDelete);
             int UpdateGroupMemberMuteOrAllow(const std::string &groupId, const std::list<std::string> &members, int setOrDelete, bool isAllow);
             int UpdateGroupMemberAlias(const std::string &groupId, const std::string &memberId, const std::string &alias);

@@ -229,7 +229,7 @@ struct IPPortItem {
 extern bool (*MakesureAuthed)(const std::string& _host);
 
 //流量统计
-extern void (*TrafficData)(ssize_t _send, ssize_t _recv);
+extern void (*TrafficData)(uint64_t _send, uint64_t _recv);
         
 //底层询问上层该host对应的ip列表 
 extern std::vector<std::string> (*OnNewDns)(const std::string& host);
