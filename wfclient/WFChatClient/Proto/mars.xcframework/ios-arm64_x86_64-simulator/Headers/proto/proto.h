@@ -838,6 +838,8 @@ namespace mars{
 
         extern void loadRemoteLineMessages(int type, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
     
+        extern void loadRemoteMessage(long long messageUid, LoadRemoteMessagesCallback *callback);
+    
         extern void clearRemoteConversationMessages(int conversationType, const std::string &target, int line, GeneralOperationCallback *callback);
 
         extern void loadConversationFileRecords(const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
