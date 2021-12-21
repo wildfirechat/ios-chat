@@ -546,6 +546,17 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
              contentTypes:(NSArray<NSNumber *> *)contentTypes
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取一条远端消息，消息不会存储在数据库中
+ 
+ @param messageUid     消息ID
+ @param successBlock 返回消息
+ @param errorBlock      返回错误码
+ */
+- (void)getRemoteMessage:(long long)messageUid
+                 success:(void(^)(WFCCMessage *message))successBlock
+                   error:(void(^)(int error_code))errorBlock;
 /**
  获取消息
  
