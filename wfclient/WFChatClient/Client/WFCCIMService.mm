@@ -349,6 +349,43 @@ public:
     }
 };
 
+class IMLoadOneRemoteMessageCallback : public mars::stn::LoadRemoteMessagesCallback {
+private:
+    void(^m_successBlock)(WFCCMessage *message);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadOneRemoteMessageCallback(void(^successBlock)(WFCCMessage *message), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteMessagesCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TMessage> &messageList) {
+        NSMutableArray *messages = convertProtoMessageList(messageList, NO);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(messageList.empty()) {
+                if (m_successBlock) {
+                    m_successBlock(messages.firstObject);
+                }
+            } else {
+                if (m_errorBlock) {
+                    m_errorBlock(253);
+                }
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMLoadOneRemoteMessageCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+
 class IMLoadFileRecordCallback : public mars::stn::LoadFileRecordCallback {
 private:
     void(^m_successBlock)(NSArray<WFCCFileRecord *> *files);
@@ -1070,6 +1107,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
     
     mars::stn::loadRemoteMessages(conv, types, beforeMessageUid, (int)count, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
+}
+
+- (void)getRemoteMessage:(long long)messageUid
+                 success:(void(^)(WFCCMessage *message))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+    mars::stn::loadRemoteMessage(messageUid, new IMLoadOneRemoteMessageCallback(successBlock, errorBlock));
 }
 
 - (WFCCMessage *)getMessage:(long)messageId {
