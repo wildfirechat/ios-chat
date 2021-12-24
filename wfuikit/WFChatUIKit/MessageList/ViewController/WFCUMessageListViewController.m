@@ -371,7 +371,7 @@
                         lastUid = model.message.messageUid;
                     }
                 }
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 success:^(NSArray<WFCCMessage *> *messages) {
+                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
                     NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
                     for (WFCCMessage *msg in messages) {
                         [reversedMsgs insertObject:msg atIndex:0];
@@ -1137,7 +1137,7 @@
 - (void)onSendingMessage:(NSNotification *)notification {
     WFCCMessage *message = [notification.userInfo objectForKey:@"message"];
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
-    if (status == Message_Status_Sending && message.messageId > 0) {
+    if (status == Message_Status_Sending && message.messageId != 0) {
         if ([message.conversation isEqual:self.conversation]) {
             [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
         }
@@ -1521,7 +1521,7 @@
     [self scrollToBottom:YES];
 }
 - (WFCUMessageModel *)modelOfMessage:(long)messageId {
-    if (messageId <= 0) {
+    if (messageId == 0) {
         return nil;
     }
     for (WFCUMessageModel *model in self.modelList) {
@@ -1797,11 +1797,13 @@
             [self startPlay:model];
         }
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
+#if WFCU_SUPPORT_VOIP
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;   
             WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         }
+#endif
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
         WFCCCardMessageContent *card = (WFCCCardMessageContent *)model.message.content;
         
@@ -2653,7 +2655,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
                 if (cell.model.message.messageId == messageId) {
-                    cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                    if(messageId > 0) {
+                        cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                    } else {
+                        //client will replace the message content
+                    }
                     [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
                 }
             });

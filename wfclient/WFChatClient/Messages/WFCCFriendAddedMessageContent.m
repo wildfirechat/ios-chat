@@ -14,7 +14,6 @@
 @implementation WFCCFriendAddedMessageContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     return payload;
 }
 

@@ -11,6 +11,8 @@
 #import "WFCCIMService.h"
 #import "Common.h"
 
+//需要兼容android发送的文件，android发送文件Name以"[文件] "开头
+const static NSString *FILE_NAME_PREFIX = @"[文件] ";
 @implementation WFCCFileMessageContent
 + (instancetype)fileMessageContentFromPath:(NSString *)filePath {
     WFCCFileMessageContent *fileMsg = [[WFCCFileMessageContent alloc] init];
@@ -23,9 +25,7 @@
 }
 
 - (WFCCMessagePayload *)encode {
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.extra = self.extra;
-    payload.contentType = [self.class getContentType];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.searchableContent = self.name;
     payload.content = [NSString stringWithFormat:@"%ld", (long)self.size];
     payload.mediaType = Media_Type_FILE;
@@ -42,6 +42,9 @@
         self.remoteUrl = mediaPayload.remoteMediaUrl;
         self.localPath = mediaPayload.localMediaPath;
         self.name = mediaPayload.searchableContent;
+        if([self.name rangeOfString:FILE_NAME_PREFIX].location == 0) {
+            self.name = [self.name substringFromIndex:FILE_NAME_PREFIX.length];
+        }
         self.size = [mediaPayload.content integerValue];
     }
 }
@@ -61,6 +64,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return [NSString stringWithFormat:@"[文件]:%@", self.name];
+    return [NSString stringWithFormat:@"[文件]%@", self.name];
 }
 @end

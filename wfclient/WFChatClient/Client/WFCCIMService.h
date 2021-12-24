@@ -198,13 +198,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
               error:(void(^)(int error_code))errorBlock;
 @end
 
+@protocol ReceiveMessageFilter;
 
 #pragma mark - IM服务
 
 /**
  IM服务
  */
-@interface WFCCIMService : NSObject
+@interface WFCCIMService : NSObject <ReceiveMessageFilter>
 
 /**
  IM服务单例
@@ -372,6 +373,15 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)clearMessageUnreadStatus:(long)messageId;
 
 /**
+ 设置会话的最后一条接收消息为未读状态。
+ 
+ @param conversation 会话
+ @param sync 是否同步到其它客户端
+ @return YES设置成功，NO消息不存在或已经存在未读。
+ */
+- (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync;
+
+/**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
  
  @param messageId 消息ID
@@ -533,8 +543,20 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)getRemoteMessages:(WFCCConversation *)conversation
                    before:(long long)beforeMessageUid
                     count:(NSUInteger)count
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取一条远端消息，消息不会存储在数据库中
+ 
+ @param messageUid     消息ID
+ @param successBlock 返回消息
+ @param errorBlock      返回错误码
+ */
+- (void)getRemoteMessage:(long long)messageUid
+                 success:(void(^)(WFCCMessage *message))successBlock
+                   error:(void(^)(int error_code))errorBlock;
 /**
  获取消息
  
@@ -753,11 +775,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  
  @param fileName 文件名
  @param mediaType 媒体类型
+ @param contentType Http的ContentType header，为空时默认为"application/octet-stream"
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)getUploadUrl:(NSString *)fileName
            mediaType:(WFCCMediaType)mediaType
+         contentType:(NSString *)contentType
             success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
               error:(void(^)(int error_code))errorBlock;
 
@@ -1673,7 +1697,6 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 #pragma mark - 频道相关
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
-               status:(int)status
                  desc:(NSString *)desc
                 extra:(NSString *)extra
             success:(void(^)(WFCCChannelInfo *channelInfo))successBlock

@@ -285,22 +285,7 @@
     [self.headerCells addObject:self.headerCell];
     
     if (self.userInfo.type == 1) {
-        self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        for (UIView *subView in self.sendMessageCell.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-        [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-        [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
-        [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-        [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
-        if (@available(iOS 14, *)) {
-            [self.sendMessageCell.contentView addSubview:btn];
-        } else {
-            [self.sendMessageCell addSubview:btn];
-        }
+        [self setupSendMessageCell:width];
     } else {
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
             UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
@@ -383,22 +368,7 @@
         }
         
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-            self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            for (UIView *subView in self.sendMessageCell.subviews) {
-                [subView removeFromSuperview];
-            }
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-            [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-            [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
-            [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-            [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
-            if (@available(iOS 14, *)) {
-                [self.sendMessageCell.contentView addSubview:btn];
-            } else {
-                [self.sendMessageCell addSubview:btn];
-            }
+            [self setupSendMessageCell:width];
             [self showSeparatorLine:self.sendMessageCell];
             
     #if WFCU_SUPPORT_VOIP
@@ -406,7 +376,7 @@
             for (UIView *subView in self.voipCallCell.subviews) {
                 [subView removeFromSuperview];
             }
-            btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
             [btn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
             btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
             [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
@@ -437,10 +407,34 @@
             } else {
                 [self.addFriendCell addSubview:btn];
             }
-            
+            if(self.fromConversation.type == Group_Type) {
+                WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.fromConversation.target refresh:NO];
+                if(!groupInfo.privateChat) {
+                    [self setupSendMessageCell:width];
+                }
+            }
         }
     }
     [self.tableView reloadData];
+}
+
+- (void)setupSendMessageCell:(CGFloat)width {
+    self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+    for (UIView *subView in self.sendMessageCell.subviews) {
+        [subView removeFromSuperview];
+    }
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+    [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+    [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
+    [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+    [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
+    if (@available(iOS 14, *)) {
+        [self.sendMessageCell.contentView addSubview:btn];
+    } else {
+        [self.sendMessageCell addSubview:btn];
+    }
 }
 
 - (UIEdgeInsets)hiddenSeparatorLine:(UITableViewCell *)cell {
@@ -541,10 +535,14 @@
         return self.cells.count;
     } else {
         if (self.sendMessageCell) {
+            int i = 1;
             if (self.voipCallCell) {
-                return 2;
+                i++;
             }
-            return 1;
+            if(self.addFriendCell) {
+                i++;
+            }
+            return i;
         } else {
             return 1;
         }
@@ -563,9 +561,12 @@
         if (self.sendMessageCell) {
             if (indexPath.row == 0) {
                 return self.sendMessageCell;
-            } else {
-                return self.voipCallCell;
+            } else if(indexPath.row == 1) {
+                if(self.voipCallCell) {
+                    return self.voipCallCell;
+                }
             }
+            return self.addFriendCell;
         } else {
             return self.addFriendCell;
         }

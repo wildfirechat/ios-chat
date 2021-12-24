@@ -284,15 +284,14 @@ static NSLock *wfcImageLock;
 + (void)generateNewGroupPortrait:(NSString *)groupId
                            width:(int)PortraitWidth
             defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
-
     NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@_%d", groupId, PortraitWidth]];
     long now = [[[NSDate alloc] init] timeIntervalSince1970];
-    if ((now - [createTime longLongValue]) < 15) {//防止连续刷新时，多次生成
+    if ((now - [createTime longLongValue]) < 2) {//防止连续刷新时，多次生成
         return;
     }
-    
+
     [[NSUserDefaults standardUserDefaults] setObject:@(now) forKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@_%d", groupId, PortraitWidth]];
-    
+
     UIView *combineHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PortraitWidth, PortraitWidth)];
     [combineHeadView setBackgroundColor:[UIColor colorWithRed:219.f/255 green:223.f/255 blue:224.f/255 alpha:1.f]];
     
@@ -465,10 +464,8 @@ static NSLock *wfcImageLock;
                     }
                     
                 } error:^(int errorCode) {
-                    //log here
                 }];
             }
-
             return path;
         } else { //文件不存在
             if (generateIfNotExist) {

@@ -8,7 +8,9 @@
 
 #import "WFCUConferenceMemberManagerViewController.h"
 #import "UIColor+YH.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 #import "WFCUConfigManager.h"
 #import "WFCUConferenceMember.h"
 #import "WFCUConferenceManager.h"
@@ -63,7 +65,7 @@
 - (void)loadData {
     self.participants = [[NSMutableArray alloc] init];
     self.audiences = [[NSMutableArray alloc] init];
-    
+#if WFCU_SUPPORT_VOIP
     WFAVCallSession *callSession = [WFAVEngineKit sharedEngineKit].currentSession;
     NSArray<WFAVParticipantProfile *> *ps =  [WFAVEngineKit sharedEngineKit].currentSession.participants;
     for (WFAVParticipantProfile *p in ps) {
@@ -111,6 +113,7 @@
             }
         }
     }
+#endif
 }
 
 - (BOOL)isMatchSearchText:(NSString *)userId {
@@ -153,6 +156,7 @@
 }
 
 - (void)onInvite:(id)sender {
+#if WFCU_SUPPORT_VOIP
     WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
     
     WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
@@ -171,6 +175,7 @@
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
 
     [self presentViewController:navi animated:YES completion:nil];
+#endif
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -212,6 +217,7 @@
     }
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#if WFCU_SUPPORT_VOIP
     WFCUConferenceMember *member;
     if(indexPath.section == 0) {
         member = self.participants[indexPath.row];
@@ -277,6 +283,7 @@
     }
     
     [self presentViewController:alertController animated:YES completion:nil];
+#endif
 }
 #pragma mark - UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {

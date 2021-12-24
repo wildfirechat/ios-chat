@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -33,9 +33,6 @@
 		2BD8D71D24D68FCD00281B81 /* WFCCFileRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD8D71B24D68FCD00281B81 /* WFCCFileRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD8D71E24D68FCD00281B81 /* WFCCFileRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD8D71C24D68FCD00281B81 /* WFCCFileRecord.m */; };
 		2E6B50A01FAE98E6006B6E31 /* WFCChatClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E6B50B01FAE990D006B6E31 /* interf_dec.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50A71FAE990D006B6E31 /* interf_dec.h */; };
-		2E6B50B11FAE990D006B6E31 /* interf_enc.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50A81FAE990D006B6E31 /* interf_enc.h */; };
-		2E6B50B21FAE990D006B6E31 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E6B50A91FAE990D006B6E31 /* libopencore-amrnb.a */; };
 		2E6B50B31FAE990D006B6E31 /* wav_amr.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E6B50AA1FAE990D006B6E31 /* wav_amr.h */; };
 		2E6B50B41FAE990D006B6E31 /* wav_amr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50AB1FAE990D006B6E31 /* wav_amr.mm */; };
 		2E6B50B51FAE990D006B6E31 /* wavreader.c in Sources */ = {isa = PBXBuildFile; fileRef = 2E6B50AC1FAE990D006B6E31 /* wavreader.c */; };
@@ -100,6 +97,8 @@
 		2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A931921B250F5006625CD /* WFCCTypingMessageContent.m */; };
 		2F1EB5BF2499AB4600FD3575 /* WFCCConferenceInviteMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5BD2499AB4500FD3575 /* WFCCConferenceInviteMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1EB5C02499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5BE2499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m */; };
+		2F21769527618FCD00AF695B /* mars.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F21769427618FCD00AF695B /* mars.xcframework */; };
+		2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2176962761A50600AF695B /* opencore-amrnb.xcframework */; };
 		2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F3223D62144C5FB0016A2C4 /* WFCCVideoMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */; };
 		2F444875252D6E51007A570E /* WFCCLinkMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F444873252D6E50007A570E /* WFCCLinkMessageContent.m */; };
@@ -118,6 +117,9 @@
 		2F8742DE219C4FED00F65EBA /* WFCCChatroomMemberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8742D8219C4FED00F65EBA /* WFCCChatroomMemberInfo.m */; };
 		2F8742DF219C4FED00F65EBA /* WFCCChatroomMemberInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F8742D9219C4FED00F65EBA /* WFCCChatroomMemberInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F8742E0219C4FED00F65EBA /* WFCCChatroomInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */; };
+		2F8CA19B274641E0000CC09C /* WFCCMarkUnreadMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F8CA199274641E0000CC09C /* WFCCMarkUnreadMessageContent.h */; };
+		2F8CA19C274641E0000CC09C /* WFCCMarkUnreadMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CA19A274641E0000CC09C /* WFCCMarkUnreadMessageContent.m */; };
+		2F9106E3273B4E1400B764DD /* WFAVEngineKit_Import.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9106E2273B4E1400B764DD /* WFAVEngineKit_Import.h */; };
 		2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB87A602650BDE000790A26 /* WFCCFriend.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FB87A632650BDE000790A26 /* WFCCFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB87A612650BDE000790A26 /* WFCCFriend.m */; };
 		2FB87C6D243EF0FE0078A199 /* WFCCFriendAddedMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB87C69243EF0FE0078A199 /* WFCCFriendAddedMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -146,7 +148,6 @@
 		901E271021F1545000A163CB /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270F21F1545000A163CB /* libresolv.tbd */; };
 		901E271221F1545900A163CB /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E271121F1545900A163CB /* libc++.tbd */; };
 		901E271421F1546100A163CB /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E271321F1546100A163CB /* libz.tbd */; };
-		901E271521F1546A00A163CB /* mars.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270A21F153D800A163CB /* mars.framework */; };
 		903EBB8B21357DDF00312C16 /* WFCCStickerMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 903EBB8921357DDF00312C16 /* WFCCStickerMessageContent.m */; };
 		903EBB8C21357DDF00312C16 /* WFCCStickerMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 903EBB8A21357DDF00312C16 /* WFCCStickerMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90B044461FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90B044441FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m */; };
@@ -193,9 +194,6 @@
 		2E6B509B1FAE98E6006B6E31 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCChatClient.h; sourceTree = "<group>"; };
 		2E6B509F1FAE98E6006B6E31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E6B50A71FAE990D006B6E31 /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
-		2E6B50A81FAE990D006B6E31 /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
-		2E6B50A91FAE990D006B6E31 /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
 		2E6B50AA1FAE990D006B6E31 /* wav_amr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wav_amr.h; sourceTree = "<group>"; };
 		2E6B50AB1FAE990D006B6E31 /* wav_amr.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = wav_amr.mm; sourceTree = "<group>"; };
 		2E6B50AC1FAE990D006B6E31 /* wavreader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wavreader.c; sourceTree = "<group>"; };
@@ -260,6 +258,8 @@
 		2F1A931921B250F5006625CD /* WFCCTypingMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCTypingMessageContent.m; sourceTree = "<group>"; };
 		2F1EB5BD2499AB4500FD3575 /* WFCCConferenceInviteMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCConferenceInviteMessageContent.h; sourceTree = "<group>"; };
 		2F1EB5BE2499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCConferenceInviteMessageContent.m; sourceTree = "<group>"; };
+		2F21769427618FCD00AF695B /* mars.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = mars.xcframework; sourceTree = "<group>"; };
+		2F2176962761A50600AF695B /* opencore-amrnb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "opencore-amrnb.xcframework"; sourceTree = "<group>"; };
 		2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCVideoMessageContent.h; sourceTree = "<group>"; };
 		2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCVideoMessageContent.m; sourceTree = "<group>"; };
 		2F444873252D6E50007A570E /* WFCCLinkMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLinkMessageContent.m; sourceTree = "<group>"; };
@@ -278,6 +278,9 @@
 		2F8742D8219C4FED00F65EBA /* WFCCChatroomMemberInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChatroomMemberInfo.m; sourceTree = "<group>"; };
 		2F8742D9219C4FED00F65EBA /* WFCCChatroomMemberInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChatroomMemberInfo.h; sourceTree = "<group>"; };
 		2F8742DA219C4FED00F65EBA /* WFCCChatroomInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChatroomInfo.m; sourceTree = "<group>"; };
+		2F8CA199274641E0000CC09C /* WFCCMarkUnreadMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCMarkUnreadMessageContent.h; sourceTree = "<group>"; };
+		2F8CA19A274641E0000CC09C /* WFCCMarkUnreadMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCMarkUnreadMessageContent.m; sourceTree = "<group>"; };
+		2F9106E2273B4E1400B764DD /* WFAVEngineKit_Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAVEngineKit_Import.h; sourceTree = "<group>"; };
 		2FB87A602650BDE000790A26 /* WFCCFriend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCFriend.h; sourceTree = "<group>"; };
 		2FB87A612650BDE000790A26 /* WFCCFriend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCFriend.m; sourceTree = "<group>"; };
 		2FB87C69243EF0FE0078A199 /* WFCCFriendAddedMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCFriendAddedMessageContent.h; sourceTree = "<group>"; };
@@ -303,7 +306,6 @@
 		6ECFB2C620A84C88001F91CB /* WFCCFileMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCFileMessageContent.h; sourceTree = "<group>"; };
 		6ED103D920AE5C9600D4A59C /* WFCCTipNotificationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCTipNotificationMessageContent.m; sourceTree = "<group>"; };
 		6ED103DA20AE5C9600D4A59C /* WFCCTipNotificationMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCTipNotificationMessageContent.h; sourceTree = "<group>"; };
-		901E270A21F153D800A163CB /* mars.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = mars.framework; sourceTree = "<group>"; };
 		901E270D21F1543D00A163CB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		901E270F21F1545000A163CB /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		901E271121F1545900A163CB /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -331,12 +333,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				901E271521F1546A00A163CB /* mars.framework in Frameworks */,
 				901E271421F1546100A163CB /* libz.tbd in Frameworks */,
+				2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */,
 				901E271221F1545900A163CB /* libc++.tbd in Frameworks */,
 				901E271021F1545000A163CB /* libresolv.tbd in Frameworks */,
 				901E270E21F1543D00A163CB /* CoreTelephony.framework in Frameworks */,
-				2E6B50B21FAE990D006B6E31 /* libopencore-amrnb.a in Frameworks */,
+				2F21769527618FCD00AF695B /* mars.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +365,7 @@
 		2E6B509D1FAE98E6006B6E31 /* WFChatClient */ = {
 			isa = PBXGroup;
 			children = (
+				2F9106E1273B4DDD00B764DD /* AV */,
 				901E270921F153D800A163CB /* Proto */,
 				2E6B50CA1FAE9B10006B6E31 /* Messages */,
 				2E6B50E81FAE9B10006B6E31 /* Model */,
@@ -379,9 +382,7 @@
 		2E6B50A61FAE990D006B6E31 /* amr */ = {
 			isa = PBXGroup;
 			children = (
-				2E6B50A71FAE990D006B6E31 /* interf_dec.h */,
-				2E6B50A81FAE990D006B6E31 /* interf_enc.h */,
-				2E6B50A91FAE990D006B6E31 /* libopencore-amrnb.a */,
+				2F2176962761A50600AF695B /* opencore-amrnb.xcframework */,
 				2E6B50AA1FAE990D006B6E31 /* wav_amr.h */,
 				2E6B50AB1FAE990D006B6E31 /* wav_amr.mm */,
 				2E6B50AC1FAE990D006B6E31 /* wavreader.c */,
@@ -500,6 +501,8 @@
 				2BC2AC582581F68B00E3D12D /* WFCCKickoffGroupMemberVisibleNotificationContent.m */,
 				2BC2AC5C2581F69E00E3D12D /* WFCCQuitGroupVisibleNotificationContent.h */,
 				2BC2AC5D2581F69E00E3D12D /* WFCCQuitGroupVisibleNotificationContent.m */,
+				2F8CA199274641E0000CC09C /* WFCCMarkUnreadMessageContent.h */,
+				2F8CA19A274641E0000CC09C /* WFCCMarkUnreadMessageContent.m */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -568,10 +571,18 @@
 			path = Things;
 			sourceTree = "<group>";
 		};
+		2F9106E1273B4DDD00B764DD /* AV */ = {
+			isa = PBXGroup;
+			children = (
+				2F9106E2273B4E1400B764DD /* WFAVEngineKit_Import.h */,
+			);
+			path = AV;
+			sourceTree = "<group>";
+		};
 		901E270921F153D800A163CB /* Proto */ = {
 			isa = PBXGroup;
 			children = (
-				901E270A21F153D800A163CB /* mars.framework */,
+				2F21769427618FCD00AF695B /* mars.xcframework */,
 			);
 			path = Proto;
 			sourceTree = "<group>";
@@ -595,6 +606,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B63367A2470DB7E008D6B38 /* WFCCReadReport.h in Headers */,
+				2F8CA19B274641E0000CC09C /* WFCCMarkUnreadMessageContent.h in Headers */,
 				2BC606E825C1A12400F77AD3 /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
 				90D1F597208D65B500C2A9CA /* WFCCCallStartMessageContent.h in Headers */,
@@ -634,6 +646,7 @@
 				6ECFB2C820A84C88001F91CB /* WFCCFileMessageContent.h in Headers */,
 				2BC2AC5E2581F69E00E3D12D /* WFCCQuitGroupVisibleNotificationContent.h in Headers */,
 				90E4D1DF1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.h in Headers */,
+				2F9106E3273B4E1400B764DD /* WFAVEngineKit_Import.h in Headers */,
 				2BC9EDDE24D99CB3004B3F0B /* WFCCGroupMemberAllowNotificationContent.h in Headers */,
 				2E6B511B1FAE9B10006B6E31 /* WFCCGroupInfo.h in Headers */,
 				90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */,
@@ -666,12 +679,10 @@
 				2F56F6A22529D04500B829C4 /* WFCCCompositeMessageContent.h in Headers */,
 				2E6B50B31FAE990D006B6E31 /* wav_amr.h in Headers */,
 				2E6B50C21FAE9B08006B6E31 /* app_callback.h in Headers */,
-				2E6B50B11FAE990D006B6E31 /* interf_enc.h in Headers */,
 				2E6B50C81FAE9B08006B6E31 /* WFCCNetworkStatus.h in Headers */,
 				2E6B50B71FAE990D006B6E31 /* wavwriter.h in Headers */,
 				2E6B50B61FAE990D006B6E31 /* wavreader.h in Headers */,
 				2E6B50A01FAE98E6006B6E31 /* WFCChatClient.h in Headers */,
-				2E6B50B01FAE990D006B6E31 /* interf_dec.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +816,7 @@
 				2F8742DE219C4FED00F65EBA /* WFCCChatroomMemberInfo.m in Sources */,
 				90D1F596208D65B500C2A9CA /* WFCCCallStartMessageContent.m in Sources */,
 				6ED103DB20AE5C9700D4A59C /* WFCCTipNotificationMessageContent.m in Sources */,
+				2F8CA19C274641E0000CC09C /* WFCCMarkUnreadMessageContent.m in Sources */,
 				90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */,
 				2E6B51101FAE9B10006B6E31 /* WFCCTransferGroupOwnerNotificationContent.m in Sources */,
 				2E6B50C51FAE9B08006B6E31 /* WFCCIMService.mm in Sources */,
@@ -980,7 +992,11 @@
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WFChatClient/amr",
@@ -1019,7 +1035,11 @@
 				INFOPLIST_FILE = WFChatClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WFChatClient/amr",

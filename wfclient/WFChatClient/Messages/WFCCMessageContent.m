@@ -7,6 +7,7 @@
 //
 
 #import "WFCCMessageContent.h"
+#import "WFCCMediaMessageContent.h"
 #import "Common.h"
 
 @implementation WFCCMessagePayload
@@ -20,9 +21,17 @@
     
 }
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
-    payload.extra = self.extra;
-    return payload;
+    if([self isKindOfClass:[WFCCMediaMessageContent class]]) {
+        WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
+        payload.extra = self.extra;
+        payload.contentType = [self.class getContentType];
+        return payload;
+    } else {
+        WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+        payload.extra = self.extra;
+        payload.contentType = [self.class getContentType];
+        return payload;
+    }
 }
 - (void)decode:(WFCCMessagePayload *)payload {
     self.extra = payload.extra;

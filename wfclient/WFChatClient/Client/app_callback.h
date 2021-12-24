@@ -9,8 +9,8 @@
 #ifndef appcomm_callback_h
 #define appcomm_callback_h
 
-#import <mars/app/app.h>
-#import <mars/app/app_logic.h>
+#import <app/app.h>
+#import <app/app_logic.h>
 
 namespace mars {
     namespace app {

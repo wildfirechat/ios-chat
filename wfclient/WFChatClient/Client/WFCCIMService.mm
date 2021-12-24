@@ -8,13 +8,14 @@
 
 #import "WFCCIMService.h"
 #import "WFCCMediaMessageContent.h"
-#import <mars/proto/MessageDB.h>
+#import <proto/MessageDB.h>
 #import <objc/runtime.h>
 #import "WFCCNetworkService.h"
-#import <mars/app/app.h>
+#import <app/app.h>
 #import "WFCCGroupSearchInfo.h"
 #import "WFCCUnknownMessageContent.h"
 #import "WFCCRecallMessageContent.h"
+#import "WFCCMarkUnreadMessageContent.h"
 #import "wav_amr.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
@@ -71,7 +72,7 @@ public:
             });
         }
     }
-    void onMediaUploaded(std::string remoteUrl) {
+    void onMediaUploaded(const std::string &remoteUrl) {
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
             mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
@@ -111,7 +112,7 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMCreateGroupCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::CreateGroupCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(std::string groupId) {
+    void onSuccess(const std::string &groupId) {
         NSString *nsstr = [NSString stringWithUTF8String:groupId.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
@@ -170,7 +171,7 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMGeneralStringCallback(void(^successBlock)(NSString *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(std::string str) {
+    void onSuccess(const std::string &str) {
         NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
@@ -238,8 +239,19 @@ public:
     RecallMessageCallback(WFCCMessage *msg, void(^successBlock)(), void(^errorBlock)(int error_code)) : mars::stn::GeneralOperationCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock), message(msg) {};
     void onSuccess() {
         WFCCRecallMessageContent *recallCnt = [[WFCCRecallMessageContent alloc] init];
+        WFCCMessagePayload *orignalPayload = [message.content encode];
+        
         recallCnt.operatorId = [WFCCNetworkService sharedInstance].userId;
         recallCnt.messageUid = message.messageUid;
+        recallCnt.originalSender = message.fromUser;
+        recallCnt.originalContent = orignalPayload.content;
+        recallCnt.originalSearchableContent = orignalPayload.searchableContent;
+        recallCnt.originalContentType = orignalPayload.contentType;
+        recallCnt.originalExtra = orignalPayload.extra;
+        recallCnt.originalMessageTimestamp = message.serverTime;
+        
+        message.fromUser = [WFCCNetworkService sharedInstance].userId;
+        message.serverTime = [[[NSDate alloc] init] timeIntervalSince1970];
         message.content = recallCnt;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -337,6 +349,43 @@ public:
     }
 };
 
+class IMLoadOneRemoteMessageCallback : public mars::stn::LoadRemoteMessagesCallback {
+private:
+    void(^m_successBlock)(WFCCMessage *message);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadOneRemoteMessageCallback(void(^successBlock)(WFCCMessage *message), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteMessagesCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TMessage> &messageList) {
+        NSMutableArray *messages = convertProtoMessageList(messageList, NO);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(messageList.empty()) {
+                if (m_successBlock) {
+                    m_successBlock(messages.firstObject);
+                }
+            } else {
+                if (m_errorBlock) {
+                    m_errorBlock(253);
+                }
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMLoadOneRemoteMessageCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+
 class IMLoadFileRecordCallback : public mars::stn::LoadFileRecordCallback {
 private:
     void(^m_successBlock)(NSArray<WFCCFileRecord *> *files);
@@ -399,6 +448,7 @@ public:
         for (std::list<std::string>::const_iterator it = info.olderMembers.begin(); it != info.olderMembers.end(); it++) {
             [members addObject:[NSString stringWithUTF8String:it->c_str()]];
         }
+        memberInfo.members = members;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (m_successBlock) {
                 m_successBlock(memberInfo);
@@ -1044,13 +1094,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 - (void)getRemoteMessages:(WFCCConversation *)conversation
                    before:(long long)beforeMessageUid
                     count:(NSUInteger)count
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock {
     mars::stn::TConversation conv;
     conv.target = [conversation.target UTF8String];
     conv.line = conversation.line;
     conv.conversationType = (int)conversation.type;
-    mars::stn::loadRemoteMessages(conv, beforeMessageUid, (int)count, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    
+    mars::stn::loadRemoteMessages(conv, types, beforeMessageUid, (int)count, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
+}
+
+- (void)getRemoteMessage:(long long)messageUid
+                 success:(void(^)(WFCCMessage *message))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+    mars::stn::loadRemoteMessage(messageUid, new IMLoadOneRemoteMessageCallback(successBlock, errorBlock));
 }
 
 - (WFCCMessage *)getMessage:(long)messageId {
@@ -1107,6 +1169,17 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     if(messageId) {
         mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId);
     }
+}
+
+- (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync {
+    int64_t messageUid = mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, 0, 0);
+    if(sync && messageUid) {
+        WFCCMarkUnreadMessageContent *syncMsg = [[WFCCMarkUnreadMessageContent alloc] init];
+        syncMsg.messageUid = messageUid;
+        syncMsg.timestamp = [self getMessageByUid:messageUid].serverTime;
+        [[WFCCIMService sharedWFCIMService] send:conversation content:syncMsg toUsers:@[[WFCCNetworkService sharedInstance].userId] expireDuration:86400 success:nil error:nil];
+    }
+    return messageUid > 0;
 }
 
 - (void)setMediaMessagePlayed:(long)messageId {
@@ -1663,9 +1736,10 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 
 - (void)getUploadUrl:(NSString *)fileName
            mediaType:(WFCCMediaType)mediaType
+         contentType:(NSString *)contentType
             success:(void(^)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type))successBlock
                error:(void(^)(int error_code))errorBlock {
-    mars::stn::getUploadMediaUrl(fileName == nil ? "" : [fileName UTF8String], (int)mediaType, new IMGetUploadMediaUrlCallback(successBlock, errorBlock));
+    mars::stn::getUploadMediaUrl(fileName == nil ? "" : [fileName UTF8String], (int)mediaType, contentType == nil ? "" : [contentType UTF8String], new IMGetUploadMediaUrlCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isSupportBigFilesUpload {
@@ -2681,7 +2755,6 @@ public:
 
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
-               status:(int)status
                  desc:(NSString *)desc
                 extra:(NSString *)extra
               success:(void(^)(WFCCChannelInfo *channelInfo))successBlock
@@ -2689,7 +2762,8 @@ public:
     if (!extra) {
         extra = @"";
     }
-    mars::stn::createChannel("", [channelName UTF8String], channelPortrait ? [channelPortrait UTF8String] : "", status, desc?[desc UTF8String]:"", [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
+    //status只能是0，请参考 https://docs.wildfirechat.cn/base_knowledge/channel.html#频道属性
+    mars::stn::createChannel("", [channelName UTF8String], channelPortrait ? [channelPortrait UTF8String] : "", 0, desc?[desc UTF8String]:"", [extra UTF8String], "", "", new IMCreateChannelCallback(successBlock, errorBlock));
 }
 
 - (void)destoryChannel:(NSString *)channelId
@@ -3015,5 +3089,16 @@ public:
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock {
     mars::stn::releaseLock([lockId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (BOOL)onReceiveMessage:(WFCCMessage *)message {
+    if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]] && [message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        WFCCMarkUnreadMessageContent *markMsg = (WFCCMarkUnreadMessageContent*)message.content;
+        WFCCConversation *conversation = message.conversation;
+        mars::stn::MessageDB::Instance()->SetLastReceivedMessageUnRead((int)conversation.type, [conversation.target UTF8String], conversation.line, markMsg.messageUid, markMsg.timestamp);
+        WFCCMessage *msg = [self getMessageByUid:markMsg.messageUid];
+        NSLog(@"timestamp is %lld", msg.serverTime);
+    }
+    return NO;
 }
 @end

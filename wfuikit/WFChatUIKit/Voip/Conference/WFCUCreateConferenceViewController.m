@@ -7,8 +7,11 @@
 //
 
 #import "WFCUCreateConferenceViewController.h"
+#import <WFChatClient/WFCChatClient.h>
+#if WFCU_SUPPORT_VOIP
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#endif
 #import "WFCUConferenceViewController.h"
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUGeneralModifyViewController.h"
@@ -66,13 +69,14 @@
 }
 
 - (void)onStart:(id)sender {
+#if WFCU_SUPPORT_VOIP
     if (self.startTime == 0) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch advanced:self.advanceConference moCall:YES];
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
     } else {
         //todo 发送会议邀请
     }
-    
+#endif
 }
 
 

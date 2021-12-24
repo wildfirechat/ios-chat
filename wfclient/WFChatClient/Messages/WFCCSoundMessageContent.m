@@ -43,9 +43,7 @@
 }
 
 - (WFCCMessagePayload *)encode {
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.extra = self.extra;
-    payload.contentType = [self.class getContentType];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.searchableContent = @"[声音]";
     payload.mediaType = Media_Type_VOICE;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];

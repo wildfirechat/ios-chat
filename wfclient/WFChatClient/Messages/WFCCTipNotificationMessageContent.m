@@ -14,7 +14,6 @@
 @implementation WFCCTipNotificationContent
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
-    payload.contentType = [self.class getContentType];
     
     payload.content = self.tip;
     return payload;
