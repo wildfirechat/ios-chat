@@ -204,7 +204,7 @@
       
       UIImage *image = self.bubbleView.image;
       self.bubbleView.image = [self.bubbleView.image
-                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.95, image.size.width * 0.2,image.size.height * 0.1, image.size.width * 0.05)];
+                                         resizableImageWithCapInsets:UIEdgeInsetsMake(ceil(image.size.height * 0.8), ceil(image.size.width * 0.2),ceil(image.size.height * 0.1), ceil(image.size.width * 0.05))];
       
       [self updateReceiptView];
   } else {
@@ -242,8 +242,8 @@
           rightProtection = 12;
       }
       self.bubbleView.image = [self.bubbleView.image
-                                         resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, leftProtection,
-                                                                                      image.size.height * 0.2, rightProtection)];
+                                         resizableImageWithCapInsets:UIEdgeInsetsMake(ceil(image.size.height * 0.8), ceil(leftProtection),
+                                                                                      ceil(image.size.height * 0.2), ceil(rightProtection))];
       
       self.receiptView.hidden = YES;
   }
