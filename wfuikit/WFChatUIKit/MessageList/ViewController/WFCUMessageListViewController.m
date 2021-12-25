@@ -762,6 +762,7 @@
     [self registerCell:[WFCUTextCell class] forContent:[WFCCPTextMessageContent class]];
     [self registerCell:[WFCUImageCell class] forContent:[WFCCImageMessageContent class]];
     [self registerCell:[WFCUVoiceCell class] forContent:[WFCCSoundMessageContent class]];
+    [self registerCell:[WFCUVoiceCell class] forContent:[WFCCPttVoiceMessageContent class]];
     [self registerCell:[WFCUVideoCell class] forContent:[WFCCVideoMessageContent class]];
     [self registerCell:[WFCULocationCell class] forContent:[WFCCLocationMessageContent class]];
     [self registerCell:[WFCUFileCell class] forContent:[WFCCFileMessageContent class]];
