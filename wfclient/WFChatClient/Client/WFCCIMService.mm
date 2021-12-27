@@ -2853,6 +2853,7 @@ public:
     NSString *pcOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"PC"];
     NSString *webOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"Web"];
     NSString *wxOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"WX"];
+    NSString *padOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"Pad"];
     
     NSMutableArray *output = [[NSMutableArray alloc] init];
     if (pcOnline.length) {
@@ -2863,6 +2864,9 @@ public:
     }
     if (wxOnline.length) {
         [output addObject:[WFCCPCOnlineInfo infoFromStr:wxOnline withType:WX_Online]];
+    }
+    if (padOnline.length) {
+        [output addObject:[WFCCPCOnlineInfo infoFromStr:padOnline withType:Pad_Online]];
     }
     return output;
 }
