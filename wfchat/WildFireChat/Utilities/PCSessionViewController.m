@@ -92,6 +92,12 @@
         } else if(infos[0].platform == PlatformType_WX) {
             [logoutBtn setTitle:@"退出小程序登录" forState:UIControlStateNormal];
             [label setText:@"小程序已登录"];
+        } else if(infos[0].platform == PlatformType_iPad) {
+            [logoutBtn setTitle:@"退出 iPad 登录" forState:UIControlStateNormal];
+            [label setText:@"iPad 已登录"];
+        } else if(infos[0].platform == PlatformType_Android) {
+            [logoutBtn setTitle:@"退出 Android 平板登录" forState:UIControlStateNormal];
+            [label setText:@"Android 平板已登录"];
         }
     }
     
