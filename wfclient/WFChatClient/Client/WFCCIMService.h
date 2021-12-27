@@ -164,7 +164,10 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_OSX = 4,
     PlatformType_WEB = 5,
     PlatformType_WX = 6,
-    PlatformType_Linux = 7
+    PlatformType_Linux = 7,
+    PlatformType_iPad = 8,
+    //Android pad
+    PlatformType_APad = 9
 } ;
 
 #pragma mark - 用户源

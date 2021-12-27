@@ -101,6 +101,9 @@ DeviceInfo AppCallBack::GetDeviceInfo() {
     
     info.clientid = [[[WFCCNetworkService sharedInstance] getClientId] UTF8String];
     info.platform = PlatformType_iOS;
+    //如果使用pad端类型，这里平台改成pad类型，另外在获取token时，也需要把平台改成pad类型，请到AppService.m文件中搜索"iPad"
+    //if(当前设备是iPad)
+    //platform = Platform_iPad
     
     info.packagename = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"] UTF8String];
     info.pushtype = mars::app::AppCallBack::Instance()->GetPushType();

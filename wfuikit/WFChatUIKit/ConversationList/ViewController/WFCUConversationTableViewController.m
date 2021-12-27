@@ -562,6 +562,10 @@
             self.pcSessionLabel.text = @"Web 已登录";
         } else if(infos[0].platform == PlatformType_WX) {
             self.pcSessionLabel.text = @"小程序已登录";
+        } else if(infos[0].platform == PlatformType_iPad) {
+            self.pcSessionLabel.text = @"iPad 已登录";
+        } else if(infos[0].platform == PlatformType_APad) {
+            self.pcSessionLabel.text = @"Android 平板已登录";
         }
         if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
             self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingString:@"，手机通知已关闭"];

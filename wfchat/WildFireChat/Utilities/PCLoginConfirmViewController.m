@@ -40,6 +40,12 @@
         case PlatformType_Linux:
             [label setText:@"确认 Linux 登陆"];
             break;
+        case PlatformType_iPad:
+            [label setText:@"确认 iPad 登陆"];
+            break;
+        case PlatformType_APad:
+            [label setText:@"确认 Android 平板登陆"];
+            break;
         default:
             [label setText:@"确认电脑登陆"];
             break;
