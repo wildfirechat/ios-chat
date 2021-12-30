@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
             success:(void(^)(long timestamp))successBlock
               error:(void(^)(int error_code))errorBlock;
 
+- (void)getGroupMembersForPortrait:(NSString *)groupId
+                           success:(void(^)(NSArray<NSDictionary<NSString *, NSString *> *> *groupMembers))successBlock
+                             error:(void(^)(int error_code))errorBlock;
+
 - (void)showPCSessionViewController:(UIViewController *)baseController
                           pcClient:(WFCCPCOnlineInfo *)clientInfo;
 

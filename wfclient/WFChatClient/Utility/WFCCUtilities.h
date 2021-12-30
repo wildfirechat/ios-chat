@@ -52,8 +52,14 @@
 
 + (UIImage *)imageWithRightOrientation:(UIImage *)aImage;
 
+//同步函数，只能在后台线程执行
 + (NSString *)getGroupGridPortrait:(NSString *)groupId
                              width:(int)width
                 generateIfNotExist:(BOOL)generateIfNotExist
+               defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock;
+
++ (NSString *)getGroupGridPortrait:(NSString *)groupId
+                   memberPortraits:(NSArray<NSDictionary<NSString*, NSString*>*> *)groupMembers
+                             width:(int)PortraitWidth
                defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock;
 @end
