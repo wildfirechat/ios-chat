@@ -334,7 +334,7 @@ static NSLock *wfcImageLock;
                 CGFloat X = (PortraitWidth - (c * (width + padding) + padding))/2;
                 for (int j = 0; j < c; j++) {
                     __block UIImageView *imageView;
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_sync(dispatch_get_main_queue(), ^{
                         imageView = [[UIImageView alloc] initWithFrame:CGRectMake(X + j *(width + padding) + padding, Y + i * (width + padding) + padding, width, width)];
                     });
                      
@@ -474,6 +474,98 @@ static NSLock *wfcImageLock;
         }
     }
     return nil;
+}
+
++ (NSString *)getGroupGridPortrait:(NSString *)groupId
+                   memberPortraits:(NSArray<NSDictionary<NSString*, NSString*>*> *)groupMembers
+                             width:(int)PortraitWidth
+               defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
+    __block UIView *combineHeadView;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        combineHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PortraitWidth, PortraitWidth)];
+        [combineHeadView setBackgroundColor:[UIColor colorWithRed:219.f/255 green:223.f/255 blue:224.f/255 alpha:1.f]];
+    });
+    
+    long long now = [[[NSDate alloc] init] timeIntervalSince1970];
+
+    int gridMemberCount = MIN((int)groupMembers.count, 9);
+    
+    CGFloat padding = 3;
+
+    int numPerRow = 3;
+
+    if (gridMemberCount <= 4) {
+        numPerRow = 2;
+    }
+    int row = (int)(gridMemberCount - 1) / numPerRow + 1;
+    int column = numPerRow;
+    int firstCol = (int)(gridMemberCount - (row - 1)*column);
+        
+    CGFloat width = (PortraitWidth - padding) / numPerRow - padding;
+        
+    CGFloat Y = (PortraitWidth - (row * (width + padding) + padding))/2;
+
+    NSString *fullPath = @"";
+    for (int i = 0; i < row; i++) {
+        int c = column;
+        if (i == 0) {
+            c = firstCol;
+        }
+        CGFloat X = (PortraitWidth - (c * (width + padding) + padding))/2;
+        for (int j = 0; j < c; j++) {
+            __block UIImageView *imageView;
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                imageView = [[UIImageView alloc] initWithFrame:CGRectMake(X + j *(width + padding) + padding, Y + i * (width + padding) + padding, width, width)];
+            });
+             
+            int index;
+            if (i == 0) {
+                index = j;
+            } else {
+                index = j + (i-1)*column + firstCol;
+            }
+            NSDictionary *dict = [groupMembers objectAtIndex:index];
+            NSString *userId = dict[@"userId"];
+            NSString *portrait = dict[@"portrait"];
+            
+            fullPath = [NSString stringWithFormat:@"%@%@", fullPath, portrait?portrait:userId];
+            
+            UIImage *image;
+            if (portrait.length) {
+                image = [WFCCUtilities getUserImage:portrait];
+                if (!image) {
+                    image = defaultUserPortraitBlock(userId);
+                }
+            } else {
+                image = defaultUserPortraitBlock(userId);
+            }
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                imageView.image = image;
+                [combineHeadView addSubview:imageView];
+            });
+        }
+    }
+     
+    __block UIImage *image;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIGraphicsBeginImageContextWithOptions(combineHeadView.frame.size, NO, 2.0);
+        [combineHeadView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    });
+     
+     
+    NSString *mdt = [WFCCUtilities rf_EncryptMD5:fullPath];
+    NSString *fileName = [NSString stringWithFormat:@"%@-%lld-%d-%@", groupId, now, PortraitWidth, mdt];
+
+    NSString *path = [[WFCCUtilities getDocumentPathWithComponent:@"/group_portrait"] stringByAppendingPathComponent:fileName];
+
+    NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+
+    [imgData writeToFile:path atomically:YES];
+    
+    return path;
 }
 
 + (void)load {

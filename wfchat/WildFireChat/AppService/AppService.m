@@ -174,6 +174,24 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (void)getGroupMembersForPortrait:(NSString *)groupId
+                           success:(void(^)(NSArray<NSDictionary<NSString *, NSString *> *> *groupMembers))successBlock
+                             error:(void(^)(int error_code))errorBlock {
+    NSString *path = @"/group/members_for_portrait";
+    [self post:path data:@{@"groupId":groupId} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if([dict[@"result"] isKindOfClass:NSArray.class]) {
+                NSArray *arr = (NSArray *)dict[@"result"];
+                if(successBlock) successBlock(arr);
+            }
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
