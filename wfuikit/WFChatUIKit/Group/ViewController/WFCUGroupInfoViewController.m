@@ -10,7 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUGroupInfoViewController ()
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;
@@ -49,8 +49,13 @@
 
 - (void)setGroupInfo:(WFCCGroupInfo *)groupInfo {
     _groupInfo = groupInfo;
-    [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@""]];
-    self.groupNameLabel.text = groupInfo.name;
+    if(groupInfo) {
+        if(groupInfo.portrait.length) {
+            [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@""]];
+        }
+        
+        self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.name, groupInfo.memberCount];
+    }
 }
 
 - (void)setMembers:(NSArray<WFCCGroupMember *> *)members {
@@ -62,7 +67,30 @@
             isContainMe = YES;
         }
     }];
+    
+    if(!isContainMe) {
+        __weak typeof(self)ws = self;
+        [[WFCUConfigManager globalManager].appServiceProvider getGroupMembersForPortrait:self.groupId success:^(NSArray<NSDictionary<NSString *, NSString *> *> *groupMembers) {
+            [ws onGetGroupMember:groupMembers];
+        } error:^(int error_code) {
+            NSLog(@"error");
+        }];
+    }
     self.isJoined = isContainMe;
+}
+
+- (void)onGetGroupMember:(NSArray<NSDictionary<NSString *, NSString *> *> *)groupMembers {
+    if(!self.groupInfo.portrait.length) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSString *imagePath = [WFCCUtilities getGroupGridPortrait:self.groupId memberPortraits:groupMembers width:50 defaultUserPortrait:^UIImage *(NSString *userId) {
+                return [UIImage imageNamed:@"PersonalChat"];
+            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.groupProtraitView.image = [UIImage imageWithContentsOfFile:imagePath];
+            });
+        });
+        
+    }
 }
 
 - (void)setIsJoined:(BOOL)isJoined {
