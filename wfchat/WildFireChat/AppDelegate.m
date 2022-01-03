@@ -30,7 +30,6 @@
 #import "PCLoginConfirmViewController.h"
 #import "QQLBXScanViewController.h"
 #import "StyleDIY.h"
-#import <Bugly/Bugly.h>
 #import "AppService.h"
 #import "UIColor+YH.h"
 #import "SharedConversation.h"
@@ -54,9 +53,6 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //替换为您自己的Bugly账户。
-    [Bugly startWithAppId:@"6f54460b01"];
-    
     [WFCCNetworkService startLog];
 //    [[WFCCNetworkService sharedInstance] useSM4];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;

@@ -399,7 +399,6 @@
 		2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E85FE222B9D600076B82B /* QrCodeHelper.m */; };
 		2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */; };
-		2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E908251633EF0038635A /* SDWebImage.framework */; };
 		2FB7125425D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB7125225D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h */; };
 		2FB7125525D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7125325D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m */; };
 		2FB7125925DA042900FD2E83 /* WFCUConferenceMember.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FB7125725DA042900FD2E83 /* WFCUConferenceMember.h */; };
@@ -434,7 +433,8 @@
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
 		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
-		B7D8F71B2782E1ED00752426 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */; };
+		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
+		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -535,7 +535,6 @@
 		2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVideoViewController.m; sourceTree = "<group>"; };
 		2BEF789C23F6A84D000DE285 /* WFCUFloatingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFloatingWindow.m; sourceTree = "<group>"; };
 		2BEF789D23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUParticipantCollectionViewCell.h; sourceTree = "<group>"; };
-		2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
 		2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSearchGroupTableViewCell.h; sourceTree = "<group>"; };
 		2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUSearchGroupTableViewCell.m; sourceTree = "<group>"; };
 		2F143A68217F7D4100B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
@@ -840,7 +839,6 @@
 		2F9E85FE222B9D600076B82B /* QrCodeHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QrCodeHelper.m; sourceTree = "<group>"; };
 		2FA2164F22F1667F00670211 /* WFCUBlackListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUBlackListViewController.h; sourceTree = "<group>"; };
 		2FA2165022F1667F00670211 /* WFCUBlackListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUBlackListViewController.m; sourceTree = "<group>"; };
-		2FA2E908251633EF0038635A /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
 		2FB7125225D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceMemberManagerViewController.h; sourceTree = "<group>"; };
 		2FB7125325D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceMemberManagerViewController.m; sourceTree = "<group>"; };
 		2FB7125725DA042900FD2E83 /* WFCUConferenceMember.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceMember.h; sourceTree = "<group>"; };
@@ -875,6 +873,8 @@
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
+		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -882,11 +882,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7D8F71B2782E1ED00752426 /* ZLPhotoBrowser.framework in Frameworks */,
 				B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */,
 				B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */,
+				B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */,
 				B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
-				2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */,
+				B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1023,7 +1023,7 @@
 		2F0BD9102537424500A7B674 /* ZLPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */,
+				B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */,
 			);
 			path = ZLPhotoBrowser;
 			sourceTree = "<group>";
@@ -1851,7 +1851,7 @@
 		2FA2E6E025158CBA0038635A /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
-				2FA2E908251633EF0038635A /* SDWebImage.framework */,
+				B7D8F7342783032F00752426 /* SDWebImage.xcframework */,
 			);
 			path = SDWebImage;
 			sourceTree = "<group>";
