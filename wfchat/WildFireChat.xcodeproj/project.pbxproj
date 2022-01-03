@@ -62,6 +62,8 @@
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
 		2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		2F79F329278304FA00D6F254 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F79F32B2783059000D6F254 /* WFChatUIKit.framework */; };
+		2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F79F32B2783059000D6F254 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E662723072600151B75 /* ptt_begin.m4a */; };
 		2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E672723072600151B75 /* ptt_end.m4a */; };
 		2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FAB124551D82007713CD /* DeviceViewController.m */; };
@@ -174,6 +176,7 @@
 			files = (
 				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
 				B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */,
+				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
 				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
@@ -287,6 +290,7 @@
 		2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+YBAttributeTextTapAction.m"; sourceTree = "<group>"; };
 		2F7268FC21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+YBAttributeTextTapAction.h"; sourceTree = "<group>"; };
 		2F78FA0323371E150007C5CE /* WFChat-Prefix-Header.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WFChat-Prefix-Header.pch"; sourceTree = "<group>"; };
+		2F79F32B2783059000D6F254 /* WFChatUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8F8E662723072600151B75 /* ptt_begin.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ptt_begin.m4a; sourceTree = "<group>"; };
 		2F8F8E672723072600151B75 /* ptt_end.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ptt_end.m4a; sourceTree = "<group>"; };
 		2F94F98622291577005BD461 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
@@ -404,6 +408,7 @@
 				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
+				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
@@ -566,6 +571,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
 				B7D8F7362783035200752426 /* SDWebImage.xcframework */,
 				B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */,
 				B75D81862782E0C5009D4A19 /* WFChatClient.framework */,
