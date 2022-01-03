@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14349F62243392E300FE38B3 /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */; };
 		14349FA624362A6600FE38B3 /* WFCUSeletedUserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14349FA424362A6600FE38B3 /* WFCUSeletedUserViewController.h */; };
 		14349FA724362A6600FE38B3 /* WFCUSeletedUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14349FA524362A6600FE38B3 /* WFCUSeletedUserViewController.m */; };
 		1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1450EA7E243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h */; };
@@ -36,7 +35,6 @@
 		2B46D4D924ACC64300721792 /* WFCUMediaMessageGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */; };
 		2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */; };
 		2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */; };
-		2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
 		2B63367F24716864008D6B38 /* ZCCCircleProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B63367D24716864008D6B38 /* ZCCCircleProgressView.h */; };
 		2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B97D4872505C7BE00162A2B /* WFCUCardCell.h */; };
@@ -103,7 +101,6 @@
 		2BEF78A723F6A84D000DE285 /* WFCUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */; };
 		2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF789C23F6A84D000DE285 /* WFCUFloatingWindow.m */; };
 		2BEF78A923F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BEF789D23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.h */; };
-		2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */; };
 		2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */; };
 		2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */; };
 		2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */; };
@@ -135,7 +132,6 @@
 		2F535BFF25296E6600C9AF09 /* WFCUQuoteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */; };
 		2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F535BFE25296E6600C9AF09 /* WFCUQuoteViewController.m */; };
 		2F550BE4217F4D7B00F56C26 /* WFChatUIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550BE2217F4D7B00F56C26 /* WFChatUIKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F550BF3217F4DCD00F56C26 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */; };
 		2F551091217F5CC200F56C26 /* WFCUMediaMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */; };
 		2F551092217F5CC200F56C26 /* WFCULocationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EB5217F5CC000F56C26 /* WFCULocationCell.h */; };
 		2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */; };
@@ -431,26 +427,15 @@
 		2FE8FC9D25F316F5007DB331 /* WFCUUploadFileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE8FC9B25F316F5007DB331 /* WFCUUploadFileTableViewCell.m */; };
 		2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */; };
 		2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */; };
-		901E270721F152F600A163CB /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270421F152F600A163CB /* WebRTC.framework */; };
-		901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901E270521F152F600A163CB /* WFAVEngineKit.framework */; };
 		9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9029D0FC21C5D7930002EBAA /* WFCUCreateChannelViewController.h */; };
 		9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */; };
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
 		90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */; };
+		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
+		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
+		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
+		B7D8F71B2782E1ED00752426 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0BD9112537424500A7B674 /* ZLPhotoBrowser.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		2FDF87112723DBCB00AC6C36 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WFChatUIKit.xcassets; sourceTree = "<group>"; };
@@ -586,7 +571,6 @@
 		2F550BDF217F4D7B00F56C26 /* WFChatUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WFChatUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F550BE2217F4D7B00F56C26 /* WFChatUIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFChatUIKit.h; sourceTree = "<group>"; };
 		2F550BE3217F4D7B00F56C26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatClient.framework; path = Frameworks/WFChatClient.framework; sourceTree = SOURCE_ROOT; };
 		2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUMediaMessageCell.m; sourceTree = "<group>"; };
 		2F550EB5217F5CC000F56C26 /* WFCULocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCULocationCell.h; sourceTree = "<group>"; };
 		2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFileCell.m; sourceTree = "<group>"; };
@@ -884,13 +868,13 @@
 		2FE8FC9B25F316F5007DB331 /* WFCUUploadFileTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUUploadFileTableViewCell.m; sourceTree = "<group>"; };
 		2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUWaitingAnimationView.h; sourceTree = "<group>"; };
 		2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUWaitingAnimationView.m; sourceTree = "<group>"; };
-		901E270121F152F600A163CB /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
-		901E270421F152F600A163CB /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
-		901E270521F152F600A163CB /* WFAVEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = "<group>"; };
 		9029D0FC21C5D7930002EBAA /* WFCUCreateChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUCreateChannelViewController.h; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.h; sourceTree = SOURCE_ROOT; };
 		9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUCreateChannelViewController.m; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.m; sourceTree = SOURCE_ROOT; };
 		90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewCell.h; sourceTree = "<group>"; };
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
+		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
+		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
+		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -898,11 +882,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F0BD9122537424500A7B674 /* ZLPhotoBrowser.framework in Frameworks */,
+				B7D8F71B2782E1ED00752426 /* ZLPhotoBrowser.framework in Frameworks */,
+				B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */,
+				B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */,
+				B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				2FA2E909251633EF0038635A /* SDWebImage.framework in Frameworks */,
-				901E270821F152F600A163CB /* WFAVEngineKit.framework in Frameworks */,
-				2F550BF3217F4DCD00F56C26 /* WFChatClient.framework in Frameworks */,
-				901E270721F152F600A163CB /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,7 +1145,7 @@
 		2F550BEA217F4DCD00F56C26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2F550BEC217F4DCD00F56C26 /* WFChatClient.framework */,
+				B75D817B2782DFE1009D4A19 /* WFChatClient.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -1937,35 +1921,10 @@
 		901E26FF21F152B200A163CB /* AVEngine */ = {
 			isa = PBXGroup;
 			children = (
-				901E270021F152F600A163CB /* GoogleWebRTC */,
-				901E270521F152F600A163CB /* WFAVEngineKit.framework */,
+				B75D81622782B800009D4A19 /* WebRTC.xcframework */,
+				B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */,
 			);
 			path = AVEngine;
-			sourceTree = "<group>";
-		};
-		901E270021F152F600A163CB /* GoogleWebRTC */ = {
-			isa = PBXGroup;
-			children = (
-				901E270121F152F600A163CB /* LICENSE.md */,
-				901E270221F152F600A163CB /* Frameworks */,
-			);
-			path = GoogleWebRTC;
-			sourceTree = "<group>";
-		};
-		901E270221F152F600A163CB /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				901E270321F152F600A163CB /* frameworks */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		901E270321F152F600A163CB /* frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				901E270421F152F600A163CB /* WebRTC.framework */,
-			);
-			path = frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2207,7 +2166,6 @@
 				2F550BDC217F4D7B00F56C26 /* Frameworks */,
 				2F550BDD217F4D7B00F56C26 /* Resources */,
 				2F550BF6217F502600F56C26 /* ShellScript */,
-				2FDF87112723DBCB00AC6C36 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2255,8 +2213,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B5E950025B8274D00317D53 /* unicode_to_hanyu_pinyin.txt in Resources */,
-				14349F62243392E300FE38B3 /* WFChatUIKit.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
