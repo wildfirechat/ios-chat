@@ -1,0 +1,11 @@
+framework module ZLPhotoBrowser {
+  umbrella header "ZLPhotoBrowser.h"
+
+  export *
+  module * { export * }
+}
+
+module ZLPhotoBrowser.Swift {
+    header "ZLPhotoBrowser-Swift.h"
+    requires objc
+}

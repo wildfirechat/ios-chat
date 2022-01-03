@@ -6,4 +6,3 @@ if [ ! -d "$DST_DIR" ]; then
 fi
 
 cp -af WFChatUIKit/Resources/*  ${DST_DIR}/
-cp -af WFChatUIKit/Vendor/ZLPhotoBrowser/*  ${DST_DIR}/
