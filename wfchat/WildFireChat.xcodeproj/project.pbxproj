@@ -60,6 +60,8 @@
 		2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
 		2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268FB21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m */; };
+		2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
+		2F79F329278304FA00D6F254 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E662723072600151B75 /* ptt_begin.m4a */; };
 		2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E672723072600151B75 /* ptt_end.m4a */; };
 		2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FAB124551D82007713CD /* DeviceViewController.m */; };
@@ -151,6 +153,17 @@
 				2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F79F32A278304FA00D6F254 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2F79F329278304FA00D6F254 /* SDWebImage.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		90C1D90A208C104400E923F4 /* Embed Frameworks */ = {
@@ -412,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */,
+				2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,6 +928,7 @@
 				2F56F6EF252C956700B829C4 /* Sources */,
 				2F56F6F0252C956700B829C4 /* Frameworks */,
 				2F56F6F1252C956700B829C4 /* Resources */,
+				2F79F32A278304FA00D6F254 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
