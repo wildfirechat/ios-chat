@@ -6,6 +6,20 @@
 	objectVersion = 52;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		B75D81522782ADE1009D4A19 /* Release */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = B75D81552782ADE1009D4A19 /* Build configuration list for PBXAggregateTarget "Release" */;
+			buildPhases = (
+				B75D81562782ADE8009D4A19 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Release;
+			productName = Release;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		2B2492E9245D3982007268E3 /* WFCCDeleteMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B2492E7245D3982007268E3 /* WFCCDeleteMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B2492EA245D3982007268E3 /* WFCCDeleteMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2492E8245D3982007268E3 /* WFCCDeleteMessageContent.m */; };
@@ -728,6 +742,9 @@
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
+					B75D81522782ADE1009D4A19 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 				};
 			};
 			buildConfigurationList = 2E6B50951FAE98E5006B6E31 /* Build configuration list for PBXProject "WFChatClient" */;
@@ -743,6 +760,7 @@
 			projectRoot = "";
 			targets = (
 				2E6B509A1FAE98E6006B6E31 /* WFChatClient */,
+				B75D81522782ADE1009D4A19 /* Release */,
 			);
 		};
 /* End PBXProject section */
@@ -758,6 +776,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		B75D81562782ADE8009D4A19 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n./build.sh WFChatClient WFChatClient\n";
+		};
 		F89D8F2820538E36005A6CD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -1062,6 +1097,24 @@
 			};
 			name = Release;
 		};
+		B75D81532782ADE1009D4A19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B75D81542782ADE1009D4A19 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1079,6 +1132,15 @@
 			buildConfigurations = (
 				2E6B50A41FAE98E6006B6E31 /* Debug */,
 				2E6B50A51FAE98E6006B6E31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B75D81552782ADE1009D4A19 /* Build configuration list for PBXAggregateTarget "Release" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B75D81532782ADE1009D4A19 /* Debug */,
+				B75D81542782ADE1009D4A19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
