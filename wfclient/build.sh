@@ -11,7 +11,11 @@ else
   TARGET_NAME=${PROJECT_NAME}
 fi
 
-UNIVERSAL_OUTPUT_FOLDER="${SRCROOT}/${PROJECT_NAME}_Products/"
+BUILD_DIR=build_tmp_path
+rm -rf $BUILD_DIR
+mkdir -p $BUILD_DIR
+
+UNIVERSAL_OUTPUT_FOLDER="${PROJECT_NAME}_Products/"
 
 #创建输出目录，并删除之前的framework文件
 mkdir -p "${UNIVERSAL_OUTPUT_FOLDER}"
@@ -23,6 +27,8 @@ xcodebuild -target ${TARGET_NAME} ONLY_ACTIVE_ARCH=YES -arch arm64 -configuratio
 xcodebuild -target ${TARGET_NAME} ONLY_ACTIVE_ARCH=NO -configuration Release -sdk iphonesimulator BUILD_DIR="${BUILD_DIR}" clean build
 
 xcodebuild -create-xcframework -framework "${BUILD_DIR}"/Release-iphoneos/"${TARGET_NAME}".framework  -framework "${BUILD_DIR}"/Release-iphonesimulator/"${TARGET_NAME}".framework  -output "${UNIVERSAL_OUTPUT_FOLDER}"/${TARGET_NAME}.xcframework
+
+rm -rf $BUILD_DIR
 
 #打开合并后的文件夹
 open "${UNIVERSAL_OUTPUT_FOLDER}"
