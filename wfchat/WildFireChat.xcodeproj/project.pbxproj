@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,12 +17,8 @@
 		2B4C027F252F4A570043FA41 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0275252F4A570043FA41 /* AFNetworkReachabilityManager.m */; };
 		2B4C0280252F4A570043FA41 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0276252F4A570043FA41 /* AFSecurityPolicy.m */; };
 		2B4C0281252F4A570043FA41 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0279252F4A570043FA41 /* MBProgressHUD.m */; };
-		2B5E950325B82A6800317D53 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E950225B82A6800317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */; };
 		2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */; };
-		2B99E540254555EA00B3452D /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B99E53F254555EA00B3452D /* ZLPhotoBrowser.framework */; };
-		2BCEC536232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC531232E238E00D55E0D /* wfc.strings */; };
-		2BCEC537232E238E00D55E0D /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC534232E238E00D55E0D /* wfc.strings */; };
 		2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E0233627450004212B /* PushKit.framework */; };
 		2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E22336278E0004212B /* CallKit.framework */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
@@ -33,12 +29,6 @@
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
-		2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; };
-		2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; };
-		2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6D217F7DA900B3E38A /* Emoj.plist */; };
-		2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A6F217F7DA900B3E38A /* Stickers.bundle */; };
-		2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */; };
-		2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */; };
 		2F1A2896251647E3001350B6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E90B251634070038635A /* SDWebImage.framework */; };
 		2F1A2897251647E3001350B6 /* SDWebImage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E90B251634070038635A /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -48,7 +38,6 @@
 		2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B0DD221E1B38100139CB1 /* ring.caf */; };
 		2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */; };
 		2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */; };
-		2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */; };
 		2F444776252D441D007A570E /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA2E90B251634070038635A /* SDWebImage.framework */; };
 		2F44477A252D475C007A570E /* Shares.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F444779252D475C007A570E /* Shares.xcassets */; };
 		2F444859252D520B007A570E /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
@@ -59,15 +48,12 @@
 		2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4B0EB2245C232E000A41C6 /* CreateDeviceViewController.m */; };
 		2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F50BE83237970780049CD39 /* WFCDiagnoseViewController.m */; };
 		2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F518FF2235ED7DD00FA3D58 /* AppService.m */; };
-		2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */; };
 		2F5527C0252CB33E00B0CDCB /* SharedConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5527BF252CB33E00B0CDCB /* SharedConversation.m */; };
 		2F5527C1252CB33E00B0CDCB /* SharedConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5527BF252CB33E00B0CDCB /* SharedConversation.m */; };
 		2F56F6F7252C956700B829C4 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F6F6252C956700B829C4 /* ShareViewController.m */; };
 		2F56F6FA252C956700B829C4 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F56F6F8252C956700B829C4 /* MainInterface.storyboard */; };
 		2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2F56F6F3252C956700B829C4 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2F56F706252CA99A00B829C4 /* ConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F56F705252CA99A00B829C4 /* ConversationListViewController.m */; };
-		2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; };
-		2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */; };
 		2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */; };
 		2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638927254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m */; };
@@ -114,11 +100,6 @@
 		2FFDDCA025515D9000CEFDBB /* WFCFavoriteVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDC9E25515D9000CEFDBB /* WFCFavoriteVideoCell.m */; };
 		2FFDDCA4255164DA00CEFDBB /* WFCFavoriteLinkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDCA3255164DA00CEFDBB /* WFCFavoriteLinkCell.m */; };
 		2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDCA6255168D000CEFDBB /* WFCFavoriteCompositeCell.m */; };
-		6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 6E616D9B20AB3435002CB8BE /* LICENSE.md */; };
-		6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; };
-		6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E616D9F20AB3435002CB8BE /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774B2243CD830020A2AC /* SystemConfiguration.framework */; };
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		905177502243CD9A0020A2AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774F2243CD9A0020A2AC /* libz.tbd */; };
@@ -135,6 +116,23 @@
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
+		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
+		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
+		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B75D81842782E0AF009D4A19 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81832782E0AF009D4A19 /* WFChatUIKit.framework */; };
+		B75D81852782E0AF009D4A19 /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81832782E0AF009D4A19 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
+		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7D8F71F2782E28F00752426 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F71D2782E26000752426 /* ZLPhotoBrowser.framework */; };
+		B7D8F7202782E28F00752426 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F71D2782E26000752426 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7212782E2D000752426 /* zh-Hans.lproj */; };
+		B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */; };
+		B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7232782E2D000752426 /* Stickers.bundle */; };
+		B7D8F72B2782E2D000752426 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */; };
+		B7D8F72C2782E2D000752426 /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7252782E2D000752426 /* Emoj.plist */; };
+		B7D8F72D2782E2D000752426 /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */; };
+		B7D8F72E2782E2D000752426 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7272782E2D000752426 /* en.lproj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,12 +163,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
+				B75D81852782E0AF009D4A19 /* WFChatUIKit.framework in Embed Frameworks */,
 				2F1A2897251647E3001350B6 /* SDWebImage.framework in Embed Frameworks */,
-				2F143A84217F876C00B3E38A /* WFChatUIKit.framework in Embed Frameworks */,
-				6E616DB520AB3540002CB8BE /* WebRTC.framework in Embed Frameworks */,
-				6E616DB920AB3540002CB8BE /* WFChatClient.framework in Embed Frameworks */,
-				2F5A6D5F25454CBA00B99E52 /* ZLPhotoBrowser.framework in Embed Frameworks */,
-				6E616DB720AB3540002CB8BE /* WFAVEngineKit.framework in Embed Frameworks */,
+				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
+				B7D8F7202782E28F00752426 /* ZLPhotoBrowser.framework in Embed Frameworks */,
+				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,14 +197,10 @@
 		2B4C0277252F4A570043FA41 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		2B4C0279252F4A570043FA41 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		2B4C027A252F4A570043FA41 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		2B5E950225B82A6800317D53 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		2B840F3E2442111F006BE3D8 /* WFCThemeTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCThemeTableViewController.h; sourceTree = "<group>"; };
 		2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewController.m; sourceTree = "<group>"; };
 		2B840F412442125B006BE3D8 /* WFCThemeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCThemeTableViewCell.h; sourceTree = "<group>"; };
 		2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewCell.m; sourceTree = "<group>"; };
-		2B99E53F254555EA00B3452D /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
-		2BCEC532232E238E00D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = wfc.strings; sourceTree = "<group>"; };
-		2BCEC535232E238E00D55E0D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = wfc.strings; sourceTree = "<group>"; };
 		2BDCE7E0233627450004212B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		2BDCE7E22336278E0004212B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
@@ -224,8 +218,6 @@
 		2E1D20B11FAF127100F4405D /* WFCConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCConfig.m; sourceTree = "<group>"; };
 		2E1D20BD1FAF127100F4405D /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
 		2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
-		2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFAVEngineKit.framework; path = Frameworks/WFAVEngineKit.framework; sourceTree = SOURCE_ROOT; };
-		2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatClient.framework; path = Frameworks/WFChatClient.framework; sourceTree = SOURCE_ROOT; };
 		2EF30A58201995630060992B /* WildFireChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WildFireChat.entitlements; sourceTree = "<group>"; };
 		2F143A47217F607300B3E38A /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
 		2F143A48217F607300B3E38A /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
@@ -235,9 +227,6 @@
 		2F143A50217F607300B3E38A /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
 		2F143A53217F607300B3E38A /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		2F143A5C217F60B600B3E38A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		2F143A6D217F7DA900B3E38A /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Emoj.plist; path = Frameworks/Emoj.plist; sourceTree = SOURCE_ROOT; };
-		2F143A6F217F7DA900B3E38A /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Stickers.bundle; path = Frameworks/Stickers.bundle; sourceTree = SOURCE_ROOT; };
-		2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = WFChatUIKit.xcassets; path = Frameworks/WFChatUIKit.xcassets; sourceTree = SOURCE_ROOT; };
 		2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -245,7 +234,6 @@
 		2F1B0DD221E1B38100139CB1 /* ring.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ring.caf; sourceTree = "<group>"; };
 		2F1B0DD421E1E29400139CB1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2F1B0DED21E2161E00139CB1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WFCUShareMessageView.xib; path = Frameworks/WFCUShareMessageView.xib; sourceTree = SOURCE_ROOT; };
 		2F444779252D475C007A570E /* Shares.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Shares.xcassets; sourceTree = "<group>"; };
 		2F44477C252D4EFF007A570E /* SharePredefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharePredefine.h; sourceTree = "<group>"; };
 		2F44485A252D522F007A570E /* WFCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCConfig.h; sourceTree = "<group>"; };
@@ -263,7 +251,6 @@
 		2F50BE83237970780049CD39 /* WFCDiagnoseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCDiagnoseViewController.m; sourceTree = "<group>"; };
 		2F518FF1235ED7DD00FA3D58 /* AppService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppService.h; sourceTree = "<group>"; };
 		2F518FF2235ED7DD00FA3D58 /* AppService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppService.m; sourceTree = "<group>"; };
-		2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFChatUIKit.framework; path = Frameworks/WFChatUIKit.framework; sourceTree = SOURCE_ROOT; };
 		2F5527BB252CADFA00B0CDCB /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		2F5527BE252CB33E00B0CDCB /* SharedConversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedConversation.h; sourceTree = "<group>"; };
 		2F5527BF252CB33E00B0CDCB /* SharedConversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedConversation.m; sourceTree = "<group>"; };
@@ -274,7 +261,6 @@
 		2F56F6FB252C956700B829C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F56F704252CA99A00B829C4 /* ConversationListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationListViewController.h; sourceTree = "<group>"; };
 		2F56F705252CA99A00B829C4 /* ConversationListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConversationListViewController.m; sourceTree = "<group>"; };
-		2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
 		2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Album.xcassets; sourceTree = "<group>"; };
 		2F638920254E5A7E0084EEA6 /* WFCFavoriteTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteTableViewController.h; sourceTree = "<group>"; };
 		2F638921254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteTableViewController.m; sourceTree = "<group>"; };
@@ -365,8 +351,6 @@
 		2FFDDCA3255164DA00CEFDBB /* WFCFavoriteLinkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteLinkCell.m; sourceTree = "<group>"; };
 		2FFDDCA6255168D000CEFDBB /* WFCFavoriteCompositeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteCompositeCell.m; sourceTree = "<group>"; };
 		2FFDDCA7255168D100CEFDBB /* WFCFavoriteCompositeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteCompositeCell.h; sourceTree = "<group>"; };
-		6E616D9B20AB3435002CB8BE /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = LICENSE.md; path = Frameworks/GoogleWebRTC/LICENSE.md; sourceTree = SOURCE_ROOT; };
-		6E616D9F20AB3435002CB8BE /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Frameworks/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework; sourceTree = SOURCE_ROOT; };
 		9051774B2243CD830020A2AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -392,6 +376,18 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
+		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
+		B75D81832782E0AF009D4A19 /* WFChatUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7D8F71D2782E26000752426 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZLPhotoBrowser.framework; sourceTree = "<group>"; };
+		B7D8F7212782E2D000752426 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
+		B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WFCUShareMessageView.xib; sourceTree = "<group>"; };
+		B7D8F7232782E2D000752426 /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
+		B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
+		B7D8F7252782E2D000752426 /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Emoj.plist; sourceTree = "<group>"; };
+		B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WFChatUIKit.xcassets; sourceTree = "<group>"; };
+		B7D8F7272782E2D000752426 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -399,11 +395,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
+				B7D8F71F2782E28F00752426 /* ZLPhotoBrowser.framework in Frameworks */,
+				B75D81842782E0AF009D4A19 /* WFChatUIKit.framework in Frameworks */,
+				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
 				905177542243CEA30020A2AC /* Bugly.framework in Frameworks */,
-				2F5A6D5E25454CBA00B99E52 /* ZLPhotoBrowser.framework in Frameworks */,
+				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				2F1A2896251647E3001350B6 /* SDWebImage.framework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
@@ -413,11 +413,6 @@
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
 				2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */,
 				2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */,
-				2F550E29217F58AE00F56C26 /* WFChatUIKit.framework in Frameworks */,
-				2B99E540254555EA00B3452D /* ZLPhotoBrowser.framework in Frameworks */,
-				2E56F6CB20AAEBA00063B4D6 /* WFChatClient.framework in Frameworks */,
-				2E56F6CA20AAEBA00063B4D6 /* WFAVEngineKit.framework in Frameworks */,
-				6E616DA220AB3435002CB8BE /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,22 +486,6 @@
 				2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */,
 			);
 			path = Moments;
-			sourceTree = "<group>";
-		};
-		2BCEC530232E238E00D55E0D /* zh-Hans.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				2BCEC531232E238E00D55E0D /* wfc.strings */,
-			);
-			path = "zh-Hans.lproj";
-			sourceTree = "<group>";
-		};
-		2BCEC533232E238E00D55E0D /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				2BCEC534232E238E00D55E0D /* wfc.strings */,
-			);
-			path = en.lproj;
 			sourceTree = "<group>";
 		};
 		2BF692E5232DBA840072036A /* Utilities */ = {
@@ -584,7 +563,10 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2F5A6D5C25454CAF00B99E52 /* ZLPhotoBrowser.framework */,
+				B75D81862782E0C5009D4A19 /* WFChatClient.framework */,
+				B75D81832782E0AF009D4A19 /* WFChatUIKit.framework */,
+				B75D81662782B8AD009D4A19 /* WebRTC.xcframework */,
+				B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */,
 				2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */,
 				2BDCE7E22336278E0004212B /* CallKit.framework */,
 				2BDCE7E0233627450004212B /* PushKit.framework */,
@@ -597,19 +579,15 @@
 				2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */,
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
-				2F143A80217F86B900B3E38A /* WFChatUIKit.xcassets */,
-				2BCEC533232E238E00D55E0D /* en.lproj */,
-				2BCEC530232E238E00D55E0D /* zh-Hans.lproj */,
 				905177532243CEA30020A2AC /* Bugly.framework */,
-				2F143A6D217F7DA900B3E38A /* Emoj.plist */,
-				2B5E950225B82A6800317D53 /* unicode_to_hanyu_pinyin.txt */,
-				2F25F746219ECFD100FFABF9 /* WFCUShareMessageView.xib */,
-				2F143A6F217F7DA900B3E38A /* Stickers.bundle */,
-				2F550E28217F58AE00F56C26 /* WFChatUIKit.framework */,
-				6E616D9A20AB3435002CB8BE /* GoogleWebRTC */,
-				2E56F6C820AAEB9F0063B4D6 /* WFAVEngineKit.framework */,
-				2E56F6C920AAEB9F0063B4D6 /* WFChatClient.framework */,
-				2B99E53F254555EA00B3452D /* ZLPhotoBrowser.framework */,
+				B7D8F71D2782E26000752426 /* ZLPhotoBrowser.framework */,
+				B7D8F7252782E2D000752426 /* Emoj.plist */,
+				B7D8F7272782E2D000752426 /* en.lproj */,
+				B7D8F7232782E2D000752426 /* Stickers.bundle */,
+				B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */,
+				B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */,
+				B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */,
+				B7D8F7212782E2D000752426 /* zh-Hans.lproj */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -884,32 +862,6 @@
 			path = Me;
 			sourceTree = "<group>";
 		};
-		6E616D9A20AB3435002CB8BE /* GoogleWebRTC */ = {
-			isa = PBXGroup;
-			children = (
-				6E616D9B20AB3435002CB8BE /* LICENSE.md */,
-				6E616D9D20AB3435002CB8BE /* Frameworks */,
-			);
-			name = GoogleWebRTC;
-			path = Frameworks/GoogleWebRTC;
-			sourceTree = SOURCE_ROOT;
-		};
-		6E616D9D20AB3435002CB8BE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6E616D9E20AB3435002CB8BE /* frameworks */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		6E616D9E20AB3435002CB8BE /* frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6E616D9F20AB3435002CB8BE /* WebRTC.framework */,
-			);
-			path = frameworks;
-			sourceTree = "<group>";
-		};
 		903EBC942136313B00312C16 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1049,23 +1001,22 @@
 			files = (
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
 				2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */,
-				2BCEC537232E238E00D55E0D /* wfc.strings in Resources */,
-				2F143A72217F7DA900B3E38A /* Stickers.bundle in Resources */,
-				6E616DA020AB3435002CB8BE /* LICENSE.md in Resources */,
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
-				2F143A70217F7DA900B3E38A /* Emoj.plist in Resources */,
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
+				B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */,
 				2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
+				B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */,
+				B7D8F72B2782E2D000752426 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
-				2BCEC536232E238E00D55E0D /* wfc.strings in Resources */,
+				B7D8F72D2782E2D000752426 /* WFChatUIKit.xcassets in Resources */,
+				B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */,
-				2F143A81217F86BA00B3E38A /* WFChatUIKit.xcassets in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
-				2B5E950325B82A6800317D53 /* unicode_to_hanyu_pinyin.txt in Resources */,
-				2F25F747219ECFD100FFABF9 /* WFCUShareMessageView.xib in Resources */,
+				B7D8F72E2782E2D000752426 /* en.lproj in Resources */,
+				B7D8F72C2782E2D000752426 /* Emoj.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,22 +1156,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2BCEC531232E238E00D55E0D /* wfc.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2BCEC532232E238E00D55E0D /* zh-Hans */,
-			);
-			name = wfc.strings;
-			sourceTree = "<group>";
-		};
-		2BCEC534232E238E00D55E0D /* wfc.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2BCEC535232E238E00D55E0D /* en */,
-			);
-			name = wfc.strings;
-			sourceTree = "<group>";
-		};
 		2E1D20001FAF0AE600F4405D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1372,7 +1307,6 @@
 		2E1D200E1FAF0AE600F4405D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1397,7 +1331,10 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.1.18;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
@@ -1412,7 +1349,6 @@
 		2E1D200F1FAF0AE600F4405D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1437,7 +1373,10 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.1.18;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
@@ -1468,7 +1407,11 @@
 				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 1.1.18;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1498,7 +1441,11 @@
 				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 1.1.18;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;

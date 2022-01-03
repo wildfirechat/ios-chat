@@ -718,7 +718,6 @@
 				2E6B50971FAE98E6006B6E31 /* Frameworks */,
 				2E6B50981FAE98E6006B6E31 /* Headers */,
 				2E6B50991FAE98E6006B6E31 /* Resources */,
-				F89D8F2820538E36005A6CD1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -792,19 +791,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n./build.sh WFChatClient WFChatClient\n";
-		};
-		F89D8F2820538E36005A6CD1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "bash xcodescript.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
