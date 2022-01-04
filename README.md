@@ -71,10 +71,6 @@
 <img src="http://static.wildfirechat.cn/ios-voip-view.png" width = 50% height = 50% />
 
 
-### 编译
-
-打开ios-chat.xcworkspace工程，第一次编译时需要按照client/uikit/chat的顺序先后进行编译。
-
 ### 工程说明
 
 工程中有3个项目，其中1个是应用，另外两个2个是库。chatclient库是IM的通讯能力，是最底层的库，chatuikit是IM的UI控件库，依赖于chatclient。chat是IM的demo，依赖于这两个库，chat需要正确配置服务器地址。
@@ -88,7 +84,7 @@
 > 在没有短信供应商时，可以使用[superCode](https://github.com/wildfirechat/app_server#短信资源)进行测试验证。
 
 ### 集成
-在集成到其他应用中时，如果使用了UIKit库，需要在应用的```Info.plist```文件中添加属性```CFBundleAllowMixedLocalizations```值为true。
+在集成到其他应用中时，如果使用了UIKit库，需要在应用的```Info.plist```文件中添加属性```CFBundleAllowMixedLocalizations```值为true。项目下的脚本[release_libs.sh](./release_libs.sh)可以把chatclient和chatuikit打包成动态库，把生成的库和资源添加到工程依赖中，注意库是动态库，需要"Embed"。此外还可以把chatclient和chatuikit项目直接添加到工程依赖中。
 
 ### 第三方动态库
 1. [SDWebImage](https://github.com/SDWebImage/SDWebImage)
@@ -102,4 +98,3 @@
 ### License
 1. Under the Creative Commons Attribution-NoDerivs 3.0 Unported license. See the [LICENSE](https://github.com/wildfirechat/ios-chat/blob/master/LICENSE) file for details.
 2. Under the 996ICU License. See the [LICENSE](https://github.com/996icu/996.ICU/blob/master/LICENSE) file for details.
-
