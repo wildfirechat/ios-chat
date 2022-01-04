@@ -2602,15 +2602,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
-					"$(PROJECT_DIR)/WFChatUIKit/AVEngine/GoogleWebRTC/Frameworks/frameworks",
-					"$(PROJECT_DIR)/WFChatUIKit/AVEngine",
-					"$(PROJECT_DIR)/WFChatUIKit/Vendor/SDWebImage",
-					"$(PROJECT_DIR)/WFChatUIKit/Vendor/ZLPhotoBrowser",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
 				INFOPLIST_FILE = WFChatUIKit/Info.plist;
@@ -2642,15 +2634,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
-					"$(PROJECT_DIR)/WFChatUIKit/AVEngine/GoogleWebRTC/Frameworks/frameworks",
-					"$(PROJECT_DIR)/WFChatUIKit/AVEngine",
-					"$(PROJECT_DIR)/WFChatUIKit/Vendor/SDWebImage",
-					"$(PROJECT_DIR)/WFChatUIKit/Vendor/ZLPhotoBrowser",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
 				INFOPLIST_FILE = WFChatUIKit/Info.plist;
