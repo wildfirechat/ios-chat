@@ -141,6 +141,7 @@
 @property (nonatomic, strong)UIButton *mentionedButton;
 @property (nonatomic, strong)UIButton *newMsgTipButton;
 
+@property (nonatomic, assign)int64_t lastUid;
 @end
 
 @implementation WFCUMessageListViewController
@@ -365,16 +366,21 @@
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
             NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
             if (!messageList.count) {
-                long long lastUid = self.modelList.lastObject.message.messageUid;
+                if(!self.lastUid) {
+                    self.lastUid = self.modelList.lastObject.message.messageUid;
+                }
                 for (WFCUMessageModel *model in self.modelList) {
-                    if (model.message.messageUid > 0 && model.message.messageUid < lastUid) {
-                        lastUid = model.message.messageUid;
+                    if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
+                        self.lastUid = model.message.messageUid;
                     }
                 }
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
+                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:self.lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
                     NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
                     for (WFCCMessage *msg in messages) {
                         [reversedMsgs insertObject:msg atIndex:0];
+                        if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
+                            self.lastUid = msg.messageUid;
+                        }
                     }
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (!reversedMsgs.count) {
