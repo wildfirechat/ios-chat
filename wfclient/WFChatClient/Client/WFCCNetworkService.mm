@@ -438,6 +438,8 @@ public:
 - (void)reportEvent_OnForeground:(BOOL)isForeground;
 
 @property(nonatomic, assign)NSUInteger backgroudRunTime;
+
+@property(nonatomic, assign)BOOL firstTimeResume;
 @end
 
 @implementation WFCCNetworkService
@@ -623,6 +625,7 @@ static WFCCNetworkService * sharedSingleton = nil;
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCCNetworkService alloc] init];
                 [sharedSingleton addReceiveMessageFilter:[WFCCIMService sharedWFCIMService]];
+                sharedSingleton.firstTimeResume = YES;
             }
         }
     }
@@ -765,6 +768,13 @@ static WFCCNetworkService * sharedSingleton = nil;
   if (!_logined) {
     return;
   }
+    
+  //首次启动也会有Resume事件，这里需要忽略，不然会启动后连接成功后再重新连接。
+  if(_firstTimeResume) {
+    _firstTimeResume = NO;
+    return;
+  }
+    
   [self reportEvent_OnForeground:YES];
   mars::baseevent::OnNetworkChange();
   mars::stn::MakesureLonglinkConnected();
