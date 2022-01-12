@@ -80,7 +80,17 @@ public:
   id<ConnectionStatusDelegate> m_delegate;
 };
 
-
+class CTSCB : public mars::stn::NotifyConnectToServerCallback {
+public:
+    CTSCB(id<ConnectToServerDelegate> delegate) : m_delegate(delegate) {
+  }
+    void OnConnectToServer(const std::string &host, const std::string &ip, int port) {
+    if (m_delegate) {
+        [m_delegate onConnectToServer:[NSString stringWithUTF8String:host.c_str()] ip:[NSString stringWithUTF8String:ip.c_str()] port:port];
+    }
+  }
+  id<ConnectToServerDelegate> m_delegate;
+};
 
 class RPCB : public mars::stn::ReceiveMessageCallback {
 public:
@@ -416,7 +426,7 @@ public:
 
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -619,6 +629,12 @@ static WFCCNetworkService * sharedSingleton = nil;
     
 }
 
+- (void)onConnectToServer:(NSString *)host ip:(NSString *)ip port:(int)port {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.connectToServerDelegate onConnectToServer:host ip:ip port:port];
+    });
+}
+
 + (WFCCNetworkService *)sharedInstance {
     if (sharedSingleton == nil) {
         @synchronized (self) {
@@ -792,14 +808,15 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void) createMars {
   mars::app::SetCallback(mars::app::AppCallBack::Instance());
   mars::stn::setConnectionStatusCallback(new CSCB(self));
+  mars::stn::setNotifyConnectToServerCallback(new CTSCB(self));
   mars::stn::setReceiveMessageCallback(new RPCB(self));
-    mars::stn::setConferenceEventCallback(new CONFCB(self));
+  mars::stn::setConferenceEventCallback(new CONFCB(self));
   mars::stn::setRefreshUserInfoCallback(new GUCB(self));
   mars::stn::setRefreshGroupInfoCallback(new GGCB(self));
-    mars::stn::setRefreshGroupMemberCallback(new GGMCB(self));
+  mars::stn::setRefreshGroupMemberCallback(new GGMCB(self));
   mars::stn::setRefreshChannelInfoCallback(new GCHCB(self));
   mars::stn::setRefreshFriendListCallback(new GFLCB(self));
-    mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
+  mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
   mars::stn::setRefreshSettingCallback(new GSCB(self));
   mars::baseevent::OnCreate();
 }

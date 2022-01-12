@@ -1943,6 +1943,19 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     mars::stn::deleteRemoteMessage(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (void)updateRemoteMessage:(long long)messageUid
+                    content:(WFCCMessageContent *)content
+                 distribute:(BOOL)distribute
+                updateLocal:(BOOL)updateLocal
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
+    
+    mars::stn::TMessageContent tcontent;
+    fillTMessageContent(tcontent, content);
+        
+    mars::stn::updateRemoteMessageContent(messageUid, tcontent, distribute, updateLocal, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
     if (keyword.length == 0) {
         return nil;
