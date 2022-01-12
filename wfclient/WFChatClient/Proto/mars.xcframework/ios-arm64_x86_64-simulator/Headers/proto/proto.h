@@ -783,6 +783,11 @@ namespace mars{
         public:
             virtual void onConnectionStatusChanged(ConnectionStatus connectionStatus) = 0;
         };
+    
+    class NotifyConnectToServerCallback {
+    public:
+        virtual void OnConnectToServer(const std::string &host, const std::string &ip, int port) = 0;
+    };
 
         class ReceiveMessageCallback {
         public:
@@ -807,6 +812,7 @@ namespace mars{
         extern void setBackupAddress(const std::string &host, int port);
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
+        extern void setNotifyConnectToServerCallback(NotifyConnectToServerCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
         extern void setConferenceEventCallback(ConferenceEventCallback *callback);
     
@@ -831,6 +837,7 @@ namespace mars{
 
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
+        extern void updateRemoteMessageContent(long long messageUid, const TMessageContent &messageContent, bool distribute, bool updateLocal, GeneralOperationCallback *callback);
         //请使用loadRemoteConversationMessages
         extern void loadRemoteMessages(const TConversation &conv, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 

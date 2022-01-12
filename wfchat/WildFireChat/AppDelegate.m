@@ -38,7 +38,7 @@
 #import <PttClient/WFPttClient.h>
 #endif
 
-@interface AppDelegate () <ConnectionStatusDelegate, ReceiveMessageDelegate,
+@interface AppDelegate () <ConnectionStatusDelegate, ConnectToServerDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
     WFAVEngineDelegate,
 #endif
@@ -56,6 +56,7 @@
     [WFCCNetworkService startLog];
 //    [[WFCCNetworkService sharedInstance] useSM4];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
+    [WFCCNetworkService sharedInstance].connectToServerDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
     [[WFCCNetworkService sharedInstance] setBackupAddressStrategy:0];
@@ -524,6 +525,9 @@
     });
 }
 
+- (void)onConnectToServer:(NSString *)host ip:(NSString *)ip port:(int)port {
+    NSLog(@"connect to server %@,%@,%d", host, ip, port);
+}
 
 - (void)setupNavBar {
     [[WFCUConfigManager globalManager] setupNavBar];

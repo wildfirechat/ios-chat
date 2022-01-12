@@ -93,6 +93,22 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @end
 
 /**
+ 连接状态的监听
+ */
+@protocol ConnectToServerDelegate <NSObject>
+
+/**
+ 成功连到某个服务的回调
+
+ @param host  服务Host
+ @param ip       服务ip
+ @param port   服务端口
+ */
+- (void)onConnectToServer:(NSString *)host ip:(NSString *)ip port:(int)port;
+
+@end
+
+/**
  消息接收的监听
  */
 @protocol ReceiveMessageDelegate <NSObject>
@@ -167,6 +183,12 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  连接状态监听
  */
 @property(nonatomic, weak) id<ConnectionStatusDelegate> connectionStatusDelegate;
+
+/**
+ 连接到服务监听
+ */
+@property(nonatomic, weak) id<ConnectToServerDelegate> connectToServerDelegate;
+
 
 /**
  消息接收监听
