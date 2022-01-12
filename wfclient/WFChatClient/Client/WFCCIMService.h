@@ -833,6 +833,25 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                       error:(void(^)(int error_code))errorBlock;
 
 /**
+ 更新远端消息，仅专业版支持。
+ 
+ @discussion 客户端仅能更新自己发送的消息，更新的消息类型不能变，更新的消息类型是服务配置允许更新的内容。Server API更新则没有限制。
+ 
+ @param messageUid 消息UID
+ @param content 更新消息内容
+ @param distribute 是否分发到其他客户端
+ @param updateLocal 是否更新本地消息内容
+ @param successBlock 删除成功
+ @param errorBlock 删除失败
+ */
+- (void)updateRemoteMessage:(long long)messageUid
+                    content:(WFCCMessageContent *)content
+                 distribute:(BOOL)distribute
+                updateLocal:(BOOL)updateLocal
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock;
+
+/**
  删除会话中的消息
  
  @param conversation 会话
