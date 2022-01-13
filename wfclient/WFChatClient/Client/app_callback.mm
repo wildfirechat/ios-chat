@@ -46,6 +46,26 @@ void AppCallBack::Release() {
             filePath = [path UTF8String];
         }
         
+        bool AppCallBack::isDBAlreadyCreated(const std::string &clientId) {
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                 NSUserDomainMask, YES);
+            NSString *documentDirectory = [paths objectAtIndex:0];
+            NSFileManager *myFileManager = [NSFileManager defaultManager];
+            NSString *cid = [NSString stringWithUTF8String:clientId.c_str()];
+            BOOL isDir = NO;
+            BOOL isExist = NO;
+            for (NSString *path in [myFileManager contentsOfDirectoryAtPath:documentDirectory error:nil]) {
+                        
+                NSString *dbPath = [[[documentDirectory stringByAppendingPathComponent:path] stringByAppendingPathComponent:cid] stringByAppendingPathComponent:@"data"];;
+                        
+                isExist = [myFileManager fileExistsAtPath:dbPath isDirectory:&isDir];
+                if(isExist && !isDir) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    
         void AppCallBack::SetAccountLogoned(bool isLogoned) {
             info.is_logoned = isLogoned;
         }

@@ -960,19 +960,24 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (NSString *)getClientId {
     //当应用在appstore上架后，开发者账户下的所有应用在同一个手机上具有相同的vendor id。详情请参考(IDFV(identifierForVendor)使用陷阱)https://easeapi.com/blog/blog/63-ios-idfv.html
     //这样如果同一个IM服务有多个应用，多个应用安装到同一个手机上，这样所有应用将具有相同的clientId，导致互踢现象产生。
-    //处理办法就是不使用identifierForVendor，随机生成UUID，然后固定使用这个UUID就行了，请参考下面注释掉的代码
-    /*
+    //处理办法就是不使用identifierForVendor，随机生成UUID，然后固定使用这个UUID就行了.
+    //下面这段代码会尝试兼容之前的vendorId，如果没有在userdefaults保持clientid，则去检查一下是否有以vendorId为子目录的数据库目录存在，如果存在就以vendorid为clientid，如果不存在就使用uuid。
+    
     NSString *clientId = [[NSUserDefaults standardUserDefaults] objectForKey:WFC_CLIENT_ID];
     if(!clientId.length) {
-        CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
-        clientId = (NSString *)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
-        CFRelease(uuidObject);
+        NSString *vendorId = [UIDevice currentDevice].identifierForVendor.UUIDString;
+        if(mars::app::AppCallBack::Instance()->isDBAlreadyCreated([vendorId UTF8String])) {
+            clientId = vendorId;
+        } else {
+            CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+            clientId = (NSString *)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
+            CFRelease(uuidObject);
+        }
+        
         [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:WFC_CLIENT_ID];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     return clientId;
-     */
-    return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
 - (BOOL)connect:(NSString *)userId token:(NSString *)token {
