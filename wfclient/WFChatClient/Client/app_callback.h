@@ -42,6 +42,8 @@ public:
     
     virtual DeviceInfo GetDeviceInfo();
     
+    bool isDBAlreadyCreated(const std::string &clientId);
+    
 private:
     static AppCallBack* instance_;
 };
