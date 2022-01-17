@@ -92,6 +92,18 @@ public:
   id<ConnectToServerDelegate> m_delegate;
 };
 
+class TDCB : public mars::stn::TrafficDataCallback {
+public:
+    TDCB(id<TrafficDataDelegate> delegate) : m_delegate(delegate) {
+  }
+    void OnTrafficData(int64_t send, int64_t recv) {
+    if (m_delegate) {
+        [m_delegate onTrafficData:send recv:recv];
+    }
+  }
+  id<TrafficDataDelegate> m_delegate;
+};
+
 class RPCB : public mars::stn::ReceiveMessageCallback {
 public:
     RPCB(id<ReceiveMessageDelegate> delegate) : m_delegate(delegate) {}
@@ -426,7 +438,7 @@ public:
 
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -635,6 +647,12 @@ static WFCCNetworkService * sharedSingleton = nil;
     });
 }
 
+- (void)onTrafficData:(int64_t)send recv:(int64_t)recv {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.trafficDataDelegate onTrafficData:send recv:recv];
+    });
+}
+
 + (WFCCNetworkService *)sharedInstance {
     if (sharedSingleton == nil) {
         @synchronized (self) {
@@ -809,6 +827,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::app::SetCallback(mars::app::AppCallBack::Instance());
   mars::stn::setConnectionStatusCallback(new CSCB(self));
   mars::stn::setNotifyConnectToServerCallback(new CTSCB(self));
+  mars::stn::setTrafficDataCallback(new TDCB(self));
   mars::stn::setReceiveMessageCallback(new RPCB(self));
   mars::stn::setConferenceEventCallback(new CONFCB(self));
   mars::stn::setRefreshUserInfoCallback(new GUCB(self));
