@@ -109,6 +109,21 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @end
 
 /**
+ 网络流量使用监听
+ */
+@protocol TrafficDataDelegate <NSObject>
+
+/**
+ 网络产生流量的回调
+
+ @param send  发送的字节数
+ @param recv 收到的字节数
+ */
+- (void)onTrafficData:(int64_t)send recv:(int64_t)recv;
+
+@end
+
+/**
  消息接收的监听
  */
 @protocol ReceiveMessageDelegate <NSObject>
@@ -189,6 +204,10 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  */
 @property(nonatomic, weak) id<ConnectToServerDelegate> connectToServerDelegate;
 
+/**
+ 网络流量监听
+ */
+@property(nonatomic, weak) id<TrafficDataDelegate> trafficDataDelegate;
 
 /**
  消息接收监听

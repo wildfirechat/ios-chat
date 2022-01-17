@@ -15,15 +15,15 @@
 #include <vector>
 
 
-//Content Type. 1000以下为系统内置类型，自定义消息需要使用1000以上
-//基本消息类型
+//Content Type. Below 1000 are predefine types. Custom types should over than 1000
+//Base message content type
 #define MESSAGE_CONTENT_TYPE_TEXT 1
 #define MESSAGE_CONTENT_TYPE_SOUND 2
 #define MESSAGE_CONTENT_TYPE_IMAGE 3
 #define MESSAGE_CONTENT_TYPE_LOCATION 4
 #define MESSAGE_CONTENT_TYPE_FILE 5
 
-//通知消息类型
+//Notification message content type
 #define MESSAGE_CONTENT_TYPE_CREATE_GROUP 104
 #define MESSAGE_CONTENT_TYPE_ADD_GROUP_MEMBER 105
 #define MESSAGE_CONTENT_TYPE_KICKOF_GROUP_MEMBER 106
@@ -44,9 +44,9 @@
 #define MESSAGE_CONTENT_TYPE_ALLOW_MEMBER 119
 
 
-//踢出群成员的可见通知消息
+//kickoff visiable notification message content type
 //#define MESSAGE_CONTENT_TYPE_KICKOF_GROUP_MEMBER_VISIBLE_NOTIFICATION 120
-//退群的可见通知消息
+//quit visiable notification message content type
 //#define MESSAGE_CONTENT_TYPE_QUIT_GROUP_VISIBLE_NOTIFICATION 121
 
 #define MESSAGE_CONTENT_TYPE_CHANGE_GROUP_EXTRA 122
@@ -788,6 +788,11 @@ namespace mars{
     public:
         virtual void OnConnectToServer(const std::string &host, const std::string &ip, int port) = 0;
     };
+    
+    class TrafficDataCallback {
+    public:
+        virtual void OnTrafficData(int64_t send, int64_t recv) = 0;
+    };
 
         class ReceiveMessageCallback {
         public:
@@ -813,6 +818,7 @@ namespace mars{
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setNotifyConnectToServerCallback(NotifyConnectToServerCallback *callback);
+        extern void setTrafficDataCallback(TrafficDataCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
         extern void setConferenceEventCallback(ConferenceEventCallback *callback);
     
@@ -838,7 +844,6 @@ namespace mars{
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void updateRemoteMessageContent(long long messageUid, const TMessageContent &messageContent, bool distribute, bool updateLocal, GeneralOperationCallback *callback);
-        //请使用loadRemoteConversationMessages
         extern void loadRemoteMessages(const TConversation &conv, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
 
         extern void loadRemoteConversationMessages(const TConversation &conv, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
