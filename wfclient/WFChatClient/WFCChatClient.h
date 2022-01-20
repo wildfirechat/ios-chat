@@ -33,7 +33,7 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCTipNotificationMessageContent.h>
 #import <WFChatClient/WFCCQuitGroupNotificationContent.h>
 #import <WFChatClient/WFCCSoundMessageContent.h>
-#import <WFChatClient/WFCCPttVoiceMessageContent.h>
+#import <WFChatClient/WFCCPTTSoundMessageContent.h>
 #import <WFChatClient/WFCCFileMessageContent.h>
 #import <WFChatClient/WFCCTextMessageContent.h>
 #import <WFChatClient/WFCCPTextMessageContent.h>
