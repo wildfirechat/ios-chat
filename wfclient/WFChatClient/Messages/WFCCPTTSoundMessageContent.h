@@ -1,5 +1,5 @@
 //
-//  WFCCPttVoiceMessageContent.h
+//  WFCCPTTSoundMessageContent.h
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/9/9.
@@ -11,7 +11,7 @@
 /**
  语音消息
  */
-@interface WFCCPttVoiceMessageContent : WFCCSoundMessageContent
+@interface WFCCPTTSoundMessageContent : WFCCSoundMessageContent
 
 /**
  构造方法

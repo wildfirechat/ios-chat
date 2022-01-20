@@ -1,26 +1,36 @@
 //
-//  WFCCPttVoiceMessageContent.m
+//  WFCCPTTSoundMessageContent.m
 //  WFChatClient
 //
 //  Created by heavyrain on 2017/9/9.
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCPttVoiceMessageContent.h"
+#import "WFCCPTTSoundMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import "wav_amr.h"
 
-
-@implementation WFCCPttVoiceMessageContent
+@implementation WFCCPTTSoundMessageContent
 + (instancetype)soundMessageContentForWav:(NSString *)wavPath
                        destinationAmrPath:(NSString *)amrPath
                                  duration:(long)duration {
-    return [super soundMessageContentForWav:wavPath destinationAmrPath:amrPath duration:duration];
+    WFCCPTTSoundMessageContent *soundMsg = [[WFCCPTTSoundMessageContent alloc] init];
+    soundMsg.duration = duration;
+    encode_amr([wavPath UTF8String], [amrPath UTF8String]);
+    
+    soundMsg.localPath = amrPath;
+    
+    return soundMsg;
 }
 
 + (instancetype)soundMessageContentForAmr:(NSString *)amrPath
                                  duration:(long)duration {
-    return [super soundMessageContentForAmr:amrPath duration:duration];
+    WFCCPTTSoundMessageContent *soundMsg = [[WFCCPTTSoundMessageContent alloc] init];
+    soundMsg.duration = duration;
+    soundMsg.localPath = amrPath;
+    
+    return soundMsg;
 }
 
 - (NSData *)getWavData {
