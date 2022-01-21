@@ -278,6 +278,9 @@
                 [[WFPttClient sharedClient] requestTalk:self.conversation startTalking:^(void) {
                     NSLog(@"talking now...");
                     [ws playPttRing:@"ptt_begin"];
+                } onAmplitude:^(int averageAmp){
+                    float level = 10*log10(averageAmp)/48.f;
+                    [ws.recordView setVoiceImage:level];
                 } requestFailure:^(int errorCode) {
                     NSLog(@"request talking failure");
                     [ws.recordView removeFromSuperview];
