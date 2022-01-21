@@ -89,6 +89,8 @@
         NSLog(@"talking now...");
         [ws playPttRing:@"ptt_begin"];
         [ws updateStartBtnStatus];
+    } onAmplitude:^(int averageAmp){
+        NSLog(@"on amp %d", averageAmp);
     } requestFailure:^(int errorCode) {
         NSLog(@"request talking failure");
         [ws updateStartBtnStatus];
