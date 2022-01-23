@@ -859,5 +859,8 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 - (void)didConversation:(WFCCConversation *)conversation endTalkingUser:(NSString *)userId {
     [self playPttRing:@"ptt_end"];
 }
+- (void)didConversation:(WFCCConversation *)conversation amplitudeUpdate:(int)amplitude ofUser:(NSString *)userId {
+    NSLog(@"on ptt user %@ speak %d", userId, amplitude);
+}
 #endif
 @end
