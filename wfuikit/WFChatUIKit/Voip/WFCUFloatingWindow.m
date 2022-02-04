@@ -200,7 +200,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit];
             } else {
-                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserId];
+                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserId screenSharing:NO];
             }
             [self updateVideoView];
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
@@ -454,15 +454,15 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
-- (void)didParticipantJoined:(NSString *)userId {
+- (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
     
 }
 
-- (void)didParticipantConnected:(NSString *)userId {
+- (void)didParticipantConnected:(NSString *)userId screenSharing:(BOOL)screenSharing {
     
 }
 
-- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+- (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {
     
 }
 - (void)didError:(NSError *)error {
@@ -481,7 +481,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
     
 }
 

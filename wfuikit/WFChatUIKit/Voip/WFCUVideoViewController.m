@@ -299,10 +299,10 @@
     }
     if (swapVideoView || self.currentSession.state == kWFAVEngineStateOutgoing) {
         [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
-        [self.currentSession setupRemoteVideoView:self.smallVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+        [self.currentSession setupRemoteVideoView:self.smallVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
     } else {
         [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
     }
 }
 - (void)startConnectedTimer {
@@ -602,7 +602,7 @@
             self.videoButton.hidden = YES;
             self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
             self.stateLabel.text = WFCString(@"WaitingAccept");
             self.smallVideoView.hidden = YES;
             
@@ -672,7 +672,7 @@
             if (self.currentSession.isAudioOnly) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.scalingType];
                 if(self.currentSession.participantIds.count > 0) {
-                    [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                    [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
                 }
                 self.smallVideoView.hidden = YES;
                 self.bigVideoView.hidden = YES;
@@ -683,7 +683,7 @@
             } else {
                 if(self.currentSession.participantIds.count > 0) {
                     [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
                 }
                 self.smallVideoView.hidden = NO;
                 self.bigVideoView.hidden = NO;
@@ -718,7 +718,7 @@
             self.downgradeButton.frame = [self getToAudioButtonFrame];
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.scalingType];
-            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0]];
+            [self.currentSession setupRemoteVideoView:nil scalingType:self.scalingType forUser:self.currentSession.participantIds[0] screenSharing:NO];
             self.stateLabel.text = WFCString(@"InvitingYou");
             self.smallVideoView.hidden = YES;
             
@@ -738,7 +738,7 @@
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
 }
 
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
@@ -753,15 +753,15 @@
     });
 
 }
-- (void)didParticipantJoined:(NSString *)userId {
+- (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
     
 }
 
-- (void)didParticipantConnected:(NSString *)userId {
+- (void)didParticipantConnected:(NSString *)userId screenSharing:(BOOL)screenSharing {
     
 }
 
-- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+- (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {
     
 }
 
@@ -781,14 +781,14 @@
     [self updateSpeakerButton];
 }
 
-- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage {
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
     //发送方丢包超过6为网络不好
     if(lostPackage > 6) {
         [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
     }
 }
 
-- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId {
+- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
     //如果uplink ture对方网络不好，false您的网络不好
     //接受方丢包超过10为网络不好
     if(lostPackage > 10) {
