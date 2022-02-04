@@ -66,13 +66,13 @@
 @property (nonatomic, assign) CGRect panStartVideoFrame;
 @property (nonatomic, strong) NSTimer *connectedTimer;
 
-@property (nonatomic, strong) NSMutableArray<NSString *> *participants;
-@property (nonatomic, strong) NSMutableArray<NSString *> *audiences;
+@property (nonatomic, strong) NSMutableArray<WFAVParticipantProfile *> *participants;
+@property (nonatomic, strong) NSMutableArray<WFAVParticipantProfile *> *audiences;
 
 //视频时，大屏用户正在说话
 @property (nonatomic, strong)UIImageView *speakingView;
 
-@property (nonatomic, strong)NSString *focusUser;
+@property (nonatomic, strong)WFAVParticipantProfile *focusUser;
 
 @property(nonatomic, strong)UIView *bottomBarView;
 
@@ -184,28 +184,41 @@
     NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
     for (WFAVParticipantProfile *p in ps) {
         if (p.audience) {
-            [self.audiences addObject:p.userId];
+            [self.audiences addObject:p];
         } else {
-            [self.participants addObject:p.userId];
+            [self.participants addObject:p];
         }
     }
     if(self.currentSession.isAudience) {
-        [self.audiences addObject:[WFCCNetworkService sharedInstance].userId];
+        [self.audiences addObject:self.currentSession.myProfile];
     } else {
-        [self.participants addObject:[WFCCNetworkService sharedInstance].userId];
+        [self.participants addObject:self.currentSession.myProfile];
     }
     
     if (self.focusUser && [self.participants containsObject:self.focusUser]) {
-        if ([self.participants containsObject:self.currentSession.host]) {
-            [self.participants removeObject:self.currentSession.host];
-            [self.participants insertObject:self.currentSession.host atIndex:0];
+        WFAVParticipantProfile *hostP;
+        for (WFAVParticipantProfile *p in self.participants) {
+            if ([p.userId isEqualToString:self.currentSession.host]) {
+                hostP = p;
+                break;
+            }
         }
-
+        if(hostP) {
+            [self.participants removeObject:hostP];
+            [self.participants insertObject:hostP atIndex:0];
+        }
         [self setFocusUser:_focusUser];
     } else {
-        if ([self.participants containsObject:self.currentSession.host]) {
-            [self.participants removeObject:self.currentSession.host];
-            [self.participants addObject:self.currentSession.host];
+        WFAVParticipantProfile *hostP;
+        for (WFAVParticipantProfile *p in self.participants) {
+            if ([p.userId isEqualToString:self.currentSession.host]) {
+                hostP = p;
+                break;
+            }
+        }
+        if(hostP) {
+            [self.participants removeObject:hostP];
+            [self.participants addObject:hostP];
         }
     }
     [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%ld)", self.participants.count + self.audiences.count] forState:UIControlStateNormal];
@@ -451,11 +464,11 @@
     }
 }
 
-- (void)setFocusUser:(NSString *)userId {
-    _focusUser = userId;
-    if (userId) {
-        [self.participants removeObject:userId];
-        [self.participants addObject:userId];
+- (void)setFocusUser:(WFAVParticipantProfile *)user {
+    _focusUser = user;
+    if (user) {
+        [self.participants removeObject:user];
+        [self.participants addObject:user];
     }
 }
 
@@ -513,8 +526,8 @@
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
-    __block NSString *focusUser = [self.participants lastObject];
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession) {
+    __block WFAVParticipantProfile *focusUser = [self.participants lastObject];
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser.userId withTouchedBlock:^(WFAVCallSession *callSession) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession];
         [vc setFocusUser:focusUser];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
@@ -595,7 +608,7 @@
 - (BOOL)onDeviceOrientationDidChange{
     //获取当前设备Device
     UIDevice *device = [UIDevice currentDevice] ;
-    NSString *lastUser;
+    WFAVParticipantProfile *lastUser;
     switch (device.orientation) {
         case UIDeviceOrientationFaceUp:
 //            NSLog(@"屏幕幕朝上平躺");
@@ -614,10 +627,10 @@
             self.bigVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
             self.bigVideoView.frame = self.view.bounds;
             lastUser = [self.participants lastObject];
-            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            if ([lastUser.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser.userId screenSharing:lastUser.screeSharing];
             }
             break;
 
@@ -625,10 +638,10 @@
             self.bigVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             self.bigVideoView.frame = self.view.bounds;
             lastUser = [self.participants lastObject];
-            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            if ([lastUser.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser.userId screenSharing:lastUser.screeSharing];
             }
             break;
 
@@ -636,10 +649,10 @@
             self.bigVideoView.transform = CGAffineTransformMakeRotation(0);
             self.bigVideoView.frame = self.view.bounds;
             lastUser = [self.participants lastObject];
-            if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            if ([lastUser.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser.userId screenSharing:lastUser.screeSharing];
             }
             break;
 
@@ -920,11 +933,11 @@
                 self.portraitCollectionView.hidden = NO;
                 [self.portraitCollectionView reloadData];
             } else {
-                NSString *lastUser = [self.participants lastObject];
-                if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                WFAVParticipantProfile *lastUser = [self.participants lastObject];
+                if ([lastUser.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                     [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
                 } else {
-                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser.userId screenSharing:lastUser.screeSharing];
                 }
                 
                 self.smallCollectionView.hidden = NO;
@@ -963,14 +976,14 @@
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
 }
 
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
-    if ([self.participants.lastObject isEqualToString:userId]) {
+    if ([self.participants.lastObject.userId isEqualToString:userId]) {
         for (int i = 0; i < self.participants.count-1; i++) {
-            NSString *pid = [self.participants objectAtIndex:i];
-            if ([pid isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            WFAVParticipantProfile *pid = [self.participants objectAtIndex:i];
+            if ([pid.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (!self.currentSession.myProfile.videoMuted) {
                     [self switchVideoView:i];
                     return;
@@ -978,7 +991,7 @@
                 continue;
             }
             for (WFAVParticipantProfile *p in self.currentSession.participants) {
-                if ([p.userId isEqualToString:pid]) {
+                if ([p.userId isEqualToString:pid.userId]) {
                     if (!p.videoMuted && p.state == kWFAVEngineStateConnected) {
                         [self switchVideoView:i];
                         return;
@@ -994,7 +1007,7 @@
 }
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
-    if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
+    if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject.userId]) {
         if (volume > 1000) {
             [self.bigVideoView bringSubviewToFront:self.speakingView];
             self.speakingView.hidden = NO;
@@ -1017,23 +1030,35 @@
     }
 }
 
-- (void)didParticipantJoined:(NSString *)userId {
+- (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     
-    if ([self.participants containsObject:userId] || [userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return;
     }
+    for (WFAVParticipantProfile *profile in self.participants) {
+        if([profile.userId isEqualToString:userId] && profile.screeSharing == screenSharing) {
+            return;
+        }
+    }
+    
     [self rearrangeParticipants];
     [self reloadVideoUI];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-    [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+    NSString *text;
+    if(screenSharing) {
+        text = [NSString stringWithFormat:@"%@ 开始屏幕分享", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName];
+    } else {
+        text = [NSString stringWithFormat:@"%@ 加入了会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName];
+    }
+    [self.view makeToast:text duration:1 position:CSToastPositionCenter];
 }
 
-- (void)didParticipantConnected:(NSString *)userId {
-    [self reloadVideoUI];
+- (void)didParticipantConnected:(NSString *)userId screenSharing:(BOOL)screenSharing {
+
 }
 
-- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+- (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     
     [self rearrangeParticipants];
@@ -1043,7 +1068,9 @@
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     NSString *reasonStr;
-    if (reason == kWFAVCallEndReasonTimeout) {
+    if(screenSharing) {
+        reasonStr = @"结束了屏幕分享";
+    } else if (reason == kWFAVCallEndReasonTimeout) {
         reasonStr = @"未接听";
     } else if(reason == kWFAVCallEndReasonBusy) {
         reasonStr = @"网络忙";
@@ -1070,21 +1097,31 @@
     
 }
 
-- (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId {
+- (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     [self rearrangeParticipants];
-    [self reloadVideoUI];
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-    if(audience) {
-        [self.view makeToast:[NSString stringWithFormat:@"%@ 结束了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
-    } else {
-        [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
-    }
     
-    if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        [self updateAudioButton];
-        [self updateVideoButton];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+    if(screenSharing) {
+        for (WFAVParticipantProfile *profile in self.participants) {
+            if([profile.userId isEqualToString:userId] && profile.screeSharing) {
+                self.focusUser = profile;
+                break;
+            }
+        }
+    } else {
+        if(audience) {
+            [self.view makeToast:[NSString stringWithFormat:@"%@ 结束了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+        } else {
+            [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+        }
+        
+        if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            [self updateAudioButton];
+            [self updateVideoButton];
+        }
     }
+    [self reloadVideoUI];
 }
 
 - (void)didChangeAudioRoute {
@@ -1100,14 +1137,14 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMutedStateChanged" object:nil];
 }
 
-- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage {
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
     //发送方丢包超过6为网络不好
     if(lostPackage > 6) {
         [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
     }
 }
 
-- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId {
+- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
     //如果uplink ture对方网络不好，false您的网络不好
     //接受方丢包超过10为网络不好
     if(lostPackage > 10) {
@@ -1120,7 +1157,9 @@
         }
     }
 }
-
+- (void)onScreenSharingFailure {
+    
+}
 - (void)checkAVPermission {
     [self checkCapturePermission:nil];
     [self checkRecordPermission:nil];
@@ -1248,8 +1287,8 @@
             self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, (itemWidth + layout.minimumLineSpacing)*lines - layout.minimumLineSpacing);
             
             _speakingView.hidden = YES;
-            NSString *userId = [self.participants lastObject];
-            if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            WFAVParticipantProfile *user = [self.participants lastObject];
+            if ([user.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
                     [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
                     self.stateLabel.text = WFCString(@"VideoClosed");
@@ -1261,13 +1300,13 @@
                 }
             } else {
                 for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-                    if ([profile.userId isEqualToString:userId]) {
+                    if ([profile.userId isEqualToString:user.userId] && profile.screeSharing == user.screeSharing) {
                         if (profile.videoMuted) {
-                            [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId];
+                            [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:user.userId screenSharing:user.screeSharing];
                             self.stateLabel.text = WFCString(@"VideoClosed");
                             self.stateLabel.hidden = NO;
                         } else {
-                            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];
+                            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:user.userId screenSharing:user.screeSharing];
                             self.stateLabel.text = nil;
                             self.stateLabel.hidden = YES;
                         }
@@ -1275,7 +1314,7 @@
                     }
                 }
             }
-            WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+            WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId refresh:NO];
             [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
             [self.smallCollectionView reloadData];
         } else {
@@ -1287,11 +1326,11 @@
 }
 
 - (BOOL)switchVideoView:(NSUInteger)index {
-    NSString *userId = self.participants[index];
+    WFAVParticipantProfile *user = self.participants[index];
     
     BOOL canSwitch = NO;
     for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-        if ([profile.userId isEqualToString:userId]) {
+        if ([profile.userId isEqualToString:user.userId] && profile.screeSharing == user.screeSharing) {
             if (profile.state == kWFAVEngineStateConnected) {
                 canSwitch = YES;
             }
@@ -1299,18 +1338,18 @@
         }
     }
     
-    if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    if ([user.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         if (self.currentSession.state == kWFAVEngineStateConnected) {
             canSwitch = YES;
         }
     }
     
     if (canSwitch) {
-        NSString *lastId = [self.participants lastObject];
+        WFAVParticipantProfile *lastId = [self.participants lastObject];
         [self.participants removeLastObject];
         [self.participants insertObject:lastId atIndex:index];
-        [self.participants removeObject:userId];
-        [self.participants addObject:userId];
+        [self.participants removeObject:user];
+        [self.participants addObject:user];
     }
     [self reloadVideoUI];
     
@@ -1329,11 +1368,11 @@
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *userId = self.participants[indexPath.row];
+    WFAVParticipantProfile *user = self.participants[indexPath.row];
     if (collectionView == self.smallCollectionView) {
         WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
 
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         
         
         UIDevice *device = [UIDevice currentDevice] ;
@@ -1346,7 +1385,7 @@
         }
         
         
-        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if ([user.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             WFAVParticipantProfile *profile = self.currentSession.myProfile;
             [cell setUserInfo:userInfo callProfile:profile];
             if (profile.videoMuted) {
@@ -1355,16 +1394,11 @@
                 [self.currentSession setupLocalVideoView:cell scalingType:self.smallScalingType];
             }
         } else {
-            for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-                if ([profile.userId isEqualToString:userId]) {
-                    [cell setUserInfo:userInfo callProfile:profile];
-                    if (profile.videoMuted) {
-                        [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:userId];
-                    } else {
-                        [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
-                    }
-                    break;
-                }
+            [cell setUserInfo:userInfo callProfile:user];
+            if (user.videoMuted) {
+                [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:user.userId screenSharing:user.screeSharing];
+            } else {
+                [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:user.userId screenSharing:user.screeSharing];
             }
         }
 
@@ -1375,18 +1409,13 @@
         cell.itemSize = PortraitItemSize;
         cell.labelSize = PortraitLabelSize;
         
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
         
-        if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if ([user.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             cell.profile = self.currentSession.myProfile;
         } else {
-            for (WFAVParticipantProfile *profile in self.currentSession.participants) {
-                if ([profile.userId isEqualToString:userId]) {
-                    cell.profile = profile;
-                    break;
-                }
-            }
+            cell.profile = user;
         }
         
         return cell;

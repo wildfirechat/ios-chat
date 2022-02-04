@@ -554,7 +554,7 @@
             if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser screenSharing:NO];
             }
             break;
 
@@ -565,7 +565,7 @@
             if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser screenSharing:NO];
             }
             break;
 
@@ -576,7 +576,7 @@
             if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             } else {
-                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser screenSharing:NO];
             }
             break;
 
@@ -884,7 +884,7 @@
                 if ([lastUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                     [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
                 } else {
-                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser];
+                    [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:lastUser screenSharing:NO];
                 }
                 
                 self.smallCollectionView.hidden = NO;
@@ -932,7 +932,7 @@
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
 }
 
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId {
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
 }
 
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
@@ -978,7 +978,7 @@
     });
 }
 
-- (void)didParticipantJoined:(NSString *)userId {
+- (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
     if ([self.participants containsObject:userId] || [userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return;
     }
@@ -986,11 +986,11 @@
     [self reloadVideoUI];
 }
 
-- (void)didParticipantConnected:(NSString *)userId {
+- (void)didParticipantConnected:(NSString *)userId screenSharing:(BOOL)screenSharing {
     [self reloadVideoUI];
 }
 
-- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason {
+- (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {
     [self.participants removeObject:userId];
     [self reloadVideoUI];
     
@@ -1090,11 +1090,11 @@
                 for (WFAVParticipantProfile *profile in self.currentSession.participants) {
                     if ([profile.userId isEqualToString:userId]) {
                         if (profile.videoMuted) {
-                            [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId];
+                            [self.currentSession setupRemoteVideoView:nil scalingType:self.bigScalingType forUser:userId screenSharing:profile.screeSharing];
                             self.stateLabel.text = WFCString(@"VideoClosed");
                             self.stateLabel.hidden = NO;
                         } else {
-                            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId];
+                            [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.bigScalingType forUser:userId screenSharing:profile.screeSharing];
                             self.stateLabel.text = nil;
                             self.stateLabel.hidden = YES;
                         }
@@ -1147,14 +1147,14 @@
     NSLog(@"didChangeInitiator:%@", initiator);
 }
 
-- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage {
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
     //发送方丢包超过6为网络不好
     if(lostPackage > 6) {
         [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
     }
 }
 
-- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId {
+- (void)didMedia:(NSString *)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
     //如果uplink ture对方网络不好，false您的网络不好
     //接受方丢包超过10为网络不好
     if(lostPackage > 10) {
@@ -1210,9 +1210,9 @@
                 if ([profile.userId isEqualToString:userId]) {
                     [cell setUserInfo:userInfo callProfile:profile];
                     if (profile.videoMuted) {
-                        [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:userId];
+                        [self.currentSession setupRemoteVideoView:nil scalingType:self.smallScalingType forUser:userId screenSharing:profile.screeSharing];
                     } else {
-                        [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId];
+                        [self.currentSession setupRemoteVideoView:cell scalingType:self.smallScalingType forUser:userId screenSharing:profile.screeSharing];
                     }
                     break;
                 }
