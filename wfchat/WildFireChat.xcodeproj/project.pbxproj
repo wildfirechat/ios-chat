@@ -115,10 +115,6 @@
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
-		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
-		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
-		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7212782E2D000752426 /* zh-Hans.lproj */; };
@@ -132,6 +128,10 @@
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7E82AFD27A578010017EC3D /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E82AFB27A578010017EC3D /* WebRTC.xcframework */; };
+		B7E82AFE27A578010017EC3D /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E82AFB27A578010017EC3D /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7E82AFF27A578010017EC3D /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E82AFC27A578010017EC3D /* WFAVEngineKit.framework */; };
+		B7E82B0027A578010017EC3D /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E82AFC27A578010017EC3D /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,8 +165,8 @@
 				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
 				B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */,
 				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
-				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
-				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
+				B7E82B0027A578010017EC3D /* WFAVEngineKit.framework in Embed Frameworks */,
+				B7E82AFE27A578010017EC3D /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -386,6 +386,8 @@
 		B7D8F7272782E2D000752426 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7E82AFB27A578010017EC3D /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../../WFAVEngineKit/Frameworks/WebRTC.xcframework; sourceTree = "<group>"; };
+		B7E82AFC27A578010017EC3D /* WFAVEngineKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -393,14 +395,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
+				B7E82AFD27A578010017EC3D /* WebRTC.xcframework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
+				B7E82AFF27A578010017EC3D /* WFAVEngineKit.framework in Frameworks */,
 				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
-				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */,
@@ -559,6 +561,8 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B7E82AFB27A578010017EC3D /* WebRTC.xcframework */,
+				B7E82AFC27A578010017EC3D /* WFAVEngineKit.framework */,
 				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
 				B7D8F7362783035200752426 /* SDWebImage.xcframework */,
 				B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */,

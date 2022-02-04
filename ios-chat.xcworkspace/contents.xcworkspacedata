@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../WFAVEngineKit/WFAVEngineKit.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:wfchat/WildFireChat.xcodeproj">
    </FileRef>
    <FileRef
