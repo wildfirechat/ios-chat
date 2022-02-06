@@ -523,6 +523,7 @@
 
 - (void)updateScreenSharingButton {
     self.screenSharingButton.selected = self.currentSession.isInAppScreenSharing;
+    self.screenSharingButton.enabled = !self.currentSession.isAudience;
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
@@ -1119,6 +1120,7 @@
         if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [self updateAudioButton];
             [self updateVideoButton];
+            [self updateScreenSharingButton];
         }
     }
     [self reloadVideoUI];
