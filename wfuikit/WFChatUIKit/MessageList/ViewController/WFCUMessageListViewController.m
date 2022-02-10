@@ -2595,7 +2595,7 @@
 
 -(void)performDelete:(UIMenuController *)sender {
     WFCCMessage *message = self.cell4Menu.model.message;
-    if([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
+    if([[WFCCIMService sharedWFCIMService] isCommercialServer] && self.conversation.type != Channel_Type) {
         __weak typeof(self)weakSelf = self;
 
         UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ConfirmDelete") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
