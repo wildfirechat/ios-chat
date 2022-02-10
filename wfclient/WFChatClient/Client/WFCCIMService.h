@@ -946,6 +946,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 #pragma mark - 用户相关
 /**
  获取用户信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的单聊会话中时或者此人的用户信息页面使用一次true。
  
  @param userId 用户ID
  @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
@@ -957,6 +958,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 /**
  获取用户信息
  @discussion 获取用户信息，如果在群中有群昵称也一并返回
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的单聊会话中时或者此人的用户信息页面使用一次true。
  
  @param userId 用户ID
  @param groupId 群组ID
@@ -991,6 +993,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 /**
  获取用户信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的单聊会话中时或者此人的用户信息页面使用true
  
  @param userId 用户ID
  @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
@@ -1161,13 +1164,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 #pragma mark - 群相关
 /**
  获取群成员信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话详情中时使用一次true。
  
  @param groupId 群ID
- @param forceUpdate 是否强制从服务器更新，如果不刷新则从本地缓存中读取
+ @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
  @return 群成员信息列表
  */
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
-                                    forceUpdate:(BOOL)forceUpdate;
+                                    forceUpdate:(BOOL)refresh;
 
 /**
  根据成员类型获取群成员信息
@@ -1181,6 +1185,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 /**
  获取群成员信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话详情中时使用一次true。
  
  @param groupId 群ID
  @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
@@ -1194,6 +1199,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 /**
  获取群信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话中时使用一次true。
  
  @param groupId 群ID
  @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
@@ -1204,6 +1210,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
 /**
  获取群信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话中时使用一次true。
  
  @param groupId 群ID
  @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取

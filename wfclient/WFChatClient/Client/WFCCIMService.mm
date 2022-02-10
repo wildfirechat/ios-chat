@@ -2311,12 +2311,12 @@ WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
 }
 
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
-                             forceUpdate:(BOOL)forceUpdate {
+                             forceUpdate:(BOOL)refresh {
     if(groupId.length == 0) {
         return nil;
     }
     
-    std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], forceUpdate);
+    std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], refresh);
     NSMutableArray *output = [[NSMutableArray alloc] init];
     for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
         WFCCGroupMember *member = convertProtoGroupMember(*it);
