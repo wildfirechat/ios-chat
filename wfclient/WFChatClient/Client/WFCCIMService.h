@@ -536,6 +536,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                       count:(NSInteger)count;
 /**
  获取服务器消息
+ @discussion 获取得到的消息数目有可能少于指定的count数，如果count不为0就意味着还有更多的消息可以获取，只有获取到的消息数为0才表示没有更多的消息了。
  
  @param conversation 会话
  @param beforeMessageUid 起始index
