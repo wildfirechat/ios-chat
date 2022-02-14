@@ -121,6 +121,7 @@
                                host:invite.host
                                title:invite.title
                                desc:invite.desc
+                               callExtra:nil
                                audience:invite.audience
                                advanced:invite.advanced
                                muteAudio:NO
@@ -147,7 +148,7 @@
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:audience advanced:advanced record:NO sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:nil audience:audience advanced:advanced record:NO sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -158,7 +159,8 @@
                                host:host
                                title:title
                                desc:desc
-                               audience:audience
+                                   callExtra:nil
+                                   audience:audience
                                    advanced:advanced
                                    muteAudio:NO
                                    muteVideo:NO

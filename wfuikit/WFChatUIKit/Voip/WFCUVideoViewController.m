@@ -95,6 +95,7 @@
     if (self) {
         WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
                                                                     audioOnly:audioOnly
+                                                                    callExtra:nil
                                                                  conversation:conversation
                                                               sessionDelegate:self];
         self.currentSession = session;
@@ -339,7 +340,7 @@
 
 - (void)answerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:NO];
+        [self.currentSession answerCall:NO callExtra:nil];
     }
 }
 
@@ -359,7 +360,7 @@
 
 - (void)downgradeButtonDidTap:(UIButton *)button {
     if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:YES];
+        [self.currentSession answerCall:YES callExtra:nil];
     } else if(self.currentSession.state == kWFAVEngineStateConnected) {
         self.currentSession.audioOnly = !self.currentSession.isAudioOnly;
     }
