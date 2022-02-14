@@ -104,6 +104,7 @@
     if (self) {
         WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
                                                                     audioOnly:audioOnly
+                                                                    callExtra:nil
                                                                  conversation:conversation
                                                               sessionDelegate:self];
         self.currentSession = session;
@@ -416,7 +417,7 @@
 
 - (void)answerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:NO];
+        [self.currentSession answerCall:NO callExtra:nil];
     }
 }
 
