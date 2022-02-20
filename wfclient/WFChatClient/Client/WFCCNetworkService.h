@@ -181,6 +181,20 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)onConferenceEvent:(NSString *)event;
 @end
 
+@class WFCCUserOnlineState;
+/**
+ 在线事件的监听
+ */
+@protocol OnlineEventDelegate <NSObject>
+
+/**
+ 在线事件的回调
+
+ @param events 事件
+ */
+- (void)onOnlineEvent:(NSArray<WFCCUserOnlineState *> *)events;
+@end
+
 #pragma mark - 连接服务
 /**
  连接服务
@@ -218,6 +232,12 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 会议事件监听
 */
 @property(nonatomic, weak) id<ConferenceEventDelegate> conferenceEventDelegate;
+
+/**
+在线事件监听
+*/
+@property(nonatomic, weak) id<OnlineEventDelegate> onlineEventDelegate;
+
 /**
  当前是否处于登陆状态
  */

@@ -115,6 +115,8 @@
 		2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2176962761A50600AF695B /* opencore-amrnb.xcframework */; };
 		2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F3223D62144C5FB0016A2C4 /* WFCCVideoMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */; };
+		2F3D37B327BDE4A7000D1833 /* WFCCUserOnlineState.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3D37B127BDE4A7000D1833 /* WFCCUserOnlineState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2F3D37B427BDE4A7000D1833 /* WFCCUserOnlineState.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3D37B227BDE4A7000D1833 /* WFCCUserOnlineState.m */; };
 		2F444875252D6E51007A570E /* WFCCLinkMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F444873252D6E50007A570E /* WFCCLinkMessageContent.m */; };
 		2F444876252D6E51007A570E /* WFCCLinkMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F444874252D6E50007A570E /* WFCCLinkMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F48C9C5214D16250092B167 /* WFCCRecallMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F48C9C3214D16240092B167 /* WFCCRecallMessageContent.m */; };
@@ -278,6 +280,8 @@
 		2F2176962761A50600AF695B /* opencore-amrnb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "opencore-amrnb.xcframework"; sourceTree = "<group>"; };
 		2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCVideoMessageContent.h; sourceTree = "<group>"; };
 		2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCVideoMessageContent.m; sourceTree = "<group>"; };
+		2F3D37B127BDE4A7000D1833 /* WFCCUserOnlineState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCUserOnlineState.h; sourceTree = "<group>"; };
+		2F3D37B227BDE4A7000D1833 /* WFCCUserOnlineState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCUserOnlineState.m; sourceTree = "<group>"; };
 		2F444873252D6E50007A570E /* WFCCLinkMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLinkMessageContent.m; sourceTree = "<group>"; };
 		2F444874252D6E50007A570E /* WFCCLinkMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCLinkMessageContent.h; sourceTree = "<group>"; };
 		2F48C9C3214D16240092B167 /* WFCCRecallMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCRecallMessageContent.m; sourceTree = "<group>"; };
@@ -576,6 +580,8 @@
 				2B785A5325294C0D003CBF78 /* WFCCQuoteInfo.m */,
 				2FB87A602650BDE000790A26 /* WFCCFriend.h */,
 				2FB87A612650BDE000790A26 /* WFCCFriend.m */,
+				2F3D37B127BDE4A7000D1833 /* WFCCUserOnlineState.h */,
+				2F3D37B227BDE4A7000D1833 /* WFCCUserOnlineState.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -627,6 +633,7 @@
 			files = (
 				2B63367A2470DB7E008D6B38 /* WFCCReadReport.h in Headers */,
 				2F8CA19B274641E0000CC09C /* WFCCMarkUnreadMessageContent.h in Headers */,
+				2F3D37B327BDE4A7000D1833 /* WFCCUserOnlineState.h in Headers */,
 				2BC606E825C1A12400F77AD3 /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
 				2F59FFF22774A3900046C2D5 /* WFCCPTTSoundMessageContent.h in Headers */,
@@ -813,6 +820,7 @@
 				2B785A5525294C0D003CBF78 /* WFCCQuoteInfo.m in Sources */,
 				903EBB8B21357DDF00312C16 /* WFCCStickerMessageContent.m in Sources */,
 				2B6336792470DB7E008D6B38 /* WFCCReadReport.m in Sources */,
+				2F3D37B427BDE4A7000D1833 /* WFCCUserOnlineState.m in Sources */,
 				2E6B51141FAE9B10006B6E31 /* WFCCConversation.m in Sources */,
 				2FEF332621BE93980087B6C2 /* WFCCChannelInfo.m in Sources */,
 				2E6B51121FAE9B10006B6E31 /* WFCCUtilities.m in Sources */,
