@@ -134,6 +134,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Disable_Sync_Draft = 20,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Voip_Silent = 21,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Custom_State = 22,
     
     
     //自定义用户设置，请使用1000以上的key
@@ -202,6 +204,8 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 @end
 
 @protocol ReceiveMessageFilter;
+@class WFCCUserOnlineState;
+@class WFCCUserCustomState;
 
 #pragma mark - IM服务
 
@@ -2006,6 +2010,17 @@ amr文件转成wav数据
 - (BOOL)isGlobalDisableSyncDraft;
 
 /*
+ 获取用户的在线状态
+ */
+- (WFCCUserOnlineState *)getUserOnlineState:(NSString *)userId;
+
+- (WFCCUserCustomState *)getMyCustomState;
+
+- (void)setMyCustomState:(WFCCUserCustomState *)state
+                 success:(void(^)(void))successBlock
+                   error:(void(^)(int error_code))errorBlock;
+
+/*
  音视频会议相关
  */
 - (void)sendConferenceRequest:(long long)sessionId
@@ -2031,4 +2046,7 @@ amr文件转成wav数据
 - (void)releaseLock:(NSString *)lockId
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock;
+
+//内部调用，请勿使用
+- (void)putUseOnlineStates:(NSArray<WFCCUserOnlineState *> *)states;
 @end
