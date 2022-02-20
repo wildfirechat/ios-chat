@@ -17,6 +17,7 @@
 #import "WFCCRecallMessageContent.h"
 #import "WFCCMarkUnreadMessageContent.h"
 #import "wav_amr.h"
+#import "WFCCUserOnlineState.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
@@ -781,6 +782,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 @interface WFCCIMService ()
 @property(nonatomic, strong)NSMutableDictionary<NSNumber *, Class> *MessageContentMaps;
 @property(nonatomic, assign)BOOL defaultSilentWhenPCOnline;
+
+@property(nonatomic, strong)NSMutableDictionary<NSString *, WFCCUserOnlineState*> *useOnlineCacheMap;
 @end
 
 @implementation WFCCIMService
@@ -791,6 +794,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                 sharedSingleton = [[WFCCIMService alloc] init];
                 sharedSingleton.MessageContentMaps = [[NSMutableDictionary alloc] init];
                 sharedSingleton.defaultSilentWhenPCOnline = YES;
+                sharedSingleton.useOnlineCacheMap = [[NSMutableDictionary alloc] init];
             }
         }
     }
@@ -3070,6 +3074,34 @@ public:
     return mars::stn::IsGlobalDisableSyncDraft() == true;
 }
 
+- (WFCCUserOnlineState *)getUserOnlineState:(NSString *)userId {
+    return self.useOnlineCacheMap[userId];
+}
+
+- (WFCCUserCustomState *)getMyCustomState {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Custom_State key:@""];
+    if(strValue.length) {
+        NSRange range = [strValue rangeOfString:@"-"];
+        if(range.location != NSNotFound) {
+            WFCCUserCustomState *state = [[WFCCUserCustomState alloc] init];
+            NSString *numStr = [strValue substringToIndex:range.length];
+            NSString *text = [strValue substringFromIndex:range.length+1];
+            state.state = [numStr intValue];
+            state.text = text;
+            return state;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)setMyCustomState:(WFCCUserCustomState *)state
+                 success:(void(^)(void))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+    NSString *strValue = [NSString stringWithFormat:@"%d-%@", state.state, state.text];
+    [self setUserSetting:UserSettingScope_Custom_State key:@"" value:strValue success:successBlock error:errorBlock];
+}
+
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
                       request:(NSString *)request
@@ -3134,5 +3166,11 @@ public:
         NSLog(@"timestamp is %lld", msg.serverTime);
     }
     return NO;
+}
+
+- (void)putUseOnlineStates:(NSArray<WFCCUserOnlineState *> *)states {
+    [states enumerateObjectsUsingBlock:^(WFCCUserOnlineState * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.useOnlineCacheMap setObject:obj forKey:obj.userId];
+    }];
 }
 @end

@@ -24,6 +24,7 @@
 #import "WFCCIMService.h"
 #import "WFCCNetworkStatus.h"
 #import "WFCCRecallMessageContent.h"
+#import "WFCCUserOnlineState.h"
 
 const NSString *SDKVERSION = @"0.1";
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
@@ -155,6 +156,40 @@ public:
   }
     
   id<ConferenceEventDelegate> m_delegate;
+};
+
+class OECB : public mars::stn::OnlineEventCallback {
+public:
+    OECB(id<OnlineEventDelegate> delegate) : m_delegate(delegate) {
+  }
+  void onOnlineEvent(const std::list<mars::stn::TUserOnlineState> &events) {
+    if (m_delegate) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TUserOnlineState>::const_iterator i = events.begin(); i != events.end(); ++i) {
+            const mars::stn::TUserOnlineState &event = *i;
+            WFCCUserOnlineState *state = [[WFCCUserOnlineState alloc] init];
+            state.userId = [NSString stringWithUTF8String:event.userId.c_str()];
+            state.customState = [[WFCCUserCustomState alloc] init];
+            state.customState.state = event.customState;
+            if(!event.customText.empty()) {
+                state.customState.text = [NSString stringWithUTF8String:event.customText.c_str()];
+            }
+            NSMutableArray *array = [[NSMutableArray alloc] init];
+            for (std::list<mars::stn::TOnlineState>::const_iterator it = event.states.begin(); it != event.states.end(); ++it) {
+                WFCCClientState *onlineState = [[WFCCClientState alloc] init];
+                onlineState.platform = it->platform;
+                onlineState.state = it->state;
+                [array addObject:onlineState];
+            }
+            state.clientStates = array;
+            [arr addObject:state];
+        }
+        
+        [m_delegate onOnlineEvent:arr];
+    }
+  }
+    
+  id<OnlineEventDelegate> m_delegate;
 };
 
 
@@ -438,7 +473,7 @@ public:
 
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -587,6 +622,13 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)onConferenceEvent:(NSString *)event {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.conferenceEventDelegate onConferenceEvent:event];
+    });
+}
+
+- (void)onOnlineEvent:(NSArray<WFCCUserOnlineState *> *)events {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[WFCCIMService sharedWFCIMService] putUseOnlineStates:events];
+        [self.onlineEventDelegate onOnlineEvent:events];
     });
 }
 
@@ -830,6 +872,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setTrafficDataCallback(new TDCB(self));
   mars::stn::setReceiveMessageCallback(new RPCB(self));
   mars::stn::setConferenceEventCallback(new CONFCB(self));
+  mars::stn::setOnlineEventCallback(new OECB(self));
   mars::stn::setRefreshUserInfoCallback(new GUCB(self));
   mars::stn::setRefreshGroupInfoCallback(new GGCB(self));
   mars::stn::setRefreshGroupMemberCallback(new GGMCB(self));
