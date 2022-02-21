@@ -16,5 +16,7 @@
 
 @property (nonatomic, strong)NSString *groupAlias;
 
+@property (nonatomic, strong)UIImageView *onlineView;
+
 @property (nonatomic, assign, getter=isBig)BOOL big;
 @end
