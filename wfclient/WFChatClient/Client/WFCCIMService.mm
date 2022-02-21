@@ -572,8 +572,7 @@ public:
 class IMGetUploadMediaUrlCallback : public mars::stn::GetUploadMediaUrlCallback {
 public:
     void(^m_successBlock)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type);
-  void(^m_errorBlock)(int error_code);
-  void(^m_progressBlock)(long uploaded, long total);
+    void(^m_errorBlock)(int error_code);
   
     IMGetUploadMediaUrlCallback(void(^successBlock)(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type), void(^errorBlock)(int error_code)) : mars::stn::GetUploadMediaUrlCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {}
   
@@ -588,7 +587,62 @@ public:
           }
           delete this;
       });
+    }
+  
+    void onFalure(int errorCode) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+          if (m_errorBlock) {
+              m_errorBlock(errorCode);
+          }
+          delete this;
+      });
+    }
+    
+  ~IMGetUploadMediaUrlCallback() {
+    m_successBlock = nil;
+    m_errorBlock = nil;
   }
+};
+
+class IMWatchOnlineStateCallback : public mars::stn::WatchOnlineStateCallback {
+public:
+    void(^m_successBlock)(NSArray<WFCCUserOnlineState *> *states);
+    void(^m_errorBlock)(int error_code);
+  
+    IMWatchOnlineStateCallback(void(^successBlock)(NSArray<WFCCUserOnlineState *> *states), void(^errorBlock)(int error_code)) : mars::stn::WatchOnlineStateCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {}
+  
+    void onSuccess(const std::list<mars::stn::TUserOnlineState> &stateList) {
+        NSMutableArray<WFCCUserOnlineState *> *onlineStates = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TUserOnlineState>::const_iterator it = stateList.begin(); it != stateList.end(); ++it) {
+            WFCCUserOnlineState *s = [[WFCCUserOnlineState alloc] init];
+            s.userId = [NSString stringWithUTF8String:it->userId.c_str()];
+            if(it->customState > 0 || !it->customText.empty()) {
+                s.customState = [[WFCCUserCustomState alloc] init];
+                s.customState.state = it->customState;
+                s.customState.text = [NSString stringWithUTF8String:it->customText.c_str()];
+            }
+            if(!it->states.empty()) {
+                NSMutableArray<WFCCClientState *> *css = [[NSMutableArray alloc] init];
+                for (std::list<mars::stn::TOnlineState>::const_iterator it2 = it->states.begin(); it2 != it->states.end(); ++it2) {
+                    WFCCClientState *cs = [[WFCCClientState alloc] init];
+                    cs.platform = it2->platform;
+                    cs.state = it2->state;
+                    cs.lastSeen = it2->lastSeen;
+                    [css addObject:cs];
+                }
+                s.clientStates = css;
+            }
+            [onlineStates addObject:s];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[WFCCIMService sharedWFCIMService] putUseOnlineStates:onlineStates];
+            if (m_successBlock) {
+                m_successBlock(onlineStates);
+            }
+            delete this;
+        });
+    }
   
   void onFalure(int errorCode) {
       dispatch_async(dispatch_get_main_queue(), ^{
@@ -599,7 +653,7 @@ public:
       });
   }
     
-  ~IMGetUploadMediaUrlCallback() {
+  ~IMWatchOnlineStateCallback() {
     m_successBlock = nil;
     m_errorBlock = nil;
   }
@@ -3100,6 +3154,34 @@ public:
                    error:(void(^)(int error_code))errorBlock {
     NSString *strValue = [NSString stringWithFormat:@"%d-%@", state.state, state.text];
     [self setUserSetting:UserSettingScope_Custom_State key:@"" value:strValue success:successBlock error:errorBlock];
+}
+
+- (void)watchOnlineState:(WFCCConversationType)conversationType
+                 targets:(NSArray<NSString *> *)targets
+                duration:(int)watchDuration
+                 success:(void(^)(NSArray<WFCCUserOnlineState *> *states))successBlock
+                   error:(void(^)(int error_code))errorBlock {
+    std::list<std::string> ts;
+    for (NSString *t in targets) {
+        ts.push_back([t UTF8String]);
+    }
+
+    mars::stn::watchOnlineState((int)conversationType, ts, watchDuration, new IMWatchOnlineStateCallback(successBlock, errorBlock));
+}
+
+- (void)unwatchOnlineState:(WFCCConversationType)conversationType
+                   targets:(NSArray<NSString *> *)targets
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock {
+    std::list<std::string> ts;
+    for (NSString *t in targets) {
+        ts.push_back([t UTF8String]);
+    }
+    mars::stn::unwatchOnlineState((int)conversationType, ts, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (BOOL)isEnableUserOnlineState {
+    return mars::stn::IsEnableUserOnlineState();
 }
 
 - (void)sendConferenceRequest:(long long)sessionId

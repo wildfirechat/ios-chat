@@ -30,6 +30,8 @@ extern NSString *kFriendRequestUpdated;
 extern NSString *kSettingUpdated;
 //频道信息更新通知
 extern NSString *kChannelInfoUpdated;
+//用户在线状态更新通知
+extern NSString *kUserOnlineStateUpdated;
 
 #pragma mark - 枚举值定义
 /**
