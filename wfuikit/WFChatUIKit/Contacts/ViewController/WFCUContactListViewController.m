@@ -410,6 +410,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                contactCell.onlineView.hidden = YES;
                 return contactCell;
             } else {
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
@@ -417,6 +418,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                contactCell.onlineView.hidden = YES;
                 return contactCell;
             }
         } else {

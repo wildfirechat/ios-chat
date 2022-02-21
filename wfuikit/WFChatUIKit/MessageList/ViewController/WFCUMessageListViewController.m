@@ -184,7 +184,28 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     
-    __weak typeof(self) ws = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTitle) name:kUserOnlineStateUpdated object:nil];
+    
+    
+    __weak typeof(self)ws = self;
+    if(self.conversation.type == Single_Type) {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
+        self.targetUser = userInfo;
+    } else if(self.conversation.type == Group_Type) {
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:YES];
+        self.targetGroup = groupInfo;
+    } else if (self.conversation.type == Channel_Type) {
+        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
+        self.targetChannel = channelInfo;
+    } else if(self.conversation.type == Chatroom_Type) {
+        
+        [[WFCCIMService sharedWFCIMService] getChatroomInfo:self.conversation.target upateDt:ws.targetChatroom.updateDt success:^(WFCCChatroomInfo *chatroomInfo) {
+            ws.targetChatroom = chatroomInfo;
+        } error:^(int error_code) {
+            
+        }];
+    }
+    
     if(self.conversation.type == Single_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
@@ -260,6 +281,16 @@
     }
     
     self.nMsgSet = [[NSMutableSet alloc] init];
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
+        if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+            __weak typeof(self)ws = self;
+            [[WFCCIMService sharedWFCIMService] watchOnlineState:self.conversation.type targets:@[self.conversation.target] duration:3600 success:^(NSArray<WFCCUserOnlineState *> *states) {
+                [ws updateTitle];
+            } error:^(int error_code) {
+                NSLog(@"watch online state failure");
+            }];
+        }
+    }
 }
 
 //The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
@@ -303,6 +334,7 @@
         }
         self.navigationItem.leftBarButtonItem = nil;
     }
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
 }
 
 - (void)onMultiSelectCancel:(id)sender {
@@ -484,6 +516,16 @@
     if (self.conversation.type == Chatroom_Type) {
         [self sendChatroomLeaveMessage];
     }
+    
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
+        if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+            [[WFCCIMService sharedWFCIMService] unwatchOnlineState:self.conversation.type targets:@[self.conversation.target] success:^{
+                NSLog(@"unwatch online statue success");
+            } error:^(int error_code) {
+                NSLog(@"unwatch online statue failure");
+            }];
+        }
+    }
 }
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
@@ -509,30 +551,144 @@
     }
 }
 
+- (void)updateTitle {
+    if(self.conversation.type == Single_Type) {
+        if(self.targetUser.friendAlias.length) {
+            self.title = self.targetUser.friendAlias;
+        } else if(self.targetUser.displayName.length == 0) {
+            self.title = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), self.conversation.target];
+        } else {
+            self.title = self.targetUser.displayName;
+        }
+        /*
+         int Platform_UNSET = 0;
+         int Platform_iOS = 1;
+         int Platform_Android = 2;
+         int Platform_Windows = 3;
+         int Platform_OSX = 4;
+         int Platform_WEB = 5;
+         int Platform_WX = 6;
+         int Platform_LINUX = 7;
+         int Platform_iPad = 8;
+         int Platform_APad = 9;
+         */
+        if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+            WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:self.conversation.target];
+            if([onlineState.clientStates count]) {
+                int pcState = -1;
+                int mobileState = -1;
+                int webState = -1;
+                int wxState = -1;
+                int padState = -1;
+                BOOL hasOnline = NO;
+                BOOL hasMobileSession = NO;
+                long long mobileLastSeen = 0;
+                for (WFCCClientState *cs in onlineState.clientStates) {
+                    if(cs.platform >= 1 && cs.platform <= 9 && cs.state == 0) {
+                        hasOnline = YES;
+                    }
+                    
+                    if(cs.platform == 1 || cs.platform == 2) {
+                        mobileState = cs.state;
+                        if(cs.state == 1) {
+                            hasMobileSession = YES;
+                            if(mobileLastSeen < cs.lastSeen) {
+                                mobileLastSeen = cs.lastSeen;
+                            }
+                        }
+                    } else if(cs.platform == 3 || cs.platform == 4 || cs.platform == 7) {
+                        pcState = cs.state;
+                    } else if(cs.platform == 5) {
+                        webState = cs.state;
+                    } else if(cs.platform == 6) {
+                        wxState = cs.state;
+                    } else if(cs.platform == 8 || cs.platform == 9) {
+                        padState = cs.state;
+                    }
+                }
+                
+                if(hasOnline) {
+                    //0，未设置，1 忙碌，2 离开（主动设置），3 离开（长时间不操作），4 隐身，其它可以自主扩展。
+                    if(onlineState.customState.state == 0) {
+                        if(pcState == 0) {
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"电脑在线"];
+                        } else if(padState == 0) {
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"平板在线"];
+                        } else if(webState == 0) {
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"网页在线"];
+                        } else if(wxState == 0) {
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"小程序在线"];
+                        } else if(mobileState == 0) {
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"手机在线"];
+                        }
+                    } else if(onlineState.customState.state == 1) {
+                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"忙碌"];
+                    } else if(onlineState.customState.state == 2 || onlineState.customState.state == 3) {
+                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"离开"];
+                    } else {
+                        //其它情况需要客户自己开发。。。
+                    }
+                    
+                } else if(hasMobileSession && mobileLastSeen) {
+                    long long duration = [[[NSDate alloc] init] timeIntervalSince1970] - (mobileLastSeen/1000);
+                    int days = (int)(duration / 86400);
+                    if(days) {
+                        self.title = [NSString stringWithFormat:@"%@(%d天前手机在线)", self.title, days];
+                    } else {
+                        int hours = (int)(duration/3600);
+                        if(hours) {
+                            self.title = [NSString stringWithFormat:@"%@(%d小时前手机在线)", self.title, hours];
+                        } else {
+                            int mins = (int)(duration/60);
+                            if(mins) {
+                                self.title = [NSString stringWithFormat:@"%@(%d分钟前手机在线)", self.title, mins];
+                            } else {
+                                self.title = [NSString stringWithFormat:@"%@(不久前手机在线)", self.title];
+                            }
+                            
+                        }
+                    }
+                    
+                }
+            }
+        }
+        self.navigationItem.backBarButtonItem.title = self.title;
+    } else if(self.conversation.type == Group_Type) {
+        if(self.targetGroup.name.length == 0) {
+            self.title = WFCString(@"GroupChat");
+            self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
+        } else {
+            self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.name, (int)self.targetGroup.memberCount];
+            self.navigationItem.backBarButtonItem.title = self.targetGroup.name;
+        }
+    } else if(self.conversation.type == Channel_Type) {
+        if(self.targetChannel.name.length == 0) {
+            self.title = WFCString(@"Channel");
+            self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
+        } else {
+            self.title = self.targetChannel.name;
+            self.navigationItem.backBarButtonItem.title = self.targetChannel.name;
+        }
+    } else if (self.conversation.type == Chatroom_Type) {
+        if(self.targetChatroom.title.length == 0) {
+            self.title = WFCString(@"Chatroom");
+            self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
+        } else {
+            self.title = self.targetChatroom.title;
+            self.navigationItem.backBarButtonItem.title = self.targetChatroom.title;
+        }
+    }
+}
+
 - (void)setTargetUser:(WFCCUserInfo *)targetUser {
     _targetUser = targetUser;
-    if(targetUser.friendAlias.length) {
-        self.title = targetUser.friendAlias;
-    } else if(targetUser.displayName.length == 0) {
-        self.title = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), self.conversation.target];
-    } else {
-        self.title = targetUser.displayName;
-    }
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-    self.navigationItem.backBarButtonItem.title = self.title;
+    [self updateTitle];
 }
 
 - (void)setTargetGroup:(WFCCGroupInfo *)targetGroup {
     _targetGroup = targetGroup;
-    if(targetGroup.name.length == 0) {
-        self.title = WFCString(@"GroupChat");
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
-    } else {
-        self.title = [NSString stringWithFormat:@"%@(%d)", targetGroup.name, (int)targetGroup.memberCount];
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = targetGroup.name;
-    }
+    [self updateTitle];
+    
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
     WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
     if (targetGroup.mute || member.type == Member_Type_Muted) {
@@ -555,28 +711,12 @@
 
 - (void)setTargetChannel:(WFCCChannelInfo *)targetChannel {
     _targetChannel = targetChannel;
-    if(targetChannel.name.length == 0) {
-        self.title = WFCString(@"Channel");
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
-    } else {
-        self.title = targetChannel.name;
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = targetChannel.name;
-    }
+    [self updateTitle];
 }
 
 - (void)setTargetChatroom:(WFCCChatroomInfo *)targetChatroom {
     _targetChatroom = targetChatroom;
-    if(targetChatroom.title.length == 0) {
-        self.title = WFCString(@"Chatroom");
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
-    } else {
-        self.title = targetChatroom.title;
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
-        self.navigationItem.backBarButtonItem.title = targetChatroom.title;
-    }
+    [self updateTitle];
 }
 
 - (void)setShowAlias:(BOOL)showAlias {
@@ -860,23 +1000,6 @@
     [super viewWillAppear:animated];
     if (!self.firstAppear) {
         [self.chatInputBar willAppear];
-    }
-    if(self.conversation.type == Single_Type) {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
-        self.targetUser = userInfo;
-    } else if(self.conversation.type == Group_Type) {
-        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:YES];
-        self.targetGroup = groupInfo;
-    } else if (self.conversation.type == Channel_Type) {
-        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
-        self.targetChannel = channelInfo;
-    } else if(self.conversation.type == Chatroom_Type) {
-        __weak typeof(self)ws = self;
-        [[WFCCIMService sharedWFCIMService] getChatroomInfo:self.conversation.target upateDt:ws.targetChatroom.updateDt success:^(WFCCChatroomInfo *chatroomInfo) {
-            ws.targetChatroom = chatroomInfo;
-        } error:^(int error_code) {
-            
-        }];
     }
     
     self.tabBarController.tabBar.hidden = YES;

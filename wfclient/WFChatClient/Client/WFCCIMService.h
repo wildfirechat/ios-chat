@@ -2020,6 +2020,18 @@ amr文件转成wav数据
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;
 
+- (void)watchOnlineState:(WFCCConversationType)conversationType
+                 targets:(NSArray<NSString *> *)targets
+                duration:(int)watchDuration
+                 success:(void(^)(NSArray<WFCCUserOnlineState *> *states))successBlock
+                   error:(void(^)(int error_code))errorBlock;
+
+- (void)unwatchOnlineState:(WFCCConversationType)conversationType
+                   targets:(NSArray<NSString *> *)targets
+                   success:(void(^)(void))successBlock
+                     error:(void(^)(int error_code))errorBlock;
+
+- (BOOL)isEnableUserOnlineState;
 /*
  音视频会议相关
  */

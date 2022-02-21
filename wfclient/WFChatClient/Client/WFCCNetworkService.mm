@@ -38,6 +38,7 @@ NSString *kFriendListUpdated = @"kFriendListUpdated";
 NSString *kFriendRequestUpdated = @"kFriendRequestUpdated";
 NSString *kSettingUpdated = @"kSettingUpdated";
 NSString *kChannelInfoUpdated = @"kChannelInfoUpdated";
+NSString *kUserOnlineStateUpdated = @"kUserOnlineStateUpdated";
 
 @protocol RefreshGroupInfoDelegate <NSObject>
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo;
@@ -179,6 +180,7 @@ public:
                 WFCCClientState *onlineState = [[WFCCClientState alloc] init];
                 onlineState.platform = it->platform;
                 onlineState.state = it->state;
+                onlineState.lastSeen = it->lastSeen;
                 [array addObject:onlineState];
             }
             state.clientStates = array;
@@ -628,6 +630,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)onOnlineEvent:(NSArray<WFCCUserOnlineState *> *)events {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[WFCCIMService sharedWFCIMService] putUseOnlineStates:events];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserOnlineStateUpdated object:nil userInfo:@{@"states":events}];
         [self.onlineEventDelegate onOnlineEvent:events];
     });
 }
