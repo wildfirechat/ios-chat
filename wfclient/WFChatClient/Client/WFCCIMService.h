@@ -135,8 +135,9 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Voip_Silent = 21,
     //不能直接使用，协议栈内会使用此值
-    UserSettingScope_Custom_State = 22,
-    
+    UserSettingScope_PTT_Reserved = 22,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Custom_State = 23,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
