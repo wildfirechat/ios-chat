@@ -195,13 +195,14 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 - (void)didChangeState:(WFAVEngineState)state;
 
 //多人音视频版本会调用到
-- (void)didParticipantJoined:(NSString *)userId;
+- (void)didParticipantJoined:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
 
 //多人音视频版本会调用到
-- (void)didParticipantConnected:(NSString *)userId;
+- (void)didParticipantConnected:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
 
 //多人音视频版本会调用到
-- (void)didParticipantLeft:(NSString *)userId withReason:(WFAVCallEndReason)reason;
+- (void)didParticipantLeft:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason;
+
 
 
 /**
@@ -243,8 +244,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  收到对方视频流的回调
 
  @param remoteVideoTrack 对方视频流
+ @param screenSharing 是否是共享屏幕
+
  */
-- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)targetId;
+- (void)didReceiveRemoteVideoTrack:(RTCVideoTrack * _Nonnull)remoteVideoTrack fromUser:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
 
 
 @optional
@@ -268,6 +271,40 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 音频播放port发送改变，当蓝牙设备/耳机 连接/断开连接时回调
 */
 - (void)didChangeAudioRoute;
+
+/**
+用户视频mute状态改变，包括音频和视频，只有会议才会有此回调。
+
+@param userIds 改变mute状态的用户列表
+*/
+- (void)didMuteStateChanged:(NSArray<NSString *> *_Nonnull)userIds;
+
+/**
+ 当前用户发送媒体丢包回调
+ 
+ @param media 媒体类型，audio或video
+ @param lostPackage 丢包数
+ @param screenSharing 是否是共享屏幕
+
+ */
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing;
+
+/**
+ 接受对应用户媒体丢包回调，uplink为true是对方丢的，false是己方丢的。
+ 
+ @param media 媒体类型，audio或video
+ @param lostPackage 丢包数
+ @param uplink 方向
+ @param userId 用户ID
+ @param screenSharing 是否是共享屏幕
+
+ */
+- (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage uplink:(BOOL)uplink ofUser:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
+
+/**
+ 发起屏幕共享失败
+ */
+- (void)onScreenSharingFailure;
 @end
 
 #pragma mark - 通话引擎
@@ -340,11 +377,13 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 
  @param targetIds 接收用户ID，本sdk只支持一个用户
  @param conversation 通话所在会话
+ @param callExtra 通话附加信息
  @param sessionDelegate 通话Session的监听
  @return 通话Session
  */
 - (WFAVCallSession *)startCall:(NSArray<NSString *> *)targetIds
                      audioOnly:(BOOL)audioOnly
+                     callExtra:(NSString *_Nullable)callExtra
                   conversation:(WFCCConversation *)conversation
                sessionDelegate:(id<WFAVCallSessionDelegate>)sessionDelegate;
 
@@ -359,6 +398,9 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 /* 此属性没有意义，仅为了兼容UI代码 */
 @property(nonatomic, assign) BOOL disableDualStreamMode;
 
+/* 此属性没有意义，仅为了兼容UI代码 */
+@property(nonatomic, assign)BOOL screenSharingReplaceMode;
+
 
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
@@ -367,6 +409,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                         host:(NSString *_Nullable)host
                                        title:(NSString *_Nullable)title
                                         desc:(NSString *_Nullable)desc
+                                   callExtra:(NSString *_Nullable)callExtra
                                     audience:(BOOL)audience
                                     advanced:(BOOL)advanced
                                       record:(BOOL)record
@@ -379,6 +422,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                        host:(NSString *_Nullable)host
                                       title:(NSString *_Nullable)title
                                        desc:(NSString *_Nullable)desc
+                                  callExtra:(NSString *_Nullable)callExtra
                                    audience:(BOOL)audience
                                    advanced:(BOOL)advanced
                                   muteAudio:(BOOL)muteAudio
@@ -417,6 +461,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, readonly)BOOL videoMuted;
 @property(nonatomic, assign, readonly)BOOL audioMuted;
 @property(nonatomic, assign, readonly)BOOL audience;
+@property(nonatomic, assign, readonly)BOOL screeSharing;
 @end
 
 #pragma mark - 通话Session
@@ -532,6 +577,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, getter=isInAppScreenSharing)BOOL inAppScreenSharing;
 
 /**
+呼叫附加信息
+*/
+@property(nonatomic, strong) NSString * _Nullable callExtra;
+
+/**
 通话成员（不包含自己）
 */
 @property(nonatomic, assign, readonly)NSArray<NSString *> *participantIds;
@@ -559,7 +609,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 /**
  接听通话
  */
-- (void)answerCall:(BOOL)audioOnly;
+- (void)answerCall:(BOOL)audioOnly callExtra:(NSString *)callExtra;
 
 /**
  挂断通话
@@ -623,7 +673,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  @param videoContainerView 本地视频视图Container
  @param scalingType 缩放模式
  */
-- (void)setupRemoteVideoView:(UIView *)videoContainerView scalingType:(WFAVVideoScalingType)scalingType forUser:(NSString *)targetId;
+- (void)setupRemoteVideoView:(UIView * _Nullable)videoContainerView scalingType:(WFAVVideoScalingType)scalingType forUser:(NSString * _Nonnull)userId screenSharing:(BOOL)screenSharing;
 
 
 /* 此函数没有意义，仅为了兼容UI代码 */
