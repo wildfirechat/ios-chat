@@ -137,13 +137,16 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    BOOL ret = [string isEqualToString:filtered];
-    if(!ret) {
-        [self.view makeToast:@"不支持的字符！仅支持英文字母和数字！" duration:0.5 position:CSToastPositionCenter];
+    if (self.modifyType  == 100) {
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        BOOL ret = [string isEqualToString:filtered];
+        if(!ret) {
+            [self.view makeToast:@"不支持的字符！仅支持英文字母和数字！" duration:0.5 position:CSToastPositionCenter];
+        }
+        return ret;
     }
-    return ret;
+    return YES;
 }
 
 - (void)textFieldChange:(UITextField *)field {
