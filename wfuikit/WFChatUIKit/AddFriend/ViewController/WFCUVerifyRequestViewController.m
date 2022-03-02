@@ -92,7 +92,14 @@
             
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = WFCString(@"SendFailure");
+            if(error_code == 16) {
+                hud.label.text = WFCString(@"AlreadySentFriendRequest");
+            } else if(error_code == 18) {
+                hud.label.text = WFCString(@"FriendRequestRejected");
+            } else {
+                hud.label.text = WFCString(@"SendFailure");
+            }
+            
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         });
