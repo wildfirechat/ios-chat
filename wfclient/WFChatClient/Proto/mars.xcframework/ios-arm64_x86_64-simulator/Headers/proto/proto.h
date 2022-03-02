@@ -471,6 +471,8 @@ namespace mars{
             kUserSettingConversationDraft = 19,
             kUserSettingDisableSyncDraft = 20,
             kUserSettingVoipSilent = 21,
+            kUserSettingPttReserved = 22,
+            kUserSettingCustomState = 23,
 
             kUserSettingCustomBegin = 1000
         };
@@ -580,7 +582,7 @@ namespace mars{
         int hasMore;
     };
     
-    class TUploadMediaUrlEntry {
+    class TUploadMediaUrlEntry : public TSerializable {
     public:
         TUploadMediaUrlEntry():type(0) {}
         virtual ~TUploadMediaUrlEntry() {}
@@ -588,6 +590,37 @@ namespace mars{
         std::string backupUploadUrl;
         std::string mediaUrl;
         int type;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
+    
+    class TOnlineState : public TSerializable {
+    public:
+        TOnlineState():platform(0), state(0), lastSeen(0) {}
+        virtual ~TOnlineState() {}
+        int platform;
+        int state;
+        int64_t lastSeen;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
+    
+    class TUserOnlineState : public TSerializable {
+    public:
+        TUserOnlineState() : customState(0) {}
+        virtual ~TUserOnlineState() {}
+        std::string userId;
+        int customState;
+        std::string customText;
+        std::list<TOnlineState> states;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
     };
     
         class GeneralStringCallback {
@@ -764,6 +797,15 @@ namespace mars{
         virtual ~GetOneGroupInfoCallback() {}
     };
     
+    class WatchOnlineStateCallback {
+    public:
+        virtual void onSuccess(const std::list<mars::stn::TUserOnlineState> &stateList) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~WatchOnlineStateCallback() {}
+    };
+    
+    
+    
         enum ConnectionStatus {
             kConnectionStatusKickedOff = -7,
             kConnectionStatusSecretKeyMismatch = -6,
@@ -808,6 +850,11 @@ namespace mars{
             virtual void onConferenceEvent(const std::string &event) = 0;
         };
 
+        class OnlineEventCallback {
+        public:
+            virtual void onOnlineEvent(const std::list<mars::stn::TUserOnlineState> &events) = 0;
+        };
+
         extern void useEncryptSM4();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
@@ -821,6 +868,7 @@ namespace mars{
         extern void setTrafficDataCallback(TrafficDataCallback *callback);
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
         extern void setConferenceEventCallback(ConferenceEventCallback *callback);
+        extern void setOnlineEventCallback(OnlineEventCallback *callback);
     
         extern void setDNSResult(std::vector<std::string> serverIPs);
         extern void setRefreshUserInfoCallback(GetUserInfoCallback *callback);
@@ -879,6 +927,10 @@ namespace mars{
         extern void setFriendAlias(const std::string &userId, const std::string &alias, GeneralOperationCallback *callback);
 
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
+    
+    
+        extern void watchOnlineState(int type, const std::list<std::string> &targets, int duration, WatchOnlineStateCallback *callback);
+        extern void unwatchOnlineState(int type, const std::list<std::string> &targets, GeneralOperationCallback *callback);
     
         extern void requireLock(const std::string &lockId, int64_t duration, GeneralOperationCallback *callback);
     
@@ -957,6 +1009,7 @@ namespace mars{
         extern bool HasMediaPresignedUrl();
         extern bool HasMediaBackupUrl();
         extern bool IsGlobalDisableSyncDraft();
+        extern bool IsEnableUserOnlineState();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
