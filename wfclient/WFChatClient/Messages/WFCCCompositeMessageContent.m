@@ -123,7 +123,15 @@
             msg.toUsers = msgDict[@"tos"];
             msg.direction = [msgDict[@"direction"] intValue];
             msg.status = [msgDict[@"status"] intValue];
-            msg.serverTime = [msgDict[@"serverTime"] longLongValue];
+            if([msgDict[@"serverTime"] isKindOfClass:NSDictionary.class]) {
+                NSDictionary *timeDict = msgDict[@"serverTime"];
+                long long high = [timeDict[@"high"] longLongValue];
+                long long low = [timeDict[@"low"] longLongValue];
+                msg.serverTime = (high << 32) + low;
+            } else {
+                msg.serverTime = [msgDict[@"serverTime"] longLongValue];
+            }
+            
             msg.localExtra = msgDict[@"le"];
             
             WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
