@@ -64,6 +64,8 @@
 "SendToMoments"="Send to moments";
 "DeleteFriend"="Delete friend";
 "SetAlias"="Set alias";
+"AlreadySentFriendRequest"="Already sent friend request";
+"FriendRequestRejected"="Friend request is rejected";
 "RemoveFromBlacklist"="Remove from black list";
 "Add2Blacklist"="Add to black list";
 "VOIPCall"="VoIP call";

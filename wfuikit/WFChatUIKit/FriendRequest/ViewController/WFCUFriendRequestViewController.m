@@ -143,9 +143,15 @@
     } error:^(int error_code) {
         dispatch_async(dispatch_get_main_queue(), ^{
             hud.hidden = YES;
-            [ws.view makeToast:WFCString(@"UpdateFailure")
-                      duration:2
-                      position:CSToastPositionCenter];
+            if(error_code == 19) {
+                [ws.view makeToast:WFCString(@"Expired")
+                          duration:2
+                          position:CSToastPositionCenter];
+            } else {
+                [ws.view makeToast:WFCString(@"UpdateFailure")
+                          duration:2
+                          position:CSToastPositionCenter];
+            }
         });
     }];
 }
