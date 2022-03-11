@@ -617,6 +617,28 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
                                    offset:(int)offset;
 
 /**
+ 搜索消息
+ 
+ @param conversation 会话，如果为空将搜索所有会话
+ @param keyword 关键词
+ @param contentTypes 过滤的消息类型
+ @param startTime 消息的开始时间，单位为毫秒，如果不需要开始时间请用0。
+ @param endTime 消息的结束时间，单位为毫秒，如果不需要结束时间请用0.。
+ @param desc order
+ @param offset offset
+ @param limit limit
+ @return 命中的消息
+ */
+- (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
+                                  keyword:(NSString *)keyword
+                             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                startTime:(int64_t)startTime
+                                  endTime:(int64_t)endTime
+                                    order:(BOOL)desc
+                                    limit:(int)limit
+                                   offset:(int)offset;
+
+/**
  获取某类会话信息
  
  @param conversationTypes 会话类型
