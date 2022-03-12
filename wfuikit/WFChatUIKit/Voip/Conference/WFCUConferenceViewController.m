@@ -518,9 +518,12 @@
 - (void)screenSharingButtonDidTap:(UIButton *)button {
     [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
     [self updateScreenSharingButton];
-    if(self.currentSession.isInAppScreenSharing) {
-        [self minimizeButtonDidTap:nil];
-    }
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if(self.currentSession.isInAppScreenSharing) {
+            [self minimizeButtonDidTap:nil];
+        }
+    });
 }
 
 - (void)updateScreenSharingButton {
