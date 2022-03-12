@@ -103,7 +103,6 @@
                         if(mobileLastSeen < cs.lastSeen) {
                             mobileLastSeen = cs.lastSeen;
                         }
-                        break;
                     }
                 }
             }
