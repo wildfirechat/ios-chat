@@ -101,13 +101,8 @@
         }];
         [[WFCUConfigManager globalManager].appServiceProvider getGroupAnnouncement:self.groupInfo.target success:^(WFCUGroupAnnouncement *announcement) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.groupAnnouncement = announcement;
-                if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:4 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-                } else {
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-                }
-                
+                ws.groupAnnouncement = announcement;
+                [ws.tableView reloadData];
             });
         } error:^(int error_code) {
             
