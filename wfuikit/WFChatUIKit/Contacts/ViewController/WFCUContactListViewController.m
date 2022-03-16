@@ -349,6 +349,24 @@ static NSString *wfcstar = @"☆";
     }
     return contactCell;
 }
+#define FAVGROUP_REUSEIDENTIFY @"favGroupCell"
+- (WFCUContactTableViewCell *)dequeueOrAllocFavGroupCell:(UITableView *)tableView {
+    WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:FAVGROUP_REUSEIDENTIFY];
+    if (contactCell == nil) {
+        contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FAVGROUP_REUSEIDENTIFY];
+        contactCell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+    }
+    return contactCell;
+}
+#define CHANNEL_REUSEIDENTIFY @"channelCell"
+- (WFCUContactTableViewCell *)dequeueOrAllocChannelCell:(UITableView *)tableView {
+    WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:CHANNEL_REUSEIDENTIFY];
+    if (contactCell == nil) {
+        contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CHANNEL_REUSEIDENTIFY];
+        contactCell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+    }
+    return contactCell;
+}
 #define NEWFRIEND_REUSEIDENTIFY @"newFriendCell"
 - (WFCUNewFriendTableViewCell *)dequeueOrAllocNewFriendCell:(UITableView *)tableView {
     WFCUNewFriendTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:NEWFRIEND_REUSEIDENTIFY];
@@ -405,7 +423,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 return contactCell;
             } else if(indexPath.row == 1) {
-                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
+                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocFavGroupCell:tableView];
                 contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
                 contactCell.nameLabel.text = WFCString(@"Group");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
@@ -413,7 +431,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
             } else {
-                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
+                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
                 contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
@@ -472,7 +490,7 @@ static NSString *wfcstar = @"☆";
               contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
               cell = contactCell;
             } else {
-              WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
+              WFCUContactTableViewCell *contactCell = [self dequeueOrAllocFavGroupCell:tableView];
               contactCell.nameLabel.text = WFCString(@"Group");
               contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
               contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
