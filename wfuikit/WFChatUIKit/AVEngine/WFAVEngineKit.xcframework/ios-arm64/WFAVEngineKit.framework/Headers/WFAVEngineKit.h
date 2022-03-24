@@ -594,6 +594,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 */
 @property(nonatomic, assign, readonly) NSArray<WFAVParticipantProfile *> *participants;
 @property(nonatomic, assign, readonly) WFAVParticipantProfile *myProfile;
+//***兼容高级版音视频***
+- (WFAVParticipantProfile *_Nullable)profileOfUser:(NSString *_Nonnull)userId isScreenSharing:(BOOL)isScreenSharing;
 
 - (void)inviteNewParticipants:(NSArray<NSString *>*)targetIds;
 /**
