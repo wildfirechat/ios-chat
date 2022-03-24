@@ -322,6 +322,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 + (instancetype)sharedEngineKit;
 
 /*
+ 设置不注册voip推送服务，注意必须在第一次调用sharedEngineKit之前调用，否则不生效。
+ */
++ (void)notRegisterVoipPushService;
+
+/*
  是否支持多人通话
  */
 @property(nonatomic, assign, readonly)BOOL supportMultiCall;
