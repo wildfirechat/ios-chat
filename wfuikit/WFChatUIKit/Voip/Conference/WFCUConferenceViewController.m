@@ -470,6 +470,9 @@
     _focusUser = user;
     if (user) {
         [self.participants removeObject:user];
+        WFAVParticipantProfile *refreshed = [self.currentSession profileOfUser:user.userId isScreenSharing:user.screeSharing];
+        if(refreshed)
+            user = refreshed;
         [self.participants addObject:user];
     }
 }
@@ -1376,6 +1379,10 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     WFAVParticipantProfile *user = self.participants[indexPath.row];
+    WFAVParticipantProfile *refreshProfile = [[WFAVEngineKit sharedEngineKit].currentSession profileOfUser:user.userId isScreenSharing:user.screeSharing];
+    if(refreshProfile)
+        user = refreshProfile;
+    
     if (collectionView == self.smallCollectionView) {
         WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
 
