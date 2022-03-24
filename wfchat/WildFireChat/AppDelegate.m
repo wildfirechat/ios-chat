@@ -68,6 +68,8 @@
     //[[WFCCIMService sharedWFCIMService] setDefaultSilentWhenPcOnline:NO];
 
 #if WFCU_SUPPORT_VOIP
+    //设置不注册voip推送服务，需要在sharedEngineKit方法之前调用
+//    [WFAVEngineKit notRegisterVoipPushService];
     //音视频高级版不需要stun/turn服务，请注释掉下面这行。单人版和多人版需要turn服务，请自己部署然后修改配置文件。
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     
