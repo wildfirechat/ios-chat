@@ -1004,6 +1004,8 @@ namespace mars{
 
         extern void KickoffPCClient(const std::string &pcClientId, GeneralOperationCallback *callback);
 
+    
+        extern void setProxyInfo(const std::string &host, const std::string &ip, int port, const std::string &username, const std::string &password);
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
         extern bool HasMediaPresignedUrl();

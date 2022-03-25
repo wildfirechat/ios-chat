@@ -191,6 +191,7 @@ namespace mars {
             long saveConversationSync(int conversatinType, const std::string &target, int line, int64_t readedDt, const std::list<std::string> &senders);
             SyncReadEntry loadConversationSync();
             bool deleteConvSync(long _id);
+            bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
         private:
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
@@ -199,7 +200,6 @@ namespace mars {
             int64_t maxConversationMessageTime(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> &lines, bool clearLastMessageId = false);
             bool clearAllConversationUnread(bool clearLastMessageId = false);
-            bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
             void getMsgFromStateMent(DB2 *db, RecyclableStatement &statementHandle, TMessage &msg);
             
             static MessageDB* instance_;

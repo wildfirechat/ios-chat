@@ -378,6 +378,17 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  @param value  value
  */
 - (void)addHttpHeader:(NSString *)header value:(NSString *)value;
+
+/*
+ 设置代理，注意只能支持socks5代理，http代理无法支持，只有专业版支持次功能。
+ 
+ @param host     代理服务域名，host和ip至少要有一个有效值。
+ @param ip       代理服务IP地址，host和ip至少要有一个有效值。
+ @param port     代理服务端口
+ @param username 账户
+ @param password 密码
+ */
+- (void)setProxyInfo:(NSString *)host ip:(NSString *)ip port:(int)port username:(NSString *)username password:(NSString *)password;
 @end
 
 #endif
