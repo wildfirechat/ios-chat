@@ -207,7 +207,7 @@ namespace mars {
     
         class UpdateConversationData {
         public:
-            UpdateConversationData() : conversationType(0), target(""), line(0), timestamp(0), lastMessageId(0), unreadCount(false), unreadMention(false), unreadMentionAll(false), isRecall(false) {}
+            UpdateConversationData() : conversationType(0), target(""), line(0), timestamp(0), lastMessageId(0), unreadCount(false), unreadMention(false), unreadMentionAll(false), isRecallOrDelete(false) {}
             virtual ~UpdateConversationData() {}
         public:
             int conversationType;
@@ -218,7 +218,7 @@ namespace mars {
             bool unreadCount;
             bool unreadMention;
             bool unreadMentionAll;
-            bool isRecall;
+            bool isRecallOrDelete;
         };
     }
 }
