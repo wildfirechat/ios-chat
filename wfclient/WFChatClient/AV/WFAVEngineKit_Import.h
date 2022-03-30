@@ -12,5 +12,5 @@
 + (instancetype _Nonnull)sharedEngineKit;
 @property(nonatomic, assign, readonly)BOOL supportMultiCall;
 @property(nonatomic, assign, readonly)BOOL supportConference;
-- (BOOL)checkAddress:(NSString *_Nonnull)host;
+- (NSString *)checkAddress:(NSString *_Nonnull)host;
 @end
