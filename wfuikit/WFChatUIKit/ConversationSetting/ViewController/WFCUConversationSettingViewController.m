@@ -629,21 +629,33 @@
 //    cell.accessoryView = portraitView;
 //    return cell;
   } else if([self isGroupQrCodeCell:indexPath]) {
-    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"GroupQRCode") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-      
-      CGFloat width = [UIScreen mainScreen].bounds.size.width;
-      UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
-      UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
-      qrview.image = qrcode;
-      [cell addSubview:qrview];
+      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QrCell"];
+      if (cell == nil) {
+          cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QrCell"];
+      } else {
+          cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+          cell.textLabel.text = WFCString(@"GroupQRCode");
+          cell.detailTextLabel.text = nil;
+          cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+          cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+          cell.accessoryView = nil;
+          cell.selectionStyle = UITableViewCellSelectionStyleNone;
+          cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0 );
+          
+          
+          
+          CGFloat width = [UIScreen mainScreen].bounds.size.width;
+          UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+          UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
+          qrview.image = qrcode;
+          [cell addSubview:qrview];
+      }
       
       return cell;
   } else if ([self isGroupManageCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:WFCString(@"GroupManage") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+      return [self cellOfTable:tableView WithTitle:WFCString(@"GroupManage") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if([self isGroupAnnouncementCell:indexPath]) {
-//    return [self cellOfTable:tableView WithTitle:@"群公告" withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-      
-      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"announcementCell"];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"announcementCell"];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"announcementCell"];
         }
