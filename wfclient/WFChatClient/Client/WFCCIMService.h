@@ -173,6 +173,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_APad = 9
 } ;
 
+typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
+    FileRecordOrder_TIME_DESC = 0,
+    FileRecordOrder_TIME_ASC = 1,
+    FileRecordOrder_SIZE_DESC = 2,
+    FileRecordOrder_SIZE_ASC = 3,
+} ;
+
 #pragma mark - 用户源
 /*
  * ChatClient内置支持用户信息托管，但对于很多应用来说都已经拥有自己的用户信息。此时可以实现用户源并设置到IMServer中去。这样ChatClient会从源中读取信息，从而ChatUIKit不用修改代码。
@@ -1904,6 +1911,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param conversation 会话
  @param fromUser 该用户发送的文件，如果为空返回所有文件
  @param messageUid 起始记录的UID
+ @param order 文件列表排序
  @param count count
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
@@ -1911,6 +1919,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 - (void)getConversationFiles:(WFCCConversation *)conversation
                     fromUser:(NSString *)fromUser
             beforeMessageUid:(long long)messageUid
+                       order:(WFCCFileRecordOrder)order
                        count:(int)count
                      success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                        error:(void(^)(int error_code))errorBlock;
@@ -1919,11 +1928,13 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  获取当前用户发送的文件。
 
  @param beforeMessageUid 起始记录的UID
+ @param order 文件列表排序
  @param count count
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)getMyFiles:(long long)beforeMessageUid
+             order:(WFCCFileRecordOrder)order
              count:(int)count
            success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
              error:(void(^)(int error_code))errorBlock;
@@ -1946,6 +1957,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
  @param conversation 会话
  @param fromUser 该用户发送的文件，如果为空返回所有文件
  @param messageUid 起始记录的UID
+ @param order 文件列表排序
  @param count count
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
@@ -1954,6 +1966,7 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
        conversation:(WFCCConversation *)conversation
            fromUser:(NSString *)fromUser
    beforeMessageUid:(long long)messageUid
+              order:(WFCCFileRecordOrder)order
               count:(int)count
             success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
               error:(void(^)(int error_code))errorBlock;
@@ -1963,12 +1976,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
 
  @param keyword 关键字
  @param beforeMessageUid 起始记录的UID
+ @param order 文件列表排序
  @param count count
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
 - (void)searchMyFiles:(NSString *)keyword
      beforeMessageUid:(long long)beforeMessageUid
+                order:(WFCCFileRecordOrder)order
                 count:(int)count
               success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                 error:(void(^)(int error_code))errorBlock;

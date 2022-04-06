@@ -52,6 +52,9 @@
     self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
     NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
+    if(!sender.length) {
+        sender = fileRecord.userId;
+    }
     
     NSString *info = [NSString stringWithFormat:@"%@ 来自", [WFCUUtilities formatTimeLabel:fileRecord.timestamp]];
     
