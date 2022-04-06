@@ -902,11 +902,11 @@ namespace mars{
     
         extern void clearRemoteConversationMessages(int conversationType, const std::string &target, int line, GeneralOperationCallback *callback);
 
-        extern void loadConversationFileRecords(const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
-        extern void loadMyFileRecords(long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void loadConversationFileRecords(const TConversation &conv, const std::string &fromUser, long long beforeUid, int order, int count, LoadFileRecordCallback *callback);
+        extern void loadMyFileRecords(long long beforeUid, int order, int count, LoadFileRecordCallback *callback);
         extern void deleteFileRecords(long long messageUid, GeneralOperationCallback *callback);
-        extern void searchConversationFileRecords(const std::string &keyword, const TConversation &conv, const std::string &fromUser, long long beforeUid, int count, LoadFileRecordCallback *callback);
-        extern void searchMyFileRecords(const std::string &keyword, long long beforeUid, int count, LoadFileRecordCallback *callback);
+        extern void searchConversationFileRecords(const std::string &keyword, const TConversation &conv, const std::string &fromUser, long long beforeUid, int order, int count, LoadFileRecordCallback *callback);
+        extern void searchMyFileRecords(const std::string &keyword, long long beforeUid, int order, int count, LoadFileRecordCallback *callback);
     
         extern int uploadGeneralMedia(const std::string &fileName, const std::string &mediaData, int mediaType, UpdateMediaCallback *callback);
 
