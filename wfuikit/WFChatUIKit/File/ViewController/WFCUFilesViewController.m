@@ -164,11 +164,11 @@
 - (void)loadData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
            error:(void(^)(int error_code))errorBlock {
     if (self.myFiles) {
-        [[WFCCIMService sharedWFCIMService] getMyFiles:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] getMyFiles:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     } else if(self.userFiles) {
-        [[WFCCIMService sharedWFCIMService] getConversationFiles:nil fromUser:self.userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] getConversationFiles:nil fromUser:self.userId beforeMessageUid:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     } else {
-        [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] getConversationFiles:self.conversation fromUser:nil beforeMessageUid:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     }
 }
 
@@ -201,11 +201,11 @@
 - (void)searchData:(long long)startPos count:(int)count success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
            error:(void(^)(int error_code))errorBlock {
     if (self.myFiles) {
-        [[WFCCIMService sharedWFCIMService] searchMyFiles:self.keyword beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] searchMyFiles:self.keyword beforeMessageUid:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     } else if(self.userFiles) {
-        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:self.userId beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:nil fromUser:self.userId beforeMessageUid:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     } else {
-        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:self.conversation fromUser:nil beforeMessageUid:startPos count:count success:successBlock error:errorBlock];
+        [[WFCCIMService sharedWFCIMService] searchFiles:self.keyword conversation:self.conversation fromUser:nil beforeMessageUid:startPos order:FileRecordOrder_TIME_DESC count:count success:successBlock error:errorBlock];
     }
 }
 

@@ -3016,6 +3016,7 @@ public:
 - (void)getConversationFiles:(WFCCConversation *)conversation
                     fromUser:(NSString *)userId
             beforeMessageUid:(long long)messageUid
+                       order:(WFCCFileRecordOrder)order
                        count:(int)count
                      success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                        error:(void(^)(int error_code))errorBlock {
@@ -3025,18 +3026,20 @@ public:
     conv.conversationType = (int)conversation.type;
     
     std::string fromUser = userId ? [userId UTF8String] : "";
-    mars::stn::loadConversationFileRecords(conv, fromUser, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::loadConversationFileRecords(conv, fromUser, messageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)getMyFiles:(long long)beforeMessageUid
+             order:(WFCCFileRecordOrder)order
              count:(int)count
            success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
              error:(void(^)(int error_code))errorBlock {
-    mars::stn::loadMyFileRecords(beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::loadMyFileRecords(beforeMessageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)searchMyFiles:(NSString *)keyword
      beforeMessageUid:(long long)beforeMessageUid
+                order:(WFCCFileRecordOrder)order
                 count:(int)count
               success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
                 error:(void(^)(int error_code))errorBlock {
@@ -3046,7 +3049,7 @@ public:
         }
         return;
     }
-    mars::stn::searchMyFileRecords([keyword UTF8String], beforeMessageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::searchMyFileRecords([keyword UTF8String], beforeMessageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)deleteFileRecord:(long long)messageUid
@@ -3059,6 +3062,7 @@ public:
        conversation:(WFCCConversation *)conversation
            fromUser:(NSString *)userId
    beforeMessageUid:(long long)messageUid
+              order:(WFCCFileRecordOrder)order
               count:(int)count
             success:(void(^)(NSArray<WFCCFileRecord *> *files))successBlock
               error:(void(^)(int error_code))errorBlock {
@@ -3074,7 +3078,7 @@ public:
     conv.conversationType = (int)conversation.type;
     
     std::string fromUser = userId ? [userId UTF8String] : "";
-    mars::stn::searchConversationFileRecords([keyword UTF8String], conv, fromUser, messageUid, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::searchConversationFileRecords([keyword UTF8String], conv, fromUser, messageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)getAuthorizedMediaUrl:(long long)messageUid
