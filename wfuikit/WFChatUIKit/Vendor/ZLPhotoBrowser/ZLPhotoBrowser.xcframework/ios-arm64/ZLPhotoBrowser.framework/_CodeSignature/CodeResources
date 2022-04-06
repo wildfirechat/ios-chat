@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/ZLPhotoBrowser-Swift.h</key>
 		<data>
-		7ux78pPfKaRCRuhoXZJKTHfL1pk=
+		JFBuNntyRssDP9DrtPBwKppYQoI=
 		</data>
 		<key>Headers/ZLPhotoBrowser.h</key>
 		<data>
@@ -14,39 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		4nZN+7xMA8kg9LfTBgI4BZzf/HU=
+		gZthXHkRS9yKd8ja5ohXhAXs1Po=
 		</data>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		2p3Ds1tVTLNybnOlfzNjVOsJPuA=
-		</data>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/Project/arm64.swiftsourceinfo</key>
-		<data>
-		2p3Ds1tVTLNybnOlfzNjVOsJPuA=
+		oOCxKE0s+s0YNkhczpZ0Rf89J3k=
 		</data>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		C64HmyAh9Q1FFG/w2NHGsbbeLuw=
+		K7ysQpKqCgICJhJxQmHW1GdTI1k=
 		</data>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		JE6L23x47EtcYcKPNOMbxfc0Ylw=
+		3he6wROa+qkmXLtDkIH2XR94zu0=
 		</data>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		xPYhlYGtqbf8I256XEms7yYZ/O0=
-		</data>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftdoc</key>
-		<data>
-		C64HmyAh9Q1FFG/w2NHGsbbeLuw=
-		</data>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftinterface</key>
-		<data>
-		JE6L23x47EtcYcKPNOMbxfc0Ylw=
-		</data>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftmodule</key>
-		<data>
-		xPYhlYGtqbf8I256XEms7yYZ/O0=
+		IlQIyU8pYIikxEB7gliMn4kt2uA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -56,7 +40,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FvNZm0Y+wwHThcbLmnlIQokA7/k=
+			YC0nkJkKVXt4Nd8bd1a84PtyENw=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -65,7 +49,16 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Wxfdlb+x1ucPwrDYjtp84nue5YI=
+			oD7aAUbeSFlDqUzT6rB97Us9hdc=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/es-419.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			5yuauHA820kkalgqIn2gyNGjCoE=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -74,7 +67,16 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			u17TqjyeF+watNwTcVylJSTrmZc=
+			Q1NdpL7H1Ytw5CUkwtSRnY0EDf4=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/id.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ZZ7Dj9ao/GWy5qUGo48Fz5q/iss=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -83,7 +85,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			BCDxaJxjivf2ERxeq/4sSJGod7o=
+			iSU9w0QTHtOyeSxkfcLPZfLwEsE=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -92,7 +94,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			rsPMjMmAnqQ1UzL1qiPVyiFx4JQ=
+			FQt2HdgYPRSyDQsbZzj5GYXpBpQ=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -101,7 +103,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uCmGzjNB0HvU9l62ECR+s6f1PfE=
+			PwG2NQbgCSBW2kJGcHyVKeP6jIY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -110,7 +112,16 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1hhpbHviCZ76XKX/iCDwH7UVUcw=
+			BqNIxSWSSqMXAdZ2S9jsC4vqtyM=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/pt-BR.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1CAotsLE2i7iYaT0Na80BA0SjJ8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -119,7 +130,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			NYUwTX4gxm+5oG5rWY/IUZwNme0=
+			/JT7qkqZFMxg8GH8uU+pfsKKeNw=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -128,7 +139,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			gZYaWNL14dbJ0mMz8WQjmtQb8z8=
+			odXUIEOKPfQiQEiV0tIu3iNDD/s=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -137,7 +148,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RO8B7uw3GfEdMNOwFV9VrXPFeUE=
+			Wea2fut55tx6frdlyZYgDNYhGiY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -146,7 +157,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7zDitnDkt+F/dn/vLJYfhJqC0To=
+			0tX6TJAK3vsonaQkN5b/JmtEvLs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -158,6 +169,22 @@
 		<key>ZLPhotoBrowser.bundle/zl_addPhoto@3x.png</key>
 		<data>
 		ufD4Pbx2OakRfEhP8w62bDiDcIA=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_adjust@2x.png</key>
+		<data>
+		B5dI2kOwsduj2mzKIUKUOo2QTCU=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_adjust@3x.png</key>
+		<data>
+		3yOWK7s9oCRtzQKMj8r2w7rrvJ8=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_adjust_selected@2x.png</key>
+		<data>
+		Wq5IuSkzQw8ikE6tD1HWFuqkwq8=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_adjust_selected@3x.png</key>
+		<data>
+		R5tiv9OGwQcZup5HzVSzVDEoeZE=
 		</data>
 		<key>ZLPhotoBrowser.bundle/zl_albumSelect@2x.png</key>
 		<data>
@@ -190,6 +217,22 @@
 		<key>ZLPhotoBrowser.bundle/zl_ashbin_open@3x.png</key>
 		<data>
 		EbQgu0IVaOZhzfDfxdqPhwfjC3c=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_brightness@2x.png</key>
+		<data>
+		6buP6PzBPtCiBNXtSgMc5fSo78Q=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_brightness@3x.png</key>
+		<data>
+		hzVbu0my5yyJNG7EERhyc+IVtaE=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_brightness_selected@2x.png</key>
+		<data>
+		3dR6V8vMGq+odwGSYnkco+YNPLg=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_brightness_selected@3x.png</key>
+		<data>
+		6XILMc34vOSC68VjyFysPDXuTR4=
 		</data>
 		<key>ZLPhotoBrowser.bundle/zl_btn_circle@2x.png</key>
 		<data>
@@ -246,6 +289,22 @@
 		<key>ZLPhotoBrowser.bundle/zl_close@3x.png</key>
 		<data>
 		gOsijPrt8uf23m3+RMPlarR9SQY=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_contrast@2x.png</key>
+		<data>
+		DTvCnOMouFROTIJRZSis7Sl6r3U=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_contrast@3x.png</key>
+		<data>
+		22JD5BR3dTwAR3SAKdTAFihMTN0=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_contrast_selected@2x.png</key>
+		<data>
+		dVWLVh8+9IF495g4ib8ItPlY9oE=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_contrast_selected@3x.png</key>
+		<data>
+		7c3c32TrOQMYfNyJoUxKDWAFTtE=
 		</data>
 		<key>ZLPhotoBrowser.bundle/zl_defaultphoto.png</key>
 		<data>
@@ -363,6 +422,14 @@
 		<data>
 		e3/so6/xzywJ75LuCw4pEAUMeFE=
 		</data>
+		<key>ZLPhotoBrowser.bundle/zl_navClose@2x.png</key>
+		<data>
+		xC5w+TtBnOCIOg8V7ikOoLCRfBE=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_navClose@3x.png</key>
+		<data>
+		FKqrvy/rra7rZxazQ39yX1VS2qQ=
+		</data>
 		<key>ZLPhotoBrowser.bundle/zl_pauseButtonWhite@2x.png</key>
 		<data>
 		NAeH9WEIy4ZMt5H3VVxOISa/MEI=
@@ -435,6 +502,22 @@
 		<data>
 		rtHfz1gpuhorN5WZUX007uBh6Yo=
 		</data>
+		<key>ZLPhotoBrowser.bundle/zl_saturation@2x.png</key>
+		<data>
+		lRftQDKQsH/n2SwLJMe6FhwKbo4=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_saturation@3x.png</key>
+		<data>
+		8x2JYsvS/CzKSiMtAkPbtGlZrTk=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_saturation_selected@2x.png</key>
+		<data>
+		t9N/oVIeDyVl/tqUsvA3gFZ2jWY=
+		</data>
+		<key>ZLPhotoBrowser.bundle/zl_saturation_selected@3x.png</key>
+		<data>
+		cY56jTXoHW2f7R7iVQbzGvSftBU=
+		</data>
 		<key>ZLPhotoBrowser.bundle/zl_shadow@2x.png</key>
 		<data>
 		kQ+HgFBYMRGxgx3VJj8+PjT7Hkg=
@@ -498,11 +581,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7ux78pPfKaRCRuhoXZJKTHfL1pk=
+			JFBuNntyRssDP9DrtPBwKppYQoI=
 			</data>
 			<key>hash2</key>
 			<data>
-			6WvpzFwUoB+0q2bFNCIqMcY9RSs/KlUSZXZjOxwap9M=
+			iBhQQYTyxYUG9eRkx5domeCpart2frb9dYB2i1WTiGQ=
 			</data>
 		</dict>
 		<key>Headers/ZLPhotoBrowser.h</key>
@@ -520,88 +603,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2p3Ds1tVTLNybnOlfzNjVOsJPuA=
+			oOCxKE0s+s0YNkhczpZ0Rf89J3k=
 			</data>
 			<key>hash2</key>
 			<data>
-			gKoGXfvwSFC5ZX+NhEJc8S50NEkGDhXnyzyFTIQC/YM=
-			</data>
-		</dict>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/Project/arm64.swiftsourceinfo</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			2p3Ds1tVTLNybnOlfzNjVOsJPuA=
-			</data>
-			<key>hash2</key>
-			<data>
-			gKoGXfvwSFC5ZX+NhEJc8S50NEkGDhXnyzyFTIQC/YM=
+			yuztd8BDD71/cVMPG/ff8jJZH4A4VEXz1wuqpU4Yg2A=
 			</data>
 		</dict>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			C64HmyAh9Q1FFG/w2NHGsbbeLuw=
+			K7ysQpKqCgICJhJxQmHW1GdTI1k=
 			</data>
 			<key>hash2</key>
 			<data>
-			6hmVOXaD92vtaX8+/8kSFO9DI7Ah0GKLUY1gaT5RG4E=
+			PTGtxuX1y1IUudg6hA+6gRdzDxhNiYW4VLqalo/nAsM=
 			</data>
 		</dict>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			JE6L23x47EtcYcKPNOMbxfc0Ylw=
+			3he6wROa+qkmXLtDkIH2XR94zu0=
 			</data>
 			<key>hash2</key>
 			<data>
-			xvFP1V6jUEkZqnnVaDasO4LntZBBlKyouajyJEO7qIk=
+			bAFTwWH0LtqRfqT4XTU1t9ofEpmULJZLGpiYZeY4X5I=
 			</data>
 		</dict>
 		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			xPYhlYGtqbf8I256XEms7yYZ/O0=
+			IlQIyU8pYIikxEB7gliMn4kt2uA=
 			</data>
 			<key>hash2</key>
 			<data>
-			zc7Abi5bnEViuGbcWpd82qTLgKLLHc1o0r2EWaNCq30=
-			</data>
-		</dict>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftdoc</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			C64HmyAh9Q1FFG/w2NHGsbbeLuw=
-			</data>
-			<key>hash2</key>
-			<data>
-			6hmVOXaD92vtaX8+/8kSFO9DI7Ah0GKLUY1gaT5RG4E=
-			</data>
-		</dict>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftinterface</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			JE6L23x47EtcYcKPNOMbxfc0Ylw=
-			</data>
-			<key>hash2</key>
-			<data>
-			xvFP1V6jUEkZqnnVaDasO4LntZBBlKyouajyJEO7qIk=
-			</data>
-		</dict>
-		<key>Modules/ZLPhotoBrowser.swiftmodule/arm64.swiftmodule</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			xPYhlYGtqbf8I256XEms7yYZ/O0=
-			</data>
-			<key>hash2</key>
-			<data>
-			zc7Abi5bnEViuGbcWpd82qTLgKLLHc1o0r2EWaNCq30=
+			ys6EcAOGj1cmXO2UJ779DBnkC2XEhnLRrF5lH3pYpTY=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -619,11 +658,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FvNZm0Y+wwHThcbLmnlIQokA7/k=
+			YC0nkJkKVXt4Nd8bd1a84PtyENw=
 			</data>
 			<key>hash2</key>
 			<data>
-			iaj7vuQXt2CvQm9yg4CJ0y13/TgXnV56c2mKxs8gnNQ=
+			0kXqGoZ/2F3flkXozNQZ6wFFFzN7OEohPpRVU6C3+24=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -632,11 +671,24 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Wxfdlb+x1ucPwrDYjtp84nue5YI=
+			oD7aAUbeSFlDqUzT6rB97Us9hdc=
 			</data>
 			<key>hash2</key>
 			<data>
-			IjZ2J5Fy3DdWcw06IqWScKGJK2rcAoCTZUTEYTf8xNk=
+			YeL44oornYayAkhul0KdfTLkLQQrPsrqBqPSzfpvlC8=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/es-419.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			5yuauHA820kkalgqIn2gyNGjCoE=
+			</data>
+			<key>hash2</key>
+			<data>
+			VpcsMH/YSPQBjuKV6DkYyVq6FVbQ5sTtJdNZvgI5G68=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -645,11 +697,24 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			u17TqjyeF+watNwTcVylJSTrmZc=
+			Q1NdpL7H1Ytw5CUkwtSRnY0EDf4=
 			</data>
 			<key>hash2</key>
 			<data>
-			/TyUgCAv7z6794t2FZEWqwQIwuQzCYxTHz37vMlAcXA=
+			/gg2Fmm0J0U17w1xk2HBL+b5yZpCZ6aZ/V62XdSbh5o=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/id.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ZZ7Dj9ao/GWy5qUGo48Fz5q/iss=
+			</data>
+			<key>hash2</key>
+			<data>
+			yNUASCM9bWtgP7FyO6XM8PGC23BTiiMqzw7FzVZ9cLI=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -658,11 +723,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			BCDxaJxjivf2ERxeq/4sSJGod7o=
+			iSU9w0QTHtOyeSxkfcLPZfLwEsE=
 			</data>
 			<key>hash2</key>
 			<data>
-			uKO8l3Stj0/Pxd7sQkOfR+5oqAvjvKxibQ9WoG8/eL8=
+			v7miMie/+WSwPT53JIPyfgu3wqaCcgYwiyFt9bVOZwc=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -671,11 +736,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			rsPMjMmAnqQ1UzL1qiPVyiFx4JQ=
+			FQt2HdgYPRSyDQsbZzj5GYXpBpQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			brtySx8eiyxFqbe2pysZ2HtARy7hDsk/pI0Bmh+Yu6c=
+			miP/EhVQL+mUrkGAUGdxPGQAcOvlar4EnObRRvOQZmQ=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -684,11 +749,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uCmGzjNB0HvU9l62ECR+s6f1PfE=
+			PwG2NQbgCSBW2kJGcHyVKeP6jIY=
 			</data>
 			<key>hash2</key>
 			<data>
-			eWuW89X+kDo1fMb8q8qVHnCGEE4aHhdAaeb7MblC4eU=
+			fBYsDrWqA6e5OfPBvIvymSFuQvy4aU2yGm+zqnfS2Sk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -697,11 +762,24 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1hhpbHviCZ76XKX/iCDwH7UVUcw=
+			BqNIxSWSSqMXAdZ2S9jsC4vqtyM=
 			</data>
 			<key>hash2</key>
 			<data>
-			u4pRM0lCZ/Vq6FpCnRCuxwB5i+Jlx28/Bswy1F6U998=
+			THO4BfrY2I4IooeAb1sXtOy1Hv0UQkBM9BYacJDc4SM=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/pt-BR.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1CAotsLE2i7iYaT0Na80BA0SjJ8=
+			</data>
+			<key>hash2</key>
+			<data>
+			eFqV0r/5embpVDNibN/4kvl53xBgJ3xQ9fAwjuw/5tQ=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -710,11 +788,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			NYUwTX4gxm+5oG5rWY/IUZwNme0=
+			/JT7qkqZFMxg8GH8uU+pfsKKeNw=
 			</data>
 			<key>hash2</key>
 			<data>
-			eo5EzOJi26SCTaVOwGoh0Nf2xy0FzOxuupRBNUyxuLc=
+			bLUnLGh4HElXy/29BZlBUThqVKdg6CySmbBq6U+DJM8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -723,11 +801,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			gZYaWNL14dbJ0mMz8WQjmtQb8z8=
+			odXUIEOKPfQiQEiV0tIu3iNDD/s=
 			</data>
 			<key>hash2</key>
 			<data>
-			aJBI+GyUzsZ6oABUgPCPwnfWdG5NsHQ/3GciCZGAhiw=
+			BmajhRiB7Ft9L29hWjyVyKnxbAp4LTHvR/raTjfT4cg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -736,11 +814,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RO8B7uw3GfEdMNOwFV9VrXPFeUE=
+			Wea2fut55tx6frdlyZYgDNYhGiY=
 			</data>
 			<key>hash2</key>
 			<data>
-			Fmc2XMUnnP6mGkYm71J4LhOSOhp13ZxjfHQP7nYoBD4=
+			4oOnMPGit6iVpmr7dFSuKXFy6lc5YZqNy3f9VTd64KI=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -749,11 +827,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7zDitnDkt+F/dn/vLJYfhJqC0To=
+			0tX6TJAK3vsonaQkN5b/JmtEvLs=
 			</data>
 			<key>hash2</key>
 			<data>
-			FROx9SHMOXxKTUC9NIGupPIybkCsXdQDg4fyaTYfSr0=
+			LwsmZzYgVPdi7KcuxOENFUUFIMm33aQwZ5cvOfWROvI=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -778,6 +856,50 @@
 			<key>hash2</key>
 			<data>
 			PeAt+japbZ6H7QECHVRxeTz7rAWRc+oH2L9E8EGllG8=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_adjust@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			B5dI2kOwsduj2mzKIUKUOo2QTCU=
+			</data>
+			<key>hash2</key>
+			<data>
+			RYhCN0R6WX5SqsjbYJCg2s24m4KFPI2qkXSYveZGGbs=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_adjust@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3yOWK7s9oCRtzQKMj8r2w7rrvJ8=
+			</data>
+			<key>hash2</key>
+			<data>
+			tmpStX2oFKdIlfyReeLxL1+SkKEdZgB/X4m9xjbOwgg=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_adjust_selected@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Wq5IuSkzQw8ikE6tD1HWFuqkwq8=
+			</data>
+			<key>hash2</key>
+			<data>
+			3T+xyouTdMR3In6fE2ndLu8q6Cs1mS/ge+jC078er5c=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_adjust_selected@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			R5tiv9OGwQcZup5HzVSzVDEoeZE=
+			</data>
+			<key>hash2</key>
+			<data>
+			yonT4ezXGbD/0WIzwrMsyLcZ9wT72Il9u12f6RjK8mg=
 			</data>
 		</dict>
 		<key>ZLPhotoBrowser.bundle/zl_albumSelect@2x.png</key>
@@ -866,6 +988,50 @@
 			<key>hash2</key>
 			<data>
 			fkcuJ2q5IQjJ4Pw3ooz0dPCXfdgEMx4xyT0GEnoANio=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_brightness@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			6buP6PzBPtCiBNXtSgMc5fSo78Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			Ft8uimtrrrVkD1yH3glI2wzxj9pSY4P2X0Vz8iSAwSQ=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_brightness@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			hzVbu0my5yyJNG7EERhyc+IVtaE=
+			</data>
+			<key>hash2</key>
+			<data>
+			AYRvwQDZ4XjE2y0Wnqw3xYiJkSQ9D4WH9Jqn7mJ9fHw=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_brightness_selected@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3dR6V8vMGq+odwGSYnkco+YNPLg=
+			</data>
+			<key>hash2</key>
+			<data>
+			Aad6GBpti3/XD/xz4Vz45YuKHnskHkC411znlTpXcbI=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_brightness_selected@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			6XILMc34vOSC68VjyFysPDXuTR4=
+			</data>
+			<key>hash2</key>
+			<data>
+			RZm/8kcXP1xf4LYIfWJBUlrNFKXdHgtckJrVkCihQ2o=
 			</data>
 		</dict>
 		<key>ZLPhotoBrowser.bundle/zl_btn_circle@2x.png</key>
@@ -1020,6 +1186,50 @@
 			<key>hash2</key>
 			<data>
 			RwZ5DAnNGH2dS/FnhIWny3iM1FY3Tt1IhcExhOjlOys=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_contrast@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			DTvCnOMouFROTIJRZSis7Sl6r3U=
+			</data>
+			<key>hash2</key>
+			<data>
+			g6Hfll964w71JgGPy0Qw3ELRGJsvDb+LQfRnGbk7nb8=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_contrast@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			22JD5BR3dTwAR3SAKdTAFihMTN0=
+			</data>
+			<key>hash2</key>
+			<data>
+			2tPWo9okeTBjQGQNOai8VTn6uFyqjB9u2KIZQqMdriQ=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_contrast_selected@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			dVWLVh8+9IF495g4ib8ItPlY9oE=
+			</data>
+			<key>hash2</key>
+			<data>
+			bIEJSFSmlRa7TWrb19/zu6DuXzG/dv+M4iq9RZp/QQE=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_contrast_selected@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			7c3c32TrOQMYfNyJoUxKDWAFTtE=
+			</data>
+			<key>hash2</key>
+			<data>
+			1YHtZ6tjSB/xT90HFBGUwsMsjuxNgo5f0ot2Cdnn+tE=
 			</data>
 		</dict>
 		<key>ZLPhotoBrowser.bundle/zl_defaultphoto.png</key>
@@ -1341,6 +1551,28 @@
 			nugzBM2HecW7lzZpnx5XCW6EFAFU/azkbCUZPq0t1Ac=
 			</data>
 		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_navClose@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			xC5w+TtBnOCIOg8V7ikOoLCRfBE=
+			</data>
+			<key>hash2</key>
+			<data>
+			LP8Ro036g7Ya+ibBa1mbqqftFTJtwXeDUqggyZQ9tfo=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_navClose@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			FKqrvy/rra7rZxazQ39yX1VS2qQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			iC8IK1o9YGiuwvSBLJiTIGocDuYNqjWsfkyVKk+zCl0=
+			</data>
+		</dict>
 		<key>ZLPhotoBrowser.bundle/zl_pauseButtonWhite@2x.png</key>
 		<dict>
 			<key>hash</key>
@@ -1537,6 +1769,50 @@
 			<key>hash2</key>
 			<data>
 			UON6Ls+pvODnTijbffphoNhMRpBkf/UHcahDZPo08vo=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_saturation@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			lRftQDKQsH/n2SwLJMe6FhwKbo4=
+			</data>
+			<key>hash2</key>
+			<data>
+			9c/2LGVpPRI22dCwQs0UMr1ODEckc9XuF07rAe4d2FQ=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_saturation@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			8x2JYsvS/CzKSiMtAkPbtGlZrTk=
+			</data>
+			<key>hash2</key>
+			<data>
+			qd9kKn+dvuYFWIZcsqBTqI4yjntY1yisyIZqymZdGTk=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_saturation_selected@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			t9N/oVIeDyVl/tqUsvA3gFZ2jWY=
+			</data>
+			<key>hash2</key>
+			<data>
+			vM0hOh7BuzevE7VRs+LLtO0Cf/aJiNQNZoWtxHGhdw4=
+			</data>
+		</dict>
+		<key>ZLPhotoBrowser.bundle/zl_saturation_selected@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			cY56jTXoHW2f7R7iVQbzGvSftBU=
+			</data>
+			<key>hash2</key>
+			<data>
+			nIQXxhsTRfzTNa4qsP+0Qmd9WSkhua8F86/cDMjkUFA=
 			</data>
 		</dict>
 		<key>ZLPhotoBrowser.bundle/zl_shadow@2x.png</key>
