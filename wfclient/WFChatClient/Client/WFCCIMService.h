@@ -1881,9 +1881,9 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                   error:(void(^)(int error_code))errorBlock;
 
 /**
- PC/Web在线时，是否发送通知
+ PC/Web在线时，是否停止通知
 
- @return 是否通知
+ @return 是否停止通知
  */
 - (BOOL)isMuteNotificationWhenPcOnline;
 
