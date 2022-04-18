@@ -192,6 +192,15 @@ namespace mars {
             SyncReadEntry loadConversationSync();
             bool deleteConvSync(long _id);
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
+            
+            bool createSecretChat(const std::string &targetId, const std::string &userId, const std::string dhx);
+            bool acceptSecretChat(const std::string &targetId, const std::string &userId);
+            bool establishedSecretChat(const std::string &targetId, const std::string &userId, const std::string dhkey);
+            bool cancelSecretChat(const std::string &targetId);
+            std::string getSecretChatUserId(const std::string &targetId);
+            int getSecretChatState(const std::string &targetId);
+            std::string getSecretChatX(const std::string &targetId);
+            std::string getSecretChatKey(const std::string &targetId);
         private:
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);

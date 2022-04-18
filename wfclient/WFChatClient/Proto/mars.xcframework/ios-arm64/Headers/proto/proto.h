@@ -804,6 +804,12 @@ namespace mars{
         virtual ~WatchOnlineStateCallback() {}
     };
     
+    class SecretChatStateCallback {
+    public:
+        virtual void onStateChanged(const std::string &targetId, int state) = 0;
+        virtual ~SecretChatStateCallback() {}
+    };
+    
     
     
         enum ConnectionStatus {
@@ -858,6 +864,7 @@ namespace mars{
         extern void useEncryptSM4();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
+        extern void setLowBPSMode(bool lowBPSMode);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);
         extern void setBackupAddressStrategy(int strategy);
@@ -879,6 +886,7 @@ namespace mars{
         extern void setRefreshFriendListCallback(GetMyFriendsCallback *callback);
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
+        extern void setSecretChatStateCallback(SecretChatStateCallback *callback);
         extern ConnectionStatus getConnectionStatus();
 
         extern int64_t getServerDeltaTime();
@@ -998,6 +1006,10 @@ namespace mars{
 
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
 
+    
+        extern void createSecretChat(const std::string &userId, GeneralStringCallback *callback);
+        extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
+    
         extern std::string GetImageThumbPara();
 
         extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
@@ -1012,6 +1024,7 @@ namespace mars{
         extern bool HasMediaBackupUrl();
         extern bool IsGlobalDisableSyncDraft();
         extern bool IsEnableUserOnlineState();
+        extern bool IsEnableSecretChat();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
