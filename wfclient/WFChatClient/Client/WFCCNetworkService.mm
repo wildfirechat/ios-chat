@@ -39,6 +39,7 @@ NSString *kFriendRequestUpdated = @"kFriendRequestUpdated";
 NSString *kSettingUpdated = @"kSettingUpdated";
 NSString *kChannelInfoUpdated = @"kChannelInfoUpdated";
 NSString *kUserOnlineStateUpdated = @"kUserOnlineStateUpdated";
+NSString *kUserSecretChatStateUpdated = @"kUserSecretChatStateUpdated";
 
 @protocol RefreshGroupInfoDelegate <NSObject>
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo;
@@ -66,6 +67,10 @@ NSString *kUserOnlineStateUpdated = @"kUserOnlineStateUpdated";
 
 @protocol RefreshSettingDelegate <NSObject>
 - (void)onSettingUpdated;
+@end
+
+@protocol SecretChatStateDelegate <NSObject>
+- (void)onSecretChatStateChanged:(NSString *)targetId newState:(WFCCSecretChatState)state;
 @end
 
 
@@ -473,9 +478,18 @@ public:
   id<RefreshSettingDelegate> m_delegate;
 };
 
+class SCSCB : public mars::stn::SecretChatStateCallback {
+public:
+    SCSCB(id<SecretChatStateDelegate> delegate) : m_delegate(delegate) {}
+    void onStateChanged(const std::string &targetId, int state) {
+        [m_delegate onSecretChatStateChanged:[NSString stringWithUTF8String:targetId.c_str()] newState:(WFCCSecretChatState)state];
+    }
+    id<SecretChatStateDelegate> m_delegate;
+};
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate>
+
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -635,6 +649,12 @@ static WFCCNetworkService * sharedSingleton = nil;
     });
 }
 
+- (void)onSecretChatStateChanged:(NSString *)targetId newState:(WFCCSecretChatState)state {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserSecretChatStateUpdated object:targetId userInfo:@{@"state":@(state)}];
+    });
+}
+
 - (void)addReceiveMessageFilter:(id<ReceiveMessageFilter>)filter {
     [self.messageFilterList addObject:filter];
 }
@@ -653,10 +673,10 @@ static WFCCNetworkService * sharedSingleton = nil;
         _currentConnectionStatus = currentConnectionStatus;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kConnectionStatusChanged object:@(_currentConnectionStatus)];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kConnectionStatusChanged object:@(self.currentConnectionStatus)];
             
-            if (_connectionStatusDelegate) {
-                [_connectionStatusDelegate onConnectionStatusChanged:currentConnectionStatus];
+            if (self.connectionStatusDelegate) {
+                [self.connectionStatusDelegate onConnectionStatusChanged:currentConnectionStatus];
             }
         });
     }
@@ -883,6 +903,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshFriendListCallback(new GFLCB(self));
   mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
   mars::stn::setRefreshSettingCallback(new GSCB(self));
+  mars::stn::setSecretChatStateCallback(new SCSCB(self));
   mars::baseevent::OnCreate();
 }
 - (BOOL)connect:(NSString *)host {
