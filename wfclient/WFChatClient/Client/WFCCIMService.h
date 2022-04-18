@@ -180,6 +180,21 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
     FileRecordOrder_SIZE_ASC = 3,
 } ;
 
+/**
+ 密聊状态
+
+ - SecretChatState_Starting: 密聊会话建立中
+ - SecretChatState_Accepting: 密聊会话接受中
+ - SecretChatState_Established: 密聊会话已建立
+ - SecretChatState_Canceled: 密聊会话已取消
+ */
+typedef NS_ENUM(NSInteger, WFCCSecretChatState) {
+    SecretChatState_Starting,
+    SecretChatState_Accepting,
+    SecretChatState_Established,
+    SecretChatState_Canceled
+};
+
 #pragma mark - 用户源
 /*
  * ChatClient内置支持用户信息托管，但对于很多应用来说都已经拥有自己的用户信息。此时可以实现用户源并设置到IMServer中去。这样ChatClient会从源中读取信息，从而ChatUIKit不用修改代码。
@@ -1861,6 +1876,45 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
 
+#pragma mark - Secret Chat 接口
+/**
+ 发起密聊
+ 
+ @param userId 对方用户ID
+ @param successBlock 成功的回调，回调返回密聊ID
+ @param errorBlock 失败的回调
+ */
+- (void)createSecretChat:(NSString *)userId
+                success:(void(^)(NSString *targetId))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
+/**
+ 销毁密聊
+ 
+ @param targetId 密聊ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)destroySecretChat:(NSString *)targetId
+                  success:(void(^)(void))successBlock
+                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取密聊用户ID
+ 
+ @param targetId 密聊ID
+ @return 密聊对方用户ID
+ */
+- (NSString *)getSecretChatUserId:(NSString *)targetId;
+
+/**
+ 获取密聊状态
+ 
+ @param targetId 密聊ID
+ @return 密聊状态
+ */
+- (WFCCSecretChatState)getSecretChatState:(NSString *)targetId;
+
 #pragma mark - 其它接口
 /**
 获取PC在线信息
@@ -2070,6 +2124,8 @@ amr文件转成wav数据
                      error:(void(^)(int error_code))errorBlock;
 
 - (BOOL)isEnableUserOnlineState;
+
+- (BOOL)isEnableSecretChat;
 /*
  音视频会议相关
  */

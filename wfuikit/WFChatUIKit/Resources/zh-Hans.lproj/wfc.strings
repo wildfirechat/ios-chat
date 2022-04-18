@@ -91,6 +91,7 @@
 "Etc"="等";
 "Search"="搜索";
 "StartChat"="发起聊天";
+"StartSecretChat"="发起保密聊天";
 "ScanQRCode"="扫二维码";
 "NotLogin"="未登录";
 "NotConnect"="未连接";

@@ -186,6 +186,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTitle) name:kUserOnlineStateUpdated object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kUserSecretChatStateUpdated object:nil];
+    
     
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
     
@@ -206,6 +208,10 @@
         } error:^(int error_code) {
             
         }];
+    } else if(self.conversation.type == SecretChat_Type) {
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
+        self.targetUser = userInfo;
     }
     
     if(self.conversation.type == Single_Type) {
@@ -231,6 +237,13 @@
         [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
                 ws.targetChannel = note.userInfo[@"channelInfo"];
+            }
+        }];
+    } else if(self.conversation.type == SecretChat_Type) {
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if ([userId isEqualToString:note.object]) {
+                ws.targetUser = note.userInfo[@"userInfo"];
             }
         }];
     }
@@ -281,7 +294,7 @@
     }
     
     self.nMsgSet = [[NSMutableSet alloc] init];
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             if(![[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target]) { //如果不是好友才需要watch他的在线状态
                 __weak typeof(self)ws = self;
@@ -333,6 +346,8 @@
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         } else if(self.conversation.type == Channel_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+        } else if(self.conversation.type == SecretChat_Type) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         }
         self.navigationItem.leftBarButtonItem = nil;
     }
@@ -519,7 +534,7 @@
         [self sendChatroomLeaveMessage];
     }
     
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             if(![[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target]) { //如果不是好友才需要watch他的在线状态
                 [[WFCCIMService sharedWFCIMService] unwatchOnlineState:self.conversation.type targets:@[self.conversation.target] success:^{
@@ -556,7 +571,7 @@
 }
 
 - (void)updateTitle {
-    if(self.conversation.type == Single_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         if(self.targetUser.friendAlias.length) {
             self.title = self.targetUser.friendAlias;
         } else if(self.targetUser.displayName.length == 0) {
@@ -577,7 +592,11 @@
          int Platform_APad = 9;
          */
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
-            WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:self.conversation.target];
+            NSString *userId = self.conversation.target;
+            if(self.conversation.type == SecretChat_Type) {
+                userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+            }
+            WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:userId];
             if([onlineState.clientStates count]) {
                 int pcState = -1;
                 int mobileState = -1;
@@ -836,6 +855,8 @@
             compositeContent.title = @"群的聊天记录";
         } else if (self.conversation.type == Channel_Type) {
             compositeContent.title = @"频道的聊天记录";
+        } else if(self.conversation.type == SecretChat_Type) {
+            compositeContent.title = @"密聊记录";
         } else {
             compositeContent.title = @"聊天记录";
         }
@@ -980,7 +1001,7 @@
     if(self.showTypingTimer != nil) {
         [self.showTypingTimer invalidate];
         self.showTypingTimer = nil;
-        if (self.conversation.type == Single_Type) {
+        if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
             self.targetUser = self.targetUser;
         } else if(self.conversation.type == Group_Type) {
             self.targetGroup = self.targetGroup;
@@ -1121,7 +1142,7 @@
 }
 
 - (void)onMessageDelivered:(NSNotification *)notification {
-    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type) {
+    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SecretChat_Type) {
         return;
     }
     
@@ -1138,13 +1159,18 @@
                 *stop = YES;
                 refresh = YES;
             }
-        }
-        if (self.conversation.type == Group_Type) {
+        } else if (self.conversation.type == Group_Type) {
             for (WFCCGroupMember *member in members) {
                 if ([member.memberId isEqualToString:obj.userId]) {
                     *stop = YES;
                     refresh = YES;
                 }
+            }
+        } else if(self.conversation.type == SecretChat_Type) {
+            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+            if ([userId isEqualToString:obj.userId]) {
+                *stop = YES;
+                refresh = YES;
             }
         }
     }];
@@ -1160,7 +1186,7 @@
                 continue;
             }
             
-            if (self.conversation.type == Single_Type) {
+            if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
                 if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
                     float rate = 1.f;
                     if (rate != model.deliveryRate) {
@@ -1192,7 +1218,7 @@
 }
 
 - (void)onMessageReaded:(NSNotification *)notification {
-    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type) {
+    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SecretChat_Type) {
         return;
     }
     
@@ -1216,7 +1242,7 @@
                 continue;
             }
             
-            if (self.conversation.type == Single_Type) {
+            if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
                 if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
                     float rate = 1.f;
                     if (rate != model.readRate) {
@@ -1293,6 +1319,17 @@
     if(![orignalDraftText isEqualToString:draftText]) {
         self.orignalDraft = info.draft;
         self.chatInputBar.draft = info.draft;
+    }
+}
+
+- (void)onSecretChatStateChanged:(NSNotification *)notification {
+    if(self.conversation.type == SecretChat_Type && [self.conversation.target isEqualToString:notification.object]) {
+        WFCCSecretChatState state = (WFCCSecretChatState)[notification.userInfo[@"state"] intValue];
+        if(state == SecretChatState_Canceled) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } else {
+            [self reloadMessageList];
+        }
     }
 }
 
@@ -2478,7 +2515,7 @@
 }
 #if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly {
-    if(self.conversation.type == Single_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[self.conversation.target] conversation:self.conversation audioOnly:isAudioOnly];
         [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
     } else {
@@ -2523,7 +2560,7 @@
 #endif
 
 - (void)onTyping:(WFCCTypingType)type {
-    if (self.conversation.type == Single_Type) {
+    if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         [self sendMessage:[WFCCTypingMessageContent contentType:type]];
     }
 }
@@ -2838,7 +2875,7 @@
         
         item.sender = self.cell4Menu.model.message.fromUser;
         item.conversation = self.cell4Menu.model.message.conversation;
-        if (self.cell4Menu.model.message.conversation.type == Single_Type) {
+        if (self.cell4Menu.model.message.conversation.type == Single_Type || self.cell4Menu.model.message.conversation.type == SecretChat_Type) {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
             item.origin = userInfo.displayName;
         } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
