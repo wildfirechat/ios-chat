@@ -2958,6 +2958,31 @@ public:
     return ids;
 }
 
+
+- (void)createSecretChat:(NSString *)userId
+                success:(void(^)(NSString *targetId))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    mars::stn::createSecretChat([userId UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+}
+
+- (void)destroySecretChat:(NSString *)targetId
+                  success:(void(^)(void))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    mars::stn::destroySecretChat([targetId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (NSString *)getSecretChatUserId:(NSString *)targetId {
+    std::string userId = mars::stn::MessageDB::Instance()->getSecretChatUserId([targetId UTF8String]);
+    if(userId.empty()) {
+        return nil;
+    }
+    return [NSString stringWithUTF8String:userId.c_str()];
+}
+
+- (WFCCSecretChatState)getSecretChatState:(NSString *)targetId {
+    return (WFCCSecretChatState)mars::stn::MessageDB::Instance()->getSecretChatState([targetId UTF8String]);
+}
+
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos {
     NSString *pcOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"PC"];
     NSString *webOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"Web"];
@@ -3207,6 +3232,10 @@ public:
 
 - (BOOL)isEnableUserOnlineState {
     return mars::stn::IsEnableUserOnlineState();
+}
+
+- (BOOL)isEnableSecretChat {
+    return mars::stn::IsEnableSecretChat();
 }
 
 - (void)sendConferenceRequest:(long long)sessionId

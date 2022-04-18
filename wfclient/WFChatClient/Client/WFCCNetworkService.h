@@ -32,6 +32,8 @@ extern NSString *kSettingUpdated;
 extern NSString *kChannelInfoUpdated;
 //用户在线状态更新通知
 extern NSString *kUserOnlineStateUpdated;
+//密聊状态更新通知
+extern NSString *kUserSecretChatStateUpdated;
 
 #pragma mark - 枚举值定义
 /**

@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UIImageView *statusView;
 @property (strong, nonatomic) UILabel *timeView;
 @property (strong, nonatomic) UIImageView *silentView;
+@property (strong, nonatomic) UIImageView *secretChatView;
 @property (nonatomic, strong)BubbleTipView *bubbleView;
 @property (nonatomic, strong)WFCCConversationInfo *info;
 @property (nonatomic, strong)WFCCConversationSearchInfo *searchInfo;

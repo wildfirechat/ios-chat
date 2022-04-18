@@ -232,7 +232,7 @@
     }
     
     //2. 保存会话列表
-    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
     NSMutableArray<SharedConversation *> *sharedConvs = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *needComposedGroupIds = [[NSMutableArray alloc] init];
     for (WFCCConversationInfo *info in infos) {
@@ -261,6 +261,22 @@
             }
             sc.title = ci.name;
             sc.portraitUrl = ci.portrait;
+        } else if (info.conversation.type == SecretChat_Type) {
+            WFCCSecretChatState state = [[WFCCIMService sharedWFCIMService] getSecretChatState:info.conversation.target];
+            if(state != SecretChatState_Established) {
+                continue;
+            }
+            
+            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:info.conversation.target];
+            if(!userId.length) {
+                continue;
+            }
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+            if (!userInfo) {
+                continue;
+            }
+            sc.title = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+            sc.portraitUrl = userInfo.portrait;
         }
         [sharedConvs addObject:sc];
     }
@@ -406,6 +422,9 @@
         } else {
             localNote.alertBody = [msg digest];
         }
+        if(msg.conversation.type == SecretChat_Type) {
+            localNote.alertBody = @"您收到了新的密聊消息";
+        }
       if (msg.conversation.type == Single_Type) {
         WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
         if (sender.displayName) {
@@ -439,6 +458,16 @@
               }
                   
           }
+      } else if (msg.conversation.type == SecretChat_Type) {
+          NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:msg.conversation.target];
+          WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+          if (sender.displayName) {
+              if (@available(iOS 8.2, *)) {
+                  localNote.alertTitle = sender.displayName;
+              } else {
+                  // Fallback on earlier versions
+              }
+          }
       }
         
       localNote.applicationIconBadgeNumber = count;
@@ -452,7 +481,7 @@
 }
 
 - (NSInteger)updateBadgeNumber {
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     int count = unreadCount.unread + unreadFriendRequest;
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;
