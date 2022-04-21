@@ -82,7 +82,7 @@
     } else if(type == Channel_Type) {
         channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:(NSString *)model refresh:NO];
     } else if(type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:(NSString *)model];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:(NSString *)model].userId;
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     } else {
         return;

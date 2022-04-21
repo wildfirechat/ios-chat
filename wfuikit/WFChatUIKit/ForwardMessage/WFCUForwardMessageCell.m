@@ -61,7 +61,7 @@
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
     } else if (conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].userId;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         if (userInfo) {
             name = userInfo.displayName;

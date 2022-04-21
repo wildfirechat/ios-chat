@@ -182,6 +182,8 @@
 		90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */; };
 		90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90F5849A1FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */; };
+		B7832E3A280FC774000233D1 /* WFCCSecretChatInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B7832E38280FC774000233D1 /* WFCCSecretChatInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7832E3B280FC774000233D1 /* WFCCSecretChatInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */; };
 		B7EF74FB280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EF74F9280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m */; };
 		B7EF74FC280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7EF74FA280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -350,6 +352,8 @@
 		90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLocationMessageContent.m; sourceTree = "<group>"; };
 		90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChangeGroupPortraitNotificationContent.h; sourceTree = "<group>"; };
 		90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChangeGroupPortraitNotificationContent.m; sourceTree = "<group>"; };
+		B7832E38280FC774000233D1 /* WFCCSecretChatInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCSecretChatInfo.h; sourceTree = "<group>"; };
+		B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCSecretChatInfo.m; sourceTree = "<group>"; };
 		B7EF74F9280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStartSecretChatMessageContent.m; sourceTree = "<group>"; };
 		B7EF74FA280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStartSecretChatMessageContent.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -588,6 +592,8 @@
 				2FB87A612650BDE000790A26 /* WFCCFriend.m */,
 				2F3D37B127BDE4A7000D1833 /* WFCCUserOnlineState.h */,
 				2F3D37B227BDE4A7000D1833 /* WFCCUserOnlineState.m */,
+				B7832E38280FC774000233D1 /* WFCCSecretChatInfo.h */,
+				B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -665,6 +671,7 @@
 				B7EF74FC280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h in Headers */,
 				6ED103DC20AE5C9700D4A59C /* WFCCTipNotificationMessageContent.h in Headers */,
 				2B785A5425294C0D003CBF78 /* WFCCQuoteInfo.h in Headers */,
+				B7832E3A280FC774000233D1 /* WFCCSecretChatInfo.h in Headers */,
 				2E6B50FD1FAE9B10006B6E31 /* WFCCImageMessageContent.h in Headers */,
 				2F8742DC219C4FED00F65EBA /* WFCCUnreadCount.h in Headers */,
 				2F8742DF219C4FED00F65EBA /* WFCCChatroomMemberInfo.h in Headers */,
@@ -854,6 +861,7 @@
 				2E6B51061FAE9B10006B6E31 /* WFCCMessageContent.m in Sources */,
 				2E6B50FA1FAE9B10006B6E31 /* WFCCCreateGroupNotificationContent.m in Sources */,
 				2E6B50F81FAE9B10006B6E31 /* WFCCAddGroupeMemberNotificationContent.m in Sources */,
+				B7832E3B280FC774000233D1 /* WFCCSecretChatInfo.m in Sources */,
 				2BC2AC5A2581F68B00E3D12D /* WFCCKickoffGroupMemberVisibleNotificationContent.m in Sources */,
 				2F7709A12453DCB10020DB77 /* WFCCThingsDataContent.m in Sources */,
 				2E6B511E1FAE9B10006B6E31 /* WFCCGroupMember.m in Sources */,

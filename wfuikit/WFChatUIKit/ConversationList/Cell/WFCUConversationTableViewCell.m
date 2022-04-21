@@ -200,7 +200,7 @@
         }
         [self updateChannelInfo:channelInfo];
     } else if(conversation.type == SecretChat_Type){
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].userId;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         [self updateUserInfo:userInfo];
     } else {
@@ -219,7 +219,7 @@
     
     NSString *secretChatStateText = nil;
     if(conversation.type == SecretChat_Type) {
-        WFCCSecretChatState secretChatState = [[WFCCIMService sharedWFCIMService] getSecretChatState:conversation.target];
+        WFCCSecretChatState secretChatState = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].state;
         if (secretChatState == SecretChatState_Starting) {
             secretChatStateText = @"密聊会话建立中，正在等待对方响应。";
         } else if(secretChatState == SecretChatState_Canceled) {

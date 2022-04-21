@@ -73,7 +73,7 @@
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         self.memberList = @[self.conversation.target];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
         self.memberList = @[userId];
     }
@@ -391,7 +391,7 @@
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
         self.memberList = @[self.conversation.target];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         self.memberList = @[userId];
     }
@@ -503,7 +503,7 @@
 - (BOOL)isClearMessageCell:(NSIndexPath *)indexPath {
   if((self.conversation.type == Group_Type && indexPath.section == 4 && indexPath.row == 0)
      || (self.conversation.type == Single_Type && indexPath.section == 2 && indexPath.row == 0)
-     || (self.conversation.type == SecretChat_Type && indexPath.section == 2 && indexPath.row == 0)
+     || (self.conversation.type == SecretChat_Type && indexPath.section == 3 && indexPath.row == 0)
      || (self.conversation.type == Channel_Type && indexPath.section == 2 && indexPath.row == 0)) {
     return YES;
   }
@@ -528,7 +528,15 @@
 }
 
 - (BOOL)isDestroySecretChatCell:(NSIndexPath *)indexPath {
-    if (self.conversation.type == SecretChat_Type && indexPath.section == 2 && indexPath.row == 1) {
+    if (self.conversation.type == SecretChat_Type && indexPath.section == 3 && indexPath.row == 1) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)isBurnTimeCell:(NSIndexPath *)indexPath {
+    if (self.conversation.type == SecretChat_Type && indexPath.section == 2 && indexPath.row == 0) {
         return YES;
     }
     
@@ -590,6 +598,8 @@
         } else if(section == 1) {
             return 2; //消息免打扰，置顶聊天
         } else if(section == 2) {
+            return 1; //清空聊天记录，删除密聊
+        } else if(section == 3) {
             return 2; //清空聊天记录，删除密聊
         }
     }
@@ -812,6 +822,13 @@
           }
       }
       return cell;
+  } else if([self isBurnTimeCell:indexPath]) {
+      NSString *subTitle = @"关闭";
+      WFCCSecretChatInfo *info = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+      if(info.burnTime) {
+          subTitle = [NSString stringWithFormat:@"%d秒", info.burnTime];
+      }
+      return [self cellOfTable:tableView WithTitle:@"设置密聊焚毁时间" withDetailTitle:subTitle withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   }
     return nil;
 }
@@ -826,7 +843,7 @@
     } else if(self.conversation.type == Channel_Type) {
         return 4;
     } else if (self.conversation.type == SecretChat_Type) {
-        return 3;
+        return 4;
     }
     return 0;
 }
@@ -913,6 +930,13 @@
       WFCUFilesViewController *vc = [[WFCUFilesViewController alloc] init];
       vc.conversation = self.conversation;
       [self.navigationController pushViewController:vc animated:YES];
+  } else if([self isBurnTimeCell:indexPath]) {
+      if(![[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].burnTime) {
+          [[WFCCIMService sharedWFCIMService] setSecretChat:self.conversation.target burnTime:10];
+      } else {
+          [[WFCCIMService sharedWFCIMService] setSecretChat:self.conversation.target burnTime:0];
+      }
+      [self.tableView reloadData];
   }
 }
 

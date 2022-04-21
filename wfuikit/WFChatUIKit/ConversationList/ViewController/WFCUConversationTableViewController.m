@@ -113,7 +113,7 @@
             } else if ([conv.lastMessage.fromUser isEqualToString:userInfo.userId]) {
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             } else if(conv.conversation.type == SecretChat_Type) {
-                NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:conv.conversation.target];
+                NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
                 if([userInfo.userId isEqualToString:userId]) {
                     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
                 }
@@ -179,7 +179,13 @@
 }
 
 - (void)onSecretChatStateChanged:(NSNotification *)notification {
-    [self.tableView reloadData];
+    [self refreshList];
+    [self refreshLeftButton];
+}
+
+- (void)onSecretMessageBurned:(NSNotification *)notification {
+    [self refreshList];
+    [self refreshLeftButton];
 }
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
@@ -369,7 +375,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendingMessageStatusUpdated:) name:kSendingMessageStatusUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kUserSecretChatStateUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kSecretChatStateUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
     
     self.firstAppear = YES;
 }

@@ -75,6 +75,8 @@
 "MsgReceipt"="Message receipt";
 "Delete"="Delete";
 "Deleting"="Deleting";
+"Loading"="Loading";
+"LoadFailure"="Load failure";
 "DeleteLocalMsg"="Only delete local message";
 "DeleteRemoteMsg"="Delete remote message also";
 "DeleteFailed"="Delete failed";

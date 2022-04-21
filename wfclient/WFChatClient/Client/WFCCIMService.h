@@ -22,6 +22,7 @@
 #import "WFCCPCOnlineInfo.h"
 #import "WFCCFileRecord.h"
 #import "WFCCFriend.h"
+#import "WFCCSecretChatInfo.h"
 
 #pragma mark - 频道通知定义
 //发送消息状态通知
@@ -179,21 +180,6 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
     FileRecordOrder_SIZE_DESC = 2,
     FileRecordOrder_SIZE_ASC = 3,
 } ;
-
-/**
- 密聊状态
-
- - SecretChatState_Starting: 密聊会话建立中
- - SecretChatState_Accepting: 密聊会话接受中
- - SecretChatState_Established: 密聊会话已建立
- - SecretChatState_Canceled: 密聊会话已取消
- */
-typedef NS_ENUM(NSInteger, WFCCSecretChatState) {
-    SecretChatState_Starting,
-    SecretChatState_Accepting,
-    SecretChatState_Established,
-    SecretChatState_Canceled
-};
 
 #pragma mark - 用户源
 /*
@@ -1905,16 +1891,25 @@ typedef NS_ENUM(NSInteger, WFCCSecretChatState) {
  @param targetId 密聊ID
  @return 密聊对方用户ID
  */
-- (NSString *)getSecretChatUserId:(NSString *)targetId;
+- (WFCCSecretChatInfo *)getSecretChatInfo:(NSString *)targetId;
 
 /**
- 获取密聊状态
+ 解密密聊会话中加密的媒体数据
  
- @param targetId 密聊ID
- @return 密聊状态
+ @param targetId 密聊会话
+ @param encryptData 密聊中的加密过的媒体数据，需要下载下来本地保存。
+ 
+ @return 解密过的数据，注意只放到内存中，不要保存。
  */
-- (WFCCSecretChatState)getSecretChatState:(NSString *)targetId;
+- (NSData *)decodeSecretChat:(NSString *)targetId mediaData:(NSData *)encryptData;
 
+/**
+ 设置密聊会话阅后即焚时间
+ 
+ @param targetId 密聊会话
+ @param second 时间
+ */
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)second;
 #pragma mark - 其它接口
 /**
 获取PC在线信息
