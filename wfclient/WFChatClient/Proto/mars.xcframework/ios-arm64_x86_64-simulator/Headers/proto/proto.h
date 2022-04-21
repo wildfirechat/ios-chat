@@ -623,6 +623,22 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
     };
     
+    class TSecretChatInfo : public TSerializable {
+    public:
+        TSecretChatInfo() : state(0), burnTime(0), createTime(0) {}
+        virtual ~TSecretChatInfo() {}
+        std::string targetId;
+        std::string userId;
+        int state;
+        int burnTime;
+        int64_t createTime;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
+    
+    
         class GeneralStringCallback {
         public:
             virtual void onSuccess(const std::string &key) = 0;
@@ -810,7 +826,12 @@ namespace mars{
         virtual ~SecretChatStateCallback() {}
     };
     
-    
+    class SecretMessageBurnStateCallback {
+    public:
+        virtual void onSecretMessageStartBurning(const std::string &targetId, long playedMsgId) = 0;
+        virtual void onSecretMessageBurned() = 0;
+        virtual ~SecretMessageBurnStateCallback() {}
+    };
     
         enum ConnectionStatus {
             kConnectionStatusKickedOff = -7,
@@ -887,6 +908,7 @@ namespace mars{
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
         extern void setSecretChatStateCallback(SecretChatStateCallback *callback);
+        extern void setSecretMessageBurnStateCallback(SecretMessageBurnStateCallback *callback);
         extern ConnectionStatus getConnectionStatus();
 
         extern int64_t getServerDeltaTime();
@@ -1009,6 +1031,7 @@ namespace mars{
     
         extern void createSecretChat(const std::string &userId, GeneralStringCallback *callback);
         extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
+        extern std::string decodeSecretChatMediaData(const std::string &targetId, const unsigned char *data, int size);
     
         extern std::string GetImageThumbPara();
 
