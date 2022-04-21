@@ -28,7 +28,7 @@
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:message.conversation.target refresh:NO];
         item.origin = channelInfo.name;
     } else if(message.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:message.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:message.conversation.target].userId;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         item.origin = userInfo.displayName;
     }

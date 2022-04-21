@@ -39,7 +39,10 @@ NSString *kFriendRequestUpdated = @"kFriendRequestUpdated";
 NSString *kSettingUpdated = @"kSettingUpdated";
 NSString *kChannelInfoUpdated = @"kChannelInfoUpdated";
 NSString *kUserOnlineStateUpdated = @"kUserOnlineStateUpdated";
-NSString *kUserSecretChatStateUpdated = @"kUserSecretChatStateUpdated";
+NSString *kSecretChatStateUpdated = @"kSecretChatStateUpdated";
+NSString *kSecretMessageStartBurning = @"kSecretMessageStartBurning";
+NSString *kSecretMessageBurned = @"kSecretMessageBurned";
+
 
 @protocol RefreshGroupInfoDelegate <NSObject>
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo;
@@ -73,7 +76,10 @@ NSString *kUserSecretChatStateUpdated = @"kUserSecretChatStateUpdated";
 - (void)onSecretChatStateChanged:(NSString *)targetId newState:(WFCCSecretChatState)state;
 @end
 
-
+@protocol SecretMessageBurnStateDelegate <NSObject>
+- (void)onSecretMessageStartBurning:(NSString *)targetId playedMessageId:(long)messageId;
+- (void)onSecretMessageBurned;
+@end
 
 class CSCB : public mars::stn::ConnectionStatusCallback {
 public:
@@ -487,9 +493,20 @@ public:
     id<SecretChatStateDelegate> m_delegate;
 };
 
+class SMBSCB : public mars::stn::SecretMessageBurnStateCallback {
+public:
+    SMBSCB(id<SecretMessageBurnStateDelegate> delegate) : m_delegate(delegate) {}
+    void onSecretMessageStartBurning(const std::string &targetId, long playedMessageId) {
+        [m_delegate onSecretMessageStartBurning:[NSString stringWithUTF8String:targetId.c_str()] playedMessageId:playedMessageId];
+    }
+    void onSecretMessageBurned() {
+        [m_delegate onSecretMessageBurned];
+    }
+    id<SecretMessageBurnStateDelegate> m_delegate;
+};
 
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -651,7 +668,19 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (void)onSecretChatStateChanged:(NSString *)targetId newState:(WFCCSecretChatState)state {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUserSecretChatStateUpdated object:targetId userInfo:@{@"state":@(state)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSecretChatStateUpdated object:targetId userInfo:@{@"state":@(state)}];
+    });
+}
+
+- (void)onSecretMessageStartBurning:(NSString *)targetId playedMessageId:(long)messageId {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSecretMessageStartBurning object:targetId userInfo:@{@"messageId":@(messageId)}];
+    });
+}
+
+- (void)onSecretMessageBurned {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSecretMessageBurned object:nil];
     });
 }
 
@@ -904,6 +933,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshFriendRequestCallback(new GFRCB(self));
   mars::stn::setRefreshSettingCallback(new GSCB(self));
   mars::stn::setSecretChatStateCallback(new SCSCB(self));
+  mars::stn::setSecretMessageBurnStateCallback(new SMBSCB(self));
   mars::baseevent::OnCreate();
 }
 - (BOOL)connect:(NSString *)host {

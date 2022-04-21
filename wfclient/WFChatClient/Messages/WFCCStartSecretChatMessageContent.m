@@ -35,7 +35,12 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    WFCCSecretChatState state = [[WFCCIMService sharedWFCIMService] getSecretChatState:message.conversation.target];
+    WFCCSecretChatInfo *info = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:message.conversation.target];
+    if (!info) {
+        return @"密聊会话不可用";
+    }
+    
+    WFCCSecretChatState state = info.state;
     if(state == SecretChatState_Starting) {
         return @"等待对方响应";
     } else if(state == SecretChatState_Accepting) {
