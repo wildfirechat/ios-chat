@@ -11,4 +11,5 @@
 @interface WFCUImagePreviewViewController : UIViewController
 @property (nonatomic, strong)NSString *imageUrl;
 @property (nonatomic, strong)UIImage *thumbnail;
+@property (nonatomic, strong)UIImage *image;
 @end

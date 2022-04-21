@@ -186,7 +186,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTitle) name:kUserOnlineStateUpdated object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kUserSecretChatStateUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kSecretChatStateUpdated object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageStartBurning:) name:kSecretMessageStartBurning object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
     
     
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
@@ -209,7 +212,7 @@
             
         }];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
         self.targetUser = userInfo;
     }
@@ -240,7 +243,7 @@
             }
         }];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([userId isEqualToString:note.object]) {
                 ws.targetUser = note.userInfo[@"userInfo"];
@@ -594,7 +597,7 @@
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             NSString *userId = self.conversation.target;
             if(self.conversation.type == SecretChat_Type) {
-                userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+                userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
             }
             WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:userId];
             if([onlineState.clientStates count]) {
@@ -1167,7 +1170,7 @@
                 }
             }
         } else if(self.conversation.type == SecretChat_Type) {
-            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:self.conversation.target];
+            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
             if ([userId isEqualToString:obj.userId]) {
                 *stop = YES;
                 refresh = YES;
@@ -1332,6 +1335,35 @@
         }
     }
 }
+
+- (void)onSecretMessageBurned:(NSNotification *)notification {
+    if(self.conversation.type == SecretChat_Type) {
+        [self reloadMessageList];
+    }
+}
+
+- (void)onSecretMessageStartBurning:(NSNotification *)notification {
+    if(self.conversation.type == SecretChat_Type) {
+        NSString *targetId = (NSString *)notification.object;
+        if(targetId.length) {
+            if([targetId isEqualToString:self.conversation.target]) {
+                [self reloadMessageList];
+            }
+        } else {
+            long long playedMsgUid = [notification.userInfo[@"messageId"] longLongValue];
+            for (int i = 0; i < self.modelList.count; ++i) {
+                WFCUMessageModel *model = self.modelList[i];
+                if(model.message.messageUid == playedMsgUid) {
+                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+                }
+            }
+        }
+        
+            
+    }
+}
+
+
 
 - (void)reloadMessageList {
     self.deliveryDict = [[WFCCIMService sharedWFCIMService] getMessageDelivery:self.conversation];
@@ -1748,6 +1780,11 @@
 }
 
 -(void)startPlay:(WFCUMessageModel *)model {
+    if(model.message.conversation.type == SecretChat_Type) {
+        [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+        model.message.status = Message_Status_Played;
+        [self.collectionView reloadData];
+    }
     
     if ([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
         // Setup audio session
@@ -1761,7 +1798,20 @@
         
         WFCCSoundMessageContent *snc = (WFCCSoundMessageContent *)model.message.content;
         NSError *error = nil;
-        self.player = [[AVAudioPlayer alloc] initWithData:[snc getWavData] error:&error];
+        if(model.message.conversation.type == SecretChat_Type) {
+            NSData *data = [NSData dataWithContentsOfFile:snc.localPath];
+            data = [[WFCCIMService sharedWFCIMService] decodeSecretChat:model.message.conversation.target mediaData:data];
+            if (![@"mp3" isEqualToString:[snc.localPath pathExtension]]) {
+                NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:model.message.conversation mediaType:0];
+                NSString *savedPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"media_%lld_tmp", model.message.messageUid]];
+                [data writeToFile:savedPath atomically:YES];
+                data = [[WFCCIMService sharedWFCIMService] getWavData:savedPath];
+                [[NSFileManager defaultManager] removeItemAtPath:savedPath error:nil];
+            }
+            self.player = [[AVAudioPlayer alloc] initWithData:data error:&error];
+        } else {
+            self.player = [[AVAudioPlayer alloc] initWithData:[snc getWavData] error:&error];
+        }
         [self.player setDelegate:self];
         [self.player prepareToPlay];
         [self.player play];
@@ -1888,39 +1938,66 @@
 #pragma mark - MessageCellDelegate
 - (void)didTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
-        if (self.conversation.type == Chatroom_Type) {
-            NSMutableArray *imageMsgs = [[NSMutableArray alloc] init];
-            for (WFCUMessageModel *msgModle in self.modelList) {
-                if ([msgModle.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
-                    [imageMsgs addObject:msgModle.message];
+        if(self.conversation.type == SecretChat_Type) {
+            WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)model.message.content;
+            typeof(self) ws = self;
+            __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.label.text = WFCString(@"Loading");
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgContent.remoteUrl]];
+                data = [[WFCCIMService sharedWFCIMService] decodeSecretChat:model.message.conversation.target mediaData:data];
+                UIImage *image = [UIImage imageWithData:data];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(image) {
+                        [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+                        [hud hideAnimated:YES];
+                        WFCUImagePreviewViewController *previewVC = [[WFCUImagePreviewViewController alloc] init];
+                        previewVC.image = image;
+                        [ws.navigationController presentViewController:previewVC animated:YES completion:nil];
+                    } else {
+                        hud.mode = MBProgressHUDModeText;
+                        hud.label.text = WFCString(@"LoadFailure");
+                        [hud hideAnimated:YES afterDelay:1.f];
+                    }
+                });
+            });
+        } else {
+            if (self.conversation.type == Chatroom_Type) {
+                NSMutableArray *imageMsgs = [[NSMutableArray alloc] init];
+                for (WFCUMessageModel *msgModle in self.modelList) {
+                    if ([msgModle.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+                        [imageMsgs addObject:msgModle.message];
+                    }
+                }
+                self.imageMsgs = imageMsgs;
+            } else {
+                self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE)] from:0 count:100 withUser:self.privateChatUser];
+            }
+            SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
+            browser.sourceImagesContainerView = self.backgroundView;
+            browser.showAll = YES;
+            browser.imageCount = self.imageMsgs.count;
+            int i;
+            for (i = 0; i < self.imageMsgs.count; i++) {
+                if ([self.imageMsgs objectAtIndex:i].messageId == model.message.messageId) {
+                    break;
                 }
             }
-            self.imageMsgs = imageMsgs;
-        } else {
-            self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE)] from:0 count:100 withUser:self.privateChatUser];
-        }
-        SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-        browser.sourceImagesContainerView = self.backgroundView;
-        browser.showAll = YES;
-        browser.imageCount = self.imageMsgs.count;
-        int i;
-        for (i = 0; i < self.imageMsgs.count; i++) {
-            if ([self.imageMsgs objectAtIndex:i].messageId == model.message.messageId) {
-                break;
+            if (i == self.imageMsgs.count) {
+                i = 0;
             }
+            [self onResetKeyboard:nil];
+            browser.currentImageIndex = i;
+            browser.delegate = self;
+            [browser show]; // 展示图片浏览器
         }
-        if (i == self.imageMsgs.count) {
-            i = 0;
-        }
-        [self onResetKeyboard:nil];
-        browser.currentImageIndex = i;
-        browser.delegate = self;
-        [browser show]; // 展示图片浏览器
     } else if([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
         if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
-            [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
-            model.message.status = Message_Status_Played;
-            [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
+            if(model.message.conversation.type != SecretChat_Type) {
+                [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+                model.message.status = Message_Status_Played;
+                [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
+            }
         }
         
         [self prepardToPlay:model];

@@ -262,12 +262,12 @@
             sc.title = ci.name;
             sc.portraitUrl = ci.portrait;
         } else if (info.conversation.type == SecretChat_Type) {
-            WFCCSecretChatState state = [[WFCCIMService sharedWFCIMService] getSecretChatState:info.conversation.target];
+            WFCCSecretChatState state = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:info.conversation.target].state;
             if(state != SecretChatState_Established) {
                 continue;
             }
             
-            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:info.conversation.target];
+            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:info.conversation.target].userId;
             if(!userId.length) {
                 continue;
             }
@@ -459,7 +459,7 @@
                   
           }
       } else if (msg.conversation.type == SecretChat_Type) {
-          NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:msg.conversation.target];
+          NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:msg.conversation.target].userId;
           WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
           if (sender.displayName) {
               if (@available(iOS 8.2, *)) {

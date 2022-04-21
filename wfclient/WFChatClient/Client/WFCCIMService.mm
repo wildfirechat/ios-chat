@@ -2971,16 +2971,30 @@ public:
     mars::stn::destroySecretChat([targetId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
-- (NSString *)getSecretChatUserId:(NSString *)targetId {
-    std::string userId = mars::stn::MessageDB::Instance()->getSecretChatUserId([targetId UTF8String]);
-    if(userId.empty()) {
+- (WFCCSecretChatInfo *)getSecretChatInfo:(NSString *)targetId {
+    mars::stn::TSecretChatInfo t = mars::stn::MessageDB::Instance()->GetSecretChatInfo([targetId UTF8String]);
+    if(t.targetId.empty()) {
         return nil;
     }
-    return [NSString stringWithUTF8String:userId.c_str()];
+    WFCCSecretChatInfo *info = [[WFCCSecretChatInfo alloc] init];
+    info.targetId = targetId;
+    info.userId = [NSString stringWithUTF8String:t.userId.c_str()];
+    info.state = (WFCCSecretChatState)t.state;
+    info.burnTime = t.burnTime;
+    info.createTime = t.createTime;
+    return info;
 }
 
-- (WFCCSecretChatState)getSecretChatState:(NSString *)targetId {
-    return (WFCCSecretChatState)mars::stn::MessageDB::Instance()->getSecretChatState([targetId UTF8String]);
+- (NSData *)decodeSecretChat:(NSString *)targetId mediaData:(NSData *)encryptData {
+    std::string sd = mars::stn::decodeSecretChatMediaData([targetId UTF8String], (const unsigned char *)encryptData.bytes, (int)encryptData.length);
+    if(sd.empty()) {
+        return nil;
+    }
+    return [[NSData alloc] initWithBytes:sd.data() length:sd.length()];
+}
+
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)second {
+    mars::stn::MessageDB::Instance()->SetSecretChatBurnTime([targetId UTF8String], second);
 }
 
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos {

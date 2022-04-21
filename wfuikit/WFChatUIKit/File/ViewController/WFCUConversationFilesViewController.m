@@ -62,7 +62,7 @@
         }
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:group.portrait] placeholderImage: [UIImage imageNamed:@"group_default_portrait"]];
     } else if (conv.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatUserId:conv.conversation.target];
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         if (user.friendAlias.length) {
             cell.textLabel.text = user.friendAlias;
