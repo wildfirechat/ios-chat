@@ -638,7 +638,24 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
     };
     
+    class TBurnMessageInfo : public TSerializable {
+    public:
+        TBurnMessageInfo() : messageId(0), messageUid(0), direction(0), burnTime(0), isMedia(0), messageDt(0) {}
+        virtual ~TBurnMessageInfo() {}
+        long messageId;
+        int64_t messageUid;
+        std::string targetId;
+        int direction;
+        int burnTime;
+        int isMedia;
+        int64_t messageDt;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
     
+
         class GeneralStringCallback {
         public:
             virtual void onSuccess(const std::string &key) = 0;
@@ -829,7 +846,7 @@ namespace mars{
     class SecretMessageBurnStateCallback {
     public:
         virtual void onSecretMessageStartBurning(const std::string &targetId, long playedMsgId) = 0;
-        virtual void onSecretMessageBurned() = 0;
+        virtual void onSecretMessageBurned(const std::list<long> &messageIds) = 0;
         virtual ~SecretMessageBurnStateCallback() {}
     };
     
