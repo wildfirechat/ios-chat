@@ -1562,9 +1562,21 @@
         return;
     }
     
+    BOOL isAtButtom = NO;
+    if (newMessage && !self.hasNewMessage) {
+        if (@available(iOS 12.0, *)) {
+            CGPoint offset = self.collectionView.contentOffset;
+            CGSize size = self.collectionView.contentSize;
+            CGSize visiableSize = CGSizeZero;
+            visiableSize = self.collectionView.visibleSize;
+            isAtButtom = (offset.y + visiableSize.height - size.height) > -10;
+        } else {
+            isAtButtom = YES;
+        }
+    }
+    
     int count = 0;
     NSMutableArray *modifiedAliasUsers = [[NSMutableArray alloc] init];
-    
     for (int i = 0; i < messages.count; i++) {
         WFCCMessage *message = [messages objectAtIndex:i];
         
@@ -1637,18 +1649,7 @@
         [self stopShowTyping];
     }
     
-    BOOL isAtButtom = NO;
-    if (newMessage && !self.hasNewMessage) {
-        if (@available(iOS 12.0, *)) {
-            CGPoint offset = self.collectionView.contentOffset;
-            CGSize size = self.collectionView.contentSize;
-            CGSize visiableSize = CGSizeZero;
-            visiableSize = self.collectionView.visibleSize;
-            isAtButtom = (offset.y + visiableSize.height - size.height) > -100;
-        } else {
-            isAtButtom = YES;
-        }
-    }
+
     if (newMessage && messages.count == 1) {
         NSLog(@"alread reload the message");
     } else {
