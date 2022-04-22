@@ -783,6 +783,9 @@ static WFCCNetworkService * sharedSingleton = nil;
                                                selector:@selector(onAppTerminate)
                                                    name:UIApplicationWillTerminateNotification
                                                  object:nil];
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(userChangeClock:)
+                                                   name:UIApplicationSignificantTimeChangeNotification object:nil];
     }
     return self;
 }
@@ -915,6 +918,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (void)onAppTerminate {
     mars::stn::AppWillTerminate();
+}
+
+- (void)userChangeClock:(NSNotification *)notify {
+    if(self.currentConnectionStatus == kConnectionStatusConnected) {
+        mars::baseevent::OnNetworkChange();
+    }
 }
 
 - (void)dealloc {
