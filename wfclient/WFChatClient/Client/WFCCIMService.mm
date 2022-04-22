@@ -2993,8 +2993,8 @@ public:
     return [[NSData alloc] initWithBytes:sd.data() length:sd.length()];
 }
 
-- (void)setSecretChat:(NSString *)targetId burnTime:(int)second {
-    mars::stn::MessageDB::Instance()->SetSecretChatBurnTime([targetId UTF8String], second);
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)millisecond {
+    mars::stn::MessageDB::Instance()->SetSecretChatBurnTime([targetId UTF8String], millisecond);
 }
 
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos {
