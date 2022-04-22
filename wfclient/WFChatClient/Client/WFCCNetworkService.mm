@@ -78,7 +78,7 @@ NSString *kSecretMessageBurned = @"kSecretMessageBurned";
 
 @protocol SecretMessageBurnStateDelegate <NSObject>
 - (void)onSecretMessageStartBurning:(NSString *)targetId playedMessageId:(long)messageId;
-- (void)onSecretMessageBurned;
+- (void)onSecretMessageBurned:(NSArray<NSNumber *> *)messageIds;
 @end
 
 class CSCB : public mars::stn::ConnectionStatusCallback {
@@ -499,8 +499,12 @@ public:
     void onSecretMessageStartBurning(const std::string &targetId, long playedMessageId) {
         [m_delegate onSecretMessageStartBurning:[NSString stringWithUTF8String:targetId.c_str()] playedMessageId:playedMessageId];
     }
-    void onSecretMessageBurned() {
-        [m_delegate onSecretMessageBurned];
+    void onSecretMessageBurned(const std::list<long> &messageIds) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (std::list<long>::const_iterator it = messageIds.begin(); it != messageIds.end(); ++it) {
+            [arr addObject:@(*it)];
+        }
+        [m_delegate onSecretMessageBurned:arr];
     }
     id<SecretMessageBurnStateDelegate> m_delegate;
 };
@@ -678,9 +682,9 @@ static WFCCNetworkService * sharedSingleton = nil;
     });
 }
 
-- (void)onSecretMessageBurned {
+- (void)onSecretMessageBurned:(NSArray<NSNumber *> *)messageIds {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSecretMessageBurned object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSecretMessageBurned object:nil userInfo:@{@"messageIds":messageIds}];
     });
 }
 

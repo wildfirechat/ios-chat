@@ -159,7 +159,6 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onResetKeyboard:)];
     [self.collectionView addGestureRecognizer:tap];
     
-    [self reloadMessageList];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecallMessages:) name:kRecallMessages object:nil];
@@ -309,6 +308,9 @@
             }
         }
     }
+    
+    
+    [self reloadMessageList];
 }
 
 //The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
@@ -1414,6 +1416,19 @@
     
     [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
     self.highlightMessageId = 0;
+    
+    if(self.conversation.type == SecretChat_Type) {
+        WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+        if(secretChatInfo.state == SecretChatState_Established) {
+            if(self.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
+                self.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+            }
+        } else {
+            if(self.chatInputBar.inputBarStatus != ChatInputBarMuteStatus) {
+                self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+            }
+        }
+    }
 }
 
 - (void)showMentionedLabel {
