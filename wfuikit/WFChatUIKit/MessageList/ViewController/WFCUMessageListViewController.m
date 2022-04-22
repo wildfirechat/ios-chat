@@ -2729,17 +2729,19 @@
         [items addObject:complainItem];
     }
     
-    if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
-        [msg.content isKindOfClass:[WFCUCardCell class]] ||
-        [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
-        //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
-        [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
-        [items addObject:forwardItem];
+    if(self.conversation.type != SecretChat_Type) {
+        if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
+            [msg.content isKindOfClass:[WFCUCardCell class]] ||
+            [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
+            //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
+            [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
+            [items addObject:forwardItem];
+        }
     }
     
     BOOL canRecall = NO;
@@ -2781,8 +2783,10 @@
         [items addObject:recallItem];
     }
     
-    if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
-        [items addObject:multiSelectItem];
+    if(self.conversation.type != SecretChat_Type) {
+        if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
+            [items addObject:multiSelectItem];
+        }
     }
     
     if (msg.messageUid > 0) {
@@ -2791,16 +2795,18 @@
         }
     }
     
-    if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
-        [items addObject:favoriteItem];
+    if(self.conversation.type != SecretChat_Type) {
+        if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
+            [items addObject:favoriteItem];
+        }
     }
     
     [menu setMenuItems:items];
