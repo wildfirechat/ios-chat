@@ -378,6 +378,57 @@
     });
 }
 
+- (void)setBurnTime:(int)ms {
+    [[WFCCIMService sharedWFCIMService] setSecretChat:self.conversation.target burnTime:ms];
+    [self.tableView reloadData];
+}
+
+- (void)onBurnTimeAction {
+    __weak typeof(self)weakSelf = self;
+
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"设置销毁时间" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+    }];
+    UIAlertAction *actionNoBurn = [UIAlertAction actionWithTitle:@"不销毁" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:0];
+    }];
+    
+    UIAlertAction *action3s = [UIAlertAction actionWithTitle:@"3秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:3000];
+    }];
+    
+    UIAlertAction *action10s = [UIAlertAction actionWithTitle:@"10秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:10000];
+    }];
+    
+    UIAlertAction *action30s = [UIAlertAction actionWithTitle:@"30秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:30000];
+    }];
+    
+    UIAlertAction *action60s = [UIAlertAction actionWithTitle:@"1分钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:60000];
+    }];
+    
+    UIAlertAction *action600s = [UIAlertAction actionWithTitle:@"10分钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf setBurnTime:600000];
+    }];
+    
+
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionNoBurn];
+    [actionSheet addAction:action3s];
+    [actionSheet addAction:action10s];
+    [actionSheet addAction:action30s];
+    [actionSheet addAction:action60s];
+    [actionSheet addAction:action600s];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -804,9 +855,9 @@
   } else if([self isFilesCell:indexPath]) {
       return [self cellOfTable:tableView WithTitle:WFCString(@"ConvFiles") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if([self isDestroySecretChatCell:indexPath]) {
-      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"buttonCell"];
+      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"destroySecretChatCell"];
       if (cell == nil) {
-          cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
+          cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"destroySecretChatCell"];
           for (UIView *subView in cell.subviews) {
               [subView removeFromSuperview];
           }
@@ -826,7 +877,7 @@
       NSString *subTitle = @"关闭";
       WFCCSecretChatInfo *info = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
       if(info.burnTime) {
-          subTitle = [NSString stringWithFormat:@"%d秒", info.burnTime];
+          subTitle = [NSString stringWithFormat:@"%d秒", info.burnTime/1000];
       }
       return [self cellOfTable:tableView WithTitle:@"设置密聊焚毁时间" withDetailTitle:subTitle withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   }
@@ -931,12 +982,7 @@
       vc.conversation = self.conversation;
       [self.navigationController pushViewController:vc animated:YES];
   } else if([self isBurnTimeCell:indexPath]) {
-      if(![[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].burnTime) {
-          [[WFCCIMService sharedWFCIMService] setSecretChat:self.conversation.target burnTime:10];
-      } else {
-          [[WFCCIMService sharedWFCIMService] setSecretChat:self.conversation.target burnTime:0];
-      }
-      [self.tableView reloadData];
+      [self onBurnTimeAction];
   }
 }
 

@@ -1907,9 +1907,9 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  设置密聊会话阅后即焚时间
  
  @param targetId 密聊会话
- @param second 时间
+ @param millisecond 时间
  */
-- (void)setSecretChat:(NSString *)targetId burnTime:(int)second;
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)millisecond;
 #pragma mark - 其它接口
 /**
 获取PC在线信息
