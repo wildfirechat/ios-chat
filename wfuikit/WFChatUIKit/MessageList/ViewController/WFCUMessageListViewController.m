@@ -2752,7 +2752,10 @@
         if ([cur timeIntervalSince1970]*1000 - msg.serverTime < 60 * 1000) {
             canRecall = YES;
         }
-        
+    }
+    
+    if(self.conversation.type == SecretChat_Type) {
+        canRecall = YES;
     }
     
     if (!canRecall && self.conversation.type == Group_Type) {
