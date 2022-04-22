@@ -19,6 +19,7 @@ namespace mars {
         class SyncReadEntry;
         class RecyclableStatement;
         class DB2;
+        class SyncBurnReadedEntry;
         class MessageDB {
             
         private:
@@ -194,7 +195,7 @@ namespace mars {
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
             
             TSecretChatInfo GetSecretChatInfo(const std::string &targetId);
-            bool SetSecretChatBurnTime(const std::string &targetId, int second);
+            bool SetSecretChatBurnTime(const std::string &targetId, int ms);
             
             std::pair<int, int64_t> GetMessageBurnTime(long messageId);
             
@@ -208,14 +209,16 @@ namespace mars {
             std::string getSecretChatKey(const std::string &targetId);
             
             bool insertBurnMessageInfo(long messageId, int64_t messageUid, const std::string &targetId, int direction, int burnTime, int media, int64_t messageDt);
+            TBurnMessageInfo getBurnMessageInfo(long messageId);
             int64_t burnMessageReaded(const std::string &targetId, int direction, int64_t readDt = 0, int64_t msgDt = 0);
             int64_t getBurnMessageReadTime(const std::string &targetId);
-            long burnMessagePlayed(long messageId, int64_t readDt = 0);
+            int64_t burnMessagePlayed(long messageId, int64_t readDt = 0);
             std::list<long> getBurnedMessage(int64_t dt);
             int removeBurnedMessageInfo(int64_t dt);
             int64_t getLastestBurnMessageTime();
             long insertSyncBurnReaded(int type, const std::string &target, int line, int64_t readDt, int64_t value);
             bool deleteSyncBurnReaded(long sid);
+            SyncBurnReadedEntry getSyncBurnReadedEntry();
             
             void _OnCheckBurn();
         private:
