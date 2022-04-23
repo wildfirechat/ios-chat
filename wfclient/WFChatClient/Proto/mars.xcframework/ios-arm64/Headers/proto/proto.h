@@ -473,6 +473,7 @@ namespace mars{
             kUserSettingVoipSilent = 21,
             kUserSettingPttReserved = 22,
             kUserSettingCustomState = 23,
+            kUserSettingDisableSecretChat = 24,
 
             kUserSettingCustomBegin = 1000
         };
@@ -837,6 +838,13 @@ namespace mars{
         virtual ~WatchOnlineStateCallback() {}
     };
     
+    class CreateSecretChatCallback {
+    public:
+        virtual void onSuccess(const std::string &targetId, int line) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~CreateSecretChatCallback() {}
+    };
+    
     class SecretChatStateCallback {
     public:
         virtual void onStateChanged(const std::string &targetId, int state) = 0;
@@ -1046,7 +1054,7 @@ namespace mars{
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
 
     
-        extern void createSecretChat(const std::string &userId, GeneralStringCallback *callback);
+        extern void createSecretChat(const std::string &userId, CreateSecretChatCallback *callback);
         extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
         extern std::string decodeSecretChatMediaData(const std::string &targetId, const unsigned char *data, int size);
     
