@@ -196,7 +196,7 @@
         return;
     }
     NSArray *menuItems;
-    if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat]) {
+    if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat] && [[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
         menuItems = @[
             [KxMenuItem menuItem:WFCString(@"StartChat")
                            image:[UIImage imageNamed:@"menu_start_chat"]
@@ -277,9 +277,9 @@
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
         [navi dismissViewControllerAnimated:NO completion:nil];
         if (contacts.count == 1) {
-            [[WFCCIMService sharedWFCIMService] createSecretChat:contacts[0] success:^(NSString *targetId) {
+            [[WFCCIMService sharedWFCIMService] createSecretChat:contacts[0] success:^(NSString *targetId, int line) {
                 WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                mvc.conversation = [WFCCConversation conversationWithType:SecretChat_Type target:targetId line:0];
+                mvc.conversation = [WFCCConversation conversationWithType:SecretChat_Type target:targetId line:line];
                 mvc.hidesBottomBarWhenPushed = YES;
                 [ws.navigationController pushViewController:mvc animated:YES];
             } error:^(int error_code) {
@@ -490,7 +490,7 @@
 }
 
 - (void)refreshList {
-    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]] mutableCopy];
+    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5)]] mutableCopy];
     [self updateBadgeNumber];
     [self.tableView reloadData];
 }
