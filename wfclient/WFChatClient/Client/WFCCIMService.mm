@@ -196,6 +196,36 @@ public:
     }
 };
 
+class IMCreateSecretChatCallback : public mars::stn::CreateSecretChatCallback {
+private:
+    void(^m_successBlock)(NSString *generalStr, int line);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMCreateSecretChatCallback(void(^successBlock)(NSString *groupId, int line), void(^errorBlock)(int error_code)) : mars::stn::CreateSecretChatCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::string &str, int line) {
+        NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(nsstr, line);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMCreateSecretChatCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 class IMGetAuthorizedMediaUrlCallback : public mars::stn::GetAuthorizedMediaUrlCallback {
 private:
     void(^m_successBlock)(NSString *url, NSString *backupUrl);
@@ -2960,9 +2990,9 @@ public:
 
 
 - (void)createSecretChat:(NSString *)userId
-                success:(void(^)(NSString *targetId))successBlock
+                success:(void(^)(NSString *targetId, int line))successBlock
                   error:(void(^)(int error_code))errorBlock {
-    mars::stn::createSecretChat([userId UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+    mars::stn::createSecretChat([userId UTF8String], new IMCreateSecretChatCallback(successBlock, errorBlock));
 }
 
 - (void)destroySecretChat:(NSString *)targetId
@@ -3250,6 +3280,17 @@ public:
 
 - (BOOL)isEnableSecretChat {
     return mars::stn::IsEnableSecretChat();
+}
+
+- (BOOL)isUserEnableSecretChat {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Distable_Secret_Chat key:@""];
+    return ![strValue isEqualToString:@"1"];
+}
+
+- (void)setUserEnableSecretChat:(BOOL)enable
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Distable_Secret_Chat key:@"" value:enable?@"0":@"1" success:successBlock error:errorBlock];
 }
 
 - (void)sendConferenceRequest:(long long)sessionId
