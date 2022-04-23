@@ -203,7 +203,8 @@ namespace mars {
             bool createSecretChat(const std::string &targetId, const std::string &userId, const std::string dhx);
             bool acceptSecretChat(const std::string &targetId, const std::string &userId);
             bool establishedSecretChat(const std::string &targetId, const std::string &userId, const std::string dhkey);
-            bool cancelSecretChat(const std::string &targetId);
+            bool cancelSecretChat(const std::string &targetId, const std::string &userId);
+            bool removeSecretChat(const std::string &targetId);
 
             std::string getSecretChatX(const std::string &targetId);
             std::string getSecretChatKey(const std::string &targetId);
