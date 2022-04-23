@@ -139,6 +139,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_PTT_Reserved = 22,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Custom_State = 23,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Distable_Secret_Chat = 24,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -1733,8 +1735,6 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                 success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock;
 
-
-
 /**
  获取当前用户星标用户
  
@@ -1871,7 +1871,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param errorBlock 失败的回调
  */
 - (void)createSecretChat:(NSString *)userId
-                success:(void(^)(NSString *targetId))successBlock
+                success:(void(^)(NSString *targetId, int line))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
 /**
@@ -1910,6 +1910,33 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param millisecond 时间
  */
 - (void)setSecretChat:(NSString *)targetId burnTime:(int)millisecond;
+
+
+/**
+  当前系统是否支持密聊。
+ 
+ @return t是否支持密聊
+ */
+- (BOOL)isEnableSecretChat;
+
+/**
+当前用户是否启用密聊
+
+@return YES，开启密聊功能；NO，关闭密聊功能。
+@disscussion 仅影响密聊的创建，已经创建的密聊不受影响
+*/
+- (BOOL)isUserEnableSecretChat;
+/**
+修改当前用户是否启用密聊功能
+
+@param enable 是否开启
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+@disscussion 仅影响密聊的创建，已经创建的密聊不受影响
+*/
+- (void)setUserEnableSecretChat:(BOOL)enable
+                        success:(void(^)(void))successBlock
+                          error:(void(^)(int error_code))errorBlock;
 #pragma mark - 其它接口
 /**
 获取PC在线信息
@@ -2120,7 +2147,6 @@ amr文件转成wav数据
 
 - (BOOL)isEnableUserOnlineState;
 
-- (BOOL)isEnableSecretChat;
 /*
  音视频会议相关
  */
