@@ -1305,13 +1305,6 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return ret;
 }
 
-- (long long)getMessageDeliveryByUser:(NSString *)userId {
-    if(!userId) {
-        return 0;
-    }
-    return mars::stn::MessageDB::Instance()->GetDelivery([userId UTF8String]);
-}
-
 - (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
     bool updated = mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
     if(updated) {
