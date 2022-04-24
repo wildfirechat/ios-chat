@@ -297,7 +297,14 @@
     self.nMsgSet = [[NSMutableSet alloc] init];
     if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
-            if(![[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target]) { //如果不是好友才需要watch他的在线状态
+            BOOL isFriend = false;
+            if(self.conversation.type == Single_Type) {
+                isFriend = [[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target];
+            } else if(self.conversation.type == SecretChat_Type) {
+                isFriend = [[WFCCIMService sharedWFCIMService] isMyFriend:self.secretChatInfo.userId];
+            }
+            
+            if(!isFriend) { //如果不是好友才需要watch他的在线状态
                 __weak typeof(self)ws = self;
                 [[WFCCIMService sharedWFCIMService] watchOnlineState:self.conversation.type targets:@[self.conversation.target] duration:3600 success:^(NSArray<WFCCUserOnlineState *> *states) {
                     [ws updateTitle];
@@ -540,7 +547,14 @@
     
     if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
-            if(![[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target]) { //如果不是好友才需要watch他的在线状态
+            BOOL isFriend = false;
+            if(self.conversation.type == Single_Type) {
+                isFriend = [[WFCCIMService sharedWFCIMService] isMyFriend:self.conversation.target];
+            } else if(self.conversation.type == SecretChat_Type) {
+                isFriend = [[WFCCIMService sharedWFCIMService] isMyFriend:self.secretChatInfo.userId];
+            }
+            
+            if(!isFriend) { //如果不是好友才需要unwatch他的在线状态
                 [[WFCCIMService sharedWFCIMService] unwatchOnlineState:self.conversation.type targets:@[self.conversation.target] success:^{
                     NSLog(@"unwatch online statue success");
                 } error:^(int error_code) {
