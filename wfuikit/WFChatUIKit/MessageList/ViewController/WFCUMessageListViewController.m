@@ -98,6 +98,7 @@
 @property(nonatomic, strong)WFCCGroupInfo *targetGroup;
 @property(nonatomic, strong)WFCCChannelInfo *targetChannel;
 @property(nonatomic, strong)WFCCChatroomInfo *targetChatroom;
+@property(nonatomic, strong)WFCCSecretChatInfo *secretChatInfo;
 
 @property(nonatomic, strong)WFCUChatInputBar *chatInputBar;
 @property(nonatomic, strong)VideoPlayerKit *videoPlayerViewController;
@@ -211,9 +212,7 @@
             
         }];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
-        self.targetUser = userInfo;
+        self.secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
     }
     
     if(self.conversation.type == Single_Type) {
@@ -242,7 +241,7 @@
             }
         }];
     } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
+        NSString *userId = self.secretChatInfo.userId;
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([userId isEqualToString:note.object]) {
                 ws.targetUser = note.userInfo[@"userInfo"];
@@ -599,7 +598,7 @@
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             NSString *userId = self.conversation.target;
             if(self.conversation.type == SecretChat_Type) {
-                userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
+                userId = self.secretChatInfo.userId;
             }
             WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:userId];
             if([onlineState.clientStates count]) {
@@ -745,6 +744,13 @@
 - (void)setTargetChatroom:(WFCCChatroomInfo *)targetChatroom {
     _targetChatroom = targetChatroom;
     [self updateTitle];
+}
+
+- (void)setSecretChatInfo:(WFCCSecretChatInfo *)secretChatInfo {
+    _secretChatInfo = secretChatInfo;
+    NSString *userId = self.secretChatInfo.userId;
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
+    self.targetUser = userInfo;
 }
 
 - (void)setShowAlias:(BOOL)showAlias {
@@ -1172,7 +1178,7 @@
                 }
             }
         } else if(self.conversation.type == SecretChat_Type) {
-            NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
+            NSString *userId = self.secretChatInfo.userId;
             if ([userId isEqualToString:obj.userId]) {
                 *stop = YES;
                 refresh = YES;
@@ -1192,7 +1198,11 @@
             }
             
             if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
-                if (model.message.serverTime <= [[model.deliveryDict objectForKey:model.message.conversation.target] longLongValue]) {
+                NSString *userId = model.message.conversation.target;
+                if(self.conversation.type == SecretChat_Type) {
+                    userId = self.secretChatInfo.userId;
+                }
+                if (model.message.serverTime <= [[model.deliveryDict objectForKey:userId] longLongValue]) {
                     float rate = 1.f;
                     if (rate != model.deliveryRate) {
                         model.deliveryRate = rate;
@@ -1248,7 +1258,11 @@
             }
             
             if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
-                if (model.message.serverTime <= [[model.readDict objectForKey:model.message.conversation.target] longLongValue]) {
+                NSString *userId = model.message.conversation.target;
+                if(self.conversation.type == SecretChat_Type) {
+                    userId = self.secretChatInfo.userId;
+                }
+                if (model.message.serverTime <= [[model.readDict objectForKey:userId] longLongValue]) {
                     float rate = 1.f;
                     if (rate != model.readRate) {
                         model.readRate = rate;
@@ -1329,6 +1343,8 @@
 
 - (void)onSecretChatStateChanged:(NSNotification *)notification {
     if(self.conversation.type == SecretChat_Type && [self.conversation.target isEqualToString:notification.object]) {
+        self.secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+        
         WFCCSecretChatState state = (WFCCSecretChatState)[notification.userInfo[@"state"] intValue];
         if(state == SecretChatState_Canceled) {
             [self.navigationController popToRootViewControllerAnimated:YES];
