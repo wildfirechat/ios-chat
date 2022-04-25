@@ -45,6 +45,8 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCStickerMessageContent.h>
 #import <WFChatClient/WFCCLocationMessageContent.h>
 #import <WFChatClient/WFCCCallStartMessageContent.h>
+#import <WFChatClient/WFCCCallAddParticipantMessageContent.h>
+#import <WFChatClient/WFCCCallByeMessageContent.h>
 #import <WFChatClient/WFCCTypingMessageContent.h>
 #import <WFChatClient/WFCCRecallMessageContent.h>
 #import <WFChatClient/WFCCVideoMessageContent.h>
