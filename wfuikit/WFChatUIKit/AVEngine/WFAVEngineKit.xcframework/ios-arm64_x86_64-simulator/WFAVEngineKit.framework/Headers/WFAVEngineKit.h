@@ -17,6 +17,8 @@ FOUNDATION_EXPORT const unsigned char WFAVEngineKitVersionString[];
 #import <Foundation/Foundation.h>
 #import <WebRTC/WebRTC.h>
 #import <WFChatClient/WFCChatClient.h>
+#import <PushKit/PushKit.h>
+
 
 @class WFAVCallSession;
 
@@ -180,6 +182,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  电话终止，一般用于未接听或者挂掉时的通知使用，UI界面需要根据CallSession的回调判断电话终止。
  */
 - (void)didCallEnded:(WFAVCallEndReason) reason duration:(int)callDuration;
+
+/**
+ 收到voip推送时，回调推送
+ */
+- (void)didReceiveIncomingPushWithPayload:(PKPushPayload * _Nonnull )payload
+                                  forType:(NSString * _Nonnull )type;
 @end
 
 /**
@@ -585,6 +593,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 呼叫附加信息
 */
 @property(nonatomic, strong) NSString * _Nullable callExtra;
+
+/**
+ Call uuid。如果使用callkit，需要在接听之前设置uuid（SDK会监听来电，如果非当前电话接通会自动挂断）。
+ */
+@property(nonatomic, strong) NSUUID *callUUID;
 
 /**
 通话成员（不包含自己）
