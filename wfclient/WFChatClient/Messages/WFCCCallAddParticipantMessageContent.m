@@ -16,6 +16,10 @@
     payload.content = self.callId;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.initiator forKey:@"initiator"];
+    if (self.pin) {
+        [dict setObject:self.pin forKey:@"pin"];
+    }
+    
     [dict setObject:self.participants forKey:@"participants"];
     [dict setObject:@(self.audioOnly == YES ? 1:0) forKey:@"audioOnly"];
     [dict setObject:self.existParticipants forKey:@"existParticipants"];
@@ -36,6 +40,7 @@
                                                                  error:&__error];
     if (!__error) {
         self.initiator = dictionary[@"initiator"];
+        self.pin = dictionary[@"pin"];
         self.participants = dictionary[@"participants"];
         self.audioOnly = [dictionary[@"audioOnly"] boolValue];
         self.existParticipants = dictionary[@"existParticipants"];
