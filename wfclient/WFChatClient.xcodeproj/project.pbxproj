@@ -182,6 +182,10 @@
 		90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */; };
 		90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90F5849A1FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */; };
+		B733C7FB2816737500F70316 /* WFCCCallAddParticipantMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */; };
+		B733C7FC2816737500F70316 /* WFCCCallAddParticipantMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B733C7FF281673D000F70316 /* WFCCCallByeMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */; };
+		B733C800281673D000F70316 /* WFCCCallByeMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B733C7FE281673D000F70316 /* WFCCCallByeMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -348,6 +352,10 @@
 		90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLocationMessageContent.m; sourceTree = "<group>"; };
 		90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChangeGroupPortraitNotificationContent.h; sourceTree = "<group>"; };
 		90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChangeGroupPortraitNotificationContent.m; sourceTree = "<group>"; };
+		B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallAddParticipantMessageContent.m; sourceTree = "<group>"; };
+		B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCCallAddParticipantMessageContent.h; sourceTree = "<group>"; };
+		B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallByeMessageContent.m; sourceTree = "<group>"; };
+		B733C7FE281673D000F70316 /* WFCCCallByeMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCCallByeMessageContent.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,6 +535,10 @@
 				2F8CA19A274641E0000CC09C /* WFCCMarkUnreadMessageContent.m */,
 				2F59FFF02774A3900046C2D5 /* WFCCPTTSoundMessageContent.h */,
 				2F59FFF12774A3900046C2D5 /* WFCCPTTSoundMessageContent.m */,
+				B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */,
+				B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */,
+				B733C7FE281673D000F70316 /* WFCCCallByeMessageContent.h */,
+				B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -650,6 +662,8 @@
 				2FD9513D243ACF3600EE4F60 /* WFCCPCOnlineInfo.h in Headers */,
 				903EBB8C21357DDF00312C16 /* WFCCStickerMessageContent.h in Headers */,
 				2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */,
+				B733C800281673D000F70316 /* WFCCCallByeMessageContent.h in Headers */,
+				B733C7FC2816737500F70316 /* WFCCCallAddParticipantMessageContent.h in Headers */,
 				2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */,
 				2FB87C6F243EF0FE0078A199 /* WFCCFriendGreetingMessageContent.h in Headers */,
 				2FB87C6D243EF0FE0078A199 /* WFCCFriendAddedMessageContent.h in Headers */,
@@ -832,11 +846,13 @@
 				2F3223D62144C5FB0016A2C4 /* WFCCVideoMessageContent.m in Sources */,
 				2E6B51181FAE9B10006B6E31 /* WFCCConversationSearchInfo.m in Sources */,
 				2FF6699F267D7833008FDCD4 /* WFCCModifyGroupExtraNotificationContent.m in Sources */,
+				B733C7FF281673D000F70316 /* WFCCCallByeMessageContent.m in Sources */,
 				2E6B50C31FAE9B08006B6E31 /* app_callback.mm in Sources */,
 				2BD8D71E24D68FCD00281B81 /* WFCCFileRecord.m in Sources */,
 				6ECFB2C720A84C88001F91CB /* WFCCFileMessageContent.m in Sources */,
 				2FD9513E243ACF3600EE4F60 /* WFCCPCOnlineInfo.m in Sources */,
 				2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */,
+				B733C7FB2816737500F70316 /* WFCCCallAddParticipantMessageContent.m in Sources */,
 				2F59FFF32774A3900046C2D5 /* WFCCPTTSoundMessageContent.m in Sources */,
 				2F7709A22453DCB10020DB77 /* WFCCThingsLostEventContent.m in Sources */,
 				2E6B50B81FAE990D006B6E31 /* wavwriter.mm in Sources */,
