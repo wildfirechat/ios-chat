@@ -9,6 +9,8 @@
 #ifndef WFChat_Prefix_Header_pch
 #define WFChat_Prefix_Header_pch
 
+#import <UIKit/UIKit.h>
+
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
@@ -26,5 +28,13 @@
 
 //朋友圈的开关
 //#define WFC_MOMENTS
+
+
+//关于启用callkit功能，请参考 https://docs.wildfirechat.cn/blogs/iOS如何启用CallKit.html
+#define USE_CALL_KIT 1
+//模拟器不支持callkit
+#if TARGET_IPHONE_SIMULATOR
+#define USE_CALL_KIT 0
+#endif
 
 #endif /* WFChat_Prefix_Header_pch */
