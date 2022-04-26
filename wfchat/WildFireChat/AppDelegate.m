@@ -38,6 +38,12 @@
 #import <PttClient/WFPttClient.h>
 #endif
 
+#if USE_CALL_KIT
+#import "WFCCallKitManager.h"
+#endif
+
+
+
 @interface AppDelegate () <ConnectionStatusDelegate, ConnectToServerDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
     WFAVEngineDelegate,
@@ -49,6 +55,9 @@
 >
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property(nonatomic, strong) UILocalNotification *localCallNotification;
+#if USE_CALL_KIT
+@property(nonatomic, strong) WFCCallKitManager *callKitManager;
+#endif
 @end
 
 @implementation AppDelegate
@@ -148,6 +157,10 @@
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
         self.window.rootViewController = nav;
     }
+    
+#if USE_CALL_KIT
+    self.callKitManager = [[WFCCallKitManager alloc] init];
+#endif
     
     return YES;
 }
@@ -611,6 +624,7 @@
 #pragma mark - WFAVEngineDelegate
 //voip 当可以使用pushkit时，如果有来电或者结束，会唤起应用，收到来电通知/电话结束通知，弹出通知。
 - (void)didReceiveCall:(WFAVCallSession *)session {
+#if !USE_CALL_KIT
     //收到来电通知后等待200毫秒，检查session有效后再弹出通知。原因是当当前用户不在线时如果有人来电并挂断，当前用户再连接后，会出现先弹来电界面，再消失的画面。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIncomming) {
@@ -656,10 +670,13 @@
             self.localCallNotification = nil;
         }
     });
-    
+#else
+    [self.callKitManager didReceiveCall:session];
+#endif
 }
 
 - (void)shouldStartRing:(BOOL)isIncoming {
+#if !USE_CALL_KIT
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming || [WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateOutgoing) {
             if([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
@@ -691,6 +708,7 @@
             }
         }
     });
+#endif
 }
 
 void systemAudioCallback (SystemSoundID soundID, void* clientData) {
@@ -712,6 +730,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 }
 
 - (void)didCallEnded:(WFAVCallEndReason)reason duration:(int)callDuration {
+#if !USE_CALL_KIT
     //在后台时，如果电话挂断，清除掉来电通知，如果未接听超时或者未接通对方挂掉，弹出结束本地通知。
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         if(self.localCallNotification) {
@@ -741,8 +760,18 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
             [[UIApplication sharedApplication] scheduleLocalNotification:callEndNotification];
         }
     }
+#else
+    [self.callKitManager didCallEnded:reason duration:callDuration];
+#endif
 }
 
+- (void)didReceiveIncomingPushWithPayload:(PKPushPayload *)payload
+                                  forType:(NSString *)type {
+    NSLog(@"didReceiveIncomingPushWithPayload");
+#if USE_CALL_KIT
+    [self.callKitManager didReceiveIncomingPushWithPayload:payload forType:type];
+#endif
+}
 #endif
 
 //voip 当无法使用pushkit时，需要使用backgroup推送，在这里弹出来电通知和取消来电通知
