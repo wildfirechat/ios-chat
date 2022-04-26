@@ -27,7 +27,22 @@
                                                    options:kNilOptions
                                                      error:nil];
     
+    NSMutableDictionary *pd = [@{@"callId":self.callId, @"audioOnly":@(self.audioOnly)} mutableCopy];
+    if(self.participants.count) {
+        [pd setObject:self.participants forKey:@"participants"];
+    }
     
+    if(self.existParticipants.count) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        [self.existParticipants enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj[@"userId"]) {
+                [arr addObject:obj[@"userId"]];
+            }
+        }];
+        [pd setObject:arr forKey:@"existParticipants"];
+    }
+    
+    payload.pushData = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:pd options:kNilOptions error:nil] encoding:NSUTF8StringEncoding];
     return payload;
 }
 
