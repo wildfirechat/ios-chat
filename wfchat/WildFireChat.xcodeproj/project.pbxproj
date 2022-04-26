@@ -121,6 +121,7 @@
 		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7212782E2D000752426 /* zh-Hans.lproj */; };
 		B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */; };
 		B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7232782E2D000752426 /* Stickers.bundle */; };
@@ -377,6 +378,8 @@
 		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
+		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
 		B7D8F7212782E2D000752426 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
 		B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WFCUShareMessageView.xib; sourceTree = "<group>"; };
 		B7D8F7232782E2D000752426 /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
@@ -537,6 +540,8 @@
 				149B3101241D28B200B935D3 /* Category */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
+				B78DD43628167D1E009589F7 /* WFCCallKitManager.h */,
+				B78DD43728167D1E009589F7 /* WFCCallKitManager.m */,
 				2F44485A252D522F007A570E /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
@@ -1076,6 +1081,7 @@
 				2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */,
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
 				2FFDDCA4255164DA00CEFDBB /* WFCFavoriteLinkCell.m in Sources */,
+				B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
 				2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */,
@@ -1318,7 +1324,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1360,7 +1366,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
