@@ -1370,7 +1370,18 @@
 
 - (void)onSecretMessageBurned:(NSNotification *)notification {
     if(self.conversation.type == SecretChat_Type) {
-        [self reloadMessageList];
+        NSArray *messageIds = notification.userInfo[@"messageIds"];
+        NSMutableArray *deletedModels = [[NSMutableArray alloc] init];
+        NSMutableArray *deletedItems = [[NSMutableArray alloc] init];
+        [self.modelList enumerateObjectsUsingBlock:^(WFCUMessageModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if([messageIds containsObject:@(obj.message.messageId)]) {
+                [deletedModels addObject:obj];
+                [deletedItems addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+            }
+        }];
+        
+        [self.modelList removeObjectsInArray:deletedModels];
+        [self.collectionView deleteItemsAtIndexPaths:deletedItems];
     }
 }
 
@@ -1378,15 +1389,13 @@
     if(self.conversation.type == SecretChat_Type) {
         NSString *targetId = (NSString *)notification.object;
         if(targetId.length) {
-            if([targetId isEqualToString:self.conversation.target]) {
-                [self reloadMessageList];
-            }
+          //普通消息开始计时阅后即焚
         } else {
             long long playedMsgUid = [notification.userInfo[@"messageId"] longLongValue];
             for (int i = 0; i < self.modelList.count; ++i) {
                 WFCUMessageModel *model = self.modelList[i];
                 if(model.message.messageUid == playedMsgUid) {
-                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+                    //媒体类消息开始阅后即焚
                 }
             }
         }
