@@ -2633,14 +2633,24 @@
 
 - (void)saveStickerRemoteUrl:(WFCCStickerMessageContent *)stickerContent {
     if (stickerContent.localPath.length && [WFCUUtilities isFileExist:stickerContent.localPath] && stickerContent.remoteUrl.length) {
-        [[NSUserDefaults standardUserDefaults] setObject:stickerContent.remoteUrl forKey:[NSString stringWithFormat:@"sticker_remote_for_%ld", stickerContent.localPath.hash]];
+        if(self.conversation.type == SecretChat_Type) {
+            [[NSUserDefaults standardUserDefaults] setObject:stickerContent.remoteUrl forKey:[NSString stringWithFormat:@"sticker_remote_for_sh_%ld", stickerContent.localPath.hash]];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setObject:stickerContent.remoteUrl forKey:[NSString stringWithFormat:@"sticker_remote_for_%ld", stickerContent.localPath.hash]];
+        }
+        
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
 - (void)didSelectSticker:(NSString *)stickerPath {
     WFCCStickerMessageContent * content = [WFCCStickerMessageContent contentFrom:stickerPath];
-    NSString *remoteUrl = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"sticker_remote_for_%ld", stickerPath.hash]];
+    NSString *remoteUrl;
+    if(self.conversation.type == SecretChat_Type) {
+        remoteUrl = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"sticker_remote_for_sh_%ld", stickerPath.hash]];
+    } else {
+        remoteUrl = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"sticker_remote_for_%ld", stickerPath.hash]];
+    }
     content.remoteUrl = remoteUrl;
     
     [self sendMessage:content];
