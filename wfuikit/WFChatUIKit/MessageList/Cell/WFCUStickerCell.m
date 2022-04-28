@@ -30,8 +30,6 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-    [super setModel:model];
-    
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
     __weak typeof(self) weakSelf = self;
     if (!stickerMsg.localPath.length || ![WFCUUtilities isFileExist:stickerMsg.localPath]) {
@@ -44,12 +42,16 @@
         } error:^(long long messageUid, int error_code) {
             if (messageUid == weakSelf.model.message.messageUid) {
                 weakSelf.model.mediaDownloading = NO;
+                [weakSelf setModel:weakSelf.model];
             }
         }];
         if (downloading) {
             model.mediaDownloading = YES;
         }
+    } else {
+        model.mediaDownloading = NO;
     }
+    [super setModel:model];
     
     self.thumbnailView.frame = self.bubbleView.bounds;
     if (stickerMsg.localPath.length && [WFCUUtilities isFileExist:stickerMsg.localPath]) {
