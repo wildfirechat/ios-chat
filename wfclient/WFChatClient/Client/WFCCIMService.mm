@@ -3008,6 +3008,14 @@ public:
     return info;
 }
 
+- (NSData *)encodeSecretChat:(NSString *)targetId mediaData:(NSData *)data {
+    std::string sd = mars::stn::encodeSecretChatMediaData([targetId UTF8String], (const unsigned char *)data.bytes, (int)data.length);
+    if(sd.empty()) {
+        return nil;
+    }
+    return [[NSData alloc] initWithBytes:sd.data() length:sd.length()];
+}
+
 - (NSData *)decodeSecretChat:(NSString *)targetId mediaData:(NSData *)encryptData {
     std::string sd = mars::stn::decodeSecretChatMediaData([targetId UTF8String], (const unsigned char *)encryptData.bytes, (int)encryptData.length);
     if(sd.empty()) {
