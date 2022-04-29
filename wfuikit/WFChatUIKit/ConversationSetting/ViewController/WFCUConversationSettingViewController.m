@@ -369,7 +369,9 @@
     
     //把action添加到actionSheet里
     [actionSheet addAction:actionLocalDelete];
-    [actionSheet addAction:actionRemoteDelete];
+    if(self.conversation.type != SecretChat_Type) {
+        [actionSheet addAction:actionRemoteDelete];
+    }
     [actionSheet addAction:actionCancel];
     
     //相当于之前的[actionSheet show];
