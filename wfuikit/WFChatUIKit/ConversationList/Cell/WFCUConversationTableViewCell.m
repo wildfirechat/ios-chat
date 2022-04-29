@@ -200,6 +200,10 @@
         }
         [self updateChannelInfo:channelInfo];
     } else if(conversation.type == SecretChat_Type){
+        WFCCSecretChatInfo *secretInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target];
+        if(!secretInfo) {
+            [[WFCCIMService sharedWFCIMService] destroySecretChat:conversation.target success:nil error:nil];
+        }
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].userId;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         [self updateUserInfo:userInfo];
