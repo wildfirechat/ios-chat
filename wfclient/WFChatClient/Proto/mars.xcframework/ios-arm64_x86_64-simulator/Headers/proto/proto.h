@@ -1056,7 +1056,8 @@ namespace mars{
     
         extern void createSecretChat(const std::string &userId, CreateSecretChatCallback *callback);
         extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
-        extern std::string decodeSecretChatMediaData(const std::string &targetId, const unsigned char *data, int size);
+        extern std::string decodeSecretChatMediaData(const std::string &targetId, const unsigned char *indata, int insize);
+        extern std::string encodeSecretChatMediaData(const std::string &targetId, const unsigned char *indata, int insize);
     
         extern std::string GetImageThumbPara();
 
