@@ -586,16 +586,8 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
-    __block NSArray<WFCCMessage *> *messageList;
-    if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
-        messageList = [self filterReceiveMessage:messages hasMore:hasMore];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            messageList = [self filterReceiveMessage:messages hasMore:hasMore];
-        });
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray<WFCCMessage *> *messageList = [self filterReceiveMessage:messages hasMore:hasMore];
         [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messageList];
         [self.receiveMessageDelegate onReceiveMessage:messageList hasMore:hasMore];
     });
