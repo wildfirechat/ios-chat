@@ -73,6 +73,10 @@
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         self.memberList = @[self.conversation.target];
     } else if(self.conversation.type == SecretChat_Type) {
+        WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+        if(!secretChatInfo) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:YES];
         self.memberList = @[userId];
