@@ -1693,11 +1693,9 @@
     }
     
 
-    if (newMessage && messages.count == 1) {
-        NSLog(@"alread reload the message");
-    } else {
-        [self.collectionView reloadData];
-    }
+
+    [self.collectionView reloadData];
+    
     if (newMessage || self.modelList.count == messages.count) {
         if(isAtButtom) {
             forceButtom = true;
