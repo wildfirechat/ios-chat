@@ -107,7 +107,7 @@
                 [ws.memberCollectionView reloadData];
             }
         }];
-        [[WFCUConfigManager globalManager].appServiceProvider getGroupAnnouncement:self.groupInfo.target success:^(WFCUGroupAnnouncement *announcement) {
+        [[WFCUConfigManager globalManager].appServiceProvider getGroupAnnouncement:self.conversation.target success:^(WFCUGroupAnnouncement *announcement) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 ws.groupAnnouncement = announcement;
                 [ws.tableView reloadData];
