@@ -3284,14 +3284,14 @@ public:
 }
 
 - (BOOL)isUserEnableSecretChat {
-    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Distable_Secret_Chat key:@""];
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Disable_Secret_Chat key:@""];
     return ![strValue isEqualToString:@"1"];
 }
 
 - (void)setUserEnableSecretChat:(BOOL)enable
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock {
-    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Distable_Secret_Chat key:@"" value:enable?@"0":@"1" success:successBlock error:errorBlock];
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Disable_Secret_Chat key:@"" value:enable?@"0":@"1" success:successBlock error:errorBlock];
 }
 
 - (void)sendConferenceRequest:(long long)sessionId
