@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Custom_State = 23,
     //不能直接使用，协议栈内会使用此值
-    UserSettingScope_Distable_Secret_Chat = 24,
+    UserSettingScope_Disable_Secret_Chat = 24,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
