@@ -32,6 +32,12 @@ extern NSString *kSettingUpdated;
 extern NSString *kChannelInfoUpdated;
 //用户在线状态更新通知
 extern NSString *kUserOnlineStateUpdated;
+//密聊状态更新通知
+extern NSString *kSecretChatStateUpdated;
+//密聊消息阅后即焚开始计时
+extern NSString *kSecretMessageStartBurning;
+//密聊消息阅后即焚完成
+extern NSString *kSecretMessageBurned;
 
 #pragma mark - 枚举值定义
 /**

@@ -22,6 +22,7 @@
 #import "WFCCPCOnlineInfo.h"
 #import "WFCCFileRecord.h"
 #import "WFCCFriend.h"
+#import "WFCCSecretChatInfo.h"
 
 #pragma mark - 频道通知定义
 //发送消息状态通知
@@ -138,6 +139,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_PTT_Reserved = 22,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Custom_State = 23,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Disable_Secret_Chat = 24,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -1732,8 +1735,6 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                 success:(void(^)(void))successBlock
                        error:(void(^)(int error_code))errorBlock;
 
-
-
 /**
  获取当前用户星标用户
  
@@ -1861,6 +1862,81 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
 
+#pragma mark - Secret Chat 接口
+/**
+ 发起密聊
+ 
+ @param userId 对方用户ID
+ @param successBlock 成功的回调，回调返回密聊ID
+ @param errorBlock 失败的回调
+ */
+- (void)createSecretChat:(NSString *)userId
+                success:(void(^)(NSString *targetId, int line))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
+/**
+ 销毁密聊
+ 
+ @param targetId 密聊ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)destroySecretChat:(NSString *)targetId
+                  success:(void(^)(void))successBlock
+                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取密聊用户ID
+ 
+ @param targetId 密聊ID
+ @return 密聊对方用户ID
+ */
+- (WFCCSecretChatInfo *)getSecretChatInfo:(NSString *)targetId;
+
+/**
+ 解密密聊会话中加密的媒体数据
+ 
+ @param targetId 密聊会话
+ @param encryptData 密聊中的加密过的媒体数据，需要下载下来本地保存。
+ 
+ @return 解密过的数据，注意只放到内存中，不要保存。
+ */
+- (NSData *)decodeSecretChat:(NSString *)targetId mediaData:(NSData *)encryptData;
+
+/**
+ 设置密聊会话阅后即焚时间
+ 
+ @param targetId 密聊会话
+ @param millisecond 时间
+ */
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)millisecond;
+
+
+/**
+  当前系统是否支持密聊。
+ 
+ @return t是否支持密聊
+ */
+- (BOOL)isEnableSecretChat;
+
+/**
+当前用户是否启用密聊
+
+@return YES，开启密聊功能；NO，关闭密聊功能。
+@disscussion 仅影响密聊的创建，已经创建的密聊不受影响
+*/
+- (BOOL)isUserEnableSecretChat;
+/**
+修改当前用户是否启用密聊功能
+
+@param enable 是否开启
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+@disscussion 仅影响密聊的创建，已经创建的密聊不受影响
+*/
+- (void)setUserEnableSecretChat:(BOOL)enable
+                        success:(void(^)(void))successBlock
+                          error:(void(^)(int error_code))errorBlock;
 #pragma mark - 其它接口
 /**
 获取PC在线信息
@@ -2070,6 +2146,7 @@ amr文件转成wav数据
                      error:(void(^)(int error_code))errorBlock;
 
 - (BOOL)isEnableUserOnlineState;
+
 /*
  音视频会议相关
  */

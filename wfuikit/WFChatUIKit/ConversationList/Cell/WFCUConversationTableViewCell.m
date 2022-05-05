@@ -199,13 +199,41 @@
             channelInfo.channelId = conversation.target;
         }
         [self updateChannelInfo:channelInfo];
+    } else if(conversation.type == SecretChat_Type){
+        WFCCSecretChatInfo *secretInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target];
+        if(!secretInfo) {
+            [[WFCCIMService sharedWFCIMService] destroySecretChat:conversation.target success:nil error:nil];
+        }
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].userId;
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+        [self updateUserInfo:userInfo];
     } else {
         self.targetView.text = WFCString(@"Chatroom");
+    }
+    if(conversation.type == SecretChat_Type) {
+        self.secretChatView.hidden = NO;
+        self.targetView.frame = CGRectMake(16 + 48 + 12 + 24, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 20);
+    } else {
+        self.secretChatView.hidden = YES;
+        self.targetView.frame = CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20);
     }
     
     self.potraitView.layer.cornerRadius = 4.f;
     self.digestView.attributedText = nil;
-    if (_info.draft.length) {
+    
+    NSString *secretChatStateText = nil;
+    if(conversation.type == SecretChat_Type) {
+        WFCCSecretChatState secretChatState = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].state;
+        if (secretChatState == SecretChatState_Starting) {
+            secretChatStateText = @"密聊会话建立中，正在等待对方响应。";
+        } else if(secretChatState == SecretChatState_Canceled) {
+            secretChatStateText = @"密聊会话已取消！";
+        }
+    }
+    
+    if(secretChatStateText) {
+        self.digestView.text = secretChatStateText;
+    } else if (_info.draft.length) {
         NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[Draft]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
         
         NSError *__error = nil;
@@ -288,7 +316,14 @@
     }
     return _targetView;
 }
-
+- (UIImageView *)secretChatView {
+    if(!_secretChatView) {
+        _secretChatView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, 20, 20)];
+        _secretChatView.image = [UIImage imageNamed:@"secret_chat_icon"];
+        [self.contentView addSubview:_secretChatView];
+    }
+    return _secretChatView;
+}
 - (UILabel *)digestView {
     if (!_digestView) {
         _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
