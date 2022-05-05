@@ -60,6 +60,16 @@
             name = WFCString(@"Channel");
         }
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    } else if (conversation.type == SecretChat_Type) {
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conversation.target].userId;
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+        if (userInfo) {
+            name = userInfo.displayName;
+            portrait = userInfo.portrait;
+        } else {
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), userId];
+        }
+        [self.portrait sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     }
     
     

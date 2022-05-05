@@ -19,6 +19,7 @@ namespace mars {
         class SyncReadEntry;
         class RecyclableStatement;
         class DB2;
+        class SyncBurnReadedEntry;
         class MessageDB {
             
         private:
@@ -186,12 +187,42 @@ namespace mars {
             
             std::map<std::string, int64_t> GetConversationRead(int conversationType, const std::string &target, int line);
             std::map<std::string, int64_t> GetDelivery(int conversationType, const std::string &target);
-            int64_t GetDelivery(std::string userId);
+            int64_t GetSingleDelivery(const std::string &userId);
+            std::map<std::string, int64_t> GetGroupDelivery(const std::string &targetId);
             
             long saveConversationSync(int conversatinType, const std::string &target, int line, int64_t readedDt, const std::list<std::string> &senders);
             SyncReadEntry loadConversationSync();
             bool deleteConvSync(long _id);
             bool updateConversationLastMessage(int conversationType, const std::string &target, int line, bool forceUpdate = false);
+            
+            TSecretChatInfo GetSecretChatInfo(const std::string &targetId);
+            bool SetSecretChatBurnTime(const std::string &targetId, int ms);
+            
+            std::pair<int, int64_t> GetMessageBurnTime(long messageId);
+            
+            int getSecretChatBurnTime(const std::string &targetId);
+            bool createSecretChat(const std::string &targetId, const std::string &userId, const std::string dhx);
+            bool acceptSecretChat(const std::string &targetId, const std::string &userId);
+            bool establishedSecretChat(const std::string &targetId, const std::string &userId, const std::string dhkey);
+            bool cancelSecretChat(const std::string &targetId, const std::string &userId);
+            bool removeSecretChat(const std::string &targetId);
+
+            std::string getSecretChatX(const std::string &targetId);
+            std::string getSecretChatKey(const std::string &targetId);
+            
+            bool insertBurnMessageInfo(long messageId, int64_t messageUid, const std::string &targetId, int direction, int burnTime, int media, int64_t messageDt);
+            TBurnMessageInfo getBurnMessageInfo(long messageId);
+            int64_t burnMessageReaded(const std::string &targetId, int direction, int64_t readDt = 0, int64_t msgDt = 0);
+            int64_t getBurnMessageReadTime(const std::string &targetId);
+            int64_t burnMessagePlayed(long messageId, int64_t readDt = 0);
+            std::list<long> getBurnedMessage(int64_t dt);
+            int removeBurnedMessageInfo(int64_t dt);
+            int64_t getLastestBurnMessageTime();
+            long insertSyncBurnReaded(int type, const std::string &target, int line, int64_t readDt, int64_t value);
+            bool deleteSyncBurnReaded(long sid);
+            SyncBurnReadedEntry getSyncBurnReadedEntry();
+            
+            void _OnCheckBurn();
         private:
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);

@@ -138,6 +138,12 @@
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"GroupChatRound"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", channelInfo.name];
+    } else if(self.conversation.type == SecretChat_Type) {
+        NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
+        
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+        [portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
     }
     
     [header addSubview:label];

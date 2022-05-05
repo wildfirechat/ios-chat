@@ -10,9 +10,13 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 
+#define BLACK_LIST_CELL_TAG 1
+#define MOMENTS_CELL_TAG 2
 
 @interface WFCPrivacyTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
+
+@property (nonatomic, strong)NSMutableArray<NSMutableArray<UITableViewCell *> *> *cells;
 @end
 
 @implementation WFCPrivacyTableViewController
@@ -20,6 +24,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self createCells];
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
@@ -34,6 +40,80 @@
     
 }
 
+- (void)createCells {
+    self.cells = [[NSMutableArray alloc] init];
+    
+    //Section 1
+    {
+        NSMutableArray *section1 = [[NSMutableArray alloc] init];
+        [self.cells addObject:section1];
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell_black_list"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = LocalizedString(@"Blacklist");
+        cell.tag = BLACK_LIST_CELL_TAG;
+        [section1 addObject:cell];
+    }
+    
+    if([[WFCCIMService sharedWFCIMService] isEnableSecretChat] || [[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
+        NSMutableArray *section2 = [[NSMutableArray alloc] init];
+        [self.cells addObject:section2];
+        if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat]) {
+            WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
+            switchCell.textLabel.text = WFCString(@"MsgReceipt");
+            if ([[WFCCIMService sharedWFCIMService] isUserEnableReceipt]) {
+                switchCell.on = YES;
+            } else {
+                switchCell.on = NO;
+            }
+            __weak typeof(self)ws = self;
+            [switchCell setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
+                [[WFCCIMService sharedWFCIMService] setUserEnableReceipt:value success:^{
+                    result(YES);
+                } error:^(int error_code) {
+                    [ws.view makeToast:@"网络错误"];
+                    result(NO);
+                }];
+            }];
+            [section2 addObject:switchCell];
+        }
+        
+        if ([[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
+            WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
+            switchCell.textLabel.text = @"密聊";
+            if ([[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
+                switchCell.on = YES;
+            } else {
+                switchCell.on = NO;
+            }
+            __weak typeof(self)ws = self;
+            [switchCell setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
+                [[WFCCIMService sharedWFCIMService] setUserEnableSecretChat:value success:^{
+                    result(YES);
+                } error:^(int error_code) {
+                    [ws.view makeToast:@"网络错误"];
+                    result(NO);
+                }];
+            }];
+            [section2 addObject:switchCell];
+        }
+    }
+    //sections3
+    if (NSClassFromString(@"MomentSettingsTableViewController")) {
+        NSMutableArray *section3 = [[NSMutableArray alloc] init];
+        [self.cells addObject:section3];
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"moments_cell"];
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = LocalizedString(@"Moments");
+        cell.tag = MOMENTS_CELL_TAG;
+        [section3 addObject:cell];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -43,10 +123,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.tag == BLACK_LIST_CELL_TAG) {
         WFCUBlackListViewController *vc = [[WFCUBlackListViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    } else if(indexPath.section == 2) {
+    } else if(cell.tag == MOMENTS_CELL_TAG) {
         UIViewController *vc = [[NSClassFromString(@"MomentSettingsTableViewController") alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -58,62 +139,16 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (NSClassFromString(@"MomentSettingsTableViewController")) {
-        return 3;
-    }
-    return 2;
+    return self.cells.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 1;
-    } else if(section == 1) {
-        return 1;
-    } else if(section == 2) {
-       return 1;
-    }
-    
-    return 0;
+    return self.cells[section].count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 || indexPath.section == 2) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
-        }
-        
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.accessoryView = nil;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if(indexPath.section == 2) {
-            cell.textLabel.text = LocalizedString(@"Moments");
-        } else {
-            cell.textLabel.text = LocalizedString(@"Blacklist");
-        }
-        return cell;;
-    } else if(indexPath.section == 1) {
-        WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
-        switchCell.textLabel.text = WFCString(@"MsgReceipt");
-        if ([[WFCCIMService sharedWFCIMService] isUserEnableReceipt]) {
-            switchCell.on = YES;
-        } else {
-            switchCell.on = NO;
-        }
-        __weak typeof(self)ws = self;
-        [switchCell setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
-            [[WFCCIMService sharedWFCIMService] setUserEnableReceipt:value success:^{
-                result(YES);
-            } error:^(int error_code) {
-                [ws.view makeToast:@"网络错误"];
-                result(NO);
-            }];
-        }];
-        
-        return switchCell;
-    }
-    return nil;
+    return self.cells[indexPath.section][indexPath.row];
 }
 
 @end
