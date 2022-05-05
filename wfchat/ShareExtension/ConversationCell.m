@@ -33,6 +33,8 @@
         }
     } else if(sc.type == 3) { //Channel_Type
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"ChannelChat"]];
+    } else if(sc.type == 5) { //SecretChat_Type
+        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     }
 }
 

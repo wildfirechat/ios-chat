@@ -112,7 +112,13 @@
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
             } else if ([conv.lastMessage.fromUser isEqualToString:userInfo.userId]) {
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            } else if(conv.conversation.type == SecretChat_Type) {
+                NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
+                if([userInfo.userId isEqualToString:userId]) {
+                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                }
             }
+            
         }
     }
 }
@@ -172,6 +178,16 @@
     }
 }
 
+- (void)onSecretChatStateChanged:(NSNotification *)notification {
+    [self refreshList];
+    [self refreshLeftButton];
+}
+
+- (void)onSecretMessageBurned:(NSNotification *)notification {
+    [self refreshList];
+    [self refreshLeftButton];
+}
+
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
     CGFloat searchExtra = 0;
     
@@ -179,27 +195,55 @@
         [KxMenu dismissMenu];
         return;
     }
+    NSArray *menuItems;
+    if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat] && [[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
+        menuItems = @[
+            [KxMenuItem menuItem:WFCString(@"StartChat")
+                           image:[UIImage imageNamed:@"menu_start_chat"]
+                          target:self
+                          action:@selector(startChatAction:)],
+            [KxMenuItem menuItem:WFCString(@"StartSecretChat")
+                           image:[UIImage imageNamed:@"menu_start_chat"]
+                          target:self
+                          action:@selector(startSecretChatAction:)],
+            [KxMenuItem menuItem:WFCString(@"AddFriend")
+                           image:[UIImage imageNamed:@"menu_add_friends"]
+                          target:self
+                          action:@selector(addFriendsAction:)],
+            [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
+                           image:[UIImage imageNamed:@"menu_listen_channel"]
+                          target:self
+                          action:@selector(listenChannelAction:)],
+            [KxMenuItem menuItem:WFCString(@"ScanQRCode")
+                           image:[UIImage imageNamed:@"menu_scan_qr"]
+                          target:self
+                          action:@selector(scanQrCodeAction:)]
+        ];
+    } else {
+        menuItems = @[
+            [KxMenuItem menuItem:WFCString(@"StartChat")
+                           image:[UIImage imageNamed:@"menu_start_chat"]
+                          target:self
+                          action:@selector(startChatAction:)],
+            [KxMenuItem menuItem:WFCString(@"AddFriend")
+                           image:[UIImage imageNamed:@"menu_add_friends"]
+                          target:self
+                          action:@selector(addFriendsAction:)],
+            [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
+                           image:[UIImage imageNamed:@"menu_listen_channel"]
+                          target:self
+                          action:@selector(listenChannelAction:)],
+            [KxMenuItem menuItem:WFCString(@"ScanQRCode")
+                           image:[UIImage imageNamed:@"menu_scan_qr"]
+                          target:self
+                          action:@selector(scanQrCodeAction:)]
+        ];
+    }
+    
     
     [KxMenu showMenuInView:self.navigationController.view
                   fromRect:CGRectMake(self.view.bounds.size.width - 56, kStatusBarAndNavigationBarHeight + searchExtra, 48, 5)
-                 menuItems:@[
-                     [KxMenuItem menuItem:WFCString(@"StartChat")
-                                    image:[UIImage imageNamed:@"menu_start_chat"]
-                                   target:self
-                                   action:@selector(startChatAction:)],
-                     [KxMenuItem menuItem:WFCString(@"AddFriend")
-                                    image:[UIImage imageNamed:@"menu_add_friends"]
-                                   target:self
-                                   action:@selector(addFriendsAction:)],
-                     [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
-                                    image:[UIImage imageNamed:@"menu_listen_channel"]
-                                   target:self
-                                   action:@selector(listenChannelAction:)],
-                     [KxMenuItem menuItem:WFCString(@"ScanQRCode")
-                                    image:[UIImage imageNamed:@"menu_scan_qr"]
-                                   target:self
-                                   action:@selector(scanQrCodeAction:)]
-                 ]];
+                 menuItems:menuItems];
 }
 
 - (void)startChatAction:(id)sender {
@@ -222,6 +266,32 @@
     
     [self.navigationController presentViewController:navi animated:YES completion:nil];
 }
+
+- (void)startSecretChatAction:(id)sender {
+    WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
+    pvc.type = Horizontal;
+    pvc.maxSelectCount = 1;
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+    navi.modalPresentationStyle = UIModalPresentationFullScreen;
+    __weak typeof(self)ws = self;
+    pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+        [navi dismissViewControllerAnimated:NO completion:nil];
+        if (contacts.count == 1) {
+            [[WFCCIMService sharedWFCIMService] createSecretChat:contacts[0] success:^(NSString *targetId, int line) {
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [WFCCConversation conversationWithType:SecretChat_Type target:targetId line:line];
+                mvc.hidesBottomBarWhenPushed = YES;
+                [ws.navigationController pushViewController:mvc animated:YES];
+            } error:^(int error_code) {
+                
+            }];
+            
+        }
+    };
+    
+    [self.navigationController presentViewController:navi animated:YES completion:nil];
+}
+
 
 - (void)createGroup:(NSArray<NSString *> *)contacts {
     __weak typeof(self) ws = self;
@@ -305,6 +375,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendingMessageStatusUpdated:) name:kSendingMessageStatusUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kSecretChatStateUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
     
     self.firstAppear = YES;
 }
@@ -418,7 +490,7 @@
 }
 
 - (void)refreshList {
-    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]] mutableCopy];
+    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5)]] mutableCopy];
     [self updateBadgeNumber];
     [self.tableView reloadData];
 }
@@ -503,7 +575,7 @@
 }
 - (void)refreshLeftButton {
     dispatch_async(dispatch_get_main_queue(), ^{
-        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
         NSUInteger count = unreadCount.unread;
         
         NSString *title = nil;
@@ -1122,7 +1194,7 @@
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchString = [self.searchController.searchBar text];
     if (searchString.length) {
-        self.searchConversationList = [[WFCCIMService sharedWFCIMService] searchConversation:searchString inConversation:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+        self.searchConversationList = [[WFCCIMService sharedWFCIMService] searchConversation:searchString inConversation:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
         self.searchFriendList = [self searchFriends:searchString];
         self.searchGroupList = [[WFCCIMService sharedWFCIMService] searchGroups:searchString];
     } else {

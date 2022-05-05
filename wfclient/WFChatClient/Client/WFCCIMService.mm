@@ -196,6 +196,36 @@ public:
     }
 };
 
+class IMCreateSecretChatCallback : public mars::stn::CreateSecretChatCallback {
+private:
+    void(^m_successBlock)(NSString *generalStr, int line);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMCreateSecretChatCallback(void(^successBlock)(NSString *groupId, int line), void(^errorBlock)(int error_code)) : mars::stn::CreateSecretChatCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::string &str, int line) {
+        NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(nsstr, line);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMCreateSecretChatCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 class IMGetAuthorizedMediaUrlCallback : public mars::stn::GetAuthorizedMediaUrlCallback {
 private:
     void(^m_successBlock)(NSString *url, NSString *backupUrl);
@@ -1273,13 +1303,6 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
     
     return ret;
-}
-
-- (long long)getMessageDeliveryByUser:(NSString *)userId {
-    if(!userId) {
-        return 0;
-    }
-    return mars::stn::MessageDB::Instance()->GetDelivery([userId UTF8String]);
 }
 
 - (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
@@ -2958,6 +2981,53 @@ public:
     return ids;
 }
 
+
+- (void)createSecretChat:(NSString *)userId
+                success:(void(^)(NSString *targetId, int line))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    mars::stn::createSecretChat([userId UTF8String], new IMCreateSecretChatCallback(successBlock, errorBlock));
+}
+
+- (void)destroySecretChat:(NSString *)targetId
+                  success:(void(^)(void))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    mars::stn::destroySecretChat([targetId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (WFCCSecretChatInfo *)getSecretChatInfo:(NSString *)targetId {
+    mars::stn::TSecretChatInfo t = mars::stn::MessageDB::Instance()->GetSecretChatInfo([targetId UTF8String]);
+    if(t.targetId.empty()) {
+        return nil;
+    }
+    WFCCSecretChatInfo *info = [[WFCCSecretChatInfo alloc] init];
+    info.targetId = targetId;
+    info.userId = [NSString stringWithUTF8String:t.userId.c_str()];
+    info.state = (WFCCSecretChatState)t.state;
+    info.burnTime = t.burnTime;
+    info.createTime = t.createTime;
+    return info;
+}
+
+- (NSData *)encodeSecretChat:(NSString *)targetId mediaData:(NSData *)data {
+    std::string sd = mars::stn::encodeSecretChatMediaData([targetId UTF8String], (const unsigned char *)data.bytes, (int)data.length);
+    if(sd.empty()) {
+        return nil;
+    }
+    return [[NSData alloc] initWithBytes:sd.data() length:sd.length()];
+}
+
+- (NSData *)decodeSecretChat:(NSString *)targetId mediaData:(NSData *)encryptData {
+    std::string sd = mars::stn::decodeSecretChatMediaData([targetId UTF8String], (const unsigned char *)encryptData.bytes, (int)encryptData.length);
+    if(sd.empty()) {
+        return nil;
+    }
+    return [[NSData alloc] initWithBytes:sd.data() length:sd.length()];
+}
+
+- (void)setSecretChat:(NSString *)targetId burnTime:(int)millisecond {
+    mars::stn::MessageDB::Instance()->SetSecretChatBurnTime([targetId UTF8String], millisecond);
+}
+
 - (NSArray<WFCCPCOnlineInfo *> *)getPCOnlineInfos {
     NSString *pcOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"PC"];
     NSString *webOnline = [self getUserSetting:UserSettingScope_PC_Online key:@"Web"];
@@ -3207,6 +3277,21 @@ public:
 
 - (BOOL)isEnableUserOnlineState {
     return mars::stn::IsEnableUserOnlineState();
+}
+
+- (BOOL)isEnableSecretChat {
+    return mars::stn::IsEnableSecretChat();
+}
+
+- (BOOL)isUserEnableSecretChat {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Disable_Secret_Chat key:@""];
+    return ![strValue isEqualToString:@"1"];
+}
+
+- (void)setUserEnableSecretChat:(BOOL)enable
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Disable_Secret_Chat key:@"" value:enable?@"0":@"1" success:successBlock error:errorBlock];
 }
 
 - (void)sendConferenceRequest:(long long)sessionId

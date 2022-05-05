@@ -75,6 +75,8 @@
 "MsgReceipt"="消息回执";
 "Delete"="删除";
 "Deleting"="删除中";
+"Loading"="加载中";
+"LoadFailure"="加载失败";
 "DeleteLocalMsg"="仅删除本地消息";
 "DeleteRemoteMsg"="删除服务器及其他端消息";
 "DeleteFailed"="删除失败";
@@ -91,6 +93,7 @@
 "Etc"="等";
 "Search"="搜索";
 "StartChat"="发起聊天";
+"StartSecretChat"="发起密聊";
 "ScanQRCode"="扫二维码";
 "NotLogin"="未登录";
 "NotConnect"="未连接";

@@ -419,6 +419,9 @@
         } else {
             localNote.alertBody = [msg digest];
         }
+        if(msg.conversation.type == SecretChat_Type) {
+            localNote.alertBody = @"您收到了新的密聊消息";
+        }
       if (msg.conversation.type == Single_Type) {
         WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
         if (sender.displayName) {
@@ -452,6 +455,16 @@
               }
                   
           }
+      } else if (msg.conversation.type == SecretChat_Type) {
+          NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:msg.conversation.target].userId;
+          WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+          if (sender.displayName) {
+              if (@available(iOS 8.2, *)) {
+                  localNote.alertTitle = sender.displayName;
+              } else {
+                  // Fallback on earlier versions
+              }
+          }
       }
         
       localNote.applicationIconBadgeNumber = count;
@@ -465,7 +478,7 @@
 }
 
 - (NSInteger)updateBadgeNumber {
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     int count = unreadCount.unread + unreadFriendRequest;
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;

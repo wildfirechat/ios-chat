@@ -354,6 +354,20 @@
                 } else {
                     self.receiptView.hidden = NO;
                 }
+            } else if(model.message.conversation.type == SecretChat_Type) {
+                WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:model.message.conversation.target];
+                if(secretChatInfo.targetId.length) {
+                    if (model.message.serverTime <= [[model.readDict objectForKey:secretChatInfo.userId] longLongValue]) {
+                        [self.receiptView setProgress:1 subProgress:1];
+                    } else if (model.message.serverTime <= [[model.deliveryDict objectForKey:secretChatInfo.userId] longLongValue]) {
+                        [self.receiptView setProgress:0 subProgress:1];
+                    } else {
+                        [self.receiptView setProgress:0 subProgress:0];
+                    }
+                    self.receiptView.hidden = NO;
+                } else {
+                    self.receiptView.hidden = YES;
+                }
             } else if(model.message.conversation.type == Group_Type) {
                 long long messageTS = model.message.serverTime;
                 

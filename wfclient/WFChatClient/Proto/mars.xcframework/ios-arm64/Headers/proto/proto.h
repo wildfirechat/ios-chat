@@ -473,6 +473,7 @@ namespace mars{
             kUserSettingVoipSilent = 21,
             kUserSettingPttReserved = 22,
             kUserSettingCustomState = 23,
+            kUserSettingDisableSecretChat = 24,
 
             kUserSettingCustomBegin = 1000
         };
@@ -623,6 +624,39 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
     };
     
+    class TSecretChatInfo : public TSerializable {
+    public:
+        TSecretChatInfo() : state(0), burnTime(0), createTime(0) {}
+        virtual ~TSecretChatInfo() {}
+        std::string targetId;
+        std::string userId;
+        int state;
+        int burnTime;
+        int64_t createTime;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
+    
+    class TBurnMessageInfo : public TSerializable {
+    public:
+        TBurnMessageInfo() : messageId(0), messageUid(0), direction(0), burnTime(0), isMedia(0), messageDt(0) {}
+        virtual ~TBurnMessageInfo() {}
+        long messageId;
+        int64_t messageUid;
+        std::string targetId;
+        int direction;
+        int burnTime;
+        int isMedia;
+        int64_t messageDt;
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
+    
+
         class GeneralStringCallback {
         public:
             virtual void onSuccess(const std::string &key) = 0;
@@ -804,7 +838,25 @@ namespace mars{
         virtual ~WatchOnlineStateCallback() {}
     };
     
+    class CreateSecretChatCallback {
+    public:
+        virtual void onSuccess(const std::string &targetId, int line) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~CreateSecretChatCallback() {}
+    };
     
+    class SecretChatStateCallback {
+    public:
+        virtual void onStateChanged(const std::string &targetId, int state) = 0;
+        virtual ~SecretChatStateCallback() {}
+    };
+    
+    class SecretMessageBurnStateCallback {
+    public:
+        virtual void onSecretMessageStartBurning(const std::string &targetId, long playedMsgId) = 0;
+        virtual void onSecretMessageBurned(const std::list<long> &messageIds) = 0;
+        virtual ~SecretMessageBurnStateCallback() {}
+    };
     
         enum ConnectionStatus {
             kConnectionStatusKickedOff = -7,
@@ -855,9 +907,12 @@ namespace mars{
             virtual void onOnlineEvent(const std::list<mars::stn::TUserOnlineState> &events) = 0;
         };
 
+        extern std::string getCurrentUserId();
+
         extern void useEncryptSM4();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
+        extern void setLowBPSMode(bool lowBPSMode);
         extern void Disconnect(uint8_t flag);
         extern bool Connect(const std::string& host);
         extern void setBackupAddressStrategy(int strategy);
@@ -879,6 +934,8 @@ namespace mars{
         extern void setRefreshFriendListCallback(GetMyFriendsCallback *callback);
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
+        extern void setSecretChatStateCallback(SecretChatStateCallback *callback);
+        extern void setSecretMessageBurnStateCallback(SecretMessageBurnStateCallback *callback);
         extern ConnectionStatus getConnectionStatus();
 
         extern int64_t getServerDeltaTime();
@@ -998,6 +1055,12 @@ namespace mars{
 
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
 
+    
+        extern void createSecretChat(const std::string &userId, CreateSecretChatCallback *callback);
+        extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
+        extern std::string decodeSecretChatMediaData(const std::string &targetId, const unsigned char *indata, int insize);
+        extern std::string encodeSecretChatMediaData(const std::string &targetId, const unsigned char *indata, int insize);
+    
         extern std::string GetImageThumbPara();
 
         extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
@@ -1012,6 +1075,7 @@ namespace mars{
         extern bool HasMediaBackupUrl();
         extern bool IsGlobalDisableSyncDraft();
         extern bool IsEnableUserOnlineState();
+        extern bool IsEnableSecretChat();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     

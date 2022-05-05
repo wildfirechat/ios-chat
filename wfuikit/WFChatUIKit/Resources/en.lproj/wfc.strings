@@ -75,6 +75,8 @@
 "MsgReceipt"="Message receipt";
 "Delete"="Delete";
 "Deleting"="Deleting";
+"Loading"="Loading";
+"LoadFailure"="Load failure";
 "DeleteLocalMsg"="Only delete local message";
 "DeleteRemoteMsg"="Delete remote message also";
 "DeleteFailed"="Delete failed";
@@ -91,6 +93,7 @@
 "Etc"="etc.";
 "Search"="Search";
 "StartChat"="Start chat";
+"StartSecretChat"="Start secret chat";
 "ScanQRCode"="Scan QR code";
 "NotLogin"="Not login";
 "NotConnect"="Not connect";
