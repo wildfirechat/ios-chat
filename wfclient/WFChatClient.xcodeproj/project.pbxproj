@@ -190,6 +190,19 @@
 		B7832E3B280FC774000233D1 /* WFCCSecretChatInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */; };
 		B7EF74FB280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EF74F9280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m */; };
 		B7EF74FC280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7EF74FA280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7FF741F2824CA5300DF2B39 /* WFAFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF74122824CA5300DF2B39 /* WFAFURLRequestSerialization.h */; };
+		B7FF74202824CA5300DF2B39 /* WFAFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF74132824CA5300DF2B39 /* WFAFNetworking.h */; };
+		B7FF74212824CA5300DF2B39 /* WFAFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF74142824CA5300DF2B39 /* WFAFNetworkReachabilityManager.h */; };
+		B7FF74222824CA5300DF2B39 /* WFAFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF74152824CA5300DF2B39 /* WFAFURLSessionManager.m */; };
+		B7FF74232824CA5300DF2B39 /* WFAFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF74162824CA5300DF2B39 /* WFAFSecurityPolicy.h */; };
+		B7FF74242824CA5300DF2B39 /* WFAFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF74172824CA5300DF2B39 /* WFAFHTTPSessionManager.m */; };
+		B7FF74252824CA5300DF2B39 /* WFAFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF74182824CA5300DF2B39 /* WFAFURLResponseSerialization.h */; };
+		B7FF74262824CA5300DF2B39 /* WFAFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF74192824CA5300DF2B39 /* WFAFURLRequestSerialization.m */; };
+		B7FF74272824CA5300DF2B39 /* WFAFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF741A2824CA5300DF2B39 /* WFAFSecurityPolicy.m */; };
+		B7FF74282824CA5300DF2B39 /* WFAFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF741B2824CA5300DF2B39 /* WFAFURLSessionManager.h */; };
+		B7FF74292824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF741C2824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m */; };
+		B7FF742A2824CA5300DF2B39 /* WFAFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FF741D2824CA5300DF2B39 /* WFAFURLResponseSerialization.m */; };
+		B7FF742B2824CA5300DF2B39 /* WFAFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FF741E2824CA5300DF2B39 /* WFAFHTTPSessionManager.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -364,6 +377,19 @@
 		B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCSecretChatInfo.m; sourceTree = "<group>"; };
 		B7EF74F9280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStartSecretChatMessageContent.m; sourceTree = "<group>"; };
 		B7EF74FA280ABE2A007AE516 /* WFCCStartSecretChatMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStartSecretChatMessageContent.h; sourceTree = "<group>"; };
+		B7FF74122824CA5300DF2B39 /* WFAFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFURLRequestSerialization.h; sourceTree = "<group>"; };
+		B7FF74132824CA5300DF2B39 /* WFAFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFNetworking.h; sourceTree = "<group>"; };
+		B7FF74142824CA5300DF2B39 /* WFAFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		B7FF74152824CA5300DF2B39 /* WFAFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFURLSessionManager.m; sourceTree = "<group>"; };
+		B7FF74162824CA5300DF2B39 /* WFAFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFSecurityPolicy.h; sourceTree = "<group>"; };
+		B7FF74172824CA5300DF2B39 /* WFAFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFHTTPSessionManager.m; sourceTree = "<group>"; };
+		B7FF74182824CA5300DF2B39 /* WFAFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFURLResponseSerialization.h; sourceTree = "<group>"; };
+		B7FF74192824CA5300DF2B39 /* WFAFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFURLRequestSerialization.m; sourceTree = "<group>"; };
+		B7FF741A2824CA5300DF2B39 /* WFAFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFSecurityPolicy.m; sourceTree = "<group>"; };
+		B7FF741B2824CA5300DF2B39 /* WFAFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFURLSessionManager.h; sourceTree = "<group>"; };
+		B7FF741C2824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		B7FF741D2824CA5300DF2B39 /* WFAFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFAFURLResponseSerialization.m; sourceTree = "<group>"; };
+		B7FF741E2824CA5300DF2B39 /* WFAFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFAFHTTPSessionManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,6 +429,7 @@
 		2E6B509D1FAE98E6006B6E31 /* WFChatClient */ = {
 			isa = PBXGroup;
 			children = (
+				B7FF74112824CA5300DF2B39 /* AFNetworking */,
 				2F9106E1273B4DDD00B764DD /* AV */,
 				901E270921F153D800A163CB /* Proto */,
 				2E6B50CA1FAE9B10006B6E31 /* Messages */,
@@ -648,6 +675,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B7FF74112824CA5300DF2B39 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				B7FF74122824CA5300DF2B39 /* WFAFURLRequestSerialization.h */,
+				B7FF74132824CA5300DF2B39 /* WFAFNetworking.h */,
+				B7FF74142824CA5300DF2B39 /* WFAFNetworkReachabilityManager.h */,
+				B7FF74152824CA5300DF2B39 /* WFAFURLSessionManager.m */,
+				B7FF74162824CA5300DF2B39 /* WFAFSecurityPolicy.h */,
+				B7FF74172824CA5300DF2B39 /* WFAFHTTPSessionManager.m */,
+				B7FF74182824CA5300DF2B39 /* WFAFURLResponseSerialization.h */,
+				B7FF74192824CA5300DF2B39 /* WFAFURLRequestSerialization.m */,
+				B7FF741A2824CA5300DF2B39 /* WFAFSecurityPolicy.m */,
+				B7FF741B2824CA5300DF2B39 /* WFAFURLSessionManager.h */,
+				B7FF741C2824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m */,
+				B7FF741D2824CA5300DF2B39 /* WFAFURLResponseSerialization.m */,
+				B7FF741E2824CA5300DF2B39 /* WFAFHTTPSessionManager.h */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -662,6 +709,7 @@
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
 				2F59FFF22774A3900046C2D5 /* WFCCPTTSoundMessageContent.h in Headers */,
 				90D1F597208D65B500C2A9CA /* WFCCCallStartMessageContent.h in Headers */,
+				B7FF74282824CA5300DF2B39 /* WFAFURLSessionManager.h in Headers */,
 				2FF6699C267D759D008FDCD4 /* WFCCModifyGroupMemberExtraNotificationContent.h in Headers */,
 				2FF669A0267D7833008FDCD4 /* WFCCModifyGroupExtraNotificationContent.h in Headers */,
 				2B6336762470DAB2008D6B38 /* WFCCDeliveryReport.h in Headers */,
@@ -675,10 +723,12 @@
 				903EBB8C21357DDF00312C16 /* WFCCStickerMessageContent.h in Headers */,
 				2F1A931A21B250F5006625CD /* WFCCTypingMessageContent.h in Headers */,
 				B733C800281673D000F70316 /* WFCCCallByeMessageContent.h in Headers */,
+				B7FF741F2824CA5300DF2B39 /* WFAFURLRequestSerialization.h in Headers */,
 				B733C7FC2816737500F70316 /* WFCCCallAddParticipantMessageContent.h in Headers */,
 				2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */,
 				2FB87C6F243EF0FE0078A199 /* WFCCFriendGreetingMessageContent.h in Headers */,
 				2FB87C6D243EF0FE0078A199 /* WFCCFriendAddedMessageContent.h in Headers */,
+				B7FF742B2824CA5300DF2B39 /* WFAFHTTPSessionManager.h in Headers */,
 				2E6B51151FAE9B10006B6E31 /* WFCCConversationInfo.h in Headers */,
 				2E6B50F71FAE9B10006B6E31 /* WFCCAddGroupeMemberNotificationContent.h in Headers */,
 				2E6B50F91FAE9B10006B6E31 /* WFCCCreateGroupNotificationContent.h in Headers */,
@@ -690,12 +740,14 @@
 				2F8742DC219C4FED00F65EBA /* WFCCUnreadCount.h in Headers */,
 				2F8742DF219C4FED00F65EBA /* WFCCChatroomMemberInfo.h in Headers */,
 				2B97D4852505BACF00162A2B /* WFCCCardMessageContent.h in Headers */,
+				B7FF74212824CA5300DF2B39 /* WFAFNetworkReachabilityManager.h in Headers */,
 				2B5FD87A2375A55800C41A72 /* WFCCPTextMessageContent.h in Headers */,
 				2B5623A124FB8F1700EB2A03 /* WFCCPCLoginRequestMessageContent.h in Headers */,
 				2FEF332721BE93980087B6C2 /* WFCCChannelInfo.h in Headers */,
 				2F8742DB219C4FED00F65EBA /* WFCCChatroomInfo.h in Headers */,
 				2F48C9C6214D16250092B167 /* WFCCRecallMessageContent.h in Headers */,
 				6E6C69A820B959F100006628 /* WFCCGroupSearchInfo.h in Headers */,
+				B7FF74252824CA5300DF2B39 /* WFAFURLResponseSerialization.h in Headers */,
 				2BC2AC592581F68B00E3D12D /* WFCCKickoffGroupMemberVisibleNotificationContent.h in Headers */,
 				2E6B50FB1FAE9B10006B6E31 /* WFCCDismissGroupNotificationContent.h in Headers */,
 				2E6B51191FAE9B10006B6E31 /* WFCCFriendRequest.h in Headers */,
@@ -707,6 +759,7 @@
 				2E6B511B1FAE9B10006B6E31 /* WFCCGroupInfo.h in Headers */,
 				90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */,
 				2E6B51031FAE9B10006B6E31 /* WFCCMessage.h in Headers */,
+				B7FF74232824CA5300DF2B39 /* WFAFSecurityPolicy.h in Headers */,
 				2E6B51011FAE9B10006B6E31 /* WFCCMediaMessageContent.h in Headers */,
 				2E6B51051FAE9B10006B6E31 /* WFCCMessageContent.h in Headers */,
 				2E6B51071FAE9B10006B6E31 /* WFCCNotificationMessageContent.h in Headers */,
@@ -726,6 +779,7 @@
 				2B2492E9245D3982007268E3 /* WFCCDeleteMessageContent.h in Headers */,
 				2FF2A45E22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h in Headers */,
 				2E6B510F1FAE9B10006B6E31 /* WFCCTransferGroupOwnerNotificationContent.h in Headers */,
+				B7FF74202824CA5300DF2B39 /* WFAFNetworking.h in Headers */,
 				2E6B51171FAE9B10006B6E31 /* WFCCConversationSearchInfo.h in Headers */,
 				2E6B51111FAE9B10006B6E31 /* WFCCUtilities.h in Headers */,
 				2E6B50C61FAE9B08006B6E31 /* WFCCNetworkService.h in Headers */,
@@ -834,7 +888,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7FF74242824CA5300DF2B39 /* WFAFHTTPSessionManager.m in Sources */,
 				2BC2AC5F2581F69E00E3D12D /* WFCCQuitGroupVisibleNotificationContent.m in Sources */,
+				B7FF742A2824CA5300DF2B39 /* WFAFURLResponseSerialization.m in Sources */,
 				2E6B50FE1FAE9B10006B6E31 /* WFCCImageMessageContent.m in Sources */,
 				2E6B51001FAE9B10006B6E31 /* WFCCKickoffGroupMemberNotificationContent.m in Sources */,
 				2E6B50C91FAE9B08006B6E31 /* WFCCNetworkStatus.m in Sources */,
@@ -897,15 +953,19 @@
 				2FB87A632650BDE000790A26 /* WFCCFriend.m in Sources */,
 				2F1EB5C02499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m in Sources */,
 				2B97D4862505BACF00162A2B /* WFCCCardMessageContent.m in Sources */,
+				B7FF74262824CA5300DF2B39 /* WFAFURLRequestSerialization.m in Sources */,
 				2E6B51161FAE9B10006B6E31 /* WFCCConversationInfo.m in Sources */,
 				6E6C69A720B959F100006628 /* WFCCGroupSearchInfo.m in Sources */,
 				2E6B50B41FAE990D006B6E31 /* wav_amr.mm in Sources */,
 				2F48C9C5214D16250092B167 /* WFCCRecallMessageContent.m in Sources */,
 				2B6336752470DAB2008D6B38 /* WFCCDeliveryReport.m in Sources */,
+				B7FF74292824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m in Sources */,
 				2F8742E0219C4FED00F65EBA /* WFCCChatroomInfo.m in Sources */,
 				2E6B50B51FAE990D006B6E31 /* wavreader.c in Sources */,
 				2E6B510E1FAE9B10006B6E31 /* WFCCTextMessageContent.m in Sources */,
 				2F56F6A32529D04500B829C4 /* WFCCCompositeMessageContent.m in Sources */,
+				B7FF74272824CA5300DF2B39 /* WFAFSecurityPolicy.m in Sources */,
+				B7FF74222824CA5300DF2B39 /* WFAFURLSessionManager.m in Sources */,
 				2E6B51081FAE9B10006B6E31 /* WFCCNotificationMessageContent.m in Sources */,
 				90F5849A1FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m in Sources */,
 				90B0444B1FEFDC1A00AFE79B /* WFCCChangeGroupNameNotificationContent.m in Sources */,
