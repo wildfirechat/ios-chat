@@ -993,7 +993,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     
     BOOL largeMedia = NO;
     int fileSize  = 0;
-    if(tmsg.content.mediaType > 0 && tmsg.content.remoteMediaUrl.empty() && !tmsg.content.localMediaPath.empty() && [self isCommercialServer]) {
+    if(tmsg.content.mediaType > 0 && tmsg.content.remoteMediaUrl.empty() && !tmsg.content.localMediaPath.empty() && [self isSupportBigFilesUpload]) {
         NSString *filePath = [NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()];
         NSURL *fileURL = [NSURL fileURLWithPath:filePath];
         NSNumber *fileSizeValue = nil;
