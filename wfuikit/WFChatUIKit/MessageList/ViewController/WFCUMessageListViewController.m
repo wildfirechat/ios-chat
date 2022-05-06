@@ -2771,7 +2771,7 @@
         }
     }
     
-    if(self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == SecretChat_Type && msg.direction == MessageDirection_Send) {
         canRecall = YES;
     }
     
