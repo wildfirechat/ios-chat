@@ -18,6 +18,7 @@
 #import "WFCCMarkUnreadMessageContent.h"
 #import "wav_amr.h"
 #import "WFCCUserOnlineState.h"
+#import "WFAFNetworking.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
@@ -29,13 +30,14 @@ NSString *kMessageDelivered = @"kMessageDelivered";
 NSString *kMessageReaded = @"kMessageReaded";
 NSString *kMessageUpdated = @"kMessageUpdated";
 
+
 class IMSendMessageCallback : public mars::stn::SendMsgCallback {
-private:
+public:
     void(^m_successBlock)(long long messageUid, long long timestamp);
     void(^m_errorBlock)(int error_code);
     void(^m_progressBlock)(long uploaded, long total);
     WFCCMessage *m_message;
-public:
+
     IMSendMessageCallback(WFCCMessage *message, void(^successBlock)(long long messageUid, long long timestamp), void(^progressBlock)(long uploaded, long total), void(^errorBlock)(int error_code)) : mars::stn::SendMsgCallback(), m_message(message), m_successBlock(successBlock), m_progressBlock(progressBlock), m_errorBlock(errorBlock) {};
      void onSuccess(long long messageUid, long long timestamp) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -67,9 +69,9 @@ public:
     void onPrepared(long messageId, int64_t savedTime) {
         m_message.messageId = messageId;
         m_message.serverTime = savedTime;
-        if(m_message.messageId) {
+        if(messageId) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
             });
         }
     }
@@ -78,9 +80,10 @@ public:
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
             mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
         }
-        if(m_message.messageId) {
+        long messageId = m_message.messageId;
+        if(messageId) {
             dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
             });
         }
     }
@@ -104,6 +107,46 @@ public:
         m_message = nil;
     }
 };
+
+
+@interface WFCUUploadModel : NSObject <NSURLSessionDelegate> {
+@public
+    IMSendMessageCallback *_sendCallback;
+}
+
+@property(nonatomic, strong)NSURLSessionUploadTask *uploadTask;
+@property(nonatomic, assign)int fileSize;
+@end
+
+@implementation WFCUUploadModel
+- (void)didUploaded:(NSString *)remoteUrl {
+    WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)self->_sendCallback->m_message.content;
+    mediaContent.remoteUrl = remoteUrl;
+    [[WFCCIMService sharedWFCIMService] updateMessage:self->_sendCallback->m_message.messageId content:self->_sendCallback->m_message.content];
+    self->_sendCallback->onMediaUploaded([remoteUrl UTF8String]);
+    [[WFCCIMService sharedWFCIMService] sendSavedMessage:self->_sendCallback->m_message expireDuration:0 success:self->_sendCallback->m_successBlock error:self->_sendCallback->m_errorBlock];
+    delete self->_sendCallback;
+}
+
+- (void)didUploadedFailed:(int)errorCode {
+    [[WFCCIMService sharedWFCIMService] updateMessage:self->_sendCallback->m_message.messageId status:Message_Status_Send_Failure];
+    self->_sendCallback->onFalure(errorCode);
+    delete self->_sendCallback;
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                                didSendBodyData:(int64_t)bytesSent
+                                 totalBytesSent:(int64_t)totalBytesSent
+                       totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        float uploadProgress = totalBytesSent * 1.f / self.fileSize;
+        NSLog(@"upload progress %f", uploadProgress);
+        self->_sendCallback->onProgress((int)totalBytesSent, self.fileSize);
+    });
+}
+
+@end
+
 extern WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui);
 
 
@@ -948,9 +991,108 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     fillTMessage(tmsg, conversation, content);
     message.fromUser = [WFCCNetworkService sharedInstance].userId;
     
-    mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
+    BOOL largeMedia = NO;
+    int fileSize  = 0;
+    if(tmsg.content.mediaType > 0 && tmsg.content.remoteMediaUrl.empty() && !tmsg.content.localMediaPath.empty() && [self isCommercialServer]) {
+        NSString *filePath = [NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()];
+        NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+        NSNumber *fileSizeValue = nil;
+        NSError *fileSizeError = nil;
+        [fileURL getResourceValue:&fileSizeValue
+                           forKey:NSURLFileSizeKey
+                            error:&fileSizeError];
+        if (!fileSizeError) {
+            NSLog(@"value for %@ is %@", fileURL, fileSizeValue);
+            largeMedia = [fileSizeValue integerValue] > 100000000L;
+            fileSize = (int)[fileSizeValue integerValue];
+        }
+    }
+    if(largeMedia) {
+        long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
+        message.messageId = msgId;
+        
+        IMSendMessageCallback *callback = new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock);
+        callback->onPrepared(message.messageId, message.serverTime);
+        
+        __weak typeof(self)ws = self;
+        [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+            if(type == 1) { //not implement qiniu yet
+                [ws uploadQiniu:uploadUrl file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize callback:callback];
+            } else {
+                [ws upload:uploadUrl file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize callback:callback];
+            }
+        } error:^(int error_code) {
+            errorBlock(error_code);
+        }];
+    } else {
+        mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
+    }
     
     return message;
+}
+
+
+- (void)upload:(NSString *)url file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
+    NSURL *presignedURL = [NSURL URLWithString:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:presignedURL];
+    request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    [request setHTTPMethod:@"PUT"];
+    NSString *fileContentTypeString = @"application/octet-stream";
+    [request setValue:fileContentTypeString forHTTPHeaderField:@"Content-Type"];
+
+    WFCUUploadModel *model = [[WFCUUploadModel alloc] init];
+    model.fileSize = fileSize;
+    model->_sendCallback = callback;
+    model.uploadTask = [[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:model delegateQueue:nil] uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:file] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(error) {
+                NSLog(@"error %@", error.localizedDescription);
+                [model didUploadedFailed:-500];
+            } else {
+                NSLog(@"done");
+                if(((NSHTTPURLResponse *)response).statusCode != 200) {
+                    NSLog(@"upload failure");
+                    [model didUploadedFailed:(int)((NSHTTPURLResponse *)response).statusCode];
+                } else {
+                    NSLog(@"upload success %@", remoteUrl);
+                    [model didUploaded:remoteUrl];
+                }
+            }
+        });
+    }];
+    
+    [model.uploadTask resume];
+}
+
+- (void)uploadQiniu:(NSString *)url file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
+    NSArray *array = [url componentsSeparatedByString:@"?"];
+    url = array[0];
+    NSString *token = array[1];
+    NSString *key = array[2];
+
+    WFAFHTTPSessionManager *manage = [WFAFHTTPSessionManager manager];
+    [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    manage.requestSerializer = [WFAFHTTPRequestSerializer serializer];
+    manage.responseSerializer = [WFAFHTTPResponseSerializer serializer];
+    manage.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/html", @"text/json", @"text/javascript",@"text/plain", nil];
+
+    [manage POST:url parameters:nil constructingBodyWithBlock:^(id<WFAFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFormData:[key dataUsingEncoding:NSUTF8StringEncoding] name:@"key"];
+        [formData appendPartWithFormData:[token dataUsingEncoding:NSUTF8StringEncoding] name:@"token"];
+        [formData appendPartWithFileURL:[NSURL fileURLWithPath:file] name:@"file" fileName:@"fileName" mimeType:@"application/octet-stream" error:nil];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+            callback->onProgress((int)uploadProgress.completedUnitCount, (int)uploadProgress.totalUnitCount);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)callback->m_message.content;
+            mediaContent.remoteUrl = remoteUrl;
+            [[WFCCIMService sharedWFCIMService] updateMessage:callback->m_message.messageId content:callback->m_message.content];
+            callback->onMediaUploaded([remoteUrl UTF8String]);
+            [[WFCCIMService sharedWFCIMService] sendSavedMessage:callback->m_message expireDuration:0 success:callback->m_successBlock error:callback->m_errorBlock];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"error %@", error.localizedDescription);
+            [[WFCCIMService sharedWFCIMService] updateMessage:callback->m_message.messageId status:Message_Status_Send_Failure];
+            callback->onFalure(-1);
+    }];
 }
 
 - (BOOL)sendSavedMessage:(WFCCMessage *)message
