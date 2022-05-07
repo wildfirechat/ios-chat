@@ -315,7 +315,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 /**
  断开连接
 
- @param disablePush   是否停止推送，clearSession为YES时无意义。
+ @param disablePush   是否停止推送，clearSession为YES时无意义。如果为true，session会变成disable状态，token会失效，必须重新获取token才能登陆。
  @param clearSession 是否清除Session信息，如果清除本地历史消息将全部清除，且token失效无法再次登陆，必须重新获取token才能进行登陆。
  */
 - (void)disconnect:(BOOL)disablePush clearSession:(BOOL)clearSession;
