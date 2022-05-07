@@ -278,6 +278,10 @@
             };
         }];
     }
+    if(self.conversation.type == Channel_Type) {
+        WFCCEnterChannelChatMessageContent *enterContent = [[WFCCEnterChannelChatMessageContent alloc] init];
+        [[WFCCIMService sharedWFCIMService] send:self.conversation content:enterContent success:nil error:nil];
+    }
     
     WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
     self.chatInputBar.draft = info.draft;
@@ -546,6 +550,10 @@
 - (void)leftMessageVC {
     if (self.conversation.type == Chatroom_Type) {
         [self sendChatroomLeaveMessage];
+    }
+    if(self.conversation.type == Channel_Type) {
+        WFCCLeaveChannelChatMessageContent *leaveContent = [[WFCCLeaveChannelChatMessageContent alloc] init];
+        [[WFCCIMService sharedWFCIMService] send:self.conversation content:leaveContent success:nil error:nil];
     }
     
     if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
