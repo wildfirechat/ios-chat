@@ -65,9 +65,11 @@
         self.targetIds = dictionary[@"ts"];
         self.pin = dictionary[@"p"];
         if (self.targetIds.count == 0) {
-            NSString *target = dictionary[@"t"];
             NSMutableArray *arr = [[NSMutableArray alloc] init];
-            [arr addObject:target];
+            NSString *target = dictionary[@"t"];
+            if(target) {
+                [arr addObject:target];
+            }
             self.targetIds = arr;
         }
     }
