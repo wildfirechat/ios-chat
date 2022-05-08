@@ -22,6 +22,7 @@
 #import "WFCUParticipantCollectionViewLayout.h"
 #import "WFCUSeletedUserViewController.h"
 #import "UIView+Toast.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -64,6 +65,7 @@
 
 //视频时，大屏用户正在说话
 @property (nonatomic, strong)UIImageView *speakingView;
+@property(nonatomic, strong)NSTimer *broadcastOngoingTimer;
 #endif
 @end
 
@@ -140,6 +142,8 @@
         [self didCallEndWithReason:self.currentSession.endReason];
         return;
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
+    
     self.smallScalingType = kWFAVVideoScalingTypeAspectFit;
     self.bigScalingType = kWFAVVideoScalingTypeAspectBalanced;
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -224,6 +228,22 @@
                                                object:nil];
     [self onDeviceOrientationDidChange];
 
+}
+
+- (void)onReceiveMessages:(NSNotification *)notification {
+    NSArray<WFCCMessage *> *messages = notification.object;
+    NSMutableArray<WFCCMultiCallOngoingMessageContent *> *ongoingCalls = [[NSMutableArray alloc] init];
+    for (WFCCMessage *msg in messages) {
+        if([msg.content isKindOfClass:WFCCMultiCallOngoingMessageContent.class]) {
+            WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)msg.content;
+            [ongoingCalls addObject:ongoing];
+        } else if([msg.content isKindOfClass:WFCCJoinCallRequestMessageContent.class]) {
+            WFCCJoinCallRequestMessageContent *join = (WFCCJoinCallRequestMessageContent *)msg.content;
+            if([self.currentSession.callId isEqualToString:join.callId] && self.currentSession.state == kWFAVEngineStateConnected && [self.currentSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.currentSession inviteNewParticipants:@[msg.fromUser] autoAnswer:YES];
+            }
+        }
+    }
 }
 
 - (UIButton *)hangupButton {
@@ -430,6 +450,10 @@
      }];
     
     [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent {
+    [self startBroadcastCallOngoing:NO];
 }
 
 - (void)addParticipantButtonDidTap:(UIButton *)button {
@@ -928,6 +952,12 @@
         default:
             break;
     }
+    
+    if(state == kWFAVEngineStateConnected && [self.currentSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        [self startBroadcastCallOngoing:YES];
+    } else {
+        [self startBroadcastCallOngoing:NO];
+    }
 }
 
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
@@ -1063,6 +1093,33 @@
         }];
     }
 }
+
+- (void)startBroadcastCallOngoing:(BOOL)start {
+    if([WFCUConfigManager globalManager].enableMultiCallAutoJoin) {
+        if(start && !self.broadcastOngoingTimer) {
+            __weak typeof(self)ws = self;
+            WFCCMultiCallOngoingMessageContent *ongoing = [[WFCCMultiCallOngoingMessageContent alloc] init];
+            ongoing.callId = self.currentSession.callId;
+            ongoing.audioOnly = self.currentSession.audioOnly;
+            ongoing.initiator = self.currentSession.initiator;
+            ongoing.targetIds = self.currentSession.participantIds;
+            if (@available(iOS 10.0, *)) {
+                self.broadcastOngoingTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                    typeof(self) strongSelf = ws;
+                    if(strongSelf.currentSession.state == kWFAVEngineStateConnected) {
+                        [[WFCCIMService sharedWFCIMService] send:strongSelf.currentSession.conversation content:ongoing success:nil error:nil];
+                    }
+                }];
+            } else {
+                // Fallback on earlier versions
+            }
+        } else if(!start && self.broadcastOngoingTimer) {
+            [self.broadcastOngoingTimer invalidate];
+            self.broadcastOngoingTimer = nil;
+        }
+    }
+}
+
 - (void)reloadVideoUI {
     if (!self.currentSession.audioOnly) {
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
@@ -1145,7 +1202,7 @@
 }
 
 - (void)didChangeInitiator:(NSString *_Nullable)initiator {
-    NSLog(@"didChangeInitiator:%@", initiator);
+    [self startBroadcastCallOngoing:[initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]];
 }
 
 - (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
@@ -1253,5 +1310,9 @@
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 #endif
+
 @end

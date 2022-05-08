@@ -49,6 +49,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, strong)NSString *conversationFilesDir;
 
+@property(nonatomic, assign)BOOL enableMultiCallAutoJoin;
+
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
 @end
 
