@@ -429,6 +429,10 @@
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
 		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
+		B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */; };
+		B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */; };
+		B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */; };
+		B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */; };
 		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
 /* End PBXBuildFile section */
@@ -865,6 +869,10 @@
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingCell.h; sourceTree = "<group>"; };
+		B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingCell.m; sourceTree = "<group>"; };
+		B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingExpendedCell.h; sourceTree = "<group>"; };
+		B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingExpendedCell.m; sourceTree = "<group>"; };
 		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1155,6 +1163,7 @@
 		2F550EB3217F5CC000F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				B7D07586282756B5008A6C63 /* Voip */,
 				2F56F6B7252A078500B829C4 /* CompositeCell */,
 				2F550EC8217F5CC000F56C26 /* WFCUCallSummaryCell.h */,
 				2F550EB7217F5CC000F56C26 /* WFCUCallSummaryCell.m */,
@@ -1907,6 +1916,17 @@
 			path = AVEngine;
 			sourceTree = "<group>";
 		};
+		B7D07586282756B5008A6C63 /* Voip */ = {
+			isa = PBXGroup;
+			children = (
+				B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */,
+				B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */,
+				B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */,
+				B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */,
+			);
+			path = Voip;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2019,6 +2039,7 @@
 				2F9CE41D21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h in Headers */,
 				149B3111241E65D500B935D3 /* UIColor+YH.h in Headers */,
 				2F5510B9217F5CC200F56C26 /* WFCUGroupTableViewCell.h in Headers */,
+				B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */,
 				2F551152217F5CC200F56C26 /* KZVideoSupport.h in Headers */,
 				2F55118E217F5CC200F56C26 /* MBProgressHUD.h in Headers */,
 				2F535BFF25296E6600C9AF09 /* WFCUQuoteViewController.h in Headers */,
@@ -2063,6 +2084,7 @@
 				2F5511E0217F5CC300F56C26 /* TYAlertFadeAnimation.h in Headers */,
 				2BBC9CFC255D0007007DA28A /* WFCUConversationFilesViewController.h in Headers */,
 				2F56F6BA252A07AF00B829C4 /* WFCUCompositeBaseCell.h in Headers */,
+				B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */,
 				2F5EB44C22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h in Headers */,
 				2F5511E4217F5CC300F56C26 /* YLImageView.h in Headers */,
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
@@ -2377,6 +2399,7 @@
 				2FB7125525D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m in Sources */,
 				2F551095217F5CC200F56C26 /* WFCUInformationCell.m in Sources */,
 				2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */,
+				B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */,
 				2F55118D217F5CC200F56C26 /* MBProgressHUD.m in Sources */,
 				2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */,
 				2F5511CE217F5CC300F56C26 /* TYAlertView.m in Sources */,
@@ -2417,6 +2440,7 @@
 				2BDF57AE24AD70C8003C1F08 /* DNBadgeLabel.m in Sources */,
 				2F5511DF217F5CC300F56C26 /* TYAlertController.m in Sources */,
 				2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */,
+				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,

@@ -23,6 +23,9 @@
     [dict setObject:self.participants forKey:@"participants"];
     [dict setObject:@(self.audioOnly == YES ? 1:0) forKey:@"audioOnly"];
     [dict setObject:self.existParticipants forKey:@"existParticipants"];
+    if(self.autoAnswer) {
+        [dict setObject:@(self.autoAnswer) forKey:@"autoAnswer"];
+    }
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dict
                                                    options:kNilOptions
                                                      error:nil];
@@ -59,6 +62,7 @@
         self.participants = dictionary[@"participants"];
         self.audioOnly = [dictionary[@"audioOnly"] boolValue];
         self.existParticipants = dictionary[@"existParticipants"];
+        self.autoAnswer = [dictionary[@"autoAnswer"] boolValue];
     }
 }
 
