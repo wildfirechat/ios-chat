@@ -11,7 +11,7 @@
 #import <CoreTelephony/CTCallCenter.h>
 #import <UIKit/UIKit.h>
 #import "WFCUConferenceManager.h"
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUFloatingWindow () <WFAVCallSessionDelegate, WFCUConferenceManagerDelegate>
 
@@ -22,6 +22,8 @@
 
 @property(nonatomic, assign)CGFloat winWidth;
 @property(nonatomic, assign)CGFloat winHeight;
+
+@property(nonatomic, strong)NSTimer *broadcastOngoingTimer;
 @end
 
 static WFCUFloatingWindow *staticWindow = nil;
@@ -60,7 +62,62 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [WFCUConferenceManager sharedInstance].delegate = self;
+    
+    if(!self.callSession.isConference) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
+    }
+    
+    if(!self.callSession.isConference) {
+        if(self.callSession.state == kWFAVEngineStateConnected && [self.callSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            [self startBroadcastCallOngoing:YES];
+        } else {
+            [self startBroadcastCallOngoing:NO];
+        }
+    }
 }
+
+- (void)onReceiveMessages:(NSNotification *)notification {
+    NSArray<WFCCMessage *> *messages = notification.object;
+    for (WFCCMessage *msg in messages) {
+        if([msg.content isKindOfClass:WFCCJoinCallRequestMessageContent.class]) {
+            WFCCJoinCallRequestMessageContent *join = (WFCCJoinCallRequestMessageContent *)msg.content;
+            if([self.callSession.callId isEqualToString:join.callId] && self.callSession.state == kWFAVEngineStateConnected && [self.callSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [self.callSession inviteNewParticipants:@[msg.fromUser] autoAnswer:YES];
+            }
+        }
+    }
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent {
+    [self startBroadcastCallOngoing:NO];
+}
+
+- (void)startBroadcastCallOngoing:(BOOL)start {
+    if([WFCUConfigManager globalManager].enableMultiCallAutoJoin) {
+        if(start && !self.broadcastOngoingTimer) {
+            __weak typeof(self)ws = self;
+            WFCCMultiCallOngoingMessageContent *ongoing = [[WFCCMultiCallOngoingMessageContent alloc] init];
+            ongoing.callId = self.callSession.callId;
+            ongoing.audioOnly = self.callSession.audioOnly;
+            ongoing.initiator = self.callSession.initiator;
+            ongoing.targetIds = self.callSession.participantIds;
+            if (@available(iOS 10.0, *)) {
+                self.broadcastOngoingTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                    typeof(self) strongSelf = ws;
+                    if(strongSelf.callSession.state == kWFAVEngineStateConnected) {
+                        [[WFCCIMService sharedWFCIMService] send:strongSelf.callSession.conversation content:ongoing success:nil error:nil];
+                    }
+                }];
+            } else {
+                // Fallback on earlier versions
+            }
+        } else if(!start && self.broadcastOngoingTimer) {
+            [self.broadcastOngoingTimer invalidate];
+            self.broadcastOngoingTimer = nil;
+        }
+    }
+}
+
 
 - (void)registerTelephonyEvent {
     self.callCenter = [[CTCallCenter alloc] init];
@@ -448,6 +505,13 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             [self updateWindow];
             break;
     }
+    if(!self.callSession.isConference) {
+        if(state == kWFAVEngineStateConnected && [self.callSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            [self startBroadcastCallOngoing:YES];
+        } else {
+            [self startBroadcastCallOngoing:NO];
+        }
+    }
 }
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -497,7 +561,9 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 
 - (void)didChangeInitiator:(NSString * _Nullable)initiator {
-    
+    if(!self.callSession.isConference) {
+        [self startBroadcastCallOngoing:[initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]];
+    }
 }
 
 - (void)didMuteStateChanged:(NSArray<NSString *> *)userIds {

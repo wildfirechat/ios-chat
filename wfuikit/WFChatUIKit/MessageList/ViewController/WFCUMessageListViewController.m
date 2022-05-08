@@ -77,8 +77,11 @@
 
 #import "WFCUUtilities.h"
 
+#import "WFCUMultiCallOngoingCell.h"
+#import "WFCUMultiCallOngoingExpendedCell.h"
 
-@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate>
+
+@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 
@@ -142,6 +145,11 @@
 @property (nonatomic, strong)UIButton *newMsgTipButton;
 
 @property (nonatomic, assign)int64_t lastUid;
+
+@property (nonatomic, strong)NSMutableDictionary<NSString *, WFCCMessage *> *ongoingCallDict;
+@property (nonatomic, strong)UITableView *ongoingCallTableView;
+@property (nonatomic, assign)int focusedOngoingCellIndex;
+@property (nonatomic, strong)NSTimer *checkOngoingCallTimer;
 @end
 
 @implementation WFCUMessageListViewController
@@ -152,7 +160,8 @@
     [self removeControllerStackIfNeed];
     
     self.cellContentDict = [[NSMutableDictionary alloc] init];
-    
+    self.ongoingCallDict = [[NSMutableDictionary alloc] init];
+    self.focusedOngoingCellIndex = -1;
     [self initializedSubViews];
     self.firstAppear = YES;
     self.hasMoreOld = YES;
@@ -573,6 +582,11 @@
                 }];
             }
         }
+    }
+    
+    if(self.checkOngoingCallTimer) {
+        [self.checkOngoingCallTimer invalidate];
+        self.checkOngoingCallTimer = nil;
     }
 }
 
@@ -1003,6 +1017,12 @@
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    
+    self.ongoingCallTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)];
+    self.ongoingCallTableView.delegate = self;
+    self.ongoingCallTableView.dataSource = self;
+    self.ongoingCallTableView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.ongoingCallTableView];
 }
 
 - (void)registerCell:(Class)cellCls forContent:(Class)msgContentCls {
@@ -1117,9 +1137,60 @@
     }];
 }
 
+- (void)onReceiveCallOngoingNotifications:(NSArray<WFCCMessage *> *)messages {
+    [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)obj.content;
+        self.ongoingCallDict[ongoing.callId] = obj;
+    }];
+    [[self.ongoingCallDict allKeys] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        WFCCMessage *msg = self.ongoingCallDict[obj];
+        if(([[NSDate date] timeIntervalSince1970] - (msg.serverTime - [WFCCNetworkService sharedInstance].serverDeltaTime)/1000) > 3) {
+            [self.ongoingCallDict removeObjectForKey:obj];
+        }
+    }];
+    
+    if(![WFCUConfigManager globalManager].enableMultiCallAutoJoin) {
+        [self.ongoingCallDict removeAllObjects];
+    }
+    
+    if(self.ongoingCallDict.count) {
+        self.ongoingCallTableView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.bounds.size.width, MIN(200, self.ongoingCallDict.count * 28 + 28));
+        [self.ongoingCallTableView reloadData];
+        if(!self.checkOngoingCallTimer) {
+            if (@available(iOS 10.0, *)) {
+                __weak typeof(self)ws = self;
+                self.checkOngoingCallTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                    [ws onReceiveCallOngoingNotifications:@[]];
+                }];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+    } else {
+        self.ongoingCallTableView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.bounds.size.width, 0);
+        if(self.checkOngoingCallTimer) {
+            [self.checkOngoingCallTimer invalidate];
+            self.checkOngoingCallTimer = nil;
+        }
+        self.focusedOngoingCellIndex = -1;
+    }
+}
+
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
     [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO];
+    
+    NSMutableArray<WFCCMessage *> *ongoingCalls = [[NSMutableArray alloc] init];
+    for (WFCCMessage *msg in messages) {
+        if([msg.content isKindOfClass:WFCCMultiCallOngoingMessageContent.class]) {
+            [ongoingCalls addObject:msg];
+        }
+    }
+    
+    if(ongoingCalls.count) {
+        [self onReceiveCallOngoingNotifications:ongoingCalls];
+    }
+    
     [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
 }
 
@@ -3043,6 +3114,79 @@
         if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
             [self.navigationController popViewControllerAnimated:NO];
         }
+    }
+}
+#pragma mark - UITableView
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.ongoingCallDict.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL isFocused = (indexPath.row == self.focusedOngoingCellIndex);
+    WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:ongoing.initiator inGroup:self.conversation.type == Group_Type ? self.conversation.target : nil refresh:NO];
+    NSString *userName = userInfo.friendAlias.length ? userInfo.friendAlias : (userInfo.groupAlias.length ? userInfo.groupAlias : userInfo.displayName);
+    NSString *callHint = @"通话正在进行中...";
+    if(userName.length) {
+        callHint = [NSString stringWithFormat:@"%@ 发起的通话正在进行中...", userName];
+    }
+    
+    if(!isFocused) {
+        WFCUMultiCallOngoingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        if(!cell) {
+            cell = [[WFCUMultiCallOngoingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        }
+        cell.callHintLabel.text = callHint;
+        return cell;
+    } else {
+        WFCUMultiCallOngoingExpendedCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expended_cell"];
+        if(!cell) {
+            cell = [[WFCUMultiCallOngoingExpendedCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"expended_cell"];
+            cell.delegate = self;
+        }
+        cell.callHintLabel.text = callHint;
+        return cell;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL isFocused = (indexPath.row == self.focusedOngoingCellIndex);
+    if(isFocused)
+        return 56;
+    return 28;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.focusedOngoingCellIndex == indexPath.row) {
+        self.focusedOngoingCellIndex = -1;
+    } else {
+        WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
+        if([ongoing.callId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId] && [WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIdle) {
+            self.focusedOngoingCellIndex = -1;
+        } else {
+            self.focusedOngoingCellIndex = (int)indexPath.row;
+        }
+    }
+    [self.ongoingCallTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+#pragma mark - WFCUMultiCallOngoingExpendedCellDelegate
+-(void)didJoinButtonPressed {
+    if(self.focusedOngoingCellIndex >= 0) {
+        WFCCMessage *message = self.ongoingCallDict[self.ongoingCallDict.allKeys[self.focusedOngoingCellIndex]];
+        WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)message.content;
+        WFCCJoinCallRequestMessageContent *join = [[WFCCJoinCallRequestMessageContent alloc] init];
+        join.callId = ongoing.callId;
+        [[WFCCIMService sharedWFCIMService] send:self.conversation content:join success:nil error:nil];
+        [self didCancelButtonPressed];
+    }
+}
+
+-(void)didCancelButtonPressed {
+    if(self.focusedOngoingCellIndex >= 0) {
+        int index = self.focusedOngoingCellIndex;
+        self.focusedOngoingCellIndex = -1;
+        [self.ongoingCallTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

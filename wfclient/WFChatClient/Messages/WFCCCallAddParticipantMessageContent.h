@@ -17,4 +17,5 @@
 //[{"userId":"xxxx","acceptTime":13123123123,"joinTime":13123123123,"videoMuted":false}]
 @property(nonatomic, strong)NSArray<NSDictionary *> *existParticipants;
 @property(nonatomic, assign)BOOL audioOnly;
+@property(nonatomic, assign)BOOL autoAnswer;
 @end

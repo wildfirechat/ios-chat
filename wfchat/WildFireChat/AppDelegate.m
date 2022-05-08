@@ -83,6 +83,9 @@
     //[[WFCCIMService sharedWFCIMService] setDefaultSilentWhenPcOnline:NO];
 
 #if WFCU_SUPPORT_VOIP
+    //多人音视频通话时，是否在会话中现在正在通话让其他人主动加入。
+    //[WFCUConfigManager globalManager].enableMultiCallAutoJoin = YES;
+    
     //音视频高级版不需要stun/turn服务，请注释掉下面这行。单人版和多人版需要turn服务，请自己部署然后修改配置文件。
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     
@@ -640,7 +643,7 @@
 #if !USE_CALL_KIT
     //收到来电通知后等待200毫秒，检查session有效后再弹出通知。原因是当当前用户不在线时如果有人来电并挂断，当前用户再连接后，会出现先弹来电界面，再消失的画面。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIncomming) {
+        if ([WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIncomming && [WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateConnected && [WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateConnecting) {
             return;
         }
         
