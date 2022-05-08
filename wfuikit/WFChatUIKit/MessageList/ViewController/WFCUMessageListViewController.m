@@ -3160,8 +3160,9 @@
     if (self.focusedOngoingCellIndex == indexPath.row) {
         self.focusedOngoingCellIndex = -1;
     } else {
-        WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
-        if([ongoing.callId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId] && [WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIdle) {
+        WFCCMessage *message = self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]];
+        WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)message.content;
+        if(([ongoing.callId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId] && [WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIdle) || [ongoing.targetIds containsObject:[WFCCNetworkService sharedInstance].userId] || [message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             self.focusedOngoingCellIndex = -1;
         } else {
             self.focusedOngoingCellIndex = (int)indexPath.row;
