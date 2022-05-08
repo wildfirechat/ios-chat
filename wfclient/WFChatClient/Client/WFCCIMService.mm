@@ -2961,10 +2961,13 @@ public:
     int contenttype;
     if (class_getClassMethod(contentClass, @selector(getContentType))) {
         contenttype = [contentClass getContentType];
-        if(self.MessageContentMaps[@(contenttype)]) {
+        if(self.MessageContentMaps[@(contenttype)] && ![contentClass isEqual:self.MessageContentMaps[@(contenttype)]]) {
             NSLog(@"****************************************");
             NSLog(@"Error, duplicate message content type %d", contenttype);
             NSLog(@"****************************************");
+#if DEBUG
+            @throw [[NSException alloc] initWithName:@"重复定义消息" reason:[NSString stringWithFormat:@"消息类型(%d)重复定义在消息(%@)和(%@)中", contenttype, NSStringFromClass(contentClass), NSStringFromClass(self.MessageContentMaps[@(contenttype)])] userInfo:nil];
+#endif
         }
         self.MessageContentMaps[@(contenttype)] = contentClass;
         int contentflag = [contentClass getContentFlags];
