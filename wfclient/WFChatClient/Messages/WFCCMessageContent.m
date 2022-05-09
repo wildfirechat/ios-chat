@@ -45,4 +45,12 @@
 - (NSString *)digest:(WFCCMessage *)message {
   return @"Unimplement digest function";
 }
+
+- (NSObject *)getObject:(NSDictionary *)dict ofKey:(NSString *)key {
+    NSObject *obj = dict[key];
+    if([obj isEqual:[NSNull null]]) {
+        obj = nil;
+    }
+    return obj;
+}
 @end

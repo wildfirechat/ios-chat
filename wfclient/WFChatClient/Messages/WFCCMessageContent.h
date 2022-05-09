@@ -177,4 +177,6 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  附加信息
  */
 @property (nonatomic, strong)NSString *extra;
+
+- (NSObject *)getObject:(NSDictionary *)dict ofKey:(NSString *)key;
 @end
