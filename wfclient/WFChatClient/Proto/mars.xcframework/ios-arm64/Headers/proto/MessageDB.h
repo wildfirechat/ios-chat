@@ -223,6 +223,7 @@ namespace mars {
             SyncBurnReadedEntry getSyncBurnReadedEntry();
             
             void _OnCheckBurn();
+            friend DB2;
         private:
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
@@ -232,7 +233,8 @@ namespace mars {
             bool clearConversationUnread(const std::list<int> &conversationTypes, const std::list<int> &lines, bool clearLastMessageId = false);
             bool clearAllConversationUnread(bool clearLastMessageId = false);
             void getMsgFromStateMent(DB2 *db, RecyclableStatement &statementHandle, TMessage &msg);
-            
+            void startBurnMessageCheck();
+            void stopBurnMessageCheck();
             static MessageDB* instance_;
         };
     
