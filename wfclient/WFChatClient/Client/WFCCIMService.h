@@ -1849,7 +1849,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  
  @return 当前用户收听的频道ID
  */
-- (NSArray<NSString *> *)getListenedChannels;
+- (NSArray<NSString *> *)getListenedChannels DEPRECATED_MSG_ATTRIBUTE("use getRemoteListenedChannels: instead");
+
+/**
+ 获取当前用户收听的频道
+ 
+ @param successBlock 成功返回关注的频道id列表
+ @param errorBlock 失败
+ */
+- (void)getRemoteListenedChannels:(void(^)(NSArray<NSString *> *))successBlock error:(void(^)(int errorCode))errorBlock;
 
 /**
  销毁频道

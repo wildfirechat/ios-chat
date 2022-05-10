@@ -663,6 +663,13 @@ namespace mars{
             virtual void onFalure(int errorCode) = 0;
             virtual ~GeneralStringCallback() {}
         };
+    
+        class GeneralStringListCallback {
+        public:
+            virtual void onSuccess(const std::list<std::string> &stringList) = 0;
+            virtual void onFalure(int errorCode) = 0;
+            virtual ~GeneralStringListCallback() {}
+        };
 
         class UploadMediaCallback {
         public:
@@ -1054,7 +1061,8 @@ namespace mars{
         extern void searchChannel(const std::string &keyword, bool puzzy, SearchChannelCallback *callback);
 
         extern void listenChannel(const std::string &channelId, bool listen, GeneralOperationCallback *callback);
-
+    
+        extern void getListenedChannels(GeneralStringListCallback *callback);
     
         extern void createSecretChat(const std::string &userId, CreateSecretChatCallback *callback);
         extern void destroySecretChat(const std::string &targetId, GeneralOperationCallback *callback);
