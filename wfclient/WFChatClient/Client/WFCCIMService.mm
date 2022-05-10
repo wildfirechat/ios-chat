@@ -239,6 +239,39 @@ public:
     }
 };
 
+class IMGeneralStringListCallback : public mars::stn::GeneralStringListCallback {
+private:
+    void(^m_successBlock)(NSArray<NSString *> *stringArray);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGeneralStringListCallback(void(^successBlock)(NSArray<NSString *> *stringArray), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringListCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<std::string> &strs) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (std::list<std::string>::const_iterator it = strs.begin(); it != strs.end(); ++it) {
+            [arr addObject:[NSString stringWithUTF8String:it->c_str()]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(arr);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMGeneralStringListCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 class IMCreateSecretChatCallback : public mars::stn::CreateSecretChatCallback {
 private:
     void(^m_successBlock)(NSString *generalStr, int line);
@@ -3126,6 +3159,9 @@ public:
     return ids;
 }
 
+- (void)getRemoteListenedChannels:(void(^)(NSArray<NSString *> *))successBlock error:(void(^)(int errorCode))errorBlock {
+    mars::stn::getListenedChannels(new IMGeneralStringListCallback(successBlock, errorBlock));
+}
 
 - (void)createSecretChat:(NSString *)userId
                 success:(void(^)(NSString *targetId, int line))successBlock

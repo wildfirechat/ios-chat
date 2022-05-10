@@ -76,14 +76,21 @@
         }
     }
     
-    ids = [[WFCCIMService sharedWFCIMService] getListenedChannels];
-    for (NSString *channelId in ids) {
-        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:channelId refresh:NO];
-        if (channelInfo) {
-            channelInfo.channelId = channelId;
-            [self.favChannels addObject:channelInfo];
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] getRemoteListenedChannels:^(NSArray<NSString *> *ids) {
+        [ws.favChannels removeAllObjects];
+        for (NSString *channelId in ids) {
+            WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:channelId refresh:NO];
+            if (channelInfo) {
+                channelInfo.channelId = channelId;
+                [ws.favChannels addObject:channelInfo];
+            }
         }
-    }
+        [ws.tableView reloadData];
+    } error:^(int errorCode) {
+        
+    }];
+    
     
     [self.tableView reloadData];
 }
