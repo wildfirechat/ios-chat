@@ -26,6 +26,9 @@
     if(self.autoAnswer) {
         [dict setObject:@(self.autoAnswer) forKey:@"autoAnswer"];
     }
+    if(self.clientId.length) {
+        [dict setObject:self.clientId forKey:@"clientId"];
+    }
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dict
                                                    options:kNilOptions
                                                      error:nil];
@@ -63,6 +66,7 @@
         self.audioOnly = [dictionary[@"audioOnly"] boolValue];
         self.existParticipants = dictionary[@"existParticipants"];
         self.autoAnswer = [dictionary[@"autoAnswer"] boolValue];
+        self.clientId = (NSString *)[self getObject:dictionary ofKey:@"clientId"];
     }
 }
 
