@@ -82,7 +82,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         if([msg.content isKindOfClass:WFCCJoinCallRequestMessageContent.class]) {
             WFCCJoinCallRequestMessageContent *join = (WFCCJoinCallRequestMessageContent *)msg.content;
             if([self.callSession.callId isEqualToString:join.callId] && self.callSession.state == kWFAVEngineStateConnected && [self.callSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [self.callSession inviteNewParticipants:@[msg.fromUser] autoAnswer:YES];
+                [self.callSession inviteNewParticipants:@[msg.fromUser] targetClientId:join.clientId autoAnswer:YES];
             }
         }
     }

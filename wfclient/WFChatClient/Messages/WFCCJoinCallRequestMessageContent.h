@@ -13,4 +13,5 @@
  */
 @interface WFCCJoinCallRequestMessageContent : WFCCMessageContent
 @property (nonatomic, strong)NSString *callId;
+@property (nonatomic, strong)NSString *clientId;
 @end

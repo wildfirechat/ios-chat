@@ -616,7 +616,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 - (WFAVParticipantProfile *_Nullable)profileOfUser:(NSString *_Nonnull)userId isScreenSharing:(BOOL)isScreenSharing;
 
 - (void)inviteNewParticipants:(NSArray<NSString *>*)targetIds;
-- (void)inviteNewParticipants:(NSArray<NSString *> *)newUserIds autoAnswer:(BOOL)autoAnswer;
+- (void)inviteNewParticipants:(NSArray<NSString *> *)newUserIds targetClientId:(NSString *)targetClientId autoAnswer:(BOOL)autoAnswer;
 /**
 是否是关掉视频
 */
