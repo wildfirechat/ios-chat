@@ -15,12 +15,29 @@
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [super encode];
     payload.content = self.callId;
+    
+    if (self.clientId) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:self.clientId forKey:@"clientId"];
+        payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dict
+                                                       options:kNilOptions
+                                                         error:nil];
+    }
+    
     return payload;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
     self.callId = payload.content;
+    
+    NSError *__error = nil;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
+                                                               options:kNilOptions
+                                                                 error:&__error];
+    if (!__error) {
+        self.clientId = (NSString *)[self getObject:dictionary ofKey:@"clientId"];
+    }
 }
 
 + (int)getContentType {

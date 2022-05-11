@@ -240,7 +240,7 @@
         } else if([msg.content isKindOfClass:WFCCJoinCallRequestMessageContent.class]) {
             WFCCJoinCallRequestMessageContent *join = (WFCCJoinCallRequestMessageContent *)msg.content;
             if([self.currentSession.callId isEqualToString:join.callId] && self.currentSession.state == kWFAVEngineStateConnected && [self.currentSession.initiator isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [self.currentSession inviteNewParticipants:@[msg.fromUser] autoAnswer:YES];
+                [self.currentSession inviteNewParticipants:@[msg.fromUser] targetClientId:join.clientId autoAnswer:YES];
             }
         }
     }

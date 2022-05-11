@@ -3178,6 +3178,7 @@
         WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)message.content;
         WFCCJoinCallRequestMessageContent *join = [[WFCCJoinCallRequestMessageContent alloc] init];
         join.callId = ongoing.callId;
+        join.clientId = [[WFCCNetworkService sharedInstance] getClientId];
         [[WFCCIMService sharedWFCIMService] send:self.conversation content:join success:nil error:nil];
         [self didCancelButtonPressed];
     }
