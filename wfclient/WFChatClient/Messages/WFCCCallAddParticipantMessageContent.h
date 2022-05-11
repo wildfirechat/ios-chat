@@ -18,4 +18,6 @@
 @property(nonatomic, strong)NSArray<NSDictionary *> *existParticipants;
 @property(nonatomic, assign)BOOL audioOnly;
 @property(nonatomic, assign)BOOL autoAnswer;
+//指定对方clientId
+@property(nonatomic, strong)NSString *clientId;
 @end
