@@ -24,7 +24,7 @@
     [self.view addSubview:self.webView];
     
     if(self.url.length) {
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[self URLEncodedString:self.url]]]];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     } else {
         [self.webView loadHTMLString:self.htmlString baseURL:nil];
