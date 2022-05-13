@@ -22,8 +22,13 @@
     self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
     
     [self.view addSubview:self.webView];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+    
+    if(self.url.length) {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[self URLEncodedString:self.url]]]];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+    } else {
+        [self.webView loadHTMLString:self.htmlString baseURL:nil];
+    }
 }
 
 - (void)onRightBtn:(id)sender {
