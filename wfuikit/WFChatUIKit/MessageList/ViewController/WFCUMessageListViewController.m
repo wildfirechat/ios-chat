@@ -2672,6 +2672,22 @@
     }
     
     for (NSString *file in files) {
+        BOOL isDir = NO;
+        [[NSFileManager defaultManager] fileExistsAtPath:file isDirectory:&isDir];
+        if(isDir) {
+            NSLog(@"file is directiory");
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"无法发送文件夹: %@", file.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                
+            }];
+            
+            [alertController addAction:actionCancel];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+            continue;;
+        }
+        
         WFCCFileMessageContent *content = [WFCCFileMessageContent fileMessageContentFromPath:file];
         [self sendMessage:content];
         [NSThread sleepForTimeInterval:0.05];
