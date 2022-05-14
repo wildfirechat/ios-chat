@@ -53,6 +53,22 @@
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
+    WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
+    NSString *url = [NSString stringWithFormat:@"file://%@",[[NSBundle mainBundle] pathForResource:@"workspace" ofType:@"html"]];
+    browserVC.url = url;
+    browserVC.hidenOpenInBrowser = YES;
+    browserVC.loadWFJSBridge = YES;
+    
+    vc = browserVC;
+    vc.title = LocalizedString(@"WorkPlatfrom");
+    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    item = nav.tabBarItem;
+    item.title = LocalizedString(@"WorkPlatfrom");
+    item.image = [UIImage imageNamed:@"tabbar_discover"];
+    item.selectedImage = [[UIImage imageNamed:@"tabbar_discover_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
+    [self addChildViewController:nav];
+    
     vc = [DiscoverViewController new];
     vc.title = LocalizedString(@"Discover");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -92,7 +108,7 @@
 
 - (void)updateBadgeNumber {
 #ifdef WFC_MOMENTS
-    [self.tabBar showBadgeOnItemIndex:2 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
+    [self.tabBar showBadgeOnItemIndex:3 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
 }
 

@@ -115,6 +115,7 @@
 		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
+		B7593BA0282F99AC005B481B /* attendance.html in Resources */ = {isa = PBXBuildFile; fileRef = B7593B9F282F99AC005B481B /* attendance.html */; };
 		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
 		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
@@ -122,6 +123,7 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
+		B7BC6212282EA949006ABF36 /* wfjsbridge.js in Resources */ = {isa = PBXBuildFile; fileRef = B7BC6211282EA949006ABF36 /* wfjsbridge.js */; };
 		B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7212782E2D000752426 /* zh-Hans.lproj */; };
 		B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */; };
 		B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7232782E2D000752426 /* Stickers.bundle */; };
@@ -133,6 +135,7 @@
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7F176D4282BFB520082E91F /* workspace.html in Resources */ = {isa = PBXBuildFile; fileRef = B7F176D3282BFB520082E91F /* workspace.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -375,11 +378,13 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		B7593B9F282F99AC005B481B /* attendance.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = attendance.html; sourceTree = "<group>"; };
 		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
+		B7BC6211282EA949006ABF36 /* wfjsbridge.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = wfjsbridge.js; sourceTree = "<group>"; };
 		B7D8F7212782E2D000752426 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
 		B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WFCUShareMessageView.xib; sourceTree = "<group>"; };
 		B7D8F7232782E2D000752426 /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
@@ -389,6 +394,7 @@
 		B7D8F7272782E2D000752426 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7F176D3282BFB520082E91F /* workspace.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = workspace.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -588,6 +594,7 @@
 				B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */,
 				B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */,
 				B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */,
+				B7BC6211282EA949006ABF36 /* wfjsbridge.js */,
 				B7D8F7212782E2D000752426 /* zh-Hans.lproj */,
 			);
 			path = Frameworks;
@@ -858,6 +865,8 @@
 		903EBC942136313B00312C16 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
+				B7593B9F282F99AC005B481B /* attendance.html */,
+				B7F176D3282BFB520082E91F /* workspace.html */,
 				2F8F8E662723072600151B75 /* ptt_begin.m4a */,
 				2F8F8E672723072600151B75 /* ptt_end.m4a */,
 				2E1D20001FAF0AE600F4405D /* Main.storyboard */,
@@ -999,13 +1008,16 @@
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */,
 				2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */,
+				B7F176D4282BFB520082E91F /* workspace.html in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */,
 				B7D8F72B2782E2D000752426 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				B7D8F72D2782E2D000752426 /* WFChatUIKit.xcassets in Resources */,
 				B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */,
+				B7593BA0282F99AC005B481B /* attendance.html in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
+				B7BC6212282EA949006ABF36 /* wfjsbridge.js in Resources */,
 				2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */,
 				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
 				B7D8F72E2782E2D000752426 /* en.lproj in Resources */,

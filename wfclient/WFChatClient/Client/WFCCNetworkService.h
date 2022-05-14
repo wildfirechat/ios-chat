@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  //Platform_APad = 9,
 */
 #define Platform_iOS 1
-#define Platform_iPad 8
+
 
     
 #pragma mark - 连接状态&消息监听

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>考勤</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+        <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+        <script>
+            new VConsole();
+            console.log("Hello world");
+        </script>
+	</head>
+
+	<body>
+        <h1 style="color: red;">考勤</h1>
+        <h2 id="welcome">登陆中。。。</h2>
+        <div class="div1"><input type="button" value="上班" onclick="beginWork()"></div>
+        <div class="div1"><input type="button" value="下班" onclick="endWork()"></div>
+        <br />
+
+
+		<script type="text/javascript">
+            WFJSBridge.getAuthCode("robot1", 0, res => {
+                console.log("get auth code is ", res);
+                //authCode, 用来登陆应用，应用调用IM服务接口来验证authCode
+            });
+            
+            WFJSBridge.ready(function(){
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            });
+            
+            WFJSBridge.error(function(res){
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            });
+            
+            WFJSBridge.config("appid1", 0, 0, "nonce1", "sign1");
+            
+			function beginWork() {
+                
+			}
+            
+            function endWork() {
+                
+            }
+		</script>
+	</body>
+</html>

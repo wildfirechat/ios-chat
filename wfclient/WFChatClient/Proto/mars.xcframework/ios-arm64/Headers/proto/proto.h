@@ -1071,7 +1071,7 @@ namespace mars{
     
         extern std::string GetImageThumbPara();
 
-        extern void GetApplicationToken(const std::string &applicationId, GeneralStringCallback *callback);
+        extern void GetAuthCode(const std::string &applicationId, int type, const std::string &host, GeneralStringCallback *callback);
 
         extern void KickoffPCClient(const std::string &pcClientId, GeneralOperationCallback *callback);
 

@@ -3340,6 +3340,17 @@ public:
     mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGetAuthorizedMediaUrlCallback(successBlock, errorBlock));
 }
 
+- (void)getAuthCode:(NSString *)applicationId
+               type:(int)type
+               host:(NSString *)host
+            success:(void(^)(NSString *authCode))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    if(!host.length) {
+        host = @"127.0.0.1";
+    }
+    mars::stn::GetAuthCode([applicationId UTF8String], type, [host UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+}
+
 - (NSData *)getWavData:(NSString *)amrPath {
     if ([@"mp3" isEqualToString:[amrPath pathExtension]]) {
         return [NSData dataWithContentsOfFile:amrPath];
