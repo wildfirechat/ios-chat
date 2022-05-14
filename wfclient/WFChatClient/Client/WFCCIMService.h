@@ -2096,6 +2096,17 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                host:(NSString *)host
             success:(void(^)(NSString *authCode))successBlock
               error:(void(^)(int error_code))errorBlock;
+
+/**
+config应用
+ */
+- (void)configApplication:(NSString *)applicationId
+                     type:(int)type
+                timestamp:(int64_t)timestamp
+                    nonce:(NSString *)nonce
+                signature:(NSString *)signature
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
 /**
 amr文件转成wav数据
 

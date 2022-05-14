@@ -24,13 +24,19 @@ var WFJSBridge = {
         });
     },
     
-    config: function(appId, appType, timestamp, nonceStr, signature) {
-        jsbridge_internal.callHandler('config', {'appId':appId, 'appType':appType, 'timestamp':timestamp, 'nonceStr':nonceStr, 'signature':signature});
-    },
-    
     ready: function(callback) {
         jsbridge_internal.callHandler('ready', {}, function(responseData) {
             callback();
         });
+    },
+    
+    error: function(callback) {
+        jsbridge_internal.callHandler('error', {}, function(errorCode) {
+            callback(errorCode);
+        });
+    },
+    
+    config: function(appId, appType, timestamp, nonceStr, signature) {
+        jsbridge_internal.callHandler('config', {'appId':appId, 'appType':appType, 'timestamp':timestamp, 'nonceStr':nonceStr, 'signature':signature});
     },
 };

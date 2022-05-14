@@ -17,6 +17,7 @@
 @property (nonatomic, strong)WebViewJavascriptBridge* bridge;
 
 @property (nonatomic, strong)WVJBResponseCallback readyCallback;
+@property (nonatomic, strong)WVJBResponseCallback errorCallback;
 @end
 
 @implementation WFCUBrowserViewController
@@ -72,11 +73,16 @@
         ws.readyCallback = responseCallback;
     }];
     
+    [self.bridge registerHandler:@"error" handler:^(id data, WVJBResponseCallback responseCallback) {
+        ws.errorCallback = responseCallback;
+    }];
+    
     [self.bridge registerHandler:@"config" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"ObjC Echo called with: %@", data);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[WFCCIMService sharedWFCIMService] configApplication:data[@"appId"] type:[data[@"appType"] intValue] timestamp:[data[@"timestamp"] longLongValue] nonce:data[@"nonceStr"] signature:data[@"signature"] success:^{
             ws.readyCallback(nil);
-        });
+        } error:^(int error_code) {
+            ws.errorCallback(@(error_code));
+        }];
     }];
 }
 
