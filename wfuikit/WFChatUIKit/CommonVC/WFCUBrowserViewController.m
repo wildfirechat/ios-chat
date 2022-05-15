@@ -59,6 +59,13 @@
     self.bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
     
     __weak typeof(self)ws = self;
+    [self.bridge registerHandler:@"openUrl" handler:^(NSDictionary * data, WVJBResponseCallback responseCallback) {
+        NSString *url = data[@"url"];
+        WFCUBrowserViewController *browser = [[WFCUBrowserViewController alloc] init];
+        browser.url = url;
+        [ws.navigationController pushViewController:browser animated:YES];
+    }];
+    
     [self.bridge registerHandler:@"getAuthCode" handler:^(NSDictionary *data, WVJBResponseCallback responseCallback) {
         NSString *appId = data[@"appId"];
         int appType = [data[@"appType"] intValue];

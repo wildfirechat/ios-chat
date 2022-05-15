@@ -17,6 +17,10 @@ setupWebViewJavascriptBridge(function(bridge) {
 
 
 var WFJSBridge = {
+    openUrl: function(url) {
+        jsbridge_internal.callHandler('openUrl', {'url':url});
+    },
+    
     getAuthCode: function(appId, appType, callback) {
         jsbridge_internal.callHandler('getAuthCode', {'appId':appId, 'appType':appType}, function(responseData) {
             console.log("JS received response:", responseData);

@@ -13,8 +13,17 @@
 
 	<body>
         <h1 style="color: red;">Config</h1><br />
-        <div class="div1"><input type="button" value="考勤" onclick="window.location.href = './attendance.html'"></div>
+        <div class="div1"><input type="button" value="考勤" onclick="gotoWork()"></div>
         <div class="div1"><input type="button" value="会议室预定" onclick="window.location.href = './bookroom.html'"></div>
         <br />
+        <script type="text/javascript">
+            function gotoWork() {
+                WFJSBridge.openUrl('./attendance.html');
+            }
+            
+            function endWork() {
+                
+            }
+        </script>
 	</body>
 </html>
