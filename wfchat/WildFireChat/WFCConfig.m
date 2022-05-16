@@ -31,3 +31,6 @@ NSString *USER_PRIVACY_URL = @"https://wildfirechat.net/wildfirechat_user_privac
 NSString *USER_AGREEMENT_URL = @"https://wildfirechat.net/wildfirechat_user_agreement.html";
 
 NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
+
+//NSString *WORK_PLATFORM_URL = nil;
+NSString *WORK_PLATFORM_URL = @"http://192.168.1.81:8080";
