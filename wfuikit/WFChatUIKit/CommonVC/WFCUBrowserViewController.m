@@ -11,6 +11,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "dsbridge.h"
 #import "WFCUConfigManager.h"
+#import "WFCUContactListViewController.h"
 
 @interface WFCUBrowserViewController ()
 @property (nonatomic, strong)DWKWebView *webView;
@@ -107,8 +108,46 @@
     }
 }
 
-- (void)config:(NSDictionary *)message completion:(JSCallback)completionHandler {
-    
+- (void)config:(NSDictionary *)message {
+    NSString *appId = message[@"appId"];
+    int appType = [message[@"apptype"] intValue];
+    int64_t timestamp = [message[@"timestamp"] longLongValue];
+    NSString *nonceStr = message[@"nonceStr"];
+    NSString *signature = message[@"signature"];
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] configApplication:appId type:appType timestamp:timestamp nonce:nonceStr signature:signature success:^{
+        [ws.webView callHandler:@"ready" arguments:nil];
+    } error:^(int error_code) {
+        [ws.webView callHandler:@"error" arguments:@[@(error_code)]];
+    }];
+}
+
+- (void)chooseContacts:(NSDictionary *)message completion:(JSCallback)completionHandler {
+    int max = [message[@"max"] intValue];
+    WFCUContactListViewController *contactVC = [[WFCUContactListViewController alloc] init];
+    if(max > 0) {
+        contactVC.multiSelect = YES;
+        contactVC.maxSelectCount = max;
+    }
+    contactVC.selectContact = YES;
+    contactVC.isPushed = YES;
+    contactVC.selectResult = ^(NSArray<NSString *> *contacts) {
+        if(contacts.count) {
+            NSMutableArray *output = [[NSMutableArray alloc] init];
+            [contacts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:obj refresh:NO];
+                if(userInfo) {
+                    [output addObject:@{@"uid":userInfo.userId, @"displayName":userInfo.displayName}];
+                } else {
+                    [output addObject:@{@"uid":obj}];
+                }
+            }];
+            completionHandler(0, output, YES);
+        } else {
+            completionHandler(1, nil, YES);
+        }
+    };
+    [self.navigationController pushViewController:contactVC animated:YES];
 }
 
 - (void)toast:(NSDictionary *)message {
