@@ -136,7 +136,7 @@
         frame.origin.y = offset;
         self.exView.frame = frame;
         
-        [self.exPortraitView sd_setImageWithURL:[NSURL URLWithString:content.exProtrait] placeholderImage:[UIImage imageNamed:@"default_app_icon"]];
+        [self.exPortraitView sd_setImageWithURL:[NSURL URLWithString:content.exPortrait] placeholderImage:[UIImage imageNamed:@"default_app_icon"]];
         
         offset += self.exView.frame.size.height;
     } else {

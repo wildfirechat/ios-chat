@@ -23,8 +23,8 @@
         [dict setObject:self.remark forKey:@"remark"];
     if(self.exName.length)
         [dict setObject:self.exName forKey:@"exName"];
-    if(self.exProtrait.length)
-        [dict setObject:self.exProtrait forKey:@"exProtrait"];
+    if(self.exPortrait.length)
+        [dict setObject:self.exPortrait forKey:@"exPortrait"];
     if(self.exUrl.length)
         [dict setObject:self.exUrl forKey:@"exUrl"];
     if(self.appId.length)
@@ -53,7 +53,7 @@
     if (!__error) {
         self.remark = [self getString:dictionary ofKey:@"remark"];
         self.exName = [self getString:dictionary ofKey:@"exName"];
-        self.exProtrait = [self getString:dictionary ofKey:@"exProtrait"];
+        self.exPortrait = [self getString:dictionary ofKey:@"exProtrait"];
         self.exUrl = [self getString:dictionary ofKey:@"exUrl"];
         self.appId = [self getString:dictionary ofKey:@"appId"];
         
