@@ -21,7 +21,7 @@
 
 //附加信息
 @property (nonatomic, strong)NSString *exName;
-@property (nonatomic, strong)NSString *exProtrait;
+@property (nonatomic, strong)NSString *exPortrait;
 @property (nonatomic, strong)NSString *exUrl;
 
 //应用信息
