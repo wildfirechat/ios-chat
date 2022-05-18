@@ -91,7 +91,7 @@
 
 - (void)getAuthCode:(NSDictionary *)message completion:(JSCallback)completionHandler {
     NSString *appId = message[@"appId"];
-    int appType = [message[@"type"] intValue];
+    int appType = [message[@"appType"] intValue];
     [[WFCCIMService sharedWFCIMService] getAuthCode:appId type:appType host:self.webView.URL.host success:^(NSString *authCode) {
         completionHandler(0, authCode,YES);
     } error:^(int error_code) {

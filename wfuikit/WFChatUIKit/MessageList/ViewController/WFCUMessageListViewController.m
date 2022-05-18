@@ -25,7 +25,7 @@
 #import "WFCUCardCell.h"
 #import "WFCUCompositeCell.h"
 #import "WFCULinkCell.h"
-
+#import "WFCURichNotificationCell.h"
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -1011,6 +1011,7 @@
     [self registerCell:[WFCUCardCell class] forContent:[WFCCCardMessageContent class]];
     [self registerCell:[WFCUCompositeCell class] forContent:[WFCCCompositeMessageContent class]];
     [self registerCell:[WFCULinkCell class] forContent:[WFCCLinkMessageContent class]];
+    [self registerCell:[WFCURichNotificationCell class] forContent:[WFCCRichNotificationMessageContent class]];
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
@@ -2222,6 +2223,13 @@
         WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
         bvc.url = content.url;
         [self.navigationController pushViewController:bvc animated:YES];
+    } else if([model.message.content isKindOfClass:WFCCRichNotificationMessageContent.class]) {
+        WFCCRichNotificationMessageContent *richNotification = (WFCCRichNotificationMessageContent *)model.message.content;
+        if(richNotification.exUrl.length) {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = richNotification.exUrl;
+            [self.navigationController pushViewController:bvc animated:YES];
+        }
     }
 }
 
