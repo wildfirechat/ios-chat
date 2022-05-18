@@ -438,6 +438,8 @@
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
 		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
+		B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */; };
+		B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */; };
 		B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */; };
 		B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */; };
 		B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */; };
@@ -887,6 +889,8 @@
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURichNotificationCell.m; sourceTree = "<group>"; };
+		B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCURichNotificationCell.h; sourceTree = "<group>"; };
 		B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingCell.h; sourceTree = "<group>"; };
 		B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingCell.m; sourceTree = "<group>"; };
 		B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingExpendedCell.h; sourceTree = "<group>"; };
@@ -1219,6 +1223,8 @@
 				2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */,
 				2F44487A252D72D5007A570E /* WFCULinkCell.h */,
 				2F444879252D72D5007A570E /* WFCULinkCell.m */,
+				B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */,
+				B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2096,6 +2102,7 @@
 				2F5511D1217F5CC300F56C26 /* TYShowAlertView.h in Headers */,
 				2F5511FC217F5CC300F56C26 /* WFCUConversationSettingMemberCell.h in Headers */,
 				2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */,
+				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
 				2F5510FD217F5CC200F56C26 /* CCHMapClusterController.h in Headers */,
 				2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */,
 				2F5510AF217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.h in Headers */,
@@ -2413,6 +2420,7 @@
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */,
+				B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
 				2F551194217F5CC200F56C26 /* UIView+SDExtension.m in Sources */,
