@@ -24,6 +24,7 @@
 @property(nonatomic, strong)UIView *exLine;
 @property(nonatomic, strong)UILabel *exName;
 @property(nonatomic, strong)UIImageView *exFWView;
+@property(nonatomic, strong)UIImageView *exPortraitView;
 @end
 //CELL左右的margin
 #define CELL_MARGIN 32
@@ -134,6 +135,8 @@
         CGRect frame = self.exView.frame;
         frame.origin.y = offset;
         self.exView.frame = frame;
+        
+        [self.exPortraitView sd_setImageWithURL:[NSURL URLWithString:content.exProtrait] placeholderImage:[UIImage imageNamed:@"default_app_icon"]];
         
         offset += self.exView.frame.size.height;
     } else {
@@ -260,6 +263,9 @@
         _exFWView.image = [UIImage imageNamed:@"forward_normal"];
         [_exView addSubview:_exFWView];
         
+        _exPortraitView = [[UIImageView alloc] initWithFrame:CGRectMake(CELL_PADDING, EX_LINE_WIDTH + (EX_FW_WIDTH - EX_FONT_SIZE)/2, EX_FONT_SIZE, EX_FONT_SIZE)];
+        [_exView addSubview:_exPortraitView];
+        
         [self.containerView addSubview:_exView];
     }
     return _exView;
@@ -267,7 +273,7 @@
 
 -(UILabel *)exName {
     if(!_exName) {
-        _exName = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, EX_LINE_WIDTH+CELL_ITEM_PADDING, self.exView.frame.size.width - CELL_PADDING - CELL_PADDING - EX_FW_WIDTH, EX_FONT_SIZE)];
+        _exName = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING + EX_FW_WIDTH, EX_LINE_WIDTH+CELL_ITEM_PADDING, self.exView.frame.size.width - CELL_PADDING - CELL_PADDING - EX_FW_WIDTH - EX_FW_WIDTH, EX_FONT_SIZE)];
         _exName.font = [UIFont systemFontOfSize:EX_FONT_SIZE];
         [self.exView addSubview:_exName];
     }
