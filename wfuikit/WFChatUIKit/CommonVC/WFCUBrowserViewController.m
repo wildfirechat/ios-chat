@@ -15,13 +15,14 @@
 
 @interface WFCUBrowserViewController ()
 @property (nonatomic, strong)DWKWebView *webView;
+@property(nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *configDict;
 @end
 
 @implementation WFCUBrowserViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.configDict = [[NSMutableDictionary alloc] init];
     self.webView = [[DWKWebView alloc] initWithFrame:self.view.bounds];
     
     [self.view addSubview:self.webView];
@@ -116,13 +117,23 @@
     NSString *signature = message[@"signature"];
     __weak typeof(self)ws = self;
     [[WFCCIMService sharedWFCIMService] configApplication:appId type:appType timestamp:timestamp nonce:nonceStr signature:signature success:^{
+        if(ws.webView.URL.host)
+            [ws.configDict setObject:@(YES) forKey:ws.webView.URL.host];
         [ws.webView callHandler:@"ready" arguments:nil];
     } error:^(int error_code) {
+        if(ws.webView.URL.host)
+            [ws.configDict removeObjectForKey:ws.webView.URL.host];
         [ws.webView callHandler:@"error" arguments:@[@(error_code)]];
     }];
 }
 
 - (void)chooseContacts:(NSDictionary *)message completion:(JSCallback)completionHandler {
+    if(!self.webView.URL.host || ![self.configDict[self.webView.URL.host] boolValue]) {
+        NSLog(@"Error host %@ not config!", self.webView.URL.host);
+        completionHandler(1, nil, YES);
+        return;
+    }
+    
     int max = [message[@"max"] intValue];
     WFCUContactListViewController *contactVC = [[WFCUContactListViewController alloc] init];
     if(max > 0) {
