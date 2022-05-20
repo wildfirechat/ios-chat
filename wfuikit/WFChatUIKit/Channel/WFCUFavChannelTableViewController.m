@@ -15,7 +15,6 @@
 #import "WFCUSearchChannelViewController.h"
 
 @interface WFCUFavChannelTableViewController ()
-@property (nonatomic, strong)NSMutableArray<WFCCChannelInfo *> *myChannels;
 @property (nonatomic, strong)NSMutableArray<WFCCChannelInfo *> *favChannels;
 @end
 
@@ -23,7 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.myChannels = [[NSMutableArray alloc] init];
     self.favChannels = [[NSMutableArray alloc] init];
     self.title = WFCString(@"MyChannels");
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -39,43 +37,10 @@
 }
 
 - (void)onRightBarBtn:(id)sender {
-    __weak typeof(self)ws = self;
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"AddChannel") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    UIAlertAction *actionSubscribe = [UIAlertAction actionWithTitle:WFCString(@"SubscribeChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIViewController *vc = [[WFCUSearchChannelViewController alloc] init];
-        [ws.navigationController pushViewController:vc animated:YES];
-    }];
-    
-    UIAlertAction *actionCreate = [UIAlertAction actionWithTitle:WFCString(@"CreateChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIViewController *vc = [[WFCUCreateChannelViewController alloc] init];
-        [ws.navigationController pushViewController:vc animated:YES];
-    }];
-    
-    //把action添加到actionSheet里
-    [actionSheet addAction:actionSubscribe];
-    [actionSheet addAction:actionCreate];
-    [actionSheet addAction:actionCancel];
-    
-    //相当于之前的[actionSheet show];
-    [self presentViewController:actionSheet animated:YES completion:nil];
+    UIViewController *vc = [[WFCUSearchChannelViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)refreshList {
-    NSArray *ids = [[WFCCIMService sharedWFCIMService] getMyChannels];
-    [self.myChannels removeAllObjects];
-    [self.favChannels removeAllObjects];
-    
-    for (NSString *channelId in ids) {
-        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:channelId refresh:NO];
-        if (channelInfo) {
-            channelInfo.channelId = channelId;
-            [self.myChannels addObject:channelInfo];
-        }
-    }
-    
     __weak typeof(self)ws = self;
     [[WFCCIMService sharedWFCIMService] getRemoteListenedChannels:^(NSArray<NSString *> *ids) {
         [ws.favChannels removeAllObjects];
@@ -98,14 +63,6 @@
 - (void)onChannelInfoUpdated:(NSNotification *)notification {
     WFCCChannelInfo *channelInfo = notification.userInfo[@"channelInfo"];
     BOOL updated = NO;
-    for (int i = 0; i < self.myChannels.count; i++) {
-        if([self.myChannels[i].channelId isEqualToString:channelInfo.channelId]) {
-            self.myChannels[i] = channelInfo;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            updated = YES;
-        }
-    }
-    
     for (int i = 0; i < self.favChannels.count; i++) {
         if([self.favChannels[i].channelId isEqualToString:channelInfo.channelId]) {
             self.favChannels[i] = channelInfo;
@@ -132,21 +89,10 @@
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return self.myChannels.count;
-    }
     return self.favChannels.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return WFCString(@"MyChannels");
-    } else {
-        return WFCString(@"SubscribedChannels");
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -155,22 +101,14 @@
         cell = [[WFCUChannelTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"groupCellId"];
     }
     
-    if (indexPath.section == 0) {
-        cell.channelInfo = self.myChannels[indexPath.row];
-    } else {
-        cell.channelInfo = self.favChannels[indexPath.row];
-    }
+    cell.channelInfo = self.favChannels[indexPath.row];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCCChannelInfo *channelInfo;
-    if (indexPath.section == 0) {
-        channelInfo = self.myChannels[indexPath.row];
-    } else {
-        channelInfo = self.favChannels[indexPath.row];
-    }
+    channelInfo = self.favChannels[indexPath.row];
     
     
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
