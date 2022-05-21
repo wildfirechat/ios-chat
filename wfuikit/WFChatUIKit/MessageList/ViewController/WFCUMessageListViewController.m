@@ -79,6 +79,7 @@
 
 #import "WFCUMultiCallOngoingCell.h"
 #import "WFCUMultiCallOngoingExpendedCell.h"
+#import "WFCUArticlesCell.h"
 
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate>
@@ -1012,6 +1013,8 @@
     [self registerCell:[WFCUCompositeCell class] forContent:[WFCCCompositeMessageContent class]];
     [self registerCell:[WFCULinkCell class] forContent:[WFCCLinkMessageContent class]];
     [self registerCell:[WFCURichNotificationCell class] forContent:[WFCCRichNotificationMessageContent class]];
+    [self registerCell:[WFCUArticlesCell class] forContent:[WFCCArticlesMessageContent class]];
+    
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];

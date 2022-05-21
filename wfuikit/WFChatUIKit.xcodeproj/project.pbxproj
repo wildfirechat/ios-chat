@@ -435,6 +435,8 @@
 		B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0D283230EF005F2745 /* DSCallInfo.h */; };
 		B72FBB17283230F0005F2745 /* InternalApis.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0E283230EF005F2745 /* InternalApis.h */; };
 		B72FBB18283230F0005F2745 /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0F283230F0005F2745 /* InternalApis.m */; };
+		B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B755657028389F8900BE047C /* WFCUArticlesCell.h */; };
+		B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B755657128389F8900BE047C /* WFCUArticlesCell.m */; };
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
 		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
@@ -886,6 +888,8 @@
 		B72FBB0D283230EF005F2745 /* DSCallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSCallInfo.h; sourceTree = "<group>"; };
 		B72FBB0E283230EF005F2745 /* InternalApis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternalApis.h; sourceTree = "<group>"; };
 		B72FBB0F283230F0005F2745 /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
+		B755657028389F8900BE047C /* WFCUArticlesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUArticlesCell.h; sourceTree = "<group>"; };
+		B755657128389F8900BE047C /* WFCUArticlesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUArticlesCell.m; sourceTree = "<group>"; };
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1225,6 +1229,8 @@
 				2F444879252D72D5007A570E /* WFCULinkCell.m */,
 				B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */,
 				B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */,
+				B755657028389F8900BE047C /* WFCUArticlesCell.h */,
+				B755657128389F8900BE047C /* WFCUArticlesCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1995,6 +2001,7 @@
 				2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */,
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
 				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
+				B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
 				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
@@ -2351,6 +2358,7 @@
 				2BEF789E23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.m in Sources */,
 				2F55116A217F5CC200F56C26 /* AFURLSessionManager.m in Sources */,
 				2BDF57A824AD70C8003C1F08 /* DNImageFlowViewController.m in Sources */,
+				B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */,
 				2F5511D5217F5CC300F56C26 /* TYAlertFadeAnimation.m in Sources */,
 				2BDF57A624AD70C8003C1F08 /* DNImagePickerController.m in Sources */,
 				2F551195217F5CC200F56C26 /* SDRefreshFooterView.m in Sources */,
