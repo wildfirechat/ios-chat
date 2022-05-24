@@ -46,11 +46,30 @@
   return @"Unimplement digest function";
 }
 
-- (NSObject *)getObject:(NSDictionary *)dict ofKey:(NSString *)key {
+- (NSString *)getString:(NSDictionary *)dict ofKey:(NSString *)key {
     NSObject *obj = dict[key];
-    if([obj isEqual:[NSNull null]]) {
-        obj = nil;
+    if([obj isKindOfClass:NSString.class]) {
+        return (NSString *)obj;
     }
-    return obj;
+    
+    return nil;
+}
+
+- (NSArray *)getArray:(NSDictionary *)dict ofKey:(NSString *)key {
+    NSObject *obj = dict[key];
+    if([obj isKindOfClass:NSArray.class]) {
+        return (NSArray *)obj;
+    }
+
+    return nil;
+}
+
+- (NSDictionary *)getDictionary:(NSDictionary *)dict ofKey:(NSString *)key {
+    NSObject *obj = dict[key];
+    if([obj isKindOfClass:NSDictionary.class]) {
+        return (NSDictionary *)obj;
+    }
+
+    return nil;
 }
 @end
