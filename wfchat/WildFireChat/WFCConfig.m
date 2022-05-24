@@ -32,5 +32,5 @@ NSString *USER_AGREEMENT_URL = @"https://wildfirechat.net/wildfirechat_user_agre
 
 NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 
-//NSString *WORK_PLATFORM_URL = nil;
-NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
+NSString *WORK_PLATFORM_URL = nil;
+//NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
