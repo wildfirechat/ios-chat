@@ -193,6 +193,7 @@ static NSString *wfcstar = @"☆";
 - (void)left:(void (^)(void))completion {
     if (self.isPushed) {
         [self.navigationController popViewControllerAnimated:YES];
+        completion();
     } else {
         [self.navigationController dismissViewControllerAnimated:YES completion:completion];
     }

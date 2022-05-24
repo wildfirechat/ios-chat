@@ -9,10 +9,6 @@
 #import "UITabBar+badge.h"
 #import "TabbarButton.h"
 
-#define TabbarItemNums 4
-
-
-
 @implementation UITabBar (badge)
 
 - (void)showBadgeOnItemIndex:(int)index{
@@ -27,7 +23,7 @@
         //新建小红点
         CGRect tabFrame = self.frame;
         //确定小红点的位置
-        float percentX = (index + 0.5) / TabbarItemNums;
+        float percentX = (index + 0.5) / self.items.count;
         CGFloat x = ceilf(percentX * tabFrame.size.width) + 8;
         CGFloat y = ceilf(0.07 * tabFrame.size.height) - 5;
         if (badgeValue <= 0) {

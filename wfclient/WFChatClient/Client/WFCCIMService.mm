@@ -3340,6 +3340,24 @@ public:
     mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGetAuthorizedMediaUrlCallback(successBlock, errorBlock));
 }
 
+- (void)getAuthCode:(NSString *)applicationId
+               type:(int)type
+               host:(NSString *)host
+            success:(void(^)(NSString *authCode))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    mars::stn::GetAuthCode([applicationId UTF8String], type, [host UTF8String], new IMGeneralStringCallback(successBlock, errorBlock));
+}
+
+- (void)configApplication:(NSString *)applicationId
+                     type:(int)type
+                timestamp:(int64_t)timestamp
+                    nonce:(NSString *)nonce
+                signature:(NSString *)signature
+            success:(void(^)(void))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    mars::stn::ApplicationConfig([applicationId UTF8String], type, timestamp, [nonce UTF8String], [signature UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (NSData *)getWavData:(NSString *)amrPath {
     if ([@"mp3" isEqualToString:[amrPath pathExtension]]) {
         return [NSData dataWithContentsOfFile:amrPath];

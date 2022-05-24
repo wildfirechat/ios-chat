@@ -426,23 +426,28 @@
 		9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */; };
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
 		90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */; };
+		B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB07283230EE005F2745 /* DSCallInfo.m */; };
+		B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB08283230EE005F2745 /* JSBUtil.h */; };
+		B72FBB12283230F0005F2745 /* JSBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB09283230EE005F2745 /* JSBUtil.m */; };
+		B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0A283230EE005F2745 /* DWKWebView.h */; };
+		B72FBB14283230F0005F2745 /* DWKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0B283230EF005F2745 /* DWKWebView.m */; };
+		B72FBB15283230F0005F2745 /* dsbridge.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0C283230EF005F2745 /* dsbridge.h */; };
+		B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0D283230EF005F2745 /* DSCallInfo.h */; };
+		B72FBB17283230F0005F2745 /* InternalApis.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0E283230EF005F2745 /* InternalApis.h */; };
+		B72FBB18283230F0005F2745 /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0F283230F0005F2745 /* InternalApis.m */; };
+		B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B755657028389F8900BE047C /* WFCUArticlesCell.h */; };
+		B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B755657128389F8900BE047C /* WFCUArticlesCell.m */; };
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
 		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
+		B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */; };
+		B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */; };
 		B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */; };
 		B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */; };
 		B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */; };
 		B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */; };
 		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
-		B7F176DE282C02080082E91F /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F176D6282C02080082E91F /* WebViewJavascriptBridgeBase.m */; };
-		B7F176DF282C02080082E91F /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F176D7282C02080082E91F /* WKWebViewJavascriptBridge.m */; };
-		B7F176E0282C02080082E91F /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F176D8282C02080082E91F /* WebViewJavascriptBridge.m */; };
-		B7F176E1282C02080082E91F /* WebViewJavascriptBridge_JS.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F176D9282C02080082E91F /* WebViewJavascriptBridge_JS.h */; };
-		B7F176E2282C02080082E91F /* WebViewJavascriptBridgeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F176DA282C02080082E91F /* WebViewJavascriptBridgeBase.h */; };
-		B7F176E3282C02080082E91F /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F176DB282C02080082E91F /* WebViewJavascriptBridge_JS.m */; };
-		B7F176E4282C02080082E91F /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F176DC282C02080082E91F /* WebViewJavascriptBridge.h */; };
-		B7F176E5282C02080082E91F /* WKWebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F176DD282C02080082E91F /* WKWebViewJavascriptBridge.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -874,23 +879,28 @@
 		9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUCreateChannelViewController.m; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.m; sourceTree = SOURCE_ROOT; };
 		90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewCell.h; sourceTree = "<group>"; };
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
+		B72FBB07283230EE005F2745 /* DSCallInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSCallInfo.m; sourceTree = "<group>"; };
+		B72FBB08283230EE005F2745 /* JSBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBUtil.h; sourceTree = "<group>"; };
+		B72FBB09283230EE005F2745 /* JSBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBUtil.m; sourceTree = "<group>"; };
+		B72FBB0A283230EE005F2745 /* DWKWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWKWebView.h; sourceTree = "<group>"; };
+		B72FBB0B283230EF005F2745 /* DWKWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWKWebView.m; sourceTree = "<group>"; };
+		B72FBB0C283230EF005F2745 /* dsbridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsbridge.h; sourceTree = "<group>"; };
+		B72FBB0D283230EF005F2745 /* DSCallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSCallInfo.h; sourceTree = "<group>"; };
+		B72FBB0E283230EF005F2745 /* InternalApis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternalApis.h; sourceTree = "<group>"; };
+		B72FBB0F283230F0005F2745 /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
+		B755657028389F8900BE047C /* WFCUArticlesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUArticlesCell.h; sourceTree = "<group>"; };
+		B755657128389F8900BE047C /* WFCUArticlesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUArticlesCell.m; sourceTree = "<group>"; };
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURichNotificationCell.m; sourceTree = "<group>"; };
+		B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCURichNotificationCell.h; sourceTree = "<group>"; };
 		B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingCell.h; sourceTree = "<group>"; };
 		B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingCell.m; sourceTree = "<group>"; };
 		B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingExpendedCell.h; sourceTree = "<group>"; };
 		B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingExpendedCell.m; sourceTree = "<group>"; };
 		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
-		B7F176D6282C02080082E91F /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
-		B7F176D7282C02080082E91F /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
-		B7F176D8282C02080082E91F /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
-		B7F176D9282C02080082E91F /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
-		B7F176DA282C02080082E91F /* WebViewJavascriptBridgeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridgeBase.h; sourceTree = "<group>"; };
-		B7F176DB282C02080082E91F /* WebViewJavascriptBridge_JS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge_JS.m; sourceTree = "<group>"; };
-		B7F176DC282C02080082E91F /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
-		B7F176DD282C02080082E91F /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1217,6 +1227,10 @@
 				2F56F6A72529E43900B829C4 /* WFCUCompositeCell.m */,
 				2F44487A252D72D5007A570E /* WFCULinkCell.h */,
 				2F444879252D72D5007A570E /* WFCULinkCell.m */,
+				B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */,
+				B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */,
+				B755657028389F8900BE047C /* WFCUArticlesCell.h */,
+				B755657128389F8900BE047C /* WFCUArticlesCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1314,7 +1328,7 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				B7F176D5282C02080082E91F /* WebViewJavascriptBridge */,
+				B7B58A672832182A0030529B /* dsbridge */,
 				2F765FA6267C28A500E3B365 /* HWCircleView */,
 				2F0BD9102537424500A7B674 /* ZLPhotoBrowser */,
 				2FA2E6E025158CBA0038635A /* SDWebImage */,
@@ -1933,6 +1947,22 @@
 			path = AVEngine;
 			sourceTree = "<group>";
 		};
+		B7B58A672832182A0030529B /* dsbridge */ = {
+			isa = PBXGroup;
+			children = (
+				B72FBB0C283230EF005F2745 /* dsbridge.h */,
+				B72FBB0D283230EF005F2745 /* DSCallInfo.h */,
+				B72FBB07283230EE005F2745 /* DSCallInfo.m */,
+				B72FBB0A283230EE005F2745 /* DWKWebView.h */,
+				B72FBB0B283230EF005F2745 /* DWKWebView.m */,
+				B72FBB0E283230EF005F2745 /* InternalApis.h */,
+				B72FBB0F283230F0005F2745 /* InternalApis.m */,
+				B72FBB08283230EE005F2745 /* JSBUtil.h */,
+				B72FBB09283230EE005F2745 /* JSBUtil.m */,
+			);
+			path = dsbridge;
+			sourceTree = "<group>";
+		};
 		B7D07586282756B5008A6C63 /* Voip */ = {
 			isa = PBXGroup;
 			children = (
@@ -1942,21 +1972,6 @@
 				B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */,
 			);
 			path = Voip;
-			sourceTree = "<group>";
-		};
-		B7F176D5282C02080082E91F /* WebViewJavascriptBridge */ = {
-			isa = PBXGroup;
-			children = (
-				B7F176D6282C02080082E91F /* WebViewJavascriptBridgeBase.m */,
-				B7F176D7282C02080082E91F /* WKWebViewJavascriptBridge.m */,
-				B7F176D8282C02080082E91F /* WebViewJavascriptBridge.m */,
-				B7F176D9282C02080082E91F /* WebViewJavascriptBridge_JS.h */,
-				B7F176DA282C02080082E91F /* WebViewJavascriptBridgeBase.h */,
-				B7F176DB282C02080082E91F /* WebViewJavascriptBridge_JS.m */,
-				B7F176DC282C02080082E91F /* WebViewJavascriptBridge.h */,
-				B7F176DD282C02080082E91F /* WKWebViewJavascriptBridge.h */,
-			);
-			path = WebViewJavascriptBridge;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1980,11 +1995,13 @@
 				2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */,
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
+				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
 				2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */,
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
 				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
+				B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */,
 				2F551155217F5CC200F56C26 /* KZVideoConfig.h in Headers */,
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
 				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
@@ -2019,6 +2036,7 @@
 				2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */,
 				2F551223217F5CC300F56C26 /* WFCUMessageSettingViewController.h in Headers */,
 				2BDF57AC24AD70C8003C1F08 /* DNAlbumCell.h in Headers */,
+				B72FBB17283230F0005F2745 /* InternalApis.h in Headers */,
 				2F56F6A82529E43900B829C4 /* WFCUCompositeCell.h in Headers */,
 				2BDF579324AD70C8003C1F08 /* DNImagePickerHelper.h in Headers */,
 				2F5511F1217F5CC300F56C26 /* UIView+Toast.h in Headers */,
@@ -2049,6 +2067,7 @@
 				2F5511D4217F5CC300F56C26 /* TYBaseAnimation.h in Headers */,
 				2F55110B217F5CC200F56C26 /* VideoPlayerSampleViewController.h in Headers */,
 				2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */,
+				B72FBB15283230F0005F2745 /* dsbridge.h in Headers */,
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
@@ -2087,11 +2106,10 @@
 				2F1EB5BB2499AA5E00FD3575 /* WFCUConferenceInviteViewController.h in Headers */,
 				2BEF78A123F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.h in Headers */,
 				2FBDAB9C25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h in Headers */,
-				B7F176E2282C02080082E91F /* WebViewJavascriptBridgeBase.h in Headers */,
 				2F5511D1217F5CC300F56C26 /* TYShowAlertView.h in Headers */,
 				2F5511FC217F5CC300F56C26 /* WFCUConversationSettingMemberCell.h in Headers */,
-				B7F176E4282C02080082E91F /* WebViewJavascriptBridge.h in Headers */,
 				2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */,
+				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
 				2F5510FD217F5CC200F56C26 /* CCHMapClusterController.h in Headers */,
 				2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */,
 				2F5510AF217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.h in Headers */,
@@ -2100,6 +2118,7 @@
 				2B14FC8F25C23D3600684B91 /* WFCUPinyinUtility.h in Headers */,
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
+				B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
@@ -2146,7 +2165,6 @@
 				2BDF579624AD70C8003C1F08 /* DNAsset.h in Headers */,
 				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
 				2F5511E3217F5CC300F56C26 /* YLGIFImage.h in Headers */,
-				B7F176E5282C02080082E91F /* WKWebViewJavascriptBridge.h in Headers */,
 				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */,
 				2F5511FD217F5CC300F56C26 /* WFCUSwitchTableViewCell.h in Headers */,
@@ -2158,9 +2176,9 @@
 				2BDF579C24AD70C8003C1F08 /* UIColor+Hex.h in Headers */,
 				2F5510FE217F5CC200F56C26 /* CCHMapClusterer.h in Headers */,
 				2BDF57A324AD70C8003C1F08 /* DNPhotoBrowser.h in Headers */,
-				B7F176E1282C02080082E91F /* WebViewJavascriptBridge_JS.h in Headers */,
 				2F5510F9217F5CC200F56C26 /* CCHNearCenterMapClusterer.h in Headers */,
 				2F55119A217F5CC200F56C26 /* UITextView+Placeholder.h in Headers */,
+				B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */,
 				2BDF57B624AD70C8003C1F08 /* DNBadgeLabel.h in Headers */,
 				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
@@ -2337,10 +2355,10 @@
 				2F551112217F5CC200F56C26 /* VideoPlayerSampleViewController.m in Sources */,
 				2F551115217F5CC200F56C26 /* FullScreenView.m in Sources */,
 				2F5510AE217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.m in Sources */,
-				B7F176E0282C02080082E91F /* WebViewJavascriptBridge.m in Sources */,
 				2BEF789E23F6A84D000DE285 /* WFCUParticipantCollectionViewCell.m in Sources */,
 				2F55116A217F5CC200F56C26 /* AFURLSessionManager.m in Sources */,
 				2BDF57A824AD70C8003C1F08 /* DNImageFlowViewController.m in Sources */,
+				B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */,
 				2F5511D5217F5CC300F56C26 /* TYAlertFadeAnimation.m in Sources */,
 				2BDF57A624AD70C8003C1F08 /* DNImagePickerController.m in Sources */,
 				2F551195217F5CC200F56C26 /* SDRefreshFooterView.m in Sources */,
@@ -2349,7 +2367,6 @@
 				1450EA8A24389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.m in Sources */,
 				2F341A50235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m in Sources */,
 				1450EA862438922800BF51FC /* WFCUUserSectionKeySupport.m in Sources */,
-				B7F176DF282C02080082E91F /* WKWebViewJavascriptBridge.m in Sources */,
 				2F5510F2217F5CC200F56C26 /* CCHMapClusterControllerUtils.m in Sources */,
 				2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */,
 				2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */,
@@ -2363,6 +2380,7 @@
 				2F5511E1217F5CC300F56C26 /* YLGIFImage.m in Sources */,
 				2F5511F4217F5CC300F56C26 /* AttributedLabel.m in Sources */,
 				2BEF78A223F6A84D000DE285 /* WFCUMultiVideoViewController.m in Sources */,
+				B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */,
 				2F551156217F5CC200F56C26 /* KZVideoListViewController.m in Sources */,
 				2F551154217F5CC200F56C26 /* KZVideoViewController.m in Sources */,
 				2F5EB44D22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m in Sources */,
@@ -2410,6 +2428,7 @@
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */,
+				B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
 				2F551194217F5CC200F56C26 /* UIView+SDExtension.m in Sources */,
@@ -2425,6 +2444,7 @@
 				2F551103217F5CC200F56C26 /* CCHFadeInOutMapAnimator.m in Sources */,
 				2F551168217F5CC200F56C26 /* AFHTTPSessionManager.m in Sources */,
 				2BDF57B524AD70C8003C1F08 /* DNTapDetectingImageView.m in Sources */,
+				B72FBB12283230F0005F2745 /* JSBUtil.m in Sources */,
 				2F5510A7217F5CC200F56C26 /* WFCUMessageCell.m in Sources */,
 				2F5510F0217F5CC200F56C26 /* CCHMapTree.m in Sources */,
 				2F551161217F5CC200F56C26 /* KxMenu.m in Sources */,
@@ -2443,7 +2463,6 @@
 				2F5511CE217F5CC300F56C26 /* TYAlertView.m in Sources */,
 				2FD550F72442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				2F36433421C136C400904CAB /* WFCUFavChannelTableViewController.m in Sources */,
-				B7F176E3282C02080082E91F /* WebViewJavascriptBridge_JS.m in Sources */,
 				2F551220217F5CC300F56C26 /* WFCUMyProfileTableViewController.m in Sources */,
 				1450EA81243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.m in Sources */,
 				2BEF78A423F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.m in Sources */,
@@ -2466,12 +2485,14 @@
 				2F5511FE217F5CC300F56C26 /* WFCUConversationSettingMemberCell.m in Sources */,
 				90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */,
 				2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */,
+				B72FBB14283230F0005F2745 /* DWKWebView.m in Sources */,
 				2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */,
 				2F3A6C18219EE941009A8B4B /* WFCUFaceBoard.m in Sources */,
 				2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */,
 				9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */,
 				2F55121C217F5CC300F56C26 /* WFCUModifyMyProfileViewController.m in Sources */,
 				2F5510F7217F5CC200F56C26 /* CCHMapClusterAnnotation.m in Sources */,
+				B72FBB18283230F0005F2745 /* InternalApis.m in Sources */,
 				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,
 				2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */,
@@ -2481,7 +2502,6 @@
 				2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */,
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
-				B7F176DE282C02080082E91F /* WebViewJavascriptBridgeBase.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,

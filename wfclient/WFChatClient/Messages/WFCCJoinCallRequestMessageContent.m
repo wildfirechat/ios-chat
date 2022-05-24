@@ -36,7 +36,7 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.clientId = (NSString *)[self getObject:dictionary ofKey:@"clientId"];
+        self.clientId = [self getString:dictionary ofKey:@"clientId"];
     }
 }
 

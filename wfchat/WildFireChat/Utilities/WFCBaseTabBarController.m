@@ -11,6 +11,7 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
+#import "WFCConfig.h"
 #ifdef WFC_MOMENTS
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #import <WFMomentClient/WFMomentClient.h>
@@ -53,6 +54,22 @@
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
+    if(WORK_PLATFORM_URL.length) {
+        WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
+        browserVC.url = WORK_PLATFORM_URL;
+        browserVC.hidenOpenInBrowser = YES;
+        
+        vc = browserVC;
+        vc.title = LocalizedString(@"WorkPlatfrom");
+        nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        item = nav.tabBarItem;
+        item.title = LocalizedString(@"WorkPlatfrom");
+        item.image = [UIImage imageNamed:@"tabbar_work"];
+        item.selectedImage = [[UIImage imageNamed:@"tabbar_work_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
+        [self addChildViewController:nav];
+    }
+    
     vc = [DiscoverViewController new];
     vc.title = LocalizedString(@"Discover");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -92,7 +109,10 @@
 
 - (void)updateBadgeNumber {
 #ifdef WFC_MOMENTS
-    [self.tabBar showBadgeOnItemIndex:2 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
+    int momentIndex = 2;
+    if(WORK_PLATFORM_URL.length)
+        momentIndex = 3;
+    [self.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
 }
 
