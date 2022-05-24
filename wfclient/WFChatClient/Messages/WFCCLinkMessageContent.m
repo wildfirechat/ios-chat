@@ -44,9 +44,9 @@
                                                                options:kNilOptions
                                                                  error:&__error];
     if (!__error) {
-        self.contentDigest = (NSString *)[self getObject:dictionary ofKey:@"d"];
-        self.url = (NSString *)[self getObject:dictionary ofKey:@"u"];
-        self.thumbnailUrl = (NSString *)[self getObject:dictionary ofKey:@"t"];
+        self.contentDigest = [self getString:dictionary ofKey:@"d"];
+        self.url = [self getString:dictionary ofKey:@"u"];
+        self.thumbnailUrl = [self getString:dictionary ofKey:@"t"];
     }
 }
 

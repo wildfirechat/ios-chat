@@ -24,4 +24,6 @@ extern NSString *USER_AGREEMENT_URL;
 
 //文件传输助手用户ID，服务器有个默认文件助手的机器人，如果修改它的ID，需要客户端和服务器数据库同步修改
 extern NSString *FILE_TRANSFER_ID;
+
+extern NSString *WORK_PLATFORM_URL;
 #endif /* Config_h */

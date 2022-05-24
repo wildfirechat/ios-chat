@@ -9,6 +9,7 @@ CFBundleName="Wildfire IM";
 CFBundleDisplayName="Wildfire IM";
 Message="Message";
 Contact="Contact";
+WorkPlatfrom="Work";
 Discover="Disconver";
 Settings="Settings";
 Chatroom="Chatroom";

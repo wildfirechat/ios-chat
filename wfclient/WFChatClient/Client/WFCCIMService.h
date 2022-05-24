@@ -2087,6 +2087,26 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                       success:(void(^)(NSString *authorizedUrl, NSString *backupAuthorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
+
+/**
+获取应用的auth code，用于应用的免密登陆
+ */
+- (void)getAuthCode:(NSString *)applicationId
+               type:(int)type
+               host:(NSString *)host
+            success:(void(^)(NSString *authCode))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
+/**
+config应用
+ */
+- (void)configApplication:(NSString *)applicationId
+                     type:(int)type
+                timestamp:(int64_t)timestamp
+                    nonce:(NSString *)nonce
+                signature:(NSString *)signature
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
 /**
 amr文件转成wav数据
 
