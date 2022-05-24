@@ -165,5 +165,9 @@
     NSLog(@"toast: %@", message);
 }
 
-
+- (void)didMoveToParentViewController:(UIViewController *)parent {
+    if(!parent) {
+        [self.webView removeJavascriptObject:nil];
+    }
+}
 @end
