@@ -101,12 +101,15 @@
 }
 
 - (void)openUrl:(NSString *)url {
-    if([[WFCUConfigManager globalManager].workPlatfromUrl rangeOfString:self.webView.URL.host].location != NSNotFound) {
-        WFCUBrowserViewController *browser = [[WFCUBrowserViewController alloc] init];
-        browser.url = url;
-        browser.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:browser animated:YES];
-    }
+    WFCUBrowserViewController *browser = [[WFCUBrowserViewController alloc] init];
+    browser.url = url;
+    browser.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:browser animated:YES];
+}
+
+- (void)close:(NSDictionary *)message completion:(JSCallback)completionHandler {
+    [self.navigationController popoverPresentationController];
+    completionHandler(0, nil, YES);
 }
 
 - (void)config:(NSDictionary *)message {
