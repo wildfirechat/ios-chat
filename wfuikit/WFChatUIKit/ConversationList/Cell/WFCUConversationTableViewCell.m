@@ -85,8 +85,8 @@
         }
     }
   
-  if(groupInfo.name.length > 0) {
-    self.targetView.text = groupInfo.name;
+  if(groupInfo.displayName.length > 0) {
+    self.targetView.text = groupInfo.displayName;
   } else {
     self.targetView.text = WFCString(@"GroupChat");
   }

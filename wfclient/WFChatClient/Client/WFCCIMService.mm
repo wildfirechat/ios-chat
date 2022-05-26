@@ -425,6 +425,7 @@ public:
 };
 
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
+extern WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi);
 
 class IMLoadRemoteMessagesCallback : public mars::stn::LoadRemoteMessagesCallback {
 private:
@@ -590,24 +591,8 @@ public:
         if (m_successBlock) {
             NSMutableArray *ret = [[NSMutableArray alloc] init];
             for (std::list<const mars::stn::TGroupInfo>::const_iterator it = groupInfoList.begin(); it != groupInfoList.end(); it++) {
-                WFCCGroupInfo *gi = [[WFCCGroupInfo alloc] init];
                 const mars::stn::TGroupInfo &tgi = *it;
-                gi.target = [NSString stringWithUTF8String:tgi.target.c_str()];
-                gi.type = (WFCCGroupType)tgi.type;
-                gi.memberCount = tgi.memberCount;
-                gi.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
-                gi.name = [NSString stringWithUTF8String:tgi.name.c_str()];
-                gi.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
-                gi.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];
-
-                gi.mute = tgi.mute;
-                gi.joinType = tgi.joinType;
-                gi.privateChat = tgi.privateChat;
-                gi.searchable = tgi.searchable;
-                gi.historyMessage = tgi.historyMessage;
-                gi.maxMemberCount = tgi.maxMemberCount;
-                gi.updateTimestamp = tgi.updateDt;
-                
+                WFCCGroupInfo *gi = convertProtoGroupInfo(tgi);
                 [ret addObject:gi];
             }
             
@@ -1735,6 +1720,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];;
     groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
     groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
+    groupInfo.remark = [NSString stringWithUTF8String:tgi.remark.c_str()];
     groupInfo.memberCount = tgi.memberCount;
     groupInfo.mute = tgi.mute;
     groupInfo.joinType = tgi.joinType;
@@ -2795,6 +2781,17 @@ public:
     }
     
     mars::stn::MuteOrAllowGroupMember([groupId UTF8String], memberList, isSet, true, lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (NSString *)getGroupRemark:(NSString *)groupId {
+    return [NSString stringWithUTF8String:mars::stn::getGroupRemark([groupId UTF8String]).c_str()];
+}
+
+- (void)setGroup:(NSString *)groupId
+          remark:(NSString *)remark
+         success:(void(^)(void))successBlock
+           error:(void(^)(int error_code))errorBlock {
+    mars::stn::setGroupRemark([groupId UTF8String], remark.length?[remark UTF8String]:"", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSArray<NSString *> *)getFavGroups {

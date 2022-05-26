@@ -62,6 +62,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, strong)NSString *extra;
 
 /**
+ 群备注
+ */
+@property (nonatomic, strong)NSString *remark;
+
+/**
  群禁言状态，0 关闭群禁言；1 开启群禁言
  */
 @property (nonatomic, assign)int mute;
@@ -96,4 +101,8 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
  */
 @property (nonatomic, assign)long long updateTimestamp;
 
+/**
+ 群显示名称，如果有群备注返回群备注，没有群备注返回群名称
+ */
+@property (nonatomic, strong, readonly)NSString *displayName;
 @end

@@ -149,8 +149,8 @@
         self.qrLogo = filePath;
     }
     
-    if (groupInfo.name.length) {
-        self.labelStr = groupInfo.name;
+    if (groupInfo.displayName.length) {
+        self.labelStr = groupInfo.displayName;
     } else {
         self.labelStr = @"群组";
     }

@@ -23,7 +23,7 @@
         item.origin = userInfo.displayName;
     } else if(message.conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:message.conversation.target refresh:NO];
-        item.origin = groupInfo.name;
+        item.origin = groupInfo.displayName;
     } else if(message.conversation.type == Channel_Type) {
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:message.conversation.target refresh:NO];
         item.origin = channelInfo.name;

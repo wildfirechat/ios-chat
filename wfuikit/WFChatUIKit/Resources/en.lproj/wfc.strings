@@ -11,6 +11,7 @@
 "Message"="Message";
 "NumberOfMessage"="Message(%d)";
 "GroupName"="Group name";
+"GroupRemark"="Group remark";
 "Back"="Back";
 "BackMore"="Back(...)";
 "BackNumber"="Back(%ld)";
@@ -120,6 +121,7 @@
 "ModifyGroupName"="Modify group name";
 "OnlyManangerCanChangeGroupPortraitHint"="Only manager change group portrait";
 "ModifyMyGroupNameCard"="Modify my group namecard";
+"ModifyGroupRemark"="Modify group remark";
 "ConfirmDelete"="Confirm delete";
 "Deleted"="Deleted";
 "Manager"="Manager";

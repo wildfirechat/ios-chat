@@ -58,10 +58,10 @@
 
 - (void)setGroupInfo:(WFCCGroupInfo *)groupInfo {
     _groupInfo = groupInfo;
-    if (groupInfo.name.length == 0) {
+    if (groupInfo.displayName.length == 0) {
         self.name.text = WFCString(@"GroupChat");
     } else {
-        self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
+        self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
     }
     [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
     

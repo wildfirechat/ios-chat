@@ -45,7 +45,7 @@
     } else if (conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         if (groupInfo) {
-            name = groupInfo.name;
+            name = groupInfo.displayName;
             portrait = groupInfo.portrait;
         } else {
             name = WFCString(@"GroupChat");
