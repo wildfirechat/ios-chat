@@ -11,6 +11,7 @@
 "Message"="信息";
 "NumberOfMessage"="信息(%d)";
 "GroupName"="群聊名称";
+"GroupRemark"="群备注";
 "Back"="返回";
 "BackMore"="返回...";
 "BackNumber"="返回(%ld)";
@@ -120,6 +121,7 @@
 "ModifyGroupName"="修改群名称";
 "OnlyManangerCanChangeGroupPortraitHint"="只有管理员才可以修改群头像";
 "ModifyMyGroupNameCard"="修改我在群中的名片";
+"ModifyGroupRemark"="修改群备注";
 "ConfirmDelete"="确认删除";
 "Deleted"="已删除";
 "Manager"="管理员";

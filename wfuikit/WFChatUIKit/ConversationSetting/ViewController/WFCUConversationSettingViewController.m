@@ -505,6 +505,21 @@
     return NO;
 }
 
+- (BOOL)isGroupRemarkCell:(NSIndexPath *)indexPath {
+    if(self.conversation.type == Group_Type && indexPath.section == 0) {
+        if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
+            if (indexPath.row == 4) {
+                return YES;
+            }
+        } else {
+            if (indexPath.row == 3) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 
 - (BOOL)isSearchMessageCell:(NSIndexPath *)indexPath {
   if((self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 0)
@@ -611,9 +626,9 @@
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
             if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
-                return 4; //群名称，群二维码，群管理，群公告
+                return 5; //群名称，群二维码，群管理，群公告，群备注
             } else {
-                return 3; //群名称，群二维码，群公告
+                return 4; //群名称，群二维码，群公告，群备注
             }
             
         } else if(section == 1) {
@@ -720,13 +735,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath  {
   if ([self isGroupNameCell:indexPath]) {
-    return [self cellOfTable:tableView WithTitle:WFCString(@"GroupName") withDetailTitle:self.groupInfo.name withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-//  } else if ([self isGroupPortraitCell:indexPath]) {
-//    UITableViewCell *cell = [self cellOfTable:tableView WithTitle:WFCString(@"ChangePortrait") withDetailTitle:nil withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
-//    UIImageView *portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 56, 8, 40, 40)];
-//    [portraitView sd_setImageWithURL:[NSURL URLWithString:[self.groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
-//    cell.accessoryView = portraitView;
-//    return cell;
+      return [self cellOfTable:tableView WithTitle:WFCString(@"GroupName") withDetailTitle:self.groupInfo.name withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if([self isGroupQrCodeCell:indexPath]) {
       UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QrCell"];
       if (cell == nil) {
@@ -753,6 +762,8 @@
       return cell;
   } else if ([self isGroupManageCell:indexPath]) {
       return [self cellOfTable:tableView WithTitle:WFCString(@"GroupManage") withDetailTitle:nil withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+  } else if ([self isGroupRemarkCell:indexPath]) {
+      return [self cellOfTable:tableView WithTitle:WFCString(@"GroupRemark") withDetailTitle:self.groupInfo.remark withDisclosureIndicator:YES withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   } else if([self isGroupAnnouncementCell:indexPath]) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"announcementCell"];
         if (cell == nil) {
@@ -989,6 +1000,22 @@
       [self.navigationController pushViewController:vc animated:YES];
   } else if([self isBurnTimeCell:indexPath]) {
       [self onBurnTimeAction];
+  } else if([self isGroupRemarkCell:indexPath]) {
+      WFCUGeneralModifyViewController *gmvc = [[WFCUGeneralModifyViewController alloc] init];
+      gmvc.defaultValue = self.groupInfo.remark;
+      gmvc.titleText = WFCString(@"ModifyGroupRemark");
+      gmvc.canEmpty = YES;
+      gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
+          [[WFCCIMService sharedWFCIMService] setGroup:self.conversation.target remark:newValue success:^{
+              result(YES);
+              weakSelf.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:weakSelf.conversation.target refresh:NO];
+              [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+          } error:^(int error_code) {
+              result(NO);
+          }];
+      };
+      UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
+      [self.navigationController presentViewController:nav animated:YES completion:nil];
   }
 }
 

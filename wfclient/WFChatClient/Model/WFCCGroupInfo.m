@@ -9,5 +9,7 @@
 #import "WFCCGroupInfo.h"
 
 @implementation WFCCGroupInfo
-
+- (NSString *)displayName {
+    return self.remark.length?self.remark:self.name;
+}
 @end

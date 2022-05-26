@@ -266,7 +266,7 @@
             if (!groupInfo) {
                 continue;
             }
-            sc.title = groupInfo.name;
+            sc.title = groupInfo.displayName;
             sc.portraitUrl = groupInfo.portrait;
             if (!groupInfo.portrait.length) {
                 [needComposedGroupIds addObject:info.conversation.target];
@@ -438,9 +438,9 @@
       } else if(msg.conversation.type == Group_Type) {
           WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:msg.conversation.target refresh:NO];
           WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
-          if (sender.displayName && group.name) {
+          if (sender.displayName && group.displayName) {
               if (@available(iOS 8.2, *)) {
-                  localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.displayName, group.name];
+                  localNote.alertTitle = [NSString stringWithFormat:@"%@@%@:", sender.displayName, group.displayName];
               } else {
                   // Fallback on earlier versions
               }

@@ -141,6 +141,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Custom_State = 23,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Disable_Secret_Chat = 24,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Group_Remark = 25,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -1519,6 +1521,27 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
            notifyContent:(WFCCMessageContent *)notifyContent
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取群备注
+ 
+ @param groupId 群ID
+ @return 群备注
+ */
+- (NSString *)getGroupRemark:(NSString *)groupId;
+
+/**
+ 设置群备注
+
+ @param groupId 群ID
+ @param remark 群备注
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)setGroup:(NSString *)groupId
+          remark:(NSString *)remark
+         success:(void(^)(void))successBlock
+           error:(void(^)(int error_code))errorBlock;
 /**
  获取当前用户收藏的群组
  

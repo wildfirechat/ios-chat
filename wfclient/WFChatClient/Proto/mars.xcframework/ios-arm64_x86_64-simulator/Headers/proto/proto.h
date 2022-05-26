@@ -155,6 +155,7 @@ namespace mars{
             int type;
             int memberCount;
             std::string extra;
+            std::string remark;
             int64_t updateDt;
             int mute;
             int joinType;
@@ -474,6 +475,7 @@ namespace mars{
             kUserSettingPttReserved = 22,
             kUserSettingCustomState = 23,
             kUserSettingDisableSecretChat = 24,
+            kUserSettingGroupRemark = 25,
 
             kUserSettingCustomBegin = 1000
         };
@@ -1048,6 +1050,8 @@ namespace mars{
 
         extern void syncConversationReadDt(int conversatinType, const std::string &target, int ine, int64_t readedDt, const std::list<std::string> &senders = std::list<std::string>(), long syncId = -1);
 
+        extern void setGroupRemark(const std::string &groupId, const std::string &remark, GeneralOperationCallback *callback);
+        extern std::string getGroupRemark(const std::string &groupId);
 
         extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string &desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
 

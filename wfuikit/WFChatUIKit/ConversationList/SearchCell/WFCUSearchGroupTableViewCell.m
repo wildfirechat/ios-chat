@@ -72,11 +72,11 @@
 
 - (void)setGroupSearchInfo:(WFCCGroupSearchInfo *)groupSearchInfo {
     _groupSearchInfo = groupSearchInfo;
-    WFCCGroupInfo *groupInfo = groupSearchInfo.groupInfo;
-    if (groupInfo.name.length == 0) {
+    WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:groupSearchInfo.groupInfo.target refresh:NO];
+    if (groupInfo.displayName.length == 0) {
         self.name.text = WFCString(@"GroupChat");
     } else {
-        self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.name, (int)groupInfo.memberCount];
+        self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
     }
     if (groupSearchInfo.marchType > 0) {
         NSMutableAttributedString *string;
