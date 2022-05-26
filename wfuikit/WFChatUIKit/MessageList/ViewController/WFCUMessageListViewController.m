@@ -721,12 +721,12 @@
         }
         self.navigationItem.backBarButtonItem.title = self.title;
     } else if(self.conversation.type == Group_Type) {
-        if(self.targetGroup.name.length == 0) {
+        if(self.targetGroup.displayName.length == 0) {
             self.title = WFCString(@"GroupChat");
             self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
         } else {
-            self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.name, (int)self.targetGroup.memberCount];
-            self.navigationItem.backBarButtonItem.title = self.targetGroup.name;
+            self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.displayName, (int)self.targetGroup.memberCount];
+            self.navigationItem.backBarButtonItem.title = self.targetGroup.displayName;
         }
     } else if(self.conversation.type == Channel_Type) {
         if(self.targetChannel.name.length == 0) {
@@ -1103,6 +1103,7 @@
         self.firstAppear = NO;
         [self scrollToBottom:NO];
     }
+    [self updateTitle]; 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -3105,7 +3106,7 @@
             item.origin = userInfo.displayName;
         } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
-            item.origin = groupInfo.name;
+            item.origin = groupInfo.displayName;
         } else if (self.cell4Menu.model.message.conversation.type == Channel_Type) {
             WFCCChannelInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
             item.origin = groupInfo.name;

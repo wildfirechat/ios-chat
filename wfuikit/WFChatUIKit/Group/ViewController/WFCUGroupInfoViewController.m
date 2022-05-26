@@ -54,7 +54,7 @@
             [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@""]];
         }
         
-        self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.name, groupInfo.memberCount];
+        self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.displayName, groupInfo.memberCount];
     }
 }
 

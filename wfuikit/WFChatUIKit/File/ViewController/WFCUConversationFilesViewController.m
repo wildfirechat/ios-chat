@@ -55,8 +55,8 @@
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
     } else if (conv.conversation.type == Group_Type) {
         WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.conversation.target refresh:NO];
-        if (group.name.length) {
-            cell.textLabel.text = group.name;
+        if (group.displayName.length) {
+            cell.textLabel.text = group.displayName;
         } else {
             cell.textLabel.text = @"群组";
         }
