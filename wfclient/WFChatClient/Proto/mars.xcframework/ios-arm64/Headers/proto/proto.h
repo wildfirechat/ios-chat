@@ -475,7 +475,8 @@ namespace mars{
             kUserSettingPttReserved = 22,
             kUserSettingCustomState = 23,
             kUserSettingDisableSecretChat = 24,
-            kUserSettingGroupRemark = 25,
+            kUserSettingPttSilent = 25,
+            kUserSettingGroupRemark = 26,
 
             kUserSettingCustomBegin = 1000
         };
