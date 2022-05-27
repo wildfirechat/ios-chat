@@ -909,6 +909,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before;
 
 /**
+ 删除所有消息。
+ 
+ @param removeConversation 是否同时删除会话信息
+ 
+ @return 删除条数是否
+ */
+- (void)clearAllMessages:(BOOL)removeConversation;
+
+/**
  注册自定义消息类型
  
  @param contentClass 自定义消息
