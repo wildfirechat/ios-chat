@@ -750,6 +750,40 @@ public:
   }
 };
 
+class IMSetGroupRemarkCallback : public mars::stn::GeneralOperationCallback {
+private:
+    NSString *mGroupId;
+    void(^m_successBlock)();
+    void(^m_errorBlock)(int error_code);
+public:
+    IMSetGroupRemarkCallback(NSString *groupId, void(^successBlock)(), void(^errorBlock)(int error_code)) : mars::stn::GeneralOperationCallback(), mGroupId(groupId), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess() {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock();
+            }
+            WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:mGroupId refresh:NO];
+            if(groupInfo.target.length) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:mGroupId userInfo:@{@"groupInfo":groupInfo}];
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMSetGroupRemarkCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
 static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     if (tMessage->target.empty()) {
         return nil;
@@ -2791,7 +2825,7 @@ public:
           remark:(NSString *)remark
          success:(void(^)(void))successBlock
            error:(void(^)(int error_code))errorBlock {
-    mars::stn::setGroupRemark([groupId UTF8String], remark.length?[remark UTF8String]:"", new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::setGroupRemark([groupId UTF8String], remark.length?[remark UTF8String]:"", new IMSetGroupRemarkCallback(groupId, successBlock, errorBlock));
 }
 
 - (NSArray<NSString *> *)getFavGroups {
