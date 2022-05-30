@@ -2258,6 +2258,12 @@
     }
 }
 
+- (void)didTapArticleCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model withArticle:(WFCCArticle *)article {
+    WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+    bvc.url = article.url;
+    [self.navigationController pushViewController:bvc animated:YES];
+}
+
 - (void)didTapTextMessageDetailView:(id)sender {
     if ([sender isKindOfClass:[UIGestureRecognizer class]]) {
         UIGestureRecognizer *gesture = (UIGestureRecognizer *)sender;
