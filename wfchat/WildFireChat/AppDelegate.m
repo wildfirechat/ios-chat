@@ -104,8 +104,6 @@
     
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
-    [WFCUConfigManager globalManager].workPlatfromUrl = WORK_PLATFORM_URL;
-    
 #ifdef WFC_PTT
     //初始化对讲SDK
     [WFPttClient sharedClient].delegate = self;

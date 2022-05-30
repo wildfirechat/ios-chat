@@ -60,10 +60,10 @@
         browserVC.hidenOpenInBrowser = YES;
         
         vc = browserVC;
-        vc.title = LocalizedString(@"WorkPlatfrom");
+        vc.title = LocalizedString(@"Work");
         nav = [[UINavigationController alloc] initWithRootViewController:vc];
         item = nav.tabBarItem;
-        item.title = LocalizedString(@"WorkPlatfrom");
+        item.title = LocalizedString(@"Work");
         item.image = [UIImage imageNamed:@"tabbar_work"];
         item.selectedImage = [[UIImage imageNamed:@"tabbar_work_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
