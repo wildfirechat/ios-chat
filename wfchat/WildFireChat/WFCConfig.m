@@ -32,5 +32,6 @@ NSString *USER_AGREEMENT_URL = @"https://wildfirechat.net/wildfirechat_user_agre
 
 NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 
-NSString *WORK_PLATFORM_URL = nil;
-//NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
+//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
+//NSString *WORK_PLATFORM_URL = nil;
+NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
