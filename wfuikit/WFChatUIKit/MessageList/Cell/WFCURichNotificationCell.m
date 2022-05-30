@@ -91,6 +91,7 @@
 
 - (void)setModel:(WFCUMessageModel *)model {
     [super setModel:model];
+    [self removeAllItems];
     WFCCRichNotificationMessageContent *content = (WFCCRichNotificationMessageContent *)model.message.content;
     CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
     CGFloat offset = CELL_PADDING_TOP;
