@@ -51,8 +51,6 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;
 
-@property(nonatomic, strong)NSString *workPlatfromUrl;
-
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
 @end
 
