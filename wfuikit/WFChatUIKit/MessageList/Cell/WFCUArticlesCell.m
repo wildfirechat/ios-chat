@@ -145,11 +145,17 @@
 - (void)didTapCell:(UITapGestureRecognizer *)tap {
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)self.model.message.content;
     WFCCArticle *article = content.topArticle;
+    if ([self.delegate respondsToSelector:@selector(didTapArticleCell:withModel:withArticle:)]) {
+        [self.delegate didTapArticleCell:self withModel:self.model withArticle:article];
+    }
 }
 
 - (void)didTapArticle:(UITapGestureRecognizer *)tap {
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)self.model.message.content;
     WFCCArticle *article = content.subArticles[tap.view.tag];
+    if ([self.delegate respondsToSelector:@selector(didTapArticleCell:withModel:withArticle:)]) {
+        [self.delegate didTapArticleCell:self withModel:self.model withArticle:article];
+    }
 }
 
 - (void)removeAllItems {
