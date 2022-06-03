@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
-@interface WFCCChannelInfo : NSObject
+@interface WFCCChannelInfo : WFCCJsonSerializer
 @property(nonatomic, strong)NSString *channelId;
 @property(nonatomic, strong)NSString *name;
 @property(nonatomic, strong)NSString *portrait;

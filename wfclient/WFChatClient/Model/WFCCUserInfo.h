@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "WFCCJsonSerializer.h"
 /**
  用户信息
  */
-@interface WFCCUserInfo : NSObject
+@interface WFCCUserInfo : WFCCJsonSerializer
 
 /**
  用户ID

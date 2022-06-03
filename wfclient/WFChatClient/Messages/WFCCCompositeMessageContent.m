@@ -31,8 +31,10 @@
         if (msg.fromUser) {
             [msgDict setValue:msg.fromUser forKey:@"from"];
         }
-        if (msg.toUsers.count) {
-            [msgDict setValue:msg.toUsers forKey:@"tos"];
+        if([msg.toUsers isKindOfClass:[NSArray class]]) {
+            if (msg.toUsers.count) {
+                [msgDict setValue:msg.toUsers forKey:@"tos"];
+            }
         }
         if (msg.direction) {
             [msgDict setValue:@(msg.direction) forKey:@"direction"];

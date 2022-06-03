@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
 /**
  群成员类型
@@ -30,7 +31,7 @@ typedef NS_ENUM(NSInteger, WFCCGroupMemberType) {
 /**
  群成员信息
  */
-@interface WFCCGroupMember : NSObject
+@interface WFCCGroupMember : WFCCJsonSerializer
 
 /**
  群ID
