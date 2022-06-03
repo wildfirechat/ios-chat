@@ -10,11 +10,12 @@
 #import "WFCCConversation.h"
 #import "WFCCMessage.h"
 #import "WFCCUnreadCount.h"
+#import "WFCCJsonSerializer.h"
 
 /**
  会话信息
  */
-@interface WFCCConversationInfo : NSObject
+@interface WFCCConversationInfo : WFCCJsonSerializer
 
 /**
  会话

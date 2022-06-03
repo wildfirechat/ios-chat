@@ -26,4 +26,33 @@
     self.type = other.type;
     self.deleted = other.deleted;
 }
+
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"uid"] = self.userId;
+    dict[@"name"] = self.name;
+    dict[@"displayName"] = self.displayName;
+    dict[@"portrait"] = self.portrait;
+    if(self.gender)
+        dict[@"gender"] = @(self.gender);
+    if(self.mobile.length)
+        dict[@"mobile"] = self.mobile;
+    if(self.email.length)
+        dict[@"email"] = self.email;
+    if(self.address.length)
+        dict[@"address"] = self.address;
+    if(self.company.length)
+        dict[@"company"] = self.company;
+    if(self.social.length)
+        dict[@"social"] = self.social;
+    if(self.extra.length)
+        dict[@"extra"] = self.extra;
+    if(self.social.length)
+        dict[@"social"] = self.social;
+    if(self.updateDt)
+        dict[@"updateDt"] = @(self.updateDt);
+    if(self.deleted)
+        dict[@"deleted"] = @(self.deleted);
+    return dict;
+}
 @end

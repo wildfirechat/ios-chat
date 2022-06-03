@@ -9,5 +9,12 @@
 #import "WFCCFriend.h"
 
 @implementation WFCCFriend
-
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"userId"] = self.userId;
+    dict[@"alias"] = self.alias;
+    dict[@"extra"] = self.extra;
+    [self setDict:dict key:@"timestamp" longlongValue:self.timestamp];
+    return dict;
+}
 @end

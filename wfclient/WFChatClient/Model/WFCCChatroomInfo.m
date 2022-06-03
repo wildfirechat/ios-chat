@@ -9,7 +9,18 @@
 #import "WFCCChatroomInfo.h"
 
 @implementation WFCCChatroomInfo
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"chatroomId"] = self.chatroomId;
+    dict[@"title"] = self.title;
+    dict[@"desc"] = self.desc;
+    dict[@"portrait"] = self.portrait;
+    dict[@"extra"] = self.extra;
 
-
-
+    dict[@"state"] = @(self.state);
+    dict[@"memberCount"] = @(self.memberCount);
+    dict[@"createDt"] = @(self.createDt);
+    dict[@"updateDt"] = @(self.updateDt);
+    return dict;
+}
 @end

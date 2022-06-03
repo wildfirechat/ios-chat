@@ -10,6 +10,11 @@
 
 @implementation WFCCChatroomMemberInfo
 
-
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"memberCount"] = @(self.memberCount);
+    dict[@"members"] = self.members;
+    return dict;
+}
 
 @end

@@ -18,4 +18,11 @@
     d.timestamp = timestamp;
     return d;;
 }
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"userId"] = self.userId;
+    dict[@"conversation"] = [self.conversation toJsonObj];
+    dict[@"timestamp"] = @(self.timestamp);
+    return dict;
+}
 @end

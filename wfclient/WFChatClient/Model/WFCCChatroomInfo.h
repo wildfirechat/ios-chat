@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
-@interface WFCCChatroomInfo : NSObject
+@interface WFCCChatroomInfo : WFCCJsonSerializer
 @property(nonatomic, strong)NSString *chatroomId;
 @property(nonatomic, strong)NSString *title;
 @property(nonatomic, strong)NSString *desc;

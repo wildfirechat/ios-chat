@@ -9,5 +9,14 @@
 #import "WFCCGroupSearchInfo.h"
 
 @implementation WFCCGroupSearchInfo
-
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    id groupDict = [self.groupInfo toJsonObj];
+    dict[@"groupInfo"] = groupDict;
+    dict[@"marchType"] = @(self.marchType);
+    dict[@"keyword"] = self.keyword;
+    if(self.marchedMemberNames.count)
+        dict[@"marchedMemberNames"] = self.marchedMemberNames;
+    return dict;
+}
 @end

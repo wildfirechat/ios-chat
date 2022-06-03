@@ -9,5 +9,15 @@
 #import "WFCCGroupMember.h"
 
 @implementation WFCCGroupMember
-
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"groupId"] = self.groupId;
+    dict[@"memberId"] = self.memberId;
+    dict[@"alias"] = self.alias;
+    dict[@"extra"] = self.extra;
+    dict[@"type"] = @(self.type);
+    dict[@"createTime"] = @(self.createTime);
+    
+    return dict;
+}
 @end

@@ -30,6 +30,14 @@
     return self.target.hash;
 }
 
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"type"] = @(self.type);
+    dict[@"target"] = self.target;
+    dict[@"line"] = @(self.line);
+    return dict;
+}
+
 #pragma mark - NSCopying
 - (id)copyWithZone:(nullable NSZone *)zone {
     WFCCConversation *conversation = [[WFCCConversation alloc] init];

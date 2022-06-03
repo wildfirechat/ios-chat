@@ -11,7 +11,7 @@
 /**
  会话
  */
-@interface WFCCReadReport : NSObject
+@interface WFCCReadReport : WFCCJsonSerializer
 
 +(instancetype)readed:(WFCCConversation *)conversation
                userId:(NSString *)userId

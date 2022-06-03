@@ -11,9 +11,60 @@
 #import "Common.h"
 
 @implementation WFCCMessagePayload
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"type"] = @(self.contentType);
+    if(self.searchableContent.length) {
+        dict[@"searchableContent"] = self.searchableContent;
+    }
+    if(self.pushContent.length) {
+        dict[@"pushContent"] = self.pushContent;
+    }
+    
+    if(self.pushData.length) {
+        dict[@"pushData"] = self.pushData;
+    }
+    
+    if(self.content.length) {
+        dict[@"content"] = self.content;
+    }
+    
+    if(self.binaryContent.length) {
+        dict[@"binaryContent"] = [self.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+    }
+    
+    if(self.localContent.length) {
+        dict[@"localContent"] = self.localContent;
+    }
+    
+    if(self.mentionedType) {
+        dict[@"mentionedType"] = @(self.mentionedType);
+    }
+    
+    if(self.mentionedTargets.count) {
+        dict[@"mentionedTargets"] = self.mentionedTargets;
+    }
+
+    if(self.extra.length) {
+        dict[@"extra"] = self.extra;
+    }
+
+    return dict;
+}
 @end
 
 @implementation WFCCMediaMessagePayload
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [super toJsonObj];
+    dict[@"mediaType"] = @(self.mediaType);
+    if(self.remoteMediaUrl.length) {
+        dict[@"remoteMediaUrl"] = self.remoteMediaUrl;
+    }
+    if(self.localMediaPath.length) {
+        dict[@"localMediaPath"] = self.localMediaPath;
+    }
+    return dict;
+}
 @end
 
 @implementation WFCCMessageContent

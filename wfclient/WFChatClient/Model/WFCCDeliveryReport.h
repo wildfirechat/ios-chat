@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "WFCCJsonSerializer.h"
 /**
  会话
  */
-@interface WFCCDeliveryReport : NSObject
+@interface WFCCDeliveryReport : WFCCJsonSerializer
 
 +(instancetype)delivered:(NSString *)userId
                timestamp:(long long)timestamp;

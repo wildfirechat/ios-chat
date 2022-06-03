@@ -237,6 +237,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 + (WFCCIMService*)sharedWFCIMService;
 
 
+/*
+ 使用raw消息。当client用于uniapp时，messagePayload没有必要decode为messagecontent，使用raw消息，收发消息都是WFCCRawMessageContent。不要调用这个函数，仅仅当client用在uniapp时。
+ */
+- (void)useRawMessage;
+
+
+/**
+ 外部用户源
+ */
 @property(nonatomic, weak)id<WFCCUserSource> userSource;
 
 #pragma mark - 会话相关
@@ -923,6 +932,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param contentClass 自定义消息
  */
 - (void)registerMessageContent:(Class)contentClass;
+
+/**
+ 注册自定义消息flag。此方法仅供给uniapp使用。
+ 
+ @param contentType 自定义消息类型
+ @param contentFlag 自定义消息flag
+ */
+- (void)registerMessageFlag:(int)contentType flag:(int)contentFlag;
 
 /**
  消息解码
