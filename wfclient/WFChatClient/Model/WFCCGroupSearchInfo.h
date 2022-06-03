@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCCGroupInfo.h"
+#import "WFCCJsonSerializer.h"
 
 /**
  群组搜索信息
  */
-@interface WFCCGroupSearchInfo : NSObject
+@interface WFCCGroupSearchInfo : WFCCJsonSerializer
 
 /**
  命中的群组

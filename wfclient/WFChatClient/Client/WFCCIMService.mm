@@ -19,6 +19,7 @@
 #import "wav_amr.h"
 #import "WFCCUserOnlineState.h"
 #import "WFAFNetworking.h"
+#import "WFCCRawMessageContent.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
@@ -963,6 +964,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 @property(nonatomic, assign)BOOL defaultSilentWhenPCOnline;
 
 @property(nonatomic, strong)NSMutableDictionary<NSString *, WFCCUserOnlineState*> *useOnlineCacheMap;
+
+@property(nonatomic, assign)BOOL rawMessage;
 @end
 
 @implementation WFCCIMService
@@ -979,6 +982,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
 
     return sharedSingleton;
+}
+
+- (void)useRawMessage {
+    self.rawMessage = YES;
 }
 
 - (WFCCMessage *)send:(WFCCConversation *)conversation
@@ -2857,6 +2864,9 @@ public:
     if (!groupId) {
         return nil;
     }
+    if(![groupId isKindOfClass:NSString.class]) {
+        return nil;
+    }
     mars::stn::TGroupInfo tgi = mars::stn::MessageDB::Instance()->GetGroupInfo([groupId UTF8String], refresh);
     return convertProtoGroupInfo(tgi);
 }
@@ -2944,6 +2954,12 @@ public:
 }
 
 - (WFCCMessageContent *)messageContentFromPayload:(WFCCMessagePayload *)payload {
+    if(self.rawMessage) {
+        WFCCRawMessageContent *rawContent = [[WFCCRawMessageContent alloc] init];
+        rawContent.payload = payload;
+        return rawContent;
+    }
+    
     int contenttype = payload.contentType;
     Class contentClass = self.MessageContentMaps[@(contenttype)];
     if (contentClass != nil) {
@@ -3042,6 +3058,10 @@ public:
     } else {
         return;
     }
+}
+
+- (void)registerMessageFlag:(int)contentType flag:(int)contentFlag {
+    mars::stn::MessageDB::Instance()->RegisterMessageFlag(contentType, contentFlag);
 }
 
 - (void)joinChatroom:(NSString *)chatroomId

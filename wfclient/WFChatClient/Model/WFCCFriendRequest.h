@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "WFCCJsonSerializer.h"
 /**
  好友请求
  */
-@interface WFCCFriendRequest : NSObject
+@interface WFCCFriendRequest : WFCCJsonSerializer
 
 /**
  方向

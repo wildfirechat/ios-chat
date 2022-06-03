@@ -61,7 +61,7 @@ NSString *kSecretMessageBurned = @"kSecretMessageBurned";
 @end
 
 @protocol RefreshFriendListDelegate <NSObject>
-- (void)onFriendListUpdated;
+- (void)onFriendListUpdated:(NSArray<NSString *> *)friendIds;
 @end
 
 @protocol RefreshFriendRequestDelegate <NSObject>
@@ -442,7 +442,11 @@ public:
     GFLCB(id<RefreshFriendListDelegate> delegate) : m_delegate(delegate) {}
     void onSuccess(const std::list<std::string> &friendIdList) {
         if(m_delegate) {
-            [m_delegate onFriendListUpdated];
+            NSMutableArray *arr = [[NSMutableArray alloc] init];
+            for (std::list<std::string>::const_iterator it = friendIdList.begin(); it != friendIdList.end(); ++it) {
+                [arr addObject:[NSString stringWithUTF8String:it->c_str()]];
+            }
+            [m_delegate onFriendListUpdated:arr];
         }
     }
     void onFalure(int errorCode) {
@@ -1262,9 +1266,9 @@ static WFCCNetworkService * sharedSingleton = nil;
   });
 }
 
-- (void)onFriendListUpdated {
+- (void)onFriendListUpdated:(NSArray<NSString *> *)friendIds {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kFriendListUpdated object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kFriendListUpdated object:friendIds];
     });
 }
 

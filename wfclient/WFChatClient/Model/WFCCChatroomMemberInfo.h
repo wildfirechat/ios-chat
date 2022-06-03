@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
-@interface WFCCChatroomMemberInfo : NSObject
+@interface WFCCChatroomMemberInfo : WFCCJsonSerializer
 @property(nonatomic, assign)int memberCount;
 @property(nonatomic, strong)NSArray<NSString *> *members;
 @end

@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "WFCCConversation.h"
 #import "WFCCMessage.h"
-
+#import "WFCCJsonSerializer.h"
 /**
  会话搜索信息
  */
-@interface WFCCConversationSearchInfo : NSObject
+@interface WFCCConversationSearchInfo : WFCCJsonSerializer
 
 /**
  会话

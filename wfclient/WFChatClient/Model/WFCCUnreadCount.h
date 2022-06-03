@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCCUnreadCount : NSObject
+@interface WFCCUnreadCount : WFCCJsonSerializer
 +(instancetype)countOf:(int)unread mention:(int)mention mentionAll:(int)mentionAll;
 @property(nonatomic, assign)int unread;
 @property(nonatomic, assign)int unreadMention;

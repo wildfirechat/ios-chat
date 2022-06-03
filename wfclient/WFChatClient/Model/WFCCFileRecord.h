@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCCConversation.h"
+#import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCCFileRecord : NSObject
+@interface WFCCFileRecord : WFCCJsonSerializer
 @property (nonatomic, strong)WFCCConversation *conversation;
 @property (nonatomic, assign)long long messageUid;
 @property (nonatomic, strong)NSString *userId;
