@@ -865,7 +865,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (BOOL)isSupportBigFilesUpload;
 
 /**
- 删除消息
+ 删除本地消息
  
  @param messageId 消息ID
  @return 是否删除成功
@@ -2023,7 +2023,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (BOOL)isMuteNotificationWhenPcOnline;
 
 /**
- 设置PC/Web在线时，手机是否默认静音。缺省值为YES，如果IM服务配置server.mobile_default_silent_when_pc_online 为false时，需要调用此函数设置为NO，此时静音状态意义翻转。
+ 设置PC/Web在线时，手机是否默认静音。缺省值为YES，只有在IM服务配置server.mobile_default_silent_when_pc_online 为false时，才需要调用此函数设置为NO，此时静音状态意义翻转。其它请求千万不要调用此函数，否则会引起状态错乱。
+ 设置当PC在线时是否通知的方法是 muteNotificationWhenPcOnline:success:error
 
  @param defaultSilent 缺省值是否为静音。
  */
