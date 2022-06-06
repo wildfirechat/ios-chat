@@ -20,7 +20,7 @@
     [self setDict:dict key:@"messageUid" longlongValue:self.messageUid];
 
     dict[@"conversation"] = [self.conversation toJsonObj];
-    dict[@"fromUser"] = self.fromUser;
+    dict[@"sender"] = self.fromUser;
     dict[@"toUsers"] = self.toUsers;
     dict[@"content"] = [[self.content encode] toJsonObj];
     dict[@"direction"] = @(self.direction);
