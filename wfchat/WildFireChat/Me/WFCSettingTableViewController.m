@@ -204,7 +204,7 @@
         if (indexPath.row == 0) {
             [self showSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"CurrentVersion");
-            cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@(%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[WFCCNetworkService sharedInstance] getProtoRevision]];
             cell.accessoryType = UITableViewCellAccessoryNone;
         } if (indexPath.row == 1) {
             cell.textLabel.text = LocalizedString(@"HelpFeedback");
