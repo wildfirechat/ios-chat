@@ -954,7 +954,8 @@ namespace mars{
         extern long sendMessage(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
 
         extern bool sendMessageEx(long messageId, SendMsgCallback *callback, int expireDuration);
-
+    
+        extern bool cancelSendingMessage(long messageId);
 
         extern void recallMessage(long long messageUid, GeneralOperationCallback *callback);
         extern void deleteRemoteMessage(long long messageUid, GeneralOperationCallback *callback);
@@ -1103,6 +1104,7 @@ namespace mars{
         extern bool GetFeeds(std::string data, std::list<TMomentsFeed> &feeds, bool gzip);
         extern bool GetFeed(std::string data, TMomentsFeed &feed, bool gzip);
         extern bool GetComments(std::string data, std::list<TMomentsComment> &feeds, bool gzip);
+        extern const std::string getProtoRevision();
 		
     }
 }
