@@ -2830,6 +2830,7 @@
     UIMenuController *menu = [UIMenuController sharedMenuController];
     
     UIMenuItem *deleteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Delete") action:@selector(performDelete:)];
+    UIMenuItem *cancelItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Cancel") action:@selector(performCancel:)];
     UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Copy") action:@selector(performCopy:)];
     UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Forward") action:@selector(performForward:)];
     UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Recall") action:@selector(performRecall:)];
@@ -2855,6 +2856,10 @@
         [items addObject:copyItem];
     }
     
+    if (baseCell.model.message.direction == MessageDirection_Send && baseCell.model.message.status == Message_Status_Sending && [baseCell.model.message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
+        [items addObject:cancelItem];
+    }
+    
     if (baseCell.model.message.direction == MessageDirection_Receive) {
         [items addObject:complainItem];
     }
@@ -2876,8 +2881,7 @@
     
     BOOL canRecall = NO;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]] &&
-        msg.direction == MessageDirection_Send
-        ) {
+        msg.direction == MessageDirection_Send) {
         NSDate *cur = [NSDate date];
         if ([cur timeIntervalSince1970]*1000 - msg.serverTime < 60 * 1000) {
             canRecall = YES;
@@ -2955,7 +2959,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCancel:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -3025,6 +3029,14 @@
         [self presentViewController:actionSheet animated:YES completion:nil];
     } else {
         [self deleteMessage:message.messageId];
+    }
+}
+
+-(void)performCancel:(UIMenuController *)sender {
+    if (self.cell4Menu) {
+        if(![[WFCCIMService sharedWFCIMService] cancelSendingMessage:self.cell4Menu.model.message.messageId]) {
+            [self.view makeToast:@"取消失败" duration:1 position:CSToastPositionCenter];
+        }
     }
 }
 
