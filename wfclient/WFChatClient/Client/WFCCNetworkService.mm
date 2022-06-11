@@ -1215,6 +1215,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setProxyInfo(host?[host UTF8String]:"", ip?[ip UTF8String]:"", port, username?[username UTF8String]:"", password?[password UTF8String]:"");
 }
 
+- (NSString *)getProtoRevision {
+    return [NSString stringWithUTF8String:mars::stn::getProtoRevision().c_str()];
+}
+
 - (void)setVoipDeviceToken:(NSString *)token {
     if (token.length == 0) {
         return;

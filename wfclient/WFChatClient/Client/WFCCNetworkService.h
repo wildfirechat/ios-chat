@@ -395,6 +395,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  @param password 密码
  */
 - (void)setProxyInfo:(NSString *)host ip:(NSString *)ip port:(int)port username:(NSString *)username password:(NSString *)password;
+
+/**
+ 获取协议栈版本
+ */
+- (NSString *)getProtoRevision;
 @end
 
 #endif
