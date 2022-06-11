@@ -1166,6 +1166,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
 }
 
+- (BOOL)cancelSendingMessage:(long)messageId {
+    return mars::stn::cancelSendingMessage(messageId)?YES:NO;
+}
+
 - (void)recall:(WFCCMessage *)msg
        success:(void(^)(void))successBlock
          error:(void(^)(int error_code))errorBlock {

@@ -794,6 +794,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
           expireDuration:(int)expireDuration
                  success:(void(^)(long long messageUid, long long timestamp))successBlock
                    error:(void(^)(int error_code))errorBlock;
+
+/**
+ 取消发送消息，只有发送媒体类消息才可以取消
+ 
+ @param messageId 消息Id
+ @return 是否取消成功
+ */
+- (BOOL)cancelSendingMessage:(long)messageId;
 /**
  撤回消息
  
