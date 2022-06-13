@@ -22,6 +22,7 @@
 - (instancetype)init {
     self = [super init];
     if(self) {
+#if USE_CALL_KIT
         self.callUUIDDict = [[NSMutableDictionary alloc] init];
         static CXProviderConfiguration* configInternal = nil;
         configInternal = [[CXProviderConfiguration alloc] initWithLocalizedName:@"野火"];
@@ -35,6 +36,7 @@
         self.provider = [[CXProvider alloc] initWithConfiguration: configInternal];
         [self.provider setDelegate:self queue:nil];
         self.callController = [[CXCallController alloc] initWithQueue:dispatch_get_main_queue()];
+#endif
     }
     return self;
 }

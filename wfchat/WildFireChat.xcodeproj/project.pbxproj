@@ -19,8 +19,6 @@
 		2B4C0281252F4A570043FA41 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0279252F4A570043FA41 /* MBProgressHUD.m */; };
 		2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */; };
 		2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */; };
-		2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E0233627450004212B /* PushKit.framework */; };
-		2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDCE7E22336278E0004212B /* CallKit.framework */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
@@ -398,7 +396,6 @@
 			files = (
 				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
-				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
@@ -406,7 +403,6 @@
 				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
-				2BDCE7E1233627450004212B /* PushKit.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
 				B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */,
 				2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */,
