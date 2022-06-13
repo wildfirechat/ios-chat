@@ -31,7 +31,7 @@
 
 
 //关于启用callkit功能，请参考 https://docs.wildfirechat.cn/blogs/iOS如何启用CallKit.html
-#define USE_CALL_KIT 1
+#define USE_CALL_KIT 0
 //模拟器不支持callkit
 #if TARGET_IPHONE_SIMULATOR
 #define USE_CALL_KIT 0

@@ -62,9 +62,8 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-#if WFCU_SUPPORT_VOIP
-    //设置不注册voip推送服务，需要在sharedEngineKit方法之前调用
-    //[WFAVEngineKit notRegisterVoipPushService];
+#if !USE_CALL_KIT
+    [WFAVEngineKit notRegisterVoipPushService];
 #endif
     
     [WFCCNetworkService startLog];
