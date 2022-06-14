@@ -19,7 +19,7 @@
 #import "UIFont+YH.h"
 #import "WFCThemeTableViewController.h"
 #import "AppService.h"
-
+#import "WFCDestroyAccountViewController.h"
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -238,10 +238,11 @@
        [self setLastCellSeperatorToLeft:cell];
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
         [btn setTitle:LocalizedString(@"Logout") forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
         btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"]
                   forState:UIControlStateNormal];
-        [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
+        
         if (@available(iOS 14, *)) {
             [cell.contentView addSubview:btn];
         } else {
@@ -253,14 +254,35 @@
 }
  
 - (void)onLogoutBtn:(id)sender {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
-    [[AppService sharedAppService] clearAppServiceAuthInfos];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"Quit") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    //退出后就不需要推送了，第一个参数为YES
-    //如果希望再次登录时能够保留历史记录，第二个参数为NO。如果需要清除掉本地历史记录第二个参数用YES
-    [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:NO];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionLogout = [UIAlertAction actionWithTitle:WFCString(@"Logout") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+        [[AppService sharedAppService] clearAppServiceAuthInfos];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        //退出后就不需要推送了，第一个参数为YES
+        //如果希望再次登录时能够保留历史记录，第二个参数为NO。如果需要清除掉本地历史记录第二个参数用YES
+        [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:NO];
+    }];
+    
+    UIAlertAction *actionDestroy = [UIAlertAction actionWithTitle:WFCString(@"DestroyAccount") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        WFCDestroyAccountViewController *destroyVC = [[WFCDestroyAccountViewController alloc] init];
+        [self.navigationController pushViewController:destroyVC animated:YES];
+    }];
+    
+    //把action添加到actionSheet里
+    [actionSheet addAction:actionLogout];
+    [actionSheet addAction:actionDestroy];
+    [actionSheet addAction:actionCancel];
+    
+    //相当于之前的[actionSheet show];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
+
 @end
