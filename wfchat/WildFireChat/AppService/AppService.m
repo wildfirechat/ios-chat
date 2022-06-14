@@ -67,6 +67,29 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (void)sendDestroyAccountCode:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/send_destroy_code" data:nil isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], @"error");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)destroyAccount:(NSString *)code success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/destroy" data:@{@"code":code} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], @"error");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
 
 - (void)pcScaned:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = [NSString stringWithFormat:@"/scan_pc/%@", sessionId];
