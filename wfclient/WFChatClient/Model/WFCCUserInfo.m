@@ -33,8 +33,7 @@
     dict[@"name"] = self.name;
     dict[@"displayName"] = self.displayName;
     dict[@"portrait"] = self.portrait;
-    if(self.gender)
-        dict[@"gender"] = @(self.gender);
+    dict[@"gender"] = @(self.gender);
     if(self.mobile.length)
         dict[@"mobile"] = self.mobile;
     if(self.email.length)
@@ -49,10 +48,8 @@
         dict[@"extra"] = self.extra;
     if(self.social.length)
         dict[@"social"] = self.social;
-    if(self.updateDt)
-        dict[@"updateDt"] = @(self.updateDt);
-    if(self.deleted)
-        dict[@"deleted"] = @(self.deleted);
+    dict[@"updateDt"] = @(self.updateDt);
+    dict[@"deleted"] = @(self.deleted);
     return dict;
 }
 @end
