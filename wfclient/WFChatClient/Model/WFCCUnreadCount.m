@@ -19,12 +19,9 @@
 
 -(id)toJsonObj {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    if(self.unread)
-        dict[@"unread"] = @(self.unread);
-    if(self.unreadMention)
-        dict[@"unreadMention"] = @(self.unreadMention);
-    if(self.unreadMentionAll)
-        dict[@"unreadMentionAll"] = @(self.unreadMentionAll);
+    dict[@"unread"] = @(self.unread);
+    dict[@"unreadMention"] = @(self.unreadMention);
+    dict[@"unreadMentionAll"] = @(self.unreadMentionAll);
     return dict;
 }
 @end
