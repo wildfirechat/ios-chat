@@ -1159,11 +1159,12 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::Disconnect(flag);
   }
 }
-
 - (NSString *)getHost {
     return [NSString stringWithUTF8String:mars::stn::GetHost().c_str()];
 }
-
+- (int)getPort {
+    return mars::stn::GetPort();
+}
 - (NSString *)getHostEx {
     return [NSString stringWithUTF8String:mars::stn::GetHostEx().c_str()];
 }

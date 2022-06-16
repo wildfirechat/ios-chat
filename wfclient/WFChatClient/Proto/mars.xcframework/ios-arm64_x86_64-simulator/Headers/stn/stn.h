@@ -258,6 +258,8 @@ extern std::string GetEncodeDataEx(std::string data);
 extern std::string GetDecodeData(std::string data);
     
 extern std::string GetHost();
+extern int GetPort();
+    
 extern std::string GetHostEx();
 
 extern void (*RequestNetCheckShortLinkHosts)(std::vector<std::string>& _hostlist);
