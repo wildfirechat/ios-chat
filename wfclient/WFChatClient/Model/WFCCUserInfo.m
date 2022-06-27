@@ -13,6 +13,8 @@
     self.userId = other.userId;
     self.name = other.name;
     self.displayName = other.displayName;
+    self.groupAlias = other.groupAlias;
+    self.friendAlias = other.friendAlias;
     self.portrait = other.portrait;
     self.gender = other.gender;
     self.mobile = other.mobile;
@@ -22,7 +24,6 @@
     self.social = other.social;
     self.extra = other.extra;
     self.updateDt = other.updateDt;
-    self.social = other.social;
     self.type = other.type;
     self.deleted = other.deleted;
 }
@@ -32,22 +33,17 @@
     dict[@"uid"] = self.userId;
     dict[@"name"] = self.name;
     dict[@"displayName"] = self.displayName;
+    dict[@"groupAlias"] = self.groupAlias;
+    dict[@"friendAlias"] = self.friendAlias;
     dict[@"portrait"] = self.portrait;
     dict[@"gender"] = @(self.gender);
-    if(self.mobile.length)
-        dict[@"mobile"] = self.mobile;
-    if(self.email.length)
-        dict[@"email"] = self.email;
-    if(self.address.length)
-        dict[@"address"] = self.address;
-    if(self.company.length)
-        dict[@"company"] = self.company;
-    if(self.social.length)
-        dict[@"social"] = self.social;
-    if(self.extra.length)
-        dict[@"extra"] = self.extra;
-    if(self.social.length)
-        dict[@"social"] = self.social;
+    dict[@"type"] = @(self.type);
+    dict[@"mobile"] = self.mobile;
+    dict[@"email"] = self.email;
+    dict[@"address"] = self.address;
+    dict[@"company"] = self.company;
+    dict[@"social"] = self.social;
+    dict[@"extra"] = self.extra;
     dict[@"updateDt"] = @(self.updateDt);
     dict[@"deleted"] = @(self.deleted);
     return dict;
