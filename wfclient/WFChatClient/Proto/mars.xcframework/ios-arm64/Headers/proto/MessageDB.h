@@ -128,6 +128,7 @@ namespace mars {
             std::list<TGroupMember> GetGroupMembers(const std::string &groupId, bool refresh);
             TGroupMember GetGroupMember(const std::string &groupId, const std::string &memberId);
             std::list<TGroupMember> GetGroupMembersByType(const std::string &groupId, int type);
+            std::list<TGroupMember> GetGroupMembersByCount(const std::string &groupId, int count);
             void GetGroupMembers(const std::string &groupId, bool refresh, GetGroupMembersCallback *callback);
             bool RemoveGroupAndMember(const std::string &groupId, bool keepGroupName = false);
             bool RemoveAllGroupMember(const std::string &groupId);
