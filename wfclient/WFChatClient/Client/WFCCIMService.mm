@@ -2678,6 +2678,20 @@ WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
     return output;
 }
 
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                                          count:(int)count {
+    if(groupId.length == 0) {
+        return nil;
+    }
+    
+    std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembersByCount([groupId UTF8String], count);
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
+        WFCCGroupMember *member = convertProtoGroupMember(*it);
+        [output addObject:member];
+    }
+    return output;
+}
 
 class IMGetGroupMembersCallback : public mars::stn::GetGroupMembersCallback {
 private:

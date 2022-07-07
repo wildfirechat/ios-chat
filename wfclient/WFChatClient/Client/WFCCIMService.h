@@ -1260,6 +1260,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                     type:(WFCCGroupMemberType)memberType;
 
 /**
+ 获取指定数目群成员信息
+ 
+ @param groupId 群ID
+ @param count 群成员类型个数
+ @return 群成员信息列表
+ */
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                                          count:(int)count;
+/**
  获取群成员信息
  @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话详情中时使用一次true。
  
