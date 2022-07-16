@@ -104,7 +104,7 @@
 		2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1439F3217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h */; };
 		2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1439F4217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m */; };
 		2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B02499A21A00FD3575 /* WFCUConferenceViewController.m */; };
-		2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B12499A21A00FD3575 /* WFCUConferenceViewController.h */; };
+		2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B12499A21A00FD3575 /* WFCUConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1EB5B72499A30500FD3575 /* WFCUCreateConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B52499A30500FD3575 /* WFCUCreateConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1EB5B82499A30500FD3575 /* WFCUCreateConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5B62499A30500FD3575 /* WFCUCreateConferenceViewController.m */; };
 		2F1EB5BB2499AA5E00FD3575 /* WFCUConferenceInviteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5B92499AA5E00FD3575 /* WFCUConferenceInviteViewController.h */; };
@@ -1998,6 +1998,7 @@
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
 				2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */,
+				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
@@ -2158,7 +2159,6 @@
 				2FD550EC2442AA0B00B3EE09 /* WFCURecallCell.h in Headers */,
 				2FB7125425D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
-				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
 				2BDF57A424AD70C8003C1F08 /* DNImageFlowViewController.h in Headers */,
