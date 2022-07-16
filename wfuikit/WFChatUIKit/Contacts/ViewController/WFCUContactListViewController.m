@@ -26,7 +26,7 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUPinyinUtility.h"
-
+#import "WFCUImage.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -100,7 +100,7 @@ static NSString *wfcstar = @"☆";
             [self updateRightBarBtn];
         }
     } else {
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_add_friend"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_add_friend"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     }
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
@@ -419,7 +419,7 @@ static NSString *wfcstar = @"☆";
                 WFCUNewFriendTableViewCell *contactCell = [self dequeueOrAllocNewFriendCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"NewFriend");
-                contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"friend_request_icon"];
                 [contactCell refresh];
                 contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
                 
@@ -429,7 +429,7 @@ static NSString *wfcstar = @"☆";
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocFavGroupCell:tableView];
                 contactCell.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
                 contactCell.nameLabel.text = WFCString(@"Group");
-                contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_group_icon"];
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
@@ -437,7 +437,7 @@ static NSString *wfcstar = @"☆";
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
-                contactCell.portraitView.image = [UIImage imageNamed:@"contact_channel_icon"];
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_channel_icon"];
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
@@ -489,13 +489,13 @@ static NSString *wfcstar = @"☆";
               [contactCell refresh];
 
               contactCell.nameLabel.text = WFCString(@"NewFriend");
-              contactCell.portraitView.image = [UIImage imageNamed:@"friend_request_icon"];
+              contactCell.portraitView.image = [WFCUImage imageNamed:@"friend_request_icon"];
               contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
               cell = contactCell;
             } else {
               WFCUContactTableViewCell *contactCell = [self dequeueOrAllocFavGroupCell:tableView];
               contactCell.nameLabel.text = WFCString(@"Group");
-              contactCell.portraitView.image = [UIImage imageNamed:@"contact_group_icon"];
+              contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_group_icon"];
               contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
               cell = contactCell;
             }

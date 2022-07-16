@@ -2,6 +2,7 @@
 
 #import "AirplayActiveView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "WFCUImage.h"
 
 @interface AirplayActiveView ()
 
@@ -25,7 +26,7 @@
         [_gradientLayer setLocations:@[ @0.0, @1.0 ]];
         [[self layer] addSublayer:_gradientLayer];
         
-        _displayImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"airplay-display.png"]];
+        _displayImageView = [[UIImageView alloc] initWithImage:[WFCUImage imageNamed:@"airplay-display.png"]];
         [self addSubview:_displayImageView];
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];

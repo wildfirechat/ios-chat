@@ -7,6 +7,7 @@
 //
 
 #import "WFCUUtilities.h"
+#import "WFCUImage.h"
 
 @implementation WFCUUtilities
 + (CGSize)getTextDrawingSize:(NSString *)text
@@ -267,7 +268,7 @@
     } else {
         fileImage = @"file_type_unknown";
     }
-    return [UIImage imageNamed:fileImage];
+    return [WFCUImage imageNamed:fileImage];
 }
 
 + (NSString *)getUnduplicatedPath:(NSString *)path {

@@ -15,7 +15,7 @@
 #import "WFCUModifyMyProfileViewController.h"
 #import "QrCodeHelper.h"
 #import "WFCUConfigManager.h"
-
+#import "WFCUImage.h"
 
 @interface WFCUMyProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -83,7 +83,7 @@
     self.portraitView.userInteractionEnabled = YES;
     
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
     [headerCell addSubview:self.portraitView];
     headerCell.tag = -1;
@@ -98,7 +98,7 @@
     cell = [self getAttrCell:WFCString(@"QRCode") rightText:@"" mutable:YES];
     cell.tag = 1000;
     [self.cells1 addObject:cell];
-    UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+    UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
     
     UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
     qrview.image = qrcode;

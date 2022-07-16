@@ -11,6 +11,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUImage.h"
 
 @interface WFCUFriendRequestTableViewCell()
 @property (nonatomic, strong)UIImageView *portraitView;
@@ -74,7 +75,7 @@
 - (void)setFriendRequest:(WFCCFriendRequest *)friendRequest {
     _friendRequest = friendRequest;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendRequest.target refresh:NO];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]  placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]  placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     self.nameLabel.text = userInfo.displayName;
     self.reasonLabel.text = friendRequest.reason;
     BOOL expired = NO;

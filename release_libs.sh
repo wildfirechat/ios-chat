@@ -36,9 +36,6 @@ xcodebuild -create-xcframework -framework "${BUILD_DIR}"/Release-iphoneos/"${TAR
 
 rm -rf $BUILD_DIR
 
-##资源
-cp -af wfuikit/WFChatUIKit/Resources ${UNIVERSAL_OUTPUT_FOLDER}
-
 ##依赖
 cp -af wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework ${UNIVERSAL_OUTPUT_FOLDER}
 cp -af wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework ${UNIVERSAL_OUTPUT_FOLDER}

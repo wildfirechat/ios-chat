@@ -11,6 +11,8 @@
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUConfigManager.h"
+#import "WFCUImage.h"
+
 
 @interface WFCUGroupInfoViewController ()
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;
@@ -51,7 +53,7 @@
     _groupInfo = groupInfo;
     if(groupInfo) {
         if(groupInfo.portrait.length) {
-            [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[UIImage imageNamed:@""]];
+            [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[WFCUImage imageNamed:@""]];
         }
         
         self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.displayName, groupInfo.memberCount];
@@ -83,7 +85,7 @@
     if(!self.groupInfo.portrait.length) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSString *imagePath = [WFCCUtilities getGroupGridPortrait:self.groupId memberPortraits:groupMembers width:50 defaultUserPortrait:^UIImage *(NSString *userId) {
-                return [UIImage imageNamed:@"PersonalChat"];
+                return [WFCUImage imageNamed:@"PersonalChat"];
             }];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.groupProtraitView.image = [UIImage imageWithContentsOfFile:imagePath];

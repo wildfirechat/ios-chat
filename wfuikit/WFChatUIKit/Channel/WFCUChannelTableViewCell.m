@@ -8,6 +8,7 @@
 
 #import "WFCUChannelTableViewCell.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @interface WFCUChannelTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
@@ -51,6 +52,6 @@
     } else {
         self.name.text = [NSString stringWithFormat:@"%@", channelInfo.name];
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
 }
 @end

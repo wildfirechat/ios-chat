@@ -8,6 +8,8 @@
 
 #import "UITabBar+badge.h"
 #import "TabbarButton.h"
+#import "WFCUImage.h"
+
 
 @implementation UITabBar (badge)
 
@@ -37,7 +39,7 @@
         }
         if (badgeValue >= 100) {
             TabbarButton *btn = [[TabbarButton alloc] initWithFrame:CGRectMake(x, y, 22, 18)];
-            UIImage *image = [[UIImage imageNamed:@"more_unread"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *image = [[WFCUImage imageNamed:@"more_unread"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [btn setImage:image forState:UIControlStateNormal];
             [self addSubview:btn];
             btn.tag = 888+index;

@@ -14,6 +14,7 @@
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
 #import "WFCUEnum.h"
+#import "WFCUImage.h"
 
 @interface WFCUCreateGroupViewController () <UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -35,7 +36,7 @@
     CGRect bound = self.view.bounds;
     CGFloat portraitWidth = PortraitWidth;
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake((bound.size.width - portraitWidth)/2, 100, portraitWidth, portraitWidth)];
-    self.portraitView.image = [UIImage imageNamed:@"group_default_portrait"];
+    self.portraitView.image = [WFCUImage imageNamed:@"group_default_portrait"];
     self.portraitView.userInteractionEnabled = YES;
     UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectPortrait:)];
     [self.portraitView addGestureRecognizer:tap];
@@ -83,7 +84,7 @@
   } else {
     UIImageView *portraitView = [[UIImageView alloc] initWithFrame:self.combineHeadView.bounds];
     WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.groupId refresh:NO];
-    [portraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [portraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     [self.combineHeadView addSubview:portraitView];
   }
 }
@@ -138,7 +139,7 @@
                     index = j + (i-1)*column + firstCol;
                 }
                 WFCCUserInfo *user = [users objectAtIndex:index];
-                [imageView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+                [imageView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
                 [self.combineHeadView addSubview:imageView];
             }
         }

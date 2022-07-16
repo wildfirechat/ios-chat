@@ -12,7 +12,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "ZCCCircleProgressView.h"
 #import "WFCUConfigManager.h"
-
+#import "WFCUImage.h"
 
 #define Portrait_Size 40
 #define SelectView_Size 20
@@ -154,7 +154,7 @@
   
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
       if(self.model.showNameLabel) {
           NSString *nameStr = nil;
           if (userInfo.friendAlias.length) {
@@ -198,7 +198,7 @@
 
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-      self.bubbleView.image = [UIImage imageNamed:@"sent_msg_background"];
+      self.bubbleView.image = [WFCUImage imageNamed:@"sent_msg_background"];
       self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side - selectViewOffset, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
       
@@ -229,7 +229,7 @@
       }
       
     CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-      self.bubbleView.image = [UIImage imageNamed:bubbleImageName];
+      self.bubbleView.image = [WFCUImage imageNamed:bubbleImageName];
       self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Arraw, Client_Bubble_Top_Padding, size.width, size.height);
       
@@ -251,9 +251,9 @@
     if (model.selecting) {
         self.selectView.hidden = NO;
         if (model.selected) {
-            self.selectView.image = [UIImage imageNamed:@"multi_selected"];
+            self.selectView.image = [WFCUImage imageNamed:@"multi_selected"];
         } else {
-            self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+            self.selectView.image = [WFCUImage imageNamed:@"multi_unselected"];
         }
         CGFloat top = [WFCUMessageCellBase hightForHeaderArea:model];
         CGRect frame = self.selectView.frame;
@@ -457,7 +457,7 @@
     _portraitView = [[UIImageView alloc] init];
     _portraitView.clipsToBounds = YES;
     _portraitView.layer.cornerRadius = 3.f;
-    [_portraitView setImage:[UIImage imageNamed:@"PersonalChat"]];
+    [_portraitView setImage:[WFCUImage imageNamed:@"PersonalChat"]];
     
     [_portraitView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapPortrait:)]];
       [_portraitView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressPortrait:)]];
@@ -525,7 +525,7 @@
 - (UIImageView *)failureView {
     if (!_failureView) {
         _failureView = [[UIImageView alloc] init];
-        _failureView.image = [UIImage imageNamed:@"failure"];
+        _failureView.image = [WFCUImage imageNamed:@"failure"];
         [_failureView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onResend:)]];
         [_failureView setUserInteractionEnabled:YES];
         [self.contentView addSubview:_failureView];
@@ -540,7 +540,7 @@
         frame = CGRectMake(frame.size.width - SelectView_Size - Portrait_Padding_Right, top, SelectView_Size, SelectView_Size);
         
         _selectView = [[UIImageView alloc] initWithFrame:frame];
-        _selectView.image = [UIImage imageNamed:@"multi_unselected"];
+        _selectView.image = [WFCUImage imageNamed:@"multi_unselected"];
         UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelect:)];
         [_selectView addGestureRecognizer:tap];
         _selectView.userInteractionEnabled = YES;
@@ -552,9 +552,9 @@
 - (void)onSelect:(id)sender {
     self.model.selected = !self.model.selected;
     if (self.model.selected) {
-        self.selectView.image = [UIImage imageNamed:@"multi_selected"];
+        self.selectView.image = [WFCUImage imageNamed:@"multi_selected"];
     } else {
-        self.selectView.image = [UIImage imageNamed:@"multi_unselected"];
+        self.selectView.image = [WFCUImage imageNamed:@"multi_unselected"];
     }
 }
 

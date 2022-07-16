@@ -10,6 +10,8 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUImage.h"
+
 @interface WFCUSearchGroupTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
 @property (strong, nonatomic) UILabel *name;
@@ -108,7 +110,7 @@
         [attrStr appendAttributedString:string];
         self.haveMember.attributedText = attrStr;
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
 }
 
 @end

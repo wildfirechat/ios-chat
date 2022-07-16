@@ -8,6 +8,7 @@
 
 #import "WFCUVideoCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUImage.h"
 
 @interface WFCUVideoCell ()
 @property(nonatomic, strong) UIImageView *shadowMaskView;
@@ -34,7 +35,7 @@
     self.thumbnailView.frame = self.bubbleView.bounds;
     self.thumbnailView.image = imgContent.thumbnail;
     self.videoCoverView.frame = CGRectMake((self.bubbleView.bounds.size.width - 40)/2, (self.bubbleView.bounds.size.height - 40)/2, 40, 40);
-    self.videoCoverView.image = [UIImage imageNamed:@"video_msg_cover"];
+    self.videoCoverView.image = [WFCUImage imageNamed:@"video_msg_cover"];
 }
 
 - (UIImageView *)thumbnailView {

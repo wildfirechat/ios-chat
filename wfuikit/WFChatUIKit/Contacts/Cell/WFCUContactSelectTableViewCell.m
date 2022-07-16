@@ -11,6 +11,9 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "WFCUImage.h"
+
+
 @interface WFCUContactSelectTableViewCell()
 @property(nonatomic, strong)UIImageView *checkImageView;
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -67,15 +70,15 @@
     _checked = checked;
     if (self.multiSelect) {
         if (checked) {
-            self.checkImageView.image = [UIImage imageNamed:@"multi_selected"];
+            self.checkImageView.image = [WFCUImage imageNamed:@"multi_selected"];
         } else {
-            self.checkImageView.image = [UIImage imageNamed:@"multi_unselected"];
+            self.checkImageView.image = [WFCUImage imageNamed:@"multi_unselected"];
         }
     } else {
         if (checked) {
-            self.checkImageView.image = [UIImage imageNamed:@"single_selected"];
+            self.checkImageView.image = [WFCUImage imageNamed:@"single_selected"];
         } else {
-            self.checkImageView.image = [UIImage imageNamed:@"single_unselected"];
+            self.checkImageView.image = [WFCUImage imageNamed:@"single_unselected"];
         }
     }
 }
@@ -86,7 +89,7 @@
 - (void)setFriendUid:(NSString *)friendUid {
     _friendUid = friendUid;
     WFCCUserInfo *friendInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendUid refresh:NO];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[friendInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[friendInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     if (friendInfo.friendAlias.length) {
         self.nameLabel.text = friendInfo.friendAlias;
     } else {

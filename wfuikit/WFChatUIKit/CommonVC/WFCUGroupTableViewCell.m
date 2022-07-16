@@ -10,6 +10,9 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUImage.h"
+
+
 @interface WFCUGroupTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
 @property (strong, nonatomic) UILabel *name;
@@ -63,10 +66,10 @@
     } else {
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     
     if (groupInfo.portrait.length) {
-        [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+        [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     } else {
         __weak typeof(self)ws = self;
         NSString *groupId = groupInfo.target;
@@ -74,18 +77,18 @@
         [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             NSString *path = [note.userInfo objectForKey:@"path"];
             if ([ws.groupInfo.target isEqualToString:groupId] && [groupId isEqualToString:note.object]) {
-                [ws.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+                [ws.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
         }];
-        [self.portrait setImage:[UIImage imageNamed:@"group_default_portrait"]];
+        [self.portrait setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
         
         
         NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
-            return [UIImage imageNamed:@"PersonalChat"];
+            return [WFCUImage imageNamed:@"PersonalChat"];
         }];
         
         if (path) {
-            [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             [self.portrait setImage:[UIImage imageWithContentsOfFile:path]];
         }
     }

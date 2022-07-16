@@ -8,6 +8,7 @@
 
 #import "WFCUSelectedUserCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @implementation WFCUSelectedUserCollectionViewCell
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -19,7 +20,7 @@
 }
 
 - (void)setUser:(WFCUSelectedUserInfo *)user {
-    [self.imgV sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.imgV sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
 }
 
 - (void)setIsSmall:(BOOL)isSmall {

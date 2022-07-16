@@ -13,6 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
+#import "WFCUImage.h"
 
 @interface WFCUSearchChannelViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -116,7 +117,7 @@
         }
         WFCCChannelInfo *channelInfo = self.searchList[indexPath.row];
         [cell.textLabel setText:channelInfo.name];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
       
       cell.userInteractionEnabled = YES;
       return cell;

@@ -13,6 +13,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import <CoreLocation/CoreLocation.h>
 #import "UIView+Screenshot.h"
+#import "WFCUImage.h"
 
 @interface WFCULocationViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -72,7 +73,7 @@
         
         self.mapView.showsUserLocation = YES;
         self.annotationLayer = [CALayer layer];
-        UIImage *image = [UIImage imageNamed:@"PinGreen"];
+        UIImage *image = [WFCUImage imageNamed:@"PinGreen"];
         self.annotationLayer.contents = (id)image.CGImage;
         self.annotationLayer.frame = CGRectMake(0, 0, 35, 35);
         self.annotationLayer.anchorPoint = CGPointMake(0.25f, 0.f);
@@ -254,7 +255,7 @@
     NSString *title = [lines componentsJoinedByString:@"\n"];
     cell.textLabel.text = title;
     if (cell.selected) {
-        cell.imageView.image = [UIImage imageNamed:@"multi_selected"];
+        cell.imageView.image = [WFCUImage imageNamed:@"multi_selected"];
     } else {
         cell.imageView.image = nil;
     }
