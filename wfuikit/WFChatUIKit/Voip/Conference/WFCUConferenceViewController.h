@@ -23,6 +23,20 @@
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
                        advanced:(BOOL)advance
-                        moCall:(BOOL)moCall;
+                        record:(BOOL)record
+                        moCall:(BOOL)moCall
+                         extra:(NSString *)extra;
+
+- (instancetype)initJoinConference:(NSString *)callId
+                     audioOnly:(BOOL)audioOnly
+                           pin:(NSString *)pin
+                          host:(NSString *)host
+                         title:(NSString *)title
+                          desc:(NSString *)desc
+                      audience:(BOOL)audience
+                       advance:(BOOL)advance
+                     muteAudio:(BOOL)muteAudio
+                     muteVideo:(BOOL)muteVideo
+                         extra:(NSString *)extra;
 @end
 

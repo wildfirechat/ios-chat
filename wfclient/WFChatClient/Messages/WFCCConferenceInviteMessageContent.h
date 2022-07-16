@@ -57,4 +57,8 @@
 */
 @property (nonatomic, assign)BOOL advanced;
 
+/*
+ 呼叫附加信息
+*/
+@property (nonatomic, strong)NSString *callExtra;
 @end
