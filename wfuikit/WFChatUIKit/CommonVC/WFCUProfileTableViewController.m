@@ -22,6 +22,8 @@
 #import "UIColor+YH.h"
 #import "WFCUConfigManager.h"
 #import "WFCUUserMessageListViewController.h"
+#import "WFCUImage.h"
+
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -241,7 +243,7 @@
     self.portraitView.userInteractionEnabled = YES;
     
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
     if (alias.length) {
@@ -377,7 +379,7 @@
                 [subView removeFromSuperview];
             }
             UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-            [btn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
+            [btn setImage:[WFCUImage imageNamed:@"video"] forState:UIControlStateNormal];
             btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
             [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
@@ -424,7 +426,7 @@
         [subView removeFromSuperview];
     }
     UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-    [btn setImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    [btn setImage:[WFCUImage imageNamed:@"message"] forState:UIControlStateNormal];
     btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
     [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
     [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];

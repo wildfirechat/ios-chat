@@ -13,6 +13,7 @@
 #import "YLGIFImage.h"
 #import "WFCUFaceButton.h"
 #import "WFCUConfigManager.h"
+#import "WFCUImage.h"
 
 #define FACE_COUNT_ROW  4
 #define FACE_COUNT_CLU  7
@@ -149,7 +150,7 @@
 
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
-        NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+        NSString *resourcePath = [[NSBundle bundleForClass:[self class]] resourcePath];
         NSString *bundlePath = [resourcePath stringByAppendingPathComponent:@"Emoj.plist"];
         
         self.faceEmojiArray = [[NSArray alloc]initWithContentsOfFile:bundlePath];
@@ -398,8 +399,8 @@
                 
                 if ((cli == FACE_COUNT_ROW -1 && col == FACE_COUNT_CLU - 1) || i == self.faceEmojiArray.count) {
                     UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [back setImage:[UIImage imageNamed:@"del_emoji_normal"] forState:UIControlStateNormal];
-                    [back setImage:[UIImage imageNamed:@"del_emoji_select"] forState:UIControlStateSelected];
+                    [back setImage:[WFCUImage imageNamed:@"del_emoji_normal"] forState:UIControlStateNormal];
+                    [back setImage:[WFCUImage imageNamed:@"del_emoji_select"] forState:UIControlStateSelected];
                     [back addTarget:self action:@selector(backFace) forControlEvents:UIControlEventTouchUpInside];
                     
                     if (i == self.faceEmojiArray.count) {
@@ -465,7 +466,7 @@
         }
         
         if (indexPath.row == 0) {
-            iv.image = [UIImage imageNamed:@"emoji_btn_normal"];
+            iv.image = [WFCUImage imageNamed:@"emoji_btn_normal"];
         } else {
             iv.image = [UIImage imageWithContentsOfFile:self.stickers[self.stickers.allKeys[indexPath.row - 1]].tabIcon];
         }

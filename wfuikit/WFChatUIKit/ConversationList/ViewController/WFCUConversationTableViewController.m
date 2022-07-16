@@ -35,6 +35,8 @@
 #import "UIView+Toast.h"
 #import "WFCUSeletedUserViewController.h"
 #import "WFCUEnum.h"
+#import "WFCUImage.h"
+
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
@@ -199,42 +201,42 @@
     if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat] && [[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
         menuItems = @[
             [KxMenuItem menuItem:WFCString(@"StartChat")
-                           image:[UIImage imageNamed:@"menu_start_chat"]
+                           image:[WFCUImage imageNamed:@"menu_start_chat"]
                           target:self
                           action:@selector(startChatAction:)],
             [KxMenuItem menuItem:WFCString(@"StartSecretChat")
-                           image:[UIImage imageNamed:@"menu_start_chat"]
+                           image:[WFCUImage imageNamed:@"menu_start_chat"]
                           target:self
                           action:@selector(startSecretChatAction:)],
             [KxMenuItem menuItem:WFCString(@"AddFriend")
-                           image:[UIImage imageNamed:@"menu_add_friends"]
+                           image:[WFCUImage imageNamed:@"menu_add_friends"]
                           target:self
                           action:@selector(addFriendsAction:)],
             [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
-                           image:[UIImage imageNamed:@"menu_listen_channel"]
+                           image:[WFCUImage imageNamed:@"menu_listen_channel"]
                           target:self
                           action:@selector(listenChannelAction:)],
             [KxMenuItem menuItem:WFCString(@"ScanQRCode")
-                           image:[UIImage imageNamed:@"menu_scan_qr"]
+                           image:[WFCUImage imageNamed:@"menu_scan_qr"]
                           target:self
                           action:@selector(scanQrCodeAction:)]
         ];
     } else {
         menuItems = @[
             [KxMenuItem menuItem:WFCString(@"StartChat")
-                           image:[UIImage imageNamed:@"menu_start_chat"]
+                           image:[WFCUImage imageNamed:@"menu_start_chat"]
                           target:self
                           action:@selector(startChatAction:)],
             [KxMenuItem menuItem:WFCString(@"AddFriend")
-                           image:[UIImage imageNamed:@"menu_add_friends"]
+                           image:[WFCUImage imageNamed:@"menu_add_friends"]
                           target:self
                           action:@selector(addFriendsAction:)],
             [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
-                           image:[UIImage imageNamed:@"menu_listen_channel"]
+                           image:[WFCUImage imageNamed:@"menu_listen_channel"]
                           target:self
                           action:@selector(listenChannelAction:)],
             [KxMenuItem menuItem:WFCString(@"ScanQRCode")
-                           image:[UIImage imageNamed:@"menu_scan_qr"]
+                           image:[WFCUImage imageNamed:@"menu_scan_qr"]
                           target:self
                           action:@selector(scanQrCodeAction:)]
         ];
@@ -362,7 +364,7 @@
     
     [self initSearchUIAndTableView];
     self.definesPresentationContext = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClearAllUnread:) name:@"kTabBarClearBadgeNotification" object:nil];
@@ -612,7 +614,7 @@
         _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
         [_pcSessionView setBackgroundColor:bgColor];
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
-        iv.image = [UIImage imageNamed:@"pc_session"];
+        iv.image = [WFCUImage imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
         self.pcSessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, self.view.bounds.size.width - 68 - 16, 20)];
         self.pcSessionLabel.font = [UIFont systemFontOfSize:16];

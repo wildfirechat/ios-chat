@@ -9,6 +9,7 @@
 #import "WFCUConferenceMemberTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @interface WFCUConferenceMemberTableViewCell ()
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -31,7 +32,7 @@
 - (void)setMember:(WFCUConferenceMember *)member {
     _member = member;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member.userId refresh:NO];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     NSString *title = userInfo.displayName;
     if(userInfo.friendAlias.length) {
         title = userInfo.friendAlias;
@@ -67,14 +68,14 @@
         }
         
         if(member.isAudioEnabled) {
-            self.audioImageView.image = [UIImage imageNamed:@"conference_audio"];
+            self.audioImageView.image = [WFCUImage imageNamed:@"conference_audio"];
         } else {
-            self.audioImageView.image = [UIImage imageNamed:@"conference_audio_mute_hover"];
+            self.audioImageView.image = [WFCUImage imageNamed:@"conference_audio_mute_hover"];
         }
         if(member.isVideoEnabled) {
-            self.videoImageView.image = [UIImage imageNamed:@"conference_video"];
+            self.videoImageView.image = [WFCUImage imageNamed:@"conference_video"];
         } else {
-            self.videoImageView.image = [UIImage imageNamed:@"conference_video_mute_hover"];
+            self.videoImageView.image = [WFCUImage imageNamed:@"conference_video_mute_hover"];
         }
     }
 }

@@ -47,7 +47,7 @@ alpha:1.0]
 
 #define WFCU_SUPPORT_VOIP 1
 
-#define WFCString(key) NSLocalizedStringFromTable(key, @"wfc", nil)
+#define WFCString(key) [[NSBundle bundleForClass:[self class]] localizedStringForKey:key value:@"" table:@"wfc"]
 
 //对讲功能开关，在Chat工程也有同样的一个开关，需要保持同步
 //#define WFC_PTT

@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUUtilities.h"
 #import "SDPhotoBrowser.h"
+#import "WFCUImage.h"
 
 @interface WFCUMyPortraitViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, SDPhotoBrowserDelegate>
   @property (strong, nonatomic)UIImageView *portraitView;
@@ -35,7 +36,7 @@
     
   self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
     __weak typeof(self)ws = self;
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
             ws.image = image;
         });
@@ -195,7 +196,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 #pragma mark - SDPhotoBrowserDelegate
 - (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
-    return [UIImage imageNamed:@"PersonalChat"];
+    return [WFCUImage imageNamed:@"PersonalChat"];
 }
 
 - (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {

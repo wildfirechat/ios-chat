@@ -33,6 +33,7 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUEnum.h"
+#import "WFCUImage.h"
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -122,7 +123,7 @@
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         
         self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
-        [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+        [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
         self.channelPortrait.userInteractionEnabled = YES;
         [self.channelPortrait addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapChannelPortrait:)]];
         
@@ -753,7 +754,7 @@
           
           
           CGFloat width = [UIScreen mainScreen].bounds.size.width;
-          UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+          UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
           UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
           qrview.image = qrcode;
           [cell addSubview:qrview];
@@ -1038,11 +1039,11 @@
         [cell setModel:member withType:self.conversation.type];
     } else {
         if (indexPath.row == self.memberCollectionCount-self.extraBtnNumber) {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"addmember"]];
+            [cell.headerImageView setImage:[WFCUImage imageNamed:@"addmember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         } else {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"removemember"]];
+            [cell.headerImageView setImage:[WFCUImage imageNamed:@"removemember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         }

@@ -13,6 +13,7 @@
 #import "UIView+Toast.h"
 #import "WFCUCreateChannelViewController.h"
 #import "WFCUSearchChannelViewController.h"
+#import "WFCUImage.h"
 
 @interface WFCUFavChannelTableViewController ()
 @property (nonatomic, strong)NSMutableArray<WFCCChannelInfo *> *favChannels;
@@ -26,7 +27,7 @@
     self.title = WFCString(@"MyChannels");
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"bar_plus"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:nil];

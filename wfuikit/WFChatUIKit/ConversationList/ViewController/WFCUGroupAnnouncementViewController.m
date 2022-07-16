@@ -11,7 +11,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUConfigManager.h"
 #import "MBProgressHUD.h"
-
+#import "WFCUImage.h"
 
 @interface WFCUGroupAnnouncementViewController () <UITextViewDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -30,7 +30,7 @@
     if (self.announcement.author.length && self.announcement.text.length) {
         self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + 16, 48, 48)];
         WFCCUserInfo *author = [[WFCCIMService sharedWFCIMService] getUserInfo:self.announcement.author refresh:NO];
-        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:author.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:author.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
         
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, kStatusBarAndNavigationBarHeight + 16, self.view.bounds.size.width - 80 - 16, 20)];
         self.nameLabel.text = author.displayName;

@@ -8,6 +8,7 @@
 
 #import "DNAssetsViewCell.h"
 #import "DNImagePicker.h"
+#import "WFCUImage.h"
 
 @interface DNAssetsViewCell ()
 @property (nonatomic, strong, nonnull) UIImageView *imageView;
@@ -147,7 +148,7 @@
                                    sSelf.asset.cacheImage = image;
                                    sSelf.imageView.image = image;
                                } else {
-                                   sSelf.imageView.image = [UIImage imageNamed:@"assets_placeholder_picture"];
+                                   sSelf.imageView.image = [WFCUImage imageNamed:@"assets_placeholder_picture"];
                                }
                            }];
 }
@@ -160,7 +161,7 @@
 
 - (void)updateCheckImageView {
     if (self.checkButton.selected) {
-        self.checkImageView.image = [UIImage imageNamed:@"photo_check_selected"];
+        self.checkImageView.image = [WFCUImage imageNamed:@"photo_check_selected"];
         
         [UIView animateWithDuration:0.2 animations:^{
             self.checkImageView.transform = CGAffineTransformMakeScale(1.2, 1.2);
@@ -171,7 +172,7 @@
                              }];
                          }];
     } else {
-        self.checkImageView.image = [UIImage imageNamed:@"photo_check_default"];
+        self.checkImageView.image = [WFCUImage imageNamed:@"photo_check_default"];
     }
 }
 
@@ -225,7 +226,7 @@
 - (UIImageView *)videoFlag {
     if (!_videoFlag) {
         _videoFlag = [[UIImageView alloc] initWithFrame:CGRectMake(8, self.bounds.size.height-24, 15, 12)];
-        _videoFlag.image = [UIImage imageNamed:@"video"];
+        _videoFlag.image = [WFCUImage imageNamed:@"video"];
         [self.imageView addSubview:_videoFlag];
     }
     return _videoFlag;

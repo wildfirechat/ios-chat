@@ -9,6 +9,7 @@
 #import "WFCUParticipantCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUWaitingAnimationView.h"
+#import "WFCUImage.h"
 
 @interface WFCUParticipantCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
@@ -23,7 +24,7 @@
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
     self.userId = userInfo.userId;
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
 
     if (profile.state == kWFAVEngineStateIncomming
         || profile.state == kWFAVEngineStateOutgoing
@@ -34,7 +35,7 @@
         [self.stateLabel stop];
         if (profile.videoMuted) {
             self.stateLabel.hidden = NO;
-            self.stateLabel.image = [UIImage imageNamed:@"disable_video"];
+            self.stateLabel.image = [WFCUImage imageNamed:@"disable_video"];
         } else {
             self.stateLabel.hidden = YES;
         }
@@ -76,7 +77,7 @@
 
         _speakingView.layer.masksToBounds = YES;
         _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
         [self addSubview:_speakingView];
     }
     return _speakingView;
@@ -86,7 +87,7 @@
     if (!_stateLabel) {
         _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:self.bounds];
 
-        _stateLabel.animationImages = @[[UIImage imageNamed:@"connect_ani1"],[UIImage imageNamed:@"connect_ani2"],[UIImage imageNamed:@"connect_ani3"]];
+        _stateLabel.animationImages = @[[WFCUImage imageNamed:@"connect_ani1"],[WFCUImage imageNamed:@"connect_ani2"],[WFCUImage imageNamed:@"connect_ani3"]];
         _stateLabel.animationDuration = 1;
         _stateLabel.animationRepeatCount = 200;
         _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];

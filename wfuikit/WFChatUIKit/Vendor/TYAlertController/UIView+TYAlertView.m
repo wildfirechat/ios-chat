@@ -12,7 +12,7 @@
 
 + (instancetype)createViewFromNibName:(NSString *)nibName
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
+    NSArray *nib = [[NSBundle bundleForClass:[self class]] loadNibNamed:nibName owner:self options:nil];
     return [nib objectAtIndex:0];
 }
 

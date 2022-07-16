@@ -8,6 +8,7 @@
 #if WFCU_SUPPORT_VOIP
 #import "WFCUPortraitCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @interface WFCUPortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
@@ -22,7 +23,7 @@
 
 - (void)setUserInfo:(WFCCUserInfo *)userInfo {
     _userInfo = userInfo;
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     self.nameLabel.text = userInfo.displayName;
     
     _speakingView.hidden = YES;
@@ -71,7 +72,7 @@
 
         _speakingView.layer.masksToBounds = YES;
         _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
         [self addSubview:_speakingView];
     }
     return _speakingView;
@@ -92,7 +93,7 @@
     if (!_stateLabel) {
         _stateLabel = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.itemSize, self.itemSize)];
         
-        _stateLabel.animationImages = @[[UIImage imageNamed:@"connect_ani1"],[UIImage imageNamed:@"connect_ani2"],[UIImage imageNamed:@"connect_ani3"]];
+        _stateLabel.animationImages = @[[WFCUImage imageNamed:@"connect_ani1"],[WFCUImage imageNamed:@"connect_ani2"],[WFCUImage imageNamed:@"connect_ani3"]];
         _stateLabel.animationDuration = 1.f;
         _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         [self addSubview:_stateLabel];

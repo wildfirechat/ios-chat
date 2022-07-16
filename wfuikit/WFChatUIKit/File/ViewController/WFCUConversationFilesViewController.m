@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUFilesViewController.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @interface WFCUConversationFilesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -52,7 +53,7 @@
         } else {
             cell.textLabel.text = @"用户";
         }
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     } else if (conv.conversation.type == Group_Type) {
         WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.conversation.target refresh:NO];
         if (group.displayName.length) {
@@ -60,7 +61,7 @@
         } else {
             cell.textLabel.text = @"群组";
         }
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:group.portrait] placeholderImage: [UIImage imageNamed:@"group_default_portrait"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:group.portrait] placeholderImage: [WFCUImage imageNamed:@"group_default_portrait"]];
     } else if (conv.conversation.type == SecretChat_Type) {
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
@@ -71,7 +72,7 @@
         } else {
             cell.textLabel.text = @"用户";
         }
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     }
     
     return cell;

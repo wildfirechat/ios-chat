@@ -13,6 +13,7 @@
 
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUImage.h"
 
 @interface WFCUCompositeBaseCell ()
 @property(nonatomic, strong)UIImageView *portraitImageView;
@@ -72,7 +73,7 @@
         _portraitImageView.hidden = YES;
     } else {
         self.portraitImageView.hidden = NO;
-        [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[UIImage imageNamed:@"PersonlChat"]];
+        [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonlChat"]];
     }
     
     self.nameLabel.text = userInfo.displayName;

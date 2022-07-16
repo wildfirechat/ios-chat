@@ -9,6 +9,7 @@
 #import "ManagerTableViewController.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUContactListViewController.h"
+#import "WFCUImage.h"
 
 @interface ManagerTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -101,11 +102,11 @@
         cell.textLabel.text = owner.displayName;
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
-            cell.imageView.image = [UIImage imageNamed:@"plus"];
+            cell.imageView.image = [WFCUImage imageNamed:@"plus"];
             cell.textLabel.text = WFCString(@"AddManager");
         } else {
             WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
-            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[manager.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[manager.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
             cell.textLabel.text = manager.displayName;
         }
     }

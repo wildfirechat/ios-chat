@@ -15,6 +15,7 @@
 #import "WFCUGeneralModifyViewController.h"
 #import "UIView+Toast.h"
 #import "WFCUUtilities.h"
+#import "WFCUImage.h"
 
 @interface WFCUChannelProfileViewController () <UIActionSheetDelegate>
 @property (nonatomic, strong)UIImageView *channelPortrait;
@@ -34,7 +35,7 @@
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
-    [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
     
     top += portraitWidth;
     top += 20;

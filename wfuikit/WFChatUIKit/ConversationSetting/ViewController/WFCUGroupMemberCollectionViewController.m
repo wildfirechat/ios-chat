@@ -15,6 +15,7 @@
 #import "WFCUConfigManager.h"
 #import "UIView+Toast.h"
 #import "WFCUEnum.h"
+#import "WFCUImage.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -109,11 +110,11 @@
         [cell setModel:member withType:Group_Type];
     } else {
         if (indexPath.row == self.memberList.count) {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"addmember"]];
+            [cell.headerImageView setImage:[WFCUImage imageNamed:@"addmember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         } else {
-            [cell.headerImageView setImage:[UIImage imageNamed:@"removemember"]];
+            [cell.headerImageView setImage:[WFCUImage imageNamed:@"removemember"]];
             cell.nameLabel.text = nil;
             cell.nameLabel.hidden = YES;
         }

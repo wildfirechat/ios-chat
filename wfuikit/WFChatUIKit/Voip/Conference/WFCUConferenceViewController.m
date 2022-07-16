@@ -25,7 +25,7 @@
 #import "WFCUConferenceInviteViewController.h"
 #import "WFCUConferenceMemberManagerViewController.h"
 #import "WFCUConferenceManager.h"
-
+#import "WFCUImage.h"
 
 #define BOTTOM_BAR_HEIGHT  54
 @interface WFCUConferenceViewController () <UITextFieldDelegate
@@ -285,7 +285,7 @@
     WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.initiator inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     self.portraitView.layer.masksToBounds = YES;
     self.portraitView.layer.cornerRadius = 8.f;
     [self.view addSubview:self.portraitView];
@@ -329,9 +329,9 @@
     if (!_minimizeButton) {
         _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
         
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize"] forState:UIControlStateNormal];
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
-        [_minimizeButton setImage:[UIImage imageNamed:@"minimize_hover"] forState:UIControlStateSelected];
+        [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize"] forState:UIControlStateNormal];
+        [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
+        [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize_hover"] forState:UIControlStateSelected];
         
         _minimizeButton.backgroundColor = [UIColor clearColor];
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
@@ -344,9 +344,9 @@
 - (UIButton *)switchCameraButton {
     if (!_switchCameraButton) {
         _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera"] forState:UIControlStateNormal];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera_hover"] forState:UIControlStateHighlighted];
-        [_switchCameraButton setImage:[UIImage imageNamed:@"switchcamera_hover"] forState:UIControlStateSelected];
+        [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera"] forState:UIControlStateNormal];
+        [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera_hover"] forState:UIControlStateHighlighted];
+        [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera_hover"] forState:UIControlStateSelected];
         _switchCameraButton.backgroundColor = [UIColor clearColor];
         [_switchCameraButton addTarget:self action:@selector(switchCameraButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _switchCameraButton.hidden = YES;
@@ -373,7 +373,7 @@
 
         _speakingView.layer.masksToBounds = YES;
         _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [UIImage imageNamed:@"speaking"];
+        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
         _speakingView.hidden = YES;
         [self.bigVideoView addSubview:_speakingView];
     }
@@ -383,7 +383,7 @@
 - (UIButton *)createBarButtom:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName select:(SEL)selector frame:(CGRect)frame {
     UIButton *btn = [[UIButton alloc] initWithFrame:frame];
     btn.clipsToBounds = YES;
-    [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [btn setImage:[WFCUImage imageNamed:imageName] forState:UIControlStateNormal];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     btn.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -391,8 +391,8 @@
     [btn setImageEdgeInsets:UIEdgeInsetsMake((-btn.titleLabel.frame.size.height-24)/2, 0.0,0.0, -btn.titleLabel.bounds.size.width)];
     [btn setTitleColor:[UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1] forState:UIControlStateNormal];
     [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateHighlighted];
-    [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateSelected];
+    [btn setImage:[WFCUImage imageNamed:selectedImageName] forState:UIControlStateHighlighted];
+    [btn setImage:[WFCUImage imageNamed:selectedImageName] forState:UIControlStateSelected];
     return btn;
 }
 
@@ -560,9 +560,9 @@
 
 - (void)updateAudioButton {
     if (self.currentSession.audioMuted) {
-        [self.audioButton setImage:[UIImage imageNamed:@"conference_audio_mute"] forState:UIControlStateNormal];
+        [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio_mute"] forState:UIControlStateNormal];
     } else {
-        [self.audioButton setImage:[UIImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
+        [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
     }
     
     self.audioButton.enabled = !self.currentSession.audience;
@@ -582,17 +582,17 @@
     }
     
     if (!self.currentSession.isSpeaker) {
-        [self.speakerButton setImage:[UIImage imageNamed:@"conference_speaker_disable"] forState:UIControlStateNormal];
+        [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker_disable"] forState:UIControlStateNormal];
     } else {
-        [self.speakerButton setImage:[UIImage imageNamed:@"conference_speaker"] forState:UIControlStateNormal];
+        [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateNormal];
     }
 }
 
 - (void)updateVideoButton {
     if (self.currentSession.videoMuted) {
-        [self.videoButton setImage:[UIImage imageNamed:@"conference_video_mute"] forState:UIControlStateNormal];
+        [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video_mute"] forState:UIControlStateNormal];
     } else {
-        [self.videoButton setImage:[UIImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
+        [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
     }
     self.videoButton.enabled = !self.currentSession.audience;
 }
@@ -1325,7 +1325,7 @@
                 }
             }
             WFCCUserInfo *focusUser = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId refresh:NO];
-            [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+            [self.bigVideoPortraitView sd_setImageWithURL:[NSURL URLWithString:focusUser.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
             [self.smallCollectionView reloadData];
         } else {
             [self.portraitCollectionView reloadData];

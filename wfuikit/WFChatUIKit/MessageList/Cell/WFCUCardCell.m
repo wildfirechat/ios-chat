@@ -11,7 +11,7 @@
 #import "WFCUUtilities.h"
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
-
+#import "WFCUImage.h"
 
 #define TEXT_TOP_PADDING 6
 #define TEXT_BUTTOM_PADDING 6
@@ -45,7 +45,7 @@
     
     self.cardDisplayName.text = content.displayName;
     self.cardName.text = content.name;
-    [self.cardPortrait sd_setImageWithURL:[NSURL URLWithString:content.portrait] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.cardPortrait sd_setImageWithURL:[NSURL URLWithString:content.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     
     [self cardSeparateLine];
     [self cardHint];
