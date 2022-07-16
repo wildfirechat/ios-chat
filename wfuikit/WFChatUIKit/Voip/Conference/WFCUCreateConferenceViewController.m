@@ -71,7 +71,7 @@
 - (void)onStart:(id)sender {
 #if WFCU_SUPPORT_VOIP
     if (self.startTime == 0) {
-        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch advanced:self.advanceConference moCall:YES];
+        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:nil audioOnly:self.audioOnlySwitch pin:nil host:[WFCCNetworkService sharedInstance].userId title:self.conferenceTitle desc:nil audience:self.audienceSwitch advanced:self.advanceConference record:NO moCall:YES extra:nil];
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
     } else {
         //todo 发送会议邀请

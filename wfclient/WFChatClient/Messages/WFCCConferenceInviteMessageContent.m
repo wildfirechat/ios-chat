@@ -32,6 +32,9 @@
     if (self.pin) {
         [dataDict setObject:self.pin forKey:@"p"];
     }
+    if (self.callExtra) {
+        [dataDict setObject:self.callExtra forKey:@"ce"];
+    }
     
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
     [dataDict setValue:@(self.audience?1:0) forKey:@"audience"];
@@ -59,6 +62,7 @@
         self.audience = [dictionary[@"audience"] intValue] ? YES : NO;
         self.advanced = [dictionary[@"advanced"] intValue] ? YES : NO;
         self.pin = dictionary[@"p"];
+        self.callExtra = dictionary[@"ce"];
     }
 }
 

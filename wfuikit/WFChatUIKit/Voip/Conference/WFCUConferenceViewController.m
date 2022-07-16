@@ -144,11 +144,13 @@
                           desc:(NSString *_Nullable)desc
                       audience:(BOOL)audience
                       advanced:(BOOL)advanced
-                        moCall:(BOOL)moCall {
+                        record:(BOOL)record
+                        moCall:(BOOL)moCall
+                         extra:(NSString *)extra {
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:nil audience:audience advanced:advanced record:NO sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -159,7 +161,7 @@
                                host:host
                                title:title
                                desc:desc
-                                   callExtra:nil
+                                   callExtra:extra
                                    audience:audience
                                    advanced:advanced
                                    muteAudio:NO
@@ -169,8 +171,37 @@
         
         }
         
-        
-        
+        [self rearrangeParticipants];
+    }
+    return self;
+}
+- (instancetype)initJoinConference:(NSString *)callId
+                     audioOnly:(BOOL)audioOnly
+                           pin:(NSString *)pin
+                          host:(NSString *)host
+                         title:(NSString *)title
+                          desc:(NSString *)desc
+                      audience:(BOOL)audience
+                       advance:(BOOL)advance
+                     muteAudio:(BOOL)muteAudio
+                     muteVideo:(BOOL)muteVideo
+                         extra:(NSString *)extra {
+    self = [super init];
+    if (self) {
+        self.currentSession = [[WFAVEngineKit sharedEngineKit]
+                               joinConference:callId
+                                    audioOnly:audioOnly
+                                        pin:pin
+                           host:host
+                           title:title
+                           desc:desc
+                               callExtra:extra
+                               audience:audience
+                               advanced:advance
+                               muteAudio:muteAudio
+                               muteVideo:muteVideo
+                           sessionDelegate:self];
+        [self didChangeState:kWFAVEngineStateIncomming];
         [self rearrangeParticipants];
     }
     return self;
@@ -1228,7 +1259,7 @@
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced moCall:NO];
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced record:NO moCall:NO extra:nil];
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         });
     }];
@@ -1262,7 +1293,7 @@
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced moCall:YES];
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced record:NO moCall:YES extra:nil];
                 [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
             });
         }];
