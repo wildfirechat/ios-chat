@@ -710,7 +710,7 @@
                     [self shouldStopRing];
                 }
                 
-                NSURL *url = [[NSBundle mainBundle] URLForResource:@"ring" withExtension:@"mp3"];
+                NSURL *url = [[NSBundle mainBundle] URLForResource:@"ring" withExtension:@"caf"];
                 NSError *error = nil;
                 self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
                 if (!error) {
