@@ -169,6 +169,7 @@
     invite.desc = currentSession.desc;
     invite.audience = currentSession.defaultAudience;
     invite.advanced = currentSession.isAdvanced;
+    invite.callExtra = currentSession.callExtra;
     
     pvc.invite = invite;
     
