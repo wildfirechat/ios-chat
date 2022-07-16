@@ -105,7 +105,7 @@
 
 - (void)loadPinyin {
     self.pinyinDict = [[NSMutableDictionary alloc] init];
-    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSString *resourcePath = [[NSBundle bundleForClass:[self class]] resourcePath];
     NSString *bundlePath = [resourcePath stringByAppendingPathComponent:@"unicode_to_hanyu_pinyin.txt"];
     
     
