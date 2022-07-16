@@ -1,6 +1,8 @@
 /* Copyright (C) 2012 IGN Entertainment, Inc. */
 
 #import "VideoPlayerView.h"
+#import "WFCUImage.h"
+
 
 #define PLAYER_CONTROL_BAR_HEIGHT 40
 #define LABEL_PADDING 10
@@ -48,12 +50,12 @@
         [_playerControlBar setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
         
         _playPauseButton = [[UIButton alloc] init];
-        [_playPauseButton setImage:[UIImage imageNamed:@"play-button"] forState:UIControlStateNormal];
+        [_playPauseButton setImage:[WFCUImage imageNamed:@"play-button"] forState:UIControlStateNormal];
         [_playPauseButton setShowsTouchWhenHighlighted:YES];
         [_playerControlBar addSubview:_playPauseButton];
         
         _fullScreenButton = [[UIButton alloc] init];
-        [_fullScreenButton setImage:[UIImage imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
+        [_fullScreenButton setImage:[WFCUImage imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
         [_fullScreenButton setShowsTouchWhenHighlighted:YES];
         [_playerControlBar addSubview:_fullScreenButton];
         
@@ -64,7 +66,7 @@
         
         _videoScrubber = [[UISlider alloc] init];
         [_videoScrubber setMinimumTrackTintColor:[UIColor redColor]];
-        [_videoScrubber setMaximumTrackImage:[UIImage imageNamed:@"transparentBar"] forState:UIControlStateNormal];
+        [_videoScrubber setMaximumTrackImage:[WFCUImage imageNamed:@"transparentBar"] forState:UIControlStateNormal];
         [_videoScrubber setThumbTintColor:[UIColor whiteColor]];
         [_playerControlBar addSubview:_videoScrubber];
         
@@ -101,7 +103,7 @@
         [self addSubview:_activityIndicator];
 
         _shareButton = [[UIButton alloc] init];
-        [_shareButton setImage:[UIImage imageNamed:@"share-button"] forState:UIControlStateNormal];
+        [_shareButton setImage:[WFCUImage imageNamed:@"share-button"] forState:UIControlStateNormal];
         [_shareButton setShowsTouchWhenHighlighted:YES];
         
         // Hide the Share Button by default after removing ShareThis
@@ -130,7 +132,7 @@
                                            constrainedToSize:CGSizeMake(insetBounds.size.width, CGFLOAT_MAX)
                                                lineBreakMode:NSLineBreakByCharWrapping];
     
-    UIImage *shareImage = [UIImage imageNamed:@"share-button"];
+    UIImage *shareImage = [WFCUImage imageNamed:@"share-button"];
     
     if (!_fullscreen) {
         CGSize twoLineSize = [@"M\nM" sizeWithFont:[_titleLabel font]

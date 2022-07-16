@@ -13,6 +13,8 @@
 #import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
 #import <UIFont+YH.h>
+#import "WFCUImage.h"
+
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -34,7 +36,7 @@
 
 }
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
-  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+  [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
   
     if (userInfo.friendAlias.length) {
         self.targetView.text = userInfo.friendAlias;
@@ -46,7 +48,7 @@
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
-    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"channel_default_portrait"]];
+    [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
     
     if(channelInfo.name.length > 0) {
         self.targetView.text = channelInfo.name;
@@ -59,7 +61,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"GroupPortraitChanged" object:nil];
 
     if (groupInfo.portrait.length) {
-        [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+        [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     } else {
         __weak typeof(self)ws = self;
         NSString *groupId = groupInfo.target;
@@ -69,18 +71,18 @@
             if ([groupId isEqualToString:note.object] && (
                 (ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
                 (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
-                [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+                [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
         }];
-        [self.potraitView setImage:[UIImage imageNamed:@"group_default_portrait"]];
+        [self.potraitView setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
         
         
         NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
-            return [UIImage imageNamed:@"PersonalChat"];
+            return [WFCUImage imageNamed:@"PersonalChat"];
         }];
         
         if (path) {
-            [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"group_default_portrait"]];
+            [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             [self.potraitView setImage:[UIImage imageWithContentsOfFile:path]];
         }
     }
@@ -154,10 +156,10 @@
     
     if (info.lastMessage && info.lastMessage.direction == MessageDirection_Send) {
         if (info.lastMessage.status == Message_Status_Sending) {
-            self.statusView.image = [UIImage imageNamed:@"conversation_message_sending"];
+            self.statusView.image = [WFCUImage imageNamed:@"conversation_message_sending"];
             self.statusView.hidden = NO;
         } else if(info.lastMessage.status == Message_Status_Send_Failure) {
-            self.statusView.image = [UIImage imageNamed:@"MessageSendError"];
+            self.statusView.image = [WFCUImage imageNamed:@"MessageSendError"];
             self.statusView.hidden = NO;
         } else {
             self.statusView.hidden = YES;
@@ -301,7 +303,7 @@
 - (UIImageView *)statusView {
     if (!_statusView) {
         _statusView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, 16, 16)];
-        _statusView.image = [UIImage imageNamed:@"conversation_message_sending"];
+        _statusView.image = [WFCUImage imageNamed:@"conversation_message_sending"];
         [self.contentView addSubview:_statusView];
     }
     return _statusView;
@@ -319,7 +321,7 @@
 - (UIImageView *)secretChatView {
     if(!_secretChatView) {
         _secretChatView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, 20, 20)];
-        _secretChatView.image = [UIImage imageNamed:@"secret_chat_icon"];
+        _secretChatView.image = [WFCUImage imageNamed:@"secret_chat_icon"];
         [self.contentView addSubview:_secretChatView];
     }
     return _secretChatView;
@@ -338,7 +340,7 @@
 - (UIImageView *)silentView {
     if (!_silentView) {
         _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 20, 45, 12, 12)];
-        _silentView.image = [UIImage imageNamed:@"conversation_mute"];
+        _silentView.image = [WFCUImage imageNamed:@"conversation_mute"];
         [self.contentView addSubview:_silentView];
     }
     return _silentView;

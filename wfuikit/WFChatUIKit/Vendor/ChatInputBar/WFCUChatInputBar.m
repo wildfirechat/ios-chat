@@ -33,7 +33,7 @@
 #import <PttClient/WFPttClient.h>
 #import "WFPttViewController.h"
 #endif
-
+#import "WFCUImage.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -142,7 +142,7 @@
     CGRect parentRect = self.bounds;
     CGFloat voiceAndPttOffset;
     self.voiceSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
+    [self.voiceSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
     [self.voiceSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.voiceSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.voiceSwitchBtn];
@@ -151,7 +151,7 @@
 #ifdef WFC_PTT
     if([self isPttEnabled]) {
     self.pttSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(voiceAndPttOffset + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.pttSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
+    [self.pttSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
     [self.pttSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pttSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.pttSwitchBtn];
@@ -160,13 +160,13 @@
 #endif
     
     self.pluginSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.pluginSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
+    [self.pluginSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
     [self.pluginSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pluginSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.pluginSwitchBtn];
     
     self.emojSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
-    [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
+    [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     [self.emojSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.emojSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self addSubview:self.emojSwitchBtn];
@@ -606,12 +606,12 @@
 
 #ifdef WFC_PTT
         if(self.inputBarStatus == ChatInputBarPttStatus) {
-            [self.pttSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
-            [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
+            [self.pttSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+            [self.voiceSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
         } else {
-            [self.pttSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
+            [self.pttSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
 #endif
-            [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+            [self.voiceSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
         
         
 #ifdef WFC_PTT
@@ -635,9 +635,9 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
-        [self.voiceSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
+        [self.voiceSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
 #ifdef WFC_PTT
-        [self.pttSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
+        [self.pttSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
 #endif
     }
 }
@@ -657,12 +657,12 @@
             [self.textInputView becomeFirstResponder];
         }
         [self.textInputView reloadInputViews];
-        [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
         if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
             [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
         }
     } else {
-        [self.emojSwitchBtn setImage:[UIImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
+        [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     }
 }
 

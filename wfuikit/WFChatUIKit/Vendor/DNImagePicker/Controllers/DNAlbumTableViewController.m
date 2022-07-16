@@ -13,6 +13,7 @@
 #import "DNUnAuthorizedTipsView.h"
 #import "DNImagePickerHelper.h"
 #import "DNAlbum.h"
+#import "WFCUImage.h"
 
 static NSString* const dnalbumTableViewCellReuseIdentifier = @"dnalbumTableViewCellReuseIdentifier";
 
@@ -93,7 +94,7 @@ static NSString* const dnalbumTableViewCellReuseIdentifier = @"dnalbumTableViewC
         if (postImage) {
             cell.postImageView.image = postImage;
         } else {
-            cell.postImageView.image = [UIImage imageNamed:@"assets_placeholder_picture"];
+            cell.postImageView.image = [WFCUImage imageNamed:@"assets_placeholder_picture"];
         }
     }];
     return cell;

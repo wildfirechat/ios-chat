@@ -110,7 +110,6 @@
 		909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDAE2130473100A64FE7 /* ChatroomListViewController.m */; };
 		909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */; };
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
-		90C1D912208C12A900E923F4 /* ring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D910208C12A900E923F4 /* ring.mp3 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
 		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
@@ -120,13 +119,6 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
-		B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7212782E2D000752426 /* zh-Hans.lproj */; };
-		B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */; };
-		B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7232782E2D000752426 /* Stickers.bundle */; };
-		B7D8F72B2782E2D000752426 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */; };
-		B7D8F72C2782E2D000752426 /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7252782E2D000752426 /* Emoj.plist */; };
-		B7D8F72D2782E2D000752426 /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */; };
-		B7D8F72E2782E2D000752426 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B7D8F7272782E2D000752426 /* en.lproj */; };
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
@@ -369,7 +361,6 @@
 		909ACDB121304CD900A64FE7 /* ChatroomItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatroomItemCell.h; sourceTree = "<group>"; };
 		909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatroomItemCell.m; sourceTree = "<group>"; };
 		90C1D90F208C12A900E923F4 /* foreman.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foreman.mp4; sourceTree = "<group>"; };
-		90C1D910208C12A900E923F4 /* ring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ring.mp3; sourceTree = "<group>"; };
 		90E927F022DFF45F00F168BC /* WFCPrivacyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyTableViewController.h; sourceTree = "<group>"; };
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
@@ -379,13 +370,6 @@
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
-		B7D8F7212782E2D000752426 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
-		B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WFCUShareMessageView.xib; sourceTree = "<group>"; };
-		B7D8F7232782E2D000752426 /* Stickers.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Stickers.bundle; sourceTree = "<group>"; };
-		B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
-		B7D8F7252782E2D000752426 /* Emoj.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Emoj.plist; sourceTree = "<group>"; };
-		B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WFChatUIKit.xcassets; sourceTree = "<group>"; };
-		B7D8F7272782E2D000752426 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
@@ -582,13 +566,6 @@
 				2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */,
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
-				B7D8F7252782E2D000752426 /* Emoj.plist */,
-				B7D8F7272782E2D000752426 /* en.lproj */,
-				B7D8F7232782E2D000752426 /* Stickers.bundle */,
-				B7D8F7242782E2D000752426 /* unicode_to_hanyu_pinyin.txt */,
-				B7D8F7262782E2D000752426 /* WFChatUIKit.xcassets */,
-				B7D8F7222782E2D000752426 /* WFCUShareMessageView.xib */,
-				B7D8F7212782E2D000752426 /* zh-Hans.lproj */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -868,7 +845,6 @@
 				2E1D20091FAF0AE600F4405D /* main.m */,
 				2F1B0DD221E1B38100139CB1 /* ring.caf */,
 				90C1D90F208C12A900E923F4 /* foreman.mp4 */,
-				90C1D910208C12A900E923F4 /* ring.mp3 */,
 				2F623A4F22DCBD3E00CB3C65 /* Album.xcassets */,
 				2FBF915F232F6A47003521FF /* InfoPlist.strings */,
 				2F78FA0323371E150007C5CE /* WFChat-Prefix-Header.pch */,
@@ -1006,19 +982,11 @@
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
-				B7D8F72A2782E2D000752426 /* Stickers.bundle in Resources */,
 				2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */,
 				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
-				B7D8F7282782E2D000752426 /* zh-Hans.lproj in Resources */,
-				B7D8F72B2782E2D000752426 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
-				B7D8F72D2782E2D000752426 /* WFChatUIKit.xcassets in Resources */,
-				B7D8F7292782E2D000752426 /* WFCUShareMessageView.xib in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */,
-				90C1D912208C12A900E923F4 /* ring.mp3 in Resources */,
-				B7D8F72E2782E2D000752426 /* en.lproj in Resources */,
-				B7D8F72C2782E2D000752426 /* Emoj.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 #import "MediaMessageGridViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUImage.h"
 
 @interface MediaMessageGridViewCell ()
 @property(nonatomic, strong)UIImageView *imageView;
@@ -77,7 +78,7 @@
 - (UIImageView *)videoFlag {
     if (!_videoFlag) {
         _videoFlag = [[UIImageView alloc] initWithFrame:CGRectMake(8, self.bounds.size.height-24, 15, 12)];
-        _videoFlag.image = [UIImage imageNamed:@"video"];
+        _videoFlag.image = [WFCUImage imageNamed:@"video"];
         [self addSubview:_videoFlag];
     }
     return _videoFlag;

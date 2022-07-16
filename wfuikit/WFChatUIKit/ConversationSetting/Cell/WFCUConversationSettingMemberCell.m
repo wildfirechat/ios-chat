@@ -12,6 +12,7 @@
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUImage.h"
 
 @interface WFCUConversationSettingMemberCell ()
 @property(nonatomic, strong) NSObject *model;
@@ -89,10 +90,10 @@
     }
     
     if (type == Channel_Type) {
-        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
         self.nameLabel.text = channelInfo.name;
     } else {
-        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.headerImageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
         
         if (userInfo.friendAlias.length) {
             self.nameLabel.text = userInfo.friendAlias;

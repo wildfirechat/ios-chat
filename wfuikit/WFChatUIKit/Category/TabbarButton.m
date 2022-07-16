@@ -10,6 +10,7 @@
 #define kBtnHeight self.bounds.size.height
 
 #import "TabbarButton.h"
+#import "WFCUImage.h"
 
 NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification";
 
@@ -46,7 +47,7 @@ NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification"
     if (_images == nil) {
         _images = [NSMutableArray array];
         for (int i = 1; i < 9; i++) {
-            UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"%d", i]];
+            UIImage *image = [WFCUImage imageNamed:[NSString stringWithFormat:@"%d", i]];
             [_images addObject:image];
         }
     }

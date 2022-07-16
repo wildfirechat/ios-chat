@@ -8,6 +8,7 @@
 
 #import "DNFullImageButton.h"
 #import "UIView+DNImagePicker.h"
+#import "WFCUImage.h"
 
 #define kDNFullImageButtonFont  [UIFont systemFontOfSize:13]
 static NSInteger const buttonPadding = 10;
@@ -61,8 +62,8 @@ static NSInteger const buttonImageWidth = 16;
         _fullImageButton.titleLabel.font = kDNFullImageButtonFont;
         [_fullImageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         [_fullImageButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [_fullImageButton setImage:[UIImage imageNamed:@"single_unselected"] forState:UIControlStateNormal];
-        [_fullImageButton setImage:[UIImage imageNamed:@"single_selected"] forState:UIControlStateSelected];
+        [_fullImageButton setImage:[WFCUImage imageNamed:@"single_unselected"] forState:UIControlStateNormal];
+        [_fullImageButton setImage:[WFCUImage imageNamed:@"single_selected"] forState:UIControlStateSelected];
         _fullImageButton.contentVerticalAlignment = NSTextAlignmentRight;
         [_fullImageButton setTitleEdgeInsets:UIEdgeInsetsMake(0, buttonPadding-buttonImageWidth, 6, 0)];
         [_fullImageButton setImageEdgeInsets:UIEdgeInsetsMake(6, 0, 6, _fullImageButton.width - buttonImageWidth)];

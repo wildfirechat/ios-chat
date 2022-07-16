@@ -12,6 +12,7 @@
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
+#import "WFCUImage.h"
 
 @interface WFCURichNotificationCell ()
 @property(nonatomic, strong)UIView *containerView;
@@ -137,7 +138,7 @@
         frame.origin.y = offset;
         self.exView.frame = frame;
         
-        [self.exPortraitView sd_setImageWithURL:[NSURL URLWithString:content.exPortrait] placeholderImage:[UIImage imageNamed:@"default_app_icon"]];
+        [self.exPortraitView sd_setImageWithURL:[NSURL URLWithString:content.exPortrait] placeholderImage:[WFCUImage imageNamed:@"default_app_icon"]];
         
         offset += self.exView.frame.size.height;
     } else {
@@ -261,7 +262,7 @@
         [_exView addSubview:_exLine];
         
         _exFWView = [[UIImageView alloc] initWithFrame:CGRectMake(_exView.frame.size.width - CELL_PADDING - EX_FW_WIDTH, EX_LINE_WIDTH, EX_FW_WIDTH, EX_FW_WIDTH)];
-        _exFWView.image = [UIImage imageNamed:@"forward_normal"];
+        _exFWView.image = [WFCUImage imageNamed:@"forward_normal"];
         [_exView addSubview:_exFWView];
         
         _exPortraitView = [[UIImageView alloc] initWithFrame:CGRectMake(CELL_PADDING, EX_LINE_WIDTH + (EX_FW_WIDTH - EX_FONT_SIZE)/2, EX_FONT_SIZE, EX_FONT_SIZE)];

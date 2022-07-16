@@ -11,6 +11,8 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "WFCUImage.h"
+
 @interface WFCUSelectedUserTableViewCell()
 
 
@@ -31,22 +33,22 @@
 
 - (void)setCheckImage:(SelectedStatusType)selectedStatus {
     if (selectedStatus == Disable) {
-        self.checkImageView.image = [UIImage imageNamed:@"multi_has_selected"];
+        self.checkImageView.image = [WFCUImage imageNamed:@"multi_has_selected"];
     }
     
     if (selectedStatus == Checked) {
-        self.checkImageView.image = [UIImage imageNamed:@"multi_selected"];
+        self.checkImageView.image = [WFCUImage imageNamed:@"multi_selected"];
     }
     
     if (selectedStatus == Unchecked) {
-        self.checkImageView.image = [UIImage imageNamed:@"multi_unselected"];
+        self.checkImageView.image = [WFCUImage imageNamed:@"multi_unselected"];
     }
 }
 
 - (void)setSelectedUserInfo:(WFCUSelectedUserInfo *)selectedUserInfo {
     _selectedUserInfo = selectedUserInfo;
     [self setCheckImage:selectedUserInfo.selectedStatus];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[selectedUserInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[selectedUserInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
        if (selectedUserInfo.friendAlias.length) {
            self.nameLabel.text = selectedUserInfo.friendAlias;
        } else {

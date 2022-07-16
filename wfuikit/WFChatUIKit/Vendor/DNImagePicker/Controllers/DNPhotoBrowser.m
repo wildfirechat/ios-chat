@@ -13,6 +13,7 @@
 #import "DNBrowserCell.h"
 #import "DNAsset.h"
 #import "DNImagePickerHelper.h"
+#import "WFCUImage.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -277,8 +278,8 @@
     if (!_checkButton) {
         _checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _checkButton.frame = CGRectMake(0, 0, 25, 25);
-        [_checkButton setBackgroundImage:[UIImage imageNamed:@"multi_selected"] forState:UIControlStateSelected];
-        [_checkButton setBackgroundImage:[UIImage imageNamed:@"multi_unselected"] forState:UIControlStateNormal];
+        [_checkButton setBackgroundImage:[WFCUImage imageNamed:@"multi_selected"] forState:UIControlStateSelected];
+        [_checkButton setBackgroundImage:[WFCUImage imageNamed:@"multi_unselected"] forState:UIControlStateNormal];
         [_checkButton addTarget:self action:@selector(checkButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkButton;

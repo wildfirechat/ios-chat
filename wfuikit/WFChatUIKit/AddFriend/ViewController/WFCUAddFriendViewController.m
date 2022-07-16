@@ -13,6 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
+#import "WFCUImage.h"
 
 @interface WFCUAddFriendViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -117,7 +118,7 @@
         }
         WFCCUserInfo *userInfo = self.searchList[indexPath.row];
         [cell.textLabel setText:userInfo.displayName];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
       
       cell.userInteractionEnabled = YES;
       return cell;

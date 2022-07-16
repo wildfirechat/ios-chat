@@ -7,6 +7,7 @@
 //
 
 #import "DNUnAuthorizedTipsView.h"
+#import "WFCUImage.h"
 
 @implementation DNUnAuthorizedTipsView
 
@@ -51,7 +52,7 @@
 - (UIImageView *)imageView {
     if (!_imageView) {
         _imageView = [UIImageView new];
-        _imageView.image = [UIImage imageNamed:@"image_unAuthorized"];
+        _imageView.image = [WFCUImage imageNamed:@"image_unAuthorized"];
         [_imageView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self addSubview:_imageView];
     }

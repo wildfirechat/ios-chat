@@ -11,6 +11,8 @@
 #import "WFCUContactListViewController.h"
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUContactListViewController.h"
+#import "WFCUImage.h"
+
 
 @interface GroupMuteTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -124,20 +126,20 @@
         
         if(indexPath.section == 1) {
             if (indexPath.row == 0) {
-                cell.imageView.image = [UIImage imageNamed:@"plus"];
+                cell.imageView.image = [WFCUImage imageNamed:@"plus"];
                 cell.textLabel.text = WFCString(@"MuteMember");
             } else {
                 WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.mutedMemberList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
-                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
                 cell.textLabel.text = member.displayName;
             }
         } else if(indexPath.section == 2) {
             if (indexPath.row == 0) {
-                cell.imageView.image = [UIImage imageNamed:@"plus"];
+                cell.imageView.image = [WFCUImage imageNamed:@"plus"];
                 cell.textLabel.text = WFCString(@"AllowMember");
             } else {
                 WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.allowedMemberList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
-                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
                 cell.textLabel.text = member.displayName;
             }
         }

@@ -8,6 +8,7 @@
 
 #import "KZVideoSupport.h"
 #import "KZVideoConfig.h"
+#import "WFCUImage.h"
 
 #pragma mark - Custom View --
 
@@ -727,7 +728,7 @@ CGFloat angleToRadian(CGFloat angle) {
 
 - (void)setVideoModel:(KZVideoModel *)videoModel {
     _videoModel = videoModel;
-    _thumImage.image = [UIImage imageNamed:videoModel.thumAbsolutePath];
+    _thumImage.image = [WFCUImage imageNamed:videoModel.thumAbsolutePath];
 //    [UIImage imageWithContentsOfFile:videoModel.totalThumPath];
 }
 

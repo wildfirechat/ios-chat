@@ -2,6 +2,7 @@
 
 #import "VideoPlayerKit.h"
 #import "FullScreenViewController.h"
+#import "WFCUImage.h"
 // #import "ShareThis.h"
 
 NSString * const kVideoPlayerVideoChangedNotification = @"VideoPlayerVideoChangedNotification";
@@ -813,18 +814,18 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
 - (void)syncPlayPauseButtons
 {
     if ([self isPlaying]) {
-        [_videoPlayerView.playPauseButton setImage:[UIImage imageNamed:@"pause-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.playPauseButton setImage:[WFCUImage imageNamed:@"pause-button"] forState:UIControlStateNormal];
     } else {
-        [_videoPlayerView.playPauseButton setImage:[UIImage imageNamed:@"play-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.playPauseButton setImage:[WFCUImage imageNamed:@"play-button"] forState:UIControlStateNormal];
     }
 }
 
 - (void)syncFullScreenButton:(UIInterfaceOrientation)toInterfaceOrientation
 {
     if (_fullScreenModeToggled) {
-        [_videoPlayerView.fullScreenButton setImage:[UIImage imageNamed:@"minimize-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.fullScreenButton setImage:[WFCUImage imageNamed:@"minimize-button"] forState:UIControlStateNormal];
     } else {
-        [_videoPlayerView.fullScreenButton setImage:[UIImage imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
+        [_videoPlayerView.fullScreenButton setImage:[WFCUImage imageNamed:@"fullscreen-button"] forState:UIControlStateNormal];
     }
 }
 

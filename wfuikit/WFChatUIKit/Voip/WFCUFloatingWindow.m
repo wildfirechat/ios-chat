@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "WFCUConferenceManager.h"
 #import "WFCUConfigManager.h"
+#import "WFCUImage.h"
 
 @interface WFCUFloatingWindow () <WFAVCallSessionDelegate, WFCUConferenceManagerDelegate>
 
@@ -284,7 +285,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                 [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
             } else {
                 [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
-                [self.floatingButton setImage:[UIImage imageNamed:@"floatingaudio"]
+                [self.floatingButton setImage:[WFCUImage imageNamed:@"floatingaudio"]
             forState:UIControlStateNormal];
             }
         }

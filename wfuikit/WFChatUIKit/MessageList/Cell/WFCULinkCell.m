@@ -11,7 +11,7 @@
 #import "WFCUUtilities.h"
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
-
+#import "WFCUImage.h"
 
 @interface WFCULinkCell ()
 @property (nonatomic, strong)UIImageView *thumbnailImageView;
@@ -58,7 +58,7 @@
     self.TitleLabel.frame = CGRectMake(0, 0, width, titleSize.height);
     self.contentLabel.text = contentTxt;
     self.contentLabel.frame = CGRectMake(0, titleSize.height+4, contentWidth, contentSize.height);
-    [self.thumbnailImageView sd_setImageWithURL:[NSURL URLWithString:content.thumbnailUrl] placeholderImage:[UIImage imageNamed:@"default_link"]];
+    [self.thumbnailImageView sd_setImageWithURL:[NSURL URLWithString:content.thumbnailUrl] placeholderImage:[WFCUImage imageNamed:@"default_link"]];
     self.thumbnailImageView.frame = CGRectMake(contentWidth+4, titleSize.height+4, 48, 48);
 }
 

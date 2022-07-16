@@ -19,6 +19,7 @@
  */
 #import "SDRefreshView.h"
 #import "UIView+SDExtension.h"
+#import "WFCUImage.h"
 
 CGFloat const SDRefreshViewDefaultHeight = 70.0f;
 CGFloat const SDActivityIndicatorViewMargin = 50.0f;
@@ -47,7 +48,7 @@ CGFloat const SDTimeIndicatorMargin = 10.0f;
         
         // 状态提示图片
         UIImageView *stateIndicator = [[UIImageView alloc] init];
-        stateIndicator.image = [UIImage imageNamed:@"sdRefeshView_arrow"];
+        stateIndicator.image = [WFCUImage imageNamed:@"sdRefeshView_arrow"];
         [self addSubview:stateIndicator];
         _stateIndicatorView = stateIndicator;
         _stateIndicatorView.bounds = CGRectMake(0, 0, 15, 40);

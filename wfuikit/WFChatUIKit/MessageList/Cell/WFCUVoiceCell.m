@@ -8,6 +8,7 @@
 
 #import "WFCUVoiceCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUImage.h"
 
 @interface WFCUVoiceCell ()
 @property(nonatomic, strong) NSTimer *animationTimer;
@@ -103,7 +104,7 @@
         _playingImg = [NSString stringWithFormat:@"received_voice_%d", (self.animationIndex++ % 3) + 1];
     }
 
-    [self.voiceBtn setImage:[UIImage imageNamed:_playingImg]];
+    [self.voiceBtn setImage:[WFCUImage imageNamed:_playingImg]];
 }
 
 - (void)stopAnimationTimer {
@@ -114,9 +115,9 @@
     }
     
     if (self.model.message.direction == MessageDirection_Send) {
-        [self.voiceBtn setImage:[UIImage imageNamed:@"sent_voice"]];
+        [self.voiceBtn setImage:[WFCUImage imageNamed:@"sent_voice"]];
     } else {
-        [self.voiceBtn setImage:[UIImage imageNamed:@"received_voice"]];
+        [self.voiceBtn setImage:[WFCUImage imageNamed:@"received_voice"]];
     }
 }
 

@@ -1,6 +1,6 @@
 
 #import "WFCUVoiceRecordView.h"
-
+#import "WFCUImage.h"
 
 @interface WFCUVoiceRecordView ()
 @property (nonatomic,strong)UIImageView *recordAnimationView;
@@ -31,7 +31,7 @@
         [self addSubview:bgView];
         
         _recordAnimationView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, self.bounds.size.width - 20, self.bounds.size.height - 30)];
-        _recordAnimationView.image = [UIImage imageNamed:@"VoiceRecordFeedback001"];
+        _recordAnimationView.image = [WFCUImage imageNamed:@"VoiceRecordFeedback001"];
         _recordAnimationView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_recordAnimationView];
         
@@ -128,15 +128,15 @@
 }
 
 -(void)setVoiceImage:(double)voiceMeter {
-    _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:0]];
+    _recordAnimationView.image = [WFCUImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:0]];
     double voiceSound = voiceMeter;
     int index = voiceSound*[_voiceMessageAnimationImages count];
     if (index >= [_voiceMessageAnimationImages count]) {
-        _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages lastObject]];
+        _recordAnimationView.image = [WFCUImage imageNamed:[_voiceMessageAnimationImages lastObject]];
     } else if(index < 0){
-        _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:0]];
+        _recordAnimationView.image = [WFCUImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:0]];
     } else {
-        _recordAnimationView.image = [UIImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:index]];
+        _recordAnimationView.image = [WFCUImage imageNamed:[_voiceMessageAnimationImages objectAtIndex:index]];
     }
 }
 

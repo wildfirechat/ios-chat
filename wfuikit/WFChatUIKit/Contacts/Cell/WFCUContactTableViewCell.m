@@ -12,6 +12,7 @@
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "WFCUConfigManager.h"
+#import "WFCUImage.h"
 
 @interface WFCUContactTableViewCell ()
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
@@ -74,7 +75,7 @@
     }
     _userInfo = userInfo;
     
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
     if (userInfo.friendAlias.length) {
         self.nameLabel.text = userInfo.friendAlias;
@@ -155,7 +156,7 @@
     if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
         if (!_onlineView) {
             _onlineView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 48, 16, 24, 24)];;
-            _onlineView.image = [UIImage imageNamed:@"ic_online"];
+            _onlineView.image = [WFCUImage imageNamed:@"ic_online"];
             [self.contentView addSubview:_onlineView];
         }
     }
