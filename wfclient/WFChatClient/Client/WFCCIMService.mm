@@ -2985,7 +2985,12 @@ public:
 - (void)setUserSetting:(UserSettingScope)scope key:(NSString *)key value:(NSString *)value
                success:(void(^)())successBlock
                  error:(void(^)(int error_code))errorBlock {
-    mars::stn::modifyUserSetting((int)scope, [key UTF8String], [value UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::modifyUserSetting((int)scope, [key UTF8String], [value UTF8String], new IMGeneralOperationCallback(^{
+        if(successBlock) {
+            successBlock();
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSettingUpdated object:nil];
+    }, errorBlock));
 }
 
 - (void)setConversation:(WFCCConversation *)conversation silent:(BOOL)silent
