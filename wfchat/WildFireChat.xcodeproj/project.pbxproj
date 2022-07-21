@@ -112,10 +112,10 @@
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
+		B74810C3280D51B300ADD31F /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B74810C2280D51B300ADD31F /* WFAVEngineKit.framework */; };
+		B74810C4280D51B300ADD31F /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B74810C2280D51B300ADD31F /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
 		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
-		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
@@ -157,7 +157,7 @@
 				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
 				B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */,
 				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
-				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
+				B74810C4280D51B300ADD31F /* WFAVEngineKit.framework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
 			);
@@ -365,6 +365,7 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		B74810C2280D51B300ADD31F /* WFAVEngineKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -383,11 +384,12 @@
 			files = (
 				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
+				B74810C3280D51B300ADD31F /* WFAVEngineKit.framework in Frameworks */,
+				2BDCE7E32336278E0004212B /* CallKit.framework in Frameworks */,
 				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
-				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
@@ -548,6 +550,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B74810C2280D51B300ADD31F /* WFAVEngineKit.framework */,
 				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
 				B7D8F7362783035200752426 /* SDWebImage.xcframework */,
 				B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */,
