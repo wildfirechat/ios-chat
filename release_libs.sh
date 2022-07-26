@@ -2,14 +2,18 @@
 TARGET_CLIENT_NAME=WFChatClient
 TARGET_UIKIT_NAME=WFChatUIKit
 
-BUILD_DIR=`pwd`"/build"
+CURRENT_PATH=`pwd`
 
+PRG="$0"
+PRGDIR=`dirname "$PRG"`
+cd $PRGDIR
+
+BUILD_DIR=`pwd`"/build"
 rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 
-UNIVERSAL_OUTPUT_FOLDER=`pwd`"/Libs&Resources"
-
 #创建输出目录，并删除之前的framework文件
+UNIVERSAL_OUTPUT_FOLDER=`pwd`"/Libs&Resources"
 rm -rf ${UNIVERSAL_OUTPUT_FOLDER}
 mkdir -p ${UNIVERSAL_OUTPUT_FOLDER}
 
@@ -44,3 +48,5 @@ cp -af wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework ${UNIVERSAL_
 
 #打开合并后的文件夹
 open "${UNIVERSAL_OUTPUT_FOLDER}"
+
+cd $CURRENT_PATH
