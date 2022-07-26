@@ -23,6 +23,7 @@
 #import "WFCCFileRecord.h"
 #import "WFCCFriend.h"
 #import "WFCCSecretChatInfo.h"
+#import "WFCCNetworkService.h"
 
 #pragma mark - 频道通知定义
 //发送消息状态通知
@@ -929,8 +930,6 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  删除所有消息。
  
  @param removeConversation 是否同时删除会话信息
- 
- @return 删除条数是否
  */
 - (void)clearAllMessages:(BOOL)removeConversation;
 

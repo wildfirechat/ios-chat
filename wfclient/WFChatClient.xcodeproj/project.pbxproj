@@ -1176,8 +1176,6 @@
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/WFChatClient/Frameworks",
-					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/WFChatClient/PrefixHeader.h";
@@ -1219,8 +1217,6 @@
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/WFChatClient/Frameworks",
-					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)/WFChatClient/Proto",
 				);
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/WFChatClient/PrefixHeader.h";
