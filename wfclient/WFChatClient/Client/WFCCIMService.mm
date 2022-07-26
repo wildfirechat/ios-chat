@@ -49,7 +49,7 @@ public:
                 m_successBlock(messageUid, timestamp);
             }
             if(m_message.messageId) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sent), @"messageUid":@(messageUid), @"timestamp":@(timestamp)}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Sent), @"messageUid":@(messageUid), @"timestamp":@(timestamp), @"message":m_message}];
             }
             delete this;
 
@@ -62,7 +62,7 @@ public:
                 m_errorBlock(errorCode);
             }
             if(m_message.messageId) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Send_Failure)}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(m_message.messageId) userInfo:@{@"status":@(Message_Status_Send_Failure), @"message":m_message, @"errorCode":@(errorCode)}];
             }
             delete this;
         });
@@ -72,19 +72,20 @@ public:
         m_message.serverTime = savedTime;
         if(messageId) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated object:@(messageId) userInfo:@{@"status":@(Message_Status_Sending), @"message":m_message, @"savedTime":@(savedTime)}];
             });
         }
     }
     void onMediaUploaded(const std::string &remoteUrl) {
+        NSString *ru = [NSString stringWithUTF8String:remoteUrl.c_str()];
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)m_message.content;
-            mediaContent.remoteUrl = [NSString stringWithUTF8String:remoteUrl.c_str()];
+            mediaContent.remoteUrl = ru;
         }
         long messageId = m_message.messageId;
         if(messageId) {
             dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES)}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES), @"message":m_message, @"remoteUrl":ru}];
             });
         }
     }
@@ -96,7 +97,7 @@ public:
             }
             if(m_message.messageId) {
                 float progress = (uploaded * 1.f)/total;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(progress), @"finish":@(NO)}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(m_message.messageId) userInfo:@{@"progress":@(progress), @"finish":@(NO), @"message":m_message, @"uploaded":@(uploaded), @"total":@(total)}];
             }
         });
     }
