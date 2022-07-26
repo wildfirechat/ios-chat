@@ -578,7 +578,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     NSMutableArray *output = [[NSMutableArray alloc] init];
     for (NSString *path in myDirectoryEnumerator.allObjects) {
         isExist = [myFileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", logPath, path] isDirectory:&isDir];
-        if (!isDir) {
+        if (!isDir && isExist) {
             if ([path containsString:@"Test_"]) {
                 [output addObject:[NSString stringWithFormat:@"%@/%@", logPath, path]];
             }

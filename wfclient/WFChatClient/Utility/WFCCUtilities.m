@@ -127,7 +127,7 @@ static NSLock *wfcImageLock;
     //处理那种长条型图片
     if(originWidth/originHeight > 3 || originHeight/originWidth > 3) {
         scaledWidth *= sqrt(MAX(originWidth/originHeight, originHeight/originWidth));
-        originHeight *= sqrt(MAX(originWidth/originHeight, originHeight/originWidth));
+        scaledHeight *= sqrt(MAX(originWidth/originHeight, originHeight/originWidth));
     }
     
     UIGraphicsBeginImageContext(CGSizeMake(scaledWidth, scaledHeight));

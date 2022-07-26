@@ -1584,7 +1584,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 - (void)clearRemoteConversationMessage:(WFCCConversation *)conversation
                                success:(void(^)(void))successBlock
                                  error:(void(^)(int error_code))errorBlock {
-    mars::stn::clearRemoteConversationMessages(conversation.type, [conversation.target UTF8String], conversation.line, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::clearRemoteConversationMessages((int)conversation.type, [conversation.target UTF8String], conversation.line, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 class IMSearchUserCallback : public mars::stn::SearchUserCallback {
