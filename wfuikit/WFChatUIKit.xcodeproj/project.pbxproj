@@ -456,6 +456,8 @@
 		B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */; };
 		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
+		B7FB0D832897734300625747 /* WFCUFileVideoSource.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FB0D812897734300625747 /* WFCUFileVideoSource.h */; };
+		B7FB0D842897734300625747 /* WFCUFileVideoSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FB0D822897734300625747 /* WFCUFileVideoSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -911,6 +913,8 @@
 		B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingExpendedCell.m; sourceTree = "<group>"; };
 		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7FB0D812897734300625747 /* WFCUFileVideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFileVideoSource.h; sourceTree = "<group>"; };
+		B7FB0D822897734300625747 /* WFCUFileVideoSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFileVideoSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1124,6 +1128,8 @@
 				2BEF789B23F6A84D000DE285 /* WFCUVideoViewController.m */,
 				2FF70EAA2402101000946D2D /* WFCUWaitingAnimationView.h */,
 				2FF70EAB2402101000946D2D /* WFCUWaitingAnimationView.m */,
+				B7FB0D812897734300625747 /* WFCUFileVideoSource.h */,
+				B7FB0D822897734300625747 /* WFCUFileVideoSource.m */,
 			);
 			path = Voip;
 			sourceTree = "<group>";
@@ -2157,6 +2163,7 @@
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
 				1450EA8924389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.h in Headers */,
 				2FD550EC2442AA0B00B3EE09 /* WFCURecallCell.h in Headers */,
+				B7FB0D832897734300625747 /* WFCUFileVideoSource.h in Headers */,
 				2FB7125425D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
@@ -2368,6 +2375,7 @@
 				1450EA862438922800BF51FC /* WFCUUserSectionKeySupport.m in Sources */,
 				2F5510F2217F5CC200F56C26 /* CCHMapClusterControllerUtils.m in Sources */,
 				2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */,
+				B7FB0D842897734300625747 /* WFCUFileVideoSource.m in Sources */,
 				2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */,
 				2BDF57B824AD70C8003C1F08 /* DNSendButton.m in Sources */,
 				2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */,

@@ -313,6 +313,18 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  发起屏幕共享失败
  */
 - (void)onScreenSharingFailure;
+
+/* 此属性没有意义，仅为了兼容UI代码 */
+- (RTCVideoFrame *_Nonnull)didCaptureVideoFrame:(RTCVideoFrame *_Nonnull)frame screenSharing:(BOOL)isScreenSharing;
+@end
+
+@protocol WFAVExternalFrameDelegate <NSObject>
+- (void)didCaptureVideoFrame:(nonnull RTCVideoFrame *)frame;
+@end
+
+@protocol WFAVExternalVideoSource <NSObject>
+- (void)startCapture:(id<WFAVExternalFrameDelegate>_Nonnull)delegate;
+- (void)stopCapture;
 @end
 
 #pragma mark - 通话引擎
@@ -414,6 +426,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 /* 此属性没有意义，仅为了兼容UI代码 */
 @property(nonatomic, assign)BOOL screenSharingReplaceMode;
 
+/* 此属性没有意义，仅为了兼容UI代码 */
+@property(nonatomic, assign) BOOL forceUseEAGLView;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
@@ -588,6 +602,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  应用内屏幕分享。仅音视频高级版支持
  */
 @property(nonatomic, assign, getter=isInAppScreenSharing)BOOL inAppScreenSharing;
+/**
+ 应用内屏幕分享。仅音视频高级版支持
+ */
+@property(nonatomic, strong)id<WFAVExternalVideoSource> _Nullable externalVideoSource;
 
 /**
 呼叫附加信息
