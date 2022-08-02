@@ -481,6 +481,16 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 - (void)dismissViewController:(UIViewController *)viewController;
 @end
 
+/*!
+ 兼容专业版，实际无意义
+ */
+typedef NS_ENUM(NSInteger, WFAVVodeoType) {
+    WFAVVodeoType_None,
+    WFAVVodeoType_BigStream,
+    WFAVVodeoType_SmallStream
+};
+
+
 @interface WFAVParticipantProfile : NSObject
 @property(nonatomic, strong, readonly)NSString *userId;
 @property(nonatomic, assign, readonly)long long startTime;
@@ -489,6 +499,10 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @property(nonatomic, assign, readonly)BOOL audioMuted;
 @property(nonatomic, assign, readonly)BOOL audience;
 @property(nonatomic, assign, readonly)BOOL screeSharing;
+//兼容专业版，实际无意义
+@property(nonatomic, strong, readonly)NSString * _Nullable callExtra;
+//兼容专业版，实际无意义
+@property(nonatomic, assign, readonly)WFAVVodeoType videoType;
 @end
 
 #pragma mark - 通话Session
@@ -572,6 +586,17 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 会议新加入成名缺省状态，是否观众，仅当会议有效
 */
 @property(nonatomic, assign) BOOL defaultAudience;
+
+/**
+ 仅当会议有效
+*/
+@property(nonatomic, assign) WFAVVodeoType defaultVideoType;
+
+/**
+ 仅当会议有效
+*/
+@property(nonatomic, assign) BOOL autoSwitchVideoType;
+
 
 /**
 是否高级会议模式，仅当会议有效
@@ -714,6 +739,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 - (void)setupRemoteVideoView:(UIView * _Nullable)videoContainerView scalingType:(WFAVVideoScalingType)scalingType forUser:(NSString * _Nonnull)userId screenSharing:(BOOL)screenSharing;
 
+/* 此函数没有意义，仅为了兼容UI代码 */
+- (void)setParticipant:(NSString * _Nonnull)userId screenSharing:(BOOL)isScreenSharing videoType:(WFAVVodeoType)videoType;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (void)leaveConference:(BOOL)destroy;
