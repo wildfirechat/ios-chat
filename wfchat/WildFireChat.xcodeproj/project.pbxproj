@@ -119,6 +119,8 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
+		B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */; };
+		B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */; };
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
@@ -370,6 +372,10 @@
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
+		B7CB3A8E289BB5CF00E9D688 /* WFCResetPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCResetPasswordViewController.h; sourceTree = "<group>"; };
+		B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCResetPasswordViewController.m; sourceTree = "<group>"; };
+		B7CB3A91289BD66C00E9D688 /* WFCChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCChangePasswordViewController.h; sourceTree = "<group>"; };
+		B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCChangePasswordViewController.m; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
@@ -803,6 +809,8 @@
 			children = (
 				2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */,
 				2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */,
+				B7CB3A8E289BB5CF00E9D688 /* WFCResetPasswordViewController.h */,
+				B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -810,6 +818,8 @@
 		2FF07F4621F82E7200A78A62 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				B7CB3A91289BD66C00E9D688 /* WFCChangePasswordViewController.h */,
+				B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */,
 				2FF07F5321F82E7200A78A62 /* WFCAboutViewController.h */,
 				2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */,
 				2F50BE82237970780049CD39 /* WFCDiagnoseViewController.h */,
@@ -1040,6 +1050,7 @@
 				2F94FB9022291577005BD461 /* LBXScanView.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
+				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,
@@ -1081,6 +1092,7 @@
 				90854287222A06870009713D /* CreateBarCodeViewController.m in Sources */,
 				2F5527C0252CB33E00B0CDCB /* SharedConversation.m in Sources */,
 				2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */,
+				B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */,
 				2F94FCA822291813005BD461 /* LBXPermission.m in Sources */,
 				2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */,
 				2FFDDC9C255158FA00CEFDBB /* WFCFavoriteSoundCell.m in Sources */,
