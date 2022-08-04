@@ -8,6 +8,8 @@
 
 #import "WFCSecurityTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCChangePasswordViewController.h"
+#import "WFCResetPasswordViewController.h"
 
 @interface WFCSecurityTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -40,11 +42,6 @@
     return 48;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        //cell.textLabel.text = @"修改密码";
-    }
-}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     return [[UIView alloc] initWithFrame:CGRectZero];
@@ -80,48 +77,27 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:@"修改密码" preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak typeof(self)ws = self;
+    UIAlertAction *actionCode = [UIAlertAction actionWithTitle:@"短信验证码验证" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
+        [ws.navigationController pushViewController:vc animated:YES];
+    }];
+    
+    UIAlertAction *actionPwd = [UIAlertAction actionWithTitle:@"使用密码验证" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        WFCChangePasswordViewController *vc = [[WFCChangePasswordViewController alloc] init];
+        [ws.navigationController pushViewController:vc animated:YES];
+    }];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    [actionSheet addAction:actionCode];
+    [actionSheet addAction:actionPwd];
+    [actionSheet addAction:actionCancel];
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
