@@ -74,8 +74,11 @@
 - (WFCCMessagePayload *)encode {
     if([self isKindOfClass:[WFCCMediaMessageContent class]]) {
         WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
+        WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)self;
         payload.extra = self.extra;
         payload.contentType = [self.class getContentType];
+        payload.localMediaPath = mediaContent.localPath;
+        payload.remoteMediaUrl = mediaContent.remoteUrl;
         return payload;
     } else {
         WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];

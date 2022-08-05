@@ -139,6 +139,10 @@ static NSLock *wfcImageLock;
 }
 
 + (NSString *)getSendBoxFilePath:(NSString *)localPath {
+    if (!localPath.length) {
+        return localPath;
+    }
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:localPath]) {
         return localPath;
     } else {
