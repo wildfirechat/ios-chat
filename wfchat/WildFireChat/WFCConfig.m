@@ -35,3 +35,7 @@ NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 //如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
 //NSString *WORK_PLATFORM_URL = nil;
 NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
+
+//有2种登陆方式，手机号码+验证码登陆 和 手机号码+密码登陆。
+//这个开关是否优先密码登陆
+BOOL Prefer_Password_Login = NO;
