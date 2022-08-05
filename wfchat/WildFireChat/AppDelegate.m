@@ -155,7 +155,9 @@
         [[WFCCNetworkService sharedInstance] connect:savedUserId token:savedToken];
     } else {
         WFCLoginViewController *loginVC = [[WFCLoginViewController alloc] init];
-        loginVC.isPwdLogin = YES;
+        
+        //是否优先密码登陆
+        loginVC.isPwdLogin = Prefer_Password_Login;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
         self.window.rootViewController = nav;
     }
