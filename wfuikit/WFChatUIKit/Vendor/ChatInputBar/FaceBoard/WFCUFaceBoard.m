@@ -79,13 +79,14 @@
         
         if(err){
             NSLog(@"初始化目录出错:%@", err);
+            return;
         }
-        
-        NSString * defaultBundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent: bundleName];
-        
-        NSString * cacheBundlePath = [cacheBundleDir stringByAppendingPathComponent:bundleName];
+    }
+    NSString * defaultBundlePath = [[NSBundle bundleForClass:[self class]].resourcePath stringByAppendingPathComponent: bundleName];
+    
+    NSString * cacheBundlePath = [cacheBundleDir stringByAppendingPathComponent:bundleName];
+    if (![defaultManager fileExistsAtPath:cacheBundlePath]) {
         [defaultManager copyItemAtPath: defaultBundlePath toPath:cacheBundlePath error: &err];
-        
         if(err){
             NSLog(@"复制初始资源文件出错:%@", err);
         }
