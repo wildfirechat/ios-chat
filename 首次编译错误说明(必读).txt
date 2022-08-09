@@ -1,3 +1,0 @@
-下载代码后首次允许常常遇见资源找不到的错误，这是因为资源在chatuikit项目中，还没有拷贝到wildfirechat项目中去，先执行一遍chatuikit项目，执行成功后就会自动把所需要的资源拷贝到wildfirechat项目中，这时再运行wildfirechat项目就不会报错了
-
-祝您使用愉快！
