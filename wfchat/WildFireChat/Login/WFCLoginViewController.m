@@ -188,12 +188,26 @@
         self.passwordLabel.text = @"密  码 ";
         self.sendCodeBtn.hidden = YES;
         self.passwordField.placeholder = @"请输入密码";
+        self.passwordField.keyboardType = UIKeyboardTypeASCIICapable;
+        self.passwordField.secureTextEntry = YES;
+        self.passwordField.text = nil;
+        if (self.passwordField.isFirstResponder) {
+            [self.passwordField resignFirstResponder];
+            [self.passwordField becomeFirstResponder];
+        }
         [self.switchButton setTitle:@"使用手机验证码登陆" forState:UIControlStateNormal];
     } else {
         self.hintLabel.text = @"验证码登录";
         self.passwordLabel.text = @"验证码";
         self.sendCodeBtn.hidden = NO;
         self.passwordField.placeholder = @"请输入验证码";
+        self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
+        self.passwordField.secureTextEntry = NO;
+        self.passwordField.text = nil;
+        if (self.passwordField.isFirstResponder) {
+            [self.passwordField resignFirstResponder];
+            [self.passwordField becomeFirstResponder];
+        }
         [self.switchButton setTitle:@"使用用户密码登陆" forState:UIControlStateNormal];
         pwdFeildWidth -= 72;
     }
