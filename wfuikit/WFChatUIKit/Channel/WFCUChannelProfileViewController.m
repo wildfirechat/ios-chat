@@ -131,7 +131,6 @@
     [[WFCCIMService sharedWFCIMService] listenChannel:self.channelInfo.channelId listen:YES success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [ws.navigationController popViewControllerAnimated:YES];
-            [ws onSubscribeBtn:sender];
         });
     } error:^(int errorCode) {
         
