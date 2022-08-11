@@ -116,21 +116,6 @@
 #endif
 }
 
-- (void)setNewUser:(BOOL)newUser {
-    if (newUser) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"欢迎注册" message:@"请更新您头像和昵称，以便您的朋友能更好地识别！" preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                self.selectedViewController = self.settingNav;
-            }];
-            [alertController addAction:action];
-            NSLog(@"hahahah");
-            [self.firstNav presentViewController:alertController animated:YES completion:nil];
-        });
-    }
-}
-
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     if (@available(iOS 13.0, *)) {

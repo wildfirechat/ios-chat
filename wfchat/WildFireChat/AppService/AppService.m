@@ -35,12 +35,32 @@ static AppService *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-- (void)login:(NSString *)user password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+- (void)loginWithMobile:(NSString *)mobile verifyCode:(NSString *)verifyCode success:(void(^)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
     int platform = Platform_iOS;
     //如果使用pad端类型，这里平台改成pad类型，另外app_callback.mm文件中把平台也改成ipad，请搜索"iPad"
     //if(当前设备是iPad)
     //platform = Platform_iPad
-    [self post:@"/login" data:@{@"mobile":user, @"code":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(platform)} isLogin:YES success:^(NSDictionary *dict) {
+    [self post:@"/login" data:@{@"mobile":mobile, @"code":verifyCode, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(platform)} isLogin:YES success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSString *userId = dict[@"result"][@"userId"];
+            NSString *token = dict[@"result"][@"token"];
+            BOOL newUser = [dict[@"result"][@"register"] boolValue];
+            NSString *resetCode = dict[@"result"][@"resetCode"];
+            if(successBlock) successBlock(userId, token, newUser, resetCode);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.description);
+    }];
+}
+
+- (void)loginWithMobile:(NSString *)mobile password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+    int platform = Platform_iOS;
+    //如果使用pad端类型，这里平台改成pad类型，另外app_callback.mm文件中把平台也改成ipad，请搜索"iPad"
+    //if(当前设备是iPad)
+    //platform = Platform_iPad
+    [self post:@"/login_pwd" data:@{@"mobile":mobile, @"password":password, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(platform)} isLogin:YES success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             NSString *userId = dict[@"result"][@"userId"];
             NSString *token = dict[@"result"][@"token"];
@@ -54,9 +74,55 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
-- (void)sendCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
+- (void)resetPassword:(NSString *)mobile code:(NSString *)code newPassword:(NSString *)newPassword success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+    NSDictionary *data;
+    if (mobile.length) {
+        data = @{@"mobile":mobile, @"resetCode":code, @"newPassword":newPassword};
+    } else {
+        data = @{@"resetCode":code, @"newPassword":newPassword};
+    }
+    [self post:@"/reset_pwd" data:data isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.description);
+    }];
+}
+
+- (void)changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+    [self post:@"/change_pwd" data:@{@"oldPassword":oldPassword, @"newPassword":newPassword} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.description);
+    }];
+}
+
+- (void)sendLoginCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
     
     [self post:@"/send_code" data:@{@"mobile":phoneNumber} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock(@"error");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(error.localizedDescription);
+    }];
+}
+
+- (void)sendResetCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
+    NSDictionary *data = @{};
+    if (phoneNumber.length) {
+        data = @{@"mobile":phoneNumber};
+    }
+    [self post:@"/send_reset_code" data:data isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
