@@ -2573,6 +2573,16 @@
     });
 }
 
+- (void)didTapChannelMenu:(WFCCChannelMenu *)channelMenu {
+    if ([channelMenu.type isEqualToString:@"view"] && channelMenu.url.length) {
+        WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+        bvc.url = channelMenu.url;
+        [self.navigationController pushViewController:bvc animated:YES];
+    } else if([channelMenu.type isEqualToString:@"miniprogram"] && channelMenu.appId.length) {
+        //打开小程序。。。
+    }
+}
+
 - (void)didTouchSend:(NSString *)stringContent withMentionInfos:(NSMutableArray<WFCUMetionInfo *> *)mentionInfos withQuoteInfo:(WFCCQuoteInfo *)quoteInfo {
     if (stringContent.length == 0) {
         return;

@@ -1713,6 +1713,27 @@ public:
     }
   return ret;
 }
+
+NSArray *convertProtoChannelMenu(const std::vector<mars::stn::TChannelMenu> &tms) {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (std::vector<mars::stn::TChannelMenu>::const_iterator it = tms.begin(); it != tms.end(); ++it) {
+        WFCCChannelMenu *cMenu = [[WFCCChannelMenu alloc] init];
+        cMenu.type = [NSString stringWithUTF8String:it->type.c_str()];
+        cMenu.name = [NSString stringWithUTF8String:it->name.c_str()];
+        if(!it->key.empty()) cMenu.key = [NSString stringWithUTF8String:it->key.c_str()];
+        if(!it->url.empty()) cMenu.url = [NSString stringWithUTF8String:it->url.c_str()];
+        if(!it->mediaId.empty()) cMenu.mediaId = [NSString stringWithUTF8String:it->mediaId.c_str()];
+        if(!it->articleId.empty()) cMenu.articleId = [NSString stringWithUTF8String:it->articleId.c_str()];
+        if(!it->appId.empty()) cMenu.appId = [NSString stringWithUTF8String:it->appId.c_str()];
+        if(!it->appPage.empty()) cMenu.appPage = [NSString stringWithUTF8String:it->appPage.c_str()];
+        if (!it->subMenus.empty()) {
+            cMenu.subMenus = convertProtoChannelMenu(it->subMenus);
+        }
+        [arr addObject:cMenu];
+    }
+    return arr;
+}
+
 WFCCChannelInfo *convertProtoChannelInfo(const mars::stn::TChannelInfo &tci) {
     if (tci.channelId.empty()) {
         return nil;
@@ -1728,6 +1749,8 @@ WFCCChannelInfo *convertProtoChannelInfo(const mars::stn::TChannelInfo &tci) {
     channelInfo.callback = [NSString stringWithUTF8String:tci.callback.c_str()];
     channelInfo.status = tci.status;
     channelInfo.updateDt = tci.updateDt;
+    channelInfo.menus = convertProtoChannelMenu(tci.menus);
+    
     return channelInfo;
 }
 

@@ -443,6 +443,8 @@
 		B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0D283230EF005F2745 /* DSCallInfo.h */; };
 		B72FBB17283230F0005F2745 /* InternalApis.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0E283230EF005F2745 /* InternalApis.h */; };
 		B72FBB18283230F0005F2745 /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0F283230F0005F2745 /* InternalApis.m */; };
+		B748123528A4BB8B003BB0C3 /* WFCUPublicMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */; };
+		B748123628A4BB8B003BB0C3 /* WFCUPublicMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */; };
 		B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B755657028389F8900BE047C /* WFCUArticlesCell.h */; };
 		B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B755657128389F8900BE047C /* WFCUArticlesCell.m */; };
 		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
@@ -900,6 +902,8 @@
 		B72FBB0D283230EF005F2745 /* DSCallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSCallInfo.h; sourceTree = "<group>"; };
 		B72FBB0E283230EF005F2745 /* InternalApis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternalApis.h; sourceTree = "<group>"; };
 		B72FBB0F283230F0005F2745 /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
+		B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPublicMenuButton.h; sourceTree = "<group>"; };
+		B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPublicMenuButton.m; sourceTree = "<group>"; };
 		B755657028389F8900BE047C /* WFCUArticlesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUArticlesCell.h; sourceTree = "<group>"; };
 		B755657128389F8900BE047C /* WFCUArticlesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUArticlesCell.m; sourceTree = "<group>"; };
 		B75D81622782B800009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = WebRTC.xcframework; sourceTree = "<group>"; };
@@ -1386,6 +1390,8 @@
 				2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */,
 				2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */,
 				2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */,
+				B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */,
+				B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */,
 			);
 			path = ChatInputBar;
 			sourceTree = "<group>";
@@ -2159,6 +2165,7 @@
 				2F56F6BA252A07AF00B829C4 /* WFCUCompositeBaseCell.h in Headers */,
 				B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */,
 				2F5EB44C22C2F36A00BC8C90 /* GroupMemberControlTableViewController.h in Headers */,
+				B748123528A4BB8B003BB0C3 /* WFCUPublicMenuButton.h in Headers */,
 				2F5511E4217F5CC300F56C26 /* YLImageView.h in Headers */,
 				2F551214217F5CC300F56C26 /* WFCUAddFriendViewController.h in Headers */,
 				1450EA8924389CA200BF51FC /* WFCUSeletedUserSearchResultViewController.h in Headers */,
@@ -2435,6 +2442,7 @@
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */,
+				B748123628A4BB8B003BB0C3 /* WFCUPublicMenuButton.m in Sources */,
 				B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */,
 				2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */,
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
