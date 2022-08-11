@@ -25,5 +25,10 @@ extern NSString *USER_AGREEMENT_URL;
 //文件传输助手用户ID，服务器有个默认文件助手的机器人，如果修改它的ID，需要客户端和服务器数据库同步修改
 extern NSString *FILE_TRANSFER_ID;
 
+//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
 extern NSString *WORK_PLATFORM_URL;
+
+//有2种登陆方式，手机号码+验证码登陆 和 手机号码+密码登陆。
+//这个开关是否优先密码登陆
+extern BOOL Prefer_Password_Login;
 #endif /* Config_h */

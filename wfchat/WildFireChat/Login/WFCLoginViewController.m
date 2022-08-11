@@ -11,6 +11,7 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "AppDelegate.h"
 #import "WFCBaseTabBarController.h"
+#import "WFCResetPasswordViewController.h"
 #import "MBProgressHUD.h"
 #import "UILabel+YBAttributeTextTapAction.h"
 #import "WFCPrivacyViewController.h"
@@ -24,6 +25,9 @@
 @property (strong, nonatomic) UITextField *passwordField;
 @property (strong, nonatomic) UIButton *loginBtn;
 
+@property (strong, nonatomic) UILabel *passwordLabel;
+
+
 @property (strong, nonatomic) UIView *userNameLine;
 @property (strong, nonatomic) UIView *passwordLine;
 
@@ -31,6 +35,8 @@
 @property (nonatomic, strong) NSTimer *countdownTimer;
 @property (nonatomic, assign) NSTimeInterval sendCodeTime;
 @property (nonatomic, strong) UILabel *privacyLabel;
+
+@property (strong, nonatomic) UIButton *switchButton;
 @end
 
 @implementation WFCLoginViewController
@@ -75,9 +81,9 @@
     topPos += inputHeight + 1;
 
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
-    UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
-    passwordLabel.text = @"验证码";
-    passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+    self.passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
+    self.passwordLabel.text = @"验证码";
+    self.passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     
     self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
@@ -105,7 +111,20 @@
     self.sendCodeBtn.enabled = NO;
     
     
-    topPos += 71;
+    topPos += 40;
+    
+    topPos += 8;
+    
+    self.switchButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, 150, 40)];
+    [self.switchButton setTitle:@"使用用户密码登陆" forState:UIControlStateNormal];
+    self.switchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    self.switchButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
+    [self.switchButton addTarget:self action:@selector(onSwitchLoginType:) forControlEvents:UIControlEventTouchDown];
+    
+    topPos += 40;
+    topPos += 31;
+    
     self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, 43)];
     [self.loginBtn addTarget:self action:@selector(onLoginButton:) forControlEvents:UIControlEventTouchDown];
     self.loginBtn.layer.masksToBounds = YES;
@@ -124,10 +143,12 @@
     [self.view addSubview:userNameContainer];
     
     [self.view addSubview:passwordContainer];
-    [passwordContainer addSubview:passwordLabel];
+    [passwordContainer addSubview:self.passwordLabel];
     [passwordContainer addSubview:self.passwordField];
     [passwordContainer addSubview:self.passwordLine];
     [passwordContainer addSubview:self.sendCodeBtn];
+    
+    [self.view addSubview:self.switchButton];
     
     [self.view addSubview:self.loginBtn];
     
@@ -153,6 +174,45 @@
     }];
     
     [self.view addSubview:self.privacyLabel];
+    [self setIsPwdLogin:self.isPwdLogin];
+}
+
+- (void)setIsPwdLogin:(BOOL)isPwdLogin {
+    _isPwdLogin = isPwdLogin;
+    CGRect bgRect = self.view.bounds;
+    CGRect pwdFeildFrame = self.passwordField.frame;
+    CGFloat paddingEdge = 16;
+    CGFloat pwdFeildWidth = bgRect.size.width - paddingEdge * 2 - 87;
+    if (isPwdLogin) {
+        self.hintLabel.text = @"密码登录";
+        self.passwordLabel.text = @"密  码 ";
+        self.sendCodeBtn.hidden = YES;
+        self.passwordField.placeholder = @"请输入密码";
+        self.passwordField.keyboardType = UIKeyboardTypeASCIICapable;
+        self.passwordField.secureTextEntry = YES;
+        self.passwordField.text = nil;
+        if (self.passwordField.isFirstResponder) {
+            [self.passwordField resignFirstResponder];
+            [self.passwordField becomeFirstResponder];
+        }
+        [self.switchButton setTitle:@"使用手机验证码登陆" forState:UIControlStateNormal];
+    } else {
+        self.hintLabel.text = @"验证码登录";
+        self.passwordLabel.text = @"验证码";
+        self.sendCodeBtn.hidden = NO;
+        self.passwordField.placeholder = @"请输入验证码";
+        self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
+        self.passwordField.secureTextEntry = NO;
+        self.passwordField.text = nil;
+        if (self.passwordField.isFirstResponder) {
+            [self.passwordField resignFirstResponder];
+            [self.passwordField becomeFirstResponder];
+        }
+        [self.switchButton setTitle:@"使用用户密码登陆" forState:UIControlStateNormal];
+        pwdFeildWidth -= 72;
+    }
+    pwdFeildFrame.size.width = pwdFeildWidth;
+    self.passwordField.frame = pwdFeildFrame;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -185,11 +245,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)onSwitchLoginType:(id)sender {
+//    [UIView animateWithDuration:0.5 animations:^{
+        self.isPwdLogin = !self.isPwdLogin;
+//    }];
+}
+
 - (void)onSendCode:(id)sender {
     self.sendCodeBtn.enabled = NO;
     [self.sendCodeBtn setTitle:@"短信发送中" forState:UIControlStateNormal];
     __weak typeof(self)ws = self;
-    [[AppService sharedAppService] sendCode:self.userNameField.text success:^{
+    [[AppService sharedAppService] sendLoginCode:self.userNameField.text success:^{
        [ws sendCodeDone:YES];
     } error:^(NSString * _Nonnull message) {
         [ws sendCodeDone:NO];
@@ -257,35 +323,54 @@
   MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
   hud.label.text = @"登录中...";
   [hud showAnimated:YES];
-  
-    [[AppService sharedAppService] login:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
-        [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
-        [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        
-    //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
-        [[WFCCNetworkService sharedInstance] connect:userId token:token];
-        
+    
+      void(^errorBlock)(int errCode, NSString *message) = ^(int errCode, NSString *message) {
+          NSLog(@"login error with code %d, message %@", errCode, message);
         dispatch_async(dispatch_get_main_queue(), ^{
           [hud hideAnimated:YES];
-            WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
-            tabBarVC.newUser = newUser;
-            [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
+          
+          MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+          hud.mode = MBProgressHUDModeText;
+          hud.label.text = @"登录失败";
+          hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+          [hud hideAnimated:YES afterDelay:1.f];
         });
-    } error:^(int errCode, NSString *message) {
-        NSLog(@"login error with code %d, message %@", errCode, message);
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [hud hideAnimated:YES];
-        
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"登录失败";
-        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-        [hud hideAnimated:YES afterDelay:1.f];
-      });
-    }];
+      };
+      
+      void(^successBlock)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) = ^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+          [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
+          [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
+          [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
+          [[NSUserDefaults standardUserDefaults] synchronize];
+          
+          
+          //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
+          [[WFCCNetworkService sharedInstance] connect:userId token:token];
+          
+            [hud hideAnimated:YES];
+            WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
+            [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
+          if (resetCode) {
+              if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
+                  WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
+                  vc.resetCode = resetCode;
+                  vc.hidesBottomBarWhenPushed = YES;
+                  UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
+                  dispatch_async(dispatch_get_main_queue(), ^{
+                      [nav pushViewController:vc animated:YES];
+                  });
+              }
+          }
+      };
+      
+      
+      if (self.isPwdLogin) {
+          [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
+              successBlock(userId, token, newUser, nil);
+          } error:errorBlock];
+      } else {
+          [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
+      }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -358,7 +443,7 @@
 }
 
 - (BOOL)isValidCode {
-    if (self.passwordField.text.length >= 4) {
+    if (self.passwordField.text.length >= 1) {
         return YES;
     } else {
         return NO;
