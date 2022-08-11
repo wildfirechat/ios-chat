@@ -42,7 +42,7 @@
     self.oldPasswordfield.placeholder = @"请输入原密码";
     self.oldPasswordfield.delegate = self;
     self.oldPasswordfield.keyboardType = UIKeyboardTypeASCIICapable;
-    self.passwordfield.secureTextEntry = YES;
+    self.oldPasswordfield.secureTextEntry = YES;
     topPos += inputHeight;
     self.oldLine = [[UIView alloc] initWithFrame:CGRectMake(16, topPos, screenWidth - 16 - 16, 1)];
     self.oldLine.backgroundColor = [UIColor grayColor];
