@@ -91,18 +91,17 @@
             }
         }
 
-        NSData *msgData =  [NSJSONSerialization dataWithJSONObject:msgDict
+        if (!binArrays) {
+            NSData *msgData =  [NSJSONSerialization dataWithJSONObject:msgDict
                                                                options:kNilOptions
                                                                  error:nil];
-        size += msgData.length;
+            size += msgData.length;
+            if (size > 20480 && arrays.count) {
+                binArrays = [arrays copy];
+            }
+        }
         [arrays addObject:msgDict];
-
     }
-    
-    if (size > 20480) {
-        binArrays = [arrays copy];
-    }
-    
     if (binArrays && !self.localPath.length) {
         [dataDict setObject:binArrays forKey:@"ms"];
         NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"ms":arrays}
@@ -117,13 +116,17 @@
         payload.localMediaPath = path;
         payload.mediaType = Media_Type_FILE;
     } else {
-        [dataDict setObject:arrays forKey:@"ms"];
-        payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
-                                                                options:kNilOptions
-                                                                  error:nil];
+        if (binArrays) {
+            [dataDict setObject:binArrays forKey:@"ms"];
+        } else {
+            [dataDict setObject:arrays forKey:@"ms"];
+        }
     }
     
 
+    payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
+                                                            options:kNilOptions
+                                                              error:nil];
 
     return payload;
 }
