@@ -899,9 +899,18 @@
     }];
     UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:@"合并转发" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCCompositeMessageContent *compositeContent = [[WFCCCompositeMessageContent alloc] init];
+
         if (self.conversation.type == Single_Type) {
+            NSString *title = nil;
+            if(self.targetUser.friendAlias.length) {
+                title = self.targetUser.friendAlias;
+            } else if(self.targetUser.displayName.length == 0) {
+                title = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), self.conversation.target];
+            } else {
+                title = self.targetUser.displayName;
+            }
             WFCCUserInfo *myself = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-            compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", self.title, myself.displayName];
+            compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", title, myself.displayName];
         } else if (self.conversation.type == Group_Type) {
             compositeContent.title = @"群的聊天记录";
         } else if (self.conversation.type == Channel_Type) {
@@ -911,6 +920,7 @@
         } else {
             compositeContent.title = @"聊天记录";
         }
+        
         compositeContent.messages = messages;
         WFCCMessage *msg = [[WFCCMessage alloc] init];
         msg.content = compositeContent;
