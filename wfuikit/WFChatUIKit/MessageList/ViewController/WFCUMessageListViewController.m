@@ -2220,7 +2220,7 @@
         }
     } else if([model.message.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
         WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
-        vc.compositeContent = (WFCCCompositeMessageContent *)model.message.content;
+        vc.message = model.message;
         [self.navigationController pushViewController:vc animated:YES];
     } else if([model.message.content isKindOfClass:[WFCCLinkMessageContent class]]) {
         WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)model.message.content;
