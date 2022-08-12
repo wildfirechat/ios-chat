@@ -90,6 +90,17 @@
         item.title = compositeContent.title;
         
         WFCCMessagePayload *payload = [compositeContent encode];
+        if (!compositeContent.loaded && compositeContent.remoteUrl.length) {
+            NSError *__error = nil;
+            NSMutableDictionary *dictionary = [[NSJSONSerialization JSONObjectWithData:payload.binaryContent
+                                                                               options:kNilOptions
+                                                                                 error:&__error] mutableCopy];
+            [dictionary setObject:compositeContent.remoteUrl forKey:@"remote_url"];
+            payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                                    options:kNilOptions
+                                                                      error:nil];
+            
+        }
         item.data = [payload.binaryContent base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     } else if ([content isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)content;
@@ -194,8 +205,15 @@
             compositeCnt.title = self.title;
             
             NSData *binaryData = [[NSData alloc] initWithBase64EncodedString:self.data options:NSDataBase64DecodingIgnoreUnknownCharacters];
-            WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+            NSError *__error = nil;
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:binaryData
+                                                                       options:kNilOptions
+                                                                         error:&__error];
+            NSString *remoteUrl = dictionary[@"remote_url"];
+            
+            WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
             payload.binaryContent = binaryData;
+            payload.remoteMediaUrl = remoteUrl;
             [compositeCnt decode:payload];
             
             msg.content = compositeCnt;
