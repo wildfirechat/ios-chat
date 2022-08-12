@@ -60,8 +60,8 @@
 
 + (NSString *)digestContent:(WFCCCompositeMessageContent *)content inConversation:(WFCCConversation *)conversation {
     NSString *result = @"";
-    int i = 0;
-    for (WFCCMessage *msg in content.messages) {
+    for (int i = 0; i < content.messages.count; i++) {
+        WFCCMessage *msg = content.messages[i];
         NSString *digest = [msg.content digest:msg];
         if (digest.length > 36) {
             digest = [digest substringToIndex:33];
@@ -74,12 +74,18 @@
             userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
         }
         result = [result stringByAppendingFormat:@"%@:%@", userInfo.displayName, digest];
-        i++;
-        if (i == 3) {
-            result = [result stringByAppendingString:@"..."];
-            break;
-        } else {
+        
+        BOOL lastItem = (i == content.messages.count - 1);
+        
+        if (!lastItem) {
             result = [result stringByAppendingString:@"\n"];
+        }
+        
+        if (i == 2) {
+            if (!lastItem) {
+                result = [result stringByAppendingString:@"..."];
+            }
+            break;
         }
     }
     
