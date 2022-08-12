@@ -11,10 +11,14 @@
 #import "WFCUUtilities.h"
 #import "WFCUCompositeBaseCell.h"
 #import "WFCUCompositeTextCell.h"
+#import <CommonCrypto/CommonCrypto.h>
+#import "MBProgressHUD.h"
+
 
 @interface WFCUCompositeMessageViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSMutableArray<WFCCMessage *> *messages;
+@property (nonatomic, strong)WFCCCompositeMessageContent *compositeContent;
 @end
 
 @implementation WFCUCompositeMessageViewController
@@ -39,7 +43,69 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+    if (!self.compositeContent.loaded && self.compositeContent.remoteUrl) {
+        [self downloadComositeContent];
+    }
 }
+- (void)downloadComositeContent {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"加载中...";
+    [hud showAnimated:YES];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.compositeContent.remoteUrl]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+            if(data.length) {
+                NSString *uuid = nil;
+                if (self.message.messageId > 0) {
+                    CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+                    uuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
+                    CFRelease(uuidObject);
+                } else {
+                    uuid = [self getMD5WithData:data];
+                }
+                NSString *path = [[WFCCUtilities getDocumentPathWithComponent:@"/COMPOSITE_MESSAGE"] stringByAppendingPathComponent:uuid];
+                if(![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    [data writeToFile:path atomically:YES];
+                }
+                
+                WFCCCompositeMessageContent *content = self.compositeContent;
+                content.localPath = path;
+                self.message.content = content;
+                if (self.message.messageId > 0) {
+                    [[WFCCIMService sharedWFCIMService] updateMessage:self.message.messageId content:content];
+                }
+                self.messages = [[NSMutableArray alloc] initWithArray:self.compositeContent.messages];
+                [self.tableView reloadData];
+            } else {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = @"加载失败";
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            }
+        });
+    });
+}
+- (NSString *)getMD5WithData:(NSData *)data {
+    CC_MD5_CTX md5;
+    CC_MD5_Init(&md5);
+    CC_MD5_Update(&md5, data.bytes, (uint32_t)data.length);
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5_Final(result, &md5);
+    NSMutableString *resultString = [NSMutableString string];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+      [resultString appendFormat:@"%02x", result[i]];
+    }
+    return resultString;
+}
+
+- (WFCCCompositeMessageContent *)compositeContent {
+    return (WFCCCompositeMessageContent *)self.message.content;
+}
+
 - (void)setupTableHeaderView {
 #define HEADER_HEIGHT 30
 #define HEADER_FONT_SIZE 16
@@ -80,9 +146,10 @@
     
     self.tableView.tableHeaderView = headerView;
 }
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.compositeContent.messages.count;
+    return self.messages.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCCMessage *msg = self.messages[indexPath.row];

@@ -10,14 +10,17 @@
 #import "Common.h"
 #import "WFCCIMService.h"
 #import "WFCCMessage.h"
+#import "WFCCUtilities.h"
 
 @implementation WFCCCompositeMessageContent
 - (WFCCMessagePayload *)encode {
-    WFCCMessagePayload *payload = [super encode];
+    WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
     payload.content = self.title;
 
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     NSMutableArray *arrays = [[NSMutableArray alloc] init];
+    int size = 0;
+    NSMutableArray *binArrays = nil;
     for (WFCCMessage *msg in self.messages) {
         NSMutableDictionary *msgDict = [NSMutableDictionary dictionary];
         if (msg.messageUid) {
@@ -88,9 +91,37 @@
             }
         }
 
+        if (!binArrays) {
+            NSData *msgData =  [NSJSONSerialization dataWithJSONObject:msgDict
+                                                               options:kNilOptions
+                                                                 error:nil];
+            size += msgData.length;
+            if (size > 20480 && arrays.count) {
+                binArrays = [arrays copy];
+            }
+        }
         [arrays addObject:msgDict];
     }
-    [dataDict setObject:arrays forKey:@"ms"];
+    if (binArrays && !self.localPath.length) {
+        [dataDict setObject:binArrays forKey:@"ms"];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"ms":arrays}
+                                                                options:kNilOptions
+                                                                  error:nil];
+        CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+        NSString *uuid = (NSString *)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
+        CFRelease(uuidObject);
+        
+        NSString *path = [[WFCCUtilities getDocumentPathWithComponent:@"/COMPOSITE_MESSAGE"] stringByAppendingPathComponent:uuid];
+        [data writeToFile:path atomically:YES];
+        payload.localMediaPath = path;
+        payload.mediaType = Media_Type_FILE;
+    } else {
+        if (binArrays) {
+            [dataDict setObject:binArrays forKey:@"ms"];
+        } else {
+            [dataDict setObject:arrays forKey:@"ms"];
+        }
+    }
     
 
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
@@ -103,6 +134,20 @@
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
     self.title = payload.content;
+    self.loaded = YES;
+    if ([payload isKindOfClass:WFCCMediaMessagePayload.class]) {
+        WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
+        if (mediaPayload.localMediaPath.length) {
+            NSData *data = [NSData dataWithContentsOfFile:[WFCCUtilities getSendBoxFilePath:mediaPayload.localMediaPath]];
+            if(data) {
+                payload.binaryContent = data;
+            }
+        } else if(mediaPayload.remoteMediaUrl.length) {
+            self.loaded = NO;
+        }
+        self.localPath = mediaPayload.localMediaPath;
+        self.remoteUrl = mediaPayload.remoteMediaUrl;
+    }
 
     NSError *__error = nil;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
@@ -156,6 +201,17 @@
             [messages addObject:msg];
         }
         self.messages = [messages copy];
+    }
+    
+}
+
+- (void)setLocalPath:(NSString *)localPath {
+    [super setLocalPath:localPath];
+    if (localPath.length) {
+        localPath = [WFCCUtilities getSendBoxFilePath:localPath];
+        if (!self.loaded) {
+            [self decode:[self encode]];
+        }
     }
     
 }

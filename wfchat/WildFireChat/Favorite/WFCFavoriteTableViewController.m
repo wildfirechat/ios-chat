@@ -195,7 +195,7 @@
         case MESSAGE_CONTENT_TYPE_COMPOSITE_MESSAGE:
         {
             WFCUCompositeMessageViewController *vc = [[WFCUCompositeMessageViewController alloc] init];
-            vc.compositeContent = (WFCCCompositeMessageContent *)[self.selectedCell.favoriteItem toMessage].content;
+            vc.message = [self.selectedCell.favoriteItem toMessage];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;

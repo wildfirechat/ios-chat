@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-@class WFCCCompositeMessageContent;
+@class WFCCMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUCompositeMessageViewController : UIViewController
-@property (nonatomic, strong)WFCCCompositeMessageContent *compositeContent;
+@property (nonatomic, strong)WFCCMessage *message;
 @end
 
 NS_ASSUME_NONNULL_END
