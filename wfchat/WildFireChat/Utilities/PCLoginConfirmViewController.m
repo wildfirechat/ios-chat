@@ -29,25 +29,25 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 320, 200, 16)];
     switch (self.platform) {
         case PlatformType_Windows:
-            [label setText:@"确认 Windows 登陆"];
+            [label setText:@"确认 Windows 登录"];
             break;
         case PlatformType_OSX:
-            [label setText:@"确认 Mac 登陆"];
+            [label setText:@"确认 Mac 登录"];
             break;
         case PlatformType_WEB:
-            [label setText:@"确认浏览器登陆"];
+            [label setText:@"确认浏览器登录"];
             break;
         case PlatformType_Linux:
-            [label setText:@"确认 Linux 登陆"];
+            [label setText:@"确认 Linux 登录"];
             break;
         case PlatformType_iPad:
-            [label setText:@"确认 iPad 登陆"];
+            [label setText:@"确认 iPad 登录"];
             break;
         case PlatformType_APad:
-            [label setText:@"确认 Android 平板登陆"];
+            [label setText:@"确认 Android 平板登录"];
             break;
         default:
-            [label setText:@"确认电脑登陆"];
+            [label setText:@"确认电脑登录"];
             break;
     }
     
@@ -56,13 +56,13 @@
     
     UIButton *loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 150, width - 200, 40)];
     [loginBtn setBackgroundColor:[UIColor greenColor]];
-    [loginBtn setTitle:@"登陆" forState:UIControlStateNormal];
+    [loginBtn setTitle:@"登录" forState:UIControlStateNormal];
     loginBtn.layer.masksToBounds = YES;
     loginBtn.layer.cornerRadius = 5.f;
     [loginBtn addTarget:self action:@selector(onLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 90, width - 200, 40)];
-    [cancelBtn setTitle:@"取消登陆" forState:UIControlStateNormal];
+    [cancelBtn setTitle:@"取消登录" forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(onLoginCancel:) forControlEvents:UIControlEventTouchUpInside];
     

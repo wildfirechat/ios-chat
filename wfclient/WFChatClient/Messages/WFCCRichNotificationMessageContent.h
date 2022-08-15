@@ -16,7 +16,7 @@
 @property (nonatomic, strong)NSString *desc;
 @property (nonatomic, strong)NSString *remark;
 
-//@[@{@"key":@"登陆账户", @"value":@"野火IM", @"color":@"#173155"}, @{@"key":@"登陆地点", @"value":@"北京", @"color":@"#173155"}]
+//@[@{@"key":@"登录账户", @"value":@"野火IM", @"color":@"#173155"}, @{@"key":@"登录地点", @"value":@"北京", @"color":@"#173155"}]
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *datas;
 
 //附加信息

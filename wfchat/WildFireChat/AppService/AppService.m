@@ -291,7 +291,7 @@ static AppService *sharedSingleton = nil;
     if(authToken.length) {
         [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
     } else {
-        NSData *cookiesdata = [self getAppServiceCookies];//url和登陆时传的url 是同一个
+        NSData *cookiesdata = [self getAppServiceCookies];//url和登录时传的url 是同一个
         if([cookiesdata length]) {
             NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
             NSHTTPCookie *cookie;
