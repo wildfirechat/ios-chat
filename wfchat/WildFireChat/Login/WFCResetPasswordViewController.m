@@ -35,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"设置新密码";
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     CGFloat inputHeight = 40;
     CGFloat topPos = kStatusBarAndNavigationBarHeight + 16;
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
