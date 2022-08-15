@@ -1146,7 +1146,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     [[WFCCNetworkStatus sharedInstance] Stop];
     int flag = 0;
     if (clearSession) {
-        NSLog(@"本地和服务器端连接会话将被清除！！！必须再次获取token才能登陆，您确认是要清除连接会话吗？！");
+        NSLog(@"本地和服务器端连接会话将被清除！！！必须再次获取token才能登录，您确认是要清除连接会话吗？！");
         flag = 8;
     } else if(disablePush) {
         flag = 1;
