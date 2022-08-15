@@ -156,7 +156,7 @@
     } else {
         WFCLoginViewController *loginVC = [[WFCLoginViewController alloc] init];
         
-        //是否优先密码登陆
+        //是否优先密码登录
         loginVC.isPwdLogin = Prefer_Password_Login;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
         self.window.rootViewController = nav;

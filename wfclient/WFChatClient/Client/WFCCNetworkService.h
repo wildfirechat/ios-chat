@@ -247,7 +247,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, weak) id<OnlineEventDelegate> onlineEventDelegate;
 
 /**
- 当前是否处于登陆状态
+ 当前是否处于登录状态
  */
 @property(nonatomic, assign, getter=isLogined, readonly)BOOL logined;
 
@@ -257,7 +257,7 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, assign, readonly)ConnectionStatus currentConnectionStatus;
 
 /**
- 当前登陆的用户ID
+ 当前登录的用户ID
  */
 @property (nonatomic, strong, readonly)NSString *userId;
 
@@ -315,8 +315,8 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 /**
  断开连接
 
- @param disablePush   是否停止推送，clearSession为YES时无意义。如果为true，session会变成disable状态，token会失效，必须重新获取token才能登陆。
- @param clearSession 是否清除Session信息，如果清除本地历史消息将全部清除，且token失效无法再次登陆，必须重新获取token才能进行登陆。
+ @param disablePush   是否停止推送，clearSession为YES时无意义。如果为true，session会变成disable状态，token会失效，必须重新获取token才能登录。
+ @param clearSession 是否清除Session信息，如果清除本地历史消息将全部清除，且token失效无法再次登录，必须重新获取token才能进行登录。
  */
 - (void)disconnect:(BOOL)disablePush clearSession:(BOOL)clearSession;
 

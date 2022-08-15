@@ -37,6 +37,7 @@
 @property (nonatomic, strong) UILabel *privacyLabel;
 
 @property (strong, nonatomic) UIButton *switchButton;
+@property (strong, nonatomic) UIButton *registerButton;
 @end
 
 @implementation WFCLoginViewController
@@ -116,11 +117,18 @@
     topPos += 8;
     
     self.switchButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, 150, 40)];
-    [self.switchButton setTitle:@"使用用户密码登陆" forState:UIControlStateNormal];
+    [self.switchButton setTitle:@"使用用户密码登录" forState:UIControlStateNormal];
     self.switchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     self.switchButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
     [self.switchButton addTarget:self action:@selector(onSwitchLoginType:) forControlEvents:UIControlEventTouchDown];
+    
+    self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - 100, topPos, 100, 40)];
+    [self.registerButton setTitle:@"注册" forState:UIControlStateNormal];
+    self.registerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.registerButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    [self.registerButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
+    [self.registerButton addTarget:self action:@selector(onRegister:) forControlEvents:UIControlEventTouchDown];
     
     topPos += 40;
     topPos += 31;
@@ -149,7 +157,7 @@
     [passwordContainer addSubview:self.sendCodeBtn];
     
     [self.view addSubview:self.switchButton];
-    
+    [self.view addSubview:self.registerButton];
     [self.view addSubview:self.loginBtn];
     
     self.userNameField.text = savedName;
@@ -195,7 +203,7 @@
             [self.passwordField resignFirstResponder];
             [self.passwordField becomeFirstResponder];
         }
-        [self.switchButton setTitle:@"使用短信验证码登陆" forState:UIControlStateNormal];
+        [self.switchButton setTitle:@"使用短信验证码登录" forState:UIControlStateNormal];
     } else {
         self.hintLabel.text = @"短信验证码登录";
         self.passwordLabel.text = @"验证码";
@@ -208,7 +216,7 @@
             [self.passwordField resignFirstResponder];
             [self.passwordField becomeFirstResponder];
         }
-        [self.switchButton setTitle:@"使用用户密码登陆" forState:UIControlStateNormal];
+        [self.switchButton setTitle:@"使用用户密码登录" forState:UIControlStateNormal];
         pwdFeildWidth -= 72;
     }
     pwdFeildFrame.size.width = pwdFeildWidth;
@@ -249,6 +257,20 @@
 //    [UIView animateWithDuration:0.5 animations:^{
         self.isPwdLogin = !self.isPwdLogin;
 //    }];
+}
+
+- (void)onRegister:(id)sender {
+    __weak typeof(self)ws = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"使用短信验证码登录将会为您创建账户，请使用短信验证码登录。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        ws.isPwdLogin = NO;
+    }];
+    
+    [alertController addAction:cancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)onSendCode:(id)sender {

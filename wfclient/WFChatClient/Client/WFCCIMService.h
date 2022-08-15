@@ -2157,7 +2157,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 
 
 /**
-获取应用的auth code，用于应用的免密登陆
+获取应用的auth code，用于应用的免密登录
  */
 - (void)getAuthCode:(NSString *)applicationId
                type:(int)type
