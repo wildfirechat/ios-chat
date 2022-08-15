@@ -195,9 +195,9 @@
             [self.passwordField resignFirstResponder];
             [self.passwordField becomeFirstResponder];
         }
-        [self.switchButton setTitle:@"使用手机验证码登陆" forState:UIControlStateNormal];
+        [self.switchButton setTitle:@"使用短信验证码登陆" forState:UIControlStateNormal];
     } else {
-        self.hintLabel.text = @"验证码登录";
+        self.hintLabel.text = @"短信验证码登录";
         self.passwordLabel.text = @"验证码";
         self.sendCodeBtn.hidden = NO;
         self.passwordField.placeholder = @"请输入验证码";
