@@ -246,6 +246,24 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
 
+        class TChannelMenu : public TSerializable {
+        public:
+            TChannelMenu() {}
+            std::string type;
+            std::string name;
+            std::string key;
+            std::string url;
+            std::string mediaId;
+            std::string articleId;
+            std::string appId;
+            std::string appPage;
+            std::vector<TChannelMenu> subMenus;
+#if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+        };
+    
         class TChannelInfo : public TSerializable {
         public:
             TChannelInfo() : status(0), updateDt(0), automatic(0) {}
@@ -261,6 +279,7 @@ namespace mars{
             int64_t updateDt;
             int automatic;
             virtual ~TChannelInfo() {}
+            std::vector<TChannelMenu> menus;
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
             virtual void Unserialize(const Value& value);
