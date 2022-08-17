@@ -249,6 +249,7 @@ namespace mars{
         class TChannelMenu : public TSerializable {
         public:
             TChannelMenu() {}
+            std::string menuId;
             std::string type;
             std::string name;
             std::string key;
@@ -257,6 +258,7 @@ namespace mars{
             std::string articleId;
             std::string appId;
             std::string appPage;
+            std::string extra;
             std::vector<TChannelMenu> subMenus;
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
