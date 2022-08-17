@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface WFCCChannelMenu : WFCCJsonSerializer
-@property(nonatomic, assign)NSString *type;
+@property(nonatomic, strong)NSString *menuId;
+@property(nonatomic, strong)NSString *type;
 @property(nonatomic, strong)NSString *name;
 @property(nonatomic, strong)NSString *key;
 @property(nonatomic, strong)NSString *url;
@@ -21,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *articleId;
 @property(nonatomic, strong)NSString *appId;
 @property(nonatomic, strong)NSString *appPage;
+@property(nonatomic, assign)NSString *extra;
 @property(nonatomic, strong)NSArray<WFCCChannelMenu *> *subMenus;
 @end
 
