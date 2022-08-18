@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCChannelMenu.h"
 #import "WFCCJsonSerializer.h"
 
 @interface WFCCChannelInfo : WFCCJsonSerializer
@@ -22,4 +23,6 @@
 //https://docs.wildfirechat.net/base_knowledge/channel.html##频道状态
 @property(nonatomic, assign)int status;
 @property(nonatomic, assign)long long updateDt;
+
+@property(nonatomic, strong)NSArray<WFCCChannelMenu *> *menus;
 @end
