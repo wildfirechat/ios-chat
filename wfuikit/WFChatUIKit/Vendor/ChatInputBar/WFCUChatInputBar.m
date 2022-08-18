@@ -20,6 +20,7 @@
 #import "WFCUContactListViewController.h"
 #import "MBProgressHUD.h"
 #import "UIColor+YH.h"
+#import "WFCUPublicMenuButton.h""
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
@@ -58,13 +59,14 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, UIDocumentPickerDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
 @property (nonatomic, assign)BOOL emojInput;
 @property (nonatomic, assign)BOOL pluginInput;
 
+@property (nonatomic, strong)UIButton *publicSwitchBtn;
 @property (nonatomic, strong)UIButton *voiceSwitchBtn;
 #ifdef WFC_PTT
 @property (nonatomic, strong)UIButton *pttSwitchBtn;
@@ -76,6 +78,9 @@
 @property (nonatomic, strong)UIView *inputCoverView;
 
 @property (nonatomic, strong)UIButton *voiceInputBtn;
+
+@property (nonatomic, strong)UIView *inputContainer;
+@property (nonatomic, strong)UIView *publicContainer;
 
 @property (nonatomic, strong)UIView *emojInputView;
 @property (nonatomic, strong)UIView *pluginInputView;
@@ -108,6 +113,8 @@
 @property (nonatomic, strong)WFCCQuoteInfo *quoteInfo;
 
 @property(nonatomic, strong)NSTimer *saveDraftTimer;
+
+@property(nonatomic, strong)NSMutableArray<WFCUPublicMenuButton *> *menuButtons;
 @end
 
 @implementation WFCUChatInputBar
@@ -115,13 +122,13 @@
     self = [super initWithFrame:CGRectMake(0, parentView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, parentView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
     if (self) {
         [parentView addSubview:self];
-        [self initSubViews];
         self.delegate = delegate;
         self.parentView = parentView;
         self.mentionInfos = [[NSMutableArray alloc] init];
         self.conversation = conversation;
         self.lastTypingTime = 0;
         self.backupFrame = CGRectZero;
+        [self initSubViews];
     }
     return self;
 }
@@ -139,14 +146,89 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     self.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
+    
+    
+    NSArray<WFCCChannelMenu *> *menus = nil;
+    if (self.conversation.type == Channel_Type) {
+        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
+        menus = channelInfo.menus;
+    }
+    
     CGRect parentRect = self.bounds;
+    
+    
+    if (menus.count) {
+        self.publicSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
+        [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        [self.publicSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.publicSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
+        [self addSubview:self.publicSwitchBtn];
+        
+        UIView *split = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2, parentRect.size.height/2 - CHAT_INPUT_BAR_ICON_SIZE/2, 1, CHAT_INPUT_BAR_ICON_SIZE)];
+        split.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+        [self addSubview:split];
+        
+        self.publicContainer = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1, 0, parentRect.size.width - (CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1), parentRect.size.height)];
+        self.inputContainer = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1, 0, parentRect.size.width - (CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1), parentRect.size.height)];
+        [self addSubview:self.publicContainer];
+        [self addSubview:self.inputContainer];
+        
+        self.inputContainer.hidden = YES;
+        [self setupInputContainer:YES];
+        [self setupPublicContainer:menus];
+    } else {
+        self.inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, parentRect.size.width, parentRect.size.height)];
+        [self addSubview:self.inputContainer];
+        [self setupInputContainer:NO];
+    }
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    UIView *view = [super hitTest:point withEvent:event];
+    if (view == nil) {
+        for (WFCUPublicMenuButton *menuButton in self.menuButtons) {
+            CGPoint tempPoint = [menuButton convertPoint:point fromView:self];
+
+            view = [menuButton hitTest:tempPoint withEvent:event];
+            if (view ) {
+                return view;
+            }
+        }
+    }
+    return view;
+}
+
+- (void)setupPublicContainer:(NSArray<WFCCChannelMenu *> *)menus {
+    CGRect parentRect = self.publicContainer.bounds;
+    CGFloat butWidth = (parentRect.size.width - (menus.count - 1) * 1)/menus.count;
+    self.menuButtons = [[NSMutableArray alloc] init];
+    for (int i = 0; i < menus.count; ++i) {
+        WFCUPublicMenuButton *menuButton = [[WFCUPublicMenuButton alloc] initWithFrame:CGRectMake(butWidth * i + (i > 0 ? (i-1):0), 0, butWidth, parentRect.size.height)];
+        [menuButton setChannelMenu:[menus objectAtIndex:i] isSubMenu:NO];
+        menuButton.delegate = self;
+        [self.menuButtons addObject:menuButton];
+        
+        [self.publicContainer addSubview:menuButton];
+        if (i > 0) {
+            UIView *split = [[UIView alloc] initWithFrame:CGRectMake(i * butWidth, parentRect.size.height/2 - CHAT_INPUT_BAR_ICON_SIZE/2, 1, CHAT_INPUT_BAR_ICON_SIZE)];
+            split.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+            [self.publicContainer addSubview:split];
+        }
+    }
+    _inputBarStatus = ChatInputBarPublicStatus;
+}
+
+- (void)setupInputContainer:(BOOL)hasPublic {
+    CGRect parentRect = self.inputContainer.bounds;
+    CGFloat voiceBtnPaddingLeft = hasPublic ? CHAT_INPUT_BAR_PADDING/2 : CHAT_INPUT_BAR_PADDING;
+    
     CGFloat voiceAndPttOffset;
-    self.voiceSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
+    self.voiceSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(voiceBtnPaddingLeft, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
     [self.voiceSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_voice"] forState:UIControlStateNormal];
     [self.voiceSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.voiceSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
-    [self addSubview:self.voiceSwitchBtn];
-    voiceAndPttOffset = CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE;
+    [self.inputContainer addSubview:self.voiceSwitchBtn];
+    voiceAndPttOffset = voiceBtnPaddingLeft + CHAT_INPUT_BAR_ICON_SIZE;
     
 #ifdef WFC_PTT
     if([self isPttEnabled]) {
@@ -154,7 +236,7 @@
     [self.pttSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_ptt"] forState:UIControlStateNormal];
     [self.pttSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pttSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
-    [self addSubview:self.pttSwitchBtn];
+    [self.inputContainer addSubview:self.pttSwitchBtn];
         voiceAndPttOffset += CHAT_INPUT_BAR_ICON_SIZE;
     }
 #endif
@@ -163,19 +245,15 @@
     [self.pluginSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
     [self.pluginSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pluginSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
-    [self addSubview:self.pluginSwitchBtn];
+    [self.inputContainer addSubview:self.pluginSwitchBtn];
     
     self.emojSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
     [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     [self.emojSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.emojSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
-    [self addSubview:self.emojSwitchBtn];
-    
-#ifdef WFC_PTT
-    self.textInputView = [[UITextView alloc] initWithFrame:CGRectMake(voiceAndPttOffset + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, parentRect.size.width - voiceAndPttOffset - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
-#else
-    self.textInputView = [[UITextView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_HEIGHT, CHAT_INPUT_BAR_PADDING, parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
-#endif
+    [self.inputContainer addSubview:self.emojSwitchBtn];
+
+    self.textInputView = [[UITextView alloc] initWithFrame:CGRectMake(voiceAndPttOffset + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, self.inputContainer.bounds.size.width - voiceAndPttOffset - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
     
     self.textInputView.delegate = self;
     self.textInputView.layoutManager.allowsNonContiguousLayout = NO;
@@ -186,7 +264,7 @@
     self.textInputView.backgroundColor = [UIColor whiteColor];
     self.textInputView.enablesReturnKeyAutomatically = YES;
     self.textInputView.userInteractionEnabled = YES;
-    [self addSubview:self.textInputView];
+    [self.inputContainer addSubview:self.textInputView];
     
     self.inputCoverView = [[UIView alloc] initWithFrame:self.textInputView.bounds];
     self.inputCoverView.backgroundColor = [UIColor clearColor];
@@ -203,7 +281,7 @@
     self.voiceInputBtn.layer.masksToBounds = YES;
     self.voiceInputBtn.layer.borderWidth = 0.5f;
     self.voiceInputBtn.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
-    [self addSubview:self.voiceInputBtn];
+    [self.inputContainer addSubview:self.voiceInputBtn];
     
     self.layer.borderWidth = 0.5f;
     self.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
@@ -222,7 +300,6 @@
     self.textInputView.returnKeyType = UIReturnKeySend;
     self.textInputView.delegate = self;
 }
-
 - (void)onTapInputView:(id)sender {
     NSLog(@"on tap input view");
     self.inputBarStatus = ChatInputBarKeyboardStatus;
@@ -471,8 +548,12 @@
 #ifdef WFC_PTT
         && self.inputBarStatus != ChatInputBarPttStatus
 #endif
+        && self.inputBarStatus != ChatInputBarPublicStatus
         ) {
         self.inputBarStatus = ChatInputBarDefaultStatus;
+    }
+    for (WFCUPublicMenuButton *menuButton in self.menuButtons) {
+        menuButton.expended = NO;
     }
 }
 
@@ -504,6 +585,12 @@
         } else {
             self.inputBarStatus = ChatInputBarPluginStatus;
         }
+    } else if (sender == self.publicSwitchBtn) {
+        if (self.inputBarStatus == ChatInputBarPublicStatus) {
+            self.inputBarStatus = ChatInputBarDefaultStatus;
+        } else {
+            self.inputBarStatus = ChatInputBarPublicStatus;
+        }
     }
 }
 
@@ -520,6 +607,11 @@
     }
     
     _inputBarStatus = inputBarStatus;
+    if (inputBarStatus != ChatInputBarPublicStatus && self.publicContainer) {
+        self.inputContainer.hidden = NO;
+        self.publicContainer.hidden = YES;
+        [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_menu"] forState:UIControlStateNormal];
+    }
     switch (inputBarStatus) {
         case ChatInputBarKeyboardStatus:
             self.voiceInput = NO;
@@ -554,10 +646,9 @@
             self.textInput = NO;
             break;
         case ChatInputBarPublicStatus:
-            self.voiceInput = NO;
-            self.emojInput = NO;
-            self.pluginInput = NO;
-            self.textInput = NO;
+            self.inputContainer.hidden = YES;
+            self.publicContainer.hidden = NO;
+            [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
             break;
         case ChatInputBarDefaultStatus:
             self.voiceInput = NO;
@@ -1680,6 +1771,21 @@
 #if WFCU_SUPPORT_VOIP
         [self.delegate didTouchVideoBtn:YES];
 #endif
+    }
+}
+
+#pragma mark - WFCUPublicMenuButtonDelegate
+- (void)didTapButton:(WFCUPublicMenuButton *)button menu:(WFCCChannelMenu *)channelMenu {
+    for (WFCUPublicMenuButton *menuButton in self.menuButtons) {
+        if (button != menuButton) {
+            menuButton.expended = NO;
+        }
+    }
+    WFCCChannelMenuEventMessageContent *content = [[WFCCChannelMenuEventMessageContent alloc] init];
+    content.menu = channelMenu;
+    [[WFCCIMService sharedWFCIMService] send:self.conversation content:content success:nil error:nil];
+    if ([self.delegate respondsToSelector:@selector(didTapChannelMenu:)]) {
+        [self.delegate didTapChannelMenu:channelMenu];
     }
 }
 

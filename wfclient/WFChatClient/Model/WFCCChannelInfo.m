@@ -22,7 +22,17 @@
     dict[@"callback"] = self.callback;
 
     dict[@"status"] = @(self.status);
-    [self setDict:dict key:@"updateDt" longlongValue:self.updateDt];    
+    [self setDict:dict key:@"updateDt" longlongValue:self.updateDt];
+    
+    if (self.menus.count) {
+        NSMutableArray *subMenus = [[NSMutableArray alloc] init];
+        [self.menus enumerateObjectsUsingBlock:^(WFCCChannelMenu * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id subs = [obj toJsonObj];
+            [subMenus addObject:subs];
+        }];
+        dict[@"menus"] = subMenus;
+    }
+    
     return dict;
 }
 
