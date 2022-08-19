@@ -22,4 +22,5 @@
 @property (nonatomic, strong)void (^createChannel)(void);
 @property (nonatomic, assign)BOOL showMentionAll;
 @property (nonatomic, strong)void (^mentionAll)(void);
+@property (nonatomic, strong)NSString *groupId;
 @end

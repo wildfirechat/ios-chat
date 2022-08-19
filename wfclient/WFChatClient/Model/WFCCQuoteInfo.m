@@ -20,8 +20,12 @@
         if (msg) {
             self.messageUid = messageUid;
             self.userId = msg.fromUser;
-            WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
+            NSString *groupId = msg.conversation.type == Group_Type ? msg.conversation.target : nil;
+            WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:groupId refresh:NO];
             self.userDisplayName = user.displayName;
+            if (user.groupAlias.length) {
+                self.userDisplayName = user.groupAlias;
+            }
             self.messageDigest = [msg.content digest:msg];
             NSUInteger maxBytes = 120;
             if (self.messageDigest.length > 48) {

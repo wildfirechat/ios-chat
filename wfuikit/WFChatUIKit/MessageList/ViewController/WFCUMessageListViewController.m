@@ -2325,8 +2325,9 @@
 - (void)didLongPressMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if (self.conversation.type == Group_Type) {
         if (model.message.direction == MessageDirection_Receive) {
-            WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser refresh:NO];
-            [self.chatInputBar appendMention:model.message.fromUser name:sender.displayName];
+            WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser inGroup:self.conversation.target refresh:NO];
+            NSString *userName = sender.groupAlias.length ? sender.groupAlias : sender.displayName;
+            [self.chatInputBar appendMention:model.message.fromUser name:userName];
         }
     } else if(self.conversation.type == Channel_Type) {
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];

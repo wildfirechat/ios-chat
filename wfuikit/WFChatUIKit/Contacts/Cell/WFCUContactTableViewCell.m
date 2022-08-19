@@ -16,6 +16,8 @@
 
 @interface WFCUContactTableViewCell ()
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
+@property (nonatomic, strong)NSString *userId;
+@property (nonatomic, strong)NSString *groupId;
 @end
 
 @implementation WFCUContactTableViewCell
@@ -50,14 +52,15 @@
     }
 }
 
-- (void)setUserId:(NSString *)userId {
+- (void)setUserId:(NSString *)userId groupId:(NSString *)groupId {
     _userId = userId;
+    _groupId = groupId;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateOnlineState) name:kUserOnlineStateUpdated object:nil];
     
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:groupId refresh:NO];
     if(userInfo.userId.length == 0) {
         userInfo = [[WFCCUserInfo alloc] init];
         userInfo.userId = userId;
@@ -79,8 +82,8 @@
     
     if (userInfo.friendAlias.length) {
         self.nameLabel.text = userInfo.friendAlias;
-    } else if (self.groupAlias.length) {
-        self.nameLabel.text = self.groupAlias;
+    } else if (userInfo.groupAlias.length) {
+        self.nameLabel.text = userInfo.groupAlias;
     } else if(userInfo.displayName.length > 0) {
         self.nameLabel.text = userInfo.displayName;
     } else {
