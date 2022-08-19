@@ -228,7 +228,7 @@ static NSString *wfcstar = @"☆";
             }
         }
     }
-    self.dataArray = [[[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil] mutableCopy];
+    self.dataArray = [[[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:self.groupId] mutableCopy];
     self.needSort = YES;
 }
 
@@ -477,7 +477,7 @@ static NSString *wfcstar = @"☆";
             WFCUContactTableViewCell *selectCell = [self dequeueOrAllocContactCell:tableView];
             
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
-            selectCell.userId = userInfo.userId;
+            [selectCell setUserId:userInfo.userId groupId:self.groupId];
             
             selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = selectCell;
@@ -502,7 +502,7 @@ static NSString *wfcstar = @"☆";
         } else {
             WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
-            contactCell.userId = userInfo.userId;
+            [contactCell setUserId:userInfo.userId groupId:self.groupId];
             contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = contactCell;
         }
@@ -819,6 +819,9 @@ static NSString *wfcstar = @"☆";
 
             WFCCUserInfo *userInfo = (WFCCUserInfo*)user;
             NSString *userName = userInfo.displayName;
+            if (userInfo.groupAlias.length) {
+                userName = userInfo.groupAlias;
+            }
             if (userInfo.friendAlias.length) {
                 userName = userInfo.friendAlias;
             }

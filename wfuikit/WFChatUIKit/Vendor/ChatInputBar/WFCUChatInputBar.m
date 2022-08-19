@@ -1220,6 +1220,7 @@
             }
             pvc.candidateUsers = candidateUser;
             pvc.withoutCheckBox = YES;
+            pvc.groupId = self.conversation.target;
             
             
             __weak typeof(self)ws = self;

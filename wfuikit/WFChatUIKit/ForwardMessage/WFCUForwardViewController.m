@@ -154,7 +154,7 @@
                 if (cell == nil) {
                     cell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendCell"];
                 }
-                cell.userId = self.searchFriendList[indexPath.row].userId;
+                [cell setUserId:self.searchFriendList[indexPath.row].userId groupId:nil];
                 return cell;
             }
         }

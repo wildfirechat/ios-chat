@@ -747,7 +747,7 @@
                     }
                     cell.big = NO;
                     cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
-                    cell.userId = self.searchFriendList[indexPath.row].userId;
+                    [cell setUserId:self.searchFriendList[indexPath.row].userId groupId:nil];
                     return cell;
                 } else {
                     if (indexPath.row == 2) {
@@ -769,7 +769,7 @@
                             cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
                             
                         }
-                        cell.userId = self.searchFriendList[indexPath.row].userId;
+                        [cell setUserId:self.searchFriendList[indexPath.row].userId groupId:nil];
                         return cell;
                     }
                 }
