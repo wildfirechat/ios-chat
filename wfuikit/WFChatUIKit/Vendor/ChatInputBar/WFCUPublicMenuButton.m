@@ -13,6 +13,7 @@
 @interface WFCUPublicMenuButton ()
 @property(nonatomic, strong)NSMutableArray *subMenuViews;
 @property(nonatomic, assign)BOOL isSubMenu;
+@property(nonatomic, strong)UIView *subMenuContainer;
 @end
 
 @implementation WFCUPublicMenuButton
@@ -24,6 +25,7 @@
         self.expended = NO;
         self.isSubMenu = NO;
         self.subMenuViews = [[NSMutableArray alloc] init];
+        self.titleLabel.font = [UIFont systemFontOfSize:16];
     }
     return self;
 }
@@ -62,19 +64,34 @@
     
     if (expended) {
         CGRect parentRect = self.bounds;
+        
+        CGPoint temPoint = [self convertPoint:CGPointMake(parentRect.size.width, 0) toView:self.superview.superview];
+        BOOL rightEdge = temPoint.x >= [UIScreen mainScreen].bounds.size.width - 3;
+        self.subMenuContainer = [[UIView alloc] initWithFrame:CGRectMake(rightEdge ? -16 : -8, -1 * (self.channelMenu.subMenus.count * parentRect.size.height) - self.channelMenu.subMenus.count + 1, parentRect.size.width+8, self.channelMenu.subMenus.count*parentRect.size.height+self.channelMenu.subMenus.count-1)];
+        self.backgroundColor = [UIColor whiteColor];
+        self.subMenuContainer.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.subMenuContainer.layer.shadowOpacity = 0.8f;
+        [self addSubview:self.subMenuContainer];
         for (int i = 0; i < self.channelMenu.subMenus.count; i++) {
             WFCCChannelMenu *subMenu = self.channelMenu.subMenus[i];
-            WFCUPublicMenuButton *menuBtn = [[WFCUPublicMenuButton alloc] initWithFrame:CGRectMake(0, -(i+1) * parentRect.size.height, parentRect.size.width, parentRect.size.height)];
+            WFCUPublicMenuButton *menuBtn = [[WFCUPublicMenuButton alloc] initWithFrame:CGRectMake(0, i * parentRect.size.height + i - 1, parentRect.size.width+16, parentRect.size.height)];
             [menuBtn setChannelMenu:subMenu isSubMenu:YES];
             menuBtn.delegate = self.delegate;
-            [self addSubview:menuBtn];
+            [self.subMenuContainer addSubview:menuBtn];
             [self.subMenuViews addObject:menuBtn];
+            if (i != self.channelMenu.subMenus.count - 1) {
+                UIView *splitbg = [[UIView alloc] initWithFrame:CGRectMake(0, (i+1) * parentRect.size.height + i - 1, parentRect.size.width+16, 1)];
+                splitbg.backgroundColor = self.backgroundColor;
+                [self.subMenuContainer addSubview:splitbg];
+                
+                UIView *split = [[UIView alloc] initWithFrame:CGRectMake(8, (i+1) * parentRect.size.height + i - 1, parentRect.size.width, 1)];
+                split.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.9];
+                [self.subMenuContainer addSubview:split];
+            }
         }
     } else {
-        [self.subMenuViews enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    [obj removeFromSuperview];
-        }];
-        [self.subMenuViews removeAllObjects];
+        [self.subMenuContainer removeFromSuperview];
+        self.subMenuContainer = nil;
     }
 }
 
@@ -87,7 +104,8 @@
         [self setImage:[WFCUImage imageNamed:@"sub_menu"] forState:UIControlStateNormal];
     }
     if (isSubMenu) {
-        
+        self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+//        self.backgroundColor = [UIColor whiteColor];
     }
 }
 @end
