@@ -59,7 +59,7 @@
     if([[WFCCIMService sharedWFCIMService] isEnableSecretChat] || [[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
         NSMutableArray *section2 = [[NSMutableArray alloc] init];
         [self.cells addObject:section2];
-        if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat]) {
+        if ([[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
             WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
             switchCell.textLabel.text = WFCString(@"MsgReceipt");
             if ([[WFCCIMService sharedWFCIMService] isUserEnableReceipt]) {
@@ -79,7 +79,7 @@
             [section2 addObject:switchCell];
         }
         
-        if ([[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
+        if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat]) {
             WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
             switchCell.textLabel.text = @"密聊";
             if ([[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
