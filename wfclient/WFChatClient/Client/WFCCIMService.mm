@@ -20,6 +20,9 @@
 #import "WFCCUserOnlineState.h"
 #import "WFAFNetworking.h"
 #import "WFCCRawMessageContent.h"
+#import "WFCCTextMessageContent.h"
+#import "WFCCFileMessageContent.h"
+#import "WFCCNetworkService.h"
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
@@ -37,9 +40,10 @@ public:
     void(^m_successBlock)(long long messageUid, long long timestamp);
     void(^m_errorBlock)(int error_code);
     void(^m_progressBlock)(long uploaded, long total);
+    void(^m_uploadedBlock)(NSString *remoteUrl);
     WFCCMessage *m_message;
 
-    IMSendMessageCallback(WFCCMessage *message, void(^successBlock)(long long messageUid, long long timestamp), void(^progressBlock)(long uploaded, long total), void(^errorBlock)(int error_code)) : mars::stn::SendMsgCallback(), m_message(message), m_successBlock(successBlock), m_progressBlock(progressBlock), m_errorBlock(errorBlock) {};
+    IMSendMessageCallback(WFCCMessage *message, void(^successBlock)(long long messageUid, long long timestamp), void(^progressBlock)(long uploaded, long total), void(^uploadedBlock)(NSString *remoteUrl), void(^errorBlock)(int error_code)) : mars::stn::SendMsgCallback(), m_message(message), m_successBlock(successBlock), m_progressBlock(progressBlock), m_errorBlock(errorBlock), m_uploadedBlock(uploadedBlock) {};
      void onSuccess(long long messageUid, long long timestamp) {
         dispatch_async(dispatch_get_main_queue(), ^{
             m_message.messageUid = messageUid;
@@ -85,7 +89,11 @@ public:
         long messageId = m_message.messageId;
         if(messageId) {
             dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES), @"message":m_message, @"remoteUrl":ru}];
+                if (m_uploadedBlock) {
+                    m_uploadedBlock(ru);
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES), @"message":m_message, @"remoteUrl":ru}];
             });
         }
     }
@@ -106,6 +114,7 @@ public:
         m_successBlock = nil;
         m_errorBlock = nil;
         m_progressBlock = nil;
+        m_uploadedBlock = nil;
         m_message = nil;
     }
 };
@@ -1040,6 +1049,20 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                   progress:(void(^)(long uploaded, long total))progressBlock
                      error:(void(^)(int error_code))errorBlock {
     
+    void(^uploadedBlock)(NSString *remoteUrl) = nil;
+    if ([content isKindOfClass:WFCCTextMessageContent.class]) {
+        WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
+        if ([txtCnt.text isEqualToString:@"*#marslog#"]) {
+            NSString *logPath = [WFCCNetworkService getLogFilesPath].lastObject;
+            if (logPath.length) {
+                content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
+                uploadedBlock = ^(NSString *remoteUrl) {
+                    [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
+                };
+            }
+        }
+    }
+    
     WFCCMessage *message = [[WFCCMessage alloc] init];
     message.conversation = conversation;
     message.content = content;
@@ -1074,7 +1097,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
         message.messageId = msgId;
         
-        IMSendMessageCallback *callback = new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock);
+        IMSendMessageCallback *callback = new IMSendMessageCallback(message, successBlock, progressBlock, uploadedBlock, errorBlock);
         callback->onPrepared(message.messageId, message.serverTime);
         
         __weak typeof(self)ws = self;
@@ -1088,7 +1111,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             errorBlock(error_code);
         }];
     } else {
-        mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, errorBlock), expireDuration);
+        mars::stn::sendMessage(tmsg, new IMSendMessageCallback(message, successBlock, progressBlock, uploadedBlock, errorBlock), expireDuration);
     }
     
     return message;
@@ -1170,7 +1193,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                  success:(void(^)(long long messageUid, long long timestamp))successBlock
                    error:(void(^)(int error_code))errorBlock {
     
-    if(mars::stn::sendMessageEx(message.messageId, new IMSendMessageCallback(message, successBlock, nil, errorBlock), expireDuration)) {
+    if(mars::stn::sendMessageEx(message.messageId, new IMSendMessageCallback(message, successBlock, nil, nil, errorBlock), expireDuration)) {
         return YES;
     } else {
         return NO;
