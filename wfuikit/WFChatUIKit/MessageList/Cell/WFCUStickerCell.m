@@ -31,6 +31,11 @@
 
 - (void)setModel:(WFCUMessageModel *)model {
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
+    if (model.message.conversation.type == SecretChat_Type && model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
+        [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+        model.message.status = Message_Status_Played;
+    }
+    
     __weak typeof(self) weakSelf = self;
     if (!stickerMsg.localPath.length || ![WFCUUtilities isFileExist:stickerMsg.localPath]) {
         BOOL downloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
