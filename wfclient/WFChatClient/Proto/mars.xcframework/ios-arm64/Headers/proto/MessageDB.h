@@ -37,6 +37,7 @@ namespace mars {
             
             bool UpdateMessageContentByUid(int64_t messageUid, TMessageContent &msgConstnet);
             bool DeleteMessageByUid(int64_t messageUid);
+            bool BatchDeleteMessage(std::list<int64_t> messageUids);
             
             bool UpdateMessageTimeline(int64_t timeline, const std::string &node);
             bool UpdateRecvAndReadTimeline(int64_t timeline, bool isRead);
@@ -61,6 +62,7 @@ namespace mars {
             
             bool ClearMessages(int conversationType, const std::string &target, int line);
             bool ClearMessages(int conversationType, const std::string &target, int line, int64_t before);
+            bool ClearUserMessages(const std::string &userId, int64_t start, int64_t end);
             bool ClearAllMessages(bool removeConveration);
             
             long GetConversationFirstUnreadMessageId(int conversationType, const std::string &target, int line);
@@ -238,6 +240,9 @@ namespace mars {
             void startBurnMessageCheck();
             void stopBurnMessageCheck();
             void removeFavGroup(const std::string &groupId);
+            std::list<TConversation> getUserConversations(const std::string &user, int64_t start, int64_t end);
+            void removeUserSingleConversations(const std::string &userId);
+            void removeUserSingleMessages(const std::string &userId);
             static MessageDB* instance_;
         };
     

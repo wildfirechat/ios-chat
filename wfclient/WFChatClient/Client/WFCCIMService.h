@@ -881,6 +881,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  */
 - (BOOL)deleteMessage:(long)messageId;
 
+
+/**
+ 批量删除本地消息
+ 
+ @param messageUids 消息UID列表
+ @return 是否删除成功
+ */
+- (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids;
+
 /**
  删除远端消息，仅专业版支持。
  
@@ -925,6 +934,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param before 时间点，单位是毫秒
  */
 - (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before;
+
+/**
+ 删除指定用户指定时间段的消息
+ 
+ @param userId 指定用户
+ @param start 消息开始时间，如果为0忽略开始时间
+ @param end 消息结束时间，如果为0忽略结束时间
+ */
+- (void)clearMessages:(NSString *)userId start:(int64_t)start end:(int64_t)end;
 
 /**
  删除所有消息。
