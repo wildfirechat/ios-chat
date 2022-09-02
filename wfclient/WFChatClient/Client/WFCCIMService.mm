@@ -1580,9 +1580,15 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 - (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before {
     mars::stn::MessageDB::Instance()->ClearMessages((int)conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, before);
 }
+
+- (void)clearMessages:(NSString *)userId start:(int64_t)start end:(int64_t)end {
+    mars::stn::MessageDB::Instance()->ClearUserMessages([userId UTF8String], start, end);
+}
+
 - (void)clearAllMessages:(BOOL)removeConversation {
     mars::stn::MessageDB::Instance()->ClearAllMessages(removeConversation);
 }
+
 - (void)setConversation:(WFCCConversation *)conversation top:(BOOL)top
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
@@ -2301,6 +2307,14 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 
 - (BOOL)deleteMessage:(long)messageId {
     return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;
+}
+
+- (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids {
+    std::list<int64_t> uids;
+    for (NSNumber *uid in messageUids) {
+        uids.push_back([uid longLongValue]);
+    }
+    return mars::stn::MessageDB::Instance()->BatchDeleteMessage(uids);
 }
 
 - (void)deleteRemoteMessage:(long long)messageUid
