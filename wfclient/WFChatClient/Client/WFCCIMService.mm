@@ -1050,9 +1050,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                      error:(void(^)(int error_code))errorBlock {
     
     void(^uploadedBlock)(NSString *remoteUrl) = nil;
-    if ([content isKindOfClass:WFCCTextMessageContent.class]) {
+    if ([content isKindOfClass:WFCCTextMessageContent.class] && [WFCCNetworkService sharedInstance].sendLogCommand.length) {
         WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
-        if ([txtCnt.text isEqualToString:@"*#marslog#"]) {
+        if ([txtCnt.text isEqualToString:[WFCCNetworkService sharedInstance].sendLogCommand]) {
             NSString *logPath = [WFCCNetworkService getLogFilesPath].lastObject;
             if (logPath.length) {
                 content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];

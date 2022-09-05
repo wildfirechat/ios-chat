@@ -559,7 +559,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     xlogger_SetLevel(kLevelInfo);
     appender_set_console_log(false);
 #endif
-    appender_open(kAppednerAsync, [logPath UTF8String], "Test", NULL);
+    appender_open(kAppednerAsync, [logPath UTF8String], "wfclient", NULL);
 }
 
 + (void)stopLog {

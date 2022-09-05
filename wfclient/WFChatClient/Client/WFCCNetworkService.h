@@ -267,6 +267,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, assign, readonly)long long serverDeltaTime;
 
 /**
+ 发送日志命令
+ */
+@property (nonatomic, strong)NSString *sendLogCommand;
+
+/**
  开启Log
  */
 + (void)startLog;

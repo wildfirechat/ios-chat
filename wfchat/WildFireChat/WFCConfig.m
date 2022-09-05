@@ -39,3 +39,5 @@ NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 BOOL Prefer_Password_Login = YES;
+
+NSString *Send_Log_Command = @"*#marslog#";
