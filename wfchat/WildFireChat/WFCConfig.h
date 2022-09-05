@@ -31,4 +31,7 @@ extern NSString *WORK_PLATFORM_URL;
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 extern BOOL Prefer_Password_Login;
+
+//发送日志命令，当发送此文本消息时，会把协议栈日志发送到当前会话中，为空时关闭此功能。
+extern NSString *Send_Log_Command;
 #endif /* Config_h */
