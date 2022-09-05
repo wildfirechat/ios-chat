@@ -65,7 +65,7 @@
 #if !USE_CALL_KIT
     [WFAVEngineKit notRegisterVoipPushService];
 #endif
-    
+    [WFCCNetworkService sharedInstance].sendLogCommand = Send_Log_Command;
     [WFCCNetworkService startLog];
 //    [[WFCCNetworkService sharedInstance] useSM4];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
