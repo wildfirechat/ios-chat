@@ -22,7 +22,6 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUMessageListViewController.h>
 #import <WFChatUIKit/WFCUVideoViewController.h>
 #import <WFChatUIKit/WFCUMultiVideoViewController.h>
-#import <WFChatUIKit/WFCUCreateConferenceViewController.h>
 #import <WFChatUIKit/WFCUConferenceViewController.h>
 #import <WFChatUIKit/WFCUMyPortraitViewController.h>
 #import <WFChatUIKit/WFCUMessageSettingViewController.h>
@@ -34,6 +33,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUForwardViewController.h>
 #import <WFChatUIKit/WFCUFilesEntryViewController.h>
 #import <WFChatUIKit/WFCUFilesViewController.h>
+#import <WFChatUIKit/WFZConferenceInfo.h>
 
 #import <WFChatUIKit/QrCodeHelper.h>
 #import <WFChatUIKit/WFCUBrowserViewController.h>

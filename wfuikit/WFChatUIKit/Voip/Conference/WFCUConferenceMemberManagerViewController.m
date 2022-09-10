@@ -11,20 +11,18 @@
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
-#import "WFCUConfigManager.h"
 #import "WFCUConferenceMember.h"
 #import "WFCUConferenceManager.h"
 #import "WFCUConferenceMemberTableViewCell.h"
 #import "WFCUConferenceInviteViewController.h"
+#import <WFChatUIKit/WFChatUIKit.h>
+#import "WFZConferenceInfo.h"
 #import "WFCUPinyinUtility.h"
-#import "WFCUProfileTableViewController.h"
-
 
 @interface WFCUConferenceMemberManagerViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)UISearchBar *searchBar;
 @property (nonatomic, strong) NSMutableArray<WFCUConferenceMember *> *participants;
-@property (nonatomic, strong) NSMutableArray<WFCUConferenceMember *> *audiences;
 @end
 
 @implementation WFCUConferenceMemberManagerViewController
@@ -36,13 +34,12 @@
     self.searchBar.placeholder = @"搜索";
     self.searchBar.barStyle = UIBarStyleDefault;
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
     }
-    
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView registerClass:[WFCUConferenceMemberTableViewCell class] forCellReuseIdentifier:@"cell"];
@@ -51,7 +48,7 @@
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"邀请" style:UIBarButtonItemStyleDone target:self action:@selector(onInvite:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"邀请" style:UIBarButtonItemStyleDone target:self action:@selector(onInvite:)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMemberChanged:) name:@"kConferenceMemberChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceEnded:) name:@"kConferenceEnded" object:nil];
@@ -64,14 +61,15 @@
 
 - (void)loadData {
     self.participants = [[NSMutableArray alloc] init];
-    self.audiences = [[NSMutableArray alloc] init];
-#if WFCU_SUPPORT_VOIP
+    
     WFAVCallSession *callSession = [WFAVEngineKit sharedEngineKit].currentSession;
     NSArray<WFAVParticipantProfile *> *ps =  [WFAVEngineKit sharedEngineKit].currentSession.participants;
+    
+    NSMutableArray *audiences = [[NSMutableArray alloc] init];
     for (WFAVParticipantProfile *p in ps) {
         WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
         member.userId = p.userId;
-        member.isHost = [p.userId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.host];
+        member.isHost = [p.userId isEqualToString:self.conferenceInfo.owner];
         member.isVideoEnabled = !p.videoMuted;
         member.isAudioEnabled = !p.audioMuted;
         member.isMe = NO;
@@ -83,7 +81,7 @@
         }
         
         if (p.audience) {
-            [self.audiences addObject:member];
+            [audiences addObject:member];
         } else {
             if(member.isHost) {
                 [self.participants insertObject:member atIndex:0];
@@ -96,24 +94,20 @@
     
     WFCUConferenceMember *member = [[WFCUConferenceMember alloc] init];
     member.userId = [WFCCNetworkService sharedInstance].userId;
-    member.isHost = [member.userId isEqualToString:callSession.host];
+    member.isHost = [member.userId isEqualToString:self.conferenceInfo.owner];
     member.isVideoEnabled = !callSession.isVideoMuted;
     member.isAudioEnabled = !callSession.isAudioMuted;
     member.isMe = YES;
     member.isAudience = callSession.isAudience;
     member.isAudioOnly = callSession.audioOnly;
     if(!self.searchBar.isFirstResponder || [self isMatchSearchText:member.userId]) {
-        if([WFAVEngineKit sharedEngineKit].currentSession.audience) {
-            [self.audiences insertObject:member atIndex:0];
+        if(self.participants.count && self.participants[0].isHost) {
+            [self.participants insertObject:member atIndex:1];
         } else {
-            if(self.participants.count && self.participants[0].isHost) {
-                [self.participants insertObject:member atIndex:1];
-            } else {
-                [self.participants insertObject:member atIndex:0];
-            }
+            [self.participants insertObject:member atIndex:0];
         }
     }
-#endif
+    [self.participants addObjectsFromArray:audiences];
 }
 
 - (BOOL)isMatchSearchText:(NSString *)userId {
@@ -156,7 +150,6 @@
 }
 
 - (void)onInvite:(id)sender {
-#if WFCU_SUPPORT_VOIP
     WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
     
     WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
@@ -169,24 +162,17 @@
     invite.desc = currentSession.desc;
     invite.audience = currentSession.defaultAudience;
     invite.advanced = currentSession.isAdvanced;
-    invite.callExtra = currentSession.callExtra;
     
     pvc.invite = invite;
     
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
 
     [self presentViewController:navi animated:YES completion:nil];
-#endif
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     WFCUConferenceMemberTableViewCell *cell = (WFCUConferenceMemberTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if(indexPath.section == 0) {
-        cell.member = self.participants[indexPath.row];
-    } else {
-        cell.member = self.audiences[indexPath.row];
-    }
-
+    cell.member = self.participants[indexPath.row];
     return cell;
 }
 
@@ -194,37 +180,13 @@
     return 56;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if(section == 0) {
-        return @"互动成员";
-    } else {
-        return @"听众";
-    }
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if(self.audiences.count) {
-        return 2;
-    } else {
-        return 1;
-    }
-}
-
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(section == 0) {
-        return self.participants.count;
-    } else {
-        return self.audiences.count;
-    }
+    return self.participants.count;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-#if WFCU_SUPPORT_VOIP
     WFCUConferenceMember *member;
-    if(indexPath.section == 0) {
-        member = self.participants[indexPath.row];
-    } else {
-        member = self.audiences[indexPath.row];
-    }
+    member = self.participants[indexPath.row];
     __weak typeof(self)ws = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"成员管理" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -240,11 +202,11 @@
         [ws.navigationController pushViewController:vc animated:YES];
     }];
     
-    UIAlertAction *requestPublish = [UIAlertAction actionWithTitle:@"邀请参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *requestPublish = [UIAlertAction actionWithTitle:@"邀请发言" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
     }];
     
-    UIAlertAction *requestUnpublish = [UIAlertAction actionWithTitle:@"取消互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *requestUnpublish = [UIAlertAction actionWithTitle:@"取消发言" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [[WFCUConferenceManager sharedInstance] request:member.userId changeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
     }];
     
@@ -257,34 +219,69 @@
         }];
     }];
     
-    UIAlertAction *publish = [UIAlertAction actionWithTitle:@"参与互动" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [[WFCUConferenceManager sharedInstance] requestChangeModel:NO inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    UIAlertAction *enableAudio = [UIAlertAction actionWithTitle:@"开启音频" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteAudio:member.isAudioEnabled];
+    }];
+    UIAlertAction *enableVideo = [UIAlertAction actionWithTitle:@"开启视频" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteVideo:member.isVideoEnabled];
+    }];
+    UIAlertAction *enableAudioVideo = [UIAlertAction actionWithTitle:@"开启音视频" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteAudioVideo:member.isVideoEnabled];
     }];
     
-    UIAlertAction *unpublish = [UIAlertAction actionWithTitle:@"退出互动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [[WFCUConferenceManager sharedInstance] requestChangeModel:YES inConference:[WFAVEngineKit sharedEngineKit].currentSession.callId];
+    UIAlertAction *muteAudio = [UIAlertAction actionWithTitle:@"关闭音频" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteAudio:member.isAudioEnabled];
+    }];
+    
+    UIAlertAction *muteVideo = [UIAlertAction actionWithTitle:@"关闭视频" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteVideo:member.isVideoEnabled];
+    }];
+    
+    UIAlertAction *muteAudioVideo = [UIAlertAction actionWithTitle:@"关闭音视频" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] muteAudioVideo:member.isVideoEnabled];
     }];
     
     [alertController addAction:actionCancel];
     [alertController addAction:showProfile];
     
-    if([[WFAVEngineKit sharedEngineKit].currentSession.host isEqualToString:[WFCCNetworkService sharedInstance].userId] && !member.isMe) {
-        if(indexPath.section == 0) {
+    if([self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] && !member.isMe) {
+        if(!member.isAudience) {
             [alertController addAction:requestUnpublish];
         } else {
             [alertController addAction:requestPublish];
         }
         [alertController addAction:requestQuit];
     } else if(member.isMe) {
-        if(indexPath.section == 0) {
-            [alertController addAction:unpublish];
+        if(member.isAudience) {
+            if(member.isHost || self.conferenceInfo.allowSwitchMode) {
+                [alertController addAction:enableAudio];
+                [alertController addAction:enableVideo];
+                [alertController addAction:enableAudioVideo];
+            } else {
+                //Todo 举手请求发言
+            }
         } else {
-            [alertController addAction:publish];
+            if(member.isAudioEnabled) {
+                [alertController addAction:muteAudio];
+            } else {
+                [alertController addAction:enableAudio];
+            }
+            
+            if(member.isVideoEnabled) {
+                [alertController addAction:muteVideo];
+            } else {
+                [alertController addAction:enableVideo];
+            }
+            
+            if(member.isAudioEnabled && member.isVideoEnabled) {
+                [alertController addAction:muteAudioVideo];
+            } else if(!member.isAudioEnabled && !member.isVideoEnabled) {
+                [alertController addAction:enableAudioVideo];
+            }
         }
     }
     
     [self presentViewController:alertController animated:YES completion:nil];
-#endif
 }
 #pragma mark - UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {

@@ -412,6 +412,129 @@ static AppService *sharedSingleton = nil;
     
 }
 
+
+- (void)getMyPrivateConferenceId:(void(^)(NSString *conferenceId))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/conference/get_my_id" data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            NSString *conferenceId = dict[@"result"];
+            successBlock(conferenceId);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)createConference:(WFZConferenceInfo *)conferenceInfo success:(void(^)(NSString *conferenceId))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/conference/create" data:[conferenceInfo toDictionary] isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            NSString *conferenceId = dict[@"result"];
+            conferenceInfo.conferenceId = conferenceId;
+            successBlock(conferenceId);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)queryConferenceInfo:(NSString *)conferenceId password:(NSString *)password success:(void(^)(WFZConferenceInfo *conferenceInfo))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSDictionary *data;
+    if(password.length) {
+        data = @{@"conferenceId":conferenceId, @"password":password};
+    } else {
+        data = @{@"conferenceId":conferenceId};
+    }
+    
+    [self post:@"/conference/info" data:data isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            WFZConferenceInfo *info = [WFZConferenceInfo fromDictionary:dict[@"result"]];
+            successBlock(info);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)destroyConference:(NSString *)conferenceId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:[NSString stringWithFormat:@"/conference/destroy/%@", conferenceId] data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock();
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)favConference:(NSString *)conferenceId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:[NSString stringWithFormat:@"/conference/fav/%@", conferenceId] data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock();
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)unfavConference:(NSString *)conferenceId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:[NSString stringWithFormat:@"/conference/unfav/%@", conferenceId] data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock();
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)isFavConference:(NSString *)conferenceId success:(void(^)(BOOL isFav))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:[NSString stringWithFormat:@"/conference/is_fav/%@", conferenceId] data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock(YES);
+        } else if(code == 16) {
+            successBlock(NO);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)getFavConferences:(void(^)(NSArray<WFZConferenceInfo *> *))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/conference/fav_conferences" data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            NSArray<NSDictionary *> *ls = dict[@"result"];
+            NSMutableArray *output = [[NSMutableArray alloc] init];
+            [ls enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [output addObject:[WFZConferenceInfo fromDictionary:obj]];
+            }];
+            successBlock(output);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     [self post:@"/change_name" data:@{@"newName":newName} isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
