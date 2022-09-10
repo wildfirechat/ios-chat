@@ -19,12 +19,7 @@
 
 @interface WFZHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UIView *topPanel;
-
 @property(nonatomic, strong)UITableView *tableView;
-
-@property(nonatomic, strong)UIImageView *portraitView;
-@property(nonatomic, strong)UILabel *nameLabel;
-@property(nonatomic, strong)UIButton *scanButton;
 
 @property(nonatomic, strong)UIButton *joinButton;
 @property(nonatomic, strong)UIButton *startButton;
@@ -34,19 +29,17 @@
 
 
 @property(nonatomic, strong)NSArray<WFZConferenceInfo *> *favConferences;
+
+@property(nonatomic, strong)UIImageView *emptyImageView;
+@property(nonatomic, strong)UILabel *emptyLabel;
 @end
 
 @implementation WFZHomeViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"会议";
     self.view.backgroundColor = [UIColor whiteColor];
     __weak typeof(self)ws = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:notification.object]) {
-            [ws updateUserInfo:NO];
-        }
-    }];
-    
     [[NSNotificationCenter defaultCenter] addObserverForName:kCONFERENCE_DESTROYED object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
         [ws reloadData];
     }];
@@ -60,6 +53,8 @@
         [fcs addObject:[WFZConferenceInfo fromDictionary:dict]];
     }
     self.favConferences = fcs;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStyleDone target:self action:@selector(onScan:)];
 }
 
 - (void)initTopPannel {
@@ -67,35 +62,8 @@
     self.topPanel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, 0)];
     [self.view addSubview:self.topPanel];
     
-    CGFloat offset = kStatusBarAndNavigationBarHeight - 64 + 32;
+    CGFloat offset = kStatusBarAndNavigationBarHeight + 32;
     
-    CGFloat portraitSize = 40;
-    self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, offset, portraitSize, portraitSize)];
-    self.portraitView.layer.cornerRadius = portraitSize/2;
-    self.portraitView.clipsToBounds = YES;
-    [self.topPanel addSubview:self.portraitView];
-    
-    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, offset, 100, portraitSize)];
-    [self.topPanel addSubview:self.nameLabel];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSettings:)];
-    [self.portraitView addGestureRecognizer:tap];
-    self.portraitView.userInteractionEnabled = YES;
-    
-    UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSettings:)];
-    [self.nameLabel addGestureRecognizer:tap2];
-    self.nameLabel.userInteractionEnabled = YES;
-    
-    
-    CGFloat scanSize = 24;
-    self.scanButton = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - scanSize - 16, offset + (portraitSize - scanSize)/2, scanSize, scanSize)];
-    [self.scanButton setImage:[UIImage imageNamed:@"scan"] forState:UIControlStateNormal];
-    [self.scanButton addTarget:self action:@selector(onScan:) forControlEvents:UIControlEventTouchUpInside];
-    [self.topPanel addSubview:self.scanButton];
-    
-    offset += portraitSize;
-    
-    offset += 40;
     
     CGFloat btnSize = 80;
     CGFloat labelHeight = 30;
@@ -130,21 +98,13 @@
     
     offset += 30;
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, offset, bounds.size.width, 1)];
-    line.backgroundColor = [UIColor grayColor];
+    line.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.9];
     [self.topPanel addSubview:line];
     offset += 1;
     
     CGRect frame = self.topPanel.frame;
     frame.size.height = offset;
     self.topPanel.frame = frame;
-    
-    [self updateUserInfo:YES];
-}
-
-- (void)updateUserInfo:(BOOL)refresh {
-    WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:refresh];
-    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:me.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
-    [self.nameLabel setText:me.displayName];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -169,48 +129,28 @@
 
 - (void)setFavConferences:(NSArray<WFZConferenceInfo *> *)favConferences {
     _favConferences = favConferences;
+    [self showEmptyConference:favConferences.count == 0];
     [self.tableView reloadData];
+}
+
+- (void)showEmptyConference:(BOOL)empty {
+    self.emptyLabel.hidden = !empty;
+    self.emptyImageView.hidden = !empty;
 }
 
 - (void)layoutButtonText:(UIButton *)button {
 //    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [button.titleLabel setFont:[UIFont systemFontOfSize:14]];
     [button setTitleColor:HEXCOLOR(0x0195ff) forState:UIControlStateNormal];
+    button.imageView.layer.masksToBounds = YES;
+    button.imageView.layer.cornerRadius = 8.f;
 
     //top left buttom right
-    button.titleEdgeInsets = UIEdgeInsetsMake(button.imageView.frame.size.height, -button.imageView.frame.size.width,
+    button.titleEdgeInsets = UIEdgeInsetsMake(button.imageView.frame.size.height+6, -button.imageView.frame.size.width,
                                               0, 0);
 
-    button.imageEdgeInsets = UIEdgeInsetsMake(-button.titleLabel.bounds.size.height,
-                                              0, 20, -button.titleLabel.bounds.size.width);
-}
-
-- (void)onScan:(id)sender {
-    QQLBXScanViewController *vc = [QQLBXScanViewController new];
-    vc.libraryType = SLT_Native;
-    vc.scanCodeType = SCT_QRCode;
-    
-    vc.style = [StyleDIY qqStyle];
-    
-    //镜头拉远拉近功能
-    vc.isVideoZoom = YES;
-    
-    vc.hidesBottomBarWhenPushed = YES;
-    __weak typeof(self)ws = self;
-    vc.scanResult = ^(NSString *str) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    };
-    
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    nav.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:nav animated:YES completion:nil];
-}
-
-- (void)onSettings:(id)sender {
-    WFCSettingTableViewController *vc = [[WFCSettingTableViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    nav.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:nav animated:YES completion:nil];
+    button.imageEdgeInsets = UIEdgeInsetsMake(0,
+                                              button.titleLabel.bounds.size.width, button.titleLabel.bounds.size.height+6, 0);
 }
 
 - (void)onJoinBtn:(id)sender {
@@ -278,6 +218,29 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
+- (UILabel *)emptyLabel {
+    if (!_emptyLabel) {
+        _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 100, self.view.bounds.size.height /2 + 60, 200, 20)];
+        _emptyLabel.font = [UIFont systemFontOfSize:14];
+        _emptyLabel.textAlignment = NSTextAlignmentCenter;
+        _emptyLabel.text = @"暂无会议";
+        _emptyLabel.textColor = [UIColor grayColor];
+        [self.view addSubview:_emptyLabel];
+    }
+    return _emptyLabel;
+}
+
+- (UIImageView *)emptyImageView {
+    if (!_emptyImageView) {
+        UIImage *img = [UIImage imageNamed:@"tea"];
+        _emptyImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, img.size.width*2, img.size.height*2)];
+        _emptyImageView.center = self.view.center;
+        _emptyImageView.image = img;
+        _emptyImageView.alpha = 0.5;
+        [self.view addSubview:_emptyImageView];
+    }
+    return _emptyImageView;
+}
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     WFZConferenceInfo *info = self.favConferences[indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
