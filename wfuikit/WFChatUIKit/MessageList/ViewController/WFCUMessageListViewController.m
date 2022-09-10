@@ -1832,7 +1832,11 @@
                     break;
                 }
             }
-            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+            if ([self.collectionView.indexPathsForVisibleItems containsObject:[NSIndexPath indexPathForRow:row inSection:0]]) {
+                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]]];
+            } else {
+                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+            }
         });
     } else if (forceButtom) {
         [self scrollToBottom:YES];
