@@ -2311,6 +2311,11 @@
                 }
             }
         }
+    } else if(self.conversation.type == Channel_Type && model.message.direction == MessageDirection_Receive) {
+        WFCUConversationSettingViewController *gvc = [[WFCUConversationSettingViewController alloc] init];
+        gvc.conversation = self.conversation;
+        [self.navigationController pushViewController:gvc animated:YES];
+        return;
     }
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser refresh:NO];

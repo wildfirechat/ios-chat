@@ -261,7 +261,7 @@
             attString = tmp;
         }
         self.digestView.attributedText = attString;
-    } else if (_info.lastMessage.direction == MessageDirection_Receive && (_info.conversation.type == Group_Type || _info.conversation.type == Channel_Type)) {
+    } else if (_info.lastMessage.direction == MessageDirection_Receive && _info.conversation.type == Group_Type) {
         NSString *groupId = nil;
         if (_info.conversation.type == Group_Type) {
             groupId = _info.conversation.target;
@@ -277,7 +277,7 @@
             self.digestView.text = _info.lastMessage.digest;
         }
         
-        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+        if (_info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
             NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
             if (self.digestView.text.length) {
                 [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];

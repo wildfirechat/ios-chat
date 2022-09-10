@@ -143,6 +143,10 @@
 }
   
 - (void)onUserInfoUpdated:(NSNotification *)notification {
+    if (self.model.message.conversation.type == Channel_Type && self.model.message.direction == MessageDirection_Receive) {
+        return;
+    }
+    
   WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
       if (self.model.message.conversation.type == Group_Type) {
@@ -151,7 +155,16 @@
     [self updateUserInfo:userInfo];
   }
 }
-  
+
+- (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
+  if(self.model.message.conversation.type == Channel_Type && self.model.message.direction == MessageDirection_Receive && [self.model.message.conversation.target isEqualToString:channelInfo.channelId]) {
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+      if(self.model.showNameLabel) {
+          self.nameLabel.text = channelInfo.name;
+      }
+  }
+}
+
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
@@ -273,7 +286,14 @@
     userInfo.userId = model.message.fromUser;
   }
   
-  [self updateUserInfo:userInfo];
+    if (self.model.message.conversation.type == Channel_Type && self.model.message.direction == MessageDirection_Receive) {
+        WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.model.message.conversation.target refresh:NO];
+        [self updateChannelInfo:channelInfo];
+    } else {
+        [self updateUserInfo:userInfo];
+    }
+    
+  
   [self setMaskImage:self.bubbleView.image];
   [self updateStatus];
     
