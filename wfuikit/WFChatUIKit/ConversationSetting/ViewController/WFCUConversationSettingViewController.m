@@ -63,7 +63,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"会话详情";
+    if (self.conversation.type == Channel_Type) {
+        self.title = @"频道详情";
+    } else {
+        self.title = @"会话详情";
+    }
+    
     if (self.conversation.type == Single_Type) {
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.memberList = @[self.conversation.target];
