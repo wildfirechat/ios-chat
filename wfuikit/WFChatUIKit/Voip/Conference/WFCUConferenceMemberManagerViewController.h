@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class WFZConferenceInfo;
 @interface WFCUConferenceMemberManagerViewController : UIViewController
-
+@property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
 @end
 
 NS_ASSUME_NONNULL_END

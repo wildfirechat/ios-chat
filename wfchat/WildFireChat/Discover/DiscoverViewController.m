@@ -12,6 +12,7 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WFChatClient/WFCCIMService.h>
 #import "DiscoverMomentsTableViewCell.h"
+#import "WFZHomeViewController.h"
 #ifdef WFC_MOMENTS
 #import <WFMomentClient/WFMomentClient.h>
 #import <WFMomentUIKit/WFMomentUIKit.h>
@@ -151,7 +152,7 @@
 //    }
     
     if ([des isEqualToString:@"Conference"]) {
-        WFCUCreateConferenceViewController *vc = [[WFCUCreateConferenceViewController alloc] init];
+        WFZHomeViewController *vc = [[WFZHomeViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
