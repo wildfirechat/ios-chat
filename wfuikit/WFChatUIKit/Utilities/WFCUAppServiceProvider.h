@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeFavoriteItem:(int)favId
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock;
+
+- (void)destroyConference:(NSString *)conferenceId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
