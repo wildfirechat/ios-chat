@@ -126,6 +126,10 @@
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
+		B7F892B128CCB7E600E362DE /* WFZOrderConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892A928CCB7E600E362DE /* WFZOrderConferenceViewController.m */; };
+		B7F892B228CCB7E600E362DE /* WFZHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892AA28CCB7E600E362DE /* WFZHomeViewController.m */; };
+		B7F892B328CCB7E600E362DE /* WFZConferenceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892AC28CCB7E600E362DE /* WFZConferenceInfoViewController.m */; };
+		B7F892B428CCB7E600E362DE /* WFZStartConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892AD28CCB7E600E362DE /* WFZStartConferenceViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -380,6 +384,15 @@
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
+		B7F892A928CCB7E600E362DE /* WFZOrderConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZOrderConferenceViewController.m; sourceTree = "<group>"; };
+		B7F892AA28CCB7E600E362DE /* WFZHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZHomeViewController.m; sourceTree = "<group>"; };
+		B7F892AB28CCB7E600E362DE /* WFZStartConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZStartConferenceViewController.h; sourceTree = "<group>"; };
+		B7F892AC28CCB7E600E362DE /* WFZConferenceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfoViewController.m; sourceTree = "<group>"; };
+		B7F892AD28CCB7E600E362DE /* WFZStartConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZStartConferenceViewController.m; sourceTree = "<group>"; };
+		B7F892AE28CCB7E600E362DE /* WFZHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZHomeViewController.h; sourceTree = "<group>"; };
+		B7F892AF28CCB7E600E362DE /* WFZOrderConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZOrderConferenceViewController.h; sourceTree = "<group>"; };
+		B7F892B028CCB7E600E362DE /* WFZConferenceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfoViewController.h; sourceTree = "<group>"; };
+		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,6 +433,7 @@
 		149B3101241D28B200B935D3 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				B7F892B528CCB8C400E362DE /* UIView+Toast.h */,
 				149B311C242247E900B935D3 /* UIImage+ERCategory.h */,
 				149B311D242247E900B935D3 /* UIImage+ERCategory.m */,
 				149B3106241D292C00B935D3 /* UIColor+YH.h */,
@@ -512,6 +526,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B7F892A828CCB7E600E362DE /* Zoom */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
 				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
@@ -891,6 +906,21 @@
 			path = DestroyAccount;
 			sourceTree = "<group>";
 		};
+		B7F892A828CCB7E600E362DE /* Zoom */ = {
+			isa = PBXGroup;
+			children = (
+				B7F892A928CCB7E600E362DE /* WFZOrderConferenceViewController.m */,
+				B7F892AA28CCB7E600E362DE /* WFZHomeViewController.m */,
+				B7F892AB28CCB7E600E362DE /* WFZStartConferenceViewController.h */,
+				B7F892AC28CCB7E600E362DE /* WFZConferenceInfoViewController.m */,
+				B7F892AD28CCB7E600E362DE /* WFZStartConferenceViewController.m */,
+				B7F892AE28CCB7E600E362DE /* WFZHomeViewController.h */,
+				B7F892AF28CCB7E600E362DE /* WFZOrderConferenceViewController.h */,
+				B7F892B028CCB7E600E362DE /* WFZConferenceInfoViewController.h */,
+			);
+			path = Zoom;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1041,6 +1071,7 @@
 				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
 				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
+				B7F892B428CCB7E600E362DE /* WFZStartConferenceViewController.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
@@ -1069,6 +1100,7 @@
 				2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */,
 				B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */,
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
+				B7F892B228CCB7E600E362DE /* WFZHomeViewController.m in Sources */,
 				2FFDDCA4255164DA00CEFDBB /* WFCFavoriteLinkCell.m in Sources */,
 				B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */,
 				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
@@ -1077,6 +1109,7 @@
 				2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */,
 				9085427E222A00430009713D /* DIYScanViewController.m in Sources */,
 				2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */,
+				B7F892B128CCB7E600E362DE /* WFZOrderConferenceViewController.m in Sources */,
 				90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */,
 				90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */,
 				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
@@ -1084,6 +1117,7 @@
 				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
+				B7F892B328CCB7E600E362DE /* WFZConferenceInfoViewController.m in Sources */,
 				2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */,
 				2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */,
 				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,

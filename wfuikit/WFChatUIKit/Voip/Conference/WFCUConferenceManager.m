@@ -13,6 +13,7 @@
 #endif
 #import "WFCUConferenceChangeModelContent.h"
 
+NSString *kMuteStateChanged = @"kMuteStateChanged";
 
 static WFCUConferenceManager *sharedSingleton = nil;
 @implementation WFCUConferenceManager
@@ -29,8 +30,70 @@ static WFCUConferenceManager *sharedSingleton = nil;
     return sharedSingleton;
 }
 
+- (void)muteAudio:(BOOL)mute {
+    if(mute) {
+        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+        }
+        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
+    } else {
+        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
+        
+        if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+        }
+    }
+    [self notifyMuteStateChanged];
+}
+
+- (void)muteVideo:(BOOL)mute {
+    if(mute) {
+        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+        }
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
+    } else {
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
+        
+        if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+        }
+    }
+    [self notifyMuteStateChanged];
+}
+
+- (void)muteAudioVideo:(BOOL)mute {
+    if(mute) {
+        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+        }
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
+        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
+    } else {
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
+        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
+        
+        if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+        }
+    }
+    [self notifyMuteStateChanged];
+}
+
+- (void)enableAudioDisableVideo {
+    [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+    [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+    if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+    }
+    [self notifyMuteStateChanged];
+}
+
+- (void)notifyMuteStateChanged {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kMuteStateChanged object:nil];
+}
+
 - (void)onReceiveMessages:(NSNotification *)notification {
-#if WFCU_SUPPORT_VOIP
     NSArray<WFCCMessage *> *messages = notification.object;
     if([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateConnected && [WFAVEngineKit sharedEngineKit].currentSession.isConference) {
         for (WFCCMessage *msg in messages) {
@@ -42,7 +105,6 @@ static WFCUConferenceManager *sharedSingleton = nil;
             }
         }
     }
-#endif
 }
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
@@ -57,11 +119,11 @@ static WFCUConferenceManager *sharedSingleton = nil;
         }];
 }
 
-- (void)requestChangeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
-#if WFCU_SUPPORT_VOIP
-    if([conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
-        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
+- (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password {
+    if(password.length) {
+        return [NSString stringWithFormat:@"wfzoom://conference?id=%@&pwd=%@", conferenceId, password];
+    } else {
+        return [NSString stringWithFormat:@"wfzoom://conference?id=%@", conferenceId];
     }
-#endif
 }
 @end
