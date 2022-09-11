@@ -467,6 +467,7 @@ static AppService *sharedSingleton = nil;
     [self post:[NSString stringWithFormat:@"/conference/destroy/%@", conferenceId] data:nil isLogin:NO success:^(NSDictionary *dict) {
         int code = [dict[@"code"] intValue];
         if(code == 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kCONFERENCE_DESTROYED object:nil];
             successBlock();
         } else {
             errorBlock(code, dict[@"message"]);
