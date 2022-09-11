@@ -17,7 +17,7 @@
 #import "WFCUParticipantCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCCConversation.h>
-#import "WFCUPortraitCollectionViewCell.h"
+#import "WFCUConferencePortraitCollectionViewCell.h"
 #import "WFCUParticipantCollectionViewLayout.h"
 #import "WFCUSeletedUserViewController.h"
 #import "UIView+Toast.h"
@@ -256,7 +256,7 @@
     self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, self.view.frame.size.height - BottomPadding - ButtonSize - (PortraitItemSize + PortraitLabelSize)*3 - PortraitLabelSize, self.view.frame.size.width - 32, (PortraitItemSize + PortraitLabelSize)*3 + PortraitLabelSize) collectionViewLayout:layout2];
     self.portraitCollectionView.dataSource = self;
     self.portraitCollectionView.delegate = self;
-    [self.portraitCollectionView registerClass:[WFCUPortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
+    [self.portraitCollectionView registerClass:[WFCUConferencePortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
     self.portraitCollectionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.portraitCollectionView];
     
@@ -1598,7 +1598,7 @@
 
         return cell;
     } else {
-        WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
+        WFCUConferencePortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
         
         cell.itemSize = PortraitItemSize;
         cell.labelSize = PortraitLabelSize;
@@ -1614,7 +1614,6 @@
         
         return cell;
     }
-    
 }
 
 #pragma mark - UICollectionViewDelegate
