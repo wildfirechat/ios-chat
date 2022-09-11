@@ -28,6 +28,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
 #import "ConferenceLabelView.h"
+#import "WFCUConfigManager.h"
 
 #define BOTTOM_BAR_HEIGHT  54
 @interface WFCUConferenceViewController () <UITextFieldDelegate
@@ -55,6 +56,7 @@
 @property (nonatomic, strong) UIButton *minimizeButton;
 @property (nonatomic, strong) UIButton *managerButton;
 @property (nonatomic, strong) UIButton *screenSharingButton;
+@property (nonatomic, strong) UIButton *informationButton;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -69,6 +71,8 @@
 @property (nonatomic, assign) CGPoint panStartPoint;
 @property (nonatomic, assign) CGRect panStartVideoFrame;
 @property (nonatomic, strong) NSTimer *connectedTimer;
+
+@property(nonatomic, strong)UIView *conferenceInfoView;
 
 @property (nonatomic, strong) NSMutableArray<WFAVParticipantProfile *> *participants;
 @property (nonatomic, strong) NSMutableArray<WFAVParticipantProfile *> *audiences;
@@ -393,6 +397,18 @@
     return _minimizeButton;
 }
 
+- (UIButton *)informationButton {
+    if(!_informationButton) {
+        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 15, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
+        [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
+        _informationButton.backgroundColor = [UIColor clearColor];
+        [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        _informationButton.hidden = YES;
+        [self.view addSubview:_informationButton];
+    }
+    return _informationButton;
+}
+
 - (UIButton *)switchCameraButton {
     if (!_switchCameraButton) {
         _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
@@ -541,7 +557,8 @@
         
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"结束会议" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             if(ws.currentSession.state != kWFAVEngineStateIdle) {
-                [ws.currentSession leaveConference:YES];
+                [ws.currentSession leaveConference:NO];
+                [ws destroyConference];
             }
         }];
         [alertController addAction:action2];
@@ -550,6 +567,14 @@
     } else {
         [self.currentSession leaveConference:NO];
     }
+}
+
+- (void)destroyConference {
+    [[WFCUConfigManager globalManager].appServiceProvider  destroyConference:self.currentSession.callId success:^{
+        
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
 }
 
 - (void)managerButtonDidTap:(UIButton *)button {
@@ -583,6 +608,11 @@
      }];
     
     [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
+}
+
+- (void)informationButtonDidTap:(UIButton *)button {
+    [self showConferenceInfoView];
+    [self startHidePanelTimer];
 }
 
 - (void)switchCameraButtonDidTap:(UIButton *)button {
@@ -821,6 +851,130 @@
 //    }
 }
 
+- (void)showConferenceInfoView {
+    CGRect bounds = self.view.bounds;
+    self.conferenceInfoView = [[UIView alloc] initWithFrame:bounds];
+    self.conferenceInfoView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+    self.conferenceInfoView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenConferenceInfoView)];
+    [self.conferenceInfoView addGestureRecognizer:tap];
+    [self.view addSubview:self.conferenceInfoView];
+    [self.view bringSubviewToFront:self.conferenceInfoView];
+    
+    UIView *panel = [[UIView alloc] initWithFrame:CGRectZero];
+    panel.backgroundColor = [UIColor whiteColor];
+    
+    CGFloat offset = 40;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, offset, 200, 18)];
+    titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    titleLabel.text = self.conferenceInfo.conferenceTitle;
+    [panel addSubview:titleLabel];
+    offset += 8;
+    
+    CGFloat copyBtnWidth = 14;
+    CGFloat titleWidth = 64;
+    CGFloat blockOffset = 24;
+    
+    
+    offset += blockOffset;
+    UILabel *numberTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, offset, titleWidth, 14)];
+    numberTitle.font = [UIFont systemFontOfSize:12];
+    numberTitle.textColor = [UIColor grayColor];
+    numberTitle.text = @"会议号";
+    UILabel *numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleWidth + 16, offset, bounds.size.width-titleWidth - 16 - 16 - copyBtnWidth - 8, 14)];
+    numberLabel.font = [UIFont systemFontOfSize:12];
+    numberLabel.text = self.conferenceInfo.conferenceId;
+    UIButton *numberCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
+    [numberCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+    [numberCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
+    numberCopyBtn.tag = 1;
+    [panel addSubview:numberTitle];
+    [panel addSubview:numberLabel];
+    [panel addSubview:numberCopyBtn];
+    
+    if(self.conferenceInfo.password.length) {
+        offset += blockOffset;
+        UILabel *pwdTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, offset, titleWidth, 14)];
+        pwdTitle.font = [UIFont systemFontOfSize:12];
+        pwdTitle.textColor = [UIColor grayColor];
+        pwdTitle.text = @"会议密码";
+        UILabel *pwdLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleWidth + 16, offset, bounds.size.width-titleWidth - 16 - 16 - copyBtnWidth - 8, 14)];
+        pwdLabel.font = [UIFont systemFontOfSize:12];
+        pwdLabel.text = self.conferenceInfo.password;
+        UIButton *pwdCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
+        [pwdCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+        [pwdCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
+        pwdCopyBtn.tag = 2;
+        [panel addSubview:pwdTitle];
+        [panel addSubview:pwdLabel];
+        [panel addSubview:pwdCopyBtn];
+    }
+    
+    offset += blockOffset;
+    UILabel *ownerTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, offset, titleWidth, 14)];
+    ownerTitle.font = [UIFont systemFontOfSize:12];
+    ownerTitle.textColor = [UIColor grayColor];
+    ownerTitle.text = @"主持人";
+    UILabel *ownerLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleWidth + 16, offset, bounds.size.width-titleWidth - 16 -16, 14)];
+    ownerLabel.font = [UIFont systemFontOfSize:12];
+    WFCCUserInfo *owner = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conferenceInfo.owner refresh:NO];
+    ownerLabel.text = owner.displayName;
+    [panel addSubview:ownerTitle];
+    [panel addSubview:ownerLabel];
+    
+    offset += blockOffset;
+    UILabel *linkTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, offset, titleWidth, 14)];
+    linkTitle.font = [UIFont systemFontOfSize:12];
+    linkTitle.textColor = [UIColor grayColor];
+    linkTitle.text = @"会议链接";
+    UILabel *linkLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleWidth + 16, offset, bounds.size.width-titleWidth - 16 - 16 - copyBtnWidth - 8, 14)];
+    linkLabel.font = [UIFont systemFontOfSize:12];
+    linkLabel.text = [self conferenceLink];
+    UIButton *linkCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
+    [linkCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+    [linkCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
+    linkCopyBtn.tag = 3;
+    [panel addSubview:linkTitle];
+    [panel addSubview:linkLabel];
+    [panel addSubview:linkCopyBtn];
+    
+    offset += 40;
+    offset += kTabbarSafeBottomMargin;
+    panel.layer.cornerRadius = 10.f;
+    panel.clipsToBounds = YES;
+    
+    [self.conferenceInfoView addSubview:panel];
+    panel.frame = CGRectMake(0, bounds.size.height, bounds.size.width, offset+10);
+    [UIView animateWithDuration:0.2 animations:^{
+        panel.frame = CGRectMake(0, bounds.size.height - offset, bounds.size.width, offset+10);
+    }];
+}
+
+- (void)onCopy:(id)sender {
+    UIButton *btn = (UIButton *)sender;
+    NSString *text;
+    if(btn.tag == 1) {
+        text = self.conferenceInfo.conferenceId;
+    } else if(btn.tag == 2) {
+        text = self.conferenceInfo.password;
+    } else {
+        text = [self conferenceLink];
+    }
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = text;
+    [self.view makeToast:@"已拷贝到剪贴板！" duration:1 position:CSToastPositionCenter];
+}
+
+- (NSString *)conferenceLink {
+    return [[WFCUConferenceManager sharedInstance] linkFromConferenceId:self.conferenceInfo.conferenceId password:self.conferenceInfo.password];
+}
+
+- (void)hiddenConferenceInfoView {
+    [self.conferenceInfoView removeFromSuperview];
+    self.conferenceInfoView = nil;
+}
+
 
 - (void)updateTopViewFrame {
         CGFloat containerWidth = self.view.bounds.size.width;
@@ -872,6 +1026,7 @@
     self.switchCameraButton.hidden = NO;
     self.smallCollectionView.hidden = NO;
     self.minimizeButton.hidden = NO;
+    self.informationButton.hidden = NO;
     self.connectTimeLabel.hidden = NO;
     [self startHidePanelTimer];
 }
@@ -889,6 +1044,7 @@
     }];
     self.switchCameraButton.hidden = YES;
     self.minimizeButton.hidden = YES;
+    self.informationButton.hidden = YES;
     self.connectTimeLabel.hidden = YES;
 }
 
@@ -1008,6 +1164,7 @@
             }
             [self updateAudioButton];
             [self updateVideoButton];
+            self.informationButton.hidden = NO;
             
             self.scalingButton.hidden = YES;
             self.minimizeButton.hidden = NO;
@@ -1343,6 +1500,7 @@
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced record:NO moCall:YES extra:nil];
+                vc.conferenceInfo = self.conferenceInfo;
                 [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
             });
         }];
