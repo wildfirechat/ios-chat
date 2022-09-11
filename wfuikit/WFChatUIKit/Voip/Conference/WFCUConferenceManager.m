@@ -6,11 +6,10 @@
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
+#if WFCU_SUPPORT_VOIP
 #import "WFCUConferenceManager.h"
 #import <WFChatClient/WFCChatClient.h>
-#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
-#endif
 #import "WFCUConferenceChangeModelContent.h"
 
 NSString *kMuteStateChanged = @"kMuteStateChanged";
@@ -127,3 +126,4 @@ static WFCUConferenceManager *sharedSingleton = nil;
     }
 }
 @end
+#endif

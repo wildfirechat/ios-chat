@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#if WFCU_SUPPORT_VOIP
 @class WFZConferenceInfo;
 @class WFAVCallSession;
 @class WFCCConversation;
@@ -30,4 +30,4 @@
 - (instancetype)initWithConferenceInfo:(WFZConferenceInfo *)conferenceInfo muteAudio:(BOOL)muteAudio muteVideo:(BOOL)muteVideo;
 @property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
 @end
-
+#endif
