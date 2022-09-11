@@ -2215,11 +2215,24 @@
         }
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
 #if WFCU_SUPPORT_VOIP
-//        if ([WFAVEngineKit sharedEngineKit].supportConference) {
-//            WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;   
-//            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithInvite:invite];
-//            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
-//        }
+        __weak typeof(self)ws = self;
+        __block MBProgressHUD *hud = [self startProgress:@"开启会议中"];
+        if ([WFAVEngineKit sharedEngineKit].supportConference) {
+            WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
+            [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:invite.callId password:invite.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
+                [ws stopProgress:hud finishText:nil];
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:conferenceInfo muteAudio:YES muteVideo:YES];
+                [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+            } error:^(int errorCode, NSString * _Nonnull message) {
+                if (errorCode == 16) {
+                    [ws stopProgress:hud finishText:@"会议已结束！"];
+                } else {
+                    [ws stopProgress:hud finishText:@"网络错误"];
+                }
+            }];
+        } else {
+            [ws stopProgress:hud finishText:@"不支持会议"];
+        }
 #endif
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
         WFCCCardMessageContent *card = (WFCCCardMessageContent *)model.message.content;
@@ -2265,6 +2278,25 @@
         }
     }
 }
+
+- (MBProgressHUD *)startProgress:(NSString *)text {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = text;
+    [hud showAnimated:YES];
+    return hud;
+}
+
+- (MBProgressHUD *)stopProgress:(MBProgressHUD *)hud finishText:(NSString *)text {
+    [hud hideAnimated:YES];
+    if(text) {
+        hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = text;
+        [hud hideAnimated:YES afterDelay:1.f];
+    }
+    return hud;
+}
+
 
 - (void)didDoubleTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
