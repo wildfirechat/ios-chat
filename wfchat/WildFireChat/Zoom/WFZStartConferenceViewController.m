@@ -44,7 +44,7 @@
 @end
 
 @implementation WFZStartConferenceViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.enableAudio = YES;
@@ -427,4 +427,5 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
+#endif
 @end

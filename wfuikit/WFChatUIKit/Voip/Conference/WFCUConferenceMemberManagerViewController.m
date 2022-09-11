@@ -5,12 +5,12 @@
 //  Created by Tom Lee on 2021/2/15.
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
-
+#if WFCU_SUPPORT_VOIP
 #import "WFCUConferenceMemberManagerViewController.h"
 #import "UIColor+YH.h"
-#if WFCU_SUPPORT_VOIP
+
 #import <WFAVEngineKit/WFAVEngineKit.h>
-#endif
+
 #import "WFCUConferenceMember.h"
 #import "WFCUConferenceManager.h"
 #import "WFCUConferenceMemberTableViewCell.h"
@@ -319,3 +319,4 @@
     [self.searchBar resignFirstResponder];
 }
 @end
+#endif
