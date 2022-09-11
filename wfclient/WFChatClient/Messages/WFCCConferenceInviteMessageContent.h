@@ -43,9 +43,14 @@
 @property (nonatomic, assign, getter=isAudioOnly)BOOL audioOnly;
 
 /*
- 会议密码
+ 会议PIN
 */
 @property (nonatomic, strong)NSString *pin;
+
+/*
+ 会议密码
+*/
+@property (nonatomic, strong)NSString *password;
 
 /*
  是否是会议观众

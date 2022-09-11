@@ -24,6 +24,7 @@
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "WFZConferenceInfo.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -444,7 +445,7 @@
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
     __block NSString *focusUser = [self.participants lastObject];
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:nil focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
         WFCUMultiVideoViewController *vc = [[WFCUMultiVideoViewController alloc] initWithSession:callSession];
         [vc setFocusUser:focusUser];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
