@@ -7,13 +7,10 @@
 //
 
 
-//如果您不需要voip功能，请在ChatUIKit工程中关掉voip功能，然后这里定义WFCU_SUPPORT_VOIP为0
+//如果您不需要voip功能，请在ChatUIKit工程中关掉voip功能，然后修改WFChat-Prefix-Header.h中WFCU_SUPPORT_VOIP为0
 //ChatUIKit关闭voip的方式是，找到ChatUIKit工程下的Predefine.h头文件，定义WFCU_SUPPORT_VOIP为0，
-//然后找到脚本“xcodescript.sh”，删除掉“cp -af WFChatUIKit/AVEngine/*  ${DST_DIR}/”这句话。
-//在删除掉ChatUIKit工程的WebRTC和WFAVEngineKit的依赖。
-//删除掉应用工程中的WebRTC.framework和WFAVEngineKit.framework。
-#define WFCU_SUPPORT_VOIP 1
-//#define WFCU_SUPPORT_VOIP 0
+//再删除掉ChatUIKit工程的WebRTC和WFAVEngineKit的依赖。
+//删除掉应用工程中的WebRTC.framework和WFAVEngineKit.framework这两个库。
 
 #import "AppDelegate.h"
 #import <WFChatClient/WFCChatClient.h>

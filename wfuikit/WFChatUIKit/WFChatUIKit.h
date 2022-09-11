@@ -17,6 +17,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <WFChatUIKit/PublicHeader.h>
 
 
+#import <WFChatUIKit/Predefine.h>
 #import <WFChatUIKit/WFCUConversationTableViewController.h>
 #import <WFChatUIKit/WFCUContactListViewController.h>
 #import <WFChatUIKit/WFCUMessageListViewController.h>
@@ -60,7 +61,6 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 #import <WFChatUIKit/BubbleTipView.h>
 #import <WFChatUIKit/UITabBar+badge.h>
-#import <WFChatUIKit/Predefine.h>
 #import <WFChatUIKit/WFCUUtilities.h>
 
 #import <WFChatUIKit/WFCUModifyMyProfileViewController.h>
