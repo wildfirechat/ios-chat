@@ -21,6 +21,7 @@
 #import "UIColor+YH.h"
 #import "UIView+Toast.h"
 #import "WFCUImage.h"
+#import "WFZConferenceInfo.h"
 
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -347,7 +348,7 @@
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:self.currentSession.participantIds[0] withTouchedBlock:^(WFAVCallSession *callSession) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:nil focusUser:self.currentSession.participantIds[0] withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
          [[WFAVEngineKit sharedEngineKit] presentViewController:[[WFCUVideoViewController alloc] initWithSession:callSession]];
      }];
     

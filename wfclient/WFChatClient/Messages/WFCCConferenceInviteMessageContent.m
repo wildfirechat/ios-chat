@@ -32,6 +32,9 @@
     if (self.pin) {
         [dataDict setObject:self.pin forKey:@"p"];
     }
+    if (self.password) {
+        [dataDict setObject:self.password forKey:@"pwd"];
+    }
     if (self.callExtra) {
         [dataDict setObject:self.callExtra forKey:@"ce"];
     }
@@ -62,6 +65,7 @@
         self.audience = [dictionary[@"audience"] intValue] ? YES : NO;
         self.advanced = [dictionary[@"advanced"] intValue] ? YES : NO;
         self.pin = dictionary[@"p"];
+        self.password = dictionary[@"pwd"];
         self.callExtra = dictionary[@"ce"];
     }
 }
