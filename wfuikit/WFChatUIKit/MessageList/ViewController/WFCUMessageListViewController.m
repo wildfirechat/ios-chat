@@ -3282,6 +3282,7 @@
     return 28;
 }
 
+#if WFCU_SUPPORT_VOIP
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.focusedOngoingCellIndex == indexPath.row) {
         self.focusedOngoingCellIndex = -1;
@@ -3296,6 +3297,7 @@
     }
     [self.ongoingCallTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
+#endif
 
 #pragma mark - WFCUMultiCallOngoingExpendedCellDelegate
 -(void)didJoinButtonPressed {

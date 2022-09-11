@@ -30,7 +30,7 @@
 @end
 
 @implementation WFZConferenceInfoViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.enableAudio = YES;
@@ -406,4 +406,5 @@
 -(void)dealloc {
     [self stopCheckTimer];
 }
+#endif
 @end

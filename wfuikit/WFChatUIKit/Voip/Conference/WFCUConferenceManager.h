@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#if WFCU_SUPPORT_VOIP
 extern NSString *kMuteStateChanged;
 
 @protocol WFCUConferenceManagerDelegate <NSObject>
@@ -29,3 +29,4 @@ extern NSString *kMuteStateChanged;
 
 - (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password;
 @end
+#endif

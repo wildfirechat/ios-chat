@@ -62,8 +62,10 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+#if WFCU_SUPPORT_VOIP
 #if !USE_CALL_KIT
     [WFAVEngineKit notRegisterVoipPushService];
+#endif
 #endif
     [WFCCNetworkService sharedInstance].sendLogCommand = Send_Log_Command;
     [WFCCNetworkService startLog];
