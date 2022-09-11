@@ -13,11 +13,12 @@
 #import "WFCUConferenceManager.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "WFZConferenceInfo.h"
 
 @interface WFCUFloatingWindow () <WFAVCallSessionDelegate, WFCUConferenceManagerDelegate>
 
 @property(nonatomic, strong) NSTimer *activeTimer;
-@property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession);
+@property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo);
 @property(nonatomic, strong) CTCallCenter *callCenter;
 @property(nonatomic, strong) NSString *focusUserId;
 
@@ -25,6 +26,8 @@
 @property(nonatomic, assign)CGFloat winHeight;
 
 @property(nonatomic, strong)NSTimer *broadcastOngoingTimer;
+
+@property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
 @end
 
 static WFCUFloatingWindow *staticWindow = nil;
@@ -34,13 +37,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 @implementation WFCUFloatingWindow
 
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession focusUser:(NSString *)focusUserId
-              withTouchedBlock:(void (^)(WFAVCallSession *callSession))touchedBlock {
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession conferenceInfo:(WFZConferenceInfo *)conferenceInfo focusUser:(NSString *)focusUserId
+              withTouchedBlock:(void (^)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo))touchedBlock {
     staticWindow = [[WFCUFloatingWindow alloc] init];
     staticWindow.callSession = callSession;
     [staticWindow.callSession setDelegate:staticWindow];
     staticWindow.touchedBlock = touchedBlock;
     staticWindow.focusUserId = focusUserId;
+    staticWindow.conferenceInfo = conferenceInfo;
     [staticWindow initWindow];
 }
 
@@ -444,7 +448,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
     [self hideCallFloatingWindow];
     if (self.touchedBlock) {
-        self.touchedBlock(self.callSession);
+        self.touchedBlock(self.callSession, self.conferenceInfo);
     }
     [self clearCallFloatingWindow];
 }

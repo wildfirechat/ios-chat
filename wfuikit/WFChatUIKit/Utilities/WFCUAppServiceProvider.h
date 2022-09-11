@@ -13,6 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class WFCCPCOnlineInfo;
+@class WFZConferenceInfo;
 @protocol WFCUAppServiceProvider <NSObject>
 - (void)getGroupAnnouncement:(NSString *)groupId
                      success:(void(^)(WFCUGroupAnnouncement *))successBlock
@@ -47,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
                      error:(void(^)(int error_code))errorBlock;
 
 - (void)destroyConference:(NSString *)conferenceId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+- (void)queryConferenceInfo:(NSString *)conferenceId password:(NSString *)password success:(void(^)(WFZConferenceInfo *conferenceInfo))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -98,52 +98,18 @@
 #define PortraitLabelSize 16
 
 @implementation WFCUConferenceViewController
-#if !WFCU_SUPPORT_VOIP
-- (instancetype)initWithSession:(WFAVCallSession *)session {
-    self = [super init];
-    return self;
-}
-
-- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
-    self = [super init];
-    return self;
-}
-#else
-- (instancetype)initWithSession:(WFAVCallSession *)session {
+#if WFCU_SUPPORT_VOIP
+- (instancetype)initWithSession:(WFAVCallSession *)session conferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     self = [super init];
     if (self) {
         self.currentSession = session;
         self.currentSession.delegate = self;
+        self.conferenceInfo = conferenceInfo;
         [self rearrangeParticipants];
     }
     return self;
 }
 
-- (instancetype)initWithInvite:(WFCCConferenceInviteMessageContent *)invite {
-    self = [super init];
-    if (self) {
-        self.currentSession = [[WFAVEngineKit sharedEngineKit]
-                               joinConference:invite.callId
-                                    audioOnly:invite.audioOnly
-                                        pin:invite.pin
-                               host:invite.host
-                               title:invite.title
-                               desc:invite.desc
-                               callExtra:nil
-                               audience:invite.audience
-                               advanced:invite.advanced
-                               muteAudio:NO
-                               muteVideo:NO
-                               sessionDelegate:self];
-        
-        
-        
-        
-        [self didChangeState:kWFAVEngineStateIncomming];
-        [self rearrangeParticipants];
-    }
-    return self;
-}
 - (instancetype)initWithCallId:(NSString *_Nullable)callId
                      audioOnly:(BOOL)audioOnly
                            pin:(NSString *_Nullable)pin
@@ -183,43 +149,12 @@
     }
     return self;
 }
-- (instancetype)initJoinConference:(NSString *)callId
-                     audioOnly:(BOOL)audioOnly
-                           pin:(NSString *)pin
-                          host:(NSString *)host
-                         title:(NSString *)title
-                          desc:(NSString *)desc
-                      audience:(BOOL)audience
-                       advance:(BOOL)advance
-                     muteAudio:(BOOL)muteAudio
-                     muteVideo:(BOOL)muteVideo
-                         extra:(NSString *)extra {
-    self = [super init];
-    if (self) {
-        self.currentSession = [[WFAVEngineKit sharedEngineKit]
-                               joinConference:callId
-                                    audioOnly:audioOnly
-                                        pin:pin
-                           host:host
-                           title:title
-                           desc:desc
-                               callExtra:extra
-                               audience:audience
-                               advanced:advance
-                               muteAudio:muteAudio
-                               muteVideo:muteVideo
-                           sessionDelegate:self];
-        [self didChangeState:kWFAVEngineStateIncomming];
-        [self rearrangeParticipants];
-    }
-    return self;
-}
 
 -(instancetype)initWithConferenceInfo:(WFZConferenceInfo *)conferenceInfo muteAudio:(BOOL)muteAudio muteVideo:(BOOL)muteVideo {
      self = [super init];
      if (self) {
         self.conferenceInfo = conferenceInfo;
-         self.currentSession = [[WFAVEngineKit sharedEngineKit] joinConference:conferenceInfo.conferenceId audioOnly:NO pin:conferenceInfo.pin host:conferenceInfo.owner title:conferenceInfo.conferenceTitle desc:nil callExtra:nil audience:conferenceInfo.audience advanced:conferenceInfo.advance muteAudio:muteAudio muteVideo:muteVideo sessionDelegate:self];
+         self.currentSession = [[WFAVEngineKit sharedEngineKit] joinConference:conferenceInfo.conferenceId audioOnly:NO pin:conferenceInfo.pin host:conferenceInfo.owner title:conferenceInfo.conferenceTitle desc:nil callExtra:nil audience:(muteAudio && muteVideo) || conferenceInfo.audience advanced:conferenceInfo.advance muteAudio:muteAudio muteVideo:muteVideo sessionDelegate:self];
          
          [self didChangeState:kWFAVEngineStateIncomming];
          [self rearrangeParticipants];
@@ -601,8 +536,8 @@
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
     __block WFAVParticipantProfile *focusUser = [self.participants lastObject];
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser.userId withTouchedBlock:^(WFAVCallSession *callSession) {
-        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession];
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:self.conferenceInfo focusUser:focusUser.userId withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
+        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession conferenceInfo:conferenceInfo];
         [vc setFocusUser:focusUser];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
@@ -1466,6 +1401,7 @@
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced record:NO moCall:NO extra:nil];
+            vc.conferenceInfo = self.conferenceInfo;
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         });
     }];
