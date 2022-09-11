@@ -6,16 +6,15 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-
+#if WFCU_SUPPORT_VOIP
 #import "WFCUConferenceViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
-#if WFCU_SUPPORT_VOIP
+
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUFloatingWindow.h"
 #import "WFCUParticipantCollectionViewCell.h"
-#endif
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCCConversation.h>
 #import "WFCUPortraitCollectionViewCell.h"
@@ -32,14 +31,11 @@
 
 #define BOTTOM_BAR_HEIGHT  54
 @interface WFCUConferenceViewController () <UITextFieldDelegate
-#if WFCU_SUPPORT_VOIP
     ,WFAVCallSessionDelegate
-#endif
     ,UICollectionViewDataSource
     ,UICollectionViewDelegate
     ,WFCUConferenceManagerDelegate
 >
-#if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UIImageView *bigVideoPortraitView;
 @property (nonatomic, strong) ConferenceLabelView *conferenceLabelView;
@@ -85,7 +81,6 @@
 @property(nonatomic, strong)UIView *bottomBarView;
 
 @property(nonatomic, strong)NSTimer *hidePanelTimer;
-#endif
 @end
 
 #define ButtonSize 60
@@ -98,7 +93,6 @@
 #define PortraitLabelSize 16
 
 @implementation WFCUConferenceViewController
-#if WFCU_SUPPORT_VOIP
 - (instancetype)initWithSession:(WFAVCallSession *)session conferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     self = [super init];
     if (self) {
@@ -1629,11 +1623,8 @@
         [self switchVideoView:indexPath.row];
     }
 }
-
-#endif
 #pragma mark - WFCUConferenceManagerDelegate
 -(void)onChangeModeRequest:(BOOL)isAudience {
-#if WFCU_SUPPORT_VOIP
     if(isAudience) {
         [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
     } else {
@@ -1651,7 +1642,6 @@
         
         [self presentViewController:alertController animated:YES completion:nil];
     }
-#endif
 }
-
 @end
+#endif

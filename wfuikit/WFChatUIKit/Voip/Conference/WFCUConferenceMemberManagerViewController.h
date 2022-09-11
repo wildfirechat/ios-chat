@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#if WFCU_SUPPORT_VOIP
 NS_ASSUME_NONNULL_BEGIN
 @class WFZConferenceInfo;
 @interface WFCUConferenceMemberManagerViewController : UIViewController
@@ -15,3 +15,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif
