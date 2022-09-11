@@ -27,6 +27,7 @@
 #import "WFCUConferenceManager.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
+#import "ConferenceLabelView.h"
 
 #define BOTTOM_BAR_HEIGHT  54
 @interface WFCUConferenceViewController () <UITextFieldDelegate
@@ -40,6 +41,8 @@
 #if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UIImageView *bigVideoPortraitView;
+@property (nonatomic, strong) ConferenceLabelView *conferenceLabelView;
+
 @property (nonatomic, strong) UICollectionView *smallCollectionView;
 
 @property (nonatomic, strong) UICollectionView *portraitCollectionView;
@@ -71,7 +74,7 @@
 @property (nonatomic, strong) NSMutableArray<WFAVParticipantProfile *> *audiences;
 
 //视频时，大屏用户正在说话
-@property (nonatomic, strong)UIImageView *speakingView;
+
 
 @property (nonatomic, strong)WFAVParticipantProfile *focusUser;
 
@@ -289,6 +292,10 @@
     [self.bigVideoView addSubview:self.bigVideoPortraitView];
     [self.view addSubview:self.bigVideoView];
     
+    CGSize labelSize = [ConferenceLabelView sizeOffView];
+    self.conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 4, labelSize.width, labelSize.height)];
+    
+    [self.view addSubview:self.conferenceLabelView];
     
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -410,19 +417,6 @@
         [self.view addSubview:_scalingButton];
     }
     return _scalingButton;
-}
-
-- (UIImageView *)speakingView {
-    if (!_speakingView) {
-        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bigVideoView.bounds.size.height - 20, 20, 20)];
-
-        _speakingView.layer.masksToBounds = YES;
-        _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
-        _speakingView.hidden = YES;
-        [self.bigVideoView addSubview:_speakingView];
-    }
-    return _speakingView;
 }
 
 - (UIButton *)createBarButtom:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName select:(SEL)selector frame:(CGRect)frame {
@@ -578,7 +572,6 @@
 
 - (void)updateScreenSharingButton {
     self.screenSharingButton.selected = self.currentSession.isInAppScreenSharing;
-    self.screenSharingButton.enabled = !self.currentSession.isAudience;
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
@@ -600,8 +593,18 @@
 
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        [self.currentSession muteAudio:!self.currentSession.audioMuted];
-        [self updateAudioButton];
+        // 当音频/视频全都mute时需要切换成观众，当是观众状态时打开音频/视频需要切换成主播
+        // 顺序需要注意，当关闭音视频需要切换成观众时，要先切换成观众，再关闭音视频。
+        // 反过来，当观众状态要打开音视频时，要先打开音视频，再切换成主播。
+        // 原因时在主播状态下切换mute状态会引发一次信令交互，按照此做法则能避免此交互。
+        // video操作时也需要遵循此原则，请参考函数 videoButtonDidTap
+        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience) {
+            [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
+            self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
+            [self updateAudioButton];
+            [self updateMainNameLabel];
+        }
+        [self startHidePanelTimer];
     }
 }
 
@@ -612,7 +615,12 @@
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
     }
     
-    self.audioButton.enabled = !self.currentSession.audience;
+    
+    if(self.currentSession.audience && !self.conferenceInfo.allowSwitchMode && ![self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        self.audioButton.enabled = NO;
+    } else {
+        self.audioButton.enabled = YES;
+    }
 }
 - (void)speakerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
@@ -641,7 +649,12 @@
     } else {
         [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
     }
-    self.videoButton.enabled = !self.currentSession.audience;
+    
+    if(self.currentSession.audience && !self.conferenceInfo.allowSwitchMode && ![self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        self.videoButton.enabled = NO;
+    } else {
+        self.videoButton.enabled = YES;
+    }
 }
 
 //1.决定当前界面是否开启自动转屏，如果返回NO，后面两个方法也不会被调用，只是会支持默认的方向
@@ -735,7 +748,10 @@
     if (_currentSession.state == kWFAVEngineStateConnected) {
         [self updateConnectedTimeLabel];
         [self startConnectedTimer];
+        [self updateAudioButton];
+        [self updateVideoButton];
     }
+    [self.view bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -782,8 +798,13 @@
 
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        [self.currentSession muteVideo:!self.currentSession.isVideoMuted];
-        [self updateVideoButton];
+        //请参考函数 audioButtonDidTap
+        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience) {
+            [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
+            [self updateVideoButton];
+        }
+        
+        [self startHidePanelTimer];
     }
 }
 
@@ -836,6 +857,11 @@
     self.bottomBarView.hidden = NO;
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT);
+        
+        CGSize labelSize = [ConferenceLabelView sizeOffView];
+        CGRect labelFrame = self.conferenceLabelView.frame;
+        labelFrame.origin.y = self.view.bounds.size.height - labelSize.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 4;
+        self.conferenceLabelView.frame = labelFrame;
     }];
     
     if (self.currentSession.audioOnly) {
@@ -853,6 +879,11 @@
 - (void)hidePanel {
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT);
+        
+        CGSize labelSize = [ConferenceLabelView sizeOffView];
+        CGRect labelFrame = self.conferenceLabelView.frame;
+        labelFrame.origin.y = self.view.bounds.size.height - labelSize.height - kTabbarSafeBottomMargin - 4;
+        self.conferenceLabelView.frame = labelFrame;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
     }];
@@ -1030,6 +1061,7 @@
 }
 
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
+    [self.bigVideoView bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
@@ -1061,15 +1093,16 @@
         [self reloadVideoUI];
     }
 }
+
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
     if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject.userId]) {
         if (volume > 1000) {
-            [self.bigVideoView bringSubviewToFront:self.speakingView];
-            self.speakingView.hidden = NO;
+            self.bigVideoView.layer.borderColor = [UIColor greenColor].CGColor;
         } else {
-            self.speakingView.hidden = YES;
+            self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
         }
+        self.conferenceLabelView.volume = volume;
     }
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -1343,7 +1376,6 @@
             
             self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, (itemWidth + layout.minimumLineSpacing)*lines - layout.minimumLineSpacing);
             
-            _speakingView.hidden = YES;
             WFAVParticipantProfile *user = [self.participants lastObject];
             if ([user.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
@@ -1380,6 +1412,19 @@
     } else {
         [self.portraitCollectionView reloadData];
     }
+    [self updateMainNameLabel];
+}
+
+- (void)updateMainNameLabel {
+    WFAVParticipantProfile *first = [self.participants firstObject];
+    BOOL isMuteVideo = first.videoMuted;
+    BOOL isMuteAudio = first.audioMuted;
+    
+    self.conferenceLabelView.isMuteVideo = isMuteVideo;
+    self.conferenceLabelView.isMuteAudio = isMuteAudio;
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:first.userId refresh:NO];
+    self.conferenceLabelView.name = userInfo.displayName;
+    [self.bigVideoView bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (BOOL)switchVideoView:(NSUInteger)index {

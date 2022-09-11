@@ -7,7 +7,7 @@
 
 #import "ConferenceLabelView.h"
 #import "WFCUUtilities.h"
-
+#import "WFCUImage.h"
 
 @interface ConferenceLabelView ()
 @property(nonatomic, strong)UIImageView *audioView;
@@ -28,7 +28,7 @@
 - (void)setIsMuteAudio:(BOOL)isMuteAudio {
     _isMuteAudio = isMuteAudio;
     if(isMuteAudio) {
-        self.audioView.image = [UIImage imageNamed:@"mic_mute"];
+        self.audioView.image = [WFCUImage imageNamed:@"mic_mute"];
     } else {
         self.volume = _volume;
     }
@@ -47,7 +47,7 @@
         v = 10;
     }
     [UIView animateWithDuration:0.2 animations:^{
-        self.audioView.image = [UIImage imageNamed:[NSString stringWithFormat:@"mic_%d", v]];
+        self.audioView.image = [WFCUImage imageNamed:[NSString stringWithFormat:@"mic_%d", v]];
     }];
 }
 
