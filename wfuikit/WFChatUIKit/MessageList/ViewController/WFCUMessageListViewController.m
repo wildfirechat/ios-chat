@@ -82,6 +82,9 @@
 #import "WFCUArticlesCell.h"
 #import "WFCUImage.h"
 
+#import "WFZConferenceInfoViewController.h"
+#import "WFZConferenceInfo.h"
+
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
@@ -2221,8 +2224,13 @@
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
             [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:invite.callId password:invite.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
                 [ws stopProgress:hud finishText:nil];
-                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:conferenceInfo muteAudio:YES muteVideo:YES];
-                [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+                WFZConferenceInfoViewController *vc = [[WFZConferenceInfoViewController alloc] init];
+                vc.conferenceId = conferenceInfo.conferenceId;
+                vc.password = conferenceInfo.password;
+                
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [self.navigationController presentViewController:nav animated:YES completion:nil];
             } error:^(int errorCode, NSString * _Nonnull message) {
                 if (errorCode == 16) {
                     [ws stopProgress:hud finishText:@"会议已结束！"];

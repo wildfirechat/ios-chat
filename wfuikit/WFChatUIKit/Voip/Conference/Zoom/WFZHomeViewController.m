@@ -11,11 +11,10 @@
 #import "WFZOrderConferenceViewController.h"
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCChatClient.h>
-#import "QQLBXScanViewController.h"
-#import "StyleDIY.h"
-#import "WFCSettingTableViewController.h"
 #import "WFZConferenceInfoViewController.h"
-#import "AppService.h"
+#import "WFCUConfigManager.h"
+#import "WFZConferenceInfo.h"
+#import "WFCUImage.h"
 
 @interface WFZHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UIView *topPanel;
@@ -53,8 +52,6 @@
         [fcs addObject:[WFZConferenceInfo fromDictionary:dict]];
     }
     self.favConferences = fcs;
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStyleDone target:self action:@selector(onScan:)];
 }
 
 - (void)initTopPannel {
@@ -72,19 +69,19 @@
     }
     CGFloat padding = (bounds.size.width - 3*btnSize)/3;
     self.joinButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2, offset, btnSize, btnSize+labelHeight)];
-    [self.joinButton setImage:[UIImage imageNamed:@"join_conference"] forState:UIControlStateNormal];
+    [self.joinButton setImage:[WFCUImage imageNamed:@"join_conference"] forState:UIControlStateNormal];
     [self.joinButton setTitle:@"加入会议" forState:UIControlStateNormal];
     [self layoutButtonText:self.joinButton];
     [self.joinButton addTarget:self action:@selector(onJoinBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2 + padding + btnSize, offset, btnSize, btnSize+labelHeight)];
-    [self.startButton setImage:[UIImage imageNamed:@"start_conference"] forState:UIControlStateNormal];
+    [self.startButton setImage:[WFCUImage imageNamed:@"start_conference"] forState:UIControlStateNormal];
     [self.startButton setTitle:@"发起会议" forState:UIControlStateNormal];
     [self layoutButtonText:self.startButton];
     [self.startButton addTarget:self action:@selector(onStartBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     self.orderButton = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width-btnSize-padding/2, offset, btnSize, btnSize+labelHeight)];
-    [self.orderButton setImage:[UIImage imageNamed:@"order_conference"] forState:UIControlStateNormal];
+    [self.orderButton setImage:[WFCUImage imageNamed:@"order_conference"] forState:UIControlStateNormal];
     [self.orderButton setTitle:@"预定会议" forState:UIControlStateNormal];
     [self layoutButtonText:self.orderButton];
     [self.orderButton addTarget:self action:@selector(onOrderBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -114,7 +111,8 @@
 
 - (void)reloadData {
     __weak typeof(self)ws = self;
-    [[AppService sharedAppService] getFavConferences:^(NSArray<WFZConferenceInfo *> * _Nonnull conferences) {
+    
+    [[WFCUConfigManager globalManager].appServiceProvider getFavConferences:^(NSArray<WFZConferenceInfo *> * _Nonnull conferences) {
         ws.favConferences = conferences;
         NSMutableArray *arrays = [[NSMutableArray alloc] init];
         for (WFZConferenceInfo *info in conferences) {
@@ -299,7 +297,7 @@
     if(editingStyle == UITableViewCellEditingStyleDelete) {
         WFZConferenceInfo *info = self.favConferences[indexPath.row];
         __weak typeof(self)ws = self;
-        [[AppService sharedAppService] unfavConference:info.conferenceId success:^{
+        [[WFCUConfigManager globalManager].appServiceProvider unfavConference:info.conferenceId success:^{
             [ws reloadData];
         } error:^(int errorCode, NSString * _Nonnull message) {
             
