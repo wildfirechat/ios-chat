@@ -25,6 +25,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
+#import "ConferenceLabelView.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -36,6 +37,7 @@
 #if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UICollectionView *smallCollectionView;
+@property (nonatomic, strong) ConferenceLabelView *conferenceLabelView;
 
 @property (nonatomic, strong) UICollectionView *portraitCollectionView;
 @property (nonatomic, strong) UIButton *hangupButton;
@@ -65,8 +67,6 @@
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *participants;
 
-//视频时，大屏用户正在说话
-@property (nonatomic, strong)UIImageView *speakingView;
 @property(nonatomic, strong)NSTimer *broadcastOngoingTimer;
 #endif
 @end
@@ -77,8 +77,7 @@
 #define OperationTitleFont 10
 #define OperationButtonSize 50
 
-#define PortraitItemSize 48
-#define PortraitLabelSize 16
+#define PortraitItemSize 100
 
 @implementation WFCUMultiVideoViewController
 #if !WFCU_SUPPORT_VOIP
@@ -153,11 +152,18 @@
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
     [self.view addSubview:self.bigVideoView];
     
+    if (!self.currentSession.audioOnly) {
+        CGSize labelSize = [ConferenceLabelView sizeOffView];
+        self.conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - kTabbarSafeBottomMargin - 4, labelSize.width, labelSize.height)];
+        
+        [self.view addSubview:self.conferenceLabelView];
+    }
+    
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    int lines = ([self.currentSession participantIds].count + 2) /3;
+    int lines = (int)([self.currentSession participantIds].count + 2) /3;
     self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth*lines) collectionViewLayout:layout];
     
     self.smallCollectionView.dataSource = self;
@@ -173,12 +179,12 @@
     
     
     WFCUParticipantCollectionViewLayout *layout2 = [[WFCUParticipantCollectionViewLayout alloc] init];
-    layout2.itemHeight = PortraitItemSize + PortraitLabelSize;
+    layout2.itemHeight = PortraitItemSize;
     layout2.itemWidth = PortraitItemSize;
     layout2.lineSpace = 6;
     layout2.itemSpace = 6;
 
-    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, self.view.frame.size.height - BottomPadding - ButtonSize - (PortraitItemSize + PortraitLabelSize)*3 - PortraitLabelSize, self.view.frame.size.width - 32, (PortraitItemSize + PortraitLabelSize)*3 + PortraitLabelSize) collectionViewLayout:layout2];
+    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, self.view.frame.size.height - BottomPadding - ButtonSize - (PortraitItemSize)*3, self.view.frame.size.width - 32, (PortraitItemSize)*3) collectionViewLayout:layout2];
     self.portraitCollectionView.dataSource = self;
     self.portraitCollectionView.delegate = self;
     [self.portraitCollectionView registerClass:[WFCUPortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
@@ -382,19 +388,6 @@
         [self.view addSubview:_scalingButton];
     }
     return _scalingButton;
-}
-
-- (UIImageView *)speakingView {
-    if (!_speakingView) {
-        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bigVideoView.bounds.size.height - 20, 20, 20)];
-
-        _speakingView.layer.masksToBounds = YES;
-        _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
-        _speakingView.hidden = YES;
-        [self.bigVideoView addSubview:_speakingView];
-    }
-    return _speakingView;
 }
 
 - (void)startConnectedTimer {
@@ -629,6 +622,7 @@
         [self updateConnectedTimeLabel];
         [self startConnectedTimer];
     }
+    [self.view bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -718,11 +712,15 @@
         self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.connectTimeLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
         self.connectTimeLabel.textAlignment = NSTextAlignmentCenter;
-    
-        self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 30, 240, 16);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
+        if (self.currentSession.isAudioOnly) {
+            self.connectTimeLabel.frame = CGRectMake((containerWidth - 240)/2, self.portraitCollectionView.frame.origin.y - 40, 240, 16);
+            self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.portraitCollectionView.frame.origin.y -40, 240, 16);
+        } else {
+            self.connectTimeLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
+            self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 30, 240, 16);
+        }
 //    } else {
 //        self.portraitView.frame = CGRectMake(16, kStatusBarAndNavigationBarHeight, 64, 64);
 //        self.userNameLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 8, 240, 26);
@@ -963,6 +961,7 @@
 }
 
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
+    [self.bigVideoView bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
@@ -998,11 +997,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
     if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
         if (volume > 1000) {
-            [self.bigVideoView bringSubviewToFront:self.speakingView];
-            self.speakingView.hidden = NO;
+            self.bigVideoView.layer.borderColor = [UIColor greenColor].CGColor;
         } else {
-            self.speakingView.hidden = YES;
+            self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
         }
+        self.conferenceLabelView.volume = volume;
     }
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -1124,6 +1123,7 @@
 
 - (void)reloadVideoUI {
     if (!self.currentSession.audioOnly) {
+        NSString *userId = [self.participants lastObject];
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
             UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
             CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
@@ -1134,8 +1134,6 @@
                 self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth);
             }
             
-            _speakingView.hidden = YES;
-            NSString *userId = [self.participants lastObject];
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 if (self.currentSession.myProfile.videoMuted) {
                     [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
@@ -1167,6 +1165,8 @@
         } else {
             [self.portraitCollectionView reloadData];
         }
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+        self.conferenceLabelView.name = userInfo.displayName;
     } else {
         [self.portraitCollectionView reloadData];
     }
@@ -1282,10 +1282,7 @@
         return cell;
     } else {
         WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
-        
         cell.itemSize = PortraitItemSize;
-        cell.labelSize = PortraitLabelSize;
-        
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
         

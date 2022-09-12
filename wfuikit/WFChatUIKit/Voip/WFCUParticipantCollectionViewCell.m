@@ -21,6 +21,8 @@
 
 @implementation WFCUParticipantCollectionViewCell
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = 5;
     self.userId = userInfo.userId;
     self.layer.borderWidth = 1.f;
     self.layer.borderColor = [UIColor clearColor].CGColor;
@@ -46,10 +48,16 @@
     
     BOOL isVideoMuted = YES;
     BOOL isAudioMuted = YES;
-    if(!profile.audience) {
-        isVideoMuted = profile.videoMuted;
-        isAudioMuted = profile.audioMuted;
+    if ([WFAVEngineKit sharedEngineKit].currentSession.isConference) {
+        if(!profile.audience) {
+            isVideoMuted = profile.videoMuted;
+            isAudioMuted = profile.audioMuted;
+        }
+    } else {
+        isVideoMuted = NO;
+        isAudioMuted = NO;
     }
+    
     self.conferenceLabelView.isMuteVideo = isVideoMuted;
     self.conferenceLabelView.isMuteAudio = isAudioMuted;
     
