@@ -53,31 +53,23 @@
         self.extraLabel.hidden = YES;
         self.nameLabel.frame = CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 40);
     }
-    if(member.isAudience) {
-        self.audioImageView.hidden = YES;
+    if(member.isAudioOnly) {
+        self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24);
         self.videoImageView.hidden = YES;
     } else {
-        if(member.isAudioOnly) {
-            self.audioImageView.hidden = NO;
-            self.videoImageView.hidden = YES;
-            self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24);
-        } else {
-            self.audioImageView.hidden = NO;
-            self.videoImageView.hidden = NO;
-            self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24);
-        }
-        
-        if(member.isAudioEnabled) {
-            self.audioImageView.image = [WFCUImage imageNamed:@"conference_audio"];
-        } else {
-            self.audioImageView.image = [WFCUImage imageNamed:@"conference_audio_mute_hover"];
-        }
-        if(member.isVideoEnabled) {
-            self.videoImageView.image = [WFCUImage imageNamed:@"conference_video"];
-        } else {
-            self.videoImageView.image = [WFCUImage imageNamed:@"conference_video_mute_hover"];
-        }
+        self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24);
+        self.videoImageView.hidden = NO;
     }
+    
+    BOOL videoMuted = YES;
+    BOOL audioMuted = YES;
+    if(!member.isAudience) {
+        audioMuted = !member.isAudioEnabled;
+        videoMuted = !member.isVideoEnabled;
+    }
+    
+    self.audioImageView.image = [WFCUImage imageNamed:audioMuted?@"conference_audio_mute_hover":@"conference_audio"];
+    self.videoImageView.image = [WFCUImage imageNamed:videoMuted?@"conference_video_mute_hover":@"conference_video"];
 }
 
 - (UIImageView *)portraitView {

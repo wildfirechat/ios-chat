@@ -508,6 +508,7 @@
 
 - (void)managerButtonDidTap:(UIButton *)button {
     WFCUConferenceMemberManagerViewController *vc = [[WFCUConferenceMemberManagerViewController alloc] init];
+    vc.conferenceInfo = self.conferenceInfo;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -557,7 +558,7 @@
         // 反过来，当观众状态要打开音视频时，要先打开音视频，再切换成主播。
         // 原因时在主播状态下切换mute状态会引发一次信令交互，按照此做法则能避免此交互。
         // video操作时也需要遵循此原则，请参考函数 videoButtonDidTap
-        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience) {
+        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
             self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
             [self updateAudioButton];
@@ -758,7 +759,7 @@
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         //请参考函数 audioButtonDidTap
-        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience) {
+        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
             [self updateVideoButton];
         }

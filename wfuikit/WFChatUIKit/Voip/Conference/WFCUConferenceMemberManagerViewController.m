@@ -254,7 +254,7 @@
         [alertController addAction:requestQuit];
     } else if(member.isMe) {
         if(member.isAudience) {
-            if(member.isHost || self.conferenceInfo.allowSwitchMode) {
+            if([self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] || self.conferenceInfo.allowSwitchMode) {
                 [alertController addAction:enableAudio];
                 [alertController addAction:enableVideo];
                 [alertController addAction:enableAudioVideo];

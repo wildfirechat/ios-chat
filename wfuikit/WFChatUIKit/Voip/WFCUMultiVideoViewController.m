@@ -164,7 +164,7 @@
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     int lines = (int)([self.currentSession participantIds].count + 2) /3;
-    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth*lines) collectionViewLayout:layout];
+    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth*lines + layout.minimumLineSpacing * (lines - 1)) collectionViewLayout:layout];
     
     self.smallCollectionView.dataSource = self;
     self.smallCollectionView.delegate = self;
@@ -179,12 +179,13 @@
     
     
     WFCUParticipantCollectionViewLayout *layout2 = [[WFCUParticipantCollectionViewLayout alloc] init];
-    layout2.itemHeight = PortraitItemSize;
-    layout2.itemWidth = PortraitItemSize;
+    CGFloat itemHeight = MIN(PortraitItemSize, (self.view.frame.size.width - 32 - 2*layout.minimumLineSpacing)/3);
+    layout2.itemHeight = itemHeight;
+    layout2.itemWidth = itemHeight;
     layout2.lineSpace = 6;
     layout2.itemSpace = 6;
 
-    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, self.view.frame.size.height - BottomPadding - ButtonSize - (PortraitItemSize)*3, self.view.frame.size.width - 32, (PortraitItemSize)*3) collectionViewLayout:layout2];
+    self.portraitCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(16, self.view.frame.size.height - BottomPadding - ButtonSize - (itemHeight)*3, self.view.frame.size.width - 32, (itemHeight)*3+2*layout.minimumLineSpacing) collectionViewLayout:layout2];
     self.portraitCollectionView.dataSource = self;
     self.portraitCollectionView.delegate = self;
     [self.portraitCollectionView registerClass:[WFCUPortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
@@ -235,6 +236,7 @@
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self onDeviceOrientationDidChange];
+    [self reloadVideoUI];
 
 }
 
@@ -1167,6 +1169,8 @@
         }
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         self.conferenceLabelView.name = userInfo.displayName;
+        self.conferenceLabelView.isMuteVideo = NO;
+        self.conferenceLabelView.isMuteAudio = NO;
     } else {
         [self.portraitCollectionView reloadData];
     }
@@ -1282,7 +1286,8 @@
         return cell;
     } else {
         WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
-        cell.itemSize = PortraitItemSize;
+        CGFloat itemHeight = MIN(PortraitItemSize, (self.view.frame.size.width - 32 - 2*10)/3);
+        cell.itemSize = itemHeight;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
         
