@@ -9,24 +9,23 @@
 #import "WFCUPortraitCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "ConferenceLabelView.h"
 
 @interface WFCUPortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
-@property (nonatomic, strong)UILabel *nameLabel;
 @property (nonatomic, strong)UIImageView *stateLabel;
-
-@property (nonatomic, strong)UIImageView *speakingView;
-
+@property (nonatomic, strong)ConferenceLabelView *conferenceLabelView;
 @end
 
 @implementation WFCUPortraitCollectionViewCell
 
 - (void)setUserInfo:(WFCCUserInfo *)userInfo {
     _userInfo = userInfo;
+    self.layer.borderWidth = 1.f;
+    self.layer.borderColor = [UIColor clearColor].CGColor;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    self.nameLabel.text = userInfo.displayName;
+    self.conferenceLabelView.name = userInfo.displayName;
     
-    _speakingView.hidden = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
@@ -36,16 +35,18 @@
     if([notification.object isEqual:self.userInfo.userId]) {
         NSInteger volume = [notification.userInfo[@"volume"] integerValue];
         if (volume > 1000) {
-            self.speakingView.hidden = NO;
-            [self bringSubviewToFront:self.speakingView];
+            self.layer.borderColor = [UIColor greenColor].CGColor;
         } else {
-            self.speakingView.hidden = YES;
+            self.layer.borderColor = [UIColor clearColor].CGColor;
         }
+        self.conferenceLabelView.volume = volume;
     }
 }
 
 -(void)setProfile:(WFAVParticipantProfile *)profile {
     _profile = profile;
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = 5;
     if (profile.state == kWFAVEngineStateConnected || profile.state == kWFAVEngineStateIdle) {
         [self.stateLabel stopAnimating];
         self.stateLabel.hidden = YES;
@@ -53,6 +54,25 @@
         [self.stateLabel startAnimating];
         self.stateLabel.hidden = NO;
     }
+    BOOL isVideoMuted = YES;
+    BOOL isAudioMuted = YES;
+    if ([WFAVEngineKit sharedEngineKit].currentSession.isConference) {
+        if(!profile.audience) {
+            isVideoMuted = profile.videoMuted;
+            isAudioMuted = profile.audioMuted;
+        }
+    } else {
+        isVideoMuted = NO;
+        isAudioMuted = NO;
+    }
+    
+    self.conferenceLabelView.isMuteVideo = isVideoMuted;
+    self.conferenceLabelView.isMuteAudio = isAudioMuted;
+}
+
+- (void)addSubview:(UIView *)view {
+    [super addSubview:view];
+    [self bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (UIImageView *)portraitView {
@@ -66,29 +86,6 @@
     return _portraitView;
 }
 
-- (UIImageView *)speakingView {
-    if (!_speakingView) {
-        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.itemSize - 20, 20, 20)];
-
-        _speakingView.layer.masksToBounds = YES;
-        _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
-        [self addSubview:_speakingView];
-    }
-    return _speakingView;
-}
-
-- (UILabel *)nameLabel {
-    if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.itemSize, self.itemSize, self.labelSize)];
-        _nameLabel.font = [UIFont systemFontOfSize:self.labelSize - 4];
-        _nameLabel.textColor = [UIColor whiteColor];
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:_nameLabel];
-    }
-    return _nameLabel;
-}
-
 - (UIImageView *)stateLabel {
     if (!_stateLabel) {
         _stateLabel = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.itemSize, self.itemSize)];
@@ -99,6 +96,15 @@
         [self addSubview:_stateLabel];
     }
     return _stateLabel;
+}
+
+- (ConferenceLabelView *)conferenceLabelView {
+    if(!_conferenceLabelView) {
+        CGSize size = [ConferenceLabelView sizeOffView];
+        _conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - size.height, MIN(size.width, self.bounds.size.width), size.height)];
+        [self addSubview:_conferenceLabelView];
+    }
+    return _conferenceLabelView;
 }
 
 - (void)dealloc {

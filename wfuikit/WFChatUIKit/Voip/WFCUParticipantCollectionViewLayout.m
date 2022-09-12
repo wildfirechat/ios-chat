@@ -64,7 +64,7 @@
             frame.origin.y = line1Start.y;
         } else if(i < line2Number) {
             if (line2Start.y == 0) {
-                line2Start.x = (collectionViewRect.size.width - (line * (self.itemWidth + self.itemSpace) - self.itemSpace))/2;
+                line2Start.x = (collectionViewRect.size.width - (MIN(3, count-line1Number) * (self.itemWidth + self.itemSpace) - self.itemSpace))/2;
                 line2Start.y = line1Start.y + self.itemHeight + self.lineSpace;
             }
             frame.origin.x = line2Start.x + (self.itemWidth + self.itemSpace)*(i-line1Number);
