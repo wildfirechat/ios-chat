@@ -569,7 +569,7 @@
 }
 
 - (void)updateAudioButton {
-    if (self.currentSession.audioMuted) {
+    if (self.currentSession.audioMuted || self.currentSession.isAudience) {
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio_mute"] forState:UIControlStateNormal];
     } else {
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
@@ -604,7 +604,7 @@
 }
 
 - (void)updateVideoButton {
-    if (self.currentSession.videoMuted) {
+    if (self.currentSession.videoMuted || self.currentSession.isAudience) {
         [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video_mute"] forState:UIControlStateNormal];
     } else {
         [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
@@ -1286,13 +1286,12 @@
             }
         }
     } else {
-        if(audience) {
-            [self.view makeToast:[NSString stringWithFormat:@"%@ 结束了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
-        } else {
-            [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
-        }
-        
-        if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+//        if(audience) {
+//            [self.view makeToast:[NSString stringWithFormat:@"%@ 结束了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+//        } else {
+//            [self.view makeToast:[NSString stringWithFormat:@"%@ 加入了互动", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] duration:1 position:CSToastPositionCenter];
+//        }
+        if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId] || !userId) {
             [self updateAudioButton];
             [self updateVideoButton];
             [self updateScreenSharingButton];

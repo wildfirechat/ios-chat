@@ -9,12 +9,13 @@
 #import "WFCUMessageSettingViewController.h"
 #import "WFCUSwitchTableViewCell.h"
 #import "UIColor+YH.h"
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUSelectNoDisturbingTimeViewController.h"
 #ifdef WFC_PTT
 #import <PttClient/WFPttClient.h>
 #endif
+#import "WFCUConfigManager.h"
+
 
 @interface WFCUMessageSettingViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;

@@ -7,8 +7,7 @@
 //
 
 #import "WFCUSearchViewController.h"
-#import <WFChatUIKit/WFChatUIKit.h>
-
+#import "WFCUConfigManager.h"
 
 @interface WFCUSearchViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
