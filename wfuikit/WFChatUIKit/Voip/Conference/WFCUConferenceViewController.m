@@ -815,7 +815,7 @@
     numberLabel.font = [UIFont systemFontOfSize:12];
     numberLabel.text = self.conferenceInfo.conferenceId;
     UIButton *numberCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
-    [numberCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+    [numberCopyBtn setImage:[WFCUImage imageNamed:@"copy"] forState:UIControlStateNormal];
     [numberCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
     numberCopyBtn.tag = 1;
     [panel addSubview:numberTitle];
@@ -832,7 +832,7 @@
         pwdLabel.font = [UIFont systemFontOfSize:12];
         pwdLabel.text = self.conferenceInfo.password;
         UIButton *pwdCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
-        [pwdCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+        [pwdCopyBtn setImage:[WFCUImage imageNamed:@"copy"] forState:UIControlStateNormal];
         [pwdCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
         pwdCopyBtn.tag = 2;
         [panel addSubview:pwdTitle];
@@ -861,7 +861,7 @@
     linkLabel.font = [UIFont systemFontOfSize:12];
     linkLabel.text = [self conferenceLink];
     UIButton *linkCopyBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - copyBtnWidth - 16, offset, copyBtnWidth, copyBtnWidth)];
-    [linkCopyBtn setImage:[UIImage imageNamed:@"copy"] forState:UIControlStateNormal];
+    [linkCopyBtn setImage:[WFCUImage imageNamed:@"copy"] forState:UIControlStateNormal];
     [linkCopyBtn addTarget:self action:@selector(onCopy:) forControlEvents:UIControlEventTouchUpInside];
     linkCopyBtn.tag = 3;
     [panel addSubview:linkTitle];
