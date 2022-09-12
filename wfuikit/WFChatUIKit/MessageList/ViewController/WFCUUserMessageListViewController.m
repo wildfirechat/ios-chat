@@ -8,7 +8,7 @@
 
 #import "WFCUUserMessageListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatUIKit/WFChatUIKit.h>
+#import "WFCUUtilities.h"
 
 @interface WFCUUserMessageListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
