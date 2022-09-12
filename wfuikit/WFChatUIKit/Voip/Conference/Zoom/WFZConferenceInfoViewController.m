@@ -9,10 +9,13 @@
 #import "WFZConferenceInfoViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
-#import "CreateBarCodeViewController.h"
 #import "UIView+Toast.h"
 #import "MBProgressHUD.h"
-#import "AppService.h"
+#import "WFCUConfigManager.h"
+#import "WFZConferenceInfo.h"
+#import "WFCUConferenceViewController.h"
+#import "WFCUGeneralSwitchTableViewCell.h"
+#import "WFCUImage.h"
 
 @interface WFZConferenceInfoViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -50,7 +53,7 @@
     
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"加载中"];
-    [[AppService sharedAppService] queryConferenceInfo:self.conferenceId password:self.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
+    [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:self.conferenceId password:self.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
         ws.conferenceInfo = conferenceInfo;
         [ws stopProgress:hud finishText:nil];
     } error:^(int errorCode, NSString * _Nonnull message) {
@@ -58,7 +61,7 @@
         [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
     }];
     
-    [[AppService sharedAppService] isFavConference:self.conferenceId success:^(BOOL isFav) {
+    [[WFCUConfigManager globalManager].appServiceProvider isFavConference:self.conferenceId success:^(BOOL isFav) {
         ws.isFavConference = isFav;
     } error:^(int errorCode, NSString * _Nonnull message) {
         ws.isFavConference = NO;
@@ -92,7 +95,7 @@
 - (void)onDestroyBtn:(id)sender {
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"销毁会议中"];
-    [[AppService sharedAppService] destroyConference:self.conferenceId success:^{
+    [[WFCUConfigManager globalManager].appServiceProvider destroyConference:self.conferenceId success:^{
         [ws stopProgress:hud finishText:@"销毁会议成功"];
         [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
     } error:^(int errorCode, NSString * _Nonnull message) {
@@ -103,7 +106,7 @@
 - (void)onDeleteBtn:(id)sender {
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"删除中"];
-    [[AppService sharedAppService] unfavConference:self.conferenceId success:^{
+    [[WFCUConfigManager globalManager].appServiceProvider unfavConference:self.conferenceId success:^{
         [ws stopProgress:hud finishText:@"删除成功"];
         [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
     } error:^(int errorCode, NSString * _Nonnull message) {
@@ -141,7 +144,7 @@
 - (void)onFav:(id)sender {
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"收藏中"];
-    [[AppService sharedAppService] favConference:self.conferenceInfo.conferenceId success:^{
+    [[WFCUConfigManager globalManager].appServiceProvider favConference:self.conferenceInfo.conferenceId success:^{
         [ws stopProgress:hud finishText:@"收藏成功"];
         ws.isFavConference = YES;
     } error:^(int errorCode, NSString * _Nonnull message) {
@@ -275,7 +278,7 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.text = @"二维码";
 
-            UIImage *qrcode = [UIImage imageNamed:@"qrcode"];
+            UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
             CGFloat width = [UIScreen mainScreen].bounds.size.width;
             UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 8, 24, 24)];
             qrview.image = qrcode;

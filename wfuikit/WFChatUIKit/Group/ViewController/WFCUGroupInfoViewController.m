@@ -9,10 +9,9 @@
 #import "WFCUGroupInfoViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
-
+#import "WFCUMessageListViewController.h"
 
 @interface WFCUGroupInfoViewController ()
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;

@@ -15,9 +15,10 @@
 #import "WFCUConferenceManager.h"
 #import "WFCUConferenceMemberTableViewCell.h"
 #import "WFCUConferenceInviteViewController.h"
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "WFZConferenceInfo.h"
 #import "WFCUPinyinUtility.h"
+#import "WFCUProfileTableViewController.h"
+
 
 @interface WFCUConferenceMemberManagerViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 @property (nonatomic, strong)UITableView *tableView;

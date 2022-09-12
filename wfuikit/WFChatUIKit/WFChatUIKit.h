@@ -70,3 +70,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCULocationViewController.h>
 #import <WFChatUIKit/WFCULocationPoint.h>
 
+#import <WFChatUIKit/WFZOrderConferenceViewController.h>
+#import <WFChatUIKit/WFZHomeViewController.h>
+#import <WFChatUIKit/WFZConferenceInfoViewController.h>
+#import <WFChatUIKit/WFZStartConferenceViewController.h>
