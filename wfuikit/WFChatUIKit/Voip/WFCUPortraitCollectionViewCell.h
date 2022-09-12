@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong)WFAVParticipantProfile *profile;
 
 @property (nonatomic, assign)CGFloat itemSize;
-@property (nonatomic, assign)CGFloat labelSize;
 @end
 
 NS_ASSUME_NONNULL_END
