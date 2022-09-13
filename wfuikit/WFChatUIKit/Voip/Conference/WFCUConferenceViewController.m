@@ -1504,7 +1504,8 @@
 }
 
 - (void)updateMainNameLabel {
-    WFAVParticipantProfile *first = [self.participants firstObject];
+    WFAVParticipantProfile *first = [self.participants lastObject];
+    first = [self.currentSession profileOfUser:first.userId isScreenSharing:first.screeSharing];
     BOOL isMuteVideo = first.videoMuted;
     BOOL isMuteAudio = first.audioMuted;
     
