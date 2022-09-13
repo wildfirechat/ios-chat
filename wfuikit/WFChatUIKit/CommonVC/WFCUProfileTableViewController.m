@@ -149,6 +149,7 @@
         [actionSheet addAction:addFriendAction];
     }
     
+
     if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
         UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"RemoveFromBlacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
@@ -174,7 +175,7 @@
             }];
         }];
         [actionSheet addAction:addFriendAction];
-    } else {
+    } else if (self.userInfo.type == 0) {  //Only normal user can add to blacklist, robot user not allowed.
         UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"Add2Blacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
             hud.label.text = @"处理中...";
@@ -200,7 +201,6 @@
         }];
         [actionSheet addAction:addFriendAction];
     }
-    
     
     
     UIAlertAction *aliasAction = [UIAlertAction actionWithTitle:WFCString(@"SetAlias") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -348,25 +348,27 @@
             [self.cells addObject:self.userMessagesCell];
         }
         
-        if(NSClassFromString(@"SDTimeLineTableViewController")) {
-            self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
-            for (UIView *subView in self.momentCell.subviews) {
-                   [subView removeFromSuperview];
+        if (self.userInfo.type == 0) {
+            if(NSClassFromString(@"SDTimeLineTableViewController")) {
+                self.momentCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"momentCell"];
+                for (UIView *subView in self.momentCell.subviews) {
+                       [subView removeFromSuperview];
+                }
+                
+                UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
+                [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
+                [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+                momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+                momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
+                if (@available(iOS 14, *)) {
+                    [self.momentCell.contentView addSubview:momentButton];
+                } else {
+                    [self.momentCell addSubview:momentButton];
+                }
+                self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
-            
-            UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
-            [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
-            [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-            momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-            momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-            [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
-            if (@available(iOS 14, *)) {
-                [self.momentCell.contentView addSubview:momentButton];
-            } else {
-                [self.momentCell addSubview:momentButton];
-            }
-            self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
