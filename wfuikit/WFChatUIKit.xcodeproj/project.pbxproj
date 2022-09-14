@@ -456,6 +456,14 @@
 		B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */; };
 		B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */; };
 		B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */; };
+		B7D584DC28CF0EC4009D09AF /* WFZOrderConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D428CF0EC4009D09AF /* WFZOrderConferenceViewController.m */; };
+		B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D528CF0EC4009D09AF /* WFZHomeViewController.m */; };
+		B7D584DE28CF0EC4009D09AF /* WFZStartConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584D628CF0EC4009D09AF /* WFZStartConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7D584DF28CF0EC4009D09AF /* WFZConferenceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D728CF0EC4009D09AF /* WFZConferenceInfoViewController.m */; };
+		B7D584E028CF0EC4009D09AF /* WFZStartConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D828CF0EC4009D09AF /* WFZStartConferenceViewController.m */; };
+		B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584D928CF0EC4009D09AF /* WFZHomeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584DA28CF0EC4009D09AF /* WFZOrderConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584DB28CF0EC4009D09AF /* WFZConferenceInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
 		B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */; };
@@ -919,6 +927,14 @@
 		B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingCell.m; sourceTree = "<group>"; };
 		B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingExpendedCell.h; sourceTree = "<group>"; };
 		B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingExpendedCell.m; sourceTree = "<group>"; };
+		B7D584D428CF0EC4009D09AF /* WFZOrderConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZOrderConferenceViewController.m; sourceTree = "<group>"; };
+		B7D584D528CF0EC4009D09AF /* WFZHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZHomeViewController.m; sourceTree = "<group>"; };
+		B7D584D628CF0EC4009D09AF /* WFZStartConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZStartConferenceViewController.h; sourceTree = "<group>"; };
+		B7D584D728CF0EC4009D09AF /* WFZConferenceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfoViewController.m; sourceTree = "<group>"; };
+		B7D584D828CF0EC4009D09AF /* WFZStartConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZStartConferenceViewController.m; sourceTree = "<group>"; };
+		B7D584D928CF0EC4009D09AF /* WFZHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZHomeViewController.h; sourceTree = "<group>"; };
+		B7D584DA28CF0EC4009D09AF /* WFZOrderConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZOrderConferenceViewController.h; sourceTree = "<group>"; };
+		B7D584DB28CF0EC4009D09AF /* WFZConferenceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfoViewController.h; sourceTree = "<group>"; };
 		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUConferencePortraitCollectionViewCell.h; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.h; sourceTree = SOURCE_ROOT; };
@@ -1096,6 +1112,7 @@
 		2F1EB5B42499A2CA00FD3575 /* Conference */ = {
 			isa = PBXGroup;
 			children = (
+				B7D584D328CF0EC4009D09AF /* Zoom */,
 				B7F892A328CC8F5F00E362DE /* View */,
 				2FB7126325DA380900FD2E83 /* Message */,
 				2FB7126225DA37F300FD2E83 /* Cell */,
@@ -2009,6 +2026,21 @@
 			path = Voip;
 			sourceTree = "<group>";
 		};
+		B7D584D328CF0EC4009D09AF /* Zoom */ = {
+			isa = PBXGroup;
+			children = (
+				B7D584DA28CF0EC4009D09AF /* WFZOrderConferenceViewController.h */,
+				B7D584D428CF0EC4009D09AF /* WFZOrderConferenceViewController.m */,
+				B7D584D928CF0EC4009D09AF /* WFZHomeViewController.h */,
+				B7D584D528CF0EC4009D09AF /* WFZHomeViewController.m */,
+				B7D584DB28CF0EC4009D09AF /* WFZConferenceInfoViewController.h */,
+				B7D584D728CF0EC4009D09AF /* WFZConferenceInfoViewController.m */,
+				B7D584D628CF0EC4009D09AF /* WFZStartConferenceViewController.h */,
+				B7D584D828CF0EC4009D09AF /* WFZStartConferenceViewController.m */,
+			);
+			path = Zoom;
+			sourceTree = "<group>";
+		};
 		B7F892A328CC8F5F00E362DE /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -2028,7 +2060,11 @@
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
+				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
+				B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */,
+				B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */,
 				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
+				B7D584DE28CF0EC4009D09AF /* WFZStartConferenceViewController.h in Headers */,
 				2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */,
 				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
@@ -2370,6 +2406,7 @@
 				2F5510B6217F5CC200F56C26 /* WFCUProfileTableViewController.m in Sources */,
 				2F551198217F5CC200F56C26 /* SDRefreshView.m in Sources */,
 				2F551157217F5CC200F56C26 /* KZVideoSupport.m in Sources */,
+				B7D584DC28CF0EC4009D09AF /* WFZOrderConferenceViewController.m in Sources */,
 				2F5EB44122C2E6BB00BC8C90 /* ManagerTableViewController.m in Sources */,
 				1450EA922439679500BF51FC /* WFCUSelectedUserInfo.m in Sources */,
 				2F5510F1217F5CC200F56C26 /* CCHMapClusterController.m in Sources */,
@@ -2477,6 +2514,7 @@
 				2BDF57A724AD70C8003C1F08 /* DNPhotoBrowser.m in Sources */,
 				2F5511DD217F5CC300F56C26 /* TYBaseAnimation.m in Sources */,
 				2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */,
+				B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */,
 				2F5510A6217F5CC200F56C26 /* WFCUStickerCell.m in Sources */,
 				2F551103217F5CC200F56C26 /* CCHFadeInOutMapAnimator.m in Sources */,
 				2F551168217F5CC200F56C26 /* AFHTTPSessionManager.m in Sources */,
@@ -2499,6 +2537,7 @@
 				2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */,
 				2F5511CE217F5CC300F56C26 /* TYAlertView.m in Sources */,
 				2FD550F72442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m in Sources */,
+				B7D584E028CF0EC4009D09AF /* WFZStartConferenceViewController.m in Sources */,
 				2F36433421C136C400904CAB /* WFCUFavChannelTableViewController.m in Sources */,
 				2F551220217F5CC300F56C26 /* WFCUMyProfileTableViewController.m in Sources */,
 				1450EA81243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.m in Sources */,
@@ -2539,6 +2578,7 @@
 				2BDF57AE24AD70C8003C1F08 /* DNBadgeLabel.m in Sources */,
 				2F5511DF217F5CC300F56C26 /* TYAlertController.m in Sources */,
 				2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */,
+				B7D584DF28CF0EC4009D09AF /* WFZConferenceInfoViewController.m in Sources */,
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
