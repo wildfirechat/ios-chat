@@ -1505,7 +1505,11 @@
 
 - (void)updateMainNameLabel {
     WFAVParticipantProfile *first = [self.participants lastObject];
-    first = [self.currentSession profileOfUser:first.userId isScreenSharing:first.screeSharing];
+    if([first.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        first = self.currentSession.myProfile;
+    } else {
+        first = [self.currentSession profileOfUser:first.userId isScreenSharing:first.screeSharing];
+    }
     BOOL isMuteVideo = first.videoMuted;
     BOOL isMuteAudio = first.audioMuted;
     
@@ -1628,7 +1632,7 @@
     if(isAudience) {
         [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
     } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您参与互动" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"忽略" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             

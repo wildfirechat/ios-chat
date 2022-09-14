@@ -99,7 +99,15 @@ static WFCUConferenceManager *sharedSingleton = nil;
             if([msg.content isKindOfClass:[WFCUConferenceChangeModelContent class]]) {
                 WFCUConferenceChangeModelContent *changeModelCnt = (WFCUConferenceChangeModelContent *)msg.content;
                 if([changeModelCnt.conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
-                    [self.delegate onChangeModeRequest:changeModelCnt.isAudience];
+                    if(changeModelCnt.isAudience) {
+                        [self.delegate onChangeModeRequest:YES];
+                        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:YES];
+                        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+                    } else {
+                        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+                        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+                        [self.delegate onChangeModeRequest:NO];
+                    }
                 }
             }
         }
