@@ -393,7 +393,7 @@ namespace mars{
     
         class TConversation : public TSerializable {
         public:
-            TConversation() : conversationType(0), line(0), lastMessage() , timestamp(0), unreadCount(), isTop(false), isSilent(false) {}
+            TConversation() : conversationType(0), line(0), lastMessage() , timestamp(0), unreadCount(), isTop(0), isSilent(false) {}
             int conversationType;
             std::string target;
             int line;
@@ -401,7 +401,7 @@ namespace mars{
             int64_t timestamp;
             std::string draft;
             TUnreadCount unreadCount;
-            bool isTop;
+            int isTop;
             bool isSilent;
             virtual ~TConversation(){}
 #if WFCHAT_PROTO_SERIALIZABLE

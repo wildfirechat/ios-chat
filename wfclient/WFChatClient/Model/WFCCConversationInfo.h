@@ -45,7 +45,7 @@
 /**
  是否置顶
  */
-@property (nonatomic, assign)BOOL isTop;
+@property (nonatomic, assign)int isTop;
 
 /**
  是否设置了免打扰

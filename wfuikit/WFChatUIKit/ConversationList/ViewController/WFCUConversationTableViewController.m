@@ -1007,7 +1007,7 @@
     }];
     
     UITableViewRowAction *setTop = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Pinned") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:YES success:^{
+        [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:1 success:^{
             [ws refreshList];
         } error:^(int error_code) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
@@ -1019,7 +1019,7 @@
     }];
     
     UITableViewRowAction *setUntop = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Unpinned") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:NO success:^{
+        [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:0 success:^{
             [ws refreshList];
         } error:^(int error_code) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
