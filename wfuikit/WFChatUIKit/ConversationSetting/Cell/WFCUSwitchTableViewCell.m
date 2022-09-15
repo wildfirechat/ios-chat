@@ -40,7 +40,7 @@
     switch (_type) {
         case SwitchType_Conversation_Top:
         {
-            [[WFCCIMService sharedWFCIMService] setConversation:_conversation top:value success:nil error:^(int error_code) {
+            [[WFCCIMService sharedWFCIMService] setConversation:_conversation top:value?1:0 success:nil error:^(int error_code) {
                 [ws.valueSwitch setOn:!value];
             }];
             break;
@@ -115,7 +115,7 @@
     BOOL value = false;
     switch (_type) {
         case SwitchType_Conversation_Top:
-            value = [[WFCCIMService sharedWFCIMService] getConversationInfo:_conversation].isTop;
+            value = [[WFCCIMService sharedWFCIMService] getConversationInfo:_conversation].isTop>0;
             break;
         case SwitchType_Conversation_Silent:
             value = [[WFCCIMService sharedWFCIMService] getConversationInfo:_conversation].isSilent;

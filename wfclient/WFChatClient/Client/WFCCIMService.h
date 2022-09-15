@@ -291,10 +291,10 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  设置或取消会话置顶
  
  @param conversation 会话
- @param top 是否置顶
+ @param top 置顶优先级
  */
 - (void)setConversation:(WFCCConversation *)conversation
-                    top:(BOOL)top
+                    top:(int)top
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
