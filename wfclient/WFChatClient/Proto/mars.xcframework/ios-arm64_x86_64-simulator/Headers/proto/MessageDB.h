@@ -49,7 +49,7 @@ namespace mars {
             
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall);
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp);
-            bool updateConversationIsTop(int conversationType, const std::string &target, int line, bool istop);
+            bool updateConversationIsTop(int conversationType, const std::string &target, int line, int istop);
             bool updateConversationIsSilent(int conversationType, const std::string &target, int line, bool issilent, bool createIfNotExist = true);
             bool updateConversationDraft(int conversationType, const std::string &target, int line, const std::string &draft, bool syncRemote = true);
             

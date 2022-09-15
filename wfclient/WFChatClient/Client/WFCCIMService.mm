@@ -1593,12 +1593,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->ClearAllMessages(removeConversation);
 }
 
-- (void)setConversation:(WFCCConversation *)conversation top:(BOOL)top
+- (void)setConversation:(WFCCConversation *)conversation top:(int)top
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock {
-//    mars::stn::MessageDB::Instance()->updateConversationIsTop(conversation.type, [conversation.target UTF8String], conversation.line, top);
-    
-    [self setUserSetting:(UserSettingScope)mars::stn::kUserSettingConversationTop key:[NSString stringWithFormat:@"%zd-%d-%@", conversation.type, conversation.line, conversation.target] value:top ? @"1" : @"0" success:successBlock error:errorBlock];
+    [self setUserSetting:(UserSettingScope)mars::stn::kUserSettingConversationTop key:[NSString stringWithFormat:@"%zd-%d-%@", conversation.type, conversation.line, conversation.target] value:[NSString stringWithFormat:@"%d", top] success:successBlock error:errorBlock];
 }
 
 - (void)setConversation:(WFCCConversation *)conversation draft:(NSString *)draft {
