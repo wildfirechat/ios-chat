@@ -523,7 +523,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     if(self.callSession.isConference && self.conferenceInfo) {
-        [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)(self.currentSession.endTime - self.currentSession.startTime)];
+        [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)([WFAVEngineKit sharedEngineKit].currentSession.endTime - [WFAVEngineKit sharedEngineKit].currentSession.startTime)];
     }
 }
 
