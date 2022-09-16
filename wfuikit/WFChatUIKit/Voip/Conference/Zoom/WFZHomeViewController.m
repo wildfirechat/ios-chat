@@ -15,6 +15,7 @@
 #import "WFCUConfigManager.h"
 #import "WFZConferenceInfo.h"
 #import "WFCUImage.h"
+#import "WFZConferenceHistoryListViewController.h"
 
 @interface WFZHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UIView *topPanel;
@@ -31,6 +32,8 @@
 
 @property(nonatomic, strong)UIImageView *emptyImageView;
 @property(nonatomic, strong)UILabel *emptyLabel;
+
+@property(nonatomic, strong)UIButton *historyButton;
 @end
 
 @implementation WFZHomeViewController
@@ -46,6 +49,7 @@
     
     [self initTopPannel];
     [self initTableView];
+    [self showHistoryButton];
     NSArray *arrays = [[NSUserDefaults standardUserDefaults] objectForKey:@"SAVED_CONFERENCE_LIST"];
     NSMutableArray *fcs = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in arrays) {
@@ -239,6 +243,26 @@
     }
     return _emptyImageView;
 }
+
+- (void)showHistoryButton {
+    CGRect bount = self.view.bounds;
+    CGRect topFrame = self.topPanel.frame;
+    self.historyButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width - 85, topFrame.origin.y + topFrame.size.height + 36, 100, 30)];
+    [self.historyButton setTitle:@"历史记录 >" forState:UIControlStateNormal];
+    self.historyButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    [self.historyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    self.historyButton.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.9];
+    self.historyButton.layer.cornerRadius = 15;
+    self.historyButton.layer.borderColor = [UIColor blackColor].CGColor;
+    [self.historyButton addTarget:self action:@selector(onHistoryButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.historyButton];
+}
+
+- (void)onHistoryButton:(id)sender {
+    WFZConferenceHistoryListViewController *histVC = [[WFZConferenceHistoryListViewController alloc] init];
+    [self.navigationController pushViewController:histVC animated:YES];
+}
+
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     WFZConferenceInfo *info = self.favConferences[indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
