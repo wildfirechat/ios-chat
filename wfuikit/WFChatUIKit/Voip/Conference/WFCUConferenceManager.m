@@ -11,8 +11,13 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUConferenceChangeModelContent.h"
+#import "WFZConferenceInfo.h"
+#import "WFCUConferenceHistory.h"
 
 NSString *kMuteStateChanged = @"kMuteStateChanged";
+
+@interface WFCUConferenceManager ()
+@end
 
 static WFCUConferenceManager *sharedSingleton = nil;
 @implementation WFCUConferenceManager
@@ -124,6 +129,34 @@ static WFCUConferenceManager *sharedSingleton = nil;
         } error:^(int error_code) {
             
         }];
+}
+
+- (void)addHistory:(WFZConferenceInfo *)info duration:(int)duration {
+    WFCUConferenceHistory *history = [[WFCUConferenceHistory alloc] init];
+    history.conferenceInfo = info;
+    history.timestamp = [[[NSDate alloc] init] timeIntervalSince1970];
+    history.duration = duration;
+    NSMutableArray<WFCUConferenceHistory *> *conferenceHistorys = [[self getConferenceHistoryList] mutableCopy];
+    [conferenceHistorys insertObject:history atIndex:0];
+    NSMutableArray *dictArray = [NSMutableArray new];
+    [conferenceHistorys enumerateObjectsUsingBlock:^(WFCUConferenceHistory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [dictArray addObject:[obj toDictionary]];
+    }];
+    [[NSUserDefaults standardUserDefaults] setObject:dictArray forKey:@"WFC_CONFERENCE_HISTORY"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSArray<WFCUConferenceHistory *> *)getConferenceHistoryList {
+    NSObject *o = [[NSUserDefaults standardUserDefaults] objectForKey:@"WFC_CONFERENCE_HISTORY"];
+    NSMutableArray *ret = [[NSMutableArray alloc] init];
+    
+    if([o isKindOfClass:NSArray.class]) {
+        NSArray<NSDictionary *> *arr = (NSArray<NSDictionary *> *)o;
+        [arr enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [ret addObject:[WFCUConferenceHistory fromDictionary:obj]];
+        }];
+    }
+    return ret;
 }
 
 - (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password {
