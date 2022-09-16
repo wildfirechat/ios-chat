@@ -54,6 +54,8 @@
 @property (nonatomic, strong) UIButton *screenSharingButton;
 @property (nonatomic, strong) UIButton *informationButton;
 
+@property (nonatomic, strong) UIButton *chatButton;
+
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *stateLabel;
@@ -81,6 +83,11 @@
 @property(nonatomic, strong)UIView *bottomBarView;
 
 @property(nonatomic, strong)NSTimer *hidePanelTimer;
+
+@property(nonatomic, strong)UIView *inputContainer;
+@property(nonatomic, strong)UITextField *inputTextField;
+
+@property(nonatomic, assign)BOOL failureJoinChatroom;
 @end
 
 #define ButtonSize 60
@@ -100,6 +107,7 @@
         self.currentSession.delegate = self;
         self.conferenceInfo = conferenceInfo;
         [self rearrangeParticipants];
+        [self joinChatroom];
     }
     return self;
 }
@@ -140,6 +148,7 @@
         }
         
         [self rearrangeParticipants];
+        [self joinChatroom];
     }
     return self;
 }
@@ -152,9 +161,17 @@
          
          [self didChangeState:kWFAVEngineStateIncomming];
          [self rearrangeParticipants];
+         [self joinChatroom];
      }
      return self;
  }
+
+- (void)joinChatroom {
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] joinChatroom:self.currentSession.callId success:nil error:^(int error_code) {
+        ws.failureJoinChatroom = YES;
+    }];
+}
 
 /*
  session的participantIds是除了自己外的所有成员。这里把自己也加入列表，然后把发起者放到最后面。
@@ -308,6 +325,20 @@
     
     [WFCUConferenceManager sharedInstance].delegate = self;
     [self startHidePanelTimer];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
 }
 
 - (UIButton *)minimizeButton {
@@ -336,6 +367,21 @@
         [self.view addSubview:_informationButton];
     }
     return _informationButton;
+}
+
+- (UIButton *)chatButton {
+    if(!_chatButton) {
+        _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(8, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68, 80, 20)];
+        [_chatButton setTitle:@"说点什么..." forState:UIControlStateNormal];
+        [_chatButton setTitleColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.5] forState:UIControlStateNormal];
+        _chatButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _chatButton.layer.masksToBounds = YES;
+        _chatButton.layer.cornerRadius = 3.f;
+        _chatButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_chatButton addTarget:self action:@selector(chatButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        [self.view addSubview:_chatButton];
+    }
+    return _chatButton;
 }
 
 - (UIButton *)switchCameraButton {
@@ -435,6 +481,83 @@
     return _bottomBarView;
 }
 
+
+- (void)onReceiveMessages:(NSNotification *)notification {
+    if (!self.failureJoinChatroom) {
+        NSArray<WFCCMessage *> *messages = notification.object;
+        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
+                [self append:obj];
+            }
+        }];
+    }
+}
+
+- (void)append:(WFCCMessage *)message {
+    
+}
+
+- (void)sendTextMessage:(NSString *)text {
+    if (!self.failureJoinChatroom) {
+        WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] send:[WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0] content:[WFCCTextMessageContent contentWith:text] success:^(long long messageUid, long long timestamp) {
+                    
+        } error:^(int error_code) {
+            
+        }];
+        
+        [self append:msg];
+    }
+}
+- (UIView *)inputContainer {
+    if(!_inputContainer) {
+        CGRect bound = self.view.bounds;
+        _inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, bound.size.height, bound.size.width, 40)];
+        _inputContainer.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3];
+        _inputContainer.hidden = YES;
+        [self.view addSubview:_inputContainer];
+    }
+    return _inputContainer;
+}
+
+- (UITextField *)inputTextField {
+    if(!_inputTextField) {
+        _inputTextField = [[UITextField alloc] initWithFrame:CGRectMake(8, 8, self.view.bounds.size.width - 16, 40 - 16)];
+        _inputTextField.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _inputTextField.returnKeyType = UIReturnKeyDone;
+        _inputTextField.delegate = self;
+        [self.inputContainer addSubview:_inputTextField];
+    }
+    return _inputTextField;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *str = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if(str.length) {
+        self.inputTextField.returnKeyType = UIReturnKeySend;
+    } else {
+        self.inputTextField.returnKeyType = UIReturnKeyDone;
+    }
+    [textField reloadInputViews];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if(self.inputTextField.text.length) {
+        [self sendTextMessage:self.inputTextField.text];
+        self.inputTextField.text = nil;
+    }
+    [self.inputTextField resignFirstResponder];
+    [self startHidePanelTimer];
+    
+    return NO;
+}
+
+- (void)showInput {
+    [self startHidePanelTimer];
+    self.inputContainer.hidden = NO;
+    [self.inputTextField becomeFirstResponder];
+}
+
 - (void)startConnectedTimer {
     [self stopConnectedTimer];
     self.connectedTimer = [NSTimer scheduledTimerWithTimeInterval:1
@@ -449,6 +572,13 @@
     if (self.connectedTimer) {
         [self.connectedTimer invalidate];
         self.connectedTimer = nil;
+    }
+}
+
+- (void)setFailureJoinChatroom:(BOOL)failureJoinChatroom {
+    _failureJoinChatroom = failureJoinChatroom;
+    if(failureJoinChatroom) {
+        self.chatButton.hidden = YES;
     }
 }
 
@@ -781,6 +911,10 @@
 //    }
 }
 
+- (void)chatButtonDidTap:(UIButton *)button {
+    [self showInput];
+}
+
 - (void)showConferenceInfoView {
     CGRect bounds = self.view.bounds;
     self.conferenceInfoView = [[UIView alloc] initWithFrame:bounds];
@@ -922,6 +1056,11 @@
 }
 
 - (void)onClickedBigVideoView:(id)sender {
+    if([self.inputTextField isFirstResponder]) {
+        [self.inputTextField resignFirstResponder];
+        return;
+    }
+    
     if (self.currentSession.state != kWFAVEngineStateConnected) {
         return;
     }
@@ -977,6 +1116,43 @@
     self.informationButton.hidden = YES;
     self.connectTimeLabel.hidden = YES;
 }
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    if (![self.inputTextField isFirstResponder]) {
+        return;
+    }
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [value CGRectValue];
+    int height = keyboardRect.size.height + kTabbarSafeBottomMargin;
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    
+    CGRect frame = self.inputContainer.frame;
+    frame.origin.y = keyboardRect.origin.y - frame.size.height;
+    [UIView animateWithDuration:duration animations:^{
+        self.inputContainer.frame = frame;
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+
+    CGRect frame = self.inputContainer.frame;
+    frame.origin.y = self.view.bounds.size.height;
+    [UIView animateWithDuration:duration animations:^{
+        self.inputContainer.frame = frame;
+    } completion:^(BOOL finished) {
+        self.inputContainer.hidden = YES;
+    }];
+}
+
+-(void)keyboardDidHide:(NSNotification *)notification{
+    
+}
+
 
 - (void)startHidePanelTimer {
     if(self.currentSession.isAudioOnly) {
@@ -1080,6 +1256,9 @@
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
             self.screenSharingButton.hidden = NO;
+            if(!self.failureJoinChatroom) {
+                self.chatButton.hidden = NO;
+            }
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 [self updateSpeakerButton];

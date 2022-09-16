@@ -20,7 +20,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if(self) {
-        self.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -76,6 +76,7 @@
     if(!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(28, 4, 48, 20)];
         _nameLabel.font = [UIFont systemFontOfSize:14];
+        _nameLabel.textColor = [UIColor grayColor];
         [self addSubview:_nameLabel];
     }
     return _nameLabel;
