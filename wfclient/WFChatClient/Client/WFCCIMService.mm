@@ -3232,6 +3232,14 @@ public:
     mars::stn::getChatroomMemberInfo([chatroomId UTF8String], maxCount, new IMGetChatroomMemberInfoCallback(successBlock, errorBlock));
 }
 
+- (NSString *)getJoinedChatroomId {
+    std::string chatroomId = mars::stn::getJoinedChatroom();
+    if (chatroomId.empty()) {
+        return nil;
+    }
+    return [NSString stringWithUTF8String:chatroomId.c_str()];
+}
+
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
                  desc:(NSString *)desc
