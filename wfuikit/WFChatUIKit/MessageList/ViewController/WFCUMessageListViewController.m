@@ -270,26 +270,32 @@
     self.orignalDraft = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation].draft;
     
     if (self.conversation.type == Chatroom_Type) {
-        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-        hud.label.text = WFCString(@"JoinChatroom");
-        [hud showAnimated:YES];
-        
-        [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:^{
-            NSLog(@"join chatroom successs");
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [ws sendChatroomWelcomeMessage];
-            });
-            [hud hideAnimated:YES];
-        } error:^(int error_code) {
-            NSLog(@"join chatroom error");
-            hud.mode = MBProgressHUDModeText;
-            hud.label.text = WFCString(@"JoinChatroomFailure");
-            //            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-            [hud hideAnimated:YES afterDelay:1.f];
-            hud.completionBlock = ^{
-                [ws.navigationController popViewControllerAnimated:YES];
-            };
-        }];
+        NSString *joinedChatroomId = [[WFCCIMService sharedWFCIMService] getJoinedChatroomId];
+
+        if(![ws.conversation.target isEqualToString:joinedChatroomId]) {
+            __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.label.text = WFCString(@"JoinChatroom");
+            [hud showAnimated:YES];
+            
+            [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:^{
+                NSLog(@"join chatroom successs");
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [ws sendChatroomWelcomeMessage];
+                });
+                [hud hideAnimated:YES];
+            } error:^(int error_code) {
+                NSLog(@"join chatroom error");
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"JoinChatroomFailure");
+                //            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+                hud.completionBlock = ^{
+                    [ws.navigationController popViewControllerAnimated:YES];
+                };
+            }];
+        } else {
+            [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:nil error:nil];
+        }
     }
     if(self.conversation.type == Channel_Type) {
         WFCCEnterChannelChatMessageContent *enterContent = [[WFCCEnterChannelChatMessageContent alloc] init];
@@ -527,25 +533,34 @@
     }
 }
 - (void)sendChatroomWelcomeMessage {
-    WFCCTipNotificationContent *tip = [[WFCCTipNotificationContent alloc] init];
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    tip.tip = [NSString stringWithFormat:WFCString(@"WelcomeJoinChatroomHint"), userInfo.displayName];
-    [self sendMessage:tip];
+    if(!self.silentJoinChatroom) {
+        WFCCTipNotificationContent *tip = [[WFCCTipNotificationContent alloc] init];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+        tip.tip = [NSString stringWithFormat:WFCString(@"WelcomeJoinChatroomHint"), userInfo.displayName];
+        [self sendMessage:tip];
+    }
 }
 
 - (void)sendChatroomLeaveMessage {
     __block WFCCConversation *strongConv = self.conversation;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        WFCCTipNotificationContent *tip = [[WFCCTipNotificationContent alloc] init];
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-        tip.tip = [NSString stringWithFormat:WFCString(@"LeaveChatroomHint"), userInfo.displayName];
-        
-        [[WFCCIMService sharedWFCIMService] send:strongConv content:tip success:^(long long messageUid, long long timestamp) {
+    if(!self.silentJoinChatroom) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            WFCCTipNotificationContent *tip = [[WFCCTipNotificationContent alloc] init];
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+            tip.tip = [NSString stringWithFormat:WFCString(@"LeaveChatroomHint"), userInfo.displayName];
+            
+            [[WFCCIMService sharedWFCIMService] send:strongConv content:tip success:^(long long messageUid, long long timestamp) {
+                [[WFCCIMService sharedWFCIMService] quitChatroom:strongConv.target success:nil error:nil];
+            } error:^(int error_code) {
+                [[WFCCIMService sharedWFCIMService] quitChatroom:strongConv.target success:nil error:nil];
+            }];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
             [[WFCCIMService sharedWFCIMService] quitChatroom:strongConv.target success:nil error:nil];
-        } error:^(int error_code) {
-            [[WFCCIMService sharedWFCIMService] quitChatroom:strongConv.target success:nil error:nil];
-        }];
-    });
+        });
+    }
+    
 }
 
 - (void)onLeftBtnPressed:(id)sender {
@@ -561,7 +576,7 @@
 }
 
 - (void)leftMessageVC {
-    if (self.conversation.type == Chatroom_Type) {
+    if (self.conversation.type == Chatroom_Type && !self.keepInChatroom) {
         [self sendChatroomLeaveMessage];
     }
     if(self.conversation.type == Channel_Type) {
