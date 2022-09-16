@@ -1200,6 +1200,7 @@
     } else if(reason == kWFAVCallEndReasonRoomParticipantsFull) {
         [self rejoinConferenceAsAudience];
     } else {
+        [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)(self.currentSession.endTime - self.currentSession.startTime)];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
         });
