@@ -1862,6 +1862,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                       success:(void(^)(WFCCChatroomMemberInfo *memberInfo))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
+- (NSString *)getJoinedChatroomId;
+
 #pragma mark - 频道相关
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait

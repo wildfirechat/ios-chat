@@ -20,4 +20,7 @@
 
 @property (nonatomic, assign)BOOL multiSelecting;
 @property (nonatomic, strong)NSMutableArray *selectedMessageIds;
+
+@property (nonatomic, assign)BOOL silentJoinChatroom;
+@property (nonatomic, assign)BOOL keepInChatroom;
 @end
