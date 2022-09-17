@@ -64,24 +64,6 @@
 		2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E662723072600151B75 /* ptt_begin.m4a */; };
 		2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E672723072600151B75 /* ptt_end.m4a */; };
 		2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FAB124551D82007713CD /* DeviceViewController.m */; };
-		2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F94F98622291577005BD461 /* CodeScan.bundle */; };
-		2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98922291577005BD461 /* LBXScanViewController.m */; };
-		2F94FB8D22291577005BD461 /* LBXScanViewStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98A22291577005BD461 /* LBXScanViewStyle.m */; };
-		2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */; };
-		2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */; };
-		2F94FB9022291577005BD461 /* LBXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98D22291577005BD461 /* LBXScanView.m */; };
-		2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */; };
-		2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94F99322291577005BD461 /* LBXScanTypes.m */; };
-		2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FB8A22291577005BD461 /* LBXScanNative.m */; };
-		2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7722291813005BD461 /* LBXAlertAction.m */; };
-		2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */; };
-		2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */; };
-		2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */; };
-		2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */; };
-		2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */; };
-		2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */; };
-		2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9322291813005BD461 /* LBXPermissionCamera.m */; };
-		2F94FCA822291813005BD461 /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F94FC9422291813005BD461 /* LBXPermission.m */; };
 		2F97CDC9252EC7D90095DDFD /* ShareUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F97CDC8252EC7D90095DDFD /* ShareUtility.m */; };
 		2FB28E652538183C00DDD387 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB28E642538183C00DDD387 /* ConversationCell.m */; };
 		2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF915F232F6A47003521FF /* InfoPlist.strings */; };
@@ -102,11 +84,6 @@
 		9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		905177502243CD9A0020A2AC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774F2243CD9A0020A2AC /* libz.tbd */; };
 		905177522243CDA60020A2AC /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 905177512243CDA60020A2AC /* libc++.tbd */; };
-		9085427B2229FF160009713D /* StyleDIY.m in Sources */ = {isa = PBXBuildFile; fileRef = 908542792229FF160009713D /* StyleDIY.m */; };
-		9085427E222A00430009713D /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9085427D222A00430009713D /* DIYScanViewController.m */; };
-		90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90854280222A04C80009713D /* QQLBXScanViewController.m */; };
-		90854287222A06870009713D /* CreateBarCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90854286222A06870009713D /* CreateBarCodeViewController.m */; };
-		9085428B222A07280009713D /* UIImageView+CornerRadius.m in Sources */ = {isa = PBXBuildFile; fileRef = 9085428A222A07280009713D /* UIImageView+CornerRadius.m */; };
 		909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDAE2130473100A64FE7 /* ChatroomListViewController.m */; };
 		909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 909ACDB221304CD900A64FE7 /* ChatroomItemCell.m */; };
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
@@ -275,43 +252,8 @@
 		2F79F32B2783059000D6F254 /* WFChatUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8F8E662723072600151B75 /* ptt_begin.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ptt_begin.m4a; sourceTree = "<group>"; };
 		2F8F8E672723072600151B75 /* ptt_end.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ptt_end.m4a; sourceTree = "<group>"; };
-		2F94F98622291577005BD461 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
-		2F94F98722291577005BD461 /* LBXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanView.h; sourceTree = "<group>"; };
-		2F94F98822291577005BD461 /* LBXScanNetAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNetAnimation.h; sourceTree = "<group>"; };
-		2F94F98922291577005BD461 /* LBXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewController.m; sourceTree = "<group>"; };
-		2F94F98A22291577005BD461 /* LBXScanViewStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewStyle.m; sourceTree = "<group>"; };
-		2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanVideoZoomView.m; sourceTree = "<group>"; };
-		2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanLineAnimation.m; sourceTree = "<group>"; };
-		2F94F98D22291577005BD461 /* LBXScanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanView.m; sourceTree = "<group>"; };
-		2F94F98E22291577005BD461 /* LBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewController.h; sourceTree = "<group>"; };
-		2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNetAnimation.m; sourceTree = "<group>"; };
-		2F94F99022291577005BD461 /* LBXScanLineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanLineAnimation.h; sourceTree = "<group>"; };
-		2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanVideoZoomView.h; sourceTree = "<group>"; };
-		2F94F99222291577005BD461 /* LBXScanViewStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewStyle.h; sourceTree = "<group>"; };
-		2F94F99322291577005BD461 /* LBXScanTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanTypes.m; sourceTree = "<group>"; };
 		2F94FAB024551D82007713CD /* DeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceViewController.h; sourceTree = "<group>"; };
 		2F94FAB124551D82007713CD /* DeviceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceViewController.m; sourceTree = "<group>"; };
-		2F94FB8722291577005BD461 /* LBXScanTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanTypes.h; sourceTree = "<group>"; };
-		2F94FB8922291577005BD461 /* LBXScanNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNative.h; sourceTree = "<group>"; };
-		2F94FB8A22291577005BD461 /* LBXScanNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNative.m; sourceTree = "<group>"; };
-		2F94FC7722291813005BD461 /* LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXAlertAction.m; sourceTree = "<group>"; };
-		2F94FC7822291813005BD461 /* LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXAlertAction.h; sourceTree = "<group>"; };
-		2F94FC7A22291813005BD461 /* UIActionSheet+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+LBXAlertAction.h"; sourceTree = "<group>"; };
-		2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+supportedInterfaceOrientations.h"; sourceTree = "<group>"; };
-		2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+LBXAlertAction.h"; sourceTree = "<group>"; };
-		2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+LBXHierarchy.m"; sourceTree = "<group>"; };
-		2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+LBXAlertAction.m"; sourceTree = "<group>"; };
-		2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LBXAlertAction.m"; sourceTree = "<group>"; };
-		2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+supportedInterfaceOrientations.m"; sourceTree = "<group>"; };
-		2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+LBXHierarchy.h"; sourceTree = "<group>"; };
-		2F94FC8722291813005BD461 /* LBXPermission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermission.h; sourceTree = "<group>"; };
-		2F94FC8822291813005BD461 /* LBXPermissionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionCamera.h; sourceTree = "<group>"; };
-		2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionSetting.m; sourceTree = "<group>"; };
-		2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionPhotos.m; sourceTree = "<group>"; };
-		2F94FC9322291813005BD461 /* LBXPermissionCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionCamera.m; sourceTree = "<group>"; };
-		2F94FC9422291813005BD461 /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
-		2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
-		2F94FC9622291813005BD461 /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
 		2F97CDC7252EC7D90095DDFD /* ShareUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareUtility.h; sourceTree = "<group>"; };
 		2F97CDC8252EC7D90095DDFD /* ShareUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareUtility.m; sourceTree = "<group>"; };
 		2FB28E632538183C00DDD387 /* ConversationCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConversationCell.h; sourceTree = "<group>"; };
@@ -348,16 +290,6 @@
 		9051774D2243CD8D0020A2AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9051774F2243CD9A0020A2AC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		905177512243CDA60020A2AC /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		908542792229FF160009713D /* StyleDIY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleDIY.m; sourceTree = "<group>"; };
-		9085427A2229FF160009713D /* StyleDIY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleDIY.h; sourceTree = "<group>"; };
-		9085427C222A00430009713D /* DIYScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIYScanViewController.h; sourceTree = "<group>"; };
-		9085427D222A00430009713D /* DIYScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DIYScanViewController.m; sourceTree = "<group>"; };
-		9085427F222A04C80009713D /* QQLBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQLBXScanViewController.h; sourceTree = "<group>"; };
-		90854280222A04C80009713D /* QQLBXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QQLBXScanViewController.m; sourceTree = "<group>"; };
-		90854285222A06860009713D /* CreateBarCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateBarCodeViewController.h; sourceTree = "<group>"; };
-		90854286222A06870009713D /* CreateBarCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateBarCodeViewController.m; sourceTree = "<group>"; };
-		90854289222A07280009713D /* UIImageView+CornerRadius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+CornerRadius.h"; sourceTree = "<group>"; };
-		9085428A222A07280009713D /* UIImageView+CornerRadius.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+CornerRadius.m"; sourceTree = "<group>"; };
 		909ACDAD2130473100A64FE7 /* ChatroomListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatroomListViewController.h; sourceTree = "<group>"; };
 		909ACDAE2130473100A64FE7 /* ChatroomListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatroomListViewController.m; sourceTree = "<group>"; };
 		909ACDB121304CD900A64FE7 /* ChatroomItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatroomItemCell.h; sourceTree = "<group>"; };
@@ -520,7 +452,6 @@
 				2F94FAAF24551D54007713CD /* Things */,
 				2BCBC82F23954AC4009321AD /* Moments */,
 				2F518FF0235ED77700FA3D58 /* AppService */,
-				2F94F98422291577005BD461 /* LBXScan */,
 				2FF07F4621F82E7200A78A62 /* Me */,
 				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
 				2F7268F621F7136600E05F9C /* Privacy */,
@@ -698,48 +629,6 @@
 			path = YBAttributeTextTapAction;
 			sourceTree = "<group>";
 		};
-		2F94F98422291577005BD461 /* LBXScan */ = {
-			isa = PBXGroup;
-			children = (
-				2F94FC7622291813005BD461 /* LBXAlertAction */,
-				2F94FC8222291813005BD461 /* LBXPermissions */,
-				2F94F98522291577005BD461 /* UI */,
-				2F94F99322291577005BD461 /* LBXScanTypes.m */,
-				2F94FB8722291577005BD461 /* LBXScanTypes.h */,
-				9085427A2229FF160009713D /* StyleDIY.h */,
-				908542792229FF160009713D /* StyleDIY.m */,
-				9085427C222A00430009713D /* DIYScanViewController.h */,
-				9085427D222A00430009713D /* DIYScanViewController.m */,
-				9085427F222A04C80009713D /* QQLBXScanViewController.h */,
-				90854280222A04C80009713D /* QQLBXScanViewController.m */,
-				90854285222A06860009713D /* CreateBarCodeViewController.h */,
-				90854286222A06870009713D /* CreateBarCodeViewController.m */,
-				90854288222A07280009713D /* CornerRadiusCategory */,
-				2F94FB8822291577005BD461 /* LBXNative */,
-			);
-			path = LBXScan;
-			sourceTree = "<group>";
-		};
-		2F94F98522291577005BD461 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				2F94F98622291577005BD461 /* CodeScan.bundle */,
-				2F94F98722291577005BD461 /* LBXScanView.h */,
-				2F94F98822291577005BD461 /* LBXScanNetAnimation.h */,
-				2F94F98922291577005BD461 /* LBXScanViewController.m */,
-				2F94F98A22291577005BD461 /* LBXScanViewStyle.m */,
-				2F94F98B22291577005BD461 /* LBXScanVideoZoomView.m */,
-				2F94F98C22291577005BD461 /* LBXScanLineAnimation.m */,
-				2F94F98D22291577005BD461 /* LBXScanView.m */,
-				2F94F98E22291577005BD461 /* LBXScanViewController.h */,
-				2F94F98F22291577005BD461 /* LBXScanNetAnimation.m */,
-				2F94F99022291577005BD461 /* LBXScanLineAnimation.h */,
-				2F94F99122291577005BD461 /* LBXScanVideoZoomView.h */,
-				2F94F99222291577005BD461 /* LBXScanViewStyle.h */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
 		2F94FAAF24551D54007713CD /* Things */ = {
 			isa = PBXGroup;
 			children = (
@@ -755,55 +644,6 @@
 				2F4B0EB2245C232E000A41C6 /* CreateDeviceViewController.m */,
 			);
 			path = Things;
-			sourceTree = "<group>";
-		};
-		2F94FB8822291577005BD461 /* LBXNative */ = {
-			isa = PBXGroup;
-			children = (
-				2F94FB8922291577005BD461 /* LBXScanNative.h */,
-				2F94FB8A22291577005BD461 /* LBXScanNative.m */,
-			);
-			path = LBXNative;
-			sourceTree = "<group>";
-		};
-		2F94FC7622291813005BD461 /* LBXAlertAction */ = {
-			isa = PBXGroup;
-			children = (
-				2F94FC7722291813005BD461 /* LBXAlertAction.m */,
-				2F94FC7822291813005BD461 /* LBXAlertAction.h */,
-				2F94FC7922291813005BD461 /* Class */,
-			);
-			path = LBXAlertAction;
-			sourceTree = "<group>";
-		};
-		2F94FC7922291813005BD461 /* Class */ = {
-			isa = PBXGroup;
-			children = (
-				2F94FC7A22291813005BD461 /* UIActionSheet+LBXAlertAction.h */,
-				2F94FC7B22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.h */,
-				2F94FC7C22291813005BD461 /* UIAlertView+LBXAlertAction.h */,
-				2F94FC7D22291813005BD461 /* UIWindow+LBXHierarchy.m */,
-				2F94FC7E22291813005BD461 /* UIActionSheet+LBXAlertAction.m */,
-				2F94FC7F22291813005BD461 /* UIAlertView+LBXAlertAction.m */,
-				2F94FC8022291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m */,
-				2F94FC8122291813005BD461 /* UIWindow+LBXHierarchy.h */,
-			);
-			path = Class;
-			sourceTree = "<group>";
-		};
-		2F94FC8222291813005BD461 /* LBXPermissions */ = {
-			isa = PBXGroup;
-			children = (
-				2F94FC8722291813005BD461 /* LBXPermission.h */,
-				2F94FC8822291813005BD461 /* LBXPermissionCamera.h */,
-				2F94FC8C22291813005BD461 /* LBXPermissionSetting.m */,
-				2F94FC8D22291813005BD461 /* LBXPermissionPhotos.m */,
-				2F94FC9322291813005BD461 /* LBXPermissionCamera.m */,
-				2F94FC9422291813005BD461 /* LBXPermission.m */,
-				2F94FC9522291813005BD461 /* LBXPermissionPhotos.h */,
-				2F94FC9622291813005BD461 /* LBXPermissionSetting.h */,
-			);
-			path = LBXPermissions;
 			sourceTree = "<group>";
 		};
 		2FEA5D6721F4AC8900280B23 /* Login */ = {
@@ -862,15 +702,6 @@
 				2F78FA0323371E150007C5CE /* WFChat-Prefix-Header.pch */,
 			);
 			name = SupportFiles;
-			sourceTree = "<group>";
-		};
-		90854288222A07280009713D /* CornerRadiusCategory */ = {
-			isa = PBXGroup;
-			children = (
-				90854289222A07280009713D /* UIImageView+CornerRadius.h */,
-				9085428A222A07280009713D /* UIImageView+CornerRadius.m */,
-			);
-			path = CornerRadiusCategory;
 			sourceTree = "<group>";
 		};
 		909ACDB02130477900A64FE7 /* chatroom */ = {
@@ -995,7 +826,6 @@
 				2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */,
 				2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */,
 				2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */,
-				2F94FB8B22291577005BD461 /* CodeScan.bundle in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
 				2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */,
@@ -1040,16 +870,11 @@
 			files = (
 				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
-				2F94FB8E22291577005BD461 /* LBXScanVideoZoomView.m in Sources */,
-				2F94FC7222291578005BD461 /* LBXScanNative.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
-				2F94FC9B22291813005BD461 /* UIActionSheet+LBXAlertAction.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
-				2F94FB8D22291577005BD461 /* LBXScanViewStyle.m in Sources */,
-				2F94FB9022291577005BD461 /* LBXScanView.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
@@ -1057,10 +882,7 @@
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,
 				2E1D200A1FAF0AE600F4405D /* main.m in Sources */,
-				9085427B2229FF160009713D /* StyleDIY.m in Sources */,
 				2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */,
-				2F94FB9222291577005BD461 /* LBXScanTypes.m in Sources */,
-				2F94FC9A22291813005BD461 /* UIWindow+LBXHierarchy.m in Sources */,
 				2F7268FD21F714C900E05F9C /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
 				2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */,
@@ -1073,40 +895,26 @@
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
 				2FFDDCA4255164DA00CEFDBB /* WFCFavoriteLinkCell.m in Sources */,
 				B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */,
-				2F94FC9922291813005BD461 /* LBXAlertAction.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
 				2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */,
 				2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */,
-				9085427E222A00430009713D /* DIYScanViewController.m in Sources */,
-				2F94FCA422291813005BD461 /* LBXPermissionPhotos.m in Sources */,
-				90854281222A04C80009713D /* QQLBXScanViewController.m in Sources */,
 				90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */,
-				2F94FCA722291813005BD461 /* LBXPermissionCamera.m in Sources */,
 				2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */,
-				2F94FC9C22291813005BD461 /* UIAlertView+LBXAlertAction.m in Sources */,
 				909ACDAF2130473100A64FE7 /* ChatroomListViewController.m in Sources */,
 				2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */,
-				2F94FB8C22291577005BD461 /* LBXScanViewController.m in Sources */,
 				2FC50B7C245273A700B36F8A /* PCSessionViewController.m in Sources */,
-				2F94FB8F22291577005BD461 /* LBXScanLineAnimation.m in Sources */,
-				2F94FCA322291813005BD461 /* LBXPermissionSetting.m in Sources */,
 				2F638930254E82B90084EEA6 /* WFCFavoriteTextCell.m in Sources */,
-				90854287222A06870009713D /* CreateBarCodeViewController.m in Sources */,
 				2F5527C0252CB33E00B0CDCB /* SharedConversation.m in Sources */,
 				2FF07F5921F82E7200A78A62 /* WFCAboutViewController.m in Sources */,
 				B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */,
-				2F94FCA822291813005BD461 /* LBXPermission.m in Sources */,
 				2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */,
 				2FFDDC9C255158FA00CEFDBB /* WFCFavoriteSoundCell.m in Sources */,
 				2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */,
-				2F94FC9D22291813005BD461 /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
-				2F94FB9122291577005BD461 /* LBXScanNetAnimation.m in Sources */,
 				149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */,
 				2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */,
 				2FFDDC982551545300CEFDBB /* WFCFavoriteLocationCell.m in Sources */,
 				90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
-				9085428B222A07280009713D /* UIImageView+CornerRadius.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

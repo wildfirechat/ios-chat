@@ -8,7 +8,7 @@
 
 #import "DIYScanViewController.h"
 #import "LBXAlertAction.h"
-
+#import "LBXScanTypes.h"
 
 
 @interface DIYScanViewController ()

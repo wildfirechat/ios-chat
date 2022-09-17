@@ -9,6 +9,9 @@
 #import "LBXScanViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
+#import "LBXScanTypes.h"
+#import "LBXScanView.h"
+#import "LBXScanNative.h" //原生扫码封装
 
 @interface LBXScanViewController ()
 @end

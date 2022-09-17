@@ -454,6 +454,51 @@
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
 		B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B767584928CC1AF200835A6A /* WFZConferenceInfo.m */; };
 		B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5441C28D5876700A2550F /* QQLBXScanViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543E928D5876700A2550F /* QQLBXScanViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5441D28D5876700A2550F /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7C543EB28D5876700A2550F /* CodeScan.bundle */; };
+		B7C5441E28D5876700A2550F /* LBXScanView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543EC28D5876700A2550F /* LBXScanView.h */; };
+		B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543ED28D5876700A2550F /* LBXScanNetAnimation.h */; };
+		B7C5442028D5876700A2550F /* LBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543EE28D5876700A2550F /* LBXScanViewController.m */; };
+		B7C5442128D5876700A2550F /* LBXScanViewStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543EF28D5876700A2550F /* LBXScanViewStyle.m */; };
+		B7C5442228D5876700A2550F /* LBXScanVideoZoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543F028D5876700A2550F /* LBXScanVideoZoomView.m */; };
+		B7C5442328D5876700A2550F /* LBXScanLineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543F128D5876700A2550F /* LBXScanLineAnimation.m */; };
+		B7C5442428D5876700A2550F /* LBXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543F228D5876700A2550F /* LBXScanView.m */; };
+		B7C5442528D5876700A2550F /* LBXScanViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543F328D5876700A2550F /* LBXScanViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5442628D5876700A2550F /* LBXScanNetAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543F428D5876700A2550F /* LBXScanNetAnimation.m */; };
+		B7C5442728D5876700A2550F /* LBXScanLineAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543F528D5876700A2550F /* LBXScanLineAnimation.h */; };
+		B7C5442828D5876700A2550F /* LBXScanVideoZoomView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543F628D5876700A2550F /* LBXScanVideoZoomView.h */; };
+		B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543F728D5876700A2550F /* LBXScanViewStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5442A28D5876700A2550F /* CreateBarCodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543F828D5876700A2550F /* CreateBarCodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5442B28D5876700A2550F /* StyleDIY.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543F928D5876700A2550F /* StyleDIY.m */; };
+		B7C5442C28D5876700A2550F /* LBXScanTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543FA28D5876700A2550F /* LBXScanTypes.m */; };
+		B7C5442D28D5876700A2550F /* LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C543FC28D5876700A2550F /* LBXAlertAction.m */; };
+		B7C5442E28D5876700A2550F /* LBXAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543FD28D5876700A2550F /* LBXAlertAction.h */; };
+		B7C5442F28D5876700A2550F /* UIActionSheet+LBXAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543FF28D5876700A2550F /* UIActionSheet+LBXAlertAction.h */; };
+		B7C5443028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h */; };
+		B7C5443128D5876700A2550F /* UIAlertView+LBXAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440128D5876700A2550F /* UIAlertView+LBXAlertAction.h */; };
+		B7C5443228D5876700A2550F /* UIWindow+LBXHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440228D5876700A2550F /* UIWindow+LBXHierarchy.m */; };
+		B7C5443328D5876700A2550F /* UIActionSheet+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440328D5876700A2550F /* UIActionSheet+LBXAlertAction.m */; };
+		B7C5443428D5876700A2550F /* UIAlertView+LBXAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440428D5876700A2550F /* UIAlertView+LBXAlertAction.m */; };
+		B7C5443528D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440528D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.m */; };
+		B7C5443628D5876700A2550F /* UIWindow+LBXHierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440628D5876700A2550F /* UIWindow+LBXHierarchy.h */; };
+		B7C5443728D5876700A2550F /* DIYScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440728D5876700A2550F /* DIYScanViewController.m */; };
+		B7C5443828D5876700A2550F /* UIImageView+CornerRadius.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440928D5876700A2550F /* UIImageView+CornerRadius.h */; };
+		B7C5443928D5876700A2550F /* UIImageView+CornerRadius.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440A28D5876700A2550F /* UIImageView+CornerRadius.m */; };
+		B7C5443A28D5876700A2550F /* CreateBarCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440B28D5876700A2550F /* CreateBarCodeViewController.m */; };
+		B7C5443B28D5876700A2550F /* QQLBXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5440C28D5876700A2550F /* QQLBXScanViewController.m */; };
+		B7C5443C28D5876700A2550F /* LBXScanTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440D28D5876700A2550F /* LBXScanTypes.h */; };
+		B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5440E28D5876700A2550F /* StyleDIY.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7C5443E28D5876700A2550F /* LBXScanNative.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441028D5876700A2550F /* LBXScanNative.h */; };
+		B7C5443F28D5876700A2550F /* LBXScanNative.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5441128D5876700A2550F /* LBXScanNative.m */; };
+		B7C5444028D5876700A2550F /* LBXPermission.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441328D5876700A2550F /* LBXPermission.h */; };
+		B7C5444128D5876700A2550F /* LBXPermissionCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441428D5876700A2550F /* LBXPermissionCamera.h */; };
+		B7C5444228D5876700A2550F /* LBXPermissionSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5441528D5876700A2550F /* LBXPermissionSetting.m */; };
+		B7C5444328D5876700A2550F /* LBXPermissionPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5441628D5876700A2550F /* LBXPermissionPhotos.m */; };
+		B7C5444428D5876700A2550F /* LBXPermissionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5441728D5876700A2550F /* LBXPermissionCamera.m */; };
+		B7C5444528D5876700A2550F /* LBXPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C5441828D5876700A2550F /* LBXPermission.m */; };
+		B7C5444628D5876700A2550F /* LBXPermissionPhotos.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441928D5876700A2550F /* LBXPermissionPhotos.h */; };
+		B7C5444728D5876700A2550F /* LBXPermissionSetting.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441A28D5876700A2550F /* LBXPermissionSetting.h */; };
+		B7C5444828D5876700A2550F /* DIYScanViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C5441B28D5876700A2550F /* DIYScanViewController.h */; };
 		B7CA48CC2834B8AD00CB2F71 /* WFCURichNotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */; };
 		B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */; };
 		B7D07589282756F4008A6C63 /* WFCUMultiCallOngoingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */; };
@@ -929,6 +974,51 @@
 		B75D817B2782DFE1009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B767584928CC1AF200835A6A /* WFZConferenceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfo.m; sourceTree = "<group>"; };
 		B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfo.h; sourceTree = "<group>"; };
+		B7C543E928D5876700A2550F /* QQLBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQLBXScanViewController.h; sourceTree = "<group>"; };
+		B7C543EB28D5876700A2550F /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
+		B7C543EC28D5876700A2550F /* LBXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanView.h; sourceTree = "<group>"; };
+		B7C543ED28D5876700A2550F /* LBXScanNetAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNetAnimation.h; sourceTree = "<group>"; };
+		B7C543EE28D5876700A2550F /* LBXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewController.m; sourceTree = "<group>"; };
+		B7C543EF28D5876700A2550F /* LBXScanViewStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanViewStyle.m; sourceTree = "<group>"; };
+		B7C543F028D5876700A2550F /* LBXScanVideoZoomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanVideoZoomView.m; sourceTree = "<group>"; };
+		B7C543F128D5876700A2550F /* LBXScanLineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanLineAnimation.m; sourceTree = "<group>"; };
+		B7C543F228D5876700A2550F /* LBXScanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanView.m; sourceTree = "<group>"; };
+		B7C543F328D5876700A2550F /* LBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewController.h; sourceTree = "<group>"; };
+		B7C543F428D5876700A2550F /* LBXScanNetAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNetAnimation.m; sourceTree = "<group>"; };
+		B7C543F528D5876700A2550F /* LBXScanLineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanLineAnimation.h; sourceTree = "<group>"; };
+		B7C543F628D5876700A2550F /* LBXScanVideoZoomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanVideoZoomView.h; sourceTree = "<group>"; };
+		B7C543F728D5876700A2550F /* LBXScanViewStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanViewStyle.h; sourceTree = "<group>"; };
+		B7C543F828D5876700A2550F /* CreateBarCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateBarCodeViewController.h; sourceTree = "<group>"; };
+		B7C543F928D5876700A2550F /* StyleDIY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleDIY.m; sourceTree = "<group>"; };
+		B7C543FA28D5876700A2550F /* LBXScanTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanTypes.m; sourceTree = "<group>"; };
+		B7C543FC28D5876700A2550F /* LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXAlertAction.m; sourceTree = "<group>"; };
+		B7C543FD28D5876700A2550F /* LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXAlertAction.h; sourceTree = "<group>"; };
+		B7C543FF28D5876700A2550F /* UIActionSheet+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+LBXAlertAction.h"; sourceTree = "<group>"; };
+		B7C5440028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+supportedInterfaceOrientations.h"; sourceTree = "<group>"; };
+		B7C5440128D5876700A2550F /* UIAlertView+LBXAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+LBXAlertAction.h"; sourceTree = "<group>"; };
+		B7C5440228D5876700A2550F /* UIWindow+LBXHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+LBXHierarchy.m"; sourceTree = "<group>"; };
+		B7C5440328D5876700A2550F /* UIActionSheet+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+LBXAlertAction.m"; sourceTree = "<group>"; };
+		B7C5440428D5876700A2550F /* UIAlertView+LBXAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LBXAlertAction.m"; sourceTree = "<group>"; };
+		B7C5440528D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+supportedInterfaceOrientations.m"; sourceTree = "<group>"; };
+		B7C5440628D5876700A2550F /* UIWindow+LBXHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+LBXHierarchy.h"; sourceTree = "<group>"; };
+		B7C5440728D5876700A2550F /* DIYScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DIYScanViewController.m; sourceTree = "<group>"; };
+		B7C5440928D5876700A2550F /* UIImageView+CornerRadius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+CornerRadius.h"; sourceTree = "<group>"; };
+		B7C5440A28D5876700A2550F /* UIImageView+CornerRadius.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+CornerRadius.m"; sourceTree = "<group>"; };
+		B7C5440B28D5876700A2550F /* CreateBarCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateBarCodeViewController.m; sourceTree = "<group>"; };
+		B7C5440C28D5876700A2550F /* QQLBXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QQLBXScanViewController.m; sourceTree = "<group>"; };
+		B7C5440D28D5876700A2550F /* LBXScanTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanTypes.h; sourceTree = "<group>"; };
+		B7C5440E28D5876700A2550F /* StyleDIY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleDIY.h; sourceTree = "<group>"; };
+		B7C5441028D5876700A2550F /* LBXScanNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanNative.h; sourceTree = "<group>"; };
+		B7C5441128D5876700A2550F /* LBXScanNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXScanNative.m; sourceTree = "<group>"; };
+		B7C5441328D5876700A2550F /* LBXPermission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermission.h; sourceTree = "<group>"; };
+		B7C5441428D5876700A2550F /* LBXPermissionCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionCamera.h; sourceTree = "<group>"; };
+		B7C5441528D5876700A2550F /* LBXPermissionSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionSetting.m; sourceTree = "<group>"; };
+		B7C5441628D5876700A2550F /* LBXPermissionPhotos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionPhotos.m; sourceTree = "<group>"; };
+		B7C5441728D5876700A2550F /* LBXPermissionCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermissionCamera.m; sourceTree = "<group>"; };
+		B7C5441828D5876700A2550F /* LBXPermission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBXPermission.m; sourceTree = "<group>"; };
+		B7C5441928D5876700A2550F /* LBXPermissionPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionPhotos.h; sourceTree = "<group>"; };
+		B7C5441A28D5876700A2550F /* LBXPermissionSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXPermissionSetting.h; sourceTree = "<group>"; };
+		B7C5441B28D5876700A2550F /* DIYScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIYScanViewController.h; sourceTree = "<group>"; };
 		B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCURichNotificationCell.m; sourceTree = "<group>"; };
 		B7CA48CB2834B8AD00CB2F71 /* WFCURichNotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCURichNotificationCell.h; sourceTree = "<group>"; };
 		B7D07587282756F4008A6C63 /* WFCUMultiCallOngoingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingCell.h; sourceTree = "<group>"; };
@@ -1380,6 +1470,7 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B7C543E828D5876700A2550F /* LBXScan */,
 				B7B58A672832182A0030529B /* dsbridge */,
 				2F765FA6267C28A500E3B365 /* HWCircleView */,
 				2F0BD9102537424500A7B674 /* ZLPhotoBrowser */,
@@ -2025,6 +2116,106 @@
 			path = dsbridge;
 			sourceTree = "<group>";
 		};
+		B7C543E828D5876700A2550F /* LBXScan */ = {
+			isa = PBXGroup;
+			children = (
+				B7C543E928D5876700A2550F /* QQLBXScanViewController.h */,
+				B7C543EA28D5876700A2550F /* UI */,
+				B7C543F828D5876700A2550F /* CreateBarCodeViewController.h */,
+				B7C543F928D5876700A2550F /* StyleDIY.m */,
+				B7C543FA28D5876700A2550F /* LBXScanTypes.m */,
+				B7C543FB28D5876700A2550F /* LBXAlertAction */,
+				B7C5440728D5876700A2550F /* DIYScanViewController.m */,
+				B7C5440828D5876700A2550F /* CornerRadiusCategory */,
+				B7C5440B28D5876700A2550F /* CreateBarCodeViewController.m */,
+				B7C5440C28D5876700A2550F /* QQLBXScanViewController.m */,
+				B7C5440D28D5876700A2550F /* LBXScanTypes.h */,
+				B7C5440E28D5876700A2550F /* StyleDIY.h */,
+				B7C5440F28D5876700A2550F /* LBXNative */,
+				B7C5441228D5876700A2550F /* LBXPermissions */,
+				B7C5441B28D5876700A2550F /* DIYScanViewController.h */,
+			);
+			path = LBXScan;
+			sourceTree = "<group>";
+		};
+		B7C543EA28D5876700A2550F /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B7C543EB28D5876700A2550F /* CodeScan.bundle */,
+				B7C543EC28D5876700A2550F /* LBXScanView.h */,
+				B7C543ED28D5876700A2550F /* LBXScanNetAnimation.h */,
+				B7C543EE28D5876700A2550F /* LBXScanViewController.m */,
+				B7C543EF28D5876700A2550F /* LBXScanViewStyle.m */,
+				B7C543F028D5876700A2550F /* LBXScanVideoZoomView.m */,
+				B7C543F128D5876700A2550F /* LBXScanLineAnimation.m */,
+				B7C543F228D5876700A2550F /* LBXScanView.m */,
+				B7C543F328D5876700A2550F /* LBXScanViewController.h */,
+				B7C543F428D5876700A2550F /* LBXScanNetAnimation.m */,
+				B7C543F528D5876700A2550F /* LBXScanLineAnimation.h */,
+				B7C543F628D5876700A2550F /* LBXScanVideoZoomView.h */,
+				B7C543F728D5876700A2550F /* LBXScanViewStyle.h */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		B7C543FB28D5876700A2550F /* LBXAlertAction */ = {
+			isa = PBXGroup;
+			children = (
+				B7C543FC28D5876700A2550F /* LBXAlertAction.m */,
+				B7C543FD28D5876700A2550F /* LBXAlertAction.h */,
+				B7C543FE28D5876700A2550F /* Class */,
+			);
+			path = LBXAlertAction;
+			sourceTree = "<group>";
+		};
+		B7C543FE28D5876700A2550F /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				B7C543FF28D5876700A2550F /* UIActionSheet+LBXAlertAction.h */,
+				B7C5440028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h */,
+				B7C5440128D5876700A2550F /* UIAlertView+LBXAlertAction.h */,
+				B7C5440228D5876700A2550F /* UIWindow+LBXHierarchy.m */,
+				B7C5440328D5876700A2550F /* UIActionSheet+LBXAlertAction.m */,
+				B7C5440428D5876700A2550F /* UIAlertView+LBXAlertAction.m */,
+				B7C5440528D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.m */,
+				B7C5440628D5876700A2550F /* UIWindow+LBXHierarchy.h */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		B7C5440828D5876700A2550F /* CornerRadiusCategory */ = {
+			isa = PBXGroup;
+			children = (
+				B7C5440928D5876700A2550F /* UIImageView+CornerRadius.h */,
+				B7C5440A28D5876700A2550F /* UIImageView+CornerRadius.m */,
+			);
+			path = CornerRadiusCategory;
+			sourceTree = "<group>";
+		};
+		B7C5440F28D5876700A2550F /* LBXNative */ = {
+			isa = PBXGroup;
+			children = (
+				B7C5441028D5876700A2550F /* LBXScanNative.h */,
+				B7C5441128D5876700A2550F /* LBXScanNative.m */,
+			);
+			path = LBXNative;
+			sourceTree = "<group>";
+		};
+		B7C5441228D5876700A2550F /* LBXPermissions */ = {
+			isa = PBXGroup;
+			children = (
+				B7C5441328D5876700A2550F /* LBXPermission.h */,
+				B7C5441428D5876700A2550F /* LBXPermissionCamera.h */,
+				B7C5441528D5876700A2550F /* LBXPermissionSetting.m */,
+				B7C5441628D5876700A2550F /* LBXPermissionPhotos.m */,
+				B7C5441728D5876700A2550F /* LBXPermissionCamera.m */,
+				B7C5441828D5876700A2550F /* LBXPermission.m */,
+				B7C5441928D5876700A2550F /* LBXPermissionPhotos.h */,
+				B7C5441A28D5876700A2550F /* LBXPermissionSetting.h */,
+			);
+			path = LBXPermissions;
+			sourceTree = "<group>";
+		};
 		B7D07586282756B5008A6C63 /* Voip */ = {
 			isa = PBXGroup;
 			children = (
@@ -2070,22 +2261,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
+				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
+				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
 				B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */,
 				B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */,
 				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
+				B7C5442528D5876700A2550F /* LBXScanViewController.h in Headers */,
 				B7D584DE28CF0EC4009D09AF /* WFZStartConferenceViewController.h in Headers */,
 				2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */,
 				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
+				B7C5441C28D5876700A2550F /* QQLBXScanViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
 				2BBC9CF5255CED1F007DA28A /* WFCUFilesEntryViewController.h in Headers */,
 				2F5510E4217F5CC200F56C26 /* WFCULocationPoint.h in Headers */,
 				2F5510E6217F5CC200F56C26 /* WFCULocationViewController.h in Headers */,
 				2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */,
+				B7C5442A28D5876700A2550F /* CreateBarCodeViewController.h in Headers */,
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
 				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
@@ -2100,7 +2296,9 @@
 				B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */,
+				B7C5442728D5876700A2550F /* LBXScanLineAnimation.h in Headers */,
 				2BEF789F23F6A84D000DE285 /* WFCUMultiVideoViewController.h in Headers */,
+				B7C5444828D5876700A2550F /* DIYScanViewController.h in Headers */,
 				2F5EB44822C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.h in Headers */,
 				2FBDAB9125DA41FD00FEF2C3 /* WFCUConferenceManager.h in Headers */,
 				1450EA912439679500BF51FC /* WFCUSelectedUserInfo.h in Headers */,
@@ -2119,9 +2317,13 @@
 				2BDF57B724AD70C8003C1F08 /* DNFullImageButton.h in Headers */,
 				2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */,
 				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
+				B7C5442E28D5876700A2550F /* LBXAlertAction.h in Headers */,
+				B7C5443C28D5876700A2550F /* LBXScanTypes.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */,
 				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
+				B7C5441E28D5876700A2550F /* LBXScanView.h in Headers */,
+				B7C5443028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h in Headers */,
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
 				2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */,
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
@@ -2162,11 +2364,13 @@
 				2F55110B217F5CC200F56C26 /* VideoPlayerSampleViewController.h in Headers */,
 				2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */,
 				B72FBB15283230F0005F2745 /* dsbridge.h in Headers */,
+				B7C5442828D5876700A2550F /* LBXScanVideoZoomView.h in Headers */,
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
 				2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */,
 				B707759928823635004034A5 /* WFCUImage.h in Headers */,
+				B7C5443828D5876700A2550F /* UIImageView+CornerRadius.h in Headers */,
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F55120F217F5CC300F56C26 /* WFCUContactTableViewCell.h in Headers */,
 				2F55120E217F5CC300F56C26 /* WFCUNewFriendTableViewCell.h in Headers */,
@@ -2208,14 +2412,17 @@
 				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
 				2F5510FD217F5CC200F56C26 /* CCHMapClusterController.h in Headers */,
 				2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */,
+				B7C5444028D5876700A2550F /* LBXPermission.h in Headers */,
 				2F5510AF217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.h in Headers */,
 				2F5511EB217F5CC300F56C26 /* WFCUShareMessageView.h in Headers */,
 				2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */,
+				B7C5444728D5876700A2550F /* LBXPermissionSetting.h in Headers */,
 				2B14FC8F25C23D3600684B91 /* WFCUPinyinUtility.h in Headers */,
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
 				B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
+				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
@@ -2227,6 +2434,7 @@
 				2F5510CA217F5CC200F56C26 /* WFCUPluginBoardView.h in Headers */,
 				2F5510FF217F5CC200F56C26 /* CCHMapTree.h in Headers */,
 				2BEF78A323F6A84D000DE285 /* WFCUFloatingWindow.h in Headers */,
+				B7C5444628D5876700A2550F /* LBXPermissionPhotos.h in Headers */,
 				2F5510A2217F5CC200F56C26 /* WFCUVoiceCell.h in Headers */,
 				2F5EB43C22C2E21A00BC8C90 /* GroupManageTableViewController.h in Headers */,
 				2F551210217F5CC300F56C26 /* WFCUContactSelectTableViewCell.h in Headers */,
@@ -2282,10 +2490,12 @@
 				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
 				2BDF579724AD70C8003C1F08 /* DNAlbum.h in Headers */,
+				B7C5443128D5876700A2550F /* UIAlertView+LBXAlertAction.h in Headers */,
 				2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */,
 				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
 				2BDF57B424AD70C8003C1F08 /* DNAssetsViewCell.h in Headers */,
 				2BDF57AA24AD70C8003C1F08 /* DNUnAuthorizedTipsView.h in Headers */,
+				B7C5443628D5876700A2550F /* UIWindow+LBXHierarchy.h in Headers */,
 				2F5510FB217F5CC200F56C26 /* CCHMapClusterControllerDelegate.h in Headers */,
 				2F5510FC217F5CC200F56C26 /* CCHMapTreeUtils.h in Headers */,
 				2F341A53235EF30B00F0D1B6 /* WFCUGroupAnnouncementViewController.h in Headers */,
@@ -2296,7 +2506,9 @@
 				2F551162217F5CC200F56C26 /* KxMenu.h in Headers */,
 				1450EA8D243960C600BF51FC /* WFCUSelectedUserTableViewCell.h in Headers */,
 				2F55110F217F5CC200F56C26 /* FullScreenViewController.h in Headers */,
+				B7C5442F28D5876700A2550F /* UIActionSheet+LBXAlertAction.h in Headers */,
 				14349FA624362A6600FE38B3 /* WFCUSeletedUserViewController.h in Headers */,
+				B7C5444128D5876700A2550F /* LBXPermissionCamera.h in Headers */,
 				2F55116F217F5CC200F56C26 /* AFHTTPSessionManager.h in Headers */,
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
 				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
@@ -2304,6 +2516,7 @@
 				2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */,
 				2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */,
 				2F55110C217F5CC200F56C26 /* FullScreenView.h in Headers */,
+				B7C5443E28D5876700A2550F /* LBXScanNative.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2370,6 +2583,7 @@
 				B707758F2881ABB1004034A5 /* WFCUShareMessageView.xib in Resources */,
 				B70775902881ABB1004034A5 /* Stickers.bundle in Resources */,
 				B70775912881ABB1004034A5 /* Emoj.plist in Resources */,
+				B7C5441D28D5876700A2550F /* CodeScan.bundle in Resources */,
 				B70775922881ABB1004034A5 /* wfc.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2405,6 +2619,7 @@
 				2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */,
 				2BBC9CF6255CED1F007DA28A /* WFCUFilesEntryViewController.m in Sources */,
 				2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */,
+				B7C5444228D5876700A2550F /* LBXPermissionSetting.m in Sources */,
 				2F5510B8217F5CC200F56C26 /* WFCUImagePreviewViewController.m in Sources */,
 				2F5510C6217F5CC200F56C26 /* WFCUFavGroupTableViewController.m in Sources */,
 				2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */,
@@ -2418,18 +2633,23 @@
 				2F551199217F5CC200F56C26 /* UITextView+Placeholder.m in Sources */,
 				2B07FBE2247562D90035C4DF /* WFCUReceiptViewController.m in Sources */,
 				2F5510B6217F5CC200F56C26 /* WFCUProfileTableViewController.m in Sources */,
+				B7C5444528D5876700A2550F /* LBXPermission.m in Sources */,
 				2F551198217F5CC200F56C26 /* SDRefreshView.m in Sources */,
 				2F551157217F5CC200F56C26 /* KZVideoSupport.m in Sources */,
+				B7C5442128D5876700A2550F /* LBXScanViewStyle.m in Sources */,
 				B7D584DC28CF0EC4009D09AF /* WFZOrderConferenceViewController.m in Sources */,
 				2F5EB44122C2E6BB00BC8C90 /* ManagerTableViewController.m in Sources */,
 				1450EA922439679500BF51FC /* WFCUSelectedUserInfo.m in Sources */,
 				2F5510F1217F5CC200F56C26 /* CCHMapClusterController.m in Sources */,
 				2F551213217F5CC300F56C26 /* WFCUAddFriendViewController.m in Sources */,
 				2F55110D217F5CC200F56C26 /* AirplayActiveView.m in Sources */,
+				B7C5443A28D5876700A2550F /* CreateBarCodeViewController.m in Sources */,
 				2F5511D3217F5CC300F56C26 /* TYAlertScaleFadeAnimation.m in Sources */,
+				B7C5443228D5876700A2550F /* UIWindow+LBXHierarchy.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
 				2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */,
 				2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */,
+				B7C5443328D5876700A2550F /* UIActionSheet+LBXAlertAction.m in Sources */,
 				2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */,
 				2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */,
 				2F55121B217F5CC300F56C26 /* WFCUMessageSettingViewController.m in Sources */,
@@ -2457,6 +2677,8 @@
 				2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */,
 				B7FB0D842897734300625747 /* WFCUFileVideoSource.m in Sources */,
 				2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */,
+				B7C5443B28D5876700A2550F /* QQLBXScanViewController.m in Sources */,
+				B7C5443728D5876700A2550F /* DIYScanViewController.m in Sources */,
 				2BDF57B824AD70C8003C1F08 /* DNSendButton.m in Sources */,
 				2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */,
 				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
@@ -2487,7 +2709,10 @@
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
 				2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */,
+				B7C5443428D5876700A2550F /* UIAlertView+LBXAlertAction.m in Sources */,
+				B7C5443928D5876700A2550F /* UIImageView+CornerRadius.m in Sources */,
 				2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */,
+				B7C5442C28D5876700A2550F /* LBXScanTypes.m in Sources */,
 				2F5511D9217F5CC300F56C26 /* TYAlertDropDownAnimation.m in Sources */,
 				2F5EB44522C2EE1900BC8C90 /* GroupMuteTableViewController.m in Sources */,
 				2F55116B217F5CC200F56C26 /* AFURLRequestSerialization.m in Sources */,
@@ -2522,12 +2747,14 @@
 				2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */,
 				2F551194217F5CC200F56C26 /* UIView+SDExtension.m in Sources */,
 				2B14FC9025C23D3600684B91 /* WFCUPinyinUtility.m in Sources */,
+				B7C5442D28D5876700A2550F /* LBXAlertAction.m in Sources */,
 				2F5510BA217F5CC200F56C26 /* WFCUGroupMemberTableViewController.m in Sources */,
 				2F3A6C1D219EE941009A8B4B /* WFCUStickerItem.m in Sources */,
 				2BDF579524AD70C8003C1F08 /* DNAsset.m in Sources */,
 				2F56F6CF252AAF5F00B829C4 /* WFCUCompositeImageCell.m in Sources */,
 				2BDF57A724AD70C8003C1F08 /* DNPhotoBrowser.m in Sources */,
 				2F5511DD217F5CC300F56C26 /* TYBaseAnimation.m in Sources */,
+				B7C5442628D5876700A2550F /* LBXScanNetAnimation.m in Sources */,
 				2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */,
 				B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */,
 				2F5510A6217F5CC200F56C26 /* WFCUStickerCell.m in Sources */,
@@ -2541,6 +2768,7 @@
 				2F551124217F5CC200F56C26 /* FullScreenViewController.m in Sources */,
 				2F5510E5217F5CC200F56C26 /* WFCUPluginItemView.m in Sources */,
 				2F1439F6217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.m in Sources */,
+				B7C5444428D5876700A2550F /* LBXPermissionCamera.m in Sources */,
 				2F55122B217F5CC300F56C26 /* WFCUMediaMessageDownloader.m in Sources */,
 				2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */,
 				2F55115D217F5CC200F56C26 /* SDBrowserImageView.m in Sources */,
@@ -2550,6 +2778,7 @@
 				B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */,
 				2F55118D217F5CC200F56C26 /* MBProgressHUD.m in Sources */,
 				2F55122C217F5CC300F56C26 /* WFCUUtilities.m in Sources */,
+				B7C5443528D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.m in Sources */,
 				2F5511CE217F5CC300F56C26 /* TYAlertView.m in Sources */,
 				2FD550F72442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.m in Sources */,
 				B7D584E028CF0EC4009D09AF /* WFZStartConferenceViewController.m in Sources */,
@@ -2557,6 +2786,7 @@
 				2F551220217F5CC300F56C26 /* WFCUMyProfileTableViewController.m in Sources */,
 				1450EA81243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.m in Sources */,
 				2BEF78A423F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.m in Sources */,
+				B7C5442228D5876700A2550F /* LBXScanVideoZoomView.m in Sources */,
 				2F55120C217F5CC300F56C26 /* WFCUContactTableViewCell.m in Sources */,
 				2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */,
 				2F55116E217F5CC200F56C26 /* AFSecurityPolicy.m in Sources */,
@@ -2569,6 +2799,7 @@
 				B733DFF428D4071F0094AD74 /* WFCUConferenceHistory.m in Sources */,
 				2F341A54235EF30B00F0D1B6 /* WFCUGroupAnnouncementViewController.m in Sources */,
 				2F551212217F5CC300F56C26 /* WFCUContactListViewController.m in Sources */,
+				B7C5442028D5876700A2550F /* LBXScanViewController.m in Sources */,
 				2F5511D6217F5CC300F56C26 /* TYAlertController+TransitionAnimate.m in Sources */,
 				2F5511D2217F5CC300F56C26 /* UIView+TYAlertView.m in Sources */,
 				2F5511E7217F5CC300F56C26 /* WFCUForwardMessageCell.m in Sources */,
@@ -2586,11 +2817,15 @@
 				9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */,
 				2F55121C217F5CC300F56C26 /* WFCUModifyMyProfileViewController.m in Sources */,
 				2F5510F7217F5CC200F56C26 /* CCHMapClusterAnnotation.m in Sources */,
+				B7C5443F28D5876700A2550F /* LBXScanNative.m in Sources */,
 				B72FBB18283230F0005F2745 /* InternalApis.m in Sources */,
 				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
+				B7C5442328D5876700A2550F /* LBXScanLineAnimation.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,
 				2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */,
 				2F5511FB217F5CC300F56C26 /* WFCUSwitchTableViewCell.m in Sources */,
+				B7C5442428D5876700A2550F /* LBXScanView.m in Sources */,
+				B7C5442B28D5876700A2550F /* StyleDIY.m in Sources */,
 				2BDF57AE24AD70C8003C1F08 /* DNBadgeLabel.m in Sources */,
 				2F5511DF217F5CC300F56C26 /* TYAlertController.m in Sources */,
 				2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */,
@@ -2598,6 +2833,7 @@
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
+				B7C5444328D5876700A2550F /* LBXPermissionPhotos.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,
 				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,

@@ -13,6 +13,9 @@
 #import "LBXPermissionSetting.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "LBXAlertAction.h"
+#import "LBXScanTypes.h"
+#import "LBXScanNative.h"
 
 @interface QQLBXScanViewController ()
 @property (nonatomic, strong) LBXScanVideoZoomView *zoomView;

@@ -6,9 +6,9 @@
 //  Copyright © 2015年 lbxia. All rights reserved.
 //
 
-#import "LBXAlertAction.h"
 #import "LBXScanViewController.h"
 
+@class LBXAlertAction;
 #pragma mark -模仿qq界面
 //继承LBXScanViewController,在界面上绘制想要的按钮，提示语等
 @interface QQLBXScanViewController : LBXScanViewController
