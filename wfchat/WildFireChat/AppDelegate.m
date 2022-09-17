@@ -35,6 +35,7 @@
 #if USE_CALL_KIT
 #import "WFCCallKitManager.h"
 #endif
+#import "MBProgressHUD.h"
 
 
 
@@ -630,8 +631,62 @@
         vc2.modalPresentationStyle = UIModalPresentationFullScreen;
         [navigator presentViewController:vc2 animated:YES completion:nil];
         return YES;
+    } else if ([str rangeOfString:@"wildfirechat://conference" options:NSCaseInsensitiveSearch].location == 0) {
+//        str = @"wildfirechat://conference/conferenceid?password=123456";
+        NSURL *URL = [NSURL URLWithString:str];
+        
+        NSString *conferenceId = [URL lastPathComponent];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+        NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:str];
+        [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [params setObject:obj.value forKey:obj.name];
+        }];
+        NSString *password = params[@"password"];
+        
+        
+        __weak typeof(self)ws = self;
+        __block MBProgressHUD *hud = [self startProgress:@"开启会议中" inView:navigator.view];
+        if ([WFAVEngineKit sharedEngineKit].supportConference) {
+            [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:conferenceId password:password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
+                [ws stopProgress:hud inView:navigator.view finishText:nil];
+                WFZConferenceInfoViewController *vc = [[WFZConferenceInfoViewController alloc] init];
+                vc.conferenceId = conferenceInfo.conferenceId;
+                vc.password = conferenceInfo.password;
+                
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [navigator presentViewController:nav animated:YES completion:nil];
+            } error:^(int errorCode, NSString * _Nonnull message) {
+                if (errorCode == 16) {
+                    [ws stopProgress:hud inView:navigator.view finishText:@"会议已结束！"];
+                } else {
+                    [ws stopProgress:hud inView:navigator.view finishText:@"网络错误"];
+                }
+            }];
+        } else {
+            [ws stopProgress:hud inView:navigator.view finishText:@"不支持会议"];
+        }
+        return YES;
     }
     return NO;
+}
+- (MBProgressHUD *)startProgress:(NSString *)text inView:(UIView *)view {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    hud.label.text = text;
+    [hud showAnimated:YES];
+    return hud;
+}
+
+- (MBProgressHUD *)stopProgress:(MBProgressHUD *)hud inView:(UIView *)view finishText:(NSString *)text {
+    [hud hideAnimated:YES];
+    if(text) {
+        hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = text;
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
+    }
+    return hud;
 }
 
 #if WFCU_SUPPORT_VOIP
