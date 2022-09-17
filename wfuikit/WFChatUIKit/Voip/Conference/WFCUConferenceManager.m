@@ -163,11 +163,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
     return ret;
 }
 
+//链接格式 @"wildfirechat://conference/conferenceid?password=123456";
+//如果修改，需要对应修改appdelegate里的openUrl的地址
 - (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password {
     if(password.length) {
-        return [NSString stringWithFormat:@"wfzoom://conference?id=%@&pwd=%@", conferenceId, password];
+        return [NSString stringWithFormat:@"wildfirechat://conference/%@?pwd=%@", conferenceId, password];
     } else {
-        return [NSString stringWithFormat:@"wfzoom://conference?id=%@", conferenceId];
+        return [NSString stringWithFormat:@"wildfirechat://conference/%@", conferenceId];
     }
 }
 @end

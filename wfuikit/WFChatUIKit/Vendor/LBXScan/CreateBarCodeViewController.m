@@ -44,7 +44,7 @@
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    
+
     __weak typeof(self) ws = self;
     if (self.qrType == QRType_User) {
         self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@", self.target];
@@ -68,6 +68,9 @@
         }];
         
         self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.target refresh:NO];
+    } else if(self.qrType == QRType_Conference) {
+        self.qrStr = self.conferenceUrl;
+        self.labelStr = self.conferenceTitle;
     }
 }
 

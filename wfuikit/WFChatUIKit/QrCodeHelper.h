@@ -16,6 +16,7 @@
 #define QRType_Channel 2
 #define QRType_Chatroom 3
 #define QRType_PC_Session 4
+#define QRType_Conference 5
 
 @protocol QrCodeDelegate <NSObject>
 - (void)showQrCodeViewController:(UINavigationController *)navigator type:(int)type target:(NSString *)target;
