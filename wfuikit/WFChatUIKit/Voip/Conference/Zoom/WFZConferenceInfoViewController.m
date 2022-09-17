@@ -16,6 +16,9 @@
 #import "WFCUConferenceViewController.h"
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUImage.h"
+#import "CreateBarCodeViewController.h"
+#import "WFCUConferenceManager.h"
+#import "QrCodeHelper.h"
 
 @interface WFZConferenceInfoViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -248,9 +251,11 @@
 }
 
 - (void)showConferenceQrCode {
-//    CreateBarCodeViewController *vc = [CreateBarCodeViewController new];
-//    vc.string = [[WFCUConferenceManager sharedInstance] linkFromConferenceId:self.conferenceInfo.conferenceId password:self.conferenceInfo.password];
-//    [self.navigationController pushViewController:vc animated:YES];
+    CreateBarCodeViewController *vc = [CreateBarCodeViewController new];
+    vc.conferenceUrl = [[WFCUConferenceManager sharedInstance] linkFromConferenceId:self.conferenceInfo.conferenceId password:self.conferenceInfo.password];
+    vc.conferenceTitle = self.conferenceInfo.conferenceTitle;
+    vc.qrType = QRType_Conference;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
