@@ -35,6 +35,7 @@
     ,UICollectionViewDataSource
     ,UICollectionViewDelegate
     ,WFCUConferenceManagerDelegate
+    ,UITableViewDataSource
 >
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UIImageView *bigVideoPortraitView;
@@ -54,7 +55,6 @@
 @property (nonatomic, strong) UIButton *screenSharingButton;
 @property (nonatomic, strong) UIButton *informationButton;
 
-@property (nonatomic, strong) UIButton *chatButton;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -84,6 +84,11 @@
 
 @property(nonatomic, strong)NSTimer *hidePanelTimer;
 
+
+@property (nonatomic, strong)UITableView *messageTableView;
+@property (nonatomic, strong)NSMutableArray<WFCCMessage *> *messages;
+@property (nonatomic, strong)NSTimer *removeOldMessageTimer;
+@property (nonatomic, strong)UIButton *chatButton;
 @property(nonatomic, strong)UIView *inputContainer;
 @property(nonatomic, strong)UITextField *inputTextField;
 
@@ -228,7 +233,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
-    
+    self.messages = [[NSMutableArray alloc] init];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
     
@@ -384,6 +389,32 @@
     return _chatButton;
 }
 
+- (UITableView *)messageTableView {
+    if(!_messageTableView) {
+        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68-200, 200, 200)];
+        _messageTableView.dataSource = self;
+        _messageTableView.backgroundColor = [UIColor clearColor];
+        _messageTableView.rowHeight = UITableViewAutomaticDimension;
+        _messageTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _messageTableView.showsVerticalScrollIndicator = NO;
+        _messageTableView.allowsSelection = NO;
+        
+        if (@available(iOS 10.0, *)) {
+            __weak typeof(self)ws = self;
+            self.removeOldMessageTimer = [NSTimer scheduledTimerWithTimeInterval:3 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                [ws removeOldMessageAndShow];
+            }];
+            [self.removeOldMessageTimer fire];
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        [self.view addSubview:_messageTableView];
+        
+    }
+    return _messageTableView;
+}
+
 - (UIButton *)switchCameraButton {
     if (!_switchCameraButton) {
         _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
@@ -485,17 +516,54 @@
 - (void)onReceiveMessages:(NSNotification *)notification {
     if (!self.failureJoinChatroom) {
         NSArray<WFCCMessage *> *messages = notification.object;
-        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if(obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
-                [self append:obj];
-            }
-        }];
+        [self append:messages];
     }
 }
 
-- (void)append:(WFCCMessage *)message {
+- (void)append:(NSArray<WFCCMessage *> *)messages {
+    [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
+            [self.messages addObject:obj];
+        }
+    }];
     
+    if(!self.messages.count) {
+        return;
+    }
+    
+    NSMutableArray *expired = [[NSMutableArray alloc] init];
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970]*1000;
+    [self.messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(now - obj.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime > 30000) {
+            [expired addObject:obj];
+        }
+    }];
+    [self.messages removeObjectsInArray:expired];
+    [self.messageTableView reloadData];
+    if(self.messages.count) {
+        [self.messageTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
+
+- (void)removeOldMessageAndShow {
+    if(!self.messages.count) {
+        return;
+    }
+    
+    NSMutableArray *expiredMsgs = [[NSMutableArray alloc] init];
+    NSMutableArray *expiredItems = [[NSMutableArray alloc] init];
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970]*1000;
+    for (int i = 0; i < self.messages.count; i++) {
+        WFCCMessage *obj = self.messages[i];
+        if(now - obj.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime > 30000) {
+            [expiredMsgs addObject:obj];
+            [expiredItems addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+        }
+    }
+    [self.messages removeObjectsInArray:expiredMsgs];
+    [self.messageTableView deleteRowsAtIndexPaths:expiredItems withRowAnimation:UITableViewRowAnimationFade];
+}
+
 
 - (void)sendTextMessage:(NSString *)text {
     if (!self.failureJoinChatroom) {
@@ -505,13 +573,13 @@
             
         }];
         
-        [self append:msg];
+        [self append:@[msg]];
     }
 }
 - (UIView *)inputContainer {
     if(!_inputContainer) {
         CGRect bound = self.view.bounds;
-        _inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, bound.size.height, bound.size.width, 40)];
+        _inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 + 24, bound.size.width, 40)];
         _inputContainer.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3];
         _inputContainer.hidden = YES;
         [self.view addSubview:_inputContainer];
@@ -530,14 +598,25 @@
     return _inputTextField;
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    self.inputTextField.returnKeyType = UIReturnKeyDone;
+    return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *str = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if(str.length) {
-        self.inputTextField.returnKeyType = UIReturnKeySend;
+        if(self.inputTextField.returnKeyType != UIReturnKeySend) {
+            self.inputTextField.returnKeyType = UIReturnKeySend;
+            [textField reloadInputViews];
+        }
     } else {
-        self.inputTextField.returnKeyType = UIReturnKeyDone;
+        if(self.inputTextField.returnKeyType != UIReturnKeyDone) {
+            self.inputTextField.returnKeyType = UIReturnKeyDone;
+            [textField reloadInputViews];
+        }
     }
-    [textField reloadInputViews];
+    
     return YES;
 }
 
@@ -1124,11 +1203,13 @@
     NSDictionary *userInfo = [notification userInfo];
     NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [value CGRectValue];
-    int height = keyboardRect.size.height + kTabbarSafeBottomMargin;
     
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     
     CGRect frame = self.inputContainer.frame;
+    frame.origin.y = self.view.bounds.size.height;
+    self.inputContainer.frame = frame;
+    
     frame.origin.y = keyboardRect.origin.y - frame.size.height;
     [UIView animateWithDuration:duration animations:^{
         self.inputContainer.frame = frame;
@@ -1141,11 +1222,12 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
 
     CGRect frame = self.inputContainer.frame;
-    frame.origin.y = self.view.bounds.size.height;
+    frame.origin.y = self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 + 20;
     [UIView animateWithDuration:duration animations:^{
         self.inputContainer.frame = frame;
-    } completion:^(BOOL finished) {
         self.inputContainer.hidden = YES;
+    } completion:^(BOOL finished) {
+        
     }];
 }
 
@@ -1258,6 +1340,7 @@
             self.screenSharingButton.hidden = NO;
             if(!self.failureJoinChatroom) {
                 self.chatButton.hidden = NO;
+                self.messageTableView.hidden = NO;
             }
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
@@ -1827,5 +1910,32 @@
         [self presentViewController:alertController animated:YES completion:nil];
     }
 }
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.messages.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    WFCCMessage *msg = self.messages[indexPath.row];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell3"];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell3"];
+        cell.textLabel.font = [UIFont systemFontOfSize:12];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.numberOfLines = 0;
+    }
+    
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
+    NSString *name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+    
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:name attributes:@{NSForegroundColorAttributeName : [UIColor orangeColor]}];
+    [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@":%@", [msg.content digest:msg]] attributes:@{NSForegroundColorAttributeName : [UIColor grayColor]}]];
+    
+    cell.textLabel.attributedText = attStr;
+    
+    return cell;
+}
+
+
 @end
 #endif
