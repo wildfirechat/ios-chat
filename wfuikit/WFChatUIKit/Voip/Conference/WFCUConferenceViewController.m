@@ -49,7 +49,6 @@
 @property (nonatomic, strong) UIButton *audioButton;
 @property (nonatomic, strong) UIButton *speakerButton;
 @property (nonatomic, strong) UIButton *videoButton;
-@property (nonatomic, strong) UIButton *scalingButton;
 @property (nonatomic, strong) UIButton *minimizeButton;
 @property (nonatomic, strong) UIButton *managerButton;
 @property (nonatomic, strong) UIButton *screenSharingButton;
@@ -81,6 +80,7 @@
 @property (nonatomic, strong)WFAVParticipantProfile *focusUser;
 
 @property(nonatomic, strong)UIView *bottomBarView;
+@property(nonatomic, strong)UIView *topBarView;
 
 @property(nonatomic, strong)NSTimer *hidePanelTimer;
 
@@ -309,14 +309,8 @@
     self.stateLabel.textColor = [UIColor whiteColor];
     [self.view addSubview:self.stateLabel];
     
-    self.connectTimeLabel = [[UILabel alloc] init];
-    self.connectTimeLabel.font = [UIFont systemFontOfSize:16];
-    self.connectTimeLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:self.connectTimeLabel];
-    
-    
-    
-    [self updateTopViewFrame];
+
+    [self updatePortraitAndStateViewFrame];
     self.bottomBarView.hidden = NO;
     
     
@@ -356,24 +350,31 @@
         
         _minimizeButton.backgroundColor = [UIColor clearColor];
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _minimizeButton.hidden = YES;
-        [self.view addSubview:_minimizeButton];
+        [self.topBarView addSubview:_minimizeButton];
     }
     return _minimizeButton;
 }
 
 - (UIButton *)informationButton {
     if(!_informationButton) {
-        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 15, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
+        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 9, 20+kStatusBarAndNavigationBarHeight-64, 18, 18)];
         [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
         _informationButton.backgroundColor = [UIColor clearColor];
         [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _informationButton.hidden = YES;
-        [self.view addSubview:_informationButton];
+        [self.topBarView addSubview:_informationButton];
     }
     return _informationButton;
 }
-
+- (UILabel *)connectTimeLabel {
+    if(!_connectTimeLabel) {
+        _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 60, 20+kStatusBarAndNavigationBarHeight-64 + 22, 120, 16)];
+        _connectTimeLabel.textAlignment = NSTextAlignmentCenter;
+        _connectTimeLabel.font = [UIFont systemFontOfSize:14];
+        _connectTimeLabel.textColor = [UIColor whiteColor];
+        [self.topBarView addSubview:self.connectTimeLabel];
+    }
+    return _connectTimeLabel;
+}
 - (UIButton *)chatButton {
     if(!_chatButton) {
         _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(8, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68, 80, 20)];
@@ -424,21 +425,9 @@
         _switchCameraButton.backgroundColor = [UIColor clearColor];
         [_switchCameraButton addTarget:self action:@selector(switchCameraButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _switchCameraButton.hidden = YES;
-        [self.view addSubview:_switchCameraButton];
+        [self.topBarView addSubview:_switchCameraButton];
     }
     return _switchCameraButton;
-}
-
-- (UIButton *)scalingButton {
-    if (!_scalingButton) {
-        _scalingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-ButtonSize/2, self.view.frame.size.height-10-ButtonSize, ButtonSize, ButtonSize)];
-        [_scalingButton setTitle:WFCString(@"Scale") forState:UIControlStateNormal];
-        _scalingButton.backgroundColor = [UIColor greenColor];
-        [_scalingButton addTarget:self action:@selector(scalingButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        _scalingButton.hidden = YES;
-        [self.view addSubview:_scalingButton];
-    }
-    return _scalingButton;
 }
 
 - (UIButton *)createBarButtom:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName select:(SEL)selector frame:(CGRect)frame {
@@ -457,11 +446,19 @@
     return btn;
 }
 
+- (UIView *)topBarView {
+    if(!_topBarView) {
+        CGFloat topViewHeigh = 26+kStatusBarAndNavigationBarHeight-64 + 40;
+        _topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -topViewHeigh, self.view.bounds.size.width, topViewHeigh)];
+        _topBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        [self.view addSubview:_topBarView];
+    }
+    return _topBarView;
+}
+
 - (UIView *)bottomBarView {
     if(!_bottomBarView) {
-        _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT)];
-        _bottomBarView.layer.masksToBounds = YES;
-        _bottomBarView.layer.cornerRadius = BOTTOM_BAR_HEIGHT/2;
+        _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin)];
         _bottomBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
         CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
         
@@ -674,6 +671,11 @@
 
 - (void)updateConnectedTimeLabel {
     long sec = [[NSDate date] timeIntervalSince1970] - self.currentSession.connectedTime / 1000;
+    if(sec <= 0) {
+        self.connectTimeLabel.hidden = YES;
+    } else {
+        self.connectTimeLabel.hidden = NO;
+    }
     if (sec < 60 * 60) {
         self.connectTimeLabel.text = [NSString stringWithFormat:@"%02ld:%02ld", sec / 60, sec % 60];
     } else {
@@ -977,19 +979,6 @@
     }
 }
 
-- (void)scalingButtonDidTap:(UIButton *)button {
-//    if (self.currentSession.state != kWFAVEngineStateIdle) {
-//        if (self.scalingType < kWFAVVideoScalingTypeAspectBalanced) {
-//            self.scalingType++;
-//        } else {
-//            self.scalingType = kWFAVVideoScalingTypeAspectFit;
-//        }
-//
-////        [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
-////        [self.currentSession setupRemoteVideoView:self.bigVideoView scalingType:self.scalingType forUser:self.currentSession.participants[0]];
-//    }
-}
-
 - (void)chatButtonDidTap:(UIButton *)button {
     [self showInput];
 }
@@ -1119,17 +1108,14 @@
 }
 
 
-- (void)updateTopViewFrame {
+- (void)updatePortraitAndStateViewFrame {
         CGFloat containerWidth = self.view.bounds.size.width;
         
         self.portraitView.frame = CGRectMake((containerWidth-64)/2, kStatusBarAndNavigationBarHeight, 64, 64);;
         
         self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
-        
-        self.connectTimeLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 8, 240, 16);
-        self.connectTimeLabel.textAlignment = NSTextAlignmentCenter;
-    
+            
         self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 30, 240, 16);
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
 }
@@ -1158,7 +1144,10 @@
 - (void)showPanel {
     self.bottomBarView.hidden = NO;
     [UIView animateWithDuration:0.5 animations:^{
-        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT);
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin);
+        
+        CGFloat topViewHeigh = 26+kStatusBarAndNavigationBarHeight-64 + 40;
+        self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, topViewHeigh);
         
         CGSize labelSize = [ConferenceLabelView sizeOffView];
         CGRect labelFrame = self.conferenceLabelView.frame;
@@ -1171,17 +1160,16 @@
     } else {
         self.videoButton.hidden = NO;
     }
-    self.switchCameraButton.hidden = NO;
     self.smallCollectionView.hidden = NO;
-    self.minimizeButton.hidden = NO;
-    self.informationButton.hidden = NO;
-    self.connectTimeLabel.hidden = NO;
     [self startHidePanelTimer];
 }
 
 - (void)hidePanel {
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT);
+        
+        CGFloat topViewHeigh = 26+kStatusBarAndNavigationBarHeight-64 + 40;
+        self.topBarView.frame = CGRectMake(0, -topViewHeigh, self.view.bounds.size.width, topViewHeigh);
         
         CGSize labelSize = [ConferenceLabelView sizeOffView];
         CGRect labelFrame = self.conferenceLabelView.frame;
@@ -1190,10 +1178,6 @@
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
     }];
-    self.switchCameraButton.hidden = YES;
-    self.minimizeButton.hidden = YES;
-    self.informationButton.hidden = YES;
-    self.connectTimeLabel.hidden = YES;
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -1260,10 +1244,8 @@
     switch (state) {
         case kWFAVEngineStateIdle:
             self.hangupButton.hidden = YES;
-            self.switchCameraButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.scalingButton.hidden = YES;
             [self stopConnectedTimer];
             self.userNameLabel.hidden = YES;
             self.portraitView.hidden = YES;
@@ -1271,17 +1253,18 @@
             self.smallCollectionView.hidden = YES;
             self.portraitCollectionView.hidden = YES;
             self.bigVideoView.hidden = YES;
-            self.minimizeButton.hidden = YES;
+            self.topBarView.hidden = YES;
             self.speakerButton.hidden = YES;
             self.screenSharingButton.hidden = YES;
             self.managerButton.hidden = YES;
             self.bottomBarView.hidden = YES;
-            [self updateTopViewFrame];
+            self.minimizeButton.hidden = NO;
+            self.informationButton.hidden = NO;
+            [self updatePortraitAndStateViewFrame];
             break;
         case kWFAVEngineStateOutgoing:
-            self.connectTimeLabel.hidden = YES;
             self.hangupButton.hidden = NO;
-            self.switchCameraButton.hidden = YES;
+            self.topBarView.hidden = YES;
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = YES;
                 [self updateSpeakerButton];
@@ -1293,7 +1276,6 @@
             self.managerButton.hidden = YES;
             self.screenSharingButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.scalingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             self.stateLabel.text = WFCString(@"WaitingAccept");
             self.smallCollectionView.hidden = YES;
@@ -1302,16 +1284,15 @@
             
             self.userNameLabel.hidden = YES;
             self.portraitView.hidden = YES;
-            [self updateTopViewFrame];
+            [self updatePortraitAndStateViewFrame];
             
             break;
         case kWFAVEngineStateConnecting:
             self.hangupButton.hidden = NO;
             self.speakerButton.hidden = YES;
-            self.switchCameraButton.hidden = YES;
+            self.topBarView.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.scalingButton.hidden = YES;
             self.managerButton.hidden = YES;
             self.screenSharingButton.hidden = YES;
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
@@ -1334,7 +1315,6 @@
             break;
         case kWFAVEngineStateConnected:
             self.hangupButton.hidden = NO;
-            self.connectTimeLabel.hidden = NO;
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
             self.screenSharingButton.hidden = NO;
@@ -1356,10 +1336,10 @@
             }
             [self updateAudioButton];
             [self updateVideoButton];
-            self.informationButton.hidden = NO;
             
-            self.scalingButton.hidden = YES;
             self.minimizeButton.hidden = NO;
+            self.informationButton.hidden = NO;
+            self.topBarView.hidden = NO;
             
             if (self.currentSession.isAudioOnly) {
                 [self.currentSession setupLocalVideoView:nil scalingType:self.bigScalingType];
@@ -1387,16 +1367,15 @@
             self.portraitView.hidden = YES;
             [self updateConnectedTimeLabel];
             [self startConnectedTimer];
-            [self updateTopViewFrame];
+            [self updatePortraitAndStateViewFrame];
             [self reloadVideoUI];
+            [self showPanel];
             break;
         case kWFAVEngineStateIncomming:
-            self.connectTimeLabel.hidden = YES;
             self.hangupButton.hidden = NO;
-            self.switchCameraButton.hidden = YES;
+            self.topBarView.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.scalingButton.hidden = YES;
             
             [self.currentSession setupLocalVideoView:self.bigVideoView scalingType:self.bigScalingType];
             self.stateLabel.text = WFCString(@"InvitingYou");
