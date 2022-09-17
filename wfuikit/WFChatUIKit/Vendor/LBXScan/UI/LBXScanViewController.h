@@ -8,12 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "LBXScanTypes.h"
-
-//UI
-#import "LBXScanView.h"
-
-#import "LBXScanNative.h" //原生扫码封装
+#import "LBXScanViewStyle.h"
 //
 //
 //#ifdef LBXScan_Define_ZXing
@@ -25,7 +20,9 @@
 //#import "LBXZBarWrapper.h"//ZBar扫码封装
 //#endif
 
-
+@class LBXScanResult;
+@class LBXScanView;
+@class LBXScanNative;
 typedef NS_ENUM(NSInteger, SCANLIBRARYTYPE) {
     SLT_Native,
     SLT_ZXing,
