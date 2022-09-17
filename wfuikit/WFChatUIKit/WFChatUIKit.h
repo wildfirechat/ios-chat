@@ -74,3 +74,9 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFZHomeViewController.h>
 #import <WFChatUIKit/WFZConferenceInfoViewController.h>
 #import <WFChatUIKit/WFZStartConferenceViewController.h>
+
+#import <WFChatUIKit/CreateBarCodeViewController.h>
+#import <WFChatUIKit/QQLBXScanViewController.h>
+#import <WFChatUIKit/LBXScanViewStyle.h>
+#import <WFChatUIKit/StyleDIY.h>
+
