@@ -142,6 +142,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [conferenceHistorys enumerateObjectsUsingBlock:^(WFCUConferenceHistory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [dictArray addObject:[obj toDictionary]];
     }];
+    
+    if(dictArray.count > 500) {
+        dictArray = [[dictArray subarrayWithRange:NSMakeRange(0, 500)] mutableCopy];
+    }
     [[NSUserDefaults standardUserDefaults] setObject:dictArray forKey:@"WFC_CONFERENCE_HISTORY"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
