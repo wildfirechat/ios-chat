@@ -23,10 +23,7 @@
 #import "WFCBaseTabBarController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <UserNotifications/UserNotifications.h>
-#import "CreateBarCodeViewController.h"
 #import "PCLoginConfirmViewController.h"
-#import "QQLBXScanViewController.h"
-#import "StyleDIY.h"
 #import "AppService.h"
 #import "UIColor+YH.h"
 #import "SharedConversation.h"
