@@ -137,6 +137,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
     history.timestamp = [[[NSDate alloc] init] timeIntervalSince1970];
     history.duration = duration;
     NSMutableArray<WFCUConferenceHistory *> *conferenceHistorys = [[self getConferenceHistoryList] mutableCopy];
+    for (WFCUConferenceHistory *his in conferenceHistorys) {
+        if([his.conferenceInfo.conferenceId isEqualToString:info.conferenceId]) {
+            history.duration += his.duration;
+            [conferenceHistorys removeObject:his];
+            break;
+        }
+    }
     [conferenceHistorys insertObject:history atIndex:0];
     NSMutableArray *dictArray = [NSMutableArray new];
     [conferenceHistorys enumerateObjectsUsingBlock:^(WFCUConferenceHistory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
