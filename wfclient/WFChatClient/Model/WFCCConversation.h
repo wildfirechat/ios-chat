@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WFCCJsonSerializer.h"
+#import "WFCCProtocol.h"
 /**
  会话类型
 
@@ -30,7 +31,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
 /**
  会话
  */
-@interface WFCCConversation : WFCCJsonSerializer <NSCopying>
+@interface WFCCConversation : WFCCJsonSerializer <NSCopying, WFCCDuplicatable>
 
 /**
  构造方法

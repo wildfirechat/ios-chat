@@ -10,6 +10,7 @@
 #import "WFCCConversation.h"
 #import "WFCCMessageContent.h"
 #import "WFCCJsonSerializer.h"
+#import "WFCCProtocol.h"
 /**
  消息方向
 
@@ -45,7 +46,7 @@ typedef NS_ENUM(NSInteger, WFCCMessageStatus) {
 /**
  消息实体
  */
-@interface WFCCMessage : WFCCJsonSerializer
+@interface WFCCMessage : WFCCJsonSerializer <WFCCDuplicatable>
 
 /**
  消息ID，当前用户本地唯一
