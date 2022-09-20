@@ -8,6 +8,7 @@
 
 #import "WFCCMessage.h"
 #import "Common.h"
+#import "WFCCIMService.h"
 
 
 @implementation WFCCMessage
@@ -30,5 +31,23 @@
     dict[@"localExtra"] = self.localExtra;
 
     return dict;
+}
+- (instancetype)duplicate {
+    WFCCMessage *msg = [[WFCCMessage alloc] init];
+    msg.messageId = self.messageId;
+    msg.messageUid = self.messageUid;
+    msg.conversation = [self.conversation duplicate];
+    msg.fromUser = self.fromUser;
+    if(self.toUsers.count) {
+        msg.toUsers = [[NSArray alloc] initWithArray:self.toUsers];
+    }
+    if(self.content) {
+        msg.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:[self.content encode]];
+    }
+    msg.direction = self.direction;
+    msg.status = self.status;
+    msg.serverTime = self.serverTime;
+    msg.localExtra = self.localExtra;
+    return msg;
 }
 @end

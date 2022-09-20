@@ -16,6 +16,15 @@
     conversation.line = line;
     return conversation;
 }
+
+- (instancetype)duplicate {
+    WFCCConversation *conversation = [[WFCCConversation alloc] init];
+    conversation.type = self.type;
+    conversation.target = self.target;
+    conversation.line = self.line;
+    return conversation;
+}
+
 - (BOOL)isEqual:(id)object {
     if ([object isMemberOfClass:[WFCCConversation class]]) {
         WFCCConversation *o = (WFCCConversation *)object;
