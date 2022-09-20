@@ -2912,6 +2912,8 @@
     if(self.conversation.type != SecretChat_Type) {
         if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCArticlesMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
@@ -2966,7 +2968,7 @@
     }
     
     if(self.conversation.type != SecretChat_Type) {
-        if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
+        if ([baseCell isKindOfClass:[WFCUMessageCell class]] || [baseCell isKindOfClass:[WFCUArticlesCell class]]) {
             [items addObject:multiSelectItem];
         }
     }
@@ -2986,6 +2988,7 @@
             [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCArticlesMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
             [items addObject:favoriteItem];
         }
