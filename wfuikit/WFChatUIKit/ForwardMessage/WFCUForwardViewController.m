@@ -88,6 +88,28 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)setMessage:(WFCCMessage *)message {
+    if([message.content isKindOfClass:[WFCCArticlesMessageContent class]]) {
+        WFCCArticlesMessageContent *articles = (WFCCArticlesMessageContent *)message.content;
+        NSArray<WFCCLinkMessageContent *> *links = [articles toLinkMessageContent];
+        if(links.count == 1) {
+            WFCCMessage *msg = [message duplicate];
+            msg.content = links[0];
+            _message = msg;
+        } else {
+            NSMutableArray *msgs = [[NSMutableArray alloc] init];
+            [links enumerateObjectsUsingBlock:^(WFCCLinkMessageContent * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                WFCCMessage *msg = [message duplicate];
+                msg.content = obj;
+                [msgs addObject:msg];
+            }];
+            _messages = msgs;
+        }
+    } else {
+        _message = message;
+    }
+}
+
 - (void)altertSend:(WFCCConversation *)conversation {
     WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
     

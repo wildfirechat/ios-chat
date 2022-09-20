@@ -9,6 +9,7 @@
 #import "WFCCArticlesMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import "WFCCLinkMessageContent.h"
 
 @implementation WFCCArticle
 - (NSDictionary *)toDict {
@@ -19,6 +20,8 @@
         dict[@"cover"] = self.cover;
     if(self.title.length)
         dict[@"title"] = self.title;
+    if(self.digest.length)
+        dict[@"digest"] = self.digest;
     if(self.url.length)
         dict[@"url"] = self.url;
     if(self.readReport)
@@ -31,9 +34,18 @@
     article.articleId = dict[@"id"];
     article.cover = dict[@"cover"];
     article.title = dict[@"title"];
+    article.digest = dict[@"digest"];
     article.url = dict[@"url"];
     article.readReport = [dict[@"rr"] boolValue];
     return article;
+}
+- (WFCCLinkMessageContent *)toLinkMessageContent {
+    WFCCLinkMessageContent *link = [[WFCCLinkMessageContent alloc] init];
+    link.url = self.url;
+    link.title = self.title;
+    link.thumbnailUrl = self.cover;
+    link.contentDigest = self.digest;
+    return link;
 }
 @end
 
@@ -92,5 +104,15 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     return self.topArticle.title;
+}
+
+- (NSArray<WFCCLinkMessageContent *> *)toLinkMessageContent {
+    NSMutableArray *links = [[NSMutableArray alloc] init];
+    [links addObject:[self.topArticle toLinkMessageContent]];
+    [self.subArticles enumerateObjectsUsingBlock:^(WFCCArticle * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [links addObject:[obj toLinkMessageContent]];
+    }];
+    
+    return links;
 }
 @end

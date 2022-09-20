@@ -196,9 +196,12 @@
         [_containerView addGestureRecognizer:doubleTapGesture];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCell:)];
-        [_containerView addGestureRecognizer:tap];
         [tap requireGestureRecognizerToFail:doubleTapGesture];
         tap.cancelsTouchesInView = NO;
+        [_containerView addGestureRecognizer:tap];
+        
+        [_containerView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)]];
+        
         [_containerView setUserInteractionEnabled:YES];
         
         _coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containerWidth, containerWidth * COVER_HW_RATE)];
