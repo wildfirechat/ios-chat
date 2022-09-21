@@ -392,13 +392,16 @@
 
 - (UITableView *)messageTableView {
     if(!_messageTableView) {
-        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68-200, 200, 200)];
+        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68-200, 200, 0)];
         _messageTableView.dataSource = self;
         _messageTableView.backgroundColor = [UIColor clearColor];
         _messageTableView.rowHeight = UITableViewAutomaticDimension;
         _messageTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _messageTableView.showsVerticalScrollIndicator = NO;
         _messageTableView.allowsSelection = NO;
+        
+        UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
+        [_messageTableView addGestureRecognizer:tapBigVideo];
         
         if (@available(iOS 10.0, *)) {
             __weak typeof(self)ws = self;
@@ -519,7 +522,7 @@
 
 - (void)append:(NSArray<WFCCMessage *> *)messages {
     [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
+        if(obj.messageId != 0 && obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
             [self.messages addObject:obj];
         }
     }];
@@ -538,8 +541,10 @@
     [self.messages removeObjectsInArray:expired];
     [self.messageTableView reloadData];
     if(self.messages.count) {
-        [self.messageTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [self.messageTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
+    
+    [self resizeMessageTable];
 }
 
 - (void)removeOldMessageAndShow {
@@ -558,9 +563,20 @@
         }
     }
     [self.messages removeObjectsInArray:expiredMsgs];
-    [self.messageTableView deleteRowsAtIndexPaths:expiredItems withRowAnimation:UITableViewRowAnimationFade];
+    [self.messageTableView deleteRowsAtIndexPaths:expiredItems withRowAnimation:UITableViewRowAnimationNone];
+    
+    [self resizeMessageTable];
 }
 
+- (void)resizeMessageTable {
+    CGSize size = self.messageTableView.contentSize;
+    if(size.height > 200) {
+        size.height = 200;
+    }
+    if(size.height != self.messageTableView.frame.size.height) {
+        self.messageTableView.frame = CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 -size.height, 200, size.height);
+    }
+}
 
 - (void)sendTextMessage:(NSString *)text {
     if (!self.failureJoinChatroom) {
