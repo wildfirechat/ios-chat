@@ -46,6 +46,15 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     staticWindow.focusUserId = focusUserId;
     staticWindow.conferenceInfo = conferenceInfo;
     [staticWindow initWindow];
+    if(callSession.isConference) {
+        [callSession.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if([obj.userId isEqualToString:focusUserId]) {
+                [callSession setParticipant:obj.userId screenSharing:obj.screeSharing videoType:WFAVVideoType_SmallStream];
+            } else {
+                [callSession setParticipant:obj.userId screenSharing:obj.screeSharing videoType:WFAVVideoType_None];
+            }
+        }];
+    }
 }
 
 + (void)stopCallFloatingWindow {
