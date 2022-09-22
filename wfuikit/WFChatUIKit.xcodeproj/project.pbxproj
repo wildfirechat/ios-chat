@@ -505,6 +505,8 @@
 		B7D0758A282756F4008A6C63 /* WFCUMultiCallOngoingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */; };
 		B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */; };
 		B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */; };
+		B7D36FED28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D36FEB28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h */; };
+		B7D36FEE28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D36FEC28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m */; };
 		B7D584DC28CF0EC4009D09AF /* WFZOrderConferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D428CF0EC4009D09AF /* WFZOrderConferenceViewController.m */; };
 		B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D584D528CF0EC4009D09AF /* WFZHomeViewController.m */; };
 		B7D584DE28CF0EC4009D09AF /* WFZStartConferenceViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584D628CF0EC4009D09AF /* WFZStartConferenceViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1025,6 +1027,8 @@
 		B7D07588282756F4008A6C63 /* WFCUMultiCallOngoingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingCell.m; sourceTree = "<group>"; };
 		B7D0758B2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMultiCallOngoingExpendedCell.h; sourceTree = "<group>"; };
 		B7D0758C2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMultiCallOngoingExpendedCell.m; sourceTree = "<group>"; };
+		B7D36FEB28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceCollectionViewLayout.h; sourceTree = "<group>"; };
+		B7D36FEC28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceCollectionViewLayout.m; sourceTree = "<group>"; };
 		B7D584D428CF0EC4009D09AF /* WFZOrderConferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZOrderConferenceViewController.m; sourceTree = "<group>"; };
 		B7D584D528CF0EC4009D09AF /* WFZHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZHomeViewController.m; sourceTree = "<group>"; };
 		B7D584D628CF0EC4009D09AF /* WFZStartConferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZStartConferenceViewController.h; sourceTree = "<group>"; };
@@ -1223,6 +1227,8 @@
 				2FB7125325D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m */,
 				2FBDAB8F25DA41FD00FEF2C3 /* WFCUConferenceManager.h */,
 				2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */,
+				B7D36FEB28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h */,
+				B7D36FEC28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m */,
 			);
 			path = Conference;
 			sourceTree = "<group>";
@@ -2322,6 +2328,7 @@
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */,
 				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
+				B7D36FED28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h in Headers */,
 				B7C5441E28D5876700A2550F /* LBXScanView.h in Headers */,
 				B7C5443028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h in Headers */,
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
@@ -2754,6 +2761,7 @@
 				2F56F6CF252AAF5F00B829C4 /* WFCUCompositeImageCell.m in Sources */,
 				2BDF57A724AD70C8003C1F08 /* DNPhotoBrowser.m in Sources */,
 				2F5511DD217F5CC300F56C26 /* TYBaseAnimation.m in Sources */,
+				B7D36FEE28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m in Sources */,
 				B7C5442628D5876700A2550F /* LBXScanNetAnimation.m in Sources */,
 				2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */,
 				B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */,
