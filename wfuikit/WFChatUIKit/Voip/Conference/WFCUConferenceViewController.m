@@ -222,8 +222,17 @@
         self.focusUserId = self.participants.firstObject.userId;
     }
     
-    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] forState:UIControlStateNormal];
+    
+    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%d)", [self participantCount]] forState:UIControlStateNormal];
     [self.managerButton setTitleEdgeInsets:UIEdgeInsetsMake((self.managerButton.imageView.frame.size.height+24)/2 ,-self.managerButton.imageView.frame.size.width, 0.0,0.0)];
+}
+
+- (int)participantCount {
+    int participantCount = (int)self.participants.count;
+    if(participantCount != 1 || ![self.participants[0].userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        participantCount += 1;
+    }
+    return participantCount;
 }
 
 - (void)viewDidLoad {
@@ -482,8 +491,7 @@
             [_bottomBarView addSubview:self.screenSharingButton];
         }
         
-        
-        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%d)", [self participantCount]] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.managerButton];
         
         self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
@@ -731,6 +739,7 @@
     __block WFAVParticipantProfile *focusUser = [self.participants firstObject];
     [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:self.conferenceInfo focusUser:focusUser.userId withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession conferenceInfo:conferenceInfo];
+        vc.focusUserId = focusUser.userId;
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
     
