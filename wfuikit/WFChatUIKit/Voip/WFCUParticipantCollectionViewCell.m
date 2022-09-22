@@ -30,6 +30,7 @@
     self.layer.borderColor = [UIColor clearColor].CGColor;
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+    self.portraitView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 
     if (profile.state == kWFAVEngineStateIncomming
         || profile.state == kWFAVEngineStateOutgoing
