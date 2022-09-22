@@ -1197,7 +1197,7 @@
     
     NSMutableArray<WFCCMessage *> *ongoingCalls = [[NSMutableArray alloc] init];
     for (WFCCMessage *msg in messages) {
-        if([msg.content isKindOfClass:WFCCMultiCallOngoingMessageContent.class]) {
+        if([msg.content isKindOfClass:WFCCMultiCallOngoingMessageContent.class] && [msg.conversation isEqual:self.conversation]) {
             [ongoingCalls addObject:msg];
         }
     }
