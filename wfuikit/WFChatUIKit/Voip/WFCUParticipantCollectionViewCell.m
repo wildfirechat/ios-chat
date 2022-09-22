@@ -17,10 +17,12 @@
 @property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
 @property(nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)ConferenceLabelView *conferenceLabelView;
+@property(nonatomic, strong)WFAVParticipantProfile *profile;
 @end
 
 @implementation WFCUParticipantCollectionViewCell
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
+    self.profile = profile;
     self.layer.masksToBounds = YES;
     self.layer.cornerRadius = 5;
     self.userId = userInfo.userId;
@@ -94,8 +96,8 @@
 
 - (UIImageView *)portraitView {
     if (!_portraitView) {
-        _portraitView = [[UIImageView alloc] initWithFrame:self.bounds];
-
+        _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _portraitView.center = self.center;
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 2.f;
         [self addSubview:_portraitView];
@@ -105,8 +107,8 @@
 
 - (WFCUWaitingAnimationView *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:self.bounds];
-
+        _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _stateLabel.center = self.center;
         _stateLabel.animationImages = @[[WFCUImage imageNamed:@"connect_ani1"],[WFCUImage imageNamed:@"connect_ani2"],[WFCUImage imageNamed:@"connect_ani3"]];
         _stateLabel.animationDuration = 1;
         _stateLabel.animationRepeatCount = 200;
