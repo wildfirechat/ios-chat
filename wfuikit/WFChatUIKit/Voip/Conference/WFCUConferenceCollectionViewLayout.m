@@ -24,7 +24,7 @@
     const CGFloat height = rect.size.height/2;
     
     self.attrubutesArray = [NSMutableArray array];
-    for (NSInteger i = 0; i < count; i ++) {
+    for (int i = 0; i < count; i ++) {
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:i inSection:0];
         UICollectionViewLayoutAttributes * attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
 
@@ -32,7 +32,7 @@
         if(i == 0) {
             frame = rect;
         } else {
-            int page = (int)(i - 1)/4 + 1;
+            int page = [self pageByRow:i];
             CGFloat startX = page * rect.size.width;
             int index = (i -1)%4;
             CGFloat x = startX;
@@ -69,5 +69,58 @@
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect{
     return _attrubutesArray;
 }
+
+- (int)pageByRow:(int)row {
+    if(row == 0){
+        return 0;
+    }
+    return (row -1)/4 + 1;
+}
+
+- (NSMutableArray<NSIndexPath *> *)itemsInPage:(int)page {
+    NSInteger count = [self.collectionView numberOfItemsInSection:0];
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    if(page == 0) {
+        [arr addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    } else {
+        for (int i = (page-1)*4 +1; i < MIN(page*4, count); i++) {
+            [arr addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+        }
+    }
     
+    return arr;
+}
+
+- (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items leftItems:(NSMutableArray<NSIndexPath *> *)leftItems rightItems:(NSMutableArray<NSIndexPath *> *)rightItems {
+    int minRow = 0x1FFFFFFF;
+    int maxRow = 0;
+    for (NSIndexPath *indexPath in items) {
+        if(indexPath.row < minRow) {
+            minRow = (int)indexPath.row;
+        }
+        if(indexPath.row > maxRow) {
+            maxRow = (int)indexPath.row;
+        }
+    }
+    
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    int start;
+    
+    int pageRight = [self pageByRow:maxRow];
+    int end = pageRight * width;
+    
+    int pageLeft = 0;
+    if(minRow == 0) {
+        start = 0;
+    } else {
+        pageLeft = [self pageByRow:minRow];
+        start = pageLeft * width;
+    }
+    
+    [leftItems addObjectsFromArray:[self itemsInPage:pageLeft]];
+    [rightItems addObjectsFromArray:[self itemsInPage:pageRight]];
+    
+    return CGPointMake(start, end);
+}
 @end

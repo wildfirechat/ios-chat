@@ -20,7 +20,7 @@
 @property(nonatomic, strong) NSTimer *activeTimer;
 @property(nonatomic, copy) void (^touchedBlock)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo);
 @property(nonatomic, strong) CTCallCenter *callCenter;
-@property(nonatomic, strong) NSString *focusUserId;
+@property(nonatomic, strong) WFAVParticipantProfile *focusUserProfile;
 
 @property(nonatomic, assign)CGFloat winWidth;
 @property(nonatomic, assign)CGFloat winHeight;
@@ -37,18 +37,18 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 @implementation WFCUFloatingWindow
 
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession conferenceInfo:(WFZConferenceInfo *)conferenceInfo focusUser:(NSString *)focusUserId
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession conferenceInfo:(WFZConferenceInfo *)conferenceInfo focusUser:(WFAVParticipantProfile *)focusUserProfile
               withTouchedBlock:(void (^)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo))touchedBlock {
     staticWindow = [[WFCUFloatingWindow alloc] init];
     staticWindow.callSession = callSession;
     [staticWindow.callSession setDelegate:staticWindow];
     staticWindow.touchedBlock = touchedBlock;
-    staticWindow.focusUserId = focusUserId;
+    staticWindow.focusUserProfile = focusUserProfile;
     staticWindow.conferenceInfo = conferenceInfo;
     [staticWindow initWindow];
     if(callSession.isConference) {
         [callSession.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if([obj.userId isEqualToString:focusUserId]) {
+            if([obj.userId isEqualToString:focusUserProfile.userId] && obj.screeSharing == focusUserProfile.screeSharing) {
                 [callSession setParticipant:obj.userId screenSharing:obj.screeSharing videoType:WFAVVideoType_SmallStream];
             } else {
                 [callSession setParticipant:obj.userId screenSharing:obj.screeSharing videoType:WFAVVideoType_None];
@@ -269,10 +269,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         } else if (self.callSession.state == kWFAVEngineStateConnected) {
             self.videoView.hidden = NO;
             [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
-            if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            if ([self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit];
             } else {
-                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserId screenSharing:NO];
+                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserProfile.userId screenSharing:self.focusUserProfile.screeSharing];
             }
             [self updateVideoView];
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
@@ -307,11 +307,11 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 - (void)updateVideoView {
     __block BOOL isMuted = NO;
-    if ([self.focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    if ([self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         isMuted = [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
     } else {
         [[[WFAVEngineKit sharedEngineKit].currentSession participants] enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if([obj isEqual:self.focusUserId]) {
+            if([obj.userId isEqual:self.focusUserProfile.userId] && obj.screeSharing == self.focusUserProfile.screeSharing) {
                 isMuted = obj.videoMuted;
                 *stop = YES;
             }
