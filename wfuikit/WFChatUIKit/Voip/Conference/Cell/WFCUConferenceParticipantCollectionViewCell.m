@@ -6,25 +6,31 @@
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 #if WFCU_SUPPORT_VOIP
-#import "WFCUParticipantCollectionViewCell.h"
+#import "WFCUConferenceParticipantCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUWaitingAnimationView.h"
 #import "WFCUImage.h"
+#import "ConferenceLabelView.h"
 
-@interface WFCUParticipantCollectionViewCell ()
+@interface WFCUConferenceParticipantCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
-
-@property (nonatomic, strong)UIImageView *speakingView;
-
 @property(nonatomic, strong)NSString *userId;
+@property (nonatomic, strong)ConferenceLabelView *conferenceLabelView;
+@property(nonatomic, strong)WFAVParticipantProfile *profile;
 @end
 
-@implementation WFCUParticipantCollectionViewCell
+@implementation WFCUConferenceParticipantCollectionViewCell
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
+    self.profile = profile;
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = 5;
     self.userId = userInfo.userId;
+    self.layer.borderWidth = 1.f;
+    self.layer.borderColor = [UIColor clearColor].CGColor;
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+    self.portraitView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 
     if (profile.state == kWFAVEngineStateIncomming
         || profile.state == kWFAVEngineStateOutgoing
@@ -33,36 +39,66 @@
         self.stateLabel.hidden = NO;
     } else {
         [self.stateLabel stop];
-        if (profile.videoMuted) {
+        if (profile.videoMuted || profile.audience) {
             self.stateLabel.hidden = NO;
             self.stateLabel.image = [WFCUImage imageNamed:@"disable_video"];
         } else {
             self.stateLabel.hidden = YES;
         }
     }
-    _speakingView.hidden = YES;
+
+    self.conferenceLabelView.name = userInfo.displayName;
+    
+    BOOL isVideoMuted = YES;
+    BOOL isAudioMuted = YES;
+    if ([WFAVEngineKit sharedEngineKit].currentSession.isConference) {
+        if(!profile.audience) {
+            isVideoMuted = profile.videoMuted;
+            isAudioMuted = profile.audioMuted;
+        }
+    } else {
+        isVideoMuted = NO;
+        isAudioMuted = NO;
+    }
+    
+    self.conferenceLabelView.isMuteVideo = isVideoMuted;
+    self.conferenceLabelView.isMuteAudio = isAudioMuted;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
+}
+
+- (void)addSubview:(UIView *)view {
+    [super addSubview:view];
+    [self bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)onVolumeUpdated:(NSNotification *)notification {
     if([notification.object isEqual:self.userId]) {
         NSInteger volume = [notification.userInfo[@"volume"] integerValue];
         if (volume > 1000) {
-            self.speakingView.hidden = NO;
-            [self bringSubviewToFront:self.speakingView];
+            self.layer.borderColor = [UIColor greenColor].CGColor;
         } else {
-            self.speakingView.hidden = YES;
+            self.layer.borderColor = [UIColor clearColor].CGColor;
         }
+        self.conferenceLabelView.volume = volume;
     }
 }
 
+- (ConferenceLabelView *)conferenceLabelView {
+    if(!_conferenceLabelView) {
+        CGSize size = [ConferenceLabelView sizeOffView];
+        _conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height)];
+        [self addSubview:_conferenceLabelView];
+    }
+    return _conferenceLabelView;
+}
 
 - (UIImageView *)portraitView {
     if (!_portraitView) {
-        _portraitView = [[UIImageView alloc] initWithFrame:self.bounds];
-
+        _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _portraitView.center = self.center;
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 2.f;
         [self addSubview:_portraitView];
@@ -70,23 +106,10 @@
     return _portraitView;
 }
 
-
-- (UIImageView *)speakingView {
-    if (!_speakingView) {
-        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - 20, 20, 20)];
-
-        _speakingView.layer.masksToBounds = YES;
-        _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
-        [self addSubview:_speakingView];
-    }
-    return _speakingView;
-}
-
 - (WFCUWaitingAnimationView *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:self.bounds];
-
+        _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _stateLabel.center = self.center;
         _stateLabel.animationImages = @[[WFCUImage imageNamed:@"connect_ani1"],[WFCUImage imageNamed:@"connect_ani2"],[WFCUImage imageNamed:@"connect_ani3"]];
         _stateLabel.animationDuration = 1;
         _stateLabel.animationRepeatCount = 200;
