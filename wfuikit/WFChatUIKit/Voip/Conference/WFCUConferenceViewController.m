@@ -14,7 +14,7 @@
 #import <WebRTC/WebRTC.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUFloatingWindow.h"
-#import "WFCUParticipantCollectionViewCell.h"
+#import "WFCUConferenceParticipantCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCCConversation.h>
 #import "WFCUConferencePortraitCollectionViewCell.h"
@@ -51,7 +51,7 @@
 @property (nonatomic, strong) UIButton *screenSharingButton;
 @property (nonatomic, strong) UIButton *informationButton;
 
-@property (nonatomic, strong)WFCUParticipantCollectionViewCell *smallVideoView;
+@property (nonatomic, strong)WFCUConferenceParticipantCollectionViewCell *smallVideoView;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -264,8 +264,8 @@
     self.participantCollectionView = [[UICollectionView alloc] initWithFrame:smallCollectionRect collectionViewLayout:layout];
     self.participantCollectionView.dataSource = self;
     self.participantCollectionView.delegate = self;
-    [self.participantCollectionView registerClass:[WFCUParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"main"];
-    [self.participantCollectionView registerClass:[WFCUParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"sub"];
+    [self.participantCollectionView registerClass:[WFCUConferenceParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"main"];
+    [self.participantCollectionView registerClass:[WFCUConferenceParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"sub"];
     self.participantCollectionView.backgroundColor = [UIColor clearColor];
     if (self.currentSession.audioOnly) {
         self.participantCollectionView.hidden = YES;
@@ -304,7 +304,7 @@
     self.portraitCollectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.portraitCollectionView];
     
-    self.smallVideoView = [[WFCUParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, 0, SmallVideoView, SmallVideoView * 4 /3)];
+    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, 0, SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     self.smallVideoView.tag = 666;
@@ -1752,7 +1752,7 @@
     
     if (collectionView == self.participantCollectionView) {
         BOOL isMain = (indexPath.row == 0);
-        WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:isMain ? @"main" : @"sub" forIndexPath:indexPath];
+        WFCUConferenceParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:isMain ? @"main" : @"sub" forIndexPath:indexPath];
         
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         
@@ -1861,7 +1861,7 @@
     if(hasMain) {
         for (NSIndexPath *obj in leaveItems) {
             UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:obj];
-            WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
+            WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
             if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
                 NSMutableArray *arr = [leaveItems mutableCopy];
                 [arr removeObject:obj];
@@ -1880,7 +1880,7 @@
         if(hasMain) {
             for (NSIndexPath *obj in enterItems) {
                 UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:obj];
-                WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
+                WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
                 if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
                     NSMutableArray *arr = [leaveItems mutableCopy];
                     [arr removeObject:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -1894,7 +1894,7 @@
     [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
         BOOL isMain = (indexPath.row == 0);
-        WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
+        WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
 
         if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [self.currentSession setupLocalVideoView:cell scalingType:self.scalingType];
@@ -1927,7 +1927,7 @@
     
     [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
-        WFCUParticipantCollectionViewCell *participantCell = (WFCUParticipantCollectionViewCell *)cell;
+        WFCUConferenceParticipantCollectionViewCell *participantCell = (WFCUConferenceParticipantCollectionViewCell *)cell;
         WFAVParticipantProfile *profile = participantCell.profile;
         [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_None];
     }];
