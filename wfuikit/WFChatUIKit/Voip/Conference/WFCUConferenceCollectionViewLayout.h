@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUConferenceCollectionViewLayout : UICollectionViewLayout
-
+- (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items leftItems:(NSMutableArray<NSIndexPath *> *)leftItems rightItems:(NSMutableArray<NSIndexPath *> *)rightItems;
 @end
 
 NS_ASSUME_NONNULL_END

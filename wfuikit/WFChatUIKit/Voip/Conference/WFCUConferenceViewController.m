@@ -85,7 +85,9 @@
 
 @property(nonatomic, assign)BOOL failureJoinChatroom;
 
-@property(nonatomic, strong)NSString *focusUserId;
+@property(nonatomic, strong)WFAVParticipantProfile *focusUserProfile;
+
+@property(nonatomic, strong)UIPageControl *facePageControl;
 @end
 
 #define ButtonSize 60
@@ -99,6 +101,12 @@
 
 #define TopViewHeigh (26 + kStatusBarAndNavigationBarHeight - 64 + 40)
 
+/*
+ 视频会议窗口排列规则：
+ 1. 首页显示大窗口，大窗口中有一个覆盖全屏的窗口，和一个小的预览窗口。大窗口显示焦点用户，预览窗口显示自己。可以点击预览窗口切换自己和焦点用户。
+ 2. 如果只有一个其他用户，只显示第一页。如果多于一个其他用户，从第二页开始显示网格窗口，自己和其他人分布排列。自己在第一个位置。
+ 3. 点击网格窗口，则设置为焦点用户，界面切换至首页。自己不能被设置为焦点用户。
+ */
 @implementation WFCUConferenceViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session conferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     self = [super init];
@@ -182,7 +190,7 @@
     
     NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
     for (WFAVParticipantProfile *p in ps) {
-        if([self.focusUserId isEqualToString:p.userId]) {
+        if([self.focusUserProfile.userId isEqualToString:p.userId] && self.focusUserProfile.screeSharing == p.screeSharing) {
             [self.participants insertObject:p atIndex:0];
         } else {
             [self.participants addObject:p];
@@ -191,10 +199,10 @@
 
     [self.participants sortUsingComparator:^NSComparisonResult(WFAVParticipantProfile *obj1, WFAVParticipantProfile *obj2) {
         //焦点用户拥有最高优先级
-        if([obj1.userId isEqualToString:self.focusUserId]) {
+        if([obj1.userId isEqualToString:self.focusUserProfile.userId] && obj1.screeSharing == self.focusUserProfile.screeSharing) {
             return NSOrderedAscending;
         }
-        if([obj2.userId isEqualToString:self.focusUserId]) {
+        if([obj2.userId isEqualToString:self.focusUserProfile.userId] &&obj2.screeSharing == self.focusUserProfile.screeSharing) {
             return NSOrderedDescending;
         }
         
@@ -214,26 +222,24 @@
         }
     }];
 
-    if(!self.participants.count) {
-        [self.participants addObject:self.currentSession.myProfile];
+    [self.participants addObject:self.currentSession.myProfile];
+    
+    if(!self.focusUserProfile || [self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(![obj.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                self.focusUserProfile = obj;
+                *stop = YES;
+            }
+        }];
     }
     
-    if(!self.focusUserId || self.focusUserId == [WFCCNetworkService sharedInstance].userId) {
-        self.focusUserId = self.participants.firstObject.userId;
-    }
+    self.facePageControl.numberOfPages = [self getPagesCount];
+    self.facePageControl.hidden = self.facePageControl.numberOfPages == 1;
     
-    
-    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%d)", [self participantCount]] forState:UIControlStateNormal];
+    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] forState:UIControlStateNormal];
     [self.managerButton setTitleEdgeInsets:UIEdgeInsetsMake((self.managerButton.imageView.frame.size.height+24)/2 ,-self.managerButton.imageView.frame.size.width, 0.0,0.0)];
 }
 
-- (int)participantCount {
-    int participantCount = (int)self.participants.count;
-    if(participantCount != 1 || ![self.participants[0].userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        participantCount += 1;
-    }
-    return participantCount;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -260,6 +266,23 @@
     [self.view addSubview:self.participantCollectionView];
     
     
+    self.facePageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 20 - 20, 200, 20)];
+    [self.facePageControl addTarget:self
+                        action:@selector(pageChange:)
+              forControlEvents:UIControlEventValueChanged];
+    
+    self.facePageControl.pageIndicatorTintColor = [UIColor grayColor];
+    self.facePageControl.currentPageIndicatorTintColor = [UIColor blackColor];
+    
+    self.facePageControl.numberOfPages = 0;
+    self.facePageControl.currentPage = 0;
+    if (@available(iOS 14.0, *)) {
+        self.facePageControl.backgroundStyle = UIPageControlBackgroundStyleProminent;
+        self.facePageControl.allowsContinuousInteraction = YES;
+    }
+    [self.view addSubview:self.facePageControl];
+    
+    
     WFCUParticipantCollectionViewLayout *layout2 = [[WFCUParticipantCollectionViewLayout alloc] init];
     layout2.itemHeight = PortraitItemSize + PortraitLabelSize;
     layout2.itemWidth = PortraitItemSize;
@@ -271,6 +294,7 @@
     self.portraitCollectionView.delegate = self;
     [self.portraitCollectionView registerClass:[WFCUConferencePortraitCollectionViewCell class] forCellWithReuseIdentifier:@"cell2"];
     self.portraitCollectionView.backgroundColor = [UIColor clearColor];
+    self.portraitCollectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.portraitCollectionView];
     
     self.smallVideoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, 0, SmallVideoView, SmallVideoView * 4 /3)];
@@ -441,6 +465,13 @@
     return btn;
 }
 
+- (NSInteger)getPagesCount {
+    if(self.participants.count == 1 || self.participants.count == 2) {
+        return 1;
+    }
+    return (self.participants.count-1)/4+1+1;
+}
+
 - (UIView *)topBarView {
     if(!_topBarView) {
         _topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -TopViewHeigh, self.view.bounds.size.width, TopViewHeigh)];
@@ -491,7 +522,7 @@
             [_bottomBarView addSubview:self.screenSharingButton];
         }
         
-        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%d)", [self participantCount]] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
+        self.managerButton = [self createBarButtom:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] imageName:@"conference_members" selectedImageName:@"conference_members" select:@selector(managerButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
         [_bottomBarView addSubview:self.managerButton];
         
         self.hangupButton = [self createBarButtom:@"结束" imageName:@"conference_end_call" selectedImageName:@"conference_end_call" select:@selector(hanupButtonDidTap:) frame:CGRectMake(btnWidth*index++, 0, btnWidth, BOTTOM_BAR_HEIGHT)];
@@ -736,10 +767,10 @@
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
-    __block WFAVParticipantProfile *focusUser = [self.participants firstObject];
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:self.conferenceInfo focusUser:focusUser.userId withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
+    __block WFAVParticipantProfile *focusUser = self.focusUserProfile;
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:self.conferenceInfo focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession conferenceInfo:conferenceInfo];
-        vc.focusUserId = focusUser.userId;
+        vc.focusUserProfile = focusUser;
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
     
@@ -1106,11 +1137,11 @@
         return;
     }
     
-    if (self.bottomBarView.hidden) {
-        [self showPanel];
-    } else {
-        [self hidePanel];
-    }
+//    if (self.bottomBarView.hidden) {
+//        [self showPanel];
+//    } else {
+//        [self hidePanel];
+//    }
 }
 
 - (void)showPanel {
@@ -1127,6 +1158,8 @@
     }
     self.participantCollectionView.hidden = NO;
     [self startHidePanelTimer];
+    [self.view bringSubviewToFront:self.bottomBarView];
+    [self.view bringSubviewToFront:self.topBarView];
 }
 
 - (void)hidePanel {
@@ -1261,7 +1294,7 @@
                 self.portraitCollectionView.center = self.view.center;
             } else {
                 self.participantCollectionView.hidden = NO;
-                [self.participantCollectionView reloadData];
+                [self reloadParticipantCollectionView];
                 self.portraitCollectionView.hidden = YES;
             }
             
@@ -1304,7 +1337,7 @@
                 [self.portraitCollectionView reloadData];
             } else {
                 self.participantCollectionView.hidden = NO;
-                [self.participantCollectionView reloadData];
+                [self reloadParticipantCollectionView];
                 self.portraitCollectionView.hidden = YES;
             }
             
@@ -1598,13 +1631,20 @@
 - (void)reloadVideoUI {
     if (!self.currentSession.audioOnly) {
         if (self.currentSession.state == kWFAVEngineStateConnecting || self.currentSession.state == kWFAVEngineStateConnected) {
-            [self.participantCollectionView reloadData];
+            [self reloadParticipantCollectionView];
         } else {
             [self.portraitCollectionView reloadData];
         }
     } else {
         [self.portraitCollectionView reloadData];
     }
+}
+
+- (void)reloadParticipantCollectionView {
+    [self.participantCollectionView reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self onItemsEnter:[self.participantCollectionView indexPathsForVisibleItems] itemsLeave:nil];
+    });
 }
 
 - (BOOL)switchVideoView:(NSUInteger)index {
@@ -1626,18 +1666,20 @@
         }
     }
     
-    if([self.focusUserId isEqualToString:user.userId]) {
+    if([self.focusUserProfile.userId isEqualToString:user.userId] && self.focusUserProfile.screeSharing == user.screeSharing) {
         canSwitch = NO;
     }
     
     if (canSwitch) {
-        self.focusUserId = user.userId;
-        [self.participants removeObject:user];
-        [self.participants insertObject:user atIndex:0];
+        self.focusUserProfile = user;
         [self reloadVideoUI];
     }
     
     return canSwitch;
+}
+
+- (void)pageChange:(id)sender {
+    
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -1647,7 +1689,7 @@
             return self.participants.count;
         }
     }
-    return self.participants.count;
+    return self.participants.count+1;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -1668,7 +1710,11 @@
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    WFAVParticipantProfile *user = self.participants[indexPath.row];
+    WFAVParticipantProfile *user = self.focusUserProfile;
+    if(indexPath.row > 0) {
+        user = self.participants[indexPath.row-1];
+    }
+    
     WFAVParticipantProfile *refreshProfile = [[WFAVEngineKit sharedEngineKit].currentSession profileOfUser:user.userId isScreenSharing:user.screeSharing];
     if(refreshProfile)
         user = refreshProfile;
@@ -1711,30 +1757,126 @@
 }
 
 #pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView == self.participantCollectionView) {
-        if(indexPath.row > 0) {
-            [self switchVideoView:indexPath.row];
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if(collectionView == self.participantCollectionView) {
+        if(indexPath.row == 0) {
+            [self onClickedBigVideoView:collectionView];
+        } else {
+            [self switchVideoView:indexPath.row-1];
         }
     }
 }
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    if(collectionView == self.participantCollectionView) {
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (scrollView == self.participantCollectionView) {
+        NSArray<NSIndexPath *> *items = [self.participantCollectionView indexPathsForVisibleItems];
+        if (items.count >= 2) {
+            WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
+            NSMutableArray *leftItems = [[NSMutableArray alloc] init];
+            NSMutableArray *rightItems = [[NSMutableArray alloc] init];
+            CGPoint pos = [layout getOffsetOfItems:items leftItems:leftItems rightItems:rightItems];
+            if(pos.x == pos.y) {
+                return;
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.participantCollectionView scrollRectToVisible:CGRectMake(velocity.x>0?pos.y:pos.x, 0, pos.y-pos.x, 100) animated:YES];
+            });
+            targetContentOffset->x = velocity.x>0?pos.y:pos.x;
+            
+            __block int row;
+            if (velocity.x > 0 /*ABS(pos.x-targetContentOffset->x) > ABS(pos.y - targetContentOffset->x)*/) {
+                [self onItemsEnter:rightItems itemsLeave:leftItems];
+                targetContentOffset->x = pos.y;
+                row = 0;
+                [items enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if(obj.row > row) {
+                        row = obj.row;
+                    }
+                }];
+            } else {
+                [self onItemsEnter:leftItems itemsLeave:rightItems];
+                targetContentOffset->x = pos.x;
+                row = 0x1FFFFFFF;
+                [items enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if(obj.row < row) {
+                        row = obj.row;
+                    }
+                }];
+            }
+
+            int page;
+            if(row == 0) {
+                page = 0;
+            } else {
+                page = (row -1)/4 + 1;
+            }
+            if(page > 0) {
+//                [self hidePanel];
+            }
+            [self.facePageControl setCurrentPage:page];
+            [self.facePageControl updateCurrentPageDisplay];
+        }
+    }
+}
+
+- (void)onItemsEnter:(NSArray<NSIndexPath *> *)enterItems itemsLeave:(NSArray<NSIndexPath *> *)leaveItems {
+    __block BOOL hasMain = NO;
+    [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.row == 0) {
+            hasMain = YES;
+            *stop = YES;
+        }
+    }];
+    if(hasMain) {
+        for (NSIndexPath *obj in leaveItems) {
+            UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:obj];
+            WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
+            if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
+                NSMutableArray *arr = [leaveItems mutableCopy];
+                [arr removeObject:obj];
+                leaveItems = [arr copy];
+                break;
+            }
+        }
+    } else {
+        [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.row == 0) {
+                hasMain = YES;
+                *stop = YES;
+                NSLog(@"leave contains obj 0");
+            }
+        }];
+        if(hasMain) {
+            for (NSIndexPath *obj in enterItems) {
+                UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:obj];
+                WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
+                if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
+                    NSMutableArray *arr = [leaveItems mutableCopy];
+                    [arr removeObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+                    leaveItems = [arr copy];
+                    break;
+                }
+            }
+        }
+    }
+    
+    [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+        UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
         BOOL isMain = (indexPath.row == 0);
         WFAVParticipantProfile *profile = ((WFCUParticipantCollectionViewCell *)cell).profile;
-        
+
         if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [self.currentSession setupLocalVideoView:cell scalingType:self.scalingType];
         } else {
             [self.currentSession setupRemoteVideoView:cell scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
-            
+
             if(isMain) {
                 [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_BigStream];
             } else {
                 [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_SmallStream];
             }
         }
-        
+
         if(isMain) {
             if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 self.smallVideoView.hidden = YES;
@@ -1742,36 +1884,20 @@
                 if(!self.smallVideoView.superview) {
                     [cell addSubview:self.smallVideoView];
                 }
-                
+
                 self.smallVideoView.hidden = NO;
                 [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
                 [cell bringSubviewToFront:self.smallVideoView];
             }
         }
-    }
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    if(collectionView == self.participantCollectionView) {
-        __weak typeof(self)ws = self;
+    }];
+    
+    [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+        UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
         WFCUParticipantCollectionViewCell *participantCell = (WFCUParticipantCollectionViewCell *)cell;
         WFAVParticipantProfile *profile = participantCell.profile;
-        
-        if(![profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                __block BOOL stillShow = NO;
-                [ws.participantCollectionView.visibleCells enumerateObjectsUsingBlock:^(WFCUParticipantCollectionViewCell * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if([obj.profile.userId isEqualToString:profile.userId]) {
-                        stillShow = YES;
-                        *stop = YES;
-                    }
-                }];
-                if(!stillShow) {
-                    [ws.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_None];
-                }
-            });
-        }
-    }
+        [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_None];
+    }];
 }
 
 #pragma mark - WFCUConferenceManagerDelegate
