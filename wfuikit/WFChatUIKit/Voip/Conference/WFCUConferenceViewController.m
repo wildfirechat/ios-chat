@@ -100,7 +100,7 @@
 #define PortraitItemSize 48
 #define PortraitLabelSize 16
 
-#define TopViewHeigh (26 + [WFCUUtilities wf_navigationFullHeight] - 64 + 40)
+#define TopViewHeigh ([WFCUUtilities wf_statusBarHeight] + 48)
 
 /*
  视频会议窗口排列规则：
@@ -275,18 +275,19 @@
     [self.view addSubview:self.participantCollectionView];
     
     
-    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 4 - 20, 200, 20)];
+    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 8 - 20, 200, 20)];
     [self.pageControl addTarget:self
                         action:@selector(pageChange:)
               forControlEvents:UIControlEventValueChanged];
     
-    self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor blackColor];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.f];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
+    self.pageControl.backgroundColor = [UIColor clearColor];
     
     self.pageControl.numberOfPages = 0;
     self.pageControl.currentPage = 0;
     if (@available(iOS 14.0, *)) {
-        self.pageControl.backgroundStyle = UIPageControlBackgroundStyleProminent;
+        self.pageControl.backgroundStyle = UIPageControlBackgroundStyleMinimal;
         self.pageControl.allowsContinuousInteraction = YES;
     }
     [self.view addSubview:self.pageControl];
@@ -306,7 +307,7 @@
     self.portraitCollectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.portraitCollectionView];
     
-    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, [WFCUUtilities wf_statusBarHeight] + TopViewHeigh, SmallVideoView, SmallVideoView * 4 /3)];
+    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, TopViewHeigh - [WFCUUtilities wf_statusBarHeight], SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     self.smallVideoView.tag = 666;
@@ -1160,8 +1161,8 @@
         self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, TopViewHeigh);
         
         CGRect smallVideoRect = self.smallVideoView.frame;
-        if(smallVideoRect.origin.y < [WFCUUtilities wf_statusBarHeight] + TopViewHeigh) {
-            smallVideoRect.origin.y = TopViewHeigh + [WFCUUtilities wf_statusBarHeight];
+        if(smallVideoRect.origin.y < TopViewHeigh - [WFCUUtilities wf_statusBarHeight]) {
+            smallVideoRect.origin.y = TopViewHeigh - [WFCUUtilities wf_statusBarHeight];
         }
         
         if(smallVideoRect.origin.y + smallVideoRect.size.height > self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT) {
@@ -1189,8 +1190,8 @@
         self.topBarView.frame = CGRectMake(0, -topViewHeigh, self.view.bounds.size.width, topViewHeigh);
         
         CGRect smallVideoRect = self.smallVideoView.frame;
-        if(smallVideoRect.origin.y == TopViewHeigh + [WFCUUtilities wf_statusBarHeight]) {
-            smallVideoRect.origin.y = [WFCUUtilities wf_statusBarHeight];
+        if(smallVideoRect.origin.y == TopViewHeigh - [WFCUUtilities wf_statusBarHeight]) {
+            smallVideoRect.origin.y = 0;
         }
         if(smallVideoRect.origin.y + smallVideoRect.size.height == self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT) {
             smallVideoRect.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - smallVideoRect.size.height;
@@ -1820,6 +1821,7 @@
         }
     }
 }
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     if (scrollView == self.participantCollectionView) {
         NSArray<NSIndexPath *> *items = [self.participantCollectionView indexPathsForVisibleItems];
