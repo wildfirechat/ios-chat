@@ -7,7 +7,7 @@
 //
 
 #import "WFCUInviteGroupMemberViewController.h"
-
+#import "WFCUUtilities.h"
 
 @interface WFCUInviteGroupMemberViewController ()
 @property (nonatomic, strong)UITextField *memberField;
@@ -23,7 +23,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Ok") style:UIBarButtonItemStyleDone target:self action:@selector(onDone:)];
     
     CGRect rect = self.view.bounds;
-    self.memberField = [[UITextField alloc] initWithFrame:CGRectMake(20, kStatusBarAndNavigationBarHeight + 50, rect.size.width - 40, 40)];
+    self.memberField = [[UITextField alloc] initWithFrame:CGRectMake(20, [WFCUUtilities wf_navigationFullHeight] + 50, rect.size.width - 40, 40)];
     [self.memberField setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.memberField];
     [self.view setBackgroundColor:[UIColor grayColor]];

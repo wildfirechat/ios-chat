@@ -14,7 +14,7 @@
 #import "WFZConferenceInfo.h"
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUGeneralModifyViewController.h"
-
+#import "WFCUUtilities.h"
 
 @interface WFZOrderConferenceViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -133,7 +133,7 @@
     CGRect bounds = self.view.bounds;
     CGFloat pickerHeight = 200;
     
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, bounds.size.height - pickerHeight - kTabbarSafeBottomMargin - 34, bounds.size.width, pickerHeight + kTabbarSafeBottomMargin + 34)];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, bounds.size.height - pickerHeight - [WFCUUtilities wf_safeDistanceBottom] - 34, bounds.size.width, pickerHeight + [WFCUUtilities wf_safeDistanceBottom] + 34)];
     container.backgroundColor = [UIColor whiteColor];
     container.layer.borderWidth = 1.f;
     container.layer.borderColor = [UIColor grayColor].CGColor;
