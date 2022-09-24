@@ -9,6 +9,8 @@
 #import "DeviceViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "DeviceInfoViewController.h"
+#import <WFChatUIKit/WFChatUIKit.h>
+
 
 @interface DeviceViewController ()
 @property(nonatomic, assign)BOOL ledOn;
@@ -42,7 +44,7 @@
     [self.view addSubview:self.ledBtn];
     [self.view addSubview:btnDHT];
     
-    self.dthLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, kStatusBarAndNavigationBarHeight + 16.f, bounds.size.width - 16, 100)];
+    self.dthLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, [WFCUUtilities wf_navigationFullHeight] + 16.f, bounds.size.width - 16, 100)];
     self.dthLabel.textAlignment = NSTextAlignmentCenter;
     self.dthLabel.backgroundColor = [UIColor grayColor];
     self.dthLabel.textColor = [UIColor greenColor];

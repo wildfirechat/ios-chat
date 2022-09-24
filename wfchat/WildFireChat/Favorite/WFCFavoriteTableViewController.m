@@ -132,7 +132,7 @@
             UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
             textContainer.backgroundColor = self.view.backgroundColor;
             
-            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
+            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
             
              textView.text = self.selectedCell.favoriteItem.title;
             textView.textAlignment = NSTextAlignmentCenter;

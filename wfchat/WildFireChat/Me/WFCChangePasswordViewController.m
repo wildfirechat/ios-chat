@@ -31,7 +31,7 @@
     self.title = @"设置新密码";
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat inputHeight = 40;
-    CGFloat topPos = kStatusBarAndNavigationBarHeight + 16;
+    CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 16;
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat labelWidth = 72;
     
