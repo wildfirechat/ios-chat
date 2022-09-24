@@ -21,6 +21,14 @@
 @end
 
 @implementation WFCUConferenceParticipantCollectionViewCell
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if(self) {
+        self.backgroundColor = [UIColor grayColor];
+    }
+    return self;
+}
+
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
     self.profile = profile;
     self.layer.masksToBounds = YES;
@@ -100,7 +108,7 @@
         _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
         _portraitView.center = self.center;
         _portraitView.layer.masksToBounds = YES;
-        _portraitView.layer.cornerRadius = 2.f;
+        _portraitView.layer.cornerRadius = 30;
         [self addSubview:_portraitView];
     }
     return _portraitView;

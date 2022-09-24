@@ -19,4 +19,13 @@
 + (UIImage *)imageForExt:(NSString *)extName;
 + (NSString *)getUnduplicatedPath:(NSString *)path;
 + (BOOL)isFileExist:(NSString *)filePath;
+
+/// 顶部状态栏高度（包括安全区）
++ (CGFloat)wf_statusBarHeight;
+
+/// 状态栏+导航栏的高度
++ (CGFloat)wf_navigationFullHeight;
+
+/// 底部安全高度
++ (CGFloat)wf_safeDistanceBottom;
 @end

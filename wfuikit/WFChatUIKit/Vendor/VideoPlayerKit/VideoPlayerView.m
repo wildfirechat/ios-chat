@@ -2,7 +2,7 @@
 
 #import "VideoPlayerView.h"
 #import "WFCUImage.h"
-
+#import "WFCUUtilities.h"
 
 #define PLAYER_CONTROL_BAR_HEIGHT 40
 #define LABEL_PADDING 10
@@ -168,7 +168,7 @@
     }
     
     [_playerControlBar setFrame:CGRectMake(bounds.origin.x,
-                                           bounds.size.height - PLAYER_CONTROL_BAR_HEIGHT - kTabbarSafeBottomMargin,
+                                           bounds.size.height - PLAYER_CONTROL_BAR_HEIGHT - [WFCUUtilities wf_safeDistanceBottom],
                                            bounds.size.width,
                                            PLAYER_CONTROL_BAR_HEIGHT)];
     

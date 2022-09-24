@@ -244,7 +244,7 @@
     
     
     [KxMenu showMenuInView:self.navigationController.view
-                  fromRect:CGRectMake(self.view.bounds.size.width - 56, kStatusBarAndNavigationBarHeight + searchExtra, 48, 5)
+                  fromRect:CGRectMake(self.view.bounds.size.width - 56, [WFCUUtilities wf_navigationFullHeight] + searchExtra, 48, 5)
                  menuItems:menuItems];
 }
 

@@ -12,6 +12,7 @@
 #import "WFCUConfigManager.h"
 #import "MBProgressHUD.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUGroupAnnouncementViewController () <UITextViewDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -28,14 +29,14 @@
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     int offset = 0;
     if (self.announcement.author.length && self.announcement.text.length) {
-        self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + 16, 48, 48)];
+        self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, [WFCUUtilities wf_navigationFullHeight] + 16, 48, 48)];
         WFCCUserInfo *author = [[WFCCIMService sharedWFCIMService] getUserInfo:self.announcement.author refresh:NO];
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:author.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
         
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, kStatusBarAndNavigationBarHeight + 16, self.view.bounds.size.width - 80 - 16, 20)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, [WFCUUtilities wf_navigationFullHeight] + 16, self.view.bounds.size.width - 80 - 16, 20)];
         self.nameLabel.text = author.displayName;
         
-        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, kStatusBarAndNavigationBarHeight + 48, self.view.bounds.size.width - 80 - 16, 14)];
+        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, [WFCUUtilities wf_navigationFullHeight] + 48, self.view.bounds.size.width - 80 - 16, 14)];
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.announcement.timestamp/1000];
         self.timeLabel.text = date.description;
         self.timeLabel.font = [UIFont systemFontOfSize:14];
@@ -51,17 +52,17 @@
     }
     
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + offset, self.view.bounds.size.width - 32, 0.5)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(16, [WFCUUtilities wf_navigationFullHeight] + offset, self.view.bounds.size.width - 32, 0.5)];
     line.backgroundColor = [UIColor grayColor];
     [self.view addSubview:line];
     
     CGFloat hintSize = 0;
     if (!self.isManager) {
-        line = [[UIView alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - kTabbarSafeBottomMargin - 40, self.view.bounds.size.width - 32, 0.5)];
+        line = [[UIView alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 40, self.view.bounds.size.width - 32, 0.5)];
         line.backgroundColor = [UIColor grayColor];
         [self.view addSubview:line];
         
-        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - kTabbarSafeBottomMargin - 36, self.view.bounds.size.width - 32, 16)];
+        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 36, self.view.bounds.size.width - 32, 16)];
         hint.textAlignment = NSTextAlignmentCenter;
         hint.text = @"仅群主和管理员可编辑";
         hint.textColor = [UIColor grayColor];
@@ -72,7 +73,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(onEditBtn:)];
     }
     
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + offset + 1, self.view.bounds.size.width - 31, self.view.bounds.size.height - 81 - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin - hintSize)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, [WFCUUtilities wf_navigationFullHeight] + offset + 1, self.view.bounds.size.width - 31, self.view.bounds.size.height - 81 - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom] - hintSize)];
     self.textView.editable = NO;
     self.textView.text = self.announcement.text;
     self.textView.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
