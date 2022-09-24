@@ -51,7 +51,7 @@
     CGFloat paddingEdge = 16;
     CGFloat inputHeight = 40;
     CGFloat hintHeight = 26;
-    CGFloat topPos = kStatusBarAndNavigationBarHeight + 45;
+    CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
     
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
     [self.hintLabel setText:@"手机号登录"];
@@ -165,7 +165,7 @@
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetKeyboard:)]];
     
-    self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 40 - kTabbarSafeBottomMargin, self.view.bounds.size.width-32, 40)];
+    self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 40 - [WFCUUtilities wf_safeDistanceBottom], self.view.bounds.size.width-32, 40)];
     self.privacyLabel.textAlignment = NSTextAlignmentCenter;
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"登录即代表你已同意《野火IM用户协议》和《野火IM隐私政策》" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
                                                                                                                      NSForegroundColorAttributeName : [UIColor darkGrayColor]}];

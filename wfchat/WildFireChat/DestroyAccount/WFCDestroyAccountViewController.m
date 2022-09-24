@@ -39,7 +39,7 @@
     CGFloat paddingEdge = 16;
     CGFloat inputHeight = 40;
     CGFloat hintHeight = 20;
-    CGFloat topPos = kStatusBarAndNavigationBarHeight + 45;
+    CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
     
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
     [self.hintLabel setText:@"亲，真的要狠心离开我们吗😭😭😭！"];
