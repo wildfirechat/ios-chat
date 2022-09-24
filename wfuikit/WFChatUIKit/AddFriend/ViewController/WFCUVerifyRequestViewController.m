@@ -10,7 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
-
+#import "WFCUUtilities.h"
 
 @interface WFCUVerifyRequestViewController ()
 @property(nonatomic, strong)UITextField *verifyField;
@@ -22,14 +22,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     CGRect clientArea = self.view.bounds;
-    UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8 + kStatusBarAndNavigationBarHeight, clientArea.size.width - 16, 16)];
+    UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8 + [WFCUUtilities wf_navigationFullHeight], clientArea.size.width - 16, 16)];
     hintLabel.text = WFCString(@"AddFriendReasonHint");
     hintLabel.font = [UIFont systemFontOfSize:12];
     hintLabel.textColor = [UIColor grayColor];
     [self.view addSubview:hintLabel];
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
-    self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + kStatusBarAndNavigationBarHeight, clientArea.size.width, 32)];
+    self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + [WFCUUtilities wf_navigationFullHeight], clientArea.size.width, 32)];
     WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     self.verifyField.font = [UIFont systemFontOfSize:16];
     if(me.displayName){
