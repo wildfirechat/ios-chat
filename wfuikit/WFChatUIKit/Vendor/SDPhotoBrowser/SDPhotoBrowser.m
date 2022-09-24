@@ -9,7 +9,7 @@
 #import "SDPhotoBrowser.h"
 #import <SDWebImage/SDWebImage.h>
 #import "SDBrowserImageView.h"
-
+#import "WFCUUtilities.h"
  
 //  ============在这里方便配置样式相关设置===========
 
@@ -296,7 +296,7 @@
        // [self showFirstImage];
     }
     
-    _indexLabel.center = CGPointMake(self.bounds.size.width * 0.5, kStatusBarAndNavigationBarHeight - 64 + 35);
+    _indexLabel.center = CGPointMake(self.bounds.size.width * 0.5, [WFCUUtilities wf_navigationFullHeight] - 64 + 35);
     _saveButton.frame = CGRectMake(30, self.bounds.size.height - 70, 50, 25);
     _allButton.frame = CGRectMake(100, self.bounds.size.height - 70, 50, 25);
 }

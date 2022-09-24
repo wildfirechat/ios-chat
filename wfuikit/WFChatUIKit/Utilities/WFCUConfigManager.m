@@ -137,7 +137,7 @@ static WFCUConfigManager *sharedSingleton = nil;
         return [UIColor colorWithRed:39/255.f green:39/255.f blue:39/255.f alpha:1.0f];
     } else {
         if (self.selectedTheme == ThemeType_WFChat) {
-            return [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9];
+            return [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:1];
         } else if(self.selectedTheme == ThemeType_White) {
             return [UIColor colorWithHexString:@"0xededed"];;
         }

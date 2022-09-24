@@ -285,4 +285,33 @@
 + (BOOL)isFileExist:(NSString *)filePath {
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
+
++ (CGFloat)wf_statusBarHeight {
+    if (@available(iOS 13.0, *)) {
+        NSSet *set = [UIApplication sharedApplication].connectedScenes;
+        UIWindowScene *windowScene = [set anyObject];
+        UIStatusBarManager *statusBarManager = windowScene.statusBarManager;
+        return statusBarManager.statusBarFrame.size.height;
+    } else {
+        return [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+}
+
++ (CGFloat)wf_navigationFullHeight {
+    return [WFCUUtilities wf_statusBarHeight] + 44;
+}
+ 
++ (CGFloat)wf_safeDistanceBottom {
+    if (@available(iOS 13.0, *)) {
+        NSSet *set = [UIApplication sharedApplication].connectedScenes;
+        UIWindowScene *windowScene = [set anyObject];
+        UIWindow *window = windowScene.windows.firstObject;
+        return window.safeAreaInsets.bottom;
+    } else if (@available(iOS 11.0, *)) {
+        UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
+        return window.safeAreaInsets.bottom;
+    }
+    
+    return [WFCUUtilities wf_safeDistanceBottom];
+}
 @end

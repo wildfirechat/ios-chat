@@ -22,6 +22,7 @@
 #import "UIView+Toast.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -120,7 +121,7 @@
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
     [self.view addSubview:self.bigVideoView];
     
-    self.smallVideoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3)];
+    self.smallVideoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, [WFCUUtilities wf_navigationFullHeight], SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     [self.view addSubview:self.smallVideoView];
@@ -514,10 +515,10 @@
         self.stateLabel.textAlignment = NSTextAlignmentCenter;
     } else {
         CGFloat postionX = 16;
-        self.portraitView.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight, 62, 62);
+        self.portraitView.frame = CGRectMake(postionX, [WFCUUtilities wf_navigationFullHeight], 62, 62);
         postionX += 62;
         postionX += 8;
-        self.userNameLabel.frame = CGRectMake(postionX, kStatusBarAndNavigationBarHeight + 8, 240, 26);
+        self.userNameLabel.frame = CGRectMake(postionX, [WFCUUtilities wf_navigationFullHeight] + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentLeft;
 
         if(![NSThread isMainThread]) {
@@ -526,7 +527,7 @@
         if(self.currentSession.state == kWFAVEngineStateConnected) {
             self.stateLabel.frame = CGRectMake(54, 36, 240, 20);
         } else {
-            self.stateLabel.frame = CGRectMake(88, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
+            self.stateLabel.frame = CGRectMake(88, [WFCUUtilities wf_navigationFullHeight] + 26 + 14, 240, 16);
         }
 //        self.stateLabel.hidden = YES;
         self.stateLabel.textAlignment = NSTextAlignmentLeft;
@@ -884,7 +885,7 @@
             self.smallVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(M_PI_2);
             self.bigVideoView.frame = self.view.bounds;
-            smallVideoFrame = CGRectMake(width - SmallVideoView - 8, height - 8 - kStatusBarAndNavigationBarHeight + 64 - SmallVideoView - SmallVideoView/3 - kTabbarSafeBottomMargin, SmallVideoView * 4 /3, SmallVideoView);
+            smallVideoFrame = CGRectMake(width - SmallVideoView - 8, height - 8 - [WFCUUtilities wf_navigationFullHeight] + 64 - SmallVideoView - SmallVideoView/3 - [WFCUUtilities wf_safeDistanceBottom], SmallVideoView * 4 /3, SmallVideoView);
             self.smallVideoView.frame = smallVideoFrame;
             self.swapVideoView = _swapVideoView;
             break;
@@ -893,7 +894,7 @@
             self.smallVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             self.bigVideoView.frame = self.view.bounds;
-            smallVideoFrame = CGRectMake(8-SmallVideoView/3, 8 + kStatusBarAndNavigationBarHeight - 64+SmallVideoView/3, SmallVideoView * 4 /3, SmallVideoView);
+            smallVideoFrame = CGRectMake(8-SmallVideoView/3, 8 + [WFCUUtilities wf_navigationFullHeight] - 64+SmallVideoView/3, SmallVideoView * 4 /3, SmallVideoView);
             self.smallVideoView.frame = smallVideoFrame;
             self.swapVideoView = _swapVideoView;
             break;
@@ -902,7 +903,7 @@
             self.smallVideoView.transform = CGAffineTransformMakeRotation(0);
             self.bigVideoView.transform = CGAffineTransformMakeRotation(0);
             self.bigVideoView.frame = self.view.bounds;
-            smallVideoFrame = CGRectMake(self.view.frame.size.width - SmallVideoView, kStatusBarAndNavigationBarHeight, SmallVideoView, SmallVideoView * 4 /3);
+            smallVideoFrame = CGRectMake(self.view.frame.size.width - SmallVideoView, [WFCUUtilities wf_navigationFullHeight], SmallVideoView, SmallVideoView * 4 /3);
             self.smallVideoView.frame = smallVideoFrame;
             self.swapVideoView = _swapVideoView;
             break;

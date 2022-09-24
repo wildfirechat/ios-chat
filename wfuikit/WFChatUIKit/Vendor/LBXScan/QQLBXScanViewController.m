@@ -147,7 +147,7 @@
         return;
     }
     
-    self.bottomItemsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.bounds)-100 - kTabbarSafeBottomMargin,
+    self.bottomItemsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.bounds)-100 - [WFCUUtilities wf_safeDistanceBottom],
                                                                       CGRectGetWidth(self.view.frame), 100)];
     _bottomItemsView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     

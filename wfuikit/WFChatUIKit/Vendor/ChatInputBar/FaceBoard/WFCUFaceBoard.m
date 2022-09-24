@@ -14,6 +14,7 @@
 #import "WFCUFaceButton.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 #define FACE_COUNT_ROW  4
 #define FACE_COUNT_CLU  7
@@ -144,7 +145,7 @@
 
 - (id)init {
     width = [UIScreen mainScreen].bounds.size.width;
-    self = [super initWithFrame:CGRectMake(0, 0, width, EMOJ_AREA_HEIGHT + kTabbarSafeBottomMargin)];
+    self = [super initWithFrame:CGRectMake(0, 0, width, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom])];
     
     [self loadStickers];
     if (self) {
@@ -161,7 +162,7 @@
         //添加PageControl
         [self addSubview:self.facePageControl];
         
-        _tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - kTabbarSafeBottomMargin, self.frame.size.width, EMOJ_TAB_HEIGHT)];
+        _tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [WFCUUtilities wf_safeDistanceBottom], self.frame.size.width, EMOJ_TAB_HEIGHT)];
         [self addSubview:_tabbarView];
         
         _sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];

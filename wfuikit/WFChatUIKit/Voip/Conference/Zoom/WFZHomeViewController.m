@@ -16,6 +16,7 @@
 #import "WFZConferenceInfo.h"
 #import "WFCUImage.h"
 #import "WFZConferenceHistoryListViewController.h"
+#import "WFCUUtilities.h"
 
 @interface WFZHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UIView *topPanel;
@@ -63,7 +64,7 @@
     self.topPanel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, 0)];
     [self.view addSubview:self.topPanel];
     
-    CGFloat offset = kStatusBarAndNavigationBarHeight + 32;
+    CGFloat offset = [WFCUUtilities wf_navigationFullHeight] + 32;
     
     
     CGFloat btnSize = 80;

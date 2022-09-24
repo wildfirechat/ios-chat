@@ -26,6 +26,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
 #import "ConferenceLabelView.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -154,7 +155,7 @@
     
     if (!self.currentSession.audioOnly) {
         CGSize labelSize = [ConferenceLabelView sizeOffView];
-        self.conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - kTabbarSafeBottomMargin - 4, labelSize.width, labelSize.height)];
+        self.conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - [WFCUUtilities wf_safeDistanceBottom] - 4, labelSize.width, labelSize.height)];
         
         [self.view addSubview:self.conferenceLabelView];
     }
@@ -164,7 +165,7 @@
     layout.itemSize = CGSizeMake(itemWidth, itemWidth);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     int lines = (int)([self.currentSession participantIds].count + 2) /3;
-    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth*lines + layout.minimumLineSpacing * (lines - 1)) collectionViewLayout:layout];
+    self.smallCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.frame.size.width, itemWidth*lines + layout.minimumLineSpacing * (lines - 1)) collectionViewLayout:layout];
     
     self.smallCollectionView.dataSource = self;
     self.smallCollectionView.delegate = self;
@@ -709,9 +710,9 @@
 //    if (self.currentSession.isAudioOnly) {
         CGFloat containerWidth = self.view.bounds.size.width;
         
-        self.portraitView.frame = CGRectMake((containerWidth-64)/2, kStatusBarAndNavigationBarHeight, 64, 64);;
+        self.portraitView.frame = CGRectMake((containerWidth-64)/2, [WFCUUtilities wf_navigationFullHeight], 64, 64);;
         
-        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
+        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, [WFCUUtilities wf_navigationFullHeight] + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
         
         self.connectTimeLabel.textAlignment = NSTextAlignmentCenter;
@@ -724,8 +725,8 @@
             self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.smallCollectionView.frame.origin.y + self.smallCollectionView.frame.size.height + 30, 240, 16);
         }
 //    } else {
-//        self.portraitView.frame = CGRectMake(16, kStatusBarAndNavigationBarHeight, 64, 64);
-//        self.userNameLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 8, 240, 26);
+//        self.portraitView.frame = CGRectMake(16, [WFCUUtilities wf_navigationFullHeight], 64, 64);
+//        self.userNameLabel.frame = CGRectMake(96, [WFCUUtilities wf_navigationFullHeight] + 8, 240, 26);
 //        if(![NSThread isMainThread]) {
 //            NSLog(@"error not main thread");
 //        }
@@ -733,7 +734,7 @@
 //        if(self.currentSession.state == kWFAVEngineStateConnected) {
 //            self.stateLabel.frame = CGRectMake(54, 30, 240, 20);
 //        } else {
-//            self.stateLabel.frame = CGRectMake(96, kStatusBarAndNavigationBarHeight + 26 + 14, 240, 16);
+//            self.stateLabel.frame = CGRectMake(96, [WFCUUtilities wf_navigationFullHeight] + 26 + 14, 240, 16);
 //        }
 //        self.stateLabel.textAlignment = NSTextAlignmentLeft;
 //    }
@@ -1131,9 +1132,9 @@
             CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
             
             if (self.participants.count - 1 > 3) {
-                self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth * 2 + layout.minimumLineSpacing);
+                self.smallCollectionView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.frame.size.width, itemWidth * 2 + layout.minimumLineSpacing);
             } else {
-                self.smallCollectionView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.frame.size.width, itemWidth);
+                self.smallCollectionView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.frame.size.width, itemWidth);
             }
             
             if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {

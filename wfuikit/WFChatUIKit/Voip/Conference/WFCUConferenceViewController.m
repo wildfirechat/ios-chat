@@ -29,6 +29,7 @@
 #import "WFZConferenceInfo.h"
 #import "ConferenceLabelView.h"
 #import "WFCUConfigManager.h"
+#import "WFCUUtilities.h"
 
 #define BOTTOM_BAR_HEIGHT  54
 @interface WFCUConferenceViewController () <UITextFieldDelegate
@@ -99,7 +100,7 @@
 #define PortraitItemSize 48
 #define PortraitLabelSize 16
 
-#define TopViewHeigh (26 + kStatusBarAndNavigationBarHeight - 64 + 40)
+#define TopViewHeigh (26 + [WFCUUtilities wf_navigationFullHeight] - 64 + 40)
 
 /*
  视频会议窗口排列规则：
@@ -256,10 +257,11 @@
     WFCUConferenceCollectionViewLayout *layout = [[WFCUConferenceCollectionViewLayout alloc] init];
     self.scalingType = kWFAVVideoScalingTypeAspectFit;
     
-    self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin);
+    self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom]);
     self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, TopViewHeigh);
     
-    CGRect smallCollectionRect = CGRectMake(0, TopViewHeigh, self.view.bounds.size.width, self.view.bounds.size.height - TopViewHeigh - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT);
+//    CGRect smallCollectionRect = CGRectMake(0, TopViewHeigh, self.view.bounds.size.width, self.view.bounds.size.height - TopViewHeigh - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT);
+    CGRect smallCollectionRect = CGRectMake(0, [WFCUUtilities wf_statusBarHeight], self.view.bounds.size.width, self.view.bounds.size.height- [WFCUUtilities wf_statusBarHeight] - [WFCUUtilities wf_safeDistanceBottom]);
     
     self.participantCollectionView = [[UICollectionView alloc] initWithFrame:smallCollectionRect collectionViewLayout:layout];
     self.participantCollectionView.dataSource = self;
@@ -273,7 +275,7 @@
     [self.view addSubview:self.participantCollectionView];
     
     
-    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 4 - 20, 200, 20)];
+    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 4 - 20, 200, 20)];
     [self.pageControl addTarget:self
                         action:@selector(pageChange:)
               forControlEvents:UIControlEventValueChanged];
@@ -304,7 +306,7 @@
     self.portraitCollectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.portraitCollectionView];
     
-    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, 0, SmallVideoView, SmallVideoView * 4 /3)];
+    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, [WFCUUtilities wf_statusBarHeight] + TopViewHeigh, SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     self.smallVideoView.tag = 666;
@@ -368,7 +370,7 @@
 
 - (UIButton *)minimizeButton {
     if (!_minimizeButton) {
-        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
+        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26+[WFCUUtilities wf_navigationFullHeight]-64, 30, 30)];
         
         [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize"] forState:UIControlStateNormal];
         [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
@@ -383,7 +385,7 @@
 
 - (UIButton *)informationButton {
     if(!_informationButton) {
-        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 9, 20+kStatusBarAndNavigationBarHeight-64, 18, 18)];
+        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 9, 20+[WFCUUtilities wf_navigationFullHeight]-64, 18, 18)];
         [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
         _informationButton.backgroundColor = [UIColor clearColor];
         [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
@@ -393,7 +395,7 @@
 }
 - (UILabel *)connectTimeLabel {
     if(!_connectTimeLabel) {
-        _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 60, 20+kStatusBarAndNavigationBarHeight-64 + 22, 120, 16)];
+        _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 60, 20+[WFCUUtilities wf_navigationFullHeight]-64 + 22, 120, 16)];
         _connectTimeLabel.textAlignment = NSTextAlignmentCenter;
         _connectTimeLabel.font = [UIFont systemFontOfSize:14];
         _connectTimeLabel.textColor = [UIColor whiteColor];
@@ -403,7 +405,7 @@
 }
 - (UIButton *)chatButton {
     if(!_chatButton) {
-        _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(8, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68, 80, 20)];
+        _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(8, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 28 - 68, 80, 20)];
         [_chatButton setTitle:@"说点什么..." forState:UIControlStateNormal];
         [_chatButton setTitleColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.5] forState:UIControlStateNormal];
         _chatButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
@@ -418,7 +420,7 @@
 
 - (UITableView *)messageTableView {
     if(!_messageTableView) {
-        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68-200, 200, 0)];
+        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 28 - 68-200, 200, 0)];
         _messageTableView.dataSource = self;
         _messageTableView.backgroundColor = [UIColor clearColor];
         _messageTableView.rowHeight = UITableViewAutomaticDimension;
@@ -444,7 +446,7 @@
 
 - (UIButton *)switchCameraButton {
     if (!_switchCameraButton) {
-        _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+kStatusBarAndNavigationBarHeight-64, 30, 30)];
+        _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26+[WFCUUtilities wf_navigationFullHeight]-64, 30, 30)];
         [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera"] forState:UIControlStateNormal];
         [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera_hover"] forState:UIControlStateHighlighted];
         [_switchCameraButton setImage:[WFCUImage imageNamed:@"switchcamera_hover"] forState:UIControlStateSelected];
@@ -482,7 +484,7 @@
 - (UIView *)topBarView {
     if(!_topBarView) {
         _topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -TopViewHeigh, self.view.bounds.size.width, TopViewHeigh)];
-        _topBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _topBarView.backgroundColor = [UIColor colorWithRed:0.2 green:0.37 blue:0.9 alpha:1];
         [self.view addSubview:_topBarView];
     }
     return _topBarView;
@@ -490,8 +492,8 @@
 
 - (UIView *)bottomBarView {
     if(!_bottomBarView) {
-        _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin)];
-        _bottomBarView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom])];
+        _bottomBarView.backgroundColor = [UIColor colorWithRed:0.2 green:0.37 blue:0.9 alpha:1];
         CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
         
         int index = 1;
@@ -602,7 +604,7 @@
         size.height = 200;
     }
     if(size.height != self.messageTableView.frame.size.height) {
-        self.messageTableView.frame = CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 -size.height, 200, size.height);
+        self.messageTableView.frame = CGRectMake(0, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 28 - 68 -size.height, 200, size.height);
     }
 }
 
@@ -620,7 +622,7 @@
 - (UIView *)inputContainer {
     if(!_inputContainer) {
         CGRect bound = self.view.bounds;
-        _inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 + 24, bound.size.width, 40)];
+        _inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 28 - 68 + 24, bound.size.width, 40)];
         _inputContainer.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3];
         _inputContainer.hidden = YES;
         [self.view addSubview:_inputContainer];
@@ -1081,7 +1083,7 @@
     [panel addSubview:linkCopyBtn];
     
     offset += 40;
-    offset += kTabbarSafeBottomMargin;
+    offset += [WFCUUtilities wf_safeDistanceBottom];
     panel.layer.cornerRadius = 10.f;
     panel.clipsToBounds = YES;
     
@@ -1121,9 +1123,9 @@
 - (void)updatePortraitAndStateViewFrame {
         CGFloat containerWidth = self.view.bounds.size.width;
         
-        self.portraitView.frame = CGRectMake((containerWidth-64)/2, kStatusBarAndNavigationBarHeight, 64, 64);;
+        self.portraitView.frame = CGRectMake((containerWidth-64)/2, [WFCUUtilities wf_navigationFullHeight], 64, 64);;
         
-        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, kStatusBarAndNavigationBarHeight + 64 + 8, 240, 26);
+        self.userNameLabel.frame = CGRectMake((containerWidth - 240)/2, [WFCUUtilities wf_navigationFullHeight] + 64 + 8, 240, 26);
         self.userNameLabel.textAlignment = NSTextAlignmentCenter;
             
         self.stateLabel.frame = CGRectMake((containerWidth - 240)/2, self.participantCollectionView.frame.origin.y + self.participantCollectionView.frame.size.height - 130, 240, 16);
@@ -1144,18 +1146,28 @@
         return;
     }
     
-//    if (self.bottomBarView.hidden) {
-//        [self showPanel];
-//    } else {
-//        [self hidePanel];
-//    }
+    if (self.bottomBarView.hidden) {
+        [self showPanel];
+    } else {
+        [self hidePanel];
+    }
 }
 
 - (void)showPanel {
     self.bottomBarView.hidden = NO;
     [UIView animateWithDuration:0.5 animations:^{
-        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - kTabbarSafeBottomMargin-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+kTabbarSafeBottomMargin);
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom]);
         self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, TopViewHeigh);
+        
+        CGRect smallVideoRect = self.smallVideoView.frame;
+        if(smallVideoRect.origin.y < [WFCUUtilities wf_statusBarHeight] + TopViewHeigh) {
+            smallVideoRect.origin.y = TopViewHeigh + [WFCUUtilities wf_statusBarHeight];
+        }
+        
+        if(smallVideoRect.origin.y + smallVideoRect.size.height > self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT) {
+            smallVideoRect.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT - smallVideoRect.size.height;
+        }
+        self.smallVideoView.frame = smallVideoRect;
     }];
     
     if (self.currentSession.audioOnly) {
@@ -1173,8 +1185,17 @@
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, BOTTOM_BAR_HEIGHT);
         
-        CGFloat topViewHeigh = 26+kStatusBarAndNavigationBarHeight-64 + 40;
+        CGFloat topViewHeigh = 26+[WFCUUtilities wf_navigationFullHeight]-64 + 40;
         self.topBarView.frame = CGRectMake(0, -topViewHeigh, self.view.bounds.size.width, topViewHeigh);
+        
+        CGRect smallVideoRect = self.smallVideoView.frame;
+        if(smallVideoRect.origin.y == TopViewHeigh + [WFCUUtilities wf_statusBarHeight]) {
+            smallVideoRect.origin.y = [WFCUUtilities wf_statusBarHeight];
+        }
+        if(smallVideoRect.origin.y + smallVideoRect.size.height == self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-BOTTOM_BAR_HEIGHT) {
+            smallVideoRect.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - smallVideoRect.size.height;
+        }
+        self.smallVideoView.frame = smallVideoRect;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
     }];
@@ -1206,7 +1227,7 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
 
     CGRect frame = self.inputContainer.frame;
-    frame.origin.y = self.view.frame.size.height - kTabbarSafeBottomMargin - BOTTOM_BAR_HEIGHT - 28 - 68 + 20;
+    frame.origin.y = self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - BOTTOM_BAR_HEIGHT - 28 - 68 + 20;
     [UIView animateWithDuration:duration animations:^{
         self.inputContainer.frame = frame;
         self.inputContainer.hidden = YES;
@@ -1229,7 +1250,7 @@
     __weak typeof(self)ws = self;
     if (@available(iOS 10.0, *)) {
         self.hidePanelTimer = [NSTimer scheduledTimerWithTimeInterval:3 repeats:NO block:^(NSTimer * _Nonnull timer) {
-//            [ws hidePanel];
+            [ws hidePanel];
         }];
     } else {
         // Fallback on earlier versions
@@ -1717,7 +1738,7 @@
     if (collectionView == self.portraitCollectionView) {
         return self.participants.count;
     } else {
-        if(self.participants.count == 2)
+        if(self.participants.count == 1 || self.participants.count == 2)
             return 1;
         return self.participants.count+1;
     }
@@ -1753,7 +1774,9 @@
     if (collectionView == self.participantCollectionView) {
         BOOL isMain = (indexPath.row == 0);
         WFCUConferenceParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:isMain ? @"main" : @"sub" forIndexPath:indexPath];
-        
+        if(isMain) {
+            cell.backgroundColor = [UIColor blackColor];
+        }
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
         
         UIDevice *device = [UIDevice currentDevice] ;
@@ -1842,7 +1865,7 @@
                 page = (row -1)/4 + 1;
             }
             if(page > 0) {
-//                [self hidePanel];
+                [self hidePanel];
             }
             [self.pageControl setCurrentPage:page];
             [self.pageControl updateCurrentPageDisplay];

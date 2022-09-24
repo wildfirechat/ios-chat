@@ -31,7 +31,7 @@
     
     
     CGFloat portraitWidth = 80;
-    CGFloat top = kStatusBarAndNavigationBarHeight + 40;
+    CGFloat top = [WFCUUtilities wf_navigationFullHeight] + 40;
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
@@ -73,12 +73,12 @@
     if(![[WFCCNetworkService sharedInstance].userId isEqualToString:self.channelInfo.owner]) {
         UIButton *btn;
         if ([[WFCCIMService sharedWFCIMService] isListenedChannel:self.channelInfo.channelId]) {
-            btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - kTabbarSafeBottomMargin - 40 - 16, screenWidth - 40, 40)];
+            btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - 40 - 16, screenWidth - 40, 40)];
             [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
         } else  {
-            btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - kTabbarSafeBottomMargin - 40 - 16, screenWidth - 40, 40)];
+            btn = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - 40 - 16, screenWidth - 40, 40)];
             [btn setTitle:WFCString(@"SubscribeChannel") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onSubscribeBtn:) forControlEvents:UIControlEventTouchDown];

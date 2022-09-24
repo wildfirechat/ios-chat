@@ -990,8 +990,8 @@
         insets = self.view.safeAreaInsets;
     }
     CGRect frame = self.view.bounds;
-    frame.origin.y += kStatusBarAndNavigationBarHeight;
-    frame.size.height -= (kTabbarSafeBottomMargin + kStatusBarAndNavigationBarHeight);
+    frame.origin.y += [WFCUUtilities wf_navigationFullHeight];
+    frame.size.height -= ([WFCUUtilities wf_safeDistanceBottom] + [WFCUUtilities wf_navigationFullHeight]);
     self.backgroundView = [[UIView alloc] initWithFrame:frame];
     [self.view addSubview:self.backgroundView];
     
@@ -1187,7 +1187,7 @@
     }
     
     if(self.ongoingCallDict.count) {
-        self.ongoingCallTableView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.bounds.size.width, MIN(200, self.ongoingCallDict.count * 28 + 28));
+        self.ongoingCallTableView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.bounds.size.width, MIN(200, self.ongoingCallDict.count * 28 + 28));
         [self.ongoingCallTableView reloadData];
         if(!self.checkOngoingCallTimer) {
             if (@available(iOS 10.0, *)) {
@@ -1200,7 +1200,7 @@
             }
         }
     } else {
-        self.ongoingCallTableView.frame = CGRectMake(0, kStatusBarAndNavigationBarHeight, self.view.bounds.size.width, 0);
+        self.ongoingCallTableView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.bounds.size.width, 0);
         if(self.checkOngoingCallTimer) {
             [self.checkOngoingCallTimer invalidate];
             self.checkOngoingCallTimer = nil;
@@ -2329,7 +2329,7 @@
         UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
         
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
          textView.text = txtMsgContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];
@@ -2499,7 +2499,7 @@
                 UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
                 textContainer.backgroundColor = self.view.backgroundColor;
                 
-                UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, kStatusBarAndNavigationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - kStatusBarAndNavigationBarHeight - kTabbarSafeBottomMargin)];
+                UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
                  textView.text = txtContent.text;
                 textView.textAlignment = NSTextAlignmentCenter;
                 textView.font = [UIFont systemFontOfSize:28];
