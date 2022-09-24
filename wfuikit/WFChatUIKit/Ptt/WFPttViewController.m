@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <PttClient/WFPttClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "WFCUUtilities.h"
 
 @interface WFPttViewController ()
 @property(nonatomic, strong)UIButton *startButton;
@@ -57,7 +58,7 @@
         }
         
         CGRect bound = self.view.bounds;
-        self.startButton.frame = CGRectMake((bound.size.width - btnSize)/2, self.view.bounds.size.height - kTabbarSafeBottomMargin - btnSize/2 - 160, btnSize, btnSize);
+        self.startButton.frame = CGRectMake((bound.size.width - btnSize)/2, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - btnSize/2 - 160, btnSize, btnSize);
         [self.startButton setTitle:title forState:UIControlStateNormal];
         self.startButton.backgroundColor = color;
         self.startButton.layer.cornerRadius = btnSize/2;
