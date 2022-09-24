@@ -25,18 +25,18 @@
     self = [super initWithFrame:frame];
     if(self) {
         self.backgroundColor = [UIColor grayColor];
+        self.layer.masksToBounds = YES;
+        self.layer.cornerRadius = 10.f;
+        self.layer.borderWidth = 1.f;
+        self.layer.borderColor = [UIColor clearColor].CGColor;
     }
     return self;
 }
 
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
     self.profile = profile;
-    self.layer.masksToBounds = YES;
-    self.layer.cornerRadius = 5;
     self.userId = userInfo.userId;
-    self.layer.borderWidth = 1.f;
-    self.layer.borderColor = [UIColor clearColor].CGColor;
-    
+
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     self.portraitView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 

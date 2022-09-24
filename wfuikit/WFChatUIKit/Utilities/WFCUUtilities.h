@@ -23,6 +23,9 @@
 /// 顶部状态栏高度（包括安全区）
 + (CGFloat)wf_statusBarHeight;
 
+/// 导航栏的高度
++ (CGFloat)wf_navigationHeight;
+
 /// 状态栏+导航栏的高度
 + (CGFloat)wf_navigationFullHeight;
 

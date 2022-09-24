@@ -9,6 +9,10 @@
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
 
+#define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f ||[UIScreen mainScreen].bounds.size.height == 844.0f ||[UIScreen mainScreen].bounds.size.height == 926.0f ||[UIScreen mainScreen].bounds.size.height == 932.0f)
+
+#define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
+
 @implementation WFCUUtilities
 + (CGSize)getTextDrawingSize:(NSString *)text
                         font:(UIFont *)font
@@ -286,6 +290,10 @@
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
++ (CGFloat)wf_navigationHeight {
+    return 44.f;
+}
+
 + (CGFloat)wf_statusBarHeight {
     if (@available(iOS 13.0, *)) {
         NSSet *set = [UIApplication sharedApplication].connectedScenes;
@@ -312,6 +320,6 @@
         return window.safeAreaInsets.bottom;
     }
     
-    return [WFCUUtilities wf_safeDistanceBottom];
+    return kTabbarSafeBottomMargin;
 }
 @end

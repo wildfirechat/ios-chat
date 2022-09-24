@@ -24,6 +24,8 @@
     const CGFloat height = rect.size.height/2;
     
     self.attrubutesArray = [NSMutableArray array];
+    int lastPageCount = (count - 1)%4;
+    int lastPageFirstIndex = count - lastPageCount;
     for (int i = 0; i < count; i ++) {
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:i inSection:0];
         UICollectionViewLayoutAttributes * attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
@@ -37,11 +39,28 @@
             int index = (i -1)%4;
             CGFloat x = startX;
             CGFloat y = 0;
-            if(index == 1 || index == 3) {
-                x += width;
-            }
-            if(index == 2 || index == 3) {
-                y += height;
+            if(i < lastPageFirstIndex) {
+                if(index == 1 || index == 3) {
+                    x += width;
+                }
+                if(index == 2 || index == 3) {
+                    y += height;
+                }
+            } else {
+                if(lastPageCount == 1) {
+                    x += width/2;
+                    y += height/2;
+                } else if(lastPageCount == 2) {
+                    x += index * width;
+                    y += height/2;
+                } else {
+                    if(index == 2) {
+                        x += width/2;
+                        y += height;
+                    } else if(index == 1) {
+                        x += width;
+                    }
+                }
             }
             frame = CGRectMake(x , y, width, height);
         }
