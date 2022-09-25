@@ -24,9 +24,9 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if(self) {
-        self.backgroundColor = [UIColor grayColor];
+        self.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:0.4];
         self.layer.masksToBounds = YES;
-        self.layer.cornerRadius = 10.f;
+        self.layer.cornerRadius = 3.f;
         self.layer.borderWidth = 1.f;
         self.layer.borderColor = [UIColor clearColor].CGColor;
     }
