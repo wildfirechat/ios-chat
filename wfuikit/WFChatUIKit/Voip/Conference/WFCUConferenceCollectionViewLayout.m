@@ -76,13 +76,12 @@
 }
 
 - (CGSize)collectionViewContentSize {
-    UICollectionViewLayoutAttributes * attributes = [self.attrubutesArray lastObject];
-    CGFloat width = attributes.frame.origin.x + attributes.frame.size.width;
-    if((self.attrubutesArray.count-1)%4 == 1 || (self.attrubutesArray.count-1)%4 == 3) {
-        width += self.collectionView.frame.size.width/2;
+    if(self.attrubutesArray.count == 1 || self.attrubutesArray.count == 2) {
+        return self.collectionView.bounds.size;
     }
+    int page = [self pageByRow:self.attrubutesArray.count - 1];
     
-    return CGSizeMake(width, self.collectionView.bounds.size.height);
+    return CGSizeMake((page + 1) * self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect{
