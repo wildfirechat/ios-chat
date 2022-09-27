@@ -46,6 +46,7 @@
 @property (nonatomic, strong) UIButton *hangupButton;
 @property (nonatomic, strong) UIButton *switchCameraButton;
 @property (nonatomic, strong) UIButton *audioButton;
+@property (nonatomic, strong) UIButton *floatingAudioButton;
 @property (nonatomic, strong) UIButton *speakerButton;
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *managerButton;
@@ -103,6 +104,8 @@
 #define CONFERENCE_TOP_BAR_WIDTH  40
 #define CONFERENCE_BAR_HEIGHT  48
 #define TopViewHeigh ([WFCUUtilities wf_statusBarHeight] + CONFERENCE_BAR_HEIGHT)
+
+#define FLOATING_AUDIO_BUTTON_SIZE 48
 
 /*
  视频会议窗口排列规则：
@@ -382,13 +385,17 @@
 
 - (UIButton *)informationButton {
     if(!_informationButton) {
-        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 70, [WFCUUtilities wf_statusBarHeight]+6, 140, 18)];
+        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 70, [WFCUUtilities wf_statusBarHeight]+6, 140, 14)];
         [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
         _informationButton.backgroundColor = [UIColor clearColor];
         _informationButton.titleLabel.font = [UIFont systemFontOfSize:14];
         [_informationButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         if(self.conferenceInfo.conferenceTitle.length) {
-            [_informationButton setTitle:[NSString stringWithFormat:@" %@", self.conferenceInfo.conferenceTitle] forState:UIControlStateNormal];
+            [_informationButton setTitle:self.conferenceInfo.conferenceTitle forState:UIControlStateNormal];
+            
+            CGFloat space = 4;
+            _informationButton.titleEdgeInsets = UIEdgeInsetsMake(0, - _informationButton.imageView.image.size.width - space,0,_informationButton.imageView.image.size.width + space);
+            _informationButton.imageEdgeInsets = UIEdgeInsetsMake(0, _informationButton.titleLabel.frame.size.width + space, 0,  -_informationButton.titleLabel.frame.size.width - space);
         }
         [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         [self.topBarView addSubview:_informationButton];
@@ -485,6 +492,38 @@
         [self.topBarView addSubview:_switchCameraButton];
     }
     return _switchCameraButton;
+}
+
+- (UIButton *)floatingAudioButton {
+    if(!_floatingAudioButton) {
+        CGRect bound = self.view.bounds;
+        _floatingAudioButton = [[UIButton alloc] initWithFrame:CGRectMake((bound.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bound.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - 16, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE)];
+        [_floatingAudioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
+        _floatingAudioButton.hidden = YES;
+        _floatingAudioButton.backgroundColor = [UIColor grayColor];
+        _floatingAudioButton.layer.masksToBounds = YES;
+        _floatingAudioButton.layer.cornerRadius = FLOATING_AUDIO_BUTTON_SIZE/2;
+        [_floatingAudioButton addTarget:self action:@selector(audioButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        [self.view addSubview:_floatingAudioButton];
+    }
+    return _floatingAudioButton;
+}
+
+- (void)updateAudioVolume:(NSInteger)volume {
+    if(self.currentSession.isAudioMuted)
+        return;
+    
+    int v = (int)(volume/1000);
+    if(v < 0) {
+        v = 0;
+    }
+    if(v > 10) {
+        v = 10;
+    }
+    __weak typeof(self)ws = self;
+    [UIView animateWithDuration:0.2 animations:^{
+        [ws.floatingAudioButton setImage:[WFCUImage imageNamed:[NSString stringWithFormat:@"mic_%d", v]] forState:UIControlStateNormal];
+    }];
 }
 
 - (UIButton *)createBarButtom:(NSString *)title imageName:(NSString *)imageName selectedImageName:(NSString *)selectedImageName select:(SEL)selector frame:(CGRect)frame {
@@ -902,22 +941,28 @@
             [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
             [self updateAudioButton];
         }
-        [self startHidePanelTimer];
+        if(button == self.audioButton) {
+            [self startHidePanelTimer];
+        }
     }
 }
 
 - (void)updateAudioButton {
     if (self.currentSession.audioMuted || self.currentSession.isAudience) {
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio_mute"] forState:UIControlStateNormal];
+        [self.floatingAudioButton setImage:[WFCUImage imageNamed:@"conference_audio_mute"] forState:UIControlStateNormal];
     } else {
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
+        [self.floatingAudioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
     }
     
     
     if(self.currentSession.audience && !self.conferenceInfo.allowSwitchMode && ![self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         self.audioButton.enabled = NO;
+        self.floatingAudioButton.enabled = NO;
     } else {
         self.audioButton.enabled = YES;
+        self.floatingAudioButton.enabled = YES;
     }
 }
 - (void)speakerButtonDidTap:(UIButton *)button {
@@ -1251,6 +1296,11 @@
 }
 
 - (void)showPanel {
+    self.floatingAudioButton.hidden = YES;
+    CGRect floatingAudioBtnFrame = self.floatingAudioButton.frame;
+    floatingAudioBtnFrame.origin.y = self.view.bounds.size.height;
+    self.floatingAudioButton.frame = floatingAudioBtnFrame;
+    
     self.bottomBarView.hidden = NO;
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom]);
@@ -1295,6 +1345,12 @@
         self.smallVideoView.frame = smallVideoRect;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
+        self.floatingAudioButton.hidden = NO;
+        [UIView animateWithDuration:0.5 animations:^{
+            CGRect floatingAudioBtnFrame = self.floatingAudioButton.frame;
+            floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - 16;
+            self.floatingAudioButton.frame = floatingAudioBtnFrame;
+        }];
     }];
 }
 
@@ -1501,6 +1557,9 @@
 
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
+    if([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        [self updateAudioVolume:volume];
+    }
 }
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
