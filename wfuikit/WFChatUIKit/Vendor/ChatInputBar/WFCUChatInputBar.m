@@ -649,6 +649,7 @@
             self.inputContainer.hidden = YES;
             self.publicContainer.hidden = NO;
             [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+            [self.textInputView resignFirstResponder];
             break;
         case ChatInputBarDefaultStatus:
             self.voiceInput = NO;
@@ -983,7 +984,7 @@
 }
 
 -(void)keyboardDidHide:(NSNotification *)notification{
-    if ((self.emojInput || self.pluginInput || self.textInput) && self.inputBarStatus != ChatInputBarDefaultStatus) {
+    if ((self.emojInput || self.pluginInput || self.textInput) && self.inputBarStatus != ChatInputBarDefaultStatus && self.inputBarStatus != ChatInputBarPublicStatus) {
         [self.textInputView becomeFirstResponder];
     }
 }
