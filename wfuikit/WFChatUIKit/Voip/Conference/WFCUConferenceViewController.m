@@ -289,7 +289,7 @@
     [self.view addSubview:self.participantCollectionView];
     
     
-    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 8 - 20, 200, 20)];
+    self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 20, 200, 20)];
     [self.pageControl addTarget:self
                          action:@selector(pageChange:)
                forControlEvents:UIControlEventValueChanged];
@@ -497,7 +497,7 @@
 - (UIButton *)floatingAudioButton {
     if(!_floatingAudioButton) {
         CGRect bound = self.view.bounds;
-        _floatingAudioButton = [[UIButton alloc] initWithFrame:CGRectMake((bound.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bound.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - 16, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE)];
+        _floatingAudioButton = [[UIButton alloc] initWithFrame:CGRectMake((bound.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bound.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE)];
         [_floatingAudioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
         _floatingAudioButton.hidden = YES;
         _floatingAudioButton.backgroundColor = [UIColor grayColor];
@@ -1346,9 +1346,9 @@
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
         self.floatingAudioButton.hidden = NO;
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             CGRect floatingAudioBtnFrame = self.floatingAudioButton.frame;
-            floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - 16;
+            floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT;
             self.floatingAudioButton.frame = floatingAudioBtnFrame;
         }];
     }];
@@ -2003,7 +2003,9 @@
 #pragma mark - UICollectionViewDelegate
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if(scrollView == self.participantCollectionView) {
-        [self updateVideoStreams];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateVideoStreams];
+        });
     }
 }
 
@@ -2022,7 +2024,6 @@
             if(pos.x == pos.y) {
                 return;
             }
-            
             
             targetContentOffset->x = velocity.x>0?pos.y:pos.x;
             
@@ -2046,7 +2047,9 @@
                         row = obj.row;
                     }
                 }];
-                [self.participantCollectionView scrollRectToVisible:CGRectMake(pos.x, 0, pos.y-pos.x, 100) animated:YES];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.participantCollectionView scrollRectToVisible:CGRectMake(pos.x, 0, pos.y-pos.x, 100) animated:YES];
+                });
             }
 
             int page;
@@ -2072,7 +2075,7 @@
             *stop = YES;
         }
     }];
-    
+
     if(hasMain) {
         for (NSIndexPath *obj in leaveItems) {
             WFAVParticipantProfile *profile = obj.row > 0 ? self.participants[obj.row-1] : self.focusUserProfile;
