@@ -21,6 +21,12 @@
 @property (nonatomic, assign)BOOL multiSelecting;
 @property (nonatomic, strong)NSMutableArray *selectedMessageIds;
 
+//静默加入聊天室，不发送欢迎语和告别语
 @property (nonatomic, assign)BOOL silentJoinChatroom;
+
+//保持在聊天室中，关掉聊天窗口也不退出
 @property (nonatomic, assign)BOOL keepInChatroom;
+
+//VC是presented的，关闭方式与push进入有所不同。
+@property (nonatomic, assign)BOOL presented;
 @end

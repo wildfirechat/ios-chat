@@ -294,7 +294,12 @@
                 };
             }];
         } else {
-            [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:nil error:nil];
+            [[WFCCIMService sharedWFCIMService] joinChatroom:ws.conversation.target success:^{
+               //需要拉取历史消息
+                [ws loadMoreMessage:YES completion:nil];
+            } error:^(int error_code) {
+                
+            }];
         }
     }
     if(self.conversation.type == Channel_Type) {
@@ -386,7 +391,11 @@
         } else if(self.conversation.type == SecretChat_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         }
-        self.navigationItem.leftBarButtonItem = nil;
+        if(self.presented) {
+            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onCloseBtn:)];
+        } else {
+            self.navigationItem.leftBarButtonItem = nil;
+        }
     }
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] init];
 }
@@ -561,6 +570,9 @@
         });
     }
     
+}
+- (void)onCloseBtn:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onLeftBtnPressed:(id)sender {
