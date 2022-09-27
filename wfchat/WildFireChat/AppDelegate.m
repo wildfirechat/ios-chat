@@ -645,7 +645,7 @@
         
         
         __weak typeof(self)ws = self;
-        __block MBProgressHUD *hud = [self startProgress:@"开启会议中" inView:navigator.view];
+        __block MBProgressHUD *hud = [self startProgress:@"会议加载中" inView:navigator.view];
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:conferenceId password:password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
                 [ws stopProgress:hud inView:navigator.view finishText:nil];

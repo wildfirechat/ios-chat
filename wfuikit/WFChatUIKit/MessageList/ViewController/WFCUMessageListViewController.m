@@ -2246,7 +2246,7 @@
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
 #if WFCU_SUPPORT_VOIP
         __weak typeof(self)ws = self;
-        __block MBProgressHUD *hud = [self startProgress:@"开启会议中"];
+        __block MBProgressHUD *hud = [self startProgress:@"会议加载中"];
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
             [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:invite.callId password:invite.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
