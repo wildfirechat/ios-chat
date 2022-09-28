@@ -31,6 +31,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
 #import "WFCUMessageListViewController.h"
+#import "WFCUMoreBoardView.h"
 
 @interface WFCUConferenceViewController () <UITextFieldDelegate
     ,WFAVCallSessionDelegate
@@ -789,65 +790,73 @@
 }
 
 - (void)moreButtonDidTap:(UIButton *)button {
-    UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:@"更多" preferredStyle:UIAlertControllerStyleActionSheet];
     __weak typeof(self)ws = self;
-    UIAlertAction *actionInvite = [UIAlertAction actionWithTitle:@"邀请" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
-        
-        WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
-        WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
-        invite.callId = currentSession.callId;
-        invite.pin = currentSession.pin;
-        invite.audioOnly = currentSession.audioOnly;
-        invite.host = currentSession.host;
-        invite.title = currentSession.title;
-        invite.desc = currentSession.desc;
-        invite.audience = currentSession.defaultAudience;
-        invite.advanced = currentSession.isAdvanced;
-        invite.password = ws.conferenceInfo.password;
-        
-        pvc.invite = invite;
-        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-        [ws presentViewController:navi animated:YES completion:nil];
-    }];
     
-    UIAlertAction *actionChat = [UIAlertAction actionWithTitle:@"聊天" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-        mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
-        mvc.keepInChatroom = YES;
-        mvc.silentJoinChatroom = YES;
-        mvc.presented = YES;
-    
-        mvc.hidesBottomBarWhenPushed = YES;
-        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:mvc];
-        navi.modalPresentationStyle = UIModalPresentationFullScreen;
-        [ws presentViewController:navi animated:YES completion:nil];
-    }];
-    
-    UIAlertAction *actionMinimize = [UIAlertAction actionWithTitle:@"画中画" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [ws minimize];
-    }];
-    UIAlertAction *actionRecord = [UIAlertAction actionWithTitle:@"录制" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    
-    UIAlertAction *actionSetting = [UIAlertAction actionWithTitle:@"设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    
-    [actionSheet addAction:actionInvite];
-    [actionSheet addAction:actionChat];
-    [actionSheet addAction:actionMinimize];
-    [actionSheet addAction:actionRecord];
-    [actionSheet addAction:actionSetting];
-    [actionSheet addAction:actionCancel];
-    
-    [self presentViewController:actionSheet animated:YES completion:nil];
     [self startHidePanelTimer];
+    WFCUMoreBoardView *boardView = [[WFCUMoreBoardView alloc] initWithItems:@[
+        [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
+            WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
+            
+            WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
+            WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
+            invite.callId = currentSession.callId;
+            invite.pin = currentSession.pin;
+            invite.audioOnly = currentSession.audioOnly;
+            invite.host = currentSession.host;
+            invite.title = currentSession.title;
+            invite.desc = currentSession.desc;
+            invite.audience = currentSession.defaultAudience;
+            invite.advanced = currentSession.isAdvanced;
+            invite.password = ws.conferenceInfo.password;
+            
+            pvc.invite = invite;
+            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+            [ws presentViewController:navi animated:YES completion:nil];
+            return nil;
+        }],
+        [[MoreItem alloc] initWithTitle:@"聊天" image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
+            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+            mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
+            mvc.keepInChatroom = YES;
+            mvc.silentJoinChatroom = YES;
+            mvc.presented = YES;
+        
+            mvc.hidesBottomBarWhenPushed = YES;
+            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:mvc];
+            navi.modalPresentationStyle = UIModalPresentationFullScreen;
+            [ws presentViewController:navi animated:YES completion:nil];
+            return nil;
+        }],
+        [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
+            [ws minimize];
+            return nil;
+        }],
+        [[MoreItem alloc] initWithTitle:@"录制" image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull{
+            return nil;
+        }],
+        [[MoreItem alloc] initWithTitle:@"设置" image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull{
+            return nil;
+        }]
+    ] cancel:^(WFCUMoreBoardView * _Nonnull boardView) {
+        [UIView animateWithDuration:0.5 animations:^{
+            CGRect boardFrame = boardView.frame;
+            boardFrame.origin.y = ws.view.bounds.size.height;
+            boardView.frame = boardFrame;
+        } completion:^(BOOL finished) {
+            [boardView removeFromSuperview];
+        }];
+    }];
+    
+    CGRect boardFrame = boardView.frame;
+    boardFrame.origin.y = self.view.bounds.size.height;
+    boardView.frame = boardFrame;
+    [self.view addSubview:boardView];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect frame = boardView.frame;
+        frame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - boardFrame.size.height;
+        boardView.frame = frame;
+    }];
 }
 
 - (void)hanupButtonDidTap:(UIButton *)button {
