@@ -9,13 +9,13 @@
 #import "WFCUConferencePortraitCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
-#import "ConferenceLabelView.h"
+#import "WFCUConferenceLabelView.h"
 
 @interface WFCUConferencePortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UILabel *nameLabel;
 @property (nonatomic, strong)UIImageView *stateLabel;
-@property (nonatomic, strong)ConferenceLabelView *conferenceLabelView;
+@property (nonatomic, strong)WFCUConferenceLabelView *conferenceLabelView;
 @end
 
 @implementation WFCUConferencePortraitCollectionViewCell
@@ -103,10 +103,10 @@
     return _stateLabel;
 }
 
-- (ConferenceLabelView *)conferenceLabelView {
+- (WFCUConferenceLabelView *)conferenceLabelView {
     if(!_conferenceLabelView) {
-        CGSize size = [ConferenceLabelView sizeOffView];
-        _conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height)];
+        CGSize size = [WFCUConferenceLabelView sizeOffView];
+        _conferenceLabelView = [[WFCUConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height)];
         [self addSubview:_conferenceLabelView];
     }
     return _conferenceLabelView;

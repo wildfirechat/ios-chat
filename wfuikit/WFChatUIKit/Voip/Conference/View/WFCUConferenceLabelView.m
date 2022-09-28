@@ -5,16 +5,16 @@
 //  Created by Tom Lee on 2021/9/22.
 //
 
-#import "ConferenceLabelView.h"
+#import "WFCUConferenceLabelView.h"
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
 
-@interface ConferenceLabelView ()
+@interface WFCUConferenceLabelView ()
 @property(nonatomic, strong)UIImageView *audioView;
 @property(nonatomic, strong)UILabel *nameLabel;
 @end
 
-@implementation ConferenceLabelView
+@implementation WFCUConferenceLabelView
 
 //size 100*28
 - (instancetype)initWithFrame:(CGRect)frame {
