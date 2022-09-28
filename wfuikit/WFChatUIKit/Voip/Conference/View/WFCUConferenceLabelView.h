@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ConferenceLabelView : UIView
+@interface WFCUConferenceLabelView : UIView
 @property(nonatomic, assign)BOOL isMuteAudio;
 @property(nonatomic, assign)BOOL isMuteVideo;
 /*
