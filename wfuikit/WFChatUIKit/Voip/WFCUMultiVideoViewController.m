@@ -25,7 +25,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
-#import "ConferenceLabelView.h"
+#import "WFCUConferenceLabelView.h"
 #import "WFCUUtilities.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
@@ -38,7 +38,7 @@
 #if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UICollectionView *smallCollectionView;
-@property (nonatomic, strong) ConferenceLabelView *conferenceLabelView;
+@property (nonatomic, strong) WFCUConferenceLabelView *conferenceLabelView;
 
 @property (nonatomic, strong) UICollectionView *portraitCollectionView;
 @property (nonatomic, strong) UIButton *hangupButton;
@@ -154,8 +154,8 @@
     [self.view addSubview:self.bigVideoView];
     
     if (!self.currentSession.audioOnly) {
-        CGSize labelSize = [ConferenceLabelView sizeOffView];
-        self.conferenceLabelView = [[ConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - [WFCUUtilities wf_safeDistanceBottom] - 4, labelSize.width, labelSize.height)];
+        CGSize labelSize = [WFCUConferenceLabelView sizeOffView];
+        self.conferenceLabelView = [[WFCUConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - [WFCUUtilities wf_safeDistanceBottom] - 4, labelSize.width, labelSize.height)];
         
         [self.view addSubview:self.conferenceLabelView];
     }

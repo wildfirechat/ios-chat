@@ -27,7 +27,7 @@
 #import "WFCUConferenceManager.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
-#import "ConferenceLabelView.h"
+#import "WFCUConferenceLabelView.h"
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
 #import "WFCUMessageListViewController.h"
