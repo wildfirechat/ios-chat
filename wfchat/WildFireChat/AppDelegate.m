@@ -466,6 +466,9 @@
                   // Fallback on earlier versions
               }
           }
+      } else if(msg.conversation.type == Channel_Type) {
+          WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:msg.conversation.target refresh:NO];
+          localNote.alertTitle = channelInfo.name;
       }
         
       localNote.applicationIconBadgeNumber = count;
