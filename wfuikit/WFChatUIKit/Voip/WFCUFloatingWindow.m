@@ -269,11 +269,21 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         } else if (self.callSession.state == kWFAVEngineStateConnected) {
             self.videoView.hidden = NO;
             [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
-            if ([self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            NSString *focusUserId;
+            BOOL screenSharing = NO;
+            if([self.focusUserProfile isKindOfClass:[NSString class]]) {
+                focusUserId = (NSString *)self.focusUserProfile;
+            } else {
+                focusUserId = self.focusUserProfile.userId;
+                screenSharing = self.focusUserProfile.screeSharing;
+            }
+            
+            if ([focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 [self.callSession setupLocalVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit];
             } else {
-                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:self.focusUserProfile.userId screenSharing:self.focusUserProfile.screeSharing];
+                [self.callSession setupRemoteVideoView:self.videoView scalingType:kWFAVVideoScalingTypeAspectFit forUser:focusUserId screenSharing:screenSharing];
             }
+            
             [self updateVideoView];
         } else if (self.callSession.state == kWFAVEngineStateIdle) {
             UILabel *videoStopTips =
@@ -307,11 +317,20 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 - (void)updateVideoView {
     __block BOOL isMuted = NO;
-    if ([self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    NSString *focusUserId;
+    BOOL screenSharing = NO;
+    if([self.focusUserProfile isKindOfClass:[NSString class]]) {
+        focusUserId = (NSString *)self.focusUserProfile;
+    } else {
+        focusUserId = self.focusUserProfile.userId;
+        screenSharing = self.focusUserProfile.screeSharing;
+    }
+    
+    if ([focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         isMuted = [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
     } else {
         [[[WFAVEngineKit sharedEngineKit].currentSession participants] enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if([obj.userId isEqual:self.focusUserProfile.userId] && obj.screeSharing == self.focusUserProfile.screeSharing) {
+            if([obj.userId isEqual:focusUserId] && obj.screeSharing == screenSharing) {
                 isMuted = obj.videoMuted;
                 *stop = YES;
             }
