@@ -542,6 +542,8 @@ public:
 
 @implementation WFCCNetworkService
 
+const static NSString *WFCC_LOG_PREFIX = @"wfclient";
+
 static WFCCNetworkService * sharedSingleton = nil;
 + (void)startLog {
     NSString* logPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/log"];
@@ -559,7 +561,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     xlogger_SetLevel(kLevelInfo);
     appender_set_console_log(false);
 #endif
-    appender_open(kAppednerAsync, [logPath UTF8String], "wfclient", NULL);
+    appender_open(kAppednerAsync, [logPath UTF8String], [WFCC_LOG_PREFIX UTF8String], NULL);
 }
 
 + (void)stopLog {
@@ -579,7 +581,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     for (NSString *path in myDirectoryEnumerator.allObjects) {
         isExist = [myFileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", logPath, path] isDirectory:&isDir];
         if (!isDir && isExist) {
-            if ([path containsString:@"Test_"]) {
+            if ([path containsString:[NSString stringWithFormat:@"%@_", WFCC_LOG_PREFIX]]) {
                 [output addObject:[NSString stringWithFormat:@"%@/%@", logPath, path]];
             }
         }
