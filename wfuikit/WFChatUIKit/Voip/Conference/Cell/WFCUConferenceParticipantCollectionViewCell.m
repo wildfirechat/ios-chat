@@ -72,6 +72,10 @@
     self.conferenceLabelView.isMuteVideo = isVideoMuted;
     self.conferenceLabelView.isMuteAudio = isAudioMuted;
     
+    if(isAudioMuted) {
+        self.layer.borderColor = [UIColor clearColor].CGColor;
+    }
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     

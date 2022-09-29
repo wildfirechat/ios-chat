@@ -9,12 +9,10 @@
 #import "WFCUPortraitCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
-#import "WFCUConferenceLabelView.h"
 
 @interface WFCUPortraitCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)UIImageView *stateLabel;
-@property (nonatomic, strong)WFCUConferenceLabelView *conferenceLabelView;
 @end
 
 @implementation WFCUPortraitCollectionViewCell
@@ -24,7 +22,6 @@
     self.layer.borderWidth = 1.f;
     self.layer.borderColor = [UIColor clearColor].CGColor;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    self.conferenceLabelView.name = userInfo.displayName;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
@@ -39,7 +36,6 @@
         } else {
             self.layer.borderColor = [UIColor clearColor].CGColor;
         }
-        self.conferenceLabelView.volume = volume;
     }
 }
 
@@ -54,25 +50,23 @@
         [self.stateLabel startAnimating];
         self.stateLabel.hidden = NO;
     }
-    BOOL isVideoMuted = YES;
+    
     BOOL isAudioMuted = YES;
     if ([WFAVEngineKit sharedEngineKit].currentSession.isConference) {
         if(!profile.audience) {
-            isVideoMuted = profile.videoMuted;
             isAudioMuted = profile.audioMuted;
         }
     } else {
-        isVideoMuted = NO;
         isAudioMuted = NO;
     }
     
-    self.conferenceLabelView.isMuteVideo = isVideoMuted;
-    self.conferenceLabelView.isMuteAudio = isAudioMuted;
+    if(isAudioMuted) {
+        self.layer.borderColor = [UIColor clearColor].CGColor;
+    }
 }
 
 - (void)addSubview:(UIView *)view {
     [super addSubview:view];
-    [self bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (UIImageView *)portraitView {
@@ -96,15 +90,6 @@
         [self addSubview:_stateLabel];
     }
     return _stateLabel;
-}
-
-- (WFCUConferenceLabelView *)conferenceLabelView {
-    if(!_conferenceLabelView) {
-        CGSize size = [WFCUConferenceLabelView sizeOffView];
-        _conferenceLabelView = [[WFCUConferenceLabelView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - size.height, MIN(size.width, self.bounds.size.width), size.height)];
-        [self addSubview:_conferenceLabelView];
-    }
-    return _conferenceLabelView;
 }
 
 - (void)dealloc {
