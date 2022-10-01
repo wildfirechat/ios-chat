@@ -82,6 +82,9 @@
     //多人音视频通话时，是否在会话中现在正在通话让其他人主动加入。
     [WFCUConfigManager globalManager].enableMultiCallAutoJoin = YES;
     
+    //多人音视频通话时，是否在显示谁在说话
+    [WFCUConfigManager globalManager].displaySpeakingInMultiCall = YES;
+    
     //音视频高级版不需要stun/turn服务，请注释掉下面这行。单人版和多人版需要turn服务，请自己部署然后修改配置文件。
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
     

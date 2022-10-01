@@ -1,5 +1,5 @@
 //
-//  WFCUParticipantCollectionViewCell.m
+//  WFCUConferenceParticipantCollectionViewCell.m
 //  WFChatUIKit
 //
 //  Created by dali on 2020/1/20.

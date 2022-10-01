@@ -51,6 +51,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;
 
+@property(nonatomic, assign)BOOL displaySpeakingInMultiCall;
+
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
 @end
 
