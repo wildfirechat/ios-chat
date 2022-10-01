@@ -14,15 +14,15 @@
 @interface WFCUParticipantCollectionViewCell ()
 @property (nonatomic, strong)UIImageView *portraitView;
 @property (nonatomic, strong)WFCUWaitingAnimationView *stateLabel;
-
-@property (nonatomic, strong)UIImageView *speakingView;
-
 @property(nonatomic, strong)NSString *userId;
 @end
 
 @implementation WFCUParticipantCollectionViewCell
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile {
     self.userId = userInfo.userId;
+    self.layer.borderWidth = 1;
+    self.layer.borderColor = [UIColor clearColor].CGColor;
+    self.layer.masksToBounds = YES;
     
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
 
@@ -40,7 +40,7 @@
             self.stateLabel.hidden = YES;
         }
     }
-    _speakingView.hidden = YES;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
@@ -50,14 +50,12 @@
     if([notification.object isEqual:self.userId]) {
         NSInteger volume = [notification.userInfo[@"volume"] integerValue];
         if (volume > 1000) {
-            self.speakingView.hidden = NO;
-            [self bringSubviewToFront:self.speakingView];
+            self.layer.borderColor = [UIColor greenColor].CGColor;
         } else {
-            self.speakingView.hidden = YES;
+            self.layer.borderColor = [UIColor clearColor].CGColor;
         }
     }
 }
-
 
 - (UIImageView *)portraitView {
     if (!_portraitView) {
@@ -68,19 +66,6 @@
         [self addSubview:_portraitView];
     }
     return _portraitView;
-}
-
-
-- (UIImageView *)speakingView {
-    if (!_speakingView) {
-        _speakingView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - 20, 20, 20)];
-
-        _speakingView.layer.masksToBounds = YES;
-        _speakingView.layer.cornerRadius = 2.f;
-        _speakingView.image = [WFCUImage imageNamed:@"speaking"];
-        [self addSubview:_speakingView];
-    }
-    return _speakingView;
 }
 
 - (WFCUWaitingAnimationView *)stateLabel {

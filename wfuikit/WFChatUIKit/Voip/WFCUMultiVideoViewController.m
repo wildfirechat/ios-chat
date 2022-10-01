@@ -25,7 +25,6 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
-#import "WFCUConferenceLabelView.h"
 #import "WFCUUtilities.h"
 
 @interface WFCUMultiVideoViewController () <UITextFieldDelegate
@@ -38,8 +37,6 @@
 #if WFCU_SUPPORT_VOIP
 @property (nonatomic, strong) UIView *bigVideoView;
 @property (nonatomic, strong) UICollectionView *smallCollectionView;
-@property (nonatomic, strong) WFCUConferenceLabelView *conferenceLabelView;
-
 @property (nonatomic, strong) UICollectionView *portraitCollectionView;
 @property (nonatomic, strong) UIButton *hangupButton;
 @property (nonatomic, strong) UIButton *answerButton;
@@ -151,14 +148,10 @@
     self.bigVideoView = [[UIView alloc] initWithFrame:self.view.bounds];
     UITapGestureRecognizer *tapBigVideo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onClickedBigVideoView:)];
     [self.bigVideoView addGestureRecognizer:tapBigVideo];
+    self.bigVideoView.layer.borderWidth = 1;
+    self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
+    self.bigVideoView.layer.masksToBounds = YES;
     [self.view addSubview:self.bigVideoView];
-    
-    if (!self.currentSession.audioOnly) {
-        CGSize labelSize = [WFCUConferenceLabelView sizeOffView];
-        self.conferenceLabelView = [[WFCUConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.view.bounds.size.height - labelSize.height - [WFCUUtilities wf_safeDistanceBottom] - 4, labelSize.width, labelSize.height)];
-        
-        [self.view addSubview:self.conferenceLabelView];
-    }
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat itemWidth = (self.view.frame.size.width + layout.minimumLineSpacing)/3 - layout.minimumLineSpacing;
@@ -625,7 +618,6 @@
         [self updateConnectedTimeLabel];
         [self startConnectedTimer];
     }
-    [self.view bringSubviewToFront:self.conferenceLabelView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -964,7 +956,7 @@
 }
 
 - (void)didCreateLocalVideoTrack:(RTCVideoTrack *)localVideoTrack {
-    [self.bigVideoView bringSubviewToFront:self.conferenceLabelView];
+    
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
@@ -997,14 +989,15 @@
     }
 }
 - (void)didReportAudioVolume:(NSInteger)volume ofUser:(NSString *)userId {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
-    if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
-        if (volume > 1000) {
-            self.bigVideoView.layer.borderColor = [UIColor greenColor].CGColor;
-        } else {
-            self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
+    if([WFCUConfigManager globalManager].displaySpeakingInMultiCall) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"wfavVolumeUpdated" object:userId userInfo:@{@"volume":@(volume)}];
+        if (!self.currentSession.audioOnly && [userId isEqualToString:self.participants.lastObject]) {
+            if (volume > 1000) {
+                self.bigVideoView.layer.borderColor = [UIColor greenColor].CGColor;
+            } else {
+                self.bigVideoView.layer.borderColor = [UIColor clearColor].CGColor;
+            }
         }
-        self.conferenceLabelView.volume = volume;
     }
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
@@ -1168,10 +1161,6 @@
         } else {
             [self.portraitCollectionView reloadData];
         }
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-        self.conferenceLabelView.name = userInfo.displayName;
-        self.conferenceLabelView.isMuteVideo = NO;
-        self.conferenceLabelView.isMuteAudio = NO;
     } else {
         [self.portraitCollectionView reloadData];
     }
