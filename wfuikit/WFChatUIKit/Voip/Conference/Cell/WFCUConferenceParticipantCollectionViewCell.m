@@ -79,7 +79,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
-    self.stateLabel.center = self.center;
     CGSize size = [WFCUConferenceLabelView sizeOffView];
     self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height);
 }
@@ -105,7 +104,7 @@
     if(!_conferenceLabelView) {
         CGSize size = [WFCUConferenceLabelView sizeOffView];
         _conferenceLabelView = [[WFCUConferenceLabelView alloc] initWithFrame:CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height)];
-        [self addSubview:_conferenceLabelView];
+        [self.contentView addSubview:_conferenceLabelView];
     }
     return _conferenceLabelView;
 }
@@ -113,10 +112,10 @@
 - (UIImageView *)portraitView {
     if (!_portraitView) {
         _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-        _portraitView.center = self.center;
+        _portraitView.center = self.contentView.center;
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 30;
-        [self addSubview:_portraitView];
+        [self.contentView addSubview:_portraitView];
     }
     return _portraitView;
 }
@@ -124,13 +123,14 @@
 - (WFCUWaitingAnimationView *)stateLabel {
     if (!_stateLabel) {
         _stateLabel = [[WFCUWaitingAnimationView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-        _stateLabel.center = self.center;
         _stateLabel.animationImages = @[[WFCUImage imageNamed:@"connect_ani1"],[WFCUImage imageNamed:@"connect_ani2"],[WFCUImage imageNamed:@"connect_ani3"]];
         _stateLabel.animationDuration = 1;
         _stateLabel.animationRepeatCount = 200;
         _stateLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         _stateLabel.hidden = YES;
-        [self addSubview:_stateLabel];
+        _stateLabel.layer.masksToBounds = YES;
+        _stateLabel.layer.cornerRadius = 30;
+        [self.portraitView addSubview:_stateLabel];
     }
     return _stateLabel;
 }
