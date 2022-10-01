@@ -79,6 +79,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
+    self.stateLabel.center = self.center;
+    CGSize size = [WFCUConferenceLabelView sizeOffView];
+    self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height);
 }
 
 - (void)addSubview:(UIView *)view {
