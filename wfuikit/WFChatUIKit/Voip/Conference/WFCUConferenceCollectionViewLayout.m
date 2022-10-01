@@ -121,7 +121,7 @@
         }
     }
     
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width = self.collectionView.bounds.size.width;
     
     int start;
     

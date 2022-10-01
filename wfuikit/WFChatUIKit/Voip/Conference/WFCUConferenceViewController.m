@@ -91,6 +91,7 @@
 @property(nonatomic, strong)WFAVParticipantProfile *focusUserProfile;
 
 @property(nonatomic, strong)UIPageControl *pageControl;
+@property(nonatomic, strong)WFCUMoreBoardView *boardView;
 @end
 
 #define ButtonSize 60
@@ -102,7 +103,7 @@
 #define PortraitItemSize 48
 #define PortraitLabelSize 16
 
-#define CONFERENCE_TOP_BAR_WIDTH  40
+#define CONFERENCE_TOP_BAR_WIDTH  48
 #define CONFERENCE_BAR_HEIGHT  48
 #define TopViewHeigh ([WFCUUtilities wf_statusBarHeight] + CONFERENCE_BAR_HEIGHT)
 
@@ -264,17 +265,16 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     self.messages = [[NSMutableArray alloc] init];
+    [self bottomBarView];
+    [self topBarView];
     
     WFCUConferenceCollectionViewLayout *layout = [[WFCUConferenceCollectionViewLayout alloc] init];
     self.scalingType = kWFAVVideoScalingTypeAspectFit;
     
-    self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom]);
-    self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, TopViewHeigh);
+    //    CGRect collectionRect = CGRectMake(0, TopViewHeigh, self.view.bounds.size.width, self.view.bounds.size.height - TopViewHeigh - [WFCUUtilities wf_safeDistanceBottom] - CONFERENCE_BAR_HEIGHT);
+    CGRect collectionRect = CGRectMake(0, [WFCUUtilities wf_statusBarHeight], self.view.bounds.size.width, self.view.bounds.size.height- [WFCUUtilities wf_statusBarHeight] - [WFCUUtilities wf_safeDistanceBottom]);
     
-    //    CGRect smallCollectionRect = CGRectMake(0, TopViewHeigh, self.view.bounds.size.width, self.view.bounds.size.height - TopViewHeigh - [WFCUUtilities wf_safeDistanceBottom] - CONFERENCE_BAR_HEIGHT);
-    CGRect smallCollectionRect = CGRectMake(0, [WFCUUtilities wf_statusBarHeight], self.view.bounds.size.width, self.view.bounds.size.height- [WFCUUtilities wf_statusBarHeight] - [WFCUUtilities wf_safeDistanceBottom]);
-    
-    self.participantCollectionView = [[UICollectionView alloc] initWithFrame:smallCollectionRect collectionViewLayout:layout];
+    self.participantCollectionView = [[UICollectionView alloc] initWithFrame:collectionRect collectionViewLayout:layout];
     self.participantCollectionView.dataSource = self;
     self.participantCollectionView.delegate = self;
     [self.participantCollectionView registerClass:[WFCUConferenceParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"main"];
@@ -322,9 +322,11 @@
     self.portraitCollectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.portraitCollectionView];
     
-    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SmallVideoView, TopViewHeigh - [WFCUUtilities wf_statusBarHeight], SmallVideoView, SmallVideoView * 4 /3)];
+    self.smallVideoView = [[WFCUConferenceParticipantCollectionViewCell alloc] initWithFrame:CGRectMake(8, CONFERENCE_BAR_HEIGHT, SmallVideoView, SmallVideoView * 4 /3)];
     [self.smallVideoView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoPan:)]];
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
+    //因为smallVideoView是加在主窗口的视频view上，当音视频引擎收到流后会在主窗口视频view上添加子view，可能会盖住smallVideoView。
+    //这里设置一个特殊的tag，当音视频引擎添加子view时，会把有特殊tag的窗口放到最上方。
     self.smallVideoView.tag = 666;
     
     [self checkAVPermission];
@@ -384,38 +386,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
 }
 
-- (UIButton *)informationButton {
-    if(!_informationButton) {
-        _informationButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 70, [WFCUUtilities wf_statusBarHeight]+6, 140, 14)];
-        [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
-        _informationButton.backgroundColor = [UIColor clearColor];
-        _informationButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        [_informationButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        if(self.conferenceInfo.conferenceTitle.length) {
-            [_informationButton setTitle:self.conferenceInfo.conferenceTitle forState:UIControlStateNormal];
-            
-            CGFloat space = 4;
-            _informationButton.titleEdgeInsets = UIEdgeInsetsMake(0, - _informationButton.imageView.image.size.width - space,0,_informationButton.imageView.image.size.width + space);
-            _informationButton.imageEdgeInsets = UIEdgeInsetsMake(0, _informationButton.titleLabel.frame.size.width + space, 0,  -_informationButton.titleLabel.frame.size.width - space);
-        }
-        [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        [self.topBarView addSubview:_informationButton];
-    }
-    return _informationButton;
-}
-- (UILabel *)connectTimeLabel {
-    if(!_connectTimeLabel) {
-        _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 60, [WFCUUtilities wf_statusBarHeight] + 6 + 18 + 4 , 120, 14)];
-        _connectTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _connectTimeLabel.font = [UIFont systemFontOfSize:14];
-        _connectTimeLabel.textColor = [UIColor whiteColor];
-        [self.topBarView addSubview:self.connectTimeLabel];
-    }
-    return _connectTimeLabel;
-}
 - (UIButton *)chatButton {
     if(!_chatButton) {
-        _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(8, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - CONFERENCE_BAR_HEIGHT - 16 - 20, 80, 20)];
+        _chatButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [_chatButton setTitle:@"说点什么..." forState:UIControlStateNormal];
         [_chatButton setTitleColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.5] forState:UIControlStateNormal];
         _chatButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
@@ -430,7 +403,7 @@
 
 - (UITableView *)messageTableView {
     if(!_messageTableView) {
-        _messageTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - CONFERENCE_BAR_HEIGHT - 16 - 20, 200, 0)];
+        _messageTableView = [[UITableView alloc] initWithFrame:CGRectZero];
         _messageTableView.dataSource = self;
         _messageTableView.backgroundColor = [UIColor clearColor];
         _messageTableView.rowHeight = UITableViewAutomaticDimension;
@@ -452,47 +425,6 @@
         
     }
     return _messageTableView;
-}
-
-- (UIButton *)hangupButton {
-    if(!_hangupButton) {
-        _hangupButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 8 - CONFERENCE_TOP_BAR_WIDTH,[WFCUUtilities wf_statusBarHeight]+2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT)];
-        [_hangupButton setImage:[WFCUImage imageNamed:@"conference_end_call"] forState:UIControlStateNormal];
-        _hangupButton.backgroundColor = [UIColor clearColor];
-        [_hangupButton addTarget:self action:@selector(hanupButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        
-        [self.topBarView addSubview:_hangupButton];
-    }
-    return _hangupButton;
-}
-
-- (UIButton *)speakerButton {
-    if(!_speakerButton) {
-        _speakerButton = [[UIButton alloc] initWithFrame:CGRectMake(8, [WFCUUtilities wf_statusBarHeight]+2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT)];
-        
-        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateNormal];
-        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateHighlighted];
-        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateSelected];
-        
-        _speakerButton.backgroundColor = [UIColor clearColor];
-        [_speakerButton addTarget:self action:@selector(speakerButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-        
-        [self.topBarView addSubview:_speakerButton];
-    }
-    return _speakerButton;
-}
-
-- (UIButton *)switchCameraButton {
-    if (!_switchCameraButton) {
-        _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(8+CONFERENCE_TOP_BAR_WIDTH+4, [WFCUUtilities wf_statusBarHeight]+2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT)];
-        [_switchCameraButton setImage:[WFCUImage imageNamed:@"conference_switch_camera"] forState:UIControlStateNormal];
-        _switchCameraButton.backgroundColor = [UIColor clearColor];
-        [_switchCameraButton addTarget:self action:@selector(switchCameraButtonDidTap:) forControlEvents:UIControlEventTouchDown];
-
-        _switchCameraButton.hidden = YES;
-        [self.topBarView addSubview:_switchCameraButton];
-    }
-    return _switchCameraButton;
 }
 
 - (UIButton *)floatingAudioButton {
@@ -558,19 +490,87 @@
     }
     return (self.participants.count-1)/4+1+1;
 }
+- (void)updateTopBarViewFrame:(BOOL)landscape {
+    CGFloat topPadding = landscape ? 0 : [WFCUUtilities wf_statusBarHeight];
+    self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, topPadding + CONFERENCE_TOP_BAR_WIDTH);
+    self.informationButton.frame = CGRectMake(self.view.bounds.size.width/2 - 70, topPadding + 6, 140, 14);
+    if(self.conferenceInfo.conferenceTitle.length) {
+        CGFloat space = 4;
+        _informationButton.titleEdgeInsets = UIEdgeInsetsMake(0, - _informationButton.imageView.image.size.width - space,0,_informationButton.imageView.image.size.width + space);
+        _informationButton.imageEdgeInsets = UIEdgeInsetsMake(0, _informationButton.titleLabel.frame.size.width + space, 0,  -_informationButton.titleLabel.frame.size.width - space);
+    }
+    
+    self.connectTimeLabel.frame = CGRectMake(self.view.bounds.size.width/2 - 60, topPadding + 6 + 18 + 4 , 120, 14);
+    self.hangupButton.frame = CGRectMake(self.view.bounds.size.width - 8 - CONFERENCE_TOP_BAR_WIDTH, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
+    self.speakerButton.frame = CGRectMake(8, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
+    self.switchCameraButton.frame = CGRectMake(8+CONFERENCE_TOP_BAR_WIDTH+4, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
+}
 
 - (UIView *)topBarView {
     if(!_topBarView) {
-        _topBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -TopViewHeigh, self.view.bounds.size.width, TopViewHeigh)];
+        _topBarView = [[UIView alloc] initWithFrame:CGRectZero];
         _topBarView.backgroundColor = [UIColor colorWithRed:0.2 green:0.37 blue:0.9 alpha:1];
         [self.view addSubview:_topBarView];
+        
+        _informationButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_informationButton setImage:[WFCUImage imageNamed:@"conference_information"] forState:UIControlStateNormal];
+        _informationButton.backgroundColor = [UIColor clearColor];
+        _informationButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_informationButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        if(self.conferenceInfo.conferenceTitle.length) {
+            [_informationButton setTitle:self.conferenceInfo.conferenceTitle forState:UIControlStateNormal];
+        }
+        [_informationButton addTarget:self action:@selector(informationButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        [_topBarView addSubview:_informationButton];
+        
+        _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _connectTimeLabel.textAlignment = NSTextAlignmentCenter;
+        _connectTimeLabel.font = [UIFont systemFontOfSize:14];
+        _connectTimeLabel.textColor = [UIColor whiteColor];
+        [_topBarView addSubview:_connectTimeLabel];
+        
+        _hangupButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_hangupButton setImage:[WFCUImage imageNamed:@"conference_end_call"] forState:UIControlStateNormal];
+        _hangupButton.backgroundColor = [UIColor clearColor];
+        [_hangupButton addTarget:self action:@selector(hanupButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        [_topBarView addSubview:_hangupButton];
+        
+        _speakerButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateNormal];
+        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateHighlighted];
+        [_speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateSelected];
+        _speakerButton.backgroundColor = [UIColor clearColor];
+        [_speakerButton addTarget:self action:@selector(speakerButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        [_topBarView addSubview:_speakerButton];
+        
+        _switchCameraButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_switchCameraButton setImage:[WFCUImage imageNamed:@"conference_switch_camera"] forState:UIControlStateNormal];
+        _switchCameraButton.backgroundColor = [UIColor clearColor];
+        [_switchCameraButton addTarget:self action:@selector(switchCameraButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+        _switchCameraButton.hidden = YES;
+        [_topBarView addSubview:_switchCameraButton];
     }
     return _topBarView;
 }
 
+- (void)updatebottomBarViewFrame:(BOOL)landscape {
+    CGFloat bottomPadding = landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom];
+    self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - bottomPadding-CONFERENCE_BAR_HEIGHT, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT+bottomPadding);
+
+    int index = 0;
+    CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
+    self.audioButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.videoButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    if(!self.currentSession.isAudioOnly) {
+        self.screenSharingButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    }
+    self.managerButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.moreButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+}
+
 - (UIView *)bottomBarView {
     if(!_bottomBarView) {
-        _bottomBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom])];
+        _bottomBarView = [[UIView alloc] initWithFrame:CGRectZero];
         _bottomBarView.backgroundColor = [UIColor colorWithRed:0.2 green:0.37 blue:0.9 alpha:1];
         CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
         
@@ -603,7 +603,6 @@
     }
     return _bottomBarView;
 }
-
 
 - (void)onReceiveMessages:(NSNotification *)notification {
     if (!self.failureJoinChatroom) {
@@ -674,9 +673,9 @@
     if(size.height > 200) {
         size.height = 200;
     }
-    if(size.height != self.messageTableView.frame.size.height) {
-        self.messageTableView.frame = CGRectMake(0, self.view.frame.size.height - [WFCUUtilities wf_safeDistanceBottom] - CONFERENCE_BAR_HEIGHT - 16 - 20 - size.height, 200, size.height);
-    }
+    
+    BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
+    self.messageTableView.frame = CGRectMake(0, self.view.bounds.size.height - (landscape ? 0 :[WFCUUtilities wf_safeDistanceBottom]) - CONFERENCE_BAR_HEIGHT - 16 - 20 - size.height, 200, size.height);
 }
 
 - (void)sendTextMessage:(NSString *)text {
@@ -793,7 +792,7 @@
     __weak typeof(self)ws = self;
     
     [self startHidePanelTimer];
-    WFCUMoreBoardView *boardView = [[WFCUMoreBoardView alloc] initWithItems:@[
+    self.boardView = [[WFCUMoreBoardView alloc] initWithWidth:self.view.bounds.size.width items:@[
         [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
             WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
             
@@ -847,15 +846,15 @@
         }];
     }];
     
-    CGRect boardFrame = boardView.frame;
+    CGRect boardFrame = self.boardView.frame;
     boardFrame.origin.y = self.view.bounds.size.height;
-    boardView.frame = boardFrame;
-    [self.view addSubview:boardView];
+    self.boardView.frame = boardFrame;
+    [self.view addSubview:self.boardView];
     
     [UIView animateWithDuration:0.5 animations:^{
-        CGRect frame = boardView.frame;
-        frame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - boardFrame.size.height;
-        boardView.frame = frame;
+        CGRect frame = ws.boardView.frame;
+        frame.origin.y = ws.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - boardFrame.size.height;
+        ws.boardView.frame = frame;
     }];
 }
 
@@ -1029,41 +1028,52 @@
      return UIInterfaceOrientationPortrait;
 }
 
+- (void)updateUIByOrientationChanged:(BOOL)landscape {
+    CGRect bounds = self.view.bounds;
+    self.view.frame = CGRectMake(0, 0, MIN(bounds.size.width, bounds.size.height), MAX(bounds.size.width, bounds.size.height));
+    bounds = self.view.bounds;
+    if(landscape) {
+        self.smallVideoView.frame = CGRectMake(0, CONFERENCE_BAR_HEIGHT, SmallVideoView* 4 /3, SmallVideoView);
+        self.participantCollectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+    } else {
+        self.smallVideoView.frame = CGRectMake(0, CONFERENCE_BAR_HEIGHT, SmallVideoView, SmallVideoView * 4 /3);
+        self.participantCollectionView.frame = CGRectMake(0, [WFCUUtilities wf_statusBarHeight], self.view.bounds.size.width, self.view.bounds.size.height- [WFCUUtilities wf_statusBarHeight] - [WFCUUtilities wf_safeDistanceBottom]);
+    }
+    
+    self.floatingAudioButton.frame = CGRectMake((bounds.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE);
+    
+    [self updateTopBarViewFrame:landscape];
+    [self updatebottomBarViewFrame:landscape];
+    [self reloadParticipantCollectionView];
+    
+    [self resizeMessageTable];
+    self.chatButton.frame = CGRectMake(8, self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - CONFERENCE_BAR_HEIGHT - 16 - 20, 80, 20);
+    if(landscape) {
+        [self.inputTextField resignFirstResponder];
+    }
+    [self.boardView removeFromSuperview];
+    self.pageControl.frame = CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - 20, 200, 20);
+}
+
 - (BOOL)onDeviceOrientationDidChange{
-    //获取当前设备Device
     UIDevice *device = [UIDevice currentDevice] ;
-    WFAVParticipantProfile *lastUser;
     switch (device.orientation) {
-        case UIDeviceOrientationFaceUp:
-//            NSLog(@"屏幕幕朝上平躺");
-            break;
-
-        case UIDeviceOrientationFaceDown:
-            //NSLog(@"屏幕朝下平躺");
-            break;
-
-        case UIDeviceOrientationUnknown:
-            //系统当前无法识别设备朝向，可能是倾斜
-            //NSLog(@"未知方向");
-            break;
-
         case UIDeviceOrientationLandscapeLeft:
-
+            self.view.transform = CGAffineTransformMakeRotation(M_PI_2);
+            [self updateUIByOrientationChanged:YES];
             break;
 
         case UIDeviceOrientationLandscapeRight:
-
+            self.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            [self updateUIByOrientationChanged:YES];
             break;
 
         case UIDeviceOrientationPortrait:
-            break;
-
-        case UIDeviceOrientationPortraitUpsideDown:
-//            NSLog(@"屏幕直立，上下顛倒");
+            self.view.transform = CGAffineTransformMakeRotation(0);
+            [self updateUIByOrientationChanged:NO];
             break;
 
         default:
-//            NSLog(@"無法识别");
             break;
     }
     return YES;
@@ -1306,22 +1316,28 @@
 
 - (void)showPanel {
     self.floatingAudioButton.hidden = YES;
-    CGRect floatingAudioBtnFrame = self.floatingAudioButton.frame;
+    BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
+    CGRect bounds = self.view.bounds;
+    CGRect floatingAudioBtnFrame = CGRectMake((bounds.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE);
     floatingAudioBtnFrame.origin.y = self.view.bounds.size.height;
     self.floatingAudioButton.frame = floatingAudioBtnFrame;
     
     self.bottomBarView.hidden = NO;
+    self.topBarView.hidden = NO;
+    
     [UIView animateWithDuration:0.5 animations:^{
-        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom]);
-        self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, TopViewHeigh);
+        CGFloat bottomBarHeigh = landscape ? CONFERENCE_BAR_HEIGHT : CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom];
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height - bottomBarHeigh, self.view.bounds.size.width, bottomBarHeigh);
+        
+        self.topBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, landscape ? CONFERENCE_TOP_BAR_WIDTH : [WFCUUtilities wf_statusBarHeight] + CONFERENCE_TOP_BAR_WIDTH);
         
         CGRect smallVideoRect = self.smallVideoView.frame;
-        if(smallVideoRect.origin.y < TopViewHeigh - [WFCUUtilities wf_statusBarHeight]) {
-            smallVideoRect.origin.y = TopViewHeigh - [WFCUUtilities wf_statusBarHeight];
+        if(smallVideoRect.origin.y < CONFERENCE_TOP_BAR_WIDTH) {
+            smallVideoRect.origin.y = CONFERENCE_TOP_BAR_WIDTH;
         }
         
-        if(smallVideoRect.origin.y + smallVideoRect.size.height > self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT) {
-            smallVideoRect.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT - smallVideoRect.size.height;
+        if(smallVideoRect.origin.y + smallVideoRect.size.height > self.view.bounds.size.height - bottomBarHeigh) {
+            smallVideoRect.origin.y = self.view.bounds.size.height - bottomBarHeigh - smallVideoRect.size.height;
         }
         self.smallVideoView.frame = smallVideoRect;
     }];
@@ -1338,26 +1354,30 @@
 }
 
 - (void)hidePanel {
+    BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
+    
     [UIView animateWithDuration:0.5 animations:^{
-        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, CONFERENCE_BAR_HEIGHT);
+        CGFloat bottomBarHeigh = landscape ? CONFERENCE_BAR_HEIGHT : CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom];
+        self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, bottomBarHeigh);
 
-        CGFloat topViewHeigh =  CONFERENCE_BAR_HEIGHT + [WFCUUtilities wf_statusBarHeight];
+        CGFloat topViewHeigh =  landscape ? CONFERENCE_TOP_BAR_WIDTH : CONFERENCE_TOP_BAR_WIDTH + [WFCUUtilities wf_statusBarHeight];
         self.topBarView.frame = CGRectMake(0, -topViewHeigh, self.view.bounds.size.width, topViewHeigh);
 
         CGRect smallVideoRect = self.smallVideoView.frame;
-        if(smallVideoRect.origin.y == TopViewHeigh - [WFCUUtilities wf_statusBarHeight]) {
+        if(smallVideoRect.origin.y == CONFERENCE_TOP_BAR_WIDTH) {
             smallVideoRect.origin.y = 0;
         }
-        if(smallVideoRect.origin.y + smallVideoRect.size.height == self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom]-CONFERENCE_BAR_HEIGHT) {
-            smallVideoRect.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - smallVideoRect.size.height;
+        if(smallVideoRect.origin.y + smallVideoRect.size.height == self.view.bounds.size.height - bottomBarHeigh) {
+            smallVideoRect.origin.y = self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - smallVideoRect.size.height;
         }
         self.smallVideoView.frame = smallVideoRect;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
+        self.topBarView.hidden = YES;
         self.floatingAudioButton.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
             CGRect floatingAudioBtnFrame = self.floatingAudioButton.frame;
-            floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT;
+            floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT;
             self.floatingAudioButton.frame = floatingAudioBtnFrame;
         }];
     }];
@@ -1426,6 +1446,8 @@
     }
     switch (state) {
         case kWFAVEngineStateIdle:
+            self.topBarView.hidden = YES;
+            self.bottomBarView.hidden = YES;
             self.moreButton.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
@@ -1435,11 +1457,9 @@
             self.stateLabel.text = WFCString(@"CallEnded");
             self.participantCollectionView.hidden = YES;
             self.portraitCollectionView.hidden = YES;
-            self.topBarView.hidden = YES;
             self.speakerButton.hidden = YES;
             self.screenSharingButton.hidden = YES;
             self.managerButton.hidden = YES;
-            self.bottomBarView.hidden = YES;
             self.informationButton.hidden = NO;
             [self updatePortraitAndStateViewFrame];
             break;
@@ -1960,15 +1980,6 @@
         }
         
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
-        
-        UIDevice *device = [UIDevice currentDevice] ;
-        if (device.orientation == UIDeviceOrientationLandscapeLeft) {
-            cell.transform = CGAffineTransformMakeRotation(M_PI_2);
-        } else if (device.orientation == UIDeviceOrientationLandscapeRight) {
-            cell.transform = CGAffineTransformMakeRotation(-M_PI_2);
-        } else {
-            cell.transform = CGAffineTransformMakeRotation(0);
-        }
         
         [cell setUserInfo:userInfo callProfile:user];
         
