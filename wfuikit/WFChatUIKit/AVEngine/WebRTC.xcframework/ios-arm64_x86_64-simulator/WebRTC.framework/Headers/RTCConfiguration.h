@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, RTCEncryptionKeyType) {
 
 /** Represents the chosen SDP semantics for the RTCPeerConnection. */
 typedef NS_ENUM(NSInteger, RTCSdpSemantics) {
+  // TODO(https://crbug.com/webrtc/13528): Remove support for Plan B.
   RTCSdpSemanticsPlanB,
   RTCSdpSemanticsUnifiedPlan,
 };
@@ -161,27 +162,24 @@ RTC_OBJC_EXPORT
  */
 @property(nonatomic, copy, nullable) NSNumber *iceCheckMinInterval;
 
-/** Configure the SDP semantics used by this PeerConnection. Note that the
- *  WebRTC 1.0 specification requires UnifiedPlan semantics. The
- *  RTCRtpTransceiver API is only available with UnifiedPlan semantics.
+/**
+ * Configure the SDP semantics used by this PeerConnection. By default, this
+ * is RTCSdpSemanticsUnifiedPlan which is compliant to the WebRTC 1.0
+ * specification. It is possible to overrwite this to the deprecated
+ * RTCSdpSemanticsPlanB SDP format, but note that RTCSdpSemanticsPlanB will be
+ * deleted at some future date, see https://crbug.com/webrtc/13528.
  *
- *  PlanB will cause RTCPeerConnection to create offers and answers with at
- *  most one audio and one video m= section with multiple RTCRtpSenders and
- *  RTCRtpReceivers specified as multiple a=ssrc lines within the section. This
- *  will also cause RTCPeerConnection to ignore all but the first m= section of
- *  the same media type.
+ * RTCSdpSemanticsUnifiedPlan will cause RTCPeerConnection to create offers and
+ * answers with multiple m= sections where each m= section maps to one
+ * RTCRtpSender and one RTCRtpReceiver (an RTCRtpTransceiver), either both audio
+ * or both video. This will also cause RTCPeerConnection to ignore all but the
+ * first a=ssrc lines that form a Plan B stream.
  *
- *  UnifiedPlan will cause RTCPeerConnection to create offers and answers with
- *  multiple m= sections where each m= section maps to one RTCRtpSender and one
- *  RTCRtpReceiver (an RTCRtpTransceiver), either both audio or both
- *  video. This will also cause RTCPeerConnection) to ignore all but the first a=ssrc
- *  lines that form a Plan B stream.
- *
- *  For users who wish to send multiple audio/video streams and need to stay
- *  interoperable with legacy WebRTC implementations or use legacy APIs,
- *  specify PlanB.
- *
- *  For all other users, specify UnifiedPlan.
+ * RTCSdpSemanticsPlanB will cause RTCPeerConnection to create offers and
+ * answers with at most one audio and one video m= section with multiple
+ * RTCRtpSenders and RTCRtpReceivers specified as multiple a=ssrc lines within
+ * the section. This will also cause RTCPeerConnection to ignore all but the
+ * first m= section of the same media type.
  */
 @property(nonatomic, assign) RTCSdpSemantics sdpSemantics;
 
