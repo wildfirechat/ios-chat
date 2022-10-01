@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface WFCUMoreBoardView : UIView
-- (instancetype)initWithItems:(NSArray<MoreItem *> *)items cancel:(void(^)(WFCUMoreBoardView *boardView))cancelBlock;
+- (instancetype)initWithWidth:(CGFloat)width items:(NSArray<MoreItem *> *)items cancel:(void(^)(WFCUMoreBoardView *boardView))cancelBlock;
 @end
 
 NS_ASSUME_NONNULL_END
