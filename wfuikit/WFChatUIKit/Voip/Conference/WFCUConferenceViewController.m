@@ -86,12 +86,12 @@
 @property(nonatomic, strong)UIView *inputContainer;
 @property(nonatomic, strong)UITextField *inputTextField;
 
-@property(nonatomic, assign)BOOL failureJoinChatroom;
-
 @property(nonatomic, strong)WFAVParticipantProfile *focusUserProfile;
 
 @property(nonatomic, strong)UIPageControl *pageControl;
 @property(nonatomic, strong)WFCUMoreBoardView *boardView;
+
+@property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
 @end
 
 #define ButtonSize 60
@@ -121,11 +121,11 @@
     if (self) {
         self.currentSession = session;
         self.currentSession.delegate = self;
-        self.conferenceInfo = conferenceInfo;
+        [WFCUConferenceManager sharedInstance].currentConferenceInfo = conferenceInfo;
         self.currentSession.autoSwitchVideoType = NO;
         self.currentSession.defaultVideoType = WFAVVideoType_None;
         [self rearrangeParticipants];
-        [self joinChatroom];
+        [[WFCUConferenceManager sharedInstance] joinChatroom];
     }
     return self;
 }
@@ -167,7 +167,6 @@
         self.currentSession.autoSwitchVideoType = NO;
         self.currentSession.defaultVideoType = WFAVVideoType_None;
         [self rearrangeParticipants];
-        [self joinChatroom];
     }
     return self;
 }
@@ -175,22 +174,19 @@
 -(instancetype)initWithConferenceInfo:(WFZConferenceInfo *)conferenceInfo muteAudio:(BOOL)muteAudio muteVideo:(BOOL)muteVideo {
     self = [super init];
     if (self) {
-        self.conferenceInfo = conferenceInfo;
+        [WFCUConferenceManager sharedInstance].currentConferenceInfo = conferenceInfo;
         self.currentSession = [[WFAVEngineKit sharedEngineKit] joinConference:conferenceInfo.conferenceId audioOnly:NO pin:conferenceInfo.pin host:conferenceInfo.owner title:conferenceInfo.conferenceTitle desc:nil callExtra:nil audience:(muteAudio && muteVideo) || conferenceInfo.audience advanced:conferenceInfo.advance muteAudio:muteAudio muteVideo:muteVideo sessionDelegate:self];
         self.currentSession.autoSwitchVideoType = NO;
         self.currentSession.defaultVideoType = WFAVVideoType_None;
         [self didChangeState:kWFAVEngineStateIncomming];
         [self rearrangeParticipants];
-        [self joinChatroom];
+        [[WFCUConferenceManager sharedInstance] joinChatroom];
     }
     return self;
 }
 
-- (void)joinChatroom {
-    __weak typeof(self)ws = self;
-    [[WFCCIMService sharedWFCIMService] joinChatroom:self.currentSession.callId success:nil error:^(int error_code) {
-        ws.failureJoinChatroom = YES;
-    }];
+- (WFZConferenceInfo *)conferenceInfo {
+    return [WFCUConferenceManager sharedInstance].currentConferenceInfo;
 }
 
 /*
@@ -605,10 +601,8 @@
 }
 
 - (void)onReceiveMessages:(NSNotification *)notification {
-    if (!self.failureJoinChatroom) {
-        NSArray<WFCCMessage *> *messages = notification.object;
-        [self append:messages];
-    }
+    NSArray<WFCCMessage *> *messages = notification.object;
+    [self append:messages];
 }
 
 - (void)append:(NSArray<WFCCMessage *> *)messages {
@@ -679,16 +673,15 @@
 }
 
 - (void)sendTextMessage:(NSString *)text {
-    if (!self.failureJoinChatroom) {
-        WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] send:[WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0] content:[WFCCTextMessageContent contentWith:text] success:^(long long messageUid, long long timestamp) {
-            
-        } error:^(int error_code) {
-            
-        }];
+    WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] send:[WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0] content:[WFCCTextMessageContent contentWith:text] success:^(long long messageUid, long long timestamp) {
         
-        [self append:@[msg]];
-    }
+    } error:^(int error_code) {
+        
+    }];
+    
+    [self append:@[msg]];
 }
+
 - (UIView *)inputContainer {
     if(!_inputContainer) {
         CGRect bound = self.view.bounds;
@@ -764,13 +757,6 @@
     if (self.connectedTimer) {
         [self.connectedTimer invalidate];
         self.connectedTimer = nil;
-    }
-}
-
-- (void)setFailureJoinChatroom:(BOOL)failureJoinChatroom {
-    _failureJoinChatroom = failureJoinChatroom;
-    if(failureJoinChatroom) {
-        self.chatButton.hidden = YES;
     }
 }
 
@@ -894,7 +880,6 @@
 
 - (void)managerButtonDidTap:(UIButton *)button {
     WFCUConferenceMemberManagerViewController *vc = [[WFCUConferenceMemberManagerViewController alloc] init];
-    vc.conferenceInfo = self.conferenceInfo;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -917,7 +902,7 @@
 
 - (void)minimize {
     __block WFAVParticipantProfile *focusUser = self.focusUserProfile;
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:self.conferenceInfo focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
         WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithSession:callSession conferenceInfo:conferenceInfo];
         vc.focusUserProfile = focusUser;
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
@@ -1518,10 +1503,6 @@
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
             self.screenSharingButton.hidden = NO;
-            if(!self.failureJoinChatroom) {
-                self.chatButton.hidden = NO;
-                self.messageTableView.hidden = NO;
-            }
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 [self updateSpeakerButton];
@@ -2188,6 +2169,66 @@
         [alertController addAction:action2];
         
         [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+-(void)onReceiveCommand:(WFCUConferenceCommandType)commandType content:(WFCUConferenceCommandContent *)commandContent fromUser:(NSString *)sender {
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:sender refresh:NO];
+    NSString *userName = @"对方";
+    if(userInfo.friendAlias.length) {
+        userName = userInfo.friendAlias;
+    } else if(userInfo.displayName.length) {
+        userName = userInfo.displayName;
+    }
+    
+    switch(commandType) {
+        case MUTE_ALL:
+            [self.view makeToast:@"主持人开启了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            break;
+        case CANCEL_MUTE_ALL:
+            if(commandContent.boolValue && [WFAVEngineKit sharedEngineKit].currentSession.isConference && ([WFAVEngineKit sharedEngineKit].currentSession.isAudience || [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted)) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人关闭了全员静音，是否要打开麦克风" preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"忽略" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    
+                }];
+                [alertController addAction:action1];
+                
+                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"打开" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    [[WFCUConferenceManager sharedInstance] muteAudio:NO];
+                }];
+                [alertController addAction:action2];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            } else {
+                [self.view makeToast:@"主持人关闭了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            }
+            break;
+        case REQUEST_MUTE:
+            if(commandContent.boolValue) {
+                [self.view makeToast:@"主持人关闭了您的发言" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            } else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"拒绝" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    [[WFCUConferenceManager sharedInstance] rejectUnmuteRequest];
+                }];
+                [alertController addAction:action1];
+                
+                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"接受" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    [[WFCUConferenceManager sharedInstance] muteAudio:NO];
+                }];
+                [alertController addAction:action2];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
+            break;
+        case REJECT_UNMUTE_REQUEST:
+            [self.view makeToast:[NSString stringWithFormat:@"%@ 拒绝了您的发言邀请", userName] duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            break;
+            
+        default:
+            break;
     }
 }
 #pragma mark - UITableViewDataSource

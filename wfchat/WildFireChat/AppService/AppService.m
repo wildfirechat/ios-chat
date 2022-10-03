@@ -442,6 +442,19 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (void)updateConference:(WFZConferenceInfo *)conferenceInfo success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/conference/put_info" data:[conferenceInfo toDictionary] isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            successBlock();
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)queryConferenceInfo:(NSString *)conferenceId password:(NSString *)password success:(void(^)(WFZConferenceInfo *conferenceInfo))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSDictionary *data;
     if(password.length) {
