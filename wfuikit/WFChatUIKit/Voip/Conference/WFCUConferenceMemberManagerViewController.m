@@ -9,6 +9,7 @@
 #import "WFCUConferenceMemberManagerViewController.h"
 #import "UIColor+YH.h"
 #import "WFCUConferenceUnmuteRequestTableViewController.h"
+#import "WFCUConferenceHandupTableViewController.h"
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUUtilities.h"
 #import "WFCUConferenceMember.h"
@@ -91,7 +92,9 @@
 }
 
 - (void)onHandupBtnPressed:(id)sender {
-    
+    WFCUConferenceHandupTableViewController *vc = [[WFCUConferenceHandupTableViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)updateTableViewHeader {
@@ -174,7 +177,7 @@
 }
 
 - (void)onUnmuteAllBtnPressed:(id)sender {
-    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"已允许全体成员开麦" actionTitle:@"取消全体静音" cancelTitle:nil contentText:@"是否要求成员开麦" checkBox:YES actionHandler:^(BOOL checked) {
+    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"允许全体成员开麦" actionTitle:@"取消全体静音" cancelTitle:nil contentText:@"是否要求成员开麦" checkBox:YES actionHandler:^(BOOL checked) {
         [[WFCUConferenceManager sharedInstance] requestUnmuteAll:checked];
     } cancelHandler:nil];
 }

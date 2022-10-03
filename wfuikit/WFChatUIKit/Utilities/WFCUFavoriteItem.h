@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by Tom Lee on 2020/11/1.
-//  Copyright © 2020 Tom Lee. All rights reserved.
+//  Copyright © 2020 Wildfirechat. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

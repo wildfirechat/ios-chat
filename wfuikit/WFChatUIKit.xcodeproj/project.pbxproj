@@ -443,6 +443,8 @@
 		B72FBB18283230F0005F2745 /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0F283230F0005F2745 /* InternalApis.m */; };
 		B7311DEC28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */; };
 		B7311DED28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */; };
+		B7311DF028EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7311DEE28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h */; };
+		B7311DF128EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7311DEF28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m */; };
 		B733DFEF28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B733DFED28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h */; };
 		B733DFF028D404AD0094AD74 /* WFZConferenceHistoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B733DFEE28D404AD0094AD74 /* WFZConferenceHistoryListViewController.m */; };
 		B733DFF328D4071F0094AD74 /* WFCUConferenceHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = B733DFF128D4071F0094AD74 /* WFCUConferenceHistory.h */; };
@@ -973,6 +975,8 @@
 		B72FBB0F283230F0005F2745 /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
 		B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceUnmuteRequestTableViewController.h; sourceTree = "<group>"; };
 		B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceUnmuteRequestTableViewController.m; sourceTree = "<group>"; };
+		B7311DEE28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceHandupTableViewController.h; sourceTree = "<group>"; };
+		B7311DEF28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceHandupTableViewController.m; sourceTree = "<group>"; };
 		B733DFED28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFZConferenceHistoryListViewController.h; sourceTree = "<group>"; };
 		B733DFEE28D404AD0094AD74 /* WFZConferenceHistoryListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceHistoryListViewController.m; sourceTree = "<group>"; };
 		B733DFF128D4071F0094AD74 /* WFCUConferenceHistory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceHistory.h; sourceTree = "<group>"; };
@@ -1247,6 +1251,8 @@
 				B7D36FEC28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m */,
 				B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */,
 				B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */,
+				B7311DEE28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h */,
+				B7311DEF28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m */,
 			);
 			path = Conference;
 			sourceTree = "<group>";
@@ -2424,6 +2430,7 @@
 				149B3111241E65D500B935D3 /* UIColor+YH.h in Headers */,
 				2F5510B9217F5CC200F56C26 /* WFCUGroupTableViewCell.h in Headers */,
 				B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */,
+				B7311DF028EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h in Headers */,
 				2F551152217F5CC200F56C26 /* KZVideoSupport.h in Headers */,
 				2F55118E217F5CC200F56C26 /* MBProgressHUD.h in Headers */,
 				2F535BFF25296E6600C9AF09 /* WFCUQuoteViewController.h in Headers */,
@@ -2731,6 +2738,7 @@
 				2F55120B217F5CC300F56C26 /* WFCUNewFriendTableViewCell.m in Sources */,
 				2FBDAB9225DA41FD00FEF2C3 /* WFCUConferenceManager.m in Sources */,
 				2BDF57A524AD70C8003C1F08 /* DNAlbumTableViewController.m in Sources */,
+				B7311DF128EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m in Sources */,
 				2F5510B3217F5CC200F56C26 /* WFCUSearchViewController.m in Sources */,
 				2F551097217F5CC200F56C26 /* WFCUVoiceCell.m in Sources */,
 				2F551091217F5CC200F56C26 /* WFCUMediaMessageCell.m in Sources */,
