@@ -896,7 +896,7 @@
 
 
 - (void)screenSharingButtonDidTap:(UIButton *)button {
-    [self.currentSession setInAppScreenSharing:!self.currentSession.isInAppScreenSharing];
+    [[WFCUConferenceManager sharedInstance] enableAudioAndScreansharing];
     [self updateScreenSharingButton];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1316,6 +1316,9 @@
     CGRect floatingAudioBtnFrame = CGRectMake((bounds.size.width - FLOATING_AUDIO_BUTTON_SIZE)/2, bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT, FLOATING_AUDIO_BUTTON_SIZE, FLOATING_AUDIO_BUTTON_SIZE);
     floatingAudioBtnFrame.origin.y = self.view.bounds.size.height;
     self.floatingAudioButton.frame = floatingAudioBtnFrame;
+    
+    CGFloat previousBottomBarHeigh = landscape ? CONFERENCE_BAR_HEIGHT : CONFERENCE_BAR_HEIGHT+[WFCUUtilities wf_safeDistanceBottom];
+    self.bottomBarView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, previousBottomBarHeigh);
     
     self.bottomBarView.hidden = NO;
     self.topBarView.hidden = NO;

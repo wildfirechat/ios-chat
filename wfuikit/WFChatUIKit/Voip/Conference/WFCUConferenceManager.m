@@ -99,6 +99,15 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self notifyMuteStateChanged];
 }
 
+- (void)enableAudioAndScreansharing {
+    [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+    if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+    }
+    [[WFAVEngineKit sharedEngineKit].currentSession setInAppScreenSharing:YES];
+    [self notifyMuteStateChanged];
+}
+
 - (void)reloadConferenceInfo {
     __weak typeof(self)ws = self;
     [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:self.currentConferenceInfo.conferenceId password:self.currentConferenceInfo.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
@@ -230,8 +239,12 @@ static WFCUConferenceManager *sharedSingleton = nil;
                         //普通用户申请解除静音，带有参数是请求，还是取消请求。
                         case APPLY_UNMUTE:
                             if([self.currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                                if(![self.applyingUnmuteMembers containsObject:msg.fromUser]) {
-                                    [self.applyingUnmuteMembers addObject:msg.fromUser];
+                                if(command.boolValue) {
+                                    [self.applyingUnmuteMembers removeObject:msg.fromUser];
+                                } else {
+                                    if(![self.applyingUnmuteMembers containsObject:msg.fromUser]) {
+                                        [self.applyingUnmuteMembers addObject:msg.fromUser];
+                                    }
                                 }
                             }
                             break;
@@ -250,6 +263,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
                         case APPROVE_ALL_UNMUTE:
                             if(self.isApplyingUnmute) {
                                 self.isApplyingUnmute = NO;
+                                if(command.boolValue) {
+                                    [self muteAudio:NO];
+                                }
                             } else {
                                 return;
                             }
@@ -438,12 +454,12 @@ static WFCUConferenceManager *sharedSingleton = nil;
     return YES;
 }
 
-- (BOOL)approveAllMemberUnmute:(BOOL)isReject {
+- (BOOL)approveAllMemberUnmute:(BOOL)isAllow {
     if(![self isOwner])
         return NO;
     
     [self.applyingUnmuteMembers removeAllObjects];
-    [self sendCommandMessage:APPROVE_ALL_UNMUTE targetUserId:nil boolValue:isReject];
+    [self sendCommandMessage:APPROVE_ALL_UNMUTE targetUserId:nil boolValue:isAllow];
     
     return YES;
 }
