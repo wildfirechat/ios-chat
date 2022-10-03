@@ -123,7 +123,7 @@
     
     
     if(self.conferenceInfo.audience) {
-        if(self.conferenceInfo.allowSwitchMode || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if(self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             if(self.enableAudio || self.enableVideo) {
                 self.conferenceInfo.audience = NO;
             }
@@ -339,7 +339,7 @@
             };
         }
         
-        if(self.conferenceInfo.allowSwitchMode || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if(self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             switchCell.valueSwitch.enabled = YES;
         } else {
             switchCell.valueSwitch.enabled = NO;
