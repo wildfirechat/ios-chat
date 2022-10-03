@@ -1,5 +1,5 @@
 //
-//  WFCUConferenceUnmuteRequestTableViewController.h
+//  WFCUConferenceHandupTableViewController.h
 //  WFChatUIKit
 //
 //  Created by Rain on 2022/10/3.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUConferenceUnmuteRequestTableViewController : UIViewController
+@interface WFCUConferenceHandupTableViewController : UIViewController
 
 @end
 

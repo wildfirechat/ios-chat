@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by Rain on 2022/10/3.
-//  Copyright © 2022 Tom Lee. All rights reserved.
+//  Copyright © 2022 Wildfirechat. All rights reserved.
 //
 
 #import "WFCUConferenceUnmuteRequestTableViewController.h"
@@ -11,9 +11,13 @@
 #import "WFCUConferenceMemberTableViewCell.h"
 #import "WFCUConferenceManager.h"
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUUtilities.h"
 
 @interface WFCUConferenceUnmuteRequestTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
+
+@property(nonatomic, strong)UIButton *acceptAllBtn;
+@property(nonatomic, strong)UIButton *rejectAllBtn;
 @end
 
 @implementation WFCUConferenceUnmuteRequestTableViewController
@@ -22,7 +26,11 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    CGRect bounds = self.view.bounds;
+    CGFloat buttonHeight = 48;
+    CGFloat buttonWidth = bounds.size.width/2 - 16 - 8;
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     if (@available(iOS 15, *)) {
@@ -34,7 +42,23 @@
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
+    
+    if([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count) {
+        self.acceptAllBtn = [self createBtn:CGRectMake(16, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全部同意" action:@selector(onAcceptAllBtnPressed:)];
+        self.rejectAllBtn = [self createBtn:CGRectMake(bounds.size.width - 16 - buttonWidth, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全部拒绝" action:@selector(onRejectAllBtnPressed:)];
+    }
+}
+
+- (void)onAcceptAllBtnPressed:(id)sender {
+    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:YES];
+    [self.tableView reloadData];
+}
+
+- (void)onRejectAllBtnPressed:(id)sender {
+    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:NO];
+    [self.tableView reloadData];
 }
 
 - (void)onClose:(id)sender {
@@ -53,6 +77,21 @@
     NSString *userId = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers[row];
     [[WFCUConferenceManager sharedInstance] approveMember:userId unmute:NO];
     [self.tableView reloadData];
+}
+
+- (UIButton *)createBtn:(CGRect)frame title:(NSString *)title action:(SEL)action {
+    UIButton *btn = [[UIButton alloc] initWithFrame:frame];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.layer.borderWidth = 1;
+    btn.layer.borderColor = [UIColor grayColor].CGColor;
+    btn.layer.masksToBounds = YES;
+    btn.layer.cornerRadius = 5.f;
+    [btn addTarget:self action:action forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:btn];
+    
+    return btn;
 }
 
 #pragma mark - UITableViewDataSource<NSObject>
@@ -99,6 +138,4 @@
     
     return cell;
 }
-
-
 @end
