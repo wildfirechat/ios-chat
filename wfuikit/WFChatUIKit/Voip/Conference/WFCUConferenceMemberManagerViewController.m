@@ -8,7 +8,7 @@
 #if WFCU_SUPPORT_VOIP
 #import "WFCUConferenceMemberManagerViewController.h"
 #import "UIColor+YH.h"
-
+#import "WFCUConferenceUnmuteRequestTableViewController.h"
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "WFCUUtilities.h"
 #import "WFCUConferenceMember.h"
@@ -29,14 +29,16 @@
 @property(nonatomic, strong)UIButton *muteAllBtn;
 @property(nonatomic, strong)UIButton *unmuteAllBtn;
 
-@property(nonatomic, strong)UIButton *alertViewCheckBtn;
+@property(nonatomic, strong)UIView *headerViewContainer;
+@property(nonatomic, strong)UIButton *unmuteRequestBtn;
+@property(nonatomic, strong)UIButton *handupBtn;
 @end
 
 @implementation WFCUConferenceMemberManagerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 50, self.view.bounds.size.width, 40)];
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"搜索";
     self.searchBar.barStyle = UIBarStyleDefault;
@@ -50,7 +52,23 @@
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView registerClass:[WFCUConferenceMemberTableViewCell class] forCellReuseIdentifier:@"cell"];
-    self.tableView.tableHeaderView = self.searchBar;
+    
+    self.headerViewContainer = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.headerViewContainer addSubview:self.searchBar];
+    
+    self.unmuteRequestBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.unmuteRequestBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.unmuteRequestBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.unmuteRequestBtn addTarget:self action:@selector(onUnmuteRequestBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.headerViewContainer addSubview:self.unmuteRequestBtn];
+    
+    self.handupBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.handupBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.handupBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.handupBtn addTarget:self action:@selector(onHandupBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.headerViewContainer addSubview:self.handupBtn];
+    
+    self.tableView.tableHeaderView = self.headerViewContainer;
     
     [self.view addSubview:self.tableView];
     
@@ -66,6 +84,61 @@
     [self.tableView reloadData];
 }
 
+- (void)onUnmuteRequestBtnPressed:(id)sender {
+    WFCUConferenceUnmuteRequestTableViewController *vc = [[WFCUConferenceUnmuteRequestTableViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)onHandupBtnPressed:(id)sender {
+    
+}
+
+- (void)updateTableViewHeader {
+    if([self.searchBar isFirstResponder] || ([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count == 0 && [WFCUConferenceManager sharedInstance].handupMembers.count == 0)) {
+        self.headerViewContainer.frame = CGRectMake(0, 50, self.view.bounds.size.width, 40);
+    } else {
+        int height = 40;
+        NSMutableArray<NSString *> *applyingUnmuteMembers = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers;
+        if(applyingUnmuteMembers.count) {
+            self.unmuteRequestBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);
+            NSString *name;
+            if(applyingUnmuteMembers.count == 1) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteMembers[0] refresh:NO];
+                name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+                if(!name.length) {
+                    name = @"1名成员";
+                }
+            } else {
+                name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteMembers.count];
+            }
+            [self.unmuteRequestBtn setTitle:[NSString stringWithFormat:@" %@正在申请解除静音", name] forState:UIControlStateNormal];
+            height += 40;
+        } else {
+            self.unmuteRequestBtn.frame = CGRectZero;
+        }
+        NSMutableArray<NSString *> *handupMembers = [WFCUConferenceManager sharedInstance].handupMembers;
+        if([WFCUConferenceManager sharedInstance].handupMembers.count) {
+            self.handupBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);
+            NSString *name;
+            if(handupMembers.count == 1) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:handupMembers[0] refresh:NO];
+                name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+                if(!name.length) {
+                    name = @"1名成员";
+                }
+            } else {
+                name = [NSString stringWithFormat:@"%ld名成员", handupMembers.count];
+            }
+            [self.handupBtn setTitle:[NSString stringWithFormat:@" %@正在举手", name] forState:UIControlStateNormal];
+            height += 40;
+        } else {
+            self.handupBtn.frame = CGRectZero;
+        }
+        self.headerViewContainer.frame = CGRectMake(0, 50, self.view.bounds.size.width, height);
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if(!self.muteAllBtn && [[WFCUConferenceManager sharedInstance] isOwner]) {
@@ -76,6 +149,7 @@
         self.muteAllBtn = [self createBtn:CGRectMake(16, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全员静音" action:@selector(onMuteAllBtnPressed:)];
         self.unmuteAllBtn = [self createBtn:CGRectMake(bounds.size.width - 16 - buttonWidth, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"取消全员静音" action:@selector(onUnmuteAllBtnPressed:)];
     }
+    [self updateTableViewHeader];
 }
 
 - (UIButton *)createBtn:(CGRect)frame title:(NSString *)title action:(SEL)action {
@@ -93,65 +167,16 @@
     return btn;
 }
 
-- (UIButton *)alertViewCheckBtn {
-    if(!_alertViewCheckBtn) {
-        CGFloat width = [[[NSUserDefaults standardUserDefaults] objectForKey:@"wfc_conference_alert_checkbox_width"] floatValue];
-        CGFloat height = [[[NSUserDefaults standardUserDefaults] objectForKey:@"wfc_conference_alert_checkbox_height"] floatValue];
-        _alertViewCheckBtn = [[UIButton alloc] initWithFrame:CGRectMake(8, 44, width, height)];
-        [_alertViewCheckBtn setImage:[WFCUImage imageNamed:@"multi_unselected"] forState:UIControlStateNormal];
-        [_alertViewCheckBtn setImage:[WFCUImage imageNamed:@"multi_selected"] forState:UIControlStateSelected];
-        [_alertViewCheckBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
-        [_alertViewCheckBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_alertViewCheckBtn addTarget:self action:@selector(onAlertViewCheckBtnPressed:) forControlEvents:UIControlEventTouchDown];
-    }
-    return _alertViewCheckBtn;
-}
-
-- (void)onAlertViewCheckBtnPressed:(id)sender {
-    self.alertViewCheckBtn.selected = !self.alertViewCheckBtn.selected;
-}
-
 - (void)onMuteAllBtnPressed:(id)sender {
-    __weak typeof(self)ws = self;
-    [self presentMuteAllAlertView:@"所有成员将被静音" actionTitle:@"全体静音" checkText:@"允许成员自主解除静音" handler:^(UIAlertAction *action) {
-        [[WFCUConferenceManager sharedInstance] requestMuteAll:ws.alertViewCheckBtn.selected];
-    }];
+    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"所有成员将被静音" actionTitle:@"全体静音" cancelTitle:nil contentText:@"允许成员自主解除静音" checkBox:YES actionHandler:^(BOOL checked) {
+        [[WFCUConferenceManager sharedInstance] requestMuteAll:checked];
+    } cancelHandler:nil];
 }
 
 - (void)onUnmuteAllBtnPressed:(id)sender {
-    __weak typeof(self)ws = self;
-    [self presentMuteAllAlertView:@"已允许全体成员开麦" actionTitle:@"取消全体静音" checkText:@"是否要求成员开麦" handler:^(UIAlertAction *action) {
-        [[WFCUConferenceManager sharedInstance] requestUnmuteAll:ws.alertViewCheckBtn.selected];
-    }];
-}
-
-- (void)presentMuteAllAlertView:(NSString *)message actionTitle:(NSString *)actionTitle checkText:(NSString *)checkText handler:(void (^)(UIAlertAction *action))handler {
-    __weak typeof(self)ws = self;
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"%@\n\n\n", message] preferredStyle:UIAlertControllerStyleAlert];
-
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    [alertController addAction:action1];
-    
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDestructive handler:handler];
-    [alertController addAction:action2];
-    
-    [self.alertViewCheckBtn setTitle:[NSString stringWithFormat:@" %@", checkText] forState:UIControlStateNormal];
-    [alertController.view addSubview:self.alertViewCheckBtn];
-    
-    [self presentViewController:alertController animated:NO completion:^{
-        CGSize size = alertController.view.bounds.size;
-        if(ws.alertViewCheckBtn.frame.size.width != size.width - 16 || ws.alertViewCheckBtn.frame.size.height != size.height - 88) {
-            [[NSUserDefaults standardUserDefaults] setObject:@(size.width - 16) forKey:@"wfc_conference_alert_checkbox_width"];
-            [[NSUserDefaults standardUserDefaults] setObject:@(size.height - 88) forKey:@"wfc_conference_alert_checkbox_height"];
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            });
-        }
-        ws.alertViewCheckBtn.frame = CGRectMake(8, 44, size.width - 16, size.height - 88);
-    }];
+    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"已允许全体成员开麦" actionTitle:@"取消全体静音" cancelTitle:nil contentText:@"是否要求成员开麦" checkBox:YES actionHandler:^(BOOL checked) {
+        [[WFCUConferenceManager sharedInstance] requestUnmuteAll:checked];
+    } cancelHandler:nil];
 }
 
 - (void)loadData {
@@ -350,11 +375,12 @@
         [alertController addAction:requestQuit];
     } else if(member.isMe) {
         if(member.isAudience) {
-            if([[WFCUConferenceManager sharedInstance].currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] || [WFCUConferenceManager sharedInstance].currentConferenceInfo.allowSwitchMode) {
+            if([[WFCUConferenceManager sharedInstance].currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] || [WFCUConferenceManager sharedInstance].currentConferenceInfo.allowTurnOnMic) {
                 [alertController addAction:enableAudio];
                 [alertController addAction:enableVideo];
                 [alertController addAction:enableAudioVideo];
             } else {
+                [alertController addAction:enableVideo];
                 //Todo 举手请求发言
             }
         } else {

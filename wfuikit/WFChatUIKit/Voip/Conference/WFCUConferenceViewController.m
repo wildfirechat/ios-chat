@@ -812,6 +812,16 @@
             [ws presentViewController:navi animated:YES completion:nil];
             return nil;
         }],
+        [WFCUConferenceManager sharedInstance].isHandup ?
+            [[MoreItem alloc] initWithTitle:@"放下" image:[WFCUImage imageNamed:@"conference_handup_hover"] callback:^MoreItem * _Nonnull{
+                [[WFCUConferenceManager sharedInstance] handup:![WFCUConferenceManager sharedInstance].isHandup];
+                return nil;
+            }]
+            :
+            [[MoreItem alloc] initWithTitle:@"举手" image:[WFCUImage imageNamed:@"conference_handup"] callback:^MoreItem * _Nonnull{
+                [[WFCUConferenceManager sharedInstance] handup:![WFCUConferenceManager sharedInstance].isHandup];
+                return nil;
+            }],
         [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
             [ws minimize];
             return nil;
@@ -925,15 +935,29 @@
 
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        // 当音频/视频全都mute时需要切换成观众，当是观众状态时打开音频/视频需要切换成主播
-        // 顺序需要注意，当关闭音视频需要切换成观众时，要先切换成观众，再关闭音视频。
-        // 反过来，当观众状态要打开音视频时，要先打开音视频，再切换成主播。
-        // 原因时在主播状态下切换mute状态会引发一次信令交互，按照此做法则能避免此交互。
-        // video操作时也需要遵循此原则，请参考函数 videoButtonDidTap
-        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if(!self.currentSession.isAudience && !self.currentSession.audioMuted) {
             [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
             [self updateAudioButton];
+        } else {
+            if (self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
+                [self updateAudioButton];
+            } else {
+                if([WFCUConferenceManager sharedInstance].isApplyingUnmute) {
+                    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"您正在申请解除静音" actionTitle:@"继续申请" cancelTitle:@"取消申请" contentText:@"主持人不允许解除静音，您已经申请解除静音，正在等待主持人操作" checkBox:NO actionHandler:^(BOOL checked) {
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                    } cancelHandler:^{
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:YES];
+                    }];
+                } else {
+                    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"你已静音" actionTitle:@"申请解除静音" cancelTitle:nil contentText:@"主持人不允许解除静音，您可以向主持人申请解除静音" checkBox:NO actionHandler:^(BOOL checked) {
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                    } cancelHandler:nil];
+                }
+            }
         }
+        
+        
         if(button == self.audioButton) {
             [self startHidePanelTimer];
         }
@@ -948,16 +972,8 @@
         [self.audioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
         [self.floatingAudioButton setImage:[WFCUImage imageNamed:@"conference_audio"] forState:UIControlStateNormal];
     }
-    
-    
-    if(self.currentSession.audience && !self.conferenceInfo.allowSwitchMode && ![self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        self.audioButton.enabled = NO;
-        self.floatingAudioButton.enabled = NO;
-    } else {
-        self.audioButton.enabled = YES;
-        self.floatingAudioButton.enabled = YES;
-    }
 }
+
 - (void)speakerButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         [self.currentSession enableSpeaker:!self.currentSession.isSpeaker];
@@ -987,12 +1003,6 @@
     } else {
         [self.videoButton setImage:[WFCUImage imageNamed:@"conference_video"] forState:UIControlStateNormal];
         self.switchCameraButton.hidden = NO;
-    }
-    
-    if(self.currentSession.audience && !self.conferenceInfo.allowSwitchMode && ![self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        self.videoButton.enabled = NO;
-    } else {
-        self.videoButton.enabled = YES;
     }
 }
 
@@ -1128,7 +1138,7 @@
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         //请参考函数 audioButtonDidTap
-        if (self.conferenceInfo.allowSwitchMode || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if (self.conferenceInfo.allowTurnOnMic || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
             [self updateVideoButton];
         }
@@ -2181,10 +2191,11 @@
     }
     
     switch(commandType) {
-        case MUTE_ALL:
+        case MUTE_ALL: {
             [self.view makeToast:@"主持人开启了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
             break;
-        case CANCEL_MUTE_ALL:
+        }
+        case CANCEL_MUTE_ALL: {
             if(commandContent.boolValue && [WFAVEngineKit sharedEngineKit].currentSession.isConference && ([WFAVEngineKit sharedEngineKit].currentSession.isAudience || [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted)) {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人关闭了全员静音，是否要打开麦克风" preferredStyle:UIAlertControllerStyleAlert];
                 
@@ -2203,6 +2214,7 @@
                 [self.view makeToast:@"主持人关闭了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
             }
             break;
+        }
         case REQUEST_MUTE:
             if(commandContent.boolValue) {
                 [self.view makeToast:@"主持人关闭了您的发言" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
@@ -2227,6 +2239,15 @@
             [self.view makeToast:[NSString stringWithFormat:@"%@ 拒绝了您的发言邀请", userName] duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
             break;
             
+        case APPLY_UNMUTE:
+            [self.view makeToast:[NSString stringWithFormat:@"%@ 请求发言", userName] duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            break;
+            
+        case APPROVE_UNMUTE:
+            if(!commandContent.boolValue) {
+                [self.view makeToast:@"主持人拒绝了您的发言请求" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            }
+            break;
         default:
             break;
     }
