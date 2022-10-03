@@ -349,7 +349,7 @@
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:nil focusUser:self.currentSession.participantIds[0] withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:self.currentSession.participantIds[0] withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
          [[WFAVEngineKit sharedEngineKit] presentViewController:[[WFCUVideoViewController alloc] initWithSession:callSession]];
      }];
     
