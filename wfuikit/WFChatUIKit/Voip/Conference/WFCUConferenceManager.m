@@ -13,6 +13,8 @@
 #import "WFCUConferenceChangeModelContent.h"
 #import "WFZConferenceInfo.h"
 #import "WFCUConferenceHistory.h"
+#import "WFCUConferenceCommandContent.h"
+#import "WFCUConfigManager.h"
 
 NSString *kMuteStateChanged = @"kMuteStateChanged";
 
@@ -93,6 +95,15 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self notifyMuteStateChanged];
 }
 
+- (void)reloadConferenceInfo {
+    __weak typeof(self)ws = self;
+    [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:self.currentConferenceInfo.conferenceId password:self.currentConferenceInfo.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
+        ws.currentConferenceInfo = conferenceInfo;
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+}
+
 - (void)notifyMuteStateChanged {
     [[NSNotificationCenter defaultCenter] postNotificationName:kMuteStateChanged object:nil];
 }
@@ -112,6 +123,89 @@ static WFCUConferenceManager *sharedSingleton = nil;
                         [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
                         [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
                         [self.delegate onChangeModeRequest:NO];
+                    }
+                }
+            } else if([msg.content isKindOfClass:[WFCUConferenceCommandContent class]]) {
+                WFCUConferenceCommandContent *command = (WFCUConferenceCommandContent *)msg.content;
+                if([command.conferenceId isEqualToString:[WFAVEngineKit sharedEngineKit].currentSession.callId]) {
+                    switch (command.type) {
+                        //全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否允许成员自主解除静音。
+                        case MUTE_ALL:
+                            [self reloadConferenceInfo];
+                            if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+                                [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+                            }
+                            break;
+                        //取消全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否邀请成员解除静音。
+                        case CANCEL_MUTE_ALL:
+                            [self reloadConferenceInfo];
+                            break;
+                            
+                        //要求某个用户更改静音状态，只有主持人可以操作。带有参数是否静音/解除静音。
+                        case REQUEST_MUTE:
+                            if([command.targetUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                                if(command.boolValue) {
+                                    [self muteAudioVideo:YES];
+                                }
+                            } else {
+                                return;
+                            }
+                            break;
+                        //拒绝UNMUTE要求。（如果同意不需要通知对方同意)
+                        case REJECT_UNMUTE_REQUEST:
+                            break;
+                            
+                        //普通用户申请解除静音，带有参数是请求，还是取消请求。
+                        case APPLY_UNMUTE:
+                            if([self.currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                                [self.applyingUnmuteMembers addObject:msg.fromUser];
+                            }
+                            break;
+                        //管理员批准解除静音申请，带有参数是同意，还是拒绝申请。
+                        case APPROVE_UNMUTE:
+                            if(self.isApplyingUnmute) {
+                                self.isApplyingUnmute = NO;
+                            } else {
+                                return;
+                            }
+                            break;
+                        //管理员批准全部解除静音申请，带有参数是同意，还是拒绝申请。
+                        case APPROVE_ALL_UNMUTE:
+                            if(self.isApplyingUnmute) {
+                                self.isApplyingUnmute = NO;
+                            } else {
+                                return;
+                            }
+                            break;
+                            
+                        //举手，带有参数是举手还是放下举手
+                        case HANDUP:
+                            [self.handupMembers addObject:msg.fromUser];
+                            break;
+                        //主持人放下成员的举手
+                        case PUT_HAND_DOWN:
+                            if(self.isHandup) {
+                                self.isHandup = NO;
+                            } else {
+                                return;
+                            }
+                            break;
+                        //主持人放下全体成员的举手
+                        case PUT_ALL_HAND_DOWN:
+                            if(self.isHandup) {
+                                self.isHandup = NO;
+                            } else {
+                                return;
+                            }
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
+                    //回调给UI来进行提醒或通知
+                    if([self.delegate respondsToSelector:@selector(onReceiveCommand:content:fromUser:)]) {
+                        [self.delegate onReceiveCommand:command.type content:command fromUser:msg.fromUser];
                     }
                 }
             }
@@ -178,6 +272,116 @@ static WFCUConferenceManager *sharedSingleton = nil;
     } else {
         return [NSString stringWithFormat:@"wildfirechat://conference/%@", conferenceId];
     }
+}
+
+- (void)sendCommandMessage:(WFCUConferenceCommandContent *)commandContent {
+    WFCCConversation *conv = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentConferenceInfo.conferenceId line:0];
+    [[WFCCIMService sharedWFCIMService] send:conv content:commandContent success:nil error:nil];
+}
+
+- (void)joinChatroom {
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] joinChatroom:self.currentConferenceInfo.conferenceId success:nil error:^(int error_code) {
+        ws.failureJoinChatroom = YES;
+    }];
+}
+
+- (BOOL)isOwner {
+    return [self.currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId];
+}
+
+- (BOOL)requestMuteAll:(BOOL)allowMemberUnmute {
+    if(![self isOwner])
+        return NO;
+    
+    self.currentConferenceInfo.audience = YES;
+    self.currentConferenceInfo.allowSwitchMode = allowMemberUnmute;
+    __weak typeof(self)ws = self;
+    
+    [[WFCUConfigManager globalManager].appServiceProvider updateConference:self.currentConferenceInfo success:^() {
+        [ws sendCommandMessage:MUTE_ALL targetUserId:nil boolValue:allowMemberUnmute];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+    
+    return YES;
+}
+
+- (BOOL)requestUnmuteAll:(BOOL)unmute {
+    if(![self isOwner])
+        return NO;
+    
+    self.currentConferenceInfo.audience = NO;
+    self.currentConferenceInfo.allowSwitchMode = YES;
+    __weak typeof(self)ws = self;
+    
+    [[WFCUConfigManager globalManager].appServiceProvider updateConference:self.currentConferenceInfo success:^(void) {
+        [ws sendCommandMessage:CANCEL_MUTE_ALL targetUserId:nil boolValue:unmute];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+    
+    return YES;
+}
+
+- (BOOL)requestMember:(NSString *)memberId Mute:(BOOL)isMute {
+    if(![self isOwner])
+        return NO;
+    
+    [self sendCommandMessage:REQUEST_MUTE targetUserId:memberId boolValue:isMute];
+    
+    return YES;
+}
+
+- (void)rejectUnmuteRequest {
+    [self sendCommandMessage:REJECT_UNMUTE_REQUEST targetUserId:nil boolValue:NO];
+}
+
+- (void)applyUnmute:(BOOL)isCancel {
+    self.isApplyingUnmute = !isCancel;
+    [self sendCommandMessage:APPLY_UNMUTE targetUserId:nil boolValue:isCancel];
+}
+
+- (BOOL)approveMember:(NSString *)memberId unmute:(BOOL)isReject {
+    if(![self isOwner])
+        return NO;
+    
+    [self.applyingUnmuteMembers removeObject:memberId];
+    [self sendCommandMessage:APPROVE_UNMUTE targetUserId:memberId boolValue:isReject];
+    
+    return YES;
+}
+
+- (BOOL)approveAllMemberUnmute:(BOOL)isReject {
+    if(![self isOwner])
+        return NO;
+    
+    [self.applyingUnmuteMembers removeAllObjects];
+    [self sendCommandMessage:APPROVE_ALL_UNMUTE targetUserId:nil boolValue:isReject];
+    
+    return YES;
+}
+
+- (void)handup:(BOOL)handup {
+    self.isHandup = handup;
+    [self sendCommandMessage:HANDUP targetUserId:nil boolValue:handup];
+}
+
+- (void)putMemberHandDown:(NSString *)memberId {
+    [self.handupMembers removeObject:memberId];
+    [self sendCommandMessage:PUT_HAND_DOWN targetUserId:memberId boolValue:NO];
+}
+
+- (void)putAllHandDown {
+    [self.handupMembers removeAllObjects];
+    [self sendCommandMessage:PUT_ALL_HAND_DOWN targetUserId:nil boolValue:NO];
+}
+
+- (void)sendCommandMessage:(WFCUConferenceCommandType)type targetUserId:(NSString *)userId boolValue:(BOOL)boolValue {
+    WFCUConferenceCommandContent *command = [WFCUConferenceCommandContent commandOfType:type conference:self.currentConferenceInfo.conferenceId];
+    command.targetUserId = userId;
+    command.boolValue = boolValue;
+    [self sendCommandMessage:command];
 }
 @end
 #endif

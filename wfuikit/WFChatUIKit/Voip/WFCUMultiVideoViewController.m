@@ -434,7 +434,7 @@
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
     __block NSString *focusUser = [self.participants lastObject];
-    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession conferenceInfo:nil focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
+    [WFCUFloatingWindow startCallFloatingWindow:self.currentSession focusUser:focusUser withTouchedBlock:^(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo) {
         WFCUMultiVideoViewController *vc = [[WFCUMultiVideoViewController alloc] initWithSession:callSession];
         [vc setFocusUser:focusUser];
          [[WFAVEngineKit sharedEngineKit] presentViewController:vc];

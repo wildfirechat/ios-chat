@@ -42,7 +42,7 @@
  @param focusUserProfile  焦点用户
  @param touchedBlock 悬浮窗点击的Block
  */
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession conferenceInfo:(WFZConferenceInfo *)conferenceInfo focusUser:(WFAVParticipantProfile *)focusUserProfile
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession focusUser:(WFAVParticipantProfile *)focusUserProfile
               withTouchedBlock:(void (^)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo))touchedBlock;
 
 /*!

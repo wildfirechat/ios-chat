@@ -525,6 +525,8 @@
 		B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */; };
 		B7F892A628CC8F5F00E362DE /* WFCUConferenceLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */; };
 		B7F892A728CC8F5F00E362DE /* WFCUConferenceLabelView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */; };
+		B7FA122028E9505D001AF906 /* WFCUConferenceCommandContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FA121E28E9505D001AF906 /* WFCUConferenceCommandContent.h */; };
+		B7FA122128E9505D001AF906 /* WFCUConferenceCommandContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FA121F28E9505D001AF906 /* WFCUConferenceCommandContent.m */; };
 		B7FB0D832897734300625747 /* WFCUFileVideoSource.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FB0D812897734300625747 /* WFCUFileVideoSource.h */; };
 		B7FB0D842897734300625747 /* WFCUFileVideoSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FB0D822897734300625747 /* WFCUFileVideoSource.m */; };
 /* End PBXBuildFile section */
@@ -1051,6 +1053,8 @@
 		B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUConferencePortraitCollectionViewCell.m; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.m; sourceTree = SOURCE_ROOT; };
 		B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceLabelView.m; sourceTree = "<group>"; };
 		B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceLabelView.h; sourceTree = "<group>"; };
+		B7FA121E28E9505D001AF906 /* WFCUConferenceCommandContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceCommandContent.h; sourceTree = "<group>"; };
+		B7FA121F28E9505D001AF906 /* WFCUConferenceCommandContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceCommandContent.m; sourceTree = "<group>"; };
 		B7FB0D812897734300625747 /* WFCUFileVideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFileVideoSource.h; sourceTree = "<group>"; };
 		B7FB0D822897734300625747 /* WFCUFileVideoSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFileVideoSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2077,6 +2081,8 @@
 			children = (
 				2FBDAB9A25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h */,
 				2FBDAB9B25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m */,
+				B7FA121E28E9505D001AF906 /* WFCUConferenceCommandContent.h */,
+				B7FA121F28E9505D001AF906 /* WFCUConferenceCommandContent.m */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -2507,6 +2513,7 @@
 				2F5510F9217F5CC200F56C26 /* CCHNearCenterMapClusterer.h in Headers */,
 				2F55119A217F5CC200F56C26 /* UITextView+Placeholder.h in Headers */,
 				B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */,
+				B7FA122028E9505D001AF906 /* WFCUConferenceCommandContent.h in Headers */,
 				2BDF57B624AD70C8003C1F08 /* DNBadgeLabel.h in Headers */,
 				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
@@ -2807,6 +2814,7 @@
 				B7D584E028CF0EC4009D09AF /* WFZStartConferenceViewController.m in Sources */,
 				2F36433421C136C400904CAB /* WFCUFavChannelTableViewController.m in Sources */,
 				2F551220217F5CC300F56C26 /* WFCUMyProfileTableViewController.m in Sources */,
+				B7FA122128E9505D001AF906 /* WFCUConferenceCommandContent.m in Sources */,
 				1450EA81243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.m in Sources */,
 				2BEF78A423F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.m in Sources */,
 				B7C5442228D5876700A2550F /* LBXScanVideoZoomView.m in Sources */,

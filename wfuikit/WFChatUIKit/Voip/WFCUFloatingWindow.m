@@ -26,8 +26,6 @@
 @property(nonatomic, assign)CGFloat winHeight;
 
 @property(nonatomic, strong)NSTimer *broadcastOngoingTimer;
-
-@property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
 @end
 
 static WFCUFloatingWindow *staticWindow = nil;
@@ -37,14 +35,13 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 
 @implementation WFCUFloatingWindow
 
-+ (void)startCallFloatingWindow:(WFAVCallSession *)callSession conferenceInfo:(WFZConferenceInfo *)conferenceInfo focusUser:(WFAVParticipantProfile *)focusUserProfile
++ (void)startCallFloatingWindow:(WFAVCallSession *)callSession focusUser:(WFAVParticipantProfile *)focusUserProfile
               withTouchedBlock:(void (^)(WFAVCallSession *callSession, WFZConferenceInfo *conferenceInfo))touchedBlock {
     staticWindow = [[WFCUFloatingWindow alloc] init];
     staticWindow.callSession = callSession;
     [staticWindow.callSession setDelegate:staticWindow];
     staticWindow.touchedBlock = touchedBlock;
     staticWindow.focusUserProfile = focusUserProfile;
-    staticWindow.conferenceInfo = conferenceInfo;
     [staticWindow initWindow];
     if(callSession.isConference) {
         [callSession.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -476,7 +473,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     
     [self hideCallFloatingWindow];
     if (self.touchedBlock) {
-        self.touchedBlock(self.callSession, self.conferenceInfo);
+        self.touchedBlock(self.callSession, [WFCUConferenceManager sharedInstance].currentConferenceInfo);
     }
     [self clearCallFloatingWindow];
 }
@@ -550,8 +547,8 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
-    if(self.callSession.isConference && self.conferenceInfo) {
-        [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)([WFAVEngineKit sharedEngineKit].currentSession.endTime - [WFAVEngineKit sharedEngineKit].currentSession.startTime)];
+    if(self.callSession.isConference) {
+        [[WFCUConferenceManager sharedInstance] addHistory:[WFCUConferenceManager sharedInstance].currentConferenceInfo duration:(int)([WFAVEngineKit sharedEngineKit].currentSession.endTime - [WFAVEngineKit sharedEngineKit].currentSession.startTime)];
     }
 }
 
