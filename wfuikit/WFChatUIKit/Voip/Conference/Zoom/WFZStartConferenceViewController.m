@@ -28,7 +28,7 @@
 //成员加入时是否为主播
 @property(nonatomic, assign)BOOL enableParticipant;
 //成员是否可以切换主播/观众状态
-@property(nonatomic, assign)BOOL enableSwitchMode;
+@property(nonatomic, assign)BOOL allowTurnOnMic;
 
 @property(nonatomic, assign)BOOL advanceConference;
 
@@ -55,7 +55,7 @@
     self.enableAudio = YES;
     self.enableVideo = NO;
     self.enableParticipant = YES;
-    self.enableSwitchMode = YES;
+    self.allowTurnOnMic = YES;
     self.advanceConference = NO;
     
     self.startTime = 0;
@@ -100,7 +100,7 @@
     info.endTime = self.endTime;
     info.audience = !self.enableParticipant;
     info.advance = self.advanceConference;
-    info.allowSwitchMode = self.enableSwitchMode;
+    info.allowTurnOnMic = self.allowTurnOnMic;
     
     __block MBProgressHUD *hud = [self startProgress:@"创建中"];
     __weak typeof(self)ws = self;
@@ -248,7 +248,7 @@
                 if(!ws.enableParticipant) {
                     switchModeCell.valueSwitch.enabled = YES;
                 } else {
-                    ws.enableSwitchMode = YES;
+                    ws.allowTurnOnMic = YES;
                     switchModeCell.on = YES;
                     switchModeCell.valueSwitch.enabled = NO;
                 }
@@ -258,13 +258,13 @@
             if(!self.enableParticipant) {
                 switchCell.valueSwitch.enabled = YES;
             } else {
-                self.enableSwitchMode = YES;
+                self.allowTurnOnMic = YES;
                 switchCell.valueSwitch.enabled = NO;
             }
             switchCell.textLabel.text = @"允许参与者自主开启摄像头、麦克风";
-            switchCell.on = self.enableSwitchMode;
+            switchCell.on = self.allowTurnOnMic;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
-                ws.enableSwitchMode = value;
+                ws.allowTurnOnMic = value;
                 handleBlock(YES);
             };
         }

@@ -39,6 +39,9 @@ extern NSString *kMuteStateChanged;
 
 - (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password;
 
+//展示带有单选框的alertview
+- (void)presentCommandAlertView:(UIViewController *)controller message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle contentText:(NSString *)contentText checkBox:(BOOL)checkBox actionHandler:(void (^)(BOOL checked))actionHandler cancelHandler:(void (^)(void))cancelHandler;
+
 - (void)joinChatroom;
 @property(nonatomic, assign)BOOL failureJoinChatroom;
 

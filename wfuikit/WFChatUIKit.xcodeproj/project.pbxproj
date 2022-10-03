@@ -441,6 +441,8 @@
 		B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0D283230EF005F2745 /* DSCallInfo.h */; };
 		B72FBB17283230F0005F2745 /* InternalApis.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB0E283230EF005F2745 /* InternalApis.h */; };
 		B72FBB18283230F0005F2745 /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB0F283230F0005F2745 /* InternalApis.m */; };
+		B7311DEC28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */; };
+		B7311DED28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */; };
 		B733DFEF28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B733DFED28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h */; };
 		B733DFF028D404AD0094AD74 /* WFZConferenceHistoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B733DFEE28D404AD0094AD74 /* WFZConferenceHistoryListViewController.m */; };
 		B733DFF328D4071F0094AD74 /* WFCUConferenceHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = B733DFF128D4071F0094AD74 /* WFCUConferenceHistory.h */; };
@@ -969,6 +971,8 @@
 		B72FBB0D283230EF005F2745 /* DSCallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSCallInfo.h; sourceTree = "<group>"; };
 		B72FBB0E283230EF005F2745 /* InternalApis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternalApis.h; sourceTree = "<group>"; };
 		B72FBB0F283230F0005F2745 /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
+		B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceUnmuteRequestTableViewController.h; sourceTree = "<group>"; };
+		B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceUnmuteRequestTableViewController.m; sourceTree = "<group>"; };
 		B733DFED28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFZConferenceHistoryListViewController.h; sourceTree = "<group>"; };
 		B733DFEE28D404AD0094AD74 /* WFZConferenceHistoryListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceHistoryListViewController.m; sourceTree = "<group>"; };
 		B733DFF128D4071F0094AD74 /* WFCUConferenceHistory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceHistory.h; sourceTree = "<group>"; };
@@ -1241,6 +1245,8 @@
 				2FBDAB9025DA41FD00FEF2C3 /* WFCUConferenceManager.m */,
 				B7D36FEB28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h */,
 				B7D36FEC28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.m */,
+				B7311DEA28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h */,
+				B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */,
 			);
 			path = Conference;
 			sourceTree = "<group>";
@@ -2319,6 +2325,7 @@
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
 				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
 				B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */,
+				B7311DEC28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */,
 				B7C5442728D5876700A2550F /* LBXScanLineAnimation.h in Headers */,
@@ -2865,6 +2872,7 @@
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
 				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
+				B7311DED28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m in Sources */,
 				B7C5444328D5876700A2550F /* LBXPermissionPhotos.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,

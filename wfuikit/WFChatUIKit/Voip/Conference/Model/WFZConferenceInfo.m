@@ -23,7 +23,7 @@
     info.endTime = [dictionary[@"endTime"] longLongValue];
     info.audience = [dictionary[@"audience"] boolValue];
     info.advance = [dictionary[@"advance"] boolValue];
-    info.allowSwitchMode = [dictionary[@"allowSwitchMode"] boolValue];
+    info.allowTurnOnMic = [dictionary[@"allowSwitchMode"] boolValue];
     info.noJoinBeforeStart = [dictionary[@"noJoinBeforeStart"] boolValue];
     
     return info;
@@ -40,7 +40,7 @@
     dict[@"endTime"] = @(self.endTime);
     dict[@"audience"] = @(self.audience);
     dict[@"advance"] = @(self.advance);
-    dict[@"allowSwitchMode"] = @(self.allowSwitchMode);
+    dict[@"allowSwitchMode"] = @(self.allowTurnOnMic);
     dict[@"noJoinBeforeStart"] = @(self.noJoinBeforeStart);
     
     return dict;

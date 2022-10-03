@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign)long long endTime;
 @property(nonatomic, assign)BOOL audience;
 @property(nonatomic, assign)BOOL advance;
-@property(nonatomic, assign)BOOL allowSwitchMode;
+@property(nonatomic, assign)BOOL allowTurnOnMic;
 @property(nonatomic, assign)BOOL noJoinBeforeStart;
 
 + (instancetype)fromDictionary:(NSDictionary *)dictionary;

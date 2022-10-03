@@ -15,10 +15,12 @@
 #import "WFCUConferenceHistory.h"
 #import "WFCUConferenceCommandContent.h"
 #import "WFCUConfigManager.h"
+#import "WFCUImage.h"
 
 NSString *kMuteStateChanged = @"kMuteStateChanged";
 
 @interface WFCUConferenceManager ()
+@property(nonatomic, strong)UIButton *alertViewCheckBtn;
 @end
 
 static WFCUConferenceManager *sharedSingleton = nil;
@@ -28,6 +30,8 @@ static WFCUConferenceManager *sharedSingleton = nil;
         @synchronized (self) {
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCUConferenceManager alloc] init];
+                sharedSingleton.applyingUnmuteMembers = [[NSMutableArray alloc] init];
+                sharedSingleton.handupMembers = [[NSMutableArray alloc] init];
                 [[NSNotificationCenter defaultCenter] addObserver:sharedSingleton selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
             }
         }
@@ -104,6 +108,74 @@ static WFCUConferenceManager *sharedSingleton = nil;
     }];
 }
 
+- (void)setCurrentConferenceInfo:(WFZConferenceInfo *)currentConferenceInfo {
+    if(![_currentConferenceInfo.conferenceId isEqualToString:currentConferenceInfo.conferenceId]) {
+        [self resetCommandState];
+    }
+    _currentConferenceInfo = currentConferenceInfo;
+}
+
+- (UIButton *)alertViewCheckBtn {
+    if(!_alertViewCheckBtn) {
+        CGFloat width = [[[NSUserDefaults standardUserDefaults] objectForKey:@"wfc_conference_alert_checkbox_width"] floatValue];
+        CGFloat height = [[[NSUserDefaults standardUserDefaults] objectForKey:@"wfc_conference_alert_checkbox_height"] floatValue];
+        _alertViewCheckBtn = [[UIButton alloc] initWithFrame:CGRectMake(8, 44, width, height)];
+        [_alertViewCheckBtn setImage:[WFCUImage imageNamed:@"multi_unselected"] forState:UIControlStateNormal];
+        [_alertViewCheckBtn setImage:[WFCUImage imageNamed:@"multi_selected"] forState:UIControlStateSelected];
+        [_alertViewCheckBtn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [_alertViewCheckBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_alertViewCheckBtn addTarget:self action:@selector(onAlertViewCheckBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    }
+    return _alertViewCheckBtn;
+}
+
+- (void)onAlertViewCheckBtnPressed:(id)sender {
+    self.alertViewCheckBtn.selected = !self.alertViewCheckBtn.selected;
+}
+
+- (void)presentCommandAlertView:(UIViewController *)controller message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle contentText:(NSString *)contentText checkBox:(BOOL)checkBox actionHandler:(void (^)(BOOL checked))actionHandler cancelHandler:(void (^)(void))cancelHandler {
+    __weak typeof(self)ws = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:checkBox?[NSString stringWithFormat:@"%@\n\n\n", message]:message preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:cancelTitle?cancelTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        ws.alertViewCheckBtn = nil;
+        if(cancelHandler) {
+            cancelHandler();
+        }
+    }];
+    [alertController addAction:action1];
+    
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        actionHandler(ws.alertViewCheckBtn.selected);
+        ws.alertViewCheckBtn = nil;
+    }];
+    [alertController addAction:action2];
+    
+    if(checkBox) {
+        [self.alertViewCheckBtn setTitle:[NSString stringWithFormat:@" %@", contentText] forState:UIControlStateNormal];
+    } else {
+        [self.alertViewCheckBtn setTitle:[NSString stringWithFormat:@"%@", contentText] forState:UIControlStateNormal];
+        [_alertViewCheckBtn setImage:nil forState:UIControlStateNormal];
+        [_alertViewCheckBtn setImage:nil forState:UIControlStateSelected];
+    }
+    
+    [alertController.view addSubview:self.alertViewCheckBtn];
+    
+    [controller presentViewController:alertController animated:NO completion:^{
+        CGSize size = alertController.view.bounds.size;
+        if(ws.alertViewCheckBtn.frame.size.width != size.width - 16 || ws.alertViewCheckBtn.frame.size.height != size.height - 88) {
+            [[NSUserDefaults standardUserDefaults] setObject:@(size.width - 16) forKey:@"wfc_conference_alert_checkbox_width"];
+            [[NSUserDefaults standardUserDefaults] setObject:@(size.height - 88) forKey:@"wfc_conference_alert_checkbox_height"];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            });
+        }
+        ws.alertViewCheckBtn.frame = CGRectMake(8, 44, size.width - 16, size.height - 88);
+    }];
+}
+
+
 - (void)notifyMuteStateChanged {
     [[NSNotificationCenter defaultCenter] postNotificationName:kMuteStateChanged object:nil];
 }
@@ -158,13 +230,18 @@ static WFCUConferenceManager *sharedSingleton = nil;
                         //普通用户申请解除静音，带有参数是请求，还是取消请求。
                         case APPLY_UNMUTE:
                             if([self.currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                                [self.applyingUnmuteMembers addObject:msg.fromUser];
+                                if(![self.applyingUnmuteMembers containsObject:msg.fromUser]) {
+                                    [self.applyingUnmuteMembers addObject:msg.fromUser];
+                                }
                             }
                             break;
                         //管理员批准解除静音申请，带有参数是同意，还是拒绝申请。
                         case APPROVE_UNMUTE:
                             if(self.isApplyingUnmute) {
                                 self.isApplyingUnmute = NO;
+                                if(command.boolValue) {
+                                    [self muteAudio:NO];
+                                }
                             } else {
                                 return;
                             }
@@ -180,7 +257,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
                             
                         //举手，带有参数是举手还是放下举手
                         case HANDUP:
-                            [self.handupMembers addObject:msg.fromUser];
+                            if(![self.handupMembers containsObject:msg.fromUser]) {
+                                [self.handupMembers addObject:msg.fromUser];
+                            }
                             break;
                         //主持人放下成员的举手
                         case PUT_HAND_DOWN:
@@ -211,6 +290,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
             }
         }
     }
+}
+
+- (void)resetCommandState {
+    [self.applyingUnmuteMembers removeAllObjects];
+    [self.handupMembers removeAllObjects];
+    self.isApplyingUnmute = NO;
+    self.isHandup = NO;
 }
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
@@ -295,7 +381,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
         return NO;
     
     self.currentConferenceInfo.audience = YES;
-    self.currentConferenceInfo.allowSwitchMode = allowMemberUnmute;
+    self.currentConferenceInfo.allowTurnOnMic = allowMemberUnmute;
     __weak typeof(self)ws = self;
     
     [[WFCUConfigManager globalManager].appServiceProvider updateConference:self.currentConferenceInfo success:^() {
@@ -312,7 +398,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
         return NO;
     
     self.currentConferenceInfo.audience = NO;
-    self.currentConferenceInfo.allowSwitchMode = YES;
+    self.currentConferenceInfo.allowTurnOnMic = YES;
     __weak typeof(self)ws = self;
     
     [[WFCUConfigManager globalManager].appServiceProvider updateConference:self.currentConferenceInfo success:^(void) {
@@ -342,12 +428,12 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self sendCommandMessage:APPLY_UNMUTE targetUserId:nil boolValue:isCancel];
 }
 
-- (BOOL)approveMember:(NSString *)memberId unmute:(BOOL)isReject {
+- (BOOL)approveMember:(NSString *)memberId unmute:(BOOL)isAllow {
     if(![self isOwner])
         return NO;
     
     [self.applyingUnmuteMembers removeObject:memberId];
-    [self sendCommandMessage:APPROVE_UNMUTE targetUserId:memberId boolValue:isReject];
+    [self sendCommandMessage:APPROVE_UNMUTE targetUserId:memberId boolValue:isAllow];
     
     return YES;
 }
