@@ -20,8 +20,18 @@
     CGRect rect = CGRectZero;
     rect.size = self.collectionView.bounds.size;
     
-    const CGFloat width = rect.size.width/2;
-    const CGFloat height = rect.size.height/2;
+    CGFloat width = rect.size.width/2;
+    CGFloat height = rect.size.height/2;
+//    UIDevice *device = [UIDevice currentDevice];
+//    if(device.orientation == UIInterfaceOrientationLandscapeLeft || device.orientation == UIInterfaceOrientationLandscapeRight) {
+//        CGFloat tmp = width;
+//        width = height;
+//        height = tmp;
+//        
+//        tmp = rect.size.width;
+//        rect.size.width = rect.size.height;
+//        rect.size.height = tmp;
+//    }
     
     self.attrubutesArray = [NSMutableArray array];
     int lastPageCount = (count - 1)%4;
@@ -109,7 +119,7 @@
     return arr;
 }
 
-- (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items leftItems:(NSMutableArray<NSIndexPath *> *)leftItems rightItems:(NSMutableArray<NSIndexPath *> *)rightItems {
+- (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items {
     int minRow = 0x1FFFFFFF;
     int maxRow = 0;
     for (NSIndexPath *indexPath in items) {
@@ -135,9 +145,6 @@
         pageLeft = [self pageByRow:minRow];
         start = pageLeft * width;
     }
-    
-    [leftItems addObjectsFromArray:[self itemsInPage:pageLeft]];
-    [rightItems addObjectsFromArray:[self itemsInPage:pageRight]];
     
     return CGPointMake(start, end);
 }

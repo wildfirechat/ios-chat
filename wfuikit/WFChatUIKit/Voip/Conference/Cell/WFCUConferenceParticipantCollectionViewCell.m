@@ -47,12 +47,7 @@
         self.stateLabel.hidden = NO;
     } else {
         [self.stateLabel stop];
-        if (profile.videoMuted || profile.audience) {
-            self.stateLabel.hidden = NO;
-            self.stateLabel.image = [WFCUImage imageNamed:@"disable_video"];
-        } else {
-            self.stateLabel.hidden = YES;
-        }
+        self.stateLabel.hidden = YES;
     }
 
     self.conferenceLabelView.name = userInfo.displayName;
@@ -79,8 +74,13 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
     
-    CGSize size = [WFCUConferenceLabelView sizeOffView];
-    self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - size.height - 4, size.width, size.height);
+    
+    CGRect frame = self.conferenceLabelView.frame;
+    if(isVideoMuted) {
+        self.conferenceLabelView.frame = CGRectMake(self.bounds.size.width/2 - frame.size.width/2, self.bounds.size.height/2 + 30 + 4, frame.size.width, frame.size.height);
+    } else {
+        self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - frame.size.height - 4, frame.size.width, frame.size.height);
+    }
 }
 
 - (void)addSubview:(UIView *)view {

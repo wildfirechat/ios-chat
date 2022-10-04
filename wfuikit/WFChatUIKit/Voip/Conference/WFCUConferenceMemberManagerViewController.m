@@ -79,6 +79,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMemberChanged:) name:@"kConferenceMemberChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceEnded:) name:@"kConferenceEnded" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceMutedStateChanged:) name:@"kConferenceMutedStateChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConferenceCommandStateChanged:) name:@"kConferenceCommandStateChanged" object:nil];
+    
     self.title = @"参会人员";
     
     [self loadData];
@@ -100,6 +102,8 @@
 - (void)updateTableViewHeader {
     if([self.searchBar isFirstResponder] || ([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count == 0 && [WFCUConferenceManager sharedInstance].handupMembers.count == 0)) {
         self.headerViewContainer.frame = CGRectMake(0, 50, self.view.bounds.size.width, 40);
+        self.unmuteRequestBtn.frame = CGRectZero;
+        self.handupBtn.frame = CGRectZero;
     } else {
         int height = 40;
         NSMutableArray<NSString *> *applyingUnmuteMembers = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers;
@@ -263,6 +267,12 @@
     [self onClose:nil];
 }
 
+- (void)onConferenceCommandStateChanged:(id)sender {
+    [self loadData];
+    [self.tableView reloadData];
+    [self updateTableViewHeader];
+}
+
 - (void)onConferenceMutedStateChanged:(id)sender {
     [self loadData];
     [self.tableView reloadData];
@@ -418,6 +428,7 @@
     [self loadData];
     [self.tableView reloadData];
     self.searchBar.showsCancelButton = YES;
+    [self updateTableViewHeader];
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
@@ -429,6 +440,7 @@
     [self.tableView reloadData];
     self.searchBar.showsCancelButton = NO;
     self.searchBar.text = nil;
+    [self updateTableViewHeader];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {

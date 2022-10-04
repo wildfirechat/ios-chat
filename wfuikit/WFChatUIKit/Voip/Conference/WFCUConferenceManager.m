@@ -246,6 +246,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
                                         [self.applyingUnmuteMembers addObject:msg.fromUser];
                                     }
                                 }
+                                [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
                             }
                             break;
                         //管理员批准解除静音申请，带有参数是同意，还是拒绝申请。
@@ -276,6 +277,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
                             if(![self.handupMembers containsObject:msg.fromUser]) {
                                 [self.handupMembers addObject:msg.fromUser];
                             }
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
                             break;
                         //主持人放下成员的举手
                         case PUT_HAND_DOWN:
@@ -450,6 +452,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     
     [self.applyingUnmuteMembers removeObject:memberId];
     [self sendCommandMessage:APPROVE_UNMUTE targetUserId:memberId boolValue:isAllow];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
     
     return YES;
 }
@@ -460,6 +463,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     
     [self.applyingUnmuteMembers removeAllObjects];
     [self sendCommandMessage:APPROVE_ALL_UNMUTE targetUserId:nil boolValue:isAllow];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
     
     return YES;
 }
@@ -472,11 +476,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
 - (void)putMemberHandDown:(NSString *)memberId {
     [self.handupMembers removeObject:memberId];
     [self sendCommandMessage:PUT_HAND_DOWN targetUserId:memberId boolValue:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
 }
 
 - (void)putAllHandDown {
     [self.handupMembers removeAllObjects];
     [self sendCommandMessage:PUT_ALL_HAND_DOWN targetUserId:nil boolValue:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceCommandStateChanged" object:nil];
 }
 
 - (void)sendCommandMessage:(WFCUConferenceCommandType)type targetUserId:(NSString *)userId boolValue:(BOOL)boolValue {
