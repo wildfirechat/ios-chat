@@ -53,8 +53,13 @@
     [self showHistoryButton];
     NSArray *arrays = [[NSUserDefaults standardUserDefaults] objectForKey:@"SAVED_CONFERENCE_LIST"];
     NSMutableArray *fcs = [[NSMutableArray alloc] init];
+    
+    NSDate *now = [[NSDate alloc] init];
     for (NSDictionary *dict in arrays) {
-        [fcs addObject:[WFZConferenceInfo fromDictionary:dict]];
+        WFZConferenceInfo *info = [WFZConferenceInfo fromDictionary:dict];
+        if([now timeIntervalSince1970] < info.endTime) {
+            [fcs addObject:info];
+        }
     }
     self.favConferences = fcs;
 }

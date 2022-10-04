@@ -108,7 +108,12 @@
         [[self.items mutableCopy] replaceObjectAtIndex:btn.tag withObject:moreItem];
         [btn removeFromSuperview];
         [self addButtonAtIndex:(int)btn.tag];
+    } else {
+        [self dismiss];
     }
-    [self removeFromSuperview];
+}
+
+- (void)dismiss {
+    self.cancelBlock(self);
 }
 @end

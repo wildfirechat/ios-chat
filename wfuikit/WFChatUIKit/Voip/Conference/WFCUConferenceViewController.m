@@ -380,6 +380,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLocalMuteStateChanged:) name:kMuteStateChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageSent:) name:kSendingMessageStatusUpdated object:nil];
 }
 
 - (UIButton *)chatButton {
@@ -605,6 +607,16 @@
     [self append:messages];
 }
 
+- (void)onMessageSent:(NSNotification *)notification {
+    WFCCMessage *message = notification.userInfo[@"message"];
+    [self append:@[message]];
+}
+
+- (void)onLocalMuteStateChanged:(id)sender {
+    [self updateAudioButton];
+    [self updateVideoButton];
+}
+
 - (void)append:(NSArray<WFCCMessage *> *)messages {
     [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if(obj.messageId != 0 && obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId]) {
@@ -778,41 +790,90 @@
     __weak typeof(self)ws = self;
     
     [self startHidePanelTimer];
-    self.boardView = [[WFCUMoreBoardView alloc] initWithWidth:self.view.bounds.size.width items:@[
-        [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
-            WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
-            
-            WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
-            WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
-            invite.callId = currentSession.callId;
-            invite.pin = currentSession.pin;
-            invite.audioOnly = currentSession.audioOnly;
-            invite.host = currentSession.host;
-            invite.title = currentSession.title;
-            invite.desc = currentSession.desc;
-            invite.audience = currentSession.defaultAudience;
-            invite.advanced = currentSession.isAdvanced;
-            invite.password = ws.conferenceInfo.password;
-            
-            pvc.invite = invite;
-            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-            [ws presentViewController:navi animated:YES completion:nil];
-            return nil;
-        }],
-        [[MoreItem alloc] initWithTitle:@"聊天" image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
-            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-            mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
-            mvc.keepInChatroom = YES;
-            mvc.silentJoinChatroom = YES;
-            mvc.presented = YES;
-        
-            mvc.hidesBottomBarWhenPushed = YES;
-            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:mvc];
-            navi.modalPresentationStyle = UIModalPresentationFullScreen;
-            [ws presentViewController:navi animated:YES completion:nil];
-            return nil;
-        }],
-        [WFCUConferenceManager sharedInstance].isHandup ?
+    NSArray<MoreItem *> *boardItems;
+    
+    if([self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        boardItems = @[
+            [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
+                WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
+                
+                WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
+                WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
+                invite.callId = currentSession.callId;
+                invite.pin = currentSession.pin;
+                invite.audioOnly = currentSession.audioOnly;
+                invite.host = currentSession.host;
+                invite.title = currentSession.title;
+                invite.desc = currentSession.desc;
+                invite.audience = currentSession.defaultAudience;
+                invite.advanced = currentSession.isAdvanced;
+                invite.password = ws.conferenceInfo.password;
+                
+                pvc.invite = invite;
+                UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+                [ws presentViewController:navi animated:YES completion:nil];
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"聊天" image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
+                mvc.keepInChatroom = YES;
+                mvc.silentJoinChatroom = YES;
+                mvc.presented = YES;
+                
+                mvc.hidesBottomBarWhenPushed = YES;
+                UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:mvc];
+                navi.modalPresentationStyle = UIModalPresentationFullScreen;
+                [ws presentViewController:navi animated:YES completion:nil];
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
+                [ws minimize];
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"录制" image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull{
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"设置" image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull{
+                return nil;
+            }]
+        ];
+    } else {
+        boardItems = @[
+            [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
+                WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
+                
+                WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
+                WFAVCallSession *currentSession = [WFAVEngineKit sharedEngineKit].currentSession;
+                invite.callId = currentSession.callId;
+                invite.pin = currentSession.pin;
+                invite.audioOnly = currentSession.audioOnly;
+                invite.host = currentSession.host;
+                invite.title = currentSession.title;
+                invite.desc = currentSession.desc;
+                invite.audience = currentSession.defaultAudience;
+                invite.advanced = currentSession.isAdvanced;
+                invite.password = ws.conferenceInfo.password;
+                
+                pvc.invite = invite;
+                UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+                [ws presentViewController:navi animated:YES completion:nil];
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"聊天" image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
+                mvc.keepInChatroom = YES;
+                mvc.silentJoinChatroom = YES;
+                mvc.presented = YES;
+                
+                mvc.hidesBottomBarWhenPushed = YES;
+                UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:mvc];
+                navi.modalPresentationStyle = UIModalPresentationFullScreen;
+                [ws presentViewController:navi animated:YES completion:nil];
+                return nil;
+            }],
+            [WFCUConferenceManager sharedInstance].isHandup ?
             [[MoreItem alloc] initWithTitle:@"放下" image:[WFCUImage imageNamed:@"conference_handup_hover"] callback:^MoreItem * _Nonnull{
                 [[WFCUConferenceManager sharedInstance] handup:NO];
                 [ws showCommandToast:@"已放下举手"];
@@ -824,17 +885,22 @@
                 [ws showCommandToast:@"已举手，等待管理员处理"];
                 return nil;
             }],
-        [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
-            [ws minimize];
-            return nil;
-        }],
-        [[MoreItem alloc] initWithTitle:@"录制" image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull{
-            return nil;
-        }],
-        [[MoreItem alloc] initWithTitle:@"设置" image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull{
-            return nil;
-        }]
-    ] cancel:^(WFCUMoreBoardView * _Nonnull boardView) {
+            [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
+                [ws minimize];
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"录制" image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull{
+                return nil;
+            }],
+            [[MoreItem alloc] initWithTitle:@"设置" image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull{
+                return nil;
+            }]
+        ];
+    }
+    
+    self.boardView = [[WFCUMoreBoardView alloc] initWithWidth:self.view.bounds.size.width
+                                                        items:boardItems
+                                                       cancel:^(WFCUMoreBoardView * _Nonnull boardView) {
         [UIView animateWithDuration:0.5 animations:^{
             CGRect boardFrame = boardView.frame;
             boardFrame.origin.y = ws.view.bounds.size.height;
@@ -1313,6 +1379,8 @@
     } else {
         [self hidePanel];
     }
+    
+    [self.boardView dismiss];
 }
 
 - (void)showPanel {
@@ -1874,22 +1942,75 @@
 - (void)updateVideoStreams {
     NSArray<NSIndexPath *> *visiableItems = [self.participantCollectionView indexPathsForVisibleItems];
     NSMutableArray *leaveItems = [[NSMutableArray alloc] init];
-    [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx1, BOOL * _Nonnull stop) {
-        if(obj.videoType != WFAVVideoType_None) {
-            __block BOOL visiable = NO;
-            [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx2, BOOL * _Nonnull stop) {
-                if(obj.row -1 == idx1) {
-                    visiable = YES;
-                    *stop = YES;
-                }
-            }];
-            if(!visiable) {
-                [leaveItems addObject:[NSIndexPath indexPathForRow:idx1+1 inSection:0]];
-            }
+    __block BOOL hasMain = NO;
+    [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.row == 0) {
+            hasMain = YES;
+            *stop = YES;
         }
     }];
-    
-    [self onItemsEnter:[self.participantCollectionView indexPathsForVisibleItems] itemsLeave:leaveItems];
+    if (visiableItems.count > 4 || (visiableItems.count > 1 && hasMain)) {
+        NSLog(@"not scroll to position");
+        WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
+        CGPoint pos = [layout getOffsetOfItems:visiableItems];
+        if(pos.x == pos.y) {
+            return;
+        }
+        CGPoint targetContentOffset = self.participantCollectionView.contentOffset;
+        
+        __block int row;
+        if (ABS(pos.x-targetContentOffset.x) > ABS(pos.y - targetContentOffset.x)) {
+            row = 0;
+            [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(obj.row > row) {
+                    row = obj.row;
+                }
+            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.participantCollectionView scrollRectToVisible:CGRectMake(pos.y, 0, pos.y-pos.x, 100) animated:YES];
+            });
+        } else {
+            targetContentOffset.x = pos.x;
+            row = 0x1FFFFFFF;
+            [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(obj.row < row) {
+                    row = obj.row;
+                }
+            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.participantCollectionView scrollRectToVisible:CGRectMake(pos.x, 0, pos.y-pos.x, 100) animated:YES];
+            });
+        }
+
+        int page;
+        if(row == 0) {
+            page = 0;
+        } else {
+            page = (row -1)/4 + 1;
+        }
+        if(page > 0) {
+            [self hidePanel];
+        }
+        [self.pageControl setCurrentPage:page];
+        [self.pageControl updateCurrentPageDisplay];
+    } else {
+        [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx1, BOOL * _Nonnull stop) {
+            if(obj.videoType != WFAVVideoType_None) {
+                __block BOOL visiable = NO;
+                [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx2, BOOL * _Nonnull stop) {
+                    if(obj.row -1 == idx1) {
+                        visiable = YES;
+                        *stop = YES;
+                    }
+                }];
+                if(!visiable) {
+                    [leaveItems addObject:[NSIndexPath indexPathForRow:idx1+1 inSection:0]];
+                }
+            }
+        }];
+        
+        [self onItemsEnter:[self.participantCollectionView indexPathsForVisibleItems] itemsLeave:leaveItems];
+    }
 }
 - (BOOL)switchVideoView:(NSUInteger)index {
     WFAVParticipantProfile *user = self.participants[index];
@@ -2038,9 +2159,7 @@
         NSArray<NSIndexPath *> *items = [self.participantCollectionView indexPathsForVisibleItems];
         if (items.count >= 2) {
             WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
-            NSMutableArray *leftItems = [[NSMutableArray alloc] init];
-            NSMutableArray *rightItems = [[NSMutableArray alloc] init];
-            CGPoint pos = [layout getOffsetOfItems:items leftItems:leftItems rightItems:rightItems];
+            CGPoint pos = [layout getOffsetOfItems:items];
             if(pos.x == pos.y) {
                 return;
             }
