@@ -814,12 +814,14 @@
         }],
         [WFCUConferenceManager sharedInstance].isHandup ?
             [[MoreItem alloc] initWithTitle:@"放下" image:[WFCUImage imageNamed:@"conference_handup_hover"] callback:^MoreItem * _Nonnull{
-                [[WFCUConferenceManager sharedInstance] handup:![WFCUConferenceManager sharedInstance].isHandup];
+                [[WFCUConferenceManager sharedInstance] handup:NO];
+                [ws showCommandToast:@"已放下举手"];
                 return nil;
             }]
             :
             [[MoreItem alloc] initWithTitle:@"举手" image:[WFCUImage imageNamed:@"conference_handup"] callback:^MoreItem * _Nonnull{
-                [[WFCUConferenceManager sharedInstance] handup:![WFCUConferenceManager sharedInstance].isHandup];
+                [[WFCUConferenceManager sharedInstance] handup:YES];
+                [ws showCommandToast:@"已举手，等待管理员处理"];
                 return nil;
             }],
         [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull{
@@ -943,15 +945,19 @@
                 [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
                 [self updateAudioButton];
             } else {
+                __weak typeof(self)ws = self;
                 if([WFCUConferenceManager sharedInstance].isApplyingUnmute) {
                     [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"您正在申请解除静音" actionTitle:@"继续申请" cancelTitle:@"取消申请" contentText:@"主持人不允许解除静音，您已经申请解除静音，正在等待主持人操作" checkBox:NO actionHandler:^(BOOL checked) {
                         [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                        [ws showCommandToast:@"已重新发送申请，请耐心等待主持人操作"];
                     } cancelHandler:^{
                         [[WFCUConferenceManager sharedInstance] applyUnmute:YES];
+                        [ws showCommandToast:@"已取消申请"];
                     }];
                 } else {
                     [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"你已静音" actionTitle:@"申请解除静音" cancelTitle:nil contentText:@"主持人不允许解除静音，您可以向主持人申请解除静音" checkBox:NO actionHandler:^(BOOL checked) {
                         [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                        [ws showCommandToast:@"已发送申请，请耐心等待主持人操作"];
                     } cancelHandler:nil];
                 }
             }
@@ -2195,7 +2201,7 @@
     
     switch(commandType) {
         case MUTE_ALL: {
-            [self.view makeToast:@"主持人开启了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            [self showCommandToast:@"主持人开启了全员静音"];
             break;
         }
         case CANCEL_MUTE_ALL: {
@@ -2214,13 +2220,13 @@
                 
                 [self presentViewController:alertController animated:YES completion:nil];
             } else {
-                [self.view makeToast:@"主持人关闭了全员静音" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+                [self showCommandToast:@"主持人关闭了全员静音"];
             }
             break;
         }
         case REQUEST_MUTE:
             if(commandContent.boolValue) {
-                [self.view makeToast:@"主持人关闭了您的发言" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+                [self showCommandToast:@"主持人关闭了您的发言"];
             } else {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
                 
@@ -2239,22 +2245,45 @@
             
             break;
         case REJECT_UNMUTE_REQUEST:
-            [self.view makeToast:[NSString stringWithFormat:@"%@ 拒绝了您的发言邀请", userName] duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            [self showCommandToast:[NSString stringWithFormat:@"%@ 拒绝了您的发言邀请", userName]];
             break;
             
         case APPLY_UNMUTE:
-            [self.view makeToast:[NSString stringWithFormat:@"%@ 请求发言", userName] duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+            [self showCommandToast:[NSString stringWithFormat:@"%@ 请求发言", userName]];
             break;
             
         case APPROVE_UNMUTE:
             if(!commandContent.boolValue) {
-                [self.view makeToast:@"主持人拒绝了您的发言请求" duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+                [self showCommandToast:@"主持人拒绝了您的发言请求"];
             }
             break;
+        case APPROVE_ALL_UNMUTE:
+            [self showCommandToast:commandContent.boolValue ? @"主持人同意了所有的发言请求" :  @"主持人拒绝了所有的发言请求"];
+            break;
+            
+            //举手，带有参数是举手还是放下举手
+        case HANDUP:
+            [self showCommandToast:[NSString stringWithFormat:commandContent.boolValue ? @"%@ 举手" :  @"%@ 放下举手", userName]];
+            break;
+            
+            //主持人放下成员的举手
+        case PUT_HAND_DOWN:
+            [self showCommandToast:@"主持人放下您的举手"];
+            break;
+            //主持人放下全体成员的举手
+        case PUT_ALL_HAND_DOWN:
+            [self showCommandToast:@"主持人放下所有举手"];
+            break;
+            
         default:
             break;
     }
 }
+
+- (void)showCommandToast:(NSString *)text {
+    [self.view makeToast:text duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.messages.count;
