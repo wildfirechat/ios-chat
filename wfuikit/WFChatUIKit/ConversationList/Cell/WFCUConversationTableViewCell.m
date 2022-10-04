@@ -74,8 +74,6 @@
                 [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
         }];
-        [self.potraitView setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-        
         
         NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
             return [WFCUImage imageNamed:@"PersonalChat"];
@@ -83,7 +81,6 @@
         
         if (path) {
             [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-            [self.potraitView setImage:[UIImage imageWithContentsOfFile:path]];
         }
     }
   

@@ -55,12 +55,11 @@
     _name = name;
     self.nameLabel.text = name;
     CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(1000, 20)];
-    NSLog(@"size is %d", size.width);
     CGRect frame = self.nameLabel.frame;
     frame.size.width = size.width;
     self.nameLabel.frame = frame;
     frame = self.frame;
-    frame.size.width = 28 + size.width + 8;
+    frame.size.width = 28 + size.width + 4;
     self.frame = frame;
 }
 
