@@ -50,6 +50,8 @@
         self.stateLabel.hidden = YES;
     }
 
+    self.layer.borderColor = [UIColor clearColor].CGColor;
+    self.portraitView.layer.borderColor = [UIColor clearColor].CGColor;
     self.conferenceLabelView.name = userInfo.displayName;
     
     BOOL isVideoMuted = YES;
@@ -91,11 +93,22 @@
 - (void)onVolumeUpdated:(NSNotification *)notification {
     if([notification.object isEqual:self.userId]) {
         NSInteger volume = [notification.userInfo[@"volume"] integerValue];
-        if (volume > 1000) {
-            self.layer.borderColor = [UIColor greenColor].CGColor;
-        } else {
+        if(self.conferenceLabelView.isMuteVideo) {
+            if (volume > 1000) {
+                self.portraitView.layer.borderColor = [UIColor greenColor].CGColor;
+            } else {
+                self.portraitView.layer.borderColor = [UIColor clearColor].CGColor;
+            }
             self.layer.borderColor = [UIColor clearColor].CGColor;
+        } else {
+            if (volume > 1000) {
+                self.layer.borderColor = [UIColor greenColor].CGColor;
+            } else {
+                self.layer.borderColor = [UIColor clearColor].CGColor;
+            }
+            self.portraitView.layer.borderColor = [UIColor clearColor].CGColor;
         }
+        
         self.conferenceLabelView.volume = volume;
     }
 }
@@ -115,6 +128,8 @@
         _portraitView.center = self.contentView.center;
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 30;
+        _portraitView.layer.borderWidth = 1;
+        _portraitView.layer.borderColor = [UIColor clearColor].CGColor;
         [self.contentView addSubview:_portraitView];
     }
     return _portraitView;
