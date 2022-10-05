@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUConferenceCollectionViewLayout : UICollectionViewLayout
 - (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items;
+@property(nonatomic, assign)BOOL audioOnly;
 @end
 
 NS_ASSUME_NONNULL_END
