@@ -22,4 +22,6 @@ RTC_OBJC_EXPORT
  */
 + (id<RTC_OBJC_TYPE(RTCVideoDecoder)>)av1Decoder;
 
++ (bool)isSupported;
+
 @end
