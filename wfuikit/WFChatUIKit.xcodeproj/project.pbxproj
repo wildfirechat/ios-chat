@@ -432,6 +432,8 @@
 		B70775922881ABB1004034A5 /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
 		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; };
 		B707759A28823635004034A5 /* WFCUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B707759828823635004034A5 /* WFCUImage.m */; };
+		B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */; };
+		B7213C3B28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */; };
 		B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB07283230EE005F2745 /* DSCallInfo.m */; };
 		B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB08283230EE005F2745 /* JSBUtil.h */; };
 		B72FBB12283230F0005F2745 /* JSBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB09283230EE005F2745 /* JSBUtil.m */; };
@@ -964,6 +966,8 @@
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
 		B707759728823635004034A5 /* WFCUImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUImage.h; sourceTree = "<group>"; };
 		B707759828823635004034A5 /* WFCUImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUImage.m; sourceTree = "<group>"; };
+		B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceAudioCollectionViewCell.h; sourceTree = "<group>"; };
+		B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceAudioCollectionViewCell.m; sourceTree = "<group>"; };
 		B72FBB07283230EE005F2745 /* DSCallInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSCallInfo.m; sourceTree = "<group>"; };
 		B72FBB08283230EE005F2745 /* JSBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBUtil.h; sourceTree = "<group>"; };
 		B72FBB09283230EE005F2745 /* JSBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBUtil.m; sourceTree = "<group>"; };
@@ -2084,6 +2088,8 @@
 				2FB7125D25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m */,
 				B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */,
 				B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */,
+				B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */,
+				B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2451,6 +2457,7 @@
 				2F5511FC217F5CC300F56C26 /* WFCUConversationSettingMemberCell.h in Headers */,
 				2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */,
 				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
+				B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */,
 				2F5510FD217F5CC200F56C26 /* CCHMapClusterController.h in Headers */,
 				2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */,
 				B7C5444028D5876700A2550F /* LBXPermission.h in Headers */,
@@ -2885,6 +2892,7 @@
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,
 				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,
+				B7213C3B28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m in Sources */,
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
 				2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */,
 				2F56F6CA252AA14000B829C4 /* WFCUCompositeUnknownCell.m in Sources */,
