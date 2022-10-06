@@ -19,12 +19,16 @@
         info.password = nil;
     info.pin = dictionary[@"pin"];
     info.owner = dictionary[@"owner"];
+    if([dictionary[@"managers"] isKindOfClass:[NSArray class]]) {
+        info.managers = dictionary[@"managers"];
+    }
     info.startTime = [dictionary[@"startTime"] longLongValue];
     info.endTime = [dictionary[@"endTime"] longLongValue];
     info.audience = [dictionary[@"audience"] boolValue];
     info.advance = [dictionary[@"advance"] boolValue];
     info.allowTurnOnMic = [dictionary[@"allowSwitchMode"] boolValue];
     info.noJoinBeforeStart = [dictionary[@"noJoinBeforeStart"] boolValue];
+    info.recording = [dictionary[@"recording"] boolValue];
     
     return info;
 }
@@ -36,12 +40,14 @@
     dict[@"password"] = self.password;
     dict[@"pin"] = self.pin;
     dict[@"owner"] = self.owner;
+    dict[@"managers"] = self.managers;
     dict[@"startTime"] = @(self.startTime);
     dict[@"endTime"] = @(self.endTime);
     dict[@"audience"] = @(self.audience);
     dict[@"advance"] = @(self.advance);
     dict[@"allowSwitchMode"] = @(self.allowTurnOnMic);
     dict[@"noJoinBeforeStart"] = @(self.noJoinBeforeStart);
+    dict[@"recording"] = @(self.recording);
     
     return dict;
 }

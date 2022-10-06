@@ -142,6 +142,16 @@ static WFCUConferenceManager *sharedSingleton = nil;
     self.alertViewCheckBtn.selected = !self.alertViewCheckBtn.selected;
 }
 
+- (void)requestRecording:(BOOL)recording {
+    __weak typeof(self)ws = self;
+    [[WFCUConfigManager globalManager].appServiceProvider recordConference:self.currentConferenceInfo.conferenceId record:recording success:^{
+        [ws sendCommandMessage:RECORDING targetUserId:nil boolValue:recording];
+        [ws reloadConferenceInfo];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+}
+
 - (void)presentCommandAlertView:(UIViewController *)controller message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle contentText:(NSString *)contentText checkBox:(BOOL)checkBox actionHandler:(void (^)(BOOL checked))actionHandler cancelHandler:(void (^)(void))cancelHandler {
     __weak typeof(self)ws = self;
     
@@ -294,6 +304,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
                             } else {
                                 return;
                             }
+                            break;
+                        case RECORDING:
+                            [self reloadConferenceInfo];
                             break;
                             
                         default:

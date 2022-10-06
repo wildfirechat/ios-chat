@@ -35,7 +35,10 @@ typedef NS_ENUM(NSInteger, WFCUConferenceCommandType) {
     //主持人放下成员的举手
     PUT_HAND_DOWN,
     //主持人放下全体成员的举手
-    PUT_ALL_HAND_DOWN
+    PUT_ALL_HAND_DOWN,
+    
+    //录制，有参数是录制还是取消录制
+    RECORDING
 };
 
 @interface WFCUConferenceCommandContent : WFCCMessageContent

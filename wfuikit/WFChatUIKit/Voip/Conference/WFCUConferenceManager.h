@@ -40,6 +40,9 @@ extern NSString *kMuteStateChanged;
 
 - (NSString *)linkFromConferenceId:(NSString *)conferenceId password:(NSString *)password;
 
+//主持人要求全部静音，allowMemberUnmute是否允许自主解除静音。
+- (void)requestRecording:(BOOL)recording;
+
 //展示带有单选框的alertview
 - (void)presentCommandAlertView:(UIViewController *)controller message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle contentText:(NSString *)contentText checkBox:(BOOL)checkBox actionHandler:(void (^)(BOOL checked))actionHandler cancelHandler:(void (^)(void))cancelHandler;
 
