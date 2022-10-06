@@ -46,24 +46,21 @@
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         if (groupInfo) {
             name = groupInfo.displayName;
-            portrait = groupInfo.portrait;
+            if (groupInfo.portrait.length) {
+                [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+            } else {
+                NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
+                    return [WFCUImage imageNamed:@"PersonalChat"];
+                }];
+                
+                if (path) {
+                    [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+                }
+            }
         } else {
             name = WFCString(@"GroupChat");
+            [self.portrait setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
         }
-
-        if (groupInfo.portrait.length) {
-            [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-        } else {
-            NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
-                return [WFCUImage imageNamed:@"PersonalChat"];
-            }];
-            
-            if (path) {
-                [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-            }
-        }
-      
-        
     } else if (conversation.type == Channel_Type) {
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:conversation.target refresh:NO];
         if (channelInfo) {

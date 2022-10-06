@@ -66,8 +66,7 @@
     } else {
         self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
     }
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-    
+
     if (groupInfo.portrait.length) {
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     } else {
@@ -80,8 +79,6 @@
                 [ws.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
         }];
-        [self.portrait setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-        
         
         NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
             return [WFCUImage imageNamed:@"PersonalChat"];
@@ -89,7 +86,6 @@
         
         if (path) {
             [self.portrait sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
-            [self.portrait setImage:[UIImage imageWithContentsOfFile:path]];
         }
     }
 }
