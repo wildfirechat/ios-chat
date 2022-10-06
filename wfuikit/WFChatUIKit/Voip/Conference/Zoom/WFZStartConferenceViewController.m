@@ -240,7 +240,7 @@
     } else if(indexPath.section == 2) {
         WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
         if(indexPath.row == 0) {
-            switchCell.textLabel.text = @"参与者开启摄像头、麦克风入会";
+            switchCell.textLabel.text = @"参与者开启麦克风入会";
             switchCell.on = self.enableParticipant;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.enableParticipant = value;
@@ -262,7 +262,7 @@
                 self.allowTurnOnMic = YES;
                 switchCell.valueSwitch.enabled = NO;
             }
-            switchCell.textLabel.text = @"允许参与者自主开启摄像头、麦克风";
+            switchCell.textLabel.text = @"允许参与者自主开启麦克风";
             switchCell.on = self.allowTurnOnMic;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.allowTurnOnMic = value;
