@@ -15,12 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *password;
 @property(nonatomic, strong)NSString *pin;
 @property(nonatomic, strong)NSString *owner;
+@property(nonatomic, strong)NSArray<NSString *> *managers;
 @property(nonatomic, assign)long long startTime;
 @property(nonatomic, assign)long long endTime;
 @property(nonatomic, assign)BOOL audience;
 @property(nonatomic, assign)BOOL advance;
 @property(nonatomic, assign)BOOL allowTurnOnMic;
 @property(nonatomic, assign)BOOL noJoinBeforeStart;
+@property(nonatomic, assign)BOOL recording;
+
 
 + (instancetype)fromDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)toDictionary;
