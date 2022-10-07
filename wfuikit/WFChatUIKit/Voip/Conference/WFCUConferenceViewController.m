@@ -1195,11 +1195,8 @@
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         //请参考函数 audioButtonDidTap
-        if (self.conferenceInfo.allowTurnOnMic || !self.currentSession.isAudience || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
-            [self updateVideoButton];
-        }
-        
+        [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
+        [self updateVideoButton];
         [self startHidePanelTimer];
     }
 }
