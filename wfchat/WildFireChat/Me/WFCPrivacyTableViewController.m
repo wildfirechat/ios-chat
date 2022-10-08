@@ -61,7 +61,7 @@
         [self.cells addObject:section2];
         if ([[WFCCIMService sharedWFCIMService] isReceiptEnabled]) {
             WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
-            switchCell.textLabel.text = WFCString(@"MsgReceipt");
+            switchCell.textLabel.text = LocalizedString(@"MsgReceipt");
             if ([[WFCCIMService sharedWFCIMService] isUserEnableReceipt]) {
                 switchCell.on = YES;
             } else {
