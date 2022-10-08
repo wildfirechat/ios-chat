@@ -1141,6 +1141,7 @@
         [self startConnectedTimer];
         [self updateAudioButton];
         [self updateVideoButton];
+        [self updateSpeakerButton];
     }
 }
 
