@@ -50,7 +50,7 @@
 }
 - (void)downloadComositeContent {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"加载中...";
+    hud.label.text = WFCString(@"Loading");
     [hud showAnimated:YES];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -82,7 +82,7 @@
             } else {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"加载失败";
+                hud.label.text = WFCString(@"LoadFailure");
                 hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                 [hud hideAnimated:YES afterDelay:1.f];
             }

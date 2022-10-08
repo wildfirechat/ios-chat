@@ -87,7 +87,7 @@ static KZVideoListViewController *__currentListVC = nil;
     _titleLabel.textColor = kzThemeGraryColor;
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.font = [UIFont systemFontOfSize:16];
-    _titleLabel.text = @"小视频";
+    _titleLabel.text = WFCString(@"MicroVideo");
     [_actionView addSubview:_titleLabel];
     
     _leftBtn = [[KZCloseBtn alloc] initWithFrame:CGRectMake(0, btnTopEdge, 60, topBarHeight)];
@@ -98,8 +98,8 @@ static KZVideoListViewController *__currentListVC = nil;
     
     
     _rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(_actionView.frame.size.width - 60, btnTopEdge, 60, topBarHeight)];
-    [_rightBtn setTitle:@"编辑" forState: UIControlStateNormal];
-    [_rightBtn setTitle:@"完成" forState: UIControlStateSelected];
+    [_rightBtn setTitle:WFCString(@"Edit") forState: UIControlStateNormal];
+    [_rightBtn setTitle:WFCString(@"Done") forState: UIControlStateSelected];
     [_rightBtn setTitleColor:kzThemeTineColor forState:UIControlStateNormal];
     [_rightBtn setTitleColor:kzThemeTineColor forState:UIControlStateSelected];
     [_rightBtn addTarget:self action:@selector(editVideosAction) forControlEvents:UIControlEventTouchUpInside];

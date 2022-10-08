@@ -50,7 +50,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
 
     [self.tableView reloadData];
     
@@ -88,7 +88,7 @@
     
     [self.tableView reloadData];
     if([conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"销毁" style:UIBarButtonItemStyleDone target:self action:@selector(onDestroyBtn:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Destroy") style:UIBarButtonItemStyleDone target:self action:@selector(onDestroyBtn:)];
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor redColor];
     } else {
         self.isFavConference = _isFavConference;
@@ -158,8 +158,8 @@
 - (void)displayMenu:(UITableViewCell *)cell {
     UIMenuController *menu = [UIMenuController sharedMenuController];
     
-    UIMenuItem *copyConferenceIdItem = [[UIMenuItem alloc]initWithTitle:@"拷贝会议号" action:@selector(performCopyId:)];
-    UIMenuItem *copyConferenceLinkItem = [[UIMenuItem alloc]initWithTitle:@"拷贝链接" action:@selector(performCopyLink:)];
+    UIMenuItem *copyConferenceIdItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"CopyConferenceNumber") action:@selector(performCopyId:)];
+    UIMenuItem *copyConferenceLinkItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"CopyConferenceLink") action:@selector(performCopyLink:)];
     
     CGRect menuPos = cell.frame;
     
@@ -205,10 +205,10 @@
     }
     
     if(isFavConference) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStyleDone target:self action:@selector(onDeleteBtn:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Delete") style:UIBarButtonItemStyleDone target:self action:@selector(onDeleteBtn:)];
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor redColor];
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"收藏" style:UIBarButtonItemStyleDone target:self action:@selector(onFav:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Favorite") style:UIBarButtonItemStyleDone target:self action:@selector(onFav:)];
     }
 }
 
@@ -237,14 +237,14 @@
         long long now = [[[NSDate alloc] init] timeIntervalSince1970];
         if(now > self.conferenceInfo.endTime) {
             self.joinBtn.enabled = NO;
-            [self.joinBtn setTitle:@"会议已结束" forState:UIControlStateNormal];
+            [self.joinBtn setTitle:WFCString(@"ConferenceEnded") forState:UIControlStateNormal];
             [self stopCheckTimer];
         } else if(self.conferenceInfo.startTime == 0 || self.conferenceInfo.startTime <= now || !self.conferenceInfo.noJoinBeforeStart) {
-            [self.joinBtn setTitle:@"加入会议" forState:UIControlStateNormal];
+            [self.joinBtn setTitle:WFCString(@"JoinConference") forState:UIControlStateNormal];
         } else if(self.conferenceInfo.startTime > 0 && self.conferenceInfo.startTime - 180 <= now) {
             [self.joinBtn setTitle:[NSString stringWithFormat:@"加入会议(%lld秒后正式开始)", now - self.conferenceInfo.startTime] forState:UIControlStateNormal];
         } else {
-            [self.joinBtn setTitle:@"会议还未开始" forState:UIControlStateNormal];
+            [self.joinBtn setTitle:WFCString(@"ConferenceNotStartYet") forState:UIControlStateNormal];
             self.joinBtn.enabled = NO;
         }
     }
@@ -265,23 +265,23 @@
             titleCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"title"];
         }
         if(indexPath.row == 0) {
-            titleCell.textLabel.text = @"会议主题";
+            titleCell.textLabel.text = WFCString(@"Subject");
             titleCell.detailTextLabel.text = self.conferenceInfo.conferenceTitle;
         } else if(indexPath.row == 1) {
-            titleCell.textLabel.text = @"发起人";
+            titleCell.textLabel.text = WFCString(@"Initiator");
             if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.conferenceInfo.owner]) {
-                titleCell.detailTextLabel.text = @"我";
+                titleCell.detailTextLabel.text = WFCString(@"Me");
             } else {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conferenceInfo.owner refresh:NO];
                 titleCell.detailTextLabel.text = userInfo.displayName;
             }
         } else if(indexPath.row == 2) {
-            titleCell.textLabel.text = @"会议号";
+            titleCell.textLabel.text = WFCString(@"ConferenceNumber");
             titleCell.detailTextLabel.text = self.conferenceInfo.conferenceId;
         } else if(indexPath.row == 3) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"qrcell"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"二维码";
+            cell.textLabel.text = WFCString(@"QRCode");
 
             UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
             CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -290,7 +290,7 @@
             [cell addSubview:qrview];
             return cell;
         } else if(indexPath.row == 4) {
-            titleCell.textLabel.text = @"入会密码";
+            titleCell.textLabel.text = WFCString(@"ConferencePassword");
             titleCell.detailTextLabel.text = self.conferenceInfo.password;
         }
         return titleCell;
@@ -302,17 +302,17 @@
         }
         
         if (indexPath.row == 0) {
-            timeCell.textLabel.text = @"开始时间";
+            timeCell.textLabel.text = WFCString(@"StartTime");
             if (self.conferenceInfo.startTime == 0) {
-                timeCell.detailTextLabel.text = @"现在";
+                timeCell.detailTextLabel.text = WFCString(@"Now");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.conferenceInfo.startTime];
                 timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
             }
         } else {
-            timeCell.textLabel.text = @"结束时间";
+            timeCell.textLabel.text = WFCString(@"EndTime");
             if (self.conferenceInfo.endTime == 0) {
-                timeCell.detailTextLabel.text = @"无限制";
+                timeCell.detailTextLabel.text = WFCString(@"NoLimit");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.conferenceInfo.endTime];
                 timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
@@ -324,14 +324,14 @@
         __weak typeof(self)ws = self;
         WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
         if(indexPath.row == 0) {
-            switchCell.textLabel.text = @"开启音频";
+            switchCell.textLabel.text = WFCString(@"EnableAudio");
             switchCell.on = self.enableAudio;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.enableAudio = value;
                 handleBlock(YES);
             };
         } else {
-            switchCell.textLabel.text = @"开启视频";
+            switchCell.textLabel.text = WFCString(@"EnableVideo");
             switchCell.on = self.enableVideo;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.enableVideo = value;

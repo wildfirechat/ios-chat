@@ -102,9 +102,9 @@
     [[UIApplication sharedApplication].keyWindow addSubview:label];
     [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
     if (error) {
-        label.text = @"保存失败";
+        label.text = WFCString(@"SaveFailure");
     } else {
-        label.text = @"保存成功";
+        label.text = WFCString(@"SaveSuccess");
     }
     [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
@@ -113,7 +113,7 @@
 - (void)onRightBtn:(id)sender {
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
     UIAlertAction *actionSave = [UIAlertAction actionWithTitle:@"保存二维码" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {

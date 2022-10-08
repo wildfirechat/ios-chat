@@ -169,7 +169,7 @@
         _sendBtn.tag = 333;
         _sendBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         _sendBtn.frame = CGRectMake(self.frame.size.width - 52,5,52, 37);
-        [_sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+        [_sendBtn setTitle:WFCString(@"Send") forState:UIControlStateNormal];
         [_sendBtn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
         self.sendBtn.layer.borderWidth = 0.5f;
         self.sendBtn.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;

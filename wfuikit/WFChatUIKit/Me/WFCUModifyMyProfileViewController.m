@@ -60,7 +60,7 @@
             defaultValue = userInfo.displayName;
             break;
         case 100:
-            title = @"修改账户名";
+            title = WFCString(@"ChangeAccount");
             defaultValue = userInfo.name;
             self.isAccount = YES;
             self.textField.keyboardType = UIKeyboardTypeASCIICapable;

@@ -73,20 +73,20 @@
     [self.view addSubview:self.activityView];
     
     if (self.myFiles) {
-        self.title = @"我的文件";
+        self.title = WFCString(@"MyFiles");
     } else if(self.userFiles) {
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
         if (user.friendAlias.length) {
-            self.title = [NSString stringWithFormat:@"%@ 的文件", user.friendAlias];
+            self.title = [NSString stringWithFormat:WFCString(@"%@`s files"), user.friendAlias];
         } else if (user.displayName.length) {
-            self.title = [NSString stringWithFormat:@"%@ 的文件", user.displayName];
+            self.title = [NSString stringWithFormat:WFCString(@"%@`s files"), user.displayName];
         } else {
-            self.title = @"文件";
+            self.title = WFCString(@"Files");
         }
     } else if(self.conversation) {
-        self.title = @"会话文件";
+        self.title = WFCString(@"ConversationFiles");
     } else {
-        self.title = @"所有文件";
+        self.title = WFCString(@"AllFiles");
     }
 
     self.hasMore = YES;
@@ -145,7 +145,7 @@
         line.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
         [footView addSubview:line];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 1, self.view.frame.size.width, 20)];
-        label.text = @"已经加载完了";
+        label.text = WFCString(@"NoMoreData");
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:12];
         label.textColor = [UIColor grayColor];

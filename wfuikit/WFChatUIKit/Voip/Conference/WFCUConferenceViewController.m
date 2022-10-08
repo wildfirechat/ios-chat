@@ -389,7 +389,7 @@
 - (UIButton *)chatButton {
     if(!_chatButton) {
         _chatButton = [[UIButton alloc] initWithFrame:CGRectZero];
-        [_chatButton setTitle:@"说点什么..." forState:UIControlStateNormal];
+        [_chatButton setTitle:WFCString(@"TalkAboutSomething") forState:UIControlStateNormal];
         [_chatButton setTitleColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.5] forState:UIControlStateNormal];
         _chatButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
         _chatButton.layer.masksToBounds = YES;
@@ -801,7 +801,7 @@
     
     [self startHidePanelTimer];
     NSArray<MoreItem *> *boardItems;
-    MoreItem *inviteItem = [[MoreItem alloc] initWithTitle:@"邀请" image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
+    MoreItem *inviteItem = [[MoreItem alloc] initWithTitle:WFCString(@"Invite") image:[WFCUImage imageNamed:@"conference_invite"] callback:^MoreItem * _Nonnull{
         WFCUConferenceInviteViewController *pvc = [[WFCUConferenceInviteViewController alloc] init];
         
         WFCCConferenceInviteMessageContent *invite = [[WFCCConferenceInviteMessageContent alloc] init];
@@ -822,7 +822,7 @@
         return nil;
     }];
     
-    MoreItem *chatItem = [[MoreItem alloc] initWithTitle:@"聊天" image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
+    MoreItem *chatItem = [[MoreItem alloc] initWithTitle:WFCString(@"Chat") image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
         mvc.keepInChatroom = YES;
@@ -836,13 +836,13 @@
         return nil;
     }];
     
-    MoreItem *minimizeItem = [[MoreItem alloc] initWithTitle:@"悬浮" image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull {
+    MoreItem *minimizeItem = [[MoreItem alloc] initWithTitle:WFCString(@"Floating") image:[WFCUImage imageNamed:@"conference_minimize"] callback:^MoreItem * _Nonnull {
         [ws minimize];
         return nil;
     }];
     
     MoreItem *recordItem = [WFCUConferenceManager sharedInstance].currentConferenceInfo.recording ?
-    [[MoreItem alloc] initWithTitle:@"取消录制" image:[WFCUImage imageNamed:@"conference_recording"] callback:^MoreItem * _Nonnull {
+    [[MoreItem alloc] initWithTitle:WFCString(@"CancelRecord") image:[WFCUImage imageNamed:@"conference_recording"] callback:^MoreItem * _Nonnull {
         if(![ws.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [ws showCommandToast:@"请联系主持人取消录制"];
             return nil;
@@ -851,7 +851,7 @@
         return nil;
     }]
     :
-    [[MoreItem alloc] initWithTitle:@"录制" image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull {
+    [[MoreItem alloc] initWithTitle:WFCString(@"Record") image:[WFCUImage imageNamed:@"conference_record"] callback:^MoreItem * _Nonnull {
         if(![ws.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             [ws showCommandToast:@"请联系主持人录制"];
             return nil;
@@ -860,18 +860,18 @@
         return nil;
     }];
     
-    MoreItem *settingItem = [[MoreItem alloc] initWithTitle:@"设置" image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull {
+    MoreItem *settingItem = [[MoreItem alloc] initWithTitle:WFCString(@"Setting") image:[WFCUImage imageNamed:@"conference_setting"] callback:^MoreItem * _Nonnull {
         return nil;
     }];
     
     MoreItem *handupItem = [WFCUConferenceManager sharedInstance].isHandup ?
-    [[MoreItem alloc] initWithTitle:@"放下" image:[WFCUImage imageNamed:@"conference_handup_hover"] callback:^MoreItem * _Nonnull{
+    [[MoreItem alloc] initWithTitle:WFCString(@"PutDown") image:[WFCUImage imageNamed:@"conference_handup_hover"] callback:^MoreItem * _Nonnull{
         [[WFCUConferenceManager sharedInstance] handup:NO];
         [ws showCommandToast:@"已放下举手"];
         return nil;
     }]
     :
-    [[MoreItem alloc] initWithTitle:@"举手" image:[WFCUImage imageNamed:@"conference_handup"] callback:^MoreItem * _Nonnull{
+    [[MoreItem alloc] initWithTitle:WFCString(@"Handup") image:[WFCUImage imageNamed:@"conference_handup"] callback:^MoreItem * _Nonnull{
         [[WFCUConferenceManager sharedInstance] handup:YES];
         [ws showCommandToast:@"已举手，等待管理员处理"];
         return nil;
@@ -912,14 +912,14 @@
         __weak typeof(self)ws = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"如果您想让与会人员继续开会，请选择退出会议" preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"退出会议" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"QuitConference") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             if(ws.currentSession.state != kWFAVEngineStateIdle) {
                 [ws.currentSession leaveConference:NO];
             }
         }];
         [alertController addAction:action1];
         
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"结束会议" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"DestroyConference") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             if(ws.currentSession.state != kWFAVEngineStateIdle) {
                 [ws.currentSession leaveConference:NO];
                 [ws destroyConference];
@@ -1802,7 +1802,7 @@
     __weak typeof(self)ws = self;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议发言人数已满，是否以观众身份入会？" preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
     }];
     [alertController addAction:action1];
@@ -1816,7 +1816,7 @@
     BOOL advanced = self.currentSession.isAdvanced;
     
     
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1837,7 +1837,7 @@
         __weak typeof(self)ws = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议未开始或者已经结束，请点击启动来开始会议" preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         }];
         [alertController addAction:action1];
@@ -1871,7 +1871,7 @@
         __weak typeof(self)ws = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         }];
         [alertController addAction:action1];
@@ -2248,12 +2248,12 @@
     } else {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"忽略" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ignore") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             
         }];
         [alertController addAction:action1];
         
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"接受" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"Accept") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:isAudience];
         }];
         [alertController addAction:action2];
@@ -2279,7 +2279,7 @@
             if(commandContent.boolValue && [WFAVEngineKit sharedEngineKit].currentSession.isConference && ([WFAVEngineKit sharedEngineKit].currentSession.isAudience || [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted)) {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人关闭了全员静音，是否要打开麦克风" preferredStyle:UIAlertControllerStyleAlert];
                 
-                UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"忽略" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ignore") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     
                 }];
                 [alertController addAction:action1];
@@ -2301,12 +2301,12 @@
             } else {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
                 
-                UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"拒绝" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Reject") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     [[WFCUConferenceManager sharedInstance] rejectUnmuteRequest];
                 }];
                 [alertController addAction:action1];
                 
-                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"接受" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"Accept") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
                     [[WFCUConferenceManager sharedInstance] muteAudio:NO];
                 }];
                 [alertController addAction:action2];

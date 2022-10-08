@@ -70,7 +70,7 @@
         [self.view addSubview:hint];
         hintSize = 40;
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(onEditBtn:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Edit") style:UIBarButtonItemStyleDone target:self action:@selector(onEditBtn:)];
     }
     
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, [WFCUUtilities wf_navigationFullHeight] + offset + 1, self.view.bounds.size.width - 31, self.view.bounds.size.height - 81 - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom] - hintSize)];
@@ -91,7 +91,7 @@
 }
 */
 - (void)onEditBtn:(id)sender {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(onSaveBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Save") style:UIBarButtonItemStyleDone target:self action:@selector(onSaveBtn:)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.textView.editable = YES;
     [self.textView becomeFirstResponder];

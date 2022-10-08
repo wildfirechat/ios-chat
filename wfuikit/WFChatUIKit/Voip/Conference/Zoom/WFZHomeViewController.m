@@ -40,7 +40,7 @@
 @implementation WFZHomeViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"会议";
+    self.title = WFCString(@"Conference");
     self.view.backgroundColor = [UIColor whiteColor];
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kCONFERENCE_DESTROYED object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
@@ -80,19 +80,19 @@
     CGFloat padding = (bounds.size.width - 3*btnSize)/3;
     self.joinButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2, offset, btnSize, btnSize+labelHeight)];
     [self.joinButton setImage:[WFCUImage imageNamed:@"join_conference"] forState:UIControlStateNormal];
-    [self.joinButton setTitle:@"加入会议" forState:UIControlStateNormal];
+    [self.joinButton setTitle:WFCString(@"JoinConference") forState:UIControlStateNormal];
     [self layoutButtonText:self.joinButton];
     [self.joinButton addTarget:self action:@selector(onJoinBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2 + padding + btnSize, offset, btnSize, btnSize+labelHeight)];
     [self.startButton setImage:[WFCUImage imageNamed:@"start_conference"] forState:UIControlStateNormal];
-    [self.startButton setTitle:@"发起会议" forState:UIControlStateNormal];
+    [self.startButton setTitle:WFCString(@"StartConference") forState:UIControlStateNormal];
     [self layoutButtonText:self.startButton];
     [self.startButton addTarget:self action:@selector(onStartBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     self.orderButton = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width-btnSize-padding/2, offset, btnSize, btnSize+labelHeight)];
     [self.orderButton setImage:[WFCUImage imageNamed:@"order_conference"] forState:UIControlStateNormal];
-    [self.orderButton setTitle:@"预定会议" forState:UIControlStateNormal];
+    [self.orderButton setTitle:WFCString(@"OrderConference") forState:UIControlStateNormal];
     [self layoutButtonText:self.orderButton];
     [self.orderButton addTarget:self action:@selector(onOrderBtn:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -173,7 +173,7 @@
         textField.placeholder = @"请输入会议密码（如果没有密码，请忽略）";
     }];
         
-    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *conferenceId = alertController.textFields.firstObject.text;
         NSString *pwd = alertController.textFields[1].text;
         WFZConferenceInfoViewController *vc = [[WFZConferenceInfoViewController alloc] init];
@@ -184,7 +184,7 @@
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:nav animated:YES completion:nil];
     }]];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil]];
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleDefault handler:nil]];
     
     [self presentViewController:alertController animated:true completion:nil];
 }
@@ -231,7 +231,7 @@
         _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 100, self.view.bounds.size.height /2 + 60, 200, 20)];
         _emptyLabel.font = [UIFont systemFontOfSize:14];
         _emptyLabel.textAlignment = NSTextAlignmentCenter;
-        _emptyLabel.text = @"暂无会议";
+        _emptyLabel.text = WFCString(@"NoConference");
         _emptyLabel.textColor = [UIColor grayColor];
         [self.view addSubview:_emptyLabel];
     }
@@ -254,7 +254,7 @@
     CGRect bount = self.view.bounds;
     CGRect topFrame = self.topPanel.frame;
     self.historyButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width - 85, topFrame.origin.y + topFrame.size.height + 36, 100, 30)];
-    [self.historyButton setTitle:@"历史记录 >" forState:UIControlStateNormal];
+    [self.historyButton setTitle:WFCString(@"ConferenceHistory") forState:UIControlStateNormal];
     self.historyButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.historyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     self.historyButton.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.9];

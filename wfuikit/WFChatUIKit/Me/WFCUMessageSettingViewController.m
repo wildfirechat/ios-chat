@@ -156,7 +156,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.accessoryView = nil;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textLabel.text = @"免打扰";
+            cell.textLabel.text = WFCString(@"NoDisturb");
             cell.on = self.isNoDisturb;
             __weak typeof(self)ws = self;
             cell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
@@ -184,7 +184,7 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             }
-            cell.textLabel.text = @"以下时段静音";
+            cell.textLabel.text = WFCString(@"SilentPeriods");
             NSInteger interval = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%02d:%02d-%02d:%02d", (self.startMins/60+(int)interval/3600)%24, self.startMins%60, (self.endMins/60+(int)interval/3600)%24, self.endMins%60];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
