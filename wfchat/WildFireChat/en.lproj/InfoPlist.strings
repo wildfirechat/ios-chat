@@ -36,3 +36,6 @@ Robot="Robot";
 Channel="Channel";
 Favorite="Favorite";
 File="File";
+Diagnose="Diagnose";
+MsgReceipt="Msg receipt";
+Cancel="Cancel";

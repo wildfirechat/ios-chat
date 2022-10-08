@@ -229,7 +229,7 @@
         }
     } else if (indexPath.section == 5) {
         [self hiddenSeparatorLine:cell];
-        cell.textLabel.text = WFCString(@"Diagnose");
+        cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 6) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
@@ -254,12 +254,12 @@
 }
  
 - (void)onLogoutBtn:(id)sender {
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"Quit") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:LocalizedString(@"Quit") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    UIAlertAction *actionLogout = [UIAlertAction actionWithTitle:WFCString(@"Logout") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionLogout = [UIAlertAction actionWithTitle:LocalizedString(@"Logout") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
@@ -271,7 +271,7 @@
         [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:NO];
     }];
     
-    UIAlertAction *actionDestroy = [UIAlertAction actionWithTitle:WFCString(@"DestroyAccount") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionDestroy = [UIAlertAction actionWithTitle:LocalizedString(@"DestroyAccount") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         WFCDestroyAccountViewController *destroyVC = [[WFCDestroyAccountViewController alloc] init];
         [self.navigationController pushViewController:destroyVC animated:YES];
     }];
