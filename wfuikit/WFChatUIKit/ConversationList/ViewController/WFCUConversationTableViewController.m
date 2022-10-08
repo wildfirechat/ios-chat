@@ -627,22 +627,22 @@
     self.pcSessionLabel.text = nil;
     if (infos.count) {
         if (infos[0].platform == PlatformType_Windows) {
-            self.pcSessionLabel.text = @"Windows 已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"Windows %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_OSX) {
-            self.pcSessionLabel.text = @"Mac 已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"Mac %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_Linux) {
-            self.pcSessionLabel.text = @"Linux 已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"Linux %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WEB) {
-            self.pcSessionLabel.text = @"Web 已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"Web %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WX) {
-            self.pcSessionLabel.text = @"小程序已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"MicroApp")];
         } else if(infos[0].platform == PlatformType_iPad) {
-            self.pcSessionLabel.text = @"iPad 已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"iPad %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_APad) {
-            self.pcSessionLabel.text = @"Android 平板已登录";
+            self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"AndroidPad")];
         }
         if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
-            self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingString:@"，手机通知已关闭"];
+            self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingFormat:@"，%@", WFCString(@"MobileNoNotification")];
         }
     }
     

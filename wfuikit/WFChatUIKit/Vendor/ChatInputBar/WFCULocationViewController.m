@@ -53,7 +53,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"位置";
+    self.navigationItem.title = WFCString(@"Location");
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(dismiss:)];
     
     
@@ -229,7 +229,7 @@
          } else {
              ws.locationPoint = nil;
              ws.sendButton.enabled = NO;
-             ws.title = @"位置";
+             ws.title = WFCString(@"Location");
          }
      }];
 }

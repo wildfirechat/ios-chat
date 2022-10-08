@@ -97,9 +97,9 @@
 - (void)setIsJoined:(BOOL)isJoined {
     _isJoined = isJoined;
     if (isJoined) {
-        [self.btn setTitle:@"进入聊天" forState:UIControlStateNormal];
+        [self.btn setTitle:WFCString(@"StartChat") forState:UIControlStateNormal];
     } else {
-        [self.btn setTitle:@"加入聊天" forState:UIControlStateNormal];
+        [self.btn setTitle:WFCString(@"StartChat") forState:UIControlStateNormal];
     }
 }
 

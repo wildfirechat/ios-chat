@@ -154,7 +154,7 @@
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _hintLabel.font = [UIFont systemFontOfSize:HINT_FONT_SIZE];
-        _hintLabel.text = @"聊天记录";
+        _hintLabel.text = WFCString(@"ChatHistory");
         _hintLabel.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_hintLabel];
     }

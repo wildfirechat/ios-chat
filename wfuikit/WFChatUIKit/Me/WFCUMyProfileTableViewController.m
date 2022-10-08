@@ -104,7 +104,7 @@
     qrview.image = qrcode;
     [cell addSubview:qrview];
 
-    cell = [self getAttrCell:@"账号" rightText:self.userInfo.name mutable:YES];
+    cell = [self getAttrCell:WFCString(@"Account") rightText:self.userInfo.name mutable:YES];
     cell.tag = 100;
     [self.cells1 addObject:cell];
 
