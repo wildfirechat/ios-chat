@@ -51,7 +51,7 @@
         } else if(user.displayName.length) {
             cell.textLabel.text = user.displayName;
         } else {
-            cell.textLabel.text = @"用户";
+            cell.textLabel.text = WFCString(@"User");
         }
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     } else if (conv.conversation.type == Group_Type) {
@@ -59,7 +59,7 @@
         if (group.displayName.length) {
             cell.textLabel.text = group.displayName;
         } else {
-            cell.textLabel.text = @"群组";
+            cell.textLabel.text = WFCString(@"Group");
         }
 
         if (group.portrait.length) {
@@ -81,7 +81,7 @@
         } else if(user.displayName.length) {
             cell.textLabel.text = user.displayName;
         } else {
-            cell.textLabel.text = @"用户";
+            cell.textLabel.text = WFCString(@"User");
         }
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     }

@@ -64,9 +64,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (self.conversation.type == Channel_Type) {
-        self.title = @"频道详情";
+        self.title = WFCString(@"ChannelDesc");
     } else {
-        self.title = @"会话详情";
+        self.title = WFCString(@"ConversationDetail");
     }
     
     if (self.conversation.type == Single_Type) {
@@ -885,7 +885,7 @@
               [subView removeFromSuperview];
           }
           UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
-          [btn setTitle:@"销毁私密聊天" forState:UIControlStateNormal];
+          [btn setTitle:WFCString(@"DestroySecretChat") forState:UIControlStateNormal];
           btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
           [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
           [btn addTarget:self action:@selector(onDestroySecretChat:) forControlEvents:UIControlEventTouchUpInside];
@@ -897,7 +897,7 @@
       }
       return cell;
   } else if([self isBurnTimeCell:indexPath]) {
-      NSString *subTitle = @"关闭";
+      NSString *subTitle = WFCString(@"Close");
       WFCCSecretChatInfo *info = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
       if(info.burnTime) {
           subTitle = [NSString stringWithFormat:@"%d秒", info.burnTime/1000];

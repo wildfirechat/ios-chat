@@ -380,7 +380,7 @@
 - (void)setupNavigationItem {
     if (self.multiSelecting) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"search"] style:UIBarButtonItemStyleDone target:self action:@selector(onSearchBarBtn:)];
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onMultiSelectCancel:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onMultiSelectCancel:)];
     } else {
         if(self.conversation.type == Single_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
@@ -392,7 +392,7 @@
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         }
         if(self.presented) {
-            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onCloseBtn:)];
+            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(onCloseBtn:)];
         } else {
             self.navigationItem.leftBarButtonItem = nil;
         }
@@ -875,7 +875,7 @@
         [_multiSelectPanel addSubview:deleteBtn];
         
         UIButton *forwardBtn = [[UIButton alloc] initWithFrame:CGRectMake(_multiSelectPanel.bounds.size.width/2, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
-        [forwardBtn setTitle:@"转发" forState:UIControlStateNormal];
+        [forwardBtn setTitle:WFCString(@"Forward") forState:UIControlStateNormal];
         [forwardBtn addTarget:self action:@selector(onForwardMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
         [forwardBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         [_multiSelectPanel addSubview:forwardBtn];
@@ -942,13 +942,13 @@
             WFCCUserInfo *myself = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
             compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", title, myself.displayName];
         } else if (self.conversation.type == Group_Type) {
-            compositeContent.title = @"群的聊天记录";
+            compositeContent.title = WFCString(@"GroupChatHistory");
         } else if (self.conversation.type == Channel_Type) {
-            compositeContent.title = @"频道的聊天记录";
+            compositeContent.title = WFCString(@"ChannelChatHistory");
         } else if(self.conversation.type == SecretChat_Type) {
-            compositeContent.title = @"密聊记录";
+            compositeContent.title = WFCString(@"SecretChatHistory");
         } else {
-            compositeContent.title = @"聊天记录";
+            compositeContent.title = WFCString(@"ChatHistory");
         }
         
         compositeContent.messages = messages;
@@ -2808,7 +2808,7 @@
             NSLog(@"file is directiory");
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"无法发送文件夹: %@", file.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
             
-            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 
             }];
             

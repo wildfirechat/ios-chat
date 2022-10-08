@@ -42,7 +42,7 @@
         
         _textLabel.textAlignment = NSTextAlignmentCenter;
         _textLabel.backgroundColor = [UIColor clearColor];
-        _textLabel.text = @"手指上滑取消发送";
+        _textLabel.text = WFCString(@"FingerUpToCancel");
         [self addSubview:_textLabel];
         _textLabel.font = [UIFont systemFontOfSize:13];
         _textLabel.textColor = [UIColor whiteColor];
@@ -64,9 +64,9 @@
 - (void)setIsPtt:(BOOL)isPtt {
     _isPtt = isPtt;
     if(isPtt) {
-        _textLabel.text = @"松开结束对接";
-        _upCancelText = @"松开结束对接";
-        _loosenCancelText = @"松开结束对接";
+        _textLabel.text = WFCString(@"ReleaseEndTalk");
+        _upCancelText = WFCString(@"ReleaseEndTalk");
+        _loosenCancelText = WFCString(@"ReleaseEndTalk");
     }
 }
 #endif

@@ -251,13 +251,13 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         self.floatingButton.layer.cornerRadius = 32;
         self.floatingButton.layer.masksToBounds = YES;
         
-        [self.floatingButton setTitle:@"结束分享" forState:UIControlStateNormal];
+        [self.floatingButton setTitle:WFCString(@"EndSharing") forState:UIControlStateNormal];
         [self.floatingButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.floatingButton setBackgroundColor:[UIColor redColor]];
         self.videoView.hidden = YES;
     } else if ([self isVideoViewEnabled]) {
         if (self.callSession.state == kWFAVEngineStateIncomming) {
-            [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+            [self.floatingButton setTitle:WFCString(@"WaitAnwser") forState:UIControlStateNormal];
             self.videoView.hidden = YES;
         } else if (self.callSession.state == kWFAVEngineStateOutgoing) {
             self.videoView.hidden = NO;
@@ -301,9 +301,9 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
                                  forState:UIControlStateNormal];
         } else {
             if (self.callSession.state == kWFAVEngineStateOutgoing) {
-                [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+                [self.floatingButton setTitle:WFCString(@"WaitAnwser") forState:UIControlStateNormal];
             } else if (self.callSession.state == kWFAVEngineStateIncomming) {
-                [self.floatingButton setTitle:@"等待接听" forState:UIControlStateNormal];
+                [self.floatingButton setTitle:WFCString(@"WaitAnwser") forState:UIControlStateNormal];
             } else {
                 [self.floatingButton setTitle:@"" forState:UIControlStateNormal];
                 [self.floatingButton setImage:[WFCUImage imageNamed:@"floatingaudio"]
@@ -334,7 +334,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         }];
     }
     if(isMuted) {
-        [self.floatingButton setTitle:@"视频关闭"
+        [self.floatingButton setTitle:WFCString(@"CloseVideo")
                              forState:UIControlStateNormal];
         self.videoView.hidden = YES;
     } else {

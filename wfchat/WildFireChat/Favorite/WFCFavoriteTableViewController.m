@@ -60,7 +60,7 @@
     [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCell:)]];
     [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongTapCell:)]];
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-    self.title = @"我的收藏";
+    self.title = LocalizedString(@"MyFarovrites");
 }
 
 - (void)viewDidAppear:(BOOL)animated {

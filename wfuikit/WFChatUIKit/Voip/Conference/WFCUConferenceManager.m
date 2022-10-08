@@ -157,7 +157,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:checkBox?[NSString stringWithFormat:@"%@\n\n\n", message]:message preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:cancelTitle?cancelTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:cancelTitle?cancelTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         ws.alertViewCheckBtn = nil;
         if(cancelHandler) {
             cancelHandler();

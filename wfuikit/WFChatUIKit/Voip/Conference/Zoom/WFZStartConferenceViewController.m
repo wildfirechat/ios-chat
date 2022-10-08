@@ -70,8 +70,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"创建" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Create") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor redColor];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     self.conferenceTitle = [NSString stringWithFormat:@"%@ 发起的会议", userInfo.displayName];
@@ -173,11 +173,11 @@
     
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(16, 16, 64, 18)];
     UIButton *okBtn = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width - 16 - 64, 16, 64, 18)];
-    [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelBtn setTitle:WFCString(@"Cancel") forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(onCancelDataPicker:) forControlEvents:UIControlEventTouchUpInside];
     [cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
-    [okBtn setTitle:@"OK" forState:UIControlStateNormal];
+    [okBtn setTitle:WFCString(@"OK") forState:UIControlStateNormal];
     [okBtn addTarget:self action:@selector(onConfirmDataPicker:) forControlEvents:UIControlEventTouchUpInside];
     [okBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
@@ -208,7 +208,7 @@
         if (!titleCell) {
             titleCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"title"];
         }
-        titleCell.textLabel.text = @"会议主题";
+        titleCell.textLabel.text = WFCString(@"Subject");
         titleCell.detailTextLabel.text = self.conferenceTitle;
         return titleCell;
     } else if(indexPath.section == 1) {
@@ -219,17 +219,17 @@
         }
         
         if (indexPath.row == 0) {
-            timeCell.textLabel.text = @"开始时间";
+            timeCell.textLabel.text = WFCString(@"StartTime");
             if (self.startTime == 0) {
-                timeCell.detailTextLabel.text = @"现在";
+                timeCell.detailTextLabel.text = WFCString(@"Now");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.startTime];
                 timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
             }
         } else {
-            timeCell.textLabel.text = @"结束时间";
+            timeCell.textLabel.text = WFCString(@"EndTime");
             if (self.endTime == 0) {
-                timeCell.detailTextLabel.text = @"无限制";
+                timeCell.detailTextLabel.text = WFCString(@"NoLimit");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.endTime];
                 timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
@@ -240,7 +240,7 @@
     } else if(indexPath.section == 2) {
         WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
         if(indexPath.row == 0) {
-            switchCell.textLabel.text = @"参与者开启麦克风入会";
+            switchCell.textLabel.text = WFCString(@"JoinWithMicOn");
             switchCell.on = self.enableParticipant;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.enableParticipant = value;
@@ -262,7 +262,7 @@
                 self.allowTurnOnMic = YES;
                 switchCell.valueSwitch.enabled = NO;
             }
-            switchCell.textLabel.text = @"允许参与者自主开启麦克风";
+            switchCell.textLabel.text = WFCString(@"AllowTurnMicOn");
             switchCell.on = self.allowTurnOnMic;
             switchCell.onSwitch = ^(BOOL value, int type, void (^handleBlock)(BOOL success)) {
                 ws.allowTurnOnMic = value;
@@ -277,7 +277,7 @@
             if(!self.enablePassword) {
                 self.password = nil;
             }
-            cell.textLabel.text = @"启用密码";
+            cell.textLabel.text = WFCString(@"UsePassword");
             cell.detailTextLabel.text = self.password;
             cell.on = self.enablePassword;
             cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
@@ -290,7 +290,7 @@
                 }
             };
         } else {
-            cell.textLabel.text = @"使用个人会议号";
+            cell.textLabel.text = WFCString(@"UsePersonalNumber");
             if(self.advanceConference) {
                 self.userPrivateConferenceId = NO;
                 cell.valueSwitch.enabled = NO;
@@ -320,8 +320,8 @@
         } else {
             cell.valueSwitch.enabled = YES;
         }
-        cell.textLabel.text = @"大规模会议";
-        cell.detailTextLabel.attributedText = [[NSAttributedString alloc] initWithString:@"参会人员大于50人" attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+        cell.textLabel.text = WFCString(@"LargeScaleConference");
+        cell.detailTextLabel.attributedText = [[NSAttributedString alloc] initWithString:WFCString(@"MemberExceed50") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
         cell.on = self.advanceConference;
         cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
             ws.advanceConference = value;
@@ -337,7 +337,7 @@
         }
         if(!self.joinBtn) {
             self.joinBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
-            [self.joinBtn setTitle:@"进入会议室" forState:UIControlStateNormal];
+            [self.joinBtn setTitle:WFCString(@"EnterConferenceRoom") forState:UIControlStateNormal];
             [self.joinBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
             [self.joinBtn addTarget:self action:@selector(onStartConference:) forControlEvents:UIControlEventTouchUpInside];
         }

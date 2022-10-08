@@ -111,7 +111,7 @@
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         UIAlertAction *deleteFriendAction = [UIAlertAction actionWithTitle:WFCString(@"DeleteFriend") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-            hud.label.text = @"处理中...";
+            hud.label.text = WFCString(@"Processing");
             [hud showAnimated:YES];
             
             [[WFCCIMService sharedWFCIMService] deleteFriend:ws.userId success:^{
@@ -120,7 +120,7 @@
 
                     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                     hud.mode = MBProgressHUDModeText;
-                    hud.label.text = @"处理成功";
+                    hud.label.text = WFCString(@"ProcessDone");
                     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                     [hud hideAnimated:YES afterDelay:1.f];
                 });
@@ -130,7 +130,7 @@
 
                     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                     hud.mode = MBProgressHUDModeText;
-                    hud.label.text = @"处理失败";
+                    hud.label.text = WFCString(@"ProcessFailure");
                     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                     [hud hideAnimated:YES afterDelay:1.f];
                 });
@@ -153,7 +153,7 @@
     if ([[WFCCIMService sharedWFCIMService] isBlackListed:self.userId]) {
         UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"RemoveFromBlacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-            hud.label.text = @"处理中...";
+            hud.label.text = WFCString(@"Processing");
             [hud showAnimated:YES];
             
             [[WFCCIMService sharedWFCIMService] setBlackList:ws.userId isBlackListed:NO success:^{
@@ -161,7 +161,7 @@
 
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理成功";
+                hud.label.text = WFCString(@"ProcessDone");
                 hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                 [hud hideAnimated:YES afterDelay:1.f];
             } error:^(int error_code) {
@@ -169,7 +169,7 @@
 
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理失败";
+                hud.label.text = WFCString(@"ProcessFailure");
                 hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                 [hud hideAnimated:YES afterDelay:1.f];
             }];
@@ -178,7 +178,7 @@
     } else if (self.userInfo.type == 0) {  //Only normal user can add to blacklist, robot user not allowed.
         UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:WFCString(@"Add2Blacklist") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-            hud.label.text = @"处理中...";
+            hud.label.text = WFCString(@"Processing");
             [hud showAnimated:YES];
             
             [[WFCCIMService sharedWFCIMService] setBlackList:ws.userId isBlackListed:YES success:^{
@@ -186,7 +186,7 @@
 
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理成功";
+                hud.label.text = WFCString(@"ProcessDone");
                 hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                 [hud hideAnimated:YES afterDelay:1.f];
             } error:^(int error_code) {
@@ -194,7 +194,7 @@
 
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                 hud.mode = MBProgressHUDModeText;
-                hud.label.text = @"处理失败";
+                hud.label.text = WFCString(@"ProcessFailure");
                 hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
                 [hud hideAnimated:YES afterDelay:1.f];
             }];
@@ -210,12 +210,12 @@
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
-            UIAlertAction *cancelStarAction = [UIAlertAction actionWithTitle:@"取消星标好友" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *cancelStarAction = [UIAlertAction actionWithTitle:WFCString(@"Star") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [ws setFavUser];
             }];
             [actionSheet addAction:cancelStarAction];
         } else {
-            UIAlertAction *setStarAction = [UIAlertAction actionWithTitle:@"设置星标好友" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *setStarAction = [UIAlertAction actionWithTitle:WFCString(@"Unstar") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [ws setFavUser];
             }];
             [actionSheet addAction:setStarAction];
@@ -341,9 +341,9 @@
             self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if([self.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                self.userMessagesCell.textLabel.text = @"查看我的消息";
+                self.userMessagesCell.textLabel.text = WFCString(@"MyMessages");
             } else {
-                self.userMessagesCell.textLabel.text = @"查看他（她）的消息";
+                self.userMessagesCell.textLabel.text = WFCString(@"He`sMessages");
             }
             [self.cells addObject:self.userMessagesCell];
         }
@@ -664,7 +664,7 @@
     BOOL isFav = [[WFCCIMService sharedWFCIMService] isFavUser:self.userId];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"处理中...";
+    hud.label.text = WFCString(@"Processing");
     [hud showAnimated:YES];
     __weak typeof(self)ws = self;
     [[WFCCIMService sharedWFCIMService] setFavUser:self.userId fav:!isFav success:^{
@@ -673,7 +673,7 @@
 
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"处理成功";
+            hud.label.text = WFCString(@"ProcessDone");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             
@@ -687,7 +687,7 @@
 
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"处理失败";
+            hud.label.text = WFCString(@"ProcessFailure");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         });

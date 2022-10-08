@@ -55,7 +55,7 @@
     
     int line = (int)self.items.count / ITEM_COUNT_OF_LINE;
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(16, (padding+ITEM_SIZE)*(line+1), boardWidth - 32, CANCEL_BTN_HEIGHT)];
-    [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelBtn setTitle:WFCString(@"Cancel") forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(onCancelBtn:) forControlEvents:UIControlEventTouchDown];
     cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     cancelBtn.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1];

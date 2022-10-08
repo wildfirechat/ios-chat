@@ -93,7 +93,7 @@
     if (!_cardHint) {
         _cardHint = [[UILabel alloc] initWithFrame:CGRectMake(8, 84, 80, 12)];
         _cardHint.font = [UIFont systemFontOfSize:10];
-        _cardHint.text = @"个人名片";
+        _cardHint.text = WFCString(@"PersonalCard");
         _cardHint.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_cardHint];
     }

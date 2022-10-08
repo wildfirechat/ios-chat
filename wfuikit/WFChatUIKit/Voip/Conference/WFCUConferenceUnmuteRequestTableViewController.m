@@ -43,7 +43,7 @@
     [self.tableView reloadData];
     
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"C") style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
     
     if([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count) {
         self.acceptAllBtn = [self createBtn:CGRectMake(16, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全部同意" action:@selector(onAcceptAllBtnPressed:)];
@@ -107,14 +107,14 @@
         size.width = self.view.bounds.size.width;
         CGFloat buttonWidth = 56;
         UIButton *reject = [[UIButton alloc] initWithFrame:CGRectMake(size.width - 8 - buttonWidth, 0, buttonWidth, size.height)];
-        [reject setTitle:@"拒绝" forState:UIControlStateNormal];
+        [reject setTitle:WFCString(@"Reject") forState:UIControlStateNormal];
         [reject setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [reject addTarget:self action:@selector(onRejectBtn:) forControlEvents:UIControlEventTouchDown];
         reject.layer.masksToBounds = YES;
         reject.layer.cornerRadius = 3.f;
         
         UIButton *accept = [[UIButton alloc] initWithFrame:CGRectMake(size.width - 8 - buttonWidth - 4 - buttonWidth, 0, buttonWidth, size.height)];
-        [accept setTitle:@"同意" forState:UIControlStateNormal];
+        [accept setTitle:WFCString(@"Agree") forState:UIControlStateNormal];
         [accept setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [accept addTarget:self action:@selector(onAcceptBtn:) forControlEvents:UIControlEventTouchDown];
         accept.layer.masksToBounds = YES;

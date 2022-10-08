@@ -304,7 +304,7 @@ static KZVideoViewController *__currentVideoVC = nil;
     __block UILabel *zoomLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
     zoomLab.center = CGPointMake(_videoView.center.x, CGRectGetMaxY(_videoView.frame) - 16);
     zoomLab.font = [UIFont boldSystemFontOfSize:14];
-    zoomLab.text = @"双击放大";
+    zoomLab.text = WFCString(@"DoubleClickZoomOut");
     zoomLab.textColor = [UIColor whiteColor];
     zoomLab.textAlignment = NSTextAlignmentCenter;
     [_videoView addSubview:zoomLab];
@@ -402,7 +402,7 @@ static KZVideoViewController *__currentVideoVC = nil;
     _topSlideView.isRecoding = YES;
     
     _statusInfo.textColor = kzThemeTineColor;
-    _statusInfo.text = @"↑上移取消";
+    _statusInfo.text = WFCString(@"MoveUpCancel");
     _statusInfo.hidden = NO;
     kz_dispatch_after(0.5, ^{
         _statusInfo.hidden = YES;
@@ -469,7 +469,7 @@ AVCaptureVideoOrientation orientationBaseOnAcceleration(CMAcceleration accelerat
     if (!_cancelInfo.hidden) {
         return;
     }
-    _cancelInfo.text = @"松手取消";
+    _cancelInfo.text = WFCString(@"ReleaseToCancel");
     _cancelInfo.hidden = NO;
     kz_dispatch_after(0.5, ^{
         _cancelInfo.hidden = YES;

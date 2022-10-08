@@ -42,7 +42,7 @@
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

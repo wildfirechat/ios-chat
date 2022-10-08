@@ -34,7 +34,7 @@
     [self updateStartBtnStatus];
     
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(onClose:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Close") style:UIBarButtonItemStylePlain target:self action:@selector(onClose:)];
     
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kWFPttTalkingBeginNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -49,11 +49,11 @@
         self.startButton.hidden = NO;
         
         CGFloat btnSize = 100;
-        NSString *title = @"按下讲话";
+        NSString *title = WFCString(@"PressToTalk");
         UIColor *color = [UIColor redColor];
         if([[WFPttClient sharedClient] getTalkingConversation] == self.conversation) {
             btnSize = 150;
-            title = @"松开结束讲话";
+            title = WFCString(@"ReleaseEndTalk");
             color = [UIColor greenColor];
         }
         

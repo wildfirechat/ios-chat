@@ -418,7 +418,7 @@
                                                                         repeats:YES];
                 }
         } else {
-            [[[UIAlertView alloc] initWithTitle:@"警告" message:@"无法录音,请到设置-隐私-麦克风,允许程序访问" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+            [[[UIAlertView alloc] initWithTitle:@"警告" message:@"无法录音,请到设置-隐私-麦克风,允许程序访问" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
         }
     }];
 }
@@ -1133,7 +1133,7 @@
     }
     if (self.seconds < 1) {
         NSLog(@"record time too short");
-        [[[UIAlertView alloc] initWithTitle:@"警告" message:@"录音时间太短了" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"警告" message:@"录音时间太短了" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
         
         return;
     }
@@ -1644,7 +1644,7 @@
 
     [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
     [MBProgressHUD HUDForView:self.parentView].mode = MBProgressHUDModeDeterminate;
-    [MBProgressHUD HUDForView:self.parentView].label.text = @"正在处理中...";
+    [MBProgressHUD HUDForView:self.parentView].label.text = WFCString(@"Processing");
     
     for (NSURL *url in urls) {
        //获取授权
@@ -1719,7 +1719,7 @@
         exportSession.shouldOptimizeForNetworkUse = YES;
         
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:picker.view animated:YES];
-        hud.label.text = @"处理中...";
+        hud.label.text = WFCString(@"Processing");
         [hud showAnimated:YES];
         
         __weak typeof(self)ws = self;
@@ -1915,7 +1915,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [MBProgressHUD showHUDAddedTo:self.parentView animated:YES];
         [MBProgressHUD HUDForView:self.parentView].mode = MBProgressHUDModeDeterminate;
-        [MBProgressHUD HUDForView:self.parentView].label.text = @"正在处理中...";
+        [MBProgressHUD HUDForView:self.parentView].label.text = WFCString(@"Processing");
     });
     
     __weak typeof(self)ws = self;

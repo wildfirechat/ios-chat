@@ -294,14 +294,14 @@ UISearchBarDelegate>
             navBarAppearance.backgroundColor = [UIColor colorWithHexString:@"0x1f2026"];
             navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
         }
-        self.title = @"选择成员";
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+        self.title = WFCString(@"ChooseMember");
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
         
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
         self.doneButton.backgroundColor = [UIColor colorWithHexString:@"0x3e65e4"];
-        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
         self.doneButton.layer.cornerRadius = 4;
@@ -317,14 +317,14 @@ UISearchBarDelegate>
         self.searchBar.barTintColor = [UIColor whiteColor];
         UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
         [self.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
-        self.title = @"创建会话";
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+        self.title = WFCString(@"StartConversion");
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
         
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
         self.doneButton.backgroundColor = [UIColor colorWithHexString:@"0x3e65e4"];
-        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
         self.doneButton.layer.cornerRadius = 4;
@@ -355,7 +355,7 @@ UISearchBarDelegate>
         self.doneButton.enabled = NO;
         self.doneButton.alpha = 0.6;
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
-        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
     }
 }
 

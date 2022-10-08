@@ -56,7 +56,7 @@
   if(self.isModifyPortrait) {
     CGFloat btnWidth = 60;
     self.resetBtn = [[UIButton alloc] initWithFrame:CGRectMake((bound.size.width - btnWidth)/2, 80 + portraitWidth + 60, btnWidth, 40)];
-    [self.resetBtn setTitle:@"重置" forState:UIControlStateNormal];
+    [self.resetBtn setTitle:WFCString(@"Reset") forState:UIControlStateNormal];
     [self.resetBtn addTarget:self action:@selector(onResetPortrait:) forControlEvents:UIControlEventTouchUpInside];
     [self.resetBtn setBackgroundColor:[UIColor greenColor]];
       self.resetBtn.layer.cornerRadius = 4.f;

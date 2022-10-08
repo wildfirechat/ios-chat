@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"文件";
+    self.title = WFCString(@"Files");
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     if (@available(iOS 15, *)) {
@@ -42,14 +42,15 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
+
     if (indexPath.row == 0) {
-        cell.textLabel.text = @"所有文件";
+        cell.textLabel.text = WFCString(@"AllFiles");
     } else if (indexPath.row == 1) {
-        cell.textLabel.text = @"我的文件";
+        cell.textLabel.text = WFCString(@"MyFiles");
     } else if (indexPath.row == 2) {
-        cell.textLabel.text = @"会话文件";
+        cell.textLabel.text = WFCString(@"ConversationFiles");
     } else if (indexPath.row == 3) {
-        cell.textLabel.text = @"用户文件";
+        cell.textLabel.text = WFCString(@"UserFiles");
     }
     return cell;
 }

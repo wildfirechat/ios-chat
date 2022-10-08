@@ -90,20 +90,20 @@
     if (!_pluginItems) {
         _pluginItems = [@[
                           [[PluginItem alloc] initWithTitle:WFCString(@"Album") image:[WFCUImage imageNamed:@"chat_input_plugin_album"] tag:1],
-                          [[PluginItem alloc] initWithTitle:@"拍摄" image:[WFCUImage imageNamed:@"chat_input_plugin_camera"] tag:2],
-                          [[PluginItem alloc] initWithTitle:@"位置" image:[WFCUImage imageNamed:@"chat_input_plugin_location"] tag:3],
-                          [[PluginItem alloc] initWithTitle:@"文件" image:[WFCUImage imageNamed:@"chat_input_plugin_file"] tag:5],
-                          [[PluginItem alloc] initWithTitle:@"名片" image:[WFCUImage imageNamed:@"chat_input_plugin_card"] tag:6]
+                          [[PluginItem alloc] initWithTitle:WFCString(@"TakePhoto") image:[WFCUImage imageNamed:@"chat_input_plugin_camera"] tag:2],
+                          [[PluginItem alloc] initWithTitle:WFCString(@"Location") image:[WFCUImage imageNamed:@"chat_input_plugin_location"] tag:3],
+                          [[PluginItem alloc] initWithTitle:WFCString(@"Files") image:[WFCUImage imageNamed:@"chat_input_plugin_file"] tag:5],
+                          [[PluginItem alloc] initWithTitle:WFCString(@"Card") image:[WFCUImage imageNamed:@"chat_input_plugin_card"] tag:6]
                           ] mutableCopy];
 
 #if WFCU_SUPPORT_VOIP
         if (self.hasVoip) {
-            [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:@"视频通话" image:[WFCUImage imageNamed:@"chat_input_plugin_video_call"] tag:4] atIndex:2];
+            [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"VideoCall") image:[WFCUImage imageNamed:@"chat_input_plugin_video_call"] tag:4] atIndex:2];
         }
 #endif
 #ifdef WFC_PTT
         if(self.hasPtt) {
-            [_pluginItems addObject:[[PluginItem alloc] initWithTitle:@"对讲" image:[WFCUImage imageNamed:@"chat_input_plugin_intercom"] tag:7]];
+            [_pluginItems addObject:[[PluginItem alloc] initWithTitle:WFCString(@"Talk") image:[WFCUImage imageNamed:@"chat_input_plugin_intercom"] tag:7]];
         }
 #endif
     }

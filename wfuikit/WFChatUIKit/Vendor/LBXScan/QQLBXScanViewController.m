@@ -73,7 +73,7 @@
         
         _topTitle.textAlignment = NSTextAlignmentCenter;
         _topTitle.numberOfLines = 0;
-        _topTitle.text = @"将取景框对准二维码即可自动扫描";
+        _topTitle.text = WFCString(@"TargetToScanQRCode");
         _topTitle.textColor = [UIColor whiteColor];
         [self.view addSubview:_topTitle];
     }    
