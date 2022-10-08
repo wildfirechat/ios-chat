@@ -229,6 +229,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     if(self.isKickedOff) {
         self.isKickedOff = NO;
         UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:@"您的账号已在其他手机登录" preferredStyle:UIAlertControllerStyleAlert];
