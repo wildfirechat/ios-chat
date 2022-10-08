@@ -47,7 +47,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if([WFCUConferenceManager sharedInstance].handupMembers.count) {
+    if([WFCUConferenceManager sharedInstance].handupMembers.count && !self.putdownAllBtn) {
         CGRect bounds = self.view.bounds;
         CGFloat buttonHeight = 48;
         CGFloat buttonWidth = bounds.size.width - 16 - 16;
