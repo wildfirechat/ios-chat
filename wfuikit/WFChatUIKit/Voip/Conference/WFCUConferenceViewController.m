@@ -1121,11 +1121,9 @@
             break;
 
         case UIDeviceOrientationPortrait:
+        default:
             self.view.transform = CGAffineTransformMakeRotation(0);
             [self updateUIByOrientationChanged:NO];
-            break;
-
-        default:
             break;
     }
     return YES;
