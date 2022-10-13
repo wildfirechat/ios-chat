@@ -28,9 +28,9 @@
 
 - (void)setupView:(CGRect)frame {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - flowLayout.minimumInteritemSpacing*2)/3;
+    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - flowLayout.minimumInteritemSpacing*2)/3-flowLayout.minimumLineSpacing;
     flowLayout.itemSize = CGSizeMake(itemWidth, itemWidth);
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:flowLayout];
     self.collectionView.dataSource = self;
@@ -51,7 +51,7 @@
     
     CGSize parentSize = self.bounds.size;
     int itemCount = MIN(12, self.participants.count - self.pages*12);
-    CGFloat itemWidth = (MIN(parentSize.width, parentSize.height) - flowLayout.minimumInteritemSpacing*2)/3;
+    CGFloat itemWidth = (MIN(parentSize.width, parentSize.height) - flowLayout.minimumInteritemSpacing*2)/3-flowLayout.minimumLineSpacing;
     
     
     CGFloat startX, startY, widht, height;
@@ -83,9 +83,9 @@
         }
     } else {
         if(itemCount == 1) {
-            startX = itemWidth;
+            startX = parentSize.width/2 - itemWidth/2;
             widht = itemWidth;
-        } else if(itemCount == 2) {
+        } else if(itemCount == 2 || itemCount == 4) {
             startX = itemWidth/2 - minimumInteritemSpacing/2;
             widht = itemWidth*2 + minimumInteritemSpacing;
         } else {
