@@ -3,7 +3,7 @@
 //  WFChatUIKit
 //
 //  Created by Rain on 2022/10/5.
-//  Copyright © 2022 Tom Lee. All rights reserved.
+//  Copyright © 2022 Wildfirechat. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

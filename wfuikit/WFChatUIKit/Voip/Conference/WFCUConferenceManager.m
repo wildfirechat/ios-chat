@@ -16,11 +16,23 @@
 #import "WFCUConferenceCommandContent.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "GCDAsyncSocket.h"
+#import <ReplayKit/ReplayKit.h>
+#import "WFCUI420VideoFrame.h"
+#import "WFCUBroadcastDefine.h"
 
 NSString *kMuteStateChanged = @"kMuteStateChanged";
 
-@interface WFCUConferenceManager ()
+
+@interface WFCUConferenceManager () <GCDAsyncSocketDelegate, WFAVExternalVideoSource>
 @property(nonatomic, strong)UIButton *alertViewCheckBtn;
+
+@property (nonatomic, strong)GCDAsyncSocket *socket;
+@property (nonatomic, strong)dispatch_queue_t queue;
+@property (nonatomic, strong)NSMutableArray *sockets;
+@property (nonatomic,strong)RPSystemBroadcastPickerView *broadPickerView;
+@property(nonatomic, strong)NSMutableData *receivedData;
+@property(nonatomic, weak)id<WFAVExternalFrameDelegate> frameDelegate;
 @end
 
 static WFCUConferenceManager *sharedSingleton = nil;
@@ -99,13 +111,18 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self notifyMuteStateChanged];
 }
 
-- (void)enableAudioAndScreansharing {
-    [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
-    if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
-        [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+- (void)switchAudioAndScreansharing:(UIView *)view {
+    if([self isBroadcasting]) {
+        [self cancelBroadcast];
+    } else {
+        [self broadcast:view];
+        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+        if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
+            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
+        }
+        [self notifyMuteStateChanged];
     }
-    [[WFAVEngineKit sharedEngineKit].currentSession setInAppScreenSharing:YES];
-    [self notifyMuteStateChanged];
 }
 
 - (void)reloadConferenceInfo {
@@ -503,6 +520,216 @@ static WFCUConferenceManager *sharedSingleton = nil;
     command.targetUserId = userId;
     command.boolValue = boolValue;
     [self sendCommandMessage:command];
+}
+
+- (void)broadcast:(UIView *)view {
+    self.receivedData = [[NSMutableData alloc] init];
+    [self setupSocket:NO];
+    [view addSubview:self.broadPickerView];
+    for (UIView *view in self.broadPickerView.subviews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            float iOSVersion = [[UIDevice currentDevice].systemVersion floatValue];
+            UIButton *button = (UIButton *)view;
+            if (iOSVersion >= 13) {
+                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchDown];
+                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchUpInside];
+            } else {
+                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchDown];
+            }
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sendOrientationCommand)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+}
+
+- (void)cancelBroadcast {
+//    for (UIView *view in self.broadPickerView.subviews) {
+//        if ([view isKindOfClass:[UIButton class]]) {
+//            float iOSVersion = [[UIDevice currentDevice].systemVersion floatValue];
+//            UIButton *button = (UIButton *)view;
+//            if (iOSVersion >= 13) {
+//                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchDown];
+//                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchUpInside];
+//            } else {
+//                [(UIButton *)view sendActionsForControlEvents:UIControlEventTouchDown];
+//            }
+//        }
+//    }
+    [self sendBroadcastCommand:3 value:0];
+}
+
+- (BOOL)isBroadcasting {
+    return [WFAVEngineKit sharedEngineKit].currentSession.isBroadcasting;
+}
+
+- (void)onBroadcastStarted {
+    [[WFAVEngineKit sharedEngineKit].currentSession setBroadcastingWithVideoSource:self];
+    [self sendOrientationCommand];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
+}
+
+- (void)onBroadcastStoped {
+    [self.socket disconnect];
+    self.socket = nil;
+    [self.sockets removeAllObjects];
+    
+    [[WFAVEngineKit sharedEngineKit].currentSession setBroadcastingWithVideoSource:nil];
+    self.receivedData = nil;
+    [self.broadPickerView removeFromSuperview];
+    self.broadPickerView = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
+}
+
+- (RPSystemBroadcastPickerView *)broadPickerView{
+    if(!_broadPickerView){
+        _broadPickerView = [[RPSystemBroadcastPickerView alloc] initWithFrame:CGRectMake(100, 100, 50, 50)];
+        _broadPickerView.showsMicrophoneButton = NO;
+        _broadPickerView.preferredExtension = @"cn.wildfirechat.messanger.Broadcast";
+        _broadPickerView.hidden = YES;
+    }
+    return _broadPickerView;
+}
+
+- (void)setupSocket:(BOOL)retry {
+    self.sockets = [NSMutableArray array];
+    self.queue = dispatch_queue_create("cn.wildfirechat.conference.broadcast.receive", DISPATCH_QUEUE_SERIAL);
+    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.queue];
+    self.socket.IPv6Enabled = NO;
+    NSError *error;
+    [self.socket acceptOnPort:36622 error:&error];
+    [self.socket readDataWithTimeout:-1 tag:0];
+    if (error == nil) {
+        NSLog(@"开启监听成功");
+    } else {
+        NSLog(@"开启监听失败");
+        if(retry) {
+            
+        } else {
+            [self setupSocket:YES];
+        }
+    }
+}
+- (void)onReceiveBroadcastCommand:(NSString *)command {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if([command isEqualToString:@"Start"]) {
+            [self onBroadcastStarted];
+        } else if([command isEqualToString:@"Finish"]) {
+            [self onBroadcastStoped];
+        }
+    });
+}
+                   
+- (void)sendOrientationCommand {
+    int orientation = 1;
+    switch([[UIDevice currentDevice] orientation]) {
+        case UIDeviceOrientationLandscapeLeft:
+            orientation = 2;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            orientation = 0;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            orientation = 3;
+            break;
+        default:
+            break;
+    }
+    [self sendBroadcastCommand:0 value:orientation];
+}
+
+- (void)sendBroadcastCommand:(int)type value:(int)value {
+    GCDAsyncSocket *socket = self.sockets.count ? self.sockets[0] : nil;
+    if(socket) {
+        Command header;
+        header.type = type;
+        header.value = value;
+        NSData *md = [[NSData alloc] initWithBytes:&header length:sizeof(Command)];
+        NSLog(@"send command %d, %d", type, value);
+        [socket writeData:md withTimeout:(NSTimeInterval)5 tag:0];
+    }
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(nullable NSError *)err {
+    [self.sockets removeObject:sock];
+}
+
+- (void)socketDidCloseReadStream:(GCDAsyncSocket *)sock {
+    [self.sockets removeObject:sock];
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
+    [self.sockets addObject:newSocket];
+    [newSocket readDataWithTimeout:-1 tag:0];
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
+    [self.receivedData appendData:data];
+    @autoreleasepool {
+        if(self.receivedData.length > sizeof(PacketHeader)) {
+            PacketHeader header;
+            memcpy(&header, self.receivedData.bytes, sizeof(PacketHeader));
+            while(self.receivedData.length >= sizeof(PacketHeader) + header.dataLen) {
+                NSData *rawData = [[NSData alloc] initWithBytes:self.receivedData.bytes+sizeof(PacketHeader) length:header.dataLen];
+                [self.receivedData replaceBytesInRange:NSMakeRange(0, sizeof(PacketHeader) + header.dataLen) withBytes:NULL length:0];
+                
+                if(header.dataType == 0) {
+                    NSString *status = [NSString stringWithUTF8String:rawData.bytes];
+                    NSLog(@"Receive command:%@", status);
+                    [self onReceiveBroadcastCommand:status];
+                } else if(header.dataType == 1) {
+                    SampleInfo sampleInfo;
+                    memcpy(&sampleInfo, rawData.bytes, sizeof(SampleInfo));
+
+                    NSData *frameData = [[NSData alloc] initWithBytes:rawData.bytes+sizeof(SampleInfo) length:sampleInfo.dataLen];
+                    
+                    if(sampleInfo.type == 0) { //video
+                        WFCUI420VideoFrame *i420Frame = [[WFCUI420VideoFrame alloc] initWithWidth:sampleInfo.width height:sampleInfo.height];
+                        [i420Frame fromBytes:frameData];
+                        CVPixelBufferRef pixelBuffer = [i420Frame toPixelBuffer];
+                        
+                        RTC_OBJC_TYPE(RTCCVPixelBuffer) *rtcPixelBuffer =
+                        [[RTC_OBJC_TYPE(RTCCVPixelBuffer) alloc] initWithPixelBuffer:pixelBuffer];
+                        NSTimeInterval timeStampSeconds = CACurrentMediaTime();
+                        int64_t timeStampNs = lroundf(timeStampSeconds * NSEC_PER_SEC);
+                        RTC_OBJC_TYPE(RTCVideoFrame) *videoFrame =
+                        [[RTC_OBJC_TYPE(RTCVideoFrame) alloc] initWithBuffer:rtcPixelBuffer
+                                                                    rotation:0
+                                                                 timeStampNs:timeStampNs];
+                        
+                        
+                        [self.frameDelegate didCaptureVideoFrame:videoFrame];
+                        CVPixelBufferRelease(pixelBuffer);
+                    } else if(sampleInfo.type == 1) { //audio
+                        
+                    }
+                } else {
+                    NSLog(@"Unknown command");
+                }
+                
+                if(self.receivedData.length > sizeof(PacketHeader)) {
+                    memcpy(&header, self.receivedData.bytes, sizeof(PacketHeader));
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+    [sock readDataWithTimeout:-1 tag:0];
+}
+
+#pragma - mark WFAVExternalVideoSource
+- (void)startCapture:(id<WFAVExternalFrameDelegate>_Nonnull)delegate {
+    self.frameDelegate = delegate;
+}
+
+- (void)stopCapture {
+    self.frameDelegate = nil;
 }
 @end
 #endif
