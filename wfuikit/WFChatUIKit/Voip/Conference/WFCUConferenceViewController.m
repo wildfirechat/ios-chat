@@ -207,7 +207,7 @@
     }
     
     if(audioOnly) {
-        if((!self.currentSession.audience && !self.currentSession.videoMuted) || [self.currentSession isInAppScreenSharing]) {
+        if((!self.currentSession.audience && !self.currentSession.videoMuted) || [self.currentSession isBroadcasting]) {
             audioOnly = NO;
         }
     }
@@ -384,6 +384,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLocalMuteStateChanged:) name:kMuteStateChanged object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageSent:) name:kSendingMessageStatusUpdated object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBroadcastingStatusUpdated:) name:@"kBroadcastingStatusUpdated" object:nil];
 }
 
 - (UIButton *)chatButton {
@@ -783,12 +785,11 @@
 }
 
 - (void)updateConnectedTimeLabel {
-    long sec = [[NSDate date] timeIntervalSince1970] - self.currentSession.connectedTime / 1000;
-    if(sec <= 0) {
-        self.connectTimeLabel.hidden = YES;
-    } else {
-        self.connectTimeLabel.hidden = NO;
+    long sec = [[NSDate date] timeIntervalSince1970] - (self.currentSession.connectedTime+500) / 1000;
+    if(sec <0) {
+        sec = 0;
     }
+    
     if (sec < 60 * 60) {
         self.connectTimeLabel.text = [NSString stringWithFormat:@"%02ld:%02ld", sec / 60, sec % 60];
     } else {
@@ -947,20 +948,21 @@
     [self presentViewController:nav animated:YES completion:nil];
 }
 
-
-- (void)screenSharingButtonDidTap:(UIButton *)button {
-    [[WFCUConferenceManager sharedInstance] enableAudioAndScreansharing];
+- (void)onBroadcastingStatusUpdated:(NSNotification *)notification {
     [self updateScreenSharingButton];
-
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(self.currentSession.isInAppScreenSharing) {
+        if(self.currentSession.isBroadcasting) {
             [self minimize];
         }
     });
 }
 
+- (void)screenSharingButtonDidTap:(UIButton *)button {
+    [[WFCUConferenceManager sharedInstance] switchAudioAndScreansharing:self.view];
+}
+
 - (void)updateScreenSharingButton {
-    self.screenSharingButton.selected = self.currentSession.isInAppScreenSharing;
+    self.screenSharingButton.selected = self.currentSession.isBroadcasting;
 }
 
 - (void)minimize {
@@ -1365,6 +1367,10 @@
 }
 
 - (void)showPanel {
+    if(!self.boardView.hidden && !self.topBarView.hidden) {
+        return;
+    }
+    
     self.floatingAudioButton.hidden = YES;
     BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
     CGRect bounds = self.view.bounds;
@@ -1393,6 +1399,13 @@
             smallVideoRect.origin.y = self.view.bounds.size.height - bottomBarHeigh - smallVideoRect.size.height;
         }
         self.smallVideoView.frame = smallVideoRect;
+    } completion:^(BOOL finished) {
+        WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
+        if(!layout.audioOnly && self.participants.count > 1) {
+            self.smallVideoView.hidden = NO;
+        }
+        
+        self.chatButton.hidden = NO;
     }];
     
     if (self.currentSession.audioOnly) {
@@ -1407,6 +1420,10 @@
 }
 
 - (void)hidePanel {
+    if(self.boardView.hidden && self.topBarView.hidden) {
+        return;
+    }
+    
     BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
     
     [UIView animateWithDuration:0.5 animations:^{
@@ -1433,6 +1450,8 @@
             floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT;
             self.floatingAudioButton.frame = floatingAudioBtnFrame;
         }];
+        self.smallVideoView.hidden = YES;
+        self.chatButton.hidden = YES;
     }];
 }
 
@@ -2223,7 +2242,13 @@
                     [cell addSubview:self.smallVideoView];
                 }
 
-                self.smallVideoView.hidden = NO;
+                if(!self.smallVideoView.hidden) {
+                    [self showPanel];
+                } else {
+                    if(self.floatingAudioButton.hidden) {
+                        self.smallVideoView.hidden = NO;
+                    }
+                }
                 [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
                 WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
                 [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];

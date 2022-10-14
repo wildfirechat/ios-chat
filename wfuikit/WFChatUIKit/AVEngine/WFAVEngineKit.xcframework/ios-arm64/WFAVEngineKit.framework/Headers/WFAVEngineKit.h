@@ -286,6 +286,12 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 
 @optional
 /**
+ 通话状态统计的回调。已经废弃，请使用didGetStats:ofUser:isScreensharing
+
+ @param stats 统计信息
+ */
+- (void)didGetStats:(NSArray *_Nonnull)stats;
+/**
 语音音量报告
 
 @param volume 音量
@@ -340,8 +346,11 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
  */
 - (void)onScreenSharingFailure;
 
-/* 此属性没有意义，仅为了兼容UI代码 */
+/* 此方法没有意义，仅为了兼容UI代码 */
 - (RTCVideoFrame *_Nonnull)didCaptureVideoFrame:(RTCVideoFrame *_Nonnull)frame screenSharing:(BOOL)isScreenSharing;
+
+/* 此方法没有意义，仅为了兼容UI代码 */
+- (void)didGetStats:(NSArray<RTCLegacyStatsReport *> *_Nonnull)stats ofUser:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
 @end
 
 @protocol WFAVExternalFrameDelegate <NSObject>
@@ -663,6 +672,12 @@ typedef NS_ENUM(NSInteger, WFAVVideoType) {
 
 /* 此属性没有意义，仅为了兼容UI代码 */
 @property(nonatomic, strong)id<WFAVExternalVideoSource> _Nullable externalVideoSource;
+
+/* 此属性没有意义，仅为了兼容UI代码 */
+- (BOOL)isBroadcasting;
+
+/* 此属性没有意义，仅为了兼容UI代码 */
+- (void)setBroadcastingWithVideoSource:(_Nullable id<WFAVExternalVideoSource>)externalVideoSource;
 
 /**
 呼叫附加信息

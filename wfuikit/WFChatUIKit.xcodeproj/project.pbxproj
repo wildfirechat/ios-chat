@@ -432,6 +432,32 @@
 		B70775922881ABB1004034A5 /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
 		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; };
 		B707759A28823635004034A5 /* WFCUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B707759828823635004034A5 /* WFCUImage.m */; };
+		B709CCE628F7B78C0036EDFA /* WFCUI420VideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */; };
+		B709CCE728F7B78C0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */; };
+		B709CCE928F7B9EF0036EDFA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */; };
+		B71F0A6E28F54156000A7C8A /* Documentation.html in Resources */ = {isa = PBXBuildFile; fileRef = B71F0A5428F54156000A7C8A /* Documentation.html */; };
+		B71F0A6F28F54156000A7C8A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A5528F54156000A7C8A /* GCDAsyncUdpSocket.m */; };
+		B71F0A7028F54156000A7C8A /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A5628F54156000A7C8A /* GCDAsyncSocket.m */; };
+		B71F0A7128F54156000A7C8A /* GCDAsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A5728F54156000A7C8A /* GCDAsyncUdpSocket.h */; };
+		B71F0A7228F54156000A7C8A /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A5828F54156000A7C8A /* GCDAsyncSocket.h */; };
+		B71F0A7328F54156000A7C8A /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A5B28F54156000A7C8A /* DDTTYLogger.m */; };
+		B71F0A7428F54156000A7C8A /* DDLog.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A5C28F54156000A7C8A /* DDLog.h */; };
+		B71F0A7528F54156000A7C8A /* DDAbstractDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A5D28F54156000A7C8A /* DDAbstractDatabaseLogger.h */; };
+		B71F0A7628F54156000A7C8A /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A5E28F54156000A7C8A /* DDASLLogger.m */; };
+		B71F0A7728F54156000A7C8A /* DDFileLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A5F28F54156000A7C8A /* DDFileLogger.h */; };
+		B71F0A7828F54156000A7C8A /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6128F54156000A7C8A /* DDContextFilterLogFormatter.m */; };
+		B71F0A7928F54156000A7C8A /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6228F54156000A7C8A /* DDDispatchQueueLogFormatter.m */; };
+		B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6328F54156000A7C8A /* DDMultiFormatter.h */; };
+		B71F0A7B28F54156000A7C8A /* DDContextFilterLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6428F54156000A7C8A /* DDContextFilterLogFormatter.h */; };
+		B71F0A7C28F54156000A7C8A /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6528F54156000A7C8A /* DDMultiFormatter.m */; };
+		B71F0A7D28F54156000A7C8A /* DDDispatchQueueLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6628F54156000A7C8A /* DDDispatchQueueLogFormatter.h */; };
+		B71F0A7E28F54156000A7C8A /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71F0A6728F54156000A7C8A /* README.txt */; };
+		B71F0A7F28F54156000A7C8A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6828F54156000A7C8A /* DDLog.m */; };
+		B71F0A8028F54156000A7C8A /* DDTTYLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6928F54156000A7C8A /* DDTTYLogger.h */; };
+		B71F0A8128F54156000A7C8A /* DDLog+LOGV.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6A28F54156000A7C8A /* DDLog+LOGV.h */; };
+		B71F0A8228F54156000A7C8A /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6B28F54156000A7C8A /* DDAbstractDatabaseLogger.m */; };
+		B71F0A8328F54156000A7C8A /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0A6C28F54156000A7C8A /* DDFileLogger.m */; };
+		B71F0A8428F54156000A7C8A /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6D28F54156000A7C8A /* DDASLLogger.h */; };
 		B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */; };
 		B7213C3B28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */; };
 		B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB07283230EE005F2745 /* DSCallInfo.m */; };
@@ -529,6 +555,7 @@
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
 		B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */; };
 		B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */; };
+		B7E494E128F6709700FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E028F6709700FF2333 /* libyuv.xcframework */; };
 		B7F892A628CC8F5F00E362DE /* WFCUConferenceLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */; };
 		B7F892A728CC8F5F00E362DE /* WFCUConferenceLabelView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */; };
 		B7FA122028E9505D001AF906 /* WFCUConferenceCommandContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7FA121E28E9505D001AF906 /* WFCUConferenceCommandContent.h */; };
@@ -966,6 +993,33 @@
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
 		B707759728823635004034A5 /* WFCUImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUImage.h; sourceTree = "<group>"; };
 		B707759828823635004034A5 /* WFCUImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUImage.m; sourceTree = "<group>"; };
+		B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
+		B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
+		B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		B709CCEF28F8E8920036EDFA /* WFCUBroadcastDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUBroadcastDefine.h; sourceTree = "<group>"; };
+		B71F0A5428F54156000A7C8A /* Documentation.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Documentation.html; sourceTree = "<group>"; };
+		B71F0A5528F54156000A7C8A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		B71F0A5628F54156000A7C8A /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		B71F0A5728F54156000A7C8A /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		B71F0A5828F54156000A7C8A /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		B71F0A5B28F54156000A7C8A /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		B71F0A5C28F54156000A7C8A /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		B71F0A5D28F54156000A7C8A /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		B71F0A5E28F54156000A7C8A /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		B71F0A5F28F54156000A7C8A /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		B71F0A6128F54156000A7C8A /* DDContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		B71F0A6228F54156000A7C8A /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		B71F0A6328F54156000A7C8A /* DDMultiFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMultiFormatter.h; sourceTree = "<group>"; };
+		B71F0A6428F54156000A7C8A /* DDContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		B71F0A6528F54156000A7C8A /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
+		B71F0A6628F54156000A7C8A /* DDDispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDDispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		B71F0A6728F54156000A7C8A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		B71F0A6828F54156000A7C8A /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		B71F0A6928F54156000A7C8A /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		B71F0A6A28F54156000A7C8A /* DDLog+LOGV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDLog+LOGV.h"; sourceTree = "<group>"; };
+		B71F0A6B28F54156000A7C8A /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		B71F0A6C28F54156000A7C8A /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		B71F0A6D28F54156000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
 		B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceAudioCollectionViewCell.h; sourceTree = "<group>"; };
 		B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceAudioCollectionViewCell.m; sourceTree = "<group>"; };
 		B72FBB07283230EE005F2745 /* DSCallInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSCallInfo.m; sourceTree = "<group>"; };
@@ -1063,6 +1117,7 @@
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUConferencePortraitCollectionViewCell.h; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.h; sourceTree = SOURCE_ROOT; };
 		B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUConferencePortraitCollectionViewCell.m; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.m; sourceTree = SOURCE_ROOT; };
+		B7E494E028F6709700FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceLabelView.m; sourceTree = "<group>"; };
 		B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceLabelView.h; sourceTree = "<group>"; };
 		B7FA121E28E9505D001AF906 /* WFCUConferenceCommandContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceCommandContent.h; sourceTree = "<group>"; };
@@ -1080,7 +1135,9 @@
 				B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */,
 				B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */,
 				B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
+				B7E494E128F6709700FF2333 /* libyuv.xcframework in Frameworks */,
 				B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
+				B709CCE928F7B9EF0036EDFA /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,6 +1314,7 @@
 				B7311DEB28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m */,
 				B7311DEE28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h */,
 				B7311DEF28EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.m */,
+				B709CCEF28F8E8920036EDFA /* WFCUBroadcastDefine.h */,
 			);
 			path = Conference;
 			sourceTree = "<group>";
@@ -1347,6 +1405,7 @@
 		2F550BEA217F4DCD00F56C26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */,
 				B75D817B2782DFE1009D4A19 /* WFChatClient.framework */,
 			);
 			path = Frameworks;
@@ -1504,6 +1563,8 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B7E494DF28F6708100FF2333 /* libyuv */,
+				B71F0A5228F54156000A7C8A /* CocoaAsyncSocket */,
 				B7C543E828D5876700A2550F /* LBXScan */,
 				B7B58A672832182A0030529B /* dsbridge */,
 				2F765FA6267C28A500E3B365 /* HWCircleView */,
@@ -2140,6 +2201,68 @@
 			path = AVEngine;
 			sourceTree = "<group>";
 		};
+		B71F0A5228F54156000A7C8A /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0A5328F54156000A7C8A /* GCD */,
+				B71F0A5928F54156000A7C8A /* Vendor */,
+			);
+			path = CocoaAsyncSocket;
+			sourceTree = "<group>";
+		};
+		B71F0A5328F54156000A7C8A /* GCD */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0A5428F54156000A7C8A /* Documentation.html */,
+				B71F0A5528F54156000A7C8A /* GCDAsyncUdpSocket.m */,
+				B71F0A5628F54156000A7C8A /* GCDAsyncSocket.m */,
+				B71F0A5728F54156000A7C8A /* GCDAsyncUdpSocket.h */,
+				B71F0A5828F54156000A7C8A /* GCDAsyncSocket.h */,
+			);
+			path = GCD;
+			sourceTree = "<group>";
+		};
+		B71F0A5928F54156000A7C8A /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0A5A28F54156000A7C8A /* CocoaLumberjack */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		B71F0A5A28F54156000A7C8A /* CocoaLumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0A5B28F54156000A7C8A /* DDTTYLogger.m */,
+				B71F0A5C28F54156000A7C8A /* DDLog.h */,
+				B71F0A5D28F54156000A7C8A /* DDAbstractDatabaseLogger.h */,
+				B71F0A5E28F54156000A7C8A /* DDASLLogger.m */,
+				B71F0A5F28F54156000A7C8A /* DDFileLogger.h */,
+				B71F0A6028F54156000A7C8A /* Extensions */,
+				B71F0A6828F54156000A7C8A /* DDLog.m */,
+				B71F0A6928F54156000A7C8A /* DDTTYLogger.h */,
+				B71F0A6A28F54156000A7C8A /* DDLog+LOGV.h */,
+				B71F0A6B28F54156000A7C8A /* DDAbstractDatabaseLogger.m */,
+				B71F0A6C28F54156000A7C8A /* DDFileLogger.m */,
+				B71F0A6D28F54156000A7C8A /* DDASLLogger.h */,
+			);
+			path = CocoaLumberjack;
+			sourceTree = "<group>";
+		};
+		B71F0A6028F54156000A7C8A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0A6128F54156000A7C8A /* DDContextFilterLogFormatter.m */,
+				B71F0A6228F54156000A7C8A /* DDDispatchQueueLogFormatter.m */,
+				B71F0A6328F54156000A7C8A /* DDMultiFormatter.h */,
+				B71F0A6428F54156000A7C8A /* DDContextFilterLogFormatter.h */,
+				B71F0A6528F54156000A7C8A /* DDMultiFormatter.m */,
+				B71F0A6628F54156000A7C8A /* DDDispatchQueueLogFormatter.h */,
+				B71F0A6728F54156000A7C8A /* README.txt */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		B7B58A672832182A0030529B /* dsbridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -2284,6 +2407,16 @@
 			path = Zoom;
 			sourceTree = "<group>";
 		};
+		B7E494DF28F6708100FF2333 /* libyuv */ = {
+			isa = PBXGroup;
+			children = (
+				B7E494E028F6709700FF2333 /* libyuv.xcframework */,
+				B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */,
+				B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */,
+			);
+			path = libyuv;
+			sourceTree = "<group>";
+		};
 		B7F892A328CC8F5F00E362DE /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -2307,6 +2440,7 @@
 				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
+				B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */,
 				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
 				B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */,
 				B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */,
@@ -2327,6 +2461,7 @@
 				B7C5442A28D5876700A2550F /* CreateBarCodeViewController.h in Headers */,
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
+				B71F0A7228F54156000A7C8A /* GCDAsyncSocket.h in Headers */,
 				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
@@ -2373,6 +2508,7 @@
 				2F551216217F5CC300F56C26 /* WFCUMyProfileTableViewController.h in Headers */,
 				2F551125217F5CC200F56C26 /* VideoPlayer.h in Headers */,
 				2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */,
+				B71F0A7728F54156000A7C8A /* DDFileLogger.h in Headers */,
 				2FB7125925DA042900FD2E83 /* WFCUConferenceMember.h in Headers */,
 				2FF70EAC2402101000946D2D /* WFCUWaitingAnimationView.h in Headers */,
 				2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */,
@@ -2428,6 +2564,7 @@
 				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				2F5510F5217F5CC200F56C26 /* CCHMapViewDelegateProxy.h in Headers */,
 				2F5511D0217F5CC300F56C26 /* UIView+TYAutoLayout.h in Headers */,
+				B71F0A7128F54156000A7C8A /* GCDAsyncUdpSocket.h in Headers */,
 				2F551169217F5CC200F56C26 /* AFURLResponseSerialization.h in Headers */,
 				2BDF57BB24AD7257003C1F08 /* DNImagePicker.h in Headers */,
 				2F551165217F5CC200F56C26 /* AFURLSessionManager.h in Headers */,
@@ -2445,6 +2582,7 @@
 				2F5510C5217F5CC200F56C26 /* WFCUFavGroupTableViewController.h in Headers */,
 				2F55116C217F5CC200F56C26 /* AFNetworking.h in Headers */,
 				2F550BE4217F4D7B00F56C26 /* WFChatUIKit.h in Headers */,
+				B71F0A7B28F54156000A7C8A /* DDContextFilterLogFormatter.h in Headers */,
 				2FE689A921AE9C0200DE54CC /* WFCUConversationSearchTableViewController.h in Headers */,
 				2F5510BE217F5CC200F56C26 /* WFCUSearchViewController.h in Headers */,
 				2F551197217F5CC200F56C26 /* SDRefreshHeaderView.h in Headers */,
@@ -2458,6 +2596,7 @@
 				2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */,
 				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
 				B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */,
+				B71F0A8128F54156000A7C8A /* DDLog+LOGV.h in Headers */,
 				2F5510FD217F5CC200F56C26 /* CCHMapClusterController.h in Headers */,
 				2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */,
 				B7C5444028D5876700A2550F /* LBXPermission.h in Headers */,
@@ -2473,6 +2612,7 @@
 				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
+				B71F0A7528F54156000A7C8A /* DDAbstractDatabaseLogger.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
 				2F5511DA217F5CC300F56C26 /* TYAlertView.h in Headers */,
 				2F551092217F5CC200F56C26 /* WFCULocationCell.h in Headers */,
@@ -2482,7 +2622,9 @@
 				2F5510CA217F5CC200F56C26 /* WFCUPluginBoardView.h in Headers */,
 				2F5510FF217F5CC200F56C26 /* CCHMapTree.h in Headers */,
 				2BEF78A323F6A84D000DE285 /* WFCUFloatingWindow.h in Headers */,
+				B71F0A8028F54156000A7C8A /* DDTTYLogger.h in Headers */,
 				B7C5444628D5876700A2550F /* LBXPermissionPhotos.h in Headers */,
+				B71F0A8428F54156000A7C8A /* DDASLLogger.h in Headers */,
 				2F5510A2217F5CC200F56C26 /* WFCUVoiceCell.h in Headers */,
 				2F5EB43C22C2E21A00BC8C90 /* GroupManageTableViewController.h in Headers */,
 				2F551210217F5CC300F56C26 /* WFCUContactSelectTableViewCell.h in Headers */,
@@ -2505,11 +2647,13 @@
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
 				2BDF57A424AD70C8003C1F08 /* DNImageFlowViewController.h in Headers */,
 				2BEF78A023F6A84D000DE285 /* WFCUPortraitCollectionViewCell.h in Headers */,
+				B709CCE628F7B78C0036EDFA /* WFCUI420VideoFrame.h in Headers */,
 				2F5511CF217F5CC300F56C26 /* TYAlertDropDownAnimation.h in Headers */,
 				2F5510B7217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.h in Headers */,
 				2F5510F8217F5CC200F56C26 /* CCHFadeInOutMapAnimator.h in Headers */,
 				2F5510CC217F5CC200F56C26 /* WFCUVoiceRecordView.h in Headers */,
 				2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */,
+				B71F0A7D28F54156000A7C8A /* DDDispatchQueueLogFormatter.h in Headers */,
 				9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */,
 				2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */,
 				2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */,
@@ -2519,6 +2663,7 @@
 				2F55118F217F5CC200F56C26 /* UIView+SDExtension.h in Headers */,
 				2BDF579624AD70C8003C1F08 /* DNAsset.h in Headers */,
 				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
+				B71F0A7428F54156000A7C8A /* DDLog.h in Headers */,
 				2F5511E3217F5CC300F56C26 /* YLGIFImage.h in Headers */,
 				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */,
@@ -2628,12 +2773,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B707758D2881ABB1004034A5 /* unicode_to_hanyu_pinyin.txt in Resources */,
+				B71F0A7E28F54156000A7C8A /* README.txt in Resources */,
 				B707758E2881ABB1004034A5 /* WFChatUIKit.xcassets in Resources */,
 				B707758F2881ABB1004034A5 /* WFCUShareMessageView.xib in Resources */,
 				B70775902881ABB1004034A5 /* Stickers.bundle in Resources */,
 				B70775912881ABB1004034A5 /* Emoj.plist in Resources */,
 				B7C5441D28D5876700A2550F /* CodeScan.bundle in Resources */,
 				B70775922881ABB1004034A5 /* wfc.strings in Resources */,
+				B71F0A6E28F54156000A7C8A /* Documentation.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2664,7 +2811,9 @@
 				2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */,
 				2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */,
 				2F5511D8217F5CC300F56C26 /* UIView+TYAutoLayout.m in Sources */,
+				B71F0A7F28F54156000A7C8A /* DDLog.m in Sources */,
 				2F551099217F5CC200F56C26 /* WFCUTextCell.m in Sources */,
+				B71F0A7328F54156000A7C8A /* DDTTYLogger.m in Sources */,
 				2FE689A821AE9C0200DE54CC /* WFCUConversationSearchTableViewController.m in Sources */,
 				2BBC9CF6255CED1F007DA28A /* WFCUFilesEntryViewController.m in Sources */,
 				2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */,
@@ -2710,6 +2859,7 @@
 				2F551112217F5CC200F56C26 /* VideoPlayerSampleViewController.m in Sources */,
 				2F551115217F5CC200F56C26 /* FullScreenView.m in Sources */,
 				2F5510AE217F5CC200F56C26 /* WFCUGroupMemberTableViewCell.m in Sources */,
+				B71F0A8228F54156000A7C8A /* DDAbstractDatabaseLogger.m in Sources */,
 				2BEF789E23F6A84D000DE285 /* WFCUConferenceParticipantCollectionViewCell.m in Sources */,
 				2F55116A217F5CC200F56C26 /* AFURLSessionManager.m in Sources */,
 				2BDF57A824AD70C8003C1F08 /* DNImageFlowViewController.m in Sources */,
@@ -2723,6 +2873,7 @@
 				2F341A50235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m in Sources */,
 				1450EA862438922800BF51FC /* WFCUUserSectionKeySupport.m in Sources */,
 				2F5510F2217F5CC200F56C26 /* CCHMapClusterControllerUtils.m in Sources */,
+				B709CCE728F7B78C0036EDFA /* WFCUI420VideoFrame.mm in Sources */,
 				2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */,
 				B7FB0D842897734300625747 /* WFCUFileVideoSource.m in Sources */,
 				2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */,
@@ -2730,11 +2881,13 @@
 				B7C5443728D5876700A2550F /* DIYScanViewController.m in Sources */,
 				2BDF57B824AD70C8003C1F08 /* DNSendButton.m in Sources */,
 				2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */,
+				B71F0A7C28F54156000A7C8A /* DDMultiFormatter.m in Sources */,
 				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
 				2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */,
 				2BDF57A924AD70C8003C1F08 /* DNImageFetchOperation.m in Sources */,
 				2F5EB43D22C2E21A00BC8C90 /* GroupManageTableViewController.m in Sources */,
 				2F55109F217F5CC200F56C26 /* WFCULocationCell.m in Sources */,
+				B71F0A7828F54156000A7C8A /* DDContextFilterLogFormatter.m in Sources */,
 				2F5511E1217F5CC300F56C26 /* YLGIFImage.m in Sources */,
 				2F5511F4217F5CC300F56C26 /* AttributedLabel.m in Sources */,
 				2BEF78A223F6A84D000DE285 /* WFCUMultiVideoViewController.m in Sources */,
@@ -2755,6 +2908,7 @@
 				2F5510AB217F5CC200F56C26 /* WFCUMessageListViewController.m in Sources */,
 				2F551126217F5CC200F56C26 /* VideoPlayerView.m in Sources */,
 				2BDF579F24AD70C8003C1F08 /* DNImagePickerHelper.m in Sources */,
+				B71F0A7628F54156000A7C8A /* DDASLLogger.m in Sources */,
 				2FB7125A25DA042900FD2E83 /* WFCUConferenceMember.m in Sources */,
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
@@ -2784,6 +2938,7 @@
 				2F5510A1217F5CC200F56C26 /* WFCUMessageCellBase.m in Sources */,
 				2F551106217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.m in Sources */,
 				2F551153217F5CC200F56C26 /* KZVideoPlayer.m in Sources */,
+				B71F0A7928F54156000A7C8A /* DDDispatchQueueLogFormatter.m in Sources */,
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,
 				2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */,
 				2F5510FA217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.m in Sources */,
@@ -2824,6 +2979,7 @@
 				2F55122B217F5CC300F56C26 /* WFCUMediaMessageDownloader.m in Sources */,
 				2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */,
 				2F55115D217F5CC200F56C26 /* SDBrowserImageView.m in Sources */,
+				B71F0A7028F54156000A7C8A /* GCDAsyncSocket.m in Sources */,
 				2FB7125525D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m in Sources */,
 				2F551095217F5CC200F56C26 /* WFCUInformationCell.m in Sources */,
 				2FD2EE81218F15B500CBA8B0 /* WFCUVerifyRequestViewController.m in Sources */,
@@ -2876,6 +3032,7 @@
 				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
 				B7C5442328D5876700A2550F /* LBXScanLineAnimation.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,
+				B71F0A6F28F54156000A7C8A /* GCDAsyncUdpSocket.m in Sources */,
 				2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */,
 				2F5511FB217F5CC300F56C26 /* WFCUSwitchTableViewCell.m in Sources */,
 				B7C5442428D5876700A2550F /* LBXScanView.m in Sources */,
@@ -2896,6 +3053,7 @@
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
 				2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */,
 				2F56F6CA252AA14000B829C4 /* WFCUCompositeUnknownCell.m in Sources */,
+				B71F0A8328F54156000A7C8A /* DDFileLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

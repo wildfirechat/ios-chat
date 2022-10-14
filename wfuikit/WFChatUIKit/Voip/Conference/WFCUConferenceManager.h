@@ -29,7 +29,7 @@ extern NSString *kMuteStateChanged;
 - (void)muteVideo:(BOOL)mute;
 - (void)muteAudioVideo:(BOOL)mute;
 - (void)enableAudioDisableVideo;
-- (void)enableAudioAndScreansharing;
+- (void)switchAudioAndScreansharing:(UIView *)view;
 
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId;
@@ -92,5 +92,8 @@ extern NSString *kMuteStateChanged;
 
 //主持人收到的举手的请求
 @property(nonatomic, strong)NSMutableArray<NSString *> *handupMembers;
+
+//是否直播中
+- (BOOL)isBroadcasting;
 @end
 #endif

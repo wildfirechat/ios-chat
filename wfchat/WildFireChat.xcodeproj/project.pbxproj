@@ -89,6 +89,27 @@
 		90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 90C1D90F208C12A900E923F4 /* foreman.mp4 */; };
 		90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */; };
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
+		B709CCEB28F7BA080036EDFA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B709CCEA28F7BA080036EDFA /* CoreMedia.framework */; };
+		B709CCEE28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */; };
+		B71F0AC228F54759000A7C8A /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0AC128F54759000A7C8A /* ReplayKit.framework */; };
+		B71F0AC628F54759000A7C8A /* SampleHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AC528F54759000A7C8A /* SampleHandler.mm */; };
+		B71F0ACD28F54759000A7C8A /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0AC128F54759000A7C8A /* ReplayKit.framework */; };
+		B71F0ACF28F54759000A7C8A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0ACE28F54759000A7C8A /* UIKit.framework */; };
+		B71F0AD328F5475A000A7C8A /* BroadcastSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */; };
+		B71F0AD728F5475A000A7C8A /* BroadcastSetupUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B71F0ADA28F5475A000A7C8A /* Broadcast.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B71F0AC028F54759000A7C8A /* Broadcast.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B71F0AFE28F547C2000A7C8A /* Documentation.html in Resources */ = {isa = PBXBuildFile; fileRef = B71F0AE428F547C2000A7C8A /* Documentation.html */; };
+		B71F0AFF28F547C2000A7C8A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AE528F547C2000A7C8A /* GCDAsyncUdpSocket.m */; };
+		B71F0B0028F547C2000A7C8A /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AE628F547C2000A7C8A /* GCDAsyncSocket.m */; };
+		B71F0B0128F547C2000A7C8A /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AEB28F547C2000A7C8A /* DDTTYLogger.m */; };
+		B71F0B0228F547C2000A7C8A /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AEE28F547C2000A7C8A /* DDASLLogger.m */; };
+		B71F0B0328F547C2000A7C8A /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF128F547C2000A7C8A /* DDContextFilterLogFormatter.m */; };
+		B71F0B0428F547C2000A7C8A /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF228F547C2000A7C8A /* DDDispatchQueueLogFormatter.m */; };
+		B71F0B0528F547C2000A7C8A /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF528F547C2000A7C8A /* DDMultiFormatter.m */; };
+		B71F0B0628F547C2000A7C8A /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71F0AF728F547C2000A7C8A /* README.txt */; };
+		B71F0B0728F547C2000A7C8A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF828F547C2000A7C8A /* DDLog.m */; };
+		B71F0B0828F547C2000A7C8A /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */; };
+		B71F0B0928F547C2000A7C8A /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */; };
 		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
 		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
@@ -102,6 +123,7 @@
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +135,20 @@
 			remoteGlobalIDString = 2F56F6F2252C956700B829C4;
 			remoteInfo = ShareExtension;
 		};
+		B71F0AD528F5475A000A7C8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E1D1FEF1FAF0AE600F4405D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B71F0ACB28F54759000A7C8A;
+			remoteInfo = BroadcastSetupUI;
+		};
+		B71F0AD828F5475A000A7C8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E1D1FEF1FAF0AE600F4405D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B71F0ABF28F54759000A7C8A;
+			remoteInfo = Broadcast;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -122,6 +158,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				B71F0ADA28F5475A000A7C8A /* Broadcast.appex in Embed App Extensions */,
+				B71F0AD728F5475A000A7C8A /* BroadcastSetupUI.appex in Embed App Extensions */,
 				2F56F6FE252C956700B829C4 /* ShareExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -299,6 +337,43 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		B709CCEA28F7BA080036EDFA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		B709CCEC28F7BCCC0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
+		B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
+		B709CCF028F8E8D00036EDFA /* WFCUBroadcastDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUBroadcastDefine.h; path = ../../wfuikit/WFChatUIKit/Voip/Conference/WFCUBroadcastDefine.h; sourceTree = "<group>"; };
+		B71F0AC028F54759000A7C8A /* Broadcast.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Broadcast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B71F0AC128F54759000A7C8A /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		B71F0AC428F54759000A7C8A /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		B71F0AC528F54759000A7C8A /* SampleHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SampleHandler.mm; sourceTree = "<group>"; };
+		B71F0AC728F54759000A7C8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B71F0ACE28F54759000A7C8A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		B71F0AD128F5475A000A7C8A /* BroadcastSetupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BroadcastSetupViewController.h; sourceTree = "<group>"; };
+		B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BroadcastSetupViewController.m; sourceTree = "<group>"; };
+		B71F0AD428F5475A000A7C8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B71F0AE428F547C2000A7C8A /* Documentation.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Documentation.html; sourceTree = "<group>"; };
+		B71F0AE528F547C2000A7C8A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		B71F0AE628F547C2000A7C8A /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		B71F0AE728F547C2000A7C8A /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		B71F0AE828F547C2000A7C8A /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		B71F0AEB28F547C2000A7C8A /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		B71F0AEC28F547C2000A7C8A /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		B71F0AED28F547C2000A7C8A /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		B71F0AEE28F547C2000A7C8A /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		B71F0AEF28F547C2000A7C8A /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		B71F0AF128F547C2000A7C8A /* DDContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		B71F0AF228F547C2000A7C8A /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		B71F0AF328F547C2000A7C8A /* DDMultiFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMultiFormatter.h; sourceTree = "<group>"; };
+		B71F0AF428F547C2000A7C8A /* DDContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		B71F0AF528F547C2000A7C8A /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
+		B71F0AF628F547C2000A7C8A /* DDDispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDDispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		B71F0AF728F547C2000A7C8A /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		B71F0AF828F547C2000A7C8A /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		B71F0AF928F547C2000A7C8A /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		B71F0AFA28F547C2000A7C8A /* DDLog+LOGV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDLog+LOGV.h"; sourceTree = "<group>"; };
+		B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		B71F0AFD28F547C2000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
 		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -310,6 +385,7 @@
 		B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCChangePasswordViewController.m; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
 		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
@@ -344,6 +420,25 @@
 			files = (
 				2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */,
 				2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71F0ABD28F54759000A7C8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B709CCEB28F7BA080036EDFA /* CoreMedia.framework in Frameworks */,
+				B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */,
+				B71F0AC228F54759000A7C8A /* ReplayKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71F0AC928F54759000A7C8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71F0ACD28F54759000A7C8A /* ReplayKit.framework in Frameworks */,
+				B71F0ACF28F54759000A7C8A /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +524,8 @@
 			children = (
 				2E1D1FF91FAF0AE600F4405D /* WildFireChat */,
 				2F56F6F4252C956700B829C4 /* ShareExtension */,
+				B71F0AC328F54759000A7C8A /* Broadcast */,
+				B71F0AD028F5475A000A7C8A /* BroadcastSetupUI */,
 				2EAC88E61FB0A0D6004B34D1 /* Frameworks */,
 				2E1D1FF81FAF0AE600F4405D /* Products */,
 			);
@@ -439,6 +536,8 @@
 			children = (
 				2E1D1FF71FAF0AE600F4405D /* 野火IM.app */,
 				2F56F6F3252C956700B829C4 /* ShareExtension.appex */,
+				B71F0AC028F54759000A7C8A /* Broadcast.appex */,
+				B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -487,6 +586,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B709CCEA28F7BA080036EDFA /* CoreMedia.framework */,
 				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
 				B7D8F7362783035200752426 /* SDWebImage.xcframework */,
 				B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */,
@@ -505,6 +605,8 @@
 				2F1B0DCD21E19AF400139CB1 /* NotificationCenter.framework */,
 				2F1B0DCE21E19AF400139CB1 /* UserNotifications.framework */,
 				2F1B0DCC21E19AF400139CB1 /* UserNotificationsUI.framework */,
+				B71F0AC128F54759000A7C8A /* ReplayKit.framework */,
+				B71F0ACE28F54759000A7C8A /* UIKit.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -715,6 +817,111 @@
 			path = chatroom;
 			sourceTree = "<group>";
 		};
+		B71F0AC328F54759000A7C8A /* Broadcast */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AE128F547AC000A7C8A /* Vendor */,
+				B71F0AC428F54759000A7C8A /* SampleHandler.h */,
+				B71F0AC528F54759000A7C8A /* SampleHandler.mm */,
+				B709CCF028F8E8D00036EDFA /* WFCUBroadcastDefine.h */,
+				B71F0AC728F54759000A7C8A /* Info.plist */,
+			);
+			path = Broadcast;
+			sourceTree = "<group>";
+		};
+		B71F0AD028F5475A000A7C8A /* BroadcastSetupUI */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AD128F5475A000A7C8A /* BroadcastSetupViewController.h */,
+				B71F0AD228F5475A000A7C8A /* BroadcastSetupViewController.m */,
+				B71F0AD428F5475A000A7C8A /* Info.plist */,
+			);
+			path = BroadcastSetupUI;
+			sourceTree = "<group>";
+		};
+		B71F0AE128F547AC000A7C8A /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				B7E494E228F670BA00FF2333 /* libyuv */,
+				B71F0AE228F547C2000A7C8A /* CocoaAsyncSocket */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		B71F0AE228F547C2000A7C8A /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AE328F547C2000A7C8A /* GCD */,
+				B71F0AE928F547C2000A7C8A /* Vendor */,
+			);
+			name = CocoaAsyncSocket;
+			path = ../../../wfuikit/WFChatUIKit/Vendor/CocoaAsyncSocket;
+			sourceTree = "<group>";
+		};
+		B71F0AE328F547C2000A7C8A /* GCD */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AE428F547C2000A7C8A /* Documentation.html */,
+				B71F0AE528F547C2000A7C8A /* GCDAsyncUdpSocket.m */,
+				B71F0AE628F547C2000A7C8A /* GCDAsyncSocket.m */,
+				B71F0AE728F547C2000A7C8A /* GCDAsyncUdpSocket.h */,
+				B71F0AE828F547C2000A7C8A /* GCDAsyncSocket.h */,
+			);
+			path = GCD;
+			sourceTree = "<group>";
+		};
+		B71F0AE928F547C2000A7C8A /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AEA28F547C2000A7C8A /* CocoaLumberjack */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		B71F0AEA28F547C2000A7C8A /* CocoaLumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AEB28F547C2000A7C8A /* DDTTYLogger.m */,
+				B71F0AEC28F547C2000A7C8A /* DDLog.h */,
+				B71F0AED28F547C2000A7C8A /* DDAbstractDatabaseLogger.h */,
+				B71F0AEE28F547C2000A7C8A /* DDASLLogger.m */,
+				B71F0AEF28F547C2000A7C8A /* DDFileLogger.h */,
+				B71F0AF028F547C2000A7C8A /* Extensions */,
+				B71F0AF828F547C2000A7C8A /* DDLog.m */,
+				B71F0AF928F547C2000A7C8A /* DDTTYLogger.h */,
+				B71F0AFA28F547C2000A7C8A /* DDLog+LOGV.h */,
+				B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */,
+				B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */,
+				B71F0AFD28F547C2000A7C8A /* DDASLLogger.h */,
+			);
+			path = CocoaLumberjack;
+			sourceTree = "<group>";
+		};
+		B71F0AF028F547C2000A7C8A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B71F0AF128F547C2000A7C8A /* DDContextFilterLogFormatter.m */,
+				B71F0AF228F547C2000A7C8A /* DDDispatchQueueLogFormatter.m */,
+				B71F0AF328F547C2000A7C8A /* DDMultiFormatter.h */,
+				B71F0AF428F547C2000A7C8A /* DDContextFilterLogFormatter.h */,
+				B71F0AF528F547C2000A7C8A /* DDMultiFormatter.m */,
+				B71F0AF628F547C2000A7C8A /* DDDispatchQueueLogFormatter.h */,
+				B71F0AF728F547C2000A7C8A /* README.txt */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B7E494E228F670BA00FF2333 /* libyuv */ = {
+			isa = PBXGroup;
+			children = (
+				B7E494E328F670BA00FF2333 /* libyuv.xcframework */,
+				B709CCEC28F7BCCC0036EDFA /* WFCUI420VideoFrame.h */,
+				B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */,
+			);
+			name = libyuv;
+			path = ../../../wfuikit/WFChatUIKit/Vendor/libyuv;
+			sourceTree = "<group>";
+		};
 		B7EDF7DC285815EF0013602E /* DestroyAccount */ = {
 			isa = PBXGroup;
 			children = (
@@ -742,6 +949,8 @@
 			);
 			dependencies = (
 				2F56F6FD252C956700B829C4 /* PBXTargetDependency */,
+				B71F0AD628F5475A000A7C8A /* PBXTargetDependency */,
+				B71F0AD928F5475A000A7C8A /* PBXTargetDependency */,
 			);
 			name = WildFireChat;
 			productName = WildFireChat;
@@ -763,6 +972,40 @@
 			name = ShareExtension;
 			productName = ShareExtension;
 			productReference = 2F56F6F3252C956700B829C4 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B71F0ABF28F54759000A7C8A /* Broadcast */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B71F0AE028F5475A000A7C8A /* Build configuration list for PBXNativeTarget "Broadcast" */;
+			buildPhases = (
+				B71F0ABC28F54759000A7C8A /* Sources */,
+				B71F0ABD28F54759000A7C8A /* Frameworks */,
+				B71F0ABE28F54759000A7C8A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Broadcast;
+			productName = Broadcast;
+			productReference = B71F0AC028F54759000A7C8A /* Broadcast.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B71F0ADF28F5475A000A7C8A /* Build configuration list for PBXNativeTarget "BroadcastSetupUI" */;
+			buildPhases = (
+				B71F0AC828F54759000A7C8A /* Sources */,
+				B71F0AC928F54759000A7C8A /* Frameworks */,
+				B71F0ACA28F54759000A7C8A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BroadcastSetupUI;
+			productName = BroadcastSetupUI;
+			productReference = B71F0ACC28F54759000A7C8A /* BroadcastSetupUI.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -793,6 +1036,12 @@
 						CreatedOnToolsVersion = 12.0.1;
 						ProvisioningStyle = Automatic;
 					};
+					B71F0ABF28F54759000A7C8A = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
+					B71F0ACB28F54759000A7C8A = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
 				};
 			};
 			buildConfigurationList = 2E1D1FF21FAF0AE600F4405D /* Build configuration list for PBXProject "WildFireChat" */;
@@ -811,6 +1060,8 @@
 			targets = (
 				2E1D1FF61FAF0AE600F4405D /* WildFireChat */,
 				2F56F6F2252C956700B829C4 /* ShareExtension */,
+				B71F0ABF28F54759000A7C8A /* Broadcast */,
+				B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */,
 			);
 		};
 /* End PBXProject section */
@@ -838,6 +1089,22 @@
 			files = (
 				2F56F6FA252C956700B829C4 /* MainInterface.storyboard in Resources */,
 				2F44477A252D475C007A570E /* Shares.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71F0ABE28F54759000A7C8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71F0B0628F547C2000A7C8A /* README.txt in Resources */,
+				B71F0AFE28F547C2000A7C8A /* Documentation.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71F0ACA28F54759000A7C8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +1206,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B71F0ABC28F54759000A7C8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71F0B0028F547C2000A7C8A /* GCDAsyncSocket.m in Sources */,
+				B71F0B0928F547C2000A7C8A /* DDFileLogger.m in Sources */,
+				B71F0B0128F547C2000A7C8A /* DDTTYLogger.m in Sources */,
+				B71F0B0428F547C2000A7C8A /* DDDispatchQueueLogFormatter.m in Sources */,
+				B71F0AFF28F547C2000A7C8A /* GCDAsyncUdpSocket.m in Sources */,
+				B71F0B0828F547C2000A7C8A /* DDAbstractDatabaseLogger.m in Sources */,
+				B71F0B0528F547C2000A7C8A /* DDMultiFormatter.m in Sources */,
+				B71F0B0328F547C2000A7C8A /* DDContextFilterLogFormatter.m in Sources */,
+				B71F0B0728F547C2000A7C8A /* DDLog.m in Sources */,
+				B709CCEE28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm in Sources */,
+				B71F0AC628F54759000A7C8A /* SampleHandler.mm in Sources */,
+				B71F0B0228F547C2000A7C8A /* DDASLLogger.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71F0AC828F54759000A7C8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71F0AD328F5475A000A7C8A /* BroadcastSetupViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -946,6 +1240,16 @@
 			isa = PBXTargetDependency;
 			target = 2F56F6F2252C956700B829C4 /* ShareExtension */;
 			targetProxy = 2F56F6FC252C956700B829C4 /* PBXContainerItemProxy */;
+		};
+		B71F0AD628F5475A000A7C8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B71F0ACB28F54759000A7C8A /* BroadcastSetupUI */;
+			targetProxy = B71F0AD528F5475A000A7C8A /* PBXContainerItemProxy */;
+		};
+		B71F0AD928F5475A000A7C8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B71F0ABF28F54759000A7C8A /* Broadcast */;
+			targetProxy = B71F0AD828F5475A000A7C8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1244,6 +1548,128 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B71F0ADB28F5475A000A7C8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Broadcast/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Broadcast;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B71F0ADC28F5475A000A7C8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Broadcast/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Broadcast;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B71F0ADD28F5475A000A7C8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B71F0ADE28F5475A000A7C8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZTJABWRJ5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1274,6 +1700,24 @@
 			buildConfigurations = (
 				2F56F700252C956700B829C4 /* Debug */,
 				2F56F701252C956700B829C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B71F0ADF28F5475A000A7C8A /* Build configuration list for PBXNativeTarget "BroadcastSetupUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B71F0ADD28F5475A000A7C8A /* Debug */,
+				B71F0ADE28F5475A000A7C8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B71F0AE028F5475A000A7C8A /* Build configuration list for PBXNativeTarget "Broadcast" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B71F0ADB28F5475A000A7C8A /* Debug */,
+				B71F0ADC28F5475A000A7C8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
