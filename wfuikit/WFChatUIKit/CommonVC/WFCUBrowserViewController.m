@@ -20,6 +20,12 @@
 
 @implementation WFCUBrowserViewController
 
+/*
+ 野火开放平台，从JS调用原生代码有2种形式:
+ 一种是异步形式，参数带有completion:(JSCallback)completionHandler，返回结果使用completionHandler回调回去。请参考getAuthCode:completion:方法；
+ 另外一种是同步形式，直接返回数据。注意同步接口一定要返回参数，如果没有有效返回数据，请返回nil，不要用void函数。请参考 config: 方法
+ */
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.configDict = [[NSMutableDictionary alloc] init];
@@ -100,11 +106,12 @@
     }];
 }
 
-- (void)openUrl:(NSString *)url {
+- (id)openUrl:(NSString *)url {
     WFCUBrowserViewController *browser = [[WFCUBrowserViewController alloc] init];
     browser.url = url;
     browser.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:browser animated:YES];
+    return nil;
 }
 
 - (void)close:(NSDictionary *)message completion:(JSCallback)completionHandler {
@@ -112,7 +119,7 @@
     completionHandler(0, nil, YES);
 }
 
-- (void)config:(NSDictionary *)message {
+- (id)config:(NSDictionary *)message {
     NSString *appId = message[@"appId"];
     int appType = [message[@"apptype"] intValue];
     int64_t timestamp = [message[@"timestamp"] longLongValue];
@@ -128,6 +135,7 @@
             [ws.configDict removeObjectForKey:ws.webView.URL.host];
         [ws.webView callHandler:@"error" arguments:@[@(error_code)]];
     }];
+    return nil;
 }
 
 - (void)chooseContacts:(NSDictionary *)message completion:(JSCallback)completionHandler {
@@ -164,8 +172,9 @@
     [self.navigationController pushViewController:contactVC animated:YES];
 }
 
-- (void)toast:(NSDictionary *)message {
+- (id)toast:(NSDictionary *)message {
     NSLog(@"toast: %@", message);
+    return nil;
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
