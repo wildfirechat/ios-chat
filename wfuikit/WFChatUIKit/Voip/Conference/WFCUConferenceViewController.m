@@ -915,33 +915,21 @@
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"如果您想让与会人员继续开会，请选择退出会议" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"QuitConference") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            if(ws.currentSession.state != kWFAVEngineStateIdle) {
-                [ws.currentSession leaveConference:NO];
-            }
+            [[WFCUConferenceManager sharedInstance] leaveConference:NO];
         }];
         [alertController addAction:action1];
         
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"DestroyConference") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-            if(ws.currentSession.state != kWFAVEngineStateIdle) {
-                [ws.currentSession leaveConference:NO];
-                [ws destroyConference];
-            }
+            [[WFCUConferenceManager sharedInstance] leaveConference:YES];
         }];
         [alertController addAction:action2];
         
         [ws presentViewController:alertController animated:YES completion:nil];
     } else {
-        [self.currentSession leaveConference:NO];
+        [[WFCUConferenceManager sharedInstance] leaveConference:NO];
     }
 }
 
-- (void)destroyConference {
-    [[WFCUConfigManager globalManager].appServiceProvider  destroyConference:self.currentSession.callId success:^{
-        
-    } error:^(int errorCode, NSString * _Nonnull message) {
-        
-    }];
-}
 
 - (void)managerButtonDidTap:(UIButton *)button {
     WFCUConferenceMemberManagerViewController *vc = [[WFCUConferenceMemberManagerViewController alloc] init];
