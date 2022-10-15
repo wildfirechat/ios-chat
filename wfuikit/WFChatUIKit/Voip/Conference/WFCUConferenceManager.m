@@ -45,6 +45,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
                 sharedSingleton.applyingUnmuteMembers = [[NSMutableArray alloc] init];
                 sharedSingleton.handupMembers = [[NSMutableArray alloc] init];
                 [[NSNotificationCenter defaultCenter] addObserver:sharedSingleton selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:sharedSingleton
+                                                         selector:@selector(onAppTerminate)
+                                                             name:UIApplicationWillTerminateNotification
+                                                           object:nil];
             }
         }
     }
@@ -139,6 +143,22 @@ static WFCUConferenceManager *sharedSingleton = nil;
         [self resetCommandState];
     }
     _currentConferenceInfo = currentConferenceInfo;
+}
+
+- (void)leaveConference:(BOOL)destroy {
+    if([[WFAVEngineKit sharedEngineKit].currentSession isBroadcasting]) {
+        [self cancelBroadcast];
+    }
+    
+    [[WFAVEngineKit sharedEngineKit].currentSession leaveConference:NO];
+    
+    if(destroy) {
+        [[WFCUConfigManager globalManager].appServiceProvider  destroyConference:[WFAVEngineKit sharedEngineKit].currentSession.callId success:^{
+            
+        } error:^(int errorCode, NSString * _Nonnull message) {
+            
+        }];
+    }
 }
 
 - (UIButton *)alertViewCheckBtn {
@@ -337,6 +357,14 @@ static WFCUConferenceManager *sharedSingleton = nil;
                 }
             }
         }
+    }
+}
+
+- (void)onAppTerminate {
+    NSLog(@"conference manager onAppTerminate");
+    if(self.socket && self.sockets.count) {
+        NSLog(@"is broadcating...");
+        [self cancelBroadcast];
     }
 }
 
@@ -581,7 +609,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     self.receivedData = nil;
     [self.broadPickerView removeFromSuperview];
     self.broadPickerView = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
 }
 
