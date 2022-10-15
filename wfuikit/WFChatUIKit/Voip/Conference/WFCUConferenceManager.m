@@ -54,7 +54,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
 
 - (void)muteAudio:(BOOL)mute {
     if(mute) {
-        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted) {
+        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted && ![[WFAVEngineKit sharedEngineKit].currentSession isBroadcasting]) {
             [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
         }
         [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
@@ -70,7 +70,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
 
 - (void)muteVideo:(BOOL)mute {
     if(mute) {
-        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted) {
+        if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted && ![[WFAVEngineKit sharedEngineKit].currentSession isBroadcasting]) {
             [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
         }
         [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
@@ -625,16 +625,16 @@ static WFCUConferenceManager *sharedSingleton = nil;
 }
                    
 - (void)sendOrientationCommand {
-    int orientation = 1;
+    int orientation = 0;
     switch([[UIDevice currentDevice] orientation]) {
         case UIDeviceOrientationLandscapeLeft:
-            orientation = 2;
+            orientation = 3;
             break;
         case UIDeviceOrientationLandscapeRight:
-            orientation = 0;
+            orientation = 1;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
-            orientation = 3;
+            orientation = 2;
             break;
         default:
             break;
@@ -679,9 +679,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
                 [self.receivedData replaceBytesInRange:NSMakeRange(0, sizeof(PacketHeader) + header.dataLen) withBytes:NULL length:0];
                 
                 if(header.dataType == 0) {
-                    NSString *status = [NSString stringWithUTF8String:rawData.bytes];
-                    NSLog(@"Receive command:%@", status);
-                    [self onReceiveBroadcastCommand:status];
+                    if(rawData.length) {
+                        NSString *status = [NSString stringWithUTF8String:rawData.bytes];
+                        NSLog(@"Receive command:%@", status);
+                        [self onReceiveBroadcastCommand:status];
+                    } else {
+                        NSLog(@"Bad command");
+                    }
                 } else if(header.dataType == 1) {
                     SampleInfo sampleInfo;
                     memcpy(&sampleInfo, rawData.bytes, sizeof(SampleInfo));
