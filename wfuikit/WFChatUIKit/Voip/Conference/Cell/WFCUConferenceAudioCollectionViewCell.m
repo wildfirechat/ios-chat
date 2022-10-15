@@ -28,7 +28,7 @@
 
 - (void)setupView:(CGRect)frame {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - flowLayout.minimumInteritemSpacing*2)/3-flowLayout.minimumLineSpacing;
+    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - flowLayout.minimumInteritemSpacing*2)/3-5;
     flowLayout.itemSize = CGSizeMake(itemWidth, itemWidth);
 //    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
@@ -51,7 +51,7 @@
     
     CGSize parentSize = self.bounds.size;
     int itemCount = MIN(12, self.participants.count - self.pages*12);
-    CGFloat itemWidth = (MIN(parentSize.width, parentSize.height) - flowLayout.minimumInteritemSpacing*2)/3-flowLayout.minimumLineSpacing;
+    CGFloat itemWidth = (MIN(parentSize.width, parentSize.height) - flowLayout.minimumInteritemSpacing*2)/3-5;
     
     
     CGFloat startX, startY, widht, height;
