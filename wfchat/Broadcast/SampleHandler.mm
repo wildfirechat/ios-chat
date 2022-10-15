@@ -26,6 +26,8 @@
 @property (nonatomic, assign) BOOL audio; //0 竖屏，1转90，2转180，3转270
 
 @property (nonatomic, assign) int64_t lastTimeStampNs;
+
+@property(nonatomic, assign)BOOL stoped;
 @end
 
 @implementation SampleHandler
@@ -90,6 +92,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [ws disconnect];
         });
+        self.stoped = YES;
     }
 }
 
@@ -325,12 +328,12 @@
     
     switch (sampleBufferType) {
         case RPSampleBufferTypeVideo:
-            if(self.connected) {
+            if(self.connected && !self.stoped) {
                 [self sendVideoDataToContainerApp:sampleBuffer];
             }
             break;
         case RPSampleBufferTypeAudioApp:
-            if(self.connected && self.audio) {
+            if(self.connected && self.audio && !self.stoped) {
                 [self sendAudioDataToContainerApp:sampleBuffer];
             }
             break;
@@ -402,7 +405,7 @@
 
     [self.receivedData appendData:data];
     
-    while(self.receivedData.length > sizeof(Command)) {
+    while(self.receivedData.length >= sizeof(Command)) {
         Command command;
         memcpy(&command, self.receivedData.bytes, sizeof(Command));
         [self onReceiveCommandFromContainerApp:command.type value:command.value];
@@ -412,10 +415,12 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    self.connected = NO;
-    [self.socket disconnect];
-    self.socket = nil;
-    [self setupSocket];
-    [self.socket readDataWithTimeout:-1 tag:0];
+    if(!self.stoped) {
+        self.connected = NO;
+        [self.socket disconnect];
+        self.socket = nil;
+        [self setupSocket];
+        [self.socket readDataWithTimeout:-1 tag:0];
+    }
 }
 @end

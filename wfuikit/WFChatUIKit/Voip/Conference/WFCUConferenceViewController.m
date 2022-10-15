@@ -290,6 +290,7 @@
     [self.participantCollectionView registerClass:[WFCUConferenceParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"main"];
     [self.participantCollectionView registerClass:[WFCUConferenceParticipantCollectionViewCell class] forCellWithReuseIdentifier:@"sub"];
     [self.participantCollectionView registerClass:[WFCUConferenceAudioCollectionViewCell class] forCellWithReuseIdentifier:@"audio_cell"];
+    [self.participantCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"broadcasting"];
     self.participantCollectionView.backgroundColor = [UIColor clearColor];
     if (self.currentSession.audioOnly) {
         self.participantCollectionView.hidden = YES;
@@ -950,11 +951,15 @@
 
 - (void)onBroadcastingStatusUpdated:(NSNotification *)notification {
     [self updateScreenSharingButton];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(self.currentSession.isBroadcasting) {
-            [self minimize];
+    [self reloadParticipantCollectionView];
+}
+
+- (void)unsubscribeAllVideoStream {
+    [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull profile, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(![profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+            [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_None];
         }
-    });
+    }];
 }
 
 - (void)screenSharingButtonDidTap:(UIButton *)button {
@@ -1777,9 +1782,15 @@
         }
     }
 }
+
 - (void)onScreenSharingFailure {
     
 }
+
+- (void)onStopBroadcastBtn:(id)sender {
+    [[WFCUConferenceManager sharedInstance] switchAudioAndScreansharing:self.view];
+}
+
 - (void)checkAVPermission {
     [self checkCapturePermission:nil];
     [self checkRecordPermission:nil];
@@ -1910,8 +1921,14 @@
 }
 
 - (void)updateVideoStreams {
+    if([[WFCUConferenceManager sharedInstance] isBroadcasting]) {
+        [self unsubscribeAllVideoStream];
+        return;
+    }
+    
     WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
     if(layout.audioOnly) {
+        [self unsubscribeAllVideoStream];
         return;
     }
     
@@ -2026,6 +2043,9 @@
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if([[WFCUConferenceManager sharedInstance] isBroadcasting]) {
+        return 1;
+    }
     WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)collectionView.collectionViewLayout;
     if(layout.audioOnly) {
         NSLog(@"count %d", (self.participants.count-1) / 12 + 1);
@@ -2056,6 +2076,32 @@
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if([[WFCUConferenceManager sharedInstance] isBroadcasting]) {
+        UICollectionViewCell *broadcastingCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"broadcasting" forIndexPath:indexPath];
+        for (UIView *subView in broadcastingCell.contentView.subviews) {
+            [subView removeFromSuperview];
+        }
+        UIButton *stopBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
+        CGRect bounds = self.view.bounds;
+        stopBtn.center = CGPointMake(bounds.size.width/2, bounds.size.height/2);
+        [stopBtn setImage:[WFCUImage imageNamed:@"conference_stop_screen_sharing"] forState:UIControlStateNormal];
+        [stopBtn setTitle:@"停止共享" forState:UIControlStateNormal];
+        stopBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+
+        stopBtn.titleEdgeInsets = UIEdgeInsetsMake(stopBtn.imageView.frame.size.height / 2-8, -stopBtn.imageView.frame.size.width,
+                                                  -stopBtn.imageView.frame.size.height, 0);
+        stopBtn.imageEdgeInsets = UIEdgeInsetsMake(-4,
+                                                  0, stopBtn.imageView.frame.size.height / 2, -stopBtn.titleLabel.bounds.size.width);
+        
+        stopBtn.imageView.layer.masksToBounds = YES;
+        stopBtn.imageView.layer.cornerRadius = 10.f;
+        
+        [stopBtn addTarget:self action:@selector(onStopBroadcastBtn:) forControlEvents:UIControlEventTouchDown];
+        
+        [broadcastingCell.contentView addSubview:stopBtn];
+        return broadcastingCell;
+    }
+    
     WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
     if(layout.audioOnly) {
         WFCUConferenceAudioCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"audio_cell" forIndexPath:indexPath];
