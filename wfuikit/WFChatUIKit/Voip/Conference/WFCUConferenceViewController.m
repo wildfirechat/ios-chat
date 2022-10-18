@@ -1392,13 +1392,9 @@
             smallVideoRect.origin.y = self.view.bounds.size.height - bottomBarHeigh - smallVideoRect.size.height;
         }
         self.smallVideoView.frame = smallVideoRect;
-    } completion:^(BOOL finished) {
-        WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
-        if(!layout.audioOnly && self.participants.count > 1) {
-            self.smallVideoView.hidden = NO;
-        }
-        
         self.chatButton.hidden = NO;
+    } completion:^(BOOL finished) {
+        
     }];
     
     if (self.currentSession.audioOnly) {
@@ -1434,6 +1430,7 @@
             smallVideoRect.origin.y = self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - smallVideoRect.size.height;
         }
         self.smallVideoView.frame = smallVideoRect;
+        self.chatButton.hidden = YES;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
         self.topBarView.hidden = YES;
@@ -1443,8 +1440,6 @@
             floatingAudioBtnFrame.origin.y = self.view.bounds.size.height - (landscape ? 0 : [WFCUUtilities wf_safeDistanceBottom]) - FLOATING_AUDIO_BUTTON_SIZE - CONFERENCE_BAR_HEIGHT;
             self.floatingAudioButton.frame = floatingAudioBtnFrame;
         }];
-        self.smallVideoView.hidden = YES;
-        self.chatButton.hidden = YES;
     }];
 }
 
