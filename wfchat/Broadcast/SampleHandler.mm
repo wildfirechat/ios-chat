@@ -84,7 +84,7 @@
 
 - (void)broadcastFinished {
     // User has requested to finish the broadcast.
-    if (self.connected) {
+    if (!self.stoped && self.connected) {
         NSString * str =@"Finish";
         NSData *data =[str dataUsingEncoding:NSUTF8StringEncoding];
         [self sendType:0 data:data tag:0];
@@ -361,9 +361,11 @@
             case 0: //rotation
                 self.orientation = value;
                 break;
+                
             case 1:  //audio
                 self.audio = value>0;
                 break;
+                
             case 2:  //resulation
             {
                 int width = value >> 16;
@@ -373,11 +375,17 @@
                 } else {
                     self.targetSize = CGSizeMake(height, width);
                 }
+                break;
             }
-                break;
+                
             case 3:
+            {
                 [self finishBroadcastWithError:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self broadcastFinished];
+                });
                 break;
+            }
             default:
                 break;
         }
