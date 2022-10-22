@@ -1434,6 +1434,8 @@
         //视频最大时长，默认是5分钟，可以更改为更大
         [ZLPhotoConfiguration default].maxSelectVideoDuration = 300;
         [ZLPhotoConfiguration default].maxEditVideoTime = 300;
+        [ZLPhotoConfiguration default].cameraConfiguration.sessionPreset = CaptureSessionPresetVga640x480;
+        [ZLPhotoConfiguration default].cameraConfiguration.videoExportType = VideoExportTypeMp4;
         
         ZLPhotoPreviewSheet *ps = [[ZLPhotoPreviewSheet alloc] initWithSelectedAssets:@[]];
         ps.selectImageBlock = ^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {

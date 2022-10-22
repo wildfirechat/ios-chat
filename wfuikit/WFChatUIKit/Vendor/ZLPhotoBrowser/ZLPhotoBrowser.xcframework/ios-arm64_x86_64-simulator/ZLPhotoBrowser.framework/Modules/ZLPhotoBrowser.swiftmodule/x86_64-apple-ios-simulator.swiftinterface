@@ -1,6 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
-// swift-module-flags: -target x86_64-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ZLPhotoBrowser
+// swift-compiler-version: Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ZLPhotoBrowser
+// swift-module-flags-ignorable: -enable-bare-slash-regex
 import AVFoundation
 import Accelerate
 import CoreMotion
@@ -11,12 +12,13 @@ import Swift
 import UIKit
 @_exported import ZLPhotoBrowser
 import _Concurrency
+import _StringProcessing
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ZLPhotoPreviewSheet : UIKit.UIView {
   @objc @_Concurrency.MainActor(unsafe) public var selectImageBlock: (([UIKit.UIImage], [Photos.PHAsset], Swift.Bool) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var selectImageRequestErrorBlock: (([Photos.PHAsset], [Swift.Int]) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var cancelBlock: (() -> Swift.Void)?
   @objc deinit
-  @_Concurrency.MainActor(unsafe) @objc convenience override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc convenience override dynamic public init(frame: CoreFoundation.CGRect)
   @objc @_Concurrency.MainActor(unsafe) public init(selectedAssets: [Photos.PHAsset]? = nil)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
@@ -28,7 +30,7 @@ extension ZLPhotoBrowser.ZLPhotoPreviewSheet : UIKit.UIGestureRecognizerDelegate
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIKit.UIGestureRecognizer) -> Swift.Bool
 }
 extension ZLPhotoBrowser.ZLPhotoPreviewSheet : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout {
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGSize
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
@@ -47,13 +49,13 @@ extension ZLPhotoBrowser.ZLPhotoPreviewSheet : Photos.PHPhotoLibraryChangeObserv
   @objc public class func getPhotoAlbumList(ascending: Swift.Bool, allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: ([ZLPhotoBrowser.ZLAlbumListModel]) -> Swift.Void)
   @objc public class func getCameraRollAlbum(allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: @escaping (ZLPhotoBrowser.ZLAlbumListModel) -> Swift.Void)
   @discardableResult
-  @objc public class func fetchImage(for asset: Photos.PHAsset, size: CoreGraphics.CGSize, progress: ((CoreGraphics.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchImage(for asset: Photos.PHAsset, size: CoreFoundation.CGSize, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @discardableResult
-  @objc public class func fetchOriginalImage(for asset: Photos.PHAsset, progress: ((CoreGraphics.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchOriginalImage(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @discardableResult
-  @objc public class func fetchOriginalImageData(for asset: Photos.PHAsset, progress: ((CoreGraphics.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (Foundation.Data, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchOriginalImageData(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (Foundation.Data, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchLivePhoto(for asset: Photos.PHAsset, completion: @escaping (Photos.PHLivePhoto?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
-  @objc public class func fetchVideo(for asset: Photos.PHAsset, progress: ((CoreGraphics.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (AVFoundation.AVPlayerItem?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchVideo(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (AVFoundation.AVPlayerItem?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchAVAsset(forVideo asset: Photos.PHAsset, completion: @escaping (AVFoundation.AVAsset?, [Swift.AnyHashable : Any]?) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchAssetFilePath(asset: Photos.PHAsset, completion: @escaping (Swift.String?) -> Swift.Void)
   @objc override dynamic public init()
@@ -166,12 +168,12 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   @objc @_Concurrency.MainActor(unsafe) public var doneBlock: (([Any]) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var videoHttpHeader: [Swift.String : Any]?
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var preferredStatusBarStyle: UIKit.UIStatusBarStyle {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
-  @objc @_Concurrency.MainActor(unsafe) public init(datas: [Any], index: Swift.Int = 0, showSelectBtn: Swift.Bool = true, showBottomView: Swift.Bool = true, urlType: ((Foundation.URL) -> ZLPhotoBrowser.ZLURLType)? = nil, urlImageLoader: ((Foundation.URL, UIKit.UIImageView, @escaping (CoreGraphics.CGFloat) -> Swift.Void, @escaping () -> Swift.Void) -> Swift.Void)? = nil)
+  @objc @_Concurrency.MainActor(unsafe) public init(datas: [Any], index: Swift.Int = 0, showSelectBtn: Swift.Bool = true, showBottomView: Swift.Bool = true, urlType: ((Foundation.URL) -> ZLPhotoBrowser.ZLURLType)? = nil, urlImageLoader: ((Foundation.URL, UIKit.UIImageView, @escaping (CoreFoundation.CGFloat) -> Swift.Void, @escaping () -> Swift.Void) -> Swift.Void)? = nil)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
@@ -183,10 +185,10 @@ extension ZLPhotoBrowser.ZLImagePreviewController {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDecelerating(_ scrollView: UIKit.UIScrollView)
 }
 extension ZLPhotoBrowser.ZLImagePreviewController : UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout {
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, minimumLineSpacingForSectionAt section: Swift.Int) -> CoreFoundation.CGFloat
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, insetForSectionAt section: Swift.Int) -> UIKit.UIEdgeInsets
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGSize
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didEndDisplaying cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
@@ -194,10 +196,10 @@ extension ZLPhotoBrowser.ZLImagePreviewController : UIKit.UICollectionViewDataSo
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ZLEditVideoViewController : UIKit.UIViewController {
   @objc @_Concurrency.MainActor(unsafe) public var editFinishBlock: ((Foundation.URL?) -> Swift.Void)?
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @objc deinit
   @objc @_Concurrency.MainActor(unsafe) public init(avAsset: AVFoundation.AVAsset, animateDismiss: Swift.Bool = false)
@@ -264,10 +266,10 @@ extension ZLPhotoBrowser.ZLPhotoModel {
   public var second: ZLPhotoBrowser.Second {
     get
   }
-  public var whRatio: CoreGraphics.CGFloat {
+  public var whRatio: CoreFoundation.CGFloat {
     get
   }
-  public var previewSize: CoreGraphics.CGSize {
+  public var previewSize: CoreFoundation.CGSize {
     get
   }
   public var editImageModel: ZLPhotoBrowser.ZLEditImageModel?
@@ -282,8 +284,8 @@ extension ZLPhotoBrowser.ZLPhotoModel {
 @objc public class ZLEditImageModel : ObjectiveC.NSObject {
   final public let drawPaths: [ZLPhotoBrowser.ZLDrawPath]
   final public let mosaicPaths: [ZLPhotoBrowser.ZLMosaicPath]
-  final public let editRect: CoreGraphics.CGRect?
-  final public let angle: CoreGraphics.CGFloat
+  final public let editRect: CoreFoundation.CGRect?
+  final public let angle: CoreFoundation.CGFloat
   final public let brightness: Swift.Float
   final public let contrast: Swift.Float
   final public let saturation: Swift.Float
@@ -291,13 +293,13 @@ extension ZLPhotoBrowser.ZLPhotoModel {
   final public let selectFilter: ZLPhotoBrowser.ZLFilter?
   final public let textStickers: [(state: ZLPhotoBrowser.ZLTextStickerState, index: Swift.Int)]?
   final public let imageStickers: [(state: ZLPhotoBrowser.ZLImageStickerState, index: Swift.Int)]?
-  public init(drawPaths: [ZLPhotoBrowser.ZLDrawPath], mosaicPaths: [ZLPhotoBrowser.ZLMosaicPath], editRect: CoreGraphics.CGRect?, angle: CoreGraphics.CGFloat, brightness: Swift.Float, contrast: Swift.Float, saturation: Swift.Float, selectRatio: ZLPhotoBrowser.ZLImageClipRatio?, selectFilter: ZLPhotoBrowser.ZLFilter, textStickers: [(state: ZLPhotoBrowser.ZLTextStickerState, index: Swift.Int)]?, imageStickers: [(state: ZLPhotoBrowser.ZLImageStickerState, index: Swift.Int)]?)
+  public init(drawPaths: [ZLPhotoBrowser.ZLDrawPath], mosaicPaths: [ZLPhotoBrowser.ZLMosaicPath], editRect: CoreFoundation.CGRect?, angle: CoreFoundation.CGFloat, brightness: Swift.Float, contrast: Swift.Float, saturation: Swift.Float, selectRatio: ZLPhotoBrowser.ZLImageClipRatio?, selectFilter: ZLPhotoBrowser.ZLFilter, textStickers: [(state: ZLPhotoBrowser.ZLTextStickerState, index: Swift.Int)]?, imageStickers: [(state: ZLPhotoBrowser.ZLImageStickerState, index: Swift.Int)]?)
   @objc deinit
 }
 @objc @_Concurrency.MainActor(unsafe) open class ZLEditImageViewController : UIKit.UIViewController {
-  @objc @_Concurrency.MainActor(unsafe) public var drawColViewH: CoreGraphics.CGFloat
-  @objc @_Concurrency.MainActor(unsafe) public var filterColViewH: CoreGraphics.CGFloat
-  @objc @_Concurrency.MainActor(unsafe) public var adjustColViewH: CoreGraphics.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var drawColViewH: CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var filterColViewH: CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var adjustColViewH: CoreFoundation.CGFloat
   @objc @_Concurrency.MainActor(unsafe) public var ashbinNormalBgColor: UIKit.UIColor
   @objc @_Concurrency.MainActor(unsafe) public var cancelBtn: UIKit.UIButton {
     @objc get
@@ -327,15 +329,15 @@ extension ZLPhotoBrowser.ZLPhotoModel {
     @objc get
     @objc set
   }
-  @objc @_Concurrency.MainActor(unsafe) public var drawLineWidth: CoreGraphics.CGFloat
-  @objc @_Concurrency.MainActor(unsafe) public var mosaicLineWidth: CoreGraphics.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var drawLineWidth: CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var mosaicLineWidth: CoreFoundation.CGFloat
   @objc @_Concurrency.MainActor(unsafe) public var editFinishBlock: ((UIKit.UIImage, ZLPhotoBrowser.ZLEditImageModel?) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var cancelEditBlock: (() -> Swift.Void)?
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @objc deinit
   @objc @_Concurrency.MainActor(unsafe) public class func showEditImageVC(parentVC: UIKit.UIViewController?, animate: Swift.Bool = false, image: UIKit.UIImage, editModel: ZLPhotoBrowser.ZLEditImageModel? = nil, cancel: (() -> Swift.Void)? = nil, completion: ((UIKit.UIImage, ZLPhotoBrowser.ZLEditImageModel?) -> Swift.Void)?)
@@ -350,7 +352,7 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UIGestureRecognizerDe
 extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UIScrollViewDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func viewForZooming(in scrollView: UIKit.UIScrollView) -> UIKit.UIView?
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidZoom(_ scrollView: UIKit.UIScrollView)
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndZooming(_ scrollView: UIKit.UIScrollView, with view: UIKit.UIView?, atScale scale: CoreGraphics.CGFloat)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndZooming(_ scrollView: UIKit.UIScrollView, with view: UIKit.UIView?, atScale scale: CoreFoundation.CGFloat)
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDragging(_ scrollView: UIKit.UIScrollView, willDecelerate decelerate: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDecelerating(_ scrollView: UIKit.UIScrollView)
@@ -457,7 +459,7 @@ extension ZLPhotoBrowser.ZLPhotoConfiguration {
   @discardableResult
   public func maxPreviewCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
-  public func cellCornerRadio(_ cornerRadio: CoreGraphics.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  public func cellCornerRadio(_ cornerRadio: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
   public func allowSelectImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
@@ -489,7 +491,7 @@ extension ZLPhotoBrowser.ZLPhotoConfiguration {
   @discardableResult
   public func autoScrollWhenSlideSelectIsActive(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
-  public func autoScrollMaxSpeed(_ speed: CoreGraphics.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  public func autoScrollMaxSpeed(_ speed: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
   public func allowDragSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
@@ -718,7 +720,7 @@ public typealias Second = Swift.Int
   }
   @objc public var allowMixSelect: Swift.Bool
   @objc public var maxPreviewCount: Swift.Int
-  @objc public var cellCornerRadio: CoreGraphics.CGFloat
+  @objc public var cellCornerRadio: CoreFoundation.CGFloat
   @objc public var allowSelectImage: Swift.Bool
   @objc public var allowSelectVideo: Swift.Bool
   @objc public var allowSelectGif: Swift.Bool
@@ -743,7 +745,7 @@ public typealias Second = Swift.Int
   @objc public var saveNewImageAfterEdit: Swift.Bool
   @objc public var allowSlideSelect: Swift.Bool
   @objc public var autoScrollWhenSlideSelectIsActive: Swift.Bool
-  @objc public var autoScrollMaxSpeed: CoreGraphics.CGFloat
+  @objc public var autoScrollMaxSpeed: CoreFoundation.CGFloat
   @objc public var allowDragSelect: Swift.Bool
   @objc public var allowSelectOriginal: Swift.Bool
   @objc public var allowPreviewPhotos: Swift.Bool
@@ -971,7 +973,7 @@ extension ZLPhotoBrowser.ZLFilter {
   @objc public static let tonal: ZLPhotoBrowser.ZLFilter
 }
 extension UIKit.UIControl {
-  @_Concurrency.MainActor(unsafe) @objc override dynamic open func point(inside point: CoreGraphics.CGPoint, with event: UIKit.UIEvent?) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func point(inside point: CoreFoundation.CGPoint, with event: UIKit.UIEvent?) -> Swift.Bool
 }
 @objc public class ZLAlbumListModel : ObjectiveC.NSObject {
   final public let title: Swift.String
@@ -1038,13 +1040,13 @@ extension UIKit.UIControl {
     set
   }
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
-    @_Concurrency.MainActor(unsafe) @objc get
+    @objc get
   }
   @objc deinit
-  @objc dynamic public init()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public init()
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidAppear(_ animated: Swift.Bool)
@@ -1151,8 +1153,8 @@ extension ZLPhotoBrowser.ZLEditImageConfiguration {
 }
 @objc public class ZLImageClipRatio : ObjectiveC.NSObject {
   public var title: Swift.String
-  final public let whRatio: CoreGraphics.CGFloat
-  @objc public init(title: Swift.String, whRatio: CoreGraphics.CGFloat, isCircle: Swift.Bool = false)
+  final public let whRatio: CoreFoundation.CGFloat
+  @objc public init(title: Swift.String, whRatio: CoreFoundation.CGFloat, isCircle: Swift.Bool = false)
   @objc deinit
 }
 extension ZLPhotoBrowser.ZLImageClipRatio {
