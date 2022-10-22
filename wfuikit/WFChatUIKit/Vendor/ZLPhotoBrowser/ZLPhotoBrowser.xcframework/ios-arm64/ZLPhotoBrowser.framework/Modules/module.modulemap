@@ -6,6 +6,6 @@ framework module ZLPhotoBrowser {
 }
 
 module ZLPhotoBrowser.Swift {
-    header "ZLPhotoBrowser-Swift.h"
-    requires objc
+  header "ZLPhotoBrowser-Swift.h"
+  requires objc
 }
