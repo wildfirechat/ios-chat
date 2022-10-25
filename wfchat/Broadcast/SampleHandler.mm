@@ -381,9 +381,14 @@
             case 3:
             {
                 [self finishBroadcastWithError:nil];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self broadcastFinished];
-                });
+                if (@available(iOS 14.0, *)) {
+                    NSLog(@"broadcast will finished");
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self broadcastFinished];
+                    });
+                }
+                
                 break;
             }
             default:
