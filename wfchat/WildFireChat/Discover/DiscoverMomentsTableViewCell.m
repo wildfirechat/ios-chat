@@ -63,7 +63,7 @@
     _lastFeed = lastFeed;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:lastFeed.sender refresh:NO];
     
-    [self.lastFeedPortrait sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+    [self.lastFeedPortrait sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     if (lastFeed.serverTime > [[WFMomentService sharedService] getLastReadTimestamp]*1000) {
         [self.bubbleView2 setBubbleTipNumber:1];
         self.bubbleView2.hidden = NO;

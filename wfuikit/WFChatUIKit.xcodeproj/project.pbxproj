@@ -430,7 +430,7 @@
 		B70775902881ABB1004034A5 /* Stickers.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A68217F7D4100B3E38A /* Stickers.bundle */; };
 		B70775912881ABB1004034A5 /* Emoj.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F143A69217F7D4100B3E38A /* Emoj.plist */; };
 		B70775922881ABB1004034A5 /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
-		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; };
+		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B707759A28823635004034A5 /* WFCUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B707759828823635004034A5 /* WFCUImage.m */; };
 		B709CCE628F7B78C0036EDFA /* WFCUI420VideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */; };
 		B709CCE728F7B78C0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */; };
@@ -2437,6 +2437,7 @@
 			files = (
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
+				B707759928823635004034A5 /* WFCUImage.h in Headers */,
 				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
@@ -2551,7 +2552,6 @@
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
 				2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */,
-				B707759928823635004034A5 /* WFCUImage.h in Headers */,
 				B7C5443828D5876700A2550F /* UIImageView+CornerRadius.h in Headers */,
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F55120F217F5CC300F56C26 /* WFCUContactTableViewCell.h in Headers */,

@@ -79,4 +79,4 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/QQLBXScanViewController.h>
 #import <WFChatUIKit/LBXScanViewStyle.h>
 #import <WFChatUIKit/StyleDIY.h>
-
+#import <WFChatUIKit/WFCUImage.h>

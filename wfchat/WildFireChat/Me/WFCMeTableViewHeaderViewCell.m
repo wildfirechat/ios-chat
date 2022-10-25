@@ -64,7 +64,7 @@
 
 - (void)setUserInfo:(WFCCUserInfo *)userInfo {
     _userInfo = userInfo;
-    [self.portrait sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [self.portrait sd_setImageWithURL:[NSURL URLWithString:self.userInfo.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     self.displayName.text = self.userInfo.displayName;
     self.userName.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
 }
