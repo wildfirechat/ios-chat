@@ -149,7 +149,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
   
         cell.textLabel.text = self.itemDataSource[indexPath.section - 1][@"title"];
-        cell.imageView.image = [UIImage imageNamed:self.itemDataSource[indexPath.section - 1][@"image"]];
+        cell.imageView.image = [WFCUImage imageNamed:self.itemDataSource[indexPath.section - 1][@"image"]];
         return cell;
     }
     return nil;
