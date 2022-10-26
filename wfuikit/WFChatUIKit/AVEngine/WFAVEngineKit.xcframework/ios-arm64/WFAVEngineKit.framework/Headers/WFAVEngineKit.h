@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, WFAVVideoScalingType) {
 
 /**
  视频属性
- 分辨率(宽x高), 帧率(fps),码率(kpbs)
+ 分辨率(宽x高), 帧率(fps),码率(kbps)。超过720P还需要看设备支持不支持。
 
  - kWFAVVideoProfile120P:       160x120,    15, 120
  - kWFAVVideoProfile120P_3:     120x120,    15, 100
@@ -88,6 +88,12 @@ typedef NS_ENUM(NSInteger, WFAVVideoScalingType) {
  - kWFAVVideoProfile720P_3:     1280x720,   30, 3699
  - kWFAVVideoProfile720P_5:     960x720,    15, 1920
  - kWFAVVideoProfile720P_6:     960x720,    30, 2880
+ - kWFAVVideoProfile1080P: 1920x1080, 15, 4160
+ - kWFAVVideoProfile1080P_3: 1920x1080, 30, 6240
+ - kWFAVVideoProfile2K: 2540x1440, 15, 6240
+ - kWFAVVideoProfile2K_3: 2540x1440, 30, 8320
+ - kWFAVVideoProfile4K: 3840x2160, 15, 12480
+ - kWFAVVideoProfile4K_3: 3840x2160, 30, 18720
  - kWFAVVideoProfileDefault:    默认值kWFAVVideoProfile360P
  */
 typedef NS_ENUM(NSInteger, WFAVVideoProfile) {
@@ -115,6 +121,12 @@ typedef NS_ENUM(NSInteger, WFAVVideoProfile) {
     kWFAVVideoProfile720P_3     = 52,
     kWFAVVideoProfile720P_5     = 54,
     kWFAVVideoProfile720P_6     = 55,
+    kWFAVVideoProfile1080P      = 56,
+    kWFAVVideoProfile1080P_3    = 57,
+    kWFAVVideoProfile2K         = 58,
+    kWFAVVideoProfile2K_3       = 59,
+    kWFAVVideoProfile4K         = 60,
+    kWFAVVideoProfile4K_3       = 61,
     kWFAVVideoProfileDefault    = kWFAVVideoProfile360P
 };
 
