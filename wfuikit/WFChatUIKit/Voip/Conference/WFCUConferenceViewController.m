@@ -194,6 +194,7 @@
     
     BOOL audioOnly = YES;
     NSArray<WFAVParticipantProfile *> *ps = self.currentSession.participants;
+    NSString *focus = [WFCUConferenceManager sharedInstance].currentConferenceInfo.focus;
     for (WFAVParticipantProfile *p in ps) {
         if([self.focusUserProfile.userId isEqualToString:p.userId] && self.focusUserProfile.screeSharing == p.screeSharing) {
             [self.participants insertObject:p atIndex:0];
@@ -239,7 +240,19 @@
     
     [self.participants insertObject:self.currentSession.myProfile atIndex:0];
     
-    if(!self.focusUserProfile || [self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    __block BOOL focusExist = NO;
+    if(focus.length) {
+        [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if([obj.userId isEqualToString:focus]) {
+                if(![self.focusUserProfile.userId isEqualToString:obj.userId] || self.focusUserProfile.screeSharing == NO) {
+                    self.focusUserProfile = obj;
+                    focusExist = YES;
+                }
+            }
+        }];
+    }
+    
+    if(!focusExist && (!self.focusUserProfile || [self.focusUserProfile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId])) {
         self.focusUserProfile = self.currentSession.myProfile;
         [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if(![obj.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -248,6 +261,7 @@
             }
         }];
     }
+    
     if(self.focusUserProfile) {
         self.focusUserProfile = [self.currentSession profileOfUser:self.focusUserProfile.userId isScreenSharing:self.focusUserProfile.screeSharing];
     }
@@ -2402,7 +2416,16 @@
         case RECORDING:
             [self showCommandToast:commandContent.boolValue ? @"主持人开始录制" : @"主持人结束录制"];
             break;
-            
+        case FOCUS:
+            [self showCommandToast:@"主持人锁定焦点用户"];
+            if(![self.focusUserProfile.userId isEqualToString:[WFCUConferenceManager sharedInstance].currentConferenceInfo.focus]) {
+                [self rearrangeParticipants];
+                [self reloadParticipantCollectionView];
+            }
+            break;
+        case CANCEL_FOCUS:
+            [self showCommandToast:@"主持人取消锁定焦点用户"];
+            break;
         default:
             break;
     }

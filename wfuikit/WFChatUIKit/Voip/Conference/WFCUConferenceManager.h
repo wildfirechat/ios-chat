@@ -81,6 +81,12 @@ extern NSString *kMuteStateChanged;
 //把所有用户举手放下
 - (void)putAllHandDown;
 
+//取消焦点用户
+- (BOOL)requestCancelFocus;
+
+//设置焦点用户
+- (BOOL)requestFocus:(NSString *)focusedUserId;
+
 //是否申请了unmute，等待主持人的批准
 @property(nonatomic, assign)BOOL isApplyingUnmute;
 

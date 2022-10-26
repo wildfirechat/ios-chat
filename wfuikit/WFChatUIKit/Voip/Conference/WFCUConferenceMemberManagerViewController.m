@@ -376,6 +376,14 @@
         [[WFCUConferenceManager sharedInstance] muteAudioVideo:member.isVideoEnabled];
     }];
     
+    UIAlertAction *focusMember = [UIAlertAction actionWithTitle:@"设置为焦点用户" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] requestFocus:member.userId];
+    }];
+    
+    UIAlertAction *cancelFocusMember = [UIAlertAction actionWithTitle:@"取消焦点用户" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [[WFCUConferenceManager sharedInstance] requestCancelFocus];
+    }];
+    
     [alertController addAction:actionCancel];
     [alertController addAction:showProfile];
     
@@ -414,6 +422,14 @@
             } else if(!member.isAudioEnabled && !member.isVideoEnabled) {
                 [alertController addAction:enableAudioVideo];
             }
+        }
+    }
+    
+    if([[WFCUConferenceManager sharedInstance].currentConferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if([member.userId isEqualToString:[WFCUConferenceManager sharedInstance].currentConferenceInfo.focus]) {
+            [alertController addAction:cancelFocusMember];
+        } else {
+            [alertController addAction:focusMember];
         }
     }
     

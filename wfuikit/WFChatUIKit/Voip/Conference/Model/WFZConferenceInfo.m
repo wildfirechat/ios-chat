@@ -22,6 +22,8 @@
     if([dictionary[@"managers"] isKindOfClass:[NSArray class]]) {
         info.managers = dictionary[@"managers"];
     }
+    if(![dictionary[@"focus"] isKindOfClass:[NSNull class]])
+        info.focus = dictionary[@"focus"];
     info.startTime = [dictionary[@"startTime"] longLongValue];
     info.endTime = [dictionary[@"endTime"] longLongValue];
     info.audience = [dictionary[@"audience"] boolValue];
@@ -41,6 +43,8 @@
     dict[@"pin"] = self.pin;
     dict[@"owner"] = self.owner;
     dict[@"managers"] = self.managers;
+    if(self.focus)
+        dict[@"focus"] = self.focus;
     dict[@"startTime"] = @(self.startTime);
     dict[@"endTime"] = @(self.endTime);
     dict[@"audience"] = @(self.audience);
