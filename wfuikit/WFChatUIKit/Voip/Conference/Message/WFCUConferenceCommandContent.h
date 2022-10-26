@@ -38,7 +38,12 @@ typedef NS_ENUM(NSInteger, WFCUConferenceCommandType) {
     PUT_ALL_HAND_DOWN,
     
     //录制，有参数是录制还是取消录制
-    RECORDING
+    RECORDING,
+    
+    //设置焦点用户
+    FOCUS,
+    //取消设置
+    CANCEL_FOCUS
 };
 
 @interface WFCUConferenceCommandContent : WFCCMessageContent

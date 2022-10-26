@@ -346,6 +346,12 @@ static WFCUConferenceManager *sharedSingleton = nil;
                             [self reloadConferenceInfo];
                             break;
                             
+                        case FOCUS:
+                        case CANCEL_FOCUS:
+                            self.currentConferenceInfo.focus = command.targetUserId;
+                            [self reloadConferenceInfo];
+                            break;
+                            
                         default:
                             break;
                     }
@@ -479,6 +485,36 @@ static WFCUConferenceManager *sharedSingleton = nil;
     
     [[WFCUConfigManager globalManager].appServiceProvider updateConference:self.currentConferenceInfo success:^(void) {
         [ws sendCommandMessage:CANCEL_MUTE_ALL targetUserId:nil boolValue:unmute];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+    
+    return YES;
+}
+
+- (BOOL)requestFocus:(NSString *)focusedUserId {
+    if(![self isOwner])
+        return NO;
+    
+    __weak typeof(self)ws = self;
+    [[WFCUConfigManager globalManager].appServiceProvider focusConference:self.currentConferenceInfo.conferenceId userId:focusedUserId success:^{
+        ws.currentConferenceInfo.focus = focusedUserId;
+        [ws sendCommandMessage:FOCUS targetUserId:focusedUserId boolValue:NO];
+    } error:^(int errorCode, NSString * _Nonnull message) {
+        
+    }];
+    
+    return YES;
+}
+
+- (BOOL)requestCancelFocus {
+    if(![self isOwner])
+        return NO;
+    
+    __weak typeof(self)ws = self;
+    [[WFCUConfigManager globalManager].appServiceProvider focusConference:self.currentConferenceInfo.conferenceId userId:nil success:^{
+        ws.currentConferenceInfo.focus = nil;
+        [ws sendCommandMessage:CANCEL_FOCUS targetUserId:nil boolValue:NO];
     } error:^(int errorCode, NSString * _Nonnull message) {
         
     }];
