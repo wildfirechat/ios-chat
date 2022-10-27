@@ -272,6 +272,12 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property (nonatomic, strong)NSString *sendLogCommand;
 
 /**
+ 服务地址
+ */
+@property(nonatomic, strong, readonly)NSString *serverHost;
+
+
+/**
  开启Log
  */
 + (void)startLog;

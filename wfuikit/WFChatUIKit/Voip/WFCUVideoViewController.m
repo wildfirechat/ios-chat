@@ -23,6 +23,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
 #import "WFCUUtilities.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
@@ -163,6 +164,11 @@
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     [self onDeviceOrientationDidChange];
+    
+    //检查turn服务是否部署。请勿使用野火turn服务上线，因为野火提供turn服务性能较弱带宽也较小，不足以支撑线上应用。请按照文档说明部署自己的turn服务。
+    if([[WFCUConfigManager globalManager].iceServerUrl rangeOfString:@"turn.wildfirechat.net"].location != NSNotFound && ![[WFCCNetworkService sharedInstance].serverHost isEqualToString:@"wildfirechat.net"]) {
+        [self.view makeToast:@"野火turn服务仅供用于体验和测试，性能和带宽都比较弱，请务必上线前部署自己的turn服务器！" duration:3 position:CSToastPositionCenter];
+    }
 }
 
 - (UIButton *)hangupButton {
