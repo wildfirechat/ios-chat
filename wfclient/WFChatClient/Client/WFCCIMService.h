@@ -1801,6 +1801,27 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                            group:(NSString *)groupId
                          success:(void(^)(void))successBlock
                            error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取当前用户的所有群组，注意这个方法的代价比较大，不建议高频使用
+ 
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+-(void)getMyGroups:(void(^)(NSArray<NSString *> *groupIds))successBlock
+                error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取某个用户的共同群组，注意这个方法的代价比较大，不建议高频使用
+ 
+ @param userId 用户ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getCommonGroups:(NSString *)userId
+                success:(void(^)(NSArray<NSString *> *groupIds))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
 /**
 当前用户是否启用消息回执功能，仅专业版有效
 
