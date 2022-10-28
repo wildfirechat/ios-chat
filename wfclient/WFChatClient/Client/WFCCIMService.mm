@@ -2304,8 +2304,17 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         }
     }];
 }
-//UserSettingScope_Group_Hide_Nickname = 5,
 
+-(void)getMyGroups:(void(^)(NSArray<NSString *> *))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    mars::stn::getMyGroups(new IMGeneralStringListCallback(successBlock, errorBlock));
+}
+
+- (void)getCommonGroups:(NSString *)userId
+                success:(void(^)(NSArray<NSString *> *))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    mars::stn::getCommonGroups([userId UTF8String], new IMGeneralStringListCallback(successBlock, errorBlock));
+}
 
 - (BOOL)deleteMessage:(long)messageId {
     return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;

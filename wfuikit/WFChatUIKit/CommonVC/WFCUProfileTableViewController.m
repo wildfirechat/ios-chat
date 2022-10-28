@@ -23,7 +23,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUUserMessageListViewController.h"
 #import "WFCUImage.h"
-
+#import "WFCUProfileMoreTableViewController.h"
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -44,6 +44,7 @@
 @property (strong, nonatomic)UITableViewCell *voipCallCell;
 @property (strong, nonatomic)UITableViewCell *addFriendCell;
 @property (strong, nonatomic)UITableViewCell *momentCell;
+@property (strong, nonatomic)UITableViewCell *moreCell;
 @property (nonatomic, strong)UITableViewCell *userMessagesCell;
 
 @property (nonatomic, strong)UITableView *tableView;
@@ -225,6 +226,7 @@
     
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
+
 - (void)loadData {
     self.cells = [[NSMutableArray alloc] init];
     
@@ -302,39 +304,6 @@
             [alisaCell.contentView addSubview:btn];
             [self showSeparatorLine:alisaCell];
             [self.headerCells addObject:alisaCell];
-
-    //        if (self.userInfo.mobile.length > 0) {
-    //            self.mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(92, 50, width - 94 - 8, 21)];
-    //            self.mobileLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
-    //            self.mobileLabel.textColor = [UIColor colorWithHexString:@"0x828282"];
-    //            self.mobileLabel.text = [NSString stringWithFormat:@"%@: %@",WFCString(@"Mobile"),self.userInfo.mobile];
-    //            [self.headerCell addSubview:self.mobileLabel];
-    //
-    //        }
-            
-            if (self.userInfo.email.length > 0) {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                cell.textLabel.text = self.userInfo.email;
-                [self.cells addObject:cell];
-            }
-            
-            if (self.userInfo.address.length) {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                cell.textLabel.text = self.userInfo.address;
-                [self.cells addObject:cell];
-            }
-            
-            if (self.userInfo.company.length) {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                cell.textLabel.text = self.userInfo.company;
-                [self.cells addObject:cell];
-            }
-            
-            if (self.userInfo.social.length) {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                cell.textLabel.text = self.userInfo.social;
-                [self.cells addObject:cell];
-            }
         }
         
         if (self.fromConversation.type == Group_Type) {
@@ -369,6 +338,10 @@
                 self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
+            
+            self.moreCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"more_cell"];
+            self.moreCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            self.moreCell.textLabel.text = WFCString(@"More");
         }
         
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
@@ -531,9 +504,9 @@
         return self.headerCells.count;
     } else if (section == 1) {
         if (self.momentCell) {
-            return 1;
+            return 2;
         } else {
-            return 0;
+            return 1;
         }
     } else if(section == 2) {
         return self.cells.count;
@@ -558,9 +531,13 @@
     if (indexPath.section == 0) {
        return self.headerCells[indexPath.row];
     } else if (indexPath.section == 1) {
-        return self.momentCell;
+        if(self.momentCell && indexPath.row == 0) {
+            return self.momentCell;
+        } else {
+            return self.moreCell;
+        }
     } else if (indexPath.section == 2) {
-           return self.cells[indexPath.row];
+        return self.cells[indexPath.row];
     } else {
         if (self.sendMessageCell) {
             if (indexPath.row == 0) {
@@ -613,6 +590,15 @@
         vc.userId = self.userId;
         vc.conversation = self.fromConversation;
         [self.navigationController pushViewController:vc animated:YES];
+    } else if([tableView cellForRowAtIndexPath:indexPath] == self.moreCell) {
+        WFCUProfileMoreTableViewController *moreVC = [[WFCUProfileMoreTableViewController alloc] init];
+        moreVC.userId = self.userId;
+        [[WFCCIMService sharedWFCIMService] getCommonGroups:self.userId success:^(NSArray<NSString *> *groupIds) {
+            moreVC.commonGroupIds = groupIds;
+        } error:^(int error_code) {
+            
+        }];
+        [self.navigationController pushViewController:moreVC animated:YES];
     }
 }
 #pragma mark - UITableViewDelegate
@@ -625,13 +611,13 @@
             return 50;
         }
     } else if(indexPath.section == 1) {
-        if (self.momentCell) {
-            return 70;
-        } else {
-            return 0;
-        }
+        return 50;
     } else if(indexPath.section == 2) {
+        if (self.momentCell) {
+            return 120;
+        } else {
             return 50;
+        }
     }  else {
         return 50;
     }
