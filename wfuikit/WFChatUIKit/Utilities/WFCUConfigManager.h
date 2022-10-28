@@ -53,8 +53,6 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, assign)BOOL displaySpeakingInMultiCall;
 
-@property(nonatomic, strong)NSString *iceServerUrl;
-
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
 @end
 
