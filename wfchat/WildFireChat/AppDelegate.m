@@ -53,6 +53,8 @@
 #if USE_CALL_KIT
 @property(nonatomic, strong) WFCCallKitManager *callKitManager;
 #endif
+
+@property(nonatomic, assign) BOOL firstConnected;
 @end
 
 @implementation AppDelegate
@@ -287,6 +289,19 @@
     //获取分组的共享目录
     NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
     NSURL *portraitURL = [groupURL URLByAppendingPathComponent:WFC_SHARE_BACKUPED_GROUP_GRID_PORTRAIT_PATH];
+    BOOL isDir = NO;
+    if(![[NSFileManager defaultManager] fileExistsAtPath:portraitURL.path isDirectory:&isDir]) {
+        NSError *error = nil;
+        if(![[NSFileManager defaultManager] createDirectoryAtPath:portraitURL.path withIntermediateDirectories:YES attributes:nil error:&error]) {
+            NSLog(@"Error, cannot create group portrait folder for share extension");
+            return;
+        }
+    } else {
+        if(!isDir) {
+            NSLog(@"Error, cannot create group portrait folder for share extension");
+            return;
+        }
+    }
     for (NSString *groupId in needComposedGroupIds) {
         //获取已经拼接好的头像，如果没有拼接会返回为空
         NSString *file = [WFCCUtilities getGroupGridPortrait:groupId width:80 generateIfNotExist:NO defaultUserPortrait:^UIImage *(NSString *userId) {
@@ -295,7 +310,8 @@
         
         if (file.length) {
             NSURL *fileURL = [portraitURL URLByAppendingPathComponent:groupId];
-            [[NSData dataWithContentsOfFile:file] writeToURL:fileURL atomically:YES];
+            NSData *data = [NSData dataWithContentsOfFile:file];
+            [data writeToURL:fileURL atomically:YES];
         }
     }
 }
@@ -562,7 +578,14 @@
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
-        } 
+        } else if(status == kConnectionStatusConnected) {
+            if(!self.firstConnected) {
+                self.firstConnected = YES;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self prepardDataForShareExtension];
+                });
+            }
+        }
     });
 }
 
