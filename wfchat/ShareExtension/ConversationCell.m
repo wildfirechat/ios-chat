@@ -26,7 +26,7 @@
     if (sc.type == 0) { //Single_Type
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
     } else if(sc.type == 1) {  //Group_Type
-        if (sc.portraitUrl) {
+        if (sc.portraitUrl.length) {
             [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"GroupChat"]];
         } else {
             [self.portraitView sd_setImageWithURL:[ShareUtility getSavedGroupGridPortrait:sc.target] placeholderImage:[UIImage imageNamed:@"GroupChat"]];

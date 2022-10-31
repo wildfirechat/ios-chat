@@ -37,6 +37,9 @@ static ShareAppService *sharedSingleton = nil;
     if (thumbnailLink) {
         [dataDict setObject:thumbnailLink forKey:@"t"];
     }
+    if(!title) {
+        title = link;
+    }
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
                                                                            options:kNilOptions
