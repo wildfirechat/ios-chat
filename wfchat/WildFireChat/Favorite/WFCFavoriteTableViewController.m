@@ -23,10 +23,11 @@
 #import <AVFoundation/AVFoundation.h>
 
 
-@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, SDPhotoBrowserDelegate, AVAudioPlayerDelegate>
+@interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, MWPhotoBrowserDelegate, AVAudioPlayerDelegate>
 @property(nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, strong)NSMutableArray<WFCUFavoriteItem *> *items;
+@property(nonatomic, strong)NSMutableArray<WFCUFavoriteItem *> *imageVideoItems;
 @property(nonatomic, assign)BOOL hasMore;
 @property(nonatomic, assign)BOOL loading;
 
@@ -153,29 +154,25 @@
             }
         }
             break;
+        case MESSAGE_CONTENT_TYPE_VIDEO:
         case MESSAGE_CONTENT_TYPE_IMAGE:
         {
-            SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-            browser.sourceImagesContainerView = self.view;
-            browser.imageCount = 1;
-            browser.currentImageIndex = 0;
-            browser.delegate = self;
-            [browser show]; // 展示图片浏览器
-        }
-            break;
-        case MESSAGE_CONTENT_TYPE_VIDEO:
-        {
-            
-            if (!self.videoPlayerViewController) {
-                self.videoPlayerViewController = [VideoPlayerKit videoPlayerWithContainingView:self.view optionalTopView:nil hideTopViewWithControls:YES];
-                self.videoPlayerViewController.allowPortraitFullscreen = YES;
-            } else {
-                [self.videoPlayerViewController.view removeFromSuperview];
+            MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+            browser.displayActionButton = YES;
+            browser.displayNavArrows = NO;
+            browser.displaySelectionButtons = NO;
+            browser.alwaysShowControls = NO;
+            browser.zoomPhotosToFill = YES;
+            browser.enableGrid = YES;
+            browser.startOnGrid = NO;
+            browser.enableSwipeToDismiss = NO;
+            browser.autoPlayOnAppear = NO;
+            NSUInteger index = [self.imageVideoItems indexOfObject:item];
+            if(index >= self.imageVideoItems.count) {
+                index = 0;
             }
-            
-            [self.view addSubview:self.videoPlayerViewController.view];
-            
-            [self.videoPlayerViewController playVideoWithTitle:@" " URL:[NSURL URLWithString:self.selectedCell.favoriteItem.url] videoID:nil shareURL:nil isStreaming:NO playInFullScreen:YES];
+            [browser setCurrentPhotoIndex:index];
+            [self.navigationController pushViewController:browser animated:YES];
         }
             break;
         case MESSAGE_CONTENT_TYPE_LOCATION:
@@ -270,7 +267,15 @@
     
 }
 
-
+- (NSMutableArray<WFCUFavoriteItem *> *)imageVideoItems {
+    NSMutableArray *is = [[NSMutableArray alloc] init];
+    [self.items enumerateObjectsUsingBlock:^(WFCUFavoriteItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.favType == MESSAGE_CONTENT_TYPE_IMAGE || obj.favType == MESSAGE_CONTENT_TYPE_VIDEO) {
+            [is addObject:obj];
+        }
+    }];
+    return is;
+}
 
 -(BOOL)canBecomeFirstResponder {
     return YES;
@@ -476,19 +481,56 @@
         [self.tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
 }
-#pragma mark - SDPhotoBrowserDelegate
-- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
-    WFCUFavoriteItem *favoriteItem = self.selectedCell.favoriteItem;
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+
+#pragma mark - MWPhotoBrowser
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return self.imageVideoItems.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    WFCUFavoriteItem *item = self.imageVideoItems[index];
+    if(item.favType == MESSAGE_CONTENT_TYPE_IMAGE) {
+        MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:item.url]];
+        return photo;
+    } else if(item.favType == MESSAGE_CONTENT_TYPE_VIDEO) {
+        MWPhoto *photo = [MWPhoto videoWithURL:[NSURL URLWithString:item.url]];
+        return photo;
+    }
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    WFCUFavoriteItem *item = self.imageVideoItems[index];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[item.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     NSString *thumbStr = dict[@"thumb"];
     NSData *thumbData = [[NSData alloc] initWithBase64EncodedString:thumbStr options:NSDataBase64DecodingIgnoreUnknownCharacters];
     UIImage *image = [UIImage imageWithData:thumbData];
-    return image;
+    
+    BOOL video = NO;
+    if(item.favType == MESSAGE_CONTENT_TYPE_VIDEO) {
+        video = YES;
+    }
+    MWPhoto *photo = [MWPhoto photoWithImage:image];
+    photo.isVideo = video;
+    return photo;
 }
 
-- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
-    WFCUFavoriteItem *favoriteItem = self.selectedCell.favoriteItem;
-    return [NSURL URLWithString:favoriteItem.url];
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
+}
+
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
+    return NO;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
+    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    // If we subscribe to this method we must dismiss the view controller ourselves
+    NSLog(@"Did finish modal presentation");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - AVAudioPlayerDelegate

@@ -35,7 +35,6 @@
 #import "UIView+Toast.h"
 
 #import "WFCUConversationSettingViewController.h"
-#import "SDPhotoBrowser.h"
 #import "WFCULocationViewController.h"
 #import "WFCULocationPoint.h"
 #import "WFCUVideoViewController.h"
@@ -64,7 +63,6 @@
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationSearchTableViewController.h"
 
-#import "WFCUMediaMessageGridViewController.h"
 #import "WFCUConferenceViewController.h"
 
 #import "WFCUGroupInfoViewController.h"
@@ -85,7 +83,9 @@
 #import "WFZConferenceInfoViewController.h"
 #import "WFZConferenceInfo.h"
 
-@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, SDPhotoBrowserDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate>
+#import "MWPhotoBrowser.h"
+
+@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 
@@ -2018,7 +2018,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessageStartPlaying object:@(self.playingMessageId)];
     } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
-        NSURL *url = [NSURL fileURLWithPath:[videoMsg.localPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
 
         
         if (!url) {
@@ -2136,46 +2136,47 @@
 
 #pragma mark - MessageCellDelegate
 - (void)didTapMessageCell:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
-    if ([model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+    if ([model.message.content isKindOfClass:[WFCCImageMessageContent class]] || [model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         if(self.conversation.type == SecretChat_Type) {
-            WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)model.message.content;
             typeof(self) ws = self;
             __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.label.text = WFCString(@"Loading");
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgContent.remoteUrl]];
+                WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)model.message.content;
+                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:mediaContent.remoteUrl]];
                 data = [[WFCCIMService sharedWFCIMService] decodeSecretChat:model.message.conversation.target mediaData:data];
-                UIImage *image = [UIImage imageWithData:data];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(image) {
-                        [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
-                        [hud hideAnimated:YES];
-                        WFCUImagePreviewViewController *previewVC = [[WFCUImagePreviewViewController alloc] init];
-                        previewVC.image = image;
-                        [ws.navigationController presentViewController:previewVC animated:YES completion:nil];
-                    } else {
-                        hud.mode = MBProgressHUDModeText;
-                        hud.label.text = WFCString(@"LoadFailure");
-                        [hud hideAnimated:YES afterDelay:1.f];
-                    }
-                });
+                if([model.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+                    UIImage *image = [UIImage imageWithData:data];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(image) {
+                            [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+                            [hud hideAnimated:YES];
+                            WFCUImagePreviewViewController *previewVC = [[WFCUImagePreviewViewController alloc] init];
+                            previewVC.image = image;
+                            [ws.navigationController presentViewController:previewVC animated:YES completion:nil];
+                        } else {
+                            hud.mode = MBProgressHUDModeText;
+                            hud.label.text = WFCString(@"LoadFailure");
+                            [hud hideAnimated:YES afterDelay:1.f];
+                        }
+                    });
+                } else {
+                    //Todo play video
+                }
             });
         } else {
             if (self.conversation.type == Chatroom_Type) {
                 NSMutableArray *imageMsgs = [[NSMutableArray alloc] init];
                 for (WFCUMessageModel *msgModle in self.modelList) {
-                    if ([msgModle.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+                    if ([msgModle.message.content isKindOfClass:[WFCCImageMessageContent class]] || [msgModle.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
                         [imageMsgs addObject:msgModle.message];
                     }
                 }
                 self.imageMsgs = imageMsgs;
             } else {
-                self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE)] from:0 count:100 withUser:self.privateChatUser];
+                self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:0 count:100 withUser:self.privateChatUser];
             }
-            SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-            browser.sourceImagesContainerView = self.backgroundView;
-            browser.showAll = YES;
-            browser.imageCount = self.imageMsgs.count;
+            
             int i;
             for (i = 0; i < self.imageMsgs.count; i++) {
                 if ([self.imageMsgs objectAtIndex:i].messageId == model.message.messageId) {
@@ -2185,10 +2186,19 @@
             if (i == self.imageMsgs.count) {
                 i = 0;
             }
-            [self onResetKeyboard:nil];
-            browser.currentImageIndex = i;
-            browser.delegate = self;
-            [browser show]; // 展示图片浏览器
+            
+            MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+            browser.displayActionButton = YES;
+            browser.displayNavArrows = NO;
+            browser.displaySelectionButtons = NO;
+            browser.alwaysShowControls = NO;
+            browser.zoomPhotosToFill = YES;
+            browser.enableGrid = YES;
+            browser.startOnGrid = NO;
+            browser.enableSwipeToDismiss = NO;
+            browser.autoPlayOnAppear = NO;
+            [browser setCurrentPhotoIndex:i];
+            [self.navigationController pushViewController:browser animated:YES];
         }
     } else if([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
         if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
@@ -2222,27 +2232,6 @@
 #if WFCU_SUPPORT_VOIP
         [self didTouchVideoBtn:callStartMsg.isAudioOnly];
 #endif
-    } else if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
-        WFCCVideoMessageContent *videoMsg = (WFCCVideoMessageContent *)model.message.content;
-        if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
-            [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
-            model.message.status = Message_Status_Played;
-            [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
-        }
-        
-        if (videoMsg.localPath.length == 0 || ![WFCUUtilities isFileExist:videoMsg.localPath]) {
-            model.mediaDownloading = YES;
-            __weak typeof(self) weakSelf = self;
-            
-            [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
-                model.mediaDownloading = NO;
-                [weakSelf startPlay:model];
-            } error:^(long long messageUid, int error_code) {
-                model.mediaDownloading = NO;
-            }];
-        } else {
-            [self startPlay:model];
-        }
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
 #if WFCU_SUPPORT_VOIP
         __weak typeof(self)ws = self;
@@ -2523,14 +2512,18 @@
                 [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
             } else if ([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
                 self.imageMsgs = @[msg];
-                SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-                browser.sourceImagesContainerView = self.backgroundView;
-                browser.showAll = NO;
-                browser.imageCount = self.imageMsgs.count;
-                [self onResetKeyboard:nil];
-                browser.currentImageIndex = 0;
-                browser.delegate = self;
-                [browser show]; // 展示图片浏览器
+                MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+                browser.displayActionButton = YES;
+                browser.displayNavArrows = NO;
+                browser.displaySelectionButtons = NO;
+                browser.alwaysShowControls = NO;
+                browser.zoomPhotosToFill = YES;
+                browser.enableGrid = NO;
+                browser.startOnGrid = NO;
+                browser.enableSwipeToDismiss = NO;
+                browser.autoPlayOnAppear = NO;
+                [browser setCurrentPhotoIndex:0];
+                [self.navigationController pushViewController:browser animated:YES];
             } else if ([msg.content isKindOfClass:[WFCCLocationMessageContent class]]) {
                 WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)msg.content;
                 WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
@@ -2900,33 +2893,6 @@
     }
 }
 
-#pragma mark - SDPhotoBrowserDelegate
-- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
-    WFCCMessage *msg = [self.imageMsgs objectAtIndex:index];
-    if ([[msg.content class] getContentType] == MESSAGE_CONTENT_TYPE_IMAGE) {
-        WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)msg.content;
-        return imgContent.thumbnail;
-    }
-    return nil;
-}
-
-- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
-    WFCCMessage *msg = [self.imageMsgs objectAtIndex:index];
-    if ([[msg.content class] getContentType] == MESSAGE_CONTENT_TYPE_IMAGE) {
-        WFCCImageMessageContent *imgContent = (WFCCImageMessageContent *)msg.content;
-        return [NSURL URLWithString:[imgContent.remoteUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    }
-    return nil;
-}
-
-- (void)photoBrowserDidDismiss:(SDPhotoBrowser *)browser {
-    self.imageMsgs = nil;
-}
-- (void)photoBrowserShowAllView {
-    WFCUMediaMessageGridViewController *vc = [[WFCUMediaMessageGridViewController alloc] init];
-    vc.conversation = self.conversation;
-    [self.navigationController pushViewController:vc animated:YES];
-}
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     return self.navigationController.childViewControllers.count > 1;
@@ -3353,6 +3319,62 @@
         self.focusedOngoingCellIndex = -1;
         [self.ongoingCallTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+//self.imageMsgs = imageMsgs;
+
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return self.imageMsgs.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    WFCCMessage *msg = self.imageMsgs[index];
+    if([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)msg.content;
+        MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:imgCnt.remoteUrl]];
+        return photo;
+    } else if([msg.content isKindOfClass:[WFCCVideoMessageContent class]]) {
+        WFCCVideoMessageContent *videoCnt = (WFCCVideoMessageContent *)msg.content;
+        MWPhoto *photo = [MWPhoto videoWithURL:[NSURL URLWithString:videoCnt.remoteUrl]];
+        return photo;
+    }
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    WFCCMessage *msg = self.imageMsgs[index];
+    UIImage *image = nil;
+    BOOL video = NO;
+    if([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)msg.content;
+        image = imgCnt.thumbnail;
+    } else if([msg.content isKindOfClass:[WFCCVideoMessageContent class]]) {
+        WFCCVideoMessageContent *videoCnt = (WFCCVideoMessageContent *)msg.content;
+        image = videoCnt.thumbnail;
+        video = YES;
+    }
+    MWPhoto *photo = [MWPhoto photoWithImage:image];
+    photo.isVideo = video;
+    return photo;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
+}
+
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
+    return NO;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
+    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    // If we subscribe to this method we must dismiss the view controller ourselves
+    NSLog(@"Did finish modal presentation");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dealloc {
