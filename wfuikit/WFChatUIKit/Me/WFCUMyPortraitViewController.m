@@ -11,10 +11,10 @@
 #import <SDWebImage/SDWebImage.h>
 #import "MBProgressHUD.h"
 #import "WFCUUtilities.h"
-#import "SDPhotoBrowser.h"
+#import "MWPhotoBrowser.h"
 #import "WFCUImage.h"
 
-@interface WFCUMyPortraitViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, SDPhotoBrowserDelegate>
+@interface WFCUMyPortraitViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, MWPhotoBrowserDelegate>
   @property (strong, nonatomic)UIImageView *portraitView;
 @property (nonatomic, strong)UIImage *image;
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
@@ -38,7 +38,11 @@
     __weak typeof(self)ws = self;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ws.image = image;
+            if(image) {
+                ws.image = image;
+            } else {
+                ws.image = [WFCUImage imageNamed:@"PersonalChat"];
+            }
         });
     }];
     
@@ -49,12 +53,18 @@
 }
 
 - (void)showFullScreen:(id)sender {
-    SDPhotoBrowser *browser = [[SDPhotoBrowser alloc] init];
-    browser.sourceImagesContainerView = self.view;
-    browser.imageCount = 1;
-    browser.currentImageIndex = 0;
-    browser.delegate = self;
-    [browser show]; // 展示图片浏览器
+    MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    browser.displayNavArrows = NO;
+    browser.displaySelectionButtons = NO;
+    browser.alwaysShowControls = NO;
+    browser.zoomPhotosToFill = YES;
+    browser.enableGrid = NO;
+    browser.startOnGrid = NO;
+    browser.enableSwipeToDismiss = NO;
+    browser.autoPlayOnAppear = NO;
+    [browser setCurrentPhotoIndex:0];
+    [self.navigationController pushViewController:browser animated:YES];
 }
 
 - (void)setImage:(UIImage *)image {
@@ -194,15 +204,36 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [hud hideAnimated:YES afterDelay:1.f];
   }
 
-#pragma mark - SDPhotoBrowserDelegate
-- (UIImage *)photoBrowser:(SDPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index {
-    return [WFCUImage imageNamed:@"PersonalChat"];
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return 1;
 }
 
-- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index {
-    return [NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:self.userInfo.portrait]];
+    return photo;
 }
 
-- (void)photoBrowserDidDismiss:(SDPhotoBrowser *)browser {
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:self.userInfo.portrait]];
+    return photo;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
+}
+
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
+    return NO;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
+    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    // If we subscribe to this method we must dismiss the view controller ourselves
+    NSLog(@"Did finish modal presentation");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

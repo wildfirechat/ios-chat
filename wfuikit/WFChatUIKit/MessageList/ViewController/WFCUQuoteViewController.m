@@ -8,8 +8,6 @@
 
 #import "WFCUQuoteViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import "SDPhotoBrowser.h"
-
 
 @interface WFCUQuoteViewController ()
 @end

@@ -386,6 +386,7 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
                                  }
                                  
                                  [self.videoPlayerView removeFromSuperview];
+                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"kVideoPlayerKitPlayCanceled" object:nil];
                              }];
         } else {
             [UIView animateWithDuration:0.45f

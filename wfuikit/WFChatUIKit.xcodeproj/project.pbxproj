@@ -31,8 +31,6 @@
 		2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B1F50DA254A59F800E6B93B /* WFCUFileRecordTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */; };
 		2B1F50DB254A59F800E6B93B /* WFCUFileRecordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */; };
-		2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */; };
-		2B46D4D924ACC64300721792 /* WFCUMediaMessageGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */; };
 		2B46D4DC24ACC9B900721792 /* MediaMessageGridViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */; };
 		2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */; };
 		2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B63367C24716864008D6B38 /* ZCCCircleProgressView.m */; };
@@ -424,6 +422,33 @@
 		9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */; };
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
 		90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */; };
+		B70162EB290E2F1700DCD651 /* MWTapDetectingImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D5290E2F1700DCD651 /* MWTapDetectingImageView.h */; };
+		B70162EC290E2F1700DCD651 /* MWPhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D6290E2F1700DCD651 /* MWPhoto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B70162ED290E2F1700DCD651 /* MWPhotoProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D7290E2F1700DCD651 /* MWPhotoProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B70162EE290E2F1700DCD651 /* MWGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D8290E2F1700DCD651 /* MWGridViewController.h */; };
+		B70162EF290E2F1700DCD651 /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162D9290E2F1700DCD651 /* MWPhotoBrowser.m */; };
+		B70162F0290E2F1700DCD651 /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162DA290E2F1700DCD651 /* MWCaptionView.m */; };
+		B70162F1290E2F1700DCD651 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = B70162DB290E2F1700DCD651 /* .gitkeep */; };
+		B70162F2290E2F1700DCD651 /* MWTapDetectingView.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162DC290E2F1700DCD651 /* MWTapDetectingView.h */; };
+		B70162F3290E2F1700DCD651 /* MWPhotoBrowserPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162DD290E2F1700DCD651 /* MWPhotoBrowserPrivate.h */; };
+		B70162F4290E2F1700DCD651 /* MWZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162DE290E2F1700DCD651 /* MWZoomingScrollView.m */; };
+		B70162F5290E2F1700DCD651 /* UIImage+MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162DF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.m */; };
+		B70162F6290E2F1700DCD651 /* MWGridCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162E0290E2F1700DCD651 /* MWGridCell.h */; };
+		B70162F7290E2F1700DCD651 /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162E1290E2F1700DCD651 /* MWTapDetectingImageView.m */; };
+		B70162F8290E2F1700DCD651 /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162E2290E2F1700DCD651 /* MWPhoto.m */; };
+		B70162F9290E2F1700DCD651 /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162E3290E2F1700DCD651 /* MWTapDetectingView.m */; };
+		B70162FA290E2F1700DCD651 /* MWCaptionView.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162E4290E2F1700DCD651 /* MWCaptionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B70162FB290E2F1700DCD651 /* MWGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162E5290E2F1700DCD651 /* MWGridViewController.m */; };
+		B70162FC290E2F1700DCD651 /* MWPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162E6290E2F1700DCD651 /* MWPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B70162FD290E2F1700DCD651 /* MWCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162E7290E2F1700DCD651 /* MWCommon.h */; };
+		B70162FE290E2F1700DCD651 /* MWGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B70162E8290E2F1700DCD651 /* MWGridCell.m */; };
+		B70162FF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162E9290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h */; };
+		B7016300290E2F1700DCD651 /* MWZoomingScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162EA290E2F1700DCD651 /* MWZoomingScrollView.h */; };
+		B7016302290E2FC100DCD651 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7016301290E2FC100DCD651 /* MWPhotoBrowser.bundle */; };
+		B7016309290E346C00DCD651 /* DALabeledCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7016305290E346C00DCD651 /* DALabeledCircularProgressView.m */; };
+		B701630A290E346C00DCD651 /* DACircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7016306290E346C00DCD651 /* DACircularProgressView.m */; };
+		B701630B290E346C00DCD651 /* DALabeledCircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7016307290E346C00DCD651 /* DALabeledCircularProgressView.h */; };
+		B701630C290E346C00DCD651 /* DACircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7016308290E346C00DCD651 /* DACircularProgressView.h */; };
 		B707758D2881ABB1004034A5 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */; };
 		B707758E2881ABB1004034A5 /* WFChatUIKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */; };
 		B707758F2881ABB1004034A5 /* WFCUShareMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F55103C217F5CC100F56C26 /* WFCUShareMessageView.xib */; };
@@ -594,8 +619,6 @@
 		2B15F1B72509E285007022BC /* WFCUGroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGroupInfoViewController.h; sourceTree = "<group>"; };
 		2B1F50D8254A59F800E6B93B /* WFCUFileRecordTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFileRecordTableViewCell.h; sourceTree = "<group>"; };
 		2B1F50D9254A59F800E6B93B /* WFCUFileRecordTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUFileRecordTableViewCell.m; sourceTree = "<group>"; };
-		2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUMediaMessageGridViewController.h; sourceTree = "<group>"; };
-		2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUMediaMessageGridViewController.m; sourceTree = "<group>"; };
 		2B46D4DA24ACC9B900721792 /* MediaMessageGridViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaMessageGridViewCell.h; sourceTree = "<group>"; };
 		2B46D4DB24ACC9B900721792 /* MediaMessageGridViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaMessageGridViewCell.m; sourceTree = "<group>"; };
 		2B5E94FF25B8274D00317D53 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
@@ -995,6 +1018,33 @@
 		9029D0FD21C5D7930002EBAA /* WFCUCreateChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUCreateChannelViewController.m; path = WFChatUIKit/CreateGroup/ViewController/WFCUCreateChannelViewController.m; sourceTree = SOURCE_ROOT; };
 		90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConversationSearchTableViewCell.h; sourceTree = "<group>"; };
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
+		B70162D5290E2F1700DCD651 /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWTapDetectingImageView.h; sourceTree = "<group>"; };
+		B70162D6290E2F1700DCD651 /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhoto.h; sourceTree = "<group>"; };
+		B70162D7290E2F1700DCD651 /* MWPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoProtocol.h; sourceTree = "<group>"; };
+		B70162D8290E2F1700DCD651 /* MWGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWGridViewController.h; sourceTree = "<group>"; };
+		B70162D9290E2F1700DCD651 /* MWPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWPhotoBrowser.m; sourceTree = "<group>"; };
+		B70162DA290E2F1700DCD651 /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
+		B70162DB290E2F1700DCD651 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		B70162DC290E2F1700DCD651 /* MWTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWTapDetectingView.h; sourceTree = "<group>"; };
+		B70162DD290E2F1700DCD651 /* MWPhotoBrowserPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoBrowserPrivate.h; sourceTree = "<group>"; };
+		B70162DE290E2F1700DCD651 /* MWZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWZoomingScrollView.m; sourceTree = "<group>"; };
+		B70162DF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MWPhotoBrowser.m"; sourceTree = "<group>"; };
+		B70162E0290E2F1700DCD651 /* MWGridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWGridCell.h; sourceTree = "<group>"; };
+		B70162E1290E2F1700DCD651 /* MWTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWTapDetectingImageView.m; sourceTree = "<group>"; };
+		B70162E2290E2F1700DCD651 /* MWPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWPhoto.m; sourceTree = "<group>"; };
+		B70162E3290E2F1700DCD651 /* MWTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWTapDetectingView.m; sourceTree = "<group>"; };
+		B70162E4290E2F1700DCD651 /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
+		B70162E5290E2F1700DCD651 /* MWGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWGridViewController.m; sourceTree = "<group>"; };
+		B70162E6290E2F1700DCD651 /* MWPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoBrowser.h; sourceTree = "<group>"; };
+		B70162E7290E2F1700DCD651 /* MWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCommon.h; sourceTree = "<group>"; };
+		B70162E8290E2F1700DCD651 /* MWGridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWGridCell.m; sourceTree = "<group>"; };
+		B70162E9290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MWPhotoBrowser.h"; sourceTree = "<group>"; };
+		B70162EA290E2F1700DCD651 /* MWZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWZoomingScrollView.h; sourceTree = "<group>"; };
+		B7016301290E2FC100DCD651 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MWPhotoBrowser.bundle; sourceTree = "<group>"; };
+		B7016305290E346C00DCD651 /* DALabeledCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DALabeledCircularProgressView.m; sourceTree = "<group>"; };
+		B7016306290E346C00DCD651 /* DACircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DACircularProgressView.m; sourceTree = "<group>"; };
+		B7016307290E346C00DCD651 /* DALabeledCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DALabeledCircularProgressView.h; sourceTree = "<group>"; };
+		B7016308290E346C00DCD651 /* DACircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DACircularProgressView.h; sourceTree = "<group>"; };
 		B707759728823635004034A5 /* WFCUImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUImage.h; sourceTree = "<group>"; };
 		B707759828823635004034A5 /* WFCUImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUImage.m; sourceTree = "<group>"; };
 		B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
@@ -1492,8 +1542,6 @@
 			children = (
 				2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */,
 				2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */,
-				2B46D4D624ACC64300721792 /* WFCUMediaMessageGridViewController.h */,
-				2B46D4D724ACC64300721792 /* WFCUMediaMessageGridViewController.m */,
 				2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */,
 				2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */,
 				2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */,
@@ -1575,6 +1623,8 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B7016304290E346C00DCD651 /* DACircularProgress */,
+				B70162D4290E2F1700DCD651 /* MWPhotoBrowser */,
 				B7E494DF28F6708100FF2333 /* libyuv */,
 				B71F0A5228F54156000A7C8A /* CocoaAsyncSocket */,
 				B7C543E828D5876700A2550F /* LBXScan */,
@@ -2213,6 +2263,47 @@
 			path = AVEngine;
 			sourceTree = "<group>";
 		};
+		B70162D4290E2F1700DCD651 /* MWPhotoBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				B70162D5290E2F1700DCD651 /* MWTapDetectingImageView.h */,
+				B70162D6290E2F1700DCD651 /* MWPhoto.h */,
+				B70162D7290E2F1700DCD651 /* MWPhotoProtocol.h */,
+				B70162D8290E2F1700DCD651 /* MWGridViewController.h */,
+				B70162D9290E2F1700DCD651 /* MWPhotoBrowser.m */,
+				B70162DA290E2F1700DCD651 /* MWCaptionView.m */,
+				B70162DB290E2F1700DCD651 /* .gitkeep */,
+				B70162DC290E2F1700DCD651 /* MWTapDetectingView.h */,
+				B70162DD290E2F1700DCD651 /* MWPhotoBrowserPrivate.h */,
+				B70162DE290E2F1700DCD651 /* MWZoomingScrollView.m */,
+				B70162DF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.m */,
+				B70162E0290E2F1700DCD651 /* MWGridCell.h */,
+				B70162E1290E2F1700DCD651 /* MWTapDetectingImageView.m */,
+				B70162E2290E2F1700DCD651 /* MWPhoto.m */,
+				B70162E3290E2F1700DCD651 /* MWTapDetectingView.m */,
+				B70162E4290E2F1700DCD651 /* MWCaptionView.h */,
+				B70162E5290E2F1700DCD651 /* MWGridViewController.m */,
+				B70162E6290E2F1700DCD651 /* MWPhotoBrowser.h */,
+				B70162E7290E2F1700DCD651 /* MWCommon.h */,
+				B70162E8290E2F1700DCD651 /* MWGridCell.m */,
+				B70162E9290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h */,
+				B70162EA290E2F1700DCD651 /* MWZoomingScrollView.h */,
+				B7016301290E2FC100DCD651 /* MWPhotoBrowser.bundle */,
+			);
+			path = MWPhotoBrowser;
+			sourceTree = "<group>";
+		};
+		B7016304290E346C00DCD651 /* DACircularProgress */ = {
+			isa = PBXGroup;
+			children = (
+				B7016305290E346C00DCD651 /* DALabeledCircularProgressView.m */,
+				B7016306290E346C00DCD651 /* DACircularProgressView.m */,
+				B7016307290E346C00DCD651 /* DALabeledCircularProgressView.h */,
+				B7016308290E346C00DCD651 /* DACircularProgressView.h */,
+			);
+			path = DACircularProgress;
+			sourceTree = "<group>";
+		};
 		B71F0A5228F54156000A7C8A /* CocoaAsyncSocket */ = {
 			isa = PBXGroup;
 			children = (
@@ -2454,16 +2545,22 @@
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */,
+				B701630B290E346C00DCD651 /* DALabeledCircularProgressView.h in Headers */,
 				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
 				B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */,
 				B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */,
 				B74FDF8428E43275001B870F /* WFCUMoreBoardView.h in Headers */,
+				B70162EC290E2F1700DCD651 /* MWPhoto.h in Headers */,
 				2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */,
+				B70162ED290E2F1700DCD651 /* MWPhotoProtocol.h in Headers */,
+				B70162FC290E2F1700DCD651 /* MWPhotoBrowser.h in Headers */,
 				B7C5442528D5876700A2550F /* LBXScanViewController.h in Headers */,
+				B70162FD290E2F1700DCD651 /* MWCommon.h in Headers */,
 				B7D584DE28CF0EC4009D09AF /* WFZStartConferenceViewController.h in Headers */,
 				2FB87A66265122F900790A26 /* WFCUEnum.h in Headers */,
 				2F1EB5B32499A21A00FD3575 /* WFCUConferenceViewController.h in Headers */,
 				2F551222217F5CC300F56C26 /* WFCUModifyMyProfileViewController.h in Headers */,
+				B70162FA290E2F1700DCD651 /* MWCaptionView.h in Headers */,
 				B7C5441C28D5876700A2550F /* QQLBXScanViewController.h in Headers */,
 				2F518FEF235ED5B300FA3D58 /* WFCUAppServiceProvider.h in Headers */,
 				2F56F6B42529EE0F00B829C4 /* WFCUCompositeMessageViewController.h in Headers */,
@@ -2471,6 +2568,7 @@
 				2F5510E4217F5CC200F56C26 /* WFCULocationPoint.h in Headers */,
 				2F5510E6217F5CC200F56C26 /* WFCULocationViewController.h in Headers */,
 				2BD8D72524D69B5300281B81 /* WFCUFilesViewController.h in Headers */,
+				B70162EB290E2F1700DCD651 /* MWTapDetectingImageView.h in Headers */,
 				B7C5442A28D5876700A2550F /* CreateBarCodeViewController.h in Headers */,
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
@@ -2515,6 +2613,7 @@
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */,
 				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
+				B70162F3290E2F1700DCD651 /* MWPhotoBrowserPrivate.h in Headers */,
 				B7D36FED28DAC90900893D59 /* WFCUConferenceCollectionViewLayout.h in Headers */,
 				B7C5441E28D5876700A2550F /* LBXScanView.h in Headers */,
 				B7C5443028D5876700A2550F /* UIAlertController+supportedInterfaceOrientations.h in Headers */,
@@ -2542,6 +2641,7 @@
 				2F5510B0217F5CC200F56C26 /* WFCUGroupMemberTableViewController.h in Headers */,
 				1450EA852438922800BF51FC /* WFCUUserSectionKeySupport.h in Headers */,
 				2F551100217F5CC200F56C26 /* CCHMapClusterControllerUtils.h in Headers */,
+				B70162F2290E2F1700DCD651 /* MWTapDetectingView.h in Headers */,
 				2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */,
 				2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */,
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
@@ -2574,6 +2674,7 @@
 				2F551109217F5CC200F56C26 /* pinyin.h in Headers */,
 				2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */,
 				2F551191217F5CC200F56C26 /* SDRefreshView.h in Headers */,
+				B70162F6290E2F1700DCD651 /* MWGridCell.h in Headers */,
 				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				2F5510F5217F5CC200F56C26 /* CCHMapViewDelegateProxy.h in Headers */,
 				B77D33FC290C258A00E72111 /* WFCUGroupTableViewController.h in Headers */,
@@ -2622,6 +2723,7 @@
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
 				B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */,
+				B701630C290E346C00DCD651 /* DACircularProgressView.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
 				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
@@ -2675,12 +2777,15 @@
 				2BDF579D24AD70C8003C1F08 /* UIView+DNImagePicker.h in Headers */,
 				2F551150217F5CC200F56C26 /* KZVideoListViewController.h in Headers */,
 				2F55118F217F5CC200F56C26 /* UIView+SDExtension.h in Headers */,
+				B70162EE290E2F1700DCD651 /* MWGridViewController.h in Headers */,
+				B7016300290E2F1700DCD651 /* MWZoomingScrollView.h in Headers */,
 				2BDF579624AD70C8003C1F08 /* DNAsset.h in Headers */,
 				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
 				B71F0A7428F54156000A7C8A /* DDLog.h in Headers */,
 				2F5511E3217F5CC300F56C26 /* YLGIFImage.h in Headers */,
 				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */,
+				B70162FF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h in Headers */,
 				2F5511FD217F5CC300F56C26 /* WFCUSwitchTableViewCell.h in Headers */,
 				2F551101217F5CC200F56C26 /* CCHMapClusterOperation.h in Headers */,
 				2FD550F62442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h in Headers */,
@@ -2721,7 +2826,6 @@
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
 				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
 				90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */,
-				2B46D4D824ACC64300721792 /* WFCUMediaMessageGridViewController.h in Headers */,
 				2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */,
 				2F55110C217F5CC200F56C26 /* FullScreenView.h in Headers */,
 				B7C5443E28D5876700A2550F /* LBXScanNative.h in Headers */,
@@ -2792,7 +2896,9 @@
 				B707758F2881ABB1004034A5 /* WFCUShareMessageView.xib in Resources */,
 				B70775902881ABB1004034A5 /* Stickers.bundle in Resources */,
 				B70775912881ABB1004034A5 /* Emoj.plist in Resources */,
+				B7016302290E2FC100DCD651 /* MWPhotoBrowser.bundle in Resources */,
 				B7C5441D28D5876700A2550F /* CodeScan.bundle in Resources */,
+				B70162F1290E2F1700DCD651 /* .gitkeep in Resources */,
 				B70775922881ABB1004034A5 /* wfc.strings in Resources */,
 				B71F0A6E28F54156000A7C8A /* Documentation.html in Resources */,
 			);
@@ -2822,6 +2928,7 @@
 				2F551102217F5CC200F56C26 /* CCHNearCenterMapClusterer.m in Sources */,
 				2FB7125F25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m in Sources */,
 				2FDF87162723E01100AC6C36 /* WFPttViewController.m in Sources */,
+				B70162F4290E2F1700DCD651 /* MWZoomingScrollView.m in Sources */,
 				2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */,
 				2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */,
 				2F5511D8217F5CC300F56C26 /* UIView+TYAutoLayout.m in Sources */,
@@ -2832,6 +2939,7 @@
 				2BBC9CF6255CED1F007DA28A /* WFCUFilesEntryViewController.m in Sources */,
 				2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */,
 				B7C5444228D5876700A2550F /* LBXPermissionSetting.m in Sources */,
+				B70162F0290E2F1700DCD651 /* MWCaptionView.m in Sources */,
 				2F5510B8217F5CC200F56C26 /* WFCUImagePreviewViewController.m in Sources */,
 				2F5510C6217F5CC200F56C26 /* WFCUFavGroupTableViewController.m in Sources */,
 				2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */,
@@ -2858,6 +2966,7 @@
 				B7C5443A28D5876700A2550F /* CreateBarCodeViewController.m in Sources */,
 				B77D33FB290C258A00E72111 /* WFCUGroupTableViewController.m in Sources */,
 				2F5511D3217F5CC300F56C26 /* TYAlertScaleFadeAnimation.m in Sources */,
+				B70162FE290E2F1700DCD651 /* MWGridCell.m in Sources */,
 				B7C5443228D5876700A2550F /* UIWindow+LBXHierarchy.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
 				2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */,
@@ -2866,7 +2975,6 @@
 				2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */,
 				2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */,
 				2F55121B217F5CC300F56C26 /* WFCUMessageSettingViewController.m in Sources */,
-				2B46D4D924ACC64300721792 /* WFCUMediaMessageGridViewController.m in Sources */,
 				2F55120A217F5CC300F56C26 /* WFCUConversationTableViewController.m in Sources */,
 				2F56F6A92529E43900B829C4 /* WFCUCompositeCell.m in Sources */,
 				2F1EB5C42499AFF900FD3575 /* WFCUConferenceInviteCell.m in Sources */,
@@ -2877,6 +2985,7 @@
 				B71F0A8228F54156000A7C8A /* DDAbstractDatabaseLogger.m in Sources */,
 				2BEF789E23F6A84D000DE285 /* WFCUConferenceParticipantCollectionViewCell.m in Sources */,
 				2F55116A217F5CC200F56C26 /* AFURLSessionManager.m in Sources */,
+				B70162F9290E2F1700DCD651 /* MWTapDetectingView.m in Sources */,
 				2BDF57A824AD70C8003C1F08 /* DNImageFlowViewController.m in Sources */,
 				B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */,
 				2F5511D5217F5CC300F56C26 /* TYAlertFadeAnimation.m in Sources */,
@@ -2929,6 +3038,7 @@
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
 				2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */,
 				B7C5443428D5876700A2550F /* UIAlertView+LBXAlertAction.m in Sources */,
+				B70162FB290E2F1700DCD651 /* MWGridViewController.m in Sources */,
 				B7C5443928D5876700A2550F /* UIImageView+CornerRadius.m in Sources */,
 				2F551228217F5CC300F56C26 /* WFCUFriendRequestViewController.m in Sources */,
 				B7C5442C28D5876700A2550F /* LBXScanTypes.m in Sources */,
@@ -2941,6 +3051,7 @@
 				2BDF579A24AD70C8003C1F08 /* UIView+DNImagePicker.m in Sources */,
 				149B3110241E65D500B935D3 /* UIColor+YH.m in Sources */,
 				2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */,
+				B70162F7290E2F1700DCD651 /* MWTapDetectingImageView.m in Sources */,
 				2F5511F8217F5CC300F56C26 /* UITabBar+badge.m in Sources */,
 				2F5511F5217F5CC300F56C26 /* UIImage+ERCategory.m in Sources */,
 				2F551192217F5CC200F56C26 /* SDRefreshHeaderView.m in Sources */,
@@ -2956,6 +3067,7 @@
 				B71F0A7928F54156000A7C8A /* DDDispatchQueueLogFormatter.m in Sources */,
 				2F551225217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.m in Sources */,
 				2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */,
+				B701630A290E346C00DCD651 /* DACircularProgressView.m in Sources */,
 				2F5510FA217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.m in Sources */,
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
@@ -3065,11 +3177,15 @@
 				2F551151217F5CC200F56C26 /* KZVideoConfig.m in Sources */,
 				2FF70EAD2402101000946D2D /* WFCUWaitingAnimationView.m in Sources */,
 				B7213C3B28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m in Sources */,
+				B70162F8290E2F1700DCD651 /* MWPhoto.m in Sources */,
 				2F5510F3217F5CC200F56C26 /* CCHMapClusterOperation.m in Sources */,
 				2F5511F0217F5CC300F56C26 /* BubbleTipView.m in Sources */,
+				B7016309290E346C00DCD651 /* DALabeledCircularProgressView.m in Sources */,
 				2F56F6CA252AA14000B829C4 /* WFCUCompositeUnknownCell.m in Sources */,
 				B71F0A8328F54156000A7C8A /* DDFileLogger.m in Sources */,
 				B77D33F7290C1EB500E72111 /* WFCUProfileMoreTableViewController.m in Sources */,
+				B70162EF290E2F1700DCD651 /* MWPhotoBrowser.m in Sources */,
+				B70162F5290E2F1700DCD651 /* UIImage+MWPhotoBrowser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
