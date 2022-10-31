@@ -30,6 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
             success:(void(^)(NSString *url))successBlock
               error:(void(^)(NSString *errorMsg))errorBlock;
 
+- (void)uploadData:(NSData *)data
+          mediaType:(int)mediaType
+           progress:(void(^)(int sentcount, int total))progressBlock
+            success:(void(^)(NSString *url))successBlock
+              error:(void(^)(NSString *errorMsg))errorBlock;
+
 - (BOOL)isLogin;
 @end
 

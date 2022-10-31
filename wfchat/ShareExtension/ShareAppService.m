@@ -169,6 +169,64 @@ static ShareAppService *sharedSingleton = nil;
     });
 }
 
+- (void)uploadData:(NSData *)data
+          mediaType:(int)mediaType
+           progress:(void(^)(int sentcount, int total))progressBlock
+            success:(void(^)(NSString *url))successBlock
+             error:(void(^)(NSString *errorMsg))errorBlock {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
+        
+        NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
+        NSString *authToken = [sharedDefaults objectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
+        
+        if(authToken.length) {
+            [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
+        } else {
+            for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies]) {
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+            }
+        }
+
+        
+        NSString *url = [APP_SERVER_ADDRESS stringByAppendingFormat:@"/media/upload/%d", mediaType];
+    
+        [manager
+         POST:url
+         parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
+            NSString *fileName = (NSString *)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
+            CFRelease(uuidObject);
+
+            [formData appendPartWithFileData:data name:@"file" fileName:fileName mimeType:@"application/octet-stream"];
+        }
+         progress:^(NSProgress * progress) {
+            if (progressBlock) {
+                progressBlock((int)progress.completedUnitCount, (int)progress.totalUnitCount);
+            }
+        }
+         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *dict = (NSDictionary *)responseObject;
+                if([dict[@"code"] intValue] == 0) {
+                    NSDictionary *result = dict[@"result"];
+                    if (result && result[@"url"]) {
+                        successBlock(result[@"url"]);
+                        return;
+                    }
+                    
+                }
+            }
+            errorBlock(@"服务器响应错误");
+        }
+         failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"上传失败：%@", error);
+            errorBlock(error.localizedFailureReason);
+        }];
+    });
+}
+
 - (void)post:(NSString *)path data:(id)data success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSString *message))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];

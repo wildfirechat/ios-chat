@@ -103,6 +103,24 @@
         } error:^(NSString * _Nonnull errorMsg) {
             [ws showFailure];
         }];
+    } else if(ws.image) {
+        UIImage *image = [ShareUtility generateThumbnail:ws.image withWidth:1024 withHeight:1024];
+        NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+        [[ShareAppService sharedAppService] uploadData:imgData mediaType:1 progress:^(int sentcount, int total) {
+            [ws showProgress:sentcount total:total];
+        } success:^(NSString * _Nonnull url) {
+            UIImage *thumbnail = [ShareUtility generateThumbnail:ws.image withWidth:120 withHeight:120];
+            [[ShareAppService sharedAppService] sendImageMessage:conversation
+                                                        mediaUrl:url
+                                                        thubnail:thumbnail
+                                                         success:^(NSDictionary * _Nonnull dict) {
+                [ws showSuccess];
+            } error:^(NSString * _Nonnull message) {
+                [ws showFailure];
+            }];
+        } error:^(NSString * _Nonnull errorMsg) {
+            [ws showFailure];
+        }];
     }
 }
 

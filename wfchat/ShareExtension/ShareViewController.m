@@ -30,6 +30,8 @@
 @property(nonatomic, assign)BOOL *fullImage;
 @property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
 
+@property(nonatomic, strong)UIImage *image;
+
 //文件
 @property(nonatomic, strong)NSString *fileUrl;
 @end
@@ -147,7 +149,7 @@
                             });
                         }
                     }];
-                } else if ([provider hasItemConformingToTypeIdentifier:@"public.jpeg"] || [provider hasItemConformingToTypeIdentifier:@"public.png"]) {
+                } else if ([provider hasItemConformingToTypeIdentifier:@"public.jpeg"] || [provider hasItemConformingToTypeIdentifier:@"public.png"] || [provider hasItemConformingToTypeIdentifier:@"public.image"]) {
                     header.frame = CGRectMake(0, 0, width, 400);
                     
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, 400)];
@@ -157,22 +159,34 @@
                     NSString *typeIdentifier = @"public.jpeg";
                     if ([provider hasItemConformingToTypeIdentifier:@"public.png"]) {
                         typeIdentifier = @"public.png";
+                    } else if ([provider hasItemConformingToTypeIdentifier:@"public.image"]) {
+                        typeIdentifier = @"public.image";
                     }
                     [provider loadItemForTypeIdentifier:typeIdentifier options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSLog(@"the value is %@", item);
-                        NSURL *url = (NSURL *)item;
-                        if ([url.scheme isEqual:@"file"]) {
+                        UIImage *image = nil;
+                        if ([provider hasItemConformingToTypeIdentifier:@"public.image"]) {
+                            image = (UIImage *)item;
                             ws.dataLoaded = YES;
-                            [ws.imageUrls addObject:url.absoluteString];
-                            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                imageView.image = image;
-                                NSExtensionItem *item = ws.extensionContext.inputItems[0];
-                                if (item.attachments.count > 1) {
-                                    [ws showImageLimit];
-                                }
-                            });
+                            ws.image = image;
+                        } else {
+                            NSURL *url = (NSURL *)item;
+                            if ([url.scheme isEqual:@"file"]) {
+                                ws.dataLoaded = YES;
+                                [ws.imageUrls addObject:url.absoluteString];
+                                image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                            }
                         }
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            imageView.image = image;
+                            NSExtensionItem *item = ws.extensionContext.inputItems[0];
+                            if (item.attachments.count > 1) {
+                                [ws showImageLimit];
+                            }
+                            [ws.tableView reloadData];
+                        });
+                     
                     }];
                     
                     break;
@@ -184,6 +198,7 @@
                     label.text = item.attributedContentText.string;
                     [header addSubview:label];
                     self.dataLoaded = YES;
+                } else if ([provider hasItemConformingToTypeIdentifier:@"public.jpeg"] || [provider hasItemConformingToTypeIdentifier:@"public.png"]) {
                 }
             }
         }
@@ -265,7 +280,6 @@
                                                                error:^(NSString * _Nonnull message) {
                     [ws showFailure];
                 }];
-                
             } error:^(NSString * _Nonnull errorMsg) {
                 [ws showFailure];
             }];
@@ -277,6 +291,24 @@
             } success:^(NSString * _Nonnull url) {
                 NSString *fileName = ws.fileUrl.lastPathComponent;
                 [[ShareAppService sharedAppService] sendFileMessage:conversation mediaUrl:url fileName:fileName size:size success:^(NSDictionary * _Nonnull dict) {
+                    [ws showSuccess];
+                } error:^(NSString * _Nonnull message) {
+                    [ws showFailure];
+                }];
+            } error:^(NSString * _Nonnull errorMsg) {
+                [ws showFailure];
+            }];
+        } else if(ws.image) {
+            UIImage *image = [ShareUtility generateThumbnail:ws.image withWidth:1024 withHeight:1024];
+            NSData *imgData = UIImageJPEGRepresentation(image, 0.85);
+            [[ShareAppService sharedAppService] uploadData:imgData mediaType:1 progress:^(int sentcount, int total) {
+                [ws showProgress:sentcount total:total];
+            } success:^(NSString * _Nonnull url) {
+                UIImage *thumbnail = [ShareUtility generateThumbnail:ws.image withWidth:120 withHeight:120];
+                [[ShareAppService sharedAppService] sendImageMessage:conversation
+                                                            mediaUrl:url
+                                                            thubnail:thumbnail
+                                                             success:^(NSDictionary * _Nonnull dict) {
                     [ws showSuccess];
                 } error:^(NSString * _Nonnull message) {
                     [ws showFailure];
@@ -383,6 +415,7 @@
         vc.imageUrls = self.imageUrls;
         vc.fullImage = self.fullImage;
         vc.fileUrl = self.fileUrl;
+        vc.image = self.image;
         [self.navigationController pushViewController:vc animated:YES];
     } else if(indexPath.row == 1) {
         SharedConversation *conversation = [[SharedConversation alloc] init];
