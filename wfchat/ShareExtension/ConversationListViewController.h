@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 //图片
 @property(nonatomic, assign)BOOL *fullImage;
 @property(nonatomic, strong)NSMutableArray<NSString *> *imageUrls;
+@property(nonatomic, strong)UIImage *image;
 
 //文件
 @property(nonatomic, strong)NSString *fileUrl;
