@@ -243,13 +243,6 @@
 		2F551157217F5CC200F56C26 /* KZVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F95217F5CC100F56C26 /* KZVideoSupport.m */; };
 		2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F96217F5CC100F56C26 /* KZVideoPlayer.h */; };
 		2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F97217F5CC100F56C26 /* KZVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F99217F5CC100F56C26 /* SDPhotoBrowserConfig.h */; };
-		2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */; };
-		2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F9B217F5CC100F56C26 /* SDWaitingView.m */; };
-		2F55115D217F5CC200F56C26 /* SDBrowserImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F9C217F5CC100F56C26 /* SDBrowserImageView.m */; };
-		2F55115E217F5CC200F56C26 /* SDWaitingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F9D217F5CC100F56C26 /* SDWaitingView.h */; };
-		2F55115F217F5CC200F56C26 /* SDPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F9E217F5CC100F56C26 /* SDPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2F551160217F5CC200F56C26 /* SDBrowserImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F9F217F5CC100F56C26 /* SDBrowserImageView.h */; };
 		2F551161217F5CC200F56C26 /* KxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550FA1217F5CC100F56C26 /* KxMenu.m */; };
 		2F551162217F5CC200F56C26 /* KxMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550FA2217F5CC100F56C26 /* KxMenu.h */; };
 		2F551163217F5CC200F56C26 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550FA4217F5CC100F56C26 /* AFSecurityPolicy.h */; };
@@ -837,13 +830,6 @@
 		2F550F95217F5CC100F56C26 /* KZVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KZVideoSupport.m; sourceTree = "<group>"; };
 		2F550F96217F5CC100F56C26 /* KZVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KZVideoPlayer.h; sourceTree = "<group>"; };
 		2F550F97217F5CC100F56C26 /* KZVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KZVideoViewController.h; sourceTree = "<group>"; };
-		2F550F99217F5CC100F56C26 /* SDPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDPhotoBrowserConfig.h; sourceTree = "<group>"; };
-		2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDPhotoBrowser.m; sourceTree = "<group>"; };
-		2F550F9B217F5CC100F56C26 /* SDWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDWaitingView.m; sourceTree = "<group>"; };
-		2F550F9C217F5CC100F56C26 /* SDBrowserImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBrowserImageView.m; sourceTree = "<group>"; };
-		2F550F9D217F5CC100F56C26 /* SDWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWaitingView.h; sourceTree = "<group>"; };
-		2F550F9E217F5CC100F56C26 /* SDPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDPhotoBrowser.h; sourceTree = "<group>"; };
-		2F550F9F217F5CC100F56C26 /* SDBrowserImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBrowserImageView.h; sourceTree = "<group>"; };
 		2F550FA1217F5CC100F56C26 /* KxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMenu.m; sourceTree = "<group>"; };
 		2F550FA2217F5CC100F56C26 /* KxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMenu.h; sourceTree = "<group>"; };
 		2F550FA4217F5CC100F56C26 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
@@ -1640,7 +1626,6 @@
 				2F550F3C217F5CC100F56C26 /* Pinyin */,
 				2F550F3F217F5CC100F56C26 /* VideoPlayerKit */,
 				2F550F8D217F5CC100F56C26 /* KZSmallVideoRecorder */,
-				2F550F98217F5CC100F56C26 /* SDPhotoBrowser */,
 				2F550FA0217F5CC100F56C26 /* KxMenu */,
 				2F550FA3217F5CC100F56C26 /* AFNetworking */,
 				2F550FD5217F5CC100F56C26 /* MBProgressHUD */,
@@ -1777,20 +1762,6 @@
 				2F550F97217F5CC100F56C26 /* KZVideoViewController.h */,
 			);
 			path = KZSmallVideoRecorder;
-			sourceTree = "<group>";
-		};
-		2F550F98217F5CC100F56C26 /* SDPhotoBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				2F550F99217F5CC100F56C26 /* SDPhotoBrowserConfig.h */,
-				2F550F9A217F5CC100F56C26 /* SDPhotoBrowser.m */,
-				2F550F9B217F5CC100F56C26 /* SDWaitingView.m */,
-				2F550F9C217F5CC100F56C26 /* SDBrowserImageView.m */,
-				2F550F9D217F5CC100F56C26 /* SDWaitingView.h */,
-				2F550F9E217F5CC100F56C26 /* SDPhotoBrowser.h */,
-				2F550F9F217F5CC100F56C26 /* SDBrowserImageView.h */,
-			);
-			path = SDPhotoBrowser;
 			sourceTree = "<group>";
 		};
 		2F550FA0217F5CC100F56C26 /* KxMenu */ = {
@@ -2597,7 +2568,6 @@
 				2BDF57B124AD70C8003C1F08 /* DNSendButton.h in Headers */,
 				2F341A4F235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h in Headers */,
 				2BEF78A623F6A84D000DE285 /* WFCUVideoViewController.h in Headers */,
-				2F55115F217F5CC200F56C26 /* SDPhotoBrowser.h in Headers */,
 				2F551166217F5CC200F56C26 /* AFURLRequestSerialization.h in Headers */,
 				2FA2165122F1667F00670211 /* WFCUBlackListViewController.h in Headers */,
 				B733DFEF28D404AD0094AD74 /* WFZConferenceHistoryListViewController.h in Headers */,
@@ -2647,8 +2617,6 @@
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
 				2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */,
 				2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */,
-				2F55115E217F5CC200F56C26 /* SDWaitingView.h in Headers */,
-				2F551160217F5CC200F56C26 /* SDBrowserImageView.h in Headers */,
 				2F5511DE217F5CC300F56C26 /* TYAlertScaleFadeAnimation.h in Headers */,
 				2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */,
 				2F551164217F5CC200F56C26 /* AFNetworkReachabilityManager.h in Headers */,
@@ -2826,7 +2794,6 @@
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
 				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
 				90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */,
-				2F55115A217F5CC200F56C26 /* SDPhotoBrowserConfig.h in Headers */,
 				2F55110C217F5CC200F56C26 /* FullScreenView.h in Headers */,
 				B7C5443E28D5876700A2550F /* LBXScanNative.h in Headers */,
 			);
@@ -2972,7 +2939,6 @@
 				2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */,
 				2B97D48A2505C7BE00162A2B /* WFCUCardCell.m in Sources */,
 				B7C5443328D5876700A2550F /* UIActionSheet+LBXAlertAction.m in Sources */,
-				2F55115B217F5CC200F56C26 /* SDPhotoBrowser.m in Sources */,
 				2F5511E8217F5CC300F56C26 /* WFCUShareMessageView.m in Sources */,
 				2F55121B217F5CC300F56C26 /* WFCUMessageSettingViewController.m in Sources */,
 				2F55120A217F5CC300F56C26 /* WFCUConversationTableViewController.m in Sources */,
@@ -3105,7 +3071,6 @@
 				B7C5444428D5876700A2550F /* LBXPermissionCamera.m in Sources */,
 				2F55122B217F5CC300F56C26 /* WFCUMediaMessageDownloader.m in Sources */,
 				2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */,
-				2F55115D217F5CC200F56C26 /* SDBrowserImageView.m in Sources */,
 				B71F0A7028F54156000A7C8A /* GCDAsyncSocket.m in Sources */,
 				2FB7125525D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.m in Sources */,
 				2F551095217F5CC200F56C26 /* WFCUInformationCell.m in Sources */,
@@ -3170,7 +3135,6 @@
 				B7D584DF28CF0EC4009D09AF /* WFZConferenceInfoViewController.m in Sources */,
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,
-				2F55115C217F5CC200F56C26 /* SDWaitingView.m in Sources */,
 				B7311DED28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.m in Sources */,
 				B7C5444328D5876700A2550F /* LBXPermissionPhotos.m in Sources */,
 				2F36433821C13C5300904CAB /* WFCUChannelTableViewCell.m in Sources */,
