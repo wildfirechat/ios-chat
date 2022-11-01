@@ -116,7 +116,7 @@ static NSLock *wfcImageLock;
 + (UIImage *)image:(UIImage *)image scaleInSize:(CGSize)size {
     CGFloat originWidth = image.size.width;
     CGFloat originHeight = image.size.height;
-    if(originWidth * originHeight > size.width * size.height) {
+    if(originWidth * originHeight < size.width * size.height) {
         return image;
     }
     CGFloat scale = originWidth/size.width < originHeight/size.height ? originHeight/size.height : originWidth/size.width;
