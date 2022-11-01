@@ -24,8 +24,9 @@
 #import "WFCUUserMessageListViewController.h"
 #import "WFCUImage.h"
 #import "WFCUProfileMoreTableViewController.h"
+#import "MWPhotoBrowser.h"
 
-@interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
 @property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
@@ -278,13 +279,13 @@
         self.starLabel.font = [UIFont systemFontOfSize:18];
         self.starLabel.textColor = [UIColor yellowColor];
         
-        [self.headerCell addSubview:self.starLabel];
+        [self.headerCell.contentView addSubview:self.starLabel];
     }
     
-    [self.headerCell addSubview:self.portraitView];
-    [self.headerCell addSubview:self.displayNameLabel];
-    [self.headerCell addSubview:self.userNameLabel];
-    [self.headerCell addSubview:self.aliasLabel];
+    [self.headerCell.contentView addSubview:self.portraitView];
+    [self.headerCell.contentView addSubview:self.displayNameLabel];
+    [self.headerCell.contentView addSubview:self.userNameLabel];
+    [self.headerCell.contentView addSubview:self.aliasLabel];
     self.headerCells = [NSMutableArray new];
     [self.headerCells addObject:self.headerCell];
     
@@ -423,9 +424,18 @@
 }
 
 - (void)onViewPortrait:(id)sender {
-    WFCUMyPortraitViewController *pvc = [[WFCUMyPortraitViewController alloc] init];
-    pvc.userId = self.userId;
-    [self.navigationController pushViewController:pvc animated:YES];
+    MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    browser.displayActionButton = YES;
+    browser.displayNavArrows = NO;
+    browser.displaySelectionButtons = NO;
+    browser.alwaysShowControls = NO;
+    browser.zoomPhotosToFill = YES;
+    browser.enableGrid = NO;
+    browser.startOnGrid = NO;
+    browser.enableSwipeToDismiss = NO;
+    browser.autoPlayOnAppear = NO;
+    [browser setCurrentPhotoIndex:0];
+    [self.navigationController pushViewController:browser animated:YES];
 }
 
 - (void)momentClick {
@@ -680,6 +690,37 @@
     }];
 }
 
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return 1;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:self.userInfo.portrait]];
+    return photo;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    return nil;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
+}
+
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
+    return NO;
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
+    NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
+    // If we subscribe to this method we must dismiss the view controller ourselves
+    NSLog(@"Did finish modal presentation");
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

@@ -2196,7 +2196,12 @@
             browser.enableGrid = YES;
             browser.startOnGrid = NO;
             browser.enableSwipeToDismiss = NO;
-            browser.autoPlayOnAppear = NO;
+            if([model.message.content isKindOfClass:[WFCCVideoMessageContent class]]) {
+                browser.autoPlayOnAppear = YES;
+            } else {
+                browser.autoPlayOnAppear = NO;
+            }
+            
             [browser setCurrentPhotoIndex:i];
             [self.navigationController pushViewController:browser animated:YES];
         }
