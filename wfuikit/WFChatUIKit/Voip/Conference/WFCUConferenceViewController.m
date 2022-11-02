@@ -1984,7 +1984,7 @@
         [self.pageControl updateCurrentPageDisplay];
     } else {
         [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx1, BOOL * _Nonnull stop) {
-            if(obj.videoType != WFAVVideoType_None) {
+            if(obj.videoType != WFAVVideoType_None && !obj.audience) {
                 __block BOOL visiable = NO;
                 [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx2, BOOL * _Nonnull stop) {
                     if(obj.row -1 == idx1) {
