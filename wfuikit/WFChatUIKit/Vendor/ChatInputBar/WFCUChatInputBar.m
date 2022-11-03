@@ -346,7 +346,19 @@
     __weak typeof(self)ws = self;
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
-            if (!ws.recordView.superview) {
+            __block BOOL isViewExist = YES;
+            if([NSThread isMainThread]) {
+                if (!ws.recordView.superview) {
+                    isViewExist = NO;
+                }
+            } else {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    if (!ws.recordView.superview) {
+                        isViewExist = NO;
+                    }
+                });
+            }
+            if(!isViewExist) {
                 return;
             }
 #ifdef WFC_PTT
@@ -418,7 +430,9 @@
                                                                         repeats:YES];
                 }
         } else {
-            [[[UIAlertView alloc] initWithTitle:@"警告" message:@"无法录音,请到设置-隐私-麦克风,允许程序访问" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[[UIAlertView alloc] initWithTitle:@"警告" message:@"无法录音,请到设置-隐私-麦克风,允许程序访问" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+            });
         }
     }];
 }
