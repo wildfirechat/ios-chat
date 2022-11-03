@@ -2285,13 +2285,7 @@
                     [cell addSubview:self.smallVideoView];
                 }
 
-                if(!self.smallVideoView.hidden) {
-                    [self showPanel];
-                } else {
-                    if(self.floatingAudioButton.hidden) {
-                        self.smallVideoView.hidden = NO;
-                    }
-                }
+                self.smallVideoView.hidden = NO;
                 [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
                 WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
                 [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
@@ -2425,6 +2419,8 @@
             break;
         case CANCEL_FOCUS:
             [self showCommandToast:@"主持人取消锁定焦点用户"];
+            [self rearrangeParticipants];
+            [self reloadParticipantCollectionView];
             break;
         default:
             break;
