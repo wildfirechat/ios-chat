@@ -2047,7 +2047,10 @@
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    WFCUMessageModel *model = self.modelList[indexPath.row];
+    WFCUMessageModel *model = nil;
+    if(indexPath.row < self.modelList.count) {
+        model = self.modelList[indexPath.row];
+    }
     NSString *objName = [NSString stringWithFormat:@"%d", [model.message.content.class getContentType]];
     
     WFCUMessageCellBase *cell = nil;
