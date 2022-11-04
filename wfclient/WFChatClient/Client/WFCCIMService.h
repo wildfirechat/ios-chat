@@ -1311,6 +1311,16 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                         refresh:(BOOL)refresh;
 
 /**
+ 批量获取群信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话中时使用一次true。
+ 
+ @param groupId 群ID
+ @param refresh 是否强制从服务器更新，如果不刷新则从本地缓存中读取
+ @return 群信息
+ */
+- (NSArray<WFCCGroupInfo *> *)getGroupInfos:(NSArray<NSString *> *)groupIds
+                                    refresh:(BOOL)refresh;
+/**
  获取群信息
  @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话中时使用一次true。
  
