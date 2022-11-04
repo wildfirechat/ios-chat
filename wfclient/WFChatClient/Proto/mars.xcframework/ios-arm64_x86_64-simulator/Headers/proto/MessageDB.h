@@ -123,6 +123,7 @@ namespace mars {
             std::list<TGroupSearchResult> SearchGroups(const std::string &keyword, int limit);
             
             TGroupInfo GetGroupInfo(const std::string &groupId, bool refresh);
+            std::list<TGroupInfo> GetGroupInfos(const std::list<std::string> &groupIds, bool refresh);
             void GetGroupInfo(const std::string &userId, bool refresh, GetOneGroupInfoCallback *callback);
             void BatchRefreshGroupInfo(const std::set<std::string> &groupIds);
             long InsertGroupInfo(const TGroupInfo &groupInfo);

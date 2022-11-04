@@ -2990,6 +2990,25 @@ public:
     return convertProtoGroupInfo(tgi);
 }
 
+- (NSArray<WFCCGroupInfo *> *)getGroupInfos:(NSArray<NSString *> *)groupIds
+                                    refresh:(BOOL)refresh {
+    if (![groupIds count]) {
+        return nil;
+    }
+    
+    std::list<std::string> gids;
+    for (NSString *groupId : groupIds) {
+        gids.push_back([groupId UTF8String]);
+    }
+    std::list<mars::stn::TGroupInfo> tgroupInfos = mars::stn::MessageDB::Instance()->GetGroupInfos(gids, refresh);
+    NSMutableArray<WFCCGroupInfo *> *groupInfos = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TGroupInfo>::iterator it = tgroupInfos.begin(); it != tgroupInfos.end(); ++it) {
+        WFCCGroupInfo *groupInfo = convertProtoGroupInfo(*it);
+        [groupInfos addObject:groupInfo];
+    }
+    return groupInfos;
+}
+
 class IMGetOneGroupInfoCallback : public mars::stn::GetOneGroupInfoCallback {
 private:
     void(^m_successBlock)(WFCCGroupInfo *);
