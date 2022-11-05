@@ -774,7 +774,7 @@ public:
             }
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:mGroupId refresh:NO];
             if(groupInfo.target.length) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:mGroupId userInfo:@{@"groupInfo":groupInfo}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:mGroupId userInfo:@{@"groupInfoList":@[groupInfo]}];
             }
             delete this;
         });

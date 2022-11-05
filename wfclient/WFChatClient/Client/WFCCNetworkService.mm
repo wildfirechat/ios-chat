@@ -1241,11 +1241,10 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (NSString *)encodedCid {
     return [NSString stringWithUTF8String:mars::stn::GetEncodedCid().c_str()];
 }
+
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo {
   dispatch_async(dispatch_get_main_queue(), ^{
-    for (WFCCGroupInfo *groupInfo in updatedGroupInfo) {
-      [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:groupInfo.target userInfo:@{@"groupInfo":groupInfo}];
-    }
+      [[NSNotificationCenter defaultCenter] postNotificationName:kGroupInfoUpdated object:nil userInfo:@{@"groupInfoList":updatedGroupInfo}];
   });
 }
 
@@ -1257,17 +1256,13 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (void)onChannelInfoUpdated:(NSArray<WFCCChannelInfo *> *)updatedChannelInfo {
     dispatch_async(dispatch_get_main_queue(), ^{
-        for (WFCCChannelInfo *channelInfo in updatedChannelInfo) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kChannelInfoUpdated object:channelInfo.channelId userInfo:@{@"channelInfo":channelInfo}];
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kChannelInfoUpdated object:nil userInfo:@{@"channelInfoList":updatedChannelInfo}];
     });
 }
 
 - (void)onUserInfoUpdated:(NSArray<WFCCUserInfo *> *)updatedUserInfo {
   dispatch_async(dispatch_get_main_queue(), ^{
-    for (WFCCUserInfo *userInfo in updatedUserInfo) {
-      [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoUpdated object:userInfo.userId userInfo:@{@"userInfo":userInfo}];
-    }
+      [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoUpdated object:nil userInfo:@{@"userInfoList":updatedUserInfo}];
   });
 }
 
