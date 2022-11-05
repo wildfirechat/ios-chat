@@ -977,21 +977,8 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (BOOL)checkSDKHost:(NSString *)host {
     if(NSClassFromString(@"WFAVEngineKit")) {
         WFAVEngineKit *avEngineKit = [NSClassFromString(@"WFAVEngineKit") performSelector:@selector(sharedEngineKit)];
-        BOOL supportConference = NO;
         if([avEngineKit respondsToSelector:@selector(supportConference)]) {
-            supportConference = avEngineKit.supportConference;
-        }
-        BOOL supportMultiCall = NO;
-        if([avEngineKit respondsToSelector:@selector(supportMultiCall)]) {
-            supportMultiCall = avEngineKit.supportMultiCall;
-        }
-        
-        if(supportConference || supportMultiCall) {
-            if(supportConference) {
-                NSLog(@"音视频SDK是高级版");
-            } else {
-                NSLog(@"音视频SDK是多人版");
-            }
+            NSLog(@"音视频SDK是高级版");
             if([avEngineKit respondsToSelector:@selector(checkAddress:)]) {
                 if(![avEngineKit checkAddress:host]) {
                     NSLog(@"***********************");
@@ -999,6 +986,8 @@ static WFCCNetworkService * sharedSingleton = nil;
                     NSLog(@"***********************");
                 }
             }
+        } else {
+            NSLog(@"音视频SDK是普通版");
         }
     }
     
