@@ -37,9 +37,13 @@
     
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        if ([ws.groupInfo.target isEqualToString:note.object]) {
-            ws.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:ws.groupInfo.target refresh:NO];
-            [ws.tableView reloadData];
+        NSArray<WFCCGroupInfo *> *groupInfoList = note.userInfo[@"groupInfoList"];
+        for (WFCCGroupInfo *groupInfo in groupInfoList) {
+            if ([ws.groupInfo.target isEqualToString:groupInfo.target]) {
+                ws.groupInfo = groupInfo;
+                [ws.tableView reloadData];
+                break;
+            }
         }
     }];
     

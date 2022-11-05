@@ -231,16 +231,24 @@
         }
     }
     
-    if(self.conversation.type == Single_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if ([ws.conversation.target isEqualToString:note.object]) {
-                ws.targetUser = note.userInfo[@"userInfo"];
+            NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
+            for (WFCCUserInfo *userInfo in userInfoList) {
+                if ([ws.conversation.target isEqualToString:note.object]) {
+                    ws.targetUser = note.userInfo[@"userInfo"];
+                    break;
+                }
             }
         }];
     } else if(self.conversation.type == Group_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if ([ws.conversation.target isEqualToString:note.object]) {
-                ws.targetGroup = note.userInfo[@"groupInfo"];
+            NSArray<WFCCGroupInfo *> *groupInfoList = note.userInfo[@"groupInfoList"];
+            for (WFCCGroupInfo *groupInfo in groupInfoList) {
+                if ([ws.conversation.target isEqualToString:groupInfo.target]) {
+                    ws.targetGroup = groupInfo;
+                    break;
+                }
             }
         }];
         
@@ -252,15 +260,12 @@
         }];
     } else if(self.conversation.type == Channel_Type) {
         [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if ([ws.conversation.target isEqualToString:note.object]) {
-                ws.targetChannel = note.userInfo[@"channelInfo"];
-            }
-        }];
-    } else if(self.conversation.type == SecretChat_Type) {
-        NSString *userId = self.secretChatInfo.userId;
-        [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if ([userId isEqualToString:note.object]) {
-                ws.targetUser = note.userInfo[@"userInfo"];
+            NSArray<WFCCChannelInfo *> *channelInfoList = note.userInfo[@"channelInfoList"];
+            for (WFCCChannelInfo *channelInfo in channelInfoList) {
+                if ([ws.conversation.target isEqualToString:channelInfo.channelId]) {
+                    ws.targetChannel = channelInfo;
+                    break;
+                }
             }
         }];
     }

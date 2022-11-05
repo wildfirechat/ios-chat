@@ -51,8 +51,12 @@
 //        self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-            if ([ws.target isEqualToString:notification.object]) {
-                ws.userInfo = notification.userInfo[@"userInfo"];
+            NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+            for (WFCCUserInfo *userInfo in userInfoList) {
+                if ([ws.target isEqualToString:userInfo.userId]) {
+                    ws.userInfo = userInfo;
+                    break;
+                }
             }
         }];
         
@@ -62,8 +66,11 @@
 //        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
         [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-            if ([ws.target isEqualToString:notification.object]) {
-                ws.groupInfo = notification.userInfo[@"groupInfo"];
+            NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
+            for (WFCCGroupInfo *groupInfo in groupInfoList) {
+                if ([ws.target isEqualToString:groupInfo.target]) {
+                    ws.groupInfo = groupInfo;
+                }
             }
         }];
         

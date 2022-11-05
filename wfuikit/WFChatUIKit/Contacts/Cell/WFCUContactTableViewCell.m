@@ -46,9 +46,12 @@
       }
 }
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    if ([self.userId isEqualToString:userInfo.userId]) {
-        [self updateUserInfo:userInfo];
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.userId isEqualToString:userInfo.userId]) {
+            [self updateUserInfo:userInfo];
+            break;
+        }
     }
 }
 

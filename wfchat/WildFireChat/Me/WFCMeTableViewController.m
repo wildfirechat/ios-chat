@@ -64,8 +64,12 @@
     
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:note.object]) {
-            [ws.tableView reloadData];
+        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
+        for (WFCCUserInfo *userInfo in userInfoList) {
+            if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
+                [ws.tableView reloadData];
+                break;
+            }
         }
     }];
     
