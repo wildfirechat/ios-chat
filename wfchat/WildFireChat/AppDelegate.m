@@ -254,7 +254,9 @@
     NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
     NSMutableArray<SharedConversation *> *sharedConvs = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *needComposedGroupIds = [[NSMutableArray alloc] init];
-    for (WFCCConversationInfo *info in infos) {
+    //最多保存200个会话，再多就没有意义
+    for (int i = 0; i < MIN(infos.count, 200); ++i) {
+        WFCCConversationInfo *info = infos[i];
         SharedConversation *sc = [SharedConversation from:(int)info.conversation.type target:info.conversation.target line:info.conversation.line];
         if (info.conversation.type == Single_Type) {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:info.conversation.target refresh:NO];
@@ -302,6 +304,7 @@
             return;
         }
     }
+    int syncPortraitCount = 0;
     for (NSString *groupId in needComposedGroupIds) {
         //获取已经拼接好的头像，如果没有拼接会返回为空
         NSString *file = [WFCCUtilities getGroupGridPortrait:groupId width:80 generateIfNotExist:NO defaultUserPortrait:^UIImage *(NSString *userId) {
@@ -310,8 +313,28 @@
         
         if (file.length) {
             NSURL *fileURL = [portraitURL URLByAppendingPathComponent:groupId];
-            NSData *data = [NSData dataWithContentsOfFile:file];
-            [data writeToURL:fileURL atomically:YES];
+            
+            BOOL needSync = NO;
+            if([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+                NSDictionary* extensionPortraitAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:fileURL.path error:nil];
+                NSDate *extensionPortraitDate = [extensionPortraitAttribs objectForKey:NSFileCreationDate];
+                
+                NSDictionary* containerPortraitAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:file error:nil];
+                NSDate *containerPortraitDate = [containerPortraitAttribs objectForKey:NSFileCreationDate];
+                needSync = extensionPortraitDate.timeIntervalSince1970 < containerPortraitDate.timeIntervalSince1970;
+            } else {
+                needSync = YES;
+            }
+            
+            if(needSync) {
+                syncPortraitCount++;
+                NSData *data = [NSData dataWithContentsOfFile:file];
+                [data writeToURL:fileURL atomically:YES];
+                //群组头像每次同步30个，太多影响性能
+                if(syncPortraitCount > 30) {
+                    break;
+                }
+            }
         }
     }
 }
