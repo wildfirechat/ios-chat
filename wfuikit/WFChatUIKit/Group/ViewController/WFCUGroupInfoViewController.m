@@ -29,9 +29,12 @@
     
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        if ([ws.groupId isEqualToString:note.object]) {
-            WFCCGroupInfo *groupInfo = note.userInfo[@"groupInfo"];
-            ws.groupInfo = groupInfo;
+        NSArray<WFCCGroupInfo *> *groupInfoList = note.userInfo[@"groupInfoList"];
+        for (WFCCGroupInfo *groupInfo in groupInfoList) {
+            if ([ws.groupId isEqualToString:groupInfo.target]) {
+                ws.groupInfo = groupInfo;
+                break;
+            }
         }
     }];
     

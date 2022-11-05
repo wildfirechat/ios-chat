@@ -33,12 +33,13 @@
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    NSArray *dataSource = self.dataList;
-    for (int i = 0; i < dataSource.count; i++) {
-        WFCCFriendRequest *request = dataSource[i];
-        if ([request.target isEqualToString:userInfo.userId]) {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (int i = 0; i < self.dataList.count; ++i) {
+        WFCCFriendRequest *request = self.dataList[i];
+        for (WFCCUserInfo *userInfo in userInfoList) {
+            if([userInfo.userId isEqualToString:request.target]) {
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            }
         }
     }
 }

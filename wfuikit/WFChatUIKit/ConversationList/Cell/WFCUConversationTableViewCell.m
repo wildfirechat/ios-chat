@@ -36,6 +36,7 @@
 
 }
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
   
     if (userInfo.friendAlias.length) {
@@ -48,6 +49,8 @@
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:nil];
+    
     [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
     
     if(channelInfo.name.length > 0) {
@@ -59,7 +62,9 @@
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"GroupPortraitChanged" object:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
+    
     if (groupInfo.portrait.length) {
         [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     } else {
@@ -174,7 +179,10 @@
         _digestView.frame = CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16, 19);
     }
 }
+
 - (void)update:(WFCCConversation *)conversation {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     self.targetView.textColor = [WFCUConfigManager globalManager].textColor;
     if(conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:conversation.target refresh:NO];
@@ -284,6 +292,55 @@
         }
     } else {
         self.digestView.text = _info.lastMessage.digest;
+    }
+}
+
+- (void)reloadCell {
+    [self setInfo:self.info];
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    WFCCConversationInfo *conv = self.info;
+    
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if (conv.conversation.type == Single_Type || conv.conversation.type == SecretChat_Type) {
+            if([userInfo.userId isEqualToString:conv.conversation.target]) {
+                [self reloadCell];
+                break;
+            }
+        }
+     
+        if ([conv.lastMessage.fromUser isEqualToString:userInfo.userId]) {
+            [self reloadCell];
+            break;
+        }
+    }
+}
+
+- (void)onGroupInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
+    WFCCConversationInfo *conv = self.info;
+    if(conv.conversation.type == Group_Type) {
+        for (WFCCGroupInfo *groupInfo in groupInfoList) {
+            if ([conv.conversation.target isEqualToString:groupInfo.target]) {
+                [self reloadCell];
+                break;
+            }
+        }
+    }
+}
+
+- (void)onChannelInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCChannelInfo *> *channelInfoList = notification.userInfo[@"channelInfoList"];
+    WFCCConversationInfo *conv = self.info;
+    if(conv.conversation.type == Channel_Type) {
+        for (WFCCChannelInfo *channelInfo in channelInfoList) {
+            if ([conv.conversation.target isEqualToString:channelInfo.channelId]) {
+                [self reloadCell];
+                break;
+            }
+        }
     }
 }
 

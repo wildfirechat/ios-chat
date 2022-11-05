@@ -62,11 +62,14 @@
     self.title = WFCString(@"UserInfomation");
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        if ([ws.userId isEqualToString:note.object]) {
-            WFCCUserInfo *userInfo = note.userInfo[@"userInfo"];
-            ws.userInfo = userInfo;
-            [ws loadData];
-            NSLog(@"reload user info %@", ws.userInfo.userId);
+        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
+        for (WFCCUserInfo *userInfo in userInfoList) {
+            if ([ws.userId isEqualToString:userInfo.userId]) {
+                WFCCUserInfo *userInfo = note.userInfo[@"userInfo"];
+                ws.userInfo = userInfo;
+                [ws loadData];
+                break;
+            }
         }
     }];
     

@@ -245,15 +245,17 @@ static NSString *wfcstar = @"☆";
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
     BOOL needRefresh = NO;
-    for (WFCCUserInfo *ui in self.dataArray) {
-        if ([ui.userId isEqualToString:userInfo.userId]) {
-            needRefresh = YES;
-            [ui cloneFrom:userInfo];
-            break;
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        for (WFCCUserInfo *ui in self.dataArray) {
+            if ([ui.userId isEqualToString:userInfo.userId]) {
+                needRefresh = YES;
+                [ui cloneFrom:userInfo];
+            }
         }
     }
+    
     if(needRefresh) {
         self.needSort = needRefresh;
     }

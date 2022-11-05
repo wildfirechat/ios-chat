@@ -147,13 +147,19 @@
         return;
     }
     
-  WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-  if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
-      if (self.model.message.conversation.type == Group_Type) {
-          userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userInfo.userId inGroup:self.model.message.conversation.target refresh:NO];
-      }
-    [self updateUserInfo:userInfo];
-  }
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
+            if (self.model.message.conversation.type == Group_Type) {
+                WFCCUserInfo *reloadUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userInfo.userId inGroup:self.model.message.conversation.target refresh:NO];
+                [self updateUserInfo:reloadUserInfo];
+            } else {
+                [self updateUserInfo:userInfo];
+            }
+          
+            break;
+        }
+    }
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {

@@ -26,10 +26,13 @@
 }
 
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
-    WFCCGroupInfo *groupInfo = notification.userInfo[@"groupInfo"];
-    for (int i = 0; i < self.groupIds.count; i++) {
-        if([self.groupIds[i] isEqualToString:groupInfo.target]) {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
+    for (int i = 0; i < self.groupIds.count; ++i) {
+        for (WFCCGroupInfo *groupInfo in groupInfoList) {
+            if([self.groupIds[i] isEqualToString:groupInfo.target]) {
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+            }
         }
     }
 }

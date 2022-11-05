@@ -45,17 +45,22 @@
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        WFCCUserInfo *userInfo = note.userInfo[@"userInfo"];
+        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
+
         BOOL needUpdate = false;
-        if ([ws.model.message.content isKindOfClass:[WFCCAddGroupeMemberNotificationContent class]]) {
-            WFCCAddGroupeMemberNotificationContent *cnt = (WFCCAddGroupeMemberNotificationContent *)ws.model.message.content;
-            if ([cnt.invitor isEqualToString:userInfo.userId] || [cnt.invitees containsObject:userInfo.userId]) {
-                needUpdate = true;
-            }
-        } else if ([ws.model.message.content isKindOfClass:[WFCCCreateGroupNotificationContent class]]) {
-            WFCCCreateGroupNotificationContent *cnt = (WFCCCreateGroupNotificationContent *)ws.model.message.content;
-            if ([cnt.creator isEqualToString:userInfo.userId]) {
-                needUpdate = true;
+        for (WFCCUserInfo *userInfo in userInfoList) {
+            if ([ws.model.message.content isKindOfClass:[WFCCAddGroupeMemberNotificationContent class]]) {
+                WFCCAddGroupeMemberNotificationContent *cnt = (WFCCAddGroupeMemberNotificationContent *)ws.model.message.content;
+                if ([cnt.invitor isEqualToString:userInfo.userId] || [cnt.invitees containsObject:userInfo.userId]) {
+                    needUpdate = true;
+                    break;
+                }
+            } else if ([ws.model.message.content isKindOfClass:[WFCCCreateGroupNotificationContent class]]) {
+                WFCCCreateGroupNotificationContent *cnt = (WFCCCreateGroupNotificationContent *)ws.model.message.content;
+                if ([cnt.creator isEqualToString:userInfo.userId]) {
+                    needUpdate = true;
+                    break;
+                }
             }
         }
         

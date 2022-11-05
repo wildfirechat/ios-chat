@@ -48,9 +48,12 @@
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-    WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
-        [self loadData:NO];
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
+            [self loadData:NO];
+            break;
+        }
     }
 }
 

@@ -62,13 +62,16 @@
 }
 
 - (void)onChannelInfoUpdated:(NSNotification *)notification {
-    WFCCChannelInfo *channelInfo = notification.userInfo[@"channelInfo"];
     BOOL updated = NO;
-    for (int i = 0; i < self.favChannels.count; i++) {
-        if([self.favChannels[i].channelId isEqualToString:channelInfo.channelId]) {
-            self.favChannels[i] = channelInfo;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
-            updated = YES;
+    NSArray<WFCCChannelInfo *> *channelInfoList = notification.userInfo[@"channelInfoList"];
+    for (WFCCChannelInfo *channelInfo in channelInfoList) {
+        for (int i = 0; i < self.favChannels.count; i++) {
+            if([self.favChannels[i].channelId isEqualToString:channelInfo.channelId]) {
+                self.favChannels[i] = channelInfo;
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+                updated = YES;
+                break;
+            }
         }
     }
     

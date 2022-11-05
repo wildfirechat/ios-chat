@@ -105,58 +105,19 @@
 - (void)onUserInfoUpdated:(NSNotification *)notification {
     if (self.searchController.active) {
         [self.tableView reloadData];
-    } else {
-        WFCCUserInfo *userInfo = notification.userInfo[@"userInfo"];
-        NSArray *dataSource = self.conversations;
-        for (int i = 0; i < dataSource.count; i++) {
-            WFCCConversationInfo *conv = dataSource[i];
-            if (conv.conversation.type == Single_Type && [conv.conversation.target isEqualToString:userInfo.userId]) {
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            } else if ([conv.lastMessage.fromUser isEqualToString:userInfo.userId]) {
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            } else if(conv.conversation.type == SecretChat_Type) {
-                NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
-                if([userInfo.userId isEqualToString:userId]) {
-                    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-                }
-            }
-            
-        }
     }
 }
 
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
     if (self.searchController.active) {
         [self.tableView reloadData];
-    } else {
-        WFCCGroupInfo *groupInfo = notification.userInfo[@"groupInfo"];
-        NSArray *dataSource = self.conversations;
-        
-        
-        for (int i = 0; i < dataSource.count; i++) {
-            WFCCConversationInfo *conv = dataSource[i];
-            if (conv.conversation.type == Group_Type && [conv.conversation.target isEqualToString:groupInfo.target]) {
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            }
-        }
     }
 }
 
 - (void)onChannelInfoUpdated:(NSNotification *)notification {
     if (self.searchController.active) {
         [self.tableView reloadData];
-    } else {
-        WFCCChannelInfo *channelInfo = notification.userInfo[@"groupInfo"];
-        NSArray *dataSource = self.conversations;
-        
-        
-        for (int i = 0; i < dataSource.count; i++) {
-            WFCCConversationInfo *conv = dataSource[i];
-            if (conv.conversation.type == Channel_Type && [conv.conversation.target isEqualToString:channelInfo.channelId]) {
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            }
-        }
-    }
+    } 
 }
 
 - (void)onSendingMessageStatusUpdated:(NSNotification *)notification {
