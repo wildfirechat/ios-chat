@@ -14,11 +14,13 @@
  - GroupType_Normal: 管理员和群主才能加人和退群，修改群信息。
  - GroupType_Free: 所有人都能加人、退群和修改群信息
  - GroupType_Restricted: 带有群管理功能
+ - GroupType_Organization: 组织群，只能通过API操作，群主和管理员可以禁言、撤回等操作
  */
 typedef NS_ENUM(NSInteger, WFCCGroupType) {
     GroupType_Normal = 0,
     GroupType_Free = 1,
     GroupType_Restricted = 2,
+    GroupType_Organization = 3,
 } ;
 
 /**
