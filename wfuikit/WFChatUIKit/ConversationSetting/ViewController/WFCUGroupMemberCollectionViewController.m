@@ -43,6 +43,8 @@
         } else {
             memberCollectionCount = (int)self.memberList.count;
         }
+    } else if(self.groupInfo.type == GroupType_Organization) {
+        memberCollectionCount = 0;
     } else {
         memberCollectionCount = (int)self.memberList.count + 1;
     }
@@ -90,6 +92,10 @@
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if(self.groupInfo.type == GroupType_Organization) {
+        return 0;
+    }
+    
     if([self isGroupManager]) {
         return self.memberList.count + 2;
     } else {

@@ -178,7 +178,10 @@
             self.extraBtnNumber = 1;
             self.memberCollectionCount = 2;
         } else if(self.conversation.type == Group_Type) {
-            if ([self isGroupManager]) {
+            if(self.groupInfo.type == GroupType_Restricted) {
+                self.extraBtnNumber = 0;
+                self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
+            } else if ([self isGroupManager]) {
                 self.extraBtnNumber = 2;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             } else if(self.groupInfo.type == GroupType_Restricted) {
@@ -192,6 +195,7 @@
                 self.extraBtnNumber = 1;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             }
+            
             if (self.memberCollectionCount > Group_Member_Visible_Lines * 5) {
                 self.memberCollectionCount = Group_Member_Visible_Lines * 5;
                 self.showMoreMember = YES;
