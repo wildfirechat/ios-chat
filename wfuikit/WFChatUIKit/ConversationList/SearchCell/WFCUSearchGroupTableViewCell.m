@@ -75,40 +75,66 @@
 - (void)setGroupSearchInfo:(WFCCGroupSearchInfo *)groupSearchInfo {
     _groupSearchInfo = groupSearchInfo;
     WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:groupSearchInfo.groupInfo.target refresh:NO];
-    if (groupInfo.displayName.length == 0) {
-        self.name.text = WFCString(@"GroupChat");
-    } else {
-        self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
-    }
-    if (groupSearchInfo.marchType > 0) {
+    self.haveMember.attributedText = nil;
+    self.name.text = nil;
+    
+    if ((groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Name) || (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Alias)) {
         NSMutableAttributedString *string;
         for (NSString *memberId in groupSearchInfo.marchedMemberNames) {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId refresh:NO];
-            if (userInfo) {
-                string = [[NSMutableAttributedString alloc] initWithString:userInfo.displayName];
-                [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
-                [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
-                break;
+            if (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Alias) {
+                WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:groupSearchInfo.groupInfo.target memberId:memberId];
+                if (member && [member.alias rangeOfString:groupSearchInfo.keyword].location != NSNotFound) {
+                    string = [[NSMutableAttributedString alloc] initWithString:member.alias];
+                    [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
+                    [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
+                    break;
+                }
+            }
+            
+            if(string == nil && (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Name)) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId refresh:NO];
+                if (userInfo && [userInfo.displayName rangeOfString:groupSearchInfo.keyword].location != NSNotFound) {
+                    string = [[NSMutableAttributedString alloc] initWithString:userInfo.displayName];
+                    [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
+                    [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
+                    break;
+                }
             }
         }
-        if (string == nil) {
-            string = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), groupSearchInfo.marchedMemberNames[0]]] mutableCopy];
-        }
-        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupMemberNameMatch")];
-        [attrStr appendAttributedString:string];
-        if (groupSearchInfo.marchedMemberNames.count > 1) {
-            [attrStr appendAttributedString:[[NSAttributedString alloc] initWithString:WFCString(@"Etc")]];
-        }
-        self.haveMember.attributedText = attrStr;
-    } else {
-        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:groupSearchInfo.keyword];
-        [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
-        [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
         
-        [string addAttribute:NSFontAttributeName value:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12] range:NSMakeRange(0, string.length)];
-        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupNameMatch")];
-        [attrStr appendAttributedString:string];
+        NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:WFCString(@"GroupMemberNameMatch")];
+        if(string.length) {
+            [attrStr appendAttributedString:string];
+            if (groupSearchInfo.marchedMemberNames.count > 1) {
+                [attrStr appendAttributedString:[[NSAttributedString alloc] initWithString:WFCString(@"Etc")]];
+            }
+        }
         self.haveMember.attributedText = attrStr;
+    }
+    
+    if ((groupSearchInfo.marchType & GroupSearchMarchTypeMask_Group_Name) || (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Group_Remark)) {
+        NSString *groupName = groupSearchInfo.groupInfo.name;
+        if(groupSearchInfo.groupInfo.remark.length) {
+            if([groupSearchInfo.groupInfo.remark rangeOfString:groupSearchInfo.keyword].location != NSNotFound) {
+                groupName = groupSearchInfo.groupInfo.remark;
+            } else {
+                groupName = [NSString stringWithFormat:@"%@(%@)", groupSearchInfo.groupInfo.remark, groupSearchInfo.groupInfo.name];
+            }
+        }
+        
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:groupName];
+        NSRange range = [groupName rangeOfString:groupSearchInfo.keyword];
+        if(range.location != NSNotFound) {
+            [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];
+            [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:range];
+            self.name.attributedText = string;
+        }
+    } else {
+        if (groupInfo.displayName.length == 0) {
+            self.name.text = WFCString(@"GroupChat");
+        } else {
+            self.name.text = [NSString stringWithFormat:@"%@(%d)", groupInfo.displayName, (int)groupInfo.memberCount];
+        }
     }
     
     if (groupInfo.portrait.length) {

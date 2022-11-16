@@ -232,6 +232,7 @@ namespace mars {
         private:
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
+            bool isConversationExist(int conversationType, const std::string &target, int line);
             bool clearConversationUnread(int conversationType, const std::string &target, int line, bool clearLastMessageId = false);
             bool updateConversationUnread(int conversationType, const std::string &target, int line);
             int64_t maxConversationMessageTime(int conversationType, const std::string &target, int line);
