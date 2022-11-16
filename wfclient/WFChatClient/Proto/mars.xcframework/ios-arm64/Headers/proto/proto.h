@@ -119,6 +119,7 @@ namespace mars{
             kEcServerFriendRequestOvertime = 19,
             kEcServerNotInChatroom = 20,
             kEcServerNotLicensed = 22,
+            kEcServerUserNotPrepared = 238,
             kEcServerUserIsBlocked = 245,
             kEcServerInBlacklist = 246,
             kEcServerForbidden_send_msg = 247,
