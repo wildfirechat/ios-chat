@@ -235,7 +235,7 @@
     self.cells = [[NSMutableArray alloc] init];
     
     self.headerCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    for (UIView *subView in self.headerCell.subviews) {
+    for (UIView *subView in self.headerCell.contentView.subviews) {
         [subView removeFromSuperview];
     }
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
