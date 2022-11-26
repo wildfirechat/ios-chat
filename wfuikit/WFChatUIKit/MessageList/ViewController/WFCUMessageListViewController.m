@@ -1788,6 +1788,10 @@
                 duplcated = YES;
                 break;
             }
+            if(message.messageId && message.messageId == model.message.messageId) {
+                duplcated = YES;
+                break;
+            }
         }
         if (duplcated) {
             continue;
