@@ -59,6 +59,13 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+#if DEBUG
+    if([IM_SERVER_HOST rangeOfString:@"http"].location != NSNotFound || [IM_SERVER_HOST rangeOfString:@":"].location != NSNotFound) {
+        NSLog(@"IM_SERVER_HOST只能填写IP或者域名，不能带HTTP头或者端口！！！");
+        exit(-1);
+    }
+#endif
+    
 #if WFCU_SUPPORT_VOIP
 #if !USE_CALL_KIT
     [WFAVEngineKit notRegisterVoipPushService];
