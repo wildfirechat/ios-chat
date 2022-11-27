@@ -8,7 +8,7 @@
 
 #import "WFCConfig.h"
 
-//域名，注意不能带http头，也不能带端口。
+//IM服务HOST，域名或者IP，注意不能带http头，也不能带端口。
 NSString *IM_SERVER_HOST = @"wildfirechat.net";
 
 
