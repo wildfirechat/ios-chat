@@ -226,7 +226,7 @@ namespace mars {
             long insertSyncBurnReaded(int type, const std::string &target, int line, int64_t readDt, int64_t value);
             bool deleteSyncBurnReaded(long sid);
             SyncBurnReadedEntry getSyncBurnReadedEntry();
-            
+            void deleteUserMessages(const std::list<std::string> &userIds);
             void _OnCheckBurn();
             friend DB2;
         private:
