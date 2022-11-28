@@ -178,7 +178,7 @@
             self.extraBtnNumber = 1;
             self.memberCollectionCount = 2;
         } else if(self.conversation.type == Group_Type) {
-            if(self.groupInfo.type == GroupType_Restricted) {
+            if(self.groupInfo.type == GroupType_Organization) {
                 self.extraBtnNumber = 0;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             } else if ([self isGroupManager]) {
