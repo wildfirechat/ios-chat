@@ -410,6 +410,7 @@
 - (void)onConnectionStatusChanged:(NSNotification *)notification {
     ConnectionStatus status = [notification.object intValue];
     [self updateConnectionStatus:status];
+    [self updatePcSession];
 }
 
 - (void)onReceiveMessages:(NSNotification *)notification {
@@ -473,7 +474,7 @@
     NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
     
     if (@available(iOS 11.0, *)) {
-        if (onlines.count) {
+        if (onlines.count && [WFCCNetworkService sharedInstance].currentConnectionStatus == kConnectionStatusConnected) {
             self.tableView.tableHeaderView = self.pcSessionView;
             if (![[NSUserDefaults standardUserDefaults] boolForKey:@"wfc_uikit_had_pc_session"]) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"wfc_uikit_had_pc_session"];
