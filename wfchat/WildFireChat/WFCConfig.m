@@ -21,10 +21,11 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
-// 我们提供的服务仅供用户测试和体验，上线时请切换成你们自己的服务。
+// 我们提供的服务仅供用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
+// 上线时请一定要切换成你们自己的服务。
 NSString *ICE_ADDRESS = @"turn:turn.wildfirechat.net:3478";
 NSString *ICE_USERNAME = @"wfchat";
-NSString *ICE_PASSWORD = @"wfchat";
+NSString *ICE_PASSWORD = @"wfchat1";
 
 //用户协议和隐私政策，上线前请替换成您自己的内容
 NSString *USER_PRIVACY_URL = @"https://wildfirechat.net/wildfirechat_user_privacy.html";
