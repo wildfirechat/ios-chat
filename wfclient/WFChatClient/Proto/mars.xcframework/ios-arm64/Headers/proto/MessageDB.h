@@ -183,7 +183,8 @@ namespace mars {
             long InsertOrUpdateChannelInfo(const TChannelInfo &channelInfo);
             
             bool BeginTransaction();
-            void CommitTransaction();
+            bool CommitTransaction();
+            bool RollbackTransaction();
             friend class LoadRemoteMessagesPublishCallback;
             std::list<TConversation> GetConversationListOld(const std::list<int> &conversationTypes, const std::list<int> &lines);
             
