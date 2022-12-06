@@ -3608,8 +3608,12 @@ public:
     return mars::stn::MessageDB::Instance()->BeginTransaction();
 }
 
-- (void)commitTransaction {
-    mars::stn::MessageDB::Instance()->CommitTransaction();
+- (BOOL)commitTransaction {
+    return mars::stn::MessageDB::Instance()->CommitTransaction();
+}
+
+- (BOOL)rollbackTransaction {
+    return mars::stn::MessageDB::Instance()->RollbackTransaction();
 }
 
 - (BOOL)isCommercialServer {

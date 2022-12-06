@@ -2253,7 +2253,13 @@ amr文件转成wav数据
 提交数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；需要跟beginTransaction配对使用
  
 */
-- (void)commitTransaction;
+- (BOOL)commitTransaction;
+
+/**
+回滚数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；需要跟beginTransaction配对使用
+ 
+*/
+- (BOOL)rollbackTransaction;
 
 /**
  是否是商业版IM服务。
