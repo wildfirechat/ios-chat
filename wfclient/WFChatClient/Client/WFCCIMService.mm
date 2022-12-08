@@ -3580,6 +3580,8 @@ public:
 
 - (long)insertMessage:(WFCCMessage *)message {
     mars::stn::TMessage tmsg;
+    
+    tmsg.messageUid = message.messageUid;
     fillTMessage(tmsg, message.conversation, message.content);
     
     if(message.status >= Message_Status_Unread) {
