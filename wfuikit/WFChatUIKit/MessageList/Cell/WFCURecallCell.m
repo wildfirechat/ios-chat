@@ -69,6 +69,9 @@
     self.infoLabel.frame = CGRectMake(8, TEXT_BUTTOM_PADDING, size.width, size.height);
     if (reeditBtnWidth) {
         self.reeditButton.frame = CGRectMake(size.width + 8, TEXT_BUTTOM_PADDING, reeditBtnWidth, size.height);
+        self.reeditButton.hidden = NO;
+    } else {
+        self.reeditButton.hidden = YES;
     }
     
 }
