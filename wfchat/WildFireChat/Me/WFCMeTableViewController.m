@@ -62,16 +62,7 @@
     self.tableView.contentInset = UIEdgeInsetsMake(-300, 0, 0, 0);
     [self.view addSubview:self.tableView];
     
-    __weak typeof(self)ws = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
-        for (WFCCUserInfo *userInfo in userInfoList) {
-            if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
-                [ws.tableView reloadData];
-                break;
-            }
-        }
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
     if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
         self.itemDataSource = @[
@@ -101,6 +92,16 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userInfo.userId]) {
+            [self.tableView reloadData];
+            break;
+        }
+    }
 }
 
 #pragma mark - Table view data source

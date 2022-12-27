@@ -60,18 +60,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = WFCString(@"UserInfomation");
-    __weak typeof(self)ws = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
-        for (WFCCUserInfo *userInfo in userInfoList) {
-            if ([ws.userId isEqualToString:userInfo.userId]) {
-                WFCCUserInfo *userInfo = note.userInfo[@"userInfo"];
-                ws.userInfo = userInfo;
-                [ws loadData];
-                break;
-            }
-        }
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
@@ -90,6 +79,17 @@
 
 
     [self loadData];
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.userId isEqualToString:userInfo.userId]) {
+            self.userInfo = userInfo;
+            [self loadData];
+            break;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
