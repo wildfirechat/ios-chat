@@ -92,11 +92,12 @@
     self.settingNav = nav;
 
 #ifdef WFC_MOMENTS
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveComments:) name:kReceiveComments object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kReceiveComments object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kClearUnreadComments object:nil];
 #endif
 }
 
-- (void)onReceiveComments:(NSNotification *)notification {
+- (void)onUnreadCommentStatusChanged:(NSNotification *)notification {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateBadgeNumber];
     });
