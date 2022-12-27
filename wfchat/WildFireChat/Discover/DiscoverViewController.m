@@ -21,6 +21,7 @@
 #endif
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCConfig.h"
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -63,11 +64,13 @@
     [self.view addSubview:self.tableView];
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 #ifdef WFC_MOMENTS
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveComments:) name:kReceiveComments object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kReceiveComments object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kClearUnreadComments object:nil];
+    
 #endif
 }
 
-- (void)onReceiveComments:(NSNotification *)notification {
+- (void)onUnreadCommentStatusChanged:(NSNotification *)notification {
     [self.tableView reloadData];
 }
 
@@ -85,7 +88,10 @@
 - (void)updateUnreadStatus {
     [self.tableView reloadData];
 #ifdef WFC_MOMENTS
-    [self.tabBarController.tabBar showBadgeOnItemIndex:2 badgeValue:[[WFMomentService sharedService] getUnreadCount]];
+    int momentIndex = 2;
+    if(WORK_PLATFORM_URL.length)
+        momentIndex = 3;
+    [self.tabBarController.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
 }
 
