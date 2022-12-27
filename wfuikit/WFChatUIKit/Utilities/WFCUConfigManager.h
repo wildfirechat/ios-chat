@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "WFCUAppServiceProvider.h"
+#import "WFCUOrgServiceProvider.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,6 +45,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, strong)UIColor *separateColor;
 
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
+
+@property(nonatomic, weak)id<WFCUOrgServiceProvider> orgServiceProvider;
 
 @property(nonatomic, strong)NSString *fileTransferId;
 

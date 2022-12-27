@@ -27,6 +27,9 @@
 #import "UIColor+YH.h"
 #import "WFCUPinyinUtility.h"
 #import "WFCUImage.h"
+#import "WFCUOrganizationCache.h"
+#import "WFCUOrganization.h"
+#import "WFCUOrganizationViewController.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -337,7 +340,7 @@ static NSString *wfcstar = @"☆";
         return dataSource.count;
     } else {
         if (section == 0) {
-            return 3;
+            return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count;
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
             return dataSource.count;
@@ -391,7 +394,15 @@ static NSString *wfcstar = @"☆";
     }
     return selectCell;
 }
-
+#define ORGANIZATION_REUSEIDENTIFY @"organizationCell"
+- (WFCUContactTableViewCell *)dequeueOrAllocOrganizationCell:(UITableView *)tableView {
+    WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:ORGANIZATION_REUSEIDENTIFY];
+    if (contactCell == nil) {
+        contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ORGANIZATION_REUSEIDENTIFY];
+        contactCell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+    }
+    return contactCell;
+}
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
 // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
 
@@ -435,7 +446,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
-            } else {
+            } else if(indexPath.row == 2) {
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
@@ -443,6 +454,27 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
+            } else {
+                int index = indexPath.row - 3;
+                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
+                if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
+                    int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+                    contactCell.nameLabel.text = organization.name;
+                    contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_organization_icon"];
+                    contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                    contactCell.onlineView.hidden = YES;
+                    return contactCell;
+                } else {
+                    index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
+                    int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+                    contactCell.nameLabel.text = organization.name;
+                    contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_expended_icon"];
+                    contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                    contactCell.onlineView.hidden = YES;
+                    return contactCell;
+                }
             }
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section - 1]];
@@ -663,10 +695,28 @@ static NSString *wfcstar = @"☆";
                 WFCUFavGroupTableViewController *groupVC = [[WFCUFavGroupTableViewController alloc] init];;
                 groupVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:groupVC animated:YES];
-            } else {
+            } else if(indexPath.row == 2) {
                 WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];;
                 channelVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:channelVC animated:YES];
+            } else {
+                int index = indexPath.row - 3;
+                if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
+                    int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
+                    WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
+                    orgVC.organizationId = orgId;
+                    orgVC.hidesBottomBarWhenPushed = YES;
+                    orgVC.isPushed = YES;
+                    [self.navigationController pushViewController:orgVC animated:YES];
+                } else {
+                    index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
+                    int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
+                    WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
+                    orgVC.organizationId = orgId;
+                    orgVC.hidesBottomBarWhenPushed = YES;
+                    orgVC.isPushed = YES;
+                    [self.navigationController pushViewController:orgVC animated:YES];
+                }
             }
             return;
         } else {

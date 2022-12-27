@@ -32,6 +32,8 @@
 #import <PttClient/WFPttClient.h>
 #endif
 
+#import "OrgService.h"
+
 #if USE_CALL_KIT
 #import "WFCCallKitManager.h"
 #endif
@@ -112,6 +114,7 @@
     
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
+    [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
 #ifdef WFC_PTT
     //初始化对讲SDK
     [WFPttClient sharedClient].delegate = self;
@@ -607,6 +610,7 @@
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
+            [[OrgService sharedOrgService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
         } else if(status == kConnectionStatusConnected) {
             if(!self.firstConnected) {
@@ -614,6 +618,44 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self prepardDataForShareExtension];
                 });
+                
+                [[OrgService sharedOrgService] login:^{
+                    NSLog(@"on org service login success");
+                    [[OrgService sharedOrgService] getRelationship:[WFCCNetworkService sharedInstance].userId  success:^(NSArray<WFCUOrgRelationship *> * _Nonnull relationships) {
+                        [[WFCUOrganizationCache sharedCache] put:[WFCCNetworkService sharedInstance].userId relationship:relationships];
+                        NSMutableArray<NSNumber *> *bottomIds = [[NSMutableArray alloc] init];
+                        [relationships enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            if(obj.bottom) [bottomIds addObject:@(obj.organizationId)];
+                        }];
+                        
+                        [WFCUOrganizationCache sharedCache].bottomOrganizationIds = bottomIds;
+                        
+                        if(bottomIds.count) {
+                            [[OrgService sharedOrgService] getOrganizations:bottomIds success:^(NSArray<WFCUOrganization *> * _Nonnull organizations) {
+                                [organizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                    [[WFCUOrganizationCache sharedCache] put:obj.organizationId organization:obj];
+                                }];
+                            } error:^(int error_code) {
+                                
+                            }];
+                        }
+                    } error:^(int error_code) {
+                        
+                    }];
+                    
+                    [[OrgService sharedOrgService] getRootOrganization:^(NSArray<WFCUOrganization *> * _Nonnull organizations) {
+                        NSMutableArray<NSNumber *> *orgIds = [[NSMutableArray alloc] init];
+                        [organizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            [orgIds addObject:@(obj.organizationId)];
+                            [[WFCUOrganizationCache sharedCache] put:obj.organizationId organization:obj];
+                        }];
+                        [WFCUOrganizationCache sharedCache].rootOrganizationIds = orgIds;
+                    } error:^(int error_code) {
+
+                    }];
+                } error:^(int errCode) {
+                    NSLog(@"on org service login failure");
+                }];
             }
         }
     });
