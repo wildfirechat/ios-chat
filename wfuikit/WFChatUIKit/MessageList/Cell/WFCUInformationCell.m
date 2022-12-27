@@ -44,31 +44,8 @@
     
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
 
-        BOOL needUpdate = false;
-        for (WFCCUserInfo *userInfo in userInfoList) {
-            if ([ws.model.message.content isKindOfClass:[WFCCAddGroupeMemberNotificationContent class]]) {
-                WFCCAddGroupeMemberNotificationContent *cnt = (WFCCAddGroupeMemberNotificationContent *)ws.model.message.content;
-                if ([cnt.invitor isEqualToString:userInfo.userId] || [cnt.invitees containsObject:userInfo.userId]) {
-                    needUpdate = true;
-                    break;
-                }
-            } else if ([ws.model.message.content isKindOfClass:[WFCCCreateGroupNotificationContent class]]) {
-                WFCCCreateGroupNotificationContent *cnt = (WFCCCreateGroupNotificationContent *)ws.model.message.content;
-                if ([cnt.creator isEqualToString:userInfo.userId]) {
-                    needUpdate = true;
-                    break;
-                }
-            }
-        }
-        
-        if (needUpdate) {
-            [ws setModel:ws.model];
-        }
-    }];
-    
     NSString *infoText;
     if ([model.message.content isKindOfClass:[WFCCNotificationMessageContent class]]) {
         WFCCNotificationMessageContent *content = (WFCCNotificationMessageContent *)model.message.content;
@@ -91,6 +68,31 @@
     self.infoLabel.frame = CGRectMake((width - size.width)/2 - 8, timeLableEnd + TEXT_LABEL_TOP_PADDING, size.width + 16, size.height + TEXT_TOP_PADDING + TEXT_BUTTOM_PADDING);
 //    self.infoLabel.textAlignment = NSTextAlignmentCenter;
 
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+
+    BOOL needUpdate = false;
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.model.message.content isKindOfClass:[WFCCAddGroupeMemberNotificationContent class]]) {
+            WFCCAddGroupeMemberNotificationContent *cnt = (WFCCAddGroupeMemberNotificationContent *)self.model.message.content;
+            if ([cnt.invitor isEqualToString:userInfo.userId] || [cnt.invitees containsObject:userInfo.userId]) {
+                needUpdate = true;
+                break;
+            }
+        } else if ([self.model.message.content isKindOfClass:[WFCCCreateGroupNotificationContent class]]) {
+            WFCCCreateGroupNotificationContent *cnt = (WFCCCreateGroupNotificationContent *)self.model.message.content;
+            if ([cnt.creator isEqualToString:userInfo.userId]) {
+                needUpdate = true;
+                break;
+            }
+        }
+    }
+    
+    if (needUpdate) {
+        [self setModel:self.model];
+    }
 }
 
 - (UILabel *)infoLabel {

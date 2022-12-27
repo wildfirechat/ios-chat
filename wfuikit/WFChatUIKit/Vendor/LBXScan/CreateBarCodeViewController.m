@@ -50,29 +50,14 @@
         self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@", self.target];
 //        self.qrStr = [NSString stringWithFormat:@"wildfirechat://user/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
-        [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-            NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
-            for (WFCCUserInfo *userInfo in userInfoList) {
-                if ([ws.target isEqualToString:userInfo.userId]) {
-                    ws.userInfo = userInfo;
-                    break;
-                }
-            }
-        }];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     } else if(self.qrType == QRType_Group) {
         self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@", self.target];
 //        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
-        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
-            NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
-            for (WFCCGroupInfo *groupInfo in groupInfoList) {
-                if ([ws.target isEqualToString:groupInfo.target]) {
-                    ws.groupInfo = groupInfo;
-                }
-            }
-        }];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
         
         self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.target refresh:NO];
     } else if(self.qrType == QRType_Conference) {
@@ -167,11 +152,23 @@
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-        self.userInfo = notification.userInfo[@"userInfo"];
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.target isEqualToString:userInfo.userId]) {
+            self.userInfo = userInfo;
+            break;
+        }
+    }
 }
 
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
-        self.groupInfo = notification.userInfo[@"groupInfo"];
+    NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
+    for (WFCCGroupInfo *groupInfo in groupInfoList) {
+        if ([self.target isEqualToString:groupInfo.target]) {
+            self.groupInfo = groupInfo;
+            break;
+        }
+    }
 }
 
 - (void)setQrLogo:(NSString *)qrLogo {

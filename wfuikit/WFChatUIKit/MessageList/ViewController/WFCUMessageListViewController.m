@@ -232,42 +232,12 @@
     }
     
     if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:kUserInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            NSArray<WFCCUserInfo *> *userInfoList = note.userInfo[@"userInfoList"];
-            for (WFCCUserInfo *userInfo in userInfoList) {
-                if ([ws.conversation.target isEqualToString:note.object]) {
-                    ws.targetUser = note.userInfo[@"userInfo"];
-                    break;
-                }
-            }
-        }];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     } else if(self.conversation.type == Group_Type) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            NSArray<WFCCGroupInfo *> *groupInfoList = note.userInfo[@"groupInfoList"];
-            for (WFCCGroupInfo *groupInfo in groupInfoList) {
-                if ([ws.conversation.target isEqualToString:groupInfo.target]) {
-                    ws.targetGroup = groupInfo;
-                    break;
-                }
-            }
-        }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if ([ws.conversation.target isEqualToString:note.object]) {
-                ws.targetGroup = ws.targetGroup;
-            }
-            
-        }];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupMemberUpdated:) name:kGroupMemberUpdated object:nil];
     } else if(self.conversation.type == Channel_Type) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:kChannelInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            NSArray<WFCCChannelInfo *> *channelInfoList = note.userInfo[@"channelInfoList"];
-            for (WFCCChannelInfo *channelInfo in channelInfoList) {
-                if ([ws.conversation.target isEqualToString:channelInfo.channelId]) {
-                    ws.targetChannel = channelInfo;
-                    break;
-                }
-            }
-        }];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onChannelInfoUpdated:) name:kChannelInfoUpdated object:nil];
     }
     
     [self setupNavigationItem];
@@ -354,6 +324,44 @@
     
     [self reloadMessageList];
 }
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.conversation.target isEqualToString:userInfo.userId]) {
+            self.targetUser = userInfo;
+            break;
+        }
+    }
+}
+
+- (void)onGroupInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
+    for (WFCCGroupInfo *groupInfo in groupInfoList) {
+        if ([self.conversation.target isEqualToString:groupInfo.target]) {
+            self.targetGroup = groupInfo;
+            break;
+        }
+    }
+}
+
+- (void)onGroupMemberUpdated:(NSNotification *)notification {
+    if ([self.conversation.target isEqualToString:notification.object]) {
+        self.targetGroup = self.targetGroup;
+    }
+}
+
+- (void)onChannelInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCChannelInfo *> *channelInfoList = notification.userInfo[@"channelInfoList"];
+    for (WFCCChannelInfo *channelInfo in channelInfoList) {
+        if ([self.conversation.target isEqualToString:channelInfo.channelId]) {
+            self.targetChannel = channelInfo;
+            break;
+        }
+    }
+}
+
+
 
 //The VC maybe pushed from search VC, so no need go back to search VC, need remove all the VC between current VC to WFCUConversationTableViewController
 - (void)removeControllerStackIfNeed {
