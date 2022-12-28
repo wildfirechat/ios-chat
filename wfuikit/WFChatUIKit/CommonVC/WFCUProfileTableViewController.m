@@ -25,6 +25,13 @@
 #import "WFCUImage.h"
 #import "WFCUProfileMoreTableViewController.h"
 #import "MWPhotoBrowser.h"
+#import "WFCUOrganizationViewController.h"
+#import "WFCUOrganizationCache.h"
+#import "WFCUOrganization.h"
+#import "WFCUEmployee.h"
+#import "WFCUOrgRelationship.h"
+#import "WFCUUtilities.h"
+
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -34,12 +41,6 @@
 @property (strong, nonatomic)UILabel *starLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
-
-@property (strong, nonatomic)UILabel *mobileLabel;
-@property (strong, nonatomic)UILabel *emailLabel;
-@property (strong, nonatomic)UILabel *addressLabel;
-@property (strong, nonatomic)UILabel *companyLabel;
-@property (strong, nonatomic)UILabel *socialLabel;
 
 @property (strong, nonatomic)UITableViewCell *sendMessageCell;
 @property (strong, nonatomic)UITableViewCell *voipCallCell;
@@ -53,6 +54,8 @@
 @property (nonatomic, strong)NSMutableArray<UITableViewCell *> *headerCells;
 
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
+
+@property(nonatomic, strong)NSArray<NSNumber *> *organizationIds;
 @end
 
 @implementation WFCUProfileTableViewController
@@ -77,6 +80,14 @@
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
 
+    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:self.userId];
+    NSMutableArray<NSNumber *> *arr = [[NSMutableArray alloc] init];
+    [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.bottom) {
+            [arr addObject:@(obj.organizationId)];
+        }
+    }];
+    self.organizationIds = [arr mutableCopy];
 
     [self loadData];
 }
@@ -521,11 +532,14 @@
     if (section == 0) {
         return self.headerCells.count;
     } else if (section == 1) {
+        int count = 1;//more
         if (self.momentCell) {
-            return 2;
-        } else {
-            return 1;
+            count++;
         }
+        
+        count+= self.organizationIds.count;
+        
+        return count;
     } else if(section == 2) {
         return self.cells.count;
     } else {
@@ -551,6 +565,24 @@
     } else if (indexPath.section == 1) {
         if(self.momentCell && indexPath.row == 0) {
             return self.momentCell;
+        }
+        
+        int index = indexPath.row;
+        if(self.momentCell)
+            index--;
+        
+        if(index < self.organizationIds.count) {
+            NSInteger orgId = [self.organizationIds[index] integerValue];
+            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"org_cell"];
+            if(!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"org_cell"];
+            }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = @"部门";
+            cell.detailTextLabel.text = org.name;
+            return cell;
         } else {
             return self.moreCell;
         }
@@ -617,6 +649,35 @@
             
         }];
         [self.navigationController pushViewController:moreVC animated:YES];
+    } else if(indexPath.section == 1) {
+        if(self.momentCell && indexPath.row == 0) {
+            //click momentCell
+        }
+        
+        int index = indexPath.row;
+        if(self.momentCell)
+            index--;
+        
+        if(index < self.organizationIds.count) {
+            NSInteger orgId = [self.organizationIds[index] integerValue];
+            NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId];
+            __block NSInteger index = orgId;
+            NSMutableArray *ids = [[NSMutableArray alloc] init];
+            while (index) {
+                [ids insertObject:@(index) atIndex:0];
+                [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if(obj.organizationId == index) {
+                        index = obj.parentOrganizationId;
+                        *stop = YES;
+                    }
+                }];
+            }
+            WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
+            orgVC.organizationIds = ids;
+            orgVC.hidesBottomBarWhenPushed = YES;
+            orgVC.isPushed = YES;
+            [self.navigationController pushViewController:orgVC animated:YES];
+        }
     }
 }
 #pragma mark - UITableViewDelegate

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @interface WFCUOrganizationViewController : UIViewController
-@property (nonatomic, assign)NSInteger organizationId;
+@property (nonatomic, strong)NSArray<NSNumber *> *organizationIds;
 @property (nonatomic, assign)BOOL selectContact;
 @property (nonatomic, assign)BOOL multiSelect;
 @property (nonatomic, assign)int maxSelectCount;

@@ -30,6 +30,7 @@
 #import "WFCUOrganizationCache.h"
 #import "WFCUOrganization.h"
 #import "WFCUEmployee.h"
+#import "WFCUUtilities.h"
 
 @interface OrganizationPath : NSObject
 @property (nonatomic, assign)NSInteger organizationId;
@@ -41,7 +42,7 @@
 @implementation OrganizationPath
 @end
 
-@interface WFCUOrganizationViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
+@interface WFCUOrganizationViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<NSString *> *selectedContacts;
 
@@ -50,7 +51,11 @@
 
 @property(nonatomic, strong)UIActivityIndicatorView *activityIndicator;
 
+@property (nonatomic, assign)NSInteger lastOrganizationId;
+
 @property(nonatomic, strong)NSMutableArray<OrganizationPath *> *paths;
+
+@property(nonatomic, strong)UICollectionView *collectionView;
 @end
 
 @implementation WFCUOrganizationViewController
@@ -138,50 +143,54 @@
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchController;
         _searchController.hidesNavigationBarDuringPresentation = YES;
-    } else {
-        self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
     
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
+    
+    
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumLineSpacing = 0;
+    layout.minimumInteritemSpacing = 0;
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 32) collectionViewLayout:layout];
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    self.collectionView.showsHorizontalScrollIndicator = NO;
+    self.tableView.tableHeaderView = self.collectionView;
+    
     [self.view addSubview:self.tableView];
     
     [self.view bringSubviewToFront:self.activityIndicator];
     
     [self loadData];
 }
-
-- (void)setOrganizationId:(NSInteger)organizationId {
+- (void)setOrganizationIds:(NSArray<NSNumber *> *)organizationIds {
+    _organizationIds = organizationIds;
     if(!_paths) {
         _paths = [[NSMutableArray alloc] init];
     }
-    if(!self.paths.count) {
+    [organizationIds enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         OrganizationPath *path = [[OrganizationPath alloc] init];
-        path.organizationId = organizationId;
+        path.organizationId = [obj integerValue];
         [self.paths addObject:path];
-    } else {
-        OrganizationPath *path = [self.paths lastObject];
-        if(path.organizationId != organizationId) {
-            path.organizationId = organizationId;
-            path.organization = nil;
-            path.subOrganizations = nil;
-            path.employees = nil;
-        }
-    }
+    }];
 }
 
--(NSInteger)organizationId {
+-(NSInteger)lastOrganizationId {
     return [self.paths lastObject].organizationId;
 }
 
 - (void)loadData {
     [self.activityIndicator startAnimating];
-    WFCUOrganization *roganization = [[WFCUOrganizationCache sharedCache] getOrganization:self.organizationId];
+    WFCUOrganization *roganization = [[WFCUOrganizationCache sharedCache] getOrganization:self.lastOrganizationId];
     if(roganization.name) {
         self.title = roganization.name;
     }
     __weak typeof(self)ws = self;
-    [[WFCUConfigManager globalManager].orgServiceProvider getOrganization:self.organizationId success:^(WFCUOrganization * _Nonnull organization, NSArray<WFCUOrganization *> * _Nonnull subOrganization, NSArray<WFCUEmployee *> * _Nonnull employees) {
+    [[WFCUConfigManager globalManager].orgServiceProvider getOrganization:self.lastOrganizationId success:^(WFCUOrganization * _Nonnull organization, NSArray<WFCUOrganization *> * _Nonnull subOrganization, NSArray<WFCUEmployee *> * _Nonnull employees) {
         [subOrganization enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [[WFCUOrganizationCache sharedCache] put:obj.organizationId organization:obj];
         }];
@@ -189,7 +198,7 @@
             [[WFCUOrganizationCache sharedCache] put:obj.employeeId employee:obj];
         }];
         
-        if(organization.organizationId == ws.organizationId) {
+        if(organization.organizationId == ws.lastOrganizationId) {
             OrganizationPath *path = [self.paths lastObject];
             path.organization = organization;
             path.subOrganizations = subOrganization;
@@ -200,6 +209,7 @@
     } error:^(int error_code) {
         [ws.activityIndicator stopAnimating];
     }];
+    [self.collectionView reloadData];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -278,6 +288,78 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (NSString *)getOrganizationNameOfIndexPath:(NSIndexPath *)indexPath {
+    NSString *name = @"通讯录";
+    if(indexPath.row > 0) {
+        OrganizationPath *path = self.paths[indexPath.row - 1];
+        if(path.organization.name.length) {
+            name = path.organization.name;
+        } else {
+            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:path.organizationId];
+            if(org.name.length) {
+                name = org.name;
+            } else {
+                name = [NSString stringWithFormat:@"%ld", path.organizationId];
+            }
+        }
+    }
+    return name;
+}
+
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.paths.count+1;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *name = [self getOrganizationNameOfIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    [cell.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, 32)];
+    label.text = name;
+    label.textColor = [UIColor blueColor];
+    label.font = [UIFont systemFontOfSize:16];
+    [cell.contentView addSubview:label];
+    
+    BOOL lastItem = (indexPath.row == self.paths.count);
+    if(!lastItem) {
+        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(size.width, 4, 25, 25)];
+        iv.image = [WFCUImage imageNamed:@"back_normal"];
+        [cell.contentView addSubview:iv];
+    }
+    
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.row == 0) {
+        [self onLeftBarBtn:nil];
+    } else {
+        [self.paths removeObjectsInRange:NSMakeRange(indexPath.row, self.paths.count-indexPath.row)];
+        [self loadData];
+    }
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *name = [self getOrganizationNameOfIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    [cell.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
+    BOOL lastItem = (indexPath.row == self.paths.count);
+    if(!lastItem) {
+        size.width += 25;
+    }
+    return CGSizeMake(size.width, 32);
 }
 
 #pragma mark - UITableViewDataSource
