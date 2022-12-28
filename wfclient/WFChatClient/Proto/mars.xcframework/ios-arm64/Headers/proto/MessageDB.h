@@ -111,11 +111,11 @@ namespace mars {
             bool updateConversationRead(int conversationType, const std::string &target, int line, int64_t dt);
             bool updateLineRead(int conversationType, int line, int64_t dt);
             bool updateConversationReaded(int conversationType, const std::string &target, int line, int64_t dt);
-            std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, int limit);
-            std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, bool desc, int limit, int offset);
-            std::list<TMessage> SearchMessagesByTypes(int conversationType, const std::string &target, int line, const std::string &keyword, const std::list<int> &contentTypes, bool desc, int limit, int offset);
-            std::list<TMessage> SearchMessagesByTypesAndTimes(int conversationType, const std::string &target, int line, const std::string &keyword, const std::list<int> &contentTypes, int64_t startTime, int64_t endTime, bool desc, int limit, int offset);
-            std::list<TMessage> SearchMessagesEx(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::string &keyword, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
+            std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, int limit, const std::string &withUser);
+            std::list<TMessage> SearchMessages(int conversationType, const std::string &target, int line, const std::string &keyword, bool desc, int limit, int offset, const std::string &withUser);
+            std::list<TMessage> SearchMessagesByTypes(int conversationType, const std::string &target, int line, const std::string &keyword, const std::list<int> &contentTypes, bool desc, int limit, int offset, const std::string &withUser);
+            std::list<TMessage> SearchMessagesByTypesAndTimes(int conversationType, const std::string &target, int line, const std::string &keyword, const std::list<int> &contentTypes, int64_t startTime, int64_t endTime, bool desc, int limit, int offset, const std::string &withUser);
+            std::list<TMessage> SearchMessagesEx(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::string &keyword, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser);
             
             std::list<TConversationSearchresult> SearchConversations(const std::list<int> &conversationTypes, const std::list<int> lines, const std::string &keyword, int limit);
             

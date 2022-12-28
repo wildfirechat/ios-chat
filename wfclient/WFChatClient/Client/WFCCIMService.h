@@ -612,15 +612,17 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param conversation 会话，如果为空将搜索所有会话
  @param keyword 关键词
  @param desc order
- @param offset offset
  @param limit limit
+ @param offset offset
+ @param withUser 用户ID
  @return 命中的消息
  */
 - (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
                                   keyword:(NSString *)keyword
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset;
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser;
 
 /**
  搜索消息
@@ -631,6 +633,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param desc order
  @param offset offset
  @param limit limit
+ @param withUser 用户ID
  @return 命中的消息
  */
 - (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
@@ -638,7 +641,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                              contentTypes:(NSArray<NSNumber *> *)contentTypes
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset;
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser;
 
 /**
  搜索消息
@@ -651,6 +655,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param desc order
  @param offset offset
  @param limit limit
+ @param withUser 用户ID
  @return 命中的消息
  */
 - (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
@@ -660,7 +665,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                   endTime:(int64_t)endTime
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset;
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser;
 
 /**
  获取某类会话信息
@@ -671,6 +677,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param keyword 关键字
  @param fromIndex 起始index
  @param count 总数
+ @param withUser 用户ID
  @return 消息实体
  */
 - (NSArray<WFCCMessage *> *)searchMessage:(NSArray<NSNumber *> *)conversationTypes
@@ -678,7 +685,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                              contentTypes:(NSArray<NSNumber *> *)contentTypes
                                   keyword:(NSString *)keyword
                                      from:(NSUInteger)fromIndex
-                                    count:(NSInteger)count;
+                                    count:(NSInteger)count
+                                 withUser:(NSString *)withUser;
 /**
  发送消息
 
