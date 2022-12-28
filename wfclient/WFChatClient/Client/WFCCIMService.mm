@@ -2383,12 +2383,13 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                                   keyword:(NSString *)keyword
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset {
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser {
     
     if (keyword.length == 0 || limit == 0) {
         return nil;
     }
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessages((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], desc ? true : false, limit, offset);
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessages((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
@@ -2397,7 +2398,8 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                              contentTypes:(NSArray<NSNumber *> *)contentTypes
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset {
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser {
     if (keyword.length == 0 && contentTypes.count == 0) {
         return nil;
     }
@@ -2406,7 +2408,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         types.push_back(num.intValue);
     }
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, desc ? true : false, limit, offset);
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
@@ -2417,7 +2419,8 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                                   endTime:(int64_t)endTime
                                     order:(BOOL)desc
                                     limit:(int)limit
-                                   offset:(int)offset {
+                                   offset:(int)offset
+                                 withUser:(NSString *)withUser {
     if (keyword.length == 0 && contentTypes.count == 0 && startTime == 0 && endTime == 0) {
         return nil;
     }
@@ -2426,7 +2429,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         types.push_back(num.intValue);
     }
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypesAndTimes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, startTime, endTime, desc ? true : false, limit, offset);
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypesAndTimes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, startTime, endTime, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
@@ -2435,7 +2438,8 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                              contentTypes:(NSArray<NSNumber *> *)contentTypes
                                   keyword:(NSString *)keyword
                                      from:(NSUInteger)fromIndex
-                                    count:(NSInteger)count {
+                                    count:(NSInteger)count
+                                 withUser:(NSString *)withUser {
     
     std::list<int> convtypes;
     for (NSNumber *ct in conversationTypes) {
@@ -2459,7 +2463,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }
     
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesEx(convtypes, ls, [keyword UTF8String], types, direction, (int)count, fromIndex);
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesEx(convtypes, ls, [keyword UTF8String], types, direction, (int)count, fromIndex, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, false);
 }
 
