@@ -30,6 +30,7 @@
 #import "WFCUOrganizationCache.h"
 #import "WFCUOrganization.h"
 #import "WFCUOrganizationViewController.h"
+#import "WFCUOrgRelationship.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -704,15 +705,27 @@ static NSString *wfcstar = @"☆";
                 if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
                     int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
                     WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
-                    orgVC.organizationId = orgId;
+                    orgVC.organizationIds = @[@(orgId)];
                     orgVC.hidesBottomBarWhenPushed = YES;
                     orgVC.isPushed = YES;
                     [self.navigationController pushViewController:orgVC animated:YES];
                 } else {
                     index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
                     int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
+                    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId];
+                    __block NSInteger index = orgId;
+                    NSMutableArray *ids = [[NSMutableArray alloc] init];
+                    while (index) {
+                        [ids insertObject:@(index) atIndex:0];
+                        [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            if(obj.organizationId == index) {
+                                index = obj.parentOrganizationId;
+                                *stop = YES;
+                            }
+                        }];
+                    }
                     WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
-                    orgVC.organizationId = orgId;
+                    orgVC.organizationIds = ids;
                     orgVC.hidesBottomBarWhenPushed = YES;
                     orgVC.isPushed = YES;
                     [self.navigationController pushViewController:orgVC animated:YES];
