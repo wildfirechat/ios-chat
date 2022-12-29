@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class WFCUOrganization;
 @class WFCUEmployee;
 @class WFCUOrgRelationship;
+@class WFCUOrganizationEx;
+@class WFCUEmployeeEx;
+
 @protocol WFCUOrgServiceProvider <NSObject>
 - (void)getRelationship:(NSString *)employeeId
                 success:(void(^)(NSArray<WFCUOrgRelationship *> *))successBlock
@@ -21,13 +24,22 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getRootOrganization:(void(^)(NSArray<WFCUOrganization *> *))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
-- (void)getOrganization:(int)organizationId
-                success:(void(^)(WFCUOrganization *organization, NSArray<WFCUOrganization *> *subOrganization, NSArray<WFCUEmployee *> *employees))successBlock
+- (void)getOrganizationEx:(NSInteger)organizationId
+                    success:(void(^)(WFCUOrganizationEx *path))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
 - (void)getOrganizations:(NSArray<NSNumber *> *)organizationIds
                  success:(void(^)(NSArray<WFCUOrganization *> *organizations))successBlock
                    error:(void(^)(int error_code))errorBlock;
+
+- (void)getEmployee:(NSString *)employeeId
+                 success:(void(^)(WFCUEmployee *employee))successBlock
+                   error:(void(^)(int error_code))errorBlock;
+
+
+- (void)getEmployeeEx:(NSString *)employeeId
+              success:(void(^)(WFCUEmployeeEx *employeeEx))successBlock
+                error:(void(^)(int error_code))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

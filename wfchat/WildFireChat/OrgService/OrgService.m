@@ -18,6 +18,10 @@ static OrgService *sharedSingleton = nil;
 #define WFC_ORGSERVER_AUTH_TOKEN  @"WFC_ORGSERVER_AUTH_TOKEN"
 #define AUTHORIZATION_HEADER @"authToken"
 
+@interface OrgService ()
+@property(nonatomic, assign)BOOL isServiceAvailable;
+@end
+
 @implementation OrgService
 + (OrgService *)sharedOrgService {
     if (sharedSingleton == nil) {
@@ -35,6 +39,7 @@ static OrgService *sharedSingleton = nil;
     [[WFCCIMService sharedWFCIMService] getAuthCode:@"admin" type:2 host:IM_SERVER_HOST success:^(NSString *authCode) {
         [self post:@"/api/user_login" data:@{@"authCode":authCode} isLogin:YES success:^(NSDictionary *dict) {
             if([dict[@"code"] intValue] == 0) {
+                self.isServiceAvailable = YES;
                 if(successBlock) successBlock();
             } else {
                 if(errorBlock) errorBlock([dict[@"code"] intValue]);
@@ -55,12 +60,7 @@ static OrgService *sharedSingleton = nil;
             NSMutableArray *result = [[NSMutableArray alloc] init];
             NSArray *arr = dict[@"result"];
             [arr enumerateObjectsUsingBlock:^(NSDictionary  *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                WFCUOrgRelationship *rs = [[WFCUOrgRelationship alloc] init];
-                rs.employeeId = obj[@"employeeId"];
-                rs.organizationId = [obj[@"organizationId"] intValue];
-                rs.depth = [obj[@"depth"] intValue];
-                rs.bottom = [obj[@"bottom"] boolValue];
-                rs.parentOrganizationId = [obj[@"parentOrganizationId"] intValue];
+                WFCUOrgRelationship *rs = [self relationshipFromDict:obj];
                 [result addObject:rs];
             }];
             if(successBlock) successBlock(result);
@@ -113,6 +113,16 @@ static OrgService *sharedSingleton = nil;
     return emp;
 }
 
+- (WFCUOrgRelationship *)relationshipFromDict:(NSDictionary *)obj {
+    WFCUOrgRelationship *rs = [[WFCUOrgRelationship alloc] init];
+    rs.employeeId = obj[@"employeeId"];
+    rs.organizationId = [obj[@"organizationId"] intValue];
+    rs.depth = [obj[@"depth"] intValue];
+    rs.bottom = [obj[@"bottom"] boolValue];
+    rs.parentOrganizationId = [obj[@"parentOrganizationId"] intValue];
+    return rs;
+}
+
 - (void)getRootOrganization:(void(^)(NSArray<WFCUOrganization *> *))successBlock
                       error:(void(^)(int error_code))errorBlock {
     [self post:@"/api/organization/root" data:nil isLogin:NO success:^(NSDictionary *dict) {
@@ -132,8 +142,8 @@ static OrgService *sharedSingleton = nil;
     }];
 }
 
-- (void)getOrganization:(int)organizationId
-                success:(void(^)(WFCUOrganization *organization, NSArray<WFCUOrganization *> *subOrganization, NSArray<WFCUEmployee *> *employees))successBlock
+- (void)getOrganizationEx:(NSInteger)organizationId
+                success:(void(^)(WFCUOrganizationEx *ex))successBlock
                   error:(void(^)(int error_code))errorBlock {
     [self post:@"/api/organization/query_ex" data:@{@"id":@(organizationId)} isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
@@ -157,8 +167,12 @@ static OrgService *sharedSingleton = nil;
                     [employees addObject:emp];
                 }];
             }
-            
-            if(successBlock) successBlock(org, subOrgs, employees);
+            WFCUOrganizationEx *ex = [[WFCUOrganizationEx alloc] init];
+            ex.organizationId = organizationId;
+            ex.organization = org;
+            ex.subOrganizations = subOrgs;
+            ex.employees = employees;
+            if(successBlock) successBlock(ex);
         } else {
             if(errorBlock) errorBlock([dict[@"code"] intValue]);
         }
@@ -187,7 +201,57 @@ static OrgService *sharedSingleton = nil;
     }];
 }
 
+- (void)getEmployee:(NSString *)employeeId
+                 success:(void(^)(WFCUEmployee *employee))successBlock
+              error:(void(^)(int error_code))errorBlock {
+    [self post:@"/api/employee/query" data:@{@"employeeId":employeeId} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSDictionary *emp = dict[@"result"];
+            WFCUEmployee *employee = [self employeeFromDict:emp];
+            if(successBlock) successBlock(employee);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
+
+- (void)getEmployeeEx:(NSString *)employeeId
+              success:(void(^)(WFCUEmployeeEx *employeeEx))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    [self post:@"/api/employee/query_ex" data:@{@"employeeId":employeeId} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSDictionary *exDict = dict[@"result"];
+            WFCUEmployee *employee = [self employeeFromDict:exDict[@"employee"]];
+            NSArray *arr = exDict[@"relationships"];
+            NSMutableArray *result = [[NSMutableArray alloc] init];
+            [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                WFCUOrgRelationship *rs = [self relationshipFromDict:obj];
+                [result addObject:rs];
+            }];
+            WFCUEmployeeEx *empEx = [[WFCUEmployeeEx alloc] init];
+            empEx.employeeId = employeeId;
+            empEx.employee = employee;
+            empEx.relationships = result;
+            
+            if(successBlock) successBlock(empEx);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
+    if(!isLogin && !self.isServiceAvailable) {
+        NSLog(@"组织通讯录服务不可用，请确保先登录再使用组织通讯录");
+        errorBlock([NSError errorWithDomain:@"" code:401 userInfo:@{NSLocalizedDescriptionKey:@"未登录"}]);
+        return;
+    }
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];

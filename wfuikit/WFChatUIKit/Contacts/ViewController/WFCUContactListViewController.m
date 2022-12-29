@@ -460,7 +460,7 @@ static NSString *wfcstar = @"☆";
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
                 if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
                     int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
-                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId refresh:NO];
                     contactCell.nameLabel.text = organization.name;
                     contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_organization_icon"];
                     contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
@@ -469,7 +469,7 @@ static NSString *wfcstar = @"☆";
                 } else {
                     index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
                     int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
-                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId refresh:NO];
                     contactCell.nameLabel.text = organization.name;
                     contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_expended_icon"];
                     contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
@@ -712,7 +712,7 @@ static NSString *wfcstar = @"☆";
                 } else {
                     index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
                     int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
-                    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId];
+                    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId refresh:NO];
                     __block NSInteger index = orgId;
                     NSMutableArray *ids = [[NSMutableArray alloc] init];
                     while (index) {

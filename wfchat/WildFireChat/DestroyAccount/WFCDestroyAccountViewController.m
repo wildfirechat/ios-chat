@@ -184,7 +184,7 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
-        [[OrgService sharedOrgService] clearAppServiceAuthInfos];
+        [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         //服务器已经删除所有信息了，这里都传NO。不能传YES，如果传YES协议栈会需要跟IM服务进行交互。
