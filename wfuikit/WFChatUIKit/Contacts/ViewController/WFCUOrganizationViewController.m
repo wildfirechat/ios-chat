@@ -31,16 +31,8 @@
 #import "WFCUOrganization.h"
 #import "WFCUEmployee.h"
 #import "WFCUUtilities.h"
+#import "WFCUOrganizationEx.h"
 
-@interface OrganizationPath : NSObject
-@property (nonatomic, assign)NSInteger organizationId;
-@property(nonatomic, strong)WFCUOrganization *organization;
-@property(nonatomic, strong)NSArray<WFCUOrganization *> *subOrganizations;
-@property(nonatomic, strong)NSArray<WFCUEmployee *> *employees;
-@end
-
-@implementation OrganizationPath
-@end
 
 @interface WFCUOrganizationViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong)UITableView *tableView;
@@ -53,7 +45,7 @@
 
 @property (nonatomic, assign)NSInteger lastOrganizationId;
 
-@property(nonatomic, strong)NSMutableArray<OrganizationPath *> *paths;
+@property(nonatomic, strong)NSMutableArray<WFCUOrganizationEx *> *paths;
 
 @property(nonatomic, strong)UICollectionView *collectionView;
 @end
@@ -86,7 +78,8 @@
 
 - (void)setup {
     self.paths = [[NSMutableArray alloc] init];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationExUpdated:) name:kOrganizationExUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationUpdated:) name:kOrganizationUpdated object:nil];
 }
 
 - (void)viewDidLoad {
@@ -167,13 +160,32 @@
     
     [self loadData];
 }
+
+- (void)onOrganizationExUpdated:(NSNotification *)notification {
+    NSInteger orgId = [notification.object integerValue];
+    if(orgId == self.lastOrganizationId) {
+        WFCUOrganizationEx * path = [[WFCUOrganizationCache sharedCache] getOrganizationEx:self.lastOrganizationId refresh:NO];
+        WFCUOrganizationEx *p = [self.paths lastObject];
+        p.organization = path.organization;
+        p.subOrganizations = path.subOrganizations;
+        p.employees = path.employees;
+        [self.tableView reloadData];
+        [self.collectionView reloadData];
+    }
+}
+
+- (void)onOrganizationUpdated:(NSNotification *)notification {
+    NSInteger orgId = [notification.object integerValue];
+    [self.collectionView reloadData];
+}
+
 - (void)setOrganizationIds:(NSArray<NSNumber *> *)organizationIds {
     _organizationIds = organizationIds;
     if(!_paths) {
         _paths = [[NSMutableArray alloc] init];
     }
     [organizationIds enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        OrganizationPath *path = [[OrganizationPath alloc] init];
+        WFCUOrganizationEx *path = [[WFCUOrganizationEx alloc] init];
         path.organizationId = [obj integerValue];
         [self.paths addObject:path];
     }];
@@ -184,31 +196,16 @@
 }
 
 - (void)loadData {
-    [self.activityIndicator startAnimating];
-    WFCUOrganization *roganization = [[WFCUOrganizationCache sharedCache] getOrganization:self.lastOrganizationId];
+    WFCUOrganization *roganization = [[WFCUOrganizationCache sharedCache] getOrganization:self.lastOrganizationId refresh:YES];
     if(roganization.name) {
         self.title = roganization.name;
     }
-    __weak typeof(self)ws = self;
-    [[WFCUConfigManager globalManager].orgServiceProvider getOrganization:self.lastOrganizationId success:^(WFCUOrganization * _Nonnull organization, NSArray<WFCUOrganization *> * _Nonnull subOrganization, NSArray<WFCUEmployee *> * _Nonnull employees) {
-        [subOrganization enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [[WFCUOrganizationCache sharedCache] put:obj.organizationId organization:obj];
-        }];
-        [employees enumerateObjectsUsingBlock:^(WFCUEmployee * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [[WFCUOrganizationCache sharedCache] put:obj.employeeId employee:obj];
-        }];
-        
-        if(organization.organizationId == ws.lastOrganizationId) {
-            OrganizationPath *path = [self.paths lastObject];
-            path.organization = organization;
-            path.subOrganizations = subOrganization;
-            path.employees = employees;
-            [ws.tableView reloadData];
-        }
-        [ws.activityIndicator stopAnimating];
-    } error:^(int error_code) {
-        [ws.activityIndicator stopAnimating];
-    }];
+    WFCUOrganizationEx * path = [[WFCUOrganizationCache sharedCache] getOrganizationEx:self.lastOrganizationId refresh:YES];
+    WFCUOrganizationEx *p = [self.paths lastObject];
+    p.organization = path.organization;
+    p.subOrganizations = path.subOrganizations;
+    p.employees = path.employees;
+    [self.tableView reloadData];
     [self.collectionView reloadData];
 }
 
@@ -250,7 +247,7 @@
 
 - (void)onBackBtn:(UIBarButtonItem *)sender {
     if(self.paths.count > 1) {
-        OrganizationPath *path = [self.paths lastObject];
+        WFCUOrganizationEx *path = [self.paths lastObject];
         [self.paths removeLastObject];
         [self.tableView reloadData];
         [self loadData];
@@ -293,11 +290,11 @@
 - (NSString *)getOrganizationNameOfIndexPath:(NSIndexPath *)indexPath {
     NSString *name = @"通讯录";
     if(indexPath.row > 0) {
-        OrganizationPath *path = self.paths[indexPath.row - 1];
+        WFCUOrganizationEx *path = self.paths[indexPath.row - 1];
         if(path.organization.name.length) {
             name = path.organization.name;
         } else {
-            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:path.organizationId];
+            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:path.organizationId refresh:NO];
             if(org.name.length) {
                 name = org.name;
             } else {
@@ -364,7 +361,7 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    OrganizationPath *path = [self.paths lastObject];
+    WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && section == 0) {
         return path.subOrganizations.count;
     }
@@ -392,7 +389,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
-    OrganizationPath *path = [self.paths lastObject];
+    WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && indexPath.section == 0) {
         WFCUOrganization *org = path.subOrganizations[indexPath.row];
         WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
@@ -413,7 +410,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    OrganizationPath *path = [self.paths lastObject];
+    WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && path.employees.count)
         return 2;
     if(path.subOrganizations.count)
@@ -452,10 +449,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    OrganizationPath *path = [self.paths lastObject];
+    WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && indexPath.section == 0) {
         WFCUOrganization *org = path.subOrganizations[indexPath.row];
-        OrganizationPath *newPath = [[OrganizationPath alloc] init];
+        WFCUOrganizationEx *newPath = [[WFCUOrganizationEx alloc] init];
         newPath.organizationId = org.organizationId;
         newPath.organization = org;
         [self.paths addObject:newPath];

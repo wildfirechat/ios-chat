@@ -15,11 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (OrgService *)sharedOrgService;
 - (void)login:(void(^)(void))successBlock error:(void(^)(int errCode))errorBlock;
 
-- (NSData *)getAppServiceCookies;
-- (NSString *)getAppServiceAuthToken;
+//清除组织服务认证token
+- (void)clearOrgServiceAuthInfos;
 
-//清除应用服务认证cookies和认证token
-- (void)clearAppServiceAuthInfos;
+@property(nonatomic, assign, readonly)BOOL isServiceAvailable;
 @end
 
 NS_ASSUME_NONNULL_END

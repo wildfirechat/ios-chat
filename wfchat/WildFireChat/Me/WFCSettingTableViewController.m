@@ -265,7 +265,7 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
-        [[OrgService sharedOrgService] clearAppServiceAuthInfos];
+        [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         //退出后就不需要推送了，第一个参数为YES

@@ -31,6 +31,7 @@
 #import "WFCUEmployee.h"
 #import "WFCUOrgRelationship.h"
 #import "WFCUUtilities.h"
+#import "WFCUEmployeeEx.h"
 
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
@@ -64,6 +65,8 @@
     [super viewDidLoad];
     self.title = WFCString(@"UserInfomation");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEmployeeExUpdated:) name:kEmployeeExUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationUpdated:) name:kOrganizationUpdated object:nil];
     
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
@@ -80,16 +83,22 @@
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
 
-    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:self.userId];
-    NSMutableArray<NSNumber *> *arr = [[NSMutableArray alloc] init];
-    [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.bottom) {
-            [arr addObject:@(obj.organizationId)];
-        }
-    }];
-    self.organizationIds = [arr mutableCopy];
+    [self loadOrganizationData:YES];
 
     [self loadData];
+}
+
+- (void)loadOrganizationData:(BOOL)refresh {
+    WFCUEmployeeEx *employeeEx = [[WFCUOrganizationCache sharedCache] getEmployeeEx:self.userId refresh:refresh];
+    if(employeeEx.relationships.count) {
+        NSMutableArray<NSNumber *> *arr = [[NSMutableArray alloc] init];
+        [employeeEx.relationships enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.bottom) {
+                [arr addObject:@(obj.organizationId)];
+            }
+        }];
+        self.organizationIds = [arr mutableCopy];
+    }
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -101,6 +110,18 @@
             break;
         }
     }
+}
+
+- (void)onEmployeeExUpdated:(NSNotification *)notification {
+    NSString *employeeId = notification.object;
+    if([employeeId isEqualToString:self.userId]) {
+        [self loadOrganizationData:NO];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)onOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -573,7 +594,7 @@
         
         if(index < self.organizationIds.count) {
             NSInteger orgId = [self.organizationIds[index] integerValue];
-            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:orgId];
+            WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:orgId refresh:NO];
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"org_cell"];
             if(!cell) {
@@ -660,7 +681,7 @@
         
         if(index < self.organizationIds.count) {
             NSInteger orgId = [self.organizationIds[index] integerValue];
-            NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId];
+            NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:self.userId refresh:YES];
             __block NSInteger index = orgId;
             NSMutableArray *ids = [[NSMutableArray alloc] init];
             while (index) {

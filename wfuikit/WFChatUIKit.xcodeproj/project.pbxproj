@@ -497,6 +497,10 @@
 		B733DFF428D4071F0094AD74 /* WFCUConferenceHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = B733DFF228D4071F0094AD74 /* WFCUConferenceHistory.m */; };
 		B748123528A4BB8B003BB0C3 /* WFCUPublicMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */; };
 		B748123628A4BB8B003BB0C3 /* WFCUPublicMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */; };
+		B74CF821295D298F009AFA88 /* WFCUOrganizationEx.h in Headers */ = {isa = PBXBuildFile; fileRef = B74CF81F295D298F009AFA88 /* WFCUOrganizationEx.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B74CF822295D298F009AFA88 /* WFCUOrganizationEx.m in Sources */ = {isa = PBXBuildFile; fileRef = B74CF820295D298F009AFA88 /* WFCUOrganizationEx.m */; };
+		B74CF825295D313C009AFA88 /* WFCUEmployeeEx.h in Headers */ = {isa = PBXBuildFile; fileRef = B74CF823295D313C009AFA88 /* WFCUEmployeeEx.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B74CF826295D313C009AFA88 /* WFCUEmployeeEx.m in Sources */ = {isa = PBXBuildFile; fileRef = B74CF824295D313C009AFA88 /* WFCUEmployeeEx.m */; };
 		B74FDF8328E43275001B870F /* WFCUMoreBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = B74FDF8128E43275001B870F /* WFCUMoreBoardView.m */; };
 		B74FDF8428E43275001B870F /* WFCUMoreBoardView.h in Headers */ = {isa = PBXBuildFile; fileRef = B74FDF8228E43275001B870F /* WFCUMoreBoardView.h */; };
 		B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B755657028389F8900BE047C /* WFCUArticlesCell.h */; };
@@ -1092,6 +1096,10 @@
 		B733DFF228D4071F0094AD74 /* WFCUConferenceHistory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceHistory.m; sourceTree = "<group>"; };
 		B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPublicMenuButton.h; sourceTree = "<group>"; };
 		B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPublicMenuButton.m; sourceTree = "<group>"; };
+		B74CF81F295D298F009AFA88 /* WFCUOrganizationEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUOrganizationEx.h; sourceTree = "<group>"; };
+		B74CF820295D298F009AFA88 /* WFCUOrganizationEx.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUOrganizationEx.m; sourceTree = "<group>"; };
+		B74CF823295D313C009AFA88 /* WFCUEmployeeEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUEmployeeEx.h; sourceTree = "<group>"; };
+		B74CF824295D313C009AFA88 /* WFCUEmployeeEx.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUEmployeeEx.m; sourceTree = "<group>"; };
 		B74FDF8128E43275001B870F /* WFCUMoreBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUMoreBoardView.m; sourceTree = "<group>"; };
 		B74FDF8228E43275001B870F /* WFCUMoreBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUMoreBoardView.h; sourceTree = "<group>"; };
 		B755657028389F8900BE047C /* WFCUArticlesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUArticlesCell.h; sourceTree = "<group>"; };
@@ -2374,6 +2382,10 @@
 				B764D49529586B060082492F /* WFCUOrganizationCache.m */,
 				B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */,
 				B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */,
+				B74CF81F295D298F009AFA88 /* WFCUOrganizationEx.h */,
+				B74CF820295D298F009AFA88 /* WFCUOrganizationEx.m */,
+				B74CF823295D313C009AFA88 /* WFCUEmployeeEx.h */,
+				B74CF824295D313C009AFA88 /* WFCUEmployeeEx.m */,
 			);
 			path = Organization;
 			sourceTree = "<group>";
@@ -2552,15 +2564,17 @@
 			files = (
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
+				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
 				B707759928823635004034A5 /* WFCUImage.h in Headers */,
 				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
 				B764D4862958517A0082492F /* WFCUOrganization.h in Headers */,
 				B764D492295868EC0082492F /* WFCUOrgRelationship.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
-				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
+				B74CF825295D313C009AFA88 /* WFCUEmployeeEx.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				B764D482295850D40082492F /* WFCUOrgServiceProvider.h in Headers */,
 				B764D48A295852500082492F /* WFCUEmployee.h in Headers */,
+				B74CF821295D298F009AFA88 /* WFCUOrganizationEx.h in Headers */,
 				B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */,
 				B701630B290E346C00DCD651 /* DALabeledCircularProgressView.h in Headers */,
 				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
@@ -3028,6 +3042,7 @@
 				2F5511E1217F5CC300F56C26 /* YLGIFImage.m in Sources */,
 				2F5511F4217F5CC300F56C26 /* AttributedLabel.m in Sources */,
 				2BEF78A223F6A84D000DE285 /* WFCUMultiVideoViewController.m in Sources */,
+				B74CF826295D313C009AFA88 /* WFCUEmployeeEx.m in Sources */,
 				B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */,
 				2F551156217F5CC200F56C26 /* KZVideoListViewController.m in Sources */,
 				2F551154217F5CC200F56C26 /* KZVideoViewController.m in Sources */,
@@ -3163,6 +3178,7 @@
 				2F5511FE217F5CC300F56C26 /* WFCUConversationSettingMemberCell.m in Sources */,
 				90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */,
 				2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */,
+				B74CF822295D298F009AFA88 /* WFCUOrganizationEx.m in Sources */,
 				B72FBB14283230F0005F2745 /* DWKWebView.m in Sources */,
 				2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */,
 				B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */,
