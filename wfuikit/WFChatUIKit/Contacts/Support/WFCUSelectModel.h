@@ -10,11 +10,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, SelectedStatusType) {
-    Disable,
+    Disable_Checked,
     Unchecked,
     Checked,
+    Disable_Unchecked
 };
-@interface WFCUSelectedUserInfo : WFCCUserInfo
+@class WFCUOrganization;
+
+@interface WFCUSelectModel : NSObject
+@property(nonatomic, strong)WFCCUserInfo *userInfo;
+@property(nonatomic, strong)WFCUOrganization *organization;
 @property (nonatomic, assign)SelectedStatusType selectedStatus;
 @end
 
