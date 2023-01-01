@@ -8,7 +8,7 @@
 
 #import "WFCUUserSectionKeySupport.h"
 #import "pinyin.h"
-#import "WFCUSelectedUserInfo.h"
+#import "WFCUSelectModel.h"
 #import <WFChatClient/WFCChatClient.h>
 
 static NSMutableDictionary *hanziStringDictory = nil;
@@ -55,8 +55,8 @@ static NSMutableDictionary *hanziStringDictory = nil;
     
     NSMutableArray *favArrays = [[NSMutableArray alloc] init];
     for (NSString *favUser in favUsers) {
-        for (WFCCUserInfo *userInfo in userList) {
-            if ([userInfo.userId isEqualToString:favUser]) {
+        for (WFCUSelectModel *userInfo in userList) {
+            if ([userInfo.userInfo.userId isEqualToString:favUser]) {
                 [favArrays addObject:userInfo];
                 break;
             }
@@ -82,14 +82,14 @@ static NSMutableDictionary *hanziStringDictory = nil;
         for (id user in userList) {
             NSString *firstLetter;
 
-            WFCCUserInfo *userInfo = (WFCCUserInfo*)user;
-            NSString *userName = userInfo.displayName;
-            if (userInfo.friendAlias.length) {
-                userName = userInfo.friendAlias;
+            WFCUSelectModel *model = (WFCUSelectModel *)user;
+            NSString *userName = model.userInfo.displayName;
+            if (model.userInfo.friendAlias.length) {
+                userName = model.userInfo.friendAlias;
             }
             if (userName.length == 0) {
-                userInfo.displayName = [NSString stringWithFormat:@"<%@>", userInfo.userId];
-                userName = userInfo.displayName;
+                model.userInfo.displayName = [NSString stringWithFormat:@"<%@>", model.userInfo.userId];
+                userName = model.userInfo.displayName;
             }
             
             firstLetter = [firstLetterDict objectForKey:userName];
@@ -139,10 +139,10 @@ static NSMutableDictionary *hanziStringDictory = nil;
     [infoDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSMutableArray *_tempOtherArr = (NSMutableArray *)obj;
         [_tempOtherArr sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            WFCUSelectedUserInfo *user1 = (WFCUSelectedUserInfo *)obj1;
-            WFCUSelectedUserInfo *user2 = (WFCUSelectedUserInfo *)obj2;
-            NSString *user1Pinyin = [[self class] hanZiToPinYinWithString:user1.displayName];
-            NSString *user2Pinyin = [[self class] hanZiToPinYinWithString:user2.displayName];
+            WFCUSelectModel *user1 = (WFCUSelectModel *)obj1;
+            WFCUSelectModel *user2 = (WFCUSelectModel *)obj2;
+            NSString *user1Pinyin = [[self class] hanZiToPinYinWithString:user1.userInfo.displayName];
+            NSString *user2Pinyin = [[self class] hanZiToPinYinWithString:user2.userInfo.displayName];
             return [user1Pinyin compare:user2Pinyin];
         }];
     }];

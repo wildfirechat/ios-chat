@@ -44,14 +44,14 @@
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchString {
-    NSMutableArray <WFCUSelectedUserInfo *>*searchList = [NSMutableArray new];
+    NSMutableArray <WFCUSelectModel *>*searchList = [NSMutableArray new];
     WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
     BOOL isChinese = [pu isChinese:searchString];
-    for (WFCUSelectedUserInfo *friend in self.dataSource) {
-        if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+    for (WFCUSelectModel *friend in self.dataSource) {
+        if ([friend.userInfo.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.userInfo.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
             [searchList addObject:friend];
         } else if(!isChinese) {
-            if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
+            if([pu isMatch:friend.userInfo.displayName ofPinYin:searchString] || [pu isMatch:friend.userInfo.friendAlias ofPinYin:searchString]) {
                 [searchList addObject:friend];
             }
         }
@@ -101,10 +101,10 @@
     if (self.needSection) {
         NSString *key = self.sectionKeys[indexPath.section];
         NSArray *users = self.sectionDictionary[key];
-        cell.selectedUserInfo = users[indexPath.row];
+        cell.selectedObject = users[indexPath.row];
     } else {
 
-        cell.selectedUserInfo = self.results[indexPath.row];
+        cell.selectedObject = self.results[indexPath.row];
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -154,7 +154,7 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCUSelectedUserInfo *user = nil;
+    WFCUSelectModel *user = nil;
     if (!self.needSection) {
         user = self.results[indexPath.row];
         self.selectedUser(user);
@@ -169,7 +169,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         for (NSString *key in ws.sectionKeys) {
             NSArray *users = ws.sectionDictionary[key];
-            for (WFCUSelectedUserInfo *u in users) {
+            for (WFCUSelectModel *u in users) {
                 if ([u isEqual:user]) {
                     NSInteger section = [ws.sectionKeys indexOfObject:key];
                     NSInteger row =  [users indexOfObject:u];

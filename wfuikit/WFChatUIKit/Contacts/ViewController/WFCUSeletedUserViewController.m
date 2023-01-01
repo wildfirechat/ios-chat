@@ -16,25 +16,31 @@
 #import "WFCUConfigManager.h"
 #import "WFCUSeletedUserSearchResultViewController.h"
 #import "UIView+Toast.h"
+#import "WFCUOrganizationCache.h"
+#import "WFCUEmployee.h"
+#import "WFCUOrganization.h"
+#import "WFCUOrgRelationship.h"
+#import "WFCUOrganizationEx.h"
+#import "WFCUConfigManager.h"
+#import "WFCUEmployeeEx.h"
 
-#define SearchBarMinWidth 70
+#define SearchBarMinWidth 80
 //#import "WFCCIMService.h"
-@interface WFCUSeletedUserViewController ()
-<UITableViewDataSource, UITableViewDelegate,
+@interface WFCUSeletedUserViewController () <UITableViewDataSource, UITableViewDelegate,
 UICollectionViewDataSource, UICollectionViewDelegate,
-UISearchBarDelegate>
+UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)UIView *topView;
 @property (nonatomic, strong)UICollectionView *selectedUserCollectionView;
 @property (nonatomic, strong)UISearchBar *searchBar;
 
 @property (nonatomic, strong)UIButton *doneButton;
-@property (nonatomic, strong)NSMutableArray<WFCUSelectedUserInfo *> *dataSource;
+@property (nonatomic, strong)NSMutableArray<WFCUSelectModel *> *dataSource;
 @property (nonatomic, strong)NSDictionary *sectionDictionary;
 @property (nonatomic, strong)NSArray *sectionKeys;
 @property(nonatomic, assign)BOOL sorting;
 @property(nonatomic, assign)BOOL needSort;
-@property (nonatomic, strong)NSMutableArray<WFCUSelectedUserInfo *> *selectedUsers;
+@property (nonatomic, strong)NSMutableArray<WFCUSelectModel *> *selectedUsers;
 @end
 
 @implementation WFCUSeletedUserViewController
@@ -43,14 +49,10 @@ UISearchBarDelegate>
     [super viewDidLoad];
     self.selectedUsers = [[NSMutableArray alloc] init];
     for (NSString *defaultUserId in self.disableUserIds) {
-        WFCUSelectedUserInfo *defaultUser = [[WFCUSelectedUserInfo alloc] init];
-        defaultUser.selectedStatus = Disable;
+        WFCUSelectModel *defaultUser = [[WFCUSelectModel alloc] init];
+        defaultUser.selectedStatus = Disable_Checked;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:defaultUserId inGroup:self.groupId refresh:NO];
-        defaultUser.userId = defaultUserId;
-        defaultUser.displayName = userInfo.displayName;
-        defaultUser.groupAlias = userInfo.groupAlias;
-        defaultUser.friendAlias = userInfo.friendAlias;
-        defaultUser.portrait = userInfo.portrait;
+        defaultUser.userInfo = userInfo;
         [self.selectedUsers addObject:defaultUser];
     }
     [self loadData];
@@ -78,13 +80,18 @@ UISearchBarDelegate>
     }
 }
 
+#pragma mark - WFCUSelectedUserTableViewCellDelegate
+- (void)didTapNextLevel:(WFCUOrganization *)organization {
+    
+}
+
 #pragma mark - UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     WFCUSeletedUserSearchResultViewController *resultVC = [[WFCUSeletedUserSearchResultViewController alloc] init];
     __weak typeof(self)weakSelf = self;
     resultVC.dataSource = self.dataSource;
       resultVC.needSection = self.type == Horizontal;
-    resultVC.selectedUser = ^(WFCUSelectedUserInfo * _Nonnull user) {
+    resultVC.selectedUser = ^(WFCUSelectModel * _Nonnull user) {
              [weakSelf toggelSeletedUser:user];
     };
     UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:resultVC];
@@ -114,13 +121,14 @@ UISearchBarDelegate>
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCUSelectedUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    cell.delegate = self;
     
     if (self.type == Horizontal) {
         NSString *key = self.sectionKeys[indexPath.section];
-        NSArray *users = self.sectionDictionary[key];
-        cell.selectedUserInfo = users[indexPath.row];
+        NSArray *models = self.sectionDictionary[key];
+        cell.selectedObject = models[indexPath.row];
     } else {
-        cell.selectedUserInfo = self.dataSource[indexPath.row];
+        cell.selectedObject = self.dataSource[indexPath.row];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -179,13 +187,13 @@ UISearchBarDelegate>
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.type == Vertical) {
-        WFCUSelectedUserInfo *user = nil;
+        WFCUSelectModel *user = nil;
         user = self.dataSource[indexPath.row];
         [self toggelSeletedUser:user];
     } else {
         NSString *key = self.sectionKeys[indexPath.section];
         NSArray *users = self.sectionDictionary[key];
-        WFCUSelectedUserInfo *user = nil;
+        WFCUSelectModel *user = nil;
         user = users[indexPath.row];
         [self toggelSeletedUser:user];
     }
@@ -194,7 +202,7 @@ UISearchBarDelegate>
 #pragma mark - UICollectionViewDataSource
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     WFCUSelectedUserCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"selectedUserC" forIndexPath:indexPath];
-    cell.user = self.selectedUsers[indexPath.row];
+    cell.model = self.selectedUsers[indexPath.row];
     cell.isSmall = self.type == Horizontal;
     return cell;
 }
@@ -254,10 +262,10 @@ UISearchBarDelegate>
     }
     
     for (WFCCUserInfo *userInfo in userDataSource) {
-        WFCUSelectedUserInfo *info = [[WFCUSelectedUserInfo alloc] init];
-        [info cloneFrom:userInfo];
-        if ([self.disableUserIds containsObject:info.userId]) {
-            info.selectedStatus = Disable;
+        WFCUSelectModel *info = [[WFCUSelectModel alloc] init];
+        info.userInfo = userInfo;
+        if ([self.disableUserIds containsObject:info.userInfo.userId]) {
+            info.selectedStatus = Disable_Checked;
         }
         [self.dataSource addObject:info];
     }
@@ -370,9 +378,9 @@ UISearchBarDelegate>
 
     [[WFCUConfigManager globalManager] setupNavBar];
     NSMutableArray *selectedUserIds = [NSMutableArray new];
-    for (WFCUSelectedUserInfo *user in self.selectedUsers) {
+    for (WFCUSelectModel *user in self.selectedUsers) {
         if (user.selectedStatus == Checked) {
-            [selectedUserIds addObject:user.userId];
+            [selectedUserIds addObject:user.userInfo.userId];
         }
     }
     self.selectResult(selectedUserIds);
@@ -383,15 +391,37 @@ UISearchBarDelegate>
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSMutableDictionary *resultDic = [WFCUUserSectionKeySupport userSectionKeys:friendList];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.sectionDictionary = resultDic[@"infoDic"];
-            self.sectionKeys = resultDic[@"allKeys"];
+            NSMutableArray<NSNumber *> *ids = [[[WFCUOrganizationCache sharedCache] rootOrganizationIds] mutableCopy];
+            [ids addObjectsFromArray:[WFCUOrganizationCache sharedCache].bottomOrganizationIds];
+            if(ids.count) {
+                NSMutableArray *orgs = [[NSMutableArray alloc] init];
+                [ids enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:[obj integerValue] refresh:NO];
+                    if(org) {
+                        WFCUSelectModel *model = [[WFCUSelectModel alloc] init];
+                        model.organization = org;
+                        [orgs addObject:model];
+                    }
+                }];
+                
+                NSMutableDictionary *dict = resultDic[@"infoDic"];
+                dict[@"组织"] = orgs;
+                NSArray *arr = resultDic[@"allKeys"];
+                NSMutableArray *mutableArr = [arr mutableCopy];
+                [mutableArr insertObject:@"组织" atIndex:0];
+                self.sectionDictionary = dict;
+                self.sectionKeys = mutableArr;
+            } else {
+                self.sectionDictionary = resultDic[@"infoDic"];
+                self.sectionKeys = resultDic[@"allKeys"];
+            }
             [self.tableView reloadData];
         });
     });
 }
 
-- (BOOL)toggelSeletedUser:(WFCUSelectedUserInfo *)user {
-    if (user.selectedStatus == Disable) {
+- (BOOL)toggelSeletedUser:(WFCUSelectModel *)user {
+    if (user.selectedStatus == Disable_Checked) {
         return NO;
     } else if (user.selectedStatus == Checked) {
         user.selectedStatus = Unchecked;
@@ -432,10 +462,10 @@ UISearchBarDelegate>
     
 }
 
-- (void)reloadCellForUser:(WFCUSelectedUserInfo *)user {
+- (void)reloadCellForUser:(WFCUSelectModel *)user {
     for (NSString *key in self.sectionKeys) {
         NSArray *users = self.sectionDictionary[key];
-        for (WFCUSelectedUserInfo *u in users) {
+        for (WFCUSelectModel *u in users) {
             if ([u isEqual:user]) {
                 NSInteger section = [self.sectionKeys indexOfObject:key];
                 NSInteger row =  [users indexOfObject:u];

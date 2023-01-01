@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WFCUSelectedUserInfo.h"
+#import "WFCUSelectModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUSeletedUserSearchResultViewController : UIViewController
@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign)BOOL needSection;
 @property (nonatomic, strong)NSDictionary *sectionDictionary;
 @property (nonatomic, strong)NSArray *sectionKeys;
-@property (nonatomic, strong)NSMutableArray <WFCUSelectedUserInfo *> *dataSource;
-@property (nonatomic, copy) void(^ selectedUser) (WFCUSelectedUserInfo *user);
+@property (nonatomic, strong)NSMutableArray <WFCUSelectModel *> *dataSource;
+@property (nonatomic, copy) void(^ selectedUser) (WFCUSelectModel *user);
 
 @end
 

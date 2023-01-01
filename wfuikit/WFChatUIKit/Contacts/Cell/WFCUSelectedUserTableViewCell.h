@@ -7,14 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WFCUSelectedUserInfo.h"
+#import "WFCUSelectModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
+@class WFCUOrganization;
+@protocol WFCUSelectedUserTableViewCellDelegate <NSObject>
+- (void)didTapNextLevel:(WFCUOrganization *)organization;
+@end
+
 @interface WFCUSelectedUserTableViewCell : UITableViewCell
-@property (nonatomic, strong)WFCUSelectedUserInfo *selectedUserInfo;
+@property (nonatomic, weak)id<WFCUSelectedUserTableViewCellDelegate> delegate;
+@property (nonatomic, strong)WFCUSelectModel *selectedObject;
 @property(nonatomic, strong)UIImageView *checkImageView;
 @property(nonatomic, strong)UIImageView *portraitView;
 @property(nonatomic, strong)UILabel *nameLabel;
+@property(nonatomic, strong)UIButton *nextLevel;
 
 @end
 

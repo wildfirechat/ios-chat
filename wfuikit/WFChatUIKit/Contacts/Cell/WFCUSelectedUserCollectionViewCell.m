@@ -9,6 +9,7 @@
 #import "WFCUSelectedUserCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUOrganization.h"
 
 @implementation WFCUSelectedUserCollectionViewCell
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -19,8 +20,12 @@
     return self;
 }
 
-- (void)setUser:(WFCUSelectedUserInfo *)user {
-    [self.imgV sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
+- (void)setModel:(WFCUSelectModel *)model {
+    if(model.userInfo) {
+        [self.imgV sd_setImageWithURL:[NSURL URLWithString:[model.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
+    } else {
+        [self.imgV sd_setImageWithURL:[NSURL URLWithString:[model.organization.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"organization_icon"]];
+    }
 }
 
 - (void)setIsSmall:(BOOL)isSmall {
