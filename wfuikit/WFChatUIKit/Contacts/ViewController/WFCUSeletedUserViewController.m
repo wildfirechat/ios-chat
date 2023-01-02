@@ -59,12 +59,14 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.selectedUsers = [[NSMutableArray alloc] init];
-    for (NSString *defaultUserId in self.disableUserIds) {
-        WFCUSelectModel *defaultUser = [[WFCUSelectModel alloc] init];
-        defaultUser.selectedStatus = Disable_Checked;
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:defaultUserId inGroup:self.groupId refresh:NO];
-        defaultUser.userInfo = userInfo;
-        [self.selectedUsers addObject:defaultUser];
+    if(!self.disabledUserNotSelected) {
+        for (NSString *defaultUserId in self.disableUserIds) {
+            WFCUSelectModel *defaultUser = [[WFCUSelectModel alloc] init];
+            defaultUser.selectedStatus = Disable_Checked;
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:defaultUserId inGroup:self.groupId refresh:NO];
+            defaultUser.userInfo = userInfo;
+            [self.selectedUsers addObject:defaultUser];
+        }
     }
     [self loadData];
     [self setUpUI];
