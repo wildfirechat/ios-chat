@@ -39,10 +39,22 @@ extern NSString *kOrgRelationUpdated;
 
 - (void)loadMyOrganizationInfos;
 
+- (void)getRelationship:(NSString *)employeeId
+                refresh:(BOOL)refresh
+                success:(void(^)(NSString *employeeId, NSArray<WFCUOrgRelationship *> *rss))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
 - (NSArray<WFCUOrgRelationship *> *)getRelationship:(NSString *)employeeId refresh:(BOOL)refresh;
 - (WFCUEmployee *)getEmployee:(NSString *)employeeId refresh:(BOOL)refresh;
 - (WFCUEmployeeEx *)getEmployeeEx:(NSString *)employeeId refresh:(BOOL)refresh;
 - (WFCUOrganization *)getOrganization:(NSInteger)orgnaizationId refresh:(BOOL)refresh;
+
+
+- (void)getOrganizationEx:(NSInteger)organizationId
+                  refresh:(BOOL)refresh
+                  success:(void(^)(NSInteger organizationId, WFCUOrganizationEx *ex))successBlock
+                    error:(void(^)(int error_code))errorBlock;
+
 - (WFCUOrganizationEx *)getOrganizationEx:(NSInteger)organizationId refresh:(BOOL)refresh;
 @end
 

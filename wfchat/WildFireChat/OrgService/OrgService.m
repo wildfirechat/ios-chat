@@ -201,6 +201,36 @@ static OrgService *sharedSingleton = nil;
     }];
 }
 
+- (void)getBatchOrgEmployees:(NSArray<NSNumber *> *)orgIds
+                success:(void(^)(NSArray<NSString *> *employeeIds))successBlock
+                       error:(void(^)(int error_code))errorBlock {
+    [self post:@"/api/organization/batch_employees" data:@{@"ids":orgIds} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSArray *arr = dict[@"result"];
+            if(successBlock) successBlock(arr);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
+- (void)getOrgEmployees:(NSInteger)orgId
+                success:(void(^)(NSArray<NSString *> *employeeIds))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    [self post:@"/api/organization/employees" data:@{@"id":@(orgId)} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSArray *arr = dict[@"result"];
+            if(successBlock) successBlock(arr);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
 - (void)getEmployee:(NSString *)employeeId
                  success:(void(^)(WFCUEmployee *employee))successBlock
               error:(void(^)(int error_code))errorBlock {

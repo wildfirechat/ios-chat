@@ -8,6 +8,8 @@
 
 #import "WFCUSelectModel.h"
 #import "WFCUOrganization.h"
+#import "WFCUEmployee.h"
+
 
 @implementation WFCUSelectModel
 - (instancetype)init {

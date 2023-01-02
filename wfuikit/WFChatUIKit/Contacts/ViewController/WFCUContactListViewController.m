@@ -109,9 +109,10 @@ static NSString *wfcstar = @"☆";
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContactsUpdated:) name:kFriendListUpdated object:nil];
-
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClearAllUnread:) name:@"kTabBarClearBadgeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRootOrganizationUpdated:) name:kRootOrganizationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMyOrganizationUpdated:) name:kMyOrganizationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationUpdated:) name:kOrganizationUpdated object:nil];
     
     _searchList = [NSMutableArray array];
     
@@ -264,8 +265,21 @@ static NSString *wfcstar = @"☆";
         self.needSort = needRefresh;
     }
 }
+
 - (void)onContactsUpdated:(NSNotification *)notification {
     [self loadContact:NO];
+}
+
+- (void)onRootOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
+
+- (void)onMyOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
+
+- (void)onOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {

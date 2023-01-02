@@ -11,8 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class WFCUOrganization;
+@class WFCUSelectModel;
 @protocol WFCUSelectedUserTableViewCellDelegate <NSObject>
-- (void)didTapNextLevel:(WFCUOrganization *)organization;
+- (void)didTapNextLevel:(WFCUSelectModel *)organization;
 @end
 
 @interface WFCUSelectedUserTableViewCell : UITableViewCell

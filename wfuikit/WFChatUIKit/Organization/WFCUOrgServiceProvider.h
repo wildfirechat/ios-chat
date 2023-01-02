@@ -32,9 +32,17 @@ NS_ASSUME_NONNULL_BEGIN
                  success:(void(^)(NSArray<WFCUOrganization *> *organizations))successBlock
                    error:(void(^)(int error_code))errorBlock;
 
+- (void)getBatchOrgEmployees:(NSArray<NSNumber *> *)orgIds
+                success:(void(^)(NSArray<NSString *> *employeeIds))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
+- (void)getOrgEmployees:(NSInteger)orgId
+                success:(void(^)(NSArray<NSString *> *employeeIds))successBlock
+                  error:(void(^)(int error_code))errorBlock;
+
 - (void)getEmployee:(NSString *)employeeId
-                 success:(void(^)(WFCUEmployee *employee))successBlock
-                   error:(void(^)(int error_code))errorBlock;
+            success:(void(^)(WFCUEmployee *employee))successBlock
+              error:(void(^)(int error_code))errorBlock;
 
 
 - (void)getEmployeeEx:(NSString *)employeeId
