@@ -88,6 +88,28 @@ static WFCUOrganizationCache *sharedSingleton = nil;
     }];
 }
 
+- (void)getRelationship:(NSString *)employeeId
+                refresh:(BOOL)refresh
+                success:(void(^)(NSString *employeeId, NSArray<WFCUOrgRelationship *> *rss))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    NSArray<WFCUOrgRelationship *> * rs = self.relationshipDict[employeeId];
+    if(!rs) {
+        refresh = YES;
+    } else {
+        if(successBlock) successBlock(employeeId, rs);
+    }
+    
+    if(refresh) {
+        [[WFCUConfigManager globalManager].orgServiceProvider getRelationship:employeeId success:^(NSArray<WFCUOrgRelationship *> * _Nonnull arr) {
+            self.relationshipDict[employeeId] = arr;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOrgRelationUpdated object:employeeId userInfo:@{@"relationships":arr}];
+            if(successBlock) successBlock(employeeId, arr);
+        } error:^(int error_code) {
+            if(errorBlock) errorBlock(error_code);
+        }];
+    }
+}
+
 - (NSArray<WFCUOrgRelationship *> *)getRelationship:(NSString *)employeeId refresh:(BOOL)refresh {
     NSArray<WFCUOrgRelationship *> * rs = self.relationshipDict[employeeId];
     if(!rs) {
@@ -161,6 +183,35 @@ static WFCUOrganizationCache *sharedSingleton = nil;
         }];
     }
     return org;
+}
+
+- (void)getOrganizationEx:(NSInteger)organizationId
+                  refresh:(BOOL)refresh
+                  success:(void(^)(NSInteger organizationId, WFCUOrganizationEx *ex))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    WFCUOrganizationEx *ex = self.organizationExDict[@(organizationId)];
+    if(!ex) {
+        refresh = YES;
+    } else {
+        if(successBlock) successBlock(organizationId, ex);
+    }
+    
+    if(refresh) {
+        [[WFCUConfigManager globalManager].orgServiceProvider getOrganizationEx:organizationId success:^(WFCUOrganizationEx *newEx) {
+            [newEx.subOrganizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                self.organizationDict[@(obj.organizationId)] = obj;
+            }];
+            
+            [newEx.employees enumerateObjectsUsingBlock:^(WFCUEmployee * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                self.employeeDict[obj.employeeId] = obj;
+            }];
+            self.organizationExDict[@(organizationId)] = newEx;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kOrganizationExUpdated object:@(organizationId)];
+            if(successBlock) successBlock(organizationId, newEx);
+        } error:^(int error_code) {
+            if(errorBlock) errorBlock(error_code);
+        }];
+    }
 }
 
 - (WFCUOrganizationEx *)getOrganizationEx:(NSInteger)organizationId refresh:(BOOL)refresh {

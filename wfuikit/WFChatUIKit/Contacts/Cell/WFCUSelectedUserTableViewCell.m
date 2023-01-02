@@ -71,12 +71,16 @@
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[selectedUserInfo.organization.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"organization_icon"]];
         self.nameLabel.text = selectedUserInfo.organization.name;
         self.nextLevel.hidden = NO;
+    } else if(selectedUserInfo.employee) {
+        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[selectedUserInfo.employee.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"employee"]];
+        self.nameLabel.text = selectedUserInfo.employee.name;
+        _nextLevel.hidden = YES;
     }
 }
 
 - (void)onNextLevel:(id)sender {
     if([self.delegate respondsToSelector:@selector(didTapNextLevel:)]) {
-        [self.delegate didTapNextLevel:(WFCUOrganization *)self.selectedObject];
+        [self.delegate didTapNextLevel:self.selectedObject];
     }
 }
 

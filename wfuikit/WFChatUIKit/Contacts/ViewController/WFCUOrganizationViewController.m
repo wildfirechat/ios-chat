@@ -200,13 +200,29 @@
     if(roganization.name) {
         self.title = roganization.name;
     }
-    WFCUOrganizationEx * path = [[WFCUOrganizationCache sharedCache] getOrganizationEx:self.lastOrganizationId refresh:YES];
-    WFCUOrganizationEx *p = [self.paths lastObject];
-    p.organization = path.organization;
-    p.subOrganizations = path.subOrganizations;
-    p.employees = path.employees;
-    [self.tableView reloadData];
-    [self.collectionView reloadData];
+    __weak typeof(self)ws = self;
+    
+    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"加载中...";
+    [hud showAnimated:YES];
+    [[WFCUOrganizationCache sharedCache] getOrganizationEx:self.lastOrganizationId refresh:YES success:^(NSInteger organizationId, WFCUOrganizationEx * _Nonnull ex) {
+        [hud hideAnimated:NO];
+        if(ws.lastOrganizationId == organizationId) {
+            WFCUOrganizationEx *p = [self.paths lastObject];
+            p.organization = ex.organization;
+            p.subOrganizations = ex.subOrganizations;
+            p.employees = ex.employees;
+            [ws.tableView reloadData];
+            [ws.collectionView reloadData];
+        }
+    } error:^(int error_code) {
+        [hud hideAnimated:NO];
+        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"加载失败";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
+    }];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -401,7 +417,7 @@
         WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
         contactCell.nameLabel.text = emp.name;
         
-        [contactCell.portraitView sd_setImageWithURL:[NSURL URLWithString:[emp.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
+        [contactCell.portraitView sd_setImageWithURL:[NSURL URLWithString:[emp.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"employee"]];
         
         cell = contactCell;
     }

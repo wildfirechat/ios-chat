@@ -16,11 +16,13 @@ typedef NS_ENUM(NSUInteger, SelectedStatusType) {
     Disable_Unchecked
 };
 @class WFCUOrganization;
-
+@class WFCUEmployee;
 @interface WFCUSelectModel : NSObject
 @property(nonatomic, strong)WFCCUserInfo *userInfo;
 @property(nonatomic, strong)WFCUOrganization *organization;
+@property(nonatomic, strong)WFCUEmployee *employee;
 @property (nonatomic, assign)SelectedStatusType selectedStatus;
+@property(nonatomic, strong)NSMutableArray<NSNumber *> *paths;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -23,6 +23,8 @@
 #import "WFCUOrganizationEx.h"
 #import "WFCUConfigManager.h"
 #import "WFCUEmployeeEx.h"
+#import "MBProgressHUD.h"
+#import "WFCUImage.h"
 
 #define SearchBarMinWidth 80
 //#import "WFCCIMService.h"
@@ -41,7 +43,16 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 @property(nonatomic, assign)BOOL sorting;
 @property(nonatomic, assign)BOOL needSort;
 @property (nonatomic, strong)NSMutableArray<WFCUSelectModel *> *selectedUsers;
+
+@property(nonatomic, strong)NSMutableArray<WFCUOrganization *> *organizations;
+@property(nonatomic, strong)NSMutableArray<WFCUEmployee *> *employees;
+
+@property(nonatomic, strong)NSMutableArray<WFCUOrganizationEx *> *paths;
+@property (nonatomic, strong)NSMutableArray<NSNumber *> *organizationIds;
 @end
+
+#define WF_ORG_KEYS @"组织"
+#define WF_EMP_KEYS @"员工"
 
 @implementation WFCUSeletedUserViewController
 
@@ -58,7 +69,17 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     [self loadData];
     [self setUpUI];
 }
-
+- (void)updateNavi {
+    if(self.organizationIds.count) {
+        UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackBtn:)];
+        UIBarButtonItem *close = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.leftBarButtonItems = @[back, close];
+    } else {
+        self.navigationItem.leftBarButtonItems = nil;
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    }
+}
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self resizeAllView];
@@ -81,8 +102,19 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 }
 
 #pragma mark - WFCUSelectedUserTableViewCellDelegate
-- (void)didTapNextLevel:(WFCUOrganization *)organization {
-    
+- (void)didTapNextLevel:(WFCUSelectModel *)model {
+    if(!self.organizationIds.count) {
+        self.organizationIds = [[NSMutableArray alloc] init];
+    }
+    if(!self.paths.count) {
+        self.paths = [[NSMutableArray alloc] init];
+    }
+    [self.organizationIds addObject:@(model.organization.organizationId)];
+    WFCUOrganizationEx *ex = [[WFCUOrganizationEx alloc] init];
+    ex.organizationId = model.organization.organizationId;
+    ex.organization = model.organization;
+    [self.paths addObject:ex];
+    [self loadData];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -250,28 +282,72 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 
 - (void)loadData {
     self.dataSource = [NSMutableArray new];
-    NSArray *userDataSource = nil;
-    
-    if (self.inputData) {
-        userDataSource = self.inputData;
-    } else if (self.candidateUsers) {
-        userDataSource = [[WFCCIMService sharedWFCIMService] getUserInfos:self.candidateUsers inGroup:nil];
+
+    if(self.organizationIds.count) {
+        NSInteger orgId = [[self.organizationIds lastObject] integerValue];
+
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = @"加载中...";
+        [hud showAnimated:YES];
+        
+        __weak typeof(self)ws = self;
+        [[WFCUOrganizationCache sharedCache] getOrganizationEx:orgId refresh:NO success:^(NSInteger organizationId, WFCUOrganizationEx * _Nonnull ex) {
+            [hud hideAnimated:NO];
+            if(organizationId == [ws.organizationIds.lastObject integerValue]) {
+                WFCUOrganizationEx *p = [ws.paths lastObject];
+                p.organization = ex.organization;
+                p.subOrganizations = ex.subOrganizations;
+                p.employees = ex.employees;
+                [ws mergeOrgAndEmps];
+            }
+        } error:^(int error_code) {
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = @"加载失败";
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+        }];
+        [self sortAndRefreshWithList:self.dataSource];
     } else {
-        NSArray *userIdList = [[WFCCIMService sharedWFCIMService] getMyFriendList:YES];
-        userDataSource = [[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil];
-    }
-    
-    for (WFCCUserInfo *userInfo in userDataSource) {
-        WFCUSelectModel *info = [[WFCUSelectModel alloc] init];
-        info.userInfo = userInfo;
-        if ([self.disableUserIds containsObject:info.userInfo.userId]) {
-            info.selectedStatus = Disable_Checked;
+        NSArray *userDataSource = nil;
+        
+        if (self.inputData) {
+            userDataSource = self.inputData;
+        } else if (self.candidateUsers) {
+            userDataSource = [[WFCCIMService sharedWFCIMService] getUserInfos:self.candidateUsers inGroup:nil];
+        } else {
+            NSArray *userIdList = [[WFCCIMService sharedWFCIMService] getMyFriendList:YES];
+            userDataSource = [[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:nil];
         }
-        [self.dataSource addObject:info];
+        
+        for (WFCCUserInfo *userInfo in userDataSource) {
+            WFCUSelectModel *info = [[WFCUSelectModel alloc] init];
+            info.userInfo = userInfo;
+            if ([self.disableUserIds containsObject:info.userInfo.userId]) {
+                info.selectedStatus = Disable_Checked;
+            }
+            [self.dataSource addObject:info];
+        }
+        
+        NSMutableArray<NSNumber *> *ids = [[[WFCUOrganizationCache sharedCache] rootOrganizationIds] mutableCopy];
+        [ids addObjectsFromArray:[WFCUOrganizationCache sharedCache].bottomOrganizationIds];
+        if(ids.count) {
+            NSMutableArray *orgs = [[NSMutableArray alloc] init];
+            [ids enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:[obj integerValue] refresh:NO];
+                if(org) {
+                    [orgs addObject:org];
+                }
+            }];
+            self.paths = [[NSMutableArray alloc] init];
+            WFCUOrganizationEx *ex = [[WFCUOrganizationEx alloc] init];
+            ex.subOrganizations = orgs;
+            [self.paths addObject:ex];
+        }
+        [self mergeOrgAndEmps];
+        [self sortAndRefreshWithList:self.dataSource];
     }
-    
-    
-    [self sortAndRefreshWithList:self.dataSource];
 }
 
 - (void)setUpUI {
@@ -303,7 +379,6 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
             navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
         }
         self.title = WFCString(@"ChooseMember");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
         
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
@@ -326,8 +401,6 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
         [self.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
         self.title = WFCString(@"StartConversion");
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
-        
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
@@ -340,7 +413,6 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         self.doneButton.enabled = NO;
         [self.doneButton addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.doneButton];
-        
     }
 }
 
@@ -373,49 +445,117 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)onBackBtn:(UIBarButtonItem *)sender {
+    if(self.organizationIds.count) {
+        [self.organizationIds removeLastObject];
+        [self.paths removeLastObject];
+        [self loadData];
+    } else {
+        [self cancel];
+    }
+}
+
 - (void)finish {
     [_selectedUserCollectionView removeObserver:self forKeyPath:@"contentSize"];
 
     [[WFCUConfigManager globalManager] setupNavBar];
     NSMutableArray *selectedUserIds = [NSMutableArray new];
+    NSMutableArray<NSNumber *> *orgIds = [[NSMutableArray alloc] init];
     for (WFCUSelectModel *user in self.selectedUsers) {
         if (user.selectedStatus == Checked) {
-            [selectedUserIds addObject:user.userInfo.userId];
+            if(user.userInfo) {
+                [selectedUserIds addObject:user.userInfo.userId];
+            } else if(user.employee) {
+                [selectedUserIds addObject:user.employee.employeeId];
+            } else if(user.organization) {
+                [orgIds addObject:@(user.organization.organizationId)];
+            }
         }
     }
-    self.selectResult(selectedUserIds);
-    [self dismissViewControllerAnimated:NO completion:nil];
+    
+    if(orgIds.count) {
+        __weak typeof(self) ws = self;
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = @"获取中...";
+        [hud showAnimated:YES];
+        
+        [[WFCUConfigManager globalManager].orgServiceProvider getBatchOrgEmployees:orgIds success:^(NSArray<NSString *> * _Nonnull employeeIds) {
+            [hud hideAnimated:NO];
+            [selectedUserIds removeObjectsInArray:employeeIds];
+            [selectedUserIds addObjectsFromArray:employeeIds];
+            ws.selectResult(selectedUserIds);
+            [ws dismissViewControllerAnimated:NO completion:nil];
+        } error:^(int error_code) {
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = @"获取失败";
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+        }];
+    } else {
+        self.selectResult(selectedUserIds);
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
+}
+
+- (void)mergeOrgAndEmps {
+    NSMutableDictionary *dict = [self.sectionDictionary mutableCopy];
+    NSMutableArray *array = [self.sectionKeys mutableCopy];
+    [dict removeObjectForKey:WF_ORG_KEYS];
+    [dict removeObjectForKey:WF_EMP_KEYS];
+    [array removeObject:WF_ORG_KEYS];
+    [array removeObject:WF_EMP_KEYS];
+    WFCUOrganizationEx *ex = [self.paths lastObject];
+    if(ex.employees.count) {
+        NSMutableArray *emps = [[NSMutableArray alloc] init];
+        [ex.employees enumerateObjectsUsingBlock:^(WFCUEmployee * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            WFCUSelectModel *model = [[WFCUSelectModel alloc] init];
+            model.employee = obj;
+            model.selectedStatus = Unchecked;
+            [self.selectedUsers enumerateObjectsUsingBlock:^(WFCUSelectModel * _Nonnull obj1, NSUInteger idx, BOOL * _Nonnull stop) {
+                if([obj1.employee.employeeId isEqualToString:model.employee.employeeId]) {
+                    model.selectedStatus = obj1.selectedStatus;
+                    *stop = YES;
+                }
+            }];
+            [emps addObject:model];
+        }];
+        
+        dict[WF_EMP_KEYS] = emps;
+        [array insertObject:WF_EMP_KEYS atIndex:0];
+    }
+    if(ex.subOrganizations.count) {
+        NSMutableArray *orgs = [[NSMutableArray alloc] init];
+        [ex.subOrganizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            WFCUSelectModel *model = [[WFCUSelectModel alloc] init];
+            model.organization = obj;
+            model.selectedStatus = Unchecked;
+            [self.selectedUsers enumerateObjectsUsingBlock:^(WFCUSelectModel * _Nonnull obj1, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(obj1.organization.organizationId == model.organization.organizationId) {
+                    model.selectedStatus = obj1.selectedStatus;
+                    *stop = YES;
+                }
+            }];
+            
+            [orgs addObject:model];
+        }];
+        dict[WF_ORG_KEYS] = orgs;
+        [array insertObject:WF_ORG_KEYS atIndex:0];
+    }
+    self.sectionDictionary = dict;
+    self.sectionKeys = array;
+    [self.tableView reloadData];
+    [self updateNavi];
 }
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSMutableDictionary *resultDic = [WFCUUserSectionKeySupport userSectionKeys:friendList];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSMutableArray<NSNumber *> *ids = [[[WFCUOrganizationCache sharedCache] rootOrganizationIds] mutableCopy];
-            [ids addObjectsFromArray:[WFCUOrganizationCache sharedCache].bottomOrganizationIds];
-            if(ids.count) {
-                NSMutableArray *orgs = [[NSMutableArray alloc] init];
-                [ids enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    WFCUOrganization *org = [[WFCUOrganizationCache sharedCache] getOrganization:[obj integerValue] refresh:NO];
-                    if(org) {
-                        WFCUSelectModel *model = [[WFCUSelectModel alloc] init];
-                        model.organization = org;
-                        [orgs addObject:model];
-                    }
-                }];
-                
-                NSMutableDictionary *dict = resultDic[@"infoDic"];
-                dict[@"组织"] = orgs;
-                NSArray *arr = resultDic[@"allKeys"];
-                NSMutableArray *mutableArr = [arr mutableCopy];
-                [mutableArr insertObject:@"组织" atIndex:0];
-                self.sectionDictionary = dict;
-                self.sectionKeys = mutableArr;
-            } else {
-                self.sectionDictionary = resultDic[@"infoDic"];
-                self.sectionKeys = resultDic[@"allKeys"];
-            }
-            [self.tableView reloadData];
+            self.sectionDictionary = resultDic[@"infoDic"];
+            self.sectionKeys = resultDic[@"allKeys"];
+            [self mergeOrgAndEmps];
         });
     });
 }

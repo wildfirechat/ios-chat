@@ -675,7 +675,7 @@
             //click momentCell
         }
         
-        int index = indexPath.row;
+        int index = (int)indexPath.row;
         if(self.momentCell)
             index--;
         
