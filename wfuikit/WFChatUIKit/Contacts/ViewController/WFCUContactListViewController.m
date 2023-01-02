@@ -731,12 +731,17 @@ static NSString *wfcstar = @"☆";
                     NSMutableArray *ids = [[NSMutableArray alloc] init];
                     while (index) {
                         [ids insertObject:@(index) atIndex:0];
+                        __block BOOL has = NO;
                         [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                             if(obj.organizationId == index) {
                                 index = obj.parentOrganizationId;
                                 *stop = YES;
+                                has = YES;
                             }
                         }];
+                        if(!has) {
+                            break;
+                        }
                     }
                     WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
                     orgVC.organizationIds = ids;

@@ -38,6 +38,7 @@ extern NSString *kOrgRelationUpdated;
 @property(nonatomic, strong)NSArray<NSNumber *> *bottomOrganizationIds;
 
 - (void)loadMyOrganizationInfos;
+- (void)clearCaches;
 
 - (void)getRelationship:(NSString *)employeeId
                 refresh:(BOOL)refresh

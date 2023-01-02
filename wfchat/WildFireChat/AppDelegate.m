@@ -612,6 +612,8 @@
             [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            self.firstConnected = NO;
         } else if(status == kConnectionStatusConnected) {
             if(!self.firstConnected) {
                 self.firstConnected = YES;
