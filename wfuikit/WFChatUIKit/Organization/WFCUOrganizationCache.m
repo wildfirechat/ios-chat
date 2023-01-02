@@ -44,6 +44,7 @@ static WFCUOrganizationCache *sharedSingleton = nil;
                 sharedSingleton.organizationDict = [[NSMutableDictionary alloc] init];
                 sharedSingleton.organizationExDict = [[NSMutableDictionary alloc] init];
                 sharedSingleton.relationshipDict = [[NSMutableDictionary alloc] init];
+                [sharedSingleton restoreMyOrganizationInfos];
             }
         }
     }
@@ -78,9 +79,14 @@ static WFCUOrganizationCache *sharedSingleton = nil;
     }];
 }
 
-- (void)loadMyOrganizationInfos {
-    [self restoreMyOrganizationInfos];
+- (void)clearCaches {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"WFC_bottomOrganizationIds"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"WFC_rootOrganizationIds"];
+    self.bottomOrganizationIds = nil;
+    self.rootOrganizationIds = nil;
+}
 
+- (void)loadMyOrganizationInfos {
     [[WFCUConfigManager globalManager].orgServiceProvider getRelationship:[WFCCNetworkService sharedInstance].userId  success:^(NSArray<WFCUOrgRelationship *> * _Nonnull relationships) {
         self.relationshipDict[[WFCCNetworkService sharedInstance].userId] = relationships;
         NSMutableArray<NSNumber *> *bottomIds = [[NSMutableArray alloc] init];

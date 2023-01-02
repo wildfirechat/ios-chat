@@ -330,6 +330,9 @@ static OrgService *sharedSingleton = nil;
 
 - (void)clearOrgServiceAuthInfos {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_ORGSERVER_AUTH_TOKEN];
+    
+    //remove kit org cache
+    [[WFCUOrganizationCache sharedCache] clearCaches];
 }
 
 @end
