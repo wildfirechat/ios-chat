@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign)NSInteger sort;
 @property(nonatomic, assign)long long updateDt;
 @property(nonatomic, assign)long long createDt;
+
++ (WFCUOrganization *)fromDict:(NSDictionary *)dict;
+- (NSDictionary *)toDict;
 @end
 
 NS_ASSUME_NONNULL_END

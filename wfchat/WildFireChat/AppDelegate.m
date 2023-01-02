@@ -621,9 +621,7 @@
                 
                 [[OrgService sharedOrgService] login:^{
                     NSLog(@"on org service login success");
-                    
                     [[WFCUOrganizationCache sharedCache] loadMyOrganizationInfos];
-                    
                 } error:^(int errCode) {
                     NSLog(@"on org service login failure");
                 }];

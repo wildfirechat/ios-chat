@@ -51,37 +51,71 @@ static WFCUOrganizationCache *sharedSingleton = nil;
     return sharedSingleton;
 }
 
+- (void)restoreMyOrganizationInfos {
+    //restore bottomOrganizationIds, rootOrganizationIds, rootOrganization
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    
+    NSArray *arrBottoms = [[NSUserDefaults standardUserDefaults] objectForKey:@"WFC_bottomOrganizationIds"];
+    if([arrBottoms isKindOfClass:[NSArray class]]) {
+        [arr addObjectsFromArray:arrBottoms];
+        self.bottomOrganizationIds = arrBottoms;
+    }
+    
+    NSArray *arrRoots = [[NSUserDefaults standardUserDefaults] objectForKey:@"WFC_rootOrganizationIds"];
+    if([arrRoots isKindOfClass:[NSArray class]]) {
+        [arr addObjectsFromArray:arrRoots];
+        self.rootOrganizationIds = arrRoots;
+    }
+    
+    [arr enumerateObjectsUsingBlock:^(NSNumber *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"WFC_organization_%ld", [obj integerValue]]];
+        if([dict isKindOfClass:[NSDictionary class]]) {
+            WFCUOrganization *org = [WFCUOrganization fromDict:dict];
+            if(org.organizationId) {
+                self.organizationDict[@(org.organizationId)] = org;
+            }
+        }
+    }];
+}
+
 - (void)loadMyOrganizationInfos {
+    [self restoreMyOrganizationInfos];
+
     [[WFCUConfigManager globalManager].orgServiceProvider getRelationship:[WFCCNetworkService sharedInstance].userId  success:^(NSArray<WFCUOrgRelationship *> * _Nonnull relationships) {
         self.relationshipDict[[WFCCNetworkService sharedInstance].userId] = relationships;
         NSMutableArray<NSNumber *> *bottomIds = [[NSMutableArray alloc] init];
         [relationships enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if(obj.bottom) [bottomIds addObject:@(obj.organizationId)];
         }];
-        
+
         self.bottomOrganizationIds = bottomIds;
-        
+        [[NSUserDefaults standardUserDefaults] setObject:self.bottomOrganizationIds forKey:@"WFC_bottomOrganizationIds"];
+
         if(bottomIds.count) {
             [[WFCUConfigManager globalManager].orgServiceProvider getOrganizations:bottomIds success:^(NSArray<WFCUOrganization *> * _Nonnull organizations) {
                 [organizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     self.organizationDict[@(obj.organizationId)] = obj;
+                    [[NSUserDefaults standardUserDefaults] setObject:[obj toDict] forKey:[NSString stringWithFormat:@"WFC_organization_%ld", obj.organizationId]];
                 }];
             } error:^(int error_code) {
-                
+
             }];
             [[NSNotificationCenter defaultCenter] postNotificationName:kMyOrganizationUpdated object:nil];
         }
     } error:^(int error_code) {
-        
+
     }];
-    
+
     [[WFCUConfigManager globalManager].orgServiceProvider getRootOrganization:^(NSArray<WFCUOrganization *> * _Nonnull organizations) {
         NSMutableArray<NSNumber *> *orgIds = [[NSMutableArray alloc] init];
         [organizations enumerateObjectsUsingBlock:^(WFCUOrganization * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [orgIds addObject:@(obj.organizationId)];
             self.organizationDict[@(obj.organizationId)] = obj;
+            [[NSUserDefaults standardUserDefaults] setObject:[obj toDict] forKey:[NSString stringWithFormat:@"WFC_organization_%ld", obj.organizationId]];
         }];
         self.rootOrganizationIds = orgIds;
+        [[NSUserDefaults standardUserDefaults] setObject:self.rootOrganizationIds forKey:@"WFC_rootOrganizationIds"];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:kRootOrganizationUpdated object:nil];
     } error:^(int error_code) {
 
