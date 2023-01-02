@@ -86,7 +86,7 @@ static OrgService *sharedSingleton = nil;
     org.memberCount = [obj[@"memberCount"] intValue];
     org.sort = [obj[@"sort"] intValue];
     org.updateDt = [obj[@"updateDt"] longLongValue];
-    org.createDt = [obj[@"managerId"] longLongValue];
+    org.createDt = [obj[@"createDt"] longLongValue];
     return org;
 }
 
