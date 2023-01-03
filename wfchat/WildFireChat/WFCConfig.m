@@ -20,6 +20,7 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
 NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
+//组织通讯录服务地址，如果没有部署，可以设置为nil
 NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/

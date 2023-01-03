@@ -275,6 +275,32 @@ static OrgService *sharedSingleton = nil;
     }];
 }
 
+- (void)searchEmployee:(NSInteger)organizationId
+               keyword:(NSString *)keyword
+               success:(void(^)(NSArray<WFCUEmployee *> *employees))successBlock
+                 error:(void(^)(int error_code))errorBlock {
+    [self post:@"/api/employee/search" data:@{@"keyword":keyword, @"organizationId":@(organizationId), @"count":@(50), @"page":@(0)} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSDictionary *exDict = dict[@"result"];
+            int totalPages = [exDict[@"totalPages"] intValue];
+            int totalCount = [exDict[@"totalCount"] intValue];
+            int currentPage = [exDict[@"currentPage"] intValue];
+            NSArray<NSDictionary *> *arr = exDict[@"contents"];
+            NSMutableArray *result = [[NSMutableArray alloc] init];
+            [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                WFCUEmployee *rs = [self employeeFromDict:obj];
+                [result addObject:rs];
+            }];
+            
+            if(successBlock) successBlock(result);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1);
+    }];
+}
+
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     if(!isLogin && !self.isServiceAvailable) {
         NSLog(@"组织通讯录服务不可用，请确保先登录再使用组织通讯录");
