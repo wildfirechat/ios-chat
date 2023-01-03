@@ -65,27 +65,35 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
     
-    if (groupInfo.portrait.length) {
-        [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+    if(groupInfo.type == GroupType_Organization) {
+        if(groupInfo.portrait.length) {
+            [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"organization_icon"]];
+        } else {
+            self.potraitView.image = [WFCUImage imageNamed:@"organization_icon"];
+        }
     } else {
-        __weak typeof(self)ws = self;
-        NSString *groupId = groupInfo.target;
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            NSString *path = [note.userInfo objectForKey:@"path"];
-            if ([groupId isEqualToString:note.object] && (
-                (ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
-                (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
-                [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+        if (groupInfo.portrait.length) {
+            [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+        } else {
+            __weak typeof(self)ws = self;
+            NSString *groupId = groupInfo.target;
+            
+            [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+                NSString *path = [note.userInfo objectForKey:@"path"];
+                if ([groupId isEqualToString:note.object] && (
+                                                              (ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
+                                                              (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
+                                                                  [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+                                                              }
+            }];
+            
+            NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
+                return [WFCUImage imageNamed:@"PersonalChat"];
+            }];
+            
+            if (path) {
+                [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
-        }];
-        
-        NSString *path = [WFCCUtilities getGroupGridPortrait:groupInfo.target width:80 generateIfNotExist:YES defaultUserPortrait:^UIImage *(NSString *userId) {
-            return [WFCUImage imageNamed:@"PersonalChat"];
-        }];
-        
-        if (path) {
-            [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
         }
     }
   
@@ -184,6 +192,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     self.targetView.textColor = [WFCUConfigManager globalManager].textColor;
+    WFCCGroupInfo *groupInfo;
     if(conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:conversation.target refresh:NO];
         if(userInfo.userId.length == 0) {
@@ -192,7 +201,7 @@
         }
         [self updateUserInfo:userInfo];
     } else if (conversation.type == Group_Type) {
-        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
+        groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         if(groupInfo.target.length == 0) {
             groupInfo = [[WFCCGroupInfo alloc] init];
             groupInfo.target = conversation.target;
@@ -217,12 +226,26 @@
     } else {
         self.targetView.text = WFCString(@"Chatroom");
     }
+    
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 8000)];
+    
     if(conversation.type == SecretChat_Type) {
         self.secretChatView.hidden = NO;
-        self.targetView.frame = CGRectMake(16 + 48 + 12 + 24, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 20);
+        self.targetView.frame = CGRectMake(16 + 48 + 12 + 24, 16, size.width, 20);
     } else {
         self.secretChatView.hidden = YES;
-        self.targetView.frame = CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20);
+        self.targetView.frame = CGRectMake(16 + 48 + 12, 16, size.width, 20);
+    }
+    
+    if(conversation.type == Group_Type && groupInfo.type == GroupType_Organization) {
+        CGRect frame = self.offcialView.frame;
+        CGRect targetFrame = self.targetView.frame;
+        frame.origin.x = targetFrame.origin.x + targetFrame.size.width + 4;
+        frame.origin.y = targetFrame.origin.y;
+        self.offcialView.frame = frame;
+        self.offcialView.hidden = NO;
+    } else {
+        _offcialView.hidden = YES;
     }
     
     self.potraitView.layer.cornerRadius = 4.f;
@@ -372,6 +395,24 @@
     }
     return _targetView;
 }
+
+- (UILabel *)offcialView {
+    if(!_offcialView) {
+        _offcialView = [[UILabel alloc] initWithFrame:CGRectZero];
+        _offcialView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:10];
+        _offcialView.layer.cornerRadius = 3;
+        _offcialView.layer.masksToBounds = YES;
+        _offcialView.textColor = [UIColor whiteColor];
+        _offcialView.backgroundColor = [UIColor blueColor];
+        _offcialView.textAlignment = NSTextAlignmentCenter;
+        _offcialView.text = @"官方";
+        CGSize size = [WFCUUtilities getTextDrawingSize:_offcialView.text font:_offcialView.font constrainedSize:CGSizeMake(200, 200)];
+        _offcialView.frame = CGRectMake(0, 0, size.width+4, size.height);
+        [self.contentView addSubview:_offcialView];
+    }
+    return _offcialView;
+}
+
 - (UIImageView *)secretChatView {
     if(!_secretChatView) {
         _secretChatView = [[UIImageView alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, 20, 20)];
