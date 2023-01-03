@@ -651,7 +651,10 @@
         } else if(section == 3) {
             return 2; //群昵称，显示群昵称
         }  else if(section == 4) {
-            return 2; //清空聊天记录,删除退群
+            if(self.groupInfo.type == GroupType_Organization)
+                return 1; //清空聊天记录,删除退群
+            else
+                return 2; //清空聊天记录,删除退群
         }
     } else if(self.conversation.type == Single_Type) {
         if(section == 0) {
