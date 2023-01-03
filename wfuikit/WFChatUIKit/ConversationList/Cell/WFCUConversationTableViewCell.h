@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIImageView *potraitView;
 @property (strong, nonatomic) UILabel *targetView;
 @property (strong, nonatomic) UILabel *digestView;
+@property (strong, nonatomic) UILabel *offcialView;
 @property (strong, nonatomic) UIImageView *statusView;
 @property (strong, nonatomic) UILabel *timeView;
 @property (strong, nonatomic) UIImageView *silentView;
