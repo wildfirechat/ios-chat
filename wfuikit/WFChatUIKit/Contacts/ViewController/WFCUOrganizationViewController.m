@@ -38,7 +38,6 @@
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<NSString *> *selectedContacts;
 
-@property (nonatomic, strong) NSMutableArray<WFCCUserInfo *> *searchList;
 @property (nonatomic, strong)  UISearchController       *searchController;
 
 @property(nonatomic, strong)UIActivityIndicatorView *activityIndicator;
@@ -48,6 +47,8 @@
 @property(nonatomic, strong)NSMutableArray<WFCUOrganizationEx *> *paths;
 
 @property(nonatomic, strong)UICollectionView *collectionView;
+
+@property(nonatomic, strong)NSArray<WFCUEmployee *> *searchResults;
 @end
 
 @implementation WFCUOrganizationViewController
@@ -111,7 +112,6 @@
     
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
-    _searchList = [NSMutableArray array];
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -377,6 +377,10 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if(self.searchController.active) {
+        return self.searchResults.count;
+    }
+    
     WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && section == 0) {
         return path.subOrganizations.count;
@@ -404,28 +408,42 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = nil;
-    WFCUOrganizationEx *path = [self.paths lastObject];
-    if(path.subOrganizations.count && indexPath.section == 0) {
-        WFCUOrganization *org = path.subOrganizations[indexPath.row];
-        WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
-        contactCell.nameLabel.text = [NSString stringWithFormat:@"%@(%d)", org.name, org.memberCount];
-        contactCell.imageView.image = [WFCUImage imageNamed:@"organization_icon"];
-        cell = contactCell;
-    } else {
-        WFCUEmployee *emp = path.employees[indexPath.row];
+    if(self.searchController.active) {
+        WFCUEmployee *emp = self.searchResults[indexPath.row];
         WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
         contactCell.nameLabel.text = emp.name;
         
         [contactCell.portraitView sd_setImageWithURL:[NSURL URLWithString:[emp.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"employee"]];
         
-        cell = contactCell;
+        return contactCell;
+    } else {
+        UITableViewCell *cell = nil;
+        WFCUOrganizationEx *path = [self.paths lastObject];
+        if(path.subOrganizations.count && indexPath.section == 0) {
+            WFCUOrganization *org = path.subOrganizations[indexPath.row];
+            WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
+            contactCell.nameLabel.text = [NSString stringWithFormat:@"%@(%d)", org.name, org.memberCount];
+            contactCell.imageView.image = [WFCUImage imageNamed:@"organization_icon"];
+            cell = contactCell;
+        } else {
+            WFCUEmployee *emp = path.employees[indexPath.row];
+            WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
+            contactCell.nameLabel.text = emp.name;
+            
+            [contactCell.portraitView sd_setImageWithURL:[NSURL URLWithString:[emp.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"employee"]];
+            
+            cell = contactCell;
+        }
+        return cell;
     }
-    return cell;
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if(self.searchController.active) {
+        return 1;
+    }
+    
     WFCUOrganizationEx *path = [self.paths lastObject];
     if(path.subOrganizations.count && path.employees.count)
         return 2;
@@ -465,23 +483,33 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    WFCUOrganizationEx *path = [self.paths lastObject];
-    if(path.subOrganizations.count && indexPath.section == 0) {
-        WFCUOrganization *org = path.subOrganizations[indexPath.row];
-        WFCUOrganizationEx *newPath = [[WFCUOrganizationEx alloc] init];
-        newPath.organizationId = org.organizationId;
-        newPath.organization = org;
-        [self.paths addObject:newPath];
-        [self.tableView reloadData];
-        [self loadData];
-    } else {
-        WFCUEmployee *emp = path.employees[indexPath.row];
+    if(self.searchController.active) {
+        WFCUEmployee *emp = self.searchResults[indexPath.row];
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = emp.employeeId;
-
+        
         vc.hidesBottomBarWhenPushed = YES;
         
         [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        WFCUOrganizationEx *path = [self.paths lastObject];
+        if(path.subOrganizations.count && indexPath.section == 0) {
+            WFCUOrganization *org = path.subOrganizations[indexPath.row];
+            WFCUOrganizationEx *newPath = [[WFCUOrganizationEx alloc] init];
+            newPath.organizationId = org.organizationId;
+            newPath.organization = org;
+            [self.paths addObject:newPath];
+            [self.tableView reloadData];
+            [self loadData];
+        } else {
+            WFCUEmployee *emp = path.employees[indexPath.row];
+            WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+            vc.userId = emp.employeeId;
+            
+            vc.hidesBottomBarWhenPushed = YES;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -494,11 +522,17 @@
 - (void)didPresentSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = YES;
     self.extendedLayoutIncludesOpaqueBars = YES;
+    CGRect frame = self.collectionView.frame;
+    frame.size.height = 0;
+    self.collectionView.frame = frame;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
     self.tabBarController.tabBar.hidden = NO;
     self.extendedLayoutIncludesOpaqueBars = NO;
+    CGRect frame = self.collectionView.frame;
+    frame.size.height = 32;
+    self.collectionView.frame = frame;
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
@@ -508,8 +542,19 @@
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     if (searchController.active) {
         NSString *searchString = [self.searchController.searchBar text];
-       
+        if(searchString.length) {
+            [[WFCUConfigManager globalManager].orgServiceProvider searchEmployee:self.lastOrganizationId keyword:searchString success:^(NSArray<WFCUEmployee *> * _Nonnull employees) {
+                NSLog(@"the search result is %d", employees.count);
+                self.searchResults = employees;
+                [self.tableView reloadData];
+            } error:^(int error_code) {
+                
+            }];
+        } else {
+            self.searchResults = @[];
+        }
     }
+    [self.tableView reloadData];
 }
 
 - (void)dealloc {

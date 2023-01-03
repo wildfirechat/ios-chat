@@ -124,10 +124,14 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     WFCUSeletedUserSearchResultViewController *resultVC = [[WFCUSeletedUserSearchResultViewController alloc] init];
     __weak typeof(self)weakSelf = self;
     resultVC.dataSource = self.dataSource;
-      resultVC.needSection = self.type == Horizontal;
-    resultVC.selectedUser = ^(WFCUSelectModel * _Nonnull user) {
-             [weakSelf toggelSeletedUser:user];
+    resultVC.needSection = self.type == Horizontal;
+    resultVC.selectedUsers = self.selectedUsers;
+    resultVC.selectedUserBlock = ^(WFCUSelectModel * _Nonnull user) {
+        [weakSelf toggelSeletedUser:user];
     };
+    if(self.organizationIds.count) {
+        resultVC.organizationId = [[self.organizationIds lastObject] integerValue];
+    }
     UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:resultVC];
     naviVC.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:naviVC animated:NO completion:nil];
@@ -324,11 +328,17 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         }
         
         for (WFCCUserInfo *userInfo in userDataSource) {
-            WFCUSelectModel *info = [[WFCUSelectModel alloc] init];
+            __block WFCUSelectModel *info = [[WFCUSelectModel alloc] init];
             info.userInfo = userInfo;
             if ([self.disableUserIds containsObject:info.userInfo.userId]) {
                 info.selectedStatus = Disable_Checked;
             }
+            [self.selectedUsers enumerateObjectsUsingBlock:^(WFCUSelectModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if([userInfo.userId isEqualToString:obj.userInfo.userId]) {
+                    info = obj;
+                    *stop = YES;
+                }
+            }];
             [self.dataSource addObject:info];
         }
         

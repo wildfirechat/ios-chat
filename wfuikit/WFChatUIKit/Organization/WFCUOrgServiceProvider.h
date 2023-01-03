@@ -48,6 +48,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getEmployeeEx:(NSString *)employeeId
               success:(void(^)(WFCUEmployeeEx *employeeEx))successBlock
                 error:(void(^)(int error_code))errorBlock;
+
+- (void)searchEmployee:(NSInteger)organizationId
+               keyword:(NSString *)keyword
+               success:(void(^)(NSArray<WFCUEmployee *> *employees))successBlock
+                 error:(void(^)(int error_code))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
