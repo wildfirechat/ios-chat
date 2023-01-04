@@ -288,7 +288,7 @@
 "EndTime"="结束时间";
 "NoLimit"="无限制";
 "JoinWithMicOn"="参与者开启麦克风入会";
-"AllowTurnMicOn"="运行参与者开启麦克风";
+"AllowTurnMicOn"="允许参与者开启麦克风";
 "AddToCalender"="添加到日历";
 "UsePassword"="启用密码";
 "UsePersonalNumber"="使用个人会议号";
