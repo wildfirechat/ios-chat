@@ -596,6 +596,7 @@ static AppService *sharedSingleton = nil;
 - (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo {
     PCSessionViewController *vc = [[PCSessionViewController alloc] init];
     vc.pcClientInfo = clientInfo;
+    vc.hidesBottomBarWhenPushed = YES;
     [baseController.navigationController pushViewController:vc animated:YES];
 }
 
