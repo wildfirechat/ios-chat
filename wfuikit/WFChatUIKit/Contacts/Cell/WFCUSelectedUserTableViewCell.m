@@ -113,7 +113,7 @@
 
 - (UIButton *)nextLevel {
     if(!_nextLevel) {
-        _nextLevel = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 16 - 80, 19, 80, 16)];
+        _nextLevel = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 19, 80, 16)];
         [_nextLevel setTitle:@"下级" forState:UIControlStateNormal];
         [_nextLevel setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         _nextLevel.titleLabel.font = [UIFont systemFontOfSize:12];
