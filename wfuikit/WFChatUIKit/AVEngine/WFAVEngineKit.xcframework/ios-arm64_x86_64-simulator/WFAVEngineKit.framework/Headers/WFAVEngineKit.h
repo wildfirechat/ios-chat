@@ -16,7 +16,6 @@ FOUNDATION_EXPORT const unsigned char WFAVEngineKitVersionString[];
 
 #import <Foundation/Foundation.h>
 #import <WebRTC/WebRTC.h>
-#import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVCallSession.h>
 #import <PushKit/PushKit.h>
 
@@ -164,6 +163,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRoomNotExist,
   kWFAVCallEndReasonRoomParticipantsFull
 };
+
+@class WFCCConversation;
 
 #pragma mark - 通话监听
 /**

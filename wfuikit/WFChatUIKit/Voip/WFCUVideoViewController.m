@@ -23,6 +23,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
 #import "WFCUUtilities.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @interface WFCUVideoViewController () <UITextFieldDelegate
 #if WFCU_SUPPORT_VOIP
