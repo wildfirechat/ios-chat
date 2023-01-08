@@ -17,6 +17,22 @@
     return conversation;
 }
 
++(instancetype)singleConversation:(NSString *)target {
+    WFCCConversation *conversation = [[WFCCConversation alloc] init];
+    conversation.type = Single_Type;
+    conversation.target = target;
+    conversation.line = 0;
+    return conversation;
+}
+
++(instancetype)groupConversation:(NSString *)target {
+    WFCCConversation *conversation = [[WFCCConversation alloc] init];
+    conversation.type = Group_Type;
+    conversation.target = target;
+    conversation.line = 0;
+    return conversation;
+}
+
 - (instancetype)duplicate {
     WFCCConversation *conversation = [[WFCCConversation alloc] init];
     conversation.type = self.type;

@@ -46,6 +46,22 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
                                line:(int)line;
 
 /**
+ 构造方法
+ 
+ @param target 目标会话ID
+ @return 单聊会话
+ */
++(instancetype)singleConversation:(NSString *)target;
+
+/**
+ 构造方法
+ 
+ @param target 目标会话ID
+ @return 群组会话
+ */
++(instancetype)groupConversation:(NSString *)target;
+
+/**
  会话类型
  */
 @property (nonatomic, assign)WFCCConversationType type;
