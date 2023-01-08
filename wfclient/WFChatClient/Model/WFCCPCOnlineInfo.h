@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +27,7 @@ typedef NS_ENUM(NSInteger, WFCCPCOnlineType) {
 };
 
 
-@interface WFCCPCOnlineInfo : NSObject
+@interface WFCCPCOnlineInfo : WFCCJsonSerializer
 + (instancetype)infoFromStr:(NSString *)strInfo withType:(WFCCPCOnlineType)type;
 @property(nonatomic, assign)WFCCPCOnlineType type;
 @property(nonatomic, assign)BOOL isOnline;
