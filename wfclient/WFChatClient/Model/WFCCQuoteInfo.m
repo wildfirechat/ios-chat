@@ -85,4 +85,14 @@
         self.messageDigest = dictData[@"d"];
     }
 }
+
+-(id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"userId"] = self.userId;
+    dict[@"userDisplayName"] = self.userDisplayName;
+    dict[@"messageDigest"] = self.messageDigest;
+    [self setDict:dict key:@"messageUid" longlongValue:self.messageUid];
+    return dict;
+}
+
 @end

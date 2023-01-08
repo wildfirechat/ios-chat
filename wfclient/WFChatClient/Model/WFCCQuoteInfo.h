@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCCQuoteInfo : NSObject
+@interface WFCCQuoteInfo : WFCCJsonSerializer
 - (instancetype)initWithMessageUid:(long long)messageUid;
 @property (nonatomic, assign)long long messageUid;
 @property (nonatomic, strong)NSString *userId;

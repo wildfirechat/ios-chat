@@ -28,4 +28,15 @@
     
     return info;
 }
+
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"clientId"] = self.clientId;
+    dict[@"clientName"] = self.clientName;
+    dict[@"type"] = @(self.type);
+    dict[@"isOnline"] = @(self.isOnline);
+    dict[@"platform"] = @(self.platform);
+    [self setDict:dict key:@"timestamp" longlongValue:self.timestamp];
+    return dict;
+}
 @end

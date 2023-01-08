@@ -9,5 +9,13 @@
 #import "WFCCSecretChatInfo.h"
 
 @implementation WFCCSecretChatInfo
-
+- (id)toJsonObj {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"targetId"] = self.targetId;
+    dict[@"userId"] = self.userId;
+    dict[@"state"] = @(self.state);
+    dict[@"burnTime"] = @(self.burnTime);
+    [self setDict:dict key:@"createTime" longlongValue:self.createTime];
+    return dict;
+}
 @end

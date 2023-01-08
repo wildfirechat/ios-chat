@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +26,7 @@ typedef NS_ENUM(NSInteger, WFCCSecretChatState) {
     SecretChatState_Canceled
 };
 
-@interface WFCCSecretChatInfo : NSObject
+@interface WFCCSecretChatInfo : WFCCJsonSerializer
 /*
  密聊ID
  */
