@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, WFCUSeletedUserHeaderViewLayoutType) {
 
 @property (nonatomic, strong)NSArray *candidateUsers;
 @property (nonatomic, strong)NSArray *disableUserIds;
+@property (nonatomic, assign)BOOL disabledUserNotSelected;
 /// 布局类型为布局Vertical: 行数最大值为2
 @property (nonatomic, assign)WFCUSeletedUserHeaderViewLayoutType type;
 @property (nonatomic, strong)void (^selectResult)(NSArray<NSString *> *contacts);

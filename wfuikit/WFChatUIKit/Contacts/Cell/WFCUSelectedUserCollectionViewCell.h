@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WFCUSelectedUserInfo.h"
+#import "WFCUSelectModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUSelectedUserCollectionViewCell : UICollectionViewCell
-@property (nonatomic, strong)WFCUSelectedUserInfo *user;
+@property (nonatomic, strong)WFCUSelectModel *model;
 @property (nonatomic, strong)UIImageView *imgV;
 @property (nonatomic, assign)BOOL isSmall;
 @end

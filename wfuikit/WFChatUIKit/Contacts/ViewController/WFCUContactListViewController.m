@@ -27,6 +27,10 @@
 #import "UIColor+YH.h"
 #import "WFCUPinyinUtility.h"
 #import "WFCUImage.h"
+#import "WFCUOrganizationCache.h"
+#import "WFCUOrganization.h"
+#import "WFCUOrganizationViewController.h"
+#import "WFCUOrgRelationship.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -105,9 +109,10 @@ static NSString *wfcstar = @"☆";
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContactsUpdated:) name:kFriendListUpdated object:nil];
-
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onClearAllUnread:) name:@"kTabBarClearBadgeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRootOrganizationUpdated:) name:kRootOrganizationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMyOrganizationUpdated:) name:kMyOrganizationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationUpdated:) name:kOrganizationUpdated object:nil];
     
     _searchList = [NSMutableArray array];
     
@@ -260,8 +265,21 @@ static NSString *wfcstar = @"☆";
         self.needSort = needRefresh;
     }
 }
+
 - (void)onContactsUpdated:(NSNotification *)notification {
     [self loadContact:NO];
+}
+
+- (void)onRootOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
+
+- (void)onMyOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
+
+- (void)onOrganizationUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)sortAndRefreshWithList:(NSArray *)friendList {
@@ -337,7 +355,7 @@ static NSString *wfcstar = @"☆";
         return dataSource.count;
     } else {
         if (section == 0) {
-            return 3;
+            return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count;
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
             return dataSource.count;
@@ -391,7 +409,15 @@ static NSString *wfcstar = @"☆";
     }
     return selectCell;
 }
-
+#define ORGANIZATION_REUSEIDENTIFY @"organizationCell"
+- (WFCUContactTableViewCell *)dequeueOrAllocOrganizationCell:(UITableView *)tableView {
+    WFCUContactTableViewCell *contactCell = [tableView dequeueReusableCellWithIdentifier:ORGANIZATION_REUSEIDENTIFY];
+    if (contactCell == nil) {
+        contactCell = [[WFCUContactTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ORGANIZATION_REUSEIDENTIFY];
+        contactCell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
+    }
+    return contactCell;
+}
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
 // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
 
@@ -435,7 +461,7 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
-            } else {
+            } else if(indexPath.row == 2) {
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"Channel");
@@ -443,6 +469,27 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
+            } else {
+                int index = indexPath.row - 3;
+                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
+                if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
+                    int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId refresh:NO];
+                    contactCell.nameLabel.text = organization.name;
+                    contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_organization_icon"];
+                    contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                    contactCell.onlineView.hidden = YES;
+                    return contactCell;
+                } else {
+                    index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
+                    int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
+                    WFCUOrganization *organization = [[WFCUOrganizationCache sharedCache] getOrganization:orgId refresh:NO];
+                    contactCell.nameLabel.text = organization.name;
+                    contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_expended_icon"];
+                    contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                    contactCell.onlineView.hidden = YES;
+                    return contactCell;
+                }
             }
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section - 1]];
@@ -663,10 +710,45 @@ static NSString *wfcstar = @"☆";
                 WFCUFavGroupTableViewController *groupVC = [[WFCUFavGroupTableViewController alloc] init];;
                 groupVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:groupVC animated:YES];
-            } else {
+            } else if(indexPath.row == 2) {
                 WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];;
                 channelVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:channelVC animated:YES];
+            } else {
+                int index = indexPath.row - 3;
+                if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
+                    int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
+                    WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
+                    orgVC.organizationIds = @[@(orgId)];
+                    orgVC.hidesBottomBarWhenPushed = YES;
+                    orgVC.isPushed = YES;
+                    [self.navigationController pushViewController:orgVC animated:YES];
+                } else {
+                    index -= [WFCUOrganizationCache sharedCache].rootOrganizationIds.count;
+                    int orgId = [[WFCUOrganizationCache sharedCache].bottomOrganizationIds[index] intValue];
+                    NSArray<WFCUOrgRelationship *> *rs = [[WFCUOrganizationCache sharedCache] getRelationship:[WFCCNetworkService sharedInstance].userId refresh:NO];
+                    __block NSInteger index = orgId;
+                    NSMutableArray *ids = [[NSMutableArray alloc] init];
+                    while (index) {
+                        [ids insertObject:@(index) atIndex:0];
+                        __block BOOL has = NO;
+                        [rs enumerateObjectsUsingBlock:^(WFCUOrgRelationship * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            if(obj.organizationId == index) {
+                                index = obj.parentOrganizationId;
+                                *stop = YES;
+                                has = YES;
+                            }
+                        }];
+                        if(!has) {
+                            break;
+                        }
+                    }
+                    WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];
+                    orgVC.organizationIds = ids;
+                    orgVC.hidesBottomBarWhenPushed = YES;
+                    orgVC.isPushed = YES;
+                    [self.navigationController pushViewController:orgVC animated:YES];
+                }
             }
             return;
         } else {

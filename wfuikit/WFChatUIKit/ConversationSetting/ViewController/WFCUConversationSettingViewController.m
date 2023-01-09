@@ -20,7 +20,7 @@
 #import "GroupManageTableViewController.h"
 #import "WFCUGroupMemberCollectionViewController.h"
 #import "WFCUFilesViewController.h"
-
+#import "WFCUSeletedUserViewController.h"
 #import "MBProgressHUD.h"
 #import "WFCUMyProfileTableViewController.h"
 #import "WFCUConversationSearchTableViewController.h"
@@ -651,7 +651,10 @@
         } else if(section == 3) {
             return 2; //群昵称，显示群昵称
         }  else if(section == 4) {
-            return 2; //清空聊天记录,删除退群
+            if(self.groupInfo.type == GroupType_Organization)
+                return 1; //清空聊天记录,删除退群
+            else
+                return 2; //清空聊天记录,删除退群
         }
     } else if(self.conversation.type == Single_Type) {
         if(section == 0) {
@@ -1065,46 +1068,36 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self)ws = self;
     if (indexPath.row == self.memberCollectionCount-self.extraBtnNumber) {
-        WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
-        pvc.selectContact = YES;
-        pvc.multiSelect = YES;
+        WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
         NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
-      if(self.conversation.type == Group_Type) {
-          
-        for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
-            [disabledUser addObject:member.memberId];
+        if(self.conversation.type == Group_Type) {
+          for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
+              [disabledUser addObject:member.memberId];
+          }
+
+          pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+              [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:nil notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
+                  
+              } error:^(int error_code) {
+                  if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
+                      [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
+                  } else {
+                      [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                  }
+              }];
+          };
+        } else {
+          [disabledUser addObject:self.conversation.target];
+          pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+              [self createGroup:contacts];
+          };
         }
-          
-          NSString *memberExtra = nil;
-          
-//          NSDictionary *extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(GroupMemberSource_Invite), @"i"/*targetId*/:[WFCCNetworkService sharedInstance].userId}};
-//          NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
-//                                                                                     options:kNilOptions
-//                                                                                       error:nil];
-//          NSString *memberExtra = [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
-          
-        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
-              [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
-                
-            } error:^(int error_code) {
-                if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
-                    [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
-                } else {
-                    [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
-                }
-            }];
-        };
-        pvc.disableUsersSelected = YES;
-      } else {
-        [disabledUser addObject:self.conversation.target];
-        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [self createGroup:contacts];
-        };
-        pvc.disableUsersSelected = YES;
-      }
-        pvc.disableUsers = disabledUser;
+        pvc.disableUserIds = disabledUser;
+        pvc.disabledUserNotSelected = YES;
+        pvc.type = Horizontal;
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+        navi.modalPresentationStyle = UIModalPresentationFullScreen;
         [self.navigationController presentViewController:navi animated:YES completion:nil];
     } else if(indexPath.row == self.memberCollectionCount-self.extraBtnNumber + 1) {
         WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];

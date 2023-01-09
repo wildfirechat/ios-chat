@@ -6,9 +6,12 @@
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
-#import "WFCUSelectedUserInfo.h"
+#import "WFCUSelectModel.h"
+#import "WFCUOrganization.h"
+#import "WFCUEmployee.h"
 
-@implementation WFCUSelectedUserInfo
+
+@implementation WFCUSelectModel
 - (instancetype)init {
     self = [super init];
     if (self) {
