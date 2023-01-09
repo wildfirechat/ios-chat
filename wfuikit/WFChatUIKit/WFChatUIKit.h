@@ -80,3 +80,11 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/LBXScanViewStyle.h>
 #import <WFChatUIKit/StyleDIY.h>
 #import <WFChatUIKit/WFCUImage.h>
+
+#import <WFChatUIKit/WFCUOrganization.h>
+#import <WFChatUIKit/WFCUEmployee.h>
+#import <WFChatUIKit/WFCUEmployeeEx.h>
+#import <WFChatUIKit/WFCUOrgRelationship.h>
+#import <WFChatUIKit/WFCUOrganizationEx.h>
+#import <WFChatUIKit/WFCUOrganizationCache.h>
+#import <WFChatUIKit/WFCUOrgServiceProvider.h>
