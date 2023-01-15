@@ -222,7 +222,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 @protocol ReceiveMessageFilter;
 @class WFCCUserOnlineState;
 @class WFCCUserCustomState;
-
+@class UIImage;
 #pragma mark - IM服务
 
 /**
@@ -248,6 +248,12 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  外部用户源
  */
 @property(nonatomic, weak)id<WFCCUserSource> userSource;
+
+
+/**
+ 默认图片，当图片消息或者其他类型需要缩略图消息没有缩略图时，使用次默认图片
+ */
+@property(nonatomic, strong)UIImage *defaultThumbnailImage;
 
 #pragma mark - 会话相关
 /**
