@@ -3260,14 +3260,14 @@
     });
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    if (@available(iOS 13.0, *)) {
-        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
-            [self.navigationController popViewControllerAnimated:NO];
-        }
-    }
-}
+//- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+//    [super traitCollectionDidChange:previousTraitCollection];
+//    if (@available(iOS 13.0, *)) {
+//        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+//            [self.navigationController popViewControllerAnimated:NO];
+//        }
+//    }
+//}
 #pragma mark - UITableView
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.ongoingCallDict.count;
