@@ -411,6 +411,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)clearMessageUnreadStatus:(long)messageId;
 
 /**
+ 清空消息未读。
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ @discuss 这个函数只能清除本地的状态，不能同步到服务器或者其他端。建议一般情况下不要用这个接口。
+ */
+- (void)clearMessageUnreadStatus:(long)messageId conversation:(WFCCConversation *)conversation;
+
+/**
  设置会话的最后一条接收消息为未读状态。
  
  @param conversation 会话
@@ -420,11 +429,19 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync;
 
 /**
- 设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
+ 设置媒体消息已播放
  
  @param messageId 消息ID
  */
 - (void)setMediaMessagePlayed:(long)messageId;
+
+/**
+ 设置媒体消息已播放
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ */
+- (void)setMediaMessagePlayed:(long)messageId conversation:(WFCCConversation *)conversation;
 
 /**
  设置消息的本地附加信息，注意信息不在多端之间同步。
@@ -435,6 +452,18 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return YES更新成功，NO消息不存在
  */
 - (BOOL)setMessage:(long)messageId localExtra:(NSString *)extra;
+
+/**
+ 设置消息的本地附加信息，注意信息不在多端之间同步。
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ @param extra          附加信息
+ 
+ @return YES更新成功，NO消息不存在
+ */
+- (BOOL)setMessage:(long)messageId conversation:(WFCCConversation *)conversation localExtra:(NSString *)extra;
+
 /**
 获取会话内已读状态
 
@@ -607,10 +636,28 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 /**
  获取消息
  
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ @return 消息实体
+ */
+- (WFCCMessage *)getMessage:(long)messageId conversation:(WFCCConversation *)conversation;
+
+/**
+ 获取消息
+ 
  @param messageUid 消息UID
  @return 消息实体
  */
 - (WFCCMessage *)getMessageByUid:(long long)messageUid;
+
+/**
+ 获取消息
+ 
+ @param messageUid 消息UID
+ @param conversation 消息所属会话
+ @return 消息实体
+ */
+- (WFCCMessage *)getMessageByUid:(long long)messageUid conversation:(WFCCConversation *)conversation;
 
 /**
  搜索消息
@@ -817,6 +864,16 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return 是否取消成功
  */
 - (BOOL)cancelSendingMessage:(long)messageId;
+
+/**
+ 取消发送消息，只有发送媒体类消息才可以取消
+ 
+ @param messageId 消息Id
+ @param conversation 消息所属会话
+ @return 是否取消成功
+ */
+- (BOOL)cancelSendingMessage:(long)messageId conversation:(WFCCConversation *)conversation;
+
 /**
  撤回消息
  
@@ -895,6 +952,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  */
 - (BOOL)deleteMessage:(long)messageId;
 
+/**
+ 删除本地消息
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ @return 是否删除成功
+ */
+- (BOOL)deleteMessage:(long)messageId conversation:(WFCCConversation *)conversation;
+
 
 /**
  批量删除本地消息
@@ -912,6 +978,19 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param errorBlock 删除失败
  */
 - (void)deleteRemoteMessage:(long long)messageUid
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock;
+
+/**
+ 删除远端消息，仅专业版支持。
+ 
+ @param messageUid 消息UID
+ @param conversation 消息所属会话
+ @param successBlock 删除成功
+ @param errorBlock 删除失败
+ */
+- (void)deleteRemoteMessage:(long long)messageUid
+               conversation:(WFCCConversation *)conversation
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock;
 
@@ -934,6 +1013,26 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock;
 
+/**
+ 更新远端消息，仅专业版支持。
+ 
+ @discussion 客户端仅能更新自己发送的消息，更新的消息类型不能变，更新的消息类型是服务配置允许更新的内容。Server API更新则没有限制。
+ 
+ @param messageUid 消息UID
+ @param conversation 消息所属会话
+ @param content 更新消息内容
+ @param distribute 是否分发到其他客户端
+ @param updateLocal 是否更新本地消息内容
+ @param successBlock 删除成功
+ @param errorBlock 删除失败
+ */
+- (void)updateRemoteMessage:(long long)messageUid
+               conversation:(WFCCConversation *)conversation
+                    content:(WFCCMessageContent *)content
+                 distribute:(BOOL)distribute
+                updateLocal:(BOOL)updateLocal
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock;
 /**
  删除会话中的消息
  
@@ -1009,10 +1108,34 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  更新消息内容。只更新本地消息内容，无法更新服务器和远端。
  
  @param messageId 消息ID
+ @param conversation 消息所属的会话
+ @param content 消息内容
+ */
+- (void)updateMessage:(long)messageId
+         conversation:(WFCCConversation *)conversation
+              content:(WFCCMessageContent *)content;
+
+/**
+ 更新消息内容。只更新本地消息内容，无法更新服务器和远端。
+ 
+ @param messageId 消息ID
  @param content 消息内容
  */
 - (void)updateMessage:(long)messageId
               content:(WFCCMessageContent *)content;
+
+/**
+ 更新消息内容及时间。只更新本地消息内容，无法更新服务器和远端。
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属的会话
+ @param content   消息内容
+ @param timestamp 消息时间戳
+ */
+- (void)updateMessage:(long)messageId
+         conversation:(WFCCConversation *)conversation
+              content:(WFCCMessageContent *)content
+            timestamp:(long long)timestamp;
 
 /**
  更新消息内容及时间。只更新本地消息内容，无法更新服务器和远端。
@@ -1034,6 +1157,18 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 @return YES 更新成功。NO 消息不存在，或者状态与消息方向不匹配
 */
 - (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status;
+
+/**
+更新消息状态，需要确保状态跟消息的方向相对应。一般情况下协议栈会自动处理好，不建议客户手动操作状态。。只更新本地消息内容，无法更新服务器和远端。
+
+@param messageId 消息ID
+@param conversation 消息所属会话
+@param status 消息状态
+ 
+@return YES 更新成功。NO 消息不存在，或者状态与消息方向不匹配
+*/
+- (BOOL)updateMessage:(long)messageId conversation:(WFCCConversation *)conversation status:(WFCCMessageStatus)status;
+
 
 /**
  插入消息。只插入到本地，无法更新服务器和远端。

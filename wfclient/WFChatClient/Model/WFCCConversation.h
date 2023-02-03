@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
     Channel_Type,
     Things_Type,
     SecretChat_Type,
+    SuperGroup_Type,
 };
 
 /**

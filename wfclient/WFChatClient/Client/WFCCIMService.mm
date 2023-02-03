@@ -1202,7 +1202,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                  success:(void(^)(long long messageUid, long long timestamp))successBlock
                    error:(void(^)(int error_code))errorBlock {
     
-    if(mars::stn::sendMessageEx(message.messageId, new IMSendMessageCallback(message, successBlock, nil, nil, errorBlock), expireDuration)) {
+    if(mars::stn::sendMessageEx(message.messageId, message.conversation.type, [message.conversation.target UTF8String], new IMSendMessageCallback(message, successBlock, nil, nil, errorBlock), expireDuration)) {
         return YES;
     } else {
         return NO;
@@ -1210,7 +1210,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (BOOL)cancelSendingMessage:(long)messageId {
-    BOOL canceled = mars::stn::cancelSendingMessage(messageId)?YES:NO;
+    return [self cancelSendingMessage:messageId conversation:nil];
+}
+
+- (BOOL)cancelSendingMessage:(long)messageId conversation:(WFCCConversation *)conversation {
+    BOOL canceled = mars::stn::cancelSendingMessage(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"")?YES:NO;
     if(!canceled) {
         NSObject *upload = [self.uploadingModelMap objectForKey:@(messageId)];
         if(upload) {
@@ -1243,7 +1247,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         return;
     }
     
-    mars::stn::recallMessage(msg.messageUid, new RecallMessageCallback(msg, successBlock, errorBlock));
+    mars::stn::recallMessage(msg.messageUid, msg.conversation.type, msg.conversation.target?[msg.conversation.target UTF8String]:"", new RecallMessageCallback(msg, successBlock, errorBlock));
 }
 - (NSArray<WFCCConversationInfo *> *)getConversationInfos:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines{
     std::list<int> types;
@@ -1469,13 +1473,21 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (WFCCMessage *)getMessage:(long)messageId {
-  mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageById(messageId);
-  return convertProtoMessage(&tMsg);
+    return [self getMessage:messageId conversation:nil];
+}
+
+- (WFCCMessage *)getMessage:(long)messageId conversation:(WFCCConversation *)conversation {
+    mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageById(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"");
+    return convertProtoMessage(&tMsg);
 }
 
 - (WFCCMessage *)getMessageByUid:(long long)messageUid {
-  mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageByUid(messageUid);
-  return convertProtoMessage(&tMsg);
+    return [self getMessageByUid:messageUid conversation:nil];
+}
+
+- (WFCCMessage *)getMessageByUid:(long long)messageUid conversation:(WFCCConversation *)conversation {
+    mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageByUid(messageUid, conversation.type, conversation.target?[conversation.target UTF8String]:"");
+    return convertProtoMessage(&tMsg);
 }
 
 - (WFCCUnreadCount *)getUnreadCount:(WFCCConversation *)conversation {
@@ -1519,8 +1531,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (void)clearMessageUnreadStatus:(long)messageId {
+    [self clearMessageUnreadStatus:messageId conversation:nil];
+}
+
+- (void)clearMessageUnreadStatus:(long)messageId conversation:(WFCCConversation *)conversation {
     if(messageId) {
-        mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId);
+        mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"");
     }
 }
 
@@ -1536,16 +1552,24 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (void)setMediaMessagePlayed:(long)messageId {
+    [self setMediaMessagePlayed:messageId conversation:nil];
+}
+
+- (void)setMediaMessagePlayed:(long)messageId conversation:(WFCCConversation *)conversation {
     WFCCMessage *message = [self getMessage:messageId];
     if (!message) {
         return;
     }
     
-    mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, mars::stn::Message_Status_Played);
+    mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", mars::stn::Message_Status_Played);
 }
 
 - (BOOL)setMessage:(long)messageId localExtra:(NSString *)extra {
-    return mars::stn::MessageDB::Instance()->setMessageLocalExtra(messageId, extra ? [extra UTF8String] : "") ? YES : NO;
+    return [self setMessage:messageId conversation:nil localExtra:extra];
+}
+
+- (BOOL)setMessage:(long)messageId conversation:(WFCCConversation *)conversation localExtra:(NSString *)extra {
+    return mars::stn::MessageDB::Instance()->setMessageLocalExtra(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", extra ? [extra UTF8String] : "") ? YES : NO;
 }
 
 - (NSMutableDictionary<NSString *, NSNumber *> *)getConversationRead:(WFCCConversation *)conversation {
@@ -1571,7 +1595,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (BOOL)updateMessage:(long)messageId status:(WFCCMessageStatus)status {
-    bool updated = mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, (mars::stn::MessageStatus)status);
+    return [self updateMessage:messageId conversation:nil status:status];
+}
+
+- (BOOL)updateMessage:(long)messageId conversation:(WFCCConversation *)conversation status:(WFCCMessageStatus)status {
+    bool updated = mars::stn::MessageDB::Instance()->updateMessageStatus(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", (mars::stn::MessageStatus)status);
     if(updated) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
     }
@@ -2322,7 +2350,11 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 }
 
 - (BOOL)deleteMessage:(long)messageId {
-    return mars::stn::MessageDB::Instance()->DeleteMessage(messageId) > 0;
+    return [self deleteMessage:messageId conversation:nil];
+}
+
+- (BOOL)deleteMessage:(long)messageId conversation:(WFCCConversation *)conversation {
+    return mars::stn::MessageDB::Instance()->DeleteMessage(messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"") > 0;
 }
 
 - (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids {
@@ -2336,7 +2368,14 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 - (void)deleteRemoteMessage:(long long)messageUid
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock  {
-    mars::stn::deleteRemoteMessage(messageUid, new IMGeneralOperationCallback(successBlock, errorBlock));
+    [self deleteRemoteMessage:messageUid conversation:nil success:successBlock error:errorBlock];
+}
+
+- (void)deleteRemoteMessage:(long long)messageUid
+               conversation:(WFCCConversation *)conversation
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
+    mars::stn::deleteRemoteMessage(messageUid, conversation.type, conversation.target?[conversation.target UTF8String]:"", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)updateRemoteMessage:(long long)messageUid
@@ -2346,10 +2385,20 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock {
     
+    [self updateRemoteMessage:messageUid conversation:nil content:content distribute:distribute updateLocal:updateLocal success:successBlock error:errorBlock];
+}
+
+- (void)updateRemoteMessage:(long long)messageUid
+               conversation:(WFCCConversation *)conversation
+                    content:(WFCCMessageContent *)content
+                 distribute:(BOOL)distribute
+                updateLocal:(BOOL)updateLocal
+                    success:(void(^)(void))successBlock
+                      error:(void(^)(int error_code))errorBlock {
     mars::stn::TMessageContent tcontent;
     fillTMessageContent(tcontent, content);
         
-    mars::stn::updateRemoteMessageContent(messageUid, tcontent, distribute, updateLocal, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::updateRemoteMessageContent(messageUid, conversation.type, conversation.target?[conversation.target UTF8String]:"", tcontent, distribute, updateLocal, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines {
@@ -3173,9 +3222,15 @@ public:
 
 - (void)updateMessage:(long)messageId
               content:(WFCCMessageContent *)content {
+    [self updateMessage:messageId conversation:nil content:content];
+}
+
+- (void)updateMessage:(long)messageId
+         conversation:(WFCCConversation *)conversation
+              content:(WFCCMessageContent *)content {
     mars::stn::TMessageContent tmc;
     fillTMessageContent(tmc, content);
-    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContent(messageId, tmc);
+    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContent(messageId, conversation.type, conversation.target ? [conversation.target UTF8String]:"", tmc);
     if(updated) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
     }
@@ -3184,9 +3239,16 @@ public:
 - (void)updateMessage:(long)messageId
               content:(WFCCMessageContent *)content
             timestamp:(long long)timestamp {
+    [self updateMessage:messageId conversation:nil content:content timestamp:timestamp];
+}
+
+- (void)updateMessage:(long)messageId
+         conversation:(WFCCConversation *)conversation
+              content:(WFCCMessageContent *)content
+            timestamp:(long long)timestamp {
     mars::stn::TMessageContent tmc;
     fillTMessageContent(tmc, content);
-    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContentAndTime(messageId, tmc, timestamp);
+    bool updated = mars::stn::MessageDB::Instance()->UpdateMessageContentAndTime(messageId, conversation.type, conversation.target ? [conversation.target UTF8String]:"", tmc, timestamp);
     if(updated) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(messageId)];
     }
