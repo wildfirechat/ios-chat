@@ -500,6 +500,35 @@ public:
     }
 };
 
+class IMLoadSuperGroupMessagesCallback : public mars::stn::LoadRemoteMessagesCallback {
+private:
+    void(^m_successBlock)(NSArray<WFCCMessage *> *messages);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadSuperGroupMessagesCallback(void(^successBlock)(NSArray<WFCCMessage *> *messages), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteMessagesCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TMessage> &messageList) {
+        NSMutableArray *messages = convertProtoMessageList(messageList, YES);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(messages);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMLoadSuperGroupMessagesCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
 
 class IMLoadFileRecordCallback : public mars::stn::LoadFileRecordCallback {
 private:
@@ -1448,6 +1477,20 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
+- (void)loadSuperGroupMessages:(WFCCConversation *)conversation
+                          from:(NSUInteger)fromIndex
+                         count:(NSInteger)count
+                       success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                         error:(void(^)(int error_code))errorBlock {
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::getSuperGroupMessages(conversation.type, [conversation.target UTF8String], conversation.line, direction, (int)count, fromIndex, new IMLoadSuperGroupMessagesCallback(successBlock, errorBlock));
+}
+
 - (void)getRemoteMessages:(WFCCConversation *)conversation
                    before:(long long)beforeMessageUid
                     count:(NSUInteger)count
@@ -1536,7 +1579,13 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
 - (void)clearMessageUnreadStatus:(long)messageId conversation:(WFCCConversation *)conversation {
     if(messageId) {
-        mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"");
+        mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line);
+    }
+}
+
+- (void)clearMessageUnreadStatusBefore:(long)messageId conversation:(WFCCConversation *)conversation {
+    if(messageId) {
+        mars::stn::MessageDB::Instance()->ClearUnreadStatusBeforeMessage((int)messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line);
     }
 }
 

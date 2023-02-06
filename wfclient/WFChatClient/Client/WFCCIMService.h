@@ -420,6 +420,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)clearMessageUnreadStatus:(long)messageId conversation:(WFCCConversation *)conversation;
 
 /**
+ 清空某条消息之前（包含）所有消息的未读状态。
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ */
+- (void)clearMessageUnreadStatusBefore:(long)messageId conversation:(WFCCConversation *)conversation;
+
+/**
  设置会话的最后一条接收消息为未读状态。
  
  @param conversation 会话
@@ -598,6 +606,23 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                contentTypes:(NSArray<NSNumber *> *)contentTypes
                                        from:(NSUInteger)fromIndex
                                       count:(NSInteger)count;
+
+/**
+ 获取超级群组消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话，会话裂隙必须是超级群组类型
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)loadSuperGroupMessages:(WFCCConversation *)conversation
+                          from:(NSUInteger)fromIndex
+                         count:(NSInteger)count
+                       success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                         error:(void(^)(int error_code))errorBlock;
+
 /**
  获取服务器消息
  @discussion 获取得到的消息数目有可能少于指定的count数，如果count不为0就意味着还有更多的消息可以获取，只有获取到的消息数为0才表示没有更多的消息了。

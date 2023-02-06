@@ -472,51 +472,67 @@
         }
         
         dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-            NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
-            if (!messageList.count) {
-                if(!self.lastUid) {
-                    self.lastUid = self.modelList.lastObject.message.messageUid;
-                }
-                for (WFCUMessageModel *model in self.modelList) {
-                    if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
-                        self.lastUid = model.message.messageUid;
-                    }
-                }
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:self.lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
-                    NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
-                    for (WFCCMessage *msg in messages) {
-                        [reversedMsgs insertObject:msg atIndex:0];
-                        if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
-                            self.lastUid = msg.messageUid;
-                        }
-                    }
+            if(self.conversation.type == SuperGroup_Type) {
+                [[WFCCIMService sharedWFCIMService] loadSuperGroupMessages:weakSelf.conversation from:lastIndex count:10 success:^(NSArray<WFCCMessage *> *messageList) {
+                    [NSThread sleepForTimeInterval:0.5];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!reversedMsgs.count) {
-                            weakSelf.hasMoreOld = NO;
-                        } else {
-                            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
-                        }
+                        [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
                         weakSelf.loadingMore = NO;
                         if (completion) {
-                            completion(messages.count > 0);
+                            completion(messageList.count > 0);
                         }
                     });
                 } error:^(int error_code) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.hasMoreOld = NO;
-                        weakSelf.loadingMore = NO;
-                    });
+                    weakSelf.loadingMore = NO;
                 }];
             } else {
-                [NSThread sleepForTimeInterval:0.5];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
-                    weakSelf.loadingMore = NO;
-                    if (completion) {
-                        completion(messageList.count > 0);
+                NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
+                if (!messageList.count) {
+                    if(!self.lastUid) {
+                        self.lastUid = self.modelList.lastObject.message.messageUid;
                     }
-                });
+                    for (WFCUMessageModel *model in self.modelList) {
+                        if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
+                            self.lastUid = model.message.messageUid;
+                        }
+                    }
+                    [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:self.lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
+                        NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
+                        for (WFCCMessage *msg in messages) {
+                            [reversedMsgs insertObject:msg atIndex:0];
+                            if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
+                                self.lastUid = msg.messageUid;
+                            }
+                        }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (!reversedMsgs.count) {
+                                weakSelf.hasMoreOld = NO;
+                            } else {
+                                [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
+                            }
+                            weakSelf.loadingMore = NO;
+                            if (completion) {
+                                completion(messages.count > 0);
+                            }
+                        });
+                    } error:^(int error_code) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            weakSelf.hasMoreOld = NO;
+                            weakSelf.loadingMore = NO;
+                        });
+                    }];
+                } else {
+                    [NSThread sleepForTimeInterval:0.5];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
+                        weakSelf.loadingMore = NO;
+                        if (completion) {
+                            completion(messageList.count > 0);
+                        }
+                    });
+                }
             }
+            
         });
     } else {
         if (weakSelf.loadingNew || !weakSelf.hasNewMessage) {
@@ -1559,11 +1575,42 @@
     }
 }
 
-
-
 - (void)reloadMessageList {
     self.deliveryDict = [[WFCCIMService sharedWFCIMService] getMessageDelivery:self.conversation];
     self.readDict = [[WFCCIMService sharedWFCIMService] getConversationRead:self.conversation];
+    
+    if(self.conversation.type == SuperGroup_Type) {
+        BOOL firstIn = NO;
+        int count = (int)self.modelList.count;
+        if(count == 0) {
+            firstIn = YES;
+        }
+        count = 15;
+        [[WFCCIMService sharedWFCIMService] loadSuperGroupMessages:self.conversation from:0 count:count success:^(NSArray<WFCCMessage *> *messages) {
+            self.mentionedMsgs = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:self.privateChatUser] mutableCopy];
+            
+            if (self.mentionedMsgs.count) {
+                [self showMentionedLabel];
+            }
+            
+            if (firstIn) {
+                WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
+                if (info.unreadCount.unread >= 10 && info.unreadCount.unread < 300) { //如果消息太多了就没有必要显示新消息了
+                    self.unreadMessageCount = info.unreadCount.unread;
+                    self.firstUnreadMessageId = [[WFCCIMService sharedWFCIMService] getFirstUnreadMessageId:self.conversation];
+                    [self showUnreadLabel];
+                }
+            }
+            
+            self.modelList = [[NSMutableArray alloc] init];
+            
+            [self appendMessages:messages newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
+            self.highlightMessageId = 0;
+        } error:^(int error_code) {
+            
+        }];
+        return;
+    }
     
     NSArray *messageList;
     if (self.highlightMessageId > 0) {
@@ -1580,12 +1627,10 @@
     } else {
         BOOL firstIn = NO;
         int count = (int)self.modelList.count;
-        if (count > 50) {
-            count = 50;
-        } else if(count == 0) {
-            count = 15;
+        if(count == 0) {
             firstIn = YES;
         }
+        count = 15;
         messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser];
         
         self.mentionedMsgs = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:self.privateChatUser] mutableCopy];
