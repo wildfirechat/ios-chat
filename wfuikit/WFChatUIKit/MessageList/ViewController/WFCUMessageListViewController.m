@@ -154,6 +154,9 @@
 @property (nonatomic, strong)UITableView *ongoingCallTableView;
 @property (nonatomic, assign)int focusedOngoingCellIndex;
 @property (nonatomic, strong)NSTimer *checkOngoingCallTimer;
+
+@property (nonatomic, assign)BOOL isAtButtom;
+
 @end
 
 @implementation WFCUMessageListViewController
@@ -162,7 +165,7 @@
     [super viewDidLoad];
     
     [self removeControllerStackIfNeed];
-    
+    self.isAtButtom = YES;
     self.cellContentDict = [[NSMutableDictionary alloc] init];
     self.ongoingCallDict = [[NSMutableDictionary alloc] init];
     self.focusedOngoingCellIndex = -1;
@@ -981,7 +984,6 @@
 }
 
 - (void)scrollToBottom:(BOOL)animated {
-    
     NSUInteger rowCount = [self.collectionView numberOfItemsInSection:0];
     if (rowCount == 0) {
         return;
@@ -1490,7 +1492,6 @@
             [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
         }
     }
-    
 }
 
 - (void)onMessageListChanged:(NSNotification *)notification {
@@ -1501,7 +1502,6 @@
 
 - (void)onSettingUpdated:(NSNotification *)notification {
     WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
-    [self reloadMessageList];
     NSString *orignalDraftText = [self.chatInputBar getDraftText:self.orignalDraft];
     NSString *draftText = [self.chatInputBar getDraftText:info.draft];
     if(![orignalDraftText isEqualToString:draftText]) {
@@ -1756,19 +1756,6 @@
         return;
     }
     
-    BOOL isAtButtom = NO;
-    if (newMessage && !self.hasNewMessage) {
-        if (@available(iOS 12.0, *)) {
-            CGPoint offset = self.collectionView.contentOffset;
-            CGSize size = self.collectionView.contentSize;
-            CGSize visiableSize = CGSizeZero;
-            visiableSize = self.collectionView.visibleSize;
-            isAtButtom = (offset.y + visiableSize.height - size.height) > -10;
-        } else {
-            isAtButtom = YES;
-        }
-    }
-    
     int count = 0;
     NSMutableArray *modifiedAliasUsers = [[NSMutableArray alloc] init];
     for (int i = 0; i < messages.count; i++) {
@@ -1852,7 +1839,7 @@
     [self.collectionView reloadData];
     
     if (newMessage || self.modelList.count == messages.count) {
-        if(isAtButtom) {
+        if(self.isAtButtom) {
             forceButtom = true;
         }
     } else {
@@ -1906,7 +1893,7 @@
         
     }
     
-    if (newMessage && !isAtButtom && self.nMsgSet.count > 0) {
+    if (newMessage && !self.isAtButtom && self.nMsgSet.count > 0) {
         [self showNewMsgTip];
     } else {
         [self dismissNewMsgTip];
@@ -1937,6 +1924,7 @@
     return _newMsgTipButton;;
 }
 - (void)onNewMsgTipBtn:(id)sender {
+    self.isAtButtom = YES;
     [self scrollToBottom:YES];
 }
 - (WFCUMessageModel *)modelOfMessage:(long)messageId {
@@ -2636,6 +2624,9 @@
         [self loadMoreMessage:YES completion:nil];
     }
     
+    CGSize size = self.collectionView.contentSize;
+    self.isAtButtom = (scrollView.bounds.size.height + targetContentOffset->y - size.height) > -5;
+    NSLog(@"is at buttom %d", self.isAtButtom);
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
