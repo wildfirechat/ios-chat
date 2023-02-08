@@ -948,6 +948,7 @@
 
 - (UIView *)pluginInputView {
     if (!_pluginInputView) {
+        //超级群组不支持通话
 #if WFCU_SUPPORT_VOIP
         BOOL hasVoip = self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type || (self.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall);
 #else
@@ -1004,7 +1005,7 @@
 }
 
 - (BOOL)appendMention:(NSString *)userId name:(NSString *)userName {
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         NSString *mentionText = [NSString stringWithFormat:@"@%@ ", userName];
         BOOL needDelay = NO;
         if(self.inputBarStatus == ChatInputBarDefaultStatus || self.inputBarStatus == ChatInputBarPluginStatus ||
@@ -1219,7 +1220,7 @@
     }
     
     BOOL needUpdateText = NO;
-    if(self.conversation.type == Group_Type) {
+    if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if ([text isEqualToString:@"@"]) {
             
             WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
@@ -1375,7 +1376,7 @@
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView {
-    if (self.textInputView == textView && self.conversation.type == Group_Type) {
+    if (self.textInputView == textView && (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type)) {
         NSRange range = textView.selectedRange;
         for (WFCUMetionInfo *mention in self.mentionInfos) {
             if (range.location > mention.range.location && range.location < mention.range.location + mention.range.length) {

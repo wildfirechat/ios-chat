@@ -99,6 +99,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, assign)int maxMemberCount;
 
 /**
+ 是否是超级群组
+ */
+@property (nonatomic, assign)int superGroup;
+
+/**
  群的最后更新日期
  */
 @property (nonatomic, assign)long long updateTimestamp;

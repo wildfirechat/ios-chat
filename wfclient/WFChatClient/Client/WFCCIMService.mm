@@ -1943,6 +1943,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.historyMessage = tgi.historyMessage;
     groupInfo.maxMemberCount = tgi.maxMemberCount;
     groupInfo.updateTimestamp = tgi.updateDt;
+    groupInfo.superGroup = tgi.superGroup;
     return groupInfo;
 }
 

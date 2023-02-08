@@ -75,7 +75,7 @@
     WFCCUserInfo *userInfo;
     WFCCGroupMember *groupMember;
     WFCCChannelInfo *channelInfo;
-    if (type == Group_Type) {
+    if (type == Group_Type || type == SuperGroup_Type) {
         groupMember = (WFCCGroupMember *)model;
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId inGroup:groupMember.groupId refresh:NO];
     } else if(type == Single_Type) {

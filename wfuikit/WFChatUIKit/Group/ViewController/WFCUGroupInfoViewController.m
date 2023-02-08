@@ -110,7 +110,10 @@
     if (self.isJoined) {
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         mvc.conversation = [[WFCCConversation alloc] init];
-        mvc.conversation.type = Group_Type;
+        if(self.groupInfo.superGroup)
+            mvc.conversation.type = SuperGroup_Type;
+        else
+            mvc.conversation.type = Group_Type;
         mvc.conversation.target = self.groupId;
         mvc.conversation.line = 0;
         

@@ -150,7 +150,7 @@
     NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
     for (WFCCUserInfo *userInfo in userInfoList) {
         if([userInfo.userId isEqualToString:self.model.message.fromUser]) {
-            if (self.model.message.conversation.type == Group_Type) {
+            if (self.model.message.conversation.type == Group_Type || self.model.message.conversation.type == SuperGroup_Type) {
                 WFCCUserInfo *reloadUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userInfo.userId inGroup:self.model.message.conversation.target refresh:NO];
                 [self updateUserInfo:reloadUserInfo];
             } else {
@@ -282,7 +282,7 @@
     }
     
     NSString *groupId = nil;
-    if (self.model.message.conversation.type == Group_Type) {
+    if (self.model.message.conversation.type == Group_Type || self.model.message.conversation.type == SuperGroup_Type) {
         groupId = self.model.message.conversation.target;
     }
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser inGroup:groupId refresh:NO];
@@ -393,7 +393,7 @@
                 } else {
                     self.receiptView.hidden = YES;
                 }
-            } else if(model.message.conversation.type == Group_Type) {
+            } else if(model.message.conversation.type == Group_Type || model.message.conversation.type == SuperGroup_Type) {
                 long long messageTS = model.message.serverTime;
                 
                 WFCCGroupInfo *groupInfo = nil;
@@ -449,7 +449,7 @@
     }
 }
 - (void)onTapReceiptView:(id)sender {
-    if ([self.delegate respondsToSelector:@selector(didTapReceiptView:withModel:)] && self.model.message.conversation.type == Group_Type) {
+    if ([self.delegate respondsToSelector:@selector(didTapReceiptView:withModel:)] && (self.model.message.conversation.type == Group_Type || self.model.message.conversation.type == SuperGroup_Type)) {
         [self.delegate didTapReceiptView:self withModel:self.model];
     }
 }

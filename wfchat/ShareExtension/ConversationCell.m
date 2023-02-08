@@ -25,7 +25,7 @@
     self.nameLabel.text = sc.title;
     if (sc.type == 0) { //Single_Type
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
-    } else if(sc.type == 1) {  //Group_Type
+    } else if(sc.type == 1 || sc.type == 6) {  //Group_Type, SuperGroup_Type
         if (sc.portraitUrl.length) {
             [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"GroupChat"]];
         } else {

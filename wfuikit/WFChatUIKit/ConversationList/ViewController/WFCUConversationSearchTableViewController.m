@@ -130,7 +130,7 @@
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
-    } else if (self.conversation.type == Group_Type) {
+    } else if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"GroupChatRound"]];
         label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", groupInfo.displayName];

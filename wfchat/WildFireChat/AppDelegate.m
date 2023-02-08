@@ -261,7 +261,7 @@
     }
     
     //2. 保存会话列表
-    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SuperGroup_Type)] lines:@[@(0)]];
     NSMutableArray<SharedConversation *> *sharedConvs = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *needComposedGroupIds = [[NSMutableArray alloc] init];
     //最多保存200个会话，再多就没有意义
@@ -275,7 +275,7 @@
             }
             sc.title = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
             sc.portraitUrl = userInfo.portrait;
-        } else if (info.conversation.type == Group_Type) {
+        } else if (info.conversation.type == Group_Type || info.conversation.type == SuperGroup_Type) {
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:info.conversation.target refresh:NO];
             if (!groupInfo) {
                 continue;
@@ -484,7 +484,7 @@
                 // Fallback on earlier versions
             }
         }
-      } else if(msg.conversation.type == Group_Type) {
+      } else if(msg.conversation.type == Group_Type || msg.conversation.type == SuperGroup_Type) {
           WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:msg.conversation.target refresh:NO];
           WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
           if (sender.displayName && group.displayName) {
@@ -534,7 +534,7 @@
 }
 
 - (NSInteger)updateBadgeNumber {
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type), @(SuperGroup_Type)] lines:@[@(0)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     int count = unreadCount.unread + unreadFriendRequest;
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;
@@ -773,7 +773,7 @@
         }
         
         UIViewController *videoVC;
-        if (session.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+        if ((session.conversation.type == Group_Type || session.conversation.type == SuperGroup_Type) && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
             videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:session];
         } else {
             videoVC = [[WFCUVideoViewController alloc] initWithSession:session];

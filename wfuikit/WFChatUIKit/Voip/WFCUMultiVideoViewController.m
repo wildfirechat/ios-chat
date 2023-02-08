@@ -193,7 +193,7 @@
         [[WFAVEngineKit sharedEngineKit] startPreview];
     }
     
-    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.inviter inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.inviter inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
@@ -1023,7 +1023,7 @@
     [self reloadVideoUI];
     
     
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
     
     NSString *reasonStr;
     if (reason == kWFAVCallEndReasonTimeout) {
@@ -1238,7 +1238,7 @@
     if (collectionView == self.smallCollectionView) {
         WFCUParticipantCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
 
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
         
         
         UIDevice *device = [UIDevice currentDevice] ;
@@ -1278,7 +1278,7 @@
         WFCUPortraitCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
         CGFloat itemHeight = MIN(PortraitItemSize, (self.view.frame.size.width - 32 - 2*10)/3);
         cell.itemSize = itemHeight;
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
         cell.userInfo = userInfo;
         
         if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {

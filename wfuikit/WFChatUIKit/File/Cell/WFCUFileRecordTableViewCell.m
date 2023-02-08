@@ -22,7 +22,7 @@
 + (CGFloat)sizeOfRecord:(WFCCFileRecord *)record withCellWidth:(CGFloat)width {
     CGSize size1 = [WFCUUtilities getTextDrawingSize:record.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width - 74, 48)];
     
-    NSString *info = [NSString stringWithFormat:@"%@ 来自%@ %@", [WFCUUtilities formatTimeLabel:record.timestamp], [[WFCCIMService sharedWFCIMService] getUserInfo:record.userId inGroup:record.conversation.type == Group_Type ? record.conversation.target : nil refresh:NO].displayName, [WFCUUtilities formatSizeLable:record.size]];
+    NSString *info = [NSString stringWithFormat:@"%@ 来自%@ %@", [WFCUUtilities formatTimeLabel:record.timestamp], [[WFCCIMService sharedWFCIMService] getUserInfo:record.userId inGroup:(record.conversation.type == Group_Type || record.conversation.type == SuperGroup_Type) ? record.conversation.target : nil refresh:NO].displayName, [WFCUUtilities formatSizeLable:record.size]];
     
     
     CGSize size2 = [WFCUUtilities getTextDrawingSize:info font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - 74, 40)];
@@ -51,7 +51,7 @@
     CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
     self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
-    NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
+    NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:(fileRecord.conversation.type == Group_Type || fileRecord.conversation.type == SuperGroup_Type) ? fileRecord.conversation.target : nil refresh:NO].displayName;
     if(!sender.length) {
         sender = fileRecord.userId;
     }

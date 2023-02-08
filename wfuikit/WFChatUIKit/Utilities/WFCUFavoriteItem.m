@@ -21,7 +21,7 @@
     if(message.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:message.conversation.target refresh:NO];
         item.origin = userInfo.displayName;
-    } else if(message.conversation.type == Group_Type) {
+    } else if(message.conversation.type == Group_Type || message.conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:message.conversation.target refresh:NO];
         item.origin = groupInfo.displayName;
     } else if(message.conversation.type == Channel_Type) {

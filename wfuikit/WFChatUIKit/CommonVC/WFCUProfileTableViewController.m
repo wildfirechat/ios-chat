@@ -342,7 +342,7 @@
             [self.headerCells addObject:alisaCell];
         }
         
-        if (self.fromConversation.type == Group_Type) {
+        if (self.fromConversation.type == Group_Type || self.fromConversation.type == SuperGroup_Type) {
             self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if([self.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
@@ -416,7 +416,7 @@
             } else {
                 [self.addFriendCell addSubview:btn];
             }
-            if(self.fromConversation.type == Group_Type) {
+            if(self.fromConversation.type == Group_Type || self.fromConversation.type == SuperGroup_Type) {
                 WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.fromConversation.target refresh:NO];
                 if(!groupInfo.privateChat) {
                     [self setupSendMessageCell:width];

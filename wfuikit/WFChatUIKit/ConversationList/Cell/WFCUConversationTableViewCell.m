@@ -81,8 +81,8 @@
             [[NSNotificationCenter defaultCenter] addObserverForName:@"GroupPortraitChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
                 NSString *path = [note.userInfo objectForKey:@"path"];
                 if ([groupId isEqualToString:note.object] && (
-                                                              (ws.info.conversation.type == Group_Type && [ws.info.conversation.target isEqualToString:groupId]) ||
-                                                              (ws.searchInfo.conversation.type == Group_Type  && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
+                                                              ((ws.info.conversation.type == Group_Type || ws.info.conversation.type == SuperGroup_Type) && [ws.info.conversation.target isEqualToString:groupId]) ||
+                                                              ((ws.searchInfo.conversation.type == Group_Type || ws.searchInfo.conversation.type == SuperGroup_Type) && [ws.searchInfo.conversation.target isEqualToString:groupId]))) {
                                                                   [ws.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
                                                               }
             }];
@@ -200,7 +200,7 @@
             userInfo.userId = conversation.target;
         }
         [self updateUserInfo:userInfo];
-    } else if (conversation.type == Group_Type) {
+    } else if (conversation.type == Group_Type || conversation.type == SuperGroup_Type) {
         groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         if(groupInfo.target.length == 0) {
             groupInfo = [[WFCCGroupInfo alloc] init];
@@ -237,7 +237,7 @@
         self.targetView.frame = CGRectMake(16 + 48 + 12, 16, size.width, 20);
     }
     
-    if(conversation.type == Group_Type && groupInfo.type == GroupType_Organization) {
+    if((conversation.type == Group_Type || conversation.type == SuperGroup_Type) && groupInfo.type == GroupType_Organization) {
         CGRect frame = self.offcialView.frame;
         CGRect targetFrame = self.targetView.frame;
         frame.origin.x = targetFrame.origin.x + targetFrame.size.width + 4;
@@ -283,15 +283,15 @@
         
         [attString appendAttributedString:[[NSAttributedString alloc] initWithString:text]];
 
-        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
+        if ((_info.conversation.type == Group_Type || _info.conversation.type == SuperGroup_Type) && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
             NSMutableAttributedString *tmp = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
             [tmp appendAttributedString:attString];
             attString = tmp;
         }
         self.digestView.attributedText = attString;
-    } else if (_info.lastMessage.direction == MessageDirection_Receive && _info.conversation.type == Group_Type) {
+    } else if (_info.lastMessage.direction == MessageDirection_Receive && (_info.conversation.type == Group_Type || _info.conversation.type == SuperGroup_Type)) {
         NSString *groupId = nil;
-        if (_info.conversation.type == Group_Type) {
+        if (_info.conversation.type == Group_Type || _info.conversation.type == SuperGroup_Type) {
             groupId = _info.conversation.target;
         }
         WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:_info.lastMessage.fromUser inGroup:groupId refresh:NO];
@@ -344,7 +344,7 @@
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
     NSArray<WFCCGroupInfo *> *groupInfoList = notification.userInfo[@"groupInfoList"];
     WFCCConversationInfo *conv = self.info;
-    if(conv.conversation.type == Group_Type) {
+    if(conv.conversation.type == Group_Type || conv.conversation.type == SuperGroup_Type) {
         for (WFCCGroupInfo *groupInfo in groupInfoList) {
             if ([conv.conversation.target isEqualToString:groupInfo.target]) {
                 [self reloadCell];

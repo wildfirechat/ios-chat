@@ -68,7 +68,7 @@
             digest = [digest stringByAppendingString:@"..."];
         }
         WFCCUserInfo *userInfo;
-        if (conversation.type == Group_Type) {
+        if (conversation.type == Group_Type || conversation.type == SuperGroup_Type) {
             userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:conversation.target refresh:NO];
         } else {
             userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];

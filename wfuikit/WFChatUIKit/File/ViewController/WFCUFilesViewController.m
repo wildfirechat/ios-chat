@@ -267,7 +267,7 @@
     
     if ([record.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         return YES;
-    } else if(record.conversation.type == Group_Type) {
+    } else if(record.conversation.type == Group_Type || record.conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:record.conversation.target refresh:NO];
         if ([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             return YES;

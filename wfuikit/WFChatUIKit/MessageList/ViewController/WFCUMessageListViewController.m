@@ -210,7 +210,7 @@
     if(self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.targetUser = userInfo;
-    } else if(self.conversation.type == Group_Type) {
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:YES];
         self.targetGroup = groupInfo;
     } else if (self.conversation.type == Channel_Type) {
@@ -233,7 +233,7 @@
     
     if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
-    } else if(self.conversation.type == Group_Type) {
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupMemberUpdated:) name:kGroupMemberUpdated object:nil];
     } else if(self.conversation.type == Channel_Type) {
@@ -285,7 +285,7 @@
     WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
     self.chatInputBar.draft = info.draft;
     
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray<WFCCGroupMember *> *groupMembers = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
             NSMutableArray *memberIds = [[NSMutableArray alloc] init];
@@ -301,7 +301,7 @@
     }
     
     self.nMsgSet = [[NSMutableSet alloc] init];
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             BOOL isFriend = false;
             if(self.conversation.type == Single_Type) {
@@ -397,7 +397,7 @@
     } else {
         if(self.conversation.type == Single_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
-        } else if(self.conversation.type == Group_Type) {
+        } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         } else if(self.conversation.type == Channel_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
@@ -625,7 +625,7 @@
         [[WFCCIMService sharedWFCIMService] send:self.conversation content:leaveContent success:nil error:nil];
     }
     
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             BOOL isFriend = false;
             if(self.conversation.type == Single_Type) {
@@ -779,7 +779,7 @@
             }
         }
         self.navigationItem.backBarButtonItem.title = self.title;
-    } else if(self.conversation.type == Group_Type) {
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if(self.targetGroup.displayName.length == 0) {
             self.title = WFCString(@"GroupChat");
             self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
@@ -970,7 +970,7 @@
             }
             WFCCUserInfo *myself = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
             compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", title, myself.displayName];
-        } else if (self.conversation.type == Group_Type) {
+        } else if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             compositeContent.title = WFCString(@"GroupChatHistory");
         } else if (self.conversation.type == Channel_Type) {
             compositeContent.title = WFCString(@"ChannelChatHistory");
@@ -1132,11 +1132,11 @@
         self.showTypingTimer = nil;
         if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
             self.targetUser = self.targetUser;
-        } else if(self.conversation.type == Group_Type) {
+        } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             self.targetGroup = self.targetGroup;
         } else if(self.conversation.type == Channel_Type) {
             self.targetChannel = self.targetChannel;
-        } else if(self.conversation.type == Group_Type) {
+        } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             self.targetGroup = self.targetGroup;
         }
     }
@@ -1164,7 +1164,7 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
     
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         self.showAlias = ![[WFCCIMService sharedWFCIMService] isHiddenGroupMemberName:self.targetGroup.target];
     }
     
@@ -1338,12 +1338,12 @@
 }
 
 - (void)onMessageDelivered:(NSNotification *)notification {
-    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SecretChat_Type) {
+    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SuperGroup_Type && self.conversation.type != SecretChat_Type) {
         return;
     }
     
     NSArray<WFCCGroupMember *> *members = nil;
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
     }
     
@@ -1355,7 +1355,7 @@
                 *stop = YES;
                 refresh = YES;
             }
-        } else if (self.conversation.type == Group_Type) {
+        } else if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             for (WFCCGroupMember *member in members) {
                 if ([member.memberId isEqualToString:obj.userId]) {
                     *stop = YES;
@@ -1418,7 +1418,7 @@
 }
 
 - (void)onMessageReaded:(NSNotification *)notification {
-    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SecretChat_Type) {
+    if (self.conversation.type != Single_Type && self.conversation.type != Group_Type && self.conversation.type != SecretChat_Type && self.conversation.type != SuperGroup_Type) {
         return;
     }
     
@@ -1578,6 +1578,8 @@
 - (void)reloadMessageList {
     self.deliveryDict = [[WFCCIMService sharedWFCIMService] getMessageDelivery:self.conversation];
     self.readDict = [[WFCCIMService sharedWFCIMService] getConversationRead:self.conversation];
+    
+    [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
     
     if(self.conversation.type == SuperGroup_Type) {
         BOOL firstIn = NO;
@@ -1867,7 +1869,7 @@
                 [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.modelList.count - 1 inSection:0]]];
             }
             
-            if (self.conversation.type == Group_Type && [message.content isKindOfClass:[WFCCModifyGroupAliasNotificationContent class]]) {
+            if ((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && [message.content isKindOfClass:[WFCCModifyGroupAliasNotificationContent class]]) {
                 [modifiedAliasUsers addObject:message.fromUser];
             }
             
@@ -2428,7 +2430,7 @@
 }
 
 - (void)didTapMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
-    if(self.conversation.type == Group_Type) {
+    if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if (self.targetGroup.privateChat) {
             if (![self.targetGroup.owner isEqualToString:model.message.fromUser] && ![self.targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
                 WFCCGroupMember *gm = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
@@ -2453,7 +2455,7 @@
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = model.message.fromUser;
         vc.fromConversation = self.conversation;
-        if(self.conversation.type == Group_Type) {
+        if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             vc.sourceType = FriendSource_Group;
             vc.sourceTargetId = self.conversation.target;
         }
@@ -2473,7 +2475,7 @@
 }
 
 - (void)didLongPressMessagePortrait:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if (model.message.direction == MessageDirection_Receive) {
             WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.fromUser inGroup:self.conversation.target refresh:NO];
             NSString *userName = sender.groupAlias.length ? sender.groupAlias : sender.displayName;
@@ -2943,7 +2945,7 @@
         __weak typeof(self)ws = self;
         vc.selectResult = ^(NSArray<NSString *> * _Nonnull contacts) {
             UIViewController *videoVC;
-            if (ws.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+            if ((ws.conversation.type == Group_Type || ws.conversation.type == SuperGroup_Type) && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
                 videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
             } else {
                 videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
@@ -3042,7 +3044,7 @@
         canRecall = YES;
     }
     
-    if (!canRecall && self.conversation.type == Group_Type) {
+    if (!canRecall && (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type)) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
         if([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             canRecall = YES;
@@ -3273,7 +3275,7 @@
         if (self.cell4Menu.model.message.conversation.type == Single_Type || self.cell4Menu.model.message.conversation.type == SecretChat_Type) {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
             item.origin = userInfo.displayName;
-        } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
+        } else if (self.cell4Menu.model.message.conversation.type == Group_Type || self.cell4Menu.model.message.conversation.type == SuperGroup_Type) {
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
             item.origin = groupInfo.displayName;
         } else if (self.cell4Menu.model.message.conversation.type == Channel_Type) {
@@ -3321,7 +3323,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BOOL isFocused = (indexPath.row == self.focusedOngoingCellIndex);
     WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:ongoing.initiator inGroup:self.conversation.type == Group_Type ? self.conversation.target : nil refresh:NO];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:ongoing.initiator inGroup:(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) ? self.conversation.target : nil refresh:NO];
     NSString *userName = userInfo.friendAlias.length ? userInfo.friendAlias : (userInfo.groupAlias.length ? userInfo.groupAlias : userInfo.displayName);
     NSString *callHint = @"通话正在进行中...";
     if(userName.length) {

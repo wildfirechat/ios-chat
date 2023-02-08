@@ -20,7 +20,7 @@
         if (msg) {
             self.messageUid = messageUid;
             self.userId = msg.fromUser;
-            NSString *groupId = msg.conversation.type == Group_Type ? msg.conversation.target : nil;
+            NSString *groupId = (msg.conversation.type == Group_Type || msg.conversation.type == SuperGroup_Type) ? msg.conversation.target : nil;
             WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:groupId refresh:NO];
             self.userDisplayName = user.displayName;
             if (user.groupAlias.length) {

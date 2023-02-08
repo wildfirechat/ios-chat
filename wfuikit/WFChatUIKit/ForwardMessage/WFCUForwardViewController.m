@@ -47,7 +47,7 @@
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
 
-    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(SecretChat_Type)] lines:@[@(0)]] mutableCopy];
+    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(SuperGroup_Type), @(SecretChat_Type)] lines:@[@(0)]] mutableCopy];
 
     self.extendedLayoutIncludesOpaqueBars = YES;
     
@@ -307,7 +307,10 @@
         } else {
             WFCCGroupInfo *groupInfo = self.searchGroupList[indexPath.row].groupInfo;
             selectedConv = [[WFCCConversation alloc] init];
-            selectedConv.type = Group_Type;
+            if(groupInfo.superGroup)
+                selectedConv.type = SuperGroup_Type;
+            else
+                selectedConv.type = Group_Type;
             selectedConv.target = groupInfo.target;
             selectedConv.line = 0;
         }

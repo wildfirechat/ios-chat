@@ -113,7 +113,10 @@
     WFCUConversationSettingMemberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID forIndexPath:indexPath];
     if (indexPath.row < self.memberList.count) {
         WFCCGroupMember *member = self.memberList[indexPath.row];
-        [cell setModel:member withType:Group_Type];
+        if(self.groupInfo.superGroup)
+            [cell setModel:member withType:SuperGroup_Type];
+        else
+            [cell setModel:member withType:Group_Type];
     } else {
         if (indexPath.row == self.memberList.count) {
             [cell.headerImageView setImage:[WFCUImage imageNamed:@"addmember"]];

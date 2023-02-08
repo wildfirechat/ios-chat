@@ -30,7 +30,7 @@
     }
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
-    self.conversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type),@(Group_Type),@(SecretChat_Type)] lines:@[@(0)]];
+    self.conversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(SuperGroup_Type), @(SecretChat_Type)] lines:@[@(0)]];
     [self.tableView reloadData];
 }
 
@@ -54,7 +54,7 @@
             cell.textLabel.text = WFCString(@"User");
         }
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
-    } else if (conv.conversation.type == Group_Type) {
+    } else if (conv.conversation.type == Group_Type || conv.conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.conversation.target refresh:NO];
         if (group.displayName.length) {
             cell.textLabel.text = group.displayName;

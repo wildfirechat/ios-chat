@@ -72,7 +72,7 @@
     if (self.conversation.type == Single_Type) {
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:YES];
         self.memberList = @[self.conversation.target];
-    } else if(self.conversation.type == Group_Type){
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type){
         self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:YES];
         self.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:YES];
     } else if(self.conversation.type == Channel_Type) {
@@ -97,13 +97,13 @@
     UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 146)];
     footerView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.tableFooterView = footerView;
-    if (self.conversation.type  != Group_Type) {
+    if (self.conversation.type  != Group_Type && self.conversation.type  != SuperGroup_Type) {
         footerView.frame = CGRectMake(0, 0, 0, 0);
     }
     
     [self.view addSubview:self.tableView];
     
-    if(self.conversation.type == Group_Type) {
+    if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         __weak typeof(self)ws = self;
         [[NSNotificationCenter defaultCenter] addObserverForName:kGroupMemberUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if ([ws.conversation.target isEqualToString:note.object]) {
@@ -171,13 +171,13 @@
 }
 
 - (void)setupMemberCollectionView {
-    if (self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
+    if (self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:8];
 
         if (self.conversation.type == Single_Type) {
             self.extraBtnNumber = 1;
             self.memberCollectionCount = 2;
-        } else if(self.conversation.type == Group_Type) {
+        } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
             if(self.groupInfo.type == GroupType_Organization) {
                 self.extraBtnNumber = 0;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
@@ -263,7 +263,7 @@
 }
 
 - (BOOL)isGroupOwner {
-    if (self.conversation.type != Group_Type) {
+    if (self.conversation.type != Group_Type && self.conversation.type != SuperGroup_Type) {
         return false;
     }
     
@@ -271,7 +271,7 @@
 }
 
 - (BOOL)isGroupManager {
-    if (self.conversation.type != Group_Type) {
+    if (self.conversation.type != Group_Type && self.conversation.type != SuperGroup_Type) {
         return false;
     }
     if ([self isGroupOwner]) {
@@ -297,7 +297,7 @@
     }];
 }
 - (void)onDeleteAndQuit:(id)sender {
-    if(self.conversation.type == Group_Type) {
+    if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if ([self isGroupOwner]) {
             __weak typeof(self) ws = self;
             [[WFCCIMService sharedWFCIMService] removeConversation:self.conversation clearMessage:YES];
@@ -451,7 +451,7 @@
     if (self.conversation.type == Single_Type) {
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
         self.memberList = @[self.conversation.target];
-    } else if(self.conversation.type == Group_Type) {
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         self.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
         self.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
     } else if(self.conversation.type == Channel_Type) {
@@ -469,28 +469,28 @@
 }
 #pragma mark - UITableViewDataSource<NSObject>
 - (BOOL)isGroupNameCell:(NSIndexPath *)indexPath {
-  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 0) {
+  if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0 && indexPath.row == 0) {
     return YES;
   }
   return NO;
 }
 //
 //- (BOOL)isGroupPortraitCell:(NSIndexPath *)indexPath {
-//  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 1) {
+//  if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0 && indexPath.row == 1) {
 //    return YES;
 //  }
 //  return NO;
 //}
 
 - (BOOL)isGroupQrCodeCell:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 1) {
+    if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0 && indexPath.row == 1) {
         return YES;
     }
     return NO;
 }
 
 - (BOOL)isGroupManageCell:(NSIndexPath *)indexPath {
-  if(self.conversation.type == Group_Type && indexPath.section == 0 && indexPath.row == 2) {
+  if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0 && indexPath.row == 2) {
     if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
         return YES;
     } else {
@@ -501,7 +501,7 @@
 }
 
 - (BOOL)isGroupAnnouncementCell:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 0) {
+    if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0) {
         if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
             if (indexPath.row == 3) {
                 return YES;
@@ -516,7 +516,7 @@
 }
 
 - (BOOL)isGroupRemarkCell:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 0) {
+    if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 0) {
         if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
             if (indexPath.row == 4) {
                 return YES;
@@ -532,7 +532,7 @@
 
 
 - (BOOL)isSearchMessageCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 0)
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 1 && indexPath.row == 0)
      ||(self.conversation.type == Single_Type && indexPath.section == 0 && indexPath.row == 0)
      ||(self.conversation.type == SecretChat_Type && indexPath.section == 0 && indexPath.row == 0)
      ||(self.conversation.type == Channel_Type && indexPath.section == 0 && indexPath.row == 0)) {
@@ -542,7 +542,7 @@
 }
 
 - (BOOL)isMessageSilentCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 2 && indexPath.row == 0)
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 2 && indexPath.row == 0)
      ||(self.conversation.type == Single_Type && indexPath.section == 1 && indexPath.row == 0)
      ||(self.conversation.type == SecretChat_Type && indexPath.section == 1 && indexPath.row == 0)
      ||(self.conversation.type == Channel_Type && indexPath.section == 1 && indexPath.row == 0)) {
@@ -552,7 +552,7 @@
 }
 
 - (BOOL)isSetTopCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 2 && indexPath.row == 1)
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 2 && indexPath.row == 1)
      ||(self.conversation.type == Single_Type && indexPath.section == 1 && indexPath.row == 1)
      ||(self.conversation.type == SecretChat_Type && indexPath.section == 1 && indexPath.row == 1)
      ||(self.conversation.type == Channel_Type && indexPath.section == 1 && indexPath.row == 1)) {
@@ -562,28 +562,28 @@
 }
 
 - (BOOL)isSaveGroupCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 2 && indexPath.row == 2)) {
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 2 && indexPath.row == 2)) {
     return YES;
   }
   return NO;
 }
 
 - (BOOL)isGroupNameCardCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 3 && indexPath.row == 0)) {
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 3 && indexPath.row == 0)) {
     return YES;
   }
   return NO;
 }
 
 - (BOOL)isShowNameCardCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 3 && indexPath.row == 1)) {
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 3 && indexPath.row == 1)) {
     return YES;
   }
   return NO;
 }
 
 - (BOOL)isClearMessageCell:(NSIndexPath *)indexPath {
-  if((self.conversation.type == Group_Type && indexPath.section == 4 && indexPath.row == 0)
+  if(((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 4 && indexPath.row == 0)
      || (self.conversation.type == Single_Type && indexPath.section == 2 && indexPath.row == 0)
      || (self.conversation.type == SecretChat_Type && indexPath.section == 3 && indexPath.row == 0)
      || (self.conversation.type == Channel_Type && indexPath.section == 2 && indexPath.row == 0)) {
@@ -593,14 +593,14 @@
 }
 
 - (BOOL)isQuitGroup:(NSIndexPath *)indexPath {
-    if(self.conversation.type == Group_Type && indexPath.section == 4 && indexPath.row == 1) {
+    if((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 4 && indexPath.row == 1) {
         return YES;
     }
     return NO;
 }
 
 - (BOOL)isFilesCell:(NSIndexPath *)indexPath {
-    if (self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 1) {
+    if ((self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) && indexPath.section == 1 && indexPath.row == 1) {
         return YES;
     } else if (self.conversation.type == Single_Type && indexPath.section == 0 && indexPath.row == 1) {
         return YES;
@@ -633,7 +633,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.conversation.type == Group_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         if (section == 0) {
             if ([self isGroupManager] && self.groupInfo.type == GroupType_Restricted) {
                 return 5; //群名称，群二维码，群管理，群公告，群备注
@@ -919,7 +919,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.conversation.type == Single_Type) {
         return 3;
-    } else if(self.conversation.type == Group_Type) {
+    } else if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         return 5;
     } else if(self.conversation.type == Channel_Type) {
         return 4;
@@ -1035,7 +1035,7 @@
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.conversation.type == Group_Type || self.conversation.type == Single_Type) {
+    if (self.conversation.type == Group_Type || self.conversation.type == Single_Type || self.conversation.type == SuperGroup_Type) {
         return self.memberCollectionCount;
     } else if(self.conversation.type == Channel_Type) {
         return self.memberList.count;
@@ -1070,7 +1070,7 @@
     if (indexPath.row == self.memberCollectionCount-self.extraBtnNumber) {
         WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
         NSMutableArray *disabledUser = [[NSMutableArray alloc] init];
-        if(self.conversation.type == Group_Type) {
+        if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
           for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
               [disabledUser addObject:member.memberId];
           }
@@ -1142,7 +1142,7 @@
         [self.navigationController presentViewController:navi animated:YES completion:nil];
     } else {
       NSString *userId;
-      if(self.conversation.type == Group_Type) {
+      if(self.conversation.type == Group_Type || self.conversation.type == SuperGroup_Type) {
         WFCCGroupMember *member = [self.memberList objectAtIndex:indexPath.row];
         userId = member.memberId;
           

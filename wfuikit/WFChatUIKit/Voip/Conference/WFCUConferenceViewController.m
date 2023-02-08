@@ -348,7 +348,7 @@
         [[WFAVEngineKit sharedEngineKit] startPreview];
     }
     
-    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.initiator inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.initiator inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
     
     self.portraitView = [[UIImageView alloc] init];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[user.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
@@ -1697,7 +1697,7 @@
     [self reloadVideoUI];
     
     
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
     
     NSString *reasonStr;
     if(screenSharing) {
@@ -2126,7 +2126,7 @@
             [cell setGestureRecognizers:@[doubleTapGesture]];
         }
         
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:user.userId inGroup:(self.currentSession.conversation.type == Group_Type || self.currentSession.conversation.type == SuperGroup_Type) ? self.currentSession.conversation.target : nil refresh:NO];
         
         [cell setUserInfo:userInfo callProfile:user];
         

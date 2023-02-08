@@ -40,6 +40,7 @@
     dict[@"searchable"] = @(self.searchable);
     dict[@"historyMessage"] = @(self.historyMessage);
     dict[@"maxMemberCount"] = @(self.maxMemberCount);
+    dict[@"superGroup"] = @(self.superGroup);
     [self setDict:dict key:@"updateTimestamp" longlongValue:self.updateTimestamp];
     
     return dict;

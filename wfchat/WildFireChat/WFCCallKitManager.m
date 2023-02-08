@@ -130,7 +130,7 @@
         [[WFAVEngineKit sharedEngineKit].currentSession answerCall:false callExtra:nil];
         
         UIViewController *videoVC;
-        if ([WFAVEngineKit sharedEngineKit].currentSession.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+        if (([WFAVEngineKit sharedEngineKit].currentSession.conversation.type == Group_Type || [WFAVEngineKit sharedEngineKit].currentSession.conversation.type == SuperGroup_Type) && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
             videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
         } else {
             videoVC = [[WFCUVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];

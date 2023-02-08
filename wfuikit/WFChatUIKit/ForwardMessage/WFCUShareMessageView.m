@@ -124,7 +124,7 @@
             name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), conversation.target];
         }
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    } else if (conversation.type == Group_Type) {
+    } else if (conversation.type == Group_Type || conversation.type == SuperGroup_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         if (groupInfo) {
             name = groupInfo.displayName;

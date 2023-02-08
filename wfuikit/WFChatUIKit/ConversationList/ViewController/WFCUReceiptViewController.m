@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    if (self.message.conversation.type != Group_Type) {
+    if (self.message.conversation.type != Group_Type && self.message.conversation.type != SuperGroup_Type) {
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }

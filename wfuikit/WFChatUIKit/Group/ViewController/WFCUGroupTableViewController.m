@@ -73,7 +73,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
     NSString *groupId = self.groupIds[indexPath.row];
-    mvc.conversation = [WFCCConversation conversationWithType:Group_Type target:groupId line:0];
+    WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:groupId refresh:NO];
+    if(groupInfo.superGroup)
+        mvc.conversation = [WFCCConversation conversationWithType:SuperGroup_Type target:groupId line:0];
+    else
+        mvc.conversation = [WFCCConversation conversationWithType:Group_Type target:groupId line:0];
     [self.navigationController pushViewController:mvc animated:YES];
 }
 

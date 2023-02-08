@@ -90,7 +90,10 @@
     
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
     NSString *groupId = groupInfo.target;
-    mvc.conversation = [WFCCConversation conversationWithType:Group_Type target:groupId line:0];
+    if(groupInfo.superGroup)
+        mvc.conversation = [WFCCConversation conversationWithType:SuperGroup_Type target:groupId line:0];
+    else
+        mvc.conversation = [WFCCConversation conversationWithType:Group_Type target:groupId line:0];
     [self.navigationController pushViewController:mvc animated:YES];
 }
 
