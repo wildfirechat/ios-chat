@@ -367,7 +367,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 @end
 
 @protocol WFAVExternalFrameDelegate <NSObject>
-- (void)didCaptureVideoFrame:(nonnull RTCVideoFrame *)frame;
+- (void)capturer:(_Nullable id)capturer didCaptureVideoFrame:(nonnull RTCVideoFrame *)frame;
 @end
 
 @protocol WFAVExternalVideoSource <NSObject>
@@ -691,6 +691,8 @@ typedef NS_ENUM(NSInteger, WFAVVideoType) {
 
 /* 此属性没有意义，仅为了兼容UI代码 */
 - (void)setBroadcastingWithVideoSource:(_Nullable id<WFAVExternalVideoSource>)externalVideoSource;
+
+@property(nonatomic, assign, readonly, getter=isMultiCall) BOOL multiCall;
 
 /**
 呼叫附加信息
