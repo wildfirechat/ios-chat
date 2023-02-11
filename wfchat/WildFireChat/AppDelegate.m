@@ -866,7 +866,6 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     if (self.audioPlayer) {
         [self.audioPlayer stop];
         self.audioPlayer = nil;
-        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     }
 }
 
