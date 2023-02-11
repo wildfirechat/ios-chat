@@ -771,7 +771,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
                                                                  timeStampNs:timeStampNs];
                         
                         
-                        [self.frameDelegate didCaptureVideoFrame:videoFrame];
+                        [self.frameDelegate capturer:nil didCaptureVideoFrame:videoFrame];
                         CVPixelBufferRelease(pixelBuffer);
                     } else if(sampleInfo.type == 1) { //audio
                         

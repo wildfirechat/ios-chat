@@ -156,7 +156,7 @@ typedef NS_ENUM(NSInteger, RTCFileVideoCapturerStatus) {
       [self readNextBuffer];
     });
 
-    [self.frameDelegate didCaptureVideoFrame:videoFrame];
+    [self.frameDelegate capturer:nil didCaptureVideoFrame:videoFrame];
   });
   dispatch_activate(timer);
 }
