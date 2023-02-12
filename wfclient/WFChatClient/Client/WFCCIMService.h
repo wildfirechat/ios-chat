@@ -996,6 +996,15 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids;
 
 /**
+ 批量删除本地消息
+ 
+ @param messageUids 消息UID列表
+ @param conversation 消息所在会话
+ @return 是否删除成功
+ */
+- (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids conversation:(WFCCConversation *)conversation;
+
+/**
  删除远端消息，仅专业版支持。
  
  @param messageUid 消息UID

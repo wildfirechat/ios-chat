@@ -1488,7 +1488,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         count = -count;
     }
     
-    mars::stn::getSuperGroupMessages(conversation.type, [conversation.target UTF8String], conversation.line, direction, (int)count, fromIndex, new IMLoadSuperGroupMessagesCallback(successBlock, errorBlock));
+    mars::stn::getSuperGroupMessages([conversation.target UTF8String], conversation.line, direction, (int)count, fromIndex, new IMLoadSuperGroupMessagesCallback(successBlock, errorBlock));
 }
 
 - (void)getRemoteMessages:(WFCCConversation *)conversation
@@ -2408,11 +2408,15 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 }
 
 - (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids {
+    return [self batchDeleteMessages:messageUids conversation:nil];
+}
+
+- (BOOL)batchDeleteMessages:(NSArray<NSNumber *> *)messageUids conversation:(WFCCConversation *)conversation {
     std::list<int64_t> uids;
     for (NSNumber *uid in messageUids) {
         uids.push_back([uid longLongValue]);
     }
-    return mars::stn::MessageDB::Instance()->BatchDeleteMessage(uids);
+    return mars::stn::MessageDB::Instance()->BatchDeleteMessage(uids, conversation.type, conversation.target?[conversation.target UTF8String]:"");
 }
 
 - (void)deleteRemoteMessage:(long long)messageUid
