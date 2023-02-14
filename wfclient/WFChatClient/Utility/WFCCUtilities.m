@@ -290,7 +290,7 @@ static NSLock *wfcImageLock;
             defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock {
     NSNumber *createTime = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"wfc_group_generate_portrait_time_%@_%d", groupId, PortraitWidth]];
     long now = [[[NSDate alloc] init] timeIntervalSince1970];
-    if ((now - [createTime longLongValue]) < 2) {//防止连续刷新时，多次生成
+    if ((now - [createTime longLongValue]) < 10) {//防止连续刷新时，多次生成
         return;
     }
 
