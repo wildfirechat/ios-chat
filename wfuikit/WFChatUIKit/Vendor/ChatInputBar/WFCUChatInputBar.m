@@ -145,6 +145,12 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onAppResume)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    
     self.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
     
     
@@ -196,6 +202,12 @@
         }
     }
     return view;
+}
+
+- (void)onAppResume {
+    if((self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarEmojiStatus || self.inputBarStatus == ChatInputBarPluginStatus) && ![self.textInputView isFirstResponder]) {
+        [self.textInputView becomeFirstResponder];
+    }
 }
 
 - (void)setupPublicContainer:(NSArray<WFCCChannelMenu *> *)menus {
