@@ -2437,7 +2437,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         types.push_back(num.intValue);
     }
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypesAndTimes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, startTime, endTime, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypesAndTimes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, keyword?[keyword UTF8String]:"", types, startTime, endTime, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
