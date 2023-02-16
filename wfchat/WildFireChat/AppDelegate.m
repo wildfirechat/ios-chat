@@ -188,6 +188,14 @@
     [application registerForRemoteNotifications];
 }
 
+//会议需要支持方向旋转
+-(UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    if([NSStringFromClass([window.rootViewController class]) isEqualToString:@"WFCUConferenceViewController"]) {
+        return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if ([deviceToken isKindOfClass:[NSData class]]) {
         const unsigned *tokenBytes = [deviceToken bytes];
