@@ -1392,6 +1392,9 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     dispatch_async(dispatch_get_main_queue(), ^{
+        if(!self.rotateButton.selected) {
+            self.currentOrientation = [[[UIDevice currentDevice] valueForKey:@"orientation"] intValue];
+        }
         [self updateUIByOrientationChanged:size.width>size.height];
         [self reloadVideoUI];
     });
