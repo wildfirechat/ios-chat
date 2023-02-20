@@ -1164,16 +1164,13 @@
             orientation = UIInterfaceOrientationLandscapeLeft;
             break;
         case UIDeviceOrientationPortrait:
-            orientation = UIInterfaceOrientationPortrait;
-            break;
         default:
+            orientation = UIInterfaceOrientationPortrait;
             break;
     }
     
-    if(orientation != UIInterfaceOrientationUnknown) {
-        [self rotateUI:orientation];
-        [self updateUIByOrientationChanged:orientation != UIInterfaceOrientationPortrait];
-    }
+    [self rotateUI:orientation];
+    [self updateUIByOrientationChanged:orientation != UIInterfaceOrientationPortrait];
     return YES;
 }
 
