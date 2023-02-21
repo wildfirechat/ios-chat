@@ -292,8 +292,6 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     self.messages = [[NSMutableArray alloc] init];
-    [self bottomBarView];
-    [self topBarView];
     
     WFCUConferenceCollectionViewLayout *layout = [[WFCUConferenceCollectionViewLayout alloc] init];
     self.scalingType = kWFAVVideoScalingTypeAspectFit;
@@ -318,6 +316,8 @@
     tap.cancelsTouchesInView = NO;
     [self.view addSubview:self.participantCollectionView];
     
+    [self bottomBarView];
+    [self topBarView];
     
     self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2-100, self.view.bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - 20, 200, 20)];
     [self.pageControl addTarget:self

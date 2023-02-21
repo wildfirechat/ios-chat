@@ -81,7 +81,14 @@
 
 - (void)setConferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     _conferenceInfo = conferenceInfo;
-    if(conferenceInfo.audience && ![conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+    if(conferenceInfo.advance) {
+        conferenceInfo.audience = YES;
+        self.enableAudio = NO;
+        self.enableVideo = NO;
+    } else if(conferenceInfo.audience && ![conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        self.enableVideo = NO;
+        self.enableAudio = NO;
+    } else if(conferenceInfo.advance) {
         self.enableVideo = NO;
         self.enableAudio = NO;
     }
@@ -121,8 +128,11 @@
     UIButton *btn = (UIButton *)sender;
     btn.enabled = NO;
     
-    
-    if(self.conferenceInfo.audience) {
+    if(self.conferenceInfo.advance) {
+        self.conferenceInfo.audience = YES;
+        self.enableAudio = NO;
+        self.enableVideo = NO;
+    } else if(self.conferenceInfo.audience) {
         if(self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             if(self.enableAudio || self.enableVideo) {
                 self.conferenceInfo.audience = NO;
@@ -338,8 +348,9 @@
                 handleBlock(YES);
             };
         }
-        
-        if(self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if(self.conferenceInfo.advance) {
+            switchCell.valueSwitch.enabled = NO;
+        } else if(self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             switchCell.valueSwitch.enabled = YES;
         } else {
             switchCell.valueSwitch.enabled = NO;
