@@ -2001,7 +2001,7 @@
 
 - (void)reloadParticipantCollectionView {
     [self.participantCollectionView reloadData];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateVideoStreams];
     });
 }
@@ -2027,15 +2027,12 @@
             *stop = YES;
         }
     }];
-    if (visiableItems.count > 4 || (visiableItems.count > 1 && hasMain)) {
-        NSLog(@"not scroll to position");
-        WFCUConferenceCollectionViewLayout *layout = (WFCUConferenceCollectionViewLayout *)self.participantCollectionView.collectionViewLayout;
-        CGPoint pos = [layout getOffsetOfItems:visiableItems];
-        if(pos.x == pos.y) {
-            return;
-        }
-        CGPoint targetContentOffset = self.participantCollectionView.contentOffset;
-        
+    
+    CGPoint pos = [layout getOffsetOfItems:visiableItems];
+    BOOL needScroll = NO;
+    CGPoint targetContentOffset = self.participantCollectionView.contentOffset;
+    if(pos.x != targetContentOffset.x) {
+        needScroll = YES;
         __block int row;
         if (ABS(pos.x-targetContentOffset.x) > ABS(pos.y - targetContentOffset.x)) {
             row = 0;
@@ -2059,7 +2056,7 @@
                 [self.participantCollectionView scrollRectToVisible:CGRectMake(pos.x, 0, pos.y-pos.x, 100) animated:YES];
             });
         }
-
+        
         int page;
         if(row == 0) {
             page = 0;
@@ -2071,23 +2068,20 @@
         }
         [self.pageControl setCurrentPage:page];
         [self.pageControl updateCurrentPageDisplay];
-    } else {
-        [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx1, BOOL * _Nonnull stop) {
-            if(obj.videoType != WFAVVideoType_None && !obj.audience) {
-                __block BOOL visiable = NO;
-                [visiableItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx2, BOOL * _Nonnull stop) {
-                    if(obj.row -1 == idx1) {
-                        visiable = YES;
-                        *stop = YES;
-                    }
-                }];
-                if(!visiable) {
+    }
+    
+    if(!needScroll) {
+        if(self.participants.count > 1) {
+            [self.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx1, BOOL * _Nonnull stop) {
+                if(obj.videoType != WFAVVideoType_None && !obj.audience) {
                     [leaveItems addObject:[NSIndexPath indexPathForRow:idx1+1 inSection:0]];
                 }
-            }
-        }];
+            }];
+        }
         
-        [self onItemsEnter:[self.participantCollectionView indexPathsForVisibleItems] itemsLeave:leaveItems];
+        CGPoint targetContentOffset = self.participantCollectionView.contentOffset;
+        int page = (targetContentOffset.x + 1)/self.participantCollectionView.bounds.size.width;
+        [self onItemsEnter:[layout itemsInPage:page] itemsLeave:leaveItems];
     }
 }
 - (BOOL)switchVideoView:(NSUInteger)index {
@@ -2308,7 +2302,7 @@
     }
 }
 
-- (void)onItemsEnter:(NSArray<NSIndexPath *> *)enterItems itemsLeave:(NSArray<NSIndexPath *> *)leaveItems {
+- (void)onItemsEnter:(NSArray<NSIndexPath *> *)enterItems itemsLeave:(NSMutableArray<NSIndexPath *> *)leaveItems {
     __block BOOL hasMain = NO;
     [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if(obj.row == 0) {
@@ -2316,38 +2310,6 @@
             *stop = YES;
         }
     }];
-
-    if(hasMain) {
-        for (NSIndexPath *obj in leaveItems) {
-            WFAVParticipantProfile *profile = obj.row > 0 ? self.participants[obj.row-1] : self.focusUserProfile;
-            if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
-                NSMutableArray *arr = [leaveItems mutableCopy];
-                [arr removeObject:obj];
-                leaveItems = [arr copy];
-                break;
-            }
-        }
-    } else {
-        [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if(obj.row == 0) {
-                hasMain = YES;
-                *stop = YES;
-                NSLog(@"leave contains obj 0");
-            }
-        }];
-        if(hasMain) {
-            for (NSIndexPath *obj in enterItems) {
-                UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:obj];
-                WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
-                if([profile.userId isEqualToString:self.focusUserProfile.userId] && profile.screeSharing == self.focusUserProfile.screeSharing) {
-                    NSMutableArray *arr = [leaveItems mutableCopy];
-                    [arr removeObject:[NSIndexPath indexPathForRow:0 inSection:0]];
-                    leaveItems = [arr copy];
-                    break;
-                }
-            }
-        }
-    }
     
     [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
@@ -2381,6 +2343,15 @@
                 [cell bringSubviewToFront:self.smallVideoView];
             }
         }
+        
+        [leaveItems removeObject:indexPath];
+        [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            WFAVParticipantProfile *leaveProfile = obj.row > 0 ? self.participants[obj.row-1] : self.focusUserProfile;
+            if([profile.userId isEqualToString:leaveProfile.userId] && profile.screeSharing == leaveProfile.screeSharing) {
+                [leaveItems removeObject:obj];
+                *stop = YES;
+            }
+        }];
     }];
     
     [leaveItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {

@@ -114,7 +114,7 @@
     if(page == 0) {
         [arr addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
     } else {
-        for (int i = (page-1)*4 +1; i < MIN(page*4, count); i++) {
+        for (int i = (page-1)*4 +1; i <= MIN(page*4, count-1); i++) {
             [arr addObject:[NSIndexPath indexPathForRow:i inSection:0]];
         }
     }
