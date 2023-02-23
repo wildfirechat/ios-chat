@@ -2001,7 +2001,7 @@
 
 - (void)reloadParticipantCollectionView {
     [self.participantCollectionView reloadData];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self updateVideoStreams];
     });
 }
@@ -2109,10 +2109,10 @@
     
     if (canSwitch) {
         self.focusUserProfile = user;
+        [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
         [self rearrangeParticipants];
         [self reloadVideoUI];
     }
-    [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     
     return canSwitch;
 }
