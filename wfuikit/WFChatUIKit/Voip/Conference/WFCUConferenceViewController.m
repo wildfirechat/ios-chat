@@ -2103,10 +2103,6 @@
         }
     }
     
-    if([self.focusUserProfile.userId isEqualToString:user.userId] && self.focusUserProfile.screeSharing == user.screeSharing) {
-        canSwitch = NO;
-    }
-    
     if (canSwitch) {
         self.focusUserProfile = user;
         [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
