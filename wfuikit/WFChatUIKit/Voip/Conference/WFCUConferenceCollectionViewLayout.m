@@ -123,6 +123,10 @@
 }
 
 - (CGPoint)getOffsetOfItems:(NSArray<NSIndexPath *> *)items {
+    if(!items.count) {
+        return CGPointMake(0, 0);
+    }
+    
     int minRow = 0x1FFFFFFF;
     int maxRow = 0;
     for (NSIndexPath *indexPath in items) {
