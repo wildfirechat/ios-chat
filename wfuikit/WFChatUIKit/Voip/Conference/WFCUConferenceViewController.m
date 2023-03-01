@@ -146,7 +146,7 @@
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO maxParticipants:9 sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {

@@ -483,6 +483,7 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
                                     audience:(BOOL)audience
                                     advanced:(BOOL)advanced
                                       record:(BOOL)record
+                             maxParticipants:(int)maxParticipats
                              sessionDelegate:(id<WFAVCallSessionDelegate>_Nonnull)sessionDelegate;
 
 /* 为了兼容视频会议UI，本功能未实现*/
