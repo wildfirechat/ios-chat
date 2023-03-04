@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface WFZHomeViewController : UIViewController
-
+@property(nonatomic, assign)BOOL isPresent;
 @end
 

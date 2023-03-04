@@ -62,6 +62,13 @@
         }
     }
     self.favConferences = fcs;
+    if(self.isPresent) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
+    }
+}
+
+- (void)onLeftBarBtn:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)initTopPannel {
