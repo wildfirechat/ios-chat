@@ -27,6 +27,7 @@
                       advanced:(BOOL)advanced
                         record:(BOOL)record
                         moCall:(BOOL)moCall
+               maxParticipants:(int)maxParticipants
                          extra:(NSString *)extra;
 @end
 #endif

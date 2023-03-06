@@ -113,6 +113,7 @@
     info.audience = !self.enableParticipant;
     info.advance = self.advanceConference;
     info.allowTurnOnMic = self.allowTurnOnMic;
+    info.maxParticipants = 20;
     
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"创建中"];
