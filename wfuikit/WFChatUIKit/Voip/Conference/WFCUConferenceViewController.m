@@ -142,11 +142,12 @@
                       advanced:(BOOL)advanced
                         record:(BOOL)record
                         moCall:(BOOL)moCall
+               maxParticipants:(int)maxParticipants
                          extra:(NSString *)extra {
     self = [super init];
     if (self) {
         if (moCall) {
-            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO maxParticipants:9 sessionDelegate:self];
+            self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO maxParticipants:maxParticipants sessionDelegate:self];
             
             [self didChangeState:kWFAVEngineStateOutgoing];
         } else {
@@ -1024,11 +1025,11 @@
 - (void)audioButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         if(!self.currentSession.isAudience && !self.currentSession.audioMuted) {
-            [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
+            [[WFCUConferenceManager sharedInstance] muteAudio:!(self.currentSession.audioMuted || self.currentSession.audience)];
             [self updateAudioButton];
         } else {
             if (self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [[WFCUConferenceManager sharedInstance] muteAudio:!self.currentSession.audioMuted];
+                [[WFCUConferenceManager sharedInstance] muteAudio:!(self.currentSession.audioMuted || self.currentSession.audience)];
                 [self updateAudioButton];
             } else {
                 __weak typeof(self)ws = self;
@@ -1239,7 +1240,8 @@
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         //请参考函数 audioButtonDidTap
-        [[WFCUConferenceManager sharedInstance] muteVideo:!self.currentSession.isVideoMuted];
+        
+        [[WFCUConferenceManager sharedInstance] muteVideo:!(self.currentSession.audience || self.currentSession.videoMuted)];
         [self updateVideoButton];
         [self startHidePanelTimer];
     }
@@ -1935,7 +1937,7 @@
         [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced record:NO moCall:NO extra:nil];
+            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced record:NO moCall:NO maxParticipants:0 extra:nil];
             vc.conferenceInfo = self.conferenceInfo;
             [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
         });
@@ -1970,7 +1972,7 @@
             [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced record:NO moCall:YES extra:nil];
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced record:NO moCall:YES maxParticipants:self.conferenceInfo.maxParticipants extra:nil];
                 vc.conferenceInfo = self.conferenceInfo;
                 [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
             });
@@ -2481,6 +2483,10 @@
         default:
             break;
     }
+}
+
+- (void)showToast:(NSString *)text {
+    [self.view makeToast:text duration:[CSToastManager defaultDuration] position:CSToastPositionCenter];
 }
 
 - (void)showCommandToast:(NSString *)text {

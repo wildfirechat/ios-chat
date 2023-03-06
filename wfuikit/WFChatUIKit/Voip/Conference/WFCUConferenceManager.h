@@ -19,6 +19,7 @@ extern NSString *kMuteStateChanged;
 @protocol WFCUConferenceManagerDelegate <NSObject>
 -(void)onChangeModeRequest:(BOOL)isAudience;
 -(void)onReceiveCommand:(WFCUConferenceCommandType)commandType content:(WFCUConferenceCommandContent *)commandContent fromUser:(NSString *)sender;
+-(void)showToast:(NSString *)text;
 @end
 
 @interface WFCUConferenceManager : NSObject

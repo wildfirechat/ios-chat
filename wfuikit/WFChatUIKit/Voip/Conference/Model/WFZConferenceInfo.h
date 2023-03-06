@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign)BOOL allowTurnOnMic;
 @property(nonatomic, assign)BOOL noJoinBeforeStart;
 @property(nonatomic, assign)BOOL recording;
+@property(nonatomic, assign)int maxParticipants;
 
 
 + (instancetype)fromDictionary:(NSDictionary *)dictionary;

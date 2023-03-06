@@ -31,6 +31,7 @@
     info.allowTurnOnMic = [dictionary[@"allowSwitchMode"] boolValue];
     info.noJoinBeforeStart = [dictionary[@"noJoinBeforeStart"] boolValue];
     info.recording = [dictionary[@"recording"] boolValue];
+    info.maxParticipants = [dictionary[@"maxParticipants"] intValue];
     
     return info;
 }
@@ -52,6 +53,7 @@
     dict[@"allowSwitchMode"] = @(self.allowTurnOnMic);
     dict[@"noJoinBeforeStart"] = @(self.noJoinBeforeStart);
     dict[@"recording"] = @(self.recording);
+    dict[@"maxParticipants"] = @(self.maxParticipants);
     
     return dict;
 }
