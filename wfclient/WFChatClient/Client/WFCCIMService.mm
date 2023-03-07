@@ -926,6 +926,10 @@ static NSArray<WFCCFriendRequest *>* convertFriendRequests(std::list<mars::stn::
 static WFCCIMService * sharedSingleton = nil;
 
 static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMessageContent *content) {
+    if(!content) {
+        return;
+    }
+    
     WFCCMessagePayload *payload = [content encode];
     if(!payload.contentType) {
         NSLog(@"****************************************");
