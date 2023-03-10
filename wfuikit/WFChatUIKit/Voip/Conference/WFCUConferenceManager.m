@@ -59,10 +59,18 @@ static WFCUConferenceManager *sharedSingleton = nil;
 - (void)muteAudio:(BOOL)mute {
     if(mute) {
         if(![WFAVEngineKit sharedEngineKit].currentSession.isAudience && [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted && ![[WFAVEngineKit sharedEngineKit].currentSession isBroadcasting]) {
-            [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES];
+            if(![[WFAVEngineKit sharedEngineKit].currentSession switchAudience:YES]) {
+                NSLog(@"switch to audience failure");
+                return;
+            }
         }
         [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:mute];
     } else {
+        if([WFAVEngineKit sharedEngineKit].currentSession.isAudience && ![[WFAVEngineKit sharedEngineKit].currentSession canSwitchAudience]) {
+            NSLog(@"can not switch to participater");
+            return;
+        }
+        
         if([WFAVEngineKit sharedEngineKit].currentSession.isAudience && self.currentConferenceInfo.maxParticipants > 0) {
             __block int participantCount = 0;
             [[WFAVEngineKit sharedEngineKit].currentSession.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
