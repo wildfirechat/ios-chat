@@ -813,7 +813,10 @@ typedef NS_ENUM(NSInteger, WFAVVideoType) {
 - (void)leaveConference:(BOOL)destroy;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
-- (void)switchAudience:(BOOL)audience;
+- (BOOL)canSwitchAudience;
+
+/* 此函数没有意义，仅为了兼容UI代码 */
+- (BOOL)switchAudience:(BOOL)audience;
 
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (void)kickoffParticipant:(NSString *_Nonnull)participant
