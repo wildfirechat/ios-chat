@@ -636,6 +636,12 @@
                     NSLog(@"on org service login failure");
                 }];
             }
+        } else if(status == kConnectionStatusNotLicensed) {
+            NSLog(@"专业版IM服务没有授权或者授权过期！！！");
+            [self.window.rootViewController.view makeToast:@"专业版IM服务没有授权或者授权过期！！！" duration:3 position:CSToastPositionCenter];
+        } else if(status == kConnectionStatusTimeInconsistent) {
+            NSLog(@"服务器和客户端时间相差太大！！！");
+            [self.window.rootViewController.view makeToast:@"服务器和客户端时间相差太大！！！" duration:3 position:CSToastPositionCenter];
         }
     });
 }
