@@ -119,6 +119,7 @@ namespace mars{
             kEcServerFriendRequestOvertime = 19,
             kEcServerNotInChatroom = 20,
             kEcServerNotLicensed = 22,
+            kEcServerTimeInconsistent = 30,
             kEcServerUserNotPrepared = 238,
             kEcServerUserIsBlocked = 245,
             kEcServerInBlacklist = 246,
@@ -891,6 +892,8 @@ namespace mars{
     };
     
         enum ConnectionStatus {
+            kConnectionStatusTimeInconsistent = -9,
+            kConnectionStatusNotLicensed = -8,
             kConnectionStatusKickedOff = -7,
             kConnectionStatusSecretKeyMismatch = -6,
             kConnectionStatusTokenIncorrect = -5,

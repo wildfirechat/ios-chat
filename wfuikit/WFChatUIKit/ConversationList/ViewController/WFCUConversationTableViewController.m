@@ -358,9 +358,6 @@
             case kConnectionStatusLogout:
                 navLabel.text = WFCString(@"NotLogin");
                 break;
-            case kConnectionStatusUnconnected:
-                navLabel.text = WFCString(@"NotConnect");
-                break;
             case kConnectionStatusConnected: {
                 int count = 0;
                 for (WFCCConversationInfo *info in self.conversations) {
@@ -377,6 +374,8 @@
                 break;
                 
             default:
+            case kConnectionStatusUnconnected:
+                navLabel.text = WFCString(@"NotConnect");
                 break;
         }
         
