@@ -2107,9 +2107,9 @@
     
     if (canSwitch) {
         self.focusUserProfile = user;
-        [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
         [self rearrangeParticipants];
-        [self reloadVideoUI];
+        [self.participantCollectionView reloadData];
+        [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }
     
     return canSwitch;
