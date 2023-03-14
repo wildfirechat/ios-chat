@@ -2334,10 +2334,10 @@
                     [cell addSubview:self.smallVideoView];
                 }
 
-                self.smallVideoView.hidden = NO;
-                [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
                 WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
                 [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
+                [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
+                self.smallVideoView.hidden = NO;
                 [cell bringSubviewToFront:self.smallVideoView];
             }
         }
