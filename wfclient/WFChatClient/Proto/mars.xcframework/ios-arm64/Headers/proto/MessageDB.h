@@ -56,6 +56,7 @@ namespace mars {
             std::string getConversationDraft(int conversationType, const std::string &target, int line);
             
             TConversation GetConversation(int conversationType, const std::string &target, int line);
+            bool isExistConversation(int conversationType, const std::string &target, int line);
             std::list<TConversation> GetConversationList(const std::list<int> &conversationTypes, const std::list<int> &lines);
             
             bool RemoveConversation(int conversationType, const std::string &target, int line, bool clearMessage = false);
