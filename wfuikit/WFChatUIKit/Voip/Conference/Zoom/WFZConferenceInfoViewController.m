@@ -61,7 +61,7 @@
         [ws stopProgress:hud finishText:nil];
     } error:^(int errorCode, NSString * _Nonnull message) {
         [ws stopProgress:hud finishText:@"会议不存在或者密码错误"];
-        [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+        [ws leftVC];
     }];
     
     [[WFCUConfigManager globalManager].appServiceProvider isFavConference:self.conferenceId success:^(BOOL isFav) {
@@ -107,7 +107,7 @@
     __block MBProgressHUD *hud = [self startProgress:@"销毁会议中"];
     [[WFCUConfigManager globalManager].appServiceProvider destroyConference:self.conferenceId success:^{
         [ws stopProgress:hud finishText:@"销毁会议成功"];
-        [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+        [ws leftVC];
     } error:^(int errorCode, NSString * _Nonnull message) {
         [ws stopProgress:hud finishText:@"销毁会议失败"];
     }];
@@ -118,7 +118,7 @@
     __block MBProgressHUD *hud = [self startProgress:@"删除中"];
     [[WFCUConfigManager globalManager].appServiceProvider unfavConference:self.conferenceId success:^{
         [ws stopProgress:hud finishText:@"删除成功"];
-        [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+        [ws leftVC];
     } error:^(int errorCode, NSString * _Nonnull message) {
         [ws stopProgress:hud finishText:@"删除失败"];
     }];
@@ -146,14 +146,18 @@
     [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+        [self leftVC];
     });
 }
 
 - (void)onLeftBarBtn:(id)sender {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self leftVC];
 }
 
+- (void)leftVC {
+    [self stopCheckTimer];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)onFav:(id)sender {
     __weak typeof(self)ws = self;
     __block MBProgressHUD *hud = [self startProgress:@"收藏中"];
