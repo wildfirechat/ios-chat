@@ -997,6 +997,9 @@
 
 - (void)updateScreenSharingButton {
     self.screenSharingButton.selected = self.currentSession.isBroadcasting;
+    if([WFAVEngineKit sharedEngineKit].screenSharingReplaceMode) {
+        self.videoButton.enabled = !self.currentSession.isBroadcasting;
+    }
 }
 
 - (void)minimize {

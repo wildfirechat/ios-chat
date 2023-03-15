@@ -102,6 +102,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
         }
         [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:mute];
     } else {
+        if([WFAVEngineKit sharedEngineKit].screenSharingReplaceMode && [self isBroadcasting]) {
+            return;
+        }
         if([WFAVEngineKit sharedEngineKit].currentSession.isAudience && self.currentConferenceInfo.maxParticipants > 0) {
             __block int participantCount = 0;
             [[WFAVEngineKit sharedEngineKit].currentSession.participants enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
