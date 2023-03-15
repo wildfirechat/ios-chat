@@ -867,7 +867,7 @@
     
     MoreItem *chatItem = [[MoreItem alloc] initWithTitle:WFCString(@"Chat") image:[WFCUImage imageNamed:@"conference_chat"] callback:^MoreItem * _Nonnull{
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-        mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:self.currentSession.callId line:0];
+        mvc.conversation = [WFCCConversation conversationWithType:Chatroom_Type target:ws.currentSession.callId line:0];
         mvc.keepInChatroom = YES;
         mvc.silentJoinChatroom = YES;
         mvc.presented = YES;
@@ -1010,6 +1010,12 @@
         [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
      }];
     
+    [self leftVC];
+}
+
+- (void)leftVC {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self stopHidePanelTimer];
     [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
 }
 
@@ -1370,6 +1376,7 @@
 
 - (void)rotateUI:(UIInterfaceOrientation)orientation {
     self.currentOrientation = orientation;
+    __weak typeof(self)ws = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (@available(iOS 16, *)) {
             UIWindowScene *scene = (UIWindowScene *)[[[UIApplication sharedApplication].connectedScenes allObjects] firstObject];
@@ -1381,7 +1388,7 @@
                 preferences.interfaceOrientations = UIInterfaceOrientationMaskLandscapeRight;
             }
             
-            [self setNeedsUpdateOfSupportedInterfaceOrientations];
+            [ws setNeedsUpdateOfSupportedInterfaceOrientations];
             [scene requestGeometryUpdateWithPreferences:preferences errorHandler:^(NSError * _Nonnull error) {
                 NSLog(@"Unsupport orientations");
             }];
@@ -1607,6 +1614,11 @@
     }
 }
 
+- (void)stopHidePanelTimer {
+    [self.hidePanelTimer invalidate];
+    self.hidePanelTimer = nil;
+}
+
 #pragma mark - WFAVEngineDelegate
 - (void)didChangeState:(WFAVEngineState)state {
     if (!self.viewLoaded) {
@@ -1739,7 +1751,7 @@
     } else {
         [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)(self.currentSession.endTime - self.currentSession.startTime)];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
+            [self leftVC];
         });
     }
 }
@@ -1923,7 +1935,7 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议发言人数已满，是否以观众身份入会？" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+        [ws leftVC];
     }];
     [alertController addAction:action1];
     
@@ -1937,7 +1949,7 @@
     
     
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+        [ws leftVC];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:host title:title desc:desc audience:YES advanced:advanced record:NO moCall:NO maxParticipants:0 extra:nil];
@@ -1958,7 +1970,7 @@
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"会议未开始或者已经结束，请点击启动来开始会议" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+            [ws leftVC];
         }];
         [alertController addAction:action1];
         
@@ -1972,7 +1984,7 @@
         
         
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"启动" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+            [ws leftVC];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithCallId:conferenceId audioOnly:audioOnly pin:pin host:[WFCCNetworkService sharedInstance].userId title:title desc:desc audience:defaultAudience advanced:advanced record:NO moCall:YES maxParticipants:self.conferenceInfo.maxParticipants extra:nil];
@@ -1992,7 +2004,7 @@
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] preferredStyle:UIAlertControllerStyleAlert];
 
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [[WFAVEngineKit sharedEngineKit] dismissViewController:ws];
+            [ws leftVC];
         }];
         [alertController addAction:action1];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -2006,8 +2018,9 @@
 
 - (void)reloadParticipantCollectionView {
     [self.participantCollectionView reloadData];
+    __weak typeof(self)ws = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateVideoStreams];
+        [ws updateVideoStreams];
     });
 }
 
@@ -2522,5 +2535,8 @@
     return cell;
 }
 
+- (void)dealloc {
+    NSLog(@"dealloc");
+}
 @end
 #endif
