@@ -1034,7 +1034,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
        expireDuration:(int)expireDuration
               success:(void(^)(long long messageUid, long long timestamp))successBlock
                 error:(void(^)(int error_code))errorBlock {
-    return [self sendMedia:conversation content:content expireDuration:0 success:successBlock progress:nil error:errorBlock];
+    return [self sendMedia:conversation content:content expireDuration:expireDuration success:successBlock progress:nil error:errorBlock];
 }
 
 - (WFCCMessage *)send:(WFCCConversation *)conversation
@@ -1043,7 +1043,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
        expireDuration:(int)expireDuration
               success:(void(^)(long long messageUid, long long timestamp))successBlock
                 error:(void(^)(int error_code))errorBlock {
-    return [self sendMedia:conversation content:content toUsers:toUsers expireDuration:0 success:successBlock progress:nil error:errorBlock];
+    return [self sendMedia:conversation content:content toUsers:toUsers expireDuration:expireDuration success:successBlock progress:nil error:errorBlock];
 }
 - (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
                    content:(WFCCMessageContent *)content
