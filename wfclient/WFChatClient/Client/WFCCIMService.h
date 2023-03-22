@@ -426,6 +426,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)clearMessageUnreadStatus:(long)messageId;
 
 /**
+ 清空某条消息之前（包含）所有消息的未读状态。
+ 
+ @param messageId 消息ID
+ @param conversation 消息所属会话
+ */
+- (void)clearMessageUnreadStatusBefore:(long)messageId conversation:(WFCCConversation *)conversation;
+
+/**
  设置会话的最后一条接收消息为未读状态。
  
  @param conversation 会话
@@ -488,6 +496,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
  
  @param conversation 会话
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMessagesV2:(WFCCConversation *)conversation
+         contentTypes:(NSArray<NSNumber *> *)contentTypes
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock;
+
+/**
+ 获取消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
  @param messageStatus 消息状态WFCCMessageStatus
  @param fromIndex 起始index
  @param count 总数
@@ -498,6 +525,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                    from:(NSUInteger)fromIndex
                                   count:(NSInteger)count
                                withUser:(NSString *)user;
+
+/**
+ 获取消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
+ @param messageStatus 消息状态WFCCMessageStatus
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMessagesV2:(WFCCConversation *)conversation
+        messageStatus:(NSArray<NSNumber *> *)messageStatus
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock;
 
 /**
  获取某类会话信息
@@ -521,6 +567,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  
  @param conversationTypes 会话类型
  @param lines 默认传 @[@(0)]
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMessagesV2:(NSArray<NSNumber *> *)conversationTypes
+                lines:(NSArray<NSNumber *> *)lines
+         contentTypes:(NSArray<NSNumber *> *)contentTypes
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock;
+/**
+ 获取某类会话信息
+ 
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
  @param messageStatus 消息状态
  @param fromIndex 起始index
  @param count 总数
@@ -533,6 +598,27 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                    from:(NSUInteger)fromIndex
                                   count:(NSInteger)count
                                withUser:(NSString *)user;
+
+/**
+ 获取某类会话信息
+ 
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param messageStatus 消息状态
+ @param fromIndex 起始index
+ @param count 总数
+ @param user 对话用户
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMessagesV2:(NSArray<NSNumber *> *)conversationTypes
+                lines:(NSArray<NSNumber *> *)lines
+        messageStatus:(NSArray<NSNumber *> *)messageStatus
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock;
 
 /**
  获取消息
@@ -549,6 +635,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                fromTime:(NSUInteger)fromTime
                                   count:(NSInteger)count
                                withUser:(NSString *)user;
+
+/**
+ 获取消息
+ @discuss 获取从fromTime起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
+ @param contentTypes 消息类型
+ @param fromTime 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMessagesV2:(WFCCConversation *)conversation
+         contentTypes:(NSArray<NSNumber *> *)contentTypes
+             fromTime:(NSUInteger)fromTime
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock;
 
 /**
  获取用户会话消息
@@ -568,6 +673,26 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                       count:(NSInteger)count;
 
 /**
+ 获取用户会话消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param userId 用户ID
+ @param conversation 会话
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUserMessagesV2:(NSString *)userId
+             conversation:(WFCCConversation *)conversation
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                     from:(NSUInteger)fromIndex
+                    count:(NSInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock;
+
+/**
  获取用户某类会话信息
  
  @param userId 用户ID
@@ -584,6 +709,28 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                contentTypes:(NSArray<NSNumber *> *)contentTypes
                                        from:(NSUInteger)fromIndex
                                       count:(NSInteger)count;
+
+/**
+ 获取用户某类会话信息
+ 
+ @param userId 用户ID
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param contentTypes 消息类型
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUserMessagesV2:(NSString *)userId
+        conversationTypes:(NSArray<NSNumber *> *)conversationTypes
+                    lines:(NSArray<NSNumber *> *)lines
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                     from:(NSUInteger)fromIndex
+                    count:(NSInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock;
+
 /**
  获取服务器消息
  @discussion 获取得到的消息数目有可能少于指定的count数，如果count不为0就意味着还有更多的消息可以获取，只有获取到的消息数为0才表示没有更多的消息了。

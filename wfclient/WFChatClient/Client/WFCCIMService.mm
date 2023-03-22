@@ -500,6 +500,35 @@ public:
     }
 };
 
+class IMLoadMessagesCallback : public mars::stn::LoadRemoteMessagesCallback {
+private:
+    void(^m_successBlock)(NSArray<WFCCMessage *> *messages);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadMessagesCallback(void(^successBlock)(NSArray<WFCCMessage *> *messages), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteMessagesCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TMessage> &messageList) {
+        NSMutableArray *messages = convertProtoMessageList(messageList, YES);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(messages);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+    
+    virtual ~IMLoadMessagesCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
 
 class IMLoadFileRecordCallback : public mars::stn::LoadFileRecordCallback {
 private:
@@ -1287,7 +1316,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
 }
-
+- (void)getMessagesV2:(WFCCConversation *)conversation
+                             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                                     from:(NSUInteger)fromIndex
+                                    count:(NSInteger)count
+                                 withUser:(NSString *)user
+                                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                                    error:(void(^)(int error_code))errorBlock {
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetMessages((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "", new IMLoadMessagesCallback(successBlock, errorBlock));
+}
 - (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
                            contentTypes:(NSArray<NSNumber *> *)contentTypes
                                fromTime:(NSUInteger)fromTime
@@ -1307,6 +1354,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
+- (void)getMessagesV2:(WFCCConversation *)conversation
+         contentTypes:(NSArray<NSNumber *> *)contentTypes
+             fromTime:(NSUInteger)fromTime
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetMessagesByTimes((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromTime, user ? [user UTF8String] : "", new IMLoadMessagesCallback(successBlock, errorBlock));
+}
 - (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation
                           messageStatus:(NSArray<NSNumber *> *)messageStatus
                                    from:(NSUInteger)fromIndex
@@ -1326,6 +1392,25 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
+- (void)getMessagesV2:(WFCCConversation *)conversation
+        messageStatus:(NSArray<NSNumber *> *)messageStatus
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    std::list<int> types;
+    for (NSNumber *num in messageStatus) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetMessagesByMessageStatus((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "", new IMLoadMessagesCallback(successBlock, errorBlock));
+}
 - (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
                                            lines:(NSArray<NSNumber *> *)lines
                                     contentTypes:(NSArray<NSNumber *> *)contentTypes
@@ -1355,6 +1440,38 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessages(convtypes, ls, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
+}
+
+- (void)getMessagesV2:(NSArray<NSNumber *> *)conversationTypes
+                lines:(NSArray<NSNumber *> *)lines
+         contentTypes:(NSArray<NSNumber *> *)contentTypes
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetMessages(convtypes, ls, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "", new IMLoadMessagesCallback(successBlock, errorBlock));
 }
 
 - (NSArray<WFCCMessage *> *)getMessages:(NSArray<NSNumber *> *)conversationTypes
@@ -1388,6 +1505,38 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return convertProtoMessageList(messages, YES);
 }
 
+- (void)getMessagesV2:(NSArray<NSNumber *> *)conversationTypes
+                lines:(NSArray<NSNumber *> *)lines
+        messageStatus:(NSArray<NSNumber *> *)messageStatus
+                 from:(NSUInteger)fromIndex
+                count:(NSInteger)count
+             withUser:(NSString *)user
+              success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                error:(void(^)(int error_code))errorBlock {
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    std::list<int> status;
+    for (NSNumber *num in messageStatus) {
+        status.push_back(num.intValue);
+    }
+
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetMessagesByMessageStatus(convtypes, ls, status, direction, (int)count, fromIndex, user ? [user UTF8String] : "", new IMLoadMessagesCallback(successBlock, errorBlock));
+}
+
 - (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
                                conversation:(WFCCConversation *)conversation
                                contentTypes:(NSArray<NSNumber *> *)contentTypes
@@ -1410,6 +1559,27 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetUserMessages([userId UTF8String], (int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex);
     return convertProtoMessageList(messages, YES);
+}
+
+- (void)getUserMessagesV2:(NSString *)userId
+             conversation:(WFCCConversation *)conversation
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                     from:(NSUInteger)fromIndex
+                    count:(NSInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetUserMessages([userId UTF8String], (int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, new IMLoadMessagesCallback(successBlock, errorBlock));
 }
 
 - (NSArray<WFCCMessage *> *)getUserMessages:(NSString *)userId
@@ -1446,6 +1616,38 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetUserMessages([userId UTF8String], convtypes, ls, types, direction, (int)count, fromIndex);
     return convertProtoMessageList(messages, YES);
+}
+
+- (void)getUserMessagesV2:(NSString *)userId
+        conversationTypes:(NSArray<NSNumber *> *)conversationTypes
+                    lines:(NSArray<NSNumber *> *)lines
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                     from:(NSUInteger)fromIndex
+                    count:(NSInteger)count
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    std::list<int> convtypes;
+    for (NSNumber *ct in conversationTypes) {
+        convtypes.push_back([ct intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+
+    bool direction = true;
+    if (count < 0) {
+        direction = false;
+        count = -count;
+    }
+    
+    mars::stn::GetUserMessages([userId UTF8String], convtypes, ls, types, direction, (int)count, fromIndex, new IMLoadMessagesCallback(successBlock, errorBlock));
 }
 
 - (void)getRemoteMessages:(WFCCConversation *)conversation
@@ -1525,6 +1727,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 - (void)clearMessageUnreadStatus:(long)messageId {
     if(messageId) {
         mars::stn::MessageDB::Instance()->ClearUnreadStatus((int)messageId);
+    }
+}
+
+- (void)clearMessageUnreadStatusBefore:(long)messageId conversation:(WFCCConversation *)conversation {
+    if(messageId) {
+        mars::stn::MessageDB::Instance()->ClearUnreadStatusBeforeMessage((int)messageId, conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line);
     }
 }
 
