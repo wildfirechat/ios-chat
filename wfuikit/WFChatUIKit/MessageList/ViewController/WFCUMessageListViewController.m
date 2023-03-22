@@ -157,6 +157,7 @@
 
 @property (nonatomic, assign)BOOL isAtButtom;
 
+@property (nonatomic, strong)NSMutableDictionary<NSString*, NSDictionary*> *typingDict;
 @end
 
 @implementation WFCUMessageListViewController
@@ -168,6 +169,7 @@
     self.isAtButtom = YES;
     self.cellContentDict = [[NSMutableDictionary alloc] init];
     self.ongoingCallDict = [[NSMutableDictionary alloc] init];
+    self.typingDict = [[NSMutableDictionary alloc] init];
     self.focusedOngoingCellIndex = -1;
     [self initializedSubViews];
     self.firstAppear = YES;
@@ -1092,26 +1094,72 @@
     [self.cellContentDict setObject:cellCls forKey:@([msgContentCls getContentType])];
 }
 
-- (void)showTyping:(WFCCTypingType)typingType {
+- (void)removeUserTyping:(NSString *)userId {
+    [self.typingDict removeObjectForKey:userId];
+    [self showTyping];
+}
+
+- (void)showUser:(NSString *)userId typing:(WFCCTypingType)typingType {
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970];
+    [self.typingDict setValue:@{@"timestamp":@(now), @"type":@(typingType)} forKey:userId];
+    [self showTyping];
+}
+
+- (void)showTyping {
     if (self.showTypingTimer) {
         [self.showTypingTimer invalidate];
     }
-    
-    self.showTypingTimer = [NSTimer timerWithTimeInterval:TYPING_INTERVAL/2 target:self selector:@selector(stopShowTyping) userInfo:nil repeats:NO];
-    
+    self.showTypingTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(checkUserTyping) userInfo:nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:self.showTypingTimer forMode:NSDefaultRunLoopMode];
-    if (typingType == Typing_TEXT) {
-        self.title = WFCString(@"TypingHint");
-    } else if(typingType == Typing_VOICE) {
-        self.title = WFCString(@"RecordingHint");
-    } else if(typingType == Typing_CAMERA) {
-        self.title = WFCString(@"PhotographingHint");
-    } else if(typingType == Typing_LOCATION) {
-        self.title = WFCString(@"GetLocationHint");
-    } else if(typingType == Typing_FILE) {
-        self.title = WFCString(@"SelectingFileHint");
-    }
     
+    if(self.typingDict.count == 1) {
+        NSString *userId = self.typingDict.allKeys[0];
+        NSDictionary *dict = self.typingDict[userId];
+        WFCCTypingType typingType = [dict[@"type"] intValue];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.conversation.type == Group_Type?self.conversation.target:nil refresh:NO];
+        NSString *name = @"有人";
+        if(userInfo.friendAlias.length) {
+            name = userInfo.friendAlias;
+        } else if(userInfo.groupAlias.length) {
+            name = userInfo.groupAlias;
+        } else if(userInfo.displayName.length) {
+            name = userInfo.displayName;
+        }
+        
+        NSString *title;
+        if(typingType == Typing_VOICE) {
+            title = WFCString(@"RecordingHint");
+        } else if(typingType == Typing_CAMERA) {
+            title = WFCString(@"PhotographingHint");
+        } else if(typingType == Typing_LOCATION) {
+            title = WFCString(@"GetLocationHint");
+        } else if(typingType == Typing_FILE) {
+            title = WFCString(@"SelectingFileHint");
+        } else {
+            title = WFCString(@"TypingHint");
+        }
+        self.title = [NSString stringWithFormat:@"%@ %@", name, title];
+    } else {
+        self.title = [NSString stringWithFormat:@"%ld人正在输入", self.typingDict.count];
+    }
+}
+
+- (void)checkUserTyping {
+    NSMutableArray<NSString *> *expiredKeys = [[NSMutableArray alloc] init];
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970];
+    [self.typingDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
+        int64_t timestamp = [obj[@"timestamp"] longLongValue];
+        if(now - timestamp > 5) {
+            [expiredKeys addObject:key];
+        }
+    }];
+    [self.typingDict removeObjectsForKeys:expiredKeys];
+    
+    if(self.typingDict.count) {
+        [self showTyping];
+    } else {
+        [self stopShowTyping];
+    }
 }
 
 - (void)stopShowTyping {
@@ -1194,9 +1242,13 @@
         if ([content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [ws saveStickerRemoteUrl:(WFCCStickerMessageContent *)content];
         }
+        if(![content isKindOfClass:[WFCCTypingMessageContent class]]) {
+            [ws.chatInputBar resetTyping];
+        }
     } error:^(int error_code) {
         NSLog(@"send message fail(%d)", error_code);
     }];
+    
 }
 
 - (void)onReceiveCallOngoingNotifications:(NSArray<WFCCMessage *> *)messages {
@@ -1790,9 +1842,15 @@
             double now = [[NSDate date] timeIntervalSince1970];
             if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
                 WFCCTypingMessageContent *content = (WFCCTypingMessageContent *)message.content;
-                [self showTyping:content.type];
+                [self showUser:message.fromUser typing:content.type];
             }
             continue;
+        }
+        if(message.direction == MessageDirection_Receive) {
+            double now = [[NSDate date] timeIntervalSince1970];
+            if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
+                [self removeUserTyping:message.fromUser];
+            }
         }
         
         if (message.messageId == 0) {
@@ -2927,7 +2985,7 @@
 #endif
 
 - (void)onTyping:(WFCCTypingType)type {
-    if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
+    if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type || self.conversation.type == Group_Type) {
         [self sendMessage:[WFCCTypingMessageContent contentType:type]];
     }
 }
