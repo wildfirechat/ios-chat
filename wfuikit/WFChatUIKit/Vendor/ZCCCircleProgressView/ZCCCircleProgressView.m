@@ -36,8 +36,6 @@
     CGFloat height = self.bounds.size.height;
     
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(width / 2, height / 2) radius:(width - self.lineWidth)/2 startAngle:M_PI / 2+0.01 endAngle:M_PI / 2 clockwise:YES];
-    UIBezierPath *circlePath2 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(width / 2, height / 2) radius:(width - 4 * self.lineWidth)/2 startAngle:M_PI / 2+0.01 endAngle:M_PI / 2 clockwise:YES];
-    
     CAShapeLayer *bgLayer = [CAShapeLayer layer];
     bgLayer.frame = self.bounds;
     bgLayer.fillColor = [UIColor clearColor].CGColor;
@@ -48,18 +46,6 @@
     bgLayer.lineCap = kCALineCapRound;
     bgLayer.path = circlePath.CGPath;
     [self.layer addSublayer:bgLayer];
-    
-    CAShapeLayer *bgLayer2 = [CAShapeLayer layer];
-    bgLayer2.frame = self.bounds;
-    bgLayer2.fillColor = [UIColor clearColor].CGColor;
-    bgLayer2.lineWidth = self.lineWidth;
-    bgLayer2.strokeColor = SDColor(212, 212, 212, 1.0).CGColor;
-    bgLayer2.strokeStart = 0;
-    bgLayer2.strokeEnd = 1;
-    bgLayer2.lineCap = kCALineCapRound;
-    bgLayer2.path = circlePath2.CGPath;
-    [self.layer addSublayer:bgLayer2];
-    
     
     _shapeLayer = [CAShapeLayer layer];
     _shapeLayer.frame = self.bounds;
@@ -72,16 +58,30 @@
     _shapeLayer.path = circlePath.CGPath;
     [self.layer addSublayer:_shapeLayer];
     
-    _shapeLayer2 = [CAShapeLayer layer];
-    _shapeLayer2.frame = self.bounds;
-    _shapeLayer2.fillColor = [UIColor clearColor].CGColor;
-    _shapeLayer2.lineWidth = self.lineWidth;
-    _shapeLayer2.lineCap = kCALineCapRound;
-    _shapeLayer2.strokeColor = [UIColor blueColor].CGColor;
-    _shapeLayer2.strokeStart = 0;
-    _shapeLayer2.strokeEnd = 0;
-    _shapeLayer2.path = circlePath2.CGPath;
-    [self.layer addSublayer:_shapeLayer2];
+    if(self.hasSubProgress) {
+        UIBezierPath *circlePath2 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(width / 2, height / 2) radius:(width - 4 * self.lineWidth)/2 startAngle:M_PI / 2+0.01 endAngle:M_PI / 2 clockwise:YES];
+        CAShapeLayer *bgLayer2 = [CAShapeLayer layer];
+        bgLayer2.frame = self.bounds;
+        bgLayer2.fillColor = [UIColor clearColor].CGColor;
+        bgLayer2.lineWidth = self.lineWidth;
+        bgLayer2.strokeColor = SDColor(212, 212, 212, 1.0).CGColor;
+        bgLayer2.strokeStart = 0;
+        bgLayer2.strokeEnd = 1;
+        bgLayer2.lineCap = kCALineCapRound;
+        bgLayer2.path = circlePath2.CGPath;
+        [self.layer addSublayer:bgLayer2];
+        
+        _shapeLayer2 = [CAShapeLayer layer];
+        _shapeLayer2.frame = self.bounds;
+        _shapeLayer2.fillColor = [UIColor clearColor].CGColor;
+        _shapeLayer2.lineWidth = self.lineWidth;
+        _shapeLayer2.lineCap = kCALineCapRound;
+        _shapeLayer2.strokeColor = [UIColor blueColor].CGColor;
+        _shapeLayer2.strokeStart = 0;
+        _shapeLayer2.strokeEnd = 0;
+        _shapeLayer2.path = circlePath2.CGPath;
+        [self.layer addSublayer:_shapeLayer2];
+    }
 
     self.gradientLayer = [CAGradientLayer layer];
     
@@ -127,12 +127,12 @@
     CGFloat progress = [[time.userInfo objectForKey:@"progressStr"]  floatValue];
     CGFloat subProgress = [[time.userInfo objectForKey:@"subProgress"] floatValue];
     
-    if(_shapeLayer.strokeEnd <= progress || _shapeLayer2.strokeEnd <= subProgress) {
+    if(_shapeLayer.strokeEnd <= progress || (self.hasSubProgress && _shapeLayer2.strokeEnd <= subProgress)) {
         if(_shapeLayer.strokeEnd <= progress) {
             _shapeLayer.strokeEnd += 0.01;
         }
         
-        if(_shapeLayer2.strokeEnd <= subProgress) {
+        if(self.hasSubProgress && _shapeLayer2.strokeEnd <= subProgress) {
             _shapeLayer2.strokeEnd += 0.01;
         }
     } else {
@@ -147,12 +147,12 @@
 }
 
 - (void)animateReset{
-    if(_shapeLayer.strokeEnd > 0 || _shapeLayer2.strokeEnd > 0){
+    if(_shapeLayer.strokeEnd > 0 || (self.hasSubProgress && _shapeLayer2.strokeEnd > 0)) {
         if(_shapeLayer.strokeEnd > 0) {
             _shapeLayer.strokeEnd -= 0.01;
         }
         
-        if(_shapeLayer2.strokeEnd > 0) {
+        if(self.hasSubProgress && _shapeLayer2.strokeEnd > 0) {
             _shapeLayer2.strokeEnd -= 0.01;
         }
     }else{
@@ -162,12 +162,16 @@
 
 - (void)setProgress:(CGFloat)progress subProgress:(CGFloat)subProgress {
     _shapeLayer.strokeEnd = progress;
-    _shapeLayer2.strokeEnd = subProgress;
+    if(self.hasSubProgress) {
+        _shapeLayer2.strokeEnd = subProgress;
+    }
 }
 
 - (void)reset {
     _shapeLayer.strokeEnd = 0;
-    _shapeLayer2.strokeEnd = 0;
+    if(self.hasSubProgress) {
+        _shapeLayer2.strokeEnd = 0;
+    }
 }
 
 - (void)deleteTimer{
