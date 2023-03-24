@@ -1106,6 +1106,10 @@
 }
 
 - (void)showTyping {
+    if(self.conversation.type == Channel_Type || self.conversation.type == Chatroom_Type) {
+        return;
+    }
+    
     if (self.showTypingTimer) {
         [self.showTypingTimer invalidate];
     }
@@ -1139,7 +1143,7 @@
             title = WFCString(@"TypingHint");
         }
         self.title = [NSString stringWithFormat:@"%@ %@", name, title];
-    } else {
+    } else if(self.typingDict.count > 1) {
         self.title = [NSString stringWithFormat:@"%ld人正在输入", self.typingDict.count];
     }
 }
