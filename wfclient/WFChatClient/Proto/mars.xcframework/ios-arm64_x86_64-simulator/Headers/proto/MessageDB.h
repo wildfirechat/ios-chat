@@ -41,7 +41,8 @@ namespace mars {
             
             bool UpdateMessageTimeline(int64_t timeline, const std::string &node);
             bool UpdateRecvAndReadTimeline(int64_t timeline, bool isRead);
-            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead);
+            bool UpdateGroupConvTimeline(int64_t timeline);
+            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead);
             int64_t GetSettingVersion();
             bool UpdateUserSettings(std::list<TUserSettingEntry> &settings);
             std::string GetUserSetting(int scope, const std::string &key);
@@ -98,10 +99,12 @@ namespace mars {
             TUnreadCount GetUnreadCount(int conversationType, const std::string &target, int line);
             
             TUnreadCount GetUnreadCount(const std::list<int> &conversationTypes, const std::list<int> lines);
-            std::list<std::string> GetUnreadMsgSender(int conversationType, const std::string &target, int line);
+            std::list<std::string> GetUnreadMsgSender(int conversationType, const std::string &target, int line, int64_t before = 0);
             bool ClearUnreadStatus(int conversationType, const std::string &target, int line);
             bool ClearUnreadStatus(const std::list<int> &conversationTypes, const std::list<int> lines);
             bool ClearUnreadStatus(int messageId);
+            bool ClearUnreadStatusBeforeMessage(int messageId, int conversationType, const std::string &target, int line);
+            bool ClearUnreadStatusBeforeTime(int conversationType, const std::string &target, int line, int64_t timestamp, bool sync);
             bool ClearAllUnreadStatus();
             int64_t SetLastReceivedMessageUnRead(int conversationType, const std::string &target, int line, int64_t lastMsgUid, int64_t timestamp);
             int64_t getLastReceivedMessageUid(int conversationType, const std::string &target, int line);
@@ -231,8 +234,10 @@ namespace mars {
             SyncBurnReadedEntry getSyncBurnReadedEntry();
             void deleteUserMessages(const std::list<std::string> &userIds);
             void _OnCheckBurn();
+            int64_t getConversationReadFromUserSetting(int type, const std::string &target, int line);
             friend DB2;
         private:
+            std::string getLoadMessageSql(DB2 *db, const std::string &where, const std::string &orderBy, int count);
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
             bool GetConversationSilent(int conversationType, const std::string &target, int line);
             bool isConversationExist(int conversationType, const std::string &target, int line);

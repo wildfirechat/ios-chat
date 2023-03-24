@@ -977,14 +977,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (BOOL)checkSDKHost:(NSString *)host {
     if(NSClassFromString(@"WFAVEngineKit")) {
         WFAVEngineKit *avEngineKit = [NSClassFromString(@"WFAVEngineKit") performSelector:@selector(sharedEngineKit)];
-        if([avEngineKit respondsToSelector:@selector(supportConference)]) {
+        if([avEngineKit respondsToSelector:@selector(checkAddress:)]) {
             NSLog(@"音视频SDK是高级版");
-            if([avEngineKit respondsToSelector:@selector(checkAddress:)]) {
-                if(![avEngineKit checkAddress:host]) {
-                    NSLog(@"***********************");
-                    NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
-                    NSLog(@"***********************");
-                }
+            if(![avEngineKit checkAddress:host]) {
+                NSLog(@"***********************");
+                NSLog(@"错误，音视频SDK跟域名不匹配。请检查SDK的授权域名是否与当前使用的域名一致。");
+                NSLog(@"***********************");
             }
         } else {
             NSLog(@"音视频SDK是普通版");
