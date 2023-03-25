@@ -12,6 +12,7 @@
 #import "WFCUConferenceManager.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUUtilities.h"
+#import "WFCUImage.h"
 
 @interface WFCUConferenceUnmuteRequestTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -133,7 +134,7 @@
     NSString *userId = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers[indexPath.row];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     cell.textLabel.text = userInfo.friendAlias.length?userInfo.friendAlias:userInfo.displayName;
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage: [UIImage imageNamed:@"PersonalChat"]];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     cell.tag = indexPath.row;
     
     return cell;
