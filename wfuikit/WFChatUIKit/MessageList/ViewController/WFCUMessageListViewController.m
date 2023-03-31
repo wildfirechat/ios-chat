@@ -157,6 +157,7 @@
 
 @property (nonatomic, assign)BOOL isAtButtom;
 
+@property (nonatomic, strong)NSMutableDictionary<NSString*, NSDictionary*> *typingDict;
 @end
 
 @implementation WFCUMessageListViewController
@@ -168,6 +169,7 @@
     self.isAtButtom = YES;
     self.cellContentDict = [[NSMutableDictionary alloc] init];
     self.ongoingCallDict = [[NSMutableDictionary alloc] init];
+    self.typingDict = [[NSMutableDictionary alloc] init];
     self.focusedOngoingCellIndex = -1;
     [self initializedSubViews];
     self.firstAppear = YES;
@@ -462,6 +464,42 @@
     }
 }
 
+- (void)loadRemoteHistoryMessages:(void (^ __nullable)(BOOL more))completion {
+    __weak typeof(self) weakSelf = self;
+    if(!self.lastUid) {
+        self.lastUid = self.modelList.lastObject.message.messageUid;
+    }
+    for (WFCUMessageModel *model in self.modelList) {
+        if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
+            self.lastUid = model.message.messageUid;
+        }
+    }
+    [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:self.lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
+        NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
+        for (WFCCMessage *msg in messages) {
+            [reversedMsgs insertObject:msg atIndex:0];
+            if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
+                self.lastUid = msg.messageUid;
+            }
+        }
+        
+        if (!reversedMsgs.count) {
+            weakSelf.hasMoreOld = NO;
+        } else {
+            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
+        }
+        weakSelf.loadingMore = NO;
+        if (completion) {
+            completion(messages.count > 0);
+        }
+    } error:^(int error_code) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.hasMoreOld = NO;
+            weakSelf.loadingMore = NO;
+        });
+    }];
+}
+
 - (void)loadMoreMessage:(BOOL)isHistory completion:(void (^ __nullable)(BOOL more))completion {
     __weak typeof(self) weakSelf = self;
     if (isHistory) {
@@ -474,53 +512,19 @@
             lastIndex = [weakSelf.modelList firstObject].message.messageId;
         }
         
-        dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-            NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser];
-            if (!messageList.count) {
-                if(!self.lastUid) {
-                    self.lastUid = self.modelList.lastObject.message.messageUid;
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser  success:^(NSArray<WFCCMessage *> *messageList) {
+            if(messageList.count) {
+                [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
+                weakSelf.loadingMore = NO;
+                if (completion) {
+                    completion(messageList.count > 0);
                 }
-                for (WFCUMessageModel *model in self.modelList) {
-                    if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
-                        self.lastUid = model.message.messageUid;
-                    }
-                }
-                [[WFCCIMService sharedWFCIMService] getRemoteMessages:weakSelf.conversation before:self.lastUid count:10 contentTypes:nil success:^(NSArray<WFCCMessage *> *messages) {
-                    NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
-                    for (WFCCMessage *msg in messages) {
-                        [reversedMsgs insertObject:msg atIndex:0];
-                        if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
-                            self.lastUid = msg.messageUid;
-                        }
-                    }
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!reversedMsgs.count) {
-                            weakSelf.hasMoreOld = NO;
-                        } else {
-                            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
-                        }
-                        weakSelf.loadingMore = NO;
-                        if (completion) {
-                            completion(messages.count > 0);
-                        }
-                    });
-                } error:^(int error_code) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.hasMoreOld = NO;
-                        weakSelf.loadingMore = NO;
-                    });
-                }];
             } else {
-                [NSThread sleepForTimeInterval:0.5];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
-                    weakSelf.loadingMore = NO;
-                    if (completion) {
-                        completion(messageList.count > 0);
-                    }
-                });
+                [weakSelf loadRemoteHistoryMessages:completion];
             }
-        });
+        } error:^(int error_code) {
+            weakSelf.loadingMore = NO;
+        }];
     } else {
         if (weakSelf.loadingNew || !weakSelf.hasNewMessage) {
             return;
@@ -1090,26 +1094,76 @@
     [self.cellContentDict setObject:cellCls forKey:@([msgContentCls getContentType])];
 }
 
-- (void)showTyping:(WFCCTypingType)typingType {
+- (void)removeUserTyping:(NSString *)userId {
+    [self.typingDict removeObjectForKey:userId];
+    [self showTyping];
+}
+
+- (void)showUser:(NSString *)userId typing:(WFCCTypingType)typingType {
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970];
+    [self.typingDict setValue:@{@"timestamp":@(now), @"type":@(typingType)} forKey:userId];
+    [self showTyping];
+}
+
+- (void)showTyping {
+    if(self.conversation.type == Channel_Type || self.conversation.type == Chatroom_Type) {
+        return;
+    }
+    
     if (self.showTypingTimer) {
         [self.showTypingTimer invalidate];
     }
-    
-    self.showTypingTimer = [NSTimer timerWithTimeInterval:TYPING_INTERVAL/2 target:self selector:@selector(stopShowTyping) userInfo:nil repeats:NO];
-    
+    self.showTypingTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(checkUserTyping) userInfo:nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:self.showTypingTimer forMode:NSDefaultRunLoopMode];
-    if (typingType == Typing_TEXT) {
-        self.title = WFCString(@"TypingHint");
-    } else if(typingType == Typing_VOICE) {
-        self.title = WFCString(@"RecordingHint");
-    } else if(typingType == Typing_CAMERA) {
-        self.title = WFCString(@"PhotographingHint");
-    } else if(typingType == Typing_LOCATION) {
-        self.title = WFCString(@"GetLocationHint");
-    } else if(typingType == Typing_FILE) {
-        self.title = WFCString(@"SelectingFileHint");
-    }
     
+    if(self.typingDict.count == 1) {
+        NSString *userId = self.typingDict.allKeys[0];
+        NSDictionary *dict = self.typingDict[userId];
+        WFCCTypingType typingType = [dict[@"type"] intValue];
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.conversation.type == Group_Type?self.conversation.target:nil refresh:NO];
+        NSString *name = @"有人";
+        if(userInfo.friendAlias.length) {
+            name = userInfo.friendAlias;
+        } else if(userInfo.groupAlias.length) {
+            name = userInfo.groupAlias;
+        } else if(userInfo.displayName.length) {
+            name = userInfo.displayName;
+        }
+        
+        NSString *title;
+        if(typingType == Typing_VOICE) {
+            title = WFCString(@"RecordingHint");
+        } else if(typingType == Typing_CAMERA) {
+            title = WFCString(@"PhotographingHint");
+        } else if(typingType == Typing_LOCATION) {
+            title = WFCString(@"GetLocationHint");
+        } else if(typingType == Typing_FILE) {
+            title = WFCString(@"SelectingFileHint");
+        } else {
+            title = WFCString(@"TypingHint");
+        }
+        self.title = [NSString stringWithFormat:@"%@ %@", name, title];
+    } else if(self.typingDict.count > 1) {
+        self.title = [NSString stringWithFormat:@"%ld人正在输入", self.typingDict.count];
+    }
+}
+
+- (void)checkUserTyping {
+    NSMutableArray<NSString *> *expiredKeys = [[NSMutableArray alloc] init];
+    int64_t now = [[[NSDate alloc] init] timeIntervalSince1970];
+    [self.typingDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSDictionary * _Nonnull obj, BOOL * _Nonnull stop) {
+        int64_t timestamp = [obj[@"timestamp"] longLongValue];
+        if(now - timestamp > 5) {
+            [expiredKeys addObject:key];
+        }
+    }];
+    [self.typingDict removeObjectsForKeys:expiredKeys];
+    
+    if(self.typingDict.count) {
+        [self showTyping];
+    } else {
+        [self stopShowTyping];
+    }
 }
 
 - (void)stopShowTyping {
@@ -1192,9 +1246,13 @@
         if ([content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [ws saveStickerRemoteUrl:(WFCCStickerMessageContent *)content];
         }
+        if(![content isKindOfClass:[WFCCTypingMessageContent class]]) {
+            [ws.chatInputBar resetTyping];
+        }
     } error:^(int error_code) {
         NSLog(@"send message fail(%d)", error_code);
     }];
+    
 }
 
 - (void)onReceiveCallOngoingNotifications:(NSArray<WFCCMessage *> *)messages {
@@ -1559,8 +1617,6 @@
     }
 }
 
-
-
 - (void)reloadMessageList {
     self.deliveryDict = [[WFCCIMService sharedWFCIMService] getMessageDelivery:self.conversation];
     self.readDict = [[WFCCIMService sharedWFCIMService] getConversationRead:self.conversation];
@@ -1577,51 +1633,72 @@
         if (messageListNew.count == 15) {
             self.hasNewMessage = YES;
         }
+        self.modelList = [[NSMutableArray alloc] init];
+        
+        [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
+        self.highlightMessageId = 0;
+        
+        if(self.conversation.type == SecretChat_Type) {
+            WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+            if(secretChatInfo.state == SecretChatState_Established) {
+                if(self.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
+                    self.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+                }
+            } else {
+                if(self.chatInputBar.inputBarStatus != ChatInputBarMuteStatus) {
+                    self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+                }
+            }
+        }
     } else {
         BOOL firstIn = NO;
         int count = (int)self.modelList.count;
-        if (count > 50) {
-            count = 50;
-        } else if(count == 0) {
-            count = 15;
+        if(count == 0) {
             firstIn = YES;
         }
-        messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser];
-        
-        self.mentionedMsgs = [[[WFCCIMService sharedWFCIMService] getMessages:self.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:self.privateChatUser] mutableCopy];
-        
-        if (self.mentionedMsgs.count) {
-            [self showMentionedLabel];
-        }
-        
-        if (firstIn) {
-            WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation];
-            if (info.unreadCount.unread >= 10 && info.unreadCount.unread < 300) { //如果消息太多了就没有必要显示新消息了
-                self.unreadMessageCount = info.unreadCount.unread;
-                self.firstUnreadMessageId = [[WFCCIMService sharedWFCIMService] getFirstUnreadMessageId:self.conversation];
-                [self showUnreadLabel];
+        count = 15;
+        __weak typeof(self)ws = self;
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser success:^(NSArray<WFCCMessage *> *messages) {
+            [[WFCCIMService sharedWFCIMService] getMessagesV2:ws.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:ws.privateChatUser success:^(NSArray<WFCCMessage *> *messages) {
+                ws.mentionedMsgs = [messages mutableCopy];
+                if (ws.mentionedMsgs.count) {
+                    [ws showMentionedLabel];
+                }
+            } error:^(int error_code) {
+                
+            }];
+            
+            if (firstIn) {
+                WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:ws.conversation];
+                if (info.unreadCount.unread >= 10 && info.unreadCount.unread < 300) { //如果消息太多了就没有必要显示新消息了
+                    ws.unreadMessageCount = info.unreadCount.unread;
+                    ws.firstUnreadMessageId = [[WFCCIMService sharedWFCIMService] getFirstUnreadMessageId:ws.conversation];
+                    [ws showUnreadLabel];
+                }
+                [[WFCCIMService sharedWFCIMService] clearUnreadStatus:ws.conversation];
             }
-        }
-        
-        [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
-    }
-    
-    self.modelList = [[NSMutableArray alloc] init];
-    
-    [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
-    self.highlightMessageId = 0;
-    
-    if(self.conversation.type == SecretChat_Type) {
-        WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
-        if(secretChatInfo.state == SecretChatState_Established) {
-            if(self.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
-                self.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+            
+            ws.modelList = [[NSMutableArray alloc] init];
+            
+            [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO];
+            ws.highlightMessageId = 0;
+            
+            if(ws.conversation.type == SecretChat_Type) {
+                WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:ws.conversation.target];
+                if(secretChatInfo.state == SecretChatState_Established) {
+                    if(ws.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
+                        ws.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+                    }
+                } else {
+                    if(ws.chatInputBar.inputBarStatus != ChatInputBarMuteStatus) {
+                        ws.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+                    }
+                }
             }
-        } else {
-            if(self.chatInputBar.inputBarStatus != ChatInputBarMuteStatus) {
-                self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
-            }
-        }
+        } error:^(int error_code) {
+            
+        }];
+        return;
     }
 }
 
@@ -1769,9 +1846,15 @@
             double now = [[NSDate date] timeIntervalSince1970];
             if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
                 WFCCTypingMessageContent *content = (WFCCTypingMessageContent *)message.content;
-                [self showTyping:content.type];
+                [self showUser:message.fromUser typing:content.type];
             }
             continue;
+        }
+        if(message.direction == MessageDirection_Receive) {
+            double now = [[NSDate date] timeIntervalSince1970];
+            if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
+                [self removeUserTyping:message.fromUser];
+            }
         }
         
         if (message.messageId == 0) {
@@ -2906,7 +2989,7 @@
 #endif
 
 - (void)onTyping:(WFCCTypingType)type {
-    if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
+    if (self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type || self.conversation.type == Group_Type) {
         [self sendMessage:[WFCCTypingMessageContent contentType:type]];
     }
 }
@@ -3107,22 +3190,30 @@
             [weakSelf deleteMessage:message.messageId];
         }];
         
-        UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
-            hud.label.text = WFCString(@"Deleting");
-            [hud showAnimated:YES];
-            [[WFCCIMService sharedWFCIMService] deleteRemoteMessage:message.messageUid success:^{
-                [weakSelf deleteMessageUI:message.messageId];
-                [hud hideAnimated:YES];
-            } error:^(int error_code) {
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = WFCString(@"DeleteFailed");
-                [hud hideAnimated:YES afterDelay:1.f];
-            }];
-        }];
-        
         [actionSheet addAction:actionLocalDelete];
-        [actionSheet addAction:actionRemoteDelete];
+        
+        bool superGroup = false;
+        if(self.conversation.type == Group_Type) {
+            superGroup = self.targetGroup.superGroup>0;
+        }
+        
+        //超级群组不支持远端删除
+        if(!superGroup) {
+            UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+                hud.label.text = WFCString(@"Deleting");
+                [hud showAnimated:YES];
+                [[WFCCIMService sharedWFCIMService] deleteRemoteMessage:message.messageUid success:^{
+                    [weakSelf deleteMessageUI:message.messageId];
+                    [hud hideAnimated:YES];
+                } error:^(int error_code) {
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = WFCString(@"DeleteFailed");
+                    [hud hideAnimated:YES afterDelay:1.f];
+                }];
+            }];
+            [actionSheet addAction:actionRemoteDelete];
+        }
         [actionSheet addAction:actionCancel];
         
         [self presentViewController:actionSheet animated:YES completion:nil];

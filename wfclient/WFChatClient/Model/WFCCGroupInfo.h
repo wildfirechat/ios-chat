@@ -99,6 +99,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, assign)int maxMemberCount;
 
 /**
+ 群成员私聊状态，0 普通群组；1 超级群组。超级群组不支持服务器端删除。
+ */
+@property (nonatomic, assign)int superGroup;
+
+/**
  群的最后更新日期
  */
 @property (nonatomic, assign)long long updateTimestamp;

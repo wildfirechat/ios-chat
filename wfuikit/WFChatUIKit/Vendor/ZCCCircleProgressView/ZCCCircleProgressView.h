@@ -10,6 +10,7 @@
 
 @interface ZCCCircleProgressView : UIView
 @property(nonatomic, assign)CGFloat lineWidth;
+@property(nonatomic, assign)BOOL hasSubProgress;
 
 //跳到进度
 - (void)animateToProgress:(CGFloat)progress subProgress:(CGFloat)subProgress;

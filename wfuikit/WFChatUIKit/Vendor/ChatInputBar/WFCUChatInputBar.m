@@ -822,6 +822,10 @@
     
 }
 
+- (void)resetTyping {
+    self.lastTypingTime = 0;
+}
+
 - (void)notifyTyping:(WFCCTypingType)type {
     double now = [[NSDate date] timeIntervalSince1970];
     if (self.lastTypingTime + TYPING_INTERVAL < now) {

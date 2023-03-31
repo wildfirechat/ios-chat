@@ -81,4 +81,5 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 - (void)willAppear;
 - (void)appendText:(NSString *)text;
 - (NSString *)getDraftText:(NSString *)draft;
+- (void)resetTyping;
 @end
