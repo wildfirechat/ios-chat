@@ -527,6 +527,22 @@
 		B7A1C06028DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A1C05E28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h */; };
 		B7AF6253295946F700324247 /* WFCUOrganizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */; };
 		B7AF6254295946F700324247 /* WFCUOrganizationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */; };
+		B7C1915D29CEFA6B00DBEA9B /* WFCUReadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */; };
+		B7C1915E29CEFA6B00DBEA9B /* WFCUReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */; };
+		B7C1916C29CEFF7D00DBEA9B /* XLPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */; };
+		B7C1916D29CEFF7D00DBEA9B /* XLPageSegmentedTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916129CEFF7D00DBEA9B /* XLPageSegmentedTitleView.m */; };
+		B7C1916E29CEFF7D00DBEA9B /* XLPageBasicTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916229CEFF7D00DBEA9B /* XLPageBasicTitleView.m */; };
+		B7C1916F29CEFF7D00DBEA9B /* XLPageViewControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916329CEFF7D00DBEA9B /* XLPageViewControllerConfig.m */; };
+		B7C1917029CEFF7D00DBEA9B /* XLPageViewControllerUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916429CEFF7D00DBEA9B /* XLPageViewControllerUtil.h */; };
+		B7C1917129CEFF7D00DBEA9B /* XLPageTitleCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916529CEFF7D00DBEA9B /* XLPageTitleCell.h */; };
+		B7C1917229CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916629CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h */; };
+		B7C1917329CEFF7D00DBEA9B /* XLPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916729CEFF7D00DBEA9B /* XLPageViewController.h */; };
+		B7C1917429CEFF7D00DBEA9B /* XLPageBasicTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916829CEFF7D00DBEA9B /* XLPageBasicTitleView.h */; };
+		B7C1917529CEFF7D00DBEA9B /* XLPageTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916929CEFF7D00DBEA9B /* XLPageTitleCell.m */; };
+		B7C1917629CEFF7D00DBEA9B /* XLPageViewControllerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916A29CEFF7D00DBEA9B /* XLPageViewControllerUtil.m */; };
+		B7C1917729CEFF7D00DBEA9B /* XLPageViewControllerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1916B29CEFF7D00DBEA9B /* XLPageViewControllerConfig.h */; };
+		B7C1917A29CF02E500DBEA9B /* CommonTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1917829CF02E400DBEA9B /* CommonTableViewController.h */; };
+		B7C1917B29CF02E500DBEA9B /* CommonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1917929CF02E500DBEA9B /* CommonTableViewController.m */; };
 		B7C5441C28D5876700A2550F /* QQLBXScanViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543E928D5876700A2550F /* QQLBXScanViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7C5441D28D5876700A2550F /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B7C543EB28D5876700A2550F /* CodeScan.bundle */; };
 		B7C5441E28D5876700A2550F /* LBXScanView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C543EC28D5876700A2550F /* LBXScanView.h */; };
@@ -1126,6 +1142,22 @@
 		B7A1C05E28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUParticipantCollectionViewCell.h; sourceTree = "<group>"; };
 		B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUOrganizationViewController.m; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.m; sourceTree = SOURCE_ROOT; };
 		B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUOrganizationViewController.h; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.h; sourceTree = SOURCE_ROOT; };
+		B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReadViewController.h; sourceTree = "<group>"; };
+		B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReadViewController.m; sourceTree = "<group>"; };
+		B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageViewController.m; sourceTree = "<group>"; };
+		B7C1916129CEFF7D00DBEA9B /* XLPageSegmentedTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageSegmentedTitleView.m; sourceTree = "<group>"; };
+		B7C1916229CEFF7D00DBEA9B /* XLPageBasicTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageBasicTitleView.m; sourceTree = "<group>"; };
+		B7C1916329CEFF7D00DBEA9B /* XLPageViewControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageViewControllerConfig.m; sourceTree = "<group>"; };
+		B7C1916429CEFF7D00DBEA9B /* XLPageViewControllerUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageViewControllerUtil.h; sourceTree = "<group>"; };
+		B7C1916529CEFF7D00DBEA9B /* XLPageTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageTitleCell.h; sourceTree = "<group>"; };
+		B7C1916629CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageSegmentedTitleView.h; sourceTree = "<group>"; };
+		B7C1916729CEFF7D00DBEA9B /* XLPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageViewController.h; sourceTree = "<group>"; };
+		B7C1916829CEFF7D00DBEA9B /* XLPageBasicTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageBasicTitleView.h; sourceTree = "<group>"; };
+		B7C1916929CEFF7D00DBEA9B /* XLPageTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageTitleCell.m; sourceTree = "<group>"; };
+		B7C1916A29CEFF7D00DBEA9B /* XLPageViewControllerUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageViewControllerUtil.m; sourceTree = "<group>"; };
+		B7C1916B29CEFF7D00DBEA9B /* XLPageViewControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLPageViewControllerConfig.h; sourceTree = "<group>"; };
+		B7C1917829CF02E400DBEA9B /* CommonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTableViewController.h; sourceTree = "<group>"; };
+		B7C1917929CF02E500DBEA9B /* CommonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonTableViewController.m; sourceTree = "<group>"; };
 		B7C543E928D5876700A2550F /* QQLBXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQLBXScanViewController.h; sourceTree = "<group>"; };
 		B7C543EB28D5876700A2550F /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
 		B7C543EC28D5876700A2550F /* LBXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBXScanView.h; sourceTree = "<group>"; };
@@ -1640,6 +1672,7 @@
 		2F550EF2217F5CC000F56C26 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B7C1915F29CEFF7D00DBEA9B /* XLPageViewController */,
 				B7016304290E346C00DCD651 /* DACircularProgress */,
 				B70162D4290E2F1700DCD651 /* MWPhotoBrowser */,
 				B7E494DF28F6708100FF2333 /* libyuv */,
@@ -2017,6 +2050,8 @@
 				2F341A52235EF30B00F0D1B6 /* WFCUGroupAnnouncementViewController.m */,
 				2B07FBDF247562D90035C4DF /* WFCUReceiptViewController.h */,
 				2B07FBE0247562D90035C4DF /* WFCUReceiptViewController.m */,
+				B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */,
+				B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2406,6 +2441,27 @@
 			path = dsbridge;
 			sourceTree = "<group>";
 		};
+		B7C1915F29CEFF7D00DBEA9B /* XLPageViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B7C1917829CF02E400DBEA9B /* CommonTableViewController.h */,
+				B7C1917929CF02E500DBEA9B /* CommonTableViewController.m */,
+				B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */,
+				B7C1916129CEFF7D00DBEA9B /* XLPageSegmentedTitleView.m */,
+				B7C1916229CEFF7D00DBEA9B /* XLPageBasicTitleView.m */,
+				B7C1916329CEFF7D00DBEA9B /* XLPageViewControllerConfig.m */,
+				B7C1916429CEFF7D00DBEA9B /* XLPageViewControllerUtil.h */,
+				B7C1916529CEFF7D00DBEA9B /* XLPageTitleCell.h */,
+				B7C1916629CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h */,
+				B7C1916729CEFF7D00DBEA9B /* XLPageViewController.h */,
+				B7C1916829CEFF7D00DBEA9B /* XLPageBasicTitleView.h */,
+				B7C1916929CEFF7D00DBEA9B /* XLPageTitleCell.m */,
+				B7C1916A29CEFF7D00DBEA9B /* XLPageViewControllerUtil.m */,
+				B7C1916B29CEFF7D00DBEA9B /* XLPageViewControllerConfig.h */,
+			);
+			path = XLPageViewController;
+			sourceTree = "<group>";
+		};
 		B7C543E828D5876700A2550F /* LBXScan */ = {
 			isa = PBXGroup;
 			children = (
@@ -2573,6 +2629,7 @@
 				B74CF825295D313C009AFA88 /* WFCUEmployeeEx.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				B764D482295850D40082492F /* WFCUOrgServiceProvider.h in Headers */,
+				B7C1917A29CF02E500DBEA9B /* CommonTableViewController.h in Headers */,
 				B764D48A295852500082492F /* WFCUEmployee.h in Headers */,
 				B74CF821295D298F009AFA88 /* WFCUOrganizationEx.h in Headers */,
 				B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */,
@@ -2714,6 +2771,8 @@
 				2F36433721C13C5300904CAB /* WFCUChannelTableViewCell.h in Headers */,
 				2F9CE41D21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h in Headers */,
 				149B3111241E65D500B935D3 /* UIColor+YH.h in Headers */,
+				B7C1917029CEFF7D00DBEA9B /* XLPageViewControllerUtil.h in Headers */,
+				B7C1917429CEFF7D00DBEA9B /* XLPageBasicTitleView.h in Headers */,
 				2F5510B9217F5CC200F56C26 /* WFCUGroupTableViewCell.h in Headers */,
 				B7D0758D2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.h in Headers */,
 				B7311DF028EB02C0009E88B5 /* WFCUConferenceHandupTableViewController.h in Headers */,
@@ -2723,6 +2782,7 @@
 				2F5510EF217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.h in Headers */,
 				2BDF57AF24AD70C8003C1F08 /* DNTapDetectingImageView.h in Headers */,
 				2F5510C5217F5CC200F56C26 /* WFCUFavGroupTableViewController.h in Headers */,
+				B7C1917129CEFF7D00DBEA9B /* XLPageTitleCell.h in Headers */,
 				2F55116C217F5CC200F56C26 /* AFNetworking.h in Headers */,
 				2F550BE4217F4D7B00F56C26 /* WFChatUIKit.h in Headers */,
 				B71F0A7B28F54156000A7C8A /* DDContextFilterLogFormatter.h in Headers */,
@@ -2732,10 +2792,12 @@
 				2F551104217F5CC200F56C26 /* CCHMapClusterAnnotation.h in Headers */,
 				2F1EB5BB2499AA5E00FD3575 /* WFCUConferenceInviteViewController.h in Headers */,
 				2BEF78A123F6A84D000DE285 /* WFCUParticipantCollectionViewLayout.h in Headers */,
+				B7C1917329CEFF7D00DBEA9B /* XLPageViewController.h in Headers */,
 				B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */,
 				2FBDAB9C25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.h in Headers */,
 				2F5511D1217F5CC300F56C26 /* TYShowAlertView.h in Headers */,
 				2F5511FC217F5CC300F56C26 /* WFCUConversationSettingMemberCell.h in Headers */,
+				B7C1915D29CEFA6B00DBEA9B /* WFCUReadViewController.h in Headers */,
 				2F551226217F5CC300F56C26 /* WFCUFriendRequestTableViewCell.h in Headers */,
 				B7CA48CD2834B8AD00CB2F71 /* WFCURichNotificationCell.h in Headers */,
 				B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */,
@@ -2827,11 +2889,13 @@
 				2F55119A217F5CC200F56C26 /* UITextView+Placeholder.h in Headers */,
 				B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */,
 				B7FA122028E9505D001AF906 /* WFCUConferenceCommandContent.h in Headers */,
+				B7C1917729CEFF7D00DBEA9B /* XLPageViewControllerConfig.h in Headers */,
 				2BDF57B624AD70C8003C1F08 /* DNBadgeLabel.h in Headers */,
 				2F56F6D0252AAF5F00B829C4 /* WFCUCompositeImageCell.h in Headers */,
 				2F551158217F5CC200F56C26 /* KZVideoPlayer.h in Headers */,
 				2BDF579724AD70C8003C1F08 /* DNAlbum.h in Headers */,
 				B7C5443128D5876700A2550F /* UIAlertView+LBXAlertAction.h in Headers */,
+				B7C1917229CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h in Headers */,
 				2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */,
 				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
 				2BDF57B424AD70C8003C1F08 /* DNAssetsViewCell.h in Headers */,
@@ -2954,12 +3018,14 @@
 				14349FA724362A6600FE38B3 /* WFCUSeletedUserViewController.m in Sources */,
 				2BDF57B224AD70C8003C1F08 /* DNUnAuthorizedTipsView.m in Sources */,
 				2F551102217F5CC200F56C26 /* CCHNearCenterMapClusterer.m in Sources */,
+				B7C1917629CEFF7D00DBEA9B /* XLPageViewControllerUtil.m in Sources */,
 				2FB7125F25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.m in Sources */,
 				2FDF87162723E01100AC6C36 /* WFPttViewController.m in Sources */,
 				B70162F4290E2F1700DCD651 /* MWZoomingScrollView.m in Sources */,
 				2F7381F72308F72F00213421 /* WFCUGroupMemberCollectionViewController.m in Sources */,
 				2BB4191724ED212200ABFEF1 /* WFCUUserMessageListViewController.m in Sources */,
 				2F5511D8217F5CC300F56C26 /* UIView+TYAutoLayout.m in Sources */,
+				B7C1916F29CEFF7D00DBEA9B /* XLPageViewControllerConfig.m in Sources */,
 				B71F0A7F28F54156000A7C8A /* DDLog.m in Sources */,
 				2F551099217F5CC200F56C26 /* WFCUTextCell.m in Sources */,
 				B71F0A7328F54156000A7C8A /* DDTTYLogger.m in Sources */,
@@ -3013,6 +3079,7 @@
 				2BEF789E23F6A84D000DE285 /* WFCUConferenceParticipantCollectionViewCell.m in Sources */,
 				2F55116A217F5CC200F56C26 /* AFURLSessionManager.m in Sources */,
 				B70162F9290E2F1700DCD651 /* MWTapDetectingView.m in Sources */,
+				B7C1917B29CF02E500DBEA9B /* CommonTableViewController.m in Sources */,
 				2BDF57A824AD70C8003C1F08 /* DNImageFlowViewController.m in Sources */,
 				B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */,
 				2F5511D5217F5CC300F56C26 /* TYAlertFadeAnimation.m in Sources */,
@@ -3033,6 +3100,7 @@
 				2BDF57B824AD70C8003C1F08 /* DNSendButton.m in Sources */,
 				2F535C0025296E6600C9AF09 /* WFCUQuoteViewController.m in Sources */,
 				B71F0A7C28F54156000A7C8A /* DDMultiFormatter.m in Sources */,
+				B7C1917529CEFF7D00DBEA9B /* XLPageTitleCell.m in Sources */,
 				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
 				2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */,
 				2BDF57A924AD70C8003C1F08 /* DNImageFetchOperation.m in Sources */,
@@ -3055,6 +3123,7 @@
 				2F551097217F5CC200F56C26 /* WFCUVoiceCell.m in Sources */,
 				2F551091217F5CC200F56C26 /* WFCUMediaMessageCell.m in Sources */,
 				B7AF6253295946F700324247 /* WFCUOrganizationViewController.m in Sources */,
+				B7C1916C29CEFF7D00DBEA9B /* XLPageViewController.m in Sources */,
 				2F5511FA217F5CC300F56C26 /* UIView+Toast.m in Sources */,
 				2BEF78A723F6A84D000DE285 /* WFCUVideoViewController.m in Sources */,
 				2B46D4DD24ACC9B900721792 /* MediaMessageGridViewCell.m in Sources */,
@@ -3062,6 +3131,7 @@
 				2F551126217F5CC200F56C26 /* VideoPlayerView.m in Sources */,
 				2BDF579F24AD70C8003C1F08 /* DNImagePickerHelper.m in Sources */,
 				B71F0A7628F54156000A7C8A /* DDASLLogger.m in Sources */,
+				B7C1915E29CEFA6B00DBEA9B /* WFCUReadViewController.m in Sources */,
 				2FB7125A25DA042900FD2E83 /* WFCUConferenceMember.m in Sources */,
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
@@ -3156,6 +3226,7 @@
 				2F55120C217F5CC300F56C26 /* WFCUContactTableViewCell.m in Sources */,
 				2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */,
 				B764D4872958517A0082492F /* WFCUOrganization.m in Sources */,
+				B7C1916D29CEFF7D00DBEA9B /* XLPageSegmentedTitleView.m in Sources */,
 				2F55116E217F5CC200F56C26 /* AFSecurityPolicy.m in Sources */,
 				B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */,
 				2F55120D217F5CC300F56C26 /* WFCUContactSelectTableViewCell.m in Sources */,
@@ -3200,6 +3271,7 @@
 				2BDF57AE24AD70C8003C1F08 /* DNBadgeLabel.m in Sources */,
 				2F5511DF217F5CC300F56C26 /* TYAlertController.m in Sources */,
 				2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */,
+				B7C1916E29CEFF7D00DBEA9B /* XLPageBasicTitleView.m in Sources */,
 				B7D584DF28CF0EC4009D09AF /* WFZConferenceInfoViewController.m in Sources */,
 				B7D0758E2827570D008A6C63 /* WFCUMultiCallOngoingExpendedCell.m in Sources */,
 				2F5510B1217F5CC200F56C26 /* WFCUGroupTableViewCell.m in Sources */,

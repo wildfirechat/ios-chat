@@ -149,7 +149,7 @@ namespace mars{
 
         class TGroupInfo : public TSerializable {
         public:
-            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0), historyMessage(0), maxMemberCount(0) {}
+            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0), historyMessage(0), maxMemberCount(0), superGroup(0) {}
             std::string target;
             std::string name;
             std::string portrait;
@@ -165,6 +165,7 @@ namespace mars{
             int searchable;
             int historyMessage;
             int maxMemberCount;
+            int superGroup;
             virtual ~TGroupInfo() {}
 #if WFCHAT_PROTO_SERIALIZABLE
             virtual void Serialize(void *writer) const;
@@ -292,7 +293,7 @@ namespace mars{
 
         class TMessageContent : public TSerializable {
         public:
-            TMessageContent() : type(0), mediaType(0), mentionedType(0) {}
+            TMessageContent() : type(0), mediaType(0), mentionedType(0), notLoaded(false) {}
             TMessageContent(const TMessageContent &c) :
             type(c.type),
             searchableContent(c.searchableContent),
@@ -306,7 +307,8 @@ namespace mars{
             localMediaPath(c.localMediaPath),
             mentionedType(c.mentionedType),
             mentionedTargets(c.mentionedTargets),
-            extra(c.extra) {}
+            extra(c.extra),
+            notLoaded(c.notLoaded) {}
 
             TMessageContent operator=(const TMessageContent &c) {
                 type = c.type;
@@ -322,6 +324,7 @@ namespace mars{
                 mentionedType = c.mentionedType;
                 mentionedTargets = c.mentionedTargets;
                 extra = c.extra;
+                notLoaded = c.notLoaded;
                 return *this;
             }
             int type;
@@ -338,6 +341,7 @@ namespace mars{
             int mentionedType;
             std::list<std::string> mentionedTargets;
             std::string extra;
+            bool notLoaded;
             virtual ~TMessageContent(){
             }
 #if WFCHAT_PROTO_SERIALIZABLE
@@ -992,6 +996,20 @@ namespace mars{
         extern void loadRemoteLineMessages(int type, const std::list<int> &contentTypes, long long beforeUid, int count, LoadRemoteMessagesCallback *callback);
     
         extern void loadRemoteMessage(long long messageUid, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetMessagesByMessageStatus(int conversationType, const std::string &target, int line, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetMessagesByMessageStatus(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetMessagesByTimes(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startTimestamp, const std::string &withUser, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetUserMessages(const std::string &user, int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, LoadRemoteMessagesCallback *callback);
+    
+        extern void GetUserMessages(const std::string &user, const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, LoadRemoteMessagesCallback *callback);
     
         extern void clearRemoteConversationMessages(int conversationType, const std::string &target, int line, GeneralOperationCallback *callback);
 
