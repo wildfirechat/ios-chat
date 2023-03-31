@@ -34,6 +34,7 @@
     
     WFCCRawMessageContent *raw = [[WFCCRawMessageContent alloc] init];
     raw.payload = payload;
+    raw.extra = payload.extra;
     return raw;
 }
 
