@@ -3190,22 +3190,30 @@
             [weakSelf deleteMessage:message.messageId];
         }];
         
-        UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
-            hud.label.text = WFCString(@"Deleting");
-            [hud showAnimated:YES];
-            [[WFCCIMService sharedWFCIMService] deleteRemoteMessage:message.messageUid success:^{
-                [weakSelf deleteMessageUI:message.messageId];
-                [hud hideAnimated:YES];
-            } error:^(int error_code) {
-                hud.mode = MBProgressHUDModeText;
-                hud.label.text = WFCString(@"DeleteFailed");
-                [hud hideAnimated:YES afterDelay:1.f];
-            }];
-        }];
-        
         [actionSheet addAction:actionLocalDelete];
-        [actionSheet addAction:actionRemoteDelete];
+        
+        bool superGroup = false;
+        if(self.conversation.type == Group_Type) {
+            superGroup = self.targetGroup.superGroup>0;
+        }
+        
+        //超级群组不支持远端删除
+        if(!superGroup) {
+            UIAlertAction *actionRemoteDelete = [UIAlertAction actionWithTitle:WFCString(@"DeleteRemoteMsg") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+                hud.label.text = WFCString(@"Deleting");
+                [hud showAnimated:YES];
+                [[WFCCIMService sharedWFCIMService] deleteRemoteMessage:message.messageUid success:^{
+                    [weakSelf deleteMessageUI:message.messageId];
+                    [hud hideAnimated:YES];
+                } error:^(int error_code) {
+                    hud.mode = MBProgressHUDModeText;
+                    hud.label.text = WFCString(@"DeleteFailed");
+                    [hud hideAnimated:YES afterDelay:1.f];
+                }];
+            }];
+            [actionSheet addAction:actionRemoteDelete];
+        }
         [actionSheet addAction:actionCancel];
         
         [self presentViewController:actionSheet animated:YES completion:nil];

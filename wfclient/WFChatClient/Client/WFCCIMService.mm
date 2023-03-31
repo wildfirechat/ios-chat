@@ -2077,6 +2077,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.searchable = tgi.searchable;
     groupInfo.historyMessage = tgi.historyMessage;
     groupInfo.maxMemberCount = tgi.maxMemberCount;
+    groupInfo.superGroup = tgi.superGroup;
     groupInfo.updateTimestamp = tgi.updateDt;
     return groupInfo;
 }
