@@ -93,6 +93,8 @@
             
             if (path) {
                 [self.potraitView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+            } else {
+                [self.potraitView setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
             }
         }
     }
