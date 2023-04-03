@@ -89,7 +89,6 @@
         datePicker.date = [NSDate dateWithTimeIntervalSince1970:self.endMins*60];
     }
     
-    NSInteger interval = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]];
     if (indexPath.row == 0) {
         cell.textLabel.text = @"From";
     } else {

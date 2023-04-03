@@ -131,7 +131,6 @@
 
 - (UILabel *)contentLabel {
     if (!_contentLabel) {
-        CGRect bounds = self.contentArea.bounds;
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _contentLabel.font = [UIFont systemFontOfSize:CONTENT_FONT_SIZE];
         _contentLabel.textColor = [UIColor grayColor];

@@ -10,7 +10,7 @@
 
 @implementation WFCCJsonSerializer
 - (id)toJsonObj {
-    return nil;
+    return [[NSMutableDictionary alloc] init];
 }
 
 - (void)setDict:(NSMutableDictionary *)dict key:(NSString *)key longlongValue:(long long)longlongValue {

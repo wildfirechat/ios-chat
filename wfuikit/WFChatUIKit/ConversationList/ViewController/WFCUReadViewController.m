@@ -63,7 +63,7 @@
             }
         }
     }
-    cell.textLabel.text = userInfo.displayName;
+    cell.textLabel.text = name;
     
     return cell;
 }
