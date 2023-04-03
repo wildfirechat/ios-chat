@@ -111,23 +111,18 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *flag = @"cell";
 
-    if (self.searchController.active) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:flag];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flag];
-        }
-        WFCCUserInfo *userInfo = self.searchList[indexPath.row];
-        [cell.textLabel setText:userInfo.displayName];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-      
-      cell.userInteractionEnabled = YES;
-      return cell;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:flag];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flag];
     }
-    else//如果没有搜索
-    {
-      return nil;
-    }
+    WFCCUserInfo *userInfo = self.searchList[indexPath.row];
+    [cell.textLabel setText:userInfo.displayName];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+  
+  cell.userInteractionEnabled = YES;
+  return cell;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 56;
 }

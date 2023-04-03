@@ -130,8 +130,6 @@
     self.infoLabel.text = [WFCUCallSummaryCell getCallText:model.message.content];
     self.infoLabel.layoutMargins = UIEdgeInsetsMake(TEXT_TOP_PADDING, TEXT_LEFT_PADDING, TEXT_BUTTOM_PADDING, TEXT_RIGHT_PADDING);
     
-    CGSize textSize = [WFCUUtilities getTextDrawingSize:self.infoLabel.text font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
-    
     if (model.message.direction == MessageDirection_Send) {
         self.infoLabel.frame = CGRectMake(0, 0, width - 25, 30);
         self.modeImageView.frame = CGRectMake(width - 25, 3, 25, 25);

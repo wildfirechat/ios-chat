@@ -208,7 +208,6 @@
 - (void)setLocalPath:(NSString *)localPath {
     [super setLocalPath:localPath];
     if (localPath.length) {
-        localPath = [WFCCUtilities getSendBoxFilePath:localPath];
         if (!self.loaded) {
             [self decode:[self encode]];
         }

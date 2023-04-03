@@ -175,7 +175,6 @@
 }
 
 - (void)onOrganizationUpdated:(NSNotification *)notification {
-    NSInteger orgId = [notification.object integerValue];
     [self.collectionView reloadData];
 }
 
@@ -263,7 +262,6 @@
 
 - (void)onBackBtn:(UIBarButtonItem *)sender {
     if(self.paths.count > 1) {
-        WFCUOrganizationEx *path = [self.paths lastObject];
         [self.paths removeLastObject];
         [self.tableView reloadData];
         [self loadData];

@@ -1016,10 +1016,6 @@
     _customFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     _customFlowLayout.headerReferenceSize = CGSizeMake(320.0f, 20.0f);
     
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    if (@available(iOS 11.0, *)) {
-        insets = self.view.safeAreaInsets;
-    }
     CGRect frame = self.view.bounds;
     frame.origin.y += [WFCUUtilities wf_navigationFullHeight];
     frame.size.height -= ([WFCUUtilities wf_safeDistanceBottom] + [WFCUUtilities wf_navigationFullHeight]);
