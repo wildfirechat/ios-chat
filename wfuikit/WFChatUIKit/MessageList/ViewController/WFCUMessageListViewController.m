@@ -1839,18 +1839,13 @@
         }
         
         if ([message.content isKindOfClass:[WFCCTypingMessageContent class]] && message.direction == MessageDirection_Receive) {
-            double now = [[NSDate date] timeIntervalSince1970];
-            if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
-                WFCCTypingMessageContent *content = (WFCCTypingMessageContent *)message.content;
-                [self showUser:message.fromUser typing:content.type];
-            }
+            WFCCTypingMessageContent *content = (WFCCTypingMessageContent *)message.content;
+            [self showUser:message.fromUser typing:content.type];
             continue;
         }
+        
         if(message.direction == MessageDirection_Receive) {
-            double now = [[NSDate date] timeIntervalSince1970];
-            if (now - message.serverTime + [WFCCNetworkService sharedInstance].serverDeltaTime < TYPING_INTERVAL) {
-                [self removeUserTyping:message.fromUser];
-            }
+            [self removeUserTyping:message.fromUser];
         }
         
         if (message.messageId == 0) {
