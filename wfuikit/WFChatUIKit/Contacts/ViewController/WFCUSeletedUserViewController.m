@@ -592,12 +592,13 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         __weak typeof(self)weakSelf = self;
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (weakSelf.type == Vertical) {
-                [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
-            } else {
-                [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+            if(insertIndexPath.row < self.selectedUsers.count) {
+                if (weakSelf.type == Vertical) {
+                    [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+                } else {
+                    [weakSelf.selectedUserCollectionView scrollToItemAtIndexPath:insertIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+                }
             }
-            
         });
     }
     [self setDoneButtonStyleAndContent:self.selectedUsers.count > 0];
