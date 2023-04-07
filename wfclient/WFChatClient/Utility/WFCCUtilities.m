@@ -360,8 +360,7 @@ static NSLock *wfcImageLock;
                         dispatch_semaphore_signal(sema);
                     }];
                     
-                    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-                    
+                    dispatch_semaphore_wait(sema, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20 * NSEC_PER_SEC)));
                     
                     fullPath = [NSString stringWithFormat:@"%@%@", fullPath, user.portrait?user.portrait:userId];
                     
