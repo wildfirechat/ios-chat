@@ -949,6 +949,8 @@ namespace mars{
         extern std::string getCurrentUserId();
 
         extern void useEncryptSM4();
+        extern void setTcpShortLink();
+        extern bool isTCPShortLink();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
         extern void setLowBPSMode(bool lowBPSMode);
