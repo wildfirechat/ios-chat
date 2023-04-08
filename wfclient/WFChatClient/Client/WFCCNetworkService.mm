@@ -1064,6 +1064,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::useEncryptSM4();
 }
 
+- (void)useTcpShortLink {
+    mars::stn::setTcpShortLink();
+}
+
+- (BOOL)isTcpShortLink {
+    return mars::stn::isTCPShortLink()?YES:NO;
+}
+
 - (void)setLiteMode:(BOOL)isLiteMode {
     mars::stn::setLiteMode(isLiteMode ? true:false);
 }

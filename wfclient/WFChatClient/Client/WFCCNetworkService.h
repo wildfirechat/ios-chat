@@ -295,6 +295,16 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  */
 - (void)useSM4;
 
+/*
+ 使用TCP的短连接。需要专业版IM服务支持。
+ */
+- (void)useTcpShortLink;
+
+/*
+ 是否使用TCP的短连接。需要专业版IM服务支持。
+ */
+- (BOOL)isTcpShortLink;
+
 /**
  设置Lite模式。
  Lite模式下，协议栈不存储数据库，不同步所有信息，只能收发消息，接收消息只接收连接以后发送的消息。
