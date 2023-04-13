@@ -9,13 +9,13 @@ PRGDIR=`dirname "$PRG"`
 cd $PRGDIR
 
 BUILD_DIR=`pwd`"/build"
-rm -rf $BUILD_DIR
-mkdir -p $BUILD_DIR
+rm -rf "${BUILD_DIR}"
+mkdir -p "${BUILD_DIR}"
 
 #创建输出目录，并删除之前的framework文件
 UNIVERSAL_OUTPUT_FOLDER=`pwd`"/Libs&Resources"
-rm -rf ${UNIVERSAL_OUTPUT_FOLDER}
-mkdir -p ${UNIVERSAL_OUTPUT_FOLDER}
+rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"
+mkdir -p "${UNIVERSAL_OUTPUT_FOLDER}"
 
 #清理
 cd wfclient
@@ -36,19 +36,19 @@ cd ..
 xcodebuild -create-xcframework -framework "${BUILD_DIR}"/Release-iphoneos/"${TARGET_CLIENT_NAME}".framework  -output "${UNIVERSAL_OUTPUT_FOLDER}"/${TARGET_CLIENT_NAME}.xcframework
 xcodebuild -create-xcframework -framework "${BUILD_DIR}"/Release-iphoneos/"${TARGET_UIKIT_NAME}".framework  -output "${UNIVERSAL_OUTPUT_FOLDER}"/${TARGET_UIKIT_NAME}.xcframework
 
-rm -rf $BUILD_DIR
+rm -rf "${BUILD_DIR}"
 
 ##依赖
-cp -af wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework ${UNIVERSAL_OUTPUT_FOLDER}
-rm -rf ${UNIVERSAL_OUTPUT_FOLDER}/WebRTC.xcframework/ios-*-simulator
-cp -af wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework ${UNIVERSAL_OUTPUT_FOLDER}
-rm -rf ${UNIVERSAL_OUTPUT_FOLDER}/WFAVEngineKit.xcframework/ios-*-simulator
-cp -af wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework ${UNIVERSAL_OUTPUT_FOLDER}
-rm -rf ${UNIVERSAL_OUTPUT_FOLDER}/ZLPhotoBrowser.xcframework/ios-*-simulator
-cp -af wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework ${UNIVERSAL_OUTPUT_FOLDER}
-rm -rf ${UNIVERSAL_OUTPUT_FOLDER}/SDWebImage.xcframework/ios-*-simulator
+cp -af wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework "${UNIVERSAL_OUTPUT_FOLDER}"
+rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"/WebRTC.xcframework/ios-*-simulator
+cp -af wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework "${UNIVERSAL_OUTPUT_FOLDER}"
+rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"/WFAVEngineKit.xcframework/ios-*-simulator
+cp -af wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework "${UNIVERSAL_OUTPUT_FOLDER}"
+rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"/ZLPhotoBrowser.xcframework/ios-*-simulator
+cp -af wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework "${UNIVERSAL_OUTPUT_FOLDER}"
+rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"/SDWebImage.xcframework/ios-*-simulator
 
 #打开合并后的文件夹
 open "${UNIVERSAL_OUTPUT_FOLDER}"
 
-cd $CURRENT_PATH
+cd "${CURRENT_PATH}"
