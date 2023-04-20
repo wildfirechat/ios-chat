@@ -14,6 +14,9 @@
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
 #import "WFCUImage.h"
+#import "WFCUGeneralImageTextTableViewCell.h"
+
+#define CELL_HEIGHT 56
 
 @interface WFCUAddFriendViewController () <UITableViewDataSource, UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UISearchBarDelegate>
 @property (nonatomic, strong)  UITableView              *tableView;
@@ -160,27 +163,26 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *flag = @"cell";
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:flag];
+    WFCUGeneralImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:flag];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flag];
-        cell.userInteractionEnabled = YES;
+        cell = [[WFCUGeneralImageTextTableViewCell alloc] initWithReuseIdentifier:flag cellHeight:CELL_HEIGHT];
     }
     if(self.texting) {
         NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:@"搜索："];
         [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:self.searchController.searchBar.text attributes:@{NSForegroundColorAttributeName : [UIColor blueColor]}]];
-        cell.textLabel.attributedText = attStr;
-        cell.imageView.image = [WFCUImage imageNamed:@"search_icon"];
+        cell.titleLable.attributedText = attStr;
+        cell.portraitIV.image = [WFCUImage imageNamed:@"search_icon"];
     } else {
         WFCCUserInfo *userInfo = self.searchList[indexPath.row];
-        [cell.textLabel setText:userInfo.displayName];
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+        [cell.titleLable setText:userInfo.displayName];
+        [cell.portraitIV sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     }
   
   return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 56;
+    return CELL_HEIGHT;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

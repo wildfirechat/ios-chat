@@ -519,6 +519,8 @@
 		B764D49729586B060082492F /* WFCUOrganizationCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D49529586B060082492F /* WFCUOrganizationCache.m */; };
 		B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B767584928CC1AF200835A6A /* WFZConferenceInfo.m */; };
 		B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B77D1E0C29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */; };
+		B77D1E0D29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */; };
 		B77D33F7290C1EB500E72111 /* WFCUProfileMoreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D33F5290C1EB500E72111 /* WFCUProfileMoreTableViewController.m */; };
 		B77D33F8290C1EB500E72111 /* WFCUProfileMoreTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D33F6290C1EB500E72111 /* WFCUProfileMoreTableViewController.h */; };
 		B77D33FB290C258A00E72111 /* WFCUGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D33F9290C258A00E72111 /* WFCUGroupTableViewController.m */; };
@@ -1134,6 +1136,8 @@
 		B764D49529586B060082492F /* WFCUOrganizationCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUOrganizationCache.m; sourceTree = "<group>"; };
 		B767584928CC1AF200835A6A /* WFZConferenceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfo.m; sourceTree = "<group>"; };
 		B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfo.h; sourceTree = "<group>"; };
+		B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralImageTextTableViewCell.h; sourceTree = "<group>"; };
+		B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGeneralImageTextTableViewCell.m; sourceTree = "<group>"; };
 		B77D33F5290C1EB500E72111 /* WFCUProfileMoreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUProfileMoreTableViewController.m; sourceTree = "<group>"; };
 		B77D33F6290C1EB500E72111 /* WFCUProfileMoreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUProfileMoreTableViewController.h; sourceTree = "<group>"; };
 		B77D33F9290C258A00E72111 /* WFCUGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupTableViewController.m; sourceTree = "<group>"; };
@@ -2173,6 +2177,8 @@
 				2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */,
 				B707759728823635004034A5 /* WFCUImage.h */,
 				B707759828823635004034A5 /* WFCUImage.m */,
+				B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */,
+				B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -2697,6 +2703,7 @@
 				2F551111217F5CC200F56C26 /* VideoPlayerView.h in Headers */,
 				B7C5442E28D5876700A2550F /* LBXAlertAction.h in Headers */,
 				B7C5443C28D5876700A2550F /* LBXScanTypes.h in Headers */,
+				B77D1E0C29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h in Headers */,
 				2F551209217F5CC300F56C26 /* WFCUConversationTableViewController.h in Headers */,
 				2B15F1B92509E2C5007022BC /* WFCUGroupInfoViewController.h in Headers */,
 				2F551114217F5CC200F56C26 /* AirplayActiveView.h in Headers */,
@@ -3191,6 +3198,7 @@
 				B74FDF8328E43275001B870F /* WFCUMoreBoardView.m in Sources */,
 				2B15F1B82509E285007022BC /* WFCUGroupInfoViewController.m in Sources */,
 				B7D584DD28CF0EC4009D09AF /* WFZHomeViewController.m in Sources */,
+				B77D1E0D29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m in Sources */,
 				2F5510A6217F5CC200F56C26 /* WFCUStickerCell.m in Sources */,
 				2F551103217F5CC200F56C26 /* CCHFadeInOutMapAnimator.m in Sources */,
 				2F551168217F5CC200F56C26 /* AFHTTPSessionManager.m in Sources */,

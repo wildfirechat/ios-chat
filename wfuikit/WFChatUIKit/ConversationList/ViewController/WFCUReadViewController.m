@@ -10,13 +10,14 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUGeneralImageTextTableViewCell.h"
 
 @interface WFCUReadViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
 @end
 
+#define CELL_HEIGHT 56
 @implementation WFCUReadViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -46,13 +47,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    WFCUGeneralImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[WFCUGeneralImageTextTableViewCell alloc] initWithReuseIdentifier:@"cell" cellHeight:CELL_HEIGHT];
     }
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userIds[indexPath.row] inGroup:self.groupId refresh:NO];
     
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+    [cell.portraitIV sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     NSString *name = userInfo.friendAlias;
     if(!name.length) {
         name = userInfo.groupAlias;
@@ -63,9 +64,13 @@
             }
         }
     }
-    cell.textLabel.text = name;
+    cell.titleLable.text = name;
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return CELL_HEIGHT;
 }
 
 - (void)dealloc {
