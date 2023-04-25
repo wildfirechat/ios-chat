@@ -3468,7 +3468,7 @@ public:
 }
 
 - (WFCCMessageContent *)messageContentFromPayload:(WFCCMessagePayload *)payload {
-    if(self.rawMessage) {
+    if(self.rawMessage && (payload.contentType < 400 || payload.contentType >= 500)) {
         WFCCRawMessageContent *rawContent = [[WFCCRawMessageContent alloc] init];
         rawContent.payload = payload;
         return rawContent;
