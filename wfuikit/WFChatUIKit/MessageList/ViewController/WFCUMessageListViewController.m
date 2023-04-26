@@ -230,10 +230,6 @@
         }];
     } else if(self.conversation.type == SecretChat_Type) {
         self.secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
-        if(!self.secretChatInfo) {
-            [[WFCCIMService sharedWFCIMService] destroySecretChat:self.conversation.target success:nil error:nil];
-            [self onLeftBtnPressed:nil];
-        }
     }
     
     if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
