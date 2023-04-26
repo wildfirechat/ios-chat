@@ -296,6 +296,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)useSM4;
 
 /*
+ 使用AES256加密。注意必须和服务器同时配置，否则无法连接。
+ */
+- (void)useAES256;
+
+/*
  使用TCP的短连接。需要专业版IM服务支持。
  */
 - (void)useTcpShortLink;

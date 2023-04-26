@@ -1064,6 +1064,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::useEncryptSM4();
 }
 
+- (void)useAES256 {
+    mars::stn::useEncryptAES256();
+}
+
 - (void)useTcpShortLink {
     mars::stn::setTcpShortLink();
 }
