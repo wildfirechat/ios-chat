@@ -2,6 +2,8 @@
 TARGET_CLIENT_NAME=WFChatClient
 TARGET_UIKIT_NAME=WFChatUIKit
 
+set +e
+
 CURRENT_PATH=`pwd`
 
 PRG="$0"
