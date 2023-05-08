@@ -14,12 +14,15 @@
 // If you want to handle photos, caching, decompression
 // yourself then you can simply ensure your custom data model
 // conforms to MWPhotoProtocol
+@class WFCCMessage;
+
 @interface MWPhoto : NSObject <MWPhoto>
 
 @property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) NSURL *videoURL;
 @property (nonatomic) BOOL emptyImage;
 @property (nonatomic) BOOL isVideo;
+@property (nonatomic, strong)WFCCMessage* message;
 
 + (MWPhoto *)photoWithImage:(UIImage *)image;
 + (MWPhoto *)photoWithURL:(NSURL *)url;

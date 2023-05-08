@@ -12,6 +12,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "MWPhoto.h"
 #import "MWPhotoBrowser.h"
+#import <WFChatClient/WFCChatClient.h>
+#import "WFCUConfigManager.h"
+
 
 @interface MWPhoto () {
 
@@ -319,6 +322,22 @@
     _loadingInProgress = NO;
     // Notify on next run loop
     [self performSelector:@selector(postCompleteNotification) withObject:nil afterDelay:0];
+    
+    if(self.underlyingImage && [self.message.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)self.message.content;
+        if(!imgCnt.localPath.length) {
+            UInt64 recordTime = [[NSDate date] timeIntervalSince1970]*1000;
+            NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.message.conversation mediaType:Media_Type_IMAGE];
+            NSString *path = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"img%lld.jpg", recordTime]];
+            NSData *imgData = UIImageJPEGRepresentation(self.underlyingImage, 0.85);
+            if([imgData writeToFile:path atomically:YES]) {
+                imgCnt.localPath = path;
+                imgCnt.size = self.underlyingImage.size;
+                imgCnt.thumbnail = [WFCCUtilities generateThumbnail:self.underlyingImage withWidth:120 withHeight:120];
+                [[WFCCIMService sharedWFCIMService] updateMessage:self.message.messageId content:imgCnt];
+            }
+        }
+    }
 }
 
 - (void)postCompleteNotification {
