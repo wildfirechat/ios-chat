@@ -43,7 +43,7 @@
 /**
  图片尺寸
  */
-@property (nonatomic, assign, readonly)CGSize size;
+@property (nonatomic, assign)CGSize size;
 
 /**
  图片缩略图参数

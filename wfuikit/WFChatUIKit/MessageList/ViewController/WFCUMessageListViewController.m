@@ -3433,10 +3433,12 @@
     if([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
         WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)msg.content;
         MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:imgCnt.remoteUrl]];
+        photo.message = msg;
         return photo;
     } else if([msg.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoCnt = (WFCCVideoMessageContent *)msg.content;
         MWPhoto *photo = [MWPhoto videoWithURL:[NSURL URLWithString:videoCnt.remoteUrl]];
+        photo.message = msg;
         return photo;
     }
     return nil;

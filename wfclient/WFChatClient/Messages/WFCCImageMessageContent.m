@@ -12,9 +12,6 @@
 #import "WFCCUtilities.h"
 #import "Common.h"
 
-@interface WFCCImageMessageContent ()
-@property (nonatomic, assign)CGSize size;
-@end
 
 @implementation WFCCImageMessageContent
 + (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path {
@@ -124,9 +121,6 @@
 + (int)getContentFlags {
     return WFCCPersistFlag_PERSIST_AND_COUNT;
 }
-
-
-
 
 + (void)load {
     [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
