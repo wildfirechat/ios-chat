@@ -13,3 +13,4 @@ wfclient/WFChatClient/Proto/libcrypto_arm64.a
 wfclient/WFChatClient/Proto/libssl_arm64.a
 wfclient/build
 wfuikit/build
+build
