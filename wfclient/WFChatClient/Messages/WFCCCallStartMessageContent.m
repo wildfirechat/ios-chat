@@ -29,6 +29,9 @@
     if (self.pin) {
         [dataDict setObject:self.pin forKey:@"p"];
     }
+    if(self.type > 0) {
+        [dataDict setObject:@(self.type) forKey:@"ty"];
+    }
     
     [dataDict setObject:self.targetIds forKey:@"ts"];
     //多人音视频与单人音视频兼容
@@ -61,6 +64,7 @@
         self.connectTime = dictionary[@"c"] ? [dictionary[@"c"] longLongValue] : 0;
         self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;
         self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
+        self.type = dictionary[@"ty"] ? [dictionary[@"ty"] intValue] : 0;
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
         self.targetIds = dictionary[@"ts"];
         self.pin = dictionary[@"p"];

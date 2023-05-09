@@ -45,6 +45,11 @@ WFAVCallEndReason
 @property (nonatomic, assign)int status;
 
 /*
+ 0 未知；1 音视频免费版；2 音视频高级版
+ */
+@property (nonatomic, assign)int type;
+
+/*
  * 是否仅音频
  */
 @property (nonatomic, assign, getter=isAudioOnly)BOOL audioOnly;
