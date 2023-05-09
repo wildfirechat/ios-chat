@@ -17,6 +17,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceHistoryListViewController.h"
 #import "WFCUUtilities.h"
+#import "WFCUConfigManager.h"
 
 @interface WFZHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic, strong)UIView *topPanel;
@@ -41,7 +42,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = WFCString(@"Conference");
-    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kCONFERENCE_DESTROYED object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull notification) {
         [ws reloadData];
@@ -112,7 +114,7 @@
     
     offset += 30;
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, offset, bounds.size.width, 1)];
-    line.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.9];
+    line.backgroundColor = [WFCUConfigManager globalManager].separateColor;
     [self.topPanel addSubview:line];
     offset += 1;
     
@@ -231,6 +233,7 @@
     }
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = [[UIView alloc] init];
+    self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
 - (UILabel *)emptyLabel {
