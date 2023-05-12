@@ -2330,7 +2330,7 @@
         BOOL isMain = (indexPath.row == 0);
         WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
 
-        if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId] || !profile.userId) {
             [self.currentSession setupLocalVideoView:cell scalingType:self.scalingType];
         } else {
             [self.currentSession setupRemoteVideoView:cell scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
