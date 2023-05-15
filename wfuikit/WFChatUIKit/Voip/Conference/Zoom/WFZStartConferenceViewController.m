@@ -385,7 +385,7 @@
     } else if(section == 2) {
         return 2;
     } else if(section == 3) {
-        return 2;
+        return 1;
     } else if(section == 4) {
         return 1;
     } else {
