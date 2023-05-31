@@ -44,6 +44,7 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
 {
     
     AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+    requestURLString = [requestURLString stringByRemovingPercentEncoding];
     NSMutableURLRequest *request =[serializer requestWithMethod:@"GET" URLString:requestURLString parameters:parameters error:nil];
     NSURLSessionDownloadTask *task = [[AFHTTPSessionManager manager] downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
         progress(downloadProgress);
