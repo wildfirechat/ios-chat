@@ -29,6 +29,10 @@
     return size;
 }
 
+- (void)superUpdateModel:(WFCUMessageModel *)model {
+    [super setModel:model];
+}
+
 - (void)setModel:(WFCUMessageModel *)model {
     WFCCStickerMessageContent *stickerMsg = (WFCCStickerMessageContent *)model.message.content;
     if (model.message.conversation.type == SecretChat_Type && model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
@@ -47,7 +51,7 @@
         } error:^(long long messageUid, int error_code) {
             if (messageUid == weakSelf.model.message.messageUid) {
                 weakSelf.model.mediaDownloading = NO;
-                [weakSelf setModel:weakSelf.model];
+                [weakSelf superUpdateModel:weakSelf.model];
             }
         }];
         if (downloading) {
