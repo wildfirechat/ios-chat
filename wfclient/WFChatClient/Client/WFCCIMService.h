@@ -511,6 +511,22 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                 error:(void(^)(int error_code))errorBlock;
 
 /**
+ 获取提醒消息
+ @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
+ 
+ @param conversation 会话
+ @param fromIndex 起始index
+ @param count 总数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getMentionedMessages:(WFCCConversation *)conversation
+                        from:(NSUInteger)fromIndex
+                       count:(NSInteger)count
+                     success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                       error:(void(^)(int error_code))errorBlock;
+
+/**
  获取消息
  @discuss 获取从fromIndex起count条旧的消息。如果想要获取比fromIndex新的消息，count传负值。
  
@@ -837,6 +853,22 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                  withUser:(NSString *)withUser;
 
 /**
+ 搜索提醒消息
+ 
+ @param conversation 会话，如果为空将搜索所有会话
+ @param keyword 关键词
+ @param desc order
+ @param offset offset
+ @param limit limit
+ @return 命中的消息
+ */
+- (NSArray<WFCCMessage *> *)searchMentionedMessages:(WFCCConversation *)conversation
+                                            keyword:(NSString *)keyword
+                                              order:(BOOL)desc
+                                              limit:(int)limit
+                                             offset:(int)offset;
+
+/**
  获取某类会话信息
  
  @param conversationTypes 会话类型
@@ -855,6 +887,24 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                      from:(NSUInteger)fromIndex
                                     count:(NSInteger)count
                                  withUser:(NSString *)withUser;
+
+/**
+ 获取某类会话提醒信息
+ 
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param keyword 关键字
+ @param desc order
+ @param offset offset
+ @param limit limit
+ @return 消息实体
+ */
+- (NSArray<WFCCMessage *> *)searchMentionedMessage:(NSArray<NSNumber *> *)conversationTypes
+                                             lines:(NSArray<NSNumber *> *)lines
+                                           keyword:(NSString *)keyword
+                                             order:(BOOL)desc
+                                             limit:(int)limit
+                                            offset:(int)offset;
 /**
  发送消息
 
