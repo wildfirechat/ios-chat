@@ -1004,6 +1004,8 @@ namespace mars{
     
         extern void GetMessagesByMessageStatus(int conversationType, const std::string &target, int line, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
     
+        extern void GetMentionedMessages(int conversationType, const std::string &target, int line, bool desc, int count, int64_t startPoint, LoadRemoteMessagesCallback *callback);
+    
         extern void GetMessages(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
     
         extern void GetMessagesByMessageStatus(const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &messageStatus, bool desc, int count, int64_t startPoint, const std::string &withUser, LoadRemoteMessagesCallback *callback);
