@@ -2764,6 +2764,55 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return results;
 }
 
+- (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword
+                                               inConversation:(NSArray<NSNumber *> *)conversationTypes
+                                                        lines:(NSArray<NSNumber *> *)lines
+                                                     cntTypes:(NSArray<NSNumber *> *)cntTypes
+                                                    startTime:(int64_t)startTime
+                                                      endTime:(int64_t)endTime
+                                                         desc:(BOOL)desc
+                                                        limit:(int)limit
+                                                       offset:(int)offset
+                                             onlyMentionedMsg:(BOOL)onlyMentionedMsg {
+    if (keyword.length == 0) {
+        return nil;
+    }
+    
+    std::list<int> types;
+    std::list<int> ls;
+    std::list<int> cnts;
+    for (NSNumber *type in conversationTypes) {
+        types.insert(types.end(), type.intValue);
+    }
+    
+    for (NSNumber *line in lines) {
+        ls.insert(ls.end(), line.intValue);
+    }
+    
+    if(lines.count == 0) {
+        ls.insert(ls.end(), 0);
+    }
+    
+    for (NSNumber *cnt in cntTypes) {
+        cnts.insert(cnts.end(), cnt.intValue);
+    }
+    
+    
+    std::list<mars::stn::TConversationSearchresult> tresult = mars::stn::MessageDB::Instance()->SearchConversationsEx2(types, ls, [keyword UTF8String], cnts, startTime, endTime, desc?YES:NO, limit, offset, onlyMentionedMsg?YES:NO);
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TConversationSearchresult>::iterator it = tresult.begin(); it != tresult.end(); it++) {
+        WFCCConversationSearchInfo *info = [[WFCCConversationSearchInfo alloc] init];
+        [results addObject:info];
+        info.conversation = [[WFCCConversation alloc] init];
+        info.conversation.type = (WFCCConversationType)(it->conversationType);
+        info.conversation.target = [NSString stringWithUTF8String:it->target.c_str()];
+        info.conversation.line = it->line;
+        info.marchedCount = it->marchedCount;
+        info.marchedMessage = convertProtoMessage(&(it->marchedMessage));
+        info.keyword = keyword;
+    }
+    return results;
+}
 - (NSArray<WFCCMessage *> *)searchMessage:(WFCCConversation *)conversation
                                   keyword:(NSString *)keyword
                                     order:(BOOL)desc
