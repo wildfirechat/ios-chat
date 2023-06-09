@@ -300,6 +300,32 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword inConversation:(NSArray<NSNumber *> *)conversationTypes lines:(NSArray<NSNumber *> *)lines startTime:(int64_t)startTime endTime:(int64_t)endTime desc:(BOOL)desc limit:(int)limit offset:(int)offset;
 
 /**
+ 搜索会话
+ 
+ @param keyword 关键词
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param cntTypes 消息内容类型
+ @param startTime 开始时间，如果不限制开始时间请使用0
+ @param endTime 结束时间，如果不限制开始时间请使用0
+ @param desc 是否逆序
+ @param limit limit
+ @param offset offset
+ @param onlyMentionedMsg 是否只搜索提醒消息
+ @return 会话搜索结果信息
+ */
+- (NSArray<WFCCConversationSearchInfo *> *)searchConversation:(NSString *)keyword
+                                               inConversation:(NSArray<NSNumber *> *)conversationTypes
+                                                        lines:(NSArray<NSNumber *> *)lines
+                                                     cntTypes:(NSArray<NSNumber *> *)cntTypes
+                                                    startTime:(int64_t)startTime
+                                                      endTime:(int64_t)endTime
+                                                         desc:(BOOL)desc
+                                                        limit:(int)limit
+                                                       offset:(int)offset
+                                             onlyMentionedMsg:(BOOL)onlyMentionedMsg;
+
+/**
  删除会话
  
  @param conversation 会话

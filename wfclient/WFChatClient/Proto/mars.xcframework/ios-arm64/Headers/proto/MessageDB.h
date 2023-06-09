@@ -129,6 +129,7 @@ namespace mars {
             
             std::list<TConversationSearchresult> SearchConversations(const std::list<int> &conversationTypes, const std::list<int> lines, const std::string &keyword, int limit);
             std::list<TConversationSearchresult> SearchConversationsEx(const std::list<int> &conversationTypes, const std::list<int> lines, const std::string &keyword, int64_t startTime, int64_t endTime, bool desc, int limit, int offset);
+            std::list<TConversationSearchresult> SearchConversationsEx2(const std::list<int> &conversationTypes, const std::list<int> lines, const std::string &keyword, const std::list<int> &contentTypes, int64_t startTime, int64_t endTime, bool desc, int limit, int offset, bool onlyMentionedMsg);
             
             std::list<TUserInfo> SearchFriends(const std::string &keyword, int limit);
             std::list<TGroupSearchResult> SearchGroups(const std::string &keyword, int limit);
