@@ -123,6 +123,10 @@
         }
     }
     
+    if(self.remoteUrl.length) {
+        payload.remoteMediaUrl = self.remoteUrl;
+    }
+    
 
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
