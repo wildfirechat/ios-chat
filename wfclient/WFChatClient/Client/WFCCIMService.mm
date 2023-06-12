@@ -2872,10 +2872,6 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                                               order:(BOOL)desc
                                               limit:(int)limit
                                              offset:(int)offset {
-    if (keyword.length == 0) {
-        return nil;
-    }
-
     std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMentionedMessages((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, keyword?[keyword UTF8String]:"", desc ? true : false, limit, offset);
     return convertProtoMessageList(tmessages, YES);
 }
