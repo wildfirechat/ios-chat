@@ -3042,9 +3042,9 @@
             [msg.content isKindOfClass:[WFCCLocationMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
-            [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
-            [msg.content isKindOfClass:[WFCUCardCell class]] ||
-            [msg.content isKindOfClass:[WFCUConferenceInviteCell class]] ||
+            [msg.content isKindOfClass:[WFCCCardMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCConferenceInviteMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCCompositeMessageContent class]] ||
             //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
             [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [items addObject:forwardItem];
