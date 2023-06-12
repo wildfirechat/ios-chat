@@ -90,7 +90,7 @@
         item.title = compositeContent.title;
         
         WFCCMessagePayload *payload = [compositeContent encode];
-        if (!compositeContent.loaded && compositeContent.remoteUrl.length) {
+        if (compositeContent.remoteUrl.length) {
             NSError *__error = nil;
             NSMutableDictionary *dictionary = [[NSJSONSerialization JSONObjectWithData:payload.binaryContent
                                                                                options:kNilOptions
