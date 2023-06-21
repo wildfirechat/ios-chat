@@ -70,14 +70,21 @@
 
     [self.view addSubview:_tableView];
   
-  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"AddFriend") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:WFCString(@"Clear") style:UIBarButtonItemStyleDone target:self action:@selector(onClearBarBtn:)], [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Add") style:UIBarButtonItemStyleDone target:self action:@selector(onAddBarBtn:)]];
 }
 
-- (void)onRightBarBtn:(UIBarButtonItem *)sender {
+- (void)onAddBarBtn:(UIBarButtonItem *)sender {
     UIViewController *addFriendVC = [[WFCUAddFriendViewController alloc] init];
     addFriendVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:addFriendVC animated:YES];
 }
+
+- (void)onClearBarBtn:(UIBarButtonItem *)sender {
+    [[WFCCIMService sharedWFCIMService] clearFriendRequest:1 beforeTime:0];
+    _dataList   = [[WFCCIMService sharedWFCIMService] getIncommingFriendRequest];
+    [self.tableView reloadData];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
@@ -109,6 +116,15 @@
   
   cell.userInteractionEnabled = YES;
   return cell;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        WFCCFriendRequest *request = self.dataList[indexPath.row];
+        [[WFCCIMService sharedWFCIMService] deleteFriendRequest:request.target direction:request.direction];
+        _dataList   = [[WFCCIMService sharedWFCIMService] getIncommingFriendRequest];
+        [self.tableView reloadData];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
