@@ -52,6 +52,7 @@
 "CallConnecting"="Connecting...";
 "InvitingYou"="Inviting you...";
 "AddFriend"="Add friend";
+"Clear"="Clear";
 "SearchUserHint"="Input account/phonenumber to search";
 "AddFriendReasonHint"="Please input apply reason and wait agreement";
 "DefaultAddFriendReason"="I'm %@";

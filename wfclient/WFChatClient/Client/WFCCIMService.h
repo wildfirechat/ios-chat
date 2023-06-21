@@ -1403,6 +1403,13 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (NSArray<WFCCFriendRequest *> *)getOutgoingFriendRequest;
 
 /**
+ 获取所有的好友请求
+
+ @return 好友请求
+ */
+- (NSArray<WFCCFriendRequest *> *)getAllFriendRequest;
+
+/**
  获取某一条好友请求记录
  @param uerId 对方用户ID
  @param direction 0 发送的好友请求；1 收到的好友请求。
@@ -1410,6 +1417,24 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return 好友请求
  */
 - (WFCCFriendRequest *)getFriendRequest:(NSString *)uerId direction:(int)direction;
+
+/**
+ 清理好友请求
+ @param direction 好友请求的方向，0发送；1收到。
+ @param beforeTime 清理时间之前的请求，单位是毫秒。如果清理所有用0
+ 
+ @return 返回true表示清理成功，返回false表示没有符合条件的请求
+ */
+- (BOOL)clearFriendRequest:(int)direction beforeTime:(int64_t)beforeTime;
+
+/**
+ 删除好友请求
+ @param direction 好友请求的方向，0发送；1收到。
+ @param userId 用户ID
+ 
+ @return 返回true表示删除成功，返回false表示找到请求
+ */
+- (BOOL)deleteFriendRequest:(NSString *)userId direction:(int)direction;
 
 /**
  从服务器更新好友请求

@@ -2253,11 +2253,26 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return convertFriendRequests(tRequests);
 }
 
+- (NSArray<WFCCFriendRequest *> *)getAllFriendRequest {
+    std::list<mars::stn::TFriendRequest> tRequests = mars::stn::MessageDB::Instance()->getFriendRequest(2);
+    return convertFriendRequests(tRequests);
+}
+
 - (WFCCFriendRequest *)getFriendRequest:(NSString *)userId direction:(int)direction {
     if(!userId)
         return nil;
     mars::stn::TFriendRequest tRequest = mars::stn::MessageDB::Instance()->getFriendRequest([userId UTF8String], direction);
     return convertFriendRequest(tRequest);
+}
+
+- (BOOL)clearFriendRequest:(int)direction beforeTime:(int64_t)beforeTime {
+    return mars::stn::MessageDB::Instance()->ClearFriendRequest(direction>0, beforeTime);
+}
+
+- (BOOL)deleteFriendRequest:(NSString *)userId direction:(int)direction {
+    if(!userId.length)
+        return false;
+    return mars::stn::MessageDB::Instance()->DeleteFriendRequest([userId UTF8String], direction>0);
 }
 
 - (void)clearUnreadFriendRequestStatus {
