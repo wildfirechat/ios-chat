@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 @property(nonatomic, strong)NSString *draft;
 
 - (BOOL)appendMention:(NSString *)userId name:(NSString *)userName;
-- (BOOL)appendQuote:(long long)messageUid;
+- (BOOL)appendQuote:(WFCCMessage *)message;
 - (void)paste:(id)sender;
 - (void)willAppear;
 - (void)appendText:(NSString *)text;

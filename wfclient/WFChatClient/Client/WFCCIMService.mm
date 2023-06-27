@@ -510,7 +510,7 @@ public:
     void onSuccess(const std::list<mars::stn::TMessage> &messageList) {
         NSMutableArray *messages = convertProtoMessageList(messageList, NO);
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(messageList.empty()) {
+            if(messages.count) {
                 if (m_successBlock) {
                     m_successBlock(messages.firstObject);
                 }

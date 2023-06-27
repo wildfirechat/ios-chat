@@ -10,9 +10,9 @@
 #import "WFCCJsonSerializer.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class WFCCMessage;
 @interface WFCCQuoteInfo : WFCCJsonSerializer
-- (instancetype)initWithMessageUid:(long long)messageUid;
+- (instancetype)initWithMessage:(WFCCMessage *)message;
 @property (nonatomic, assign)long long messageUid;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *userDisplayName;

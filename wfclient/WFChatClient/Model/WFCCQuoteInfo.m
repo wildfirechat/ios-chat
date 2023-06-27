@@ -13,12 +13,11 @@
 
 
 @implementation WFCCQuoteInfo
-- (instancetype)initWithMessageUid:(long long)messageUid {
+- (instancetype)initWithMessage:(WFCCMessage *)msg {
     self = [super init];
     if (self) {
-        WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid];
-        if (msg) {
-            self.messageUid = messageUid;
+        if (msg.messageUid) {
+            self.messageUid = msg.messageUid;
             self.userId = msg.fromUser;
             NSString *groupId = msg.conversation.type == Group_Type ? msg.conversation.target : nil;
             WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:groupId refresh:NO];
