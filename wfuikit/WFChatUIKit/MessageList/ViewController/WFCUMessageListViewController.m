@@ -2570,101 +2570,134 @@
     [self.navigationController pushViewController:receipt animated:YES];
 }
 
+
+- (void)showQuote:(WFCCQuoteInfo *)quoteInfo ofMessage:(WFCCMessage *)msg {
+    if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
+        WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msg.content;
+        
+        [self.chatInputBar resetInputBarStatue];
+        
+        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        textContainer.backgroundColor = self.view.backgroundColor;
+        
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+         textView.text = txtContent.text;
+        textView.textAlignment = NSTextAlignmentCenter;
+        textView.font = [UIFont systemFontOfSize:28];
+        textView.editable = NO;
+        textView.backgroundColor = self.view.backgroundColor;
+        
+        [textContainer addSubview:textView];
+        [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
+        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+    } else if ([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        self.imageMsgs = @[msg];
+        MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+        browser.displayActionButton = YES;
+        browser.displayNavArrows = NO;
+        browser.displaySelectionButtons = NO;
+        browser.alwaysShowControls = NO;
+        browser.zoomPhotosToFill = YES;
+        browser.enableGrid = NO;
+        browser.startOnGrid = NO;
+        browser.enableSwipeToDismiss = NO;
+        browser.autoPlayOnAppear = NO;
+        [browser setCurrentPhotoIndex:0];
+        [self.navigationController pushViewController:browser animated:YES];
+    } else if ([msg.content isKindOfClass:[WFCCLocationMessageContent class]]) {
+        WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)msg.content;
+        WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if ([msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
+        WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+        
+        __weak typeof(self)ws = self;
+        [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = authorizedUrl;
+            [ws.navigationController pushViewController:bvc animated:YES];
+        } error:^(int error_code) {
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = fileContent.remoteUrl;
+            [ws.navigationController pushViewController:bvc animated:YES];
+        }];
+    } else if ([msg.content isKindOfClass:[WFCCCardMessageContent class]]) {
+        WFCCCardMessageContent *card = (WFCCCardMessageContent *)msg.content;
+        
+        if (card.type == CardType_User) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:card.targetId refresh:NO];
+            if (!userInfo.deleted) {
+                WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+                vc.userId = card.targetId;
+                vc.sourceType = FriendSource_Card;
+                vc.sourceTargetId = card.fromUser;
+                vc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+        } else if(card.type == CardType_Group) {
+            WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
+            vc2.groupId = card.targetId;
+            vc2.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc2 animated:YES];
+        } else if(card.type == CardType_Channel) {
+            WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
+            pvc.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:card.targetId refresh:NO];
+            if (pvc.channelInfo) {
+                pvc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:pvc animated:YES];
+            }
+        }
+    } else {
+        //有些消息内容不能在当前页面显示，跳转到新的页面显示
+//            if ([msg.content isKindOfClass:[WFCCSoundMessageContent class]])
+//            if ([msg.content isKindOfClass:[WFCCStickerMessageContent class]])
+//            if ([msg.content isKindOfClass:[WFCCVideoMessageContent class]])
+        WFCUQuoteViewController *vc = [[WFCUQuoteViewController alloc] init];
+        vc.messageUid = msg.messageUid;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+}
 - (void)didTapQuoteLabel:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model {
     if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)model.message.content;
         if (txtContent.quoteInfo) {
-            WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:txtContent.quoteInfo.messageUid];
-            if (!msg || [msg.content isKindOfClass:[WFCCRecallMessageContent class]]) {
+            __block WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:txtContent.quoteInfo.messageUid];
+            if ([msg.content isKindOfClass:[WFCCRecallMessageContent class]]) {
                 [self.view makeToast:@"消息不存在了！"];
                 NSLog(@"msg not exist");
                 return;
             }
-
-            if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
-                WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msg.content;
-                
-                [self.chatInputBar resetInputBarStatue];
-                
-                UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-                textContainer.backgroundColor = self.view.backgroundColor;
-                
-                UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
-                 textView.text = txtContent.text;
-                textView.textAlignment = NSTextAlignmentCenter;
-                textView.font = [UIFont systemFontOfSize:28];
-                textView.editable = NO;
-                textView.backgroundColor = self.view.backgroundColor;
-                
-                [textContainer addSubview:textView];
-                [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-                [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
-            } else if ([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
-                self.imageMsgs = @[msg];
-                MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
-                browser.displayActionButton = YES;
-                browser.displayNavArrows = NO;
-                browser.displaySelectionButtons = NO;
-                browser.alwaysShowControls = NO;
-                browser.zoomPhotosToFill = YES;
-                browser.enableGrid = NO;
-                browser.startOnGrid = NO;
-                browser.enableSwipeToDismiss = NO;
-                browser.autoPlayOnAppear = NO;
-                [browser setCurrentPhotoIndex:0];
-                [self.navigationController pushViewController:browser animated:YES];
-            } else if ([msg.content isKindOfClass:[WFCCLocationMessageContent class]]) {
-                WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)msg.content;
-                WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
-                [self.navigationController pushViewController:vc animated:YES];
-            } else if ([msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
-                WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
-                
-                __weak typeof(self)ws = self;
-                [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
-                    WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
-                    bvc.url = authorizedUrl;
-                    [ws.navigationController pushViewController:bvc animated:YES];
-                } error:^(int error_code) {
-                    WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
-                    bvc.url = fileContent.remoteUrl;
-                    [ws.navigationController pushViewController:bvc animated:YES];
-                }];
-            } else if ([msg.content isKindOfClass:[WFCCCardMessageContent class]]) {
-                WFCCCardMessageContent *card = (WFCCCardMessageContent *)msg.content;
-                
-                if (card.type == CardType_User) {
-                    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:card.targetId refresh:NO];
-                    if (!userInfo.deleted) {
-                        WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
-                        vc.userId = card.targetId;
-                        vc.sourceType = FriendSource_Card;
-                        vc.sourceTargetId = card.fromUser;
-                        vc.hidesBottomBarWhenPushed = YES;
-                        [self.navigationController pushViewController:vc animated:YES];
-                    }
-                } else if(card.type == CardType_Group) {
-                    WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
-                    vc2.groupId = card.targetId;
-                    vc2.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:vc2 animated:YES];
-                } else if(card.type == CardType_Channel) {
-                    WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
-                    pvc.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:card.targetId refresh:NO];
-                    if (pvc.channelInfo) {
-                        pvc.hidesBottomBarWhenPushed = YES;
-                        [self.navigationController pushViewController:pvc animated:YES];
-                    }
-                }
+            
+            if(msg) {
+                [self showQuote:txtContent.quoteInfo ofMessage:msg];
             } else {
-                //有些消息内容不能在当前页面显示，跳转到新的页面显示
-//            if ([msg.content isKindOfClass:[WFCCSoundMessageContent class]])
-//            if ([msg.content isKindOfClass:[WFCCStickerMessageContent class]])
-//            if ([msg.content isKindOfClass:[WFCCVideoMessageContent class]])
-                WFCUQuoteViewController *vc = [[WFCUQuoteViewController alloc] init];
-                vc.messageUid = msg.messageUid;
-                [self.navigationController pushViewController:vc animated:YES];
-                
+                [self.modelList enumerateObjectsUsingBlock:^(WFCUMessageModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if(obj.message.messageUid == txtContent.quoteInfo.messageUid) {
+                        msg = obj.message;
+                        *stop = YES;
+                    }
+                }];
+                if(msg) {
+                    [self showQuote:txtContent.quoteInfo ofMessage:msg];
+                } else {
+                    __weak typeof(self)ws = self;
+                    [[WFCCIMService sharedWFCIMService] getRemoteMessage:txtContent.quoteInfo.messageUid success:^(WFCCMessage *message) {
+                        if (!message.content || [message.content isKindOfClass:[WFCCRecallMessageContent class]]) {
+                            [ws.view makeToast:@"消息不存在了！"];
+                            NSLog(@"msg not exist");
+                            return;
+                        } else {
+                            [ws showQuote:txtContent.quoteInfo ofMessage:message];
+                        }
+                    } error:^(int error_code) {
+                        if(error_code == 253) {
+                            [ws.view makeToast:@"消息不存在了！"];
+                        } else {
+                            [ws.view makeToast:@"网络错误"];
+                        }
+                    }];
+                }
             }
         }
     }
@@ -3286,7 +3319,7 @@
 
 - (void)performQuote:(UIMenuItem *)sender {
     if (self.cell4Menu.model.message) {
-        [self.chatInputBar appendQuote:self.cell4Menu.model.message.messageUid];
+        [self.chatInputBar appendQuote:self.cell4Menu.model.message];
     }
 }
 

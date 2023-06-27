@@ -1107,12 +1107,12 @@
     }
 }
 
-- (BOOL)appendQuote:(long long)messageUid {
+- (BOOL)appendQuote:(WFCCMessage *)message {
     if (self.quoteInfo) {
         [self clearQuoteInfo];
         [self updateQuoteView:YES showKeyboard:YES];
     }
-    self.quoteInfo = [[WFCCQuoteInfo alloc] initWithMessageUid:messageUid];
+    self.quoteInfo = [[WFCCQuoteInfo alloc] initWithMessage:message];
     [self updateQuoteView:YES showKeyboard:YES];
     return self.quoteInfo != nil;
 }
