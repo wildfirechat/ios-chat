@@ -9,9 +9,11 @@
 #import "WFCPrivacyTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "WFCPrivacyFindMeViewController.h"
 
 #define BLACK_LIST_CELL_TAG 1
 #define MOMENTS_CELL_TAG 2
+#define FIND_ME_TAG 3
 
 @interface WFCPrivacyTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -42,6 +44,19 @@
 
 - (void)createCells {
     self.cells = [[NSMutableArray alloc] init];
+    
+    //Section 0
+    {
+        NSMutableArray *section0 = [[NSMutableArray alloc] init];
+        [self.cells addObject:section0];
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"find_me"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = @"找到我的方式";
+        cell.tag = FIND_ME_TAG;
+        [section0 addObject:cell];
+    }
     
     //Section 1
     {
@@ -129,6 +144,9 @@
         [self.navigationController pushViewController:vc animated:YES];
     } else if(cell.tag == MOMENTS_CELL_TAG) {
         UIViewController *vc = [[NSClassFromString(@"MomentSettingsTableViewController") alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if(cell.tag == FIND_ME_TAG) {
+        UIViewController *vc = [[WFCPrivacyFindMeViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

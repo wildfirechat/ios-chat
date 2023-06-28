@@ -146,6 +146,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Ptt_Silent = 25,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Group_Remark = 26,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Privacy_Searchable = 27,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -165,7 +167,21 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
     SearchUserType_Name_Mobile,
     SearchUserType_Name,
     SearchUserType_Mobile,
-} ;
+};
+
+/**
+ 禁止搜索当前用户的掩码。
+
+ - DisableSearch_DisplayName_Mask: 第1位是是否禁止搜索昵称
+ - DisableSearch_Name_Mask: 第2位是否禁止搜索账户
+ - DisableSearch_Mobile_Mask: 精确第3位是否禁止搜索电话号码name
+ */
+typedef NS_ENUM(NSInteger, WFCCDisableSearchMask) {
+    DisableSearch_DisplayName_Mask = 1,
+    DisableSearch_Name_Mask = 2,
+    DisableSearch_Mobile_Mask = 4,
+};
+
 
 typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_UNSET = 0,
