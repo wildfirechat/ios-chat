@@ -3612,6 +3612,7 @@ public:
                 content:(WFCCMessageContent *)content
                  status:(WFCCMessageStatus)status
                  notify:(BOOL)notify
+                toUsers:(NSArray<NSString *> *)toUsers
              serverTime:(long long)serverTime {
     WFCCMessage *message = [[WFCCMessage alloc] init];
     message.conversation = conversation;
@@ -3635,6 +3636,12 @@ public:
     if(serverTime > 0) {
         message.serverTime = serverTime;
         tmsg.timestamp = serverTime;
+    }
+    
+    if(toUsers.count) {
+        for (NSString *toUser in toUsers) {
+            tmsg.to.push_back([toUser UTF8String]);
+        }
     }
     
     long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
@@ -4084,6 +4091,12 @@ public:
     tmsg.status = (mars::stn::MessageStatus)message.status;
     tmsg.timestamp = message.serverTime;
     tmsg.localExtra = message.localExtra ? [message.localExtra UTF8String] : "";
+    
+    if(message.toUsers.count) {
+        for (NSString *toUser in message.toUsers) {
+            tmsg.to.push_back([toUser UTF8String]);
+        }
+    }
     
     long msgId = mars::stn::MessageDB::Instance()->InsertMessage(tmsg);
     message.messageId = msgId;
