@@ -1257,6 +1257,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                 content:(WFCCMessageContent *)content
                  status:(WFCCMessageStatus)status
                  notify:(BOOL)notify
+                toUsers:(NSArray<NSString *> *)toUsers
              serverTime:(long long)serverTime;
 
 /**
