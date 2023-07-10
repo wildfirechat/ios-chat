@@ -945,8 +945,8 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setSecretMessageBurnStateCallback(new SMBSCB(self));
   mars::baseevent::OnCreate();
 }
-- (BOOL)connect:(NSString *)host {
-    bool newDB = mars::stn::Connect([host UTF8String]);
+- (int64_t)connect:(NSString *)host {
+    int64_t lastActiveTime = mars::stn::Connect([host UTF8String]);
     
   dispatch_async(dispatch_get_main_queue(), ^{
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
@@ -961,12 +961,8 @@ static WFCCNetworkService * sharedSingleton = nil;
     [self reportEvent_OnForeground:YES];
     mars::stn::MakesureLonglinkConnected();
     
-    if (newDB) {
-        return YES;
-    }
-    return NO;
+    return lastActiveTime;
 }
-
 
 - (void)setServerAddress:(NSString *)host {
     [self checkSDKHost:host];
@@ -1104,7 +1100,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     return clientId;
 }
 
-- (BOOL)connect:(NSString *)userId token:(NSString *)token {
+- (int64_t)connect:(NSString *)userId token:(NSString *)token {
     if (_logined) {
         for (int i = 0; i < 10; i++) {
             xerror2(TSF"Error: 使用错误，已经connect过了，不能再次connect。如果切换用户请先disconnect，再connect。请修正改错误");
