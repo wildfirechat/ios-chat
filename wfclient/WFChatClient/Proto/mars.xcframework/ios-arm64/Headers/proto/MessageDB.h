@@ -87,6 +87,7 @@ namespace mars {
           
             TMessage GetMessageById(long messageId);
             TMessage GetMessageByUid(long long messageUid);
+            int64_t GetOldestMessageTimestamp();
           
             
           

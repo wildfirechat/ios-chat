@@ -332,9 +332,9 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  @param userId 用户Id
  @param token 密码
  
- @return 是否是第一次连接。第一次连接需要同步用户信息，耗时较长，可以加个第一次登录的等待提示界面。
+ @return 返回上一次活动时间。如果间隔时间较长，可以加个第一次登录的等待提示界面，在等待时同步所有的用户信息/群组信息/频道信息等。
  */
-- (BOOL)connect:(NSString *)userId token:(NSString *)token;
+- (int64_t)connect:(NSString *)userId token:(NSString *)token;
 
 /**
  断开连接
