@@ -19,9 +19,7 @@
 "preview" = "Preview";
 
 "noPhotoTips" = "No Photos";
-"notAllowMixSelect" = "Unable to select video";
 
-"loading" = "loading, waiting please";
 "hudLoading" = "waiting...";
 
 "exceededMaxSelectCount" = "Max count for selection: %ld";
@@ -32,7 +30,7 @@
 
 "noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\" > \"Privacy\" > \"Camera\"";
 "noPhotoLibratyAuthority" = "Please allow %@ to access your album in \"Settings\" > \"Privacy\" > \"Photos\"";
-"noMicrophoneAuthority" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access.";
+"noMicrophoneAuthority" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access";
 "cameraUnavailable" = "Camera is unavailable";
 "keepRecording" = "Keep Recording";
 "gotoSettings" = "Go to Settings";
