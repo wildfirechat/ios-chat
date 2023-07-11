@@ -1684,12 +1684,9 @@
             self.managerButton.hidden = NO;
             self.screenSharingButton.hidden = NO;
             if (self.currentSession.isAudioOnly) {
-                self.speakerButton.hidden = NO;
-                [self updateSpeakerButton];
                 self.audioButton.hidden = NO;
                 self.videoButton.hidden = YES;
             } else {
-                self.speakerButton.hidden = YES;
                 self.audioButton.hidden = NO;
                 self.videoButton.hidden = NO;
             }
@@ -1697,6 +1694,7 @@
             self.speakerButton.hidden = NO;
             [self updateAudioButton];
             [self updateVideoButton];
+            [self updateSpeakerButton];
             
             self.informationButton.hidden = NO;
             self.topBarView.hidden = NO;
