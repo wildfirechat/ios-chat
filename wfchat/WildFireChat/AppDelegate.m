@@ -716,7 +716,9 @@
         vc2.modalPresentationStyle = UIModalPresentationFullScreen;
         [navigator presentViewController:vc2 animated:YES completion:nil];
         return YES;
-    } else if ([str rangeOfString:@"wildfirechat://conference" options:NSCaseInsensitiveSearch].location == 0) {
+    } else
+#if WFCU_SUPPORT_VOIP
+        if ([str rangeOfString:@"wildfirechat://conference" options:NSCaseInsensitiveSearch].location == 0) {
 //        str = @"wildfirechat://conference/conferenceid?password=123456";
         NSURL *URL = [NSURL URLWithString:str];
         
@@ -753,6 +755,7 @@
         }
         return YES;
     }
+#endif
     return NO;
 }
 - (MBProgressHUD *)startProgress:(NSString *)text inView:(UIView *)view {

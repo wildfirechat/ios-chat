@@ -7,7 +7,7 @@
 //
 
 #import "WFCUFileVideoSource.h"
-
+#if WFCU_SUPPORT_VOIP
 @interface WFCUFileVideoSource ()
 @property(nonatomic, weak)id<WFAVExternalFrameDelegate> frameDelegate;
 @property(nonatomic, assign) CMTime lastPresentationTime;
@@ -168,3 +168,4 @@ typedef NS_ENUM(NSInteger, RTCFileVideoCapturerStatus) {
 }
 
 @end
+#endif
