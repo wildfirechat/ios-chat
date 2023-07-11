@@ -1,11 +1,12 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)
+// swift-compiler-version: Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)
 // swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ZLPhotoBrowser
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import AVFoundation
 import Accelerate
 import CoreMotion
 import Foundation
+import MobileCoreServices
 import Photos
 import PhotosUI
 import Swift
@@ -13,13 +14,25 @@ import UIKit
 @_exported import ZLPhotoBrowser
 import _Concurrency
 import _StringProcessing
-@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ZLPhotoPreviewSheet : UIKit.UIView {
-  @objc @_Concurrency.MainActor(unsafe) public var selectImageBlock: (([UIKit.UIImage], [Photos.PHAsset], Swift.Bool) -> Swift.Void)?
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ZLEnlargeButton : UIKit.UIButton {
+  @_Concurrency.MainActor(unsafe) public var enlargeInsets: UIKit.UIEdgeInsets
+  @_Concurrency.MainActor(unsafe) public var enlargeInset: CoreFoundation.CGFloat {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func point(inside point: CoreFoundation.CGPoint, with event: UIKit.UIEvent?) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ZLPhotoPreviewSheet : UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) public var selectImageBlock: (([ZLPhotoBrowser.ZLResultModel], Swift.Bool) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var selectImageRequestErrorBlock: (([Photos.PHAsset], [Swift.Int]) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var cancelBlock: (() -> Swift.Void)?
   @objc deinit
-  @_Concurrency.MainActor(unsafe) @objc convenience override dynamic public init(frame: CoreFoundation.CGRect)
-  @objc @_Concurrency.MainActor(unsafe) public init(selectedAssets: [Photos.PHAsset]? = nil)
+  @objc @_Concurrency.MainActor(unsafe) convenience public init(selectedAssets: [Photos.PHAsset]? = nil)
+  @objc @_Concurrency.MainActor(unsafe) convenience public init(results: [ZLPhotoBrowser.ZLResultModel]? = nil)
+  @available(*, unavailable)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
   @objc @_Concurrency.MainActor(unsafe) public func showPreview(animate: Swift.Bool = true, sender: UIKit.UIViewController)
@@ -49,15 +62,16 @@ extension ZLPhotoBrowser.ZLPhotoPreviewSheet : Photos.PHPhotoLibraryChangeObserv
   @objc public class func getPhotoAlbumList(ascending: Swift.Bool, allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: ([ZLPhotoBrowser.ZLAlbumListModel]) -> Swift.Void)
   @objc public class func getCameraRollAlbum(allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: @escaping (ZLPhotoBrowser.ZLAlbumListModel) -> Swift.Void)
   @discardableResult
-  @objc public class func fetchImage(for asset: Photos.PHAsset, size: CoreFoundation.CGSize, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchImage(for asset: Photos.PHAsset, size: CoreFoundation.CGSize, progress: ((CoreFoundation.CGFloat, (any Swift.Error)?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @discardableResult
-  @objc public class func fetchOriginalImage(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchOriginalImage(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, (any Swift.Error)?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (UIKit.UIImage?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @discardableResult
-  @objc public class func fetchOriginalImageData(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (Foundation.Data, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchOriginalImageData(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, (any Swift.Error)?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (Foundation.Data, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchLivePhoto(for asset: Photos.PHAsset, completion: @escaping (Photos.PHLivePhoto?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
-  @objc public class func fetchVideo(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, Swift.Error?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (AVFoundation.AVPlayerItem?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
+  @objc public class func fetchVideo(for asset: Photos.PHAsset, progress: ((CoreFoundation.CGFloat, (any Swift.Error)?, Swift.UnsafeMutablePointer<ObjectiveC.ObjCBool>, [Swift.AnyHashable : Any]?) -> Swift.Void)? = nil, completion: @escaping (AVFoundation.AVPlayerItem?, [Swift.AnyHashable : Any]?, Swift.Bool) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchAVAsset(forVideo asset: Photos.PHAsset, completion: @escaping (AVFoundation.AVAsset?, [Swift.AnyHashable : Any]?) -> Swift.Void) -> Photos.PHImageRequestID
   @objc public class func fetchAssetFilePath(asset: Photos.PHAsset, completion: @escaping (Swift.String?) -> Swift.Void)
+  @objc public class func saveAsset(_ asset: Photos.PHAsset, toFile fileUrl: Foundation.URL, completion: @escaping (((any Swift.Error)?) -> Swift.Void))
   @objc override dynamic public init()
   @objc deinit
 }
@@ -82,6 +96,8 @@ extension ZLPhotoBrowser.ZLPhotoManager {
   case indonesian
   case portuguese
   case spanish
+  case turkish
+  case arabic
   public init?(rawValue: Swift.Int)
   public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
@@ -96,7 +112,6 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   public static let previewAlbum: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let cancel: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let noPhotoTips: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let loading: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let hudLoading: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let done: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let ok: ZLPhotoBrowser.ZLLocalLanguageKey
@@ -117,7 +132,6 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   public static let contrast: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let saturation: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let preview: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let notAllowMixSelect: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let save: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let saveImageError: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let saveVideoError: ZLPhotoBrowser.ZLLocalLanguageKey
@@ -164,7 +178,9 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
     get
   }
 }
+public typealias ZLImageLoaderBlock = (_ url: Foundation.URL, _ imageView: UIKit.UIImageView, _ progress: @escaping (CoreFoundation.CGFloat) -> Swift.Void, _ complete: @escaping () -> Swift.Void) -> Swift.Void
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ZLImagePreviewController : UIKit.UIViewController {
+  @objc @_Concurrency.MainActor(unsafe) public var longPressBlock: ((ZLPhotoBrowser.ZLImagePreviewController?, UIKit.UIImage?, Swift.Int) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var doneBlock: (([Any]) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var videoHttpHeader: [Swift.String : Any]?
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
@@ -173,12 +189,12 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   @_Concurrency.MainActor(unsafe) @objc override dynamic public var preferredStatusBarStyle: UIKit.UIStatusBarStyle {
     @objc get
   }
-  @objc @_Concurrency.MainActor(unsafe) public init(datas: [Any], index: Swift.Int = 0, showSelectBtn: Swift.Bool = true, showBottomView: Swift.Bool = true, urlType: ((Foundation.URL) -> ZLPhotoBrowser.ZLURLType)? = nil, urlImageLoader: ((Foundation.URL, UIKit.UIImageView, @escaping (CoreFoundation.CGFloat) -> Swift.Void, @escaping () -> Swift.Void) -> Swift.Void)? = nil)
+  @objc deinit
+  @objc @_Concurrency.MainActor(unsafe) public init(datas: [Any], index: Swift.Int = 0, showSelectBtn: Swift.Bool = true, showBottomView: Swift.Bool = true, urlType: ((Foundation.URL) -> ZLPhotoBrowser.ZLURLType)? = nil, urlImageLoader: ZLPhotoBrowser.ZLImageLoaderBlock? = nil)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLayoutSubviews()
-  @objc deinit
 }
 extension ZLPhotoBrowser.ZLImagePreviewController {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
@@ -192,6 +208,153 @@ extension ZLPhotoBrowser.ZLImagePreviewController : UIKit.UICollectionViewDataSo
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
   @_Concurrency.MainActor(unsafe) @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didEndDisplaying cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class ZLPhotoUIConfiguration : ObjectiveC.NSObject {
+  @objc public enum CancelButtonStyle : Swift.Int {
+    case text
+    case image
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  @objc public class func `default`() -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc public class func resetConfiguration()
+  @objc public var style: ZLPhotoBrowser.ZLPhotoBrowserStyle
+  @objc public var statusBarStyle: UIKit.UIStatusBarStyle
+  @objc public var navCancelButtonStyle: ZLPhotoBrowser.ZLPhotoUIConfiguration.CancelButtonStyle
+  @objc public var showStatusBarInPreviewInterface: Swift.Bool
+  @objc public var hudStyle: ZLPhotoBrowser.ZLProgressHUD.HUDStyle
+  @objc public var adjustSliderType: ZLPhotoBrowser.ZLAdjustSliderType
+  @objc public var cellCornerRadio: CoreFoundation.CGFloat
+  public var customAlertClass: (any ZLPhotoBrowser.ZLCustomAlertProtocol.Type)?
+  @objc public var columnCount: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc public var columnCountBlock: ((_ collectionViewWidth: CoreFoundation.CGFloat) -> Swift.Int)?
+  @objc public var minimumInteritemSpacing: CoreFoundation.CGFloat
+  @objc public var minimumLineSpacing: CoreFoundation.CGFloat
+  @objc public var navViewBlurEffectOfAlbumList: UIKit.UIBlurEffect?
+  @objc public var navViewBlurEffectOfPreview: UIKit.UIBlurEffect?
+  @objc public var bottomViewBlurEffectOfAlbumList: UIKit.UIBlurEffect?
+  @objc public var bottomViewBlurEffectOfPreview: UIKit.UIBlurEffect?
+  @objc public var customImageNames: [Swift.String] {
+    @objc get
+    @objc set
+  }
+  public var customImageForKey: [Swift.String : UIKit.UIImage?] {
+    get
+    set
+  }
+  @objc public var customImageForKey_objc: [Swift.String : UIKit.UIImage] {
+    @objc get
+    @objc set
+  }
+  @objc public var languageType: ZLPhotoBrowser.ZLLanguageType {
+    @objc get
+    @objc set
+  }
+  public var customLanguageKeyValue: [ZLPhotoBrowser.ZLLocalLanguageKey : Swift.String] {
+    get
+    set
+  }
+  @objc public var customLanguageKeyValue_objc: [Swift.String : Swift.String] {
+    @objc get
+    @objc set
+  }
+  @objc public var themeFontName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc public var themeColor: UIKit.UIColor
+  @objc public var sheetTranslucentColor: UIKit.UIColor
+  @objc public var sheetBtnBgColor: UIKit.UIColor
+  @objc public var sheetBtnTitleColor: UIKit.UIColor
+  @objc public var sheetBtnTitleTintColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var navBarColor: UIKit.UIColor
+  @objc public var navBarColorOfPreviewVC: UIKit.UIColor
+  @objc public var navTitleColor: UIKit.UIColor
+  @objc public var navTitleColorOfPreviewVC: UIKit.UIColor
+  @objc public var navEmbedTitleViewBgColor: UIKit.UIColor
+  @objc public var albumListBgColor: UIKit.UIColor
+  @objc public var embedAlbumListTranslucentColor: UIKit.UIColor
+  @objc public var albumListTitleColor: UIKit.UIColor
+  @objc public var albumListCountColor: UIKit.UIColor
+  @objc public var separatorColor: UIKit.UIColor
+  @objc public var thumbnailBgColor: UIKit.UIColor
+  @objc public var previewVCBgColor: UIKit.UIColor
+  @objc public var bottomToolViewBgColor: UIKit.UIColor
+  @objc public var bottomToolViewBgColorOfPreviewVC: UIKit.UIColor
+  @objc public var bottomToolViewBtnNormalTitleColor: UIKit.UIColor
+  @objc public var bottomToolViewDoneBtnNormalTitleColor: UIKit.UIColor
+  @objc public var bottomToolViewBtnNormalTitleColorOfPreviewVC: UIKit.UIColor
+  @objc public var bottomToolViewDoneBtnNormalTitleColorOfPreviewVC: UIKit.UIColor
+  @objc public var bottomToolViewBtnDisableTitleColor: UIKit.UIColor
+  @objc public var bottomToolViewDoneBtnDisableTitleColor: UIKit.UIColor
+  @objc public var bottomToolViewBtnDisableTitleColorOfPreviewVC: UIKit.UIColor
+  @objc public var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIKit.UIColor
+  @objc public var bottomToolViewBtnNormalBgColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var bottomToolViewBtnDisableBgColor: UIKit.UIColor
+  @objc public var bottomToolViewBtnDisableBgColorOfPreviewVC: UIKit.UIColor
+  @objc public var limitedAuthorityTipsColor: UIKit.UIColor
+  @objc public var cameraRecodeProgressColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var selectedMaskColor: UIKit.UIColor
+  @objc public var selectedBorderColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var invalidMaskColor: UIKit.UIColor
+  @objc public var indexLabelTextColor: UIKit.UIColor
+  @objc public var indexLabelBgColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var cameraCellBgColor: UIKit.UIColor
+  @objc public var adjustSliderNormalColor: UIKit.UIColor
+  @objc public var adjustSliderTintColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc public var imageEditorToolTitleNormalColor: UIKit.UIColor
+  @objc public var imageEditorToolTitleTintColor: UIKit.UIColor
+  @objc public var imageEditorToolIconTintColor: UIKit.UIColor?
+  @objc public var trashCanBackgroundNormalColor: UIKit.UIColor
+  @objc public var trashCanBackgroundTintColor: UIKit.UIColor
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public enum ZLPhotoBrowserStyle : Swift.Int {
+  case embedAlbumList
+  case externalAlbumList
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum ZLAdjustSliderType : Swift.Int {
+  case vertical
+  case horizontal
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ZLEditVideoViewController : UIKit.UIViewController {
   @objc @_Concurrency.MainActor(unsafe) public var editFinishBlock: ((Foundation.URL?) -> Swift.Void)?
@@ -300,12 +463,11 @@ extension ZLPhotoBrowser.ZLPhotoModel {
   @objc @_Concurrency.MainActor(unsafe) public var drawColViewH: CoreFoundation.CGFloat
   @objc @_Concurrency.MainActor(unsafe) public var filterColViewH: CoreFoundation.CGFloat
   @objc @_Concurrency.MainActor(unsafe) public var adjustColViewH: CoreFoundation.CGFloat
-  @objc @_Concurrency.MainActor(unsafe) public var ashbinNormalBgColor: UIKit.UIColor
-  @objc @_Concurrency.MainActor(unsafe) public var cancelBtn: UIKit.UIButton {
+  @objc @_Concurrency.MainActor(unsafe) public var cancelBtn: ZLPhotoBrowser.ZLEnlargeButton {
     @objc get
     @objc set
   }
-  @objc @_Concurrency.MainActor(unsafe) public var scrollView: UIKit.UIScrollView {
+  @objc @_Concurrency.MainActor(unsafe) public var mainScrollView: UIKit.UIScrollView {
     @objc get
     @objc set
   }
@@ -317,10 +479,23 @@ extension ZLPhotoBrowser.ZLPhotoModel {
     @objc get
     @objc set
   }
-  @objc @_Concurrency.MainActor(unsafe) public var bottomShadowView: UIKit.UIView
-  @objc @_Concurrency.MainActor(unsafe) public var bottomShadowLayer: QuartzCore.CAGradientLayer
-  @objc @_Concurrency.MainActor(unsafe) public var doneBtn: UIKit.UIButton
-  @objc @_Concurrency.MainActor(unsafe) public var revokeBtn: UIKit.UIButton
+  @objc @_Concurrency.MainActor(unsafe) public var bottomShadowView: UIKit.UIView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var bottomShadowLayer: QuartzCore.CAGradientLayer {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var doneBtn: UIKit.UIButton {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var revokeBtn: UIKit.UIButton {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var redoBtn: UIKit.UIButton?
   @objc @_Concurrency.MainActor(unsafe) public var ashbinView: UIKit.UIView {
     @objc get
     @objc set
@@ -342,9 +517,11 @@ extension ZLPhotoBrowser.ZLPhotoModel {
   @objc deinit
   @objc @_Concurrency.MainActor(unsafe) public class func showEditImageVC(parentVC: UIKit.UIViewController?, animate: Swift.Bool = false, image: UIKit.UIImage, editModel: ZLPhotoBrowser.ZLEditImageModel? = nil, cancel: (() -> Swift.Void)? = nil, completion: ((UIKit.UIImage, ZLPhotoBrowser.ZLEditImageModel?) -> Swift.Void)?)
   @objc @_Concurrency.MainActor(unsafe) public init(image: UIKit.UIImage, editModel: ZLPhotoBrowser.ZLEditImageModel? = nil)
+  @available(*, unavailable)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillTransition(to size: CoreFoundation.CGSize, with coordinator: any UIKit.UIViewControllerTransitionCoordinator)
 }
 extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UIGestureRecognizerDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIKit.UIGestureRecognizer) -> Swift.Bool
@@ -369,13 +546,13 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UICollectionViewDataS
 @objc @_hasMissingDesignatedInitializers public class ZLMosaicPath : ObjectiveC.NSObject {
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers public class ZLCameraConfiguration : ObjectiveC.NSObject {
+@objc @_inheritsConvenienceInitializers @objcMembers public class ZLCameraConfiguration : ObjectiveC.NSObject {
   @objc public enum CaptureSessionPreset : Swift.Int {
     case cif352x288
     case vga640x480
     case hd1280x720
     case hd1920x1080
-    case hd4K3840x2160
+    case photo
     public init?(rawValue: Swift.Int)
     public typealias RawValue = Swift.Int
     public var rawValue: Swift.Int {
@@ -400,16 +577,6 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UICollectionViewDataS
       get
     }
   }
-  @objc public enum FlashMode : Swift.Int {
-    case auto
-    case on
-    case off
-    public init?(rawValue: Swift.Int)
-    public typealias RawValue = Swift.Int
-    public var rawValue: Swift.Int {
-      get
-    }
-  }
   @objc public enum VideoExportType : Swift.Int {
     case mov
     case mp4
@@ -419,264 +586,179 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UICollectionViewDataS
       get
     }
   }
+  @objc public enum DevicePosition : Swift.Int {
+    case back
+    case front
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  @objc public var allowTakePhoto: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var allowRecordVideo: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var minRecordDuration: ZLPhotoBrowser.Second {
+    @objc get
+    @objc set
+  }
+  @objc public var maxRecordDuration: ZLPhotoBrowser.Second {
+    @objc get
+    @objc set
+  }
   @objc public var sessionPreset: ZLPhotoBrowser.ZLCameraConfiguration.CaptureSessionPreset
   @objc public var focusMode: ZLPhotoBrowser.ZLCameraConfiguration.FocusMode
   @objc public var exposureMode: ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode
-  @objc public var flashMode: ZLPhotoBrowser.ZLCameraConfiguration.FlashMode
+  @objc public var showFlashSwitch: Swift.Bool
+  @objc public var allowSwitchCamera: Swift.Bool
   @objc public var videoExportType: ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType
+  @objc public var devicePosition: ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition
   @objc override dynamic public init()
   @objc deinit
 }
 extension ZLPhotoBrowser.ZLCameraConfiguration {
-  @discardableResult
-  public func sessionPreset(_ sessionPreset: ZLPhotoBrowser.ZLCameraConfiguration.CaptureSessionPreset) -> ZLPhotoBrowser.ZLCameraConfiguration
-  @discardableResult
-  public func focusMode(_ mode: ZLPhotoBrowser.ZLCameraConfiguration.FocusMode) -> ZLPhotoBrowser.ZLCameraConfiguration
-  @discardableResult
-  public func exposureMode(_ mode: ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode) -> ZLPhotoBrowser.ZLCameraConfiguration
-  @discardableResult
-  public func flashMode(_ mode: ZLPhotoBrowser.ZLCameraConfiguration.FlashMode) -> ZLPhotoBrowser.ZLCameraConfiguration
-  @discardableResult
-  public func videoExportType(_ type: ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func allowTakePhoto(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func allowRecordVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func minRecordDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func maxRecordDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func sessionPreset(_ sessionPreset: ZLPhotoBrowser.ZLCameraConfiguration.CaptureSessionPreset) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func focusMode(_ mode: ZLPhotoBrowser.ZLCameraConfiguration.FocusMode) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func exposureMode(_ mode: ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func showFlashSwitch(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func allowSwitchCamera(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func videoExportType(_ type: ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func devicePosition(_ position: ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition) -> ZLPhotoBrowser.ZLCameraConfiguration
 }
 extension ZLPhotoBrowser.ZLPhotoConfiguration {
-  @discardableResult
-  public func style(_ style: ZLPhotoBrowser.ZLPhotoBrowserStyle) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func statusBarStyle(_ statusBarStyle: UIKit.UIStatusBarStyle) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func navCancelButtonStyle(_ style: ZLPhotoBrowser.ZLPhotoConfiguration.CancelButtonStyle) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func sortAscending(_ ascending: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxVideoSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func minVideoSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowMixSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxPreviewCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func cellCornerRadio(_ cornerRadio: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowSelectImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func sortAscending(_ ascending: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxVideoSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func minVideoSelectCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowMixSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxPreviewCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowSelectImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
   @discardableResult
   @objc dynamic public func allowSelectVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowSelectGif(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowSelectLivePhoto(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowTakePhotoInLibrary(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowEditImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowEditVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func animateSelectBtnWhenSelect(_ animate: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func selectBtnAnimationDuration(_ duration: CoreFoundation.CFTimeInterval) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func editAfterSelectThumbnailImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func cropVideoAfterSelectThumbnail(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showClipDirectlyIfOnlyHasClipTool(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func saveNewImageAfterEdit(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowSlideSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func autoScrollWhenSlideSelectIsActive(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func autoScrollMaxSpeed(_ speed: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowDragSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowSelectOriginal(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowPreviewPhotos(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showStatusBarInPreviewInterface(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showPreviewButtonInAlbum(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func columnCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxEditVideoTime(_ second: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxSelectVideoDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func minSelectVideoDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func editImageConfiguration(_ configuration: ZLPhotoBrowser.ZLEditImageConfiguration) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func editImageTools(_ tools: [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func editImageDrawColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func editImageDefaultDrawColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func editImageClipRatios(_ ratios: [ZLPhotoBrowser.ZLImageClipRatio]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func textStickerTextColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func textStickerDefaultTextColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func filters(_ filters: [ZLPhotoBrowser.ZLFilter]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @discardableResult
-  public func imageStickerContainerView(_ view: (UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showCaptureImageOnTakePhotoBtn(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showSelectBtnWhenSingleSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showSelectedMask(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showSelectedBorder(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showInvalidMask(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showSelectedIndex(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func showSelectedPhotoPreview(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func customImageNames(_ names: [Swift.String]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func customImageForKey(_ map: [Swift.String : UIKit.UIImage?]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func shouldAnialysisAsset(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func timeout(_ timeout: Foundation.TimeInterval) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func languageType(_ type: ZLPhotoBrowser.ZLLanguageType) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func customLanguageKeyValue(_ value: [ZLPhotoBrowser.ZLLocalLanguageKey : Swift.String]) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func useCustomCamera(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowTakePhoto(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func allowRecordVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func minRecordDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func maxRecordDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func cameraConfiguration(_ configuration: ZLPhotoBrowser.ZLCameraConfiguration) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func hudStyle(_ style: ZLPhotoBrowser.ZLProgressHUD.HUDStyle) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func navViewBlurEffectOfAlbumList(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func navViewBlurEffectOfPreview(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func bottomViewBlurEffectOfAlbumList(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func bottomViewBlurEffectOfPreview(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func themeColorDeploy(_ deploy: ZLPhotoBrowser.ZLPhotoThemeColorDeploy) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  public func themeFontName(_ name: Swift.String?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  @objc dynamic public func canSelectAsset(_ block: ((Photos.PHAsset) -> Swift.Bool)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  @objc dynamic public func showAddPhotoButton(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  @objc dynamic public func showEnterSettingTips(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
-  @discardableResult
-  @objc dynamic public func noAuthorityCallback(_ callback: ((ZLPhotoBrowser.ZLNoAuthorityType) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
-}
-extension ZLPhotoBrowser.ZLPhotoThemeColorDeploy {
-  @discardableResult
-  public func previewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func previewBtnBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func previewBtnTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func previewBtnHighlightTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func navBarColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func navBarColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func navTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func navTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func navEmbedTitleViewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func albumListBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func albumListTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func albumListCountColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func separatorColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func thumbnailBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnNormalTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnDisableTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnNormalBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnDisableBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func cameraRecodeProgressColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func selectedMaskColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func selectedBorderColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func invalidMaskColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func indexLabelBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @discardableResult
-  public func cameraCellBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
+  @objc @discardableResult
+  dynamic public func allowSelectGif(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowSelectLivePhoto(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowTakePhotoInLibrary(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func callbackDirectlyAfterTakingPhoto(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowEditImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowEditVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func animateSelectBtnWhenSelect(_ animate: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func selectBtnAnimationDuration(_ duration: CoreFoundation.CFTimeInterval) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func editAfterSelectThumbnailImage(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func cropVideoAfterSelectThumbnail(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showClipDirectlyIfOnlyHasClipTool(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func saveNewImageAfterEdit(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowSlideSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func autoScrollWhenSlideSelectIsActive(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func autoScrollMaxSpeed(_ speed: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowDragSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowSelectOriginal(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func alwaysRequestOriginal(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func allowPreviewPhotos(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showPreviewButtonInAlbum(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectCountOnDoneBtn(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxEditVideoTime(_ second: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxSelectVideoDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func minSelectVideoDuration(_ duration: ZLPhotoBrowser.Second) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func editImageConfiguration(_ configuration: ZLPhotoBrowser.ZLEditImageConfiguration) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showCaptureImageOnTakePhotoBtn(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectBtnWhenSingleSelect(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectedMask(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectedBorder(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showInvalidMask(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectedIndex(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showSelectedPhotoPreview(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func timeout(_ timeout: Foundation.TimeInterval) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func useCustomCamera(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func cameraConfiguration(_ configuration: ZLPhotoBrowser.ZLCameraConfiguration) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func canSelectAsset(_ block: ((Photos.PHAsset) -> Swift.Bool)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showAddPhotoButton(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func showEnterSettingTips(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func maxFrameCountForGIF(_ frameCount: Swift.Int) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func gifPlayBlock(_ block: ((UIKit.UIImageView, Foundation.Data, [Swift.AnyHashable : Any]?) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func pauseGIFBlock(_ block: ((UIKit.UIImageView) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func resumeGIFBlock(_ block: ((UIKit.UIImageView) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func noAuthorityCallback(_ callback: ((ZLPhotoBrowser.ZLNoAuthorityType) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
+  @objc @discardableResult
+  dynamic public func operateBeforeDoneAction(_ block: ((UIKit.UIViewController, @escaping () -> Swift.Void) -> Swift.Void)?) -> ZLPhotoBrowser.ZLPhotoConfiguration
 }
 @objc @_inheritsConvenienceInitializers public class ZLVideoManager : ObjectiveC.NSObject {
-  @objc public class func mergeVideos(fileUrls: [Foundation.URL], completion: @escaping ((Foundation.URL?, Swift.Error?) -> Swift.Void))
+  @objc public class func mergeVideos(fileUrls: [Foundation.URL], completion: @escaping ((Foundation.URL?, (any Swift.Error)?) -> Swift.Void))
   @objc override dynamic public init()
   @objc deinit
 }
 extension ZLPhotoBrowser.ZLVideoManager {
-  @objc dynamic public class func exportVideo(for asset: Photos.PHAsset, exportType: ZLPhotoBrowser.ZLVideoManager.ExportType = .mov, presetName: Swift.String = AVAssetExportPresetMediumQuality, complete: @escaping ((Foundation.URL?, Swift.Error?) -> Swift.Void))
-  @objc dynamic public class func exportVideo(for asset: AVFoundation.AVAsset, range: CoreMedia.CMTimeRange = CMTimeRange(start: .zero, duration: .positiveInfinity), exportType: ZLPhotoBrowser.ZLVideoManager.ExportType = .mov, presetName: Swift.String = AVAssetExportPresetMediumQuality, complete: @escaping ((Foundation.URL?, Swift.Error?) -> Swift.Void))
+  @objc dynamic public class func exportVideo(for asset: Photos.PHAsset, exportType: ZLPhotoBrowser.ZLVideoManager.ExportType = .mov, presetName: Swift.String = AVAssetExportPresetMediumQuality, complete: @escaping ((Foundation.URL?, (any Swift.Error)?) -> Swift.Void))
+  @objc dynamic public class func exportVideo(for asset: AVFoundation.AVAsset, range: CoreMedia.CMTimeRange = CMTimeRange(start: .zero, duration: .positiveInfinity), exportType: ZLPhotoBrowser.ZLVideoManager.ExportType = .mov, presetName: Swift.String = AVAssetExportPresetMediumQuality, complete: @escaping ((Foundation.URL?, (any Swift.Error)?) -> Swift.Void))
 }
 extension ZLPhotoBrowser.ZLVideoManager {
   @objc public enum ExportType : Swift.Int {
@@ -690,21 +772,9 @@ extension ZLPhotoBrowser.ZLVideoManager {
   }
 }
 public typealias Second = Swift.Int
-@objc @_inheritsConvenienceInitializers public class ZLPhotoConfiguration : ObjectiveC.NSObject {
-  @objc public enum CancelButtonStyle : Swift.Int {
-    case text
-    case image
-    public init?(rawValue: Swift.Int)
-    public typealias RawValue = Swift.Int
-    public var rawValue: Swift.Int {
-      get
-    }
-  }
+@objc @_inheritsConvenienceInitializers @objcMembers public class ZLPhotoConfiguration : ObjectiveC.NSObject {
   @objc public class func `default`() -> ZLPhotoBrowser.ZLPhotoConfiguration
   @objc public class func resetConfiguration()
-  @objc public var style: ZLPhotoBrowser.ZLPhotoBrowserStyle
-  @objc public var statusBarStyle: UIKit.UIStatusBarStyle
-  @objc public var navCancelButtonStyle: ZLPhotoBrowser.ZLPhotoConfiguration.CancelButtonStyle
   @objc public var sortAscending: Swift.Bool
   @objc public var maxSelectCount: Swift.Int {
     @objc get
@@ -720,7 +790,6 @@ public typealias Second = Swift.Int
   }
   @objc public var allowMixSelect: Swift.Bool
   @objc public var maxPreviewCount: Swift.Int
-  @objc public var cellCornerRadio: CoreFoundation.CGFloat
   @objc public var allowSelectImage: Swift.Bool
   @objc public var allowSelectVideo: Swift.Bool
   @objc public var allowSelectGif: Swift.Bool
@@ -729,6 +798,7 @@ public typealias Second = Swift.Int
     @objc get
     @objc set
   }
+  @objc public var callbackDirectlyAfterTakingPhoto: Swift.Bool
   @objc public var allowEditImage: Swift.Bool {
     @objc get
     @objc set
@@ -748,54 +818,14 @@ public typealias Second = Swift.Int
   @objc public var autoScrollMaxSpeed: CoreFoundation.CGFloat
   @objc public var allowDragSelect: Swift.Bool
   @objc public var allowSelectOriginal: Swift.Bool
+  @objc public var alwaysRequestOriginal: Swift.Bool
   @objc public var allowPreviewPhotos: Swift.Bool
-  @objc public var showStatusBarInPreviewInterface: Swift.Bool
   @objc public var showPreviewButtonInAlbum: Swift.Bool
-  @objc public var columnCount: Swift.Int {
-    @objc get
-    @objc set
-  }
+  @objc public var showSelectCountOnDoneBtn: Swift.Bool
   @objc public var maxEditVideoTime: Swift.Int
   @objc public var maxSelectVideoDuration: Swift.Int
   @objc public var minSelectVideoDuration: Swift.Int
   @objc public var editImageConfiguration: ZLPhotoBrowser.ZLEditImageConfiguration
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  public var editImageTools: [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool] {
-    get
-    set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var editImageDrawColors: [UIKit.UIColor] {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var editImageDefaultDrawColor: UIKit.UIColor {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var editImageClipRatios: [ZLPhotoBrowser.ZLImageClipRatio] {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var textStickerTextColors: [UIKit.UIColor] {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var textStickerDefaultTextColor: UIKit.UIColor {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var filters: [ZLPhotoBrowser.ZLFilter] {
-    @objc get
-    @objc set
-  }
-  @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-  @objc public var imageStickerContainerView: (UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?
   @objc public var showCaptureImageOnTakePhotoBtn: Swift.Bool
   @objc public var showSelectBtnWhenSingleSelect: Swift.Bool
   @objc public var showSelectedMask: Swift.Bool
@@ -803,64 +833,18 @@ public typealias Second = Swift.Int
   @objc public var showInvalidMask: Swift.Bool
   @objc public var showSelectedIndex: Swift.Bool
   @objc public var showSelectedPhotoPreview: Swift.Bool
-  @objc public var customImageNames: [Swift.String] {
-    @objc get
-    @objc set
-  }
-  public var customImageForKey: [Swift.String : UIKit.UIImage?] {
-    get
-    set
-  }
-  @objc public var customImageForKey_objc: [Swift.String : UIKit.UIImage] {
-    @objc get
-    @objc set
-  }
-  @objc public var shouldAnialysisAsset: Swift.Bool
   @objc public var timeout: Swift.Double
-  @objc public var languageType: ZLPhotoBrowser.ZLLanguageType {
-    @objc get
-    @objc set
-  }
-  @objc public var customLanguageKeyValue_objc: [Swift.String : Swift.String] {
-    @objc get
-    @objc set
-  }
-  public var customLanguageKeyValue: [ZLPhotoBrowser.ZLLocalLanguageKey : Swift.String] {
-    get
-    set
-  }
   @objc public var useCustomCamera: Swift.Bool
-  @objc public var allowTakePhoto: Swift.Bool {
-    @objc get
-    @objc set
-  }
-  @objc public var allowRecordVideo: Swift.Bool {
-    @objc get
-    @objc set
-  }
-  @objc public var minRecordDuration: ZLPhotoBrowser.Second {
-    @objc get
-    @objc set
-  }
-  @objc public var maxRecordDuration: ZLPhotoBrowser.Second {
-    @objc get
-    @objc set
-  }
   @objc public var cameraConfiguration: ZLPhotoBrowser.ZLCameraConfiguration
-  @objc public var hudStyle: ZLPhotoBrowser.ZLProgressHUD.HUDStyle
-  @objc public var navViewBlurEffectOfAlbumList: UIKit.UIBlurEffect?
-  @objc public var navViewBlurEffectOfPreview: UIKit.UIBlurEffect?
-  @objc public var bottomViewBlurEffectOfAlbumList: UIKit.UIBlurEffect?
-  @objc public var bottomViewBlurEffectOfPreview: UIKit.UIBlurEffect?
-  @objc public var themeColorDeploy: ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @objc public var themeFontName: Swift.String? {
-    @objc get
-    @objc set
-  }
   @objc public var canSelectAsset: ((Photos.PHAsset) -> Swift.Bool)?
   @objc public var showAddPhotoButton: Swift.Bool
   @objc public var showEnterSettingTips: Swift.Bool
+  @objc public var maxFrameCountForGIF: Swift.Int
+  @objc public var gifPlayBlock: ((UIKit.UIImageView, Foundation.Data, [Swift.AnyHashable : Any]?) -> Swift.Void)?
+  @objc public var pauseGIFBlock: ((UIKit.UIImageView) -> Swift.Void)?
+  @objc public var resumeGIFBlock: ((UIKit.UIImageView) -> Swift.Void)?
   @objc public var noAuthorityCallback: ((ZLPhotoBrowser.ZLNoAuthorityType) -> Swift.Void)?
+  @objc public var operateBeforeDoneAction: ((UIKit.UIViewController, @escaping () -> Swift.Void) -> Swift.Void)?
   @objc override dynamic public init()
   @objc deinit
 }
@@ -874,60 +858,7 @@ public typealias Second = Swift.Int
     get
   }
 }
-@objc public enum ZLPhotoBrowserStyle : Swift.Int {
-  case embedAlbumList
-  case externalAlbumList
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc @_inheritsConvenienceInitializers public class ZLPhotoThemeColorDeploy : ObjectiveC.NSObject {
-  @objc public class func `default`() -> ZLPhotoBrowser.ZLPhotoThemeColorDeploy
-  @objc public var previewBgColor: UIKit.UIColor
-  @objc public var previewBtnBgColor: UIKit.UIColor
-  @objc public var previewBtnTitleColor: UIKit.UIColor
-  @objc public var previewBtnHighlightTitleColor: UIKit.UIColor
-  @objc public var navBarColor: UIKit.UIColor
-  @objc public var navBarColorOfPreviewVC: UIKit.UIColor
-  @objc public var navTitleColor: UIKit.UIColor
-  @objc public var navTitleColorOfPreviewVC: UIKit.UIColor
-  @objc public var navEmbedTitleViewBgColor: UIKit.UIColor
-  @objc public var albumListBgColor: UIKit.UIColor
-  @objc public var albumListTitleColor: UIKit.UIColor
-  @objc public var albumListCountColor: UIKit.UIColor
-  @objc public var separatorColor: UIKit.UIColor
-  @objc public var thumbnailBgColor: UIKit.UIColor
-  @objc public var bottomToolViewBgColor: UIKit.UIColor
-  @objc public var bottomToolViewBgColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewBtnNormalTitleColor: UIKit.UIColor
-  @objc public var bottomToolViewDoneBtnNormalTitleColor: UIKit.UIColor
-  @objc public var bottomToolViewBtnNormalTitleColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewDoneBtnNormalTitleColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewBtnDisableTitleColor: UIKit.UIColor
-  @objc public var bottomToolViewDoneBtnDisableTitleColor: UIKit.UIColor
-  @objc public var bottomToolViewBtnDisableTitleColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewBtnNormalBgColor: UIKit.UIColor
-  @objc public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIKit.UIColor
-  @objc public var bottomToolViewBtnDisableBgColor: UIKit.UIColor
-  @objc public var bottomToolViewBtnDisableBgColorOfPreviewVC: UIKit.UIColor
-  @objc public var selectMorePhotoWhenAuthIsLismitedTitleColor: UIKit.UIColor
-  @objc public var cameraRecodeProgressColor: UIKit.UIColor
-  @objc public var selectedMaskColor: UIKit.UIColor
-  @objc public var selectedBorderColor: UIKit.UIColor
-  @objc public var invalidMaskColor: UIKit.UIColor
-  @objc public var indexLabelBgColor: UIKit.UIColor
-  @objc public var cameraCellBgColor: UIKit.UIColor
-  @objc public var adjustSliderNormalColor: UIKit.UIColor
-  @objc public var adjustSliderTintColor: UIKit.UIColor
-  @objc override dynamic public init()
-  @objc deinit
-}
-public struct ZLCustomFontDeploy {
-}
-public typealias ZLFilterApplierType = ((_ image: UIKit.UIImage) -> UIKit.UIImage)
+public typealias ZLFilterApplierType = (_ image: UIKit.UIImage) -> UIKit.UIImage
 @objc public enum ZLFilterType : Swift.Int {
   case normal
   case chrome
@@ -972,8 +903,182 @@ extension ZLPhotoBrowser.ZLFilter {
   @objc public static let noir: ZLPhotoBrowser.ZLFilter
   @objc public static let tonal: ZLPhotoBrowser.ZLFilter
 }
-extension UIKit.UIControl {
-  @_Concurrency.MainActor(unsafe) @objc override dynamic open func point(inside point: CoreFoundation.CGPoint, with event: UIKit.UIEvent?) -> Swift.Bool
+public enum ZLCustomAlertStyle {
+  case alert
+  case actionSheet
+  public static func == (a: ZLPhotoBrowser.ZLCustomAlertStyle, b: ZLPhotoBrowser.ZLCustomAlertStyle) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol ZLCustomAlertProtocol : AnyObject {
+  static func alert(title: Swift.String?, message: Swift.String, style: ZLPhotoBrowser.ZLCustomAlertStyle) -> any ZLPhotoBrowser.ZLCustomAlertProtocol
+  func addAction(_ action: ZLPhotoBrowser.ZLCustomAlertAction)
+  func show(with parentVC: UIKit.UIViewController?)
+}
+@objc public class ZLCustomAlertAction : ObjectiveC.NSObject {
+  public enum Style {
+    case `default`
+    case tint
+    case cancel
+    case destructive
+    public static func == (a: ZLPhotoBrowser.ZLCustomAlertAction.Style, b: ZLPhotoBrowser.ZLCustomAlertAction.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  final public let title: Swift.String
+  final public let style: ZLPhotoBrowser.ZLCustomAlertAction.Style
+  final public let handler: ((ZLPhotoBrowser.ZLCustomAlertAction) -> Swift.Void)?
+  @objc deinit
+  public init(title: Swift.String, style: ZLPhotoBrowser.ZLCustomAlertAction.Style, handler: ((ZLPhotoBrowser.ZLCustomAlertAction) -> Swift.Void)?)
+}
+extension ZLPhotoBrowser.ZLPhotoUIConfiguration {
+  @objc @discardableResult
+  dynamic public func style(_ style: ZLPhotoBrowser.ZLPhotoBrowserStyle) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func statusBarStyle(_ statusBarStyle: UIKit.UIStatusBarStyle) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navCancelButtonStyle(_ style: ZLPhotoBrowser.ZLPhotoUIConfiguration.CancelButtonStyle) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func showStatusBarInPreviewInterface(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func hudStyle(_ style: ZLPhotoBrowser.ZLProgressHUD.HUDStyle) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func adjustSliderType(_ type: ZLPhotoBrowser.ZLAdjustSliderType) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func cellCornerRadio(_ cornerRadio: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @discardableResult
+  public func customAlertClass(_ alertClass: (any ZLPhotoBrowser.ZLCustomAlertProtocol.Type)?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func columnCount(_ count: Swift.Int) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func columnCountBlock(_ block: ((_ collectionViewWidth: CoreFoundation.CGFloat) -> Swift.Int)?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func minimumInteritemSpacing(_ value: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func minimumLineSpacing(_ value: CoreFoundation.CGFloat) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navViewBlurEffectOfAlbumList(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navViewBlurEffectOfPreview(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomViewBlurEffectOfAlbumList(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomViewBlurEffectOfPreview(_ effect: UIKit.UIBlurEffect?) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func customImageNames(_ names: [Swift.String]) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @discardableResult
+  public func customImageForKey(_ map: [Swift.String : UIKit.UIImage?]) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func languageType(_ type: ZLPhotoBrowser.ZLLanguageType) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @discardableResult
+  public func customLanguageKeyValue(_ map: [ZLPhotoBrowser.ZLLocalLanguageKey : Swift.String]) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func themeFontName(_ name: Swift.String) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func themeColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func sheetTranslucentColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func sheetBtnBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func sheetBtnTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func sheetBtnTitleTintColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navBarColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navBarColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func navEmbedTitleViewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func albumListBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func embedAlbumListTranslucentColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func albumListTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func albumListCountColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func separatorColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func thumbnailBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func previewVCBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnNormalTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnDisableTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnNormalBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnDisableBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func limitedAuthorityTipsColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func cameraRecodeProgressColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func selectedMaskColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func selectedBorderColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func invalidMaskColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func indexLabelTextColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func indexLabelBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func cameraCellBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func adjustSliderNormalColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func adjustSliderTintColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func imageEditorToolTitleNormalColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func imageEditorToolTitleTintColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func imageEditorToolIconTintColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func trashCanBackgroundNormalColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func trashCanBackgroundTintColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+}
+@objc public class ZLResultModel : ObjectiveC.NSObject {
+  @objc final public let asset: Photos.PHAsset
+  @objc final public let image: UIKit.UIImage
+  @objc final public let isEdited: Swift.Bool
+  @objc final public let editModel: ZLPhotoBrowser.ZLEditImageModel?
+  @objc final public let index: Swift.Int
+  @objc public init(asset: Photos.PHAsset, image: UIKit.UIImage, isEdited: Swift.Bool, editModel: ZLPhotoBrowser.ZLEditImageModel? = nil, index: Swift.Int)
+  @objc deinit
 }
 @objc public class ZLAlbumListModel : ObjectiveC.NSObject {
   final public let title: Swift.String
@@ -992,7 +1097,7 @@ extension UIKit.UIControl {
   public func refetchPhotos()
   @objc deinit
 }
-@objc @_Concurrency.MainActor(unsafe) open class ZLCustomCamera : UIKit.UIViewController, QuartzCore.CAAnimationDelegate {
+@objc @_Concurrency.MainActor(unsafe) open class ZLCustomCamera : UIKit.UIViewController {
   @objc @_Concurrency.MainActor(unsafe) public var takeDoneBlock: ((UIKit.UIImage?, Foundation.URL?) -> Swift.Void)?
   @objc @_Concurrency.MainActor(unsafe) public var cancelBlock: (() -> Swift.Void)?
   @_Concurrency.MainActor(unsafe) public var tipsLabel: UIKit.UILabel {
@@ -1003,7 +1108,7 @@ extension UIKit.UIControl {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) public var largeCircleView: UIKit.UIVisualEffectView {
+  @_Concurrency.MainActor(unsafe) public var largeCircleView: UIKit.UIView {
     get
     set
   }
@@ -1011,11 +1116,15 @@ extension UIKit.UIControl {
     get
     set
   }
+  @_Concurrency.MainActor(unsafe) public var borderLayer: QuartzCore.CAShapeLayer {
+    get
+    set
+  }
   @_Concurrency.MainActor(unsafe) public var animateLayer: QuartzCore.CAShapeLayer {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) public var retakeBtn: UIKit.UIButton {
+  @_Concurrency.MainActor(unsafe) public var retakeBtn: ZLPhotoBrowser.ZLEnlargeButton {
     get
     set
   }
@@ -1023,11 +1132,15 @@ extension UIKit.UIControl {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) public var dismissBtn: UIKit.UIButton {
+  @_Concurrency.MainActor(unsafe) public var dismissBtn: ZLPhotoBrowser.ZLEnlargeButton {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) public var switchCameraBtn: UIKit.UIButton {
+  @_Concurrency.MainActor(unsafe) public var flashBtn: ZLPhotoBrowser.ZLEnlargeButton {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var switchCameraBtn: ZLPhotoBrowser.ZLEnlargeButton {
     get
     set
   }
@@ -1047,32 +1160,83 @@ extension UIKit.UIControl {
   }
   @objc deinit
   @_Concurrency.MainActor(unsafe) @objc dynamic public init()
+  @available(*, unavailable)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillDisappear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillTransition(to size: CoreFoundation.CGSize, with coordinator: any UIKit.UIViewControllerTransitionCoordinator)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLayoutSubviews()
-  @_Concurrency.MainActor(unsafe) @objc public func animationDidStop(_ anim: QuartzCore.CAAnimation, finished flag: Swift.Bool)
 }
 extension ZLPhotoBrowser.ZLCustomCamera : AVFoundation.AVCapturePhotoCaptureDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func photoOutput(_ output: AVFoundation.AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVFoundation.AVCaptureResolvedPhotoSettings)
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func photoOutput(_ output: AVFoundation.AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CoreMedia.CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CoreMedia.CMSampleBuffer?, resolvedSettings: AVFoundation.AVCaptureResolvedPhotoSettings, bracketSettings: AVFoundation.AVCaptureBracketedStillImageSettings?, error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func photoOutput(_ output: AVFoundation.AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CoreMedia.CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CoreMedia.CMSampleBuffer?, resolvedSettings: AVFoundation.AVCaptureResolvedPhotoSettings, bracketSettings: AVFoundation.AVCaptureBracketedStillImageSettings?, error: (any Swift.Error)?)
 }
 extension ZLPhotoBrowser.ZLCustomCamera : AVFoundation.AVCaptureFileOutputRecordingDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func fileOutput(_ output: AVFoundation.AVCaptureFileOutput, didStartRecordingTo fileURL: Foundation.URL, from connections: [AVFoundation.AVCaptureConnection])
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func fileOutput(_ output: AVFoundation.AVCaptureFileOutput, didFinishRecordingTo outputFileURL: Foundation.URL, from connections: [AVFoundation.AVCaptureConnection], error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func fileOutput(_ output: AVFoundation.AVCaptureFileOutput, didFinishRecordingTo outputFileURL: Foundation.URL, from connections: [AVFoundation.AVCaptureConnection], error: (any Swift.Error)?)
+}
+extension ZLPhotoBrowser.ZLCustomCamera : QuartzCore.CAAnimationDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func animationDidStop(_ anim: QuartzCore.CAAnimation, finished flag: Swift.Bool)
 }
 extension ZLPhotoBrowser.ZLCustomCamera : UIKit.UIGestureRecognizerDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func gestureRecognizer(_ gestureRecognizer: UIKit.UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIKit.UIGestureRecognizer) -> Swift.Bool
 }
-@objc public protocol ZLImageStickerContainerDelegate : UIKit.UIView {
+public struct ZLPhotoBrowserWrapper<Base> {
+  public let base: Base
+  public init(_ base: Base)
+}
+public protocol ZLPhotoBrowserCompatible : AnyObject {
+}
+public protocol ZLPhotoBrowserCompatibleValue {
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+  public var zl: ZLPhotoBrowser.ZLPhotoBrowserWrapper<Self> {
+    get
+    set
+  }
+  public static var zl: ZLPhotoBrowser.ZLPhotoBrowserWrapper<Self>.Type {
+    get
+    set
+  }
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
+  public var zl: ZLPhotoBrowser.ZLPhotoBrowserWrapper<Self> {
+    get
+    set
+  }
+}
+extension UIKit.UIViewController : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension UIKit.UIColor : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension UIKit.UIImage : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension CoreImage.CIImage : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension Photos.PHAsset : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension UIKit.UIFont : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension UIKit.UIView : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension Swift.Array : ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
+}
+extension Swift.String : ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
+}
+extension CoreFoundation.CGFloat : ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
+}
+extension Swift.Bool : ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
+}
+@objc public protocol ZLImageStickerContainerDelegate {
   @objc var selectImageBlock: ((UIKit.UIImage) -> Swift.Void)? { get set }
   @objc var hideBlock: (() -> Swift.Void)? { get set }
   @objc func show(in view: UIKit.UIView)
 }
-@objc @_inheritsConvenienceInitializers public class ZLEditImageConfiguration : ObjectiveC.NSObject {
-  @objc public enum EditTool : Swift.Int {
+@objc @_inheritsConvenienceInitializers @objcMembers public class ZLEditImageConfiguration : ObjectiveC.NSObject {
+  @objc public enum EditTool : Swift.Int, Swift.CaseIterable {
     case draw
     case clip
     case imageSticker
@@ -1081,17 +1245,25 @@ extension ZLPhotoBrowser.ZLCustomCamera : UIKit.UIGestureRecognizerDelegate {
     case filter
     case adjust
     public init?(rawValue: Swift.Int)
+    public typealias AllCases = [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool]
     public typealias RawValue = Swift.Int
+    public static var allCases: [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool] {
+      get
+    }
     public var rawValue: Swift.Int {
       get
     }
   }
-  @objc public enum AdjustTool : Swift.Int {
+  @objc public enum AdjustTool : Swift.Int, Swift.CaseIterable {
     case brightness
     case contrast
     case saturation
     public init?(rawValue: Swift.Int)
+    public typealias AllCases = [ZLPhotoBrowser.ZLEditImageConfiguration.AdjustTool]
     public typealias RawValue = Swift.Int
+    public static var allCases: [ZLPhotoBrowser.ZLEditImageConfiguration.AdjustTool] {
+      get
+    }
     public var rawValue: Swift.Int {
       get
     }
@@ -1099,6 +1271,10 @@ extension ZLPhotoBrowser.ZLCustomCamera : UIKit.UIGestureRecognizerDelegate {
   public var tools: [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool] {
     get
     set
+  }
+  @objc public var tools_objc: [Swift.Int] {
+    @objc get
+    @objc set
   }
   @objc public var drawColors: [UIKit.UIColor] {
     @objc get
@@ -1118,42 +1294,50 @@ extension ZLPhotoBrowser.ZLCustomCamera : UIKit.UIGestureRecognizerDelegate {
     @objc get
     @objc set
   }
-  @objc public var imageStickerContainerView: (UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?
+  @objc public var imageStickerContainerView: (any UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?
   public var adjustTools: [ZLPhotoBrowser.ZLEditImageConfiguration.AdjustTool] {
     get
     set
   }
+  @objc public var adjustTools_objc: [Swift.Int] {
+    @objc get
+    @objc set
+  }
   @objc public var impactFeedbackWhenAdjustSliderValueIsZero: Swift.Bool
   @objc public var impactFeedbackStyle: UIKit.UIImpactFeedbackGenerator.FeedbackStyle
+  @objc public var canRedo: Swift.Bool
   @objc override dynamic public init()
   @objc deinit
 }
 extension ZLPhotoBrowser.ZLEditImageConfiguration {
   @discardableResult
   public func tools(_ tools: [ZLPhotoBrowser.ZLEditImageConfiguration.EditTool]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func drawColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  public func defaultDrawColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func clipRatios(_ ratios: [ZLPhotoBrowser.ZLImageClipRatio]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func textStickerTextColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func textStickerDefaultTextColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func filters(_ filters: [ZLPhotoBrowser.ZLFilter]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func imageStickerContainerView(_ view: (UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func drawColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc dynamic public func defaultDrawColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func clipRatios(_ ratios: [ZLPhotoBrowser.ZLImageClipRatio]) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func textStickerTextColors(_ colors: [UIKit.UIColor]) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func textStickerDefaultTextColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func filters(_ filters: [ZLPhotoBrowser.ZLFilter]) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func imageStickerContainerView(_ view: (any UIKit.UIView & ZLPhotoBrowser.ZLImageStickerContainerDelegate)?) -> ZLPhotoBrowser.ZLEditImageConfiguration
   @discardableResult
   public func adjustTools(_ tools: [ZLPhotoBrowser.ZLEditImageConfiguration.AdjustTool]) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLEditImageConfiguration
-  @discardableResult
-  public func impactFeedbackStyle(_ style: UIKit.UIImpactFeedbackGenerator.FeedbackStyle) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func impactFeedbackStyle(_ style: UIKit.UIImpactFeedbackGenerator.FeedbackStyle) -> ZLPhotoBrowser.ZLEditImageConfiguration
+  @objc @discardableResult
+  dynamic public func canRedo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLEditImageConfiguration
 }
 @objc public class ZLImageClipRatio : ObjectiveC.NSObject {
-  public var title: Swift.String
-  final public let whRatio: CoreFoundation.CGFloat
+  @objc public var title: Swift.String
+  @objc final public let whRatio: CoreFoundation.CGFloat
+  @objc final public let isCircle: Swift.Bool
   @objc public init(title: Swift.String, whRatio: CoreFoundation.CGFloat, isCircle: Swift.Bool = false)
   @objc deinit
 }
@@ -1171,12 +1355,57 @@ extension ZLPhotoBrowser.ZLImageClipRatio {
 @objc @_hasMissingDesignatedInitializers public class ZLImageStickerState : ObjectiveC.NSObject {
   @objc deinit
 }
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
+  public static func animateGifImage(data: Foundation.Data) -> UIKit.UIImage?
+  public static func getFrameDuration(from imageSource: ImageIO.CGImageSource, at index: Swift.Int) -> Foundation.TimeInterval
+  public static func getFrameDuration(from gifInfo: [Swift.String : Any]?) -> Foundation.TimeInterval
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
+  public func fixOrientation() -> UIKit.UIImage
+  public func rotate(orientation: UIKit.UIImage.Orientation) -> UIKit.UIImage
+  public func swapRectWidthAndHeight(_ rect: CoreFoundation.CGRect) -> CoreFoundation.CGRect
+  public func rotate(degress: CoreFoundation.CGFloat) -> UIKit.UIImage
+  public func mosaicImage() -> UIKit.UIImage?
+  public func resize(_ size: CoreFoundation.CGSize, scale: CoreFoundation.CGFloat? = nil) -> UIKit.UIImage?
+  public func resize_vI(_ size: CoreFoundation.CGSize, scale: CoreFoundation.CGFloat? = nil) -> UIKit.UIImage?
+  public func toCIImage() -> CoreImage.CIImage?
+  public func clipImage(angle: CoreFoundation.CGFloat, editRect: CoreFoundation.CGRect, isCircle: Swift.Bool) -> UIKit.UIImage?
+  public func blurImage(level: CoreFoundation.CGFloat) -> UIKit.UIImage?
+  public func hasAlphaChannel() -> Swift.Bool
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
+  public func adjust(brightness: Swift.Float, contrast: Swift.Float, saturation: Swift.Float) -> UIKit.UIImage?
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
+  public static func image(withColor color: UIKit.UIColor, size: CoreFoundation.CGSize = CGSize(width: 1, height: 1)) -> UIKit.UIImage?
+  public func fillColor(_ color: UIKit.UIColor) -> UIKit.UIImage?
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
+  public var width: CoreFoundation.CGFloat {
+    get
+  }
+  public var height: CoreFoundation.CGFloat {
+    get
+  }
+}
+extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : CoreImage.CIImage {
+  public func toUIImage() -> UIKit.UIImage?
+}
 extension ZLPhotoBrowser.ZLLanguageType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLLanguageType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLLanguageType : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLURLType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLURLType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLURLType : Swift.RawRepresentable {}
+extension ZLPhotoBrowser.ZLPhotoUIConfiguration.CancelButtonStyle : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLPhotoUIConfiguration.CancelButtonStyle : Swift.Hashable {}
+extension ZLPhotoBrowser.ZLPhotoUIConfiguration.CancelButtonStyle : Swift.RawRepresentable {}
+extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.Hashable {}
+extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.RawRepresentable {}
+extension ZLPhotoBrowser.ZLAdjustSliderType : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLAdjustSliderType : Swift.Hashable {}
+extension ZLPhotoBrowser.ZLAdjustSliderType : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLProgressHUD.HUDStyle : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLProgressHUD.HUDStyle : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLProgressHUD.HUDStyle : Swift.RawRepresentable {}
@@ -1192,27 +1421,25 @@ extension ZLPhotoBrowser.ZLCameraConfiguration.FocusMode : Swift.RawRepresentabl
 extension ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode : Swift.RawRepresentable {}
-extension ZLPhotoBrowser.ZLCameraConfiguration.FlashMode : Swift.Equatable {}
-extension ZLPhotoBrowser.ZLCameraConfiguration.FlashMode : Swift.Hashable {}
-extension ZLPhotoBrowser.ZLCameraConfiguration.FlashMode : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType : Swift.RawRepresentable {}
+extension ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition : Swift.Hashable {}
+extension ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLVideoManager.ExportType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLVideoManager.ExportType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLVideoManager.ExportType : Swift.RawRepresentable {}
-extension ZLPhotoBrowser.ZLPhotoConfiguration.CancelButtonStyle : Swift.Equatable {}
-extension ZLPhotoBrowser.ZLPhotoConfiguration.CancelButtonStyle : Swift.Hashable {}
-extension ZLPhotoBrowser.ZLPhotoConfiguration.CancelButtonStyle : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLNoAuthorityType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLNoAuthorityType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLNoAuthorityType : Swift.RawRepresentable {}
-extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.Equatable {}
-extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.Hashable {}
-extension ZLPhotoBrowser.ZLPhotoBrowserStyle : Swift.RawRepresentable {}
 extension ZLPhotoBrowser.ZLFilterType : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLFilterType : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLFilterType : Swift.RawRepresentable {}
+extension ZLPhotoBrowser.ZLCustomAlertStyle : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLCustomAlertStyle : Swift.Hashable {}
+extension ZLPhotoBrowser.ZLCustomAlertAction.Style : Swift.Equatable {}
+extension ZLPhotoBrowser.ZLCustomAlertAction.Style : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLEditImageConfiguration.EditTool : Swift.Equatable {}
 extension ZLPhotoBrowser.ZLEditImageConfiguration.EditTool : Swift.Hashable {}
 extension ZLPhotoBrowser.ZLEditImageConfiguration.EditTool : Swift.RawRepresentable {}

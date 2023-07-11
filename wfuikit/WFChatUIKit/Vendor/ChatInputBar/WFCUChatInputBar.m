@@ -1468,9 +1468,12 @@
         [ZLPhotoConfiguration default].cameraConfiguration.videoExportType = VideoExportTypeMp4;
         
         ZLPhotoPreviewSheet *ps = [[ZLPhotoPreviewSheet alloc] initWithSelectedAssets:@[]];
-        ps.selectImageBlock = ^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+        ps.selectImageBlock = ^(NSArray<ZLResultModel *> *models, BOOL isOriginal) {
             NSMutableArray *photos = [[NSMutableArray alloc] init];
-            [photos addObjectsFromArray:assets];
+            [models enumerateObjectsUsingBlock:^(ZLResultModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [photos addObject:obj.asset];
+            }];
+
             [weakself recursiveHandle:photos isFullImage:isOriginal];
         };
         [ps showPhotoLibraryWithSender:[self.delegate requireNavi]];
