@@ -7,6 +7,7 @@
 //
 
 #import "WFZStartConferenceViewController.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "MBProgressHUD.h"
@@ -47,6 +48,7 @@
 
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @end
+#endif
 
 @implementation WFZStartConferenceViewController
 #if WFCU_SUPPORT_VOIP

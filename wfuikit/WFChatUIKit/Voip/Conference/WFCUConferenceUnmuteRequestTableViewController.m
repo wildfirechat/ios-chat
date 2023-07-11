@@ -22,7 +22,7 @@
 @end
 
 @implementation WFCUConferenceUnmuteRequestTableViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -139,4 +139,5 @@
     
     return cell;
 }
+#endif
 @end

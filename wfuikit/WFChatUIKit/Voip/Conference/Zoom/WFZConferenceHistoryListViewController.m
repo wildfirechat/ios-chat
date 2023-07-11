@@ -7,6 +7,7 @@
 //
 
 #import "WFZConferenceHistoryListViewController.h"
+#if WFCU_SUPPORT_VOIP
 #import "WFCUConferenceManager.h"
 #import "WFCUConferenceHistory.h"
 #import "WFZConferenceInfo.h"
@@ -16,9 +17,10 @@
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSArray<WFCUConferenceHistory *> *conferenceHistorys;
 @end
+#endif
 
 @implementation WFZConferenceHistoryListViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -78,5 +80,5 @@
     return cell;
 }
 
-
+#endif
 @end

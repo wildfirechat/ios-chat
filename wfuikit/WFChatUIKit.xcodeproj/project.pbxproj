@@ -505,8 +505,6 @@
 		B74FDF8428E43275001B870F /* WFCUMoreBoardView.h in Headers */ = {isa = PBXBuildFile; fileRef = B74FDF8228E43275001B870F /* WFCUMoreBoardView.h */; };
 		B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B755657028389F8900BE047C /* WFCUArticlesCell.h */; };
 		B755657328389F8900BE047C /* WFCUArticlesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B755657128389F8900BE047C /* WFCUArticlesCell.m */; };
-		B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81622782B800009D4A19 /* WebRTC.xcframework */; };
-		B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */; };
 		B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D817B2782DFE1009D4A19 /* WFChatClient.framework */; };
 		B764D482295850D40082492F /* WFCUOrgServiceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D481295850D40082492F /* WFCUOrgServiceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B764D4862958517A0082492F /* WFCUOrganization.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D4842958517A0082492F /* WFCUOrganization.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1242,9 +1240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B75D817C2782DFE1009D4A19 /* WFChatClient.framework in Frameworks */,
-				B75D81642782B800009D4A19 /* WebRTC.xcframework in Frameworks */,
 				B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */,
-				B75D81652782B800009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				B7E494E128F6709700FF2333 /* libyuv.xcframework in Frameworks */,
 				B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B709CCE928F7B9EF0036EDFA /* CoreMedia.framework in Frameworks */,

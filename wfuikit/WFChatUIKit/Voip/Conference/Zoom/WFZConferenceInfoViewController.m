@@ -7,6 +7,7 @@
 //
 
 #import "WFZConferenceInfoViewController.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "UIView+Toast.h"
@@ -34,6 +35,7 @@
 
 @property(nonatomic, assign)BOOL isFavConference;
 @end
+#endif
 
 @implementation WFZConferenceInfoViewController
 #if WFCU_SUPPORT_VOIP

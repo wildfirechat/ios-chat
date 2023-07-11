@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#if WFCU_SUPPORT_VOIP
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import <WebRTC/WebRTC.h>
@@ -23,3 +24,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif

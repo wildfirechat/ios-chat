@@ -8,6 +8,7 @@
 
 #import "WFCUConferenceAudioCollectionViewCell.h"
 #import "WFCUConferenceParticipantCollectionViewCell.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 
 @interface WFCUConferenceAudioCollectionViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -16,8 +17,10 @@
 @property(nonatomic, strong)NSMutableArray<WFAVParticipantProfile *> *participants;
 @property(nonatomic, assign)NSUInteger pages;
 @end
+#endif
 
 @implementation WFCUConferenceAudioCollectionViewCell
+#if WFCU_SUPPORT_VOIP
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if(self) {
@@ -125,4 +128,5 @@
     cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
+#endif
 @end

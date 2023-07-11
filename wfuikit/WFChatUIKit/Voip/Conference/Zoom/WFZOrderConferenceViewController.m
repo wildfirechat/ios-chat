@@ -7,6 +7,7 @@
 //
 
 #import "WFZOrderConferenceViewController.h"
+#if WFCU_SUPPORT_VOIP
 #import <WFChatClient/WFCChatClient.h>
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import "MBProgressHUD.h"
@@ -15,8 +16,10 @@
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUGeneralModifyViewController.h"
 #import "WFCUUtilities.h"
+#endif
 
 @interface WFZOrderConferenceViewController () <UITableViewDelegate, UITableViewDataSource>
+#if WFCU_SUPPORT_VOIP
 @property(nonatomic, strong)UITableView *tableView;
 
 @property(nonatomic, assign)BOOL enableAudio;
@@ -44,10 +47,11 @@
 
 
 @property (nonatomic, strong) UIDatePicker *datePicker;
+#endif
 @end
 
 @implementation WFZOrderConferenceViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.enableAudio = YES;
@@ -431,4 +435,5 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
+#endif
 @end

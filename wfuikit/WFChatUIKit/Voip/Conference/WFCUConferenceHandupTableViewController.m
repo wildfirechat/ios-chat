@@ -21,7 +21,7 @@
 @end
 
 @implementation WFCUConferenceHandupTableViewController
-
+#if WFCU_SUPPORT_VOIP
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -116,5 +116,5 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *userId = [WFCUConferenceManager sharedInstance].handupMembers[indexPath.row];
 }
-
+#endif
 @end

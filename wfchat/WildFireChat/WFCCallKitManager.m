@@ -7,6 +7,7 @@
 //
 
 #import "WFCCallKitManager.h"
+#if WFCU_SUPPORT_VOIP
 #import <CallKit/CallKit.h>
 #import <UIKit/UIKit.h>
 #import <WFChatUIKit/WFChatUIKit.h>
@@ -140,3 +141,4 @@
     }
 }
 @end
+#endif
