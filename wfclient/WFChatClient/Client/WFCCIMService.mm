@@ -1032,7 +1032,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     tmsg.conversationType = (int)conv.type;
     tmsg.target = conv.target ? [conv.target UTF8String] : "";
     tmsg.line = conv.line;
-    tmsg.from = mars::app::GetAccountUserName();
+    tmsg.from = [[WFCCNetworkService sharedInstance].userId UTF8String];
     tmsg.status = mars::stn::MessageStatus::Message_Status_Sending;
     tmsg.timestamp = time(NULL)*1000;
     tmsg.direction = 0;
