@@ -472,6 +472,9 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
 /* 此属性没有意义，仅为了兼容UI代码 */
 @property(nonatomic, assign) BOOL forceUseEAGLView;
 
+/* 此属性没有意义，仅为了兼容UI代码 */
+@property(nonatomic, assign) BOOL forceRelay;
+
 /* 此函数没有意义，仅为了兼容UI代码 */
 - (WFAVCallSession *_Nonnull)startConference:(NSString *_Nullable)callId
                                    audioOnly:(BOOL)audioOnly
