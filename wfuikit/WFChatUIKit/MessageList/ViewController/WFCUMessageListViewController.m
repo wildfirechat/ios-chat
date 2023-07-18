@@ -818,7 +818,9 @@
             }
         }
     } else {
-        self.chatInputBar.inputBarStatus =  defaultStatus;
+        if(self.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
+            self.chatInputBar.inputBarStatus =  defaultStatus;
+        }
     }
 }
 
