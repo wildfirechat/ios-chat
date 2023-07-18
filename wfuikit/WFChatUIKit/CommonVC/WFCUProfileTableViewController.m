@@ -247,12 +247,12 @@
     
     if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
         if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
-            UIAlertAction *cancelStarAction = [UIAlertAction actionWithTitle:WFCString(@"Star") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *cancelStarAction = [UIAlertAction actionWithTitle:WFCString(@"Unstar") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [ws setFavUser];
             }];
             [actionSheet addAction:cancelStarAction];
         } else {
-            UIAlertAction *setStarAction = [UIAlertAction actionWithTitle:WFCString(@"Unstar") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *setStarAction = [UIAlertAction actionWithTitle:WFCString(@"Star") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [ws setFavUser];
             }];
             [actionSheet addAction:setStarAction];
