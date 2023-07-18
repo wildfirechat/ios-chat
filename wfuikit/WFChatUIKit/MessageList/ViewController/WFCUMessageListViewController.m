@@ -2542,6 +2542,9 @@
 }
 
 - (void)didSelectPhoneNumber:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model withPhoneNumber:(NSString *)phoneNumber {
+    if(self.chatInputBar.inputBarStatus == ChatInputBarKeyboardStatus || self.chatInputBar.inputBarStatus == ChatInputBarEmojiStatus || self.chatInputBar.inputBarStatus == ChatInputBarPluginStatus) {
+        self.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+    }
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:WFCString(@"PhoneNumberHint"), phoneNumber] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
