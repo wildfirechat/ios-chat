@@ -390,11 +390,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         _floatingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_floatingButton setTitle:@"" forState:UIControlStateNormal];
         _floatingButton.backgroundColor = [UIColor clearColor];
-        if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
-            _floatingButton.frame = CGRectMake(0, 0, 64, 96);
-        } else {
-            _floatingButton.frame = CGRectMake(0, 0, 96, 64);
-        }
+        _floatingButton.frame = CGRectMake(0, 0, 64, 96);
         
         [_floatingButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         _floatingButton.titleLabel.font = [UIFont systemFontOfSize:14];
