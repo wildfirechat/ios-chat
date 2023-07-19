@@ -40,6 +40,13 @@
     } else {
         text = WFCString(@"VideoCall");
     }
+    
+    if(startContent.status == kWFAVCallEndReasonInterrupted) {
+        text = @"通话中断";
+    } else if(startContent.status == kWFAVCallEndReasonRemoteInterrupted) {
+        text = @"对方通话中断";
+    }
+    
     if (startContent.connectTime > 0 && startContent.endTime > 0) {
         long long duration = startContent.endTime - startContent.connectTime;
         if (duration <= 0) {
@@ -112,6 +119,12 @@
                 break;
             case kWFAVCallEndReasonRoomParticipantsFull:
                 text = @"已达到最大参与人数";
+                break;
+            case kWFAVCallEndReasonInterrupted:
+                text = @"通话中断";
+                break;
+            case kWFAVCallEndReasonRemoteInterrupted:
+                text = @"对方通话中断";
                 break;
             default:
                 break;
