@@ -161,7 +161,9 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRemoteNetworkError,
   kWFAVCallEndReasonRoomDestroyed,
   kWFAVCallEndReasonRoomNotExist,
-  kWFAVCallEndReasonRoomParticipantsFull
+  kWFAVCallEndReasonRoomParticipantsFull,
+  kWFAVCallEndReasonInterrupted,
+  kWFAVCallEndReasonRemoteInterrupted
 };
 
 @class WFCCConversation;

@@ -1810,6 +1810,10 @@
         reasonStr = @"未接听";
     } else if(reason == kWFAVCallEndReasonBusy) {
         reasonStr = @"网络忙";
+    } else if(reason == kWFAVCallEndReasonInterrupted) {
+        reasonStr = @"通话中断";
+    } else if(reason == kWFAVCallEndReasonRemoteInterrupted) {
+        reasonStr = @"对方通话中断";
     } else if(reason == kWFAVCallEndReasonRemoteHangup) {
         reasonStr = @"离开会议";
     } else {

@@ -756,6 +756,10 @@
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     if(reason == kWFAVCallEndReasonBusy) {
         [self.view makeToast:@"忙线未接听！" duration:3 position:CSToastPositionCenter];
+    } else if(reason == kWFAVCallEndReasonInterrupted) {
+        [self.view makeToast:@"通话中断！" duration:3 position:CSToastPositionCenter];
+    } else if(reason == kWFAVCallEndReasonRemoteInterrupted) {
+        [self.view makeToast:@"对方通话中断！" duration:3 position:CSToastPositionCenter];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
