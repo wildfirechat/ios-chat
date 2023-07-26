@@ -165,7 +165,7 @@
                     [provider loadItemForTypeIdentifier:typeIdentifier options:nil completionHandler:^(__kindof id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
                         NSLog(@"the value is %@", item);
                         UIImage *image = nil;
-                        if ([provider hasItemConformingToTypeIdentifier:@"public.image"]) {
+                        if ([provider hasItemConformingToTypeIdentifier:@"public.image"] && [item isKindOfClass:[UIImage class]]) {
                             image = (UIImage *)item;
                             ws.dataLoaded = YES;
                             ws.image = image;
