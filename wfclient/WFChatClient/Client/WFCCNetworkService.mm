@@ -1072,6 +1072,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     return mars::stn::isTCPShortLink()?YES:NO;
 }
 
+- (void)noUseFts {
+    mars::stn::noUseFts();
+}
+
 - (void)setLiteMode:(BOOL)isLiteMode {
     mars::stn::setLiteMode(isLiteMode ? true:false);
 }
