@@ -310,6 +310,10 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
  */
 - (BOOL)isTcpShortLink;
 
+/*
+ 不使用FTS搜索。仅在connect之前调用有效。
+ */
+- (void)noUseFts;
 /**
  设置Lite模式。
  Lite模式下，协议栈不存储数据库，不同步所有信息，只能收发消息，接收消息只接收连接以后发送的消息。
