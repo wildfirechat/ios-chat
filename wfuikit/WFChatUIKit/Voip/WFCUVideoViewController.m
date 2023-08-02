@@ -394,14 +394,14 @@
 }
 
 - (void)updateSpeakerButton {
-    if([self.currentSession isHeadsetPluggedIn] || [self.currentSession isBluetoothSpeaker]) {
-        self.speakerButton.enabled = NO;
-    } else {
-        self.speakerButton.enabled = YES;
-    }
-    
     if (!self.currentSession.isSpeaker) {
-        [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
+        if([self.currentSession isHeadsetPluggedIn]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_headset"] forState:UIControlStateNormal];
+        } else if([self.currentSession isBluetoothSpeaker]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_bluetooth"] forState:UIControlStateNormal];
+        } else {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
+        }
     } else {
         [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_hover"] forState:UIControlStateNormal];
     }
@@ -596,6 +596,9 @@
             
             if (self.currentSession.isAudioOnly) {
                 [self updateSpeakerButton];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateSpeakerButton];
+                });
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
                 self.speakerButton.hidden = NO;
                 self.switchCameraButton.hidden = YES;
@@ -658,7 +661,12 @@
                 self.switchCameraButton.hidden = YES;
             } else {
                 self.speakerButton.hidden = YES;
-                [self.currentSession enableSpeaker:YES];
+                if(self.currentSession.isHeadsetPluggedIn || self.currentSession.isBluetoothSpeaker) {
+                    [self.currentSession enableSpeaker:NO];
+                } else {
+                    [self.currentSession enableSpeaker:YES];
+                }
+                
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
                 self.switchCameraButton.hidden = NO;
                 self.switchCameraButton.enabled = YES;

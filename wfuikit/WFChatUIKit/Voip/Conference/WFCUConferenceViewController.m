@@ -1085,14 +1085,14 @@
 }
 
 - (void)updateSpeakerButton {
-    if([self.currentSession isHeadsetPluggedIn] || [self.currentSession isBluetoothSpeaker]) {
-        self.speakerButton.enabled = NO;
-    } else {
-        self.speakerButton.enabled = YES;
-    }
-    
     if (!self.currentSession.isSpeaker) {
-        [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_earphone"] forState:UIControlStateNormal];
+        if([self.currentSession isHeadsetPluggedIn]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker_headset"] forState:UIControlStateNormal];
+        } else if([self.currentSession isBluetoothSpeaker]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker_bluetooth"] forState:UIControlStateNormal];
+        } else {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker_hover"] forState:UIControlStateNormal];
+        }
     } else {
         [self.speakerButton setImage:[WFCUImage imageNamed:@"conference_speaker"] forState:UIControlStateNormal];
     }
@@ -1755,6 +1755,8 @@
 }
 
 - (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
+    [self updateSpeakerButton];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     
     if ([userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
