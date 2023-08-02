@@ -507,14 +507,14 @@
 }
 
 - (void)updateSpeakerButton {
-    if([self.currentSession isHeadsetPluggedIn] || [self.currentSession isBluetoothSpeaker]) {
-        self.speakerButton.enabled = NO;
-    } else {
-        self.speakerButton.enabled = YES;
-    }
-    
     if (!self.currentSession.isSpeaker) {
-        [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
+        if([self.currentSession isHeadsetPluggedIn]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_headset"] forState:UIControlStateNormal];
+        } else if([self.currentSession isBluetoothSpeaker]) {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_bluetooth"] forState:UIControlStateNormal];
+        } else {
+            [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
+        }
     } else {
         [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_hover"] forState:UIControlStateNormal];
     }
@@ -872,7 +872,11 @@
             self.audioButton.hidden = NO;
             self.audioButton.enabled = YES;
             self.audioButton.frame = [self getButtomLeftButtonFrame];
-            [self.currentSession enableSpeaker:YES];
+            if([self.currentSession isHeadsetPluggedIn] || [self.currentSession isBluetoothSpeaker]) {
+                [self.currentSession enableSpeaker:NO];
+            } else {
+                [self.currentSession enableSpeaker:YES];
+            }
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 self.speakerButton.enabled = YES;
