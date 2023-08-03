@@ -4156,6 +4156,9 @@ public:
 - (void)setMyCustomState:(WFCCUserCustomState *)state
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock {
+    if (!state.text) {
+        state.text = @"";
+    }
     NSString *strValue = [NSString stringWithFormat:@"%d-%@", state.state, state.text];
     [self setUserSetting:UserSettingScope_Custom_State key:@"" value:strValue success:successBlock error:errorBlock];
 }
