@@ -230,6 +230,9 @@ WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     userInfo.extra = [NSString stringWithUTF8String:tui.extra.c_str()];
     userInfo.updateDt = tui.updateDt;
     userInfo.type = tui.type;
+    if(!userInfo.portrait.length && [WFCCNetworkService sharedInstance].defaultPortraitProvider && [[WFCCNetworkService sharedInstance].defaultPortraitProvider respondsToSelector:@selector(userDefaultPortrait:)]) {
+        userInfo.portrait = [[WFCCNetworkService sharedInstance].defaultPortraitProvider userDefaultPortrait:userInfo];
+    }
     
     return userInfo;
 }

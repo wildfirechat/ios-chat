@@ -767,6 +767,33 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (NSString *)userDefaultPortrait:(WFCCUserInfo *)userInfo {
+    if(userInfo.portrait.length) {
+        return userInfo.portrait;
+    } else {
+        return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar?name=%@", userInfo.displayName];
+    }
+}
+
+- (NSString *)groupDefaultPortrait:(WFCCGroupInfo *)groupInfo memberInfos:(NSArray<WFCCUserInfo *> *)memberInfos {
+    if(groupInfo.portrait.length) {
+        return groupInfo.portrait;
+    }
+    
+    NSMutableArray *reqMembers = [[NSMutableArray alloc] init];
+    [memberInfos enumerateObjectsUsingBlock:^(WFCCUserInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.portrait.length && [obj.portrait rangeOfString:APP_SERVER_ADDRESS].location == NSNotFound) {
+            [reqMembers addObject:@{@"avatarUrl" : obj.portrait}];
+        } else {
+            [reqMembers addObject:@{@"name" : obj.displayName}];
+        }
+    }];
+    NSDictionary *request = @{@"members" : reqMembers};
+    NSError * err;
+    NSData * jsonData = [NSJSONSerialization  dataWithJSONObject:request options:0 error:&err];
+    return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar/group?request=%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+}
+
 - (NSData *)getAppServiceCookies {
     return [[NSUserDefaults standardUserDefaults] objectForKey:WFC_APPSERVER_COOKIES];
 }
