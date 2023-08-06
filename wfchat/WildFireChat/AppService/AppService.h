@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppService : NSObject <WFCUAppServiceProvider>
+@interface AppService : NSObject <WFCUAppServiceProvider, WFCCDefaultPortraitProvider>
 + (AppService *)sharedAppService;
 
 - (void)loginWithMobile:(NSString *)mobile verifyCode:(NSString *)verifyCode success:(void(^)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;

@@ -207,6 +207,30 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)onOnlineEvent:(NSArray<WFCCUserOnlineState *> *)events;
 @end
 
+@class WFCCUserInfo;
+@class WFCCGroupInfo;
+/**
+ 默认头像提供者
+ */
+@protocol WFCCDefaultPortraitProvider <NSObject>
+/**
+ 获取用户的默认头像链接
+ 
+ @param userInfo 用户信息
+ @return 返回此用户的默认头像
+ */
+- (NSString *)userDefaultPortrait:(WFCCUserInfo *)userInfo;
+
+/**
+ 获取群组的默认头像链接
+ 
+ @param groupInfo 群组信息
+ @param memberInfos 群成员用户信息，只用前9名，可以只传入9名成员
+ @return 返回此用户的默认头像
+ */
+- (NSString *)groupDefaultPortrait:(WFCCGroupInfo *)groupInfo memberInfos:(NSArray<WFCCUserInfo *> *)memberInfos;
+@end
+
 #pragma mark - 连接服务
 /**
  连接服务
@@ -249,6 +273,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 在线事件监听
 */
 @property(nonatomic, weak) id<OnlineEventDelegate> onlineEventDelegate;
+
+/**
+ 默认头像提供者
+ */
+@property(nonatomic, weak)id<WFCCDefaultPortraitProvider> defaultPortraitProvider;
 
 /**
  当前是否处于登录状态

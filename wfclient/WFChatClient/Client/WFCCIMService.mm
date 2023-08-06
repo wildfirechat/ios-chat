@@ -2212,6 +2212,25 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.maxMemberCount = tgi.maxMemberCount;
     groupInfo.superGroup = tgi.superGroup;
     groupInfo.updateTimestamp = tgi.updateDt;
+    
+    if(!groupInfo.portrait.length && [WFCCNetworkService sharedInstance].defaultPortraitProvider && [[WFCCNetworkService sharedInstance].defaultPortraitProvider respondsToSelector:@selector(groupDefaultPortrait:memberInfos:)]) {
+        __block NSMutableArray<WFCCUserInfo *> *memberUserInfos = [[NSMutableArray alloc] init];
+        __block BOOL pendding = NO;
+        [[[WFCCIMService sharedWFCIMService] getGroupMembers:groupInfo.target count:9] enumerateObjectsUsingBlock:^(WFCCGroupMember * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:obj.memberId refresh:NO];
+            if(userInfo) {
+                [memberUserInfos addObject:userInfo];
+            } else {
+                pendding = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if(!pendding) {
+            groupInfo.portrait = [[WFCCNetworkService sharedInstance].defaultPortraitProvider groupDefaultPortrait:groupInfo memberInfos:memberUserInfos];
+        }
+    }
+    
     return groupInfo;
 }
 
