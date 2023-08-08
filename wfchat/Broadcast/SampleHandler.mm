@@ -136,11 +136,11 @@
     });
 }
 
-#define FPS 10
+#define FPS 15
 - (void)sendVideoDataToContainerApp:(CMSampleBufferRef)sampleBuffer {
     NSTimeInterval timeStampSeconds = CACurrentMediaTime();
     int64_t timeStampNs = lroundf(timeStampSeconds * NSEC_PER_SEC);
-    if(timeStampNs - self.lastTimeStampNs < 100000000) { //1000000000 / FPS = 100000000
+    if(timeStampNs - self.lastTimeStampNs < (1000000000L/FPS)) { //1000000000 / FPS = 100000000
         return;
     }
     self.lastTimeStampNs = timeStampNs;
