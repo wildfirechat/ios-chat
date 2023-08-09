@@ -43,7 +43,7 @@
 - (void)setup {
     self.receivedData = [[NSMutableData alloc] init];
     self.cropRate = 3.f/4;
-    self.targetSize = CGSizeMake(480, 640);
+    self.targetSize = CGSizeMake(640, 1280);
     self.sampleHadlerQueue = dispatch_queue_create("cn.wildfirechat.conference.broadcast.sample", DISPATCH_QUEUE_SERIAL);
 }
 
