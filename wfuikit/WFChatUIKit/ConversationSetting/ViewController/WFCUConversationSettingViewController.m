@@ -168,6 +168,8 @@
         [container addSubview:self.channelDesc];
         self.tableView.tableHeaderView = container;
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
 }
 
 - (void)setupMemberCollectionView {
@@ -236,6 +238,29 @@
         }
     }
 
+}
+
+- (void)onReceiveMessages:(NSNotification *)notification {
+    if(self.conversation.type == Group_Type) {
+        NSArray<WFCCMessage *> *messages = notification.object;
+        __block BOOL reload = NO;
+        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if([obj.content isKindOfClass:WFCCGroupSettingsNotificationContent.class]) {
+                WFCCGroupSettingsNotificationContent *notiContent = (WFCCGroupSettingsNotificationContent *)obj.content;
+                if([notiContent.groupId isEqualToString:self.conversation.target]) {
+                    reload = YES;
+                    *stop = YES;
+                }
+            }
+        }];
+        if(reload) {
+            __weak typeof(self)ws = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                ws.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:ws.conversation.target refresh:NO];
+                [ws.tableView reloadData];
+            });
+        }
+    }
 }
 
 - (void)onViewAllMember:(id)sender {
