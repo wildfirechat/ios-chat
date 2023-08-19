@@ -48,6 +48,12 @@
         [dataDict setValue:@(self.size.height) forKey:@"h"];
     } else if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
         dataDict = nil;
+        if(!self.thumbnail && self.localPath.length) {
+            UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
+            if(image) {
+                self.thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
+            }
+        }
         payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
     } else {
         UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
