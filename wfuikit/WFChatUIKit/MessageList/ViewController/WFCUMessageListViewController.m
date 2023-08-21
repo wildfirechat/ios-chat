@@ -2278,7 +2278,7 @@
             browser.displayNavArrows = NO;
             browser.displaySelectionButtons = NO;
             browser.alwaysShowControls = NO;
-            browser.zoomPhotosToFill = YES;
+            browser.zoomPhotosToFill = NO;
             browser.enableGrid = YES;
             browser.startOnGrid = NO;
             browser.enableSwipeToDismiss = NO;
