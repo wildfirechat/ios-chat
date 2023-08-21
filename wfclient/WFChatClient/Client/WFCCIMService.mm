@@ -23,6 +23,7 @@
 #import "WFCCTextMessageContent.h"
 #import "WFCCFileMessageContent.h"
 #import "WFCCNetworkService.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 NSString *kSendingMessageStatusUpdated = @"kSendingMessageStatusUpdated";
 NSString *kUploadMediaMessageProgresse = @"kUploadMediaMessageProgresse";
@@ -1207,13 +1208,19 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return message;
 }
 
+- (NSString *)mimeTypeOfFile:(NSString *)filePath {
+    NSString *fileExtension = [filePath pathExtension];
+    NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+    NSString *mimeType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
+    return mimeType.length?mimeType:@"application/octet-stream";;
+}
 
 - (void)upload:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
     NSURL *presignedURL = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:presignedURL];
     request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
     [request setHTTPMethod:@"PUT"];
-    NSString *fileContentTypeString = @"application/octet-stream";
+    NSString *fileContentTypeString = [self mimeTypeOfFile:file];
     [request setValue:fileContentTypeString forHTTPHeaderField:@"Content-Type"];
 
     WFCUUploadModel *model = [[WFCUUploadModel alloc] init];
@@ -1295,7 +1302,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     NSURLSessionDataTask *task = [manage POST:url parameters:nil constructingBodyWithBlock:^(id<WFAFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFormData:[key dataUsingEncoding:NSUTF8StringEncoding] name:@"key"];
         [formData appendPartWithFormData:[token dataUsingEncoding:NSUTF8StringEncoding] name:@"token"];
-        [formData appendPartWithFileURL:[NSURL fileURLWithPath:file] name:@"file" fileName:@"fileName" mimeType:@"application/octet-stream" error:nil];
+        [formData appendPartWithFileURL:[NSURL fileURLWithPath:file] name:@"file" fileName:@"fileName" mimeType:[self mimeTypeOfFile:file] error:nil];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
             callback->onProgress((int)uploadProgress.completedUnitCount, (int)uploadProgress.totalUnitCount);
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
