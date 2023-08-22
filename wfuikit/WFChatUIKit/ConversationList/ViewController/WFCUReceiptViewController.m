@@ -67,11 +67,36 @@
 
     self.unReadedUserIds = [[NSMutableArray alloc] init];
 
-    NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.message.conversation.target forceUpdate:NO];
-    for (WFCCGroupMember *member in members) {
-        if (![self.readedUserIds containsObject:member.memberId]) {
-            [self.unReadedUserIds addObject:member.memberId];
+    if(self.message.conversation.type == Single_Type) {
+        if (![self.readedUserIds containsObject:self.message.conversation.target]) {
+            [self.unReadedUserIds addObject:self.message.conversation.target];
         }
+    } else {
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.message.conversation.target refresh:NO];
+        NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.message.conversation.target forceUpdate:NO];
+        NSMutableArray<NSString *> *tobeRemoveUserIds = [[NSMutableArray alloc] init];
+        [self.readedUserIds enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            BOOL exist = NO;
+            for (WFCCGroupMember *member in members) {
+                if([member.memberId isEqualToString:obj]) {
+                    if(groupInfo.historyMessage || member.createTime < self.message.serverTime) {
+                        exist = YES;
+                    }
+                }
+            }
+            
+            if(!exist) {
+                [tobeRemoveUserIds addObject:obj];
+            }
+        }];
+        [self.readedUserIds removeObjectsInArray:tobeRemoveUserIds];
+        
+        for (WFCCGroupMember *member in members) {
+            if (![self.readedUserIds containsObject:member.memberId]) {
+                [self.unReadedUserIds addObject:member.memberId];
+            }
+        }
+        [self.unReadedUserIds removeObjectsInArray:tobeRemoveUserIds];
     }
 
     [self.readedUserIds removeObject:self.message.fromUser];

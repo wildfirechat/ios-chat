@@ -1471,6 +1471,24 @@
     
     if (refresh) {
         self.readDict = [[WFCCIMService sharedWFCIMService] getConversationRead:self.conversation];
+        if(self.conversation.type == Group_Type) {
+            NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+            NSMutableArray<NSString *> *tobeRemoveKeys = [[NSMutableArray alloc] init];
+            [self.readDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+                BOOL exist = NO;
+                for (WFCCGroupMember *member in members) {
+                    if([member.memberId isEqualToString:key]) {
+                        exist = YES;
+                    }
+                }
+                
+                if(!exist) {
+                    [tobeRemoveKeys addObject:key];
+                }
+            }];
+            [self.readDict removeObjectsForKeys:tobeRemoveKeys];
+        }
+        
         WFCCGroupInfo *groupInfo = nil;
 
         for (int i = 0; i < self.modelList.count; i++) {
