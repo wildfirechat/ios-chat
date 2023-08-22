@@ -1879,14 +1879,6 @@
             model.deliveryDict = self.deliveryDict;
             model.readDict = self.readDict;
             [self.modelList addObject:model];
-            if (messages.count == 1) {
-                if(self.modelList.count) {
-                    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.modelList.count - 1 inSection:0]]];
-                } else {
-                    [self.collectionView reloadData];
-                }
-            }
-            
             if (self.conversation.type == Group_Type && [message.content isKindOfClass:[WFCCModifyGroupAliasNotificationContent class]]) {
                 [modifiedAliasUsers addObject:message.fromUser];
             }
@@ -1912,8 +1904,6 @@
         [self stopShowTyping];
     }
     
-
-
     [self.collectionView reloadData];
     
     if (newMessage || self.modelList.count == messages.count) {
