@@ -1192,11 +1192,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         callback->onPrepared(message.messageId, message.serverTime);
         
         __weak typeof(self)ws = self;
-        [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+        NSString *fileContentTypeString = [self mimeTypeOfFile:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()]];
+        [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
             if(type == 1) {
                 [ws uploadQiniu:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize callback:callback];
             } else {
-                [ws upload:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize callback:callback];
+                [ws upload:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileContentType:fileContentTypeString fileSize:fileSize callback:callback];
             }
         } error:^(int error_code) {
             errorBlock(error_code);
@@ -1215,12 +1216,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return mimeType.length?mimeType:@"application/octet-stream";;
 }
 
-- (void)upload:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
+- (void)upload:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileContentType:(NSString *)fileContentTypeString fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
     NSURL *presignedURL = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:presignedURL];
     request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
     [request setHTTPMethod:@"PUT"];
-    NSString *fileContentTypeString = [self mimeTypeOfFile:file];
     [request setValue:fileContentTypeString forHTTPHeaderField:@"Content-Type"];
 
     WFCUUploadModel *model = [[WFCUUploadModel alloc] init];
