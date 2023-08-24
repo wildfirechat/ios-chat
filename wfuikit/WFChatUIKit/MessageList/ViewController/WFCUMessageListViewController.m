@@ -3098,40 +3098,41 @@
     }
     
     BOOL canRecall = NO;
-    if ([baseCell isKindOfClass:[WFCUMessageCell class]] &&
-        msg.direction == MessageDirection_Send) {
-        NSDate *cur = [NSDate date];
-        if ([cur timeIntervalSince1970]*1000 - msg.serverTime < 60 * 1000) {
-            canRecall = YES;
+    if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
+        if(msg.direction == MessageDirection_Send) {
+            NSDate *cur = [NSDate date];
+            if ([cur timeIntervalSince1970]*1000 - msg.serverTime < 60 * 1000) {
+                canRecall = YES;
+            }
+        } else if (self.conversation.type == Group_Type) {
+            WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
+            if([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                canRecall = YES;
+            } else {
+                __block BOOL isMyselfManager = false;
+                __block BOOL isTargetManager = false;
+                NSArray *memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+                [memberList enumerateObjectsUsingBlock:^(WFCCGroupMember * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj.memberId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                        if (obj.type == Member_Type_Manager || obj.type == Member_Type_Owner) {
+                            isMyselfManager = YES;
+                        }
+                    }
+                    if([obj.memberId isEqualToString:msg.fromUser]) {
+                        if ((obj.type == Member_Type_Manager || obj.type == Member_Type_Owner)) {
+                            isTargetManager = YES;
+                        }
+                    }
+                }];
+                if(isMyselfManager && !isTargetManager) {
+                    canRecall = YES;
+                }
+            }
         }
     }
     
     if(self.conversation.type == SecretChat_Type && msg.direction == MessageDirection_Send) {
         canRecall = YES;
-    }
-    
-    if (!canRecall && self.conversation.type == Group_Type) {
-        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
-        if([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            canRecall = YES;
-            if ([groupInfo.owner isEqualToString:msg.fromUser]) {
-                canRecall = NO;
-            }
-        } else {
-            __block BOOL isManager = false;
-            NSArray *memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
-            [memberList enumerateObjectsUsingBlock:^(WFCCGroupMember * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj.memberId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                    if ((obj.type == Member_Type_Manager || obj.type == Member_Type_Owner) && ![msg.fromUser isEqualToString:obj.memberId]) {
-                        isManager = YES;
-                    }
-                    *stop = YES;
-                }
-            }];
-            if(isManager && ![msg.fromUser isEqualToString:groupInfo.owner]) {
-                canRecall = YES;
-            }
-        }
     }
     
     if (canRecall) {
