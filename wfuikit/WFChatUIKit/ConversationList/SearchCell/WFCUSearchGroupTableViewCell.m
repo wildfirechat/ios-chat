@@ -83,7 +83,7 @@
         for (NSString *memberId in groupSearchInfo.marchedMemberNames) {
             if (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Alias) {
                 WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:groupSearchInfo.groupInfo.target memberId:memberId];
-                if (member && [member.alias rangeOfString:groupSearchInfo.keyword].location != NSNotFound) {
+                if (member && [[member.alias lowercaseString] rangeOfString:[groupSearchInfo.keyword lowercaseString]].location != NSNotFound) {
                     string = [[NSMutableAttributedString alloc] initWithString:member.alias];
                     [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
                     [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
@@ -93,7 +93,7 @@
             
             if(string == nil && (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Name)) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId refresh:NO];
-                if (userInfo && [userInfo.displayName rangeOfString:groupSearchInfo.keyword].location != NSNotFound) {
+                if (userInfo && [[userInfo.displayName lowercaseString] rangeOfString:[groupSearchInfo.keyword lowercaseString]].location != NSNotFound) {
                     string = [[NSMutableAttributedString alloc] initWithString:userInfo.displayName];
                     [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
                     [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
@@ -123,7 +123,7 @@
         }
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:groupName];
-        NSRange range = [groupName rangeOfString:groupSearchInfo.keyword];
+        NSRange range = [[groupName lowercaseString] rangeOfString:[groupSearchInfo.keyword lowercaseString]];
         if(range.location != NSNotFound) {
             [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:range];
             [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:range];
