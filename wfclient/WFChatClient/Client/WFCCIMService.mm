@@ -4131,7 +4131,7 @@ public:
 }
 
 - (int)getMessageCount:(WFCCConversation *)conversation {
-    return mars::stn::MessageDB::Instance()->GetMsgTotalCount((int)conversation.type, [conversation.target UTF8String], conversation.line);
+    return mars::stn::MessageDB::Instance()->GetMsgTotalCount((int)conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line);
 }
 
 - (BOOL)beginTransaction {
