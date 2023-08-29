@@ -1051,6 +1051,28 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                      error:(void(^)(int error_code))errorBlock;
 
 /**
+ 发送媒体消息
+ 
+ @param conversation 会话
+ @param content 消息内容
+ @param toUsers 在会话中只发给该用户，如果为空则发到会话中
+ @param expireDuration 消息的有效期，0不限期，单位秒
+ @param successBlock 成功的回调
+ @param progressBlock 上传进度的回调，注意仅当媒体内容大于300K才会有回调
+ @param mediaUploadedBlock 上传成功的回调
+ @param errorBlock 失败的回调
+ @return 消息实体
+ */
+- (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
+                   content:(WFCCMessageContent *)content
+                   toUsers:(NSArray<NSString *> *)toUsers
+            expireDuration:(int)expireDuration
+                   success:(void(^)(long long messageUid, long long timestamp))successBlock
+                  progress:(void(^)(long uploaded, long total))progressBlock
+             mediaUploaded:(void(^)(NSString *remoteUrl))mediaUploadedBlock
+                     error:(void(^)(int error_code))errorBlock;
+
+/**
  发送已保存消息，消息状态必须是发送中或者发送失败
 
  @param message 已经存储在本地待发送的消息
