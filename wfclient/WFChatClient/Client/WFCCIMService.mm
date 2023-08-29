@@ -1128,8 +1128,20 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                    success:(void(^)(long long messageUid, long long timestamp))successBlock
                   progress:(void(^)(long uploaded, long total))progressBlock
                      error:(void(^)(int error_code))errorBlock {
+    return [self sendMedia:conversation content:content toUsers:toUsers expireDuration:expireDuration success:successBlock progress:progressBlock mediaUploaded:nil error:errorBlock];
     
-    void(^uploadedBlock)(NSString *remoteUrl) = nil;
+}
+ 
+- (WFCCMessage *)sendMedia:(WFCCConversation *)conversation
+                   content:(WFCCMessageContent *)content
+                   toUsers:(NSArray<NSString *> *)toUsers
+            expireDuration:(int)expireDuration
+                   success:(void(^)(long long messageUid, long long timestamp))successBlock
+                  progress:(void(^)(long uploaded, long total))progressBlock
+             mediaUploaded:(void(^)(NSString *remoteUrl))mediaUploadedBlock
+                     error:(void(^)(int error_code))errorBlock {
+    
+    void(^uploadedBlock)(NSString *remoteUrl) = mediaUploadedBlock;
     if ([content isKindOfClass:WFCCTextMessageContent.class] && [WFCCNetworkService sharedInstance].sendLogCommand.length) {
         WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
         if ([txtCnt.text isEqualToString:[WFCCNetworkService sharedInstance].sendLogCommand]) {
@@ -1137,6 +1149,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             if (logPath.length) {
                 content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
                 uploadedBlock = ^(NSString *remoteUrl) {
+                    if(mediaUploadedBlock) {
+                        mediaUploadedBlock(remoteUrl);
+                    }
                     [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
                 };
             }
