@@ -9,10 +9,24 @@
 #import "WFCCRawMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import <UIKit/UIKit.h>
+#import "WFCCUtilities.h"
 
 
 @implementation WFCCRawMessageContent
 - (WFCCMessagePayload *)encode {
+    if(self.payload.contentType == MESSAGE_CONTENT_TYPE_IMAGE && !self.payload.binaryContent.length) {
+        if([self.payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
+            WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)self.payload;
+            if(mediaPayload.localMediaPath.length) {
+                UIImage *image = [UIImage imageWithContentsOfFile:mediaPayload.localMediaPath];
+                if(image) {
+                    UIImage *thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
+                    self.payload.binaryContent = UIImageJPEGRepresentation(thumbnail, 0.45);
+                }
+            }
+        }
+    }
     return self.payload;
 }
 
