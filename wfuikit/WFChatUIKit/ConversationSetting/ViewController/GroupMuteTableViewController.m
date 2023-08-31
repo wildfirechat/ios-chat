@@ -12,6 +12,7 @@
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUImage.h"
+#import "UIView+Toast.h"
 
 
 @interface GroupMuteTableViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -91,9 +92,13 @@
             [candidateUsers addObject:member.memberId];
         }
     }
-    pvc.candidateUsers = candidateUsers;
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
-    [self.navigationController presentViewController:navi animated:YES completion:nil];
+    if([candidateUsers count]) {
+        pvc.candidateUsers = candidateUsers;
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+        [self.navigationController presentViewController:navi animated:YES completion:nil];
+    } else {
+        [self.view makeToast:@"成员已全部添加"];
+    }
 }
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     __weak typeof(self)ws = self;
