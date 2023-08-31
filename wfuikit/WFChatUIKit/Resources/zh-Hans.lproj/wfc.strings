@@ -54,7 +54,7 @@
 "AddFriend"="添加好友";
 "Clear"="清空";
 "SearchUserHint"="输入野火号或电话号码搜索";
-"AddFriendReasonHint"="请填入申请理由，等等对方同意";
+"AddFriendReasonHint"="请填入申请理由，等待对方同意";
 "DefaultAddFriendReason"="我是 %@";
 "Send"="发送";
 "Sending"="发送...";
