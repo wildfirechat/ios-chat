@@ -166,6 +166,15 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRemoteInterrupted
 };
 
+/*
+ 摄像头位置
+ */
+typedef NS_ENUM(NSInteger, WFAVCameraPosition) {
+    WFAVCameraPosition_Unknown = 0,
+    WFAVCameraPosition_Front = 1,
+    WFAVCameraPosition_Back = 2
+};
+
 @class WFCCConversation;
 
 #pragma mark - 通话监听
@@ -747,6 +756,11 @@ typedef NS_ENUM(NSInteger, WFAVVideoType) {
  切换前后摄像头
  */
 - (void)switchCamera;
+
+/**
+ 获取摄像头位置
+ */
+- (WFAVCameraPosition)cameraPosition;
 
 /**
  是否是蓝牙设备连接
