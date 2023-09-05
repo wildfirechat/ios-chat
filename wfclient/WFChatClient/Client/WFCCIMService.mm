@@ -4098,7 +4098,7 @@ public:
 }
 
 - (NSData *)getWavData:(NSString *)amrPath {
-    if ([@"mp3" isEqualToString:[amrPath pathExtension]]) {
+    if (![@"amr" isEqualToString:[amrPath pathExtension]]) {
         return [NSData dataWithContentsOfFile:amrPath];
     } else {
         NSMutableData *data = [[NSMutableData alloc] init];
