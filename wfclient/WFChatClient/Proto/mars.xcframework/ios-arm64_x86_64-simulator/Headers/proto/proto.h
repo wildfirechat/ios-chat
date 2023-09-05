@@ -1145,6 +1145,7 @@ namespace mars{
         extern bool IsGlobalDisableSyncDraft();
         extern bool IsEnableUserOnlineState();
         extern bool IsEnableSecretChat();
+        extern bool ForcePresignedUrlUpload();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
