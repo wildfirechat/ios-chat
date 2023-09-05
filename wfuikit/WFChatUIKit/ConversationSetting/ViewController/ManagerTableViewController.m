@@ -79,7 +79,7 @@
     NSMutableArray *candidateUsers = [[NSMutableArray alloc] init];
     NSArray *memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO];
     for (WFCCGroupMember *member in memberList) {
-        if (member.type == Member_Type_Normal && ![member.memberId isEqualToString:self.groupInfo.owner]) {
+        if ((member.type == Member_Type_Normal || member.type == Member_Type_Muted || member.type == Member_Type_Allowed) && ![member.memberId isEqualToString:self.groupInfo.owner]) {
             [candidateUsers addObject:member.memberId];
         }
     }
