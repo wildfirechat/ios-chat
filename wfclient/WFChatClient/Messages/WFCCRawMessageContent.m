@@ -55,4 +55,19 @@
 - (NSString *)digest:(WFCCMessage *)message {
   return nil;
 }
+
+-(NSString *)localPath {
+    return ((WFCCMediaMessagePayload *)self.payload).localMediaPath;
+}
+
+-(void)setLocalPath:(NSString *)localPath {
+    ((WFCCMediaMessagePayload *)self.payload).localMediaPath = localPath;
+}
+
+-(NSString *)remoteUrl {
+    return ((WFCCMediaMessagePayload *)self.payload).remoteMediaUrl;
+}
+- (void)setRemoteUrl:(NSString *)remoteUrl {
+    ((WFCCMediaMessagePayload *)self.payload).remoteMediaUrl = remoteUrl;
+}
 @end

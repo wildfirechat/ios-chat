@@ -2493,7 +2493,11 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
             return;
         }
     } else if([self isSupportBigFilesUpload]) {
-        largeMedia = mediaData.length > 100000000L;
+        if(mars::stn::ForcePresignedUrlUpload()) {
+            largeMedia = YES;
+        } else {
+            largeMedia = mediaData.length > 100000000L;
+        }
     }
     
     if(largeMedia) {

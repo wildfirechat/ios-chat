@@ -6,17 +6,16 @@
 //  Copyright © 2017年 WildFireChat. All rights reserved.
 //
 
-#import "WFCCMessageContent.h"
+#import "WFCCMediaMessageContent.h"
 
 /**
  Raw消息内容，消息没有经过decode，只包含payload.
  */
-@interface WFCCRawMessageContent : WFCCMessageContent
+@interface WFCCRawMessageContent : WFCCMediaMessageContent
 
 + (instancetype)contentOfPayload:(WFCCMessagePayload *)payload;
 /**
  消息Payload
  */
 @property (nonatomic, strong)WFCCMessagePayload *payload;
-
 @end
