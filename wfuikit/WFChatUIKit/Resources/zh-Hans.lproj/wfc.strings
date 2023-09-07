@@ -116,7 +116,7 @@
 "Unset"="未设置";
 "ShowMemberNickname"="显示成员昵称";
 "ClearChatHistory"="清空聊天记录";
-"DismissGroup"="销毁群组";
+"DismissGroup"="解散群组";
 "QuitGroup"="退出群组";
 "OnlyManangerCanChangeGroupNameHint"="只有管理员才可以修改群名称";
 "ModifyGroupName"="修改群名称";
