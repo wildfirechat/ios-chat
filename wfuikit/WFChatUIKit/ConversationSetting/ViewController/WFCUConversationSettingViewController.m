@@ -324,13 +324,25 @@
 - (void)onDeleteAndQuit:(id)sender {
     if(self.conversation.type == Group_Type) {
         if ([self isGroupOwner]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"请确认是否解散群组" preferredStyle:UIAlertControllerStyleAlert];
+            
             __weak typeof(self) ws = self;
-            [[WFCCIMService sharedWFCIMService] removeConversation:self.conversation clearMessage:YES];
-            [[WFCCIMService sharedWFCIMService] dismissGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
-                [ws.navigationController popToRootViewControllerAnimated:YES];
-            } error:^(int error_code) {
-                
+            UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"解散" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [[WFCCIMService sharedWFCIMService] removeConversation:self.conversation clearMessage:YES];
+                [[WFCCIMService sharedWFCIMService] dismissGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
+                    [ws.navigationController popToRootViewControllerAnimated:YES];
+                } error:^(int error_code) {
+                    
+                }];
             }];
+            
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+            }];
+            
+            [alert addAction:actionCancel];
+            [alert addAction:actionDismiss];
+            [self presentViewController:alert animated:YES completion:nil];
         } else {
             __weak typeof(self) ws = self;
             [[WFCCIMService sharedWFCIMService] quitGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
