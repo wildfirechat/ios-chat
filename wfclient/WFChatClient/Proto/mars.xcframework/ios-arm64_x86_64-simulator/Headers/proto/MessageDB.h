@@ -147,7 +147,8 @@ namespace mars {
             std::list<TGroupMember> GetGroupMembersByCount(const std::string &groupId, int count);
             void GetGroupMembers(const std::string &groupId, bool refresh, GetGroupMembersCallback *callback);
             bool RemoveGroupAndMember(const std::string &groupId, bool keepGroupName = false);
-            bool RemoveAllGroupMember(const std::string &groupId, bool removeFavSettings = true);
+            bool RemoveAllGroupMember(const std::string &groupId, bool removeUserSettings = true);
+            void RemoveAllGroupUserSettings(const std::string &groupId);
             void UpdateGroupMember(const std::list<TGroupMember> &retList);
             void RemoveGroupMembers(const std::string &groupId, const std::list<std::string> &members);
             void AddGroupMembers(const std::string &groupId, const std::list<std::string> &members, const std::string &extra, bool isCreate);
@@ -259,7 +260,6 @@ namespace mars {
             void getMsgFromStateMent(DB2 *db, RecyclableStatement &statementHandle, TMessage &msg);
             void startBurnMessageCheck();
             void stopBurnMessageCheck();
-            void removeFavGroup(const std::string &groupId);
             std::list<TConversation> getUserConversations(const std::string &user, int64_t start, int64_t end);
             void removeUserSingleConversations(const std::string &userId);
             void removeUserSingleMessages(const std::string &userId);
