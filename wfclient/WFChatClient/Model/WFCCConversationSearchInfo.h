@@ -34,4 +34,9 @@
  搜索关键字
  */
 @property (nonatomic, strong)NSString *keyword;
+
+/**
+ 会话时间
+ */
+@property (nonatomic, assign)int64_t timestamp;
 @end

@@ -17,6 +17,7 @@
     }
     dict[@"marchedCount"] = @(self.marchedCount);
     dict[@"keyword"] = self.keyword;
+    dict[@"timestamp"] = @(self.timestamp);
     return dict;
 }
 @end
