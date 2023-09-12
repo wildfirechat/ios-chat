@@ -2824,6 +2824,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         info.marchedCount = it->marchedCount;
         info.marchedMessage = convertProtoMessage(&(it->marchedMessage));
         info.keyword = keyword;
+        info.timestamp = it->timestamp;
     }
     return results;
 }
