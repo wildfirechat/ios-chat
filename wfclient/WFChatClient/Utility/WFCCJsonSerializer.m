@@ -15,7 +15,7 @@
 
 - (void)setDict:(NSMutableDictionary *)dict key:(NSString *)key longlongValue:(long long)longlongValue {
     if (longlongValue > 9007199254740991LL) {
-        dict[key] = [NSString stringWithFormat:@"%lldL", longlongValue];
+        dict[key] = [NSString stringWithFormat:@"%lld", longlongValue];
     } else {
         dict[key] = @(longlongValue);
     }
