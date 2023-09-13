@@ -32,10 +32,11 @@
     if(self.type > 0) {
         [dataDict setObject:@(self.type) forKey:@"ty"];
     }
-    
-    [dataDict setObject:self.targetIds forKey:@"ts"];
-    //多人音视频与单人音视频兼容
-    [dataDict setObject:self.targetIds[0] forKey:@"t"];
+    if(self.targetIds.count) {
+        [dataDict setObject:self.targetIds forKey:@"ts"];
+        //多人音视频与单人音视频兼容
+        [dataDict setObject:self.targetIds[0] forKey:@"t"];
+    }
     [dataDict setValue:@(self.audioOnly?1:0) forKey:@"a"];
     
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
