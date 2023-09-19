@@ -1142,19 +1142,32 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                      error:(void(^)(int error_code))errorBlock {
     
     void(^uploadedBlock)(NSString *remoteUrl) = mediaUploadedBlock;
-    if ([content isKindOfClass:WFCCTextMessageContent.class] && [WFCCNetworkService sharedInstance].sendLogCommand.length) {
-        WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
-        if ([txtCnt.text isEqualToString:[WFCCNetworkService sharedInstance].sendLogCommand]) {
-            NSString *logPath = [WFCCNetworkService getLogFilesPath].lastObject;
-            if (logPath.length) {
-                content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
-                uploadedBlock = ^(NSString *remoteUrl) {
-                    if(mediaUploadedBlock) {
-                        mediaUploadedBlock(remoteUrl);
-                    }
-                    [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
-                };
+    BOOL isSendCmd = NO;
+    
+    if([WFCCNetworkService sharedInstance].sendLogCommand.length) {
+        if ([content isKindOfClass:WFCCTextMessageContent.class]) {
+            WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
+            isSendCmd = [txtCnt.text isEqualToString:[WFCCNetworkService sharedInstance].sendLogCommand];
+        } else if ([content isKindOfClass:WFCCRawMessageContent.class]) {
+            WFCCRawMessageContent *rawCnt = (WFCCRawMessageContent *)content;
+            if(rawCnt.payload.contentType == MESSAGE_CONTENT_TYPE_TEXT) {
+                isSendCmd = [rawCnt.payload.searchableContent isEqualToString:[WFCCNetworkService sharedInstance].sendLogCommand];
             }
+        }
+    }
+    
+    if (isSendCmd) {
+        NSString *logPath = [WFCCNetworkService getLogFilesPath].lastObject;
+        if (logPath.length) {
+            content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
+            uploadedBlock = ^(NSString *remoteUrl) {
+                if(mediaUploadedBlock) {
+                    mediaUploadedBlock(remoteUrl);
+                }
+                [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
+            };
+        } else {
+            NSLog(@"log not exist");
         }
     }
     
