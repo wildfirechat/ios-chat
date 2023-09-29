@@ -28,6 +28,8 @@
     [self initSearchUIAndData];
   
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
+    
     
     [[WFCCIMService sharedWFCIMService] clearUnreadFriendRequestStatus];
 }
@@ -44,6 +46,10 @@
     }
 }
 
+- (void)onFriendRequestUpdated:(NSNotification *)notification {
+    self.dataList   = [[WFCCIMService sharedWFCIMService] getIncommingFriendRequest];
+    [self.tableView reloadData];
+}
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[WFCCIMService sharedWFCIMService] clearUnreadFriendRequestStatus];
