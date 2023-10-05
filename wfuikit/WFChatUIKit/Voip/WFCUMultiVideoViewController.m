@@ -190,7 +190,7 @@
     [self checkAVPermission];
     
     if(self.currentSession.state == kWFAVEngineStateOutgoing && !self.currentSession.isAudioOnly) {
-        [[WFAVEngineKit sharedEngineKit] startPreview];
+        [[WFAVEngineKit sharedEngineKit] startVideoPreview];
     }
     
     WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.inviter inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];

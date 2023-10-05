@@ -518,7 +518,7 @@ typedef NS_ENUM(NSInteger, WFAVCameraPosition) {
 /**
  开启画面预览
  */
-- (void)startPreview;
+- (void)startVideoPreview;
 
 /**
  设置视频参数
