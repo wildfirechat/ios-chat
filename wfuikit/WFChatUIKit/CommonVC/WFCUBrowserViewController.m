@@ -40,7 +40,9 @@
     
     if(self.url.length) {
         NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self.url, (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL, kCFStringEncodingUTF8));
-        
+        if (![NSURL URLWithString:encodedString].scheme) {
+            encodedString = [@"http://" stringByAppendingString:encodedString];
+        }
         [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:encodedString]]];
         if(!self.hidenOpenInBrowser) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
