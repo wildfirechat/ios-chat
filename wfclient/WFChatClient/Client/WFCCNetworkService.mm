@@ -529,6 +529,7 @@ public:
 @property(nonatomic, strong)NSTimer *suspendTimer;
 @property(nonatomic, strong)NSTimer *endBgTaskTimer;
 @property(nonatomic, strong)NSString *deviceToken;
+@property(nonatomic, assign)int pushType;
 @property(nonatomic, strong)NSString *voipDeviceToken;
 
 @property(nonatomic, assign)BOOL requestProxying;
@@ -727,7 +728,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     self.currentConnectionStatus = status;
     if (status == kConnectionStatusConnected) {
         if (self.deviceToken.length && !self.deviceTokenUploaded) {
-            [self setDeviceToken:self.deviceToken];
+            [self setDeviceToken:self.deviceToken pushType:self.pushType];
         }
         
         if (self.voipDeviceToken.length && !self.voipDeviceTokenUploaded) {
@@ -1192,6 +1193,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
 
     _deviceToken = token;
+    _pushType = pushType;
 
     if (!self.isLogined || self.currentConnectionStatus != kConnectionStatusConnected) {
         self.deviceTokenUploaded = NO;
