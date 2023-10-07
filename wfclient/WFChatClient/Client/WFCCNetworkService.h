@@ -393,6 +393,14 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)setDeviceToken:(NSString *)token;
 
 /**
+ 设置当前设备的device token，可以指定推送类型，用来对接个推、极光等第三方推送。
+
+ @param token 苹果APNs Device Token
+ @param pushType 推送类型
+ */
+- (void)setDeviceToken:(NSString *)token pushType:(int)pushType;
+
+/**
  设置当前设备的Voip device token
  
  @param token 苹果APNs Device Token

@@ -1183,6 +1183,10 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)setDeviceToken:(NSString *)token {
+    [self setDeviceToken:token pushType:mars::app::AppCallBack::Instance()->GetPushType()];
+}
+
+- (void)setDeviceToken:(NSString *)token pushType:(int)pushType {
     if (token.length == 0) {
         return;
     }
@@ -1196,9 +1200,10 @@ static WFCCNetworkService * sharedSingleton = nil;
   
     NSString *appName =
     [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-    mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], mars::app::AppCallBack::Instance()->GetPushType());
+    mars::stn::setDeviceToken([appName UTF8String], [token UTF8String], pushType);
     self.deviceTokenUploaded =YES;
 }
+
 - (void)setBackupAddressStrategy:(int)strategy {
     mars::stn::setBackupAddressStrategy(strategy);
 }
