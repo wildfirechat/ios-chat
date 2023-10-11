@@ -8,6 +8,7 @@
 
 #import "ConversationCell.h"
 #import <SDWebImage/SDWebImage.h>
+#import <WFChatUIKit/WFChatUIKit.h>
 #import "ShareUtility.h"
 
 @implementation ConversationCell
@@ -24,7 +25,7 @@
     
     self.nameLabel.text = sc.title;
     if (sc.type == 0) { //Single_Type
-        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     } else if(sc.type == 1) {  //Group_Type
         if (sc.portraitUrl.length) {
             [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"GroupChat"]];
@@ -34,7 +35,7 @@
     } else if(sc.type == 3) { //Channel_Type
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"ChannelChat"]];
     } else if(sc.type == 5) { //SecretChat_Type
-        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[UIImage imageNamed:@"PersonalChat"]];
+        [self.portraitView sd_setImageWithURL:[NSURL URLWithString:sc.portraitUrl] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     }
 }
 
