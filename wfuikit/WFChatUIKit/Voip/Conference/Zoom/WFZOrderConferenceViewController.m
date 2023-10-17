@@ -143,9 +143,10 @@
     container.layer.borderWidth = 1.f;
     container.layer.borderColor = [UIColor grayColor].CGColor;
     
-    UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 34, bounds.size.width, pickerHeight)];
+    UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
     datePicker.locale = [NSLocale localeWithLocaleIdentifier:@"zh"];
     datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    datePicker.frame = CGRectMake(0, 34, bounds.size.width, pickerHeight);
     [datePicker setDate:[NSDate dateWithTimeIntervalSince1970:self.endTime] animated:YES];
     [datePicker setMinimumDate:[NSDate date]];
     
