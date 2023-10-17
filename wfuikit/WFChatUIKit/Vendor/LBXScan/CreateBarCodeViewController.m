@@ -12,6 +12,7 @@
 #import "UIImageView+CornerRadius.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "SDWebImage/SDWebImage.h"
 
 
 @interface CreateBarCodeViewController ()
@@ -64,6 +65,13 @@
         self.qrStr = self.conferenceUrl;
         self.labelStr = self.conferenceTitle;
     }
+    
+    self.qrImgView = [[UIImageView alloc]init];
+    _qrImgView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.qrView.frame)-12, CGRectGetWidth(self.qrView.frame)-12);
+    _qrImgView.center = CGPointMake(CGRectGetWidth(self.qrView.frame)/2, CGRectGetHeight(self.qrView.frame)/2+30);
+    [self.qrView addSubview:_qrImgView];
+    
+    [self createQR_logo];
 }
 
 
@@ -171,28 +179,25 @@
     }
 }
 
+/*
+ #define QRType_User  0
+ #define QRType_Group 1
+ #define QRType_Channel 2
+ #define QRType_Chatroom 3
+ #define QRType_PC_Session 4
+ #define QRType_Conference 5
+ */
 - (void)setQrLogo:(NSString *)qrLogo {
     _qrLogo = qrLogo;
-    __weak typeof(self)ws = self;
-    dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-        CGSize logoSize=CGSizeMake(50, 50);
-        UIImage *logo;
-        if ([NSURL URLWithString:qrLogo].baseURL) {
-            logo = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:ws.qrLogo]]];
-        } else {
-            logo = [UIImage imageWithContentsOfFile:qrLogo];
-        }
-        if (!logo) {
-            logo = [UIImage imageNamed:@"group_default_portrait"];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            ws.logoImgView = [ws roundCornerWithImage:logo size:logoSize];
-            ws.logoImgView.bounds = CGRectMake(0, 0, logoSize.width, logoSize.height);
-            ws.logoImgView.center = CGPointMake(40, 40);
-            [ws.qrView addSubview:ws.logoImgView];
-        });
-    });
+    self.logoImgView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 50, 50)];
+    NSString *defaultPortrait = @"PersonalChat";
+    if(self.qrType == 1) {
+        defaultPortrait = @"group_default_portrait";
+    } else if(self.qrType == 2) {
+        defaultPortrait = @"channel_default_portrait";
+    }
+    [self.logoImgView sd_setImageWithURL:[NSURL URLWithString:self.qrLogo] placeholderImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+    [self.qrView addSubview:self.logoImgView];
 }
 
 - (void)setLabelStr:(NSString *)labelStr {
@@ -221,38 +226,11 @@
     }
     return _qrView;
 }
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.qrImgView = [[UIImageView alloc]init];
-    _qrImgView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.qrView.frame)-12, CGRectGetWidth(self.qrView.frame)-12);
-    _qrImgView.center = CGPointMake(CGRectGetWidth(self.qrView.frame)/2, CGRectGetHeight(self.qrView.frame)/2+30);
-    [self.qrView addSubview:_qrImgView];
-    
-    [self createQR_logo];
-}
 
 - (void)createQR_logo
 {
     _qrView.hidden = NO;
     _qrImgView.image = [LBXScanNative createQRWithString:self.qrStr QRSize:_qrImgView.bounds.size];
-}
-
-- (UIImageView*)roundCornerWithImage:(UIImage*)logoImg size:(CGSize)size
-{
-    //logo圆角
-    UIImageView *backImage = [[UIImageView alloc] initWithCornerRadiusAdvance:6.0f rectCornerType:UIRectCornerAllCorners];
-    backImage.frame = CGRectMake(0, 0, size.width, size.height);
-    backImage.backgroundColor = [UIColor whiteColor];
-    
-    UIImageView *logImage = [[UIImageView alloc] initWithCornerRadiusAdvance:6.0f rectCornerType:UIRectCornerAllCorners];
-    logImage.image =logoImg;
-    CGFloat diff  =2;
-    logImage.frame = CGRectMake(diff, diff, size.width - 2 * diff, size.height - 2 * diff);
-    
-    [backImage addSubview:logImage];
-    
-    return backImage;
 }
 
 - (void)showError:(NSString*)str
