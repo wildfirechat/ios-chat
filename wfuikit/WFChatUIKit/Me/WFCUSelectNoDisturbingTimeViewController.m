@@ -68,9 +68,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-        UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 96, 3, 96, 35)];
+        UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
         datePicker.datePickerMode = UIDatePickerModeTime;
+        datePicker.frame = CGRectMake(self.view.bounds.size.width - 96, 3, 96, 35);
         [datePicker addTarget:self action:@selector(onTimeChanged:) forControlEvents:UIControlEventValueChanged];
+
         datePicker.tag = indexPath.row;
         
         [cell.contentView addSubview:datePicker];
