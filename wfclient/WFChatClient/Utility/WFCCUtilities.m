@@ -444,7 +444,7 @@ static NSLock *wfcImageLock;
                     
                     //检查群组日期，超过7天，或生成之后群组有更新，检查头像是否有变化是否需要重新生成
                     long long now = [[[NSDate alloc] init] timeIntervalSince1970];
-                    if (timestamp + 7 * 24 * 3600 < now || timestamp*1000 < groupInfo.updateTimestamp) {
+                    if (timestamp + 7 * 24 * 3600 < now || timestamp*1000 < groupInfo.updateDt) {
                         [[WFCCIMService sharedWFCIMService] getGroupMembers:groupId refresh:NO success:^(NSString *groupId, NSArray<WFCCGroupMember *> *members) {
                             if (!members.count) {
                                 return;

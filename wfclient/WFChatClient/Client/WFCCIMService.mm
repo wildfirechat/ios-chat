@@ -2250,7 +2250,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.historyMessage = tgi.historyMessage;
     groupInfo.maxMemberCount = tgi.maxMemberCount;
     groupInfo.superGroup = tgi.superGroup;
-    groupInfo.updateTimestamp = tgi.updateDt;
+    groupInfo.updateDt = tgi.updateDt;
     
     if(!groupInfo.portrait.length && [WFCCNetworkService sharedInstance].defaultPortraitProvider && [[WFCCNetworkService sharedInstance].defaultPortraitProvider respondsToSelector:@selector(groupDefaultPortrait:memberInfos:)]) {
         __block NSMutableArray<WFCCUserInfo *> *memberUserInfos = [[NSMutableArray alloc] init];

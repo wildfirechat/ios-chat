@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 /**
  群的最后更新日期
  */
-@property (nonatomic, assign)long long updateTimestamp;
+@property (nonatomic, assign)long long updateDt;
 
 /**
  群显示名称，如果有群备注返回群备注，没有群备注返回群名称
