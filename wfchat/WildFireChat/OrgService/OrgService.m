@@ -36,6 +36,11 @@ static OrgService *sharedSingleton = nil;
 }
 
 - (void)login:(void(^)(void))successBlock error:(void(^)(int errCode))errorBlock {
+    if(!ORG_SERVER_ADDRESS) {
+        NSLog(@"没有配置组织通讯录服务!");
+        errorBlock(-1);
+        return;
+    }
     [[WFCCIMService sharedWFCIMService] getAuthCode:@"admin" type:2 host:IM_SERVER_HOST success:^(NSString *authCode) {
         [self post:@"/api/user_login" data:@{@"authCode":authCode} isLogin:YES success:^(NSDictionary *dict) {
             if([dict[@"code"] intValue] == 0) {
