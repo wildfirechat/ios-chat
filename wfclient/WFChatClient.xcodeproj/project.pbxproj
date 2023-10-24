@@ -1222,6 +1222,10 @@
 					"$(PROJECT_DIR)",
 				);
 				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-ld_classic",
+					"-Wl",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.WFChatClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -1263,6 +1267,10 @@
 					"$(PROJECT_DIR)",
 				);
 				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-ld_classic",
+					"-Wl",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.WFChatClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
