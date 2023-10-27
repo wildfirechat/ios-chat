@@ -237,6 +237,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    //从后台回到前台时，如果是在来电状态，需要播放来电铃声。
+    if([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
+        [self shouldStartRing:YES];
+    }
 }
 
 
@@ -801,9 +805,6 @@
             if([[WFCCIMService sharedWFCIMService] isVoipNotificationSilent]) {
                 NSLog(@"用户设置禁止voip通知，忽略来电提醒");
                 return;
-            }
-            if(self.localCallNotification) {
-                [[UIApplication sharedApplication] scheduleLocalNotification:self.localCallNotification];
             }
             self.localCallNotification = [[UILocalNotification alloc] init];
             
