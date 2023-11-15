@@ -45,32 +45,6 @@
     int searchableValue = [[[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Privacy_Searchable key:nil] intValue];
     __weak typeof(self)ws = self;
     
-    //如果搜索用户支持按照昵称搜索，请打开这里；
-    /*
-    WFCUGeneralSwitchTableViewCell *switchCell1 = [[WFCUGeneralSwitchTableViewCell alloc] init];
-    switchCell1.textLabel.text = @"昵称";
-    if (searchableValue & DisableSearch_DisplayName_Mask) {
-        switchCell1.on = NO;
-    } else {
-        switchCell1.on = YES;
-    }
-    [switchCell1 setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
-        int intvalue = [[[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Privacy_Searchable key:nil] intValue];
-        if(value) {
-            intvalue &= (DisableSearch_Name_Mask | DisableSearch_Mobile_Mask);
-        } else {
-            intvalue |= DisableSearch_DisplayName_Mask;
-        }
-        [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Privacy_Searchable key:nil value:[NSString stringWithFormat:@"%d", intvalue] success:^{
-                    result(YES);
-                } error:^(int error_code) {
-                    [ws.view makeToast:@"网络错误"];
-                    result(NO);
-                }];
-    }];
-    [section2 addObject:switchCell1];
-     */
-    
     WFCUGeneralSwitchTableViewCell *switchCell2 = [[WFCUGeneralSwitchTableViewCell alloc] init];
     switchCell2.textLabel.text = @"账号";
     if (searchableValue & DisableSearch_Name_Mask) {
@@ -81,7 +55,7 @@
     [switchCell2 setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
         int intvalue = [[[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Privacy_Searchable key:nil] intValue];
         if(value) {
-            intvalue &= (DisableSearch_DisplayName_Mask | DisableSearch_Mobile_Mask);
+            intvalue &= (DisableSearch_DisplayName_Mask | DisableSearch_Mobile_Mask | DisableSearch_UserId_Mask);
         } else {
             intvalue |= DisableSearch_Name_Mask;
         }
@@ -104,7 +78,7 @@
     [switchCell3 setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
         int intvalue = [[[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Privacy_Searchable key:nil] intValue];
         if(value) {
-            intvalue &= (DisableSearch_DisplayName_Mask | DisableSearch_Name_Mask);
+            intvalue &= (DisableSearch_DisplayName_Mask | DisableSearch_Name_Mask | DisableSearch_UserId_Mask);
         } else {
             intvalue |= DisableSearch_Mobile_Mask;
         }
@@ -116,7 +90,30 @@
                 }];
     }];
     [section2 addObject:switchCell3];
-    
+   
+    //如果需要按照用户id搜索，可以打开下面这段，正常不用打开
+//    WFCUGeneralSwitchTableViewCell *switchCell4 = [[WFCUGeneralSwitchTableViewCell alloc] init];
+//    switchCell4.textLabel.text = @"用户ID";
+//    if (searchableValue & DisableSearch_UserId_Mask) {
+//        switchCell4.on = NO;
+//    } else {
+//        switchCell4.on = YES;
+//    }
+//    [switchCell4 setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
+//        int intvalue = [[[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Privacy_Searchable key:nil] intValue];
+//        if(value) {
+//            intvalue &= (DisableSearch_DisplayName_Mask | DisableSearch_Name_Mask | DisableSearch_Mobile_Mask);
+//        } else {
+//            intvalue |= DisableSearch_UserId_Mask;
+//        }
+//        [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Privacy_Searchable key:nil value:[NSString stringWithFormat:@"%d", intvalue] success:^{
+//                    result(YES);
+//                } error:^(int error_code) {
+//                    [ws.view makeToast:@"网络错误"];
+//                    result(NO);
+//                }];
+//    }];
+//    [section2 addObject:switchCell4];
 }
 
 - (void)didReceiveMemoryWarning {
