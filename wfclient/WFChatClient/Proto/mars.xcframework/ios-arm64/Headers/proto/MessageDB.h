@@ -43,7 +43,8 @@ namespace mars {
             bool UpdateRecvAndReadTimeline(int64_t timeline, bool isRead);
             bool UpdateGroupConvTimeline(int64_t timeline);
             bool UpdateNoFtsTimeline(bool noFts);
-            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead, bool &noFts);
+            bool UpdateFriendRequestTimeline(int64_t timeline);
+            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead, bool &noFts, int64_t &frHead);
             int64_t GetSettingVersion();
             bool UpdateUserSettings(std::list<TUserSettingEntry> &settings);
             std::string GetUserSetting(int scope, const std::string &key);
