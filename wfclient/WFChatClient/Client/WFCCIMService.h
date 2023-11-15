@@ -157,16 +157,20 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
 /**
  搜索用户类型
 
- - SearchUserType_General: 模糊搜索diaplayName，精确匹配name和电话
- - SearchUserType_Name_Mobile: 精确匹配name和电话
+ - SearchUserType_General: 模糊搜索diaplayName，精确匹配name或电话或用户ID
+ - SearchUserType_Name_Mobile: 精确匹配name或电话
  - SearchUserType_Name: 精确匹配name
  - SearchUserType_Mobile: 精确匹配电话
+ - SearchUserType_UserId: 精确匹配用户ID
+ - SearchUserType_Name_Mobile_UserId: 精确匹配name或电话或用户ID
  */
 typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
     SearchUserType_General,
     SearchUserType_Name_Mobile,
     SearchUserType_Name,
     SearchUserType_Mobile,
+    SearchUserType_UserId,
+    SearchUserType_Name_Mobile_UserId
 };
 
 /**
@@ -174,12 +178,14 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 
  - DisableSearch_DisplayName_Mask: 第1位是是否禁止搜索昵称
  - DisableSearch_Name_Mask: 第2位是否禁止搜索账户
- - DisableSearch_Mobile_Mask: 精确第3位是否禁止搜索电话号码name
+ - DisableSearch_Mobile_Mask: 第3位是否禁止搜索电话号码
+ - DisableSearch_UserId_Mask: 第4位是否禁止搜索用户ID
  */
 typedef NS_ENUM(NSInteger, WFCCDisableSearchMask) {
     DisableSearch_DisplayName_Mask = 1,
     DisableSearch_Name_Mask = 2,
     DisableSearch_Mobile_Mask = 4,
+    DisableSearch_UserId_Mask = 8,
 };
 
 
