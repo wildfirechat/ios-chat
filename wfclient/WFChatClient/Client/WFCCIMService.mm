@@ -1282,6 +1282,42 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     [self.uploadingModelMap setObject:model forKey:@(messageId)];
 }
 
+- (void)uploadFile:(NSString *)url file:(NSString *)file fileContentType:(NSString *)fileContentTypeString fileSize:(int)fileSize remoteUrl:(NSString *)remoteUrl success:(void(^)(NSString *remoteUrl))successBlock
+          progress:(void(^)(long uploaded, long total))progressBlock
+             error:(void(^)(int error_code))errorBlock {
+    NSURL *presignedURL = [NSURL URLWithString:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:presignedURL];
+    request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    [request setHTTPMethod:@"PUT"];
+    [request setValue:fileContentTypeString forHTTPHeaderField:@"Content-Type"];
+
+    long messageId = [[[NSDate alloc] init] timeIntervalSince1970];
+    WFCUUploadModel *model = [[WFCUUploadModel alloc] init];
+    model.fileSize = fileSize;
+    model->_sendCallback = new IMSendMessageCallback(nil, nil, progressBlock, nil, nil);
+    __weak typeof(self)ws = self;
+    model.uploadTask = [[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:model delegateQueue:nil] uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:file] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ws.uploadingModelMap removeObjectForKey:@(messageId)];
+            delete model->_sendCallback;
+            if(error) {
+                NSLog(@"error %@", error.localizedDescription);
+                errorBlock(-500);
+            } else {
+                NSLog(@"done");
+                if(((NSHTTPURLResponse *)response).statusCode != 200) {
+                    errorBlock((int)((NSHTTPURLResponse *)response).statusCode);
+                } else {
+                    successBlock(remoteUrl);
+                }
+            }
+        });
+    }];
+    
+    [model.uploadTask resume];
+    [self.uploadingModelMap setObject:model forKey:@(messageId)];
+}
+
 - (void)uploadData:(NSData *)data url:(NSString *)url remoteUrl:(NSString *)remoteUrl success:(void(^)(NSString *remoteUrl))successBlock
           progress:(void(^)(long uploaded, long total))progressBlock
              error:(void(^)(int error_code))errorBlock {
@@ -1349,6 +1385,40 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             [[WFCCIMService sharedWFCIMService] updateMessage:callback->m_message.messageId status:Message_Status_Send_Failure];
             [ws.uploadingModelMap removeObjectForKey:@(messageId)];
             callback->onFalure(-1);
+    }];
+    [self.uploadingModelMap setObject:task forKey:@(messageId)];
+}
+
+- (void)uploadQiniuFile:(NSString *)url file:(NSString *)file fileSize:(int)fileSize remoteUrl:(NSString *)remoteUrl success:(void(^)(NSString *remoteUrl))successBlock
+               progress:(void(^)(long uploaded, long total))progressBlock
+                  error:(void(^)(int error_code))errorBlock {
+    NSArray *array = [url componentsSeparatedByString:@"?"];
+    url = array[0];
+    NSString *token = array[1];
+    NSString *key = array[2];
+    
+    long messageId = [[[NSDate alloc] init] timeIntervalSince1970];
+
+    WFAFHTTPSessionManager *manage = [WFAFHTTPSessionManager manager];
+    [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    manage.requestSerializer = [WFAFHTTPRequestSerializer serializer];
+    manage.responseSerializer = [WFAFHTTPResponseSerializer serializer];
+    manage.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/html", @"text/json", @"text/javascript",@"text/plain", nil];
+
+    __weak typeof(self)ws = self;
+    NSURLSessionDataTask *task = [manage POST:url parameters:nil constructingBodyWithBlock:^(id<WFAFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFormData:[key dataUsingEncoding:NSUTF8StringEncoding] name:@"key"];
+        [formData appendPartWithFormData:[token dataUsingEncoding:NSUTF8StringEncoding] name:@"token"];
+        [formData appendPartWithFileURL:[NSURL fileURLWithPath:file] name:@"file" fileName:@"fileName" mimeType:[self mimeTypeOfFile:file] error:nil];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        progressBlock((long)uploadProgress.completedUnitCount, (long)uploadProgress.totalUnitCount);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ws.uploadingModelMap removeObjectForKey:@(messageId)];
+        successBlock(remoteUrl);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error %@", error.localizedDescription);
+        [ws.uploadingModelMap removeObjectForKey:@(messageId)];
+        errorBlock(-1);
     }];
     [self.uploadingModelMap setObject:task forKey:@(messageId)];
 }
@@ -2527,6 +2597,51 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         }];
     } else {
         mars::stn::uploadGeneralMedia(fileName == nil ? "" : [fileName UTF8String], std::string((char *)mediaData.bytes, mediaData.length), (int)mediaType, new GeneralUpdateMediaCallback(successBlock, progressBlock, errorBlock));
+    }
+}
+
+- (void)uploadMediaFile:(NSString *)filePath
+              mediaType:(WFCCMediaType)mediaType
+                success:(void(^)(NSString *remoteUrl))successBlock
+               progress:(void(^)(long uploaded, long total))progressBlock
+                  error:(void(^)(int error_code))errorBlock {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:filePath error:nil];
+    NSNumber *fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
+    long long fileSize = [fileSizeNumber longLongValue];
+    
+    BOOL largeMedia = NO;
+    if ([[WFCCNetworkService sharedInstance] isTcpShortLink]) {
+        if ([self isSupportBigFilesUpload]) {
+            largeMedia = YES;
+        } else {
+            NSLog(@"TCP短连接不支持内置对象存储，请把对象存储切换到其他类型");
+            errorBlock(-1);
+            return;
+        }
+    } else if([self isSupportBigFilesUpload]) {
+        if(mars::stn::ForcePresignedUrlUpload()) {
+            largeMedia = YES;
+        } else {
+            largeMedia = fileSize > 100000000L;
+        }
+    }
+    
+    if(largeMedia) {
+        __weak typeof(self)ws = self;
+        NSString *fileContentTypeString = [self mimeTypeOfFile:filePath];
+        [self getUploadUrl:[filePath lastPathComponent] mediaType:mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+            if(type == 1) {
+                [ws uploadQiniuFile:uploadUrl file:filePath fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+            } else {
+                [ws uploadFile:uploadUrl file:filePath fileContentType:fileContentTypeString fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+            }
+        } error:^(int error_code) {
+            errorBlock(error_code);
+        }];
+    } else {
+        NSData *mediaData = [NSData dataWithContentsOfFile:filePath];
+        mars::stn::uploadGeneralMedia([[filePath lastPathComponent] UTF8String], std::string((char *)mediaData.bytes, mediaData.length), (int)mediaType, new GeneralUpdateMediaCallback(successBlock, progressBlock, errorBlock));
     }
 }
 

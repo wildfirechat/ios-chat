@@ -1112,7 +1112,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
          error:(void(^)(int error_code))errorBlock;
 
 /**
- 上传媒体(图片、语音、文件等)
+ 上传媒体(图片、语音、文件等)数据
  
  @param fileName 文件名，可为空
  @param mediaData 媒体信息
@@ -1127,6 +1127,21 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
             success:(void(^)(NSString *remoteUrl))successBlock
            progress:(void(^)(long uploaded, long total))progressBlock
               error:(void(^)(int error_code))errorBlock;
+
+/**
+ 上传媒体(图片、语音、文件等)文件
+ 
+ @param filePath 文件名，可为空
+ @param mediaType 媒体类型
+ @param successBlock 成功的回调
+ @param progressBlock 上传进度的回调，注意仅当媒体内容大于300K才会有回调
+ @param errorBlock 失败的回调
+ */
+- (void)uploadMediaFile:(NSString *)filePath
+              mediaType:(WFCCMediaType)mediaType
+                success:(void(^)(NSString *remoteUrl))successBlock
+               progress:(void(^)(long uploaded, long total))progressBlock
+                  error:(void(^)(int error_code))errorBlock;
 
 /**
  同步上传媒体(图片、语音、文件等)，成功或者失败之后才会返回
