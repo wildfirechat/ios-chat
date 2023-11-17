@@ -1157,17 +1157,28 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     }
     
     if (isSendCmd) {
-        NSString *logPath = [WFCCNetworkService getLogFilesPath].lastObject;
-        if (logPath.length) {
-            content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
-            uploadedBlock = ^(NSString *remoteUrl) {
-                if(mediaUploadedBlock) {
-                    mediaUploadedBlock(remoteUrl);
-                }
-                [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
-            };
+        NSArray<NSString *> *logs = [WFCCNetworkService getLogFilesPath];
+        if(logs.count) {
+            WFCCMessage *message;
+            for (NSString *logPath in logs) {
+                content = [WFCCFileMessageContent fileMessageContentFromPath:logPath];
+                uploadedBlock = ^(NSString *remoteUrl) {
+                    [self send:conversation content:[WFCCTextMessageContent contentWith:remoteUrl]  success:nil error:nil];
+                };
+                message = [self sendMedia:conversation content:content toUsers:nil expireDuration:0 success:nil progress:nil mediaUploaded:uploadedBlock error:nil];
+            }
+            return message;
         } else {
-            NSLog(@"log not exist");
+            NSLog(@"日志文件不存在。。。");
+            if ([content isKindOfClass:WFCCTextMessageContent.class]) {
+                WFCCTextMessageContent *txtCnt = (WFCCTextMessageContent *)content;
+                txtCnt.text = @"日志文件不存在。。。";
+            } else if ([content isKindOfClass:WFCCRawMessageContent.class]) {
+                WFCCRawMessageContent *rawCnt = (WFCCRawMessageContent *)content;
+                if(rawCnt.payload.contentType == MESSAGE_CONTENT_TYPE_TEXT) {
+                    rawCnt.payload.searchableContent = @"日志文件不存在。。。";
+                }
+            }
         }
     }
     
