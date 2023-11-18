@@ -12,6 +12,7 @@
 #import <libyuv.h>
 #import "WFCUI420VideoFrame.h"
 #import "WFCUBroadcastDefine.h"
+#import <CoreMedia/CoreMedia.h>
 
 @interface SampleHandler () <GCDAsyncSocketDelegate>
 @property (nonatomic, strong) dispatch_queue_t sampleHadlerQueue;
@@ -149,8 +150,27 @@
     dispatch_async(self.sampleHadlerQueue, ^{
         @autoreleasepool {
             CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-            
-            WFCUI420VideoFrame *i420Frame = [self resizeAndConvert:imageBuffer];
+            int orientation = self.orientation;
+            if (UIDevice.currentDevice.systemVersion.floatValue > 11.1) {
+                CGImagePropertyOrientation cgOr = (CGImagePropertyOrientation)((__bridge NSNumber*)CMGetAttachment(sampleBuffer, (__bridge CFStringRef)RPVideoSampleOrientationKey , NULL)).unsignedIntValue;
+                switch (cgOr) {
+                    case kCGImagePropertyOrientationUp:
+                        orientation = 0;
+                        break;
+                    case kCGImagePropertyOrientationDown:
+                        orientation = 2;
+                        break;
+                    case kCGImagePropertyOrientationLeft:
+                        orientation = 1;
+                        break;
+                    case kCGImagePropertyOrientationRight:
+                        orientation = 3;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            WFCUI420VideoFrame *i420Frame = [self resizeAndConvert:imageBuffer orientation:orientation];
             
             if(!i420Frame) {
                 return;
@@ -173,7 +193,7 @@
     });
 }
 
-- (WFCUI420VideoFrame *)resizeAndConvert:(CVImageBufferRef)pixelBuffer {
+- (WFCUI420VideoFrame *)resizeAndConvert:(CVImageBufferRef)pixelBuffer orientation:(int)orientation {
     CVPixelBufferLockBaseAddress( pixelBuffer, 0 );
     
     OSType sourcePixelFormat = CVPixelBufferGetPixelFormatType( pixelBuffer );
@@ -296,7 +316,7 @@
     
     
     int dstWidth, dstHeight;
-    libyuv::RotationModeEnum rotateMode = (libyuv::RotationModeEnum)(self.orientation*90);
+    libyuv::RotationModeEnum rotateMode = (libyuv::RotationModeEnum)(orientation*90);
     
     if (rotateMode != libyuv::kRotateNone) {
         if (rotateMode == libyuv::kRotate270 || rotateMode == libyuv::kRotate90) {
