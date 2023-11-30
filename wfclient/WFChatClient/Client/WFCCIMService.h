@@ -229,6 +229,12 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
               error:(void(^)(int errorCode))errorBlock;
 
+- (void)getUserInfo:(NSString *)userId
+            groupId:(NSString *)groupId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+              error:(void(^)(int errorCode))errorBlock;
+
 - (void)searchUser:(NSString *)keyword
         searchType:(WFCCSearchUserType)searchType
               page:(int)page
@@ -1406,6 +1412,22 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param errorBlock 失败的回调
  */
 - (void)getUserInfo:(NSString *)userId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+            error:(void(^)(int errorCode))errorBlock;
+
+/**
+ 获取用户信息
+ @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的单聊会话中时或者此人的用户信息页面使用true
+ 
+ @param userId 用户ID
+ @param groupId 群组ID，可以为nil
+ @param refresh 是否强制从服务器更新，如果本地没有或者强制，会从服务器刷新，然后发出通知kUserInfoUpdated。
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUserInfo:(NSString *)userId
+            groupId:(NSString *)groupId
             refresh:(BOOL)refresh
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
             error:(void(^)(int errorCode))errorBlock;
