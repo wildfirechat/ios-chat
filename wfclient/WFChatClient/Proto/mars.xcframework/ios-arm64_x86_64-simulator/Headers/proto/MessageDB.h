@@ -159,8 +159,10 @@ namespace mars {
             int UpdateGroupMemberExtra(const std::string &groupId, const std::string &memberId, const std::string &extra);
             
             TUserInfo getUserInfo(const std::string &userId, const std::string &groupId, bool refresh);
+            TUserInfo getLocalUserInfo(const std::string &userId, const std::string &groupId);
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
             void GetUserInfo(const std::string &userId, bool refresh, GetOneUserInfoCallback *callback);
+            void GetUserInfo(const std::string &userId, const std::string &groupId, bool refresh, GetOneUserInfoCallback *callback);
             
             long InsertUserInfoOrReplace(const TUserInfo &userInfo);
             long UpdateMyInfo(const std::list<std::pair<int, std::string>> &infos);

@@ -2170,6 +2170,23 @@ public:
     mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
 }
 
+- (void)getUserInfo:(NSString *)userId
+            groupId:(NSString *)groupId
+            refresh:(BOOL)refresh
+            success:(void(^)(WFCCUserInfo *userInfo))successBlock
+              error:(void(^)(int errorCode))errorBlock {
+    if (!userId.length) {
+        return;
+    }
+    
+    if ([self.userSource respondsToSelector:@selector(getUserInfo:groupId:refresh:success:error:)]) {
+        [self.userSource getUserInfo:userId groupId:groupId refresh:refresh success:successBlock error:errorBlock];
+        return;
+    }
+    
+    mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], [groupId UTF8String], refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
+}
+
 - (BOOL)isMyFriend:(NSString *)userId {
     if(!userId)
         return NO;
