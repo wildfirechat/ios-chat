@@ -129,15 +129,27 @@
     if (self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
+        if(userInfo.displayName.length) {
+            label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
+        } else {
+            label.text = @"用户聊天记录";
+        }
     } else if (self.conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"GroupChatRound"]];
-        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", groupInfo.displayName];
+        if(groupInfo.displayName.length) {
+            label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", groupInfo.displayName];
+        } else {
+            label.text = @"群组聊天记录";
+        }
     } else if(self.conversation.type == Channel_Type) {
         WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"GroupChatRound"]];
-        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", channelInfo.name];
+        if(channelInfo.name.length) {
+            label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", channelInfo.name];
+        } else {
+            label.text = @"频道聊天记录";
+        }
     } else if(self.conversation.type == SecretChat_Type) {
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target].userId;
         
