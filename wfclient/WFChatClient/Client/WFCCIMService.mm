@@ -2184,7 +2184,7 @@ public:
         return;
     }
     
-    mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], [groupId UTF8String], refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
+    mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], groupId.length?[groupId UTF8String]:"", refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isMyFriend:(NSString *)userId {
