@@ -21,7 +21,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <sys/cdefs.h>
 #include <sys/time.h>
 
 #include "comm/string_cast.h"
