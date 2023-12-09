@@ -3360,7 +3360,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }
     
     
-    mars::stn::modifyGroupMemberAlias([groupId UTF8String], [memberId UTF8String], [newAlias UTF8String], lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
+    mars::stn::modifyGroupMemberAlias([groupId UTF8String], [memberId UTF8String], newAlias.length?[newAlias UTF8String]:"", lines, tcontent, new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
 - (void)modifyGroupMemberExtra:(NSString *)groupId
