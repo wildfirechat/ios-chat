@@ -19,6 +19,8 @@
 
 @property(nonatomic, strong)UIButton *acceptAllBtn;
 @property(nonatomic, strong)UIButton *rejectAllBtn;
+
+@property(nonatomic, strong)NSMutableArray<NSString *> *members;
 @end
 
 @implementation WFCUConferenceUnmuteRequestTableViewController
@@ -46,19 +48,27 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"C") style:UIBarButtonItemStyleDone target:self action:@selector(onClose:)];
     
-    if([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count) {
+    if(self.isAudio) {
+        self.members = [WFCUConferenceManager sharedInstance].applyingUnmuteAudioMembers;
+        self.title = @"请求打开麦克风成员";
+    } else {
+        self.members = [WFCUConferenceManager sharedInstance].applyingUnmuteVideoMembers;
+        self.title = @"请求打开摄像头成员";
+    }
+    
+    if(self.members.count) {
         self.acceptAllBtn = [self createBtn:CGRectMake(16, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全部同意" action:@selector(onAcceptAllBtnPressed:)];
         self.rejectAllBtn = [self createBtn:CGRectMake(bounds.size.width - 16 - buttonWidth, bounds.size.height - [WFCUUtilities wf_safeDistanceBottom] - buttonHeight - 16, buttonWidth, buttonHeight) title:@"全部拒绝" action:@selector(onRejectAllBtnPressed:)];
     }
 }
 
 - (void)onAcceptAllBtnPressed:(id)sender {
-    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:YES];
+    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:YES isAudio:self.isAudio];
     [self.tableView reloadData];
 }
 
 - (void)onRejectAllBtnPressed:(id)sender {
-    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:NO];
+    [[WFCUConferenceManager sharedInstance] approveAllMemberUnmute:NO isAudio:self.isAudio];
     [self.tableView reloadData];
 }
 
@@ -68,15 +78,15 @@
 
 - (void)onAcceptBtn:(UIButton *)sender {
     int row = (int)sender.tag;
-    NSString *userId = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers[row];
-    [[WFCUConferenceManager sharedInstance] approveMember:userId unmute:YES];
+    NSString *userId = self.members[row];
+    [[WFCUConferenceManager sharedInstance] approveMember:userId unmute:YES isAudio:self.isAudio];
     [self.tableView reloadData];
 }
 
 - (void)onRejectBtn:(UIButton *)sender {
     int row = (int)sender.tag;
-    NSString *userId = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers[row];
-    [[WFCUConferenceManager sharedInstance] approveMember:userId unmute:NO];
+    NSString *userId = self.members[row];
+    [[WFCUConferenceManager sharedInstance] approveMember:userId unmute:NO isAudio:self.isAudio];
     [self.tableView reloadData];
 }
 
@@ -97,7 +107,7 @@
 
 #pragma mark - UITableViewDataSource<NSObject>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count;
+    return self.members.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -131,7 +141,7 @@
         }
     }
     
-    NSString *userId = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers[indexPath.row];
+    NSString *userId = self.members[indexPath.row];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     cell.textLabel.text = userInfo.friendAlias.length?userInfo.friendAlias:userInfo.displayName;
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
