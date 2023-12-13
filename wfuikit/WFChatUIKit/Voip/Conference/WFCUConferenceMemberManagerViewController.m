@@ -31,7 +31,8 @@
 @property(nonatomic, strong)UIButton *unmuteAllBtn;
 
 @property(nonatomic, strong)UIView *headerViewContainer;
-@property(nonatomic, strong)UIButton *unmuteRequestBtn;
+@property(nonatomic, strong)UIButton *unmuteAudioRequestBtn;
+@property(nonatomic, strong)UIButton *unmuteVideoRequestBtn;
 @property(nonatomic, strong)UIButton *handupBtn;
 @end
 
@@ -57,11 +58,17 @@
     self.headerViewContainer = [[UIView alloc] initWithFrame:CGRectZero];
     [self.headerViewContainer addSubview:self.searchBar];
     
-    self.unmuteRequestBtn = [[UIButton alloc] initWithFrame:CGRectZero];
-    [self.unmuteRequestBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    self.unmuteRequestBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.unmuteRequestBtn addTarget:self action:@selector(onUnmuteRequestBtnPressed:) forControlEvents:UIControlEventTouchDown];
-    [self.headerViewContainer addSubview:self.unmuteRequestBtn];
+    self.unmuteAudioRequestBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.unmuteAudioRequestBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.unmuteAudioRequestBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.unmuteAudioRequestBtn addTarget:self action:@selector(onUnmuteAudioRequestBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.headerViewContainer addSubview:self.unmuteAudioRequestBtn];
+    
+    self.unmuteVideoRequestBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+    [self.unmuteVideoRequestBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.unmuteVideoRequestBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.unmuteVideoRequestBtn addTarget:self action:@selector(onUnmuteVideoRequestBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.headerViewContainer addSubview:self.unmuteVideoRequestBtn];
     
     self.handupBtn = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.handupBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -87,8 +94,16 @@
     [self.tableView reloadData];
 }
 
-- (void)onUnmuteRequestBtnPressed:(id)sender {
+- (void)onUnmuteAudioRequestBtnPressed:(id)sender {
     WFCUConferenceUnmuteRequestTableViewController *vc = [[WFCUConferenceUnmuteRequestTableViewController alloc] init];
+    vc.isAudio = YES;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)onUnmuteVideoRequestBtnPressed:(id)sender {
+    WFCUConferenceUnmuteRequestTableViewController *vc = [[WFCUConferenceUnmuteRequestTableViewController alloc] init];
+    vc.isAudio = NO;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -100,30 +115,51 @@
 }
 
 - (void)updateTableViewHeader {
-    if([self.searchBar isFirstResponder] || ([WFCUConferenceManager sharedInstance].applyingUnmuteMembers.count == 0 && [WFCUConferenceManager sharedInstance].handupMembers.count == 0)) {
+    if([self.searchBar isFirstResponder] || ([WFCUConferenceManager sharedInstance].applyingUnmuteAudioMembers.count == 0 && [WFCUConferenceManager sharedInstance].applyingUnmuteVideoMembers.count == 0 && [WFCUConferenceManager sharedInstance].handupMembers.count == 0)) {
         self.headerViewContainer.frame = CGRectMake(0, 50, self.view.bounds.size.width, 40);
-        self.unmuteRequestBtn.frame = CGRectZero;
+        self.unmuteAudioRequestBtn.frame = CGRectZero;
+        self.unmuteVideoRequestBtn.frame = CGRectZero;
         self.handupBtn.frame = CGRectZero;
     } else {
         int height = 40;
-        NSMutableArray<NSString *> *applyingUnmuteMembers = [WFCUConferenceManager sharedInstance].applyingUnmuteMembers;
-        if(applyingUnmuteMembers.count) {
-            self.unmuteRequestBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);
+        NSMutableArray<NSString *> *applyingUnmuteAudioMembers = [WFCUConferenceManager sharedInstance].applyingUnmuteAudioMembers;
+        if(applyingUnmuteAudioMembers.count) {
+            self.unmuteAudioRequestBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);
             NSString *name;
-            if(applyingUnmuteMembers.count == 1) {
-                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteMembers[0] refresh:NO];
+            if(applyingUnmuteAudioMembers.count == 1) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteAudioMembers[0] refresh:NO];
                 name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
                 if(!name.length) {
                     name = @"1名成员";
                 }
             } else {
-                name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteMembers.count];
+                name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteAudioMembers.count];
             }
-            [self.unmuteRequestBtn setTitle:[NSString stringWithFormat:@" %@正在申请解除静音", name] forState:UIControlStateNormal];
+            [self.unmuteAudioRequestBtn setTitle:[NSString stringWithFormat:@" %@正在申请解除静音", name] forState:UIControlStateNormal];
             height += 40;
         } else {
-            self.unmuteRequestBtn.frame = CGRectZero;
+            self.unmuteAudioRequestBtn.frame = CGRectZero;
         }
+        
+        NSMutableArray<NSString *> *applyingUnmuteVideoMembers = [WFCUConferenceManager sharedInstance].applyingUnmuteVideoMembers;
+        if(applyingUnmuteVideoMembers.count) {
+            self.unmuteVideoRequestBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);
+            NSString *name;
+            if(applyingUnmuteVideoMembers.count == 1) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteVideoMembers[0] refresh:NO];
+                name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+                if(!name.length) {
+                    name = @"1名成员";
+                }
+            } else {
+                name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteVideoMembers.count];
+            }
+            [self.unmuteVideoRequestBtn setTitle:[NSString stringWithFormat:@" %@正在申请打开摄像头", name] forState:UIControlStateNormal];
+            height += 40;
+        } else {
+            self.unmuteVideoRequestBtn.frame = CGRectZero;
+        }
+        
         NSMutableArray<NSString *> *handupMembers = [WFCUConferenceManager sharedInstance].handupMembers;
         if([WFCUConferenceManager sharedInstance].handupMembers.count) {
             self.handupBtn.frame = CGRectMake(0, height, self.view.bounds.size.width, 40);

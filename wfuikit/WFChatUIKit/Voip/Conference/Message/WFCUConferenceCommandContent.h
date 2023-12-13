@@ -14,21 +14,21 @@
  */
 typedef NS_ENUM(NSInteger, WFCUConferenceCommandType) {
     //全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否允许成员自主解除静音。
-    MUTE_ALL,
+    MUTE_ALL_AUDIO,
     //取消全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否邀请成员解除静音。
-    CANCEL_MUTE_ALL,
+    CANCEL_MUTE_ALL_AUDIO,
     
     //要求某个用户更改静音状态，只有主持人可以操作。带有参数是否静音/解除静音。
-    REQUEST_MUTE,
+    REQUEST_MUTE_AUDIO,
     //拒绝UNMUTE要求。（如果同意不需要通知对方同意)
-    REJECT_UNMUTE_REQUEST,
+    REJECT_UNMUTE_AUDIO_REQUEST,
     
     //普通用户申请解除静音，带有参数是请求，还是取消请求。
-    APPLY_UNMUTE,
+    APPLY_UNMUTE_AUDIO,
     //管理员批准解除静音申请，带有参数是同意，还是拒绝申请。
-    APPROVE_UNMUTE,
+    APPROVE_UNMUTE_AUDIO,
     //管理员批准全部解除静音申请，带有参数是同意，还是拒绝申请。
-    APPROVE_ALL_UNMUTE,
+    APPROVE_ALL_UNMUTE_AUDIO,
     
     //举手，带有参数是举手还是放下举手
     HANDUP,
@@ -42,8 +42,26 @@ typedef NS_ENUM(NSInteger, WFCUConferenceCommandType) {
     
     //设置焦点用户
     FOCUS,
+    
     //取消设置
-    CANCEL_FOCUS
+    CANCEL_FOCUS,
+
+    //全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否允许成员自主解除静音。
+    MUTE_ALL_VIDEO,
+    //取消全体静音，只有主持人可以操作，结果写入conference profile中。带有参数是否邀请成员解除静音。
+    CANCEL_MUTE_ALL_VIDEO,
+    
+    //要求某个用户更改静音状态，只有主持人可以操作。带有参数是否静音/解除静音。
+    REQUEST_MUTE_VIDEO,
+    //拒绝UNMUTE要求。（如果同意不需要通知对方同意)
+    REJECT_UNMUTE_VIDEO_REQUEST,
+
+    //普通用户申请解除静音，带有参数是请求，还是取消请求。
+    APPLY_UNMUTE_VIDEO,
+    //管理员批准解除静音申请，带有参数是同意，还是拒绝申请。
+    APPROVE_UNMUTE_VIDEO,
+    //管理员批准全部解除静音申请，带有参数是同意，还是拒绝申请。
+    APPROVE_ALL_UNMUTE_VIDEO
 };
 
 @interface WFCUConferenceCommandContent : WFCCMessageContent

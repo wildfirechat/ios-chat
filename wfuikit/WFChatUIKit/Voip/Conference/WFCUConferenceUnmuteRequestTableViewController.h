@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUConferenceUnmuteRequestTableViewController : UIViewController
-
+@property(nonatomic, assign)BOOL isAudio;
 @end
 
 NS_ASSUME_NONNULL_END

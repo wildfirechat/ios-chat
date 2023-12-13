@@ -1042,17 +1042,17 @@
                 [self updateAudioButton];
             } else {
                 __weak typeof(self)ws = self;
-                if([WFCUConferenceManager sharedInstance].isApplyingUnmute) {
+                if([WFCUConferenceManager sharedInstance].isApplyingUnmuteAudio) {
                     [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"您正在申请解除静音" actionTitle:@"继续申请" cancelTitle:@"取消申请" contentText:@"主持人不允许解除静音，您已经申请解除静音，正在等待主持人操作" checkBox:NO actionHandler:^(BOOL checked) {
-                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO isAudio:YES];
                         [ws showCommandToast:@"已重新发送申请，请耐心等待主持人操作"];
                     } cancelHandler:^{
-                        [[WFCUConferenceManager sharedInstance] applyUnmute:YES];
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:YES isAudio:YES];
                         [ws showCommandToast:@"已取消申请"];
                     }];
                 } else {
                     [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"你已静音" actionTitle:@"申请解除静音" cancelTitle:nil contentText:@"主持人不允许解除静音，您可以向主持人申请解除静音" checkBox:NO actionHandler:^(BOOL checked) {
-                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO];
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO isAudio:YES];
                         [ws showCommandToast:@"已发送申请，请耐心等待主持人操作"];
                     } cancelHandler:nil];
                 }
@@ -1248,12 +1248,33 @@
 
 - (void)videoButtonDidTap:(UIButton *)button {
     if (self.currentSession.state != kWFAVEngineStateIdle) {
-        //请参考函数 audioButtonDidTap
-        
-        [[WFCUConferenceManager sharedInstance] muteVideo:!(self.currentSession.audience || self.currentSession.videoMuted)];
-        [self updateVideoButton];
-        [self startHidePanelTimer];
+        if(!self.currentSession.isAudience && !self.currentSession.videoMuted) {
+            [[WFCUConferenceManager sharedInstance] muteVideo:!(self.currentSession.audience || self.currentSession.videoMuted)];
+            [self updateVideoButton];
+        } else {
+            if (self.conferenceInfo.allowTurnOnMic || [self.conferenceInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                [[WFCUConferenceManager sharedInstance] muteVideo:!(self.currentSession.audience || self.currentSession.videoMuted)];
+                [self updateVideoButton];
+            } else {
+                __weak typeof(self)ws = self;
+                if([WFCUConferenceManager sharedInstance].isApplyingUnmuteVideo) {
+                    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"主持人不允许开启摄像头，您已经申请开启，正在等待主持人允许" actionTitle:@"继续申请" cancelTitle:@"取消申请" contentText:nil checkBox:NO actionHandler:^(BOOL checked) {
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO isAudio:NO];
+                        [ws showCommandToast:@"已重新发送申请，请耐心等待主持人操作"];
+                    } cancelHandler:^{
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:YES isAudio:NO];
+                        [ws showCommandToast:@"已取消申请"];
+                    }];
+                } else {
+                    [[WFCUConferenceManager sharedInstance] presentCommandAlertView:self message:@"你已关闭摄像头" actionTitle:@"申请开启" cancelTitle:nil contentText:@"主持人不允许开启摄像头，您可以向主持人申请开启" checkBox:NO actionHandler:^(BOOL checked) {
+                        [[WFCUConferenceManager sharedInstance] applyUnmute:NO isAudio:NO];
+                        [ws showCommandToast:@"已发送申请，请耐心等待主持人操作"];
+                    } cancelHandler:nil];
+                }
+            }
+        }
     }
+    [self startHidePanelTimer];
 }
 
 - (void)chatButtonDidTap:(UIButton *)button {
@@ -2410,35 +2431,59 @@
     }
     
     switch(commandType) {
-        case MUTE_ALL: {
+        case MUTE_ALL_AUDIO: {
             [self showCommandToast:@"主持人开启了全员静音"];
             break;
         }
-        case CANCEL_MUTE_ALL: {
-            if(commandContent.boolValue && [WFAVEngineKit sharedEngineKit].currentSession.isConference && ([WFAVEngineKit sharedEngineKit].currentSession.isAudience || [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted)) {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人关闭了全员静音，是否要打开麦克风" preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ignore") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        case MUTE_ALL_VIDEO: {
+            [self showCommandToast:@"主持人关闭了所有人的摄像头"];
+            break;
+        }
+        case CANCEL_MUTE_ALL_AUDIO: 
+        case CANCEL_MUTE_ALL_VIDEO:
+        {
+            BOOL audio = commandType == CANCEL_MUTE_ALL_AUDIO;
+            if(commandContent.boolValue && [WFAVEngineKit sharedEngineKit].currentSession.isConference) {
+                if([WFAVEngineKit sharedEngineKit].currentSession.isAudience || ((audio && [WFAVEngineKit sharedEngineKit].currentSession.isAudioMuted) || (!audio && [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted))) {
+                    NSString *message;
+                    if(audio) {
+                        message = @"管理员关闭了全员静音，是否要打开麦克风";
+                    } else {
+                        message = @"管理员取消了全体成员关闭摄像头，是否打开摄像头";
+                    }
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
                     
-                }];
-                [alertController addAction:action1];
-                
-                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"打开" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                    [[WFCUConferenceManager sharedInstance] muteAudio:NO];
-                }];
-                [alertController addAction:action2];
-                
-                [self presentViewController:alertController animated:YES completion:nil];
+                    UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ignore") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        
+                    }];
+                    [alertController addAction:action1];
+                    
+                    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"打开" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        if(audio) {
+                            [[WFCUConferenceManager sharedInstance] muteAudio:NO];
+                        } else {
+                            [[WFCUConferenceManager sharedInstance] muteVideo:NO];
+                        }
+                    }];
+                    [alertController addAction:action2];
+                    
+                    [self presentViewController:alertController animated:YES completion:nil];
+                } else {
+                    [self showCommandToast:audio?@"管理员关闭了全员静音":@"管理员关闭了全员关闭摄像头"];
+                }
             } else {
-                [self showCommandToast:@"主持人关闭了全员静音"];
+                [self showCommandToast:audio?@"管理员关闭了全员静音":@"管理员关闭了全员关闭摄像头"];
             }
             break;
         }
-        case REQUEST_MUTE:
+        case REQUEST_MUTE_AUDIO:
+        case REQUEST_MUTE_VIDEO:
+        {
+            BOOL audio = commandType == REQUEST_MUTE_AUDIO;
             if(commandContent.boolValue) {
-                [self showCommandToast:@"主持人关闭了您的发言"];
+                [self showCommandToast:audio?@"主持人关闭了您的":@"主持人关闭了您的摄像头"];
             } else {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"主持人邀请您发言" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:audio?@"主持人邀请您打开麦克风":@"主持人邀请您打开摄像头" preferredStyle:UIAlertControllerStyleAlert];
                 
                 UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Reject") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     [[WFCUConferenceManager sharedInstance] rejectUnmuteRequest];
@@ -2446,28 +2491,39 @@
                 [alertController addAction:action1];
                 
                 UIAlertAction *action2 = [UIAlertAction actionWithTitle:WFCString(@"Accept") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                    [[WFCUConferenceManager sharedInstance] muteAudio:NO];
+                    if(audio) {
+                        [[WFCUConferenceManager sharedInstance] muteAudio:NO];
+                    } else {
+                        [[WFCUConferenceManager sharedInstance] muteVideo:NO];
+                    }
                 }];
                 [alertController addAction:action2];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
             }
-            
+        }
             break;
-        case REJECT_UNMUTE_REQUEST:
-            [self showCommandToast:[NSString stringWithFormat:@"%@ 拒绝了您的发言邀请", userName]];
-            break;
-            
-        case APPLY_UNMUTE:
-            [self showCommandToast:[NSString stringWithFormat:@"%@ 请求发言", userName]];
+        case REJECT_UNMUTE_AUDIO_REQUEST:
+        case REJECT_UNMUTE_VIDEO_REQUEST:
+            [self showCommandToast:[NSString stringWithFormat:@"%@ 拒绝了您的请求", userName]];
             break;
             
-        case APPROVE_UNMUTE:
+        case APPLY_UNMUTE_AUDIO:
+        case APPLY_UNMUTE_VIDEO:
+        {
+            BOOL audio = commandType == APPLY_UNMUTE_AUDIO;
+            [self showCommandToast:[NSString stringWithFormat:audio?@"%@ 请求开启麦克风":@"%@ 请求开启摄像头", userName]];
+        }
+            break;
+            
+        case APPROVE_UNMUTE_AUDIO:
+        case APPROVE_UNMUTE_VIDEO:
             if(!commandContent.boolValue) {
-                [self showCommandToast:@"主持人拒绝了您的发言请求"];
+                [self showCommandToast:@"主持人拒绝了您的请求"];
             }
             break;
-        case APPROVE_ALL_UNMUTE:
+        case APPROVE_ALL_UNMUTE_AUDIO:
+        case APPROVE_ALL_UNMUTE_VIDEO:
             [self showCommandToast:commandContent.boolValue ? @"主持人同意了所有的发言请求" :  @"主持人拒绝了所有的发言请求"];
             break;
             

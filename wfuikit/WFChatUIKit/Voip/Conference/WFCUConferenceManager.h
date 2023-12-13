@@ -65,13 +65,13 @@ extern NSString *kMuteStateChanged;
 - (void)rejectUnmuteRequest;
 
 //成员申请解除静音，true是取消
-- (void)applyUnmute:(BOOL)isCancel;
+- (void)applyUnmute:(BOOL)isCancel isAudio:(BOOL)isAudio;
 
 //主持人批准成员的unmute的请求
-- (BOOL)approveMember:(NSString *)memberId unmute:(BOOL)isReject;
+- (BOOL)approveMember:(NSString *)memberId unmute:(BOOL)isReject isAudio:(BOOL)isAudio;
 
 //主持人批准所有成员的unmute的请求
-- (BOOL)approveAllMemberUnmute:(BOOL)isReject;
+- (BOOL)approveAllMemberUnmute:(BOOL)isReject isAudio:(BOOL)isAudio;
 
 //举手
 - (void)handup:(BOOL)handup;
@@ -88,19 +88,30 @@ extern NSString *kMuteStateChanged;
 //设置焦点用户
 - (BOOL)requestFocus:(NSString *)focusedUserId;
 
-//是否申请了unmute，等待主持人的批准
-@property(nonatomic, assign)BOOL isApplyingUnmute;
+//是否申请了unmute audio，等待主持人的批准
+@property(nonatomic, assign)BOOL isApplyingUnmuteAudio;
+//是否申请了unmute video，等待主持人的批准
+@property(nonatomic, assign)BOOL isApplyingUnmuteVideo;
 
-//主持人收到的申请unmute的请求
-@property(nonatomic, strong)NSMutableArray<NSString *> *applyingUnmuteMembers;
+//主持人收到的申请unmute音频的请求
+@property(nonatomic, strong)NSMutableArray<NSString *> *applyingUnmuteAudioMembers;
+//主持人收到的申请unmute视频频的请求
+@property(nonatomic, strong)NSMutableArray<NSString *> *applyingUnmuteVideoMembers;
 
 //是否举手
 @property(nonatomic, assign)BOOL isHandup;
+//是否全部关闭麦克风
+@property(nonatomic, assign)BOOL isMuteAllAudio;
+//是否全部关闭摄像头
+@property(nonatomic, assign)BOOL isMuteAllVideo;
 
 //主持人收到的举手的请求
 @property(nonatomic, strong)NSMutableArray<NSString *> *handupMembers;
 
 //是否直播中
 - (BOOL)isBroadcasting;
+
+@property(nonatomic, assign)BOOL isAllowUnmuteAudioWhenMuteAll;
+@property(nonatomic, assign)BOOL isAllowUnMuteVideoWhenMuteAll;
 @end
 #endif
