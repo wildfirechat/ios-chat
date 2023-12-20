@@ -651,7 +651,11 @@
 }
 
 - (void)onConnectToServer:(NSString *)host ip:(NSString *)ip port:(int)port {
-    NSLog(@"connect to server %@,%@,%d", host, ip, port);
+    NSLog(@"connecting to server %@,%@,%d", host, ip, port);
+}
+
+- (void)onConnected:(NSString *)host ip:(NSString *)ip port:(int)port mainNw:(BOOL)mainNw {
+    NSLog(@"connected to server %@,%@,%d,%d", host, ip, port, mainNw);
 }
 
 - (void)setupNavBar {

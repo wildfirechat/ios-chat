@@ -294,7 +294,7 @@ namespace mars{
 
         class TMessageContent : public TSerializable {
         public:
-            TMessageContent() : type(0), mediaType(0), mentionedType(0), notLoaded(false) {}
+            TMessageContent() : type(0), mediaType(0), mentionedType(0), expireTime(0), notLoaded(false) {}
             TMessageContent(const TMessageContent &c) :
             type(c.type),
             searchableContent(c.searchableContent),
@@ -309,6 +309,7 @@ namespace mars{
             mentionedType(c.mentionedType),
             mentionedTargets(c.mentionedTargets),
             extra(c.extra),
+            expireTime(c.expireTime),
             notLoaded(c.notLoaded) {}
 
             TMessageContent operator=(const TMessageContent &c) {
@@ -325,6 +326,7 @@ namespace mars{
                 mentionedType = c.mentionedType;
                 mentionedTargets = c.mentionedTargets;
                 extra = c.extra;
+                expireTime = c.expireTime;
                 notLoaded = c.notLoaded;
                 return *this;
             }
@@ -342,6 +344,7 @@ namespace mars{
             int mentionedType;
             std::list<std::string> mentionedTargets;
             std::string extra;
+            int64_t expireTime;
             bool notLoaded;
             virtual ~TMessageContent(){
             }
@@ -921,6 +924,7 @@ namespace mars{
     class NotifyConnectToServerCallback {
     public:
         virtual void OnConnectToServer(const std::string &host, const std::string &ip, int port) = 0;
+        virtual void OnConnected(const std::string &host, const std::string &ip, int port, bool mainNW) {}
     };
     
     class TrafficDataCallback {
@@ -1141,6 +1145,7 @@ namespace mars{
         extern void setProxyInfo(const std::string &host, const std::string &ip, int port, const std::string &username, const std::string &password);
         extern bool IsCommercialServer();
         extern bool IsReceiptEnabled();
+        extern bool IsGroupReceiptEnabled();
         extern bool HasMediaPresignedUrl();
         extern bool HasMediaBackupUrl();
         extern bool IsGlobalDisableSyncDraft();
