@@ -1238,10 +1238,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         __weak typeof(self)ws = self;
         NSString *fileContentTypeString = [self mimeTypeOfFile:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()]];
         [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+            NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
-                [ws uploadQiniu:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize expireDuration:expireDuration callback:callback];
+                [ws uploadQiniu:url messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize expireDuration:expireDuration callback:callback];
             } else {
-                [ws upload:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileContentType:fileContentTypeString fileSize:fileSize expireDuration:expireDuration callback:callback];
+                [ws upload:url messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileContentType:fileContentTypeString fileSize:fileSize expireDuration:expireDuration callback:callback];
             }
         } error:^(int error_code) {
             errorBlock(error_code);
@@ -2620,11 +2621,12 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     if(largeMedia) {
         __weak typeof(self)ws = self;
         [self getUploadUrl:@"" mediaType:mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+            NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
-                [ws uploadQiniuData:mediaData url:uploadUrl remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+                [ws uploadQiniuData:mediaData url:url remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
                 return;
             } else {
-                [ws uploadData:mediaData url:uploadUrl remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+                [ws uploadData:mediaData url:url remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
             }
         } error:^(int error_code) {
             errorBlock(error_code);
@@ -2665,10 +2667,11 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         __weak typeof(self)ws = self;
         NSString *fileContentTypeString = [self mimeTypeOfFile:filePath];
         [self getUploadUrl:[filePath lastPathComponent] mediaType:mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+            NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
-                [ws uploadQiniuFile:uploadUrl file:filePath fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+                [ws uploadQiniuFile:url file:filePath fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
             } else {
-                [ws uploadFile:uploadUrl file:filePath fileContentType:fileContentTypeString fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
+                [ws uploadFile:url file:filePath fileContentType:fileContentTypeString fileSize:(int)fileSize remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
             }
         } error:^(int error_code) {
             errorBlock(error_code);

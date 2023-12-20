@@ -310,6 +310,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 @property(nonatomic, assign, readonly)long long serverDeltaTime;
 
 /**
+ 当前服务是否连接到了主网络
+ */
+@property (nonatomic, assign, readonly)BOOL connectedToMainNetwork;
+
+/**
  发送日志命令
  */
 @property (nonatomic, strong)NSString *sendLogCommand;

@@ -548,6 +548,8 @@ public:
 @property(nonatomic, assign)NSUInteger backgroudRunTime;
 
 @property(nonatomic, assign)BOOL firstTimeResume;
+
+@property (nonatomic, assign)BOOL connectedToMainNetwork;
 @end
 
 @implementation WFCCNetworkService
@@ -752,6 +754,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)onConnected:(NSString *)host ip:(NSString *)ip port:(int)port mainNw:(BOOL)mainNw {
+    self.connectedToMainNetwork = mainNw;
     dispatch_async(dispatch_get_main_queue(), ^{
         if([self.connectToServerDelegate respondsToSelector:@selector(onConnected:ip:port:mainNw:)]) {
             [self.connectToServerDelegate onConnected:host ip:ip port:port mainNw:mainNw];
