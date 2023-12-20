@@ -19,6 +19,7 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.initiator forKey:@"initiator"];
     [dict setObject:self.targetIds forKey:@"targetIds"];
+    [dict setObject:self.targetIds forKey:@"targets"];
     [dict setObject:@(self.audioOnly == YES ? 1:0) forKey:@"audioOnly"];
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dict
                                                    options:kNilOptions
@@ -37,7 +38,14 @@
                                                                  error:&__error];
     if (!__error) {
         self.initiator = dictionary[@"initiator"];
-        self.targetIds = dictionary[@"targetIds"];
+        if(dictionary[@"targets"]) {
+            self.targetIds = dictionary[@"targets"];
+        } else if(dictionary[@"targetIds"]) {
+            self.targetIds = dictionary[@"targetIds"];
+        } else {
+            self.targetIds = @[];
+        }
+        
         self.audioOnly = [dictionary[@"audioOnly"] boolValue];
     }
 }
