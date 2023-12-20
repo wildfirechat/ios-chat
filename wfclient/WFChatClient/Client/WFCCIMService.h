@@ -1253,6 +1253,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)clearMessages:(WFCCConversation *)conversation before:(int64_t)before;
 
 /**
+ 删除会话中的消息，只保留最近指定条数的消息。
+ 
+ @param conversation 会话，如果conversation为nil，则清除所有会话的消息。
+ @param keepCount 保留的条数
+ */
+- (void)clearMessages:(WFCCConversation *)conversation keepLatest:(int)keepCount;
+
+/**
  删除指定用户指定时间段的消息
  
  @param userId 指定用户
@@ -2626,9 +2634,14 @@ amr文件转成wav数据
 - (BOOL)isCommercialServer;
 
 /**
-是否支持已送达报告和已阅读报告
+是否支持已阅读报告
 */
 - (BOOL)isReceiptEnabled;
+
+/**
+群组是否支持已阅读报告
+*/
+- (BOOL)isGroupReceiptEnabled;
 
 /*
  是否应用关闭草稿同步功能

@@ -2057,6 +2057,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::MessageDB::Instance()->ClearMessages((int)conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, before);
 }
 
+- (void)clearMessages:(WFCCConversation *)conversation keepLatest:(int)keepCount {
+    mars::stn::MessageDB::Instance()->ClearMessagesKeepLatest((int)conversation.type, conversation.target.length ? [conversation.target UTF8String] : "", conversation.line, keepCount);
+}
+
 - (void)clearMessages:(NSString *)userId start:(int64_t)start end:(int64_t)end {
     mars::stn::MessageDB::Instance()->ClearUserMessages([userId UTF8String], start, end);
 }
@@ -4334,6 +4338,10 @@ public:
 
 - (BOOL)isReceiptEnabled {
     return mars::stn::IsReceiptEnabled() == true;
+}
+
+- (BOOL)isGroupReceiptEnabled {
+    return mars::stn::IsGroupReceiptEnabled() == true;
 }
 
 - (BOOL)isGlobalDisableSyncDraft {

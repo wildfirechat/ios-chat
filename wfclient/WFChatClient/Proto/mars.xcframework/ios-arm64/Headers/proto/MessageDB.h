@@ -66,8 +66,13 @@ namespace mars {
             bool RemoveGroupMessageBefore(const std::string &groupId, int64_t beforeTime);
             bool ClearMessages(int conversationType, const std::string &target, int line);
             bool ClearMessages(int conversationType, const std::string &target, int line, int64_t before);
+            bool ClearMessagesKeepLatest(int conversationType, const std::string &target, int line, int count);
             bool ClearUserMessages(const std::string &userId, int64_t start, int64_t end);
             bool ClearAllMessages(bool removeConveration);
+            bool DeleteExpiredMessages();
+            
+            
+            bool InsertMessageExpire(long messageId, int conversationType, const std::string &target, int line, int64_t expireTime);
             
             long GetConversationFirstUnreadMessageId(int conversationType, const std::string &target, int line);
             std::list<TMessage> GetMessages(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint, const std::string &withUser);
