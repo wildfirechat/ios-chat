@@ -125,6 +125,7 @@ public:
 
 @property(nonatomic, strong)NSURLSessionUploadTask *uploadTask;
 @property(nonatomic, assign)int fileSize;
+@property(nonatomic, assign)int expireDuration;
 @end
 
 @implementation WFCUUploadModel
@@ -133,7 +134,7 @@ public:
     mediaContent.remoteUrl = remoteUrl;
     [[WFCCIMService sharedWFCIMService] updateMessage:self->_sendCallback->m_message.messageId content:self->_sendCallback->m_message.content];
     self->_sendCallback->onMediaUploaded([remoteUrl UTF8String]);
-    [[WFCCIMService sharedWFCIMService] sendSavedMessage:self->_sendCallback->m_message expireDuration:0 success:self->_sendCallback->m_successBlock error:self->_sendCallback->m_errorBlock];
+    [[WFCCIMService sharedWFCIMService] sendSavedMessage:self->_sendCallback->m_message expireDuration:self.expireDuration success:self->_sendCallback->m_successBlock error:self->_sendCallback->m_errorBlock];
     delete self->_sendCallback;
 }
 
@@ -1238,9 +1239,9 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         NSString *fileContentTypeString = [self mimeTypeOfFile:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()]];
         [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
             if(type == 1) {
-                [ws uploadQiniu:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize callback:callback];
+                [ws uploadQiniu:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize expireDuration:expireDuration callback:callback];
             } else {
-                [ws upload:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileContentType:fileContentTypeString fileSize:fileSize callback:callback];
+                [ws upload:uploadUrl messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileContentType:fileContentTypeString fileSize:fileSize expireDuration:expireDuration callback:callback];
             }
         } error:^(int error_code) {
             errorBlock(error_code);
@@ -1259,7 +1260,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return mimeType.length?mimeType:@"application/octet-stream";;
 }
 
-- (void)upload:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileContentType:(NSString *)fileContentTypeString fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
+- (void)upload:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileContentType:(NSString *)fileContentTypeString fileSize:(int)fileSize expireDuration:(int)expireDuration callback:(IMSendMessageCallback *)callback {
     NSURL *presignedURL = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:presignedURL];
     request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
@@ -1268,6 +1269,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 
     WFCUUploadModel *model = [[WFCUUploadModel alloc] init];
     model.fileSize = fileSize;
+    model.expireDuration = expireDuration;
     model->_sendCallback = callback;
     __weak typeof(self)ws = self;
     model.uploadTask = [[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:model delegateQueue:nil] uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:file] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -1365,7 +1367,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 
-- (void)uploadQiniu:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize callback:(IMSendMessageCallback *)callback {
+- (void)uploadQiniu:(NSString *)url messageId:(long)messageId file:(NSString *)file remoteUrl:(NSString *)remoteUrl fileSize:(int)fileSize expireDuration:(int)expireDuration callback:(IMSendMessageCallback *)callback {
     NSArray *array = [url componentsSeparatedByString:@"?"];
     url = array[0];
     NSString *token = array[1];
@@ -1390,7 +1392,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
             mediaContent.remoteUrl = remoteUrl;
             [[WFCCIMService sharedWFCIMService] updateMessage:callback->m_message.messageId content:callback->m_message.content];
             callback->onMediaUploaded([remoteUrl UTF8String]);
-            [[WFCCIMService sharedWFCIMService] sendSavedMessage:callback->m_message expireDuration:0 success:callback->m_successBlock error:callback->m_errorBlock];
+            [[WFCCIMService sharedWFCIMService] sendSavedMessage:callback->m_message expireDuration:expireDuration success:callback->m_successBlock error:callback->m_errorBlock];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"error %@", error.localizedDescription);
             [[WFCCIMService sharedWFCIMService] updateMessage:callback->m_message.messageId status:Message_Status_Send_Failure];
