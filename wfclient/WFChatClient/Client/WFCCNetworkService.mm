@@ -550,6 +550,7 @@ public:
 @property(nonatomic, assign)BOOL firstTimeResume;
 
 @property (nonatomic, assign)BOOL connectedToMainNetwork;
+@property (nonatomic, assign)int doubleNetworkStrategy;
 @end
 
 @implementation WFCCNetworkService
@@ -1101,6 +1102,16 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setLiteMode(isLiteMode ? true:false);
 }
 
+- (BOOL)connectedToMainNetwork {
+    if(self.doubleNetworkStrategy == 1) {
+        return YES;
+    } else if(self.doubleNetworkStrategy == 2) {
+        return NO;
+    } else {
+        return _connectedToMainNetwork;
+    }
+}
+
 #define WFC_CLIENT_ID @"wfc_client_id"
 - (NSString *)getClientId {
     //当应用在appstore上架后，开发者账户下的所有应用在同一个手机上具有相同的vendor id。详情请参考(IDFV(identifierForVendor)使用陷阱)https://easeapi.com/blog/blog/63-ios-idfv.html
@@ -1224,6 +1235,10 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)setBackupAddressStrategy:(int)strategy {
+    self.doubleNetworkStrategy = strategy;
+    if(strategy == 0) {
+        self.connectedToMainNetwork = YES;
+    }
     mars::stn::setBackupAddressStrategy(strategy);
 }
 - (void)setBackupAddress:(NSString *)host port:(int)port {
