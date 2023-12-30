@@ -26,6 +26,8 @@
 #import "WFCUCompositeCell.h"
 #import "WFCULinkCell.h"
 #import "WFCURichNotificationCell.h"
+#import "WFCUStreamingTextCell.h"
+
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUProfileTableViewController.h"
@@ -1067,6 +1069,9 @@
     [self registerCell:[WFCULinkCell class] forContent:[WFCCLinkMessageContent class]];
     [self registerCell:[WFCURichNotificationCell class] forContent:[WFCCRichNotificationMessageContent class]];
     [self registerCell:[WFCUArticlesCell class] forContent:[WFCCArticlesMessageContent class]];
+    [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratedMessageContent class]];
+    [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratingMessageContent class]];
+    
     
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
@@ -1864,9 +1869,10 @@
             [self removeUserTyping:message.fromUser];
         }
         
-        if (message.messageId == 0) {
+        if (message.messageId == 0 && ![message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
             continue;
         }
+        
         BOOL duplcated = NO;
         for (WFCUMessageModel *model in self.modelList) {
             if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
@@ -1878,6 +1884,25 @@
                 model.message.content = message.content;
                 duplcated = YES;
                 break;
+            }
+            if(([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] || [message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) && [model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+                WFCCStreamingTextGeneratingMessageContent *existStreamingTextContent = (WFCCStreamingTextGeneratingMessageContent *)model.message.content;
+                
+                if([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+                    WFCCStreamingTextGeneratingMessageContent *streamingTextContent = (WFCCStreamingTextGeneratingMessageContent *)message.content;
+                    if([existStreamingTextContent.streamId isEqualToString:streamingTextContent.streamId]) {
+                        model.message.content = message.content;
+                        duplcated = YES;
+                        break;
+                    }
+                } else {
+                    WFCCStreamingTextGeneratedMessageContent *streamingTextContent = (WFCCStreamingTextGeneratedMessageContent *)message.content;
+                    if([existStreamingTextContent.streamId isEqualToString:streamingTextContent.streamId]) {
+                        model.message.content = message.content;
+                        duplcated = YES;
+                        break;
+                    }
+                }
             }
         }
         if (duplcated) {

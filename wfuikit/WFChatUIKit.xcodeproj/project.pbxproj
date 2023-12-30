@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -478,6 +478,8 @@
 		B71F0A8428F54156000A7C8A /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = B71F0A6D28F54156000A7C8A /* DDASLLogger.h */; };
 		B7213C3A28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */; };
 		B7213C3B28ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */; };
+		B72D96352B3D81C600431D9B /* WFCUStreamingTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B72D96332B3D81C600431D9B /* WFCUStreamingTextCell.h */; };
+		B72D96362B3D81C600431D9B /* WFCUStreamingTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B72D96342B3D81C600431D9B /* WFCUStreamingTextCell.m */; };
 		B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB07283230EE005F2745 /* DSCallInfo.m */; };
 		B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B72FBB08283230EE005F2745 /* JSBUtil.h */; };
 		B72FBB12283230F0005F2745 /* JSBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FBB09283230EE005F2745 /* JSBUtil.m */; };
@@ -1095,6 +1097,8 @@
 		B71F0A6D28F54156000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
 		B7213C3828ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceAudioCollectionViewCell.h; sourceTree = "<group>"; };
 		B7213C3928ED0FE600761C53 /* WFCUConferenceAudioCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceAudioCollectionViewCell.m; sourceTree = "<group>"; };
+		B72D96332B3D81C600431D9B /* WFCUStreamingTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUStreamingTextCell.h; sourceTree = "<group>"; };
+		B72D96342B3D81C600431D9B /* WFCUStreamingTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUStreamingTextCell.m; sourceTree = "<group>"; };
 		B72FBB07283230EE005F2745 /* DSCallInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSCallInfo.m; sourceTree = "<group>"; };
 		B72FBB08283230EE005F2745 /* JSBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBUtil.h; sourceTree = "<group>"; };
 		B72FBB09283230EE005F2745 /* JSBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBUtil.m; sourceTree = "<group>"; };
@@ -1559,6 +1563,8 @@
 				2F550ECB217F5CC000F56C26 /* WFCUVideoCell.h */,
 				2F550EBD217F5CC000F56C26 /* WFCUVideoCell.m */,
 				2F550EBC217F5CC000F56C26 /* WFCUTextCell.m */,
+				B72D96332B3D81C600431D9B /* WFCUStreamingTextCell.h */,
+				B72D96342B3D81C600431D9B /* WFCUStreamingTextCell.m */,
 				2F550EC5217F5CC000F56C26 /* WFCUVoiceCell.h */,
 				2F550EBA217F5CC000F56C26 /* WFCUVoiceCell.m */,
 				2FD550EA2442AA0B00B3EE09 /* WFCURecallCell.h */,
@@ -2923,6 +2929,7 @@
 				B7C5444128D5876700A2550F /* LBXPermissionCamera.h in Headers */,
 				2F55116F217F5CC200F56C26 /* AFHTTPSessionManager.h in Headers */,
 				B7AF6254295946F700324247 /* WFCUOrganizationViewController.h in Headers */,
+				B72D96352B3D81C600431D9B /* WFCUStreamingTextCell.h in Headers */,
 				2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */,
 				2F765FA9267C28B600E3B365 /* HWCircleView.h in Headers */,
 				90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */,
@@ -3152,6 +3159,7 @@
 				2F5511D9217F5CC300F56C26 /* TYAlertDropDownAnimation.m in Sources */,
 				2F5EB44522C2EE1900BC8C90 /* GroupMuteTableViewController.m in Sources */,
 				2F55116B217F5CC200F56C26 /* AFURLRequestSerialization.m in Sources */,
+				B72D96362B3D81C600431D9B /* WFCUStreamingTextCell.m in Sources */,
 				2BEF78A523F6A84D000DE285 /* WFCUPortraitCollectionViewCell.m in Sources */,
 				2BDF57AD24AD70C8003C1F08 /* DNFullImageButton.m in Sources */,
 				2B1F50DB254A59F800E6B93B /* WFCUFileRecordTableViewCell.m in Sources */,
