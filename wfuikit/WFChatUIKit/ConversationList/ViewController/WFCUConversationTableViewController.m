@@ -593,6 +593,8 @@
             self.pcSessionLabel.text = [NSString stringWithFormat:@"Mac %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_Linux) {
             self.pcSessionLabel.text = [NSString stringWithFormat:@"Linux %@", WFCString(@"LoggedIn")];
+        } else if(infos[0].platform == PlatformType_HarmonyPC) {
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"鸿蒙电脑 %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WEB) {
             self.pcSessionLabel.text = [NSString stringWithFormat:@"Web %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WX) {
@@ -601,6 +603,8 @@
             self.pcSessionLabel.text = [NSString stringWithFormat:@"iPad %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_APad) {
             self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"AndroidPad")];
+        } else if(infos[0].platform == PlatformType_HarmonyPad) {
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"鸿蒙平板 %@", WFCString(@"LoggedIn")];
         }
         if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
             self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingFormat:@"，%@", WFCString(@"MobileNoNotification")];
