@@ -200,7 +200,10 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_Linux = 7,
     PlatformType_iPad = 8,
     //Android pad
-    PlatformType_APad = 9
+    PlatformType_APad = 9,
+    PlatformType_Harmony = 10,
+    PlatformType_HarmonyPad = 11,
+    PlatformType_HarmonyPC = 12
 } ;
 
 typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
