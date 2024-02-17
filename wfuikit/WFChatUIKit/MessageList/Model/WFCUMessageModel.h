@@ -14,6 +14,7 @@
 @property (nonatomic, assign)BOOL showTimeLabel;
 @property (nonatomic, assign)BOOL showNameLabel;
 @property (nonatomic, strong)WFCCMessage *message;
+@property (nonatomic, strong)WFCCMessage *quotedMessage;
 @property (nonatomic, assign)BOOL mediaDownloading;
 @property (nonatomic, assign)int mediaDownloadProgress;
 @property (nonatomic, assign)BOOL voicePlaying;
@@ -30,4 +31,5 @@
 @property (nonatomic, assign)float selecting;
 
 @property (nonatomic, assign)float selected;
+- (void)loadQuotedMessage;
 @end
