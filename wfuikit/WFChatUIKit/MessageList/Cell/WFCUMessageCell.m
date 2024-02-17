@@ -88,15 +88,29 @@
     if ([msgModel.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msgModel.message.content;
         if (txtContent.quoteInfo) {
-            CGFloat quoteWidth = width - Portrait_Size - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left - 8;
-            NSString *quoteTxt = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, txtContent.quoteInfo.messageDigest];
+            CGFloat quoteWidth = width;
+            NSString *quoteTxt = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, [WFCUMessageCell quoteMessageDigest:msgModel]];
             CGSize size = [WFCUUtilities getTextDrawingSize:quoteTxt font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 44)];
             size.height += 12;
-            size.width = width;
+            size.width += 8;
             return size;
         }
     }
     return CGSizeZero;
+}
+
++ (NSString *)quoteMessageDigest:(WFCUMessageModel *)model {
+    NSString *messageDigest;
+    if(model.quotedMessage) {
+        if([model.quotedMessage.content isKindOfClass:[WFCCRecallMessageContent class]]) {
+            messageDigest = @"消息已被撤回";
+        } else {
+            messageDigest = [model.quotedMessage.content digest:model.quotedMessage];
+        }
+    } else {
+        messageDigest = @"消息不可用，可能被删除或者过期";
+    }
+    return messageDigest;
 }
 
 - (void)updateStatus {
@@ -327,6 +341,7 @@
                 self.quoteLabel = [[UILabel alloc] initWithFrame:CGRectZero];
                 self.quoteLabel.font = [UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE];
                 self.quoteLabel.numberOfLines = 0;
+                self.quoteLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 self.quoteLabel.layer.cornerRadius = 3.f;
                 self.quoteLabel.layer.masksToBounds = YES;
                 self.quoteLabel.userInteractionEnabled = YES;
@@ -357,7 +372,7 @@
             self.quoteLabel.frame = frame;
             
             self.quoteContainer.hidden = NO;
-            self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, txtContent.quoteInfo.messageDigest];
+            self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, [WFCUMessageCell quoteMessageDigest:model]];
         }
     }
 }

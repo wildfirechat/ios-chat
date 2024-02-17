@@ -14,7 +14,26 @@
   model.message = message;
   model.showNameLabel = showName;
   model.showTimeLabel = showTime;
+  [model loadQuotedMessage];
+    
   return model;
+}
+
+- (void)loadQuotedMessage {
+    if([self.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
+        WFCCTextMessageContent *txtCont = (WFCCTextMessageContent *)self.message.content;
+        if(txtCont.quoteInfo) {
+            self.quotedMessage = [[WFCCIMService sharedWFCIMService] getMessageByUid:txtCont.quoteInfo.messageUid];
+            if(!self.quotedMessage) {
+                [[WFCCIMService sharedWFCIMService] getRemoteMessage:txtCont.quoteInfo.messageUid success:^(WFCCMessage *message) {
+                    self.quotedMessage = message;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kMessageUpdated object:@(self.message.messageId)];
+                } error:^(int error_code) {
+                    
+                }];
+            }
+        }
+    }
 }
 
 - (instancetype)init {

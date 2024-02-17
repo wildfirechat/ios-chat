@@ -1311,6 +1311,19 @@
     [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
 }
 
+- (void)updateQuotedMessageWhenRecall:(long long)messageUid {
+    for (int i = 0; i < self.modelList.count; i++) {
+        WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+        if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
+            WFCCTextMessageContent *txtMsg = (WFCCTextMessageContent *)model.message.content;
+            if(txtMsg.quoteInfo.messageUid == messageUid) {
+                [model loadQuotedMessage];
+                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+            }
+        }
+    }
+}
+
 - (void)onRecallMessages:(NSNotification *)notification {
     long long messageUid = [notification.object longLongValue];
     if (self.conversation.type != Chatroom_Type) {
@@ -1339,6 +1352,7 @@
             }
         }
     }
+    [self updateQuotedMessageWhenRecall:messageUid];
 }
 
 - (void)onDeleteMessages:(NSNotification *)notification {
@@ -3329,6 +3343,7 @@
                         //client will replace the message content
                     }
                     [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
+                    [ws updateQuotedMessageWhenRecall:ws.cell4Menu.model.message.messageUid];
                 }
             });
         } error:^(int error_code) {
