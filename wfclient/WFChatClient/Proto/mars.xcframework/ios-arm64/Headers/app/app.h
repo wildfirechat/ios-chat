@@ -46,6 +46,9 @@ struct AccountInfo {
         PlatformType_Linux = 7,
         PlatformType_iPad = 8,
         PlatformType_APad = 9,
+        PlatformType_Harmony = 10,
+        PlatformType_Harmony_Pad = 11,
+        PlatformType_Harmony_PC = 12,
     } PlatformType;
     
 struct DeviceInfo {
