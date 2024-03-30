@@ -777,7 +777,11 @@
             self.title = WFCString(@"GroupChat");
             self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
         } else {
-            self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.displayName, (int)self.targetGroup.memberCount];
+            if(self.targetGroup.deleted) {
+                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, @"已删除"];
+            } else {
+                self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.displayName, (int)self.targetGroup.memberCount];
+            }
             self.navigationItem.backBarButtonItem.title = self.targetGroup.displayName;
         }
     } else if(self.conversation.type == Channel_Type) {
