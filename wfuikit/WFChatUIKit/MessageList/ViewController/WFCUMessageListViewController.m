@@ -401,7 +401,11 @@
         if(self.conversation.type == Single_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         } else if(self.conversation.type == Group_Type) {
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+            if(!self.targetGroup || self.targetGroup.deleted) {
+                self.navigationItem.rightBarButtonItem = nil;
+            } else {
+                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+            }
         } else if(self.conversation.type == Channel_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_channel"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         } else if(self.conversation.type == SecretChat_Type) {
@@ -803,10 +807,13 @@
 - (void)setTargetGroup:(WFCCGroupInfo *)targetGroup {
     _targetGroup = targetGroup;
     [self updateTitle];
+    [self setupNavigationItem];
     
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
     WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
-    if (targetGroup.mute || member.type == Member_Type_Muted) {
+    if(targetGroup.deleted) {
+        self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+    } else if (targetGroup.mute || member.type == Member_Type_Muted) {
         if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             self.chatInputBar.inputBarStatus =  defaultStatus;
         } else if(targetGroup.mute && member.type == Member_Type_Allowed) {
