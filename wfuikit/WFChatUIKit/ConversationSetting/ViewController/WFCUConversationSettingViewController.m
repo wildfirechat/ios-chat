@@ -420,7 +420,7 @@
     
     //把action添加到actionSheet里
     [actionSheet addAction:actionLocalDelete];
-    if(self.conversation.type != SecretChat_Type) {
+    if(self.conversation.type != SecretChat_Type && !(self.conversation.type == Group_Type && self.groupInfo.superGroup)) {
         [actionSheet addAction:actionRemoteDelete];
     }
     [actionSheet addAction:actionCancel];
