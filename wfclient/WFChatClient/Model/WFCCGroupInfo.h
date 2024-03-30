@@ -104,6 +104,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, assign)int superGroup;
 
 /**
+ 是否被解散，0 没有解散；1 已经被解散。在2024.3.30日以后的IM服务支持群组标记删除，默认为关，需要IM服务打开群组标记删除的开关。
+ */
+@property (nonatomic, assign)int deleted;
+
+/**
  群的最后更新日期
  */
 @property (nonatomic, assign)long long updateDt;
