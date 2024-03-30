@@ -41,6 +41,7 @@
     dict[@"historyMessage"] = @(self.historyMessage);
     dict[@"maxMemberCount"] = @(self.maxMemberCount);
     dict[@"superGroup"] = @(self.superGroup);
+    dict[@"deleted"] = @(self.deleted);
     [self setDict:dict key:@"updateDt" longlongValue:self.updateDt];
     
     return dict;

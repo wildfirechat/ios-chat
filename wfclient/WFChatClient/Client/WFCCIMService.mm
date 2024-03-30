@@ -2355,6 +2355,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.historyMessage = tgi.historyMessage;
     groupInfo.maxMemberCount = tgi.maxMemberCount;
     groupInfo.superGroup = tgi.superGroup;
+    groupInfo.deleted = tgi.deleted;
     groupInfo.updateDt = tgi.updateDt;
     
     if(!groupInfo.portrait.length && [WFCCNetworkService sharedInstance].defaultPortraitProvider && [[WFCCNetworkService sharedInstance].defaultPortraitProvider respondsToSelector:@selector(groupDefaultPortrait:memberInfos:)]) {
