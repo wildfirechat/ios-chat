@@ -127,6 +127,29 @@
         cell.tag = MOMENTS_CELL_TAG;
         [section3 addObject:cell];
     }
+    
+    {
+        NSMutableArray *section4 = [[NSMutableArray alloc] init];
+        [self.cells addObject:section4];
+        
+        WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
+        switchCell.textLabel.text = @"加我为好友时需要验证";
+        if ([[WFCCIMService sharedWFCIMService] isAddFriendNeedVerify]) {
+            switchCell.on = YES;
+        } else {
+            switchCell.on = NO;
+        }
+        __weak typeof(self)ws = self;
+        [switchCell setOnSwitch:^(BOOL value, int type, void (^result)(BOOL success)) {
+            [[WFCCIMService sharedWFCIMService] setAddFriendNeedVerify:value success:^{
+                result(YES);
+            } error:^(int error_code) {
+                [ws.view makeToast:@"网络错误"];
+                result(NO);
+            }];
+        }];
+        [section4 addObject:switchCell];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

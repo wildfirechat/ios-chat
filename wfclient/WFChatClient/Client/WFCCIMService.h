@@ -148,6 +148,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Group_Remark = 26,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Privacy_Searchable = 27,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_AddFriend_NoVerify = 28,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -2431,6 +2433,23 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 @disscussion 仅影响密聊的创建，已经创建的密聊不受影响
 */
 - (void)setUserEnableSecretChat:(BOOL)enable
+                        success:(void(^)(void))successBlock
+                          error:(void(^)(int error_code))errorBlock;
+
+/**
+当前用户是否开启添加好友需要验证，默认为开启
+
+@return YES，需要验证；NO，不需验证
+*/
+- (BOOL)isAddFriendNeedVerify;
+/**
+修改当前用户是否开启添加好友需要验证功能
+
+@param enable 是否开启
+@param successBlock 成功的回调
+@param errorBlock 失败的回调
+*/
+- (void)setAddFriendNeedVerify:(BOOL)enable
                         success:(void(^)(void))successBlock
                           error:(void(^)(int error_code))errorBlock;
 #pragma mark - 其它接口

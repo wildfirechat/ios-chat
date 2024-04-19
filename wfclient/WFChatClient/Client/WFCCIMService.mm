@@ -2818,6 +2818,25 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }];
 }
 
+- (BOOL)isAddFriendNeedVerify {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_AddFriend_NoVerify key:@""];
+    return ![strValue isEqualToString:@"1"];
+}
+
+- (void)setAddFriendNeedVerify:(BOOL)enable
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int error_code))errorBlock {
+    [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_AddFriend_NoVerify key:@"" value:enable?@"0":@"1" success:^{
+        if (successBlock) {
+            successBlock();
+        }
+    } error:^(int error_code) {
+        if (errorBlock) {
+            errorBlock(error_code);
+        }
+    }];
+}
+
 - (void)getNoDisturbingTimes:(void(^)(int startMins, int endMins))resultBlock
                        error:(void(^)(int error_code))errorBlock {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_No_Disturbing key:@""];
