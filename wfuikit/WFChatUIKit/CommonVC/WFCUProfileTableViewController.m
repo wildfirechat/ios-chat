@@ -67,6 +67,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEmployeeExUpdated:) name:kEmployeeExUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrganizationUpdated:) name:kOrganizationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendListUpdated:) name:kFriendListUpdated object:nil];
     
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
@@ -99,6 +100,10 @@
         }];
         self.organizationIds = [arr mutableCopy];
     }
+}
+
+- (void)onFriendListUpdated:(NSNotification *)notification {
+    [self loadData];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -265,6 +270,13 @@
 
 - (void)loadData {
     self.cells = [[NSMutableArray alloc] init];
+    
+    self.sendMessageCell = nil;
+    self.voipCallCell = nil;
+    self.addFriendCell = nil;
+    self.momentCell = nil;
+    self.moreCell = nil;
+    self.userMessagesCell = nil;
     
     self.headerCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     for (UIView *subView in self.headerCell.contentView.subviews) {
