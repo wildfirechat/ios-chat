@@ -1348,6 +1348,15 @@
                     break;
                 }
             }
+        } else {
+            for (int i = 0; i < self.modelList.count; i++) {
+                WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+                if (model.message.messageUid == messageUid) {
+                    [self.modelList removeObject:model];
+                    [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+                    break;
+                }
+            }
         }
     } else {
         for (int i = 0; i < self.modelList.count; i++) {
@@ -1385,6 +1394,11 @@
         if(model.message.messageId == messageId) {
             if(model.message.conversation.type != Chatroom_Type) {
                 model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                if(!model.message) {
+                    [self.modelList removeObject:model];
+                    isUpdated = YES;
+                    break;
+                }
             }
             isUpdated = YES;
             break;
@@ -3385,11 +3399,16 @@
                 if (cell.model.message.messageId == messageId) {
                     if(messageId > 0) {
                         cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                        if(cell.model.message) {
+                            [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
+                        } else {
+                            [self.modelList removeObject:cell.model];
+                            [ws.collectionView deleteItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
+                        }
+                        [ws updateQuotedMessageWhenRecall:ws.cell4Menu.model.message.messageUid];
                     } else {
                         //client will replace the message content
                     }
-                    [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
-                    [ws updateQuotedMessageWhenRecall:ws.cell4Menu.model.message.messageUid];
                 }
             });
         } error:^(int error_code) {
