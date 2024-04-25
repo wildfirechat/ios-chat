@@ -3273,10 +3273,10 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     notifyContent:(WFCCMessageContent *)notifyContent
           success:(void(^)())successBlock
             error:(void(^)(int error_code))errorBlock {
-    [self quitGroupEx:groupId keepMessage:false notifyLines:notifyLines notifyContent:notifyContent success:successBlock error:errorBlock];
+    [self quitGroup:groupId keepMessage:false notifyLines:notifyLines notifyContent:notifyContent success:successBlock error:errorBlock];
 }
 
-- (void)quitGroupEx:(NSString *)groupId
+- (void)quitGroup:(NSString *)groupId
         keepMessage:(BOOL)keepMessage
       notifyLines:(NSArray<NSNumber *> *)notifyLines
     notifyContent:(WFCCMessageContent *)notifyContent

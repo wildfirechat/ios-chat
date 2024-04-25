@@ -346,7 +346,7 @@
         } else {
             __weak typeof(self) ws = self;
             //可以提示是否清空消息，如果保留消息keepMessage就为YES
-            [[WFCCIMService sharedWFCIMService] quitGroupEx:self.conversation.target keepMessage:NO notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] quitGroup:self.conversation.target keepMessage:NO notifyLines:@[@(0)] notifyContent:nil success:^{
                 [ws.navigationController popToRootViewControllerAnimated:YES];
             } error:^(int error_code) {
                 

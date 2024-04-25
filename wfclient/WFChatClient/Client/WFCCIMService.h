@@ -1799,12 +1799,12 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @param successBlock 成功的回调
  @param errorBlock 失败的回调
  */
-- (void)quitGroupEx:(NSString *)groupId
-        keepMessage:(BOOL)keepMessage
-        notifyLines:(NSArray<NSNumber *> *)notifyLines
-      notifyContent:(WFCCMessageContent *)notifyContent
-            success:(void(^)(void))successBlock
-              error:(void(^)(int error_code))errorBlock;
+- (void)quitGroup:(NSString *)groupId
+      keepMessage:(BOOL)keepMessage
+      notifyLines:(NSArray<NSNumber *> *)notifyLines
+    notifyContent:(WFCCMessageContent *)notifyContent
+          success:(void(^)(void))successBlock
+            error:(void(^)(int error_code))errorBlock;
 
 /**
  解散群
