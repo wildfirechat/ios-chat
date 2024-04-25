@@ -401,7 +401,7 @@
         if(self.conversation.type == Single_Type) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_single"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
         } else if(self.conversation.type == Group_Type) {
-            if(!self.targetGroup || self.targetGroup.deleted) {
+            if(!self.targetGroup || self.targetGroup.deleted || self.targetGroup.memberDt < 0) {
                 self.navigationItem.rightBarButtonItem = nil;
             } else {
                 self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[WFCUImage imageNamed:@"nav_chat_group"] style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
@@ -779,6 +779,8 @@
         } else {
             if(self.targetGroup.deleted) {
                 self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, @"已删除"];
+            } else if(self.targetGroup.memberDt < 0) {
+                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, @"已退出"];
             } else {
                 self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.displayName, (int)self.targetGroup.memberCount];
             }
@@ -815,7 +817,7 @@
     
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
     WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
-    if(targetGroup.deleted) {
+    if(targetGroup.deleted || targetGroup.memberDt < 0) {
         self.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
     } else if (targetGroup.mute || member.type == Member_Type_Muted) {
         if ([targetGroup.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {

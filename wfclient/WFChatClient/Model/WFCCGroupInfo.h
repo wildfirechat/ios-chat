@@ -114,6 +114,11 @@ typedef NS_ENUM(NSInteger, WFCCGroupType) {
 @property (nonatomic, assign)long long updateDt;
 
 /**
+ 群成员的最后更新日期，一般是没有什么作用，唯一的作用就是当用户退出群组后，再获取群组信息，memberDt会为负数。
+ */
+@property (nonatomic, assign)long long memberDt;
+
+/**
  群显示名称，如果有群备注返回群备注，没有群备注返回群名称
  */
 @property (nonatomic, strong, readonly)NSString *displayName;

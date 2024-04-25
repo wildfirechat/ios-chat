@@ -150,7 +150,7 @@ namespace mars{
 
         class TGroupInfo : public TSerializable {
         public:
-            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), mute(0), joinType(0), privateChat(0), searchable(0), historyMessage(0), maxMemberCount(0), superGroup(0), deleted(0) {}
+            TGroupInfo() : target(""), type(0), memberCount(0), updateDt(0), memberDt(0), mute(0), joinType(0), privateChat(0), searchable(0), historyMessage(0), maxMemberCount(0), superGroup(0), deleted(0) {}
             std::string target;
             std::string name;
             std::string portrait;
@@ -160,6 +160,7 @@ namespace mars{
             std::string extra;
             std::string remark;
             int64_t updateDt;
+            int64_t memberDt;
             int mute;
             int joinType;
             int privateChat;
@@ -1069,7 +1070,7 @@ namespace mars{
 
         extern void (*kickoffMembers)(const std::string &groupId, const std::list<std::string> &members, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 
-        extern void (*quitGroup)(const std::string &groupId, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
+        extern void quitGroup(const std::string &groupId, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback, bool keepMsg = false);
 
         extern void (*dismissGroup)(const std::string &groupId, const std::list<int> &notifyLines, TMessageContent &content, GeneralOperationCallback *callback);
 

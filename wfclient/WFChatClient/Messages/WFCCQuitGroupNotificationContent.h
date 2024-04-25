@@ -22,4 +22,9 @@
  退群成员的ID
  */
 @property (nonatomic, strong)NSString *quitMember;
+
+/**
+ 退群成员的ID
+ */
+@property (nonatomic, assign)BOOL keepMessage;
 @end
