@@ -43,6 +43,7 @@
     dict[@"superGroup"] = @(self.superGroup);
     dict[@"deleted"] = @(self.deleted);
     [self setDict:dict key:@"updateDt" longlongValue:self.updateDt];
+    [self setDict:dict key:@"memberDt" longlongValue:self.memberDt];
     
     return dict;
 }

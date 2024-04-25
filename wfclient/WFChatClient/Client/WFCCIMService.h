@@ -1790,6 +1790,23 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
             error:(void(^)(int error_code))errorBlock;
 
 /**
+ 退群
+
+ @param groupId 群ID
+ @param keepMessage 是否保留消息
+ @param notifyLines 默认传 @[@(0)]
+ @param notifyContent 通知消息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)quitGroupEx:(NSString *)groupId
+        keepMessage:(BOOL)keepMessage
+        notifyLines:(NSArray<NSNumber *> *)notifyLines
+      notifyContent:(WFCCMessageContent *)notifyContent
+            success:(void(^)(void))successBlock
+              error:(void(^)(int error_code))errorBlock;
+
+/**
  解散群
 
  @param groupId 群ID

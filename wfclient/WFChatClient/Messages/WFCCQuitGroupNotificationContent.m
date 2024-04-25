@@ -24,10 +24,13 @@
         [dataDict setObject:self.groupId forKey:@"g"];
     }
     
+    if(self.keepMessage) {
+        [dataDict setObject:@"1" forKey:@"n"];
+    }
+    
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
                                                               error:nil];
-    
     return payload;
 }
 
@@ -40,6 +43,7 @@
     if (!__error) {
         self.quitMember = dictionary[@"o"];
         self.groupId = dictionary[@"g"];
+        self.keepMessage = [@"1" isEqualToString:dictionary[@"n"]];
     }
 }
 
