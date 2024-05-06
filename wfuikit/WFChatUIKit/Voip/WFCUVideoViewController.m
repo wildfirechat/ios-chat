@@ -127,8 +127,6 @@
     [self.smallVideoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSmallVideoTaped:)]];
     [self.view addSubview:self.smallVideoView];
     
-    [self checkAVPermission];
-    
     if(self.currentSession.state == kWFAVEngineStateOutgoing && !self.currentSession.isAudioOnly) {
         [[WFAVEngineKit sharedEngineKit] startVideoPreview];
     }
@@ -344,9 +342,23 @@
 }
 
 - (void)answerButtonDidTap:(UIButton *)button {
-    if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:NO callExtra:nil];
-    }
+    [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        if(granted) {
+            if(self.currentSession.audioOnly) {
+                if (self.currentSession.state == kWFAVEngineStateIncomming) {
+                    [self.currentSession answerCall:NO callExtra:nil];
+                }
+            } else {
+                [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                    if(granted) {
+                        if (self.currentSession.state == kWFAVEngineStateIncomming) {
+                            [self.currentSession answerCall:NO callExtra:nil];
+                        }
+                    }
+                } viewController:self];
+            }
+        }
+    } viewController:self];
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
@@ -365,7 +377,13 @@
 
 - (void)downgradeButtonDidTap:(UIButton *)button {
     if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:YES callExtra:nil];
+        [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+            if(granted) {
+                if (self.currentSession.state == kWFAVEngineStateIncomming) {
+                    [self.currentSession answerCall:YES callExtra:nil];
+                }
+            }
+        } viewController:self];
     } else if(self.currentSession.state == kWFAVEngineStateConnected) {
         self.currentSession.audioOnly = !self.currentSession.isAudioOnly;
     }
@@ -823,41 +841,6 @@
     }
 }
 
-- (void)checkAVPermission {
-    [self checkCapturePermission:nil];
-    [self checkRecordPermission:nil];
-}
-
-- (void)checkCapturePermission:(void (^)(BOOL granted))complete {
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
-        if (complete) {
-            complete(NO);
-        }
-    } else if (authStatus == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice
-         requestAccessForMediaType:AVMediaTypeVideo
-         completionHandler:^(BOOL granted) {
-             if (complete) {
-                 complete(granted);
-             }
-         }];
-    } else {
-        if (complete) {
-            complete(YES);
-        }
-    }
-}
-
-- (void)checkRecordPermission:(void (^)(BOOL granted))complete {
-    if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (complete) {
-                complete(granted);
-            }
-        }];
-    }
-}
 //1.决定当前界面是否开启自动转屏，如果返回NO，后面两个方法也不会被调用，只是会支持默认的方向
 - (BOOL)shouldAutorotate {
       return YES;

@@ -15,6 +15,7 @@
 #import "WFCUVerifyRequestViewController.h"
 #import "WFCUGeneralModifyViewController.h"
 #import "WFCUVideoViewController.h"
+#import "WFCUMultiVideoViewController.h"
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #endif
@@ -526,14 +527,12 @@
     }];
     UIAlertAction *actionVoice = [UIAlertAction actionWithTitle:WFCString(@"VoiceCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[ws.userInfo.userId] conversation:conversation audioOnly:YES];
-        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        [self startCall:@[ws.userInfo.userId] isMulti:NO conversation:conversation audioOnly:YES];
     }];
     
     UIAlertAction *actionVideo = [UIAlertAction actionWithTitle:WFCString(@"VideoCall") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:ws.userInfo.userId line:0];
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[ws.userInfo.userId] conversation:conversation audioOnly:NO];
-        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        [self startCall:@[ws.userInfo.userId] isMulti:NO conversation:conversation audioOnly:NO];
     }];
     
     //把action添加到actionSheet里
@@ -546,6 +545,36 @@
     [self presentViewController:actionSheet animated:YES completion:nil];
 #endif
 }
+
+#if WFCU_SUPPORT_VOIP
+- (void)startCall:(NSArray<NSString *> *)targetIds isMulti:(BOOL)isMulti conversation:(WFCCConversation *)conversation audioOnly:(BOOL)isAudioOnly {
+    [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        if(granted) {
+            if(isAudioOnly) {
+                UIViewController *videoVC;
+                if(isMulti) {
+                    videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                } else {
+                    videoVC = [[WFCUVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                }
+                [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+            } else {
+                [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                    if(granted) {
+                        UIViewController *videoVC;
+                        if(isMulti) {
+                            videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                        } else {
+                            videoVC = [[WFCUVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                        }
+                        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+                    }
+                } viewController:self];
+            }
+        }
+    } viewController:self];
+}
+#endif
 
 - (void)onAddFriendBtn:(id)sender {
     WFCUVerifyRequestViewController *vc = [[WFCUVerifyRequestViewController alloc] init];

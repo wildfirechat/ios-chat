@@ -31,4 +31,8 @@
 
 /// 底部安全高度
 + (CGFloat)wf_safeDistanceBottom;
+
+///已授权返回YES，否则返回NO
++ (BOOL)checkRecordOrCameraPermission:(BOOL)isAudio complete:(void (^)(BOOL granted))complete viewController:(UIViewController *)controller;
+
 @end

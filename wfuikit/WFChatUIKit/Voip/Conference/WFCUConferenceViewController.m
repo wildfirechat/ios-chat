@@ -346,8 +346,6 @@
     //这里设置一个特殊的tag，当音视频引擎添加子view时，会把有特殊tag的窗口放到最上方。
     self.smallVideoView.tag = 666;
     
-    [self checkAVPermission];
-    
     if(self.currentSession.state == kWFAVEngineStateOutgoing && !self.currentSession.isAudioOnly) {
         [[WFAVEngineKit sharedEngineKit] startVideoPreview];
     }
@@ -1917,42 +1915,6 @@
 
 - (void)onStopBroadcastBtn:(id)sender {
     [[WFCUConferenceManager sharedInstance] switchAudioAndScreansharing:self.view];
-}
-
-- (void)checkAVPermission {
-    [self checkCapturePermission:nil];
-    [self checkRecordPermission:nil];
-}
-
-- (void)checkCapturePermission:(void (^)(BOOL granted))complete {
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
-        if (complete) {
-            complete(NO);
-        }
-    } else if (authStatus == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice
-         requestAccessForMediaType:AVMediaTypeVideo
-         completionHandler:^(BOOL granted) {
-             if (complete) {
-                 complete(granted);
-             }
-         }];
-    } else {
-        if (complete) {
-            complete(YES);
-        }
-    }
-}
-
-- (void)checkRecordPermission:(void (^)(BOOL granted))complete {
-    if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (complete) {
-                complete(granted);
-            }
-        }];
-    }
 }
 
 - (void)rejoinConferenceAsAudience {

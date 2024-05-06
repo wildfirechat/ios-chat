@@ -112,9 +112,19 @@
         info.conferenceId = conferenceId;
         if(andJoin) {
             [ws stopProgress:hud finishText:nil];
-            WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:info muteAudio:!self.enableAudio muteVideo:!self.enableVideo];
-            [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
-            [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+            
+            [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+                if(granted) {
+                    [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                        WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:info muteAudio:!self.enableAudio muteVideo:!self.enableVideo];
+                        [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [ws.navigationController dismissViewControllerAnimated:NO completion:nil];
+                        });
+                    } viewController:ws];
+                }
+            } viewController:ws];
         } else {
             [ws stopProgress:hud finishText:@"创建成功"];
             [self dismissViewControllerAnimated:NO completion:^{

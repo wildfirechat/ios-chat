@@ -20,6 +20,7 @@
 #import "CreateBarCodeViewController.h"
 #import "WFCUConferenceManager.h"
 #import "QrCodeHelper.h"
+#import "WFCUUtilities.h"
 
 @interface WFZConferenceInfoViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -144,12 +145,18 @@
         self.conferenceInfo.audience = YES;
     }
     
-    WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:self.conferenceInfo muteAudio:!self.enableAudio muteVideo:!self.enableVideo];
-    [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self leftVC];
-    });
+    [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        if(granted) {
+            [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                WFCUConferenceViewController *vc = [[WFCUConferenceViewController alloc] initWithConferenceInfo:self.conferenceInfo muteAudio:!self.enableAudio muteVideo:!self.enableVideo];
+                [[WFAVEngineKit sharedEngineKit] presentViewController:vc];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self leftVC];
+                });
+            } viewController:self];
+        }
+    } viewController:self];
 }
 
 - (void)onLeftBarBtn:(id)sender {

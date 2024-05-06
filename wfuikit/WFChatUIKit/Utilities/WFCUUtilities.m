@@ -8,6 +8,8 @@
 
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AVKit/AVKit.h>
 
 #define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f ||[UIScreen mainScreen].bounds.size.height == 844.0f ||[UIScreen mainScreen].bounds.size.height == 926.0f ||[UIScreen mainScreen].bounds.size.height == 932.0f)
 
@@ -321,5 +323,59 @@
     }
     
     return kTabbarSafeBottomMargin;
+}
+
++ (BOOL)checkRecordOrCameraPermission:(BOOL)isAudio complete:(void (^)(BOOL granted))complete viewController:(UIViewController *)controller {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:isAudio?AVMediaTypeAudio:AVMediaTypeVideo];
+    if(authStatus == AVAuthorizationStatusRestricted) {
+        [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"没有麦克风权限，无法完成语音通话或者录音功能":@"没有录像权限，无法完成视频通话" withSettingAction:NO withController:controller];
+        if(complete) complete(NO);
+    } else if (authStatus == AVAuthorizationStatusDenied) {
+        [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"通话或者录音需要麦克风权限，请开启麦克风权限":@"视频通话需要摄像头权限，请开启摄像头权限" withSettingAction:YES withController:controller];
+        if(complete) complete(NO);
+    } else if (authStatus == AVAuthorizationStatusNotDetermined) {
+        [AVCaptureDevice
+         requestAccessForMediaType:isAudio?AVMediaTypeAudio:AVMediaTypeVideo
+         completionHandler:^(BOOL granted) {
+            if(!granted) {
+                [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"通话需要麦克风权限，请开启麦克风权限":@"视频通话需要摄像头权限，请开启摄像头权限" withSettingAction:YES withController:controller];
+            }
+            if(complete) complete(granted);
+         }];
+    } else {
+        if(complete) complete(YES);
+        return YES;
+    }
+    
+    return NO;
+}
+
++ (void)showPermissionAlertWithMessage:(NSString *)message withSettingAction:(BOOL)goSetting withController:(UIViewController *)controller {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"权限请求"
+                                                                             message:message
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    if(goSetting) {
+        UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"前往设置"
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction * _Nonnull action) {
+            NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
+                if (@available(iOS 10.0, *)) {
+                    [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+        }];
+        [alertController addAction:settingsAction];
+    }
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"
+                                                             style:UIAlertActionStyleCancel
+                                                           handler:nil];
+    [alertController addAction:cancelAction];
+    
+    [controller presentViewController:alertController animated:YES completion:nil];
 }
 @end

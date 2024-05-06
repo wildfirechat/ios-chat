@@ -186,9 +186,6 @@
     self.portraitCollectionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.portraitCollectionView];
     
-    
-    [self checkAVPermission];
-    
     if(self.currentSession.state == kWFAVEngineStateOutgoing && !self.currentSession.isAudioOnly) {
         [[WFAVEngineKit sharedEngineKit] startVideoPreview];
     }
@@ -427,9 +424,23 @@
 }
 
 - (void)answerButtonDidTap:(UIButton *)button {
-    if (self.currentSession.state == kWFAVEngineStateIncomming) {
-        [self.currentSession answerCall:NO callExtra:nil];
-    }
+    [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        if(granted) {
+            if(self.currentSession.audioOnly) {
+                if (self.currentSession.state == kWFAVEngineStateIncomming) {
+                    [self.currentSession answerCall:NO callExtra:nil];
+                }
+            } else {
+                [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                    if(granted) {
+                        if (self.currentSession.state == kWFAVEngineStateIncomming) {
+                            [self.currentSession answerCall:NO callExtra:nil];
+                        }
+                    }
+                } viewController:self];
+            }
+        }
+    } viewController:self];
 }
 
 - (void)minimizeButtonDidTap:(UIButton *)button {
@@ -1061,42 +1072,6 @@
 
 - (void)didChangeAudioRoute {
     [self updateSpeakerButton];
-}
-
-- (void)checkAVPermission {
-    [self checkCapturePermission:nil];
-    [self checkRecordPermission:nil];
-}
-
-- (void)checkCapturePermission:(void (^)(BOOL granted))complete {
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted) {
-        if (complete) {
-            complete(NO);
-        }
-    } else if (authStatus == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice
-         requestAccessForMediaType:AVMediaTypeVideo
-         completionHandler:^(BOOL granted) {
-             if (complete) {
-                 complete(granted);
-             }
-         }];
-    } else {
-        if (complete) {
-            complete(YES);
-        }
-    }
-}
-
-- (void)checkRecordPermission:(void (^)(BOOL granted))complete {
-    if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (complete) {
-                complete(granted);
-            }
-        }];
-    }
 }
 
 - (void)startBroadcastCallOngoing:(BOOL)start {
