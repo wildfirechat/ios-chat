@@ -318,7 +318,7 @@
 }
 
 - (void)onTouchDown:(id)sender {
-    if ([self canRecord]) {
+    if ([self canRecordNow]) {
         _recordView = [[WFCUVoiceRecordView alloc] initWithFrame:CGRectMake(self.parentView.bounds.size.width/2 - 70, self.parentView.bounds.size.height/2 - 70, 140, 140)];
         _recordView.center = self.parentView.center;
         [self.parentView addSubview:_recordView];
@@ -482,25 +482,10 @@
     [self recordCancel];
 }
 
-- (BOOL)canRecord {
-    __block BOOL bCanRecord = YES;
-    
-    if ([[AVAudioSession sharedInstance]
-         respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            bCanRecord = granted;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                bCanRecord = granted;
-                if (granted) {
-                    bCanRecord = YES;
-                } else {
-                    
-                }
-            });
-        }];
-    }
-    
-    return bCanRecord;
+- (BOOL)canRecordNow {
+    return [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        
+    } viewController:[self.delegate requireNavi]];
 }
 
 - (void)timerFired:(NSTimer*)timer {

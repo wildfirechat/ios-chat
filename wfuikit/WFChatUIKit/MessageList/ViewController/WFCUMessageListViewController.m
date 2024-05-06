@@ -3083,8 +3083,7 @@
 #if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly {
     if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
-        WFCUVideoViewController *videoVC = [[WFCUVideoViewController alloc] initWithTargets:@[self.conversation.target] conversation:self.conversation audioOnly:isAudioOnly];
-        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        [self startCall:@[self.conversation.target] isMulti:NO conversation:self.conversation audioOnly:isAudioOnly];
     } else {
         //      WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
         //      pvc.selectContact = YES;
@@ -3111,18 +3110,40 @@
         vc.type = Vertical;
         __weak typeof(self)ws = self;
         vc.selectResult = ^(NSArray<NSString *> * _Nonnull contacts) {
-            UIViewController *videoVC;
-            if (ws.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
-                videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
-            } else {
-                videoVC = [[WFCUVideoViewController alloc] initWithTargets:contacts conversation:ws.conversation audioOnly:isAudioOnly];
-            }
-            [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+            [self startCall:contacts isMulti:ws.conversation.type == Group_Type conversation:self.conversation audioOnly:isAudioOnly];
         };
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:vc];
         navi.modalPresentationStyle = UIModalPresentationFullScreen;
         [self.navigationController presentViewController:navi animated:YES completion:nil];
     }
+}
+
+- (void)startCall:(NSArray<NSString *> *)targetIds isMulti:(BOOL)isMulti conversation:(WFCCConversation *)conversation audioOnly:(BOOL)isAudioOnly {
+    [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+        if(granted) {
+            if(isAudioOnly) {
+                UIViewController *videoVC;
+                if(isMulti) {
+                    videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                } else {
+                    videoVC = [[WFCUVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                }
+                [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+            } else {
+                [WFCUUtilities checkRecordOrCameraPermission:NO complete:^(BOOL granted) {
+                    if(granted) {
+                        UIViewController *videoVC;
+                        if(isMulti) {
+                            videoVC = [[WFCUMultiVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                        } else {
+                            videoVC = [[WFCUVideoViewController alloc] initWithTargets:targetIds conversation:conversation audioOnly:isAudioOnly];
+                        }
+                        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+                    }
+                } viewController:self];
+            }
+        }
+    } viewController:self];
 }
 #endif
 
