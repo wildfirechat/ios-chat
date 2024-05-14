@@ -979,6 +979,7 @@
     self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
+        self.inputContainer.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     }];
 }
 
@@ -991,6 +992,7 @@
     self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
+        self.inputContainer.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     }];
     
     if(self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarEmojiStatus) {
@@ -1123,6 +1125,7 @@
     
     [UIView animateWithDuration:0.5 animations:^{
         self.frame = baseFrame;
+        self.inputContainer.frame = CGRectMake(0, 0, baseFrame.size.width, baseFrame.size.height);
         self.voiceSwitchBtn.frame = voiceFrame;
         self.emojSwitchBtn.frame = emojFrame;
         self.pluginSwitchBtn.frame = extendFrame;
@@ -1363,6 +1366,7 @@
         ws.textInputView.frame = tvFrame;
         ws.inputCoverView.frame = ws.textInputView.bounds;
         self.frame = baseFrame;
+        self.inputContainer.frame = CGRectMake(0, 0, baseFrame.size.width, baseFrame.size.height);
         self.voiceSwitchBtn.frame = voiceFrame;
         self.emojSwitchBtn.frame = emojFrame;
         self.pluginSwitchBtn.frame = extendFrame;
