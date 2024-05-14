@@ -2103,21 +2103,18 @@
     self.playingMessageId = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessagePlayStoped object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+    [self removeProximityMonitoringObserver];
 }
 
 -(void)prepardToPlay:(WFCUMessageModel *)model {
-    
     if (self.playingMessageId == model.message.messageId) {
         [self stopPlayer];
     } else {
         [self stopPlayer];
-        
         self.playingMessageId = model.message.messageId;
-        
         WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)model.message.content;
         if (soundContent.localPath.length == 0 || ![WFCUUtilities isFileExist:soundContent.localPath]) {
             __weak typeof(self) weakSelf = self;
-            
             BOOL isDownloading = [[WFCUMediaMessageDownloader sharedDownloader] tryDownload:model.message success:^(long long messageUid, NSString *localPath) {
                 model.mediaDownloading = NO;
                 [weakSelf startPlay:model];
@@ -2128,11 +2125,9 @@
             if (isDownloading) {
                 model.mediaDownloading = YES;
             }
-            
         } else {
             [self startPlay:model];
         }
-        
     }
 }
 
@@ -2152,7 +2147,8 @@
         case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
         {
             AVAudioSession *session = [AVAudioSession sharedInstance];
-            if([self isPluginHeadPhonesOrConnectedBluetooth]) {
+            UIDevice *device = [UIDevice currentDevice];
+            if([self isPluginHeadPhonesOrConnectedBluetooth] || device.proximityState) {
                 [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone
                                            error:nil];
             } else {
@@ -2166,6 +2162,24 @@
     }
 }
 
+- (void)addProximityMonitoringObserver {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(proximityStatueChanged:)
+                                                 name:UIDeviceProximityStateDidChangeNotification
+                                               object:nil];
+        [UIDevice currentDevice].proximityMonitoringEnabled = YES;
+}
+
+- (void)removeProximityMonitoringObserver {
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:UIDeviceProximityStateDidChangeNotification
+                                                      object:nil];
+        [UIDevice currentDevice].proximityMonitoringEnabled = NO;
+}
+
+- (void)proximityStatueChanged:(NSNotificationCenter *)notification {
+}
+
 -(void)startPlay:(WFCUMessageModel *)model {
     if(model.message.conversation.type == SecretChat_Type) {
         [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
@@ -2174,20 +2188,16 @@
     }
     
     if ([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
-        // Setup audio session
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-        
-        if([self isPluginHeadPhonesOrConnectedBluetooth]) {
-            [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone
-                                       error:nil];
+        UIDevice *device = [UIDevice currentDevice];
+        if([self isPluginHeadPhonesOrConnectedBluetooth] || device.proximityState) {
+            [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
         } else {
-            [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker
-                                       error:nil];
+            [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
         }
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:nil];
-    
+        [self addProximityMonitoringObserver];
         
         WFCCSoundMessageContent *snc = (WFCCSoundMessageContent *)model.message.content;
         NSError *error = nil;
