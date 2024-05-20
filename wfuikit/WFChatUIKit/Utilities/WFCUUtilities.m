@@ -340,7 +340,11 @@
             if(!granted) {
                 [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"通话需要麦克风权限，请开启麦克风权限":@"视频通话需要摄像头权限，请开启摄像头权限" withSettingAction:YES withController:controller];
             }
-            if(complete) complete(granted);
+            if(complete) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    complete(granted);
+                });
+            }
          }];
     } else {
         if(complete) complete(YES);
