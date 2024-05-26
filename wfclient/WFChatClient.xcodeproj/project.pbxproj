@@ -202,6 +202,8 @@
 		B77A8C852A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A8C832A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.m */; };
 		B7832E3A280FC774000233D1 /* WFCCSecretChatInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B7832E38280FC774000233D1 /* WFCCSecretChatInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7832E3B280FC774000233D1 /* WFCCSecretChatInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */; };
+		B790216F2C01F54A005C382A /* WFCCDomainInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B790216D2C01F54A005C382A /* WFCCDomainInfo.m */; };
+		B79021702C01F54A005C382A /* WFCCDomainInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B790216E2C01F54A005C382A /* WFCCDomainInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B79F81A628D958740092FA4B /* WFCCProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B79F81A528D958220092FA4B /* WFCCProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A683742B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683702B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -418,6 +420,8 @@
 		B77A8C832A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupSettingsNotificationContent.m; sourceTree = "<group>"; };
 		B7832E38280FC774000233D1 /* WFCCSecretChatInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCSecretChatInfo.h; sourceTree = "<group>"; };
 		B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCSecretChatInfo.m; sourceTree = "<group>"; };
+		B790216D2C01F54A005C382A /* WFCCDomainInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCDomainInfo.m; sourceTree = "<group>"; };
+		B790216E2C01F54A005C382A /* WFCCDomainInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCDomainInfo.h; sourceTree = "<group>"; };
 		B79F81A528D958220092FA4B /* WFCCProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCProtocol.h; sourceTree = "<group>"; };
 		B7A683702B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextGeneratingMessageContent.h; sourceTree = "<group>"; };
 		B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextGeneratedMessageContent.h; sourceTree = "<group>"; };
@@ -720,6 +724,8 @@
 				B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */,
 				B748120A28A49D8A003BB0C3 /* WFCCChannelMenu.h */,
 				B748120B28A49D8A003BB0C3 /* WFCCChannelMenu.m */,
+				B790216E2C01F54A005C382A /* WFCCDomainInfo.h */,
+				B790216D2C01F54A005C382A /* WFCCDomainInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -808,6 +814,7 @@
 				B77A8C842A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h in Headers */,
 				B7F2A3D82826AEBE0046A4F0 /* WFCCJoinCallRequestMessageContent.h in Headers */,
 				2FF6699C267D759D008FDCD4 /* WFCCModifyGroupMemberExtraNotificationContent.h in Headers */,
+				B79021702C01F54A005C382A /* WFCCDomainInfo.h in Headers */,
 				2FF669A0267D7833008FDCD4 /* WFCCModifyGroupExtraNotificationContent.h in Headers */,
 				2B6336762470DAB2008D6B38 /* WFCCDeliveryReport.h in Headers */,
 				2FDEEFD024A49C690032428A /* WFCCEnums.h in Headers */,
@@ -1036,6 +1043,7 @@
 				2FD9513E243ACF3600EE4F60 /* WFCCPCOnlineInfo.m in Sources */,
 				2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */,
 				B733C7FB2816737500F70316 /* WFCCCallAddParticipantMessageContent.m in Sources */,
+				B790216F2C01F54A005C382A /* WFCCDomainInfo.m in Sources */,
 				2F59FFF32774A3900046C2D5 /* WFCCPTTSoundMessageContent.m in Sources */,
 				2F7709A22453DCB10020DB77 /* WFCCThingsLostEventContent.m in Sources */,
 				2E6B50B81FAE990D006B6E31 /* wavwriter.mm in Sources */,

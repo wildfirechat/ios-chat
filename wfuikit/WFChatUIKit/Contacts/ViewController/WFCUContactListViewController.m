@@ -31,6 +31,7 @@
 #import "WFCUOrganization.h"
 #import "WFCUOrganizationViewController.h"
 #import "WFCUOrgRelationship.h"
+#import "WFCUDomainTableViewController.h"
 
 @interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
 @property (nonatomic, strong)UITableView *tableView;
@@ -48,6 +49,8 @@
 @property(nonatomic, assign)BOOL sorting;
 @property(nonatomic, assign)BOOL needSort;
 @property(nonatomic, strong)UIActivityIndicatorView *activityIndicator;
+
+@property(nonatomic, assign)BOOL meshEnabled;
 @end
 
 static NSMutableDictionary *hanziStringDict = nil;
@@ -96,6 +99,7 @@ static NSString *wfcstar = @"☆";
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.tableView.tableHeaderView = nil;
+    self.meshEnabled = [[WFCCIMService sharedWFCIMService] isMeshEnabled];
     if (self.selectContact) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
         
@@ -355,7 +359,7 @@ static NSString *wfcstar = @"☆";
         return dataSource.count;
     } else {
         if (section == 0) {
-            return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count;
+            return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count + (self.meshEnabled?1:0);
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
             return dataSource.count;
@@ -469,8 +473,16 @@ static NSString *wfcstar = @"☆";
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
+            } else if(indexPath.row == 3 && self.meshEnabled) {
+                WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
+                
+                contactCell.nameLabel.text = WFCString(@"Mesh");
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_channel_icon"];
+                contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+                contactCell.onlineView.hidden = YES;
+                return contactCell;
             } else {
-                int index = indexPath.row - 3;
+                int index = indexPath.row - 3 - (self.meshEnabled?1:0);
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
                 if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
                     int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
@@ -714,8 +726,12 @@ static NSString *wfcstar = @"☆";
                 WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];;
                 channelVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:channelVC animated:YES];
+            } else if(indexPath.row == 3 && self.meshEnabled) {
+                WFCUDomainTableViewController *channelVC = [[WFCUDomainTableViewController alloc] init];;
+                channelVC.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:channelVC animated:YES];
             } else {
-                int index = indexPath.row - 3;
+                int index = indexPath.row - 3 - (self.meshEnabled?1:0);
                 if(index < [WFCUOrganizationCache sharedCache].rootOrganizationIds.count) {
                     int orgId = [[WFCUOrganizationCache sharedCache].rootOrganizationIds[index] intValue];
                     WFCUOrganizationViewController *orgVC = [[WFCUOrganizationViewController alloc] init];

@@ -15,6 +15,8 @@
 #import "UIImage+ERCategory.h"
 #import "WFCUImage.h"
 #import "WFCUGeneralImageTextTableViewCell.h"
+#import "WFCUDomainTableViewController.h"
+
 
 #define CELL_HEIGHT 56
 
@@ -25,6 +27,9 @@
 @property (nonatomic, assign) BOOL texting;
 
 @property (nonatomic, strong) UITextView       *noUserView;
+
+@property(nonatomic, assign)BOOL meshEnabled;
+@property(nonatomic, strong)NSString *domainId;
 @end
 
 @implementation WFCUAddFriendViewController
@@ -43,6 +48,7 @@
 - (void)initSearchUIAndData {
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.navigationItem.title = WFCString(@"AddFriend");
+    self.meshEnabled = [[WFCCIMService sharedWFCIMService] isMeshEnabled];
 
     _searchList = [NSMutableArray array];
         
@@ -92,6 +98,38 @@
     self.noUserView.font = [UIFont systemFontOfSize:18];
     self.noUserView.hidden = YES;
     [self.view addSubview:self.noUserView];
+    self.domainId = _domainId;
+}
+
+- (void)setDomainId:(NSString *)domainId {
+    _domainId = domainId;
+    if(self.meshEnabled) {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 24)];
+        
+        if(self.domainId) {
+            WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:self.domainId refresh:NO];
+            label.text = [NSString stringWithFormat:@"在单位 %@ 中搜索用户", domainInfo.name];
+        } else {
+            label.text = @"在本单位搜索用户";
+        }
+        label.userInteractionEnabled = YES;
+        label.textAlignment = NSTextAlignmentLeft;
+        label.font = [UIFont systemFontOfSize:14];
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectDomain:)];
+        [label addGestureRecognizer:gestureRecognizer];
+        
+        self.tableView.tableHeaderView = label;
+    }
+}
+
+- (void)onSelectDomain:(id)sender {
+    WFCUDomainTableViewController *vc = [[WFCUDomainTableViewController alloc] init];
+    vc.onSelect = ^(NSString *domainId) {
+        self.domainId = domainId;
+    };
+    vc.isPresent = YES;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -196,6 +234,7 @@
     NSString *searchString = [ws.searchController.searchBar text];
     if (searchString.length) {
         [[WFCCIMService sharedWFCIMService] searchUser:searchString
+                                                domain:self.domainId
                                             searchType:SearchUserType_Name_Mobile
                                                   page:0
                                                success:^(NSArray<WFCCUserInfo *> *machedUsers) {

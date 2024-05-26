@@ -527,6 +527,8 @@
 		B77D33F8290C1EB500E72111 /* WFCUProfileMoreTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D33F6290C1EB500E72111 /* WFCUProfileMoreTableViewController.h */; };
 		B77D33FB290C258A00E72111 /* WFCUGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D33F9290C258A00E72111 /* WFCUGroupTableViewController.m */; };
 		B77D33FC290C258A00E72111 /* WFCUGroupTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D33FA290C258A00E72111 /* WFCUGroupTableViewController.h */; };
+		B790216B2C01F4FF005C382A /* WFCUDomainTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B79021692C01F4FF005C382A /* WFCUDomainTableViewController.h */; };
+		B790216C2C01F4FF005C382A /* WFCUDomainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B790216A2C01F4FF005C382A /* WFCUDomainTableViewController.m */; };
 		B7A1C05F28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A1C05D28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.m */; };
 		B7A1C06028DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A1C05E28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h */; };
 		B7AF6253295946F700324247 /* WFCUOrganizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */; };
@@ -1146,6 +1148,8 @@
 		B77D33F6290C1EB500E72111 /* WFCUProfileMoreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUProfileMoreTableViewController.h; sourceTree = "<group>"; };
 		B77D33F9290C258A00E72111 /* WFCUGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUGroupTableViewController.m; sourceTree = "<group>"; };
 		B77D33FA290C258A00E72111 /* WFCUGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUGroupTableViewController.h; sourceTree = "<group>"; };
+		B79021692C01F4FF005C382A /* WFCUDomainTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUDomainTableViewController.h; sourceTree = "<group>"; };
+		B790216A2C01F4FF005C382A /* WFCUDomainTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUDomainTableViewController.m; sourceTree = "<group>"; };
 		B7A1C05D28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUParticipantCollectionViewCell.m; sourceTree = "<group>"; };
 		B7A1C05E28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUParticipantCollectionViewCell.h; sourceTree = "<group>"; };
 		B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUOrganizationViewController.m; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1486,6 +1490,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				B79021682C01F4A0005C382A /* Mesh */,
 				B764D483295851570082492F /* Organization */,
 				2FDF87122723DFFD00AC6C36 /* Ptt */,
 				2FB87A64265122E100790A26 /* Enum */,
@@ -2437,6 +2442,15 @@
 			path = Organization;
 			sourceTree = "<group>";
 		};
+		B79021682C01F4A0005C382A /* Mesh */ = {
+			isa = PBXGroup;
+			children = (
+				B79021692C01F4FF005C382A /* WFCUDomainTableViewController.h */,
+				B790216A2C01F4FF005C382A /* WFCUDomainTableViewController.m */,
+			);
+			path = Mesh;
+			sourceTree = "<group>";
+		};
 		B7B58A672832182A0030529B /* dsbridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -2673,6 +2687,7 @@
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
 				B71F0A7228F54156000A7C8A /* GCDAsyncSocket.h in Headers */,
+				B790216B2C01F4FF005C382A /* WFCUDomainTableViewController.h in Headers */,
 				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
@@ -3257,6 +3272,7 @@
 				2F5511D6217F5CC300F56C26 /* TYAlertController+TransitionAnimate.m in Sources */,
 				2F5511D2217F5CC300F56C26 /* UIView+TYAlertView.m in Sources */,
 				B764D49729586B060082492F /* WFCUOrganizationCache.m in Sources */,
+				B790216C2C01F4FF005C382A /* WFCUDomainTableViewController.m in Sources */,
 				2F5511E7217F5CC300F56C26 /* WFCUForwardMessageCell.m in Sources */,
 				B7A1C05F28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.m in Sources */,
 				2F5510C7217F5CC200F56C26 /* WFCULocationViewController.m in Sources */,

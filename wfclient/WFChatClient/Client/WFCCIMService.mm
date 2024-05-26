@@ -318,6 +318,49 @@ public:
     }
 };
 
+class IMLoadRemoteDomainsCallback : public mars::stn::LoadRemoteDomainsCallback {
+private:
+    void(^m_successBlock)(NSArray<WFCCDomainInfo *> *domains);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMLoadRemoteDomainsCallback(void(^successBlock)(NSArray<WFCCDomainInfo *> *domains), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteDomainsCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::list<mars::stn::TDomain> &domainlist) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        for (std::list<mars::stn::TDomain>::const_iterator it = domainlist.begin(); it != domainlist.end(); ++it) {
+            WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
+            domainInfo.domainId = [NSString stringWithUTF8String:it->domainId.c_str()];
+            domainInfo.name = [NSString stringWithUTF8String:it->name.c_str()];
+            domainInfo.desc = [NSString stringWithUTF8String:it->desc.c_str()];
+            domainInfo.email = [NSString stringWithUTF8String:it->email.c_str()];
+            domainInfo.tel = [NSString stringWithUTF8String:it->tel.c_str()];
+            domainInfo.address = [NSString stringWithUTF8String:it->address.c_str()];
+            domainInfo.extra = [NSString stringWithUTF8String:it->extra.c_str()];
+            domainInfo.updateDt = it->updateDt;
+            [arr addObject:domainInfo];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(arr);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMLoadRemoteDomainsCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+
 class IMCreateSecretChatCallback : public mars::stn::CreateSecretChatCallback {
 private:
     void(^m_successBlock)(NSString *generalStr, int line);
@@ -2123,17 +2166,25 @@ public:
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock {
-    
+    [self searchUser:keyword domain:nil searchType:searchType page:page success:successBlock error:errorBlock];
+}
+
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock {
     if(keyword.length == 0) {
         successBlock(@[]);
     }
     
     if (self.userSource) {
-        [self.userSource searchUser:keyword searchType:searchType page:page success:successBlock error:errorBlock];
+        [self.userSource searchUser:keyword domain:domainId searchType:searchType page:page success:successBlock error:errorBlock];
         return;
     }
     
-    mars::stn::searchUser([keyword UTF8String], (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser(domainId?[domainId UTF8String]:"", [keyword UTF8String], (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
 class IMGetOneUserInfoCallback : public mars::stn::GetOneUserInfoCallback {
@@ -4105,6 +4156,27 @@ public:
     mars::stn::getListenedChannels(new IMGeneralStringListCallback(successBlock, errorBlock));
 }
 
+- (WFCCDomainInfo *)getDomainInfo:(NSString *)domainId refresh:(BOOL)refresh {
+    mars::stn::TDomain tdomain = mars::stn::MessageDB::Instance()->GetDomainInfo([domainId UTF8String], refresh?true:false);
+    if(tdomain.domainId.size()) {
+        WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
+        domainInfo.domainId = [NSString stringWithUTF8String:tdomain.domainId.c_str()];
+        domainInfo.name = [NSString stringWithUTF8String:tdomain.name.c_str()];
+        domainInfo.desc = [NSString stringWithUTF8String:tdomain.desc.c_str()];
+        domainInfo.email = [NSString stringWithUTF8String:tdomain.email.c_str()];
+        domainInfo.tel = [NSString stringWithUTF8String:tdomain.tel.c_str()];
+        domainInfo.address = [NSString stringWithUTF8String:tdomain.address.c_str()];
+        domainInfo.extra = [NSString stringWithUTF8String:tdomain.extra.c_str()];
+        domainInfo.updateDt = tdomain.updateDt;
+        return domainInfo;
+    }
+    return nil;
+}
+
+- (void)getRemoteDomains:(void (^)(NSArray<WFCCDomainInfo *> *domains))successBlock error:(void (^)(int errorCode))errorBlock {
+    mars::stn::loadRemoteDomains(new IMLoadRemoteDomainsCallback(successBlock, errorBlock));
+}
+
 - (void)createSecretChat:(NSString *)userId
                 success:(void(^)(NSString *targetId, int line))successBlock
                   error:(void(^)(int error_code))errorBlock {
@@ -4378,6 +4450,10 @@ public:
 
 - (BOOL)isGlobalDisableSyncDraft {
     return mars::stn::IsGlobalDisableSyncDraft() == true;
+}
+
+- (BOOL)isMeshEnabled {
+    return mars::stn::IsEnableMesh() == true;
 }
 
 - (WFCCUserOnlineState *)getUserOnlineState:(NSString *)userId {

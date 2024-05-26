@@ -42,6 +42,7 @@ NSString *kUserOnlineStateUpdated = @"kUserOnlineStateUpdated";
 NSString *kSecretChatStateUpdated = @"kSecretChatStateUpdated";
 NSString *kSecretMessageStartBurning = @"kSecretMessageStartBurning";
 NSString *kSecretMessageBurned = @"kSecretMessageBurned";
+NSString *kDomainInfoUpdated = @"kDomainInfoUpdated";
 
 
 @protocol RefreshGroupInfoDelegate <NSObject>
@@ -79,6 +80,10 @@ NSString *kSecretMessageBurned = @"kSecretMessageBurned";
 @protocol SecretMessageBurnStateDelegate <NSObject>
 - (void)onSecretMessageStartBurning:(NSString *)targetId playedMessageId:(long)messageId;
 - (void)onSecretMessageBurned:(NSArray<NSNumber *> *)messageIds;
+@end
+
+@protocol RefreshDomainInfoDelegate <NSObject>
+- (void)onDomainInfoUpdated:(WFCCDomainInfo *)updatedDomainInfo;
 @end
 
 class CSCB : public mars::stn::ConnectionStatusCallback {
@@ -522,8 +527,31 @@ public:
     id<SecretMessageBurnStateDelegate> m_delegate;
 };
 
+class GDCB : public mars::stn::GetDomainInfoCallback {
+  public:
+    GDCB(id<RefreshDomainInfoDelegate> delegate) : m_delegate(delegate) {}
+  
+  void onSuccess(const mars::stn::TDomain &domain) {
+      if(m_delegate) {
+          WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
+          domainInfo.domainId = [NSString stringWithUTF8String:domain.domainId.c_str()];
+          domainInfo.name = [NSString stringWithUTF8String:domain.name.c_str()];
+          domainInfo.desc = [NSString stringWithUTF8String:domain.desc.c_str()];
+          domainInfo.email = [NSString stringWithUTF8String:domain.email.c_str()];
+          domainInfo.tel = [NSString stringWithUTF8String:domain.tel.c_str()];
+          domainInfo.address = [NSString stringWithUTF8String:domain.address.c_str()];
+          domainInfo.extra = [NSString stringWithUTF8String:domain.extra.c_str()];
+          domainInfo.updateDt = domain.updateDt;
+          [m_delegate onDomainInfoUpdated:domainInfo];
+      }
+  }
+  void onFalure(int errorCode) {
+    
+  }
+  id<RefreshDomainInfoDelegate> m_delegate;
+};
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate, RefreshDomainInfoDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -965,6 +993,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setRefreshSettingCallback(new GSCB(self));
   mars::stn::setSecretChatStateCallback(new SCSCB(self));
   mars::stn::setSecretMessageBurnStateCallback(new SMBSCB(self));
+  mars::stn::setGetDomainInfoCallback(new GDCB(self));
   mars::baseevent::OnCreate();
 }
 - (int64_t)connect:(NSString *)host {
@@ -1304,6 +1333,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)onUserInfoUpdated:(NSArray<WFCCUserInfo *> *)updatedUserInfo {
   dispatch_async(dispatch_get_main_queue(), ^{
       [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoUpdated object:nil userInfo:@{@"userInfoList":updatedUserInfo}];
+  });
+}
+
+- (void)onDomainInfoUpdated:(WFCCDomainInfo *)updatedDomainInfo {
+  dispatch_async(dispatch_get_main_queue(), ^{
+      [[NSNotificationCenter defaultCenter] postNotificationName:kDomainInfoUpdated object:nil userInfo:@{@"domainInfo":updatedDomainInfo}];
   });
 }
 
