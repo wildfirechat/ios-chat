@@ -531,7 +531,7 @@ class GDCB : public mars::stn::GetDomainInfoCallback {
   public:
     GDCB(id<RefreshDomainInfoDelegate> delegate) : m_delegate(delegate) {}
   
-  void onSuccess(const mars::stn::TDomain &domain) {
+  void onSuccess(const mars::stn::TDomainInfo &domain) {
       if(m_delegate) {
           WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
           domainInfo.domainId = [NSString stringWithUTF8String:domain.domainId.c_str()];

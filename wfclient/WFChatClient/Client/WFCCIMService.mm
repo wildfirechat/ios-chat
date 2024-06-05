@@ -324,9 +324,9 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMLoadRemoteDomainsCallback(void(^successBlock)(NSArray<WFCCDomainInfo *> *domains), void(^errorBlock)(int error_code)) : mars::stn::LoadRemoteDomainsCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(const std::list<mars::stn::TDomain> &domainlist) {
+    void onSuccess(const std::list<mars::stn::TDomainInfo> &domainlist) {
         NSMutableArray *arr = [[NSMutableArray alloc] init];
-        for (std::list<mars::stn::TDomain>::const_iterator it = domainlist.begin(); it != domainlist.end(); ++it) {
+        for (std::list<mars::stn::TDomainInfo>::const_iterator it = domainlist.begin(); it != domainlist.end(); ++it) {
             WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
             domainInfo.domainId = [NSString stringWithUTF8String:it->domainId.c_str()];
             domainInfo.name = [NSString stringWithUTF8String:it->name.c_str()];
@@ -4157,7 +4157,7 @@ public:
 }
 
 - (WFCCDomainInfo *)getDomainInfo:(NSString *)domainId refresh:(BOOL)refresh {
-    mars::stn::TDomain tdomain = mars::stn::MessageDB::Instance()->GetDomainInfo([domainId UTF8String], refresh?true:false);
+    mars::stn::TDomainInfo tdomain = mars::stn::MessageDB::Instance()->GetDomainInfo([domainId UTF8String], refresh?true:false);
     if(tdomain.domainId.size()) {
         WFCCDomainInfo *domainInfo = [[WFCCDomainInfo alloc] init];
         domainInfo.domainId = [NSString stringWithUTF8String:tdomain.domainId.c_str()];
