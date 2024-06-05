@@ -8,6 +8,7 @@
 
 #import "WFCUDomainTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUDomainProfileTableViewController.h"
 #import "UIView+Toast.h"
 #import "WFCUImage.h"
 
@@ -87,7 +88,9 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
     } else {
-        
+        WFCUDomainProfileTableViewController *vc = [[WFCUDomainProfileTableViewController alloc] init];
+        vc.domainId = self.domains[indexPath.row].domainId;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

@@ -180,6 +180,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         cell.backgroundColor = [UIColor whiteColor];
         cell.nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
     }
+    [cell updateExternalDomainInfo];
     return cell;
 }
 

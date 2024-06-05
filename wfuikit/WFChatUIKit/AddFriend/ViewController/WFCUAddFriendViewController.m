@@ -29,7 +29,6 @@
 @property (nonatomic, strong) UITextView       *noUserView;
 
 @property(nonatomic, assign)BOOL meshEnabled;
-@property(nonatomic, strong)NSString *domainId;
 @end
 
 @implementation WFCUAddFriendViewController

@@ -477,7 +477,7 @@ static NSString *wfcstar = @"☆";
                 WFCUContactTableViewCell *contactCell = [self dequeueOrAllocChannelCell:tableView];
                 
                 contactCell.nameLabel.text = WFCString(@"Mesh");
-                contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_channel_icon"];
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_mesh_icon"];
                 contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
                 contactCell.onlineView.hidden = YES;
                 return contactCell;
@@ -532,7 +532,6 @@ static NSString *wfcstar = @"☆";
                 selectCell.disabled = NO;
             }
             
-            selectCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = selectCell;
         } else {
             WFCUContactTableViewCell *selectCell = [self dequeueOrAllocContactCell:tableView];
@@ -564,7 +563,6 @@ static NSString *wfcstar = @"☆";
             WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
             WFCCUserInfo *userInfo = dataSource[indexPath.row];
             [contactCell setUserId:userInfo.userId groupId:self.groupId];
-            contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
             cell = contactCell;
         }
     }

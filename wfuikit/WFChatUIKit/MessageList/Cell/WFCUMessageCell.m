@@ -181,6 +181,7 @@
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
       if(self.model.showNameLabel) {
           self.nameLabel.text = channelInfo.name;
+          [self updateExternalDomainInfo];
       }
   }
 }
@@ -204,9 +205,18 @@
               nameStr = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), self.model.message.fromUser];
           }
           self.nameLabel.text = nameStr;
+          [self updateExternalDomainInfo];
       }
   }
 }
+
+- (void)updateExternalDomainInfo {
+    if([WFCCUtilities isExternalTarget:self.model.message.conversation.target]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.model.message.conversation.target];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+    }
+}
+
 
 - (void)setModel:(WFCUMessageModel *)model {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

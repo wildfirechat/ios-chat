@@ -9,6 +9,7 @@
 #import "WFCUContactSelectTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
+#import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "WFCUImage.h"
@@ -88,12 +89,17 @@
 
 - (void)setFriendUid:(NSString *)friendUid {
     _friendUid = friendUid;
+    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
     WFCCUserInfo *friendInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendUid refresh:NO];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[friendInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     if (friendInfo.friendAlias.length) {
         self.nameLabel.text = friendInfo.friendAlias;
     } else {
         self.nameLabel.text = friendInfo.displayName;
+    }
+    if([WFCCUtilities isExternalTarget:friendUid]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:friendUid];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
     }
 }
 @end
