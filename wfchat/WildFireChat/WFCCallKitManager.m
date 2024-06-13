@@ -93,7 +93,7 @@
     update.localizedCallerName = title;
     
     self.callUUIDDict[callId] = uuid;
-    //弹出电话页面
+    [[WFAVEngineKit sharedEngineKit] registerCall:callId uuid:uuid];
     
     [self.provider reportNewIncomingCallWithUUID:uuid update:update completion:^(NSError * _Nullable error) {
         NSLog(@"error");
@@ -126,18 +126,39 @@
     }
     [action fulfill];
 }
+
+- (void)answerCall {
+    [[WFAVEngineKit sharedEngineKit].currentSession answerCall:false callExtra:nil];
+    
+    UIViewController *videoVC;
+    if ([WFAVEngineKit sharedEngineKit].currentSession.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
+        videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
+    } else {
+        videoVC = [[WFCUVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
+    }
+
+    [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+}
+
 -(void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession {
     if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
-        [[WFAVEngineKit sharedEngineKit].currentSession answerCall:false callExtra:nil];
-        
-        UIViewController *videoVC;
-        if ([WFAVEngineKit sharedEngineKit].currentSession.conversation.type == Group_Type && [WFAVEngineKit sharedEngineKit].supportMultiCall) {
-            videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
-        } else {
-            videoVC = [[WFCUVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
-        }
-
-        [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
+        [self answerCall];
+    } else {
+        //有可能用户点击接听以后，IM服务消息还没有同步完成，来电消息还没有被处理，需要等待有来电session再接听.
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            int count = 60;
+            while (count--) {
+                [NSThread sleepForTimeInterval:0.05];
+                if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self answerCall];
+                    });
+                    break;
+                }
+            }
+            //3秒内没有接听成功，这里设置为失败
+            [self.provider invalidate];
+        });
     }
 }
 @end
