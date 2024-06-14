@@ -96,7 +96,9 @@
     [[WFAVEngineKit sharedEngineKit] registerCall:callId uuid:uuid];
     
     [self.provider reportNewIncomingCallWithUUID:uuid update:update completion:^(NSError * _Nullable error) {
-        NSLog(@"error");
+        if(error) {
+            NSLog(@"error:%@", error);
+        }
     }];
 }
 
@@ -112,7 +114,7 @@
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action {
     NSLog(@"performAnswerCallAction");
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:nil];
+    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeDefault error:nil];
 
     [action fulfill];
 }
@@ -127,6 +129,19 @@
     [action fulfill];
 }
 
+- (void)provider:(CXProvider *)provider performSetMutedCallAction:(CXSetMutedCallAction *)action {
+    if([action.callUUID isEqual:[WFAVEngineKit sharedEngineKit].currentSession.callUUID]) {
+        if ([WFAVEngineKit sharedEngineKit].currentSession.state != kWFAVEngineStateIdle) {
+            if (action.isMuted) {
+                [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:YES];
+            } else {
+                [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+            }
+        }
+    }
+    [action fulfill];
+}
+
 - (void)answerCall {
     [[WFAVEngineKit sharedEngineKit].currentSession answerCall:false callExtra:nil];
     
@@ -135,6 +150,11 @@
         videoVC = [[WFCUMultiVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
     } else {
         videoVC = [[WFCUVideoViewController alloc] initWithSession:[WFAVEngineKit sharedEngineKit].currentSession];
+    }
+    if([[WFAVEngineKit sharedEngineKit].currentSession isAudioOnly]) {
+        [[WFAVEngineKit sharedEngineKit].currentSession enableSpeaker:NO];
+    } else {
+        [[WFAVEngineKit sharedEngineKit].currentSession enableSpeaker:YES];
     }
 
     [[WFAVEngineKit sharedEngineKit] presentViewController:videoVC];
