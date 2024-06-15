@@ -850,11 +850,6 @@
                 AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, systemAudioCallback, NULL);
                 AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
             } else {
-                AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-                //默认情况按静音或者锁屏键会静音
-                [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:nil];
-                [audioSession setActive:YES error:nil];
-                
                 if (self.audioPlayer) {
                     [self shouldStopRing];
                 }
