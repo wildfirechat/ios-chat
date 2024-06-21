@@ -78,6 +78,13 @@
     }
 }
 
+- (void)updateExternalDomainInfo {
+    if([WFCCUtilities isExternalTarget:self.selectedObject.userInfo.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.selectedObject.userInfo.userId];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+    }
+}
+
 - (void)onNextLevel:(id)sender {
     if([self.delegate respondsToSelector:@selector(didTapNextLevel:)]) {
         [self.delegate didTapNextLevel:self.selectedObject];

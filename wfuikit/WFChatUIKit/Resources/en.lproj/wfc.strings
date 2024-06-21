@@ -87,6 +87,7 @@
 "NewFriend"="New friend";
 "Group"="Group";
 "Channel"="Channel";
+"Mesh"="External";
 "NumberOfRecords"="%d record(s)";
 "[Draft]"="[Draft]";
 "[MentionYou]"="[Somebody @ you]";

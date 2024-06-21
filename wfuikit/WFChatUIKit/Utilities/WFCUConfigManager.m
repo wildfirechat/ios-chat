@@ -187,6 +187,14 @@ static WFCUConfigManager *sharedSingleton = nil;
     
 }
 
+- (UIColor *)externalNameColor {
+    if(_externalNameColor) {
+        return _externalNameColor;
+    }
+    
+    return [UIColor colorWithHexString:@"0xF0A040"];
+}
+
 //file path document/conversationresource/conv_line/conv_type/conv_target/mediatype/
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,

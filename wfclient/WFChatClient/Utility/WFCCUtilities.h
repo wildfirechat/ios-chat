@@ -52,6 +52,10 @@
 
 + (UIImage *)imageWithRightOrientation:(UIImage *)aImage;
 
++ (BOOL)isExternalTarget:(NSString *)targetId;
++ (NSString *)getExternalDomain:(NSString *)targetId;
++ (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color;
+
 //同步函数，只能在后台线程执行
 + (NSString *)getGroupGridPortrait:(NSString *)groupId
                              width:(int)width

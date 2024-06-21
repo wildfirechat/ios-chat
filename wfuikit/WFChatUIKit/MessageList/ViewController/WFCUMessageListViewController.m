@@ -687,7 +687,7 @@
          int Platform_iPad = 8;
          int Platform_APad = 9;
          */
-        if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState] && ![WFCCUtilities isExternalTarget:self.conversation.target]) {
             NSString *userId = self.conversation.target;
             if(self.conversation.type == SecretChat_Type) {
                 userId = self.secretChatInfo.userId;
@@ -802,6 +802,25 @@
             self.title = self.targetChatroom.title;
             self.navigationItem.backBarButtonItem.title = self.targetChatroom.title;
         }
+    }
+    if([WFCCUtilities isExternalTarget:self.conversation.target]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.conversation.target];
+        UIView *titleContainer = [[UIView alloc] initWithFrame:CGRectMake(80, 0, self.view.bounds.size.width - 160, 36)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 160, 24)];
+        UILabel *domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.view.bounds.size.width - 160, 12)];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        titleLabel.text = self.title;
+        
+        domainLabel.textAlignment = NSTextAlignmentCenter;
+        domainLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
+        domainLabel.font = [UIFont systemFontOfSize:12];
+        
+        [titleContainer addSubview:titleLabel];
+        [titleContainer addSubview:domainLabel];
+        
+        self.navigationItem.titleView = titleContainer;
     }
 }
 
@@ -1071,6 +1090,7 @@
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCChangeGroupPortraitNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCFriendAddedMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCFriendGreetingMessageContent class]];
+    [self registerCell:[WFCUInformationCell class] forContent:[WFCCNotDeliveredMessageContent class]];
     
     [self registerCell:[WFCUCallSummaryCell class] forContent:[WFCCCallStartMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];

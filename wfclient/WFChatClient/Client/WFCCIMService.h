@@ -24,6 +24,7 @@
 #import "WFCCFriend.h"
 #import "WFCCSecretChatInfo.h"
 #import "WFCCNetworkService.h"
+#import "WFCCDomainInfo.h"
 
 #pragma mark - 频道通知定义
 //发送消息状态通知
@@ -241,6 +242,13 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
               error:(void(^)(int errorCode))errorBlock;
 
 - (void)searchUser:(NSString *)keyword
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock;
+
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
         searchType:(WFCCSearchUserType)searchType
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
@@ -1416,6 +1424,23 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
              error:(void(^)(int errorCode))errorBlock;
 
 /**
+ 搜索用户
+ 
+ @param keyword 关键词
+ @param domainId 域ID
+ @param searchType 搜索类型
+ @param page page
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
+        searchType:(WFCCSearchUserType)searchType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock;
+
+/**
  获取用户信息
  @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的单聊会话中时或者此人的用户信息页面使用true
  
@@ -2377,6 +2402,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
 
+
+#pragma mark - Mesh 接口
+/**
+ 获取域信息
+ 
+ @param domainId 域ID
+ @param refresh 是否从服务器刷新
+ 
+ @return 域信息
+ */
+- (WFCCDomainInfo *)getDomainInfo:(NSString *)domainId refresh:(BOOL)refresh;
+/**
+ 获取所有的域
+ 
+ @param successBlock 成功回调
+ @param errorBlock 错误回调
+ */
+- (void)getRemoteDomains:(void (^)(NSArray<WFCCDomainInfo *> *))successBlock error:(void (^)(int))errorBlock;
+
 #pragma mark - Secret Chat 接口
 /**
  发起密聊
@@ -2686,6 +2730,11 @@ amr文件转成wav数据
  是否应用关闭草稿同步功能
  */
 - (BOOL)isGlobalDisableSyncDraft;
+
+/*
+ 是否应用开启了Mesh功能
+ */
+- (BOOL)isMeshEnabled;
 
 /*
  获取用户的在线状态

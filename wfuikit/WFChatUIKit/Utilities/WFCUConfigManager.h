@@ -1,3 +1,4 @@
+
 //
 //  WFCUConfigManager.h
 //  WFChatUIKit
@@ -43,6 +44,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, strong)UIColor *naviTextColor;
 
 @property(nonatomic, strong)UIColor *separateColor;
+
+@property(nonatomic, strong)UIColor *externalNameColor;
 
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
 
