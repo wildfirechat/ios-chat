@@ -38,6 +38,8 @@ extern NSString *kSecretChatStateUpdated;
 extern NSString *kSecretMessageStartBurning;
 //密聊消息阅后即焚完成
 extern NSString *kSecretMessageBurned;
+//域信息更新通知
+extern NSString *kDomainInfoUpdated;
 
 #pragma mark - 枚举值定义
 /**

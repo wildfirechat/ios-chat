@@ -46,6 +46,7 @@
     } else {
         self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.info.conversation.target];
     }
+    [self updateExternalDomainInfo];
 }
 
 - (void)updateChannelInfo:(WFCCChannelInfo *)channelInfo {
@@ -58,6 +59,7 @@
     } else {
         self.targetView.text = WFCString(@"Channel");
     }
+    [self updateExternalDomainInfo];
 }
 
 - (void)updateGroupInfo:(WFCCGroupInfo *)groupInfo {
@@ -104,8 +106,15 @@
   } else {
     self.targetView.text = WFCString(@"GroupChat");
   }
+  [self updateExternalDomainInfo];
 }
 
+- (void)updateExternalDomainInfo {
+    if([WFCCUtilities isExternalTarget:self.info.conversation.target]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.info.conversation.target];
+        self.targetView.attributedText = [WFCCUtilities getExternal:domainId withName:self.targetView.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+    }
+}
 - (void)setSearchInfo:(WFCCConversationSearchInfo *)searchInfo {
     _searchInfo = searchInfo;
     self.bubbleView.hidden = YES;
@@ -224,6 +233,7 @@
         [self updateUserInfo:userInfo];
     } else {
         self.targetView.text = WFCString(@"Chatroom");
+        [self updateExternalDomainInfo];
     }
     
     CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 8000)];
@@ -390,6 +400,7 @@
         _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
         _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
         _targetView.textColor = [WFCUConfigManager globalManager].textColor;
+        _targetView.lineBreakMode = NSLineBreakByTruncatingMiddle;
         [self.contentView addSubview:_targetView];
     }
     return _targetView;

@@ -203,6 +203,10 @@ namespace mars {
             bool DeleteFriendRequest(const std::string &friendUid, bool incomming);
             
             
+            TDomainInfo GetDomainInfo(const std::string &domainId, bool refresh);
+            int SaveDomainInfo(const TDomainInfo &domain);
+            
+            
             TChannelInfo GetChannelInfo(const std::string &channelId, bool refresh);
             long InsertOrUpdateChannelInfo(const TChannelInfo &channelInfo);
             

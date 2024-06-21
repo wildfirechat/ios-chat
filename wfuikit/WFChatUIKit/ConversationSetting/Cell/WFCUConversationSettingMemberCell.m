@@ -31,6 +31,7 @@
     [super layoutSubviews];
     self.headerImageView.frame = CGRectMake(2, 2, self.frame.size.width - 4, self.frame.size.width - 4);
     self.nameLabel.frame = CGRectMake(0, self.frame.size.width + 3, self.frame.size.width, 11);
+    self.domainLabel.frame = CGRectMake(0, self.frame.size.width + 3 + 14, self.frame.size.width, 11);
 }
 
 - (UILabel *)nameLabel {
@@ -43,6 +44,18 @@
         [[self contentView] addSubview:_nameLabel];
     }
     return _nameLabel;
+}
+
+- (UILabel *)domainLabel {
+    if (!_domainLabel) {
+        _domainLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _domainLabel.textColor = [WFCUConfigManager globalManager].textColor;
+        _domainLabel.textAlignment = NSTextAlignmentCenter;
+        _domainLabel.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+        _domainLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:11];
+        [[self contentView] addSubview:_domainLabel];
+    }
+    return _domainLabel;
 }
 
 - (UIImageView *)headerImageView {
@@ -68,20 +81,28 @@
 
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type {
     self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-//    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-    
     self.model = model;
     
     WFCCUserInfo *userInfo;
     WFCCGroupMember *groupMember;
     WFCCChannelInfo *channelInfo;
+    NSString *domainId = nil;
     if (type == Group_Type) {
         groupMember = (WFCCGroupMember *)model;
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId inGroup:groupMember.groupId refresh:NO];
+        if([WFCCUtilities isExternalTarget:groupMember.memberId]) {
+            domainId = [WFCCUtilities getExternalDomain:groupMember.memberId];
+        }
     } else if(type == Single_Type) {
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:(NSString *)model refresh:NO];
+        if([WFCCUtilities isExternalTarget:(NSString *)model]) {
+            domainId = [WFCCUtilities getExternalDomain:(NSString *)model];
+        }
     } else if(type == Channel_Type) {
         channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:(NSString *)model refresh:NO];
+        if([WFCCUtilities isExternalTarget:(NSString *)model]) {
+            domainId = [WFCCUtilities getExternalDomain:(NSString *)model];
+        }
     } else if(type == SecretChat_Type) {
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:(NSString *)model].userId;
         userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
@@ -106,6 +127,12 @@
         }
     }
     self.nameLabel.hidden = NO;
+    if(domainId) {
+        self.domainLabel.hidden = NO;
+        self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
+    } else {
+        self.domainLabel.hidden = YES;
+    }
 }
 
 - (void)resetLayout:(CGFloat)nameLabelHeight

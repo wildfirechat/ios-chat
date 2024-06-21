@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface WFCUAddFriendViewController : UIViewController
-
+@property(nonatomic, strong)NSString *domainId;
 @end

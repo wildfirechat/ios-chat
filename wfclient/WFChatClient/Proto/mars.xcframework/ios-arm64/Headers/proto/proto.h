@@ -482,6 +482,24 @@ namespace mars{
             virtual void Unserialize(const Value& value);
     #endif //WFCHAT_PROTO_SERIALIZABLE
         };
+    
+    class TDomainInfo : public TSerializable {
+    public:
+        TDomainInfo() : updateDt(0) {}
+        std::string domainId;
+        std::string name;
+        std::string desc;
+        std::string email;
+        std::string tel;
+        std::string address;
+        std::string extra;
+        int64_t updateDt;
+        virtual ~TDomainInfo(){}
+#if WFCHAT_PROTO_SERIALIZABLE
+        virtual void Serialize(void *writer) const;
+        virtual void Unserialize(const Value& value);
+#endif //WFCHAT_PROTO_SERIALIZABLE
+    };
 
         enum UserSettingScope {
             kUserSettingConversationSilent = 1,
@@ -790,6 +808,13 @@ namespace mars{
             virtual ~LoadRemoteMessagesCallback() {}
         };
     
+    class LoadRemoteDomainsCallback {
+    public:
+        virtual void onSuccess(const std::list<TDomainInfo> &domains) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~LoadRemoteDomainsCallback() {}
+    };
+    
         class LoadFileRecordCallback {
         public:
             virtual void onSuccess(const std::list<TFileRecord> &fileList) = 0;
@@ -833,6 +858,13 @@ namespace mars{
             virtual ~GetChannelInfoCallback() {}
         };
 
+    class GetDomainInfoCallback {
+    public:
+        virtual void onSuccess(const TDomainInfo &domain) = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetDomainInfoCallback() {}
+    };
+    
         class GetUserInfoCallback {
         public:
             virtual void onSuccess(const std::list<TUserInfo> &userInfoList) = 0;
@@ -987,6 +1019,7 @@ namespace mars{
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
         extern void setSecretChatStateCallback(SecretChatStateCallback *callback);
         extern void setSecretMessageBurnStateCallback(SecretMessageBurnStateCallback *callback);
+        extern void setGetDomainInfoCallback(GetDomainInfoCallback *callback);
         extern ConnectionStatus getConnectionStatus();
 
         extern int64_t getServerDeltaTime();
@@ -1043,6 +1076,7 @@ namespace mars{
         extern int modifyUserSetting(int scope, const std::string &key, const std::string &value, GeneralOperationCallback *callback);
 
         extern void searchUser(const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
+        extern void searchUser(const std::string &domainId, const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
         extern void sendFriendRequest(const std::string &userId, const std::string &reason, const std::string &extra, GeneralOperationCallback *callback);
 
         extern void loadFriendRequestFromRemote(int64_t head = 0);
@@ -1053,6 +1087,8 @@ namespace mars{
 
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
     
+    
+        extern void loadRemoteDomains(LoadRemoteDomainsCallback *callback);
     
         extern void watchOnlineState(int type, const std::list<std::string> &targets, int duration, WatchOnlineStateCallback *callback);
         extern void unwatchOnlineState(int type, const std::list<std::string> &targets, GeneralOperationCallback *callback);
@@ -1154,6 +1190,7 @@ namespace mars{
         extern bool IsEnableUserOnlineState();
         extern bool IsEnableSecretChat();
         extern bool ForcePresignedUrlUpload();
+        extern bool IsEnableMesh();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     

@@ -40,6 +40,7 @@
 @property (strong, nonatomic)UILabel *aliasLabel;
 @property (strong, nonatomic)UILabel *displayNameLabel;
 @property (strong, nonatomic)UILabel *userNameLabel;
+@property (strong, nonatomic)UILabel *domainLabel;
 @property (strong, nonatomic)UILabel *starLabel;
 @property (strong, nonatomic)UITableViewCell *headerCell;
 
@@ -297,29 +298,32 @@
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
     NSString *alias = [[WFCCIMService sharedWFCIMService] getFriendAlias:self.userId];
+    CGFloat startPos = 8;
+
     if (alias.length) {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 8, width - 64 - 8, 21)];
         self.aliasLabel.text = alias;
-        
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 32, width - 94 - 8, 21)];
-        self.displayNameLabel.text = self.userInfo.displayName;
-        
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 60, width - 94 - 8, 11)];
-        self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
-        self.userNameLabel.font = [UIFont systemFontOfSize:12];
-        self.userNameLabel.textColor = [UIColor grayColor];
-    } else {
-        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-
-        self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 23, width - 94 - 8, 21)];
-        self.displayNameLabel.text = self.userInfo.displayName;
-        self.displayNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:20];
-        
-        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 50, width - 94 - 8, 21)];
-        self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
-        self.userNameLabel.font = [UIFont systemFontOfSize:12];
-        self.userNameLabel.textColor = [UIColor grayColor];
+        startPos += 24;
     }
+    
+    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 21)];
+    self.displayNameLabel.text = self.userInfo.displayName;
+    startPos += 24;
+
+    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+    self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
+    self.userNameLabel.font = [UIFont systemFontOfSize:12];
+    self.userNameLabel.textColor = [UIColor grayColor];
+    startPos += 16;
+    
+    if([WFCCUtilities isExternalTarget:self.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.userId];
+        self.domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+        self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
+        self.domainLabel.font = [UIFont systemFontOfSize:12];
+        startPos += 16;
+    }
+    
     
     if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
         self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
@@ -333,7 +337,12 @@
     [self.headerCell.contentView addSubview:self.portraitView];
     [self.headerCell.contentView addSubview:self.displayNameLabel];
     [self.headerCell.contentView addSubview:self.userNameLabel];
-    [self.headerCell.contentView addSubview:self.aliasLabel];
+    if(self.aliasLabel) {
+        [self.headerCell.contentView addSubview:self.aliasLabel];
+    }
+    if(self.domainLabel) {
+        [self.headerCell.contentView addSubview:self.domainLabel];
+    }
     self.headerCells = [NSMutableArray new];
     [self.headerCells addObject:self.headerCell];
     

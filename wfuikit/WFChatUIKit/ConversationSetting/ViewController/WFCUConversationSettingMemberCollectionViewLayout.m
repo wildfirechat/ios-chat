@@ -7,7 +7,7 @@
 //
 
 #import "WFCUConversationSettingMemberCollectionViewLayout.h"
-
+#import <WFChatClient/WFCChatClient.h>
 
 @interface WFCUConversationSettingMemberCollectionViewLayout()
 @property(nonatomic, strong) NSMutableArray *attributesArray;
@@ -79,6 +79,9 @@
         int lines = (itemCount - 1) / 5 + 1;
         CGFloat height = self.itemAreaWidth * lines;
         height += 12;
+        if([[WFCCIMService sharedWFCIMService] isMeshEnabled]) {
+            height += 10;
+        }
         return height;
     }
 }

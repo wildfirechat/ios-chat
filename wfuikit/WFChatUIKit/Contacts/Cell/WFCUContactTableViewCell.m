@@ -56,6 +56,7 @@
 }
 
 - (void)setUserId:(NSString *)userId groupId:(NSString *)groupId {
+    self.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
     _userId = userId;
     _groupId = groupId;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -68,6 +69,7 @@
         userInfo = [[WFCCUserInfo alloc] init];
         userInfo.userId = userId;
     }
+    
     [self updateUserInfo:userInfo];
 }
 
@@ -81,6 +83,7 @@
     }
     _userInfo = userInfo;
     
+    
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
     if (userInfo.friendAlias.length) {
@@ -92,49 +95,54 @@
     } else {
         self.nameLabel.text = [NSString stringWithFormat:@"user<%@>", userInfo.userId];
     }
-    
-    if ([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
-        WFCCUserOnlineState *state = [[WFCCIMService sharedWFCIMService] getUserOnlineState:self.userId];
-        BOOL online = NO;
-        BOOL hasMobileSession = NO;
-        long long mobileLastSeen = 0;
-        if(state.clientStates.count) { //有设备在线
-            if(state.customState.state != 4) { //没有设置为隐身
-                for (WFCCClientState *cs in state.clientStates) {
-                    if(cs.state == 0) {
-                        online = YES;
-                        break;
-                    }
-                    if(cs.state == 1 && (cs.platform == 1 || cs.platform == 2)) {
-                        hasMobileSession = YES;
-                        if(mobileLastSeen < cs.lastSeen) {
-                            mobileLastSeen = cs.lastSeen;
+
+    if([WFCCUtilities isExternalTarget:userInfo.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:userInfo.userId];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+    } else {
+        if ([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+            WFCCUserOnlineState *state = [[WFCCIMService sharedWFCIMService] getUserOnlineState:self.userId];
+            BOOL online = NO;
+            BOOL hasMobileSession = NO;
+            long long mobileLastSeen = 0;
+            if(state.clientStates.count) { //有设备在线
+                if(state.customState.state != 4) { //没有设置为隐身
+                    for (WFCCClientState *cs in state.clientStates) {
+                        if(cs.state == 0) {
+                            online = YES;
+                            break;
+                        }
+                        if(cs.state == 1 && (cs.platform == 1 || cs.platform == 2)) {
+                            hasMobileSession = YES;
+                            if(mobileLastSeen < cs.lastSeen) {
+                                mobileLastSeen = cs.lastSeen;
+                            }
                         }
                     }
                 }
             }
-        }
-        self.onlineView.hidden = !(online || hasMobileSession);
-        if(!online && hasMobileSession && mobileLastSeen > 0) {
-            NSString *strSeenTime = nil;
-            long long duration = [[[NSDate alloc] init] timeIntervalSince1970] - (mobileLastSeen/1000);
-            int days = (int)(duration / 86400);
-            if(days) {
-                strSeenTime = [NSString stringWithFormat:@"%d天前", days];
-            } else {
-                int hours = (int)(duration/3600);
-                if(hours) {
-                    strSeenTime = [NSString stringWithFormat:@"%d时前", hours];
+            self.onlineView.hidden = !(online || hasMobileSession);
+            if(!online && hasMobileSession && mobileLastSeen > 0) {
+                NSString *strSeenTime = nil;
+                long long duration = [[[NSDate alloc] init] timeIntervalSince1970] - (mobileLastSeen/1000);
+                int days = (int)(duration / 86400);
+                if(days) {
+                    strSeenTime = [NSString stringWithFormat:@"%d天前", days];
                 } else {
-                    int mins = (int)(duration/60);
-                    if(mins) {
-                        strSeenTime = [NSString stringWithFormat:@"%d分前", mins];
+                    int hours = (int)(duration/3600);
+                    if(hours) {
+                        strSeenTime = [NSString stringWithFormat:@"%d时前", hours];
                     } else {
-                        strSeenTime = [NSString stringWithFormat:@"不久前"];
+                        int mins = (int)(duration/60);
+                        if(mins) {
+                            strSeenTime = [NSString stringWithFormat:@"%d分前", mins];
+                        } else {
+                            strSeenTime = [NSString stringWithFormat:@"不久前"];
+                        }
                     }
                 }
+                self.nameLabel.text = [NSString stringWithFormat:@"%@(%@)", self.nameLabel.text, strSeenTime];
             }
-            self.nameLabel.text = [NSString stringWithFormat:@"%@(%@)", self.nameLabel.text, strSeenTime];
         }
     }
 }

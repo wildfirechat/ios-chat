@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)UILabel *nameLabel;
 @property(nonatomic, strong)UIButton *nextLevel;
 
+- (void)updateExternalDomainInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

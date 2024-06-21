@@ -12,5 +12,6 @@
 @interface WFCUConversationSettingMemberCell : UICollectionViewCell
 @property(nonatomic, strong) UIImageView *headerImageView;
 @property(nonatomic, strong) UILabel *nameLabel;
+@property(nonatomic, strong) UILabel *domainLabel;
 - (void)setModel:(NSObject *)model withType:(WFCCConversationType)type;
 @end

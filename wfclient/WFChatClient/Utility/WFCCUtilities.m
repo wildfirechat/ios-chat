@@ -250,6 +250,39 @@ static NSLock *wfcImageLock;
     return img;
 }
 
++ (BOOL)isExternalTarget:(NSString *)targetId {
+    if([targetId containsString:@"@"]) {
+        NSArray *components = [targetId componentsSeparatedByString:@"@"];
+        return components.count == 2;
+    }
+    return false;
+}
+
++ (NSString *)getExternalDomain:(NSString *)targetId {
+    if([targetId containsString:@"@"]) {
+        NSArray *components = [targetId componentsSeparatedByString:@"@"];
+        if(components.count == 2) {
+            return components[1];
+        }
+    }
+    return nil;
+}
+
++ (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color {
+    WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:domainId refresh:NO];
+    NSString *domainName = domainInfo.name.length?domainInfo.name:domainId;
+
+    NSMutableAttributedString *atts;
+    if(name.length) {
+        atts = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ @%@", name, domainName]];
+        [atts setAttributes:@{NSForegroundColorAttributeName : color} range:NSMakeRange(name.length, domainName.length+2)];
+    } else {
+        atts = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"@%@", domainName]];
+        [atts setAttributes:@{NSForegroundColorAttributeName : color} range:NSMakeRange(0, domainName.length+1)];
+    }
+    return atts;
+}
+
 + (NSString *)rf_EncryptMD5:(NSString *)str {
     if (str.length<=0) return nil;
 
