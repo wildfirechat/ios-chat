@@ -82,7 +82,7 @@
         [subView removeFromSuperview];
     }
     UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, self.view.bounds.size.width - 40, 40)];
-    [btn setTitle:@"在本单位中查找用户" forState:UIControlStateNormal];
+    [btn setTitle:@"在此单位中查找用户" forState:UIControlStateNormal];
     [btn setBackgroundColor:[UIColor greenColor]];
     [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
     btn.layer.cornerRadius = 5.f;

@@ -99,7 +99,7 @@
     }
     if([WFCCUtilities isExternalTarget:friendUid]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:friendUid];
-        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
     }
 }
 @end

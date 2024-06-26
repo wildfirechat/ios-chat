@@ -112,7 +112,7 @@
 - (void)updateExternalDomainInfo {
     if([WFCCUtilities isExternalTarget:self.info.conversation.target]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:self.info.conversation.target];
-        self.targetView.attributedText = [WFCCUtilities getExternal:domainId withName:self.targetView.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+        self.targetView.attributedText = [WFCCUtilities getExternal:domainId withName:self.targetView.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
     }
 }
 - (void)setSearchInfo:(WFCCConversationSearchInfo *)searchInfo {

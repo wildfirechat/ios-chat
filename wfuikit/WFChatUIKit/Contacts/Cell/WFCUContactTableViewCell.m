@@ -33,18 +33,6 @@
     // Configure the view for the selected state
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    if (self.isBig) {
-          _portraitView.frame = CGRectMake(8, (self.frame.size.height - 52) / 2.0, 52, 52);
-        _nameLabel.frame = CGRectMake(72, (self.frame.size.height - 20) / 2.0, [UIScreen mainScreen].bounds.size.width - 64, 20);
-        _nameLabel.font = [UIFont systemFontOfSize:20];
-      } else {
-          _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
-          _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
-            _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-      }
-}
 - (void)onUserInfoUpdated:(NSNotification *)notification {
     NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
     for (WFCCUserInfo *userInfo in userInfoList) {
@@ -98,7 +86,7 @@
 
     if([WFCCUtilities isExternalTarget:userInfo.userId]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:userInfo.userId];
-        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
     } else {
         if ([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             WFCCUserOnlineState *state = [[WFCCIMService sharedWFCIMService] getUserOnlineState:self.userId];
@@ -152,6 +140,7 @@
         _portraitView = [UIImageView new];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
+        _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
         [self.contentView addSubview:_portraitView];
     }
     return _portraitView;
@@ -161,6 +150,8 @@
     if (!_nameLabel) {
         _nameLabel = [UILabel new];
         _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
+        _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
+        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

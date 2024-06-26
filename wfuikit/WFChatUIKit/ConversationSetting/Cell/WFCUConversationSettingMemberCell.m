@@ -129,7 +129,7 @@
     self.nameLabel.hidden = NO;
     if(domainId) {
         self.domainLabel.hidden = NO;
-        self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
+        self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
     } else {
         self.domainLabel.hidden = YES;
     }
