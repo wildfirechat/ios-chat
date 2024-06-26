@@ -211,12 +211,11 @@
 }
 
 - (void)updateExternalDomainInfo {
-    if([WFCCUtilities isExternalTarget:self.model.message.conversation.target]) {
-        NSString *domainId = [WFCCUtilities getExternalDomain:self.model.message.conversation.target];
-        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor];
+    if([WFCCUtilities isExternalTarget:self.model.message.fromUser]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.model.message.fromUser];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
     }
 }
-
 
 - (void)setModel:(WFCUMessageModel *)model {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

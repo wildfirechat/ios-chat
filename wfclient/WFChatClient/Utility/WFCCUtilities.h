@@ -55,6 +55,7 @@
 + (BOOL)isExternalTarget:(NSString *)targetId;
 + (NSString *)getExternalDomain:(NSString *)targetId;
 + (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color;
++ (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color withSize:(CGFloat)fontSize;
 
 //同步函数，只能在后台线程执行
 + (NSString *)getGroupGridPortrait:(NSString *)groupId

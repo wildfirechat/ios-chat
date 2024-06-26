@@ -269,6 +269,10 @@ static NSLock *wfcImageLock;
 }
 
 + (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color {
+    return [WFCCUtilities getExternal:domainId withName:name withColor:color withSize:0];
+}
+
++ (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color withSize:(CGFloat)fontSize {
     WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:domainId refresh:NO];
     NSString *domainName = domainInfo.name.length?domainInfo.name:domainId;
 
@@ -276,9 +280,15 @@ static NSLock *wfcImageLock;
     if(name.length) {
         atts = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ @%@", name, domainName]];
         [atts setAttributes:@{NSForegroundColorAttributeName : color} range:NSMakeRange(name.length, domainName.length+2)];
+        if(fontSize > 0) {
+            [atts addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(name.length, domainName.length+2)];
+        }
     } else {
         atts = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"@%@", domainName]];
         [atts setAttributes:@{NSForegroundColorAttributeName : color} range:NSMakeRange(0, domainName.length+1)];
+        if(fontSize > 0) {
+            [atts addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, domainName.length+1)];
+        }
     }
     return atts;
 }

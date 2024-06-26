@@ -814,8 +814,8 @@
         
         domainLabel.textAlignment = NSTextAlignmentCenter;
         domainLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
         domainLabel.font = [UIFont systemFontOfSize:12];
+        domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
         
         [titleContainer addSubview:titleLabel];
         [titleContainer addSubview:domainLabel];
