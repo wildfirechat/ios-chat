@@ -74,12 +74,8 @@
             formatMsg = @"你加入了群聊";
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.invitor inGroup:self.groupId refresh:NO];
-            if (userInfo.friendAlias.length > 0) {
-                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.friendAlias];
-            } else if(userInfo.groupAlias.length > 0) {
-                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.groupAlias];
-            } else if (userInfo.displayName.length > 0) {
-                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.displayName];
+            if(userInfo) {
+                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.readableName];
             } else {
                 formatMsg = [NSString stringWithFormat:@"%@加入了群聊", self.invitor];
             }
@@ -91,8 +87,8 @@
         formatMsg = @"你邀请";
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.invitor refresh:NO];
-        if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@邀请", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"%@邀请", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"%@邀请", self.invitor];
         }
@@ -109,8 +105,8 @@
             continue;
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member refresh:NO];
-            if (userInfo.displayName.length > 0) {
-                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.displayName];
+            if (userInfo) {
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.readableName];
             } else {
                 formatMsg = [formatMsg stringByAppendingFormat:@" %@", member];
             }

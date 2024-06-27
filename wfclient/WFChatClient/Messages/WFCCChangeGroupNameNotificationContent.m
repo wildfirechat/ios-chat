@@ -75,12 +75,8 @@
         formatMsg = [NSString stringWithFormat:@"你修改群名称为：%@", self.name];
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", self.operateUser];
         }

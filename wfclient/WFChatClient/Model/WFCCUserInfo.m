@@ -7,6 +7,7 @@
 //
 
 #import "WFCCUserInfo.h"
+#import "WFCCUtilities.h"
 
 @implementation WFCCUserInfo
 - (void)cloneFrom:(WFCCUserInfo *)other {
@@ -47,5 +48,34 @@
     dict[@"updateDt"] = @(self.updateDt);
     dict[@"deleted"] = @(self.deleted);
     return dict;
+}
+
+- (NSString *)readableName {
+    BOOL isExternal = [WFCCUtilities isExternalTarget:self.userId];
+    NSString *name;
+    if (self.friendAlias.length > 0) {
+        name = self.friendAlias;
+    } else if(self.groupAlias.length > 0) {
+        name = self.groupAlias;
+    } else if (self.displayName.length > 0) {
+        name = self.displayName;
+    } else {
+        if(isExternal) {
+            name = [WFCCUtilities getTargetWithoutDomain:self.userId];
+        } else {
+            name =  self.userId;
+        }
+    }
+    if(isExternal) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.userId];
+        WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:domainId refresh:NO];
+        if(domainInfo.name.length) {
+            name = [NSString stringWithFormat:@"%@@%@", name, domainInfo.name];
+        } else {
+            name = [NSString stringWithFormat:@"%@@%@", name, domainId];
+        }
+    }
+    
+    return name;
 }
 @end

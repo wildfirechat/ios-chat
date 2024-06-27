@@ -54,6 +54,7 @@
 
 + (BOOL)isExternalTarget:(NSString *)targetId;
 + (NSString *)getExternalDomain:(NSString *)targetId;
++ (NSString *)getTargetWithoutDomain:(NSString *)targetId;
 + (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color;
 + (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color withSize:(CGFloat)fontSize;
 

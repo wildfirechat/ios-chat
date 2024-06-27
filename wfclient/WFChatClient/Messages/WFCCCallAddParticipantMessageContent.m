@@ -88,12 +88,10 @@
     NSString *format = @"";
     if ([message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         format = [format stringByAppendingString:@"您"];
-    } else if (sender.friendAlias.length) {
-        format = [format stringByAppendingString:sender.friendAlias];
-    } else if(sender.groupAlias.length) {
-        format = [format stringByAppendingString:sender.groupAlias];
-    } else if(sender.displayName.length) {
-        format = [format stringByAppendingString:sender.displayName];
+    } else if (sender) {
+        format = [format stringByAppendingString:sender.readableName];
+    } else {
+        format = [format stringByAppendingString:message.fromUser];
     }
     
     if (!format) {
@@ -107,12 +105,10 @@
     
         if ([p isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             format = [format stringByAppendingString:@" 您 "];
-        } else if (userInfo.friendAlias.length) {
-            format = [format stringByAppendingFormat:@" %@ ", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length) {
-            format = [format stringByAppendingFormat:@" %@ ", userInfo.groupAlias];
-        } else if(sender.displayName.length) {
-            format = [format stringByAppendingFormat:@" %@ ", userInfo.displayName];
+        } else if (userInfo) {
+            format = [format stringByAppendingFormat:@" %@ ", userInfo.readableName];
+        } else {
+            format = [format stringByAppendingFormat:@" %@ ", p];
         }
     }
     

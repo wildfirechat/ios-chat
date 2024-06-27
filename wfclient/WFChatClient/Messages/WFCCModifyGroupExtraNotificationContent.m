@@ -71,12 +71,8 @@
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser refresh:NO];
         
-        if (self.operateUser.length && userInfo.groupAlias.length) {
-            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.groupAlias];
-        } else if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.friendAlias];
-        } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"%@修改", self.operateUser];
         }
