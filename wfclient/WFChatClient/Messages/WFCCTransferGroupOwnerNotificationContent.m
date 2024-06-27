@@ -70,23 +70,15 @@
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.owner inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", self.owner];
         }
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", self.operateUser];
         }
@@ -95,12 +87,8 @@
             formatMsg = [formatMsg stringByAppendingString:@"你"];
         } else {
             userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.owner inGroup:self.groupId refresh:NO];
-            if (userInfo.friendAlias.length > 0) {
-                formatMsg = [formatMsg stringByAppendingString:userInfo.friendAlias];
-            } else if(userInfo.groupAlias.length > 0) {
-                formatMsg = [formatMsg stringByAppendingString:userInfo.groupAlias];
-            } else if (userInfo.displayName.length > 0) {
-                formatMsg = [formatMsg stringByAppendingString:userInfo.displayName];
+            if (userInfo) {
+                formatMsg = [formatMsg stringByAppendingString:userInfo.readableName];
             } else {
                 formatMsg = [formatMsg stringByAppendingString:self.owner];
             }

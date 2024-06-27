@@ -69,12 +69,8 @@
     NSString *user = @"你";
     if (![[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            user = userInfo.friendAlias;
-        } else if(userInfo.groupAlias.length > 0) {
-            user = userInfo.groupAlias;
-        } else if (userInfo.displayName.length > 0) {
-            user = userInfo.displayName;
+        if (userInfo) {
+            user = userInfo.readableName;
         } else {
             user = [NSString stringWithFormat:@"管理员<%@>", self.operatorId];
         }

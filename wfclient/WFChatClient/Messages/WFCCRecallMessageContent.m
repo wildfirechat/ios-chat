@@ -65,11 +65,8 @@
         return WFCCString(@"你撤回了一条消息");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId refresh:NO];
-        if (userInfo.friendAlias.length) {
-            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.friendAlias];
-        }
-        if (userInfo.displayName != nil) {
-            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.displayName];
+        if (userInfo) {
+            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.readableName];
         }
         return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), self.operatorId];
     }

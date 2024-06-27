@@ -94,6 +94,11 @@
 @property (nonatomic, assign) int deleted;
 
 
+/**
+ 辅助方法，返回可读的名称，如果有备注返回备注，如果有群昵称，显示群昵称，如果都没有返回用户昵称。
+ */
+@property(nonatomic, readonly)NSString *readableName;
+
 - (void)cloneFrom:(WFCCUserInfo *)other;
 
 @end

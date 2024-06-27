@@ -70,12 +70,8 @@
         return [self.type isEqualToString:@"0"] ? @"你开启了成员私聊" : @"你关闭了成员私聊";
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.displayName];
+        if (userInfo) {
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.readableName];
         } else {
             return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"用户<%@>开启了成员私聊" : @"用户<%@>关闭了成员私聊", self.operatorId];
         }

@@ -69,12 +69,8 @@
         formatMsg = @"你解散了群聊";
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@解散了群聊", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@解散了群聊", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            formatMsg = [NSString stringWithFormat:@"%@解散了群聊", userInfo.displayName];
+        if (userInfo) {
+            formatMsg = [NSString stringWithFormat:@"%@解散了群聊", userInfo.readableName];
         } else {
             formatMsg = [NSString stringWithFormat:@"用户<%@>解散了群聊", self.operateUser];
         }

@@ -70,12 +70,8 @@
         return [self.type isEqualToString:@"1"] ? @"你开启了全员禁言" : @"你关闭了全员禁言";
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
-        if (userInfo.friendAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"%@开启了全员禁言" : @"%@关闭了全员禁言", userInfo.friendAlias];
-        } else if(userInfo.groupAlias.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"%@开启了全员禁言" : @"%@关闭了全员禁言", userInfo.groupAlias];
-        } else if (userInfo.displayName.length > 0) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"%@开启了全员禁言" : @"%@关闭了全员禁言", userInfo.displayName];
+        if (userInfo) {
+            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"%@开启了全员禁言" : @"%@关闭了全员禁言", userInfo.readableName];
         } else {
             return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"用户<%@>开启了全员禁言" : @"用户<%@>关闭了全员禁言", self.creator];
         }

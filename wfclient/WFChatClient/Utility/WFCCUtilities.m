@@ -267,7 +267,15 @@ static NSLock *wfcImageLock;
     }
     return nil;
 }
-
++ (NSString *)getTargetWithoutDomain:(NSString *)targetId {
+    if([targetId containsString:@"@"]) {
+        NSArray *components = [targetId componentsSeparatedByString:@"@"];
+        if(components.count == 2) {
+            return components[0];
+        }
+    }
+    return targetId;
+}
 + (NSAttributedString *)getExternal:(NSString *)domainId withName:(NSString *)name withColor:(UIColor *)color {
     return [WFCCUtilities getExternal:domainId withName:name withColor:color withSize:0];
 }

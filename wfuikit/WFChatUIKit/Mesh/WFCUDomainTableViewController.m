@@ -72,6 +72,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"groupCellId"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"groupCellId"];
+        cell.imageView.image = [WFCUImage imageNamed:@"organization_icon"];
     }
     
     cell.textLabel.text = self.domains[indexPath.row].name;

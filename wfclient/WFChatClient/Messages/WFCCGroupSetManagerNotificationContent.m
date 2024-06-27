@@ -76,12 +76,8 @@
         from = @"你";
     } else {
         WFCCUserInfo *fromUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
-        if (fromUserInfo.friendAlias.length > 0) {
-            from = fromUserInfo.friendAlias;
-        } else if(fromUserInfo.groupAlias.length > 0) {
-            from = fromUserInfo.groupAlias;
-        } else if (fromUserInfo.displayName.length > 0) {
-            from = fromUserInfo.displayName;
+        if (fromUserInfo) {
+            from = fromUserInfo.readableName;
         } else {
             from = [NSString stringWithFormat:@"用户<%@>", self.operatorId];
         }
@@ -99,12 +95,8 @@
             continue;
         } else {
             WFCCUserInfo *memberUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId inGroup:self.groupId refresh:NO];
-            if (memberUserInfo.friendAlias.length > 0) {
-                target = memberUserInfo.friendAlias;
-            } else if(memberUserInfo.groupAlias.length > 0) {
-                target = memberUserInfo.groupAlias;
-            } else if (memberUserInfo.displayName.length > 0) {
-                target = memberUserInfo.displayName;
+            if (memberUserInfo) {
+                target = memberUserInfo.readableName;
             } else {
                 target = [NSString stringWithFormat:@"用户<%@>", memberId];
             }
