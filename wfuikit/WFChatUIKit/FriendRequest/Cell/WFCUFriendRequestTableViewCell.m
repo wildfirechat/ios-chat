@@ -66,10 +66,22 @@
     
     [self.acceptBtn addTarget:self action:@selector(onAddBtn:) forControlEvents:UIControlEventTouchDown];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
 }
 
 - (void)onAddBtn:(id)sender {
     [self.delegate onAcceptBtn:self.friendRequest.target];
+}
+
+- (void)onUserInfoUpdated:(NSNotification *)notification {
+    NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
+    for (WFCCUserInfo *userInfo in userInfoList) {
+        if ([self.friendRequest.target isEqualToString:userInfo.userId]) {
+            self.friendRequest = _friendRequest;
+            break;
+        }
+    }
 }
 
 - (void)setFriendRequest:(WFCCFriendRequest *)friendRequest {
@@ -110,6 +122,9 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
