@@ -9,6 +9,7 @@
 #import "WFCUFriendRequestTableViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUImage.h"
@@ -89,6 +90,10 @@
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:friendRequest.target refresh:NO];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]  placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     self.nameLabel.text = userInfo.displayName;
+    if([WFCCUtilities isExternalTarget:friendRequest.target]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:friendRequest.target];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.nameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
+    }
     self.reasonLabel.text = friendRequest.reason;
     BOOL expired = NO;
     NSDate *date = [[NSDate alloc] init];

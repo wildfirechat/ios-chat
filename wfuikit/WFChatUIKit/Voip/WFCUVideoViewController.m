@@ -23,6 +23,7 @@
 #import "WFCUImage.h"
 #import "WFZConferenceInfo.h"
 #import "WFCUUtilities.h"
+#import "WFCUConfigManager.h"
 #import <WFChatClient/WFCChatClient.h>
 
 @interface WFCUVideoViewController () <UITextFieldDelegate
@@ -147,6 +148,12 @@
     self.userNameLabel.text = user.displayName;
     self.userNameLabel.textColor = [UIColor colorWithHexString:@"0xffffff"];
     [self.view addSubview:self.userNameLabel];
+    
+    if([WFCCUtilities isExternalTarget:self.currentSession.participantIds[0]]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:self.currentSession.participantIds[0]];
+        self.userNameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:self.userNameLabel.text withColor:[WFCUConfigManager globalManager].externalNameColor withSize:24];
+    }
+
     
     self.stateLabel = [[UILabel alloc] init];
     self.stateLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
