@@ -2184,7 +2184,7 @@ public:
         return;
     }
     
-    mars::stn::searchUser(domainId?[domainId UTF8String]:"", [keyword UTF8String], (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser(domainId?[domainId UTF8String]:"", keyword?[keyword UTF8String]:"", (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
 
 class IMGetOneUserInfoCallback : public mars::stn::GetOneUserInfoCallback {
@@ -2279,7 +2279,7 @@ public:
     if(!keyword)
         return nil;
     
-    std::list<mars::stn::TUserInfo> friends = mars::stn::MessageDB::Instance()->SearchFriends([keyword UTF8String], 50);
+    std::list<mars::stn::TUserInfo> friends = mars::stn::MessageDB::Instance()->SearchFriends(keyword?[keyword UTF8String]:"", 50);
     NSMutableArray<WFCCUserInfo *> *ret = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TUserInfo>::iterator it = friends.begin(); it != friends.end(); it++) {
         WFCCUserInfo *userInfo = convertUserInfo(*it);
@@ -2435,7 +2435,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
 - (NSArray<WFCCGroupSearchInfo *> *)searchGroups:(NSString *)keyword {
     if(!keyword)
         return nil;
-    std::list<mars::stn::TGroupSearchResult> groups = mars::stn::MessageDB::Instance()->SearchGroups([keyword UTF8String], 50);
+    std::list<mars::stn::TGroupSearchResult> groups = mars::stn::MessageDB::Instance()->SearchGroups(keyword?[keyword UTF8String]:"", 50);
     NSMutableArray<WFCCGroupSearchInfo *> *ret = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TGroupSearchResult>::iterator it = groups.begin(); it != groups.end(); it++) {
         WFCCGroupSearchInfo *searchGroupInfo = [[WFCCGroupSearchInfo alloc] init];
@@ -3045,7 +3045,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         ls.insert(ls.end(), 0);
     }
     
-    std::list<mars::stn::TConversationSearchresult> tresult = mars::stn::MessageDB::Instance()->SearchConversationsEx(types, ls, [keyword UTF8String], startTime, endTime, desc?YES:NO, limit, offset);
+    std::list<mars::stn::TConversationSearchresult> tresult = mars::stn::MessageDB::Instance()->SearchConversationsEx(types, ls, keyword?[keyword UTF8String]:"", startTime, endTime, desc?YES:NO, limit, offset);
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TConversationSearchresult>::iterator it = tresult.begin(); it != tresult.end(); it++) {
         WFCCConversationSearchInfo *info = [[WFCCConversationSearchInfo alloc] init];
@@ -3092,7 +3092,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }
     
     
-    std::list<mars::stn::TConversationSearchresult> tresult = mars::stn::MessageDB::Instance()->SearchConversationsEx2(types, ls, [keyword UTF8String], cnts, startTime, endTime, desc?YES:NO, limit, offset, onlyMentionedMsg?YES:NO);
+    std::list<mars::stn::TConversationSearchresult> tresult = mars::stn::MessageDB::Instance()->SearchConversationsEx2(types, ls, keyword?[keyword UTF8String]:"", cnts, startTime, endTime, desc?YES:NO, limit, offset, onlyMentionedMsg?YES:NO);
     NSMutableArray *results = [[NSMutableArray alloc] init];
     for (std::list<mars::stn::TConversationSearchresult>::iterator it = tresult.begin(); it != tresult.end(); it++) {
         WFCCConversationSearchInfo *info = [[WFCCConversationSearchInfo alloc] init];
@@ -3113,7 +3113,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
                                     limit:(int)limit
                                    offset:(int)offset
                                  withUser:(NSString *)withUser {
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessages((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessages((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, keyword?[keyword UTF8String]:"", desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
@@ -3129,7 +3129,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
         types.push_back(num.intValue);
     }
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, [keyword UTF8String], types, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesByTypes((int)conversation.type, conversation.target ? [conversation.target UTF8String] : "", conversation.line, keyword?[keyword UTF8String]:"", types, desc ? true : false, limit, offset, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, YES);
 }
 
@@ -3190,7 +3190,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }
     
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesEx(convtypes, ls, [keyword UTF8String], types, direction, (int)count, fromIndex, withUser.length?[withUser UTF8String]:"");
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMessagesEx(convtypes, ls, keyword?[keyword UTF8String]:"", types, direction, (int)count, fromIndex, withUser.length?[withUser UTF8String]:"");
     return convertProtoMessageList(tmessages, false);
 }
 
@@ -3211,7 +3211,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     }
     
     
-    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMentionedMessagesEx(convtypes, ls, [keyword UTF8String], desc, limit, offset);
+    std::list<mars::stn::TMessage> tmessages = mars::stn::MessageDB::Instance()->SearchMentionedMessagesEx(convtypes, ls, keyword?[keyword UTF8String]:"", desc, limit, offset);
     return convertProtoMessageList(tmessages, false);
 }
 
@@ -4093,7 +4093,7 @@ public:
         successBlock(@[]);
         return;
     }
-    mars::stn::searchChannel([keyword UTF8String], YES, new IMSearchChannelCallback(successBlock, errorBlock));
+    mars::stn::searchChannel(keyword?[keyword UTF8String]:"", YES, new IMSearchChannelCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isListenedChannel:(NSString *)channelId {
@@ -4296,7 +4296,7 @@ public:
         }
         return;
     }
-    mars::stn::searchMyFileRecords([keyword UTF8String], beforeMessageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::searchMyFileRecords(keyword?[keyword UTF8String]:"", beforeMessageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)deleteFileRecord:(long long)messageUid
@@ -4325,7 +4325,7 @@ public:
     conv.conversationType = (int)conversation.type;
     
     std::string fromUser = userId ? [userId UTF8String] : "";
-    mars::stn::searchConversationFileRecords([keyword UTF8String], conv, fromUser, messageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
+    mars::stn::searchConversationFileRecords(keyword?[keyword UTF8String]:"", conv, fromUser, messageUid, (int)order, count, new IMLoadFileRecordCallback(successBlock, errorBlock));
 }
 
 - (void)getAuthorizedMediaUrl:(long long)messageUid
