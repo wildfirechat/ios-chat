@@ -105,6 +105,7 @@ namespace mars {
             bool setMessageLocalExtra(long messageId, const std::string &extra);
             
             int GetMsgTotalCount(int conversationType, const std::string &target, int line);
+            int GetConversationMessageCount(const std::list<int> &conversationTypes, const std::list<int> &lines);
             
             TUnreadCount GetUnreadCount(int conversationType, const std::string &target, int line);
             

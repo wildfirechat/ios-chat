@@ -4406,6 +4406,20 @@ public:
     return mars::stn::MessageDB::Instance()->GetMsgTotalCount((int)conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line);
 }
 
+- (int)getConversationMessageCount:(NSArray<NSNumber *> *)conversationTypes
+                             lines:(NSArray<NSNumber *> *)lines {
+    std::list<int> types;
+    for (NSNumber *type in conversationTypes) {
+        types.push_back([type intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    return mars::stn::MessageDB::Instance()->GetConversationMessageCount(types, ls);
+}
+
 - (BOOL)beginTransaction {
     return mars::stn::MessageDB::Instance()->BeginTransaction();
 }
