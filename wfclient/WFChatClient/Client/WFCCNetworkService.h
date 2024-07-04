@@ -76,6 +76,20 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 
 
 /**
+ 在双网环境中，获取当前连接的网络类型。仅当长连接建立时是准确的。如果长连接未建立，此值为上一次长连接建立时的值
+ 
+ - kConnectedNetworkType_Main 连接到主网络
+ - kConnectedNetworkType_Backup 连接到备网络
+ - kConnectedNetworkType_Unknown 未知
+
+ */
+typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
+  kConnectedNetworkType_Main = 1,
+  kConnectedNetworkType_Unknown = 0,
+  kConnectedNetworkType_Backup = -1,
+};
+
+/**
 平台枚举值
 
  //Platform_Android = 2,
@@ -446,10 +460,11 @@ typedef NS_ENUM(NSInteger, ConnectionStatus) {
 - (void)cancelForceConnect;
 
 /*
- 设置备选服务地址，仅专业版支持，一般用于政企单位内外网两种网络环境。
+ 设置备选服务地址，仅专业版支持，一般用于政企单位内外网两种网络环境。请参考：https://docs.wildfirechat.cn/blogs/政企内外双网解决方案.html
  */
 - (void)setBackupAddressStrategy:(int)strategy;
 - (void)setBackupAddress:(NSString *)host port:(int)port;
+- (ConnectedNetworkType)getConnectedNetworkType;
 
 /*
  设置协议栈短连接User agent。

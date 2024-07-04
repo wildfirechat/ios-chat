@@ -1274,6 +1274,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::setBackupAddress([host UTF8String], port);
 }
 
+- (ConnectedNetworkType)getConnectedNetworkType {
+    return (ConnectedNetworkType)mars::stn::getConnectedNetworkType();
+}
+
 - (void)setProtoUserAgent:(NSString *)userAgent {
     mars::stn::setUserAgent([userAgent UTF8String]);
 }

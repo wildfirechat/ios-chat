@@ -1375,6 +1375,16 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return 会话的消息数。
  */
 - (int)getMessageCount:(WFCCConversation *)conversation;
+
+/**
+ 获取会话消息数量
+ 
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @return 会话信息
+ */
+- (int)getConversationMessageCount:(NSArray<NSNumber *> *)conversationTypes
+                             lines:(NSArray<NSNumber *> *)lines;
 #pragma mark - 用户相关
 /**
  获取用户信息
