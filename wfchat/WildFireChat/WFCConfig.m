@@ -24,11 +24,11 @@ NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
-// 我们提供的服务仅供用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
-// 上线时请一定要切换成你们自己的服务。
+// 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
+// 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
 NSString *ICE_ADDRESS = @"turn:turn.wildfirechat.net:3478";
 NSString *ICE_USERNAME = @"wfchat";
-NSString *ICE_PASSWORD = @"wfchat1";
+NSString *ICE_PASSWORD = @"wfchat123";
 
 //用户协议和隐私政策，上线前请替换成您自己的内容
 NSString *USER_PRIVACY_URL = @"https://wildfirechat.net/wildfirechat_user_privacy.html";
