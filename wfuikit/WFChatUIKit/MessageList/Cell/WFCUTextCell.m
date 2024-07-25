@@ -19,9 +19,14 @@
 @end
 
 @implementation WFCUTextCell
++ (UIFont *)defaultFont {
+//    return [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    return [UIFont systemFontOfSize:18];
+}
+
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msgModel.message.content;
-    CGSize size = [WFCUUtilities getTextDrawingSize:txtContent.text font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:txtContent.text font:[WFCUTextCell defaultFont] constrainedSize:CGSizeMake(width, 8000)];
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING;
     if (size.width < 40) {
         size.width += 4;
@@ -49,7 +54,7 @@
         _textLabel = [[AttributedLabel alloc] init];
         ((AttributedLabel*)_textLabel).attributedLabelDelegate = self;
         _textLabel.numberOfLines = 0;
-        _textLabel.font = [UIFont systemFontOfSize:18];
+        _textLabel.font = [WFCUTextCell defaultFont];
         _textLabel.userInteractionEnabled = YES;
         [self.contentArea addSubview:_textLabel];
     }

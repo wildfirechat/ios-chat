@@ -23,7 +23,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
-    CFIndex index = [self characterIndexAtPoint:[touch locationInView:self]];
+    NSUInteger index = [self characterIndexAtPoint:[touch locationInView:self]];
     for(NSValue *value in self.rangeArray) {
         
         NSRange range=[value rangeValue];
@@ -130,128 +130,37 @@
     return [NSValue valueWithRange:range];
 }
 
-- (CFIndex)characterIndexAtPoint:(CGPoint)point {
-    
-    ////////
-    
-    NSMutableAttributedString* optimizedAttributedText = [self.attributedText mutableCopy];
-    
-    [self.attributedText enumerateAttribute:(NSString*)kCTParagraphStyleAttributeName inRange:NSMakeRange(0, [optimizedAttributedText length]) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-        
-        if (value == nil) {
-            return ;
-        }
-        NSMutableParagraphStyle* paragraphStyle = [value mutableCopy];
-        
-        if ([paragraphStyle lineBreakMode] == kCTLineBreakByTruncatingTail) {
-            [paragraphStyle setLineBreakMode:kCTLineBreakByWordWrapping];
-        }
-        
-        [optimizedAttributedText removeAttribute:(NSString*)kCTParagraphStyleAttributeName range:range];
-        [optimizedAttributedText addAttribute:(NSString*)kCTParagraphStyleAttributeName value:paragraphStyle range:range];
-        
-    }];
-    
-    ////////
-    
-    if (!CGRectContainsPoint(self.bounds, point)) {
-        return NSNotFound;
-    }
-    
-    CGRect textRect = [self textRect];
-    
-    if (!CGRectContainsPoint(textRect, point)) {
-        return NSNotFound;
-    }
-    
-    // Offset tap coordinates by textRect origin to make them relative to the origin of frame
-    point = CGPointMake(point.x - textRect.origin.x, point.y - textRect.origin.y);
-    // Convert tap coordinates (start at top left) to CT coordinates (start at bottom left)
-    point = CGPointMake(point.x, textRect.size.height - point.y);
-    
-    //////
-    
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)optimizedAttributedText);
-    
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, textRect);
-    
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [self.attributedText length]), path, NULL);
-    
-    if (frame == NULL) {
-        CFRelease(framesetter);
-        CFRelease(path);
-        return NSNotFound;
-    }
-    
-    CFArrayRef lines = CTFrameGetLines(frame);
-    
-    NSInteger numberOfLines = self.numberOfLines > 0 ? MIN(self.numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
-    
-    //NSLog(@"num lines: %d", numberOfLines);
-    
-    if (numberOfLines == 0) {
-        CFRelease(framesetter);
-        CFRelease(frame);
-        CFRelease(path);
-        return NSNotFound;
-    }
-    
-    NSUInteger idx = NSNotFound;
-    
-    CGPoint lineOrigins[numberOfLines];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
-    
-    for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++) {
-        
-        CGPoint lineOrigin = lineOrigins[lineIndex];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-        
-        // Get bounding information of line
-        CGFloat ascent, descent, leading, width;
-        width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-        CGFloat yMin = floor(lineOrigin.y - descent);
-        CGFloat yMax = ceil(lineOrigin.y + ascent);
-        
-        // Check if we've already passed the line
-        if (point.y > yMax) {
-            break;
-        }
-        
-        // Check if the point is within this line vertically
-        if (point.y >= yMin) {
-            
-            // Check if the point is within this line horizontally
-            if (point.x >= lineOrigin.x && point.x <= lineOrigin.x + width) {
-                
-                // Convert CT coordinates to line-relative coordinates
-                CGPoint relativePoint = CGPointMake(point.x - lineOrigin.x, point.y - lineOrigin.y);
-                idx = CTLineGetStringIndexForPosition(line, relativePoint);
-                
-                break;
-            }
-        }
-    }
-    
-    CFRelease(framesetter);
-    CFRelease(frame);
-    CFRelease(path);
-    
-    return idx;
-}
+- (NSUInteger)characterIndexAtPoint:(CGPoint)location {
+    NSMutableAttributedString* attributedString = [self.attributedText mutableCopy];
 
-- (CGRect)textRect {
+    NSString *text = self.text;
+    UIFont *font = self.font;
+    if (!text || !font) return NSNotFound;
+  
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedString);
+    CGSize constraintSize = CGSizeMake(self.bounds.size.width, CGFLOAT_MAX);
+    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), CGPathCreateWithRect(CGRectMake(0, 0, constraintSize.width, CGFLOAT_MAX), NULL), NULL);
+  
+    CFRelease(framesetter);
+  
+    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:constraintSize];
+    textContainer.lineFragmentPadding = 0.0;
+    textContainer.lineBreakMode = self.lineBreakMode;
+    textContainer.maximumNumberOfLines = self.numberOfLines;
+    [layoutManager addTextContainer:textContainer];
+  
+    NSTextStorage *textStorage = [[NSTextStorage alloc] initWithAttributedString:attributedString];
+    [textStorage addLayoutManager:layoutManager];
+
+    CGFloat xOffset = location.x;
+    CGFloat yOffset = location.y;
+    NSRange glyphRange;
+    CGFloat partialFraction;
+    NSUInteger charIndex = [layoutManager characterIndexForPoint:CGPointMake(xOffset, yOffset) inTextContainer:textContainer fractionOfDistanceBetweenInsertionPoints:&partialFraction];
     
-    CGRect textRect = [self textRectForBounds:self.bounds limitedToNumberOfLines:self.numberOfLines];
-    textRect.origin.y = (self.bounds.size.height - textRect.size.height)/2;
+    CFRelease(frame);
     
-    if (self.textAlignment == NSTextAlignmentCenter) {
-        textRect.origin.x = (self.bounds.size.width - textRect.size.width)/2;
-    }
-    if (self.textAlignment == NSTextAlignmentRight) {
-        textRect.origin.x = self.bounds.size.width - textRect.size.width;
-    }
-    
-    return textRect;
+    return partialFraction==1?NSNotFound:charIndex;
 }
 @end
