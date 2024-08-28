@@ -1205,6 +1205,7 @@ namespace mars{
         extern bool GetFeed(std::string data, TMomentsFeed &feed, bool gzip);
         extern bool GetComments(std::string data, std::list<TMomentsComment> &feeds, bool gzip);
         extern const std::string getProtoRevision();
+        extern int64_t getAvailableSize();
 		
     }
 }

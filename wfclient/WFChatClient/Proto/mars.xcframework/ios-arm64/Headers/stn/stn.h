@@ -259,6 +259,8 @@ extern std::string GetDecodeData(std::string data);
     
 extern std::string GetHost();
 extern int GetPort();
+extern int GetLonglinkPort();
+extern int GetRouteCode();
     
 extern std::string GetHostEx();
 
