@@ -509,9 +509,17 @@
             return;
         }
         self.loadingMore = YES;
-        long lastIndex = 0;
+        __block long lastIndex = 0;
+        __block long maxTime = 0;
         if (weakSelf.modelList.count) {
             lastIndex = [weakSelf.modelList firstObject].message.messageId;
+            maxTime = [weakSelf.modelList firstObject].message.serverTime;
+            [weakSelf.modelList enumerateObjectsUsingBlock:^(WFCUMessageModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(obj.message.serverTime < maxTime) {
+                    lastIndex = obj.message.messageId;
+                    maxTime = obj.message.serverTime;
+                }
+            }];
         }
         
         [[WFCCIMService sharedWFCIMService] getMessagesV2:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser  success:^(NSArray<WFCCMessage *> *messageList) {
