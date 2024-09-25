@@ -646,13 +646,16 @@ static NSLock *wfcImageLock;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[memberExtra dataUsingEncoding:NSUTF8StringEncoding]
                                                                options:kNilOptions
                                                                  error:&__error];
-    if (!__error && dictionary[@"s"]) {
-        int sourceType = [[dictionary[@"s"] valueForKey:@"t"] intValue];
-        if(sourceType > 0) {
-            if([[dictionary[@"s"] valueForKey:@"i"] isKindOfClass:NSString.class]) {
-                [sourceTargetId setString:[dictionary[@"s"] valueForKey:@"i"]];
+    if (!__error && dictionary[@"s"] && [dictionary[@"s"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *source = dictionary[@"s"];
+        if(source[@"t"]) {
+            int sourceType = [[source valueForKey:@"t"] intValue];
+            if(sourceType > 0) {
+                if(source[@"i"] && [[source valueForKey:@"i"] isKindOfClass:NSString.class]) {
+                    [sourceTargetId setString:[source valueForKey:@"i"]];
+                }
+                return sourceType;
             }
-            return sourceType;
         }
     }
     return GroupMemberSource_Unknown;
