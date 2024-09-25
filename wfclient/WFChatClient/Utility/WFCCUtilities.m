@@ -626,4 +626,48 @@ static NSLock *wfcImageLock;
     wfcUrlImageDict = [[NSMutableDictionary alloc] init];
     wfcImageLock = [[NSLock alloc] init];
 }
+
++ (NSString *)getGroupMemberExtra:(WFCCGroupMemberSourceType)sourceType sourceTargetId:(NSString *)sourceTargetId {
+    NSDictionary *extraDict;
+    if(sourceTargetId.length) {
+        extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(sourceType), @"i"/*targetId*/:sourceTargetId}};
+    } else {
+        extraDict = @{@"s"/*source*/:@{@"t"/*type*/:@(sourceType)}};
+    }
+    
+    NSData *extraData = [NSJSONSerialization dataWithJSONObject:extraDict
+                                                        options:kNilOptions
+                                                          error:nil];
+    return [[NSString alloc] initWithData:extraData encoding:NSUTF8StringEncoding];
+}
+
++ (WFCCGroupMemberSourceType)getGroupMemberSourceType:(NSString *)memberExtra sourceTargetId:(NSMutableString *)sourceTargetId {
+    NSError *__error = nil;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[memberExtra dataUsingEncoding:NSUTF8StringEncoding]
+                                                               options:kNilOptions
+                                                                 error:&__error];
+    if (!__error && dictionary[@"s"]) {
+        int sourceType = [[dictionary[@"s"] valueForKey:@"t"] intValue];
+        if(sourceType > 0) {
+            if([[dictionary[@"s"] valueForKey:@"i"] isKindOfClass:NSString.class]) {
+                [sourceTargetId setString:[dictionary[@"s"] valueForKey:@"i"]];
+            }
+            return sourceType;
+        }
+    }
+    return GroupMemberSource_Unknown;
+}
+
++ (NSString *)getUserDisplayName:(NSString *)userId inGroup:(NSString *)groupId {
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:userId]) {
+        return @"你";
+    } else {
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:groupId refresh:NO];
+        if(userInfo) {
+            return userInfo.readableName;
+        } else {
+            return userId;
+        }
+    }
+}
 @end

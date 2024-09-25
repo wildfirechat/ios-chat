@@ -2507,6 +2507,8 @@
         } else if(card.type == CardType_Group) {
             WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
             vc2.groupId = card.targetId;
+            vc2.sourceType = GroupMemberSource_Card;
+            vc2.sourceTargetId = model.message.fromUser;
             vc2.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc2 animated:YES];
         } else if(card.type == CardType_Channel) {

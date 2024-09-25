@@ -51,6 +51,7 @@
 @property (strong, nonatomic)UITableViewCell *momentCell;
 @property (strong, nonatomic)UITableViewCell *moreCell;
 @property (nonatomic, strong)UITableViewCell *userMessagesCell;
+@property (nonatomic, strong)UITableViewCell *groupSourceCell;
 
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<UITableViewCell *> *cells;
@@ -59,6 +60,9 @@
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
 
 @property(nonatomic, strong)NSArray<NSNumber *> *organizationIds;
+
+@property(nonatomic, assign)WFCCGroupMemberSourceType groupSourceType;
+@property (nonatomic, strong)NSString *groupSourceTargetId;
 @end
 
 @implementation WFCUProfileTableViewController
@@ -365,6 +369,46 @@
         }
         
         if (self.fromConversation.type == Group_Type) {
+            WFCCGroupMember * groupMember = [[WFCCIMService sharedWFCIMService] getGroupMember:self.fromConversation.target memberId:self.userId];
+            NSMutableString *targetId = [[NSMutableString alloc] init];
+            self.groupSourceType = [WFCCUtilities getGroupMemberSourceType:groupMember.extra sourceTargetId:targetId];
+            if(self.groupSourceType > 0) {
+                if(targetId.length) {
+                    self.sourceTargetId = [targetId copy];
+                }
+                if(self.groupSourceType == GroupMemberSource_Invite) {
+                    if([self.userId isEqualToString:self.sourceTargetId]) {
+                        //可能是当前用户创建的群组，忽略。
+                        NSLog(@"Maybe the creator of the group!");
+                    } else {
+                        if(self.sourceTargetId.length) {
+                            self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                            self.groupSourceCell.textLabel.text = @"进群方式";
+                            self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:@"%@ 邀请入群", [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
+                            [self.cells addObject:self.groupSourceCell];
+                        }
+                    }
+                } else if(self.groupSourceType == GroupMemberSource_QrCode) {
+                    if(self.sourceTargetId.length) {
+                        self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                        self.groupSourceCell.textLabel.text = @"进群方式";
+                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:@"扫描 %@ 分享的二维码入群", [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
+                        [self.cells addObject:self.groupSourceCell];
+                    }
+                } else if(self.groupSourceType == GroupMemberSource_Card) {
+                    if(self.sourceTargetId.length) {
+                        self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                        self.groupSourceCell.textLabel.text = @"进群方式";
+                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:@"通过 %@ 分享的名片入群", [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
+                        [self.cells addObject:self.groupSourceCell];
+                    }
+                } else if(self.groupSourceType == GroupMemberSource_Search) {
+                    self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+                    self.groupSourceCell.textLabel.text = @"进群方式";
+                    self.groupSourceCell.detailTextLabel.text = @"通过搜索入群";
+                    [self.cells addObject:self.groupSourceCell];
+                }
+            }
             self.userMessagesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             self.userMessagesCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if([self.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {

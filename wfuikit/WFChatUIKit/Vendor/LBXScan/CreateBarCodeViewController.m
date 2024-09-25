@@ -55,8 +55,8 @@
 
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
     } else if(self.qrType == QRType_Group) {
-        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@", self.target];
-//        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
+//        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@", self.target];
+        self.qrStr = [NSString stringWithFormat:@"wildfirechat://group/%@?from=%@", self.target, [WFCCNetworkService sharedInstance].userId];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGroupInfoUpdated:) name:kGroupInfoUpdated object:nil];
         

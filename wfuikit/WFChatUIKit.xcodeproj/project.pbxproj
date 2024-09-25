@@ -173,8 +173,6 @@
 		2F5510BC217F5CC200F56C26 /* WFCUBrowserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510BE217F5CC200F56C26 /* WFCUSearchViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */; };
-		2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */; };
-		2F5510C0217F5CC200F56C26 /* WFCUCreateGroupViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EE8217F5CC000F56C26 /* WFCUCreateGroupViewController.h */; };
 		2F5510C5217F5CC200F56C26 /* WFCUFavGroupTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EF0217F5CC000F56C26 /* WFCUFavGroupTableViewController.h */; };
 		2F5510C6217F5CC200F56C26 /* WFCUFavGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EF1217F5CC000F56C26 /* WFCUFavGroupTableViewController.m */; };
 		2F5510C7217F5CC200F56C26 /* WFCULocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EF4217F5CC000F56C26 /* WFCULocationViewController.m */; };
@@ -799,8 +797,6 @@
 		2F550EE2217F5CC000F56C26 /* WFCUBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUBrowserViewController.h; sourceTree = "<group>"; };
 		2F550EE3217F5CC000F56C26 /* WFCUGeneralModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralModifyViewController.h; sourceTree = "<group>"; };
 		2F550EE4217F5CC000F56C26 /* WFCUSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUSearchViewController.h; sourceTree = "<group>"; };
-		2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCreateGroupViewController.m; sourceTree = "<group>"; };
-		2F550EE8217F5CC000F56C26 /* WFCUCreateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUCreateGroupViewController.h; sourceTree = "<group>"; };
 		2F550EF0217F5CC000F56C26 /* WFCUFavGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUFavGroupTableViewController.h; sourceTree = "<group>"; };
 		2F550EF1217F5CC000F56C26 /* WFCUFavGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFavGroupTableViewController.m; sourceTree = "<group>"; };
 		2F550EF4217F5CC000F56C26 /* WFCULocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULocationViewController.m; sourceTree = "<group>"; };
@@ -1508,7 +1504,6 @@
 				2F551065217F5CC100F56C26 /* Contacts */,
 				2F551059217F5CC100F56C26 /* ConversationList */,
 				2F55104E217F5CC100F56C26 /* ConversationSetting */,
-				2F550EE5217F5CC000F56C26 /* CreateGroup */,
 				2F551037217F5CC100F56C26 /* ForwardMessage */,
 				2F551085217F5CC200F56C26 /* FriendRequest */,
 				2F550EEE217F5CC000F56C26 /* Group */,
@@ -1647,23 +1642,6 @@
 				B77D33F5290C1EB500E72111 /* WFCUProfileMoreTableViewController.m */,
 			);
 			path = CommonVC;
-			sourceTree = "<group>";
-		};
-		2F550EE5217F5CC000F56C26 /* CreateGroup */ = {
-			isa = PBXGroup;
-			children = (
-				2F550EE6217F5CC000F56C26 /* ViewController */,
-			);
-			path = CreateGroup;
-			sourceTree = "<group>";
-		};
-		2F550EE6217F5CC000F56C26 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				2F550EE7217F5CC000F56C26 /* WFCUCreateGroupViewController.m */,
-				2F550EE8217F5CC000F56C26 /* WFCUCreateGroupViewController.h */,
-			);
-			path = ViewController;
 			sourceTree = "<group>";
 		};
 		2F550EEE217F5CC000F56C26 /* Group */ = {
@@ -2914,7 +2892,6 @@
 				2F551101217F5CC200F56C26 /* CCHMapClusterOperation.h in Headers */,
 				2FD550F62442AA5800B3EE09 /* UILabel+YBAttributeTextTapAction.h in Headers */,
 				2FD2EE80218F15B500CBA8B0 /* WFCUVerifyRequestViewController.h in Headers */,
-				2F5510C0217F5CC200F56C26 /* WFCUCreateGroupViewController.h in Headers */,
 				2F55109D217F5CC200F56C26 /* WFCUMediaMessageCell.h in Headers */,
 				2BDF579C24AD70C8003C1F08 /* UIColor+Hex.h in Headers */,
 				2F5510FE217F5CC200F56C26 /* CCHMapClusterer.h in Headers */,
@@ -3290,7 +3267,6 @@
 				2F551093217F5CC200F56C26 /* WFCUFileCell.m in Sources */,
 				B74CF822295D298F009AFA88 /* WFCUOrganizationEx.m in Sources */,
 				B72FBB14283230F0005F2745 /* DWKWebView.m in Sources */,
-				2F5510BF217F5CC200F56C26 /* WFCUCreateGroupViewController.m in Sources */,
 				B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */,
 				2F3A6C18219EE941009A8B4B /* WFCUFaceBoard.m in Sources */,
 				2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */,

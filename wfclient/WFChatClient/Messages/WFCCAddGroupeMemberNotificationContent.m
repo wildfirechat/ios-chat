@@ -10,7 +10,7 @@
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
-
+#import "WFCCUtilities.h"
 
 @implementation WFCCAddGroupeMemberNotificationContent
 - (WFCCMessagePayload *)encode {
@@ -67,32 +67,26 @@
     return [self formatNotification:message];
 }
 
+- (NSString *)getUserDisplayName:(NSString *)userId {
+    return [WFCCUtilities getUserDisplayName:userId inGroup:self.groupId];
+}
+
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
+    NSMutableString *sourceTargetId = [[NSMutableString alloc] init];
+    WFCCGroupMemberSourceType sourceType = [WFCCUtilities getGroupMemberSourceType:self.extra sourceTargetId:sourceTargetId];
+    if(sourceType == GroupMemberSource_QrCode && [sourceTargetId length] && [self.invitees count] == 1) {
+        return [NSString stringWithFormat:@"%@ 扫描了 %@ 分享的二维码加入了群聊", [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
+    } else if(sourceType == GroupMemberSource_Card && [sourceTargetId length] && [self.invitees count] == 1) {
+        return [NSString stringWithFormat:@"%@ 通过 %@ 分享的群名片加入了群聊", [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
+    }
+    
     if ([self.invitees count] == 1 && [[self.invitees objectAtIndex:0] isEqualToString:self.invitor]) {
-        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.invitor]) {
-            formatMsg = @"你加入了群聊";
-        } else {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.invitor inGroup:self.groupId refresh:NO];
-            if(userInfo) {
-                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", userInfo.readableName];
-            } else {
-                formatMsg = [NSString stringWithFormat:@"%@加入了群聊", self.invitor];
-            }
-        }
+        formatMsg = [NSString stringWithFormat:@"%@ 加入了群聊", [self getUserDisplayName:self.invitor]];
         return formatMsg;
     }
     
-    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.invitor]) {
-        formatMsg = @"你邀请";
-    } else {
-        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.invitor refresh:NO];
-        if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@邀请", userInfo.readableName];
-        } else {
-            formatMsg = [NSString stringWithFormat:@"%@邀请", self.invitor];
-        }
-    }
+    formatMsg = [NSString stringWithFormat:@"%@邀请", [self getUserDisplayName:self.invitor]];
     
     int count = 0;
     if([self.invitees containsObject:[WFCCNetworkService sharedInstance].userId]) {
@@ -104,12 +98,7 @@
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             continue;
         } else {
-            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:member refresh:NO];
-            if (userInfo) {
-                formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.readableName];
-            } else {
-                formatMsg = [formatMsg stringByAppendingFormat:@" %@", member];
-            }
+            formatMsg = [formatMsg stringByAppendingFormat:@" %@", [self getUserDisplayName:member]];
             
             count++;
             if(count >= 4) {

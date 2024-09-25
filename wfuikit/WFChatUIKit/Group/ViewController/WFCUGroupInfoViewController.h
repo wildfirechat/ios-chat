@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WFCUEnum.h"
+#import <WFChatClient/WFCChatClient.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUGroupInfoViewController : UIViewController
 @property(nonatomic, strong)NSString *groupId;
 
-@property (nonatomic, assign)WFCUGroupMemberSourceType sourceType;
+@property (nonatomic, assign)WFCCGroupMemberSourceType sourceType;
 @property (nonatomic, strong)NSString *sourceTargetId;
 @end
 

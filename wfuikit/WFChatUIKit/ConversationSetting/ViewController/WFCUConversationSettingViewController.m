@@ -15,7 +15,6 @@
 #import "WFCUMessageListViewController.h"
 #import "WFCUGeneralModifyViewController.h"
 #import "WFCUSwitchTableViewCell.h"
-#import "WFCUCreateGroupViewController.h"
 #import "WFCUProfileTableViewController.h"
 #import "GroupManageTableViewController.h"
 #import "WFCUGroupMemberCollectionViewController.h"
@@ -989,20 +988,6 @@
     };
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:gmvc];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
-//  } else if ([self isGroupPortraitCell:indexPath]) {
-//      if (self.groupInfo.type == GroupType_Restricted && ![self isGroupManager]) {
-//          [self.view makeToast:WFCString(@"OnlyManangerCanChangeGroupPortraitHint") duration:1 position:CSToastPositionCenter];
-//          return;
-//      }
-//    WFCUCreateGroupViewController *vc = [[WFCUCreateGroupViewController alloc] init];
-//    vc.isModifyPortrait = YES;
-//    vc.groupId = self.groupInfo.target;
-//    vc.memberIds = [[NSMutableArray alloc] init];
-//    for (WFCCGroupMember *member in self.memberList) {
-//      [vc.memberIds addObject:member.memberId];
-//    }
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
   } else if ([self isGroupManageCell:indexPath]) {
       GroupManageTableViewController *gmvc = [[GroupManageTableViewController alloc] init];
       gmvc.groupInfo = self.groupInfo;
@@ -1114,7 +1099,8 @@
           }
 
           pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-              [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:nil notifyLines:@[@(0)] notifyContent:nil success:^{
+              NSString *memberExtra = [WFCCUtilities getGroupMemberExtra:GroupMemberSource_Invite sourceTargetId:[WFCCNetworkService sharedInstance].userId];
+              [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
                   
               } error:^(int error_code) {
@@ -1244,7 +1230,7 @@
         name = WFCString(@"GroupChat");
     }
     
-    NSString *extraStr = nil;
+    NSString *extraStr = [WFCCUtilities getGroupMemberExtra:GroupMemberSource_Invite sourceTargetId:[WFCCNetworkService sharedInstance].userId];
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         
