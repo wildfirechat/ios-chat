@@ -9,7 +9,6 @@
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationTableViewCell.h"
 #import "WFCUContactListViewController.h"
-#import "WFCUCreateGroupViewController.h"
 #import "WFCUFriendRequestViewController.h"
 #import "WFCUSearchGroupTableViewCell.h"
 #import "WFCUConversationSearchTableViewController.h"
@@ -281,7 +280,7 @@
         name = WFCString(@"GroupChat");
     }
     
-    NSString *extraStr = nil;
+    NSString *extraStr = [WFCCUtilities getGroupMemberExtra:GroupMemberSource_Invite sourceTargetId:[WFCCNetworkService sharedInstance].userId];
     [[WFCCIMService sharedWFCIMService] createGroup:nil name:name portrait:nil type:GroupType_Restricted groupExtra:nil members:memberIds memberExtra:extraStr notifyLines:@[@(0)] notifyContent:nil success:^(NSString *groupId) {
         NSLog(@"create group success");
         

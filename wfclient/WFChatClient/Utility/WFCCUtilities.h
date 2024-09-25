@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WFCCIMService.h"
+#import "WFCCEnums.h"
 
 @interface WFCCUtilities : NSObject
 
@@ -68,4 +69,11 @@
                    memberPortraits:(NSArray<NSDictionary<NSString*, NSString*>*> *)groupMembers
                              width:(int)PortraitWidth
                defaultUserPortrait:(UIImage *(^)(NSString *userId))defaultUserPortraitBlock;
+
+
++ (NSString *)getGroupMemberExtra:(WFCCGroupMemberSourceType)sourceType sourceTargetId:(NSString *)sourceTargetId;
+
++ (WFCCGroupMemberSourceType)getGroupMemberSourceType:(NSString *)memberExtra sourceTargetId:(NSMutableString *)sourceTargetId;
+
++ (NSString *)getUserDisplayName:(NSString *)userId inGroup:(NSString *)groupId;
 @end

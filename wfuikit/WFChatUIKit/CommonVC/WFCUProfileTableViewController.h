@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WFCUEnum.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @class WFCCUserInfo;
 @class WFCCConversation;
@@ -15,6 +15,6 @@
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)WFCCConversation *fromConversation;
 
-@property (nonatomic, assign)WFCUFriendSourceType sourceType;
+@property (nonatomic, assign)WFCCFriendSourceType sourceType;
 @property (nonatomic, strong)NSString *sourceTargetId;
 @end
