@@ -4,9 +4,12 @@
 "cancel" = "Huỷ";
 
 "originalPhoto" = "Toàn bộ hình ảnh";
+"originalTotalSize" = "Tổng cộng";
 "done" = "Xong";
 "ok" = "đồng ý";
 "editFinish" = "Xong";
+"cameraDone" = "Xong";
+"inputDone" = "Xong";
 
 "back" = "Trở lại";
 "edit" = "Chỉnh sửa";
@@ -20,11 +23,14 @@
 
 "noPhotoTips" = "Không có ảnh";
 
-"hudLoading" = "đang chờ đợi...";
+"hudLoading" = "Đang tải";
+"hudProcessing" = "Đang xử lý";
 
 "exceededMaxSelectCount" = "Số lượng lựa chọn tối đa: %ld";
 "longerThanMaxVideoDuration" = "Không thể chọn video có thời lượng dài hơn %ld giây";
-"shorterThanMaxVideoDuration" = "Không thể chọn video có thời lượng ngắn hơn %ld giây";
+"shorterThanMinVideoDuration" = "Không thể chọn video có thời lượng ngắn hơn %ld giây";
+"largerThanMaxVideoDataSize" = "Không thể chọn video lớn hơn %@MB";
+"smallerThanMinVideoDataSize" = "Không thể chọn video nhỏ hơn %@MB";
 "exceededMaxVideoSelectCount" = "Số lượng lựa chọn tối đa của video: %ld";
 "lessThanMinVideoSelectCount" = "Số phút chọn tối thiểu của video: %ld";
 

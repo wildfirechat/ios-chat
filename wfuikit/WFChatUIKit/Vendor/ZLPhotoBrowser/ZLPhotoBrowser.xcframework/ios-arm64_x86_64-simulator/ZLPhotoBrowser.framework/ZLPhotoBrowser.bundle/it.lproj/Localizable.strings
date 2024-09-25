@@ -4,9 +4,12 @@
 "cancel" = "Annulla";
 
 "originalPhoto" = "Immagine completa";
+"originalTotalSize" = "Totale";
 "done" = "Fine";
 "ok" = "OK";
 "editFinish" = "Fine";
+"cameraDone" = "Fine";
+"inputDone" = "Fine";
 
 "back" = "Indietro";
 "edit" = "Modifica";
@@ -20,11 +23,14 @@
 
 "noPhotoTips" = "Niente fotos";
 
-"hudLoading" = "in attesa...";
+"hudLoading" = "Caricamento in corso";
+"hudProcessing" = "Elaborazione in corse";
 
 "exceededMaxSelectCount" = "Conteggio massimo per la selezione: %ld";
 "longerThanMaxVideoDuration" = "Impossibile selezionare video con una durata superiore a %lds";
-"shorterThanMaxVideoDuration" = "Impossibile selezionare video con una durata inferiore a %lds";
+"shorterThanMinVideoDuration" = "Impossibile selezionare video con una durata inferiore a %lds";
+"largerThanMaxVideoDataSize" = "Impossibile selezionare video di dimensioni superiori a %@MB";
+"smallerThanMinVideoDataSize" = "Impossibile selezionare video di dimensioni inferiori a %@MB";
 "exceededMaxVideoSelectCount" = "Conteggio massimo per la selezione dei video: %ld";
 "lessThanMinVideoSelectCount" = "Conteggio minimo per la selezione del video: %ld";
 

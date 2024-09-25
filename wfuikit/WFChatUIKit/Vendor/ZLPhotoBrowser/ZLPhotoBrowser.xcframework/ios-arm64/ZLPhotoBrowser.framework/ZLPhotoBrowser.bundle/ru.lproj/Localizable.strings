@@ -4,9 +4,12 @@
 "cancel" = "Отмена";
 
 "originalPhoto" = "Полный формат";
+"originalTotalSize" = "Всего";
 "done" = "Готово";
 "ok" = "в порядке";
 "editFinish" = "Готово";
+"cameraDone" = "Готово";
+"inputDone" = "Готово";
 
 "back" = "Назад";
 "edit" = "Pед";
@@ -20,11 +23,14 @@
 
 "noPhotoTips" = "Нет фотографии";
 
-"hudLoading" = "ожидание...";
+"hudLoading" = "Загрузка";
+"hudProcessing" = "Обработка";
 
 "exceededMaxSelectCount" = "Максимальное количество выбранных: %ld";
-"longerThanMaxVideoDuration" = "Невозможно выбрать видео длительностью более %ld с";
-"shorterThanMaxVideoDuration" = "Невозможно выбрать видео продолжительностью менее 2 с";
+"longerThanMaxVideoDuration" = "Невозможно выбрать видео продолжительностью более %ld сек";
+"shorterThanMinVideoDuration" = "Невозможно выбрать видео короче %ld сек";
+"largerThanMaxVideoDataSize" = "Невозможно выбрать видео размером более %@МБ";
+"smallerThanMinVideoDataSize" = "Невозможно выбрать видео размером менее %@МБ";
 "exceededMaxVideoSelectCount" = "Максимальное количество выбранных видео: %ld";
 "lessThanMinVideoSelectCount" = "Количество мин. Выбора видео: %ld";
 
