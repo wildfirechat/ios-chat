@@ -4,9 +4,12 @@
 "cancel" = "取消";
 
 "originalPhoto" = "原图";
+"originalTotalSize" = "共";
 "done" = "确定";
 "ok" = "确定";
 "editFinish" = "完成";
+"cameraDone" = "确定";
+"inputDone" = "确定";
 
 "back" = "返回";
 "edit" = "编辑";
@@ -20,11 +23,14 @@
 
 "noPhotoTips" = "无照片";
 
-"hudLoading" = "正在处理...";
+"hudLoading" = "正在加载";
+"hudProcessing" = "正在处理";
 
 "exceededMaxSelectCount" = "最多只能选择%ld张图片";
 "longerThanMaxVideoDuration" = "不能选择超过%ld秒的视频";
-"shorterThanMaxVideoDuration" = "不能选择低于%ld秒的视频";
+"shorterThanMinVideoDuration" = "不能选择低于%ld秒的视频";
+"largerThanMaxVideoDataSize" = "不能选择大于%@MB的视频";
+"smallerThanMinVideoDataSize" = "不能选择小于%@MB的视频";
 "exceededMaxVideoSelectCount" = "最多只能选择%ld个视频";
 "lessThanMinVideoSelectCount" = "最少选择%ld个视频";
 

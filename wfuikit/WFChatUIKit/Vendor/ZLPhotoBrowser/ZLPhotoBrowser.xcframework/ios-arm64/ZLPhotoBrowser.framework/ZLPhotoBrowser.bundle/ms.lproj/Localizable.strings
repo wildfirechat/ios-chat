@@ -4,9 +4,12 @@
 "cancel" = "Batal";
 
 "originalPhoto" = "Imej Penuh";
+"originalTotalSize" = "Jumlah";
 "done" = "Selesai";
 "ok" = "Okey";
 "editFinish" = "Selesai";
+"cameraDone" = "Selesai";
+"inputDone" = "Selesai";
 
 "back" = "Belakang";
 "edit" = "Edit";
@@ -20,11 +23,14 @@
 
 "noPhotoTips" = "Tiada Foto";
 
-"hudLoading" = "menunggu...";
+"hudLoading" = "Memuatkan";
+"hudProcessing" = "Sedang diproses";
 
 "exceededMaxSelectCount" = "Kiraan maksimum untuk pemilihan: %ld";
 "longerThanMaxVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih lama daripada %lds";
-"shorterThanMaxVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih pendek daripada %lds";
+"shorterThanMinVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih pendek daripada %lds";
+"largerThanMaxVideoDataSize" = "Tidak boleh memilih video yang lebih besar daripada %@MB";
+"smallerThanMinVideoDataSize" = "Tidak boleh memilih video yang lebih kecil daripada %@MB";
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Kiraan minimum untuk pemilihan video: %ld";
 

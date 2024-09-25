@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import <ZLPhotoBrowser/ZLWeakProxy.h>
 
 //! Project version number for ZLPhotoBrowser.
 FOUNDATION_EXPORT double ZLPhotoBrowserVersionNumber;
@@ -33,5 +34,3 @@ FOUNDATION_EXPORT double ZLPhotoBrowserVersionNumber;
 FOUNDATION_EXPORT const unsigned char ZLPhotoBrowserVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <ZLPhotoBrowser/PublicHeader.h>
-
-
