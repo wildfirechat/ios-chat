@@ -63,7 +63,12 @@
     [alertController addAction:cancelAction];
     
     UIAlertAction *openInBrowserAction = [UIAlertAction actionWithTitle:WFCString(@"OpenInBrowser") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url]];
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url] options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url]];
+        }
+        
         [ws.navigationController popViewControllerAnimated:NO];
     }];
     [alertController addAction:openInBrowserAction];

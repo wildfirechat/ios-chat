@@ -368,7 +368,7 @@
                 if (@available(iOS 10.0, *)) {
                     [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
                 } else {
-                    // Fallback on earlier versions
+                    [[UIApplication sharedApplication] openURL:settingsURL];
                 }
             }
         }];
