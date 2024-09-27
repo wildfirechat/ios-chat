@@ -6,6 +6,7 @@
 //  Copyright © 2020 WildFireChat. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "DiscoverMomentsTableViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 

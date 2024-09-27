@@ -2694,7 +2694,11 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
     UIAlertAction *callAction = [UIAlertAction actionWithTitle:WFCString(@"Call") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"telprompt:%@", phoneNumber]];
-        [[UIApplication sharedApplication] openURL:url];
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:url];
+        }
     }];
     
     UIAlertAction *copyAction = [UIAlertAction actionWithTitle:WFCString(@"CopyNumber") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
