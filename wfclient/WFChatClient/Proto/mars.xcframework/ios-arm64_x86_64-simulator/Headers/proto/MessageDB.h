@@ -258,6 +258,7 @@ namespace mars {
             SyncBurnReadedEntry getSyncBurnReadedEntry();
             void deleteUserMessages(const std::list<std::string> &userIds);
             void _OnCheckBurn();
+            void _OnCheckReroute();
             int64_t getConversationReadFromUserSetting(int type, const std::string &target, int line);
             friend DB2;
         private:
