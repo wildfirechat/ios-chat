@@ -752,12 +752,6 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
 }
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
-  if (!_logined || kConnectionStatusRejected == status) {
-    dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-      [self disconnect:YES clearSession:YES];
-    });
-    return;
-  }
     if((int)status == (int)mars::stn::kConnectionStatusServerDown) {
         status = kConnectionStatusUnconnected;
     }
