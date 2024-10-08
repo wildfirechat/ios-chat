@@ -1708,11 +1708,18 @@
     self.readDict = [[WFCCIMService sharedWFCIMService] getConversationRead:self.conversation];
     
     NSArray *messageList;
+    WFCCMessage *highlightMessage;
     if (self.highlightMessageId > 0) {
-        NSArray *messageListOld = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId+1 count:15 withUser:self.privateChatUser];
+        highlightMessage = [[WFCCIMService sharedWFCIMService] getMessage:self.highlightMessageId];
+    }
+    
+    if (self.highlightMessageId > 0 && highlightMessage) {
+        WFCCMessage *highlightMessage = [[WFCCIMService sharedWFCIMService] getMessage:self.highlightMessageId];
+        NSArray *messageListOld = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:15 withUser:self.privateChatUser];
         NSArray *messageListNew = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:-15 withUser:self.privateChatUser];
         NSMutableArray *list = [[NSMutableArray alloc] init];
         [list addObjectsFromArray:messageListNew];
+        [list addObject:highlightMessage];
         [list addObjectsFromArray:messageListOld];
         messageList = [list copy];
         [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
