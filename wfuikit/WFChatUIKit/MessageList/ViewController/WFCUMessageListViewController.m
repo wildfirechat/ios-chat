@@ -1714,7 +1714,6 @@
     }
     
     if (self.highlightMessageId > 0 && highlightMessage) {
-        WFCCMessage *highlightMessage = [[WFCCIMService sharedWFCIMService] getMessage:self.highlightMessageId];
         NSArray *messageListOld = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:15 withUser:self.privateChatUser];
         NSArray *messageListNew = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:-15 withUser:self.privateChatUser];
         NSMutableArray *list = [[NSMutableArray alloc] init];
