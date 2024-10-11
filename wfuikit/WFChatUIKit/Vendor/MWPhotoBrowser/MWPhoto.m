@@ -333,7 +333,9 @@
             if([imgData writeToFile:path atomically:YES]) {
                 imgCnt.localPath = path;
                 imgCnt.size = self.underlyingImage.size;
-                imgCnt.thumbnail = [WFCCUtilities generateThumbnail:self.underlyingImage withWidth:120 withHeight:120];
+                if(!imgCnt.thumbnail || imgCnt.thumbnail == [WFCCIMService sharedWFCIMService].defaultThumbnailImage) {
+                    imgCnt.thumbnail = [WFCCUtilities generateThumbnail:self.underlyingImage withWidth:120 withHeight:120];
+                }
                 [[WFCCIMService sharedWFCIMService] updateMessage:self.message.messageId content:imgCnt];
             }
         }
