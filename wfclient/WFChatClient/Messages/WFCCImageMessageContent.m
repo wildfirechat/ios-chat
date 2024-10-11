@@ -46,7 +46,9 @@
         [dataDict setValue:self.thumbParameter forKey:@"tp"];
         [dataDict setValue:@(self.size.width) forKey:@"w"];
         [dataDict setValue:@(self.size.height) forKey:@"h"];
-    } else if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
+    }
+    
+    if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
         dataDict = nil;
         if(!self.thumbnail && self.localPath.length) {
             UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
