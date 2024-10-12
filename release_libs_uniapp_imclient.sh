@@ -1,7 +1,7 @@
 #!/bin/sh
 TARGET_CLIENT_NAME=WFChatClient
 
-set +e
+set -e
 
 CURRENT_PATH=`pwd`
 
