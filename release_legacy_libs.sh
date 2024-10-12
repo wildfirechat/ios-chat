@@ -2,7 +2,7 @@
 TARGET_CLIENT_NAME=WFChatClient
 TARGET_UIKIT_NAME=WFChatUIKit
 
-set +e
+set -e
 
 BUILD_DIR=`pwd`"/build"
 
