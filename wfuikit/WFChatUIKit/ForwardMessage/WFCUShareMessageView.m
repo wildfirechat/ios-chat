@@ -33,6 +33,17 @@
     self.messageTextView.layer.borderColor = [[UIColor greenColor] CGColor];
 }
 
+- (WFCCMessageContent *)filterContent:(WFCCMessage *)message {
+    WFCCMessageContent *content = message.content;
+    if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+        content = [WFCCTextMessageContent contentWith:[content digest:message]];
+    } else if([content isKindOfClass:[WFCCSoundMessageContent class]]) {
+        WFCCSoundMessageContent *sound = (WFCCSoundMessageContent *)content;
+        content = [WFCCTextMessageContent contentWith:[NSString stringWithFormat:@"%@ %ld\"", [content digest:message], sound.duration]];
+    }
+    return content;
+}
+
 - (IBAction)sendAction:(id)sender {
     [self hideView];
     WFCCTextMessageContent *textMsg;
@@ -45,11 +56,7 @@
     __strong void (^forwardDone)(BOOL success) = self.forwardDone;
     
     if (self.message) {
-        WFCCMessageContent *content = self.message.content;
-        if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
-            content = [WFCCTextMessageContent contentWith:[content digest:self.message]];
-        }
-        [[WFCCIMService sharedWFCIMService] send:conversation content:content success:^(long long messageUid, long long timestamp) {
+        [[WFCCIMService sharedWFCIMService] send:conversation content:[self filterContent:self.message] success:^(long long messageUid, long long timestamp) {
             if (textMsg) {
                 [[WFCCIMService sharedWFCIMService] send:conversation content:textMsg success:^(long long messageUid, long long timestamp) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -84,7 +91,7 @@
             if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
                 content = [WFCCTextMessageContent contentWith:[content digest:msg]];
             }
-            [[WFCCIMService sharedWFCIMService] send:conversation content:content success:^(long long messageUid, long long timestamp) {
+            [[WFCCIMService sharedWFCIMService] send:conversation content:[self filterContent:msg] success:^(long long messageUid, long long timestamp) {
                 
             } error:^(int error_code) {
                 
