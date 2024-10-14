@@ -45,7 +45,11 @@
     __strong void (^forwardDone)(BOOL success) = self.forwardDone;
     
     if (self.message) {
-        [[WFCCIMService sharedWFCIMService] send:conversation content:self.message.content success:^(long long messageUid, long long timestamp) {
+        WFCCMessageContent *content = self.message.content;
+        if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+            content = [WFCCTextMessageContent contentWith:[content digest:self.message]];
+        }
+        [[WFCCIMService sharedWFCIMService] send:conversation content:content success:^(long long messageUid, long long timestamp) {
             if (textMsg) {
                 [[WFCCIMService sharedWFCIMService] send:conversation content:textMsg success:^(long long messageUid, long long timestamp) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -76,7 +80,11 @@
         }];
     } else {
         for (WFCCMessage *msg in self.messages) {
-            [[WFCCIMService sharedWFCIMService] send:conversation content:msg.content success:^(long long messageUid, long long timestamp) {
+            WFCCMessageContent *content = msg.content;
+            if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+                content = [WFCCTextMessageContent contentWith:[content digest:msg]];
+            }
+            [[WFCCIMService sharedWFCIMService] send:conversation content:content success:^(long long messageUid, long long timestamp) {
                 
             } error:^(int error_code) {
                 
