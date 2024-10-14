@@ -114,8 +114,12 @@
     WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
     
     shareView.conversation = conversation;
-    shareView.message = self.message;
-    shareView.messages = self.messages;
+    if(!self.message && self.messages.count == 1) {
+        shareView.message = [self.messages firstObject];
+    } else {
+        shareView.message = self.message;
+        shareView.messages = self.messages;
+    }
     __weak typeof(self)ws = self;
     shareView.forwardDone = ^(BOOL success) {
         if (success) {
