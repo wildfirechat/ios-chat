@@ -149,9 +149,12 @@
 }
 
 -(void)onStatusChanged:(NSNotification *)notification {
-    if(self.model.message.messageId == [notification.object longLongValue]) {
+    if(self.model.message.messageId == [notification.object longValue]) {
         WFCCMessageStatus newStatus = (WFCCMessageStatus)[[notification.userInfo objectForKey:@"status"] integerValue];
         self.model.message.status = newStatus;
+        [self updateStatus];
+    } else if(self.model.message.messageUid && self.model.message.messageUid == [[notification.userInfo objectForKey:@"messageUid"] longLongValue]) {
+        self.model.message = [[WFCCIMService sharedWFCIMService] getMessageByUid:self.model.message.messageUid];
         [self updateStatus];
     }
 }

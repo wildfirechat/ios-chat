@@ -98,7 +98,7 @@ namespace mars {
             
           
             bool updateMessageStatus(long messageId, MessageStatus status);
-            bool updateMessageUidAndTimestamp(long messageId, int64_t messageUid, int64_t sendTime);
+            bool updateMessageUidAndTimestamp(long messageId, int64_t messageUid, int64_t sendTime, bool *duplicated);
             bool updateMessageRemoteMediaUrl(long messageId, const std::string &remoteMediaUrl);
             bool updateMessageLocalMediaPath(long messageId, const std::string &localMediaPath);
             

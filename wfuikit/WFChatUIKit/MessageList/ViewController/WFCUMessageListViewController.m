@@ -1635,7 +1635,7 @@
 - (void)onSendingMessage:(NSNotification *)notification {
     WFCCMessage *message = [notification.userInfo objectForKey:@"message"];
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
-    if (status == Message_Status_Sending && message.messageId != 0) {
+    if ((status == Message_Status_Sending || status == Message_Status_Sent) && message.messageId != 0) {
         if ([message.conversation isEqual:self.conversation]) {
             [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
         }
@@ -1954,16 +1954,18 @@
         
         BOOL duplcated = NO;
         for (WFCUMessageModel *model in self.modelList) {
-            if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
-                model.message.content = message.content;
-                duplcated = YES;
-                break;
-            }
             if(message.messageId && message.messageId == model.message.messageId) {
                 model.message.content = message.content;
                 duplcated = YES;
                 break;
             }
+            
+            if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
+                model.message.content = message.content;
+                duplcated = YES;
+                break;
+            }
+            
             if(([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] || [message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) && [model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
                 WFCCStreamingTextGeneratingMessageContent *existStreamingTextContent = (WFCCStreamingTextGeneratingMessageContent *)model.message.content;
                 
@@ -2021,12 +2023,38 @@
             [self.modelList insertObject:model atIndex:0];
         }
     }
+    NSUInteger dupCount = 0;
+    if(self.modelList.count > 1) {
+        NSMutableArray *dupArr = [[NSMutableArray alloc] init];
+        for (int i = 0; i < self.modelList.count; ++i) {
+            WFCUMessageModel *model = [self.modelList objectAtIndex:i];
+            if (!model.message.messageUid) {
+                continue;
+            }
+            for (int j = i+1; j < self.modelList.count; ++j) {
+                WFCUMessageModel *m = [self.modelList objectAtIndex:j];
+                if(model.message.messageUid == m.message.messageUid) {
+                    [dupArr addObject:m];
+                    model.message = [[WFCCIMService sharedWFCIMService] getMessageByUid:model.message.messageUid];
+                }
+            }
+        }
+        dupCount = dupArr.count;
+        if(dupCount) {
+            [self.modelList removeObjectsInArray:dupArr];
+            count -= dupArr.count;
+        }
+    }
     
     if (count > 0) {
         [self stopShowTyping];
     }
     
     [self.collectionView reloadData];
+    
+    if(dupCount == messages.count) {
+        return;
+    }
     
     if (newMessage || self.modelList.count == messages.count) {
         if(self.isAtButtom) {
