@@ -102,6 +102,11 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  附加信息
  */
 @property (nonatomic, strong)NSString *extra;
+
+/**
+ 本地信息，用于消息未从服务器下载下来。
+ */
+@property (nonatomic, assign)BOOL notLoaded;
 @end
 
 /**
@@ -177,6 +182,11 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  附加信息
  */
 @property (nonatomic, strong)NSString *extra;
+
+/**
+ 本地信息，用于消息未从服务器下载下来。
+ */
+@property (nonatomic, assign)BOOL notLoaded;
 
 - (NSString *)getString:(NSDictionary *)dict ofKey:(NSString *)key;
 - (NSArray *)getArray:(NSDictionary *)dict ofKey:(NSString *)key;

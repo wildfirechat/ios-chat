@@ -939,6 +939,7 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     payload.remoteMediaUrl = [NSString stringWithUTF8String:tMessage->content.remoteMediaUrl.c_str()];
     payload.localMediaPath = [NSString stringWithUTF8String:tMessage->content.localMediaPath.c_str()];
     payload.mentionedType = tMessage->content.mentionedType;
+    payload.notLoaded = tMessage->content.notLoaded?YES:NO;
     
     NSMutableArray *mentionedTargets = [[NSMutableArray alloc] init];
     for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
