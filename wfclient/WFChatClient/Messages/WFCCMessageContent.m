@@ -48,6 +48,10 @@
     if(self.extra.length) {
         dict[@"extra"] = self.extra;
     }
+    
+    if(self.notLoaded) {
+        dict[@"notLoaded"] = @(YES);
+    }
 
     return dict;
 }
@@ -87,9 +91,12 @@
         return payload;
     }
 }
+
 - (void)decode:(WFCCMessagePayload *)payload {
     self.extra = payload.extra;
+    self.notLoaded = payload.notLoaded;
 }
+
 + (int)getContentType {
     return 0;
 }

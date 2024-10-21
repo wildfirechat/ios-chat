@@ -1045,10 +1045,22 @@
         }
     }
     
-    NSIndexPath *finalIndexPath = [NSIndexPath indexPathForItem:finalRow inSection:0];
-    [self.collectionView scrollToItemAtIndexPath:finalIndexPath
-                                atScrollPosition:UICollectionViewScrollPositionBottom
-                                        animated:animated];
+    __block BOOL noNeedScroll = NO;
+    if (finalRow == rowCount -1) {
+        [[self.collectionView indexPathsForVisibleItems] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.row > finalRow) {
+                *stop = YES;
+                noNeedScroll = YES;
+            }
+        }];
+    }
+    
+    if (!noNeedScroll) {
+        NSIndexPath *finalIndexPath = [NSIndexPath indexPathForItem:finalRow inSection:0];
+        [self.collectionView scrollToItemAtIndexPath:finalIndexPath
+                                    atScrollPosition:UICollectionViewScrollPositionBottom
+                                            animated:animated];
+    }
     
     [self dismissNewMsgTip];
 }
@@ -1927,6 +1939,22 @@
 - (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom {
     if (messages.count == 0) {
         return;
+    }
+    
+    if (newMessage && self.conversation.type == Group_Type && [WFCCIMService sharedWFCIMService].isCommercialServer) {
+        __block BOOL hasUnloadMsg = NO;
+        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.content.notLoaded) {
+                hasUnloadMsg = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if(hasUnloadMsg) {
+            messages = [messages subarrayWithRange:NSMakeRange(messages.count-15, 15)];
+            [self.modelList removeAllObjects];
+            self.isAtButtom = YES;
+        }
     }
     
     int count = 0;
