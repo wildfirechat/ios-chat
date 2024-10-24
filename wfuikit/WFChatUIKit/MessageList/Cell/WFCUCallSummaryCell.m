@@ -41,6 +41,7 @@
         text = WFCString(@"VideoCall");
     }
     
+#if WFCU_SUPPORT_VOIP
     if(startContent.status == kWFAVCallEndReasonInterrupted) {
         text = @"通话中断";
     } else if(startContent.status == kWFAVCallEndReasonRemoteInterrupted) {
@@ -70,7 +71,6 @@
         text = [text stringByAppendingFormat:@"%02lld:", mins];
         text = [text stringByAppendingFormat:@"%02lld", second];
     } else {
-#if WFCU_SUPPORT_VOIP
         switch (startContent.status) {
             case kWFAVCallEndReasonBusy:
                 text = @"线路忙";
@@ -126,8 +126,8 @@
             default:
                 break;
         }
-#endif
     }
+#endif
     
     return text;
 }
