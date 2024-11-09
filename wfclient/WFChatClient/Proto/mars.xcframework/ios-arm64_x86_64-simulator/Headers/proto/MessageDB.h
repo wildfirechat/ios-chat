@@ -169,6 +169,8 @@ namespace mars {
             std::list<TUserInfo> getUserInfos(const std::list<std::string> &userIds, const std::string &groupId);
             void GetUserInfo(const std::string &userId, bool refresh, GetOneUserInfoCallback *callback);
             void GetUserInfo(const std::string &userId, const std::string &groupId, bool refresh, GetOneUserInfoCallback *callback);
+            std::list<TUserInfo> GetUserInfos(const std::list<std::string> &userIds, const std::string &groupId, std::list<std::string> &needRefreshList);
+            void BatchGetUserInfos(const std::list<std::string> &userIds, const std::string &groupId, GetUserInfoCallback *callback);
             
             long InsertUserInfoOrReplace(const TUserInfo &userInfo);
             long UpdateMyInfo(const std::list<std::pair<int, std::string>> &infos);
