@@ -1137,6 +1137,7 @@ namespace mars{
         extern void reloadGroupInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &groupReqList);
         extern void reloadOneGroupInfo(const std::string &groupId, int64_t timestamp, GetOneGroupInfoCallback *callback);
         extern void reloadUserInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &userReqList);
+        extern void reloadPartUserInfoFromRemote(const std::list<std::pair<std::string, int64_t>> &userReqList, const std::string &groupId, const std::list<TUserInfo> &existUserInfos, GetUserInfoCallback *callback);
         extern void reloadOneUserInfo(const std::string &userId, const std::string &groupId, int64_t timestamp, GetOneUserInfoCallback *callback);
         extern void reloadGroupMembersFromRemote(const std::string &groupId, int64_t updateDt, int64_t dtSum);
         extern void reloadGroupMembersEx(const std::string &groupId, int64_t updateDt, int64_t dtSum, GetGroupMembersCallback *callback);

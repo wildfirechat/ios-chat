@@ -241,6 +241,11 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
               error:(void(^)(int errorCode))errorBlock;
 
+- (void)getUserInfos:(NSArray<NSString *> *)userIds
+             groupId:(NSString *)groupId
+             success:(void(^)(NSArray<WFCCUserInfo *> *userInfos))successBlock
+              error:(void(^)(int errorCode))errorBlock;
+
 - (void)searchUser:(NSString *)keyword
         searchType:(WFCCSearchUserType)searchType
               page:(int)page
@@ -1479,6 +1484,20 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
             refresh:(BOOL)refresh
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
             error:(void(^)(int errorCode))errorBlock;
+
+/**
+ 批量获取用户信息
+ @discussion 当本地有部分或者全部不存在时，会从服务器加载这些缺失的用户信息。
+ 
+ @param userIds 用户ID列表
+ @param groupId 群组ID，可以为nil
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)getUserInfos:(NSArray<NSString *> *)userIds
+             groupId:(NSString *)groupId
+             success:(void(^)(NSArray<WFCCUserInfo *> *userInfo))successBlock
+               error:(void(^)(int errorCode))errorBlock;
 #pragma mark - 好友相关
 /**
  查询用户和当前用户是否是好友关系

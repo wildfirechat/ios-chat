@@ -2212,6 +2212,34 @@ public:
     ~IMGetOneUserInfoCallback() {}
 };
 
+class IMGetUserInfoCallback : public mars::stn::GetUserInfoCallback {
+private:
+    void(^m_successBlock)(NSArray<WFCCUserInfo *> *userInfos);
+    void(^m_errorBlock)(int errorCode);
+public:
+    IMGetUserInfoCallback(void(^successBlock)(NSArray<WFCCUserInfo *> *machedUsers), void(^errorBlock)(int errorCode)) : m_successBlock(successBlock), m_errorBlock(errorBlock) {}
+    
+    void onSuccess(const std::list<mars::stn::TUserInfo> &userInfoList) {
+        if(m_successBlock) {
+            NSMutableArray<WFCCUserInfo *> *ret = [[NSMutableArray alloc] init];
+            for (std::list<mars::stn::TUserInfo>::const_iterator it = userInfoList.begin(); it != userInfoList.end(); it++) {
+                WFCCUserInfo *userInfo = convertUserInfo(*it);
+                [ret addObject:userInfo];
+            }
+            m_successBlock(ret);
+        }
+        delete this;
+    }
+    
+    void onFalure(int errorCode) {
+        if(m_errorBlock) {
+            m_errorBlock(errorCode);
+        }
+        delete this;
+    }
+    
+    ~IMGetUserInfoCallback() {}
+};
 
 - (void)getUserInfo:(NSString *)userId
             refresh:(BOOL)refresh
@@ -2244,6 +2272,27 @@ public:
     }
     
     mars::stn::MessageDB::Instance()->GetUserInfo([userId UTF8String], groupId.length?[groupId UTF8String]:"", refresh ? true : false, new IMGetOneUserInfoCallback(successBlock, errorBlock));
+}
+
+- (void)getUserInfos:(NSArray<NSString *> *)userIds
+             groupId:(NSString *)groupId
+             success:(void(^)(NSArray<WFCCUserInfo *> *userInfo))successBlock
+               error:(void(^)(int errorCode))errorBlock {
+    if (!userIds.count) {
+        return;
+    }
+    
+    if ([self.userSource respondsToSelector:@selector(getUserInfos:groupId:success:error:)]) {
+        [self.userSource getUserInfos:userIds groupId:groupId success:successBlock error:errorBlock];
+        return;
+    }
+    
+    std::list<std::string> strIds;
+    for (NSString *userId in userIds) {
+        strIds.insert(strIds.end(), [userId UTF8String]);
+    }
+    
+    mars::stn::MessageDB::Instance()->BatchGetUserInfos(strIds, groupId ? [groupId UTF8String] : "", new IMGetUserInfoCallback(successBlock, errorBlock));
 }
 
 - (BOOL)isMyFriend:(NSString *)userId {
