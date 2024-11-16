@@ -18,6 +18,8 @@
 #import "AppService.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "TYHWaterMark.h"
+#import "WFCConfig.h"
 
 @interface WFCLoginViewController () <UITextFieldDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
@@ -369,6 +371,11 @@
           
           //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
           [[WFCCNetworkService sharedInstance] connect:userId token:token];
+          if(ENABLE_WATER_MARKER) {
+              [[UIApplication sharedApplication].delegate.window addSubview:[TYHWaterMarkView new]];
+              [TYHWaterMarkView setCharacter:userId];
+              [TYHWaterMarkView autoUpdateDate:YES];
+          }
           
             [hud hideAnimated:YES];
             WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];

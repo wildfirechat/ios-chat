@@ -46,3 +46,6 @@ BOOL Prefer_Password_Login = YES;
 
 //发送日志命令，当发送此文本消息时，会把协议栈日志发送到当前会话中，为空时关闭此功能。
 NSString *Send_Log_Command = @"*#marslog#";
+
+//是否开启水印
+BOOL ENABLE_WATER_MARKER = YES;
