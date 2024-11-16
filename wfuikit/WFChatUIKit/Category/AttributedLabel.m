@@ -78,11 +78,7 @@
         NSString* substringForMatch;
         substringForMatch = [string substringWithRange:match.range];
         [arr addObject:substringForMatch];
-    }
-    
-    NSString *subStr=string;
-    for (NSString *str in arr) {
-        [rangeArr addObject:[self rangesOfString:str inString:subStr]];
+        [rangeArr addObject:[NSValue valueWithRange:match.range]];
     }
     
     NSString *pattern =@"[0-9]{5,11}";
@@ -98,16 +94,11 @@
         substringForMatch = [string substringWithRange:match.range];
         [arr addObject:substringForMatch];
         [telArr addObject:substringForMatch];
+        [rangeArr addObject:[NSValue valueWithRange:match.range]];
     }
-    
-    subStr=string;
-    for (NSString *str in telArr) {
-        [rangeArr addObject:[self rangesOfString:str inString:subStr]];
-    }
-    
     
     NSMutableAttributedString *attributedText;
-    attributedText=[[NSMutableAttributedString alloc]initWithString:subStr attributes:@{NSFontAttributeName :self.font}];
+    attributedText=[[NSMutableAttributedString alloc]initWithString:string attributes:@{NSFontAttributeName :self.font}];
     
     for(NSValue *value in rangeArr) {
         NSInteger index=[rangeArr indexOfObject:value];
