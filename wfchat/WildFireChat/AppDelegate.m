@@ -605,6 +605,7 @@
         [self.window.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[TYHWaterMarkView class]]) {
                 [obj removeFromSuperview];
+                [TYHWaterMarkView autoUpdateDate:NO];
                 *stop = YES;
             }
         }];
