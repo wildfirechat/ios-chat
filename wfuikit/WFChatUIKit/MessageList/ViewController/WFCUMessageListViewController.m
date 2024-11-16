@@ -2227,7 +2227,7 @@
 
 - (BOOL)isPluginHeadPhonesOrConnectedBluetooth {
     for(AVAudioSessionPortDescription *output in [AVAudioSession sharedInstance].currentRoute.outputs) {
-        if(output.portType == AVAudioSessionPortHeadphones || output.portType == AVAudioSessionPortBluetoothA2DP || output.portType == AVAudioSessionPortBluetoothLE) {
+        if(output.portType == AVAudioSessionPortHeadphones || output.portType == AVAudioSessionPortBluetoothA2DP || output.portType == AVAudioSessionPortBluetoothLE || output.portType == AVAudioSessionPortBluetoothHFP) {
             return YES;
         }
     }
