@@ -118,6 +118,7 @@
 		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
+		B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C177572CE83720005A5E1B /* TYHWaterMark.m */; };
 		B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */; };
 		B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */; };
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
@@ -383,6 +384,8 @@
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
 		B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyFindMeViewController.m; sourceTree = "<group>"; };
+		B7C177562CE83720005A5E1B /* TYHWaterMark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYHWaterMark.h; sourceTree = "<group>"; };
+		B7C177572CE83720005A5E1B /* TYHWaterMark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYHWaterMark.m; sourceTree = "<group>"; };
 		B7CB3A8E289BB5CF00E9D688 /* WFCResetPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCResetPasswordViewController.h; sourceTree = "<group>"; };
 		B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCResetPasswordViewController.m; sourceTree = "<group>"; };
 		B7CB3A91289BD66C00E9D688 /* WFCChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCChangePasswordViewController.h; sourceTree = "<group>"; };
@@ -549,6 +552,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B7C177582CE83720005A5E1B /* TYHWaterMark */,
 				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
@@ -926,6 +930,15 @@
 			path = OrgService;
 			sourceTree = "<group>";
 		};
+		B7C177582CE83720005A5E1B /* TYHWaterMark */ = {
+			isa = PBXGroup;
+			children = (
+				B7C177562CE83720005A5E1B /* TYHWaterMark.h */,
+				B7C177572CE83720005A5E1B /* TYHWaterMark.m */,
+			);
+			path = TYHWaterMark;
+			sourceTree = "<group>";
+		};
 		B7E494E228F670BA00FF2333 /* libyuv */ = {
 			isa = PBXGroup;
 			children = (
@@ -1157,6 +1170,7 @@
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
+				B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,

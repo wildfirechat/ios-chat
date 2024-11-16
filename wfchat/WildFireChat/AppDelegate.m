@@ -32,6 +32,8 @@
 #import <PttClient/WFPttClient.h>
 #endif
 
+#import "TYHWaterMark.h"
+
 #import "OrgService.h"
 
 #if USE_CALL_KIT
@@ -160,11 +162,15 @@
     }
     
     
-
-    
     if (savedToken.length > 0 && savedUserId.length > 0) {
         //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。另外不能多次connect，如果需要切换用户请先disconnect，然后3秒钟之后再connect（如果是用户手动登录可以不用等，因为用户操作很难3秒完成，如果程序自动切换请等3秒）。
         [[WFCCNetworkService sharedInstance] connect:savedUserId token:savedToken];
+        
+        if(ENABLE_WATER_MARKER) {
+            [self.window addSubview:[TYHWaterMarkView new]];
+            [TYHWaterMarkView setCharacter:savedUserId];
+            [TYHWaterMarkView autoUpdateDate:YES];
+        }
     } else {
         WFCLoginViewController *loginVC = [[WFCLoginViewController alloc] init];
         
@@ -593,6 +599,16 @@
     loginVC.isPwdLogin = YES;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
     self.window.rootViewController = nav;
+    
+    //移除水印
+    if(ENABLE_WATER_MARKER) {
+        [self.window.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[TYHWaterMarkView class]]) {
+                [obj removeFromSuperview];
+                *stop = YES;
+            }
+        }];
+    }
 }
 
 - (void)onConnectionStatusChanged:(ConnectionStatus)status {
