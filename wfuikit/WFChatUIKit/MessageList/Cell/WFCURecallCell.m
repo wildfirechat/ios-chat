@@ -47,7 +47,7 @@
     
     CGFloat reeditBtnWidth = 0;
     
-    if (content.originalContentType == MESSAGE_CONTENT_TYPE_TEXT && [content.originalSender isEqualToString:[WFCCNetworkService sharedInstance].userId] && content.originalSearchableContent.length > 0) {
+    if (content.originalContentType == MESSAGE_CONTENT_TYPE_TEXT && [content.originalSender isEqualToString:[WFCCNetworkService sharedInstance].userId] && content.originalSearchableContent.length > 0 && [content.operatorId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         CGSize btnsize = [WFCUUtilities getTextDrawingSize:self.reeditButton.titleLabel.text font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
         
         reeditBtnWidth = btnsize.width + 4;
