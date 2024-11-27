@@ -20,6 +20,7 @@
 #import "UIFont+YH.h"
 #import "TYHWaterMark.h"
 #import "WFCConfig.h"
+#import "SSKeychain.h"
 
 @interface WFCLoginViewController () <UITextFieldDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
@@ -364,8 +365,8 @@
       
       void(^successBlock)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) = ^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
           [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
-          [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"savedToken"];
-          [[NSUserDefaults standardUserDefaults] setObject:userId forKey:@"savedUserId"];
+          [SSKeychain setPassword:token forWFService:@"savedToken"];
+          [SSKeychain setPassword:userId forWFService:@"savedUserId"];
           [[NSUserDefaults standardUserDefaults] synchronize];
           
           

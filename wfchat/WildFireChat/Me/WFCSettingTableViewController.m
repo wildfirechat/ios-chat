@@ -21,6 +21,7 @@
 #import "AppService.h"
 #import "OrgService.h"
 #import "WFCDestroyAccountViewController.h"
+#import "SSKeychain.h"
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -262,8 +263,8 @@
     }];
     UIAlertAction *actionLogout = [UIAlertAction actionWithTitle:LocalizedString(@"Logout") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+        [SSKeychain deletePasswordForWFService:@"savedToken"];
+        [SSKeychain deletePasswordForWFService:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
         [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];

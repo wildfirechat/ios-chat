@@ -18,6 +18,7 @@
 #import "OrgService.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "SSKeychain.h"
 
 @interface WFCDestroyAccountViewController () <UITextFieldDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
@@ -181,8 +182,8 @@
   [hud showAnimated:YES];
     [[AppService sharedAppService] destroyAccount:password success:^{
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+        [SSKeychain deletePasswordForWFService:@"savedToken"];
+        [SSKeychain deletePasswordForWFService:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
         [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];
