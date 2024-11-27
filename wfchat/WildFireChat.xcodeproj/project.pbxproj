@@ -116,6 +116,10 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
+		B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B184F2CF719E0008A2C09 /* SSKeychain.m */; };
+		B78B18562CF719E0008A2C09 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */; };
+		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
+		B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
 		B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C177572CE83720005A5E1B /* TYHWaterMark.m */; };
@@ -380,6 +384,11 @@
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B764D48D295854700082492F /* OrgService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrgService.m; sourceTree = "<group>"; };
 		B764D48E295854700082492F /* OrgService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrgService.h; sourceTree = "<group>"; };
+		B78B184E2CF719E0008A2C09 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
+		B78B184F2CF719E0008A2C09 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		B78B18502CF719E0008A2C09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SSKeychain.strings; sourceTree = "<group>"; };
+		B78B18522CF719E0008A2C09 /* SSKeychainQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
+		B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
@@ -409,6 +418,7 @@
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
+				B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */,
 				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
@@ -929,6 +939,7 @@
 		B78B184C2CF71943008A2C09 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B78B18542CF719E0008A2C09 /* SSKeychain */,
 				149B3101241D28B200B935D3 /* Category */,
 				B7C177582CE83720005A5E1B /* TYHWaterMark */,
 				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
@@ -936,6 +947,18 @@
 				2F143A46217F607300B3E38A /* AFNetworking */,
 			);
 			path = Vendor;
+			sourceTree = "<group>";
+		};
+		B78B18542CF719E0008A2C09 /* SSKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				B78B184E2CF719E0008A2C09 /* SSKeychain.h */,
+				B78B184F2CF719E0008A2C09 /* SSKeychain.m */,
+				B78B18512CF719E0008A2C09 /* SSKeychain.strings */,
+				B78B18522CF719E0008A2C09 /* SSKeychainQuery.h */,
+				B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */,
+			);
+			path = SSKeychain;
 			sourceTree = "<group>";
 		};
 		B7C177582CE83720005A5E1B /* TYHWaterMark */ = {
@@ -1115,6 +1138,7 @@
 				2F8F8E692723072600151B75 /* ptt_end.m4a in Resources */,
 				2F623A5022DCBD3E00CB3C65 /* Album.xcassets in Resources */,
 				90C1D911208C12A900E923F4 /* foreman.mp4 in Resources */,
+				B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */,
 				2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1214,6 +1238,8 @@
 				B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */,
 				2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */,
 				2FFDDC9C255158FA00CEFDBB /* WFCFavoriteSoundCell.m in Sources */,
+				B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */,
+				B78B18562CF719E0008A2C09 /* SSKeychainQuery.m in Sources */,
 				2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */,
 				149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */,
 				2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */,
@@ -1323,6 +1349,14 @@
 				2FBF9160232F6A5E003521FF /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B78B18512CF719E0008A2C09 /* SSKeychain.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B78B18502CF719E0008A2C09 /* en */,
+			);
+			name = SSKeychain.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

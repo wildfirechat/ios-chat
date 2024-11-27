@@ -41,6 +41,8 @@
 #endif
 #import "MBProgressHUD.h"
 
+#import "SSKeychain.h"
+
 
 
 @interface AppDelegate () <ConnectionStatusDelegate, ConnectToServerDelegate, ReceiveMessageDelegate,
@@ -127,9 +129,19 @@
     BOOL pttEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"WFC_PTT_ENABLED"];
     [WFPttClient sharedClient].enablePtt = pttEnabled;
 #endif //WFC_PTT
+    NSString *savedToken = [SSKeychain passwordForWFService:@"savedToken"];
+    NSString *savedUserId = [SSKeychain passwordForWFService:@"savedUserId"];
+    if (!savedToken || !savedUserId) { //升级兼容
+        savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
+        savedUserId = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedUserId"];
+        if(savedToken && savedUserId) {
+            [SSKeychain setPassword:savedToken forWFService:@"savedToken"];
+            [SSKeychain setPassword:savedUserId forWFService:@"savedUserId"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+        }
+    }
     
-    NSString *savedToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedToken"];
-    NSString *savedUserId = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedUserId"];
     
     self.window.rootViewController = [WFCBaseTabBarController new];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -621,8 +633,8 @@
             
             [[WFCCNetworkService sharedInstance] disconnect:YES clearSession:NO];
             
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [SSKeychain deletePasswordForWFService:@"savedToken"];
+            [SSKeychain deletePasswordForWFService:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
         } else if (status == kConnectionStatusLogout) {
@@ -638,8 +650,8 @@
                 [self jumpToLoginViewController:NO];
             }
             
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedToken"];
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedUserId"];
+            [SSKeychain deletePasswordForWFService:@"savedToken"];
+            [SSKeychain deletePasswordForWFService:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
             [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
             [[NSUserDefaults standardUserDefaults] synchronize];
