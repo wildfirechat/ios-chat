@@ -395,7 +395,7 @@
 		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
-		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
+		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -552,7 +552,6 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
-				B7C177582CE83720005A5E1B /* TYHWaterMark */,
 				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
@@ -561,14 +560,11 @@
 				2BCBC82F23954AC4009321AD /* Moments */,
 				2F518FF0235ED77700FA3D58 /* AppService */,
 				2FF07F4621F82E7200A78A62 /* Me */,
-				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
 				2F7268F621F7136600E05F9C /* Privacy */,
 				2FEA5D6721F4AC8900280B23 /* Login */,
-				2F143A5A217F60B600B3E38A /* MBProgressHUD */,
-				2F143A46217F607300B3E38A /* AFNetworking */,
 				2E1D20BC1FAF127100F4405D /* Discover */,
 				2BF692E5232DBA840072036A /* Utilities */,
-				149B3101241D28B200B935D3 /* Category */,
+				B78B184C2CF71943008A2C09 /* Vendor */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
 				B78DD43628167D1E009589F7 /* WFCCallKitManager.h */,
@@ -632,7 +628,7 @@
 				2F143A53217F607300B3E38A /* AFHTTPSessionManager.h */,
 			);
 			name = AFNetworking;
-			path = ../../wfuikit/WFChatUIKit/Vendor/AFNetworking;
+			path = ../../../wfuikit/WFChatUIKit/Vendor/AFNetworking;
 			sourceTree = "<group>";
 		};
 		2F143A5A217F60B600B3E38A /* MBProgressHUD */ = {
@@ -641,7 +637,7 @@
 				2F143A5C217F60B600B3E38A /* MBProgressHUD.h */,
 			);
 			name = MBProgressHUD;
-			path = ../../wfuikit/WFChatUIKit/Vendor/MBProgressHUD;
+			path = ../../../wfuikit/WFChatUIKit/Vendor/MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		2F518FF0235ED77700FA3D58 /* AppService */ = {
@@ -928,6 +924,18 @@
 				B764D48D295854700082492F /* OrgService.m */,
 			);
 			path = OrgService;
+			sourceTree = "<group>";
+		};
+		B78B184C2CF71943008A2C09 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				149B3101241D28B200B935D3 /* Category */,
+				B7C177582CE83720005A5E1B /* TYHWaterMark */,
+				2F7268FA21F7137C00E05F9C /* YBAttributeTextTapAction */,
+				2F143A5A217F60B600B3E38A /* MBProgressHUD */,
+				2F143A46217F607300B3E38A /* AFNetworking */,
+			);
+			path = Vendor;
 			sourceTree = "<group>";
 		};
 		B7C177582CE83720005A5E1B /* TYHWaterMark */ = {
