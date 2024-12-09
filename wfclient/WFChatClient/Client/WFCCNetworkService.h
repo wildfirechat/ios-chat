@@ -56,7 +56,7 @@ extern NSString *kDomainInfoUpdated;
  - kConnectionStatusUnconnected: 未连接
  - kConnectionStatusConnecting: 连接中
  - kConnectionStatusConnected: 已连接
- - kConnectionStatusReceiving: 获取离线消息中，可忽略
+ - kConnectionStatusReceiving: 正在与服务同步数据中
  */
 typedef NS_ENUM(NSInteger, ConnectionStatus) {
   kConnectionStatusTimeInconsistent = -9,
