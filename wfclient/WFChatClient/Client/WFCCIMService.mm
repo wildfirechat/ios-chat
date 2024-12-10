@@ -1046,6 +1046,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
     if(!payload.contentType) {
         NSLog(@"****************************************");
         NSLog(@"Error, message content net set content type %@", content.class);
+        NSLog(@"错误，消息%@的类型为空，请检查自定义消息的encode方法是不是没有调用[super encode]", content.class);
         NSLog(@"****************************************");
     }
     payload.extra = content.extra;
