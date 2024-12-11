@@ -65,6 +65,7 @@
 @property (nonatomic, assign)BOOL voiceInput;
 @property (nonatomic, assign)BOOL emojInput;
 @property (nonatomic, assign)BOOL pluginInput;
+@property (nonatomic, assign)BOOL publicInput;
 
 @property (nonatomic, strong)UIButton *publicSwitchBtn;
 @property (nonatomic, strong)UIButton *voiceSwitchBtn;
@@ -659,8 +660,8 @@
         case ChatInputBarPublicStatus:
             self.inputContainer.hidden = YES;
             self.publicContainer.hidden = NO;
-            [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
-            [self.textInputView resignFirstResponder];
+            self.publicInput = YES;
+            self.textInput = NO;
             break;
         case ChatInputBarDefaultStatus:
             self.voiceInput = NO;
@@ -804,7 +805,26 @@
             [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
         }
     }
-    
+}
+
+- (void)setPublicInput:(BOOL)publicInput {
+    _publicInput = publicInput;
+    if (publicInput) {
+        [self.publicSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
+        [self.textInputView resignFirstResponder];
+        
+        if (!self.voiceInput) {
+            CGFloat diff = 0;
+            if (self.textInputView.frame.size.height != CHAT_INPUT_BAR_ICON_SIZE) {
+                diff = self.textInputView.frame.size.height - CHAT_INPUT_BAR_ICON_SIZE;
+            }
+            if (self.quoteContainerView && !self.quoteContainerView.hidden) {
+                self.quoteContainerView.hidden = YES;
+                diff += self.quoteContainerView.frame.size.height + CHAT_INPUT_QUOTE_PADDING;
+            }
+            [self extendUp:-diff];
+        }
+    }
 }
 
 - (void)resetTyping {
@@ -979,7 +999,12 @@
     self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
-        self.inputContainer.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+        CGRect inputFrame = self.inputContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.inputContainer.frame = inputFrame;
+        inputFrame = self.publicContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.publicContainer.frame = inputFrame;
     }];
 }
 
@@ -992,7 +1017,12 @@
     self.backupFrame = frame;
     [UIView animateWithDuration:duration animations:^{
         self.frame = frame;
-        self.inputContainer.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+        CGRect inputFrame = self.inputContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.inputContainer.frame = inputFrame;
+        inputFrame = self.publicContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.publicContainer.frame = inputFrame;
     }];
     
     if(self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarEmojiStatus) {
@@ -1109,6 +1139,7 @@
     CGRect voiceFrame = self.voiceSwitchBtn.frame;
     CGRect emojFrame = self.emojSwitchBtn.frame;
     CGRect extendFrame = self.pluginSwitchBtn.frame;
+    CGRect publicFrame = self.publicSwitchBtn.frame;
 #ifdef WFC_PTT
     CGRect pttFrame = self.pttSwitchBtn.frame;
 #endif
@@ -1119,16 +1150,23 @@
     voiceFrame.origin.y += diff;
     emojFrame.origin.y += diff;
     extendFrame.origin.y += diff;
+    publicFrame.origin.y += diff;
 #ifdef WFC_PTT
     pttFrame.origin.y += diff;
 #endif
     
     [UIView animateWithDuration:0.5 animations:^{
         self.frame = baseFrame;
-        self.inputContainer.frame = CGRectMake(0, 0, baseFrame.size.width, baseFrame.size.height);
+        CGRect inputFrame = self.inputContainer.frame;
+        inputFrame.size.height = baseFrame.size.height;
+        self.inputContainer.frame = inputFrame;
+        inputFrame = self.publicContainer.frame;
+        inputFrame.size.height = baseFrame.size.height;
+        self.publicContainer.frame = inputFrame;
         self.voiceSwitchBtn.frame = voiceFrame;
         self.emojSwitchBtn.frame = emojFrame;
         self.pluginSwitchBtn.frame = extendFrame;
+        self.publicSwitchBtn.frame = publicFrame;
 #ifdef WFC_PTT
         self.pttSwitchBtn.frame = pttFrame;
 #endif
@@ -1321,6 +1359,7 @@
     CGRect voiceFrame = self.voiceSwitchBtn.frame;
     CGRect emojFrame = self.emojSwitchBtn.frame;
     CGRect extendFrame = self.pluginSwitchBtn.frame;
+    CGRect publicFrame = self.publicSwitchBtn.frame;
 #ifdef WFC_PTT
     CGRect pttFrame = self.pttSwitchBtn.frame;
 #endif
@@ -1354,6 +1393,7 @@
     voiceFrame.origin.y += diff;
     emojFrame.origin.y += diff;
     extendFrame.origin.y += diff;
+    publicFrame.origin.y += diff;
 #ifdef WFC_PTT
     pttFrame.origin.y += diff;
 #endif
@@ -1366,10 +1406,16 @@
         ws.textInputView.frame = tvFrame;
         ws.inputCoverView.frame = ws.textInputView.bounds;
         self.frame = baseFrame;
-        self.inputContainer.frame = CGRectMake(0, 0, baseFrame.size.width, baseFrame.size.height);
+        CGRect inputFrame = self.inputContainer.frame;
+        inputFrame.size.height = baseFrame.size.height;
+        self.inputContainer.frame = inputFrame;
+        inputFrame = self.publicContainer.frame;
+        inputFrame.size.height = baseFrame.size.height;
+        self.publicContainer.frame = inputFrame;
         self.voiceSwitchBtn.frame = voiceFrame;
         self.emojSwitchBtn.frame = emojFrame;
         self.pluginSwitchBtn.frame = extendFrame;
+        self.publicSwitchBtn.frame = publicFrame;
 #ifdef WFC_PTT
         self.pttSwitchBtn.frame = pttFrame;
 #endif
