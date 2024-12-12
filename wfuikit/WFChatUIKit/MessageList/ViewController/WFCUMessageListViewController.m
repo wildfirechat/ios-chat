@@ -2193,18 +2193,42 @@
             self.playTimer = nil;
         }
     }
-    [self modelOfMessage:self.playingMessageId].voicePlaying = NO;
+    WFCUMessageModel *model = [self modelOfMessage:self.playingMessageId];
+    model.voicePlaying = NO;
     self.playingMessageId = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:kVoiceMessagePlayStoped object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
     [self removeProximityMonitoringObserver];
+    
+    [self.modelList enumerateObjectsUsingBlock:^(WFCUMessageModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.message.serverTime > model.message.serverTime && [obj.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
+            if (obj.message.status != Message_Status_Played && obj.message.direction == MessageDirection_Receive) {
+                WFCUMessageCellBase *cell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathWithIndex:idx]];
+                [self prepardToPlay:obj cell:cell];
+                *stop = YES;
+            }
+        }
+    }];
 }
 
--(void)prepardToPlay:(WFCUMessageModel *)model {
+-(void)prepardToPlay:(WFCUMessageModel *)model cell:(WFCUMessageCellBase *)cell {
+    if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
+        if(model.message.conversation.type != SecretChat_Type) {
+            [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
+            model.message.status = Message_Status_Played;
+            if (cell) {
+                [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
+            }
+        }
+    }
+    
     if (self.playingMessageId == model.message.messageId) {
         [self stopPlayer];
     } else {
-        [self stopPlayer];
+        if (self.playingMessageId) {
+            [self stopPlayer];
+        }
+        
         self.playingMessageId = model.message.messageId;
         WFCCSoundMessageContent *soundContent = (WFCCSoundMessageContent *)model.message.content;
         if (soundContent.localPath.length == 0 || ![WFCUUtilities isFileExist:soundContent.localPath]) {
@@ -2500,15 +2524,7 @@
             [self.navigationController pushViewController:browser animated:YES];
         }
     } else if([model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
-        if (model.message.direction == MessageDirection_Receive && model.message.status != Message_Status_Played) {
-            if(model.message.conversation.type != SecretChat_Type) {
-                [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:model.message.messageId];
-                model.message.status = Message_Status_Played;
-                [self.collectionView reloadItemsAtIndexPaths:@[[self.collectionView indexPathForCell:cell]]];
-            }
-        }
-        
-        [self prepardToPlay:model];
+        [self prepardToPlay:model cell:cell];
     } else if([model.message.content isKindOfClass:[WFCCLocationMessageContent class]]) {
         WFCCLocationMessageContent *locContent = (WFCCLocationMessageContent *)model.message.content;
         WFCULocationViewController *vc = [[WFCULocationViewController alloc] initWithLocationPoint:[[WFCULocationPoint alloc] initWithCoordinate:locContent.coordinate andTitle:locContent.title]];
