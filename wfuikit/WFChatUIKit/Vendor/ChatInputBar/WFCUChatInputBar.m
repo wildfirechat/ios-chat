@@ -747,7 +747,7 @@
 }
 #ifdef WFC_PTT
 - (BOOL)isPttEnabled {
-    return ![[WFCCIMService sharedWFCIMService] isConversationSilent:self.conversation] && [WFPttClient sharedClient].enablePtt;
+    return ![[WFCCIMService sharedWFCIMService] isConversationSilent:self.conversation] && [WFPttClient sharedClient].enablePtt && (self.conversation.type == Single_Type || self.conversation.type == Group_Type);
 }
 #endif
 - (void)setEmojInput:(BOOL)emojInput {
