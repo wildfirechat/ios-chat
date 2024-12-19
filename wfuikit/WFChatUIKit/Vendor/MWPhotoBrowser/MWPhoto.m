@@ -213,6 +213,14 @@
 
 // Load from local file
 - (void)_performLoadUnderlyingImageAndNotifyWithWebURL:(NSURL *)url {
+    [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:self.message.messageUid mediaType:Media_Type_IMAGE mediaPath:url.absoluteString success:^(NSString *authorizedUrl, NSString *backupAuthorizedUrl) {
+        [self _performLoadUnderlyingImageAndNotifyWithWebURLWithAuthedUrl:[NSURL URLWithString:authorizedUrl]];
+    } error:^(int error_code) {
+        [self _performLoadUnderlyingImageAndNotifyWithWebURLWithAuthedUrl:url];
+    }];
+}
+
+- (void)_performLoadUnderlyingImageAndNotifyWithWebURLWithAuthedUrl:(NSURL *)url {
     @try {
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         _webImageOperation = [manager loadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
