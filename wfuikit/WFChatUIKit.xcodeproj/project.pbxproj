@@ -318,7 +318,7 @@
 		2F5511FE217F5CC300F56C26 /* WFCUConversationSettingMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551053217F5CC100F56C26 /* WFCUConversationSettingMemberCell.m */; };
 		2F5511FF217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551055217F5CC100F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.m */; };
 		2F551200217F5CC300F56C26 /* WFCUConversationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F551056217F5CC100F56C26 /* WFCUConversationSettingViewController.m */; };
-		2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551057217F5CC100F56C26 /* WFCUConversationSettingViewController.h */; };
+		2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551057217F5CC100F56C26 /* WFCUConversationSettingViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551058217F5CC100F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h */; };
 		2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F55105B217F5CC100F56C26 /* WFCUConversationTableViewCell.h */; };
 		2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F55105D217F5CC100F56C26 /* WFCUConversationTableViewCell.m */; };
@@ -2628,6 +2628,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
 				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
@@ -2772,7 +2773,6 @@
 				2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */,
 				2F551191217F5CC200F56C26 /* SDRefreshView.h in Headers */,
 				B70162F6290E2F1700DCD651 /* MWGridCell.h in Headers */,
-				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				2F5510F5217F5CC200F56C26 /* CCHMapViewDelegateProxy.h in Headers */,
 				B77D33FC290C258A00E72111 /* WFCUGroupTableViewController.h in Headers */,
 				2F5511D0217F5CC300F56C26 /* UIView+TYAutoLayout.h in Headers */,

@@ -38,6 +38,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 #import <WFChatUIKit/QrCodeHelper.h>
 #import <WFChatUIKit/WFCUBrowserViewController.h>
+#import <WFChatUIKit/WFCUConversationSettingViewController.h>
 
 #import <WFChatUIKit/WFCUMediaMessageDownloader.h>
 #import <WFChatUIKit/WFCUFaceBoard.h>
