@@ -118,7 +118,11 @@
 "ShowMemberNickname"="显示成员昵称";
 "ClearChatHistory"="清空聊天记录";
 "DismissGroup"="解散群组";
+"TransferGroup"="转让群组";
 "QuitGroup"="退出群组";
+"Transfering"="转移中...";
+"Transfered"="转移完成";
+"TransferFailed"="转移失败!";
 "OnlyManangerCanChangeGroupNameHint"="只有管理员才可以修改群名称";
 "ModifyGroupName"="修改群名称";
 "OnlyManangerCanChangeGroupPortraitHint"="只有管理员才可以修改群头像";

@@ -110,8 +110,23 @@
                 ws.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:NO];
                 [ws setupMemberCollectionView];
                 [ws.memberCollectionView reloadData];
+                [ws.tableView reloadData];
             }
         }];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSArray<WFCCGroupInfo *> *updateGroupInfos = [note.userInfo objectForKey:@"groupInfoList"];
+            [updateGroupInfos enumerateObjectsUsingBlock:^(WFCCGroupInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([ws.conversation.target isEqualToString:obj.target]) {
+                    ws.groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:ws.conversation.target refresh:NO];
+                    ws.memberList = [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:NO];
+                    [ws setupMemberCollectionView];
+                    [ws.memberCollectionView reloadData];
+                    [ws.tableView reloadData];
+                }
+            }];
+        }];
+        
         [[WFCUConfigManager globalManager].appServiceProvider getGroupAnnouncement:self.conversation.target success:^(WFCUGroupAnnouncement *announcement) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 ws.groupAnnouncement = announcement;
@@ -320,6 +335,69 @@
         [ws.navigationController popToRootViewControllerAnimated:YES];
     }];
 }
+
+- (void)onTransferGroup:(id)sender {
+    if ([self isGroupOwner]) {
+        WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
+        pvc.selectContact = YES;
+        pvc.multiSelect = NO;
+        __weak typeof(self)ws = self;
+        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+            if (contacts.count == 1) {
+                WFCCUserInfo *newOwnerUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:ws.groupInfo.target refresh:NO];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"请确认是否把群组转让给 %@", newOwnerUserInfo.readableName] preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"转让" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+                    hud.label.text = WFCString(@"Transfering");
+                    [hud showAnimated:YES];
+                    
+                    [[WFCCIMService sharedWFCIMService] transferGroup:ws.conversation.target to:[contacts objectAtIndex:0] notifyLines:nil notifyContent:nil success:^{
+                        NSLog(@"Transfer success");
+                        [hud hideAnimated:NO];
+                        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+                        hud.label.text = WFCString(@"Transfered");
+                        hud.mode = MBProgressHUDModeText;
+                        hud.removeFromSuperViewOnHide = YES;
+                        [hud hideAnimated:NO afterDelay:1.5];
+                    } error:^(int error_code) {
+                        NSLog(@"Transfer error");
+                        [hud hideAnimated:NO];
+                        hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+                        hud.label.text = WFCString(@"TransferFailed");
+                        hud.mode = MBProgressHUDModeText;
+                        hud.removeFromSuperViewOnHide = YES;
+                        [hud hideAnimated:NO afterDelay:1.5];
+                    }];
+                }];
+                
+                UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+                }];
+                
+                [alert addAction:actionCancel];
+                [alert addAction:actionDismiss];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [ws presentViewController:alert animated:YES completion:nil];
+                });
+            }
+        };
+        
+        NSMutableArray *candidateUsers = [[NSMutableArray alloc] init];
+        NSMutableArray *disableUsers = [[NSMutableArray alloc] init];
+        BOOL isOwner = [self isGroupOwner];
+        
+        for (WFCCGroupMember *member in [[WFCCIMService sharedWFCIMService] getGroupMembers:self.groupInfo.target forceUpdate:NO]) {
+            [candidateUsers addObject:member.memberId];
+        }
+        [disableUsers addObject:[WFCCNetworkService sharedInstance].userId];
+        pvc.candidateUsers = candidateUsers;
+        pvc.disableUsers = [disableUsers copy];
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
+        [self.navigationController presentViewController:navi animated:YES completion:nil];
+    }
+}
+
 - (void)onDeleteAndQuit:(id)sender {
     if(self.conversation.type == Group_Type) {
         if ([self isGroupOwner]) {
@@ -635,6 +713,12 @@
     }
     return NO;
 }
+- (BOOL)isTransferGroup:(NSIndexPath *)indexPath {
+    if(self.conversation.type == Group_Type && indexPath.section == 4 && indexPath.row == 2) {
+        return YES;
+    }
+    return NO;
+}
 
 - (BOOL)isFilesCell:(NSIndexPath *)indexPath {
     if (self.conversation.type == Group_Type && indexPath.section == 1 && indexPath.row == 1) {
@@ -690,8 +774,13 @@
         }  else if(section == 4) {
             if(self.groupInfo.type == GroupType_Organization)
                 return 1; //清空聊天记录,删除退群
-            else
-                return 2; //清空聊天记录,删除退群
+            else {
+                if([self isGroupOwner]) {
+                    return 3;
+                } else {
+                    return 2; //清空聊天记录,删除退群
+                }
+            }
         }
     } else if(self.conversation.type == Single_Type) {
         if(section == 0) {
@@ -886,6 +975,25 @@
             btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onDeleteAndQuit:) forControlEvents:UIControlEventTouchUpInside];
+            if (@available(iOS 14, *)) {
+                [cell.contentView addSubview:btn];
+            } else {
+                [cell addSubview:btn];
+            }
+        }
+        return cell;
+  } else if([self isTransferGroup:indexPath]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"buttonCell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
+            for (UIView *subView in cell.subviews) {
+                [subView removeFromSuperview];
+            }
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
+            [btn setTitle:WFCString(@"TransferGroup") forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(onTransferGroup:) forControlEvents:UIControlEventTouchUpInside];
             if (@available(iOS 14, *)) {
                 [cell.contentView addSubview:btn];
             } else {

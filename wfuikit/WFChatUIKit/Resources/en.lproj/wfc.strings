@@ -118,7 +118,11 @@
 "ShowMemberNickname"="Show member's nickname";
 "ClearChatHistory"="Clear chat history";
 "DismissGroup"="Dismiss group";
+"TransferGroup"="Transfer group";
 "QuitGroup"="Quit group";
+"Transfering"="Transfering...";
+"Transfered"="Transfered";
+"TransferFailed"="Transfer Failed!";
 "OnlyManangerCanChangeGroupNameHint"="Only manager change group name";
 "ModifyGroupName"="Modify group name";
 "OnlyManangerCanChangeGroupPortraitHint"="Only manager change group portrait";
