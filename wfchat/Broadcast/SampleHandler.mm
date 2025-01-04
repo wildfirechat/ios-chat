@@ -24,7 +24,9 @@
 @property (nonatomic, assign) CGFloat cropRate;
 @property (nonatomic, assign) CGSize  targetSize;
 @property (nonatomic, assign) int orientation; //0 竖屏，1转90，2转180，3转270
-@property (nonatomic, assign) BOOL audio; //0 竖屏，1转90，2转180，3转270
+@property (nonatomic, assign) BOOL audio;
+
+@property (nonatomic, assign) int audioBigEnd; //0 未知，1大端，-1小端
 
 @property (nonatomic, assign) int64_t lastTimeStampNs;
 
@@ -113,24 +115,48 @@
             AudioBufferList audioBufferList;
             NSMutableData *data=[[NSMutableData alloc] init];
             CMBlockBufferRef blockBuffer;
-            OSStatus status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(ref, NULL, &audioBufferList, sizeof(audioBufferList), NULL, NULL, 0, &blockBuffer);
-
-            for(int y=0; y < audioBufferList.mNumberBuffers; y++) {
-                AudioBuffer audioBuffer = audioBufferList.mBuffers[y];
-                Float32 *frame = (Float32*)audioBuffer.mData;
-                [data appendBytes:frame length:audioBuffer.mDataByteSize];
-            }
-         
-            SampleInfo sampleInfo;
-            sampleInfo.width = 0;
-            sampleInfo.height = 0;
-            sampleInfo.dataLen = (int)data.length;
-            sampleInfo.type = 1;
-
-            NSMutableData *dataWithHeader = [[NSMutableData alloc] initWithBytes:&sampleInfo length:sizeof(SampleInfo)];
-            [dataWithHeader appendData:data];
+            CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(ref,
+                                                                  NULL,
+                                                                  &audioBufferList,
+                                                                  sizeof(audioBufferList),
+                                                                  NULL,
+                                                                  NULL,
+                                                                  kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+                                                                  &blockBuffer);
             
-            [self sendType:1 data:[dataWithHeader copy] tag:1];
+            if (self.audioBigEnd == 0) {
+                CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(ref);
+                const AudioStreamBasicDescription *asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription);
+                if (asbd->mFormatFlags & kAudioFormatFlagIsBigEndian) {
+                    self.audioBigEnd = 1;
+                } else {
+                    self.audioBigEnd = -1;
+                }
+            }
+            
+            if (audioBufferList.mNumberBuffers > 0) {
+                AudioBuffer audioBuffer = audioBufferList.mBuffers[0];
+                uint8_t *frame = (uint8_t *)audioBuffer.mData;
+                if (self.audioBigEnd == 1) {
+                    for (int i = 0; i < (audioBuffer.mDataByteSize - 1); i += 2) {
+                         int8_t temp = frame[i];
+                        frame[i] = frame[i+1];
+                        frame[i+1] = temp;
+                     }
+                }
+                [data appendBytes:frame length:audioBuffer.mDataByteSize];
+                
+                SampleInfo sampleInfo;
+                sampleInfo.width = audioBuffer.mNumberChannels;
+                sampleInfo.height = (int)data.length/audioBuffer.mNumberChannels/2;
+                sampleInfo.dataLen = (int)data.length;
+                sampleInfo.type = 1;
+
+                NSMutableData *dataWithHeader = [[NSMutableData alloc] initWithBytes:&sampleInfo length:sizeof(SampleInfo)];
+                [dataWithHeader appendData:data];
+                
+                [self sendType:1 data:[dataWithHeader copy] tag:1];
+            }
             CFRelease(blockBuffer);
             CFRelease(ref);
         }

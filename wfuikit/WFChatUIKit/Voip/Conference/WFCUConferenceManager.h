@@ -30,7 +30,8 @@ extern NSString *kMuteStateChanged;
 - (void)muteVideo:(BOOL)mute;
 - (void)muteAudioVideo:(BOOL)mute;
 - (void)enableAudioDisableVideo;
-- (void)switchAudioAndScreansharing:(UIView *)view;
+- (void)startScreansharing:(UIView *)view withAudio:(BOOL)withAudio;
+- (void)stopScreansharing;
 - (void)leaveConference:(BOOL)destroy;
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId;
