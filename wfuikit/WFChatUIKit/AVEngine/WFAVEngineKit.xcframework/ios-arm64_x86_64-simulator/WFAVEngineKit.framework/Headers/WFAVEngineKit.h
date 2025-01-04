@@ -371,6 +371,18 @@ typedef NS_ENUM(NSInteger, WFAVCameraPosition) {
 - (void)didGetStats:(NSArray<RTCLegacyStatsReport *> *_Nonnull)stats ofUser:(NSString *_Nonnull)userId screenSharing:(BOOL)screenSharing;
 @end
 
+/**
+ /* 此方法没有意义，仅为了兼容UI代码
+ */
+@protocol WFAVCallSessionAudioDataDelegate <NSObject>
+@optional
+/* 此方法没有意义，仅为了兼容UI代码 */
+-(OSStatus)onDeliverRecordeAudiodData:(AudioUnitRenderActionFlags*_Nonnull)flags timestamp:(const AudioTimeStamp*_Nonnull)time_stamp busNumber:(UInt32)bus_number numFrames:(UInt32)num_frames ioData:(AudioBufferList*_Nonnull)io_data;
+
+/* 此方法没有意义，仅为了兼容UI代码 */
+-(OSStatus)onGetPlayoutAudioData:(AudioUnitRenderActionFlags*_Nonnull)io_action_flags timestamp:(const AudioTimeStamp*_Nonnull)time_stamp busNumber:(UInt32)bus_number numFrames:(UInt32)num_frames ioData:(AudioBufferList*_Nonnull)io_data;
+@end
+
 @protocol WFAVExternalFrameDelegate <NSObject>
 - (void)capturer:(_Nullable id)capturer didCaptureVideoFrame:(nonnull RTCVideoFrame *)frame;
 @end
@@ -600,6 +612,11 @@ typedef NS_ENUM(NSInteger, WFAVVideoType) {
  通话Session的事件监听
  */
 @property(nonatomic, weak)id<WFAVCallSessionDelegate> delegate;
+
+/**
+ * 此属性没有意义，仅为了兼容UI代码
+ */
+@property(nonatomic, weak) _Nullable id <WFAVCallSessionAudioDataDelegate> audioDataDelegate;
 
 /**
  通话状态

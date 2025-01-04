@@ -24,7 +24,7 @@
 NSString *kMuteStateChanged = @"kMuteStateChanged";
 
 
-@interface WFCUConferenceManager () <GCDAsyncSocketDelegate, WFAVExternalVideoSource>
+@interface WFCUConferenceManager () <GCDAsyncSocketDelegate, WFAVExternalVideoSource, WFAVCallSessionAudioDataDelegate>
 @property(nonatomic, strong)UIButton *alertViewCheckBtn;
 
 @property (nonatomic, strong)GCDAsyncSocket *socket;
@@ -32,6 +32,9 @@ NSString *kMuteStateChanged = @"kMuteStateChanged";
 @property (nonatomic, strong)NSMutableArray *sockets;
 @property (nonatomic,strong)RPSystemBroadcastPickerView *broadPickerView;
 @property(nonatomic, strong)NSMutableData *receivedData;
+@property(nonatomic, strong)NSMutableData *receivedAudioData;
+@property (nonatomic, strong) NSLock *audioDataLock;
+@property(nonatomic, assign)BOOL broadcastWithAudio;
 @property(nonatomic, weak)id<WFAVExternalFrameDelegate> frameDelegate;
 @end
 
@@ -157,17 +160,21 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self notifyMuteStateChanged];
 }
 
-- (void)switchAudioAndScreansharing:(UIView *)view {
-    if([self isBroadcasting]) {
-        [self cancelBroadcast];
-    } else {
-        [self broadcast:view];
+- (void)startScreansharing:(UIView *)view withAudio:(BOOL)withAudio {
+    if(![self isBroadcasting]) {
+        [self broadcast:view withAudio:withAudio];
         [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
         [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
         if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
             [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
         }
         [self notifyMuteStateChanged];
+    }
+}
+
+- (void)stopScreansharing {
+    if([self isBroadcasting]) {
+        [self cancelBroadcast];
     }
 }
 
@@ -701,8 +708,11 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self sendCommandMessage:command];
 }
 
-- (void)broadcast:(UIView *)view {
+- (void)broadcast:(UIView *)view withAudio:(BOOL)withAudio  {
     self.receivedData = [[NSMutableData alloc] init];
+    self.receivedAudioData = [[NSMutableData alloc] init];
+    self.audioDataLock = [[NSLock alloc] init];
+    self.broadcastWithAudio = withAudio;
     [self setupSocket:NO];
     [view addSubview:self.broadPickerView];
     for (UIView *view in self.broadPickerView.subviews) {
@@ -748,7 +758,11 @@ static WFCUConferenceManager *sharedSingleton = nil;
 - (void)onBroadcastStarted {
     [[WFAVEngineKit sharedEngineKit].currentSession setBroadcastingWithVideoSource:self];
     [self sendOrientationCommand];
+    if (self.broadcastWithAudio) {
+        [self sendWithAudioCommand:YES];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
+    [WFAVEngineKit sharedEngineKit].currentSession.audioDataDelegate = self;
 }
 
 - (void)onBroadcastStoped {
@@ -758,10 +772,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
     
     [[WFAVEngineKit sharedEngineKit].currentSession setBroadcastingWithVideoSource:nil];
     self.receivedData = nil;
+    self.receivedAudioData = nil;
+    self.audioDataLock = nil;
     [self.broadPickerView removeFromSuperview];
     self.broadPickerView = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
+    [WFAVEngineKit sharedEngineKit].currentSession.audioDataDelegate = nil;
 }
 
 - (RPSystemBroadcastPickerView *)broadPickerView{
@@ -821,6 +838,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [self sendBroadcastCommand:0 value:orientation];
 }
 
+- (void)sendWithAudioCommand:(BOOL)withAudio {
+    [self sendBroadcastCommand:1 value:withAudio?1:0];
+}
+
 - (void)sendBroadcastCommand:(int)type value:(int)value {
     GCDAsyncSocket *socket = self.sockets.count ? self.sockets[0] : nil;
     if(socket) {
@@ -831,6 +852,43 @@ static WFCUConferenceManager *sharedSingleton = nil;
         NSLog(@"send command %d, %d", type, value);
         [socket writeData:md withTimeout:(NSTimeInterval)5 tag:0];
     }
+}
+
+#pragma mark - WFAVCallSessionAudioDataDelegate
+- (OSStatus)onDeliverRecordeAudiodData:(AudioUnitRenderActionFlags *)flags timestamp:(const AudioTimeStamp *)time_stamp busNumber:(UInt32)bus_number numFrames:(UInt32)num_frames ioData:(AudioBufferList *)io_data {
+    @autoreleasepool {
+        NSLock *Lock = self.audioDataLock;
+        [Lock lock];
+        NSData *deviceAudioData = nil;
+        if (self.receivedAudioData.length >= num_frames*4) {
+            deviceAudioData = [self.receivedAudioData subdataWithRange:NSMakeRange(0, num_frames*4)];
+            [self.receivedAudioData replaceBytesInRange:NSMakeRange(0, num_frames*4) withBytes:NULL length:0];
+            self.receivedAudioData = [[NSMutableData alloc] initWithData:self.receivedAudioData];
+        }
+        [Lock unlock];
+        
+        for (int i = 0; i < num_frames; i++) {
+            if (io_data->mBuffers[0].mNumberChannels == 1) {
+                short channel1 = 0;
+                short channel2 = 0;
+                if (deviceAudioData) {
+                    channel1 = *((short*)(deviceAudioData.bytes+i*4))/10;
+                    channel2 = *((short*)(deviceAudioData.bytes+i*4+2))/10;
+                }
+                short deviceFrame = channel1/2+channel2/2;
+                short micFrame = *((short*)(io_data->mBuffers[0].mData+i*2));
+                int mixed = deviceFrame+micFrame*9/10;
+                if(mixed > 32767) {
+                    mixed = 32767;
+                } else if(mixed < -32767) {
+                    mixed = -32767;
+                }
+                *((short*)(io_data->mBuffers[0].mData+i*2)) = mixed;
+            }
+        }
+    }
+    
+    return 0;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -889,7 +947,10 @@ static WFCUConferenceManager *sharedSingleton = nil;
                         [self.frameDelegate capturer:nil didCaptureVideoFrame:videoFrame];
                         CVPixelBufferRelease(pixelBuffer);
                     } else if(sampleInfo.type == 1) { //audio
-                        
+                        NSLock *Lock = self.audioDataLock;
+                        [Lock lock];
+                        [self.receivedAudioData appendData:frameData];
+                        [Lock unlock];
                     }
                 } else {
                     NSLog(@"Unknown command");

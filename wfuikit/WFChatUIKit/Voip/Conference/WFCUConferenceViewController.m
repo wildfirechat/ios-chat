@@ -990,7 +990,11 @@
 }
 
 - (void)screenSharingButtonDidTap:(UIButton *)button {
-    [[WFCUConferenceManager sharedInstance] switchAudioAndScreansharing:self.view];
+    if([[WFCUConferenceManager sharedInstance] isBroadcasting]) {
+        [[WFCUConferenceManager sharedInstance] stopScreansharing];
+    } else {
+        [[WFCUConferenceManager sharedInstance] startScreansharing:self.view withAudio:YES];
+    }
 }
 
 - (void)updateScreenSharingButton {
@@ -1914,7 +1918,7 @@
 }
 
 - (void)onStopBroadcastBtn:(id)sender {
-    [[WFCUConferenceManager sharedInstance] switchAudioAndScreansharing:self.view];
+    [[WFCUConferenceManager sharedInstance] stopScreansharing];
 }
 
 - (void)rejoinConferenceAsAudience {
