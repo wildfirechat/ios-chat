@@ -89,3 +89,10 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUOrganizationEx.h>
 #import <WFChatUIKit/WFCUOrganizationCache.h>
 #import <WFChatUIKit/WFCUOrgServiceProvider.h>
+
+#import <WFChatUIKit/WFCUMessageModel.h>
+#import <WFChatUIKit/WFCUMessageCellBase.h>
+#import <WFChatUIKit/WFCUMessageCell.h>
+#import <WFChatUIKit/WFCUTextCell.h>
+#import <WFChatUIKit/WFCUInformationCell.h>
+

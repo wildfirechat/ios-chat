@@ -19,6 +19,7 @@ static WFCUConfigManager *sharedSingleton = nil;
             if (sharedSingleton == nil) {
                 sharedSingleton = [[WFCUConfigManager alloc] init];
                 sharedSingleton.conversationFilesDir = @"ConversationResource";
+                sharedSingleton.cellContentDict = [[NSMutableDictionary alloc] init];
             }
         }
     }
@@ -218,5 +219,9 @@ static WFCUConfigManager *sharedSingleton = nil;
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
     }
     return path;
+}
+
+- (void)registerCustomCell:(Class)cellCls forContent:(Class)msgContentCls {
+    self.cellContentDict[@([msgContentCls getContentType])] = cellCls;
 }
 @end

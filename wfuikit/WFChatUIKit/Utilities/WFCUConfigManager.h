@@ -59,7 +59,12 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, assign)BOOL displaySpeakingInMultiCall;
 
+@property (nonatomic, strong)NSMutableDictionary<NSNumber*, Class>* cellContentDict;
+
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
+
+//[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
+- (void)registerCustomCell:(Class)cellCls forContent:(Class)msgContentCls;
 @end
 
 NS_ASSUME_NONNULL_END

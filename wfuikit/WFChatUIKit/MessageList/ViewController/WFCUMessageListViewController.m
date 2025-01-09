@@ -1129,7 +1129,9 @@
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratedMessageContent class]];
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratingMessageContent class]];
     
-    
+    [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
+        [self registerCell:obj forContentType:key];
+    }];    
     
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
@@ -1148,6 +1150,12 @@
     [self.collectionView registerClass:cellCls
             forCellWithReuseIdentifier:[NSString stringWithFormat:@"%d", [msgContentCls getContentType]]];
     [self.cellContentDict setObject:cellCls forKey:@([msgContentCls getContentType])];
+}
+
+- (void)registerCell:(Class)cellCls forContentType:(NSNumber *)msgContentType {
+    [self.collectionView registerClass:cellCls
+            forCellWithReuseIdentifier:[NSString stringWithFormat:@"%d", [msgContentType intValue]]];
+    [self.cellContentDict setObject:cellCls forKey:msgContentType];
 }
 
 - (void)removeUserTyping:(NSString *)userId {
