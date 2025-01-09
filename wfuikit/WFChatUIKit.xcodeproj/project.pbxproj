@@ -107,7 +107,7 @@
 		2F1EB5BC2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5BA2499AA5E00FD3575 /* WFCUConferenceInviteViewController.m */; };
 		2F1EB5C32499AFF900FD3575 /* WFCUConferenceInviteCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5C12499AFF900FD3575 /* WFCUConferenceInviteCell.h */; };
 		2F1EB5C42499AFF900FD3575 /* WFCUConferenceInviteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5C22499AFF900FD3575 /* WFCUConferenceInviteCell.m */; };
-		2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */; };
+		2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F337EE5219EE1840086B0F3 /* WFCUTextCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F341A4F235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F341A4D235EF12B00F0D1B6 /* WFCUGroupAnnouncement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F341A50235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F341A4E235EF12B00F0D1B6 /* WFCUGroupAnnouncement.m */; };
 		2F341A53235EF30B00F0D1B6 /* WFCUGroupAnnouncementViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F341A51235EF30B00F0D1B6 /* WFCUGroupAnnouncementViewController.h */; };
@@ -135,10 +135,10 @@
 		2F551095217F5CC200F56C26 /* WFCUInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EB8217F5CC000F56C26 /* WFCUInformationCell.m */; };
 		2F551096217F5CC200F56C26 /* WFCUImageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EB9217F5CC000F56C26 /* WFCUImageCell.h */; };
 		2F551097217F5CC200F56C26 /* WFCUVoiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EBA217F5CC000F56C26 /* WFCUVoiceCell.m */; };
-		2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EBB217F5CC000F56C26 /* WFCUMessageCellBase.h */; };
+		2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EBB217F5CC000F56C26 /* WFCUMessageCellBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F551099217F5CC200F56C26 /* WFCUTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EBC217F5CC000F56C26 /* WFCUTextCell.m */; };
 		2F55109A217F5CC200F56C26 /* WFCUVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EBD217F5CC000F56C26 /* WFCUVideoCell.m */; };
-		2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EBE217F5CC000F56C26 /* WFCUMessageCell.h */; };
+		2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EBE217F5CC000F56C26 /* WFCUMessageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EBF217F5CC000F56C26 /* WFCUStickerCell.h */; };
 		2F55109D217F5CC200F56C26 /* WFCUMediaMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC0217F5CC000F56C26 /* WFCUMediaMessageCell.h */; };
 		2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC1217F5CC000F56C26 /* WFCUFileCell.h */; };
@@ -146,13 +146,13 @@
 		2F5510A1217F5CC200F56C26 /* WFCUMessageCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EC4217F5CC000F56C26 /* WFCUMessageCellBase.m */; };
 		2F5510A2217F5CC200F56C26 /* WFCUVoiceCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC5217F5CC000F56C26 /* WFCUVoiceCell.h */; };
 		2F5510A3217F5CC200F56C26 /* WFCUImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EC6217F5CC000F56C26 /* WFCUImageCell.m */; };
-		2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC7217F5CC000F56C26 /* WFCUInformationCell.h */; };
+		2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC7217F5CC000F56C26 /* WFCUInformationCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550EC8217F5CC000F56C26 /* WFCUCallSummaryCell.h */; };
 		2F5510A6217F5CC200F56C26 /* WFCUStickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550EC9217F5CC000F56C26 /* WFCUStickerCell.m */; };
 		2F5510A7217F5CC200F56C26 /* WFCUMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550ECA217F5CC000F56C26 /* WFCUMessageCell.m */; };
 		2F5510A8217F5CC200F56C26 /* WFCUVideoCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ECB217F5CC000F56C26 /* WFCUVideoCell.h */; };
 		2F5510A9217F5CC200F56C26 /* WFCUMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550ECD217F5CC000F56C26 /* WFCUMessageModel.m */; };
-		2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ECE217F5CC000F56C26 /* WFCUMessageModel.h */; };
+		2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ECE217F5CC000F56C26 /* WFCUMessageModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510AB217F5CC200F56C26 /* WFCUMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */; };
 		2F5510AC217F5CC200F56C26 /* WFCUMessageListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F5510AD217F5CC200F56C26 /* WFCUProfileTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550ED3217F5CC000F56C26 /* WFCUProfileTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2634,18 +2634,23 @@
 				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
 				B707759928823635004034A5 /* WFCUImage.h in Headers */,
 				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
+				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
 				B764D4862958517A0082492F /* WFCUOrganization.h in Headers */,
+				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
 				B764D492295868EC0082492F /* WFCUOrgRelationship.h in Headers */,
+				2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */,
 				2F44487C252D72D5007A570E /* WFCULinkCell.h in Headers */,
 				B74CF825295D313C009AFA88 /* WFCUEmployeeEx.h in Headers */,
 				2F56F6BF252A088100B829C4 /* WFCUCompositeTextCell.h in Headers */,
 				B764D482295850D40082492F /* WFCUOrgServiceProvider.h in Headers */,
 				B7C1917A29CF02E500DBEA9B /* CommonTableViewController.h in Headers */,
 				B764D48A295852500082492F /* WFCUEmployee.h in Headers */,
+				2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */,
 				B74CF821295D298F009AFA88 /* WFCUOrganizationEx.h in Headers */,
 				B71F0A7A28F54156000A7C8A /* DDMultiFormatter.h in Headers */,
 				B701630B290E346C00DCD651 /* DALabeledCircularProgressView.h in Headers */,
 				B7D584E128CF0EC4009D09AF /* WFZHomeViewController.h in Headers */,
+				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				B7D584E228CF0EC4009D09AF /* WFZOrderConferenceViewController.h in Headers */,
 				B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */,
 				B74FDF8428E43275001B870F /* WFCUMoreBoardView.h in Headers */,
@@ -2746,7 +2751,6 @@
 				2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */,
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
 				2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */,
-				2F5510AA217F5CC200F56C26 /* WFCUMessageModel.h in Headers */,
 				2F5511DE217F5CC300F56C26 /* TYAlertScaleFadeAnimation.h in Headers */,
 				2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */,
 				2F551164217F5CC200F56C26 /* AFNetworkReachabilityManager.h in Headers */,
@@ -2767,7 +2771,6 @@
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
 				2F55120F217F5CC300F56C26 /* WFCUContactTableViewCell.h in Headers */,
 				2F55120E217F5CC300F56C26 /* WFCUNewFriendTableViewCell.h in Headers */,
-				2F55109B217F5CC200F56C26 /* WFCUMessageCell.h in Headers */,
 				2F5511DB217F5CC300F56C26 /* UIView+TYAlertView.h in Headers */,
 				2F551109217F5CC200F56C26 /* pinyin.h in Headers */,
 				2F1439F5217F5DAA00B3E38A /* WFCUSearchGroupTableViewCell.h in Headers */,
@@ -2882,10 +2885,8 @@
 				B70162EE290E2F1700DCD651 /* MWGridViewController.h in Headers */,
 				B7016300290E2F1700DCD651 /* MWZoomingScrollView.h in Headers */,
 				2BDF579624AD70C8003C1F08 /* DNAsset.h in Headers */,
-				2F5510A4217F5CC200F56C26 /* WFCUInformationCell.h in Headers */,
 				B71F0A7428F54156000A7C8A /* DDLog.h in Headers */,
 				2F5511E3217F5CC300F56C26 /* YLGIFImage.h in Headers */,
-				2F337EE6219EE1840086B0F3 /* WFCUTextCell.h in Headers */,
 				2F5EB44422C2EE1900BC8C90 /* GroupMuteTableViewController.h in Headers */,
 				B70162FF290E2F1700DCD651 /* UIImage+MWPhotoBrowser.h in Headers */,
 				2F5511FD217F5CC300F56C26 /* WFCUSwitchTableViewCell.h in Headers */,
@@ -2908,7 +2909,6 @@
 				B7C5443128D5876700A2550F /* UIAlertView+LBXAlertAction.h in Headers */,
 				B7C1917229CEFF7D00DBEA9B /* XLPageSegmentedTitleView.h in Headers */,
 				2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */,
-				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
 				2BDF57B424AD70C8003C1F08 /* DNAssetsViewCell.h in Headers */,
 				2BDF57AA24AD70C8003C1F08 /* DNUnAuthorizedTipsView.h in Headers */,
 				B7C5443628D5876700A2550F /* UIWindow+LBXHierarchy.h in Headers */,

@@ -14,6 +14,7 @@
 
 #import "AppDelegate.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatUIKit/WFChatUIKit.h>
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
 #import <WebRTC/WebRTC.h>
@@ -119,6 +120,11 @@
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
+    
+    //可以在WFCUMessageListViewController界面代码中绑定消息和Cell的对应关系（注册Cell），也可以在这里注册。
+    //Cell分为2种类型，一种类型是带有头像的，另外一种是没有头像的。写Cell时可以参考下面这2个Cell。
+    //[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
+    //[[WFCUConfigManager globalManager] registerCustomCell::[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
 #ifdef WFC_PTT
     //初始化对讲SDK
     [WFPttClient sharedClient].delegate = self;
