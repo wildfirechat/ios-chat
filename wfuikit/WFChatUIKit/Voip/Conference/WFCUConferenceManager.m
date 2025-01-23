@@ -855,35 +855,93 @@ static WFCUConferenceManager *sharedSingleton = nil;
 }
 
 #pragma mark - WFAVCallSessionAudioDataDelegate
-- (OSStatus)onDeliverRecordeAudiodData:(AudioUnitRenderActionFlags *)flags timestamp:(const AudioTimeStamp *)time_stamp busNumber:(UInt32)bus_number numFrames:(UInt32)num_frames ioData:(AudioBufferList *)io_data {
+- (OSStatus)onDeliverRecordeAudiodData:(AudioUnitRenderActionFlags *)flags timestamp:(const AudioTimeStamp *)time_stamp busNumber:(UInt32)bus_number numFrames:(UInt32)mic_frames ioData:(AudioBufferList *)io_data {
     @autoreleasepool {
+        NSData *deviceAudioData = nil;
+        int micSampleRate = mic_frames*50;
+        int deviceSampleRate = 44100;
+        int device_frames = 882; // deviceSampleRate * 0.02
+        //Broadcast录制系统声音的采样率是44100
+        //WebRTC本地录音间隔是20ms，一般采样率为48000，当使用蓝牙耳机时，可能的采样率为16000，也有可能是其他的采样率。
+        //第一步先截取20ms的设备录音；第二步把这20ms的设备录音转化为跟麦克风录音采样率一样的数据；第三步把这2部分录音数据混音。
+        
+        //先截取20ms的设备录音，20ms的直播frame是882帧，双声道，每个数据的2个字节。
         NSLock *Lock = self.audioDataLock;
         [Lock lock];
-        NSData *deviceAudioData = nil;
-        if (self.receivedAudioData.length >= num_frames*4) {
-            deviceAudioData = [self.receivedAudioData subdataWithRange:NSMakeRange(0, num_frames*4)];
-            [self.receivedAudioData replaceBytesInRange:NSMakeRange(0, num_frames*4) withBytes:NULL length:0];
-            self.receivedAudioData = [[NSMutableData alloc] initWithData:self.receivedAudioData];
+        if (self.receivedAudioData.length >= device_frames * 2 * 2) {
+            if (self.receivedAudioData.length > (device_frames * 2 * 2)*2) {
+                //如果缓冲区数据太多，只保留最后一段的，之前的清掉。
+                deviceAudioData = [self.receivedAudioData subdataWithRange:NSMakeRange(self.receivedAudioData.length-device_frames * 2 * 2, device_frames * 2 * 2)];
+                self.receivedAudioData = [[NSMutableData alloc] init];
+            } else {
+                deviceAudioData = [self.receivedAudioData subdataWithRange:NSMakeRange(0, device_frames * 2 * 2)];
+                [self.receivedAudioData replaceBytesInRange:NSMakeRange(0, device_frames * 2 * 2) withBytes:NULL length:0];
+            }
         }
         [Lock unlock];
         
-        for (int i = 0; i < num_frames; i++) {
-            if (io_data->mBuffers[0].mNumberChannels == 1) {
-                short channel1 = 0;
-                short channel2 = 0;
-                if (deviceAudioData) {
-                    channel1 = *((short*)(deviceAudioData.bytes+i*4))/10;
-                    channel2 = *((short*)(deviceAudioData.bytes+i*4+2))/10;
+        //采样率转换
+        if (deviceAudioData) {
+            AVAudioFormat *inputFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16
+                                                                          sampleRate:deviceSampleRate
+                                                                            channels:2
+                                                                         interleaved:YES];
+            AVAudioPCMBuffer *inputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:inputFormat
+                                                                          frameCapacity:device_frames];
+            inputBuffer.frameLength = device_frames;
+            memcpy(inputBuffer.int16ChannelData[0], deviceAudioData.bytes, device_frames*4);
+            //            for (int i = 0; i < device_frames; i++) {
+            //                short value1 = *((short*)(deviceAudioData.bytes+i*4));
+            //                short value2 = *((short*)(deviceAudioData.bytes+i*4+2));
+            //                ((int16_t *)inputBuffer.int16ChannelData[0])[i*2] = value1;
+            //                ((int16_t *)inputBuffer.int16ChannelData[0])[i*2+1] = value2;
+            //            }
+            
+            AVAudioFormat *outputFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16
+                                                                           sampleRate:micSampleRate
+                                                                             channels:1
+                                                                          interleaved:YES];
+            
+            AVAudioConverter *converter = [[AVAudioConverter alloc] initFromFormat:inputFormat toFormat:outputFormat];
+            if (!converter) {
+                NSLog(@"Failed to create AVAudioConverter");
+                deviceAudioData = nil;
+            } else {
+                AVAudioPCMBuffer *outputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:outputFormat
+                                                                               frameCapacity:mic_frames];
+                
+                AVAudioConverterOutputStatus outputStatus = [converter convertToBuffer:outputBuffer
+                                                                                 error:nil
+                                                                    withInputFromBlock:^AVAudioBuffer * _Nullable(AVAudioPacketCount inNumberOfPackets, AVAudioConverterInputStatus * _Nonnull outStatus) {
+                    *outStatus = AVAudioConverterInputStatus_HaveData;
+                    return inputBuffer;
+                }];
+                if (outputStatus == AVAudioConverterOutputStatus_Error) {
+                    NSLog(@"Conversion failed");
                 }
-                short deviceFrame = channel1/2+channel2/2;
-                short micFrame = *((short*)(io_data->mBuffers[0].mData+i*2));
-                int mixed = deviceFrame+micFrame*9/10;
-                if(mixed > 32767) {
-                    mixed = 32767;
-                } else if(mixed < -32767) {
-                    mixed = -32767;
+                
+                if (outputBuffer.frameLength) {
+                    deviceAudioData = [NSData dataWithBytes:outputBuffer.int16ChannelData[0] length:outputBuffer.frameLength * sizeof(int16_t)];
+                } else {
+                    deviceAudioData = nil;
                 }
-                *((short*)(io_data->mBuffers[0].mData+i*2)) = mixed;
+            }
+        }
+        
+        //混音
+        if (deviceAudioData) {
+            for (int i = 0; i < mic_frames; i++) {
+                if (io_data->mBuffers[0].mNumberChannels == 1) {
+                    short deviceFrame = *((short*)(deviceAudioData.bytes+i*2));
+                    short micFrame = *((short*)(io_data->mBuffers[0].mData+i*2));
+                    int mixed = (float)deviceFrame*0.5+(float)micFrame*0.5 + 0.5;
+                    if(mixed > 32767) {
+                        mixed = 32767;
+                    } else if(mixed < -32767) {
+                        mixed = -32767;
+                    }
+                    *((short*)(io_data->mBuffers[0].mData+i*2)) = mixed;
+                }
             }
         }
     }
