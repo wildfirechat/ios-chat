@@ -1412,19 +1412,6 @@
                 }
             }
         }
-    } else {
-        for (int i = 0; i < self.modelList.count; i++) {
-            WFCUMessageModel *model = [self.modelList objectAtIndex:i];
-            if (model.message.messageUid == messageUid) {
-                WFCCRecallMessageContent *recallContent = [[WFCCRecallMessageContent alloc] init];
-                recallContent.messageUid = messageUid;
-                recallContent.operatorId = model.message.fromUser;
-                recallContent.originalSender = model.message.fromUser;
-                model.message.content = recallContent;
-                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
-                break;
-            }
-        }
     }
     [self updateQuotedMessageWhenRecall:messageUid];
 }
