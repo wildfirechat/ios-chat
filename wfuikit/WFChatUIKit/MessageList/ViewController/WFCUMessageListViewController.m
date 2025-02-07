@@ -3535,20 +3535,39 @@
         [[WFCCIMService sharedWFCIMService] recall:self.cell4Menu.model.message success:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
-                if (cell.model.message.messageId == messageId) {
-                    if(messageId > 0) {
-                        cell.model.message = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
-                        if(cell.model.message) {
-                            [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
-                        } else {
-                            [self.modelList removeObject:cell.model];
-                            [ws.collectionView deleteItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:cell]]];
+                [ws.modelList enumerateObjectsUsingBlock:^(WFCUMessageModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (obj.message.messageId == messageId) {
+                        BOOL msgNotExist = NO;
+                        if(messageId > 0) {
+                            WFCCMessage *localMsg = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
+                            if(localMsg) {
+                                obj.message = localMsg;
+                            } else {
+                                msgNotExist = YES;
+                            }
                         }
-                        [ws updateQuotedMessageWhenRecall:ws.cell4Menu.model.message.messageUid];
-                    } else {
-                        //client will replace the message content
+                        if(messageId < 0 || msgNotExist) {
+                            WFCCRecallMessageContent *recallCnt = [[WFCCRecallMessageContent alloc] init];
+                            recallCnt.messageUid = obj.message.messageUid;
+                            recallCnt.operatorId = [WFCCNetworkService sharedInstance].userId;
+                            recallCnt.originalSender = obj.message.fromUser;
+                            WFCCMessagePayload *payload = [obj.message.content encode];
+                            recallCnt.originalContentType = payload.contentType;
+                            recallCnt.originalSearchableContent = payload.searchableContent;
+                            recallCnt.originalContent = payload.content;
+                            recallCnt.originalExtra = payload.extra;
+                            recallCnt.originalMessageTimestamp = obj.message.serverTime;
+                            obj.message.content = recallCnt;
+                        }
+                        *stop = YES;
                     }
-                }
+                }];
+                [[ws.collectionView visibleCells] enumerateObjectsUsingBlock:^(__kindof WFCUMessageCellBase* _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (obj.model.message.messageId == messageId) {
+                        [ws.collectionView reloadItemsAtIndexPaths:@[[ws.collectionView indexPathForCell:obj]]];
+                    }
+                }];
+                [ws updateQuotedMessageWhenRecall:ws.cell4Menu.model.message.messageUid];
             });
         } error:^(int error_code) {
             dispatch_async(dispatch_get_main_queue(), ^{
