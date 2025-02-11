@@ -148,7 +148,13 @@
                 
                 SampleInfo sampleInfo;
                 sampleInfo.width = audioBuffer.mNumberChannels;
-                sampleInfo.height = (int)data.length/audioBuffer.mNumberChannels/2;
+                
+                //音频数据的采样率。实在弄不明白为啥这个值是采样率！！！这个duration不是这段音频的时长，而是duration.timescale是采样率。
+                //如果您知道文档请告诉我们！如果这个值不是这个意思，也请告诉我们！非常感谢！
+                CMSampleTimingInfo timingInfoOut;
+                CMSampleBufferGetSampleTimingInfo(ref, 0, &timingInfoOut);
+                sampleInfo.height = timingInfoOut.duration.timescale;
+                
                 sampleInfo.dataLen = (int)data.length;
                 sampleInfo.type = 1;
 

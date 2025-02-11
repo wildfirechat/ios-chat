@@ -36,6 +36,8 @@ NSString *kMuteStateChanged = @"kMuteStateChanged";
 @property (nonatomic, strong) NSLock *audioDataLock;
 @property(nonatomic, assign)BOOL broadcastWithAudio;
 @property(nonatomic, weak)id<WFAVExternalFrameDelegate> frameDelegate;
+
+@property(nonatomic, assign)NSUInteger deviceSampleRate;;
 @end
 
 static WFCUConferenceManager *sharedSingleton = nil;
@@ -859,15 +861,17 @@ static WFCUConferenceManager *sharedSingleton = nil;
     @autoreleasepool {
         NSData *deviceAudioData = nil;
         int micSampleRate = mic_frames*50;
-        int deviceSampleRate = 44100;
-        int device_frames = 882; // deviceSampleRate * 0.02
-        //Broadcast录制系统声音的采样率是44100
+
+        //Broadcast录制系统声音的采样率是44100，但蓝牙或者耳机可能是16000，也可能是别的采样率，可以从broadcast extension获取到采样率。
         //WebRTC本地录音间隔是20ms，一般采样率为48000，当使用蓝牙耳机时，可能的采样率为16000，也有可能是其他的采样率。
         //第一步先截取20ms的设备录音；第二步把这20ms的设备录音转化为跟麦克风录音采样率一样的数据；第三步把这2部分录音数据混音。
         
         //先截取20ms的设备录音，20ms的直播frame是882帧，双声道，每个数据的2个字节。
         NSLock *Lock = self.audioDataLock;
         [Lock lock];
+        //保存当前的采样率和20ms的数据，以供后面混音使用。
+        int sampleRate = self.deviceSampleRate;
+        int device_frames = self.deviceSampleRate/50; // deviceSampleRate * 0.02
         if (self.receivedAudioData.length >= device_frames * 2 * 2) {
             if (self.receivedAudioData.length > (device_frames * 2 * 2)*2) {
                 //如果缓冲区数据太多，只保留最后一段的，之前的清掉。
@@ -883,20 +887,13 @@ static WFCUConferenceManager *sharedSingleton = nil;
         //采样率转换
         if (deviceAudioData) {
             AVAudioFormat *inputFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16
-                                                                          sampleRate:deviceSampleRate
+                                                                          sampleRate:sampleRate
                                                                             channels:2
                                                                          interleaved:YES];
             AVAudioPCMBuffer *inputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:inputFormat
                                                                           frameCapacity:device_frames];
             inputBuffer.frameLength = device_frames;
             memcpy(inputBuffer.int16ChannelData[0], deviceAudioData.bytes, device_frames*4);
-            //            for (int i = 0; i < device_frames; i++) {
-            //                short value1 = *((short*)(deviceAudioData.bytes+i*4));
-            //                short value2 = *((short*)(deviceAudioData.bytes+i*4+2));
-            //                ((int16_t *)inputBuffer.int16ChannelData[0])[i*2] = value1;
-            //                ((int16_t *)inputBuffer.int16ChannelData[0])[i*2+1] = value2;
-            //            }
-            
             AVAudioFormat *outputFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16
                                                                            sampleRate:micSampleRate
                                                                              channels:1
@@ -1007,6 +1004,12 @@ static WFCUConferenceManager *sharedSingleton = nil;
                     } else if(sampleInfo.type == 1) { //audio
                         NSLock *Lock = self.audioDataLock;
                         [Lock lock];
+                        //sampleInfo.height保存从Broadcast extension获取到的采样率。
+                        if(self.deviceSampleRate != sampleInfo.height) {
+                            //如果采样率有变化，抛弃掉之前的数据。
+                            self.deviceSampleRate = sampleInfo.height;
+                            self.receivedAudioData = [[NSMutableData alloc] init];
+                        }
                         [self.receivedAudioData appendData:frameData];
                         [Lock unlock];
                     }
