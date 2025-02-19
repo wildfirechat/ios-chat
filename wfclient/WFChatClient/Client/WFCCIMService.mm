@@ -4384,6 +4384,12 @@ public:
                     mediaPath:(NSString *)mediaPath
                       success:(void(^)(NSString *authorizedUrl, NSString *backupAuthorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock {
+    if (!mediaPath.length) {
+        if (errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
     mars::stn::getAuthorizedMediaUrl(messageUid, (int)mediaType, [mediaPath UTF8String], new IMGetAuthorizedMediaUrlCallback(successBlock, errorBlock));
 }
 
