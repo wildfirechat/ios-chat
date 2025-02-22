@@ -36,4 +36,7 @@
 #define USE_CALL_KIT 0
 #endif
 
+//是否使用个推推送
+#define USE_GETUI_PUSH 0
+
 #endif /* WFChat_Prefix_Header_pch */

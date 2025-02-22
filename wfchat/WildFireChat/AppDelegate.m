@@ -44,7 +44,19 @@
 
 #import "SSKeychain.h"
 
+#if USE_GETUI_PUSH
+#import <GTSDK/GeTuiSdk.h>
+#import "Utils.h"
+#endif
 
+#if USE_GETUI_PUSH
+// GTSDK 配置信息
+#define kGtAppId @"RaamqzvnTmA2xfBBi0Ruy9"
+#define kGtAppKey @"W99yuzV8eE6ndQg6VzLPU6"
+#define kGtAppSecret @"os7RDFU8uU6UwdTUBSeB58"
+
+#define GTSdkStateNotification @"GtSdkStateChange"
+#endif
 
 @interface AppDelegate () <ConnectionStatusDelegate, ConnectToServerDelegate, ReceiveMessageDelegate,
 #if WFCU_SUPPORT_VOIP
@@ -53,6 +65,9 @@
     UNUserNotificationCenterDelegate, QrCodeDelegate
 #ifdef WFC_PTT
 ,WFPttDelegate
+#endif
+#if USE_GETUI_PUSH
+,PKPushRegistryDelegate
 #endif
 >
 @property(nonatomic, strong) AVAudioPlayer *audioPlayer;
@@ -96,6 +111,10 @@
     //[[WFCCIMService sharedWFCIMService] setDefaultSilentWhenPcOnline:NO];
 
 #if WFCU_SUPPORT_VOIP
+#if USE_GETUI_PUSH
+    //当使用个推时，音视频SDK不再自己注册voip推送。这个方法必须在调用所有音视频SDK的方法之前才行。
+    [WFAVEngineKit notRegisterVoipPushService];
+#endif
     //多人音视频通话时，是否在会话中现在正在通话让其他人主动加入。
     [WFCUConfigManager globalManager].enableMultiCallAutoJoin = YES;
     
@@ -157,6 +176,20 @@
     setQrCodeDelegate(self);
     
     
+#if USE_GETUI_PUSH
+    // [ GTSDK ]：使用APPID/APPKEY/APPSECRENT启动个推
+    [GeTuiSdk startSdkWithAppId:kGtAppId appKey:kGtAppKey appSecret:kGtAppSecret delegate:self launchingOptions:launchOptions];
+    
+    // [ 参考代码，开发者注意根据实际需求自行修改 ] 注册远程通知
+    [GeTuiSdk registerRemoteNotification: (UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge)];
+    
+#if WFCU_SUPPORT_VOIP
+    PKPushRegistry *voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
+    voipRegistry.delegate = self;
+    // Set the push type to VoIP
+    voipRegistry.desiredPushTypes = [NSSet setWithObject:PKPushTypeVoIP];
+#endif
+#else
     if (@available(iOS 10.0, *)) {
         //第一步：获取推送通知中心
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
@@ -178,7 +211,7 @@
                                                 categories:nil];
         [application registerUserNotificationSettings:settings];
     }
-    
+#endif
     
     if (savedToken.length > 0 && savedUserId.length > 0) {
         //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。另外不能多次connect，如果需要切换用户请先disconnect，然后3秒钟之后再connect（如果是用户手动登录可以不用等，因为用户操作很难3秒完成，如果程序自动切换请等3秒）。
@@ -221,6 +254,9 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+#if USE_GETUI_PUSH
+    NSLog(@"Received ios device token");
+#else
     if ([deviceToken isKindOfClass:[NSData class]]) {
         const unsigned *tokenBytes = [deviceToken bytes];
         NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
@@ -238,6 +274,7 @@
         
         [[WFCCNetworkService sharedInstance] setDeviceToken:token];
     }
+#endif
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -959,6 +996,16 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 #endif
 }
 
+
+/// [ 系统回调 ] 系统返回VOIPToken，并提交个推服务器
+- (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(NSString *)type {
+    // [ GTSDK ]：（新版）向个推服务器注册 VoipToken
+#if USE_GETUI_PUSH
+    [GeTuiSdk registerVoipTokenCredentials:credentials.token];
+#endif
+
+}
+
 - (void)didReceiveIncomingPushWithPayload:(PKPushPayload *)payload
                                   forType:(NSString *)type {
     NSLog(@"didReceiveIncomingPushWithPayload");
@@ -1092,5 +1139,183 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 - (void)didConversation:(WFCCConversation *)conversation amplitudeUpdate:(int)amplitude ofUser:(NSString *)userId {
     NSLog(@"on ptt user %@ speak %d", userId, amplitude);
 }
+#endif
+#if USE_GETUI_PUSH
+//MARK: - GeTuiSdkDelegate
+
+
+/// [ GTSDK回调 ] SDK启动成功返回cid
+- (void)GeTuiSdkDidRegisterClient:(NSString *)clientId {
+    [[WFCCNetworkService sharedInstance] setDeviceToken:clientId pushType:7];
+}
+
+/// [ GTSDK回调 ] SDK运行状态通知
+- (void)GeTuiSDkDidNotifySdkState:(SdkStatus)aStatus {
+    [[NSNotificationCenter defaultCenter] postNotificationName:GTSdkStateNotification object:self];
+}
+
+- (void)GeTuiSdkDidOccurError:(NSError *)error {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [GeTuiSdk GeTuiSdkDidOccurError]:%@\n\n",error.localizedDescription];
+    NSLog(msg);
+}
+
+//MARK: - 通知回调
+
+/// 通知授权结果（iOS10及以上版本）
+/// @param granted 用户是否允许通知
+/// @param error 错误信息
+- (void)GetuiSdkGrantAuthorization:(BOOL)granted error:(NSError *)error {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APNs] %@ \n%@ %@", NSStringFromSelector(_cmd), @(granted), error];
+    NSLog(msg);
+}
+
+/// 通知展示（iOS10及以上版本）
+/// @param center center
+/// @param notification notification
+/// @param completionHandler completionHandler
+- (void)GeTuiSdkNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification completionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APNs] %@ \n%@", NSStringFromSelector(_cmd), notification.request.content.userInfo];
+    NSLog(msg);
+    // [ 参考代码，开发者注意根据实际需求自行修改 ] 根据APP需要，判断是否要提示用户Badge、Sound、Alert等
+    //completionHandler(UNNotificationPresentationOptionNone); 若不显示通知，则无法点击通知
+    completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
+}
+
+/// 收到通知信息
+/// @param userInfo apns通知内容
+/// @param center UNUserNotificationCenter（iOS10及以上版本）
+/// @param response UNNotificationResponse（iOS10及以上版本）
+/// @param completionHandler 用来在后台状态下进行操作（iOS10以下版本）
+- (void)GeTuiSdkDidReceiveNotification:(NSDictionary *)userInfo notificationCenter:(UNUserNotificationCenter *)center response:(UNNotificationResponse *)response fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APNs] %@ \n%@", NSStringFromSelector(_cmd), userInfo];
+    NSLog(msg);
+    if(completionHandler) {
+        // [ 参考代码，开发者注意根据实际需求自行修改 ] 根据APP需要自行修改参数值
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
+}
+
+
+/// 收到透传消息
+/// @param userInfo    推送消息内容
+/// @param fromGetui   YES: 个推通道  NO：苹果apns通道
+/// @param offLine     是否是离线消息，YES.是离线消息
+/// @param appId       应用的appId
+/// @param taskId      推送消息的任务id
+/// @param msgId       推送消息的messageid
+/// @param completionHandler 用来在后台状态下进行操作（通过苹果apns通道的消息 才有此参数值）
+- (void)GeTuiSdkDidReceiveSlience:(NSDictionary *)userInfo fromGetui:(BOOL)fromGetui offLine:(BOOL)offLine appId:(NSString *)appId taskId:(NSString *)taskId msgId:(NSString *)msgId fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    // [ GTSDK ]：汇报个推自定义事件(反馈透传消息)，开发者可以根据项目需要决定是否使用, 非必须
+    // [GeTuiSdk sendFeedbackMessage:90001 andTaskId:taskId andMsgId:msgId];
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APN] %@ \nReceive Slience: fromGetui:%@ appId:%@ offLine:%@ taskId:%@ msgId:%@ userInfo:%@ ", NSStringFromSelector(_cmd), fromGetui ? @"个推消息" : @"APNs消息", appId, offLine ? @"离线" : @"在线", taskId, msgId, userInfo];
+    NSLog(msg);
+    
+    //本地通知UserInfo参数
+    NSDictionary *dic = nil;
+    if (fromGetui) {
+        //个推在线透传
+        //个推进行本地通知统计 userInfo中必须要有_gmid_参数
+        dic = @{@"_gmid_": [NSString stringWithFormat:@"%@:%@", taskId ?: @"", msgId ?: @""]};
+    } else {
+        //APNs静默通知
+        dic = userInfo;
+    }
+    if (fromGetui && offLine == NO) {
+        //个推通道+在线，发起本地通知
+        [Utils pushLocalNotification:userInfo[@"payload"] userInfo:dic];
+    }
+    if(completionHandler) {
+        // [ 参考代码，开发者注意根据实际需求自行修改 ] 根据APP需要自行修改参数值
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
+}
+
+- (void)GeTuiSdkNotificationCenter:(UNUserNotificationCenter *)center openSettingsForNotification:(UNNotification *)notification {
+    // [ 参考代码，开发者注意根据实际需求自行修改 ] 根据APP需要自行修改参数值
+}
+
+//MARK: - 发送上行消息
+
+/// [ GTSDK回调 ] SDK收到sendMessage消息回调
+- (void)GeTuiSdkDidSendMessage:(NSString *)messageId result:(BOOL)isSuccess error:(NSError *)aError {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [GeTuiSdk DidSendMessage]: \nReceive sendmessage:%@ result:%d error:%@", messageId, isSuccess, aError];
+    NSLog(msg);
+}
+
+
+//MARK: - 开关设置
+
+/// [ GTSDK回调 ] SDK设置推送模式回调
+- (void)GeTuiSdkDidSetPushMode:(BOOL)isModeOff error:(NSError *)error {
+    NSString *msg = [NSString stringWithFormat:@">>>[GexinSdkSetModeOff]: %@ %@", isModeOff ? @"开启" : @"关闭", [error localizedDescription]];
+    NSLog(msg);
+}
+
+
+//MARK: - 别名设置
+
+- (void)GeTuiSdkDidAliasAction:(NSString *)action result:(BOOL)isSuccess sequenceNum:(NSString *)aSn error:(NSError *)aError {
+    /*
+     参数说明
+     isSuccess: YES: 操作成功 NO: 操作失败
+     aError.code:
+     30001：绑定别名失败，频率过快，两次调用的间隔需大于 5s
+     30002：绑定别名失败，参数错误
+     30003：绑定别名请求被过滤
+     30004：绑定别名失败，未知异常
+     30005：绑定别名时，cid 未获取到
+     30006：绑定别名时，发生网络错误
+     30007：别名无效
+     30008：sn 无效 */
+    NSString *msg = nil;
+    if([action isEqual:kGtResponseBindType]) {
+        msg = [NSString stringWithFormat:@"[ TestDemo ] bind alias result sn = %@, code = %@", aSn, @(aError.code)];
+    }
+    if([action isEqual:kGtResponseUnBindType]) {
+        msg = [NSString stringWithFormat:@"[ TestDemo ] unbind alias result sn = %@, code = %@", aSn, @(aError.code)];
+    }
+    NSLog(msg);
+}
+
+
+//MARK: - 标签设置
+
+- (void)GeTuiSdkDidSetTagsAction:(NSString *)sequenceNum result:(BOOL)isSuccess error:(NSError *)aError {
+    /*
+     参数说明
+     sequenceNum: 请求的序列码
+     isSuccess: 操作成功 YES, 操作失败 NO
+     aError.code:
+     20001：tag 数量过大（单次设置的 tag 数量不超过 100)
+     20002：调用次数超限（默认一天只能成功设置一次）
+     20003：标签重复
+     20004：服务初始化失败
+     20005：setTag 异常
+     20006：tag 为空
+     20007：sn 为空
+     20008：离线，还未登陆成功
+     20009：该 appid 已经在黑名单列表（请联系技术支持处理）
+     20010：已存 tag 数目超限
+     20011：tag 内容格式不正确
+     */
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] GeTuiSdkDidSetTagAction sequenceNum:%@ isSuccess:%@ error: %@", sequenceNum, @(isSuccess), aError];
+    NSLog(msg);
+}
+
+
+//MARK: - 应用内弹窗
+
+// 展示回调
+- (void)GeTuiSdkPopupDidShow:(NSDictionary *)info {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] GeTuiSdkPopupDidShow%@", info];
+    NSLog(msg);
+}
+
+// 点击回调
+- (void)GeTuiSdkPopupDidClick:(NSDictionary *)info {
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] GeTuiSdkPopupDidClick%@", info];
+    NSLog(msg);
+}
+
 #endif
 @end
