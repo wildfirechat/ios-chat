@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -116,6 +116,12 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
+		B76C1DDB2D695F5B00B1B0D8 /* GTSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */; };
+		B76C1DDC2D695F5B00B1B0D8 /* GTCommonSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */; };
+		B76C1DE22D69650500B1B0D8 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DDF2D69650500B1B0D8 /* Utils.m */; };
+		B76C1DE32D69650500B1B0D8 /* UIView+Gt.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DE12D69650500B1B0D8 /* UIView+Gt.m */; };
+		B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */; };
+		B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */; };
 		B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B184F2CF719E0008A2C09 /* SSKeychain.m */; };
 		B78B18562CF719E0008A2C09 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */; };
 		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
@@ -384,6 +390,15 @@
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B764D48D295854700082492F /* OrgService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrgService.m; sourceTree = "<group>"; };
 		B764D48E295854700082492F /* OrgService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrgService.h; sourceTree = "<group>"; };
+		B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTCommonSDK.xcframework; sourceTree = "<group>"; };
+		B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTSDK.xcframework; sourceTree = "<group>"; };
+		B76C1DDE2D69650500B1B0D8 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		B76C1DDF2D69650500B1B0D8 /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		B76C1DE02D69650500B1B0D8 /* UIView+Gt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Gt.h"; sourceTree = "<group>"; };
+		B76C1DE12D69650500B1B0D8 /* UIView+Gt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Gt.m"; sourceTree = "<group>"; };
+		B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		B76C1DF12D696E2100B1B0D8 /* WildFireChat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WildFireChat-Bridging-Header.h"; sourceTree = "<group>"; };
+		B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsCenterUtils.swift; sourceTree = "<group>"; };
 		B78B184E2CF719E0008A2C09 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		B78B184F2CF719E0008A2C09 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		B78B18502CF719E0008A2C09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SSKeychain.strings; sourceTree = "<group>"; };
@@ -412,7 +427,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B76C1DDB2D695F5B00B1B0D8 /* GTSDK.xcframework in Frameworks */,
+				B76C1DDC2D695F5B00B1B0D8 /* GTCommonSDK.xcframework in Frameworks */,
 				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
+				B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
@@ -562,6 +580,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B76C1DD82D695EF900B1B0D8 /* Getui */,
 				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
@@ -601,6 +620,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */,
 				B709CCEA28F7BA080036EDFA /* CoreMedia.framework */,
 				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
 				B7D8F7362783035200752426 /* SDWebImage.xcframework */,
@@ -936,6 +956,29 @@
 			path = OrgService;
 			sourceTree = "<group>";
 		};
+		B76C1DD82D695EF900B1B0D8 /* Getui */ = {
+			isa = PBXGroup;
+			children = (
+				B76C1DDD2D6964EB00B1B0D8 /* GTUtils */,
+				B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */,
+				B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */,
+			);
+			path = Getui;
+			sourceTree = "<group>";
+		};
+		B76C1DDD2D6964EB00B1B0D8 /* GTUtils */ = {
+			isa = PBXGroup;
+			children = (
+				B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */,
+				B76C1DDE2D69650500B1B0D8 /* Utils.h */,
+				B76C1DDF2D69650500B1B0D8 /* Utils.m */,
+				B76C1DE02D69650500B1B0D8 /* UIView+Gt.h */,
+				B76C1DE12D69650500B1B0D8 /* UIView+Gt.m */,
+				B76C1DF12D696E2100B1B0D8 /* WildFireChat-Bridging-Header.h */,
+			);
+			path = GTUtils;
+			sourceTree = "<group>";
+		};
 		B78B184C2CF71943008A2C09 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1078,6 +1121,7 @@
 				TargetAttributes = {
 					2E1D1FF61FAF0AE600F4405D = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 1620;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1199,6 +1243,7 @@
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
+				B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
@@ -1219,6 +1264,8 @@
 				2FFDDCA025515D9000CEFDBB /* WFCFavoriteVideoCell.m in Sources */,
 				2F4B0EAD245BFD22000A41C6 /* Device.m in Sources */,
 				B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */,
+				B76C1DE22D69650500B1B0D8 /* Utils.m in Sources */,
+				B76C1DE32D69650500B1B0D8 /* UIView+Gt.m in Sources */,
 				2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */,
 				B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */,
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
@@ -1481,6 +1528,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1514,6 +1562,9 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -1526,6 +1577,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1559,6 +1611,8 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_WORKSPACE = YES;
 			};
