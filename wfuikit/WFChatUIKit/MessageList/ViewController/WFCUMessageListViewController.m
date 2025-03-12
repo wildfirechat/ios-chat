@@ -1971,6 +1971,11 @@
             continue;
         }
         
+        if (newMessage && self.modelList.count && self.modelList.firstObject.message.serverTime > message.serverTime-10000) {
+            //收到的消息时间小于当前加载最早一条的时间，这应该是修改的消息，而且没有加载出来，所以可以忽略不管。
+            continue;
+        }
+        
         BOOL duplcated = NO;
         for (WFCUMessageModel *model in self.modelList) {
             if(message.messageId && message.messageId == model.message.messageId) {
