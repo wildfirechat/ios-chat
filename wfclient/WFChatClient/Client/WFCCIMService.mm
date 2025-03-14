@@ -937,6 +937,9 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     payload.localContent = [NSString stringWithUTF8String:tMessage->content.localContent.c_str()];
     payload.mediaType = (WFCCMediaType)tMessage->content.mediaType;
     payload.remoteMediaUrl = [NSString stringWithUTF8String:tMessage->content.remoteMediaUrl.c_str()];
+    if (payload.remoteMediaUrl.length && [WFCCNetworkService sharedInstance].urlRedirector) {
+        payload.remoteMediaUrl = [[WFCCNetworkService sharedInstance].urlRedirector redirect:payload.remoteMediaUrl];
+    }
     payload.localMediaPath = [NSString stringWithUTF8String:tMessage->content.localMediaPath.c_str()];
     payload.mentionedType = tMessage->content.mentionedType;
     payload.notLoaded = tMessage->content.notLoaded?YES:NO;
@@ -2373,6 +2376,9 @@ WFCCChannelInfo *convertProtoChannelInfo(const mars::stn::TChannelInfo &tci) {
     channelInfo.name = [NSString stringWithUTF8String:tci.name.c_str()];
     channelInfo.extra = [NSString stringWithUTF8String:tci.extra.c_str()];
     channelInfo.portrait = [NSString stringWithUTF8String:tci.portrait.c_str()];
+    if (channelInfo.portrait.length && [WFCCNetworkService sharedInstance].urlRedirector) {
+        channelInfo.portrait = [[WFCCNetworkService sharedInstance].urlRedirector redirect:channelInfo.portrait];
+    }
     channelInfo.owner = [NSString stringWithUTF8String:tci.owner.c_str()];
     channelInfo.secret = [NSString stringWithUTF8String:tci.secret.c_str()];
     channelInfo.callback = [NSString stringWithUTF8String:tci.callback.c_str()];
@@ -2447,6 +2453,10 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     groupInfo.name = [NSString stringWithUTF8String:tgi.name.c_str()];
     groupInfo.extra = [NSString stringWithUTF8String:tgi.extra.c_str()];;
     groupInfo.portrait = [NSString stringWithUTF8String:tgi.portrait.c_str()];
+    if (groupInfo.portrait.length && [WFCCNetworkService sharedInstance].urlRedirector) {
+        groupInfo.portrait = [[WFCCNetworkService sharedInstance].urlRedirector redirect:groupInfo.portrait];
+    }
+    
     groupInfo.owner = [NSString stringWithUTF8String:tgi.owner.c_str()];
     groupInfo.remark = [NSString stringWithUTF8String:tgi.remark.c_str()];
     groupInfo.memberCount = tgi.memberCount;

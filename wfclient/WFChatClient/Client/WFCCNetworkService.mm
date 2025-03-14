@@ -222,7 +222,9 @@ WFCCUserInfo* convertUserInfo(const mars::stn::TUserInfo &tui) {
     userInfo.userId = [NSString stringWithUTF8String:tui.uid.c_str()];
     userInfo.name = [NSString stringWithUTF8String:tui.name.c_str()];
     userInfo.portrait = [NSString stringWithUTF8String:tui.portrait.c_str()];
-    
+    if (userInfo.portrait.length && [WFCCNetworkService sharedInstance].urlRedirector) {
+        userInfo.portrait = [[WFCCNetworkService sharedInstance].urlRedirector redirect:userInfo.portrait];
+    }
     userInfo.deleted = tui.deleted;
     if (tui.deleted) {
         userInfo.displayName = @"已删除用户";
