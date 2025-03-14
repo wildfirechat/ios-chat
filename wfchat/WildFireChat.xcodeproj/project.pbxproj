@@ -135,6 +135,7 @@
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
 /* End PBXBuildFile section */
@@ -416,6 +417,8 @@
 		B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCChangePasswordViewController.m; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestRedirector.h; sourceTree = "<group>"; };
+		B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestRedirector.m; sourceTree = "<group>"; };
 		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
@@ -600,6 +603,8 @@
 				B78DD43728167D1E009589F7 /* WFCCallKitManager.m */,
 				2F44485A252D522F007A570E /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
+				B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */,
+				B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
 			);
 			path = WildFireChat;
@@ -1258,6 +1263,7 @@
 				2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */,
 				B764D48F295854700082492F /* OrgService.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
+				B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */,
 				2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */,
 				2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */,
 				2F4B0EB0245C231D000A41C6 /* DeviceInfoViewController.m in Sources */,

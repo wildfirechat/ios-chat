@@ -29,6 +29,7 @@
 #import "UIColor+YH.h"
 #import "SharedConversation.h"
 #import "SharePredefine.h"
+#import "TestRedirector.h"
 #ifdef WFC_PTT
 #import <PttClient/WFPttClient.h>
 #endif
@@ -102,6 +103,7 @@
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
     [[WFCCNetworkService sharedInstance] setBackupAddressStrategy:0];
     [WFCCNetworkService sharedInstance].defaultPortraitProvider = [AppService sharedAppService];
+    [WFCCNetworkService sharedInstance].urlRedirector = [[TestRedirector alloc] init];
 //    [[WFCCNetworkService sharedInstance] setProxyInfo:nil ip:@"192.168.1.80" port:1080 username:nil password:nil];
 //    [[WFCCNetworkService sharedInstance] setBackupAddress:@"192.168.1.120" port:80];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];

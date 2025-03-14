@@ -257,6 +257,14 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (NSString *)groupDefaultPortrait:(WFCCGroupInfo *)groupInfo memberInfos:(NSArray<WFCCUserInfo *> *)memberInfos;
 @end
 
+/**
+ 链接地址转换器，用于双网环境下媒体资源和头像等在不同网络下的转换
+ */
+@protocol WFCCUrlRedirector <NSObject>
+- (NSString *)redirect:(NSString *)originalUrl;
+@end
+
+
 #pragma mark - 连接服务
 /**
  连接服务
@@ -304,6 +312,11 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  默认头像提供者
  */
 @property(nonatomic, weak)id<WFCCDefaultPortraitProvider> defaultPortraitProvider;
+
+/**
+ 双网地址转换器
+ */
+@property(nonatomic, strong)id<WFCCUrlRedirector> urlRedirector;
 
 /**
  当前是否处于登录状态
