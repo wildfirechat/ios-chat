@@ -1945,6 +1945,7 @@
             messages = [messages subarrayWithRange:NSMakeRange(messages.count-15, 15)];
             [self.modelList removeAllObjects];
             self.isAtButtom = YES;
+            self.hasMoreOld = YES;
         }
     }
     
