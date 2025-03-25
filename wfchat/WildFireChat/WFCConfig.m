@@ -9,6 +9,8 @@
 #import "WFCConfig.h"
 
 //IM服务HOST，域名或者IP，注意不能带http头，也不能带端口。
+//NSString *IM_SERVER_HOST = @"192.168.1.81";
+//NSString *IM_SERVER_HOST = @"2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10"; //ipv6地址，不能带[]和端口
 NSString *IM_SERVER_HOST = @"wildfirechat.net";
 
 
@@ -18,6 +20,7 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 // wfc.all_client_support_ssl为tue，所以客户端也必须使用https的应用服务地址
 
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
+//NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
 NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
 //组织通讯录服务地址，如果没有部署，可以设置为nil
