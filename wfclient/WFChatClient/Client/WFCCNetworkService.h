@@ -397,6 +397,11 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (void)setLiteMode:(BOOL)isLiteMode;
 
 /**
+ 设置心跳时间，默认为270秒，可以设置为30-300之间的秒数。
+ */
+- (void)setHeartBeatInterval:(int)second;
+
+/**
  获取客户端id
  
  @return 客户端ID

@@ -128,6 +128,13 @@ public:
   id<TrafficDataDelegate> m_delegate;
 };
 
+class TECB : public mars::stn::ErrorEventCallback {
+public:
+    void OnErrorEvent(int errorType, const std::string &errMsg) {
+        NSLog(@"on protocol error %d, %@", errorType, [[NSString alloc] initWithUTF8String:errMsg.c_str()]);
+    }
+};
+
 class RPCB : public mars::stn::ReceiveMessageCallback {
 public:
     RPCB(id<ReceiveMessageDelegate> delegate) : m_delegate(delegate) {}
@@ -977,6 +984,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setConnectionStatusCallback(new CSCB(self));
   mars::stn::setNotifyConnectToServerCallback(new CTSCB(self));
   mars::stn::setTrafficDataCallback(new TDCB(self));
+  mars::stn::setErrorEventCallback(new TECB(self));
   mars::stn::setReceiveMessageCallback(new RPCB(self));
   mars::stn::setConferenceEventCallback(new CONFCB(self));
   mars::stn::setOnlineEventCallback(new OECB(self));
@@ -1125,6 +1133,12 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (void)setLiteMode:(BOOL)isLiteMode {
     mars::stn::setLiteMode(isLiteMode ? true:false);
+}
+
+- (void)setHeartBeatInterval:(int)second {
+    if (second >= 30 && second <= 300) {
+        mars::stn::SetHeartBeatInterval(second);
+    }
 }
 
 - (BOOL)connectedToMainNetwork {
