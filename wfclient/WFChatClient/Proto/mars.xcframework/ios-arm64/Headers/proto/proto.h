@@ -965,6 +965,11 @@ namespace mars{
     public:
         virtual void OnTrafficData(int64_t send, int64_t recv) = 0;
     };
+    
+    class ErrorEventCallback {
+    public:
+        virtual void OnErrorEvent(int errorType, const std::string &errMsg) = 0;
+    };
 
         class ReceiveMessageCallback {
         public:
@@ -1005,6 +1010,8 @@ namespace mars{
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setNotifyConnectToServerCallback(NotifyConnectToServerCallback *callback);
         extern void setTrafficDataCallback(TrafficDataCallback *callback);
+        extern void setErrorEventCallback(ErrorEventCallback *callback);
+    
         extern void setReceiveMessageCallback(ReceiveMessageCallback *callback);
         extern void setConferenceEventCallback(ConferenceEventCallback *callback);
         extern void setOnlineEventCallback(OnlineEventCallback *callback);
@@ -1193,6 +1200,7 @@ namespace mars{
         extern bool IsEnableSecretChat();
         extern bool ForcePresignedUrlUpload();
         extern bool IsEnableMesh();
+        extern bool IsEnableRemoteControl();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
@@ -1207,6 +1215,7 @@ namespace mars{
         extern bool GetComments(std::string data, std::list<TMomentsComment> &feeds, bool gzip);
         extern const std::string getProtoRevision();
         extern int64_t getAvailableSize();
+        extern void SetHeartBeatInterval(int interval);
 		
     }
 }
