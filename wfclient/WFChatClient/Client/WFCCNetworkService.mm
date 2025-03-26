@@ -984,7 +984,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setConnectionStatusCallback(new CSCB(self));
   mars::stn::setNotifyConnectToServerCallback(new CTSCB(self));
   mars::stn::setTrafficDataCallback(new TDCB(self));
-  mars::stn::setErrorEventCallback(new TECB(self));
+  mars::stn::setErrorEventCallback(new TECB());
   mars::stn::setReceiveMessageCallback(new RPCB(self));
   mars::stn::setConferenceEventCallback(new CONFCB(self));
   mars::stn::setOnlineEventCallback(new OECB(self));
