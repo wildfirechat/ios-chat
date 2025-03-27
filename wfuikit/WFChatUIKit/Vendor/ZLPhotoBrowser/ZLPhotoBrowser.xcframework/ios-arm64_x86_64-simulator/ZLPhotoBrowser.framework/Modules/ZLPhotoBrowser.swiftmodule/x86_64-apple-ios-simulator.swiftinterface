@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0 effective-5.10 (swiftlang-6.0.0.9.10 clang-1600.0.26.2)
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
 // swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name ZLPhotoBrowser
 // swift-module-flags-ignorable: -no-verify-emitted-module-interface
 import AVFoundation
@@ -26,13 +26,15 @@ import _SwiftConcurrencyShims
   @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ZLPhotoPreviewSheet : UIKit.UIView {
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(*, deprecated, message: "Please use ZLPhotoPicker instead. The permission of ZLPhotoPreviewSheet will be changed to private later.")
+@_Concurrency.MainActor @preconcurrency public class ZLPhotoPreviewSheet : UIKit.UIView {
   @objc @_Concurrency.MainActor @preconcurrency public var selectImageBlock: (([ZLPhotoBrowser.ZLResultModel], Swift.Bool) -> Swift.Void)?
   @objc @_Concurrency.MainActor @preconcurrency public var selectImageRequestErrorBlock: (([Photos.PHAsset], [Swift.Int]) -> Swift.Void)?
   @objc @_Concurrency.MainActor @preconcurrency public var cancelBlock: (() -> Swift.Void)?
   @objc deinit
   @objc @_Concurrency.MainActor @preconcurrency convenience public init(selectedAssets: [Photos.PHAsset]? = nil)
   @objc @_Concurrency.MainActor @preconcurrency convenience public init(results: [ZLPhotoBrowser.ZLResultModel]? = nil)
+  @objc @_Concurrency.MainActor @preconcurrency convenience public init(models: [ZLPhotoBrowser.ZLPhotoModel]? = nil)
   @available(*, unavailable)
   @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
   @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
@@ -58,8 +60,8 @@ extension ZLPhotoBrowser.ZLPhotoPreviewSheet : Photos.PHPhotoLibraryChangeObserv
   @_Concurrency.MainActor @preconcurrency @objc dynamic public func photoLibraryDidChange(_ changeInstance: Photos.PHChange)
 }
 @objc @_inheritsConvenienceInitializers @objcMembers public class ZLPhotoManager : ObjectiveC.NSObject {
-  @objc public class func saveImageToAlbum(image: UIKit.UIImage, completion: ((Swift.Bool, Photos.PHAsset?) -> Swift.Void)?)
-  @objc public class func saveVideoToAlbum(url: Foundation.URL, completion: ((Swift.Bool, Photos.PHAsset?) -> Swift.Void)?)
+  @objc public class func saveImageToAlbum(image: UIKit.UIImage, completion: (((any Swift.Error)?, Photos.PHAsset?) -> Swift.Void)?)
+  @objc public class func saveVideoToAlbum(url: Foundation.URL, completion: (((any Swift.Error)?, Photos.PHAsset?) -> Swift.Void)?)
   @objc public class func fetchPhoto(in result: Photos.PHFetchResult<Photos.PHAsset>, ascending: Swift.Bool, allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, limitCount: Swift.Int = .max) -> [ZLPhotoBrowser.ZLPhotoModel]
   @objc public class func getPhotoAlbumList(ascending: Swift.Bool, allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: ([ZLPhotoBrowser.ZLAlbumListModel]) -> Swift.Void)
   @objc public class func getCameraRollAlbum(allowSelectImage: Swift.Bool, allowSelectVideo: Swift.Bool, completion: @escaping (ZLPhotoBrowser.ZLAlbumListModel) -> Swift.Void)
@@ -127,9 +129,13 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   public static let inputDone: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let ok: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let timeout: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let noPhotoLibratyAuthority: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let noCameraAuthority: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let noMicrophoneAuthority: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let noPhotoLibraryAuthorityAlertMessage: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let noCameraAuthorityAlertMessage: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let noMicrophoneAuthorityAlertMessage: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let unableToAccessAllPhotos: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let noLibraryAuthTitleInThumbList: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let noLibraryAuthDescInThumbList: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let gotoSystemSettingInThumbList: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let cameraUnavailable: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let keepRecording: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let gotoSettings: ZLPhotoBrowser.ZLLocalLanguageKey
@@ -159,6 +165,7 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   public static let customCameraTips: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let customCameraTakePhotoTips: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let customCameraRecordVideoTips: ZLPhotoBrowser.ZLLocalLanguageKey
+  public static let customCameraTapToRecordVideoTips: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let minRecordTimeTips: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let cameraRoll: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let panoramas: ZLPhotoBrowser.ZLLocalLanguageKey
@@ -175,7 +182,6 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   public static let animated: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let myPhotoStream: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let noTitleAlbumListPlaceholder: ZLPhotoBrowser.ZLLocalLanguageKey
-  public static let unableToAccessAllPhotos: ZLPhotoBrowser.ZLLocalLanguageKey
   public static let textStickerRemoveTips: ZLPhotoBrowser.ZLLocalLanguageKey
   public func hash(into hasher: inout Swift.Hasher)
   public static func == (a: ZLPhotoBrowser.ZLLocalLanguageKey, b: ZLPhotoBrowser.ZLLocalLanguageKey) -> Swift.Bool
@@ -193,7 +199,16 @@ public struct ZLLocalLanguageKey : Swift.Hashable {
   }
 }
 public typealias ZLImageLoaderBlock = (_ url: Foundation.URL, _ imageView: UIKit.UIImageView, _ progress: @escaping (CoreFoundation.CGFloat) -> Swift.Void, _ complete: @escaping () -> Swift.Void) -> Swift.Void
+@objc public protocol ZLImagePreviewControllerDelegate {
+  @objc optional func imagePreviewController(_ controller: ZLPhotoBrowser.ZLImagePreviewController, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @objc optional func imagePreviewController(_ controller: ZLPhotoBrowser.ZLImagePreviewController, didEndDisplaying cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @objc optional func imagePreviewController(_ controller: ZLPhotoBrowser.ZLImagePreviewController, didScroll collectionView: UIKit.UICollectionView)
+}
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ZLImagePreviewController : UIKit.UIViewController {
+  @_Concurrency.MainActor @preconcurrency public var currentIndex: Swift.Int {
+    get
+  }
+  @objc @_Concurrency.MainActor @preconcurrency public var delegate: (any ZLPhotoBrowser.ZLImagePreviewControllerDelegate)?
   @objc @_Concurrency.MainActor @preconcurrency public var longPressBlock: ((ZLPhotoBrowser.ZLImagePreviewController?, UIKit.UIImage?, Swift.Int) -> Swift.Void)?
   @objc @_Concurrency.MainActor @preconcurrency public var doneBlock: (([Any]) -> Swift.Void)?
   @objc @_Concurrency.MainActor @preconcurrency public var videoHttpHeader: [Swift.String : Any]?
@@ -327,6 +342,8 @@ extension ZLPhotoBrowser.ZLImagePreviewController : UIKit.UICollectionViewDataSo
   @objc public var separatorColor: UIKit.UIColor
   @objc public var thumbnailBgColor: UIKit.UIColor
   @objc public var previewVCBgColor: UIKit.UIColor
+  @objc public var noLibraryAuthTitleAndDescColor: UIKit.UIColor
+  @objc public var noLibraryAuthGotoSettingBtnTitleColor: UIKit.UIColor
   @objc public var bottomToolViewBgColor: UIKit.UIColor
   @objc public var bottomToolViewBgColorOfPreviewVC: UIKit.UIColor
   @objc public var originalSizeLabelTextColor: UIKit.UIColor
@@ -399,6 +416,7 @@ extension ZLPhotoBrowser.ZLImagePreviewController : UIKit.UICollectionViewDataSo
 }
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ZLEditVideoViewController : UIKit.UIViewController {
   @objc @_Concurrency.MainActor @preconcurrency public var editFinishBlock: ((Foundation.URL?) -> Swift.Void)?
+  @objc @_Concurrency.MainActor @preconcurrency public var cancelEditBlock: (() -> Swift.Void)?
   @_Concurrency.MainActor @preconcurrency @objc override dynamic public var prefersStatusBarHidden: Swift.Bool {
     @objc get
   }
@@ -450,6 +468,25 @@ extension ZLPhotoBrowser.ZLProgressHUD {
     case processing
     case custome(Swift.String)
   }
+}
+@objc @_inheritsConvenienceInitializers public class ZLPhotoPicker : ObjectiveC.NSObject {
+  @objc public var selectImageBlock: (([ZLPhotoBrowser.ZLResultModel], Swift.Bool) -> Swift.Void)?
+  @objc public var selectImageRequestErrorBlock: (([Photos.PHAsset], [Swift.Int]) -> Swift.Void)?
+  @objc public var cancelBlock: (() -> Swift.Void)?
+  @objc deinit
+  @objc override dynamic public init()
+  @objc convenience public init(selectedAssets: [Photos.PHAsset]? = nil)
+  @objc convenience public init(results: [ZLPhotoBrowser.ZLResultModel]? = nil)
+  @discardableResult
+  @objc public func showPreview(animate: Swift.Bool = true, sender: UIKit.UIViewController) -> ZLPhotoBrowser.ZLPhotoPreviewSheet
+  @discardableResult
+  @objc public func showPhotoLibrary(sender: UIKit.UIViewController) -> ZLPhotoBrowser.ZLImageNavController
+  @objc public func previewAssets(sender: UIKit.UIViewController, assets: [Photos.PHAsset], index: Swift.Int, isOriginal: Swift.Bool, showBottomViewAndSelectBtn: Swift.Bool = true)
+}
+extension ZLPhotoBrowser.ZLPhotoPicker {
+  @available(iOS, introduced: 13.0, message: "Only available for SwiftUI")
+  public func showPhotoLibraryForSwiftUI() -> ZLPhotoBrowser.ZLImageNavController
+  @objc dynamic public func previewAssetsForSwiftUI(assets: [Photos.PHAsset], index: Swift.Int, isOriginal: Swift.Bool, showBottomViewAndSelectBtn: Swift.Bool = true) -> ZLPhotoBrowser.ZLImageNavController
 }
 extension ZLPhotoBrowser.ZLPhotoModel {
   public enum MediaType : Swift.Int {
@@ -649,6 +686,17 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UICollectionViewDataS
   @objc public var exposureMode: ZLPhotoBrowser.ZLCameraConfiguration.ExposureMode
   @objc public var showFlashSwitch: Swift.Bool
   @objc public var allowSwitchCamera: Swift.Bool
+  @objc public var tapToRecordVideo: Swift.Bool
+  @objc @available(iOS 13.0, *)
+  public var enableWideCameras: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var overlayView: UIKit.UIView? {
+    @objc get
+    @objc set
+  }
+  @objc public var videoStabilizationMode: AVFoundation.AVCaptureVideoStabilizationMode
   @objc public var videoExportType: ZLPhotoBrowser.ZLCameraConfiguration.VideoExportType
   @objc public var devicePosition: ZLPhotoBrowser.ZLCameraConfiguration.DevicePosition
   @objc @available(iOS 11.0, *)
@@ -656,6 +704,7 @@ extension ZLPhotoBrowser.ZLEditImageViewController : UIKit.UICollectionViewDataS
     @objc get
     @objc set
   }
+  public var lockedOutputOrientation: AVFoundation.AVCaptureVideoOrientation?
   @objc override dynamic public init()
   @objc deinit
 }
@@ -736,6 +785,17 @@ extension ZLPhotoBrowser.ZLCameraConfiguration {
   @objc @available(iOS 11.0, *)
   @discardableResult
   dynamic public func videoCodecType(_ type: AVFoundation.AVVideoCodecType) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func tapToRecordVideo(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @available(iOS 13.0, *)
+  @discardableResult
+  dynamic public func enableWideCameras(_ value: Swift.Bool) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func overlayView(_ value: UIKit.UIView) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @objc @discardableResult
+  dynamic public func videoStabilizationMode(_ value: AVFoundation.AVCaptureVideoStabilizationMode) -> ZLPhotoBrowser.ZLCameraConfiguration
+  @discardableResult
+  public func lockedOutputOrientation(_ orientation: AVFoundation.AVCaptureVideoOrientation?) -> ZLPhotoBrowser.ZLCameraConfiguration
 }
 public enum ZLEditorAction {
   case draw(ZLPhotoBrowser.ZLDrawPath)
@@ -1153,6 +1213,10 @@ extension ZLPhotoBrowser.ZLPhotoUIConfiguration {
   @objc @discardableResult
   dynamic public func previewVCBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
   @objc @discardableResult
+  dynamic public func noLibraryAuthTitleAndDescColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
+  dynamic public func noLibraryAuthGotoSettingBtnTitleColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
+  @objc @discardableResult
   dynamic public func bottomToolViewBgColor(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
   @objc @discardableResult
   dynamic public func bottomToolViewBgColorOfPreviewVC(_ color: UIKit.UIColor) -> ZLPhotoBrowser.ZLPhotoUIConfiguration
@@ -1244,6 +1308,8 @@ extension ZLPhotoBrowser.ZLPhotoUIConfiguration {
 public enum ZLInputTextStyle {
   case normal
   case bg
+  case stroke
+  case shadow
   public static func == (a: ZLPhotoBrowser.ZLInputTextStyle, b: ZLPhotoBrowser.ZLInputTextStyle) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
@@ -1255,6 +1321,7 @@ public enum ZLInputTextStyle {
   }
   @objc @_Concurrency.MainActor @preconcurrency public var takeDoneBlock: ((UIKit.UIImage?, Foundation.URL?) -> Swift.Void)?
   @objc @_Concurrency.MainActor @preconcurrency public var cancelBlock: (() -> Swift.Void)?
+  @objc @_Concurrency.MainActor @preconcurrency public var willCaptureBlock: ((@escaping () -> Swift.Void, _ isCapturing: Swift.Bool) -> Swift.Void)?
   @_Concurrency.MainActor @preconcurrency public var tipsLabel: UIKit.UILabel {
     get
     set
@@ -1394,6 +1461,8 @@ extension UIKit.UIFont : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
 extension UIKit.UIView : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
 }
 extension UIKit.UIGraphicsImageRenderer : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
+}
+extension AVFoundation.AVCaptureDevice : ZLPhotoBrowser.ZLPhotoBrowserCompatible {
 }
 extension Swift.Array : ZLPhotoBrowser.ZLPhotoBrowserCompatibleValue {
 }
@@ -1536,6 +1605,13 @@ extension ZLPhotoBrowser.ZLImageClipRatio {
   @objc public static let wh3x2: ZLPhotoBrowser.ZLImageClipRatio
   @objc public static let wh9x16: ZLPhotoBrowser.ZLImageClipRatio
   @objc public static let wh16x9: ZLPhotoBrowser.ZLImageClipRatio
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ZLImageNavController : UIKit.UINavigationController {
+  @objc deinit
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var preferredStatusBarStyle: UIKit.UIStatusBarStyle {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidLoad()
 }
 extension ZLPhotoBrowser.ZLPhotoBrowserWrapper where Base : UIKit.UIImage {
   public static func animateGifImage(data: Foundation.Data) -> UIKit.UIImage?
