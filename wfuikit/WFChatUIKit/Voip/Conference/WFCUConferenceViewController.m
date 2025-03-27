@@ -989,12 +989,29 @@
     }];
 }
 
+- (void)showAlert {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"警告" message:@"屏幕共享功能有可能泄漏您的隐私，已经有多个诈骗案例使用屏幕共享进行远程遥控诈骗。此功能野火测试环境上已经被关闭，私有部署的环境会开放此功能。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertController addAction:action1];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+//是否屏蔽掉屏幕共享功能。如果您是私有部署且能保证用户安全，把下面宏定义改成0或者删除就可启用屏幕共享功能
+#define DISABLE_SCREEN_SHARING 0
 - (void)screenSharingButtonDidTap:(UIButton *)button {
+#if DISABLE_SCREEN_SHARING
+    [self showAlert];
+#else
     if([[WFCUConferenceManager sharedInstance] isBroadcasting]) {
         [[WFCUConferenceManager sharedInstance] stopScreansharing];
     } else {
         [[WFCUConferenceManager sharedInstance] startScreansharing:self.view withAudio:YES];
     }
+#endif
 }
 
 - (void)updateScreenSharingButton {
