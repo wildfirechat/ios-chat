@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Максимальное количество выбранных видео: %ld";
 "lessThanMinVideoSelectCount" = "Количество мин. Выбора видео: %ld";
 
-"noCameraAuthority" = "Разрешите %@ доступ к камере вашего устройства в \"Настройки\" > \"Конфиденциальность\" > \"Камера\"";
-"noPhotoLibratyAuthority" = "Разрешите %@ доступ к вашему альбому в \"Настройки\" > \"Конфиденциальность\" > \"Фото\"";
-"noMicrophoneAuthority" = "Не удалось записать звук. Перейдите в меню \"Настройки\" > \"%@\" и включите доступ к микрофону";
+"noCameraAuthorityAlertMessage" = "Разрешите %@ доступ к камере вашего устройства в \"Настройки\" > \"Конфиденциальность\" > \"Камера\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Разрешите %@ доступ к вашему альбому в \"Настройки\" > \"Конфиденциальность\" > \"Фото\"";
+"noMicrophoneAuthorityAlertMessage" = "Не удалось записать звук. Перейдите в меню \"Настройки\" > \"%@\" и включите доступ к микрофону";
+"unableToAccessAllPhotos" = "У %@ есть доступ только к некоторым фотографиям. Предоставьте %@ доступ \"Все фото\".";
+"noLibraryAuthTitleInThumbList" = "Невозможно получить доступ к фотографиям в альбоме";
+"noLibraryAuthDescInThumbList" = "У %@ нет доступа к фотографиям. Предоставьте %@ доступ \"Все фото\".";
+"gotoSystemSettingInThumbList" = "Перейти в параметры системы";
+
 "cameraUnavailable" = "Камера недоступна";
 "keepRecording" = "Продолжить запись";
 "gotoSettings" = "Перейти в настройки";
@@ -52,7 +57,8 @@
 "customCameraTips" = "Нажмите для съемки, удерживайте для записи";
 "customCameraTakePhotoTips" = "Нажмите для съeмки";
 "customCameraRecordVideoTips" = "Удерживайте для записи";
-"minRecordTimeTips" = "Запишите не менее 2 с";
+"customCameraTapToRecordVideoTips" = "Нажмите для записи";
+"minRecordTimeTips" = "Запишите не менее %ld с";
 
 "cameraRoll" = "Недавние";
 "panoramas" = "Панорамы";
@@ -70,5 +76,4 @@
 "myPhotoStream" = "Мой фотопоток";
 
 "noTitleAlbumListPlaceholder" = "Все фотографии";
-"unableToAccessAllPhotos" = "Невозможно получить доступ к фотографиям в альбоме.\nРазрешить доступ ко \"Всем фотографиям\" в \"Фото\".";
 "textStickerRemoveTips" = "Перетащите сюда, чтобы удалить";
