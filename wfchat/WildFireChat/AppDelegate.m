@@ -142,6 +142,8 @@
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
     
+    [WFCUConfigManager globalManager].asrServiceUrl = ASR_SERVICE_URL;
+    
     //可以在WFCUMessageListViewController界面代码中绑定消息和Cell的对应关系（注册Cell），也可以在这里注册。
     //Cell分为2种类型，一种类型是带有头像的，另外一种是没有头像的。写Cell时可以参考下面这2个Cell。
     //[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];

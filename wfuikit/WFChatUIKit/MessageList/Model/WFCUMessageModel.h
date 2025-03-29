@@ -31,5 +31,9 @@
 @property (nonatomic, assign)float selecting;
 
 @property (nonatomic, assign)float selected;
+
+//可以用来翻译或者语音转文字
+@property (nonatomic, assign)BOOL translating;
+@property (nonatomic, strong)NSString *translateText;
 - (void)loadQuotedMessage;
 @end

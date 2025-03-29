@@ -33,6 +33,8 @@
 
 #define MESSAGE_BASE_CELL_QUOTE_SIZE 14
 
+#define MESSAGE_BASE_CELL_TRANSLATE_SIZE 16
+
 
 @interface WFCUMessageCell ()
 @property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
@@ -76,12 +78,34 @@
   height += Client_Arad_Buttom_Padding;   //buttom padding
     
   height += [self sizeForQuoteArea:msgModel withViewWidth:clientAreaWidth].height;
+  height += [self sizeForTranslateArea:msgModel withViewWidth:clientAreaWidth].height;
     
   return CGSizeMake(width, height);
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   return CGSizeZero;
+}
+
++ (CGSize)sizeForTranslateArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+    if (msgModel.translating || msgModel.translateText.length) {
+        CGFloat quoteWidth = width;
+        CGSize size = CGSizeZero;
+        if (msgModel.translateText.length) {
+            size = [WFCUUtilities getTextDrawingSize:msgModel.translateText font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 1000)];
+        }
+        if (msgModel.translating) {
+            size.height += 20;
+            if (size.width < 20) {
+                size.width = 20;
+            }
+        }
+
+        size.height += 12;
+        size.width += 8;
+        return size;
+    }
+    return CGSizeZero;
 }
 
 + (CGSize)sizeForQuoteArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -386,6 +410,87 @@
             self.quoteContainer.hidden = NO;
             self.quoteLabel.text = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, [WFCUMessageCell quoteMessageDigest:model]];
         }
+    }
+    
+    self.translateContainer.hidden = YES;
+    if (model.translateText.length || model.translating) {
+        if (model.translateText.length && !self.translateLabel) {
+            self.translateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+            self.translateLabel.font = [UIFont systemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE];
+            self.translateLabel.numberOfLines = 0;
+            self.translateLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+            self.translateLabel.layer.cornerRadius = 3.f;
+            self.translateLabel.layer.masksToBounds = YES;
+            self.translateLabel.userInteractionEnabled = YES;
+            self.translateLabel.textColor = [UIColor blackColor];
+            
+            if (!self.translateContainer) {
+                self.translateContainer = [[UIView alloc] initWithFrame:CGRectZero];
+                self.translateContainer.backgroundColor = [UIColor whiteColor];
+                self.translateContainer.layer.cornerRadius = 3.f;
+                self.translateContainer.layer.masksToBounds = YES;
+                [self.contentView addSubview:self.translateContainer];
+            }
+
+            [self.translateContainer addSubview:self.translateLabel];
+        }
+        if (model.translating && !self.translateActivity) {
+            self.translateActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            
+            if (!self.translateContainer) {
+                self.translateContainer = [[UIView alloc] initWithFrame:CGRectZero];
+                self.translateContainer.backgroundColor = [UIColor whiteColor];
+                self.translateContainer.layer.cornerRadius = 3.f;
+                self.translateContainer.layer.masksToBounds = YES;
+                [self.contentView addSubview:self.translateContainer];
+            }
+            
+            [self.translateContainer addSubview:self.translateActivity];
+            [self.translateActivity startAnimating];
+        }
+        
+        CGSize size = [self.class sizeForTranslateArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+        
+        CGRect frame;
+        if (model.message.direction == MessageDirection_Send) {
+            frame = CGRectMake(self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Another_Side - selectViewOffset, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
+        } else {
+            frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding + Bubble_Padding_Arraw, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
+        }
+        self.translateContainer.frame = frame;
+        frame = self.translateContainer.bounds;
+        frame.size.height -= 8;
+        if (model.translating) {
+            frame.size.height -= 20;
+        }
+        frame.size.width -= 8;
+        frame.origin.x += 4;
+        frame.origin.y += 4;
+        self.translateLabel.frame = frame;
+        
+        
+        if (model.translating) {
+            frame = self.translateContainer.bounds;
+            if (model.message.direction == MessageDirection_Send) {
+                frame.origin.x = frame.size.width - 22;
+                frame.origin.y = frame.size.height - 22;
+                frame.size = CGSizeMake(20, 20);
+            } else {
+                frame.origin.x = 2;
+                frame.origin.y = frame.size.height - 22;
+                frame.size = CGSizeMake(20, 20);
+            }
+            self.translateActivity.frame = frame;
+            self.translateActivity.hidden = NO;
+        } else {
+            [self.translateActivity stopAnimating];
+            self.translateActivity.hidden = YES;
+            [self.translateActivity removeFromSuperview];
+            self.translateActivity = nil;
+        }
+        
+        self.translateContainer.hidden = NO;
+        self.translateLabel.text = self.model.translateText;
     }
 }
 

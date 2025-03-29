@@ -43,6 +43,9 @@ NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 //NSString *WORK_PLATFORM_URL = nil;
 NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
 
+//语音转文字服务
+NSString *ASR_SERVICE_URL = nil;
+
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 BOOL Prefer_Password_Login = YES;
