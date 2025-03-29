@@ -30,6 +30,9 @@ extern NSString *FILE_TRANSFER_ID;
 //如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
 extern NSString *WORK_PLATFORM_URL;
 
+//语音转文字服务
+extern NSString *ASR_SERVICE_URL;
+
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 extern BOOL Prefer_Password_Login;

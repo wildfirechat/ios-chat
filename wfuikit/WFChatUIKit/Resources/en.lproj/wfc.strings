@@ -214,6 +214,7 @@
 "Recall"="Recall";
 "Recalling"="Recalling...";
 "Complain"="Complain";
+"ToText"="To text";
 "RecallFailure"="Recall failure!";
 "TypingHint"="Typing...";
 "RecordingHint"="Recording...";

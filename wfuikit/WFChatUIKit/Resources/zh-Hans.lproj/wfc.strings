@@ -214,6 +214,7 @@
 "Recall"="撤回";
 "Recalling"="撤回中...";
 "Complain"="投诉";
+"ToText"="转文字";
 "RecallFailure"="撤回失败";
 "TypingHint"="对方正在输入...";
 "RecordingHint"="对方正在录音...";
