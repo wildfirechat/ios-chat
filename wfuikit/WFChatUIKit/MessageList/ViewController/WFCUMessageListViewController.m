@@ -3627,7 +3627,7 @@
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSURL *url = [NSURL URLWithString:[WFCUConfigManager globalManager].asrServiceUrl];
-        NSDictionary *parameters = @{@"url": link, @"noReuse":@(YES), @"noLlm":@(NO)};
+        NSDictionary *parameters = @{@"url": link, @"noReuse":@(NO), @"noLlm":@(NO)};
 
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"POST"];
