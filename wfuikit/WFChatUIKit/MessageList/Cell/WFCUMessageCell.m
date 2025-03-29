@@ -481,7 +481,9 @@
                 frame.size = CGSizeMake(20, 20);
             }
             self.translateActivity.frame = frame;
-            self.translateActivity.hidden = NO;
+            if (!self.translateActivity.isAnimating) {
+                [self.translateActivity startAnimating];
+            }
         } else {
             [self.translateActivity stopAnimating];
             self.translateActivity.hidden = YES;
@@ -570,7 +572,7 @@
         }
         
         if (self.receiptView.hidden == NO) {
-            self.receiptView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.frame.size.height - 24 , 14, 14);
+            self.receiptView.frame = CGRectMake(self.bubbleView.frame.origin.x - 16, self.bubbleView.frame.size.height + self.bubbleView.frame.origin.y - 14 , 14, 14);
         }
     }
 }

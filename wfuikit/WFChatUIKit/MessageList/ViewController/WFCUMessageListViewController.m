@@ -3613,7 +3613,17 @@
     self.toTextModel = self.cell4Menu.model;
     __block NSString *link = ((WFCCSoundMessageContent *)self.toTextModel.message.content).remoteUrl;
     self.toTextModel.translating = YES;
+    if (self.toTextModel.message.direction == MessageDirection_Receive && self.toTextModel.message.status != Message_Status_Played) {
+        if(self.toTextModel.message.conversation.type != SecretChat_Type) {
+            [[WFCCIMService sharedWFCIMService] setMediaMessagePlayed:self.toTextModel.message.messageId];
+            self.toTextModel.message.status = Message_Status_Played;
+        }
+    }
+    
     [self.collectionView reloadData];
+    if (self.isAtButtom) {
+        [self scrollToBottom:YES];
+    }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSURL *url = [NSURL URLWithString:[WFCUConfigManager globalManager].asrServiceUrl];
@@ -3668,6 +3678,9 @@
                 *stop = YES;
             }
         }];
+        if (self.isAtButtom) {
+            [self scrollToBottom:YES];
+        }
     });
 }
 
