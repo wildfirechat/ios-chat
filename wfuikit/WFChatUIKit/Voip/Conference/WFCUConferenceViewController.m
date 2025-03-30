@@ -1000,8 +1000,6 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-//是否屏蔽掉屏幕共享功能。如果您是私有部署且能保证用户安全，把下面宏定义改成0或者删除就可启用屏幕共享功能
-#define DISABLE_SCREEN_SHARING 0
 - (void)screenSharingButtonDidTap:(UIButton *)button {
 #if DISABLE_SCREEN_SHARING
     [self showAlert];

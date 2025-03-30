@@ -52,4 +52,10 @@ alpha:1.0]
 //对讲功能开关，在Chat工程也有同样的一个开关，需要保持同步
 //#define WFC_PTT
 
+//是否屏蔽掉屏幕共享功能。如果您是私有部署且能保证用户安全，把下面宏定义改成0或者删除就可启用屏幕共享功能
+#define DISABLE_SCREEN_SHARING 0
+
+//是否屏蔽掉聊天室功能
+#define DISABLE_CHATROOM 0
+
 #endif /* Predefine_h */

@@ -250,6 +250,17 @@
     self.orignalDraft = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation].draft;
     
     if (self.conversation.type == Chatroom_Type) {
+#if DISABLE_CHATROOM
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"警告" message:@"聊天室功能在测试环境上已经被关闭，私有部署的环境可以放此功能，如果需要体验，请申请试用私有部署使用。" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        [alertController addAction:action1];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+#else
         NSString *joinedChatroomId = [[WFCCIMService sharedWFCIMService] getJoinedChatroomId];
         
         if(![ws.conversation.target isEqualToString:joinedChatroomId]) {
@@ -281,6 +292,7 @@
                 
             }];
         }
+#endif
     }
     if(self.conversation.type == Channel_Type) {
         WFCCEnterChannelChatMessageContent *enterContent = [[WFCCEnterChannelChatMessageContent alloc] init];
