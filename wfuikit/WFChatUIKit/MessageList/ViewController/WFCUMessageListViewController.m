@@ -3676,6 +3676,10 @@
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     NSString *currentString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     currentString = [currentString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    currentString = [currentString stringByReplacingOccurrencesOfString:@"data:" withString:@""];
+    if (!currentString.length) {
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.toTextModel.translateText) {
             self.toTextModel.translateText = [NSString stringWithFormat:@"%@%@", self.toTextModel.translateText, currentString];
