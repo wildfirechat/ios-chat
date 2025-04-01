@@ -30,6 +30,7 @@ static WFCUConfigManager *sharedSingleton = nil;
     self = [super init];
     if (self) {
         _selectedTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"WFC_THEME_TYPE"];
+        _cellSizeMap = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
