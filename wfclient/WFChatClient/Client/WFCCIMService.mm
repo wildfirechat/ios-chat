@@ -707,12 +707,12 @@ private:
     void(^m_errorBlock)(int error_code);
 public:
     IMGetGroupInfoCallback(void(^successBlock)(NSArray<WFCCGroupInfo *> *), void(^errorBlock)(int error_code)) : mars::stn::GetGroupInfoCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
-    void onSuccess(const std::list<const mars::stn::TGroupInfo> &groupInfoList) {
+    void onSuccess(const std::list<mars::stn::TGroupInfo> &groupInfoList) {
         
         NSMutableArray *ret = nil;
         if (m_successBlock) {
             NSMutableArray *ret = [[NSMutableArray alloc] init];
-            for (std::list<const mars::stn::TGroupInfo>::const_iterator it = groupInfoList.begin(); it != groupInfoList.end(); it++) {
+            for (std::list<mars::stn::TGroupInfo>::const_iterator it = groupInfoList.begin(); it != groupInfoList.end(); it++) {
                 const mars::stn::TGroupInfo &tgi = *it;
                 WFCCGroupInfo *gi = convertProtoGroupInfo(tgi);
                 [ret addObject:gi];
