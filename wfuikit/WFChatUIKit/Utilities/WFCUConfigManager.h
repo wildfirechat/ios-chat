@@ -67,6 +67,9 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 //[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
 - (void)registerCustomCell:(Class)cellCls forContent:(Class)msgContentCls;
+
+//缓存文本cell的size，避免卡顿
+@property (nonatomic, strong)NSMutableDictionary<NSNumber*, NSDictionary*> *cellSizeMap;
 @end
 
 NS_ASSUME_NONNULL_END

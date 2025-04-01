@@ -663,6 +663,8 @@
         [self.checkOngoingCallTimer invalidate];
         self.checkOngoingCallTimer = nil;
     }
+    //clean cached cell size
+    [[WFCUConfigManager globalManager].cellSizeMap removeAllObjects];
 }
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {

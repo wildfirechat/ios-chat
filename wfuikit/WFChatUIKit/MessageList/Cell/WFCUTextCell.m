@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
 #import "AttributedLabel.h"
+#import "WFCUConfigManager.h"
 
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
@@ -25,6 +26,13 @@
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+    NSDictionary *dict = [[WFCUConfigManager globalManager].cellSizeMap objectForKey:@(msgModel.message.messageId)];
+    if (dict && ceil([dict[@"viewWidth"] floatValue]) == ceil(width)) {
+        float width = [dict[@"width"] floatValue];
+        float height = [dict[@"height"] floatValue];
+        return CGSizeMake(width, height);
+    }
+    
   WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msgModel.message.content;
     CGSize size = [WFCUUtilities getTextDrawingSize:txtContent.text font:[WFCUTextCell defaultFont] constrainedSize:CGSizeMake(width, 8000)];
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING;
@@ -36,6 +44,8 @@
             size.width = 24;
         }
     }
+    
+    [[WFCUConfigManager globalManager].cellSizeMap setObject:@{@"viewWidth":@(width), @"width":@(size.width), @"height":@(size.height)} forKey:@(msgModel.message.messageId)];
   return size;
 }
 
