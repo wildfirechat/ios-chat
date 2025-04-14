@@ -7,7 +7,6 @@
 */
 
 #import <Foundation/Foundation.h>
-#import <ImageIO/ImageIO.h>
 #import "SDImageCoder.h"
 
 /**
@@ -29,6 +28,13 @@
  @note Subclass override.
  */
 @property (class, readonly, nonnull) NSString *imageUTType;
+/**
+ Some image codec use different UTI Type between animated image and static image.
+ For this case, override this method and return the UTI for animated image encoding.
+ @note Defaults to use the value of `imageUTType`, so it's @optional actually.
+ @note Subclass override.
+ */
+@property (class, readonly, nonnull) NSString *animatedImageUTType;
 /**
  The image container property key used in Image/IO API. Such as `kCGImagePropertyGIFDictionary`.
  @note Subclass override.

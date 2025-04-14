@@ -17,16 +17,27 @@
  For others (macOS/watchOS or iOS/tvOS 10-), these method use the `SDImageGraphics.h` to implements the same behavior (but without dynamic bitmap support)
 */
 
+/// A closure for drawing an image.
 typedef void (^SDGraphicsImageDrawingActions)(CGContextRef _Nonnull context);
+/// Constants that specify the color range of the image renderer context.
 typedef NS_ENUM(NSInteger, SDGraphicsImageRendererFormatRange) {
+    /// The image renderer context doesn’t specify a color range.
     SDGraphicsImageRendererFormatRangeUnspecified = -1,
+    /// The system automatically chooses the image renderer context’s pixel format according to the color range of its content.
     SDGraphicsImageRendererFormatRangeAutomatic = 0,
+    /// The image renderer context supports wide color.
     SDGraphicsImageRendererFormatRangeExtended,
+    /// The image renderer context doesn’t support extended colors.
     SDGraphicsImageRendererFormatRangeStandard
 };
 
 /// A set of drawing attributes that represent the configuration of an image renderer context.
 @interface SDGraphicsImageRendererFormat : NSObject
+
+#if SD_UIKIT
+/// The underlying uiformat for UIKit. This usage of this API should be careful, which may cause out of sync.
+@property (nonatomic, strong, nonnull) UIGraphicsImageRendererFormat *uiformat API_AVAILABLE(ios(10.0), tvos(10.0));
+#endif
 
 /// The display scale of the image renderer context.
 /// The default value is equal to the scale of the main screen.
