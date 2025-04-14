@@ -21,14 +21,6 @@
     #define SD_MAC 0
 #endif
 
-// iOS and tvOS are very similar, UIKit exists on both platforms
-// Note: watchOS also has UIKit, but it's very limited
-#if TARGET_OS_IOS || TARGET_OS_TV
-    #define SD_UIKIT 1
-#else
-    #define SD_UIKIT 0
-#endif
-
 #if TARGET_OS_IOS
     #define SD_IOS 1
 #else
@@ -47,6 +39,20 @@
     #define SD_WATCH 0
 #endif
 
+// Supports Xcode 14 to suppress warning
+#ifdef TARGET_OS_VISION
+#if TARGET_OS_VISION
+    #define SD_VISION 1
+#endif
+#endif
+
+// iOS/tvOS/visionOS are very similar, UIKit exists on both platforms
+// Note: watchOS also has UIKit, but it's very limited
+#if SD_IOS || SD_TV || SD_VISION
+    #define SD_UIKIT 1
+#else
+    #define SD_UIKIT 0
+#endif
 
 #if SD_MAC
     #import <AppKit/AppKit.h>
@@ -92,4 +98,5 @@
     } else {\
         dispatch_async(dispatch_get_main_queue(), block);\
     }
+#pragma clang deprecated(dispatch_main_async_safe, "Use SDCallbackQueue instead")
 #endif

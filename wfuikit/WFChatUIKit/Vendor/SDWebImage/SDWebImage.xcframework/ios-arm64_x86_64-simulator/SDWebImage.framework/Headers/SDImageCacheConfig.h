@@ -115,7 +115,7 @@ typedef NS_ENUM(NSUInteger, SDImageCacheConfigExpireType) {
 
 /*
  * The attribute which the clear cache will be checked against when clearing the disk cache
- * Default is Modified Date
+ * Default is Access Date
  */
 @property (assign, nonatomic) SDImageCacheConfigExpireType diskCacheExpireType;
 
@@ -126,6 +126,15 @@ typedef NS_ENUM(NSUInteger, SDImageCacheConfigExpireType) {
  * @note Since `NSFileManager` does not support `NSCopying`. We just pass this by reference during copying. So it's not recommend to set this value on `defaultCacheConfig`.
  */
 @property (strong, nonatomic, nullable) NSFileManager *fileManager;
+
+/**
+ * The dispatch queue attr for ioQueue. You can config the QoS and concurrent/serial to internal IO queue. The ioQueue is used by SDImageCache to access read/write for disk data.
+ * Defaults we use `DISPATCH_QUEUE_SERIAL`(NULL) under iOS 10, `DISPATCH_QUEUE_SERIAL_WITH_AUTORELEASE_POOL` above and equal iOS 10, using serial dispatch queue is to ensure single access for disk data. It's safe but may be slow.
+ * @note You can override this to use `DISPATCH_QUEUE_CONCURRENT`, use concurrent queue.
+ * @warning **MAKE SURE** to keep `diskCacheWritingOptions` to use `NSDataWritingAtomic`, or concurrent queue may cause corrupted disk data (because multiple threads read/write same file without atomic is not IO-safe).
+ * @note This value does not support dynamic changes. Which means further modification on this value after cache initialized has no effect.
+ */
+@property (strong, nonatomic, nullable) dispatch_queue_attr_t ioQueueAttributes;
 
 /**
  * The custom memory cache class. Provided class instance must conform to `SDMemoryCache` protocol to allow usage.
