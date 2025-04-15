@@ -396,8 +396,8 @@
       
       
       if (self.isPwdLogin) {
-          [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser) {
-              successBlock(userId, token, newUser, nil);
+          [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+              successBlock(userId, token, newUser, resetCode);
           } error:errorBlock];
       } else {
           [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
