@@ -55,7 +55,7 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
-- (void)loginWithMobile:(NSString *)mobile password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+- (void)loginWithMobile:(NSString *)mobile password:(NSString *)password success:(void(^)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
     int platform = Platform_iOS;
     //如果使用pad端类型，这里平台改成pad类型，另外app_callback.mm文件中把平台也改成ipad，请搜索"iPad"
     //if(当前设备是iPad)
@@ -65,7 +65,8 @@ static AppService *sharedSingleton = nil;
             NSString *userId = dict[@"result"][@"userId"];
             NSString *token = dict[@"result"][@"token"];
             BOOL newUser = [dict[@"result"][@"register"] boolValue];
-            if(successBlock) successBlock(userId, token, newUser);
+            NSString *resetCode = dict[@"result"][@"resetCode"];
+            if(successBlock) successBlock(userId, token, newUser, resetCode);
         } else {
             if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
         }
