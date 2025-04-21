@@ -931,6 +931,11 @@
                 if (self.audioPlayer) {
                     [self shouldStopRing];
                 }
+        
+                if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
+                    AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, systemAudioCallback, NULL);
+                    AudioServicesPlaySystemSound (kSystemSoundID_Vibrate);
+                }
                 
                 NSURL *url = [[NSBundle mainBundle] URLForResource:@"ring" withExtension:@"caf"];
                 NSError *error = nil;
@@ -949,10 +954,8 @@
 
 void systemAudioCallback (SystemSoundID soundID, void* clientData) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-            if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-            }
+        if ([WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIncomming) {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
     });
 }
