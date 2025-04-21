@@ -60,6 +60,9 @@
 @property (nonatomic, assign) CGPoint panStartPoint;
 @property (nonatomic, assign) CGRect panStartVideoFrame;
 @property (nonatomic, strong) NSTimer *connectedTimer;
+
+//记录接通之前按下speker
+@property (nonatomic, assign) BOOL manulSpeakerBeforeConnected;
 #endif
 @end
 
@@ -419,12 +422,19 @@
 }
 
 - (void)updateSpeakerButton {
+    if (self.currentSession.state == kWFAVEngineStateOutgoing || self.currentSession.state == kWFAVEngineStateIncomming) {
+        self.manulSpeakerBeforeConnected = NO;
+    }
+    
     if (!self.currentSession.isSpeaker) {
         if([self.currentSession isHeadsetPluggedIn]) {
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_headset"] forState:UIControlStateNormal];
         } else if([self.currentSession isBluetoothSpeaker]) {
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_bluetooth"] forState:UIControlStateNormal];
         } else {
+            if (self.currentSession.state == kWFAVEngineStateOutgoing || self.currentSession.state == kWFAVEngineStateIncomming) {
+                self.manulSpeakerBeforeConnected = YES;
+            }
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
         }
     } else {
@@ -680,6 +690,11 @@
             if (self.currentSession.isAudioOnly) {
                 self.speakerButton.hidden = NO;
                 self.speakerButton.enabled = YES;
+                if(self.currentSession.isHeadsetPluggedIn || self.currentSession.isBluetoothSpeaker) {
+                    [self.currentSession enableSpeaker:NO];
+                } else {
+                    [self.currentSession enableSpeaker:self.manulSpeakerBeforeConnected];
+                }
                 self.speakerButton.frame = [self getButtomRightButtonFrame];
                 [self updateSpeakerButton];
                 self.audioButton.frame = [self getButtomLeftButtonFrame];
