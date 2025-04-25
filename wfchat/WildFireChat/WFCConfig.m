@@ -23,7 +23,8 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 //NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
 NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
-//组织通讯录服务地址，如果没有部署，可以设置为nil
+//组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
+//组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
 NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
@@ -39,11 +40,13 @@ NSString *USER_AGREEMENT_URL = @"https://wildfirechat.net/wildfirechat_user_agre
 
 NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 
-//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
+//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了。工作平台项目地址：https://gitee.com/wfchat/open-platform
 //NSString *WORK_PLATFORM_URL = nil;
 NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
 
-//语音转文字服务
+//语音转文字服务地址。关于语音转文字信息请参考：https://gitee.com/wfchat/asr-api 。
+//野火提供的测试服务会记录语音文件和转换后的文字，上线会有可能泄密风险。因此请确保务必上线时购买部署自己的语音转文字服务，或者设置为nil。
+//NSString *ASR_SERVICE_URL = nil;
 NSString *ASR_SERVICE_URL = @"https://app.wildfirechat.net/asr/api/recognize";
 
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
