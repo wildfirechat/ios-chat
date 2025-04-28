@@ -46,6 +46,9 @@ static AppService *sharedSingleton = nil;
             NSString *token = dict[@"result"][@"token"];
             BOOL newUser = [dict[@"result"][@"register"] boolValue];
             NSString *resetCode = dict[@"result"][@"resetCode"];
+            if([resetCode isKindOfClass:[NSNull class]]) {
+                resetCode = nil;
+            }
             if(successBlock) successBlock(userId, token, newUser, resetCode);
         } else {
             if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
@@ -66,6 +69,9 @@ static AppService *sharedSingleton = nil;
             NSString *token = dict[@"result"][@"token"];
             BOOL newUser = [dict[@"result"][@"register"] boolValue];
             NSString *resetCode = dict[@"result"][@"resetCode"];
+            if([resetCode isKindOfClass:[NSNull class]]) {
+                resetCode = nil;
+            }
             if(successBlock) successBlock(userId, token, newUser, resetCode);
         } else {
             if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
