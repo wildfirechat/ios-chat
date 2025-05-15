@@ -91,6 +91,60 @@
         if(err){
             NSLog(@"复制初始资源文件出错:%@", err);
         }
+    } else {
+        checkAndCopyFiles(defaultBundlePath, cacheBundlePath);
+    }
+}
+
+// 检查并拷贝文件的函数
+void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
+    // 创建文件管理器
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    // 检查源目录是否存在
+    BOOL isDir;
+    if (![fileManager fileExistsAtPath:defaultBundlePath isDirectory:&isDir] || !isDir) {
+        NSLog(@"源目录不存在: %@", defaultBundlePath);
+        return;
+    }
+    
+    // 创建目标目录（如果不存在）
+    NSError *error;
+    if (![fileManager fileExistsAtPath:cacheBundlePath]) {
+        if (![fileManager createDirectoryAtPath:cacheBundlePath withIntermediateDirectories:YES attributes:nil error:&error]) {
+            NSLog(@"无法创建目标目录: %@，错误: %@", cacheBundlePath, error.localizedDescription);
+            return;
+        }
+    }
+    
+    // 获取源目录下的所有内容（文件和子目录）
+    NSArray *contents = [fileManager contentsOfDirectoryAtPath:defaultBundlePath error:&error];
+    if (error) {
+        NSLog(@"读取源目录内容失败: %@，错误: %@", defaultBundlePath, error.localizedDescription);
+        return;
+    }
+    
+    // 遍历所有内容
+    for (NSString *itemName in contents) {
+        NSString *itemPath = [defaultBundlePath stringByAppendingPathComponent:itemName];
+        NSString *destinationPath = [cacheBundlePath stringByAppendingPathComponent:itemName];
+        
+        // 检查是文件还是目录
+        BOOL isItemDir;
+        if ([fileManager fileExistsAtPath:itemPath isDirectory:&isItemDir]) {
+            if (isItemDir) {
+                // 如果是目录，递归处理
+                checkAndCopyFiles(itemPath, destinationPath);
+            } else {
+                // 如果是文件，检查是否需要拷贝
+                if (![fileManager fileExistsAtPath:destinationPath]) {
+                    // 拷贝文件
+                    if (![fileManager copyItemAtPath:itemPath toPath:destinationPath error:&error]) {
+                        NSLog(@"拷贝文件失败: %@ 到 %@，错误: %@", itemPath, destinationPath, error.localizedDescription);
+                    }
+                }
+            }
+        }
     }
 }
 
