@@ -502,7 +502,7 @@
         if (!reversedMsgs.count) {
             weakSelf.hasMoreOld = NO;
         } else {
-            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO];
+            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO firstIn:NO];
         }
         weakSelf.loadingMore = NO;
         if (completion) {
@@ -538,7 +538,7 @@
         
         [[WFCCIMService sharedWFCIMService] getMessagesV2:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser  success:^(NSArray<WFCCMessage *> *messageList) {
             if(messageList.count) {
-                [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO];
+                [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO firstIn:NO];
                 weakSelf.loadingMore = NO;
                 if (completion) {
                     completion(messageList.count > 0);
@@ -576,7 +576,7 @@
             }
             [NSThread sleepForTimeInterval:0.5];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO];
+                [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO];
                 weakSelf.loadingNew = NO;
                 if (completion) {
                     completion(messageList.count > 0);
@@ -1372,7 +1372,7 @@
 
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
-    [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO];
+    [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO];
     
     NSMutableArray<WFCCMessage *> *ongoingCalls = [[NSMutableArray alloc] init];
     for (WFCCMessage *msg in messages) {
@@ -1656,7 +1656,7 @@
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
     if ((status == Message_Status_Sending || status == Message_Status_Sent) && message.messageId != 0) {
         if ([message.conversation isEqual:self.conversation]) {
-            [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES];
+            [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES firstIn:NO];
         }
     }
 }
@@ -1750,7 +1750,7 @@
         }
         self.modelList = [[NSMutableArray alloc] init];
         
-        [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO];
+        [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO firstIn:NO];
         self.highlightMessageId = 0;
         
         if(self.conversation.type == SecretChat_Type) {
@@ -1795,7 +1795,7 @@
             
             ws.modelList = [[NSMutableArray alloc] init];
             
-            [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO];
+            [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:firstIn];
             ws.highlightMessageId = 0;
             
             if(ws.conversation.type == SecretChat_Type) {
@@ -1943,7 +1943,7 @@
     }
 }
 
-- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom {
+- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom firstIn:(BOOL)firstIn {
     if (messages.count == 0) {
         return;
     }
@@ -2132,7 +2132,7 @@
             }
         });
     } else if (forceButtom) {
-        [self scrollToBottom:YES];
+        [self scrollToBottom:!firstIn];
     }
     
     if (modifiedAliasUsers.count) {
