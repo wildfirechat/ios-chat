@@ -418,23 +418,20 @@
     if (self.currentSession.state != kWFAVEngineStateIdle) {
         [self.currentSession enableSpeaker:!self.currentSession.isSpeaker];
         [self updateSpeakerButton];
+        
+        if (self.currentSession.state == kWFAVEngineStateOutgoing || self.currentSession.state == kWFAVEngineStateIncomming) {
+            self.manulSpeakerBeforeConnected = self.currentSession.isSpeaker;
+        }
     }
 }
 
 - (void)updateSpeakerButton {
-    if (self.currentSession.state == kWFAVEngineStateOutgoing || self.currentSession.state == kWFAVEngineStateIncomming) {
-        self.manulSpeakerBeforeConnected = NO;
-    }
-    
     if (!self.currentSession.isSpeaker) {
         if([self.currentSession isHeadsetPluggedIn]) {
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_headset"] forState:UIControlStateNormal];
         } else if([self.currentSession isBluetoothSpeaker]) {
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker_bluetooth"] forState:UIControlStateNormal];
         } else {
-            if (self.currentSession.state == kWFAVEngineStateOutgoing || self.currentSession.state == kWFAVEngineStateIncomming) {
-                self.manulSpeakerBeforeConnected = YES;
-            }
             [self.speakerButton setImage:[WFCUImage imageNamed:@"speaker"] forState:UIControlStateNormal];
         }
     } else {
