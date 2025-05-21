@@ -57,7 +57,6 @@
 		2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F638933254E8FAB0084EEA6 /* WFCFavoriteImageCell.m */; };
 		2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F70C73A2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m */; };
 		2F7268F921F7136600E05F9C /* WFCPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7268F821F7136600E05F9C /* WFCPrivacyViewController.m */; };
-		2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
 		2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F79F32B2783059000D6F254 /* WFChatUIKit.framework */; };
 		2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F79F32B2783059000D6F254 /* WFChatUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F8F8E682723072600151B75 /* ptt_begin.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2F8F8E662723072600151B75 /* ptt_begin.m4a */; };
@@ -133,9 +132,9 @@
 		B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */; };
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; };
-		B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7362783035200752426 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */; };
+		B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
+		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
 /* End PBXBuildFile section */
@@ -185,7 +184,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
-				B7D8F7382783035200752426 /* SDWebImage.xcframework in Embed Frameworks */,
+				B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */,
 				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
 				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
@@ -419,6 +418,7 @@
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestRedirector.h; sourceTree = "<group>"; };
 		B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestRedirector.m; sourceTree = "<group>"; };
+		B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
@@ -439,12 +439,12 @@
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
+				B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */,
 				B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */,
 				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
-				B7D8F7372783035200752426 /* SDWebImage.xcframework in Frameworks */,
 				2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */,
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
 				2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */,
@@ -457,7 +457,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */,
-				2F79F328278304FA00D6F254 /* SDWebImage.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +624,7 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */,
 				B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */,
 				B709CCEA28F7BA080036EDFA /* CoreMedia.framework */,
 				2F79F32B2783059000D6F254 /* WFChatUIKit.framework */,
