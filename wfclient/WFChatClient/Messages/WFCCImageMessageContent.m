@@ -11,7 +11,7 @@
 #import "WFCCIMService.h"
 #import "WFCCUtilities.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCImageMessageContent
 + (instancetype)contentFrom:(UIImage *)image cachePath:(NSString *)path {
@@ -93,9 +93,7 @@
         self.localPath = mediaPayload.localMediaPath;
         if (mediaPayload.content.length) {
             NSError *__error = nil;
-            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
-                                                                       options:kNilOptions
-                                                                         error:&__error];
+            WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
             if (!__error) {
                 NSString *str1 = dictionary[@"w"];
                 NSString *str2 = dictionary[@"h"];

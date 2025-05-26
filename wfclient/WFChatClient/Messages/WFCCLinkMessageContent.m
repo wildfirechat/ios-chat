@@ -9,7 +9,7 @@
 #import "WFCCLinkMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCLinkMessageContent
 - (WFCCMessagePayload *)encode {
@@ -40,9 +40,7 @@
     self.title = payload.searchableContent;
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.contentDigest = [self getString:dictionary ofKey:@"d"];
         self.url = [self getString:dictionary ofKey:@"u"];

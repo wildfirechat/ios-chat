@@ -9,7 +9,7 @@
 #import "WFCCTextMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCTextMessageContent
 - (WFCCMessagePayload *)encode {
@@ -34,9 +34,7 @@
     self.mentionedTargets = payload.mentionedTargets;
     if (payload.binaryContent.length) {
         NSError *__error = nil;
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                                   options:kNilOptions
-                                                                     error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
         if (!__error) {
             NSDictionary *quoteDict = dictionary[@"quote"];
             if (quoteDict) {

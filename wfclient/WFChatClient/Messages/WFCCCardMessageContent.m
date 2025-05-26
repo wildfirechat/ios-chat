@@ -9,7 +9,7 @@
 #import "WFCCCardMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCCardMessageContent
 - (WFCCMessagePayload *)encode {
@@ -45,9 +45,7 @@
     self.targetId = payload.content;
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.name = dictionary[@"n"];
         self.displayName = dictionary[@"d"];

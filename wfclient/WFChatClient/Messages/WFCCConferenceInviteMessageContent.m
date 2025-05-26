@@ -9,7 +9,7 @@
 #import "WFCCConferenceInviteMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCConferenceInviteMessageContent
 - (WFCCMessagePayload *)encode {
@@ -49,13 +49,13 @@
     return payload;
 }
 
+
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
     self.callId = payload.content;
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+
     if (!__error) {
         self.host = dictionary[@"h"];
         self.startTime = dictionary[@"s"] ? [dictionary[@"s"] longLongValue] : 0;

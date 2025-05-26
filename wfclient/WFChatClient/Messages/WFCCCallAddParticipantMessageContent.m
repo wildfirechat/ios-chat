@@ -7,6 +7,7 @@
 //
 
 #import "WFCCCallAddParticipantMessageContent.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCCallAddParticipantMessageContent
 
@@ -56,9 +57,7 @@
     self.callId = payload.content;
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.initiator = dictionary[@"initiator"];
         self.pin = dictionary[@"pin"];

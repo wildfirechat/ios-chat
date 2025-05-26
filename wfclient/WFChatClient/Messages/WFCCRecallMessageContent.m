@@ -10,7 +10,7 @@
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCRecallMessageContent
 - (WFCCMessagePayload *)encode {
@@ -28,9 +28,7 @@
     self.messageUid = [[[NSString alloc] initWithData:payload.binaryContent encoding:NSUTF8StringEncoding] longLongValue];
     if (self.extra.length) {
         NSError *__error = nil;
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.extra dataUsingEncoding:NSUTF8StringEncoding]
-                                                                   options:kNilOptions
-                                                                     error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
         if (!__error) {
             self.originalSender = dictionary[@"s"];
             self.originalContentType = [dictionary[@"t"] intValue];

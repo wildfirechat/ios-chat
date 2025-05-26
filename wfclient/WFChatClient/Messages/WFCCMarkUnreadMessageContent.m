@@ -9,7 +9,7 @@
 #import "WFCCMarkUnreadMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCMarkUnreadMessageContent
 - (WFCCMessagePayload *)encode {
@@ -32,9 +32,7 @@
     [super decode:payload];
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.messageUid = [dictionary[@"u"] longLongValue];
         self.timestamp = [dictionary[@"t"] longLongValue];

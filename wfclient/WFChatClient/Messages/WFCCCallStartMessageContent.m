@@ -9,6 +9,7 @@
 #import "WFCCCallStartMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import "WFCCDictionary.h"
 
 
 @implementation WFCCCallStartMessageContent
@@ -58,9 +59,8 @@
     [super decode:payload];
     self.callId = payload.content;
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+
     if (!__error) {
         self.connectTime = dictionary[@"c"] ? [dictionary[@"c"] longLongValue] : 0;
         self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;

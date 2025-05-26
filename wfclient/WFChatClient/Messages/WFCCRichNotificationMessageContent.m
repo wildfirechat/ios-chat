@@ -9,7 +9,7 @@
 #import "WFCCRichNotificationMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCRichNotificationMessageContent
 - (WFCCMessagePayload *)encode {
@@ -47,9 +47,7 @@
     self.desc = payload.content;
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.remark = [self getString:dictionary ofKey:@"remark"];
         self.exName = [self getString:dictionary ofKey:@"exName"];

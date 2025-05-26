@@ -11,6 +11,7 @@
 #import "WFCCIMService.h"
 #import "WFCCMessage.h"
 #import "WFCCUtilities.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCCompositeMessageContent
 - (WFCCMessagePayload *)encode {
@@ -154,9 +155,7 @@
     }
 
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     
     NSMutableArray<WFCCMessage *> *messages = [[NSMutableArray alloc] init];
     if (!__error && dictionary && [dictionary[@"ms"] isKindOfClass:[NSArray class]]) {

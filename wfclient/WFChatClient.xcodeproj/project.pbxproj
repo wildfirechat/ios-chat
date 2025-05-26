@@ -194,6 +194,8 @@
 		B748120D28A49D8A003BB0C3 /* WFCCChannelMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B748120B28A49D8A003BB0C3 /* WFCCChannelMenu.m */; };
 		B748123D28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B748123B28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B748123E28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B748123C28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m */; };
+		B75322A82DE49ACD004F1064 /* WFCCDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = B75322A62DE49ACD004F1064 /* WFCCDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B75322A92DE49ACD004F1064 /* WFCCDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B75322A72DE49ACD004F1064 /* WFCCDictionary.m */; };
 		B755656E2838999400BE047C /* WFCCArticlesMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B755656C2838999400BE047C /* WFCCArticlesMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B755656F2838999400BE047C /* WFCCArticlesMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B755656D2838999400BE047C /* WFCCArticlesMessageContent.m */; };
 		B76A39922BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -412,6 +414,8 @@
 		B748120B28A49D8A003BB0C3 /* WFCCChannelMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelMenu.m; sourceTree = "<group>"; };
 		B748123B28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChannelMenuEventMessageContent.h; sourceTree = "<group>"; };
 		B748123C28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelMenuEventMessageContent.m; sourceTree = "<group>"; };
+		B75322A62DE49ACD004F1064 /* WFCCDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCDictionary.h; sourceTree = "<group>"; };
+		B75322A72DE49ACD004F1064 /* WFCCDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCDictionary.m; sourceTree = "<group>"; };
 		B755656C2838999400BE047C /* WFCCArticlesMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCArticlesMessageContent.h; sourceTree = "<group>"; };
 		B755656D2838999400BE047C /* WFCCArticlesMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCArticlesMessageContent.m; sourceTree = "<group>"; };
 		B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCNotDeliveredMessageContent.h; sourceTree = "<group>"; };
@@ -675,6 +679,8 @@
 				B7E6DBD72845AE9A00A24AE8 /* WFCCJsonSerializer.h */,
 				B7E6DBD82845AE9A00A24AE8 /* WFCCJsonSerializer.m */,
 				B79F81A528D958220092FA4B /* WFCCProtocol.h */,
+				B75322A62DE49ACD004F1064 /* WFCCDictionary.h */,
+				B75322A72DE49ACD004F1064 /* WFCCDictionary.m */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -803,6 +809,7 @@
 				B7E6DBD92845AE9A00A24AE8 /* WFCCJsonSerializer.h in Headers */,
 				2BC606E825C1A12400F77AD3 /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
 				B79F81A628D958740092FA4B /* WFCCProtocol.h in Headers */,
+				B75322A82DE49ACD004F1064 /* WFCCDictionary.h in Headers */,
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
 				B748123D28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h in Headers */,
 				2F59FFF22774A3900046C2D5 /* WFCCPTTSoundMessageContent.h in Headers */,
@@ -1083,6 +1090,7 @@
 				2E6B50B41FAE990D006B6E31 /* wav_amr.mm in Sources */,
 				2F48C9C5214D16250092B167 /* WFCCRecallMessageContent.m in Sources */,
 				2B6336752470DAB2008D6B38 /* WFCCDeliveryReport.m in Sources */,
+				B75322A92DE49ACD004F1064 /* WFCCDictionary.m in Sources */,
 				B7FF74292824CA5300DF2B39 /* WFAFNetworkReachabilityManager.m in Sources */,
 				2F8742E0219C4FED00F65EBA /* WFCCChatroomInfo.m in Sources */,
 				2E6B50B51FAE990D006B6E31 /* wavreader.c in Sources */,

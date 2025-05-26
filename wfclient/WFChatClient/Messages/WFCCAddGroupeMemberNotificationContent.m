@@ -11,6 +11,7 @@
 #import "WFCCNetworkService.h"
 #import "Common.h"
 #import "WFCCUtilities.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCAddGroupeMemberNotificationContent
 - (WFCCMessagePayload *)encode {
@@ -39,9 +40,8 @@
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    
     if (!__error) {
         self.invitor = dictionary[@"o"];
         self.invitees = dictionary[@"ms"];
