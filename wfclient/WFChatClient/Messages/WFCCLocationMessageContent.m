@@ -10,6 +10,7 @@
 #import "WFCCIMService.h"
 #import "Common.h"
 #import "WFCCUtilities.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCLocationMessageContent
 - (WFCCMessagePayload *)encode {
@@ -32,9 +33,7 @@
     self.thumbnail = [UIImage imageWithData:payload.binaryContent];
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         double latitude = [dictionary[@"lat"] doubleValue];
         double longitude = [dictionary[@"long"] doubleValue];

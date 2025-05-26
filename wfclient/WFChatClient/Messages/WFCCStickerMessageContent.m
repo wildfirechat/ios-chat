@@ -11,7 +11,7 @@
 #import "WFCCIMService.h"
 #import "WFCCUtilities.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCStickerMessageContent
 + (instancetype)contentFrom:(NSString *)stickerPath {
@@ -48,9 +48,7 @@
     }
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.size = CGSizeMake([dictionary[@"x"] floatValue], [dictionary[@"y"] floatValue]);
     }

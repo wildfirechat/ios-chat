@@ -9,7 +9,7 @@
 #import "WFCCJoinCallRequestMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
-
+#import "WFCCDictionary.h"
 
 @implementation WFCCJoinCallRequestMessageContent
 - (WFCCMessagePayload *)encode {
@@ -32,9 +32,7 @@
     self.callId = payload.content;
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.clientId = [self getString:dictionary ofKey:@"clientId"];
     }

@@ -10,6 +10,7 @@
 #import "WFCCIMService.h"
 #import "WFCCNetworkService.h"
 #import "Common.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCQuitGroupVisibleNotificationContent
 - (WFCCMessagePayload *)encode {
@@ -34,9 +35,7 @@
 - (void)decode:(WFCCMessagePayload *)payload {
     [super decode:payload];
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.quitMember = dictionary[@"o"];
         self.groupId = dictionary[@"g"];

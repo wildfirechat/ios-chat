@@ -12,6 +12,7 @@
 #import "WFCCUtilities.h"
 #import "Common.h"
 #import <AVFoundation/AVFoundation.h>
+#import "WFCCDictionary.h"
 
 @implementation WFCCVideoMessageContent
 + (instancetype)contentPath:(NSString *)localPath thumbnail:(UIImage *)image {
@@ -51,9 +52,7 @@
         self.localPath = mediaPayload.localMediaPath;
         
         NSError *__error = nil;
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
-                                                                   options:kNilOptions
-                                                                     error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
         if (!__error) {
             self.duration = [dictionary[@"duration"] longValue];
             if(self.duration == 0) {

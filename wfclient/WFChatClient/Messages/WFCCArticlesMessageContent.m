@@ -10,6 +10,7 @@
 #import "WFCCIMService.h"
 #import "Common.h"
 #import "WFCCLinkMessageContent.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCArticle
 - (NSDictionary *)toDict {
@@ -74,9 +75,7 @@
     [super decode:payload];
     
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.topArticle = [WFCCArticle fromDict:dictionary[@"top"]];
         if([dictionary[@"subArticles"] isKindOfClass:NSArray.class]) {

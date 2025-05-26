@@ -7,6 +7,7 @@
 //
 
 #import "WFCCCallByeMessageContent.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCCallByeMessageContent
 
@@ -27,9 +28,7 @@
 - (void)decode:(WFCCMessagePayload *)payload {
     self.callId = payload.content;
     NSError *__error = nil;
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:payload.binaryContent
-                                                               options:kNilOptions
-                                                                 error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
         self.endReason = [dictionary[@"r"] intValue];
         self.inviteMsgUid = [dictionary[@"u"] longLongValue];

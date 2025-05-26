@@ -11,6 +11,7 @@
 #import "wav_amr.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCSoundMessageContent
 + (instancetype)soundMessageContentForWav:(NSString *)wavPath
@@ -63,9 +64,7 @@
         self.localPath = mediaPayload.localMediaPath;
         
         NSError *__error = nil;
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[payload.content dataUsingEncoding:NSUTF8StringEncoding]
-                                                                   options:kNilOptions
-                                                                     error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
         if (!__error) {
             self.duration = [dictionary[@"duration"] longValue];
         }
