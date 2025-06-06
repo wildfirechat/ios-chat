@@ -9,6 +9,7 @@
 #import "WFCCMessageContent.h"
 #import "WFCCMediaMessageContent.h"
 #import "Common.h"
+#import "WFCCDictionary.h"
 
 @implementation WFCCMessagePayload
 - (id)toJsonObj {
@@ -107,28 +108,10 @@
   return @"Unimplement digest function";
 }
 
-- (NSString *)getString:(NSDictionary *)dict ofKey:(NSString *)key {
-    NSObject *obj = dict[key];
-    if([obj isKindOfClass:NSString.class]) {
-        return (NSString *)obj;
-    }
-    
-    return nil;
-}
-
-- (NSArray *)getArray:(NSDictionary *)dict ofKey:(NSString *)key {
+- (NSArray *)getArray:(WFCCDictionary *)dict ofKey:(NSString *)key {
     NSObject *obj = dict[key];
     if([obj isKindOfClass:NSArray.class]) {
         return (NSArray *)obj;
-    }
-
-    return nil;
-}
-
-- (NSDictionary *)getDictionary:(NSDictionary *)dict ofKey:(NSString *)key {
-    NSObject *obj = dict[key];
-    if([obj isKindOfClass:NSDictionary.class]) {
-        return (NSDictionary *)obj;
     }
 
     return nil;

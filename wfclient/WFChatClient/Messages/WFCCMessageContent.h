@@ -132,6 +132,7 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
 @end
 
 @class WFCCMessage;
+@class WFCCDictionary;
 /**
  消息协议，所有消息(包括自定义消息均需要实现此协议)
  */
@@ -188,7 +189,5 @@ typedef NS_ENUM(NSInteger, WFCCPersistFlag) {
  */
 @property (nonatomic, assign)BOOL notLoaded;
 
-- (NSString *)getString:(NSDictionary *)dict ofKey:(NSString *)key;
-- (NSArray *)getArray:(NSDictionary *)dict ofKey:(NSString *)key;
-- (NSDictionary *)getDictionary:(NSDictionary *)dict ofKey:(NSString *)key;
+- (NSArray *)getArray:(WFCCDictionary *)dict ofKey:(NSString *)key;
 @end

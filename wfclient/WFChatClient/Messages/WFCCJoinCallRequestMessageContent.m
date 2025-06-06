@@ -34,7 +34,7 @@
     NSError *__error = nil;
     WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
-        self.clientId = [self getString:dictionary ofKey:@"clientId"];
+        self.clientId = dictionary[@"clientId"];
     }
 }
 
