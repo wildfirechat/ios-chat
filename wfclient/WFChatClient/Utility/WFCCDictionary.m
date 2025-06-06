@@ -22,9 +22,17 @@
 }
 
 + (WFCCDictionary *)fromData:(nonnull NSData *)data error:(NSError **)error {
-    if(!data) {
-        return nil;
+    if (!data) {
+        if (error) {
+            *error = [NSError errorWithDomain:@"WFCCDictionaryErrorDomain"
+                                         code:-1
+                                     userInfo:@{NSLocalizedDescriptionKey: @"Data parameter cannot be nil"}];
+        }
+        WFCCDictionary *ret = [[WFCCDictionary alloc] init];
+        ret.dict = @{};
+        return ret;
     }
+    
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
                                                                options:kNilOptions
                                                                  error:error];
