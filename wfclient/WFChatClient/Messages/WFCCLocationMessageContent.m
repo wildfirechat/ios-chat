@@ -33,7 +33,7 @@
     self.thumbnail = [UIImage imageWithData:payload.binaryContent];
     
     NSError *__error = nil;
-    WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+    WFCCDictionary *dictionary = [WFCCDictionary fromString:payload.content error:&__error];
     if (!__error) {
         double latitude = [dictionary[@"lat"] doubleValue];
         double longitude = [dictionary[@"long"] doubleValue];

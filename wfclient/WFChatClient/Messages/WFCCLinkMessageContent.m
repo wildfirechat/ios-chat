@@ -42,9 +42,9 @@
     NSError *__error = nil;
     WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
-        self.contentDigest = [self getString:dictionary ofKey:@"d"];
-        self.url = [self getString:dictionary ofKey:@"u"];
-        self.thumbnailUrl = [self getString:dictionary ofKey:@"t"];
+        self.contentDigest = dictionary[@"d"];
+        self.url = dictionary[@"u"];
+        self.thumbnailUrl = dictionary[@"t"];
     }
 }
 

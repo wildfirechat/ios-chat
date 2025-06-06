@@ -64,7 +64,7 @@
         self.localPath = mediaPayload.localMediaPath;
         
         NSError *__error = nil;
-        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromString:payload.content error:&__error];
         if (!__error) {
             self.duration = [dictionary[@"duration"] longValue];
         }

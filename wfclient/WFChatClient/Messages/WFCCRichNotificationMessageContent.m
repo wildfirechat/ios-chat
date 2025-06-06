@@ -49,11 +49,11 @@
     NSError *__error = nil;
     WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
     if (!__error) {
-        self.remark = [self getString:dictionary ofKey:@"remark"];
-        self.exName = [self getString:dictionary ofKey:@"exName"];
-        self.exPortrait = [self getString:dictionary ofKey:@"exProtrait"];
-        self.exUrl = [self getString:dictionary ofKey:@"exUrl"];
-        self.appId = [self getString:dictionary ofKey:@"appId"];
+        self.remark = dictionary[@"remark"];
+        self.exName = dictionary[@"exName"];
+        self.exPortrait = dictionary[@"exProtrait"];
+        self.exUrl = dictionary[@"exUrl"];
+        self.appId = dictionary[@"appId"];
         
         self.datas = [self getArray:dictionary ofKey:@"datas"];
     }

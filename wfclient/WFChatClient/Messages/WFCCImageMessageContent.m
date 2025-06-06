@@ -93,7 +93,7 @@
         self.localPath = mediaPayload.localMediaPath;
         if (mediaPayload.content.length) {
             NSError *__error = nil;
-            WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+            WFCCDictionary *dictionary = [WFCCDictionary fromString:payload.content error:&__error];
             if (!__error) {
                 NSString *str1 = dictionary[@"w"];
                 NSString *str2 = dictionary[@"h"];
