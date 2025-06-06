@@ -383,7 +383,10 @@
     if (!self.dataLoaded) {
         return 0;
     }
-    return 2;
+    if(FILE_TRANSFER_ID) {
+        return 2;
+    }
+    return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
