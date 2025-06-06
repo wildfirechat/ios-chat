@@ -21,7 +21,10 @@
     return value;
 }
 
-+ (nonnull WFCCDictionary *)fromData:(nonnull NSData *)data error:(NSError **)error {
++ (WFCCDictionary *)fromData:(nonnull NSData *)data error:(NSError **)error {
+    if(!data) {
+        return nil;
+    }
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data
                                                                options:kNilOptions
                                                                  error:error];
