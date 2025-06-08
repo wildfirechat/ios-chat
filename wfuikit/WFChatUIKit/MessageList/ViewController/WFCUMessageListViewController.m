@@ -318,7 +318,7 @@
     }
     
     self.nMsgSet = [[NSMutableSet alloc] init];
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             BOOL isFriend = false;
             if(self.conversation.type == Single_Type) {
@@ -336,6 +336,8 @@
                 }];
             }
         }
+    } else if(self.conversation.type == Group_Type) {
+        //当群超级大时，订阅群成员在线状态非常消耗资源。因此进入会话时不能订阅状态，只有在展示列表时订阅。
     }
     
     
@@ -640,7 +642,7 @@
         [[WFCCIMService sharedWFCIMService] send:self.conversation content:leaveContent success:nil error:nil];
     }
     
-    if(self.conversation.type == Single_Type || self.conversation.type == Group_Type || self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
         if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
             BOOL isFriend = false;
             if(self.conversation.type == Single_Type) {
@@ -657,6 +659,8 @@
                 }];
             }
         }
+    } else if(self.conversation.type == Group_Type) {
+        //当群超级大时，订阅群成员在线状态非常消耗资源。因此进入会话时不能订阅状态，只有在展示列表时订阅。
     }
     
     if(self.checkOngoingCallTimer) {
