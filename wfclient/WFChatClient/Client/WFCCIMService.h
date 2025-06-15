@@ -1336,7 +1336,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
              serverTime:(long long)serverTime;
 
 /**
- 更新消息内容。只更新本地消息内容，无法更新服务器和远端。
+ 更新消息内容。只更新本地消息内容，无法更新服务器和远端。不支持聊天室消息，因为聊天室消息本地不存储。
  
  @param messageId 消息ID
  @param content 消息内容
@@ -1345,7 +1345,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
               content:(WFCCMessageContent *)content;
 
 /**
- 更新消息内容及时间。只更新本地消息内容，无法更新服务器和远端。
+ 更新消息内容及时间。只更新本地消息内容，无法更新服务器和远端。不支持聊天室消息，因为聊天室消息本地不存储。
  
  @param messageId 消息ID
  @param content   消息内容
