@@ -560,6 +560,24 @@ class GDCB : public mars::stn::GetDomainInfoCallback {
   id<RefreshDomainInfoDelegate> m_delegate;
 };
 
+class CSACB : public mars::stn::CustomSortAddressCallback {
+  public:
+    bool sortAddress(bool longLink, std::vector<std::pair<std::string, int>> &ipPorts) {
+        bool changed = false;
+// 当有多个可连网络时，这里可以进行排序。只能排序和删除，不能添加。
+//        for(int i = 1; i < ipPorts.size(); i++) {
+//            if(ipPorts[i].second == 1886) {
+//                std::pair<std::string, int> temp = ipPorts[0];
+//                ipPorts[0] = ipPorts[i];
+//                ipPorts[i] = temp;
+//                changed = true;
+//                break;
+//            }
+//        }
+        return changed;
+    }
+};
+
 @interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate, RefreshDomainInfoDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
@@ -998,6 +1016,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setSecretChatStateCallback(new SCSCB(self));
   mars::stn::setSecretMessageBurnStateCallback(new SMBSCB(self));
   mars::stn::setGetDomainInfoCallback(new GDCB(self));
+  mars::stn::setCustomSortAddressCallback(new CSACB());
   mars::baseevent::OnCreate();
 }
 - (int64_t)connect:(NSString *)host {
