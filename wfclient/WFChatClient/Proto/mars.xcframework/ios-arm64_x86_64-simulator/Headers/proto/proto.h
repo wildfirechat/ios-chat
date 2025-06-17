@@ -933,6 +933,12 @@ namespace mars{
         virtual ~SecretMessageBurnStateCallback() {}
     };
     
+    class CustomSortAddressCallback {
+    public:
+        virtual bool sortAddress(bool longLink, std::vector<std::pair<std::string, int>> &ipPorts) = 0;
+        virtual ~CustomSortAddressCallback() {}
+    };
+    
         enum ConnectionStatus {
             kConnectionStatusTimeInconsistent = -9,
             kConnectionStatusNotLicensed = -8,
@@ -1008,6 +1014,7 @@ namespace mars{
         extern int getRoutePort();
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
+        extern void setCustomSortAddressCallback(CustomSortAddressCallback *callback);
         extern void setNotifyConnectToServerCallback(NotifyConnectToServerCallback *callback);
         extern void setTrafficDataCallback(TrafficDataCallback *callback);
         extern void setErrorEventCallback(ErrorEventCallback *callback);
