@@ -257,7 +257,12 @@
 
 - (void)createGroup:(NSArray<NSString *> *)contacts {
     __weak typeof(self) ws = self;
-    NSMutableArray<NSString *> *memberIds = [contacts mutableCopy];
+    NSMutableArray<NSString *> *memberIds = [[NSMutableArray alloc] init];
+    [contacts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(![memberIds containsObject:obj]) {
+            [memberIds addObject:obj];
+        }
+    }];
     if (![memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
         [memberIds insertObject:[WFCCNetworkService sharedInstance].userId atIndex:0];
     }
