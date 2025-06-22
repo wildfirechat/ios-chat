@@ -1092,6 +1092,7 @@ namespace mars{
 
         extern void searchUser(const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
         extern void searchUser(const std::string &domainId, const std::string &keyword, int searchType, int page, SearchUserCallback *callback);
+        extern void searchUser(const std::string &domainId, const std::string &keyword, int searchType, int userType, int page, SearchUserCallback *callback);
         extern void sendFriendRequest(const std::string &userId, const std::string &reason, const std::string &extra, GeneralOperationCallback *callback);
 
         extern void loadFriendRequestFromRemote(int64_t head = 0);
