@@ -2184,18 +2184,27 @@ public:
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock {
+    [self searchUser:keyword domain:domainId searchType:searchType userType:UserSearchUserType_All page:page success:successBlock error:errorBlock];
+}
+
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
+        searchType:(WFCCSearchUserType)searchType
+          userType:(WFCCUserSearchUserType)userType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock {
     if(keyword.length == 0) {
         successBlock(@[]);
     }
     
     if (self.userSource) {
-        [self.userSource searchUser:keyword domain:domainId searchType:searchType page:page success:successBlock error:errorBlock];
+        [self.userSource searchUser:keyword domain:domainId searchType:searchType userType:userType page:page success:successBlock error:errorBlock];
         return;
     }
     
-    mars::stn::searchUser(domainId?[domainId UTF8String]:"", keyword?[keyword UTF8String]:"", (int)searchType, page, new IMSearchUserCallback(successBlock, errorBlock));
+    mars::stn::searchUser(domainId?[domainId UTF8String]:"", keyword?[keyword UTF8String]:"", (int)searchType, (int)userType, page, new IMSearchUserCallback(successBlock, errorBlock));
 }
-
 class IMGetOneUserInfoCallback : public mars::stn::GetOneUserInfoCallback {
 private:
     void(^m_successBlock)(WFCCUserInfo *userInfo);

@@ -235,6 +235,7 @@
         [[WFCCIMService sharedWFCIMService] searchUser:searchString
                                                 domain:self.domainId
                                             searchType:SearchUserType_Name_Mobile
+                                              userType:UserSearchUserType_All
                                                   page:0
                                                success:^(NSArray<WFCCUserInfo *> *machedUsers) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{

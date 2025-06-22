@@ -177,6 +177,19 @@ typedef NS_ENUM(NSInteger, WFCCSearchUserType) {
 };
 
 /**
+ 搜索用户的用户类型
+
+ - UserSearchUserType_All: 搜索普通用户和机器人
+ - UserSearchUserType_Only_User: 只搜索普通用户
+ - UserSearchUserType_Only_Robot: 只搜索机器人
+ */
+typedef NS_ENUM(NSInteger, WFCCUserSearchUserType) {
+    UserSearchUserType_All,
+    UserSearchUserType_Only_User,
+    UserSearchUserType_Only_Robot
+};
+
+/**
  禁止搜索当前用户的掩码。
 
  - DisableSearch_DisplayName_Mask: 第1位是是否禁止搜索昵称
@@ -255,6 +268,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)searchUser:(NSString *)keyword
             domain:(NSString *)domainId
         searchType:(WFCCSearchUserType)searchType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock;
+
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
+        searchType:(WFCCSearchUserType)searchType
+          userType:(WFCCUserSearchUserType)userType
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
@@ -1451,6 +1472,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)searchUser:(NSString *)keyword
             domain:(NSString *)domainId
         searchType:(WFCCSearchUserType)searchType
+              page:(int)page
+           success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
+             error:(void(^)(int errorCode))errorBlock;
+
+/**
+ 搜索用户
+ 
+ @param keyword 关键词
+ @param domainId 域ID
+ @param searchType 搜索类型
+ @param userType 用户类型
+ @param page page
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)searchUser:(NSString *)keyword
+            domain:(NSString *)domainId
+        searchType:(WFCCSearchUserType)searchType
+          userType:(WFCCUserSearchUserType)userType
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
