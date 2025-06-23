@@ -3220,8 +3220,13 @@
 }
 #if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly {
-    if(self.conversation.type == Single_Type || self.conversation.type == SecretChat_Type) {
+    if(self.conversation.type == Single_Type) {
         [self startCall:@[self.conversation.target] isMulti:NO conversation:self.conversation audioOnly:isAudioOnly];
+    } else if(self.conversation.type == SecretChat_Type) {
+        WFCCSecretChatInfo *secrectChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:self.conversation.target];
+        if(secrectChatInfo && secrectChatInfo.state == SecretChatState_Established) {
+            [self startCall:@[secrectChatInfo.userId] isMulti:NO conversation:self.conversation audioOnly:isAudioOnly];
+        }
     } else {
         //      WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
         //      pvc.selectContact = YES;
