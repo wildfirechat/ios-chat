@@ -4438,7 +4438,7 @@ public:
 }
 
 - (NSData *)getWavData:(NSString *)amrPath {
-    if (![@"amr" isEqualToString:[amrPath pathExtension]]) {
+    if ([amrPath pathExtension].length>0 && ![@"amr" isEqualToString:[amrPath pathExtension]]) {
         return [NSData dataWithContentsOfFile:amrPath];
     } else {
         NSMutableData *data = [[NSMutableData alloc] init];
