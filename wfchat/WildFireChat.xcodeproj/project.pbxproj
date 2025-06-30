@@ -1554,7 +1554,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1603,7 +1603,7 @@
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
 				INFOPLIST_FILE = WildFireChat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1641,7 +1641,7 @@
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
 				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1674,7 +1674,7 @@
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
 				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1704,7 +1704,7 @@
 				INFOPLIST_FILE = Broadcast/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "野火IM";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1735,7 +1735,7 @@
 				INFOPLIST_FILE = Broadcast/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "野火IM";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1765,7 +1765,7 @@
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1796,7 +1796,7 @@
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastSetupUI;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 WildFireChat. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
