@@ -485,7 +485,7 @@
         WFCUEmployee *emp = self.searchResults[indexPath.row];
         WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
         vc.userId = emp.employeeId;
-        
+        vc.sourceType = FriendSource_Org;
         vc.hidesBottomBarWhenPushed = YES;
         
         [self.navigationController pushViewController:vc animated:YES];
@@ -503,7 +503,7 @@
             WFCUEmployee *emp = path.employees[indexPath.row];
             WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
             vc.userId = emp.employeeId;
-            
+            vc.sourceType = FriendSource_Org;
             vc.hidesBottomBarWhenPushed = YES;
             
             [self.navigationController pushViewController:vc animated:YES];

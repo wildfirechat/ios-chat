@@ -487,6 +487,9 @@
                 if(!groupInfo.privateChat) {
                     [self setupSendMessageCell:width];
                 }
+            } else if(self.sourceType == FriendSource_Org)  {
+                //组织通讯录用户允许不添加好友聊天
+                [self setupSendMessageCell:width];
             }
         }
     }

@@ -110,6 +110,7 @@ typedef NS_ENUM(NSInteger, WFCCErrorCode) {
  - FriendSource_Group: 群组，targetId为群主ID
  - FriendSource_QrCode: 二维码，targetId为分享二维码的用户Id
  - FriendSource_Card: 用户名片，targetId为分享名片的用户Id
+ - FriendSource_Org: 组织通讯录查看
  */
 typedef NS_ENUM(NSInteger, WFCCFriendSourceType) {
     FriendSource_Unknown,
@@ -117,6 +118,7 @@ typedef NS_ENUM(NSInteger, WFCCFriendSourceType) {
     FriendSource_Group,
     FriendSource_QrCode,
     FriendSource_Card,
+    FriendSource_Org
 };
 
 /**
