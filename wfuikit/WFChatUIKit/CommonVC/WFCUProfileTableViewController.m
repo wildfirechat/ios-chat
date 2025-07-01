@@ -445,25 +445,7 @@
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
             [self setupSendMessageCell:width];
             [self showSeparatorLine:self.sendMessageCell];
-            
-    #if WFCU_SUPPORT_VOIP
-            self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-            for (UIView *subView in self.voipCallCell.subviews) {
-                [subView removeFromSuperview];
-            }
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
-            [btn setImage:[WFCUImage imageNamed:@"video"] forState:UIControlStateNormal];
-            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-            [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
-            [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
-            if (@available(iOS 14, *)) {
-                [self.voipCallCell.contentView addSubview:btn];
-            } else {
-                [self.voipCallCell addSubview:btn];
-            }
-    #endif
+            [self setupVoipCallCell:width];
         } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
             
         } else {
@@ -490,6 +472,9 @@
             } else if(self.sourceType == FriendSource_Org)  {
                 //组织通讯录用户允许不添加好友聊天
                 [self setupSendMessageCell:width];
+                [self showSeparatorLine:self.sendMessageCell];
+                [self setupVoipCallCell:width];
+                [self showSeparatorLine:self.sendMessageCell];
             }
         }
     }
@@ -513,6 +498,27 @@
     } else {
         [self.sendMessageCell addSubview:btn];
     }
+}
+
+- (void)setupVoipCallCell:(CGFloat)width {
+#if WFCU_SUPPORT_VOIP
+        self.voipCallCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        for (UIView *subView in self.voipCallCell.subviews) {
+            [subView removeFromSuperview];
+        }
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+        [btn setImage:[WFCUImage imageNamed:@"video"] forState:UIControlStateNormal];
+        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+        [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
+        [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+        if (@available(iOS 14, *)) {
+            [self.voipCallCell.contentView addSubview:btn];
+        } else {
+            [self.voipCallCell addSubview:btn];
+        }
+#endif
 }
 
 - (UITableViewCell *)moreCell {
