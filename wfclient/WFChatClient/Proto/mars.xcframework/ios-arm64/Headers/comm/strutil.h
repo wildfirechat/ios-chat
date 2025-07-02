@@ -21,7 +21,7 @@
 
 #ifndef COMM_STRUTIL_H_
 #define COMM_STRUTIL_H_
-
+#include <cstdint>
 #include <string>
 #include <vector>
 

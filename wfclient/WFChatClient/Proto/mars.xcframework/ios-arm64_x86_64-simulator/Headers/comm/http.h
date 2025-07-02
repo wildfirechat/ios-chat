@@ -20,7 +20,7 @@
 
 #ifndef HTTP_H_
 #define HTTP_H_
-
+#include <cstdint>
 #include <string>
 #include <map>
 #include <list>

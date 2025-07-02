@@ -2856,6 +2856,7 @@ amr文件转成wav数据
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock;
 
+- (void)postMomentsRequest:(NSString *)path data:(NSData *)data success:(void(^)(NSData *responseData))successBlock error:(void(^)(int error_code))errorBlock;
 //内部调用，请勿使用
 - (void)putUseOnlineStates:(NSArray<WFCCUserOnlineState *> *)states;
 @end
