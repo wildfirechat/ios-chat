@@ -1115,6 +1115,8 @@ namespace mars{
     
         extern void setUserAgent(const std::string &userAgent);
         extern void addHttpHeader(const std::string &header, const std::string &value);
+    
+        extern void sendMomentsRequest(const std::string &path, const std::string &data, GeneralStringCallback *callback);
 
         extern void (*createGroup)(const std::string &groupId, const std::string &groupName, const std::string &groupPortrait, int groupType, const std::string &groupExtra, const std::list<std::string> &groupMembers, const std::string &memberExtra, const std::list<int> &notifyLines, TMessageContent &content, CreateGroupCallback *callback);
 

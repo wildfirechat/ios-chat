@@ -4664,6 +4664,41 @@ public:
     mars::stn::releaseLock([lockId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+class IMGeneralDataCallback : public mars::stn::GeneralStringCallback {
+private:
+    void(^m_successBlock)(NSData *generalStr);
+    void(^m_errorBlock)(int error_code);
+public:
+    IMGeneralDataCallback(void(^successBlock)(NSData *groupId), void(^errorBlock)(int error_code)) : mars::stn::GeneralStringCallback(), m_successBlock(successBlock), m_errorBlock(errorBlock) {};
+    void onSuccess(const std::string &str) {
+        NSData *data = [NSData dataWithBytes:str.c_str() length:str.length()];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_successBlock) {
+                m_successBlock(data);
+            }
+            delete this;
+        });
+    }
+    void onFalure(int errorCode) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (m_errorBlock) {
+                m_errorBlock(errorCode);
+            }
+            delete this;
+        });
+    }
+
+    virtual ~IMGeneralDataCallback() {
+        m_successBlock = nil;
+        m_errorBlock = nil;
+    }
+};
+
+- (void)postMomentsRequest:(NSString *)path data:(NSData *)data success:(void(^)(NSData *responseData))successBlock error:(void(^)(int error_code))errorBlock {
+    std::string strData((const char*)data.bytes, data.length);
+    mars::stn::sendMomentsRequest([path UTF8String], strData, new IMGeneralDataCallback(successBlock, errorBlock));
+}
+
 - (BOOL)onReceiveMessage:(WFCCMessage *)message {
     if([message.content isKindOfClass:[WFCCMarkUnreadMessageContent class]] && [message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
         WFCCMarkUnreadMessageContent *markMsg = (WFCCMarkUnreadMessageContent*)message.content;
