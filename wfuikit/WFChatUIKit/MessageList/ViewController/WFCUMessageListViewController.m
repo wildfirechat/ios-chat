@@ -1131,6 +1131,7 @@
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCFriendAddedMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCFriendGreetingMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCNotDeliveredMessageContent class]];
+    [self registerCell:[WFCUInformationCell class] forContent:[WFCCGroupRejectJoinNotificationContent class]];
     
     [self registerCell:[WFCUCallSummaryCell class] forContent:[WFCCCallStartMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
