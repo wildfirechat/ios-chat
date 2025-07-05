@@ -265,6 +265,11 @@
                     reload = YES;
                     *stop = YES;
                 }
+            } else if([obj.content isKindOfClass:WFCCGroupRejectJoinNotificationContent.class]) {
+                WFCCGroupRejectJoinNotificationContent *notiContent = (WFCCGroupRejectJoinNotificationContent *)obj.content;
+                if([notiContent.operatorUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                    [self.view makeToast:[notiContent digest:obj] duration:1 position:CSToastPositionCenter];
+                }
             }
         }];
         if(reload) {
