@@ -9,11 +9,13 @@
 #import "WFCUUserMessageListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIView+Toast.h"
 
 @interface WFCUUserMessageListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSMutableArray<WFCCMessage *> *messages;
 
+@property(nonatomic)bool hasMore;
 @property(nonatomic)bool isLoading;
 @end
 
@@ -21,7 +23,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
     
     if (userInfo.displayName.length) {
@@ -29,6 +30,7 @@
     }
     
     self.messages = [[[WFCCIMService sharedWFCIMService] getUserMessages:self.userId conversation:self.conversation contentTypes:nil from:0 count:20] mutableCopy];
+    self.hasMore = self.messages.count == 20;
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     if (@available(iOS 15, *)) {
@@ -48,10 +50,20 @@
         return;
     }
     
-    NSArray *moreMsg = [[WFCCIMService sharedWFCIMService] getUserMessages:self.userId conversation:self.conversation contentTypes:nil from:[self.messages lastObject].messageId count:20];
-    [self.messages addObjectsFromArray:moreMsg];
-    [self.tableView reloadData];
-    self.isLoading = NO;
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] getUserMessagesV2:self.userId conversation:self.conversation contentTypes:nil from:[self.messages lastObject].messageId count:20 success:^(NSArray<WFCCMessage *> *moreMsg) {
+        if(moreMsg.count) {
+            [ws.messages addObjectsFromArray:moreMsg];
+            [ws.tableView reloadData];
+        } else {
+            ws.hasMore = NO;
+        }
+        ws.isLoading = NO;
+    } error:^(int error_code) {
+        ws.isLoading = NO;
+        ws.hasMore = NO;
+        [ws.view makeToast:@"网络错误" duration:1 position:CSToastPositionCenter];
+    }];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -90,7 +102,7 @@
         }
     }
     
-    if(!self.isLoading && isNeedLoadMore){
+    if(!self.isLoading && isNeedLoadMore && self.hasMore){
         self.isLoading = true;
         NSLog(@"-->加载更多数据");
         [self loadMore];
