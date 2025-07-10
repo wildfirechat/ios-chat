@@ -28,7 +28,7 @@
     self.messageUid = [[[NSString alloc] initWithData:payload.binaryContent encoding:NSUTF8StringEncoding] longLongValue];
     if (self.extra.length) {
         NSError *__error = nil;
-        WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
+        WFCCDictionary *dictionary = [WFCCDictionary fromString:payload.extra error:&__error];
         if (!__error) {
             self.originalSender = dictionary[@"s"];
             self.originalContentType = [dictionary[@"t"] intValue];
