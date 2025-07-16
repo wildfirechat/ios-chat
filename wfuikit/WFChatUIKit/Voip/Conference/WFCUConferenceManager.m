@@ -787,7 +787,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     if(!_broadPickerView){
         _broadPickerView = [[RPSystemBroadcastPickerView alloc] initWithFrame:CGRectMake(100, 100, 50, 50)];
         _broadPickerView.showsMicrophoneButton = NO;
-        _broadPickerView.preferredExtension = @"cn.wildfirechat.messanger.Broadcast";
+        _broadPickerView.preferredExtension = [NSString stringWithFormat:@"%@.Broadcast", [[NSBundle mainBundle] bundleIdentifier]];
         _broadPickerView.hidden = YES;
     }
     return _broadPickerView;
