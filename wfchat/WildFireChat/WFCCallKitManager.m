@@ -31,7 +31,7 @@
         configInternal.maximumCallsPerCallGroup = 1;
         configInternal.maximumCallGroups = 1;
         configInternal.supportedHandleTypes = [[NSSet alloc] initWithObjects:[NSNumber numberWithInt:CXHandleTypeGeneric],[NSNumber numberWithInt:CXHandleTypePhoneNumber], nil];
-        UIImage* iconMaskImage = [UIImage imageNamed:@"file_icon"];
+        UIImage* iconMaskImage = [UIImage imageNamed:@"callkit_app_icon"];
         configInternal.iconTemplateImageData = UIImagePNGRepresentation(iconMaskImage);
         
         self.provider = [[CXProvider alloc] initWithConfiguration: configInternal];
