@@ -76,4 +76,14 @@
 + (WFCCGroupMemberSourceType)getGroupMemberSourceType:(NSString *)memberExtra sourceTargetId:(NSMutableString *)sourceTargetId;
 
 + (NSString *)getUserDisplayName:(NSString *)userId inGroup:(NSString *)groupId;
+
+/*
+ 获取指定年月的第一秒，UTC时间
+ */
++ (NSTimeInterval)startSecondOf:(NSUInteger)year month:(NSUInteger)month;
+
+/*
+ 获取指定年月的最后一秒，UTC时间
+ */
++ (NSTimeInterval)endSendOf:(NSUInteger)year month:(NSUInteger)month;
 @end

@@ -4503,6 +4503,21 @@ public:
     return mars::stn::MessageDB::Instance()->GetConversationMessageCount(types, ls);
 }
 
+- (NSDictionary<NSString *, NSNumber *> *)getMessageCountByDay:(WFCCConversation *)conversation contentTypes:(NSArray<NSNumber *> *)contentTypes startTime:(int64_t)startTime endTime:(int64_t)endTime {
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    
+    std::list<std::pair<std::string, int>> dayCounts = mars::stn::MessageDB::Instance()->GetMessageCountByDay((int)conversation.type, conversation.target?[conversation.target UTF8String]:"", conversation.line, types, startTime, endTime);
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    for(std::list<std::pair<std::string, int>>::iterator it = dayCounts.begin(); it != dayCounts.end(); it++) {
+        [result setValue:@(it->second) forKey:[NSString stringWithUTF8String:it->first.c_str()]];
+    }
+    
+    return result;
+}
+
 - (BOOL)beginTransaction {
     return mars::stn::MessageDB::Instance()->BeginTransaction();
 }

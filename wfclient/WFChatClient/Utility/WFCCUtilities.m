@@ -673,4 +673,42 @@ static NSLock *wfcImageLock;
         }
     }
 }
+
++ (NSTimeInterval)startSecondOf:(NSUInteger)year month:(NSUInteger)month {
+    // 创建日历对象（使用默认时区）
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone defaultTimeZone]];
+    
+    // 提取年份和月份组件
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    
+    // 设置为当月第一天的开始时间（00:00:00 UTC）
+    components.year = year;
+    components.month = month;
+    components.day = 1;
+    components.hour = 0;
+    components.minute = 0;
+    components.second = 0;
+    components.timeZone = [NSTimeZone defaultTimeZone];
+    components.calendar = calendar;
+    
+    // 生成当月开始的日期
+    NSDate *startOfMonth = [calendar dateFromComponents:components];
+    
+    // 返回UTC时间戳（秒）
+    return [startOfMonth timeIntervalSince1970];
+}
+
++ (NSTimeInterval)endSendOf:(NSUInteger)year month:(NSUInteger)month {
+    // 取下个月的时间
+    if(month == 12) {
+        year++;
+        month = 1;
+    } else {
+        month += 1;
+    }
+    
+    //返回下个月开头时间减一秒。
+    return [WFCCUtilities startSecondOf:year month:month] -1;
+}
 @end
