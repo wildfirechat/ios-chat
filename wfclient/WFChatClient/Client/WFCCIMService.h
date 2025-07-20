@@ -1411,6 +1411,31 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  */
 - (int)getConversationMessageCount:(NSArray<NSNumber *> *)conversationTypes
                              lines:(NSArray<NSNumber *> *)lines;
+
+/**
+ 获取会话每天的消息数。用于会话的按时间查找消息，在日历上显示每天的消息数量。
+ 
+ 使用示例：
+ long long startTime = [WFCCUtilities startSecondOf:2025 month:7];
+ long long endTme = [WFCCUtilities endSendOf:2025 month:7];
+ NSDictionary<NSString *, NSNumber *> *counts = [[WFCCIMService sharedWFCIMService] getMessageCountByDay:self.conversation contentTypes:nil startTime:startTime endTime:endTme];
+ NSLog(@"the count are %@", counts);
+ 输出：
+ the count are {
+     "2025-07-04" = 3;
+     "2025-07-16" = 3;
+     "2025-07-20" = 3;
+ }
+ 
+ @param conversation 会话。
+ @param contentTypes 消息类型
+ @param startTime 起始时间。
+ @param endTime 结束时间。
+ 
+ @return 这个时间范围内每天的消息数。
+ @discussion 如果获取某天的消息，可以用 getMessagesV2:contentTypes:from:count:withUser:success:error: 方法，其中from可以用当天时间的秒数（也可用消息ID）。如果获取这天的消息，以降序排列，from就是这天的最后一秒的时间，然后count为正值。如果以升序排列，from为这一天的第一秒，count值为负值。
+ */
+- (NSDictionary<NSString *, NSNumber *> *)getMessageCountByDay:(WFCCConversation *)conversation contentTypes:(NSArray<NSNumber *> *)contentTypes startTime:(int64_t)startTime endTime:(int64_t)endTime;
 #pragma mark - 用户相关
 /**
  获取用户信息

@@ -89,6 +89,8 @@ namespace mars {
             
             std::list<TMessage> GetUserMessages(const std::string &user, int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
             std::list<TMessage> GetUserMessages(const std::string &user, const std::list<int> &conversationTypes, const std::list<int> &lines, const std::list<int> &contentTypes, bool desc, int count, int64_t startPoint);
+            
+            std::list<std::pair<std::string, int>> GetMessageCountByDay(int conversationType, const std::string &target, int line, const std::list<int> &contentTypes, int64_t startTime, int64_t endTime);
 
           
             TMessage GetMessageById(long messageId);
