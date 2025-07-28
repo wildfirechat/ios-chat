@@ -2055,6 +2055,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return messageUid > 0;
 }
 
+- (void)uploadBadgeNumber:(int)number {
+    [self setUserSetting:UserSettingScope_Sync_Badge key:nil value:[NSString stringWithFormat:@"%d", number] success:nil error:nil];
+}
+
 - (void)setMediaMessagePlayed:(long)messageId {
     WFCCMessage *message = [self getMessage:messageId];
     if (!message) {
