@@ -151,6 +151,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Privacy_Searchable = 27,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_AddFriend_NoVerify = 28,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Sync_Badge = 29,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -534,6 +536,13 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return YES设置成功，NO消息不存在或已经存在未读。
  */
 - (BOOL)markAsUnRead:(WFCCConversation *)conversation syncToOtherClient:(BOOL)sync;
+
+/**
+ 上传用户本地角标数字到IM服务，当IM服务推送时，会把此数字发送到推送服务，从而让推送角标显示准确
+ 
+ @param number 角标数
+ */
+- (void)uploadBadgeNumber:(int)number;
 
 /**
  设置媒体消息已播放（已经放开限制，所有消息都可以设置为已读状态）
