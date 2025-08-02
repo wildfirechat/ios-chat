@@ -626,6 +626,17 @@
     
 }
 
+- (void)onTabbarItemDoubleClicked {
+    //双击tabbar，跳到下一个未读的会话.
+    int currentRow = (int)self.tableView.indexPathsForVisibleRows.firstObject.row;
+    for (int i = currentRow+1; i < self.conversations.count; i++) {
+        if(!self.conversations[i].isSilent && self.conversations[i].unreadCount.unread > 0) {
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            break;
+        }
+    }
+}
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     int sec = 0;
