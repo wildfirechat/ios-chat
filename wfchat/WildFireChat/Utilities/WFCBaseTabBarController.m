@@ -25,13 +25,15 @@
 @interface WFCBaseTabBarController ()
 @property (nonatomic, strong)UINavigationController *firstNav;
 @property (nonatomic, strong)UINavigationController *settingNav;
+@property (nonatomic, strong)WFCUConversationTableViewController *conversationsViewController;
 @end
 
 @implementation WFCBaseTabBarController
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIViewController *vc = [WFCUConversationTableViewController new];
+    self.conversationsViewController = [WFCUConversationTableViewController new];
+    UIViewController *vc = self.conversationsViewController;
     vc.title = LocalizedString(@"Message");
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     UITabBarItem *item = nav.tabBarItem;
@@ -40,6 +42,9 @@
     item.selectedImage = [[UIImage imageNamed:@"tabbar_chat_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.tabBar addGestureRecognizer:doubleTap];
     
     self.firstNav = nav;
     
@@ -95,6 +100,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kReceiveComments object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kClearUnreadComments object:nil];
 #endif
+}
+
+- (void)onDoubleTap:(UITapGestureRecognizer *)sender {
+    CGPoint location = [sender locationInView:self.tabBar];
+    if(location.x < self.tabBar.bounds.size.width/self.tabBar.items.count) {
+        //点击第一个tab item。如果消息不是第一个需要调整一下。
+        [self.conversationsViewController onTabbarItemDoubleClicked];
+    }
 }
 
 - (void)onUnreadCommentStatusChanged:(NSNotification *)notification {

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface WFCUConversationTableViewController : UIViewController
-
+- (void)onTabbarItemDoubleClicked;
 @end
