@@ -930,33 +930,36 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
     ret.status = (WFCCMessageStatus)tMessage->status;
     ret.localExtra = [NSString stringWithUTF8String:tMessage->localExtra.c_str()];
     
-    WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
-    payload.contentType = tMessage->content.type;
-    payload.searchableContent = [NSString stringWithUTF8String:tMessage->content.searchableContent.c_str()];
-    payload.pushContent = [NSString stringWithUTF8String:tMessage->content.pushContent.c_str()];
-    payload.pushData = [NSString stringWithUTF8String:tMessage->content.pushData.c_str()];
-    
-    payload.content = [NSString stringWithUTF8String:tMessage->content.content.c_str()];
-    payload.binaryContent = [NSData dataWithBytes:tMessage->content.binaryContent.c_str() length:tMessage->content.binaryContent.length()];
-    payload.localContent = [NSString stringWithUTF8String:tMessage->content.localContent.c_str()];
-    payload.mediaType = (WFCCMediaType)tMessage->content.mediaType;
-    payload.remoteMediaUrl = [NSString stringWithUTF8String:tMessage->content.remoteMediaUrl.c_str()];
-    if (payload.remoteMediaUrl.length && [WFCCNetworkService sharedInstance].urlRedirector) {
-        payload.remoteMediaUrl = [[WFCCNetworkService sharedInstance].urlRedirector redirect:payload.remoteMediaUrl];
+    //如果消息未加载，没有必要对消息的content进行decode。
+    if(!tMessage->content.notLoaded) {
+        WFCCMediaMessagePayload *payload = [[WFCCMediaMessagePayload alloc] init];
+        payload.contentType = tMessage->content.type;
+        payload.searchableContent = [NSString stringWithUTF8String:tMessage->content.searchableContent.c_str()];
+        payload.pushContent = [NSString stringWithUTF8String:tMessage->content.pushContent.c_str()];
+        payload.pushData = [NSString stringWithUTF8String:tMessage->content.pushData.c_str()];
+        
+        payload.content = [NSString stringWithUTF8String:tMessage->content.content.c_str()];
+        payload.binaryContent = [NSData dataWithBytes:tMessage->content.binaryContent.c_str() length:tMessage->content.binaryContent.length()];
+        payload.localContent = [NSString stringWithUTF8String:tMessage->content.localContent.c_str()];
+        payload.mediaType = (WFCCMediaType)tMessage->content.mediaType;
+        payload.remoteMediaUrl = [NSString stringWithUTF8String:tMessage->content.remoteMediaUrl.c_str()];
+        if (payload.remoteMediaUrl.length && [WFCCNetworkService sharedInstance].urlRedirector) {
+            payload.remoteMediaUrl = [[WFCCNetworkService sharedInstance].urlRedirector redirect:payload.remoteMediaUrl];
+        }
+        payload.localMediaPath = [NSString stringWithUTF8String:tMessage->content.localMediaPath.c_str()];
+        payload.mentionedType = tMessage->content.mentionedType;
+        payload.notLoaded = NO;
+        
+        NSMutableArray *mentionedTargets = [[NSMutableArray alloc] init];
+        for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
+            [mentionedTargets addObject:[NSString stringWithUTF8String:(*it).c_str()]];
+        }
+        payload.mentionedTargets = mentionedTargets;
+        
+        payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
+        
+        ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
     }
-    payload.localMediaPath = [NSString stringWithUTF8String:tMessage->content.localMediaPath.c_str()];
-    payload.mentionedType = tMessage->content.mentionedType;
-    payload.notLoaded = tMessage->content.notLoaded?YES:NO;
-    
-    NSMutableArray *mentionedTargets = [[NSMutableArray alloc] init];
-    for (std::list<std::string>::const_iterator it = tMessage->content.mentionedTargets.begin(); it != tMessage->content.mentionedTargets.end(); it++) {
-        [mentionedTargets addObject:[NSString stringWithUTF8String:(*it).c_str()]];
-    }
-    payload.mentionedTargets = mentionedTargets;
-    
-    payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
-    
-    ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
     return ret;
 }
 
