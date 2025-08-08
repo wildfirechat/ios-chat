@@ -1000,6 +1000,7 @@ namespace mars{
 
         extern void useEncryptSM4();
         extern void useEncryptAES256();
+        extern void setTimeOffset(int timeoffset);
         extern void setTcpShortLink();
         extern bool isTCPShortLink();
         extern void noUseFts();
