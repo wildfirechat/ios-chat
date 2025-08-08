@@ -401,6 +401,11 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  */
 - (void)setHeartBeatInterval:(int)second;
 
+
+/**
+ 时间偏移。一般用于时间不正确的设置，可以设置时间偏移确保能够设备能够正常使用。时间是服务器时间-当前时间
+ */
+@property (nonatomic, assign)int timeOffset;
 /**
  获取客户端id
  

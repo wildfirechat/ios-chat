@@ -1160,6 +1160,11 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
 }
 
+-(void)setTimeOffset:(int)timeOffset {
+    _timeOffset = timeOffset;
+    mars::stn::setTimeOffset(timeOffset);
+}
+
 - (BOOL)connectedToMainNetwork {
     if(self.doubleNetworkStrategy == 1) {
         return YES;
