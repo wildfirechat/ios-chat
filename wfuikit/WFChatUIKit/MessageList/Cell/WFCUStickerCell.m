@@ -9,8 +9,9 @@
 #import "WFCUStickerCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUMediaMessageDownloader.h"
-#import <SDWebImage/SDWebImage.h>
 #import "WFCUUtilities.h"
+#import "YLImageView.h"
+#import "YLGIFImage.h"
 
 @interface WFCUStickerCell ()
 @property (nonatomic, strong)UIImageView *thumbnailView;
@@ -67,9 +68,9 @@
         if(model.message.conversation.type == SecretChat_Type && model.message.direction == MessageDirection_Receive) {
             NSData *data = [NSData dataWithContentsOfFile:stickerMsg.localPath];
             data = [[WFCCIMService sharedWFCIMService] decodeSecretChat:model.message.conversation.target mediaData:data];
-            self.thumbnailView.image = [UIImage imageWithData:data];
+            self.thumbnailView.image = [YLGIFImage imageWithData:data];
         } else {
-            [self.thumbnailView sd_setImageWithURL:[NSURL fileURLWithPath:stickerMsg.localPath]];
+            self.thumbnailView.image = [YLGIFImage imageWithContentsOfFile:stickerMsg.localPath];
         }
     } else {
         self.thumbnailView.image = nil;
@@ -79,7 +80,7 @@
 
 - (UIImageView *)thumbnailView {
     if (!_thumbnailView) {
-        _thumbnailView = [[UIImageView alloc] init];
+        _thumbnailView = [[YLImageView alloc] init];
         [self.bubbleView addSubview:_thumbnailView];
     }
     return _thumbnailView;
