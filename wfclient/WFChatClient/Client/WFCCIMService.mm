@@ -2565,6 +2565,15 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return convertFriendRequest(tRequest);
 }
 
+- (NSArray<WFCCFriendRequest *> *)getFriendRequestByStatus:(int)status direction:(int)direction {
+    std::list<mars::stn::TFriendRequest> tRequests = mars::stn::MessageDB::Instance()->getFriendRequestByStatus(status, direction);
+    return convertFriendRequests(tRequests);
+}
+
+- (int)getFriendRequestCountByStatus:(int)status direction:(int)direction {
+    return mars::stn::MessageDB::Instance()->getFriendRequestCountByStatus(status, direction);
+}
+
 - (BOOL)clearFriendRequest:(int)direction beforeTime:(int64_t)beforeTime {
     return mars::stn::MessageDB::Instance()->ClearFriendRequest(direction>0, beforeTime);
 }

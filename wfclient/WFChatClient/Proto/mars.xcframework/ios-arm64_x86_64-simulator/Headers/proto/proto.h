@@ -1221,6 +1221,7 @@ namespace mars{
 		extern bool filesystem_copy_files(const std::string &source, const std::string &dest);
         extern bool filesystem_remove(const std::string &path);
 		extern void filesystem_copy_directory(const std::string &strSourceDir, const std::string &strDestDir);
+        extern void filesystem_files_indirectory(const std::string &strSourceDir, std::list<std::string> &files);
         extern bool GetFeeds(std::string data, std::list<TMomentsFeed> &feeds, bool gzip);
         extern bool GetFeed(std::string data, TMomentsFeed &feed, bool gzip);
         extern bool GetComments(std::string data, std::list<TMomentsComment> &feeds, bool gzip);

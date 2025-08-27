@@ -1642,6 +1642,25 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (WFCCFriendRequest *)getFriendRequest:(NSString *)uerId direction:(int)direction;
 
 /**
+ 根据状态好友请求记录
+ @param status 状态
+ @param direction 0 发送的好友请求；1 收到的好友请求。
+ 
+ @return 好友请求列表
+ */
+- (NSArray<WFCCFriendRequest *> *)getFriendRequestByStatus:(int)status direction:(int)direction;
+
+
+/**
+ 根据状态好友请求记录条数
+ @param status 状态
+ @param direction 0 发送的好友请求；1 收到的好友请求。
+ 
+ @return 好友请求条数
+ */
+- (int)getFriendRequestCountByStatus:(int)status direction:(int)direction;
+
+/**
  清理好友请求
  @param direction 好友请求的方向，0发送；1收到。
  @param beforeTime 清理时间之前的请求，单位是毫秒。如果清理所有用0
