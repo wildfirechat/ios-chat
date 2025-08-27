@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *articleId;
 @property(nonatomic, strong)NSString *appId;
 @property(nonatomic, strong)NSString *appPage;
-@property(nonatomic, assign)NSString *extra;
+@property(nonatomic, strong)NSString *extra;
 @property(nonatomic, strong)NSArray<WFCCChannelMenu *> *subMenus;
 @end
 
