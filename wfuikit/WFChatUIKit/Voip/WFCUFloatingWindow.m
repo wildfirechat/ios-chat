@@ -337,8 +337,10 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         [self.floatingButton setTitle:WFCString(@"CloseVideo")
                              forState:UIControlStateNormal];
         self.videoView.hidden = YES;
+        [self.callSession setParticipant:focusUserId screenSharing:screenSharing videoType:WFAVVideoType_None];
     } else {
         self.videoView.hidden = NO;
+        [self.callSession setParticipant:focusUserId screenSharing:screenSharing videoType:WFAVVideoType_SmallStream];
     }
 }
 - (UIWindow *)window {
