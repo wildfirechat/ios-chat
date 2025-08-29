@@ -312,6 +312,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         }
     }
 }
+
 - (void)updateVideoView {
     __block BOOL isMuted = NO;
     NSString *focusUserId;
@@ -324,11 +325,11 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     }
     
     if ([focusUserId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        isMuted = [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted;
+        isMuted = [WFAVEngineKit sharedEngineKit].currentSession.isVideoMuted || [WFAVEngineKit sharedEngineKit].currentSession.isAudience;
     } else {
         [[[WFAVEngineKit sharedEngineKit].currentSession participants] enumerateObjectsUsingBlock:^(WFAVParticipantProfile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if([obj.userId isEqual:focusUserId] && obj.screeSharing == screenSharing) {
-                isMuted = obj.videoMuted;
+                isMuted = obj.videoMuted || obj.audience;
                 *stop = YES;
             }
         }];
@@ -578,9 +579,11 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
 }
 
 - (void)didReceiveRemoteVideoTrack:(RTCVideoTrack *)remoteVideoTrack fromUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
-    
+    [self updateWindow];
 }
-
+- (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
+    [self updateWindow];
+}
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
     
 }
