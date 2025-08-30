@@ -582,7 +582,7 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     [self updateWindow];
 }
 - (void)didChangeType:(BOOL)audience ofUser:(NSString *)userId screenSharing:(BOOL)screenSharing {
-    [self updateWindow];
+    [self updateVideoView];
 }
 - (void)didVideoMuted:(BOOL)videoMuted fromUser:(NSString *)userId {
     

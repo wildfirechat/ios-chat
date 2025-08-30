@@ -825,6 +825,9 @@ static WFCCNetworkService * sharedSingleton = nil;
                 sharedSingleton = [[WFCCNetworkService alloc] init];
                 [sharedSingleton addReceiveMessageFilter:[WFCCIMService sharedWFCIMService]];
                 sharedSingleton.firstTimeResume = YES;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    sharedSingleton.isPad = YES;
+                }
             }
         }
     }
@@ -1124,6 +1127,13 @@ static WFCCNetworkService * sharedSingleton = nil;
         [self onAppSuspend];
     }
     });
+}
+
+- (void)setIsPad:(BOOL)isPad {
+    //只有pad设备才可以设置pad或者手机设备
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        _isPad = isPad;
+    }
 }
 
 - (long long)serverDeltaTime {
