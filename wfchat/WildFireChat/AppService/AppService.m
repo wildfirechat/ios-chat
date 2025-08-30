@@ -36,10 +36,7 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)loginWithMobile:(NSString *)mobile verifyCode:(NSString *)verifyCode success:(void(^)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
-    int platform = Platform_iOS;
-    //如果使用pad端类型，这里平台改成pad类型，另外app_callback.mm文件中把平台也改成ipad，请搜索"iPad"
-    //if(当前设备是iPad)
-    //platform = Platform_iPad
+    int platform = [WFCCNetworkService sharedInstance].isPad?Platform_iPad:Platform_iOS;
     [self post:@"/login" data:@{@"mobile":mobile, @"code":verifyCode, @"clientId":[[WFCCNetworkService sharedInstance] getClientId], @"platform":@(platform)} isLogin:YES success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             NSString *userId = dict[@"result"][@"userId"];

@@ -348,6 +348,12 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  */
 @property (nonatomic, strong)NSString *sendLogCommand;
 
+
+/**
+ 设备是否以Pad平台登录
+ */
+@property (nonatomic, assign)BOOL isPad;
+
 /**
  开启Log
  */
