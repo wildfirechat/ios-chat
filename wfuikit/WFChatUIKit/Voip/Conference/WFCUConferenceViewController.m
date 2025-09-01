@@ -1779,12 +1779,16 @@
 
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceEnded" object:nil];
-    [self.view makeToast:@"会议已结束" duration:1 position:CSToastPositionCenter];
     if(reason == kWFAVCallEndReasonRoomNotExist) {
         [self restartConference];
     } else if(reason == kWFAVCallEndReasonRoomParticipantsFull) {
         [self rejoinConferenceAsAudience];
     } else {
+        if(reason == kWFAVCallEndReasonHangup || reason == kWFAVCallEndReasonAllLeft || reason == kWFAVCallEndReasonRoomDestroyed || reason == kWFAVCallEndReasonRemoteHangup) {
+            [self.view makeToast:@"已离开会议" duration:1 position:CSToastPositionCenter];
+        } else {
+            [self.view makeToast:[NSString stringWithFormat:@"已离开会议(%ld)", reason] duration:1 position:CSToastPositionCenter];
+        }
         [[WFCUConferenceManager sharedInstance] addHistory:self.conferenceInfo duration:(int)(self.currentSession.endTime - self.currentSession.startTime)];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self leftVC];
