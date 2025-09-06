@@ -55,6 +55,7 @@
 
 static NSMutableDictionary *hanziStringDict = nil;
 static NSString *wfcstar = @"☆";
+static NSString *aiRobot = @"AI";
 @implementation WFCUContactListViewController
 
 - (instancetype)init {
@@ -235,6 +236,11 @@ static NSString *wfcstar = @"☆";
                 [ma addObject:[WFCUConfigManager globalManager].fileTransferId];
                 userIdList = [ma copy];
             }
+        }
+        if([WFCUConfigManager globalManager].aiRobotId.length && ![userIdList containsObject:[WFCUConfigManager globalManager].aiRobotId]) {
+            NSMutableArray *ma = [userIdList mutableCopy];
+            [ma addObject:[WFCUConfigManager globalManager].aiRobotId];
+            userIdList = [ma copy];
         }
     }
     self.dataArray = [[[WFCCIMService sharedWFCIMService] getUserInfos:userIdList inGroup:self.groupId] mutableCopy];
@@ -650,6 +656,9 @@ static NSString *wfcstar = @"☆";
     if ([title isEqualToString:wfcstar]) {
         title = WFCString(@"StarFriends");
     }
+    if([title isEqualToString:aiRobot]) {
+        title = @"人工智能助手";
+    }
     label.text = [NSString stringWithFormat:@"%@", title];
     [view addSubview:label];
     return view;
@@ -853,6 +862,7 @@ static NSString *wfcstar = @"☆";
         return nil;
     NSArray *_keys = @[
                        wfcstar,
+                       aiRobot,
                        @"A",
                        @"B",
                        @"C",
@@ -897,17 +907,27 @@ static NSString *wfcstar = @"☆";
                 break;
             }
         }
-        
     }
+    
     if (favArrays.count) {
         [infoDic setObject:favArrays forKey:wfcstar];
     }
     
+    for (WFCCUserInfo *userInfo in userList) {
+        if ([userInfo.userId isEqualToString:[WFCUConfigManager globalManager].aiRobotId]) {
+            [infoDic setObject:[@[userInfo] mutableCopy] forKey:aiRobot];
+            break;
+        }
+    }
     
     for (NSString *key in _keys) {
         if ([key isEqualToString:wfcstar]) {
             continue;
         }
+        if ([key isEqualToString:aiRobot]) {
+            continue;
+        }
+        
         if ([_tempOtherArr count]) {
             isReturn = YES;
         }
@@ -916,6 +936,10 @@ static NSString *wfcstar = @"☆";
             NSString *firstLetter;
 
             WFCCUserInfo *userInfo = (WFCCUserInfo*)user;
+            if([userInfo.userId isEqualToString:[WFCUConfigManager globalManager].aiRobotId]) {
+                continue;
+            }
+            
             NSString *userName = userInfo.displayName;
             if (userInfo.groupAlias.length) {
                 userName = userInfo.groupAlias;
@@ -962,6 +986,10 @@ static NSString *wfcstar = @"☆";
     if ([allKeys containsObject:@"#"]) {
         [allKeys removeObject:@"#"];
         [allKeys insertObject:@"#" atIndex:allKeys.count];
+    }
+    if ([allKeys containsObject:aiRobot]) {
+        [allKeys removeObject:aiRobot];
+        [allKeys insertObject:aiRobot atIndex:0];
     }
     if ([allKeys containsObject:wfcstar]) {
         [allKeys removeObject:wfcstar];

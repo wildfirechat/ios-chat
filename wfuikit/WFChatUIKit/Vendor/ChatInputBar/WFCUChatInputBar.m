@@ -1261,7 +1261,7 @@
     }
     
     BOOL needUpdateText = NO;
-    if(self.conversation.type == Group_Type) {
+    if(self.conversation.type == Group_Type || (self.conversation.type == Single_Type && [WFCUConfigManager globalManager].aiRobotId.length)) {
         if ([text isEqualToString:@"@"]) {
             
             WFCUContactListViewController *pvc = [[WFCUContactListViewController alloc] init];
@@ -1271,9 +1271,17 @@
             [disabledUser addObject:[WFCCNetworkService sharedInstance].userId];
             pvc.disableUsers = disabledUser;
             NSMutableArray *candidateUser = [[NSMutableArray alloc] init];
-            NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
-            for (WFCCGroupMember *member in members) {
-                [candidateUser addObject:member.memberId];
+            
+            if(self.conversation.type == Group_Type) {
+                NSArray<WFCCGroupMember *> *members = [[WFCCIMService sharedWFCIMService] getGroupMembers:self.conversation.target forceUpdate:NO];
+                for (WFCCGroupMember *member in members) {
+                    [candidateUser addObject:member.memberId];
+                }
+            }
+            if([WFCUConfigManager globalManager].aiRobotId.length) {
+                if(![candidateUser containsObject:@"FireRobot"]) {
+                    [candidateUser addObject:@"FireRobot"];
+                }
             }
             pvc.candidateUsers = candidateUser;
             pvc.withoutCheckBox = YES;

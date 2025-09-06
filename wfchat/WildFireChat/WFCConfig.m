@@ -58,3 +58,5 @@ NSString *Send_Log_Command = @"*#marslog#";
 
 //是否开启水印
 BOOL ENABLE_WATER_MARKER = YES;
+
+NSString *AI_ROBOT = @"FireRobot";

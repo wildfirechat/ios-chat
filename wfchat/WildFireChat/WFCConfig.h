@@ -42,4 +42,7 @@ extern NSString *Send_Log_Command;
 
 //是否开启水印
 extern BOOL ENABLE_WATER_MARKER;
+
+//AI机器人ID
+extern NSString *AI_ROBOT;
 #endif /* Config_h */
