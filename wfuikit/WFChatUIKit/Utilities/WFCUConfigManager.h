@@ -55,6 +55,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, strong)NSString *asrServiceUrl;
 
+@property(nonatomic, strong)NSString *aiRobotId;
+
 @property(nonatomic, strong)NSString *conversationFilesDir;
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;
