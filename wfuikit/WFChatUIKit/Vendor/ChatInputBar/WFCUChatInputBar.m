@@ -1289,20 +1289,22 @@
             
             
             __weak typeof(self)ws = self;
-            WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
-            WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
-            if ([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] || member.type == Member_Type_Manager) {
-                pvc.showMentionAll = YES;
-                pvc.mentionAll = ^{
-                    NSString *text = WFCString(@"@All");
-                    [ws didMentionType:2 user:@"" range:NSMakeRange(range.location, text.length) text:text];
-                };
+            if(self.conversation.type == Group_Type) {
+                WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
+                WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:self.conversation.target memberId:[WFCCNetworkService sharedInstance].userId];
+                if ([groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId] || member.type == Member_Type_Manager) {
+                    pvc.showMentionAll = YES;
+                    pvc.mentionAll = ^{
+                        NSString *text = WFCString(@"@All");
+                        [ws didMentionType:2 user:@"" range:NSMakeRange(range.location, text.length) text:text];
+                    };
+                }
             }
             
             
             pvc.selectResult = ^(NSArray<NSString *> *contacts) {
                 if (contacts.count == 1) {
-                    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:self.conversation.target refresh:NO];
+                    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:self.conversation.type == Group_Type?self.conversation.target:nil refresh:NO];
                     NSString *name = userInfo.displayName;
                     if (userInfo.groupAlias.length) {
                         name = userInfo.groupAlias;
