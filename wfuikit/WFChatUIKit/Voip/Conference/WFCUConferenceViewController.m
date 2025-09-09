@@ -2336,14 +2336,14 @@
     }];
     
     [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
-        UICollectionViewCell *cell = [self.participantCollectionView cellForItemAtIndexPath:indexPath];
+        WFCUConferenceParticipantCollectionViewCell *cell = (WFCUConferenceParticipantCollectionViewCell *)[self.participantCollectionView cellForItemAtIndexPath:indexPath];
         BOOL isMain = (indexPath.row == 0);
-        WFAVParticipantProfile *profile = ((WFCUConferenceParticipantCollectionViewCell *)cell).profile;
+        WFAVParticipantProfile *profile = cell.profile;
 
         if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId] || !profile.userId) {
-            [self.currentSession setupLocalVideoView:cell scalingType:self.scalingType];
+            [self.currentSession setupLocalVideoView:cell.videoCanvs scalingType:self.scalingType];
         } else {
-            [self.currentSession setupRemoteVideoView:cell scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
+            [self.currentSession setupRemoteVideoView:cell.videoCanvs scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
 
             if(isMain) {
                 [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_BigStream];
@@ -2362,7 +2362,7 @@
 
                 WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
                 [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
-                [self.currentSession setupLocalVideoView:self.smallVideoView scalingType:self.scalingType];
+                [self.currentSession setupLocalVideoView:self.smallVideoView.videoCanvs scalingType:self.scalingType];
                 self.smallVideoView.hidden = NO;
                 [cell bringSubviewToFront:self.smallVideoView];
             }
