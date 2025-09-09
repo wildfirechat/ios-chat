@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setUserInfo:(WFCCUserInfo *)userInfo callProfile:(WFAVParticipantProfile *)profile;
 
 @property(nonatomic, strong, readonly)WFAVParticipantProfile *profile;
+@property(nonatomic, strong)UIView *videoCanvs;
 @end
 
 NS_ASSUME_NONNULL_END

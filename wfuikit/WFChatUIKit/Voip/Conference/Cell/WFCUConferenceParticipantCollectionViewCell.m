@@ -78,11 +78,22 @@
     
     
     CGRect frame = self.conferenceLabelView.frame;
-    if(isVideoMuted) {
-        self.conferenceLabelView.frame = CGRectMake(self.bounds.size.width/2 - frame.size.width/2, self.bounds.size.height/2 + 30 + 4, frame.size.width, frame.size.height);
-    } else {
+//    if(isVideoMuted) {
+//        self.conferenceLabelView.frame = CGRectMake(self.bounds.size.width/2 - frame.size.width/2, self.bounds.size.height/2 + 30 + 4, frame.size.width, frame.size.height);
+//    } else {
         self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - frame.size.height - 4, frame.size.width, frame.size.height);
+//    }
+}
+
+- (UIView *)videoCanvs {
+    if(!_videoCanvs) {
+        _videoCanvs = [[UIView alloc] initWithFrame:self.contentView.bounds];
+        [self.contentView addSubview:_videoCanvs];
     }
+    if(_conferenceLabelView) {
+        [self.contentView bringSubviewToFront:_conferenceLabelView];
+    }
+    return _videoCanvs;;
 }
 
 - (void)addSubview:(UIView *)view {
