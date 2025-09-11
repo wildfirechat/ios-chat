@@ -1985,6 +1985,26 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     mars::stn::loadRemoteMessage(messageUid, new IMLoadOneRemoteMessageCallback(successBlock, errorBlock));
 }
 
+- (void)getRemoteMessages:(WFCCConversation *)conversation
+               messageUid:(long long)messageUid
+                    count:(NSUInteger)count
+                   before:(BOOL)before
+                 saveToDb:(BOOL)saveToDb
+             contentTypes:(NSArray<NSNumber *> *)contentTypes
+                  success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
+                    error:(void(^)(int error_code))errorBlock {
+    mars::stn::TConversation conv;
+    conv.target = [conversation.target UTF8String];
+    conv.line = conversation.line;
+    conv.conversationType = (int)conversation.type;
+    std::list<int> types;
+    for (NSNumber *num in contentTypes) {
+        types.push_back(num.intValue);
+    }
+    
+    mars::stn::loadRemoteConversationMessagesEx(conv, types, messageUid, (int)count, before, saveToDb, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
+}
+
 - (WFCCMessage *)getMessage:(long)messageId {
   mars::stn::TMessage tMsg = mars::stn::MessageDB::Instance()->GetMessageById(messageId);
   return convertProtoMessage(&tMsg);
