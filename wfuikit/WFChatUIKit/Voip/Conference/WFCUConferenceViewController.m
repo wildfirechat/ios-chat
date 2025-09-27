@@ -246,8 +246,8 @@
     
     [self.participants insertObject:self.currentSession.myProfile atIndex:0];
     
-    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] forState:UIControlStateNormal];
     
+    [self updateManagerButtonNumber];
     
     self.managerButton.titleEdgeInsets = UIEdgeInsetsMake(self.managerButton.imageView.frame.size.height / 2-12, -self.managerButton.imageView.frame.size.width,
                                               -self.managerButton.imageView.frame.size.height, 0);
@@ -263,6 +263,10 @@
         [self.pageControl setCurrentPage:0];
     }
     [self resetFocus];
+}
+
+- (void)updateManagerButtonNumber {
+    [self.managerButton setTitle:[NSString stringWithFormat:@"管理(%ld)", self.participants.count] forState:UIControlStateNormal];
 }
 
 - (void)resetFocus {
@@ -1891,6 +1895,8 @@
         [self.participantCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }
     
+    [self updateManagerButtonNumber];
+    
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     NSString *text;
     if(screenSharing) {
@@ -1940,6 +1946,7 @@
     }
     
     [self updateVideoStreams];
+    [self updateManagerButtonNumber];
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
