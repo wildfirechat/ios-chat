@@ -75,6 +75,9 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMuteStatueChanged:) name:@"kConferenceMutedStateChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMuteStatueChanged:) name:@"kConferenceMemberChanged" object:nil];
+    
     
     
     CGRect frame = self.conferenceLabelView.frame;
@@ -83,6 +86,25 @@
 //    } else {
         self.conferenceLabelView.frame = CGRectMake(4, self.bounds.size.height - frame.size.height - 4, frame.size.width, frame.size.height);
 //    }
+}
+
+- (void)onMuteStatueChanged:(NSNotification *)notification {
+    NSArray<NSString *> *userIds = notification.userInfo[@"userIds"];
+    __block BOOL currentUser = NO;
+    [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj isEqualToString:self.profile.userId]) {
+            currentUser = YES;
+            *stop = YES;
+        }
+    }];
+    
+    if(currentUser) {
+        WFAVParticipantProfile *profile = [[WFAVEngineKit sharedEngineKit].currentSession profileOfUser:self.profile.userId isScreenSharing:self.profile.screeSharing];
+        if(profile) {
+            WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
+            [self setUserInfo:userInfo callProfile:profile];
+        }
+    }
 }
 
 - (UIView *)videoCanvs {
