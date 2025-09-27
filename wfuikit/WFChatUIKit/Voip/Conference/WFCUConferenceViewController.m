@@ -1918,35 +1918,41 @@
 
 - (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
-
-    BOOL focusLeft = [self.focusUserProfile.userId isEqualToString:userId] && self.focusUserProfile.screeSharing == screenSharing;
-    int index = -1;
-    for (int i = 0; i < self.participants.count; i++) {
-        WFAVParticipantProfile *profile = self.participants[i];
-        if([profile.userId isEqualToString:userId] && profile.screeSharing == screenSharing) {
-            [self.participants removeObjectAtIndex:i];
-            index = i;
-            break;
-        }
-    }
     
-    if([self isAudioOnly]) {
+    if([self updateAudioOnly]) {
+        [self rearrangeParticipants];
         [self reloadParticipantCollectionView];
     } else {
-        if(self.participants.count < 3) {
-            [self resetFocus];
-            [self reloadParticipantCollectionView];
-        } else {
-            [self resetFocus];
-            [self.participantCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index+1 inSection:0]]];
-            if(focusLeft) {
-                [self.participantCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+        BOOL focusLeft = [self.focusUserProfile.userId isEqualToString:userId] && self.focusUserProfile.screeSharing == screenSharing;
+        int index = -1;
+        for (int i = 0; i < self.participants.count; i++) {
+            WFAVParticipantProfile *profile = self.participants[i];
+            if([profile.userId isEqualToString:userId] && profile.screeSharing == screenSharing) {
+                [self.participants removeObjectAtIndex:i];
+                index = i;
+                break;
             }
         }
+        
+        if([self isAudioOnly]) {
+            [self reloadParticipantCollectionView];
+        } else {
+            if(self.participants.count < 3) {
+                [self resetFocus];
+                [self reloadParticipantCollectionView];
+            } else {
+                [self resetFocus];
+                [self.participantCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index+1 inSection:0]]];
+                if(focusLeft) {
+                    [self.participantCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+                }
+            }
+        }
+        
+        [self updateVideoStreams];
+        [self updateManagerButtonNumber];
     }
     
-    [self updateVideoStreams];
-    [self updateManagerButtonNumber];
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.currentSession.conversation.type == Group_Type ? self.currentSession.conversation.target : nil refresh:NO];
     
