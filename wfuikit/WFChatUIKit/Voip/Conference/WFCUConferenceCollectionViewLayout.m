@@ -46,29 +46,29 @@
                 int index = (i -1)%4;
                 CGFloat x = startX;
                 CGFloat y = 0;
-                if(i < lastPageFirstIndex) {
+//                if(i < lastPageFirstIndex) {
                     if(index == 1 || index == 3) {
                         x += width;
                     }
                     if(index == 2 || index == 3) {
                         y += height;
                     }
-                } else {
-                    if(lastPageCount == 1) {
-                        x += width/2;
-                        y += height/2;
-                    } else if(lastPageCount == 2) {
-                        x += index * width;
-                        y += height/2;
-                    } else {
-                        if(index == 2) {
-                            x += width/2;
-                            y += height;
-                        } else if(index == 1) {
-                            x += width;
-                        }
-                    }
-                }
+//                } else {
+//                    if(lastPageCount == 1) {
+//                        x += width/2;
+//                        y += height/2;
+//                    } else if(lastPageCount == 2) {
+//                        x += index * width;
+//                        y += height/2;
+//                    } else {
+//                        if(index == 2) {
+//                            x += width/2;
+//                            y += height;
+//                        } else if(index == 1) {
+//                            x += width;
+//                        }
+//                    }
+//                }
                 frame = CGRectMake(x , y, width, height);
             }
             attributes.frame = frame;
