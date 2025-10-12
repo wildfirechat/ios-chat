@@ -1005,6 +1005,11 @@
         inputFrame = self.publicContainer.frame;
         inputFrame.size.height = frame.size.height;
         self.publicContainer.frame = inputFrame;
+        
+    } completion:^(BOOL finished) {
+        if(self.inputBarStatus == ChatInputBarDefaultStatus) {
+            _inputBarStatus = ChatInputBarKeyboardStatus;
+        }
     }];
 }
 
@@ -1033,6 +1038,8 @@
 -(void)keyboardDidHide:(NSNotification *)notification{
     if ((self.emojInput || self.pluginInput || self.textInput) && self.inputBarStatus != ChatInputBarDefaultStatus && self.inputBarStatus != ChatInputBarPublicStatus) {
         [self.textInputView becomeFirstResponder];
+    } else if(self.inputBarStatus == ChatInputBarDefaultStatus && [self.textInputView isFirstResponder]) {
+        [self.textInputView resignFirstResponder];
     }
 }
 
