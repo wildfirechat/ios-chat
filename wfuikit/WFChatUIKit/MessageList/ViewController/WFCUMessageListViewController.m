@@ -2138,6 +2138,13 @@
         });
     } else if (forceButtom) {
         [self scrollToBottom:!firstIn];
+        
+        //不知道为什么WFCCStreamingTextGeneratedMessageContent这个消息没有滚动到合适位置，必须再延迟一下才能到位
+        if(messages.count == 1 && [[messages objectAtIndex:0].content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self scrollToBottom:!firstIn];
+            });
+        }
     }
     
     if (modifiedAliasUsers.count) {
