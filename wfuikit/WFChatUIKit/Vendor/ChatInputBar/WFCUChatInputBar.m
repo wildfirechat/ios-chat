@@ -1559,6 +1559,10 @@
                 
                 [self.delegate videoDidCapture:desFileName thumbnail:thumb duration:seconds];
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"kWFAVResumeAudioSessionNotification" object:nil];
+        };
+        cc.cancelBlock = ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"kWFAVResumeAudioSessionNotification" object:nil];
         };
         [[self.delegate requireNavi] showDetailViewController:cc sender:nil];
         [self notifyTyping:2];
