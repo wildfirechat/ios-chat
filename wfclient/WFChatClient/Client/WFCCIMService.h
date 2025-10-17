@@ -1841,6 +1841,16 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                                           types:(NSArray<NSNumber *> *)types
                                          offset:(int)offset
                                           count:(int)count;
+
+/**
+ 获取群成员ID
+ 
+ @param groupId 群ID
+ @param types 群成员类型，nil为所有
+ @return 群成员ID列表
+ */
+- (NSArray<NSString *> *)getGroupMemberIds:(NSString *)groupId
+                                     types:(NSArray<NSNumber *> *)types;
 /**
  获取群成员数量
  
