@@ -23,7 +23,8 @@ FOUNDATION_EXPORT const unsigned char WFAVEngineKitVersionString[];
 
 #pragma mark - 通知定义
 //通话状态更新通知
-extern NSString *kCallStateUpdated;
+extern NSString * _Nonnull kCallStateUpdated;
+extern NSString * _Nonnull kWFAVResumeAudioSessionNotification;
 
 
 #pragma mark - 枚举值定义
