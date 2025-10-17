@@ -3637,6 +3637,44 @@ WFCCGroupMember* convertProtoGroupMember(const mars::stn::TGroupMember &tm) {
     return output;
 }
 
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                                          types:(NSArray<NSNumber *> *)types
+                                         offset:(int)offset
+                                          count:(int)count {
+    if(groupId.length == 0) {
+        return nil;
+    }
+    
+    std::list<int> ts;
+    for (NSNumber *type in types) {
+        ts.push_back([type intValue]);
+    }
+    
+    std::list<mars::stn::TGroupMember> tmembers = mars::stn::MessageDB::Instance()->GetGroupMembers([groupId UTF8String], ts, offset, count);
+    NSMutableArray *output = [[NSMutableArray alloc] init];
+    for(std::list<mars::stn::TGroupMember>::iterator it = tmembers.begin(); it != tmembers.end(); it++) {
+        WFCCGroupMember *member = convertProtoGroupMember(*it);
+        [output addObject:member];
+    }
+    return output;
+}
+
+-(int)getGroupMembersCount:(NSString *)groupId types:(NSArray<NSNumber *> *)types {
+    if(groupId.length == 0) {
+        return 0;
+    }
+    
+    std::list<int> ts;
+    for (NSNumber *type in types) {
+        ts.push_back([type intValue]);
+    }
+    return mars::stn::MessageDB::Instance()->GetGroupMembersCount([groupId UTF8String], ts);
+}
+
+-(void)loadGroupMemberFromRemote:(NSString *)groupId {
+    mars::stn::MessageDB::Instance()->ReloadGroupMembers([groupId UTF8String]);
+}
+
 class IMGetGroupMembersCallback : public mars::stn::GetGroupMembersCallback {
 private:
     void(^m_successBlock)(NSString *groupId, NSArray<WFCCGroupMember *> *memberList);

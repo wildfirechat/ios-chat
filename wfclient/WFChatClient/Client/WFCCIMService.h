@@ -1827,6 +1827,37 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  */
 - (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
                                           count:(int)count;
+
+/**
+ 分批获取群成员信息
+ 
+ @param groupId 群ID
+ @param types 群成员类型，nil为所有
+ @param offset offset
+ @param count 群成员类型个数
+ @return 群成员信息列表
+ */
+- (NSArray<WFCCGroupMember *> *)getGroupMembers:(NSString *)groupId
+                                          types:(NSArray<NSNumber *> *)types
+                                         offset:(int)offset
+                                          count:(int)count;
+/**
+ 获取群成员数量
+ 
+ @param groupId 群ID
+ @param types 群成员类型，nil为所有
+ @return 群成员的数量
+ */
+-(int)getGroupMembersCount:(NSString *)groupId types:(NSArray<NSNumber *> *)types;
+
+
+/**
+ 从远程服务同步群组成员
+ 
+ @param groupId 群ID
+ */
+-(void)loadGroupMemberFromRemote:(NSString *)groupId;
+
 /**
  获取群成员信息
  @discussion refresh 为true会导致一次网络同步，代价特别大，应该尽量避免使用true，仅当在进入此人的群聊会话详情中时使用一次true。
