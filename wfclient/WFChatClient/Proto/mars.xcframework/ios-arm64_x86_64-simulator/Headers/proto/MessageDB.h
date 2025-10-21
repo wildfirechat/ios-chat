@@ -46,11 +46,11 @@ namespace mars {
             bool UpdateFriendRequestTimeline(int64_t timeline);
             int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead, bool &noFts, int64_t &frHead);
             int64_t GetSettingVersion();
-            bool UpdateUserSettings(std::list<TUserSettingEntry> &settings);
+            bool UpdateUserSettings(std::list<TUserSettingEntry> &settings, bool firstSync = false);
             std::string GetUserSetting(int scope, const std::string &key);
             std::map<std::string, std::string> GetUserSettings(int scope);
             
-            bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall);
+            bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall, bool isRein = false);
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp);
             bool updateConversationIsTop(int conversationType, const std::string &target, int line, int istop);
             bool updateConversationIsSilent(int conversationType, const std::string &target, int line, bool issilent, bool createIfNotExist = true);
@@ -151,10 +151,14 @@ namespace mars {
             long InsertGroupInfo(const TGroupInfo &groupInfo);
             bool UpdateGroupInfo(const std::string &groupId, int type, const std::string &newValue);
             std::list<TGroupMember> GetGroupMembers(const std::string &groupId, bool refresh);
+            std::list<TGroupMember> GetGroupMembers(const std::string &groupId, const std::list<int> &ts, int offset, int count);
+            std::list<std::string> GetGroupMemberIds(const std::string &groupId, const std::list<int> &ts);
+            int GetGroupMembersCount(const std::string &groupId, const std::list<int> &ts);
             TGroupMember GetGroupMember(const std::string &groupId, const std::string &memberId);
             std::list<TGroupMember> GetGroupMembersByType(const std::string &groupId, int type);
             std::list<TGroupMember> GetGroupMembersByCount(const std::string &groupId, int count);
             void GetGroupMembers(const std::string &groupId, bool refresh, GetGroupMembersCallback *callback);
+            void ReloadGroupMembers(const std::string &groupId);
             bool RemoveGroupAndMember(const std::string &groupId, bool keepGroupName = false);
             bool RemoveAllGroupMember(const std::string &groupId, bool removeUserSettings = true);
             void RemoveAllGroupUserSettings(const std::string &groupId);
@@ -268,6 +272,9 @@ namespace mars {
             void _OnCheckReroute();
             int64_t getConversationReadFromUserSetting(int type, const std::string &target, int line);
             friend DB2;
+            
+            bool isNewMessageIndex();
+            bool upgradeNewMessageIndex();
         private:
             std::string getLoadMessageSql(DB2 *db, const std::string &where, const std::string &orderBy, int count);
             int64_t GetGroupMembersMaxDt(const std::string &groupId);
