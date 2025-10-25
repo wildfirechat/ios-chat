@@ -777,8 +777,22 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+static inline BOOL isHTTPURL(NSString *str) {
+    if (str.length == 0) return NO;
+    
+    NSString *s = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *low = [s lowercaseString];
+    if (![low hasPrefix:@"http://"] && ![low hasPrefix:@"https://"] && ![low hasPrefix:@"ftp://"]) return NO;
+    
+    NSError *e = nil;
+    NSDataDetector *d = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&e];
+    NSTextCheckingResult *m = [d firstMatchInString:s options:0 range:NSMakeRange(0, s.length)];
+    
+    return m && m.range.location == 0 && m.range.length == s.length;
+}
+
 - (NSString *)userDefaultPortrait:(WFCCUserInfo *)userInfo {
-    if(userInfo.portrait.length) {
+    if(isHTTPURL(userInfo.portrait)) {
         return userInfo.portrait;
     } else {
         return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar?name=%@", userInfo.displayName];
@@ -792,7 +806,7 @@ static AppService *sharedSingleton = nil;
     
     NSMutableArray *reqMembers = [[NSMutableArray alloc] init];
     [memberInfos enumerateObjectsUsingBlock:^(WFCCUserInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.portrait.length && [obj.portrait rangeOfString:APP_SERVER_ADDRESS].location == NSNotFound) {
+        if(isHTTPURL(obj.portrait) && [obj.portrait rangeOfString:APP_SERVER_ADDRESS].location == NSNotFound) {
             [reqMembers addObject:@{@"avatarUrl" : obj.portrait}];
         } else {
             [reqMembers addObject:@{@"name" : obj.displayName}];
@@ -801,6 +815,7 @@ static AppService *sharedSingleton = nil;
     NSDictionary *request = @{@"members" : reqMembers};
     NSError * err;
     NSData * jsonData = [NSJSONSerialization  dataWithJSONObject:request options:0 error:&err];
+
     return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar/group?request=%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
 }
 
