@@ -6,8 +6,8 @@
 //  Copyright © 2022 WildFireChat. All rights reserved.
 //
 
+#if USE_CALL_KIT
 #import "WFCCallKitManager.h"
-#if WFCU_SUPPORT_VOIP
 #import <CallKit/CallKit.h>
 #import <UIKit/UIKit.h>
 #import <WFChatUIKit/WFChatUIKit.h>
