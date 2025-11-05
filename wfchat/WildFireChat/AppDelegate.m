@@ -190,10 +190,12 @@
     [GeTuiSdk registerRemoteNotification: (UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge)];
     
 #if WFCU_SUPPORT_VOIP
+#if USE_CALL_KIT
     PKPushRegistry *voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     voipRegistry.delegate = self;
     // Set the push type to VoIP
     voipRegistry.desiredPushTypes = [NSSet setWithObject:PKPushTypeVoIP];
+#endif
 #endif
 #else
     if (@available(iOS 10.0, *)) {
