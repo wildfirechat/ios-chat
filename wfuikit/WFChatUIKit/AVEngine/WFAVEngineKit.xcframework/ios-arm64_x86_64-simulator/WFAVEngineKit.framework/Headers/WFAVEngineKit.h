@@ -145,6 +145,9 @@ typedef NS_ENUM(NSInteger, WFAVVideoProfile) {
  - kWFAVCallEndReasonRemoteTimeout：对方未接听
  - kWFAVCallEndReasonRemoteNetworkError：对方网络错误
  - kWFAVCallEndReasonRoomDestroyed：会议室被销毁
+ - kWFAVCallEndReasonInterrupted：本方被电话或者其他事件打断
+ - kWFAVCallEndReasonRemoteInterrupted：对方被电话或者其他事件打断
+ - kWFAVCallEndReasonKicked：被踢，可能是多端加入或者被API踢掉
  */
 typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonUnknown = 0,
@@ -164,7 +167,8 @@ typedef NS_ENUM(NSInteger, WFAVCallEndReason) {
   kWFAVCallEndReasonRoomNotExist,
   kWFAVCallEndReasonRoomParticipantsFull,
   kWFAVCallEndReasonInterrupted,
-  kWFAVCallEndReasonRemoteInterrupted
+  kWFAVCallEndReasonRemoteInterrupted,
+  kWFAVCallEndReasonKicked
 };
 
 /*
