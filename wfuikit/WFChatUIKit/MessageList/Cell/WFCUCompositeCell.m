@@ -67,13 +67,28 @@
             digest = [digest substringToIndex:33];
             digest = [digest stringByAppendingString:@"..."];
         }
-        WFCCUserInfo *userInfo;
-        if (conversation.type == Group_Type) {
-            userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:conversation.target refresh:NO];
-        } else {
-            userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
+        
+        BOOL isChannelOwnerMsg = NO;
+        NSString *senderName = nil;
+        if(msg.conversation.type == Channel_Type) {
+            WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:msg.conversation.target refresh:NO];
+            if([channelInfo.owner isEqualToString:msg.fromUser]) {
+                isChannelOwnerMsg = YES;
+                senderName = channelInfo.name;
+            }
         }
-        result = [result stringByAppendingFormat:@"%@:%@", userInfo.displayName, digest];
+        
+        if(!isChannelOwnerMsg) {
+            WFCCUserInfo *userInfo;
+            if (conversation.type == Group_Type) {
+                userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:conversation.target refresh:NO];
+            } else {
+                userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
+            }
+            senderName = userInfo.readableName;
+        }
+
+        result = [result stringByAppendingFormat:@"%@:%@", senderName, digest];
         
         BOOL lastItem = (i == content.messages.count - 1);
         
