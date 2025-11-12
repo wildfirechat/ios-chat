@@ -68,17 +68,15 @@
             digest = [digest stringByAppendingString:@"..."];
         }
         
-        BOOL isChannelOwnerMsg = NO;
         NSString *senderName = nil;
-        if(msg.conversation.type == Channel_Type) {
+        if(msg.conversation.type == Channel_Type && msg.direction == MessageDirection_Receive) {
             WFCCChannelInfo *channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:msg.conversation.target refresh:NO];
-            if([channelInfo.owner isEqualToString:msg.fromUser]) {
-                isChannelOwnerMsg = YES;
+            if(channelInfo) {
                 senderName = channelInfo.name;
+            } else {
+                senderName = @"频道";
             }
-        }
-        
-        if(!isChannelOwnerMsg) {
+        } else {
             WFCCUserInfo *userInfo;
             if (conversation.type == Group_Type) {
                 userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser inGroup:conversation.target refresh:NO];
