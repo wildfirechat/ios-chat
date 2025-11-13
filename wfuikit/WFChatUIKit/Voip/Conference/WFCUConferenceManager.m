@@ -765,6 +765,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
     [WFAVEngineKit sharedEngineKit].currentSession.audioDataDelegate = self;
+    if([WFAVEngineKit sharedEngineKit].screenSharingReplaceMode) {
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:NO];
+    }
 }
 
 - (void)onBroadcastStoped {
@@ -781,6 +784,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kBroadcastingStatusUpdated" object:nil];
     [WFAVEngineKit sharedEngineKit].currentSession.audioDataDelegate = nil;
+    if([WFAVEngineKit sharedEngineKit].screenSharingReplaceMode) {
+        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+    }
 }
 
 - (RPSystemBroadcastPickerView *)broadPickerView{
