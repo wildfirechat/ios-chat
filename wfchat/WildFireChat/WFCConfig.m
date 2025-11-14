@@ -32,7 +32,7 @@ NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
 // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
 NSString *ICE_ADDRESS = @"turn:turn.wildfirechat.net:3478";
 NSString *ICE_USERNAME = @"wfchat";
-NSString *ICE_PASSWORD = @"wfchat123";
+NSString *ICE_PASSWORD = @"wfchatpwd";
 
 //用户协议和隐私政策，上线前请替换成您自己的内容
 NSString *USER_PRIVACY_URL = @"https://example.com/user_privacy.html";
