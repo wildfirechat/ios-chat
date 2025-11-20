@@ -396,7 +396,6 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
-        self.doneButton.backgroundColor = [UIColor colorWithHexString:@"0x3e65e4"];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
@@ -417,7 +416,6 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
-        self.doneButton.backgroundColor = [UIColor colorWithHexString:@"0x3e65e4"];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
@@ -440,8 +438,8 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
             self.doneButton.frame = CGRectMake(0, 0, self.doneButton.frame.size.width + 8 * 2, self.doneButton.frame.size.height);
         } else {
             [self.doneButton setTitle:[NSString stringWithFormat:@"完成(%lu/%d)", (unsigned long)self.selectedUsers.count, self.maxSelectCount] forState:UIControlStateNormal];
-                    [self.doneButton sizeToFit];
-                    self.doneButton.frame = CGRectMake(0, 0, self.doneButton.frame.size.width + 8 * 2, self.doneButton.frame.size.height);
+            [self.doneButton sizeToFit];
+            self.doneButton.frame = CGRectMake(0, 0, self.doneButton.frame.size.width + 8 * 2, self.doneButton.frame.size.height);
         }
 
     } else {
