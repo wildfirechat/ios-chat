@@ -1061,27 +1061,27 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
     }
     payload.extra = content.extra;
     tmsgcontent.type = payload.contentType;
-    tmsgcontent.searchableContent = [payload.searchableContent UTF8String] ? [payload.searchableContent UTF8String] : "";
-    tmsgcontent.pushContent = [payload.pushContent UTF8String] ? [payload.pushContent UTF8String] : "";
-    tmsgcontent.pushData = [payload.pushData UTF8String] ? [payload.pushData UTF8String] : "";
+    tmsgcontent.searchableContent = payload.searchableContent ? [payload.searchableContent UTF8String] : "";
+    tmsgcontent.pushContent = payload.pushContent ? [payload.pushContent UTF8String] : "";
+    tmsgcontent.pushData = payload.pushData ? [payload.pushData UTF8String] : "";
     
-    tmsgcontent.content = [payload.content UTF8String] ? [payload.content UTF8String] : "";
-    if (payload.binaryContent != nil) {
+    tmsgcontent.content = payload.content ? [payload.content UTF8String] : "";
+    if (payload.binaryContent.length) {
         tmsgcontent.binaryContent = std::string((const char *)payload.binaryContent.bytes, payload.binaryContent.length);
     }
-    tmsgcontent.localContent = [payload.localContent UTF8String] ? [payload.localContent UTF8String] : "";
+    tmsgcontent.localContent = payload.localContent ? [payload.localContent UTF8String] : "";
     if ([payload isKindOfClass:[WFCCMediaMessagePayload class]]) {
         WFCCMediaMessagePayload *mediaPayload = (WFCCMediaMessagePayload *)payload;
         tmsgcontent.mediaType = (int)mediaPayload.mediaType;
-        tmsgcontent.remoteMediaUrl = [mediaPayload.remoteMediaUrl UTF8String] ? [mediaPayload.remoteMediaUrl UTF8String] : "";
-        tmsgcontent.localMediaPath = [mediaPayload.localMediaPath UTF8String] ? [mediaPayload.localMediaPath UTF8String] : "";
+        tmsgcontent.remoteMediaUrl = mediaPayload.remoteMediaUrl ? [mediaPayload.remoteMediaUrl UTF8String] : "";
+        tmsgcontent.localMediaPath = mediaPayload.localMediaPath ? [mediaPayload.localMediaPath UTF8String] : "";
     }
     
     tmsgcontent.mentionedType = payload.mentionedType;
     for (NSString *target in payload.mentionedTargets) {
         tmsgcontent.mentionedTargets.insert(tmsgcontent.mentionedTargets.end(), [target UTF8String]);
     }
-    tmsgcontent.extra = [payload.extra UTF8String] ? [payload.extra UTF8String] : "";
+    tmsgcontent.extra = payload.extra ? [payload.extra UTF8String] : "";
 }
 
 
@@ -1089,7 +1089,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     tmsg.conversationType = (int)conv.type;
     tmsg.target = conv.target ? [conv.target UTF8String] : "";
     tmsg.line = conv.line;
-    tmsg.from = [[WFCCNetworkService sharedInstance].userId UTF8String];
+    //当没有调用connect时，这个userId是空。这个情况实际上是代码逻辑有问题，只有调用完conect之后才能做其他操作。
+    tmsg.from = [WFCCNetworkService sharedInstance].userId?[[WFCCNetworkService sharedInstance].userId UTF8String]:"";
     tmsg.status = mars::stn::MessageStatus::Message_Status_Sending;
     tmsg.timestamp = time(NULL)*1000 + [WFCCNetworkService sharedInstance].serverDeltaTime;
     tmsg.direction = 0;
@@ -1595,10 +1596,20 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (WFCCConversationInfo *)getConversationInfo:(WFCCConversation *)conversation {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        return nil;
+    }
+    
     mars::stn::TConversation tConv = mars::stn::MessageDB::Instance()->GetConversation((int)conversation.type, [conversation.target UTF8String], conversation.line);
     return convertConversationInfo(tConv);
 }
 - (NSArray<WFCCMessage *> *)getMessages:(WFCCConversation *)conversation contentTypes:(NSArray<NSNumber *> *)contentTypes from:(NSUInteger)fromIndex count:(NSInteger)count withUser:(NSString *)user {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        return nil;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
@@ -1619,6 +1630,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                                  withUser:(NSString *)user
                                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                                     error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
@@ -1637,6 +1654,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                        count:(NSInteger)count
                      success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                        error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
+    
     bool direction = true;
     if (count < 0) {
         direction = false;
@@ -1651,6 +1674,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                                fromTime:(NSUInteger)fromTime
                                   count:(NSInteger)count
                                withUser:(NSString *)user {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        return nil;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
@@ -1672,6 +1700,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
              withUser:(NSString *)user
               success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                 error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
@@ -1689,6 +1723,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                                    from:(NSUInteger)fromIndex
                                   count:(NSInteger)count
                                withUser:(NSString *)user {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        return nil;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in messageStatus) {
         types.push_back(num.intValue);
@@ -1698,7 +1737,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         direction = false;
         count = -count;
     }
-    
+
     std::list<mars::stn::TMessage> messages = mars::stn::MessageDB::Instance()->GetMessagesByMessageStatus((int)conversation.type, [conversation.target UTF8String], conversation.line, types, direction, (int)count, fromIndex, user ? [user UTF8String] : "");
     return convertProtoMessageList(messages, YES);
 }
@@ -1710,6 +1749,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
              withUser:(NSString *)user
               success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                 error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in messageStatus) {
         types.push_back(num.intValue);
@@ -1879,6 +1924,12 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                     count:(NSInteger)count
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
+    
     std::list<int> types;
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
@@ -1975,6 +2026,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     for (NSNumber *num in contentTypes) {
         types.push_back(num.intValue);
     }
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
     
     mars::stn::loadRemoteMessages(conv, types, beforeMessageUid, (int)count, new IMLoadRemoteMessagesCallback(successBlock, errorBlock));
 }
@@ -1993,6 +2049,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
              contentTypes:(NSArray<NSNumber *> *)contentTypes
                   success:(void(^)(NSArray<WFCCMessage *> *messages))successBlock
                     error:(void(^)(int error_code))errorBlock {
+    if(!conversation.target) {
+        NSLog(@"Error, conversation target is nil!!!!!");
+        errorBlock(-1);
+        return;
+    }
     mars::stn::TConversation conv;
     conv.target = [conversation.target UTF8String];
     conv.line = conversation.line;
