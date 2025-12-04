@@ -1933,6 +1933,9 @@
                 break;
             }
         }
+        if(index == -1) {
+            return;
+        }
         
         if([self isAudioOnly]) {
             [self reloadParticipantCollectionView];
