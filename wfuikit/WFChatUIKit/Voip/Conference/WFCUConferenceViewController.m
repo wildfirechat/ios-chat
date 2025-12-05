@@ -1878,7 +1878,7 @@
                 if([self isAudioOnly]) {
                     [self reloadParticipantCollectionView];
                 } else {
-                    if(self.participants.count == 3) {
+                    if(self.participants.count == 3 || [[WFCUConferenceManager sharedInstance] isBroadcasting]) {
                         [self reloadParticipantCollectionView];
                     } else {
                         [self.participantCollectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:itemCount-1 inSection:0]]];
@@ -1940,7 +1940,7 @@
         if([self isAudioOnly]) {
             [self reloadParticipantCollectionView];
         } else {
-            if(self.participants.count < 3) {
+            if(self.participants.count < 3 || [[WFCUConferenceManager sharedInstance] isBroadcasting]) {
                 [self resetFocus];
                 [self reloadParticipantCollectionView];
             } else {
