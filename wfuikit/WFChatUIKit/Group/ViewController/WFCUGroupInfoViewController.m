@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.groupNameLabel.text = @"群组";
+    self.groupProtraitView.image = [WFCUImage imageNamed:@"contact_group_icon"];
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         NSArray<WFCCGroupInfo *> *groupInfoList = note.userInfo[@"groupInfoList"];
@@ -59,7 +61,13 @@
             [self.groupProtraitView sd_setImageWithURL:[NSURL URLWithString:groupInfo.portrait] placeholderImage:[WFCUImage imageNamed:@""]];
         }
         
-        self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.displayName, groupInfo.memberCount];
+        if(groupInfo.displayName.length) {
+            if(groupInfo.memberCount > 0) {
+                self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", groupInfo.displayName, groupInfo.memberCount];
+            } else {
+                self.groupNameLabel.text = groupInfo.displayName;
+            }
+        }
     }
 }
 
@@ -94,7 +102,24 @@
                 self.groupProtraitView.image = [UIImage imageWithContentsOfFile:imagePath];
             });
         });
+    }
+    
+    if(!self.groupInfo.name.length) {
+        __block NSString *name = @"";
+        [groupMembers enumerateObjectsUsingBlock:^(NSDictionary<NSString *,NSString *> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString* memberName = [obj objectForKey:@"name"];
+            if(memberName.length + name.length < 64) {
+                name = [NSString stringWithFormat:@"%@,%@", name, memberName];
+            } else {
+                name = [NSString stringWithFormat:@"%@等", name];
+            }
+        }];
         
+        if(self.groupInfo.memberCount > 0) {
+            self.groupNameLabel.text = [NSString stringWithFormat:@"%@(%ld)", name, self.groupInfo.memberCount];
+        } else {
+            self.groupNameLabel.text = name;
+        }
     }
 }
 
