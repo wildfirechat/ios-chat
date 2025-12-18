@@ -141,12 +141,28 @@
 }
 
 - (void)onSecretChatStateChanged:(NSNotification *)notification {
-    [self refreshList];
+    NSString *targetId = notification.object;
+    [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.conversation.type == SecretChat_Type && [obj.conversation.target isEqualToString:targetId]) {
+            [self.conversations removeObjectAtIndex:idx];
+            [self.conversations addObject:[[WFCCIMService sharedWFCIMService] getConversationInfo:obj.conversation]];
+            [self sortAndReloadConversationList];
+            *stop = YES;
+        }
+    }];
     [self refreshLeftButton];
 }
 
 - (void)onSecretMessageBurned:(NSNotification *)notification {
-    [self refreshList];
+    NSString *targetId = notification.object;
+    [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.conversation.type == SecretChat_Type && [obj.conversation.target isEqualToString:targetId]) {
+            [self.conversations removeObjectAtIndex:idx];
+            [self.conversations addObject:[[WFCCIMService sharedWFCIMService] getConversationInfo:obj.conversation]];
+            [self sortAndReloadConversationList];
+            *stop = YES;
+        }
+    }];
     [self refreshLeftButton];
 }
 
@@ -416,16 +432,72 @@
     [self updatePcSession];
 }
 
+- (void)sortAndReloadConversationList {
+    [self.conversations sortUsingComparator:^NSComparisonResult(WFCCConversationInfo*  _Nonnull obj1, WFCCConversationInfo*  _Nonnull obj2) {
+        if(obj1.isTop > obj2.isTop) {
+            return NSOrderedAscending;
+        } else if(obj1.isTop < obj2.isTop) {
+            return NSOrderedDescending;
+        } else {
+            if(obj1.timestamp > obj2.timestamp) {
+                return NSOrderedAscending;
+            } else if(obj1.timestamp < obj2.timestamp) {
+                return NSOrderedDescending;
+            }
+        }
+        return NSOrderedSame;
+    }];
+    
+    [self.tableView reloadData];
+    [self updateBadgeNumber];
+}
+
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
     if ([messages count]) {
-        [self refreshList];
+        NSMutableSet<WFCCConversation *> *updatedConversations = [[NSMutableSet alloc] init];
+        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.messageId != 0) {
+                [updatedConversations addObject:obj.conversation];
+            }
+        }];
+        if(updatedConversations.count) {
+            [updatedConversations enumerateObjectsUsingBlock:^(WFCCConversation * _Nonnull converation, BOOL * _Nonnull stop1) {
+                [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull conversationInfo, NSUInteger idx, BOOL * _Nonnull stop2) {
+                    if([conversationInfo.conversation isEqual:converation]) {
+                        [self.conversations removeObjectAtIndex:idx];
+                        *stop2 = YES;
+                    }
+                }];
+                WFCCConversationInfo *conversationInfo = [[WFCCIMService sharedWFCIMService] getConversationInfo:converation];
+                [self.conversations addObject:conversationInfo];
+            }];
+            [self sortAndReloadConversationList];
+        }
+        
         [self refreshLeftButton];
     }
 }
 
+- (void)updateConversationListForMessage:(WFCCMessage *)message {
+    __block BOOL updated = NO;
+    [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj.conversation isEqual:message.conversation]) {
+            [self.conversations removeObjectAtIndex:idx];
+            WFCCConversationInfo *conversationInfo = [[WFCCIMService sharedWFCIMService] getConversationInfo:message.conversation];
+            [self.conversations addObject:conversationInfo];
+            updated = YES;
+            *stop = YES;
+        }
+    }];
+    if(updated) {
+        [self sortAndReloadConversationList];
+    }
+}
+
 - (void)onMessageUpdated:(NSNotification *)notification {
-    [self refreshList];
+    long messageId = [notification.object longValue];
+    [self updateConversationListForMessage:[[WFCCIMService sharedWFCIMService] getMessage:messageId]];
     [self refreshLeftButton];
 }
 
@@ -438,15 +510,29 @@
 }
 
 - (void)onRecallMessages:(NSNotification *)notification {
-    [self refreshList];
+    long long messageUid = [notification.object longLongValue];
+    [self updateConversationListForMessage:[[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid]];
     [self refreshLeftButton];
 }
 
 - (void)onDeleteMessages:(NSNotification *)notification {
-    [self refreshList];
+    long long messageUid = [notification.object longLongValue];
+    __block BOOL updated = NO;
+    [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.lastMessage.messageUid == messageUid) {
+            *stop = YES;
+            [self.conversations removeObjectAtIndex:idx];
+            [self.conversations addObject:[[WFCCIMService sharedWFCIMService] getConversationInfo:obj.conversation]];
+            updated = YES;
+            
+        }
+    }];
+    if(updated) {
+        [self.tableView reloadData];
+        [self updateBadgeNumber];
+    }
     [self refreshLeftButton];
 }
-
 
 - (void)onClearAllUnread:(NSNotification *)notification {
     if ([notification.object intValue] == 0) {
@@ -966,16 +1052,23 @@
     return YES;
 }
 
+- (void)reloadConversationAtIndex:(NSUInteger)index {
+    WFCCConversation *conversation = self.conversations[index].conversation;
+    [self.conversations removeObjectAtIndex:index];
+    [self.conversations addObject:[[WFCCIMService sharedWFCIMService] getConversationInfo:conversation]];
+    [self sortAndReloadConversationList];
+}
+
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak typeof(self) ws = self;
     UITableViewRowAction *markAsUnread = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"MarkAsUnread") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [[WFCCIMService sharedWFCIMService] markAsUnRead:ws.conversations[indexPath.row].conversation syncToOtherClient:YES];
-        [ws refreshList];
+        [ws reloadConversationAtIndex:indexPath.row];
     }];
     
     UITableViewRowAction *clearUnread = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"MarkAsRead") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [[WFCCIMService sharedWFCIMService] clearUnreadStatus:ws.conversations[indexPath.row].conversation];
-        [ws refreshList];
+        [ws reloadConversationAtIndex:indexPath.row];
     }];
     
     UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Delete") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
@@ -988,7 +1081,7 @@
     
     UITableViewRowAction *setTop = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Pinned") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:1 success:^{
-            [ws refreshList];
+            [ws reloadConversationAtIndex:indexPath.row];
         } error:^(int error_code) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
             hud.label.text = WFCString(@"UpdateFailure");
@@ -1000,7 +1093,7 @@
     
     UITableViewRowAction *setUntop = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:WFCString(@"Unpinned") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [[WFCCIMService sharedWFCIMService] setConversation:ws.conversations[indexPath.row].conversation top:0 success:^{
-            [ws refreshList];
+            [ws reloadConversationAtIndex:indexPath.row];
         } error:^(int error_code) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
             hud.label.text = WFCString(@"UpdateFailure");
@@ -1008,8 +1101,6 @@
             hud.removeFromSuperViewOnHide = YES;
             [hud hideAnimated:NO afterDelay:1.5];
         }];
-        
-        [self refreshList];
     }];
     
     setTop.backgroundColor = [UIColor purpleColor];
