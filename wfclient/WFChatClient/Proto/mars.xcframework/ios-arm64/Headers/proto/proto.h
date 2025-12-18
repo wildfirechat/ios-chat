@@ -1117,6 +1117,8 @@ namespace mars{
     
         extern void setUserAgent(const std::string &userAgent);
         extern void addHttpHeader(const std::string &header, const std::string &value);
+        extern void setHttpPrefixPath(const std::string &prefixPath);
+        extern void setHttpUploadPrefixPath(const std::string &prefixPath);
     
         extern void sendMomentsRequest(const std::string &path, const std::string &data, GeneralStringCallback *callback);
 

@@ -61,6 +61,7 @@ namespace mars {
             TConversation GetConversation(int conversationType, const std::string &target, int line);
             bool isExistConversation(int conversationType, const std::string &target, int line);
             std::list<TConversation> GetConversationList(const std::list<int> &conversationTypes, const std::list<int> &lines);
+            std::list<TConversation> GetConversationListEx(const std::list<int> &conversationTypes, const std::list<int> &lines, int count, int offset);
             
             bool RemoveConversation(int conversationType, const std::string &target, int line, bool clearMessage = false, bool sync = true);
             bool RemoveGroupMessageBefore(const std::string &groupId, int64_t beforeTime);

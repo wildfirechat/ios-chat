@@ -338,6 +338,19 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 /**
  获取会话信息
  
+ @param conversationTypes 会话类型
+ @param lines 默认传 @[@(0)]
+ @param count
+ @param offset
+ @return 会话信息
+ */
+- (NSArray<WFCCConversationInfo *> *)getConversationInfos:(NSArray<NSNumber *> *)conversationTypes
+                                                    lines:(NSArray<NSNumber *> *)lines
+                                                    count:(int)count
+                                                   offset:(int)offset;
+/**
+ 获取会话信息
+ 
  @param conversation 会话
  @return 会话信息
  */

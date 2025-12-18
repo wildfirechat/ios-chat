@@ -1595,6 +1595,29 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     return ret;
 }
 
+- (NSArray<WFCCConversationInfo *> *)getConversationInfos:(NSArray<NSNumber *> *)conversationTypes
+                                                    lines:(NSArray<NSNumber *> *)lines
+                                                    count:(int)count
+                                                   offset:(int)offset {
+    std::list<int> types;
+    for (NSNumber *type in conversationTypes) {
+        types.push_back([type intValue]);
+    }
+    
+    std::list<int> ls;
+    for (NSNumber *type in lines) {
+        ls.push_back([type intValue]);
+    }
+    std::list<mars::stn::TConversation> convers = mars::stn::MessageDB::Instance()->GetConversationListEx(types, ls, count, offset);
+    NSMutableArray *ret = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TConversation>::iterator it = convers.begin(); it != convers.end(); it++) {
+        mars::stn::TConversation &tConv = *it;
+        WFCCConversationInfo *info = convertConversationInfo(tConv);
+        [ret addObject:info];
+    }
+    return ret;
+}
+
 - (WFCCConversationInfo *)getConversationInfo:(WFCCConversation *)conversation {
     if(!conversation.target) {
         NSLog(@"Error, conversation target is nil!!!!!");
