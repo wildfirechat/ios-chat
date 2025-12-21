@@ -93,10 +93,12 @@ public:
         }
         long messageId = m_message.messageId;
         if(messageId) {
-            if (m_uploadedBlock) {
-                m_uploadedBlock(ru);
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES), @"message":m_message, @"remoteUrl":ru}];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (m_uploadedBlock) {
+                    m_uploadedBlock(ru);
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUploadMediaMessageProgresse object:@(messageId) userInfo:@{@"progress":@(1), @"finish":@(YES), @"message":m_message, @"remoteUrl":ru}];
+            });
         }
     }
     
