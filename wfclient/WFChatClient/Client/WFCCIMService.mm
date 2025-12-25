@@ -84,7 +84,10 @@ public:
     void onMediaUploaded(const std::string &remoteUrl) {
         NSString *ru = [NSString stringWithUTF8String:remoteUrl.c_str()];
         if ([WFCCNetworkService sharedInstance].urlRedirector) {
-            ru = [[WFCCNetworkService sharedInstance].urlRedirector redirect:ru];
+            NSString *redirectedUrl = [[WFCCNetworkService sharedInstance].urlRedirector redirect:ru];
+            if(redirectedUrl.length) {
+                ru = redirectedUrl;
+            }
         }
         
         if ([m_message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
