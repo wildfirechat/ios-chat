@@ -141,6 +141,7 @@
 "Free2Join"="Free to join";
 "MemberInviteOnly"="Only member invite";
 "ManagerInviteOnly"="Only manager invite";
+"NeedManagerVerify"="Need manager verify";
 "GroupVisiable"="Group visiablity";
 "GroupCanbeSearch"="Group can be searched";
 "GroupHistoryMessageAviable"="Group history message aviable";

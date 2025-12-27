@@ -43,7 +43,7 @@ NSString *kSecretChatStateUpdated = @"kSecretChatStateUpdated";
 NSString *kSecretMessageStartBurning = @"kSecretMessageStartBurning";
 NSString *kSecretMessageBurned = @"kSecretMessageBurned";
 NSString *kDomainInfoUpdated = @"kDomainInfoUpdated";
-
+NSString *kJoinGroupRequestUpdated = @"kJoinGroupRequestUpdated";
 
 @protocol RefreshGroupInfoDelegate <NSObject>
 - (void)onGroupInfoUpdated:(NSArray<WFCCGroupInfo *> *)updatedGroupInfo;
@@ -63,6 +63,10 @@ NSString *kDomainInfoUpdated = @"kDomainInfoUpdated";
 
 @protocol RefreshFriendListDelegate <NSObject>
 - (void)onFriendListUpdated:(NSArray<NSString *> *)friendIds;
+@end
+
+@protocol RefreshJoinGroupRequestDelegate <NSObject>
+- (void)onJoinGroupRequestUpdated;
 @end
 
 @protocol RefreshFriendRequestDelegate <NSObject>
@@ -478,6 +482,20 @@ public:
     id<RefreshFriendListDelegate> m_delegate;
 };
 
+class GJGRCB : public mars::stn::GetJoinGroupRequestCallback {
+public:
+    GJGRCB(id<RefreshJoinGroupRequestDelegate> delegate) : m_delegate(delegate) {}
+    void onSuccess() {
+        if(m_delegate) {
+            [m_delegate onJoinGroupRequestUpdated];
+        }
+    }
+    void onFalure(int errorCode) {
+        
+    }
+    id<RefreshJoinGroupRequestDelegate> m_delegate;
+};
+
 class GFRCB : public mars::stn::GetFriendRequestCallback {
 public:
     GFRCB(id<RefreshFriendRequestDelegate> delegate) : m_delegate(delegate) {}
@@ -578,7 +596,7 @@ class CSACB : public mars::stn::CustomSortAddressCallback {
     }
 };
 
-@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate, RefreshDomainInfoDelegate>
+@interface WFCCNetworkService () <ConnectionStatusDelegate, ReceiveMessageDelegate, RefreshUserInfoDelegate, RefreshGroupInfoDelegate, WFCCNetworkStatusDelegate, RefreshFriendListDelegate, RefreshFriendRequestDelegate, RefreshSettingDelegate, RefreshChannelInfoDelegate, RefreshGroupMemberDelegate, ConferenceEventDelegate, ConnectToServerDelegate, TrafficDataDelegate, OnlineEventDelegate, SecretChatStateDelegate, SecretMessageBurnStateDelegate, RefreshDomainInfoDelegate, RefreshJoinGroupRequestDelegate>
 @property(nonatomic, assign)ConnectionStatus currentConnectionStatus;
 @property (nonatomic, strong)NSString *userId;
 @property (nonatomic, strong)NSString *passwd;
@@ -1020,6 +1038,7 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setSecretMessageBurnStateCallback(new SMBSCB(self));
   mars::stn::setGetDomainInfoCallback(new GDCB(self));
   mars::stn::setCustomSortAddressCallback(new CSACB());
+  mars::stn::setGetJoinGroupRequestCallback(new GJGRCB(self));
   mars::baseevent::OnCreate();
 }
 - (int64_t)connect:(NSString *)host {
@@ -1413,6 +1432,12 @@ static WFCCNetworkService * sharedSingleton = nil;
   });
 }
 
+- (void)onJoinGroupRequestUpdated {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [[NSNotificationCenter defaultCenter] postNotificationName:kJoinGroupRequestUpdated object:nil];
+    });
+}
+
 - (NSData *)decodeData:(NSData *)data {
     std::string encodeData = mars::stn::GetDecodeData(std::string((char *)data.bytes, data.length));
     return [[NSData alloc] initWithBytes:encodeData.c_str() length:encodeData.length()];
@@ -1462,6 +1487,4 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
 }
 
-
 @end
-

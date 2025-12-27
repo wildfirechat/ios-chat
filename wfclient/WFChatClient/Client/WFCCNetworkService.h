@@ -40,6 +40,8 @@ extern NSString *kSecretMessageStartBurning;
 extern NSString *kSecretMessageBurned;
 //域信息更新通知
 extern NSString *kDomainInfoUpdated;
+//加群邀请有更新
+extern NSString *kJoinGroupRequestUpdated;
 
 #pragma mark - 枚举值定义
 /**
