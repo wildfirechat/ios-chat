@@ -292,11 +292,6 @@
         
         [attString appendAttributedString:[[NSAttributedString alloc] initWithString:text]];
 
-        if (_info.conversation.type == Group_Type && _info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
-            NSMutableAttributedString *tmp = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
-            [tmp appendAttributedString:attString];
-            attString = tmp;
-        }
         self.digestView.attributedText = attString;
     } else if (_info.lastMessage.direction == MessageDirection_Receive && _info.conversation.type == Group_Type) {
         NSString *groupId = nil;
@@ -313,17 +308,36 @@
         } else {
             self.digestView.text = _info.lastMessage.digest;
         }
+    } else {
+        self.digestView.text = _info.lastMessage.digest;
+    }
         
+    if (_info.conversation.type == Group_Type) {
         if (_info.unreadCount.unreadMentionAll + _info.unreadCount.unreadMention > 0) {
             NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:WFCString(@"[MentionYou]") attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
-            if (self.digestView.text.length) {
-                [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+            if(self.digestView.attributedText) {
+                [attString appendAttributedString:self.digestView.attributedText];
+            } else {
+                if (self.digestView.text.length) {
+                    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+                }
             }
             
             self.digestView.attributedText = attString;
         }
-    } else {
-        self.digestView.text = _info.lastMessage.digest;
+        
+        int unreadJoinRequest = [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:_info.conversation.target];
+        if(unreadJoinRequest > 0) {
+            NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"[%d条加群申请]", unreadJoinRequest] attributes:@{NSForegroundColorAttributeName : [UIColor redColor]}];
+            if(self.digestView.attributedText) {
+                [attString appendAttributedString:self.digestView.attributedText];
+            } else {
+                if (self.digestView.text.length) {
+                    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:self.digestView.text]];
+                }
+            }
+            self.digestView.attributedText = attString;
+        }
     }
 }
 

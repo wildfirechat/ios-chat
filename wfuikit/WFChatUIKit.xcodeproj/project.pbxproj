@@ -614,6 +614,10 @@
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
 		B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */; };
 		B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */; };
+		B7E2D8BD2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E2D8BC2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m */; };
+		B7E2D8BE2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E2D8BB2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h */; };
+		B7E2D8C22EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E2D8C02EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.m */; };
+		B7E2D8C32EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E2D8C12EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h */; };
 		B7E494E128F6709700FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E028F6709700FF2333 /* libyuv.xcframework */; };
 		B7F892A628CC8F5F00E362DE /* WFCUConferenceLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */; };
 		B7F892A728CC8F5F00E362DE /* WFCUConferenceLabelView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */; };
@@ -1235,6 +1239,10 @@
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUConferencePortraitCollectionViewCell.h; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.h; sourceTree = SOURCE_ROOT; };
 		B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUConferencePortraitCollectionViewCell.m; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.m; sourceTree = SOURCE_ROOT; };
+		B7E2D8BB2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUJoinGroupRequestViewController.h; sourceTree = "<group>"; };
+		B7E2D8BC2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUJoinGroupRequestViewController.m; sourceTree = "<group>"; };
+		B7E2D8C02EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUJoinGroupRequestTableViewCell.m; sourceTree = "<group>"; };
+		B7E2D8C12EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUJoinGroupRequestTableViewCell.h; sourceTree = "<group>"; };
 		B7E494E028F6709700FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7F892A428CC8F5F00E362DE /* WFCUConferenceLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConferenceLabelView.m; sourceTree = "<group>"; };
 		B7F892A528CC8F5F00E362DE /* WFCUConferenceLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUConferenceLabelView.h; sourceTree = "<group>"; };
@@ -1647,6 +1655,7 @@
 		2F550EEE217F5CC000F56C26 /* Group */ = {
 			isa = PBXGroup;
 			children = (
+				B7E2D8BF2EFBCAF800C8F909 /* Cell */,
 				2F341A4C235EF11700F0D1B6 /* Model */,
 				2F550EEF217F5CC000F56C26 /* ViewController */,
 			);
@@ -1656,6 +1665,8 @@
 		2F550EEF217F5CC000F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B7E2D8BB2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h */,
+				B7E2D8BC2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m */,
 				B77D33FA290C258A00E72111 /* WFCUGroupTableViewController.h */,
 				B77D33F9290C258A00E72111 /* WFCUGroupTableViewController.m */,
 				2F550EF0217F5CC000F56C26 /* WFCUFavGroupTableViewController.h */,
@@ -2600,6 +2611,15 @@
 			path = Zoom;
 			sourceTree = "<group>";
 		};
+		B7E2D8BF2EFBCAF800C8F909 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				B7E2D8C02EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.m */,
+				B7E2D8C12EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		B7E494DF28F6708100FF2333 /* libyuv */ = {
 			isa = PBXGroup;
 			children = (
@@ -2766,6 +2786,7 @@
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
+				B7E2D8C32EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h in Headers */,
 				2F551203217F5CC300F56C26 /* WFCUConversationTableViewCell.h in Headers */,
 				B7C5443828D5876700A2550F /* UIImageView+CornerRadius.h in Headers */,
 				2F551196217F5CC200F56C26 /* SDRefresh.h in Headers */,
@@ -2897,6 +2918,7 @@
 				2BDF579C24AD70C8003C1F08 /* UIColor+Hex.h in Headers */,
 				2F5510FE217F5CC200F56C26 /* CCHMapClusterer.h in Headers */,
 				2BDF57A324AD70C8003C1F08 /* DNPhotoBrowser.h in Headers */,
+				B7E2D8BE2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h in Headers */,
 				2F5510F9217F5CC200F56C26 /* CCHNearCenterMapClusterer.h in Headers */,
 				2F55119A217F5CC200F56C26 /* UITextView+Placeholder.h in Headers */,
 				B72FBB16283230F0005F2745 /* DSCallInfo.h in Headers */,
@@ -3016,6 +3038,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7E2D8BD2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m in Sources */,
 				2F551105217F5CC200F56C26 /* CCHMapViewDelegateProxy.m in Sources */,
 				2F551224217F5CC300F56C26 /* WFCUMyPortraitViewController.m in Sources */,
 				2F56F6C0252A088100B829C4 /* WFCUCompositeTextCell.m in Sources */,
@@ -3275,6 +3298,7 @@
 				2F5510F7217F5CC200F56C26 /* CCHMapClusterAnnotation.m in Sources */,
 				B7C5443F28D5876700A2550F /* LBXScanNative.m in Sources */,
 				B72FBB18283230F0005F2745 /* InternalApis.m in Sources */,
+				B7E2D8C22EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.m in Sources */,
 				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
 				B7C5442328D5876700A2550F /* LBXScanLineAnimation.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,

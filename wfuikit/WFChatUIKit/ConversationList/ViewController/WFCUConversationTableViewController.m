@@ -509,6 +509,14 @@
     });
 }
 
+- (void)onJoinGroupRequestUpdated:(NSNotification *)notification {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self refreshList];
+        [self refreshLeftButton];
+        [self updatePcSession];
+    });
+}
+
 - (void)onRecallMessages:(NSNotification *)notification {
     long long messageUid = [notification.object longLongValue];
     [self updateConversationListForMessage:[[WFCCIMService sharedWFCIMService] getMessageByUid:messageUid]];
@@ -603,6 +611,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeleteMessages:) name:kDeleteMessages object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onJoinGroupRequestUpdated:) name:kJoinGroupRequestUpdated object:nil];
     }
     
     [self updateConnectionStatus:[WFCCNetworkService sharedInstance].currentConnectionStatus];

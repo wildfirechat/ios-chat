@@ -94,6 +94,7 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCFriend.h>
 #import <WFChatClient/WFCCGroupInfo.h>
 #import <WFChatClient/WFCCGroupMember.h>
+#import <WFChatClient/WFCCJoinGroupRequest.h>
 #import <WFChatClient/WFCCUserInfo.h>
 #import <WFChatClient/WFCCChatroomInfo.h>
 #import <WFChatClient/WFCCUnreadCount.h>

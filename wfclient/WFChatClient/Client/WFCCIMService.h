@@ -12,6 +12,7 @@
 #import "WFCCConversationInfo.h"
 #import "WFCCUserInfo.h"
 #import "WFCCFriendRequest.h"
+#import "WFCCJoinGroupRequest.h"
 #import "WFCCConversationSearchInfo.h"
 #import "WFCCGroupMember.h"
 #import "WFCCGroupSearchInfo.h"
@@ -1646,6 +1647,90 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @return 群组搜索结果
  */
 - (NSArray<WFCCGroupSearchInfo *> *)searchGroups:(NSString *)keyword;
+
+/**
+ 发送加群申请。仅当群组的加入模式是3（3入群需要批准）时才可以使用加群申请相关接口。只有专业版才支持。
+ 
+ @param groupId    群组ID
+ @param memberIds 被邀请人ID
+ @param reason      加入理由
+ @param extra extra
+ @param successBlock 成功回调
+ @param errorBlock   失败回调
+ */
+- (void)sendJoinGroupRequest:(NSString *)groupId members:(NSArray<NSString *> *)memberIds reason:(NSString *)reason extra:(NSString *)extra success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock;
+
+
+/**
+ 处理加群申请。仅当群组的加入模式是3（3入群需要批准）时才可以使用加群申请相关接口。只有专业版才支持。
+ @param groupId    群组ID
+ @param memberId 被邀请人ID
+ @param status     1同意进入，2拒绝进入
+ @param memberExtra 接受时，群成员的extra
+ @param notifyLines 默认传 @[@(0)]
+ @param successBlock 成功回调
+ @param errorBlock   失败回调
+ */
+- (void)handleJoinGroupRequest:(NSString *)groupId
+                      memberId:(NSString *)memberId
+                       inviter:(NSString *)inviter
+                        status:(int)status
+                   memberExtra:(NSString *)memberExtra
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int errorCode))errorBlock;
+
+/**
+ 根据状态加群请求记录。仅当群组的加入模式是3（3入群需要批准）时才可以使用加群申请相关接口。只有专业版才支持。
+ @param groupId 群组ID
+ @param userId 对方用户ID，如果用户ID为空，则获取所有用户的加群记录
+ @param status 0 未处理的；1 已经同意的； -1是全部的。
+ 
+ @return 加群请求列表
+ */
+- (NSArray<WFCCJoinGroupRequest *> *)getJoinGroupRequests:(NSString *)groupId memberId:(NSString *)userId status:(int)status;
+
+/**
+ 清理加群请求。仅当群组的加入模式是3（3入群需要批准）时才可以使用加群申请相关接口。
+ @param groupId 群组ID
+ @param memberId 被邀请者ID，可以为空
+ @param inviter 邀请者ID，可以为空
+ 
+ @return 返回true表示清理成功，返回false表示没有符合条件的请求
+ */
+- (BOOL)clearJoinGroupRequest:(NSString *)groupId
+                     memberId:(NSString *)memberId
+                      inviter:(NSString *)inviter;
+
+/**
+ 获取所有的未读的加群请求数
+
+ @return 未读数
+ */
+- (int)getAllJoinGroupRequestUnread;
+
+/**
+ 获取指定群的未读的加群请求数
+ @param groupId 群组ID
+ 
+ @return 未读数
+ */
+- (int)getJoinGroupRequestUnread:(NSString *)groupId;
+
+/**
+ 清除加群请求的未读数
+ @param groupId 群组ID
+ */
+- (void)clearJoinGroupRequestUnread:(NSString *)groupId;
+
+/**
+ 清除服务端的属于当前用户的好友请求
+ 
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
+- (void)clearRemoteJoinGroupRequest:(void(^)(void))successBlock
+                              error:(void(^)(int errorCode))errorBlock;
 
 /**
  获取收到的好友请求

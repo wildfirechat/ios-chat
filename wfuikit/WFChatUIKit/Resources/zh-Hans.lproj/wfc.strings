@@ -141,6 +141,7 @@
 "Free2Join"="不限制加入";
 "MemberInviteOnly"="群成员可以拉人";
 "ManagerInviteOnly"="只能群管理拉人";
+"NeedManagerVerify"="需要群管理验证";
 "GroupVisiable"="群的可见性";
 "GroupHistoryMessageAviable"="群历史消息可见";
 "GroupHistoryMessageNotAviable"="群历史消息不可见";
