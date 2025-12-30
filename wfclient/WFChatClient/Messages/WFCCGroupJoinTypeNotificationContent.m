@@ -79,6 +79,10 @@
         return [NSString stringWithFormat:@"%@开放了加入群组功能", user];
     } else if ([self.type isEqualToString:@"1"]) {
         return [NSString stringWithFormat:@"%@仅允许群成员邀请加入群组", user];
+    } else if ([self.type isEqualToString:@"2"]) {
+        return [NSString stringWithFormat:@"%@仅限群管理邀请加入群组", user];
+    } else if ([self.type isEqualToString:@"3"]) {
+        return [NSString stringWithFormat:@"%@开启了加群验证", user];
     } else {
         return [NSString stringWithFormat:@"%@关闭了加入群组功能", user];
     }
