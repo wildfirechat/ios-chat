@@ -22,7 +22,7 @@
 @implementation WFCUTextCell
 + (UIFont *)defaultFont {
 //    return [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    return [UIFont systemFontOfSize:20];
+    return [UIFont systemFontOfSize:18];
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
