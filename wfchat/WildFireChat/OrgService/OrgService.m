@@ -309,7 +309,7 @@ static OrgService *sharedSingleton = nil;
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     if(!isLogin && !self.isServiceAvailable) {
         NSLog(@"组织通讯录服务不可用，请确保先登录再使用组织通讯录");
-        errorBlock([NSError errorWithDomain:@"" code:401 userInfo:@{NSLocalizedDescriptionKey:@"未登录"}]);
+        errorBlock([NSError errorWithDomain:@"" code:401 userInfo:@{NSLocalizedDescriptionKey:LocalizedString(@"NotLoggedIn")}]);
         return;
     }
     

@@ -44,7 +44,7 @@
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
     
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
-    [self.hintLabel setText:@"亲，真的要狠心离开我们吗😭😭😭！"];
+    [self.hintLabel setText:LocalizedString(@"DestroyAccountTitle")];
     self.hintLabel.textAlignment = NSTextAlignmentLeft;
     self.hintLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
     
@@ -71,7 +71,7 @@
     [self.passwordField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
-    [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
     self.sendCodeBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.sendCodeBtn.layer.borderWidth = 1;
     self.sendCodeBtn.layer.cornerRadius = 4;
@@ -86,7 +86,7 @@
     [self.loginBtn addTarget:self action:@selector(onLoginButton:) forControlEvents:UIControlEventTouchDown];
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = 4.f;
-    [self.loginBtn setTitle:@"销毁账户" forState:UIControlStateNormal];
+    [self.loginBtn setTitle:LocalizedString(@"DestroyAccountButton") forState:UIControlStateNormal];
     self.loginBtn.backgroundColor = [UIColor colorWithHexString:@"0xe1e1e1"];
     [self.loginBtn setTitleColor:[UIColor colorWithHexString:@"0xb1b1b1"] forState:UIControlStateNormal];
     self.loginBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
@@ -113,7 +113,7 @@
 
 - (void)onSendCode:(id)sender {
     self.sendCodeBtn.enabled = NO;
-    [self.sendCodeBtn setTitle:@"短信发送中" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
     __weak typeof(self)ws = self;
     [[AppService sharedAppService] sendDestroyAccountCode:^{
        [ws sendCodeDone:YES];
@@ -128,7 +128,7 @@
     if (second >= 60) {
         [self.countdownTimer invalidate];
         self.countdownTimer = nil;
-        [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
         self.sendCodeBtn.enabled = YES;
     }
 }
@@ -137,7 +137,7 @@
         if (success) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"发送成功";
+            hud.label.text = LocalizedString(@"SendSuccess");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             self.sendCodeTime = [NSDate date].timeIntervalSince1970;
             self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1
@@ -152,11 +152,11 @@
         } else {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"发送失败";
+            hud.label.text = LocalizedString(@"SendFailed");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+                [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
                 self.sendCodeBtn.enabled = YES;
             });
         }
@@ -178,7 +178,7 @@
     [self resetKeyboard:nil];
     
   MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-  hud.label.text = @"登录中...";
+  hud.label.text = LocalizedString(@"Logining");
   [hud showAnimated:YES];
     [[AppService sharedAppService] destroyAccount:password success:^{
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"savedName"];
@@ -197,7 +197,7 @@
         
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"登录失败";
+        hud.label.text = LocalizedString(@"LoginFailed");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
       });

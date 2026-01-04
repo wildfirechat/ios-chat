@@ -27,15 +27,15 @@
 
     self.ledBtn = [[UIButton alloc] initWithFrame:CGRectMake((bounds.size.width - 100 - 100 - 20)/2, (bounds.size.height - 20)/2, 100, 40)];
     [self.ledBtn addTarget:self action:@selector(onLedBtn:) forControlEvents:UIControlEventTouchDown];
-    [self.ledBtn setTitle:@"打开LED" forState:UIControlStateNormal];
-    [self.ledBtn setBackgroundColor:[UIColor redColor]];
+    [self.ledBtn setTitle:LocalizedString(@"OpenLED") forState:UIControlStateNormal];
+    self.ledBtn.backgroundColor = [UIColor redColor];
     self.ledBtn.layer.masksToBounds = YES;
     self.ledBtn.layer.cornerRadius = 5.f;
     self.ledBtn.tag = 0;
     
     UIButton *btnDHT = [[UIButton alloc] initWithFrame:CGRectMake((bounds.size.width - 100 - 100 - 20)/2 + 100 + 20, (bounds.size.height - 20)/2, 100, 40)];
     [btnDHT addTarget:self action:@selector(onLedBtn:) forControlEvents:UIControlEventTouchDown];
-    [btnDHT setTitle:@"手动更新数据" forState:UIControlStateNormal];
+    [btnDHT setTitle:LocalizedString(@"ManualUpdateData") forState:UIControlStateNormal];
     [btnDHT setBackgroundColor:[UIColor greenColor]];
     btnDHT.layer.masksToBounds = YES;
     btnDHT.layer.cornerRadius = 5.f;
@@ -82,10 +82,10 @@
 - (void)setLedOn:(BOOL)ledOn {
     _ledOn = ledOn;
     if (self.ledOn) {
-        [self.ledBtn setTitle:@"关闭LED" forState:UIControlStateNormal];
+        [self.ledBtn setTitle:LocalizedString(@"CloseLED") forState:UIControlStateNormal];
         self.ledBtn.backgroundColor = [UIColor redColor];
     } else {
-        [self.ledBtn setTitle:@"打开LED" forState:UIControlStateNormal];
+        [self.ledBtn setTitle:LocalizedString(@"OpenLED") forState:UIControlStateNormal];
         self.ledBtn.backgroundColor = [UIColor grayColor];
     }
 }
@@ -118,7 +118,7 @@
                                 
                                 int dHi = bytes[3];
                                 int dLo = bytes[4];
-                                NSString *str = [NSString stringWithFormat:@"湿度:%d.%d%% 温度:%d.%dC", thHi, thLo, dHi, dLo];
+                                NSString *str = [NSString stringWithFormat:LocalizedString(@"HumidityTemperature"), thHi, thLo, dHi, dLo];
                                 self.dthLabel.text = str;
                             }
                         } else if(bytes[0] == 1) {

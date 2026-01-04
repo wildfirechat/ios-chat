@@ -68,20 +68,20 @@
 - (void)onAddBtn:(id)sender {
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
     
     __weak typeof(self)ws = self;
     
-    UIAlertAction *createAction = [UIAlertAction actionWithTitle:@"创建频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *createAction = [UIAlertAction actionWithTitle:LocalizedString(@"CreateChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFPttCreateChannelViewController *vc = [[WFPttCreateChannelViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [ws.navigationController presentViewController:nav animated:YES completion:nil];
     }];
     
-    UIAlertAction *joinAction = [UIAlertAction actionWithTitle:@"加入频道" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *joinAction = [UIAlertAction actionWithTitle:LocalizedString(@"JoinChannel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFPttJoinChannelViewController *vc = [[WFPttJoinChannelViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -112,7 +112,7 @@
     
     NSString *channelId = self.items[indexPath.row];
     WFPttChannelInfo *channelInfo = [[WFPttClient sharedClient] getChannelInfo:channelId];
-    NSString *text = channelInfo.name.length ? channelInfo.name : @"频道";
+    NSString *text = channelInfo.name.length ? channelInfo.name : LocalizedString(@"Channel");
     
     NSDictionary<NSString *, NSNumber *> *talkingMembers = [[WFPttClient sharedClient] getTalkingMember:channelId];
     NSArray *keys = talkingMembers.allKeys;
@@ -145,11 +145,11 @@
     
     UITableViewRowAction *action;
     if([[WFCCNetworkService sharedInstance].userId isEqualToString:owner]) {
-        action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:LocalizedString(@"Delete") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
             [[WFPttClient sharedClient] destroyChannel:channelId success:nil error:nil];
         }];
     } else {
-        action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"退出" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        action = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:LocalizedString(@"QuitChannel") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
             [[WFPttClient sharedClient] leaveChanel:channelId success:nil error:nil];
            }];
     }

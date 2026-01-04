@@ -442,7 +442,7 @@
         
         UILocalNotification *localNote = [[UILocalNotification alloc] init];
         if (@available(iOS 8.2, *)) {
-            localNote.alertTitle = @"收到好友邀请";
+            localNote.alertTitle = LocalizedString(@"ReceivedFriendInvitation");
         }
         
         if (newRequests.count == 1) {
@@ -456,7 +456,7 @@
                             
                         }];
         } else if(newRequests.count > 1) {
-            localNote.alertBody = [NSString stringWithFormat:@"您收到 %ld 条好友请求", newRequests.count];
+            localNote.alertBody = [NSString stringWithFormat:LocalizedString(@"ReceivedFriendRequests"), newRequests.count];
             [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
         }
     }
@@ -551,12 +551,12 @@
 
       UILocalNotification *localNote = [[UILocalNotification alloc] init];
         if([[WFCCIMService sharedWFCIMService] isHiddenNotificationDetail] && ![msg.content isKindOfClass:[WFCCRecallMessageContent class]]) {
-            localNote.alertBody = @"您收到了新消息";
+            localNote.alertBody = LocalizedString(@"ReceivedNewMessage");
         } else {
             localNote.alertBody = [msg digest];
         }
         if(msg.conversation.type == SecretChat_Type) {
-            localNote.alertBody = @"您收到了新的密聊消息";
+            localNote.alertBody = LocalizedString(@"ReceivedSecretMessage");
         }
       if (msg.conversation.type == Single_Type) {
         WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.conversation.target refresh:NO];
@@ -585,9 +585,9 @@
           }
           if (msg.status == Message_Status_Mentioned || msg.status == Message_Status_AllMentioned) {
               if (sender.displayName) {
-                  localNote.alertBody = [NSString stringWithFormat:@"%@在群里@了你", sender.displayName];
+                  localNote.alertBody = [NSString stringWithFormat:LocalizedString(@"MentionedInGroup"), sender.displayName];
               } else {
-                  localNote.alertBody = @"有人在群里@了你";
+                  localNote.alertBody = LocalizedString(@"SomeoneMentionedYou");
               }
                   
           }
@@ -728,10 +728,10 @@
             }
         } else if(status == kConnectionStatusNotLicensed) {
             NSLog(@"专业版IM服务没有授权或者授权过期！！！");
-            [self.window.rootViewController.view makeToast:@"专业版IM服务没有授权或者授权过期！！！" duration:3 position:CSToastPositionCenter];
+            [self.window.rootViewController.view makeToast:LocalizedString(@"ProfessionalVersionUnauthorized") duration:3 position:CSToastPositionCenter];
         } else if(status == kConnectionStatusTimeInconsistent) {
             NSLog(@"服务器和客户端时间相差太大！！！");
-            [self.window.rootViewController.view makeToast:@"服务器和客户端时间相差太大！！！" duration:3 position:CSToastPositionCenter];
+            [self.window.rootViewController.view makeToast:LocalizedString(@"TimeDifferenceTooLarge") duration:3 position:CSToastPositionCenter];
         }
     });
 }
@@ -827,26 +827,26 @@
         
         
         __weak typeof(self)ws = self;
-        __block MBProgressHUD *hud = [self startProgress:@"会议加载中" inView:navigator.view];
+        __block MBProgressHUD *hud = [self startProgress:LocalizedString(@"MeetingLoading") inView:navigator.view];
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:conferenceId password:password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
                 [ws stopProgress:hud inView:navigator.view finishText:nil];
                 WFZConferenceInfoViewController *vc = [[WFZConferenceInfoViewController alloc] init];
                 vc.conferenceId = conferenceInfo.conferenceId;
                 vc.password = conferenceInfo.password;
-                
+
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
                 nav.modalPresentationStyle = UIModalPresentationFullScreen;
                 [navigator presentViewController:nav animated:YES completion:nil];
             } error:^(int errorCode, NSString * _Nonnull message) {
                 if (errorCode == 16) {
-                    [ws stopProgress:hud inView:navigator.view finishText:@"会议已结束！"];
+                    [ws stopProgress:hud inView:navigator.view finishText:LocalizedString(@"MeetingEnded")];
                 } else {
-                    [ws stopProgress:hud inView:navigator.view finishText:@"网络错误"];
+                    [ws stopProgress:hud inView:navigator.view finishText:LocalizedString(@"NetworkError")];
                 }
             }];
         } else {
-            [ws stopProgress:hud inView:navigator.view finishText:@"不支持会议"];
+            [ws stopProgress:hud inView:navigator.view finishText:LocalizedString(@"MeetingNotSupported")];
         }
         return YES;
     }
@@ -897,8 +897,8 @@
                 return;
             }
             self.localCallNotification = [[UILocalNotification alloc] init];
-            
-            self.localCallNotification.alertBody = @"来电话了";
+
+            self.localCallNotification.alertBody = LocalizedString(@"IncomingCall");
             
                 WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:session.inviter refresh:NO];
                 if (sender.displayName) {
@@ -987,12 +987,12 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
         if(reason == kWFAVCallEndReasonTimeout || (reason == kWFAVCallEndReasonRemoteHangup && callDuration == 0)) {
             UILocalNotification *callEndNotification = [[UILocalNotification alloc] init];
             if(reason == kWFAVCallEndReasonTimeout) {
-                callEndNotification.alertBody = @"来电未接听";
+                callEndNotification.alertBody = LocalizedString(@"MissedCall");
             } else {
-                callEndNotification.alertBody = @"来电已取消";
+                callEndNotification.alertBody = LocalizedString(@"CallCancelled");
             }
             if (@available(iOS 8.2, *)) {
-                self.localCallNotification.alertTitle = @"网络通话";
+                self.localCallNotification.alertTitle = LocalizedString(@"NetworkCall");
                 if([WFAVEngineKit sharedEngineKit].currentSession.inviter) {
                     WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFAVEngineKit sharedEngineKit].currentSession.inviter refresh:NO];
                     if (sender.displayName) {
@@ -1222,7 +1222,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 - (void)GeTuiSdkDidReceiveSlience:(NSDictionary *)userInfo fromGetui:(BOOL)fromGetui offLine:(BOOL)offLine appId:(NSString *)appId taskId:(NSString *)taskId msgId:(NSString *)msgId fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // [ GTSDK ]：汇报个推自定义事件(反馈透传消息)，开发者可以根据项目需要决定是否使用, 非必须
     // [GeTuiSdk sendFeedbackMessage:90001 andTaskId:taskId andMsgId:msgId];
-    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APN] %@ \nReceive Slience: fromGetui:%@ appId:%@ offLine:%@ taskId:%@ msgId:%@ userInfo:%@ ", NSStringFromSelector(_cmd), fromGetui ? @"个推消息" : @"APNs消息", appId, offLine ? @"离线" : @"在线", taskId, msgId, userInfo];
+    NSString *msg = [NSString stringWithFormat:@"[ TestDemo ] [APN] %@ \nReceive Slience: fromGetui:%@ appId:%@ offLine:%@ taskId:%@ msgId:%@ userInfo:%@ ", NSStringFromSelector(_cmd), fromGetui ? LocalizedString(@"GetuiMessage") : LocalizedString(@"APNsMessage"), appId, offLine ? LocalizedString(@"Offline") : LocalizedString(@"Online"), taskId, msgId, userInfo];
     NSLog(msg);
     
     //本地通知UserInfo参数
@@ -1262,7 +1262,7 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 
 /// [ GTSDK回调 ] SDK设置推送模式回调
 - (void)GeTuiSdkDidSetPushMode:(BOOL)isModeOff error:(NSError *)error {
-    NSString *msg = [NSString stringWithFormat:@">>>[GexinSdkSetModeOff]: %@ %@", isModeOff ? @"开启" : @"关闭", [error localizedDescription]];
+    NSString *msg = [NSString stringWithFormat:@">>>[GexinSdkSetModeOff]: %@ %@", isModeOff ? LocalizedString(@"On") : LocalizedString(@"Off"), [error localizedDescription]];
     NSLog(msg);
 }
 

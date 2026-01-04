@@ -56,18 +56,18 @@
     
     UIButton *loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 150, width - 200, 40)];
     [loginBtn setBackgroundColor:[UIColor greenColor]];
-    [loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+    [loginBtn setTitle:LocalizedString(@"Login") forState:UIControlStateNormal];
     loginBtn.layer.masksToBounds = YES;
     loginBtn.layer.cornerRadius = 5.f;
     [loginBtn addTarget:self action:@selector(onLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 90, width - 200, 40)];
-    [cancelBtn setTitle:@"取消登录" forState:UIControlStateNormal];
+    [cancelBtn setTitle:LocalizedString(@"Cancel") forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(onLoginCancel:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *closeBtn = [[UIButton alloc] initWithFrame:CGRectMake(12, 12, 40, 40)];
-    [closeBtn setTitle:@"关闭" forState:UIControlStateNormal];
+    [closeBtn setTitle:LocalizedString(@"Close") forState:UIControlStateNormal];
     [closeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -114,14 +114,14 @@
     if (!result) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"网络错误";
+        hud.label.text = LocalizedString(@"NetworkError");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         
         [hud hideAnimated:YES afterDelay:1.f];
     } else if(isLogin) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"成功";
+        hud.label.text = LocalizedString(@"Success");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         
         __weak typeof(self)ws = self;

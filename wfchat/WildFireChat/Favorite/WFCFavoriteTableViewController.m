@@ -94,7 +94,7 @@
         ws.player.delegate = self;
         [ws.player play];
     } downloadFailure:^(NSError *error) {
-        [ws.view makeToast:@"下载失败!" duration:1 position:CSToastPositionCenter];
+        [ws.view makeToast:LocalizedString(@"DownloadFailed") duration:1 position:CSToastPositionCenter];
     }];
 }
 
@@ -240,9 +240,9 @@
         if (indexPath) {
             UIMenuController *menu = [UIMenuController sharedMenuController];
 
-            UIMenuItem *deleteItem = [[UIMenuItem alloc]initWithTitle:@"删除" action:@selector(performDelete:)];
-            UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:@"转发" action:@selector(performForward:)];
-            UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:@"拷贝" action:@selector(performCopy:)];
+            UIMenuItem *deleteItem = [[UIMenuItem alloc]initWithTitle:LocalizedString(@"Delete") action:@selector(performDelete:)];
+            UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:LocalizedString(@"Forward") action:@selector(performForward:)];
+            UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:LocalizedString(@"Copy") action:@selector(performCopy:)];
 
             self.selectedCell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (@available(iOS 13.0, *)) {
@@ -329,7 +329,7 @@
     if (self.selectedCell && self.selectedCell.favoriteItem.favType == MESSAGE_CONTENT_TYPE_TEXT) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = self.selectedCell.favoriteItem.title;
-        [self.view makeToast:@"已拷贝" duration:1 position:CSToastPositionCenter];
+        [self.view makeToast:LocalizedString(@"Copied") duration:1 position:CSToastPositionCenter];
     }
 }
 

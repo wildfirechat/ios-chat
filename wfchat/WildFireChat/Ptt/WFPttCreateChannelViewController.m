@@ -20,21 +20,21 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, kStatusBarAndNavigationBarHeight + 8, Label_Width, 24)];
-    label.text = @"频道名称";
+    label.text = LocalizedString(@"ChannelName");
     [self.view addSubview:label];
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(16 + Label_Width, kStatusBarAndNavigationBarHeight + 8, self.view.bounds.size.width - 16 - Label_Width - 16, 24)];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    self.titleTextField.text = [NSString stringWithFormat:@"%@的频道", userInfo.displayName];
+    self.titleTextField.text = [NSString stringWithFormat:LocalizedString(@"ChannelOfUser"), userInfo.displayName];
     self.titleTextField.borderStyle = UITextBorderStyleBezel;
     self.titleTextField.returnKeyType = UIReturnKeyDone;
     self.titleTextField.delegate = self;
     [self.view addSubview:self.titleTextField];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(dismiss:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"创建" style:UIBarButtonItemStylePlain target:self action:@selector(onStart:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"Create") style:UIBarButtonItemStylePlain target:self action:@selector(onStart:)];
 }
 
 - (void)dismiss:(id)sender {
@@ -53,10 +53,10 @@
             [ws dismiss:nil];
         });
     } error:^(int errorCode) {
-        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:@"糟糕，出错了" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:LocalizedString(@"OopsError") preferredStyle:UIAlertControllerStyleAlert];
         
         __weak typeof(self)ws = self;
-        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"等会再试试吧！" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:LocalizedString(@"TryAgainLater") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [ws dismiss:nil];
         }];
         

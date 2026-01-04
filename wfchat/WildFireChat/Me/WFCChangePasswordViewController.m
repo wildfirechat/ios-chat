@@ -28,7 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"设置新密码";
+    self.title = LocalizedString(@"SetNewPassword");
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat inputHeight = 40;
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 16;
@@ -91,7 +91,7 @@
     [self.view addSubview:self.repeatPasswordField];
     [self.view addSubview:self.repeatLine];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"Done") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
@@ -100,7 +100,7 @@
     NSString *old = self.oldPasswordfield.text;
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"保存中...";
+    hud.label.text = LocalizedString(@"Saving");
     [hud showAnimated:YES];
     __weak typeof(self)ws = self;
     [[AppService sharedAppService] changePassword:old newPassword:password success:^{
@@ -112,7 +112,7 @@
         [hud hideAnimated:YES];
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"保存失败";
+        hud.label.text = LocalizedString(@"SaveFailed");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

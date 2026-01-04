@@ -51,7 +51,7 @@
     __weak typeof(self)ws = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [MBProgressHUD HUDForView:self.view].mode = MBProgressHUDModeDeterminate;
-    [MBProgressHUD HUDForView:self.view].label.text = @"正在发送中...";
+    [MBProgressHUD HUDForView:self.view].label.text = LocalizedString(@"Sending");
     if (self.textMessageContent.length) {
         [[ShareAppService sharedAppService] sendTextMessage:conversation text:self.textMessageContent success:^(NSDictionary * _Nonnull dict) {
             [ws showSuccess];
@@ -136,7 +136,7 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"已发送" message:@"您可以在野火IM中查看" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"Sent") message:LocalizedString(@"ViewInWildFire") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
@@ -152,9 +152,9 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"网络错误" message:@"糟糕！网络出问题了！" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NetworkError") message:LocalizedString(@"NetworkErrorMessage") preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"算了吧" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *action = [UIAlertAction actionWithTitle:LocalizedString(@"ForgetIt") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
     }];
     
@@ -189,12 +189,12 @@
     SharedConversation *sc = self.sharedConversations[indexPath.row];
     
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:sc.title preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmSendTo") message:sc.title preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws sendTo:sc];
     }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
     

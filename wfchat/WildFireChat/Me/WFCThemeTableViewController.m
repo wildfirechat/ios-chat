@@ -38,7 +38,7 @@
     [self.tableView reloadData];
 }
 - (void)displayUpdatedAlert {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"修改成功！请退回到应用主页面查看效果。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:LocalizedString(@"ThemeChangeSuccess") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
@@ -60,9 +60,9 @@
     }
     
     if (indexPath.row == ThemeType_WFChat) {
-        cell.textLabel.text = @"蓝色";
+        cell.textLabel.text = LocalizedString(@"Blue");
     } else if(indexPath.row == ThemeType_White) {
-        cell.textLabel.text = @"白色";
+        cell.textLabel.text = LocalizedString(@"White");
     }
     
     if ([WFCUConfigManager globalManager].selectedTheme == indexPath.row) {

@@ -26,7 +26,7 @@
 #if USE_CALL_KIT
         self.callUUIDDict = [[NSMutableDictionary alloc] init];
         static CXProviderConfiguration* configInternal = nil;
-        configInternal = [[CXProviderConfiguration alloc] initWithLocalizedName:@"野火"];
+        configInternal = [[CXProviderConfiguration alloc] initWithLocalizedName:LocalizedString(@"WildFire")];
         configInternal.supportsVideo = true;
         configInternal.maximumCallsPerCallGroup = 1;
         configInternal.maximumCallGroups = 1;
