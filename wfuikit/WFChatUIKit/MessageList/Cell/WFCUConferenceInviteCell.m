@@ -41,11 +41,11 @@
     
     WFCCConferenceInviteMessageContent *content = (WFCCConferenceInviteMessageContent *)model.message.content;
 
-    self.titleLabel.text = [NSString stringWithFormat:@"会议邀请:%@", content.title];
+    self.titleLabel.text = [NSString stringWithFormat:WFCString(@"ConferenceInvite"), content.title];
     if (content.startTime == 0 || content.startTime >= [[NSDate alloc] init].timeIntervalSince1970) {
-        self.infoLabel.text = @"会议已经开始了，请尽快加入会议。";
+        self.infoLabel.text = WFCString(@"ConferenceAlreadyStarted");
     } else {
-        self.infoLabel.text = @"会议还未开始，请准时参加。";
+        self.infoLabel.text = WFCString(@"ConferenceNotStartedYet");
     }
 
     [self separateLine];
@@ -101,7 +101,7 @@
     if (!_hint) {
         _hint = [[UILabel alloc] initWithFrame:CGRectMake(8, 68, 80, 16)];
         _hint.font = [UIFont systemFontOfSize:8];
-        _hint.text = @"野火会议";
+        _hint.text = WFCString(@"WildfireConference");
         _hint.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_hint];
     }

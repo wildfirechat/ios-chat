@@ -350,9 +350,9 @@
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
             if (contacts.count == 1) {
                 WFCCUserInfo *newOwnerUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:ws.groupInfo.target refresh:NO];
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"请确认是否把群组转让给 %@", newOwnerUserInfo.readableName] preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"转让" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:WFCString(@"ConfirmTransferGroup"), newOwnerUserInfo.readableName] preferredStyle:UIAlertControllerStyleAlert];
+
+                UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:WFCString(@"Transfer") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
                     hud.label.text = WFCString(@"Transfering");
                     [hud showAnimated:YES];
@@ -406,10 +406,10 @@
 - (void)onDeleteAndQuit:(id)sender {
     if(self.conversation.type == Group_Type) {
         if ([self isGroupOwner]) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"请确认是否解散群组" preferredStyle:UIAlertControllerStyleAlert];
-            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:WFCString(@"ConfirmDismissGroup") preferredStyle:UIAlertControllerStyleAlert];
+
             __weak typeof(self) ws = self;
-            UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:@"解散" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:WFCString(@"Dismiss") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [[WFCCIMService sharedWFCIMService] removeConversation:self.conversation clearMessage:YES];
                 [[WFCCIMService sharedWFCIMService] dismissGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
                     [ws.navigationController popToRootViewControllerAnimated:YES];
@@ -522,32 +522,32 @@
 - (void)onBurnTimeAction {
     __weak typeof(self)weakSelf = self;
 
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"设置销毁时间" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"SetBurnTime") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
     }];
-    UIAlertAction *actionNoBurn = [UIAlertAction actionWithTitle:@"不销毁" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionNoBurn = [UIAlertAction actionWithTitle:WFCString(@"NoBurn") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:0];
     }];
-    
-    UIAlertAction *action3s = [UIAlertAction actionWithTitle:@"3秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action3s = [UIAlertAction actionWithTitle:WFCString(@"Burn3Seconds") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:3000];
     }];
-    
-    UIAlertAction *action10s = [UIAlertAction actionWithTitle:@"10秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action10s = [UIAlertAction actionWithTitle:WFCString(@"Burn10Seconds") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:10000];
     }];
-    
-    UIAlertAction *action30s = [UIAlertAction actionWithTitle:@"30秒钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action30s = [UIAlertAction actionWithTitle:WFCString(@"Burn30Seconds") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:30000];
     }];
-    
-    UIAlertAction *action60s = [UIAlertAction actionWithTitle:@"1分钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action60s = [UIAlertAction actionWithTitle:WFCString(@"Burn1Minute") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:60000];
     }];
-    
-    UIAlertAction *action600s = [UIAlertAction actionWithTitle:@"10分钟" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action600s = [UIAlertAction actionWithTitle:WFCString(@"Burn10Minutes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf setBurnTime:600000];
     }];
     
@@ -1059,7 +1059,7 @@
       if(info.burnTime) {
           subTitle = [NSString stringWithFormat:@"%d秒", info.burnTime/1000];
       }
-      return [self cellOfTable:tableView WithTitle:@"设置密聊焚毁时间" withDetailTitle:subTitle withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
+      return [self cellOfTable:tableView WithTitle:WFCString(@"SetSecretChatBurnTime") withDetailTitle:subTitle withDisclosureIndicator:NO withSwitch:NO withSwitchType:SwitchType_Conversation_None];
   }
     return nil;
 }
