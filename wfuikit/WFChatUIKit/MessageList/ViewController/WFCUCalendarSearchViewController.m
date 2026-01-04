@@ -8,6 +8,7 @@
 
 #import "WFCUCalendarSearchViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUMessageListViewController.h"
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
 #import "MBProgressHUD.h"
@@ -341,15 +342,19 @@
 
     if (cell.hasMessage && cell.date) {
         // 点击有消息的日期，弹出TODO提示
-        NSDateComponents *components = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:cell.date];
-        NSString *dateStr = [NSString stringWithFormat:@"%ld年%ld月%ld日", (long)components.year, (long)components.month, (long)components.day];
-
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"TODO"
-                                                                       message:[NSString stringWithFormat:@"%@\n共有 %ld 条消息", dateStr, (long)cell.messageCount]
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil];
-        [alert addAction:okAction];
-        [self presentViewController:alert animated:YES completion:nil];
+//        NSDateComponents *components = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:cell.date];
+//        NSString *dateStr = [NSString stringWithFormat:@"%ld年%ld月%ld日", (long)components.year, (long)components.month, (long)components.day];
+//
+//        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"TODO"
+//                                                                       message:[NSString stringWithFormat:@"%@\n共有 %ld 条消息", dateStr, (long)cell.messageCount]
+//                                                                preferredStyle:UIAlertControllerStyleAlert];
+//        UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil];
+//        [alert addAction:okAction];
+//        [self presentViewController:alert animated:YES completion:nil];
+        WFCUMessageListViewController *vc = [[WFCUMessageListViewController alloc] init];
+        vc.conversation = self.conversation;
+        vc.selectedDate = cell.date;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

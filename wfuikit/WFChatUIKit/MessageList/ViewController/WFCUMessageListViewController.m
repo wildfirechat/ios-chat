@@ -1741,7 +1741,35 @@
         highlightMessage = [[WFCCIMService sharedWFCIMService] getMessage:self.highlightMessageId];
     }
     
-    if (self.highlightMessageId > 0 && highlightMessage) {
+    __weak typeof(self)ws = self;
+    if(self.selectedDate) {
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil fromTime:[self.selectedDate timeIntervalSince1970]*1000+1000 count:-20 withUser:nil success:^(NSArray<WFCCMessage *> *messages) {
+            
+            ws.modelList = [[NSMutableArray alloc] init];
+            if(messages.count) {
+                ws.highlightMessageId = messages.lastObject.messageId;
+                [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:true];
+            }
+            ws.highlightMessageId = 0;
+            
+            if(ws.conversation.type == SecretChat_Type) {
+                WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:ws.conversation.target];
+                if(secretChatInfo.state == SecretChatState_Established) {
+                    if(ws.chatInputBar.inputBarStatus == ChatInputBarMuteStatus) {
+                        ws.chatInputBar.inputBarStatus = ChatInputBarDefaultStatus;
+                    }
+                } else {
+                    if(ws.chatInputBar.inputBarStatus != ChatInputBarMuteStatus) {
+                        ws.chatInputBar.inputBarStatus = ChatInputBarMuteStatus;
+                    }
+                }
+            }
+            ws.hasNewMessage = YES;
+        } error:^(int error_code) {
+            
+        }];
+        self.selectedDate = nil;
+    } else if (self.highlightMessageId > 0 && highlightMessage) {
         NSArray *messageListOld = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:15 withUser:self.privateChatUser];
         NSArray *messageListNew = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:self.highlightMessageId count:-15 withUser:self.privateChatUser];
         NSMutableArray *list = [[NSMutableArray alloc] init];
@@ -1777,7 +1805,6 @@
             firstIn = YES;
         }
         count = 15;
-        __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil from:0 count:count withUser:self.privateChatUser success:^(NSArray<WFCCMessage *> *messages) {
             [[WFCCIMService sharedWFCIMService] getMessagesV2:ws.conversation messageStatus:@[@(Message_Status_Mentioned), @(Message_Status_AllMentioned)] from:0 count:100 withUser:ws.privateChatUser success:^(NSArray<WFCCMessage *> *messages) {
                 ws.mentionedMsgs = [messages mutableCopy];

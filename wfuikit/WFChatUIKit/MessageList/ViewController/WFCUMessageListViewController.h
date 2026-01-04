@@ -15,6 +15,9 @@
 @property (nonatomic, strong)NSString *highlightText;
 @property (nonatomic, assign)long highlightMessageId;
 
+//显示某天消息，用于按时间搜索
+@property(nonatomic, strong)NSDate *selectedDate;
+
 //仅限于在Channel内使用。Channel的owner对订阅Channel单个用户发起一对一私聊
 @property (nonatomic, strong)NSString *privateChatUser;
 
