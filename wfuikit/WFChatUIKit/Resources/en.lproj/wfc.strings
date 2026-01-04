@@ -467,3 +467,10 @@
 "Seconds"="%d seconds";
 "SomeoneTyping"="Someone is typing";
 "EtcPeople"="etc.";
+"SearchByDate"="By Date";
+"SearchMedia"="Photos & Videos";
+"SearchFile"="Files";
+"SearchLink"="Links";
+"Tip"="Tip";
+"No media messages"="No media messages in this conversation";
+"Links"="Links";

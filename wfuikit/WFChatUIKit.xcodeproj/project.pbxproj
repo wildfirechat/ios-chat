@@ -535,6 +535,10 @@
 		B7AF6254295946F700324247 /* WFCUOrganizationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */; };
 		B7B1A48F2F0A177B003316BB /* SelectableTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A48E2F0A177B003316BB /* SelectableTextView.m */; };
 		B7B1A4902F0A177B003316BB /* SelectableTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B1A48D2F0A177B003316BB /* SelectableTextView.h */; };
+		B7B1A4972F0A4EC2003316BB /* WFCULinksViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B1A4952F0A4EC2003316BB /* WFCULinksViewController.h */; };
+		B7B1A4982F0A4EC2003316BB /* WFCULinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A4962F0A4EC2003316BB /* WFCULinksViewController.m */; };
+		B7B1A49B2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B1A4992F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h */; };
+		B7B1A49C2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A49A2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m */; };
 		B7C1915D29CEFA6B00DBEA9B /* WFCUReadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */; };
 		B7C1915E29CEFA6B00DBEA9B /* WFCUReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */; };
 		B7C1916C29CEFF7D00DBEA9B /* XLPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */; };
@@ -1158,6 +1162,10 @@
 		B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUOrganizationViewController.h; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.h; sourceTree = SOURCE_ROOT; };
 		B7B1A48D2F0A177B003316BB /* SelectableTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectableTextView.h; sourceTree = "<group>"; };
 		B7B1A48E2F0A177B003316BB /* SelectableTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectableTextView.m; sourceTree = "<group>"; };
+		B7B1A4952F0A4EC2003316BB /* WFCULinksViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCULinksViewController.h; sourceTree = "<group>"; };
+		B7B1A4962F0A4EC2003316BB /* WFCULinksViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCULinksViewController.m; sourceTree = "<group>"; };
+		B7B1A4992F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCULinkRecordTableViewCell.h; sourceTree = "<group>"; };
+		B7B1A49A2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCULinkRecordTableViewCell.m; sourceTree = "<group>"; };
 		B7B2F84C2F0A11E6001CBF4C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/wfc.strings"; sourceTree = "<group>"; };
 		B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReadViewController.h; sourceTree = "<group>"; };
 		B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReadViewController.m; sourceTree = "<group>"; };
@@ -1592,6 +1600,8 @@
 				B7CA48CA2834B8AD00CB2F71 /* WFCURichNotificationCell.m */,
 				B755657028389F8900BE047C /* WFCUArticlesCell.h */,
 				B755657128389F8900BE047C /* WFCUArticlesCell.m */,
+				B7B1A4992F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h */,
+				B7B1A49A2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1616,6 +1626,8 @@
 				2F535BFE25296E6600C9AF09 /* WFCUQuoteViewController.m */,
 				2F56F6B22529EE0F00B829C4 /* WFCUCompositeMessageViewController.h */,
 				2F56F6B32529EE0F00B829C4 /* WFCUCompositeMessageViewController.m */,
+				B7B1A4952F0A4EC2003316BB /* WFCULinksViewController.h */,
+				B7B1A4962F0A4EC2003316BB /* WFCULinksViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2683,6 +2695,7 @@
 				B7C5442A28D5876700A2550F /* CreateBarCodeViewController.h in Headers */,
 				2FB7125E25DA0A9600FD2E83 /* WFCUConferenceMemberTableViewCell.h in Headers */,
 				2F36433321C136C400904CAB /* WFCUFavChannelTableViewController.h in Headers */,
+				B7B1A49B2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h in Headers */,
 				B71F0A7228F54156000A7C8A /* GCDAsyncSocket.h in Headers */,
 				B790216B2C01F4FF005C382A /* WFCUDomainTableViewController.h in Headers */,
 				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
@@ -2871,6 +2884,7 @@
 				B7FB0D832897734300625747 /* WFCUFileVideoSource.h in Headers */,
 				2FB7125425D9F83B00FD2E83 /* WFCUConferenceMemberManagerViewController.h in Headers */,
 				2F5511D7217F5CC300F56C26 /* TYAlertController.h in Headers */,
+				B7B1A4972F0A4EC2003316BB /* WFCULinksViewController.h in Headers */,
 				2F5510F4217F5CC200F56C26 /* CCHCenterOfMassMapClusterer.h in Headers */,
 				B733DFF328D4071F0094AD74 /* WFCUConferenceHistory.h in Headers */,
 				2F5510F6217F5CC200F56C26 /* CCHMapAnimator.h in Headers */,
@@ -3082,7 +3096,9 @@
 				B7C5443A28D5876700A2550F /* CreateBarCodeViewController.m in Sources */,
 				B77D33FB290C258A00E72111 /* WFCUGroupTableViewController.m in Sources */,
 				2F5511D3217F5CC300F56C26 /* TYAlertScaleFadeAnimation.m in Sources */,
+				B7B1A4982F0A4EC2003316BB /* WFCULinksViewController.m in Sources */,
 				B70162FE290E2F1700DCD651 /* MWGridCell.m in Sources */,
+				B7B1A49C2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m in Sources */,
 				B7C5443228D5876700A2550F /* UIWindow+LBXHierarchy.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
 				2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */,

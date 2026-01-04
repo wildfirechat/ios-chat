@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <WFChatClient/WFCChatClient.h>
+#import "MWPhotoBrowser.h"
 
-@interface WFCUConversationSearchTableViewController : UIViewController
+@interface WFCUConversationSearchTableViewController : UIViewController <MWPhotoBrowserDelegate>
 @property(nonatomic, strong)WFCCConversation *conversation;
 @property(nonatomic, strong)NSString *keyword;
 
