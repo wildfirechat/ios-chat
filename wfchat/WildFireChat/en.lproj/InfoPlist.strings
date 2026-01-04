@@ -259,3 +259,10 @@ Off="Off";
 // Additional strings
 PleaseLoginWildFireIM="Please login to WildFire IM first";
 MyDevices="My Devices";
+
+// Language
+Language="Language";
+FollowSystem="Follow System";
+LanguageChangeRestart="App needs to restart to apply language changes";
+LanguageChangeSuccess="Language setting saved, please restart the app";
+ReportMessage="If you find any content that violates laws and morality, or your legitimate rights and interests have been infringed, please take a screenshot and send it to us. We will handle it within 24 hours. Actions include but are not limited to deleting content, warning the author, freezing the account, and even calling the police. To report, please go to \"Settings -> Settings -> Report\" to contact us!";

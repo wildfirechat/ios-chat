@@ -12,6 +12,7 @@
 #import "WFCConfig.h"
 #import "ShareUtility.h"
 #import "MBProgressHUD.h"
+#import "ShareLocalizationHelper.h"
 
 
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -45,10 +46,10 @@
     
     if (![[ShareAppService sharedAppService] isLogin]) {
         __weak typeof(self)ws = self;
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NotLoggedIn") message:LocalizedString(@"PleaseLoginWildFireIM") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ShareLocalizedString(@"NotLoggedIn") message:ShareLocalizedString(@"PleaseLoginWildFireIM") preferredStyle:UIAlertControllerStyleAlert];
         
         
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:ShareLocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
         }];
         
@@ -245,12 +246,12 @@
 - (void)sendTo:(SharedConversation *)conversation {
     __weak typeof(self)ws = self;
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmSendTo") message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ShareLocalizedString(@"ConfirmSendTo") message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         [MBProgressHUD HUDForView:ws.view].mode = MBProgressHUDModeDeterminate;
-        [MBProgressHUD HUDForView:ws.view].label.text = LocalizedString(@"Sending");
+        [MBProgressHUD HUDForView:ws.view].label.text = ShareLocalizedString(@"Sending");
         if (ws.textMessageContent.length) {
             [[ShareAppService sharedAppService] sendTextMessage:conversation text:ws.textMessageContent success:^(NSDictionary * _Nonnull dict) {
                 [ws showSuccess];
@@ -319,7 +320,7 @@
         }
     }];
     
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:ShareLocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
     
@@ -330,7 +331,7 @@
 }
 
 - (void)showImageLimit {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NotSupportMultiImages") message:LocalizedString(@"NotSupportMultiImagesMessage") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ShareLocalizedString(@"NotSupportMultiImages") message:ShareLocalizedString(@"NotSupportMultiImagesMessage") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
@@ -352,7 +353,7 @@
 - (void)showSuccess {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"Sent") message:LocalizedString(@"ViewInWildFire") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ShareLocalizedString(@"Sent") message:ShareLocalizedString(@"ViewInWildFire") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
@@ -366,9 +367,9 @@
 
 - (void)showFailure {
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NetworkError") message:LocalizedString(@"NetworkErrorMessage") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ShareLocalizedString(@"NetworkError") message:ShareLocalizedString(@"NetworkErrorMessage") preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *action = [UIAlertAction actionWithTitle:LocalizedString(@"ForgetIt") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *action = [UIAlertAction actionWithTitle:ShareLocalizedString(@"ForgetIt") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
     }];
     
@@ -396,9 +397,9 @@
     }
     
     if (indexPath.row == 0) {
-        cell.textLabel.text = LocalizedString(@"SendToFriend");
+        cell.textLabel.text = ShareLocalizedString(@"SendToFriend");
     } else if(indexPath.row == 1) {
-        cell.textLabel.text = LocalizedString(@"SendToSelf");
+        cell.textLabel.text = ShareLocalizedString(@"SendToSelf");
     } else {
         cell.textLabel.text = @"分享到朋友圈";
     }
@@ -425,7 +426,7 @@
         conversation.type = 0;//Single_Type;
         conversation.target = FILE_TRANSFER_ID;
         conversation.line = 0;
-        conversation.title = LocalizedString(@"Self");
+        conversation.title = ShareLocalizedString(@"Self");
         [self sendTo:conversation];
     }
 }

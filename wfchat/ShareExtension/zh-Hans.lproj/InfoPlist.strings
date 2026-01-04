@@ -1,0 +1,29 @@
+/*
+  InfoPlist.strings
+  ShareExtension
+
+  Created by WildFire Chat on 2025/01/04.
+  Copyright © 2025年 WildFireChat. All rights reserved.
+*/
+
+// Share Extension
+ConfirmSendTo="确认发送给";
+Sending="正在发送中...";
+NotSupportMultiImages="不支持发送多张图片";
+NotSupportMultiImagesMessage="每次只能发送一张。如果您需要一次发送多张，请打开野火IM选择图片发送。";
+Sent="已发送";
+ViewInWildFire="您可以在野火IM中查看";
+NetworkErrorTitle="网络错误";
+NetworkErrorMessage="糟糕！网络出问题了！";
+ForgetIt="算了吧";
+SendToFriend="发给朋友";
+SendToSelf="发给自己";
+ShareToMoments="分享到朋友圈";
+Self="自己";
+Image="[图片]";
+ServerResponseError="服务器响应错误";
+UploadFailed="上传失败：%@";
+NotLoggedIn="未登录";
+PleaseLoginWildFireIM="请先登录野火IM";
+Cancel="取消";
+Confirm="确定";

@@ -82,6 +82,22 @@
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // 调试：检查语言设置
+#ifdef DEBUG
+    NSArray *languages = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"];
+    NSLog(@"[AppDelegate] Current AppleLanguages: %@", languages);
+
+    // 测试本地化
+    NSString *testSettings = LocalizedString(@"Settings");
+    NSString *testLanguage = LocalizedString(@"Language");
+    NSLog(@"[AppDelegate] Localized 'Settings': %@", testSettings);
+    NSLog(@"[AppDelegate] Localized 'Language': %@", testLanguage);
+
+    // 检查 bundle 中的本地化资源
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSArray *localizations = [bundle localizations];
+    NSLog(@"[AppDelegate] Available localizations in bundle: %@", localizations);
+#endif
 #if DEBUG
     if([IM_SERVER_HOST rangeOfString:@"http"].location != NSNotFound || [IM_SERVER_HOST rangeOfString:@":"].location != NSNotFound) {
         NSLog(@"IM_SERVER_HOST只能填写IP或者域名，不能带HTTP头或者端口！！！");

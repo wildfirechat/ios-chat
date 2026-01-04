@@ -259,3 +259,10 @@ Off="關閉";
 // Additional strings
 PleaseLoginWildFireIM="請先登錄野火IM";
 MyDevices="我的設備";
+
+// Language
+Language="語言";
+FollowSystem="跟隨系統";
+LanguageChangeRestart="語言修改後需要重啟應用才能生效";
+LanguageChangeSuccess="語言設置已保存，請重啟應用";
+ReportMessage="如果您發現有違反法律和道德的內容，或者您的合法權益受到侵犯，請截圖之後發送給我們。我們會在24小時之內處理。處理辦法包括不限於刪除內容，對作者進行警告，凍結賬號，甚至報警處理。舉報請到\"設置->設置->舉報\"聯繫我們！";

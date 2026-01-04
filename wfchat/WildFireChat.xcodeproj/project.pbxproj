@@ -127,6 +127,14 @@
 		B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
+		B7B2F83E2F0A0228001CBF4C /* WFCLanguageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */; };
+		B7B2F83F2F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
+		B7B2F8402F0A0228001CBF4C /* WFCLanguageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */; };
+		B7B2F8412F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
+		B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8432F0A0279001CBF4C /* WFCLanguageTableViewController.m */; };
+		B7B2F8452F0A0576001CBF4C /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
+		B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B7B2F84A2F0A0862001CBF4C /* ShareLocalizationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */; };
 		B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C177572CE83720005A5E1B /* TYHWaterMark.m */; };
 		B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */; };
 		B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */; };
@@ -189,6 +197,17 @@
 				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7B2F8472F0A0576001CBF4C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -408,6 +427,16 @@
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
 		B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyFindMeViewController.m; sourceTree = "<group>"; };
+		B7B1A48B2F0A14A9003316BB /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		B7B1A48C2F0A14A9003316BB /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		B7B2F83A2F0A0228001CBF4C /* WFCLanguageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCLanguageManager.h; sourceTree = "<group>"; };
+		B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCLanguageManager.m; sourceTree = "<group>"; };
+		B7B2F83C2F0A0228001CBF4C /* WFCLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCLocalization.h; sourceTree = "<group>"; };
+		B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCLocalization.m; sourceTree = "<group>"; };
+		B7B2F8422F0A0279001CBF4C /* WFCLanguageTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCLanguageTableViewController.h; sourceTree = "<group>"; };
+		B7B2F8432F0A0279001CBF4C /* WFCLanguageTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCLanguageTableViewController.m; sourceTree = "<group>"; };
+		B7B2F8482F0A0862001CBF4C /* ShareLocalizationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareLocalizationHelper.h; sourceTree = "<group>"; };
+		B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareLocalizationHelper.m; sourceTree = "<group>"; };
 		B7C177562CE83720005A5E1B /* TYHWaterMark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYHWaterMark.h; sourceTree = "<group>"; };
 		B7C177572CE83720005A5E1B /* TYHWaterMark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYHWaterMark.m; sourceTree = "<group>"; };
 		B7CB3A8E289BB5CF00E9D688 /* WFCResetPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCResetPasswordViewController.h; sourceTree = "<group>"; };
@@ -457,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */,
+				B7B2F8452F0A0576001CBF4C /* SDWebImage.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +582,10 @@
 				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
 				2FC50B7B245273A700B36F8A /* PCSessionViewController.h */,
 				2FC50B7A245273A700B36F8A /* PCSessionViewController.m */,
+				B7B2F83A2F0A0228001CBF4C /* WFCLanguageManager.h */,
+				B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */,
+				B7B2F83C2F0A0228001CBF4C /* WFCLocalization.h */,
+				B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -712,6 +746,8 @@
 				2F44485C252D52AE007A570E /* ShareAppService.m */,
 				2F97CDC7252EC7D90095DDFD /* ShareUtility.h */,
 				2F97CDC8252EC7D90095DDFD /* ShareUtility.m */,
+				B7B2F8482F0A0862001CBF4C /* ShareLocalizationHelper.h */,
+				B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */,
 			);
 			path = ShareExtension;
 			sourceTree = "<group>";
@@ -823,6 +859,8 @@
 				2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */,
 				2B840F412442125B006BE3D8 /* WFCThemeTableViewCell.h */,
 				2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */,
+				B7B2F8422F0A0279001CBF4C /* WFCLanguageTableViewController.h */,
+				B7B2F8432F0A0279001CBF4C /* WFCLanguageTableViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -1071,6 +1109,7 @@
 				2F56F6EF252C956700B829C4 /* Sources */,
 				2F56F6F0252C956700B829C4 /* Frameworks */,
 				2F56F6F1252C956700B829C4 /* Resources */,
+				B7B2F8472F0A0576001CBF4C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1160,6 +1199,7 @@
 				en,
 				Base,
 				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 2E1D1FEE1FAF0AE600F4405D;
 			productRefGroup = 2E1D1FF81FAF0AE600F4405D /* Products */;
@@ -1247,6 +1287,8 @@
 				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,
+				B7B2F8402F0A0228001CBF4C /* WFCLanguageManager.m in Sources */,
+				B7B2F8412F0A0228001CBF4C /* WFCLocalization.m in Sources */,
 				2F518FF3235ED7DD00FA3D58 /* AppService.m in Sources */,
 				B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
@@ -1258,6 +1300,7 @@
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
+				B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */,
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,
 				2E1D200A1FAF0AE600F4405D /* main.m in Sources */,
 				2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */,
@@ -1315,10 +1358,13 @@
 				2F444859252D520B007A570E /* WFCConfig.m in Sources */,
 				2B4C027B252F4A570043FA41 /* AFURLResponseSerialization.m in Sources */,
 				2FB28E652538183C00DDD387 /* ConversationCell.m in Sources */,
+				B7B2F83E2F0A0228001CBF4C /* WFCLanguageManager.m in Sources */,
+				B7B2F83F2F0A0228001CBF4C /* WFCLocalization.m in Sources */,
 				2B4C027E252F4A570043FA41 /* AFURLRequestSerialization.m in Sources */,
 				2B4C0281252F4A570043FA41 /* MBProgressHUD.m in Sources */,
 				2F56F6F7252C956700B829C4 /* ShareViewController.m in Sources */,
 				2B4C027F252F4A570043FA41 /* AFNetworkReachabilityManager.m in Sources */,
+				B7B2F84A2F0A0862001CBF4C /* ShareLocalizationHelper.m in Sources */,
 				2B4C027C252F4A570043FA41 /* AFHTTPSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1383,6 +1429,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2E1D20061FAF0AE600F4405D /* Base */,
+				B7B1A48B2F0A14A9003316BB /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1400,6 +1447,7 @@
 			children = (
 				2FBF915E232F6A47003521FF /* zh-Hans */,
 				2FBF9160232F6A5E003521FF /* en */,
+				B7B1A48C2F0A14A9003316BB /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
