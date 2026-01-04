@@ -8,6 +8,8 @@
 
 #import "WFCUMessageCell.h"
 
+@class SelectableTextView;
+
 @interface WFCUTextCell : WFCUMessageCell
-@property (strong, nonatomic)UILabel *textLabel;
+@property (strong, nonatomic)SelectableTextView *textLabel;
 @end
