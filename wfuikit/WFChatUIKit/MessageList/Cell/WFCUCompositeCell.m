@@ -74,7 +74,7 @@
             if(channelInfo) {
                 senderName = channelInfo.name;
             } else {
-                senderName = @"频道";
+                senderName = WFCString(@"Channel");
             }
         } else {
             WFCCUserInfo *userInfo;

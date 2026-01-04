@@ -251,9 +251,9 @@
     
     if (self.conversation.type == Chatroom_Type) {
 #if DISABLE_CHATROOM
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"警告" message:@"聊天室功能在测试环境上已经被关闭，私有部署的环境可以放此功能，如果需要体验，请申请试用私有部署使用。" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"ChatroomClosedInTestEnvironment") preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"IKnow") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
         }];
         [alertController addAction:action1];
@@ -758,20 +758,20 @@
                     //0，未设置，1 忙碌，2 离开（主动设置），3 离开（长时间不操作），4 隐身，其它可以自主扩展。
                     if(onlineState.customState.state == 0) {
                         if(pcState == 0) {
-                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"电脑在线"];
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"PCOnline")];
                         } else if(padState == 0) {
-                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"平板在线"];
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"PadOnline")];
                         } else if(webState == 0) {
-                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"网页在线"];
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"WebOnline")];
                         } else if(wxState == 0) {
-                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"小程序在线"];
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"MicroAppOnline")];
                         } else if(mobileState == 0) {
-                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"手机在线"];
+                            self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"MobileOnline")];
                         }
                     } else if(onlineState.customState.state == 1) {
-                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"忙碌"];
+                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"Busy")];
                     } else if(onlineState.customState.state == 2 || onlineState.customState.state == 3) {
-                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, @"离开"];
+                        self.title = [NSString stringWithFormat:@"%@(%@)", self.title, WFCString(@"Away")];
                     } else {
                         //其它情况需要客户自己开发。。。
                     }
@@ -780,19 +780,19 @@
                     long long duration = [[[NSDate alloc] init] timeIntervalSince1970] - (mobileLastSeen/1000);
                     int days = (int)(duration / 86400);
                     if(days) {
-                        self.title = [NSString stringWithFormat:@"%@(%d天前手机在线)", self.title, days];
+                        self.title = [NSString stringWithFormat:WFCString(@"DaysAgoMobileOnline"), self.title, days];
                     } else {
                         int hours = (int)(duration/3600);
                         if(hours) {
-                            self.title = [NSString stringWithFormat:@"%@(%d小时前手机在线)", self.title, hours];
+                            self.title = [NSString stringWithFormat:WFCString(@"HoursAgoMobileOnline"), self.title, hours];
                         } else {
                             int mins = (int)(duration/60);
                             if(mins) {
-                                self.title = [NSString stringWithFormat:@"%@(%d分钟前手机在线)", self.title, mins];
+                                self.title = [NSString stringWithFormat:WFCString(@"MinsAgoMobileOnline"), self.title, mins];
                             } else {
-                                self.title = [NSString stringWithFormat:@"%@(不久前手机在线)", self.title];
+                                self.title = [NSString stringWithFormat:WFCString(@"ShortlyAgoMobileOnline"), self.title];
                             }
-                            
+
                         }
                     }
                     
@@ -1000,14 +1000,14 @@
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *oneByOneAction = [UIAlertAction actionWithTitle:@"逐条转发" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *oneByOneAction = [UIAlertAction actionWithTitle:WFCString(@"ForwardOneByOne") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
         controller.messages = messages;
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:controller];
         [self.navigationController presentViewController:navi animated:YES completion:nil];
         
     }];
-    UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:@"合并转发" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *AllInOneAction = [UIAlertAction actionWithTitle:WFCString(@"ForwardMerge") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCCCompositeMessageContent *compositeContent = [[WFCCCompositeMessageContent alloc] init];
         
         if (self.conversation.type == Single_Type) {
@@ -1020,7 +1020,7 @@
                 title = self.targetUser.displayName;
             }
             WFCCUserInfo *myself = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-            compositeContent.title = [NSString stringWithFormat:@"%@和%@ 的聊天记录", title, myself.displayName];
+            compositeContent.title = [NSString stringWithFormat:WFCString(@"ChatHistoryWith"), title, myself.displayName];
         } else if (self.conversation.type == Group_Type) {
             compositeContent.title = WFCString(@"GroupChatHistory");
         } else if (self.conversation.type == Channel_Type) {
@@ -1202,7 +1202,7 @@
         NSDictionary *dict = self.typingDict[userId];
         WFCCTypingType typingType = [dict[@"type"] intValue];
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId inGroup:self.conversation.type == Group_Type?self.conversation.target:nil refresh:NO];
-        NSString *name = @"有人";
+        NSString *name = WFCString(@"Someone");
         if(userInfo.friendAlias.length) {
             name = userInfo.friendAlias;
         } else if(userInfo.groupAlias.length) {
@@ -1225,7 +1225,7 @@
         }
         self.title = [NSString stringWithFormat:@"%@ %@", name, title];
     } else if(self.typingDict.count > 1) {
-        self.title = [NSString stringWithFormat:@"%ld人正在输入", self.typingDict.count];
+        self.title = [NSString stringWithFormat:WFCString(@"TypingCount"), self.typingDict.count];
     }
 }
 
@@ -1837,7 +1837,7 @@
             self.mentionedButton.frame = CGRectMake(bount.size.width - 85, 240, 100, 30);
         }];
     }
-    [self.mentionedButton setTitle:[NSString stringWithFormat:@"%d 条@消息", self.mentionedMsgs.count] forState:UIControlStateNormal];
+    [self.mentionedButton setTitle:[NSString stringWithFormat:WFCString(@"MentionedMessagesCount"), self.mentionedMsgs.count] forState:UIControlStateNormal];
 }
 
 - (void)dismissMentionedLabel {
@@ -1890,7 +1890,7 @@
 - (void)showUnreadLabel {
     CGRect bount = self.view.bounds;
     self.unreadButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 200, 0, 30)];
-    [self.unreadButton setTitle:[NSString stringWithFormat:@"%d 条新消息", self.unreadMessageCount] forState:UIControlStateNormal];
+    [self.unreadButton setTitle:[NSString stringWithFormat:WFCString(@"NewMessagesCount"), self.unreadMessageCount] forState:UIControlStateNormal];
     self.unreadButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.unreadButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     self.unreadButton.backgroundColor = [UIColor whiteColor];
@@ -2368,7 +2368,7 @@
         NSURL *url = [NSURL URLWithString:videoMsg.remoteUrl];
         
         if (!url) {
-            [self.view makeToast:@"无法播放"];
+            [self.view makeToast:WFCString(@"CannotPlay")];
             return;
         }
         
@@ -2575,7 +2575,7 @@
     } else if([model.message.content isKindOfClass:[WFCCConferenceInviteMessageContent class]]) {
 #if WFCU_SUPPORT_VOIP
         __weak typeof(self)ws = self;
-        __block MBProgressHUD *hud = [self startProgress:@"会议加载中"];
+        __block MBProgressHUD *hud = [self startProgress:WFCString(@"LoadingConference")];
         if ([WFAVEngineKit sharedEngineKit].supportConference) {
             WFCCConferenceInviteMessageContent *invite = (WFCCConferenceInviteMessageContent *)model.message.content;
             [[WFCUConfigManager globalManager].appServiceProvider queryConferenceInfo:invite.callId password:invite.password success:^(WFZConferenceInfo * _Nonnull conferenceInfo) {
@@ -2589,13 +2589,13 @@
                 [self.navigationController presentViewController:nav animated:YES completion:nil];
             } error:^(int errorCode, NSString * _Nonnull message) {
                 if (errorCode == 16) {
-                    [ws stopProgress:hud finishText:@"会议已结束！"];
+                    [ws stopProgress:hud finishText:WFCString(@"ConferenceEnded2")];
                 } else {
-                    [ws stopProgress:hud finishText:@"网络错误"];
+                    [ws stopProgress:hud finishText:WFCString(@"NetworkError")];
                 }
             }];
         } else {
-            [ws stopProgress:hud finishText:@"不支持会议"];
+            [ws stopProgress:hud finishText:WFCString(@"ConferenceNotSupported")];
         }
 #endif
     } else if([model.message.content isKindOfClass:[WFCCCardMessageContent class]]) {
@@ -2924,7 +2924,7 @@
         if (txtContent.quoteInfo) {
             __block WFCCMessage *msg = [[WFCCIMService sharedWFCIMService] getMessageByUid:txtContent.quoteInfo.messageUid];
             if ([msg.content isKindOfClass:[WFCCRecallMessageContent class]]) {
-                [self.view makeToast:@"消息不存在了！"];
+                [self.view makeToast:WFCString(@"MessageNotExist")];
                 NSLog(@"msg not exist");
                 return;
             }
@@ -2944,7 +2944,7 @@
                     __weak typeof(self)ws = self;
                     [[WFCCIMService sharedWFCIMService] getRemoteMessage:txtContent.quoteInfo.messageUid success:^(WFCCMessage *message) {
                         if (!message.content || [message.content isKindOfClass:[WFCCRecallMessageContent class]]) {
-                            [ws.view makeToast:@"消息不存在了！"];
+                            [ws.view makeToast:WFCString(@"MessageNotExist")];
                             NSLog(@"msg not exist");
                             return;
                         } else {
@@ -2952,9 +2952,9 @@
                         }
                     } error:^(int error_code) {
                         if(error_code == 253) {
-                            [ws.view makeToast:@"消息不存在了！"];
+                            [ws.view makeToast:WFCString(@"MessageNotExist")];
                         } else {
-                            [ws.view makeToast:@"网络错误"];
+                            [ws.view makeToast:WFCString(@"NetworkError")];
                         }
                     }];
                 }
@@ -3165,9 +3165,9 @@
         for (NSString *file in files) {
             WFCCFileMessageContent *content = [WFCCFileMessageContent fileMessageContentFromPath:file];
             if(content.size >= 100 * 1024 * 1024) {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"警告" message:@"文件内容超大，无法发送！" preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"知道了") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"FileTooLarge") preferredStyle:UIAlertControllerStyleAlert];
+
+                UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"IKnow") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     
                 }];
                 
@@ -3184,7 +3184,7 @@
         [[NSFileManager defaultManager] fileExistsAtPath:file isDirectory:&isDir];
         if(isDir) {
             NSLog(@"file is directiory");
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"无法发送文件夹: %@", file.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:WFCString(@"CannotSendFolder"), file.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 
@@ -3541,7 +3541,7 @@
 -(void)performCancel:(UIMenuController *)sender {
     if (self.cell4Menu) {
         if(![[WFCCIMService sharedWFCIMService] cancelSendingMessage:self.cell4Menu.model.message.messageId]) {
-            [self.view makeToast:@"取消失败" duration:1 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"CancelFailed") duration:1 position:CSToastPositionCenter];
         }
     }
 }
@@ -3687,7 +3687,7 @@
         [self.collectionView reloadData];
         
         if (error) {
-            [self.view makeToast:@"网络错误"];
+            [self.view makeToast:WFCString(@"NetworkError")];
         }
     });
 }
@@ -3723,7 +3723,7 @@
     if (self.cell4Menu.model.message) {
         WFCUFavoriteItem *item = [WFCUFavoriteItem itemFromMessage:self.cell4Menu.model.message];
         if (!item) {
-            [self.view makeToast:@"暂不支持" duration:1 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"NotSupported") duration:1 position:CSToastPositionCenter];
             return;
         }
         
@@ -3747,10 +3747,10 @@
         __weak typeof(self)ws = self;
         [[WFCUConfigManager globalManager].appServiceProvider addFavoriteItem:item success:^{
             NSLog(@"added");
-            [ws.view makeToast:@"已收藏" duration:1 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"Favorited") duration:1 position:CSToastPositionCenter];
         } error:^(int error_code) {
             NSLog(@"add failure");
-            [ws.view makeToast:@"网络错误" duration:1 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
         }];
     }
 }
@@ -3782,9 +3782,9 @@
     WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:ongoing.initiator inGroup:self.conversation.type == Group_Type ? self.conversation.target : nil refresh:NO];
     NSString *userName = userInfo.friendAlias.length ? userInfo.friendAlias : (userInfo.groupAlias.length ? userInfo.groupAlias : userInfo.displayName);
-    NSString *callHint = @"通话正在进行中...";
+    NSString *callHint = WFCString(@"CallInProgress");
     if(userName.length) {
-        callHint = [NSString stringWithFormat:@"%@ 发起的通话正在进行中...", userName];
+        callHint = [NSString stringWithFormat:WFCString(@"UserCallInProgress"), userName];
     }
     
     if(!isFocused) {

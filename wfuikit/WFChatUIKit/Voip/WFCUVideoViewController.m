@@ -800,11 +800,11 @@
 }
 - (void)didCallEndWithReason:(WFAVCallEndReason)reason {
     if(reason == kWFAVCallEndReasonBusy) {
-        [self.view makeToast:@"忙线未接听！" duration:3 position:CSToastPositionCenter];
+        [self.view makeToast:WFCString(@"CallEndBusy") duration:3 position:CSToastPositionCenter];
     } else if(reason == kWFAVCallEndReasonInterrupted) {
-        [self.view makeToast:@"通话中断！" duration:3 position:CSToastPositionCenter];
+        [self.view makeToast:WFCString(@"CallEndInterrupted") duration:3 position:CSToastPositionCenter];
     } else if(reason == kWFAVCallEndReasonRemoteInterrupted) {
-        [self.view makeToast:@"对方通话中断！" duration:3 position:CSToastPositionCenter];
+        [self.view makeToast:WFCString(@"CallEndRemoteInterrupted") duration:3 position:CSToastPositionCenter];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[WFAVEngineKit sharedEngineKit] dismissViewController:self];
@@ -842,7 +842,7 @@
 - (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
     //发送方丢包超过6为网络不好
     if(lostPackage > 6) {
-        [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+        [self.view makeToast:WFCString(@"YourNetworkIsPoor") duration:3 position:CSToastPositionCenter];
     }
 }
 
@@ -852,10 +852,10 @@
     if(lostPackage > 10) {
         if(uplink) {
             NSLog(@"对方的网络不好");
-            [self.view makeToast:@"对方的网络不好" duration:3 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"PeerNetworkIsPoor") duration:3 position:CSToastPositionCenter];
         } else {
             NSLog(@"您的网络不好");
-            [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"YourNetworkIsPoor") duration:3 position:CSToastPositionCenter];
         }
     }
 }
