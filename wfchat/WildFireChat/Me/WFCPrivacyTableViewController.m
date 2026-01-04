@@ -53,7 +53,7 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.text = @"找到我的方式";
+        cell.textLabel.text = LocalizedString(@"FindMeBy");
         cell.tag = FIND_ME_TAG;
         [section0 addObject:cell];
     }
@@ -87,7 +87,7 @@
                 [[WFCCIMService sharedWFCIMService] setUserEnableReceipt:value success:^{
                     result(YES);
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"网络错误"];
+                    [ws.view makeToast:LocalizedString(@"NetworkError")];
                     result(NO);
                 }];
             }];
@@ -96,7 +96,7 @@
         
         if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat]) {
             WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
-            switchCell.textLabel.text = @"密聊";
+            switchCell.textLabel.text = LocalizedString(@"SecretChat");
             if ([[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
                 switchCell.on = YES;
             } else {
@@ -107,7 +107,7 @@
                 [[WFCCIMService sharedWFCIMService] setUserEnableSecretChat:value success:^{
                     result(YES);
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"网络错误"];
+                    [ws.view makeToast:LocalizedString(@"NetworkError")];
                     result(NO);
                 }];
             }];
@@ -133,7 +133,7 @@
         [self.cells addObject:section4];
         
         WFCUGeneralSwitchTableViewCell *switchCell = [[WFCUGeneralSwitchTableViewCell alloc] init];
-        switchCell.textLabel.text = @"加我为好友时需要验证";
+        switchCell.textLabel.text = LocalizedString(@"AddFriendNeedVerify");
         if ([[WFCCIMService sharedWFCIMService] isAddFriendNeedVerify]) {
             switchCell.on = YES;
         } else {
@@ -144,7 +144,7 @@
             [[WFCCIMService sharedWFCIMService] setAddFriendNeedVerify:value success:^{
                 result(YES);
             } error:^(int error_code) {
-                [ws.view makeToast:@"网络错误"];
+                [ws.view makeToast:LocalizedString(@"NetworkError")];
                 result(NO);
             }];
         }];

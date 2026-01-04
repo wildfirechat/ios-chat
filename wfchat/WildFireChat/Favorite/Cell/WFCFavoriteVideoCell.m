@@ -33,7 +33,7 @@
     self.videoIcon.center = self.thumbView.center;
     
     int duration = [dict[@"duration"] intValue];
-    self.durationLabel.text = [NSString stringWithFormat:@"%d 秒", duration];
+    self.durationLabel.text = [NSString stringWithFormat:LocalizedString(@"Seconds"), duration];
     self.durationLabel.frame = CGRectMake(8, image.size.height - 30, image.size.width-16, 20);
 }
 

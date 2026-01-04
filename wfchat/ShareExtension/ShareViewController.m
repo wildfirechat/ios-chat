@@ -45,10 +45,10 @@
     
     if (![[ShareAppService sharedAppService] isLogin]) {
         __weak typeof(self)ws = self;
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"没有登录" message:@"请先登录野火IM" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NotLoggedIn") message:LocalizedString(@"PleaseLoginWildFireIM") preferredStyle:UIAlertControllerStyleAlert];
         
         
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
         }];
         
@@ -245,12 +245,12 @@
 - (void)sendTo:(SharedConversation *)conversation {
     __weak typeof(self)ws = self;
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确认发送给" message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmSendTo") message:conversation.title preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         [MBProgressHUD HUDForView:ws.view].mode = MBProgressHUDModeDeterminate;
-        [MBProgressHUD HUDForView:ws.view].label.text = @"正在发送中...";
+        [MBProgressHUD HUDForView:ws.view].label.text = LocalizedString(@"Sending");
         if (ws.textMessageContent.length) {
             [[ShareAppService sharedAppService] sendTextMessage:conversation text:ws.textMessageContent success:^(NSDictionary * _Nonnull dict) {
                 [ws showSuccess];
@@ -319,7 +319,7 @@
         }
     }];
     
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
     
@@ -330,7 +330,7 @@
 }
 
 - (void)showImageLimit {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"不支持发送多张图片" message:@"每次只能发送一张。如果您需要一次发送多张，请打开野火IM选择图片发送。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NotSupportMultiImages") message:LocalizedString(@"NotSupportMultiImagesMessage") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
@@ -352,7 +352,7 @@
 - (void)showSuccess {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"已发送" message:@"您可以在野火IM中查看" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"Sent") message:LocalizedString(@"ViewInWildFire") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
@@ -366,9 +366,9 @@
 
 - (void)showFailure {
     __weak typeof(self)ws = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"网络错误" message:@"糟糕！网络出问题了！" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"NetworkError") message:LocalizedString(@"NetworkErrorMessage") preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"算了吧" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *action = [UIAlertAction actionWithTitle:LocalizedString(@"ForgetIt") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [ws.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
     }];
     
@@ -396,9 +396,9 @@
     }
     
     if (indexPath.row == 0) {
-        cell.textLabel.text = @"发给朋友";
+        cell.textLabel.text = LocalizedString(@"SendToFriend");
     } else if(indexPath.row == 1) {
-        cell.textLabel.text = @"发给自己";
+        cell.textLabel.text = LocalizedString(@"SendToSelf");
     } else {
         cell.textLabel.text = @"分享到朋友圈";
     }
@@ -425,7 +425,7 @@
         conversation.type = 0;//Single_Type;
         conversation.target = FILE_TRANSFER_ID;
         conversation.line = 0;
-        conversation.title = @"自己";
+        conversation.title = LocalizedString(@"Self");
         [self sendTo:conversation];
     }
 }

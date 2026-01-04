@@ -41,3 +41,221 @@ Diagnose="Diagnose";
 MsgReceipt="Msg receipt";
 Cancel="Cancel";
 MyFarovrites="Favrovrites";
+
+// Login
+PhoneLogin="Phone Login";
+PhoneNumber="Phone Number";
+PhoneNumberPlaceholder="Enter phone number (Mainland China only)";
+VerificationCode="Verification Code";
+VerificationCodePlaceholder="Enter verification code";
+GetVerificationCode="Get Code";
+UsePasswordLogin="Use Password Login";
+Register="Register";
+Login="Login";
+LoginAgreement="By logging in, you agree to the WildFire IM User Agreement and Privacy Policy";
+PasswordLogin="Password Login";
+Password="Password";
+PasswordPlaceholder="Enter password";
+UseSMSCodeLogin="Use SMS Code Login";
+SMSCodeLogin="SMS Code Login";
+AccountLoggedInElsewhere="Your account has been logged in on another device";
+GotIt="Got It";
+Tips="Tips";
+SMSCodeLoginTip="Using SMS code login will create an account for you. Please use SMS code login.";
+Confirm="Confirm";
+SMSSending="Sending SMS...";
+SendSuccess="Sent successfully";
+SendFailed="Failed to send";
+Logining="Logging in...";
+LoginFailed="Login failed";
+
+// Reset Password
+SetNewPassword="Set New Password";
+SMSVerificationCode="Enter SMS verification code";
+NewPassword="New Password";
+NewPasswordPlaceholder="Enter new password";
+ConfirmPassword="Confirm Password";
+ConfirmPasswordPlaceholder="Enter confirm password";
+Done="Done";
+Saving="Saving...";
+SaveFailed="Failed to save";
+
+// App Service
+UploadSuccess="Upload successful";
+ServerResponseError="Server response error";
+UploadFailed="Upload failed: %@";
+UsernameExists="Username already exists";
+NetworkError="Network error";
+
+// Call
+WildFire="WildFire";
+IncomingCall="Incoming call";
+MissedCall="Missed call";
+CallCancelled="Call cancelled";
+NetworkCall="Network Call";
+
+// Meeting
+MeetingLoading="Loading meeting";
+MeetingEnded="Meeting ended!";
+MeetingNotSupported="Meeting not supported";
+
+// Notifications
+ReceivedFriendInvitation="Friend invitation received";
+ReceivedFriendRequests="You received %ld friend requests";
+ReceivedNewMessage="You received a new message";
+ReceivedSecretMessage="You received a new secret message";
+MentionedInGroup="%@ mentioned you in the group";
+SomeoneMentionedYou="Someone mentioned you in the group";
+
+// PC Login
+ConfirmWindowsLogin="Confirm Windows Login";
+ConfirmMacLogin="Confirm Mac Login";
+ConfirmBrowserLogin="Confirm Browser Login";
+ConfirmLinuxLogin="Confirm Linux Login";
+ConfirmIPadLogin="Confirm iPad Login";
+ConfirmAndroidTabletLogin="Confirm Android Tablet Login";
+ConfirmPCLogin="Confirm PC Login";
+PCLogin="Login";
+CancelLogin="Cancel Login";
+Close="Close";
+Success="Success";
+
+// PC Session
+PCLoggedIn="PC Logged In";
+WindowsLoggedIn="Windows Logged In";
+MacLoggedIn="Mac Logged In";
+LinuxLoggedIn="Linux Logged In";
+WebLoggedIn="Web Logged In";
+MiniProgramLoggedIn="Mini Program Logged In";
+IPadLoggedIn="iPad Logged In";
+AndroidTabletLoggedIn="Android Tablet Logged In";
+MutePhone="Mute Phone";
+TransferFile="Transfer File";
+LogoutPC="Logout PC";
+LogoutWindows="Logout Windows";
+LogoutMac="Logout Mac";
+LogoutLinux="Logout Linux";
+LogoutWeb="Logout Web";
+LogoutMiniProgram="Logout Mini Program";
+LogoutIPad="Logout iPad";
+LogoutAndroidTablet="Logout Android Tablet";
+
+// PTT Channel
+ChannelName="Channel Name";
+ChannelOfUser="%@'s Channel";
+CreateChannel="Create Channel";
+OopsError="Oops, error occurred";
+TryAgainLater="Try again later!";
+Create="Create";
+JoinChannel="Join Channel";
+Channel="Channel";
+Delete="Delete";
+QuitChannel="Quit";
+
+// Theme
+ThemeChangeSuccess="Changed successfully! Please go back to the app main page to see the effect.";
+Blue="Blue";
+White="White";
+
+// Favorite
+DownloadFailed="Download failed!";
+Forward="Forward";
+Copy="Copy";
+Copied="Copied";
+
+// Privacy
+FindMeBy="Find Me By";
+SecretChat="Secret Chat";
+AddFriendNeedVerify="Require verification when adding me as friend";
+Account="Account";
+PhoneNumberTitle="Phone Number";
+UserId="User ID";
+FindMeDescription="You can find me by";
+
+// Diagnose
+DiagnoseHint="Click \"Test Network\" to start testing";
+TestNetwork="Test Network";
+UploadLogs="Upload Logs";
+SpeedTestSuccess="Speed test successful, latency is %dms";
+SpeedTestFailedUnrecognized="Speed test failed, unrecognized server response: %@";
+SpeedTestFailed="Speed test failed, error: %@";
+UploadSuccess="Upload successful";
+UploadFailed="Upload failed: %@";
+
+// Security
+ModifyPassword="Modify Password";
+SMSCodeVerification="SMS Code Verification";
+UsePasswordVerification="Use Password Verification";
+
+// Report
+ReportTitle="Report";
+ReportDescription="If you find any content that violates laws and morality, or your legitimate rights and interests have been infringed, please take a screenshot and send it to us. We will handle it within 24 hours. Actions include but are not limited to deleting content, warning the author, freezing the account, and even calling the police. To report, please go to \"Settings -> Settings -> Report\" to contact us!";
+
+// Destroy Account
+DestroyAccountTitle="Do you really want to leave us😭😭😭!";
+DestroyAccountButton="Destroy Account";
+OldPassword="Old Password";
+OldPasswordPlaceholder="Enter old password";
+
+// Org Service
+OrgServiceNotConfigured="Organization address book service not configured!";
+OrgServiceNotAvailable="Organization address book service is not available, please login first";
+NotLoggedIn="Not logged in";
+
+// Common
+Seconds="%d seconds";
+
+// Share Extension
+ConfirmSendTo="Confirm send to";
+Sending="Sending...";
+NotSupportMultiImages="Multiple images not supported";
+NotSupportMultiImagesMessage="Only one image at a time. If you need to send multiple images, please open WildFire IM and select images to send.";
+Sent="Sent";
+ViewInWildFire="You can view it in WildFire IM";
+NetworkErrorTitle="Network Error";
+NetworkErrorMessage="Oops! Network problem!";
+ForgetIt="Forget it";
+SendToFriend="Send to Friend";
+SendToSelf="Send to Self";
+ShareToMoments="Share to Moments";
+Self="Self";
+Image="[Image]";
+
+// Things
+DeviceName="Device Name: %@";
+DeviceIdLabel="Device ID: %@";
+DeviceToken="Device Token: %@";
+ModifyDeviceName="Modify Name";
+DeleteDevice="Delete Device";
+SendToMe="Send to Me";
+ModifyDeviceNameTitle="Modify Device Name";
+Deleting="Deleting...";
+Deleted="Deleted";
+DeleteFailed="Failed to delete";
+SendingTo="Sending...";
+SendToDeviceSuccess="Sent successfully";
+SendToDeviceFailed="Failed to send";
+CreateDevice="Create Device";
+DeviceNamePlaceholder="Enter device name";
+DeviceIdPlaceholder="Enter device ID, leave empty to auto-generate";
+Creating="Creating...";
+CreateFailed="Failed to create";
+OpenLED="Open LED";
+CloseLED="Close LED";
+ManualUpdateData="Manual Update Data";
+HumidityTemperature="Humidity:%d.%d%% Temperature:%d.%dC";
+
+// Error Messages
+IMServerError="IM_SERVER_HOST can only be IP or domain, cannot include HTTP header or port!!!";
+ProfessionalVersionUnauthorized="Professional IM service not authorized or authorization expired!!!";
+TimeDifferenceTooLarge="Time difference between server and client is too large!!!";
+GetuiMessage="Getui Message";
+APNsMessage="APNs Message";
+Online="Online";
+Offline="Offline";
+On="On";
+Off="Off";
+
+// Additional strings
+PleaseLoginWildFireIM="Please login to WildFire IM first";
+MyDevices="My Devices";

@@ -79,7 +79,7 @@ static ShareAppService *sharedSingleton = nil;
                  @"content_type":@(3),
                  @"content_media_type":@(1),
                  @"content_remote_url":mediaUrl,
-                 @"content_searchable":@"[图片]",
+                 @"content_searchable":LocalizedString(@"Image"),
                  @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
           }
        success:successBlock
@@ -163,10 +163,10 @@ static ShareAppService *sharedSingleton = nil;
                     
                 }
             }
-            errorBlock(@"服务器响应错误");
+            errorBlock(LocalizedString(@"ServerResponseError"));
         }
          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"上传失败：%@", error);
+            NSLog(@"%@", [NSString stringWithFormat:LocalizedString(@"UploadFailed"), error]);
             errorBlock(error.localizedFailureReason);
         }];
     });
@@ -221,10 +221,10 @@ static ShareAppService *sharedSingleton = nil;
                     
                 }
             }
-            errorBlock(@"服务器响应错误");
+            errorBlock(LocalizedString(@"ServerResponseError"));
         }
          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"上传失败：%@", error);
+            NSLog(@"%@", [NSString stringWithFormat:LocalizedString(@"UploadFailed"), error]);
             errorBlock(error.localizedFailureReason);
         }];
     });

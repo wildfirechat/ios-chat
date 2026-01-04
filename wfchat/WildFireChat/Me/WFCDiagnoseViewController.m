@@ -42,12 +42,12 @@
     
     self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 150, self.view.bounds.size.height/4-40, 300, 60)];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
-    self.resultLabel.text = @"点击\"测试网络\"开始测试";
+    self.resultLabel.text = LocalizedString(@"DiagnoseHint");
     self.resultLabel.numberOfLines = 0;
     [self.view addSubview:self.resultLabel];
     
     self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 - 20, 160, 40)];
-    [self.startButton  setTitle:@"测试网络" forState:UIControlStateNormal];
+    [self.startButton  setTitle:LocalizedString(@"TestNetwork") forState:UIControlStateNormal];
     [self.startButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
     [self.startButton setBackgroundColor:[UIColor greenColor]];
     self.startButton.layer.masksToBounds = YES;
@@ -59,7 +59,7 @@
     
     
     self.uploadLogsButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 + 40, 160, 40)];
-    [self.uploadLogsButton  setTitle:@"上传日志" forState:UIControlStateNormal];
+    [self.uploadLogsButton  setTitle:LocalizedString(@"UploadLogs") forState:UIControlStateNormal];
     [self.uploadLogsButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
     [self.uploadLogsButton setBackgroundColor:[UIColor redColor]];
     self.uploadLogsButton.layer.masksToBounds = YES;
@@ -85,7 +85,7 @@
             if ([responseObject isKindOfClass:[NSDictionary class]]) {
                 double value = now.timeIntervalSinceNow;
                 int duration = (int)((-value)*1000 + 0.5);
-                [ws reportResult:[NSString stringWithFormat:@"测速成功，延时为%dms", duration]];
+                [ws reportResult:[NSString stringWithFormat:LocalizedString(@"SpeedTestSuccess"), duration]];
             } else {
                 [ws reportResult:[NSString stringWithFormat:@"测速失败，无法识别服务器返回的数据：%@", responseObject]];
             }
@@ -104,9 +104,9 @@
     
     __weak typeof(self)ws =self;
     [[AppService sharedAppService] uploadLogs:^{
-        [ws reportResult:@"上传成功"];
+        [ws reportResult:LocalizedString(@"UploadSuccess")];
     } error:^(NSString *errorMsg) {
-        [ws reportResult:[NSString stringWithFormat:@"上传失败：%@", errorMsg]];
+        [ws reportResult:[NSString stringWithFormat:LocalizedString(@"UploadFailed"), errorMsg]];
     }];
 }
 

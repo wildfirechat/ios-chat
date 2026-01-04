@@ -1,0 +1,261 @@
+/*
+  InfoPlist.strings
+  WildFireChat
+
+  Created by Heavyrain.lee on 2019/9/16.
+  Copyright © 2019 WildFireChat. All rights reserved.
+*/
+CFBundleName="野火IM";
+CFBundleDisplayName="野火IM";
+Message="消息";
+Contact="聯繫人";
+Work="工作台";
+Discover="發現";
+Settings="設置";
+Chatroom="聊天室";
+DevDocs="開發手冊";
+Conference="會議";
+AccountSafety="賬戶與安全";
+MessageNotification="新消息通知";
+ChangePassword="修改密碼";
+PrivacySettings="隱私設置";
+Theme="主題";
+CurrentVersion="當前版本";
+HelpFeedback="幫助與反饋";
+AboutWFChat="關於野火IM";
+UserAgreement="用戶協議";
+PrivacyPolicy="隱私政策";
+Complain="舉報";
+Blacklist="黑名單";
+Quit="退出";
+Logout="退出登錄";
+DestroyAccount="銷毀賬號";
+Moments="朋友圈";
+Me="我的";
+Robot="機器人";
+Channel="頻道";
+Mesh="外部單位";
+Favorite="收藏";
+File="文件";
+Diagnose="診斷";
+MsgReceipt="消息回執";
+Cancel="取消";
+MyFarovrites="我的收藏";
+
+// Login
+PhoneLogin="手機號登錄";
+PhoneNumber="手機號";
+PhoneNumberPlaceholder="請輸入手機號(僅支持中國大陸號碼)";
+VerificationCode="驗證碼";
+VerificationCodePlaceholder="請輸入驗證碼";
+GetVerificationCode="獲取驗證碼";
+UsePasswordLogin="使用用戶密碼登錄";
+Register="註冊";
+Login="登錄";
+LoginAgreement="登錄即代表你已同意《野火IM用戶協議》和《野火IM隱私政策》";
+PasswordLogin="密碼登錄";
+Password="密  碼 ";
+PasswordPlaceholder="請輸入密碼";
+UseSMSCodeLogin="使用短信驗證碼登錄";
+SMSCodeLogin="短信驗證碼登錄";
+AccountLoggedInElsewhere="您的賬號已在其他手機登錄";
+GotIt="知道了";
+Tips="提示";
+SMSCodeLoginTip="使用短信驗證碼登錄將會為您創建賬戶，請使用短信驗證碼登錄。";
+Confirm="確定";
+SMSSending="短信發送中";
+SendSuccess="發送成功";
+SendFailed="發送失敗";
+Logining="登錄中...";
+LoginFailed="登錄失敗";
+
+// Reset Password
+SetNewPassword="設置新密碼";
+SMSVerificationCode="請輸入短信驗證碼";
+NewPassword="新密碼";
+NewPasswordPlaceholder="請輸入新密碼";
+ConfirmPassword="確認密碼";
+ConfirmPasswordPlaceholder="請輸入確認密碼";
+Done="完成";
+Saving="保存中...";
+SaveFailed="保存失敗";
+
+// App Service
+UploadSuccess="上傳成功";
+ServerResponseError="服務器響應錯誤";
+UploadFailed="上傳失敗：%@";
+UsernameExists="用戶名已經存在";
+NetworkError="網絡錯誤";
+
+// Call
+WildFire="野火";
+IncomingCall="來電話了";
+MissedCall="來電未接聽";
+CallCancelled="來電已取消";
+NetworkCall="網絡通話";
+
+// Meeting
+MeetingLoading="會議加載中";
+MeetingEnded="會議已結束！";
+MeetingNotSupported="不支持會議";
+
+// Notifications
+ReceivedFriendInvitation="收到好友邀請";
+ReceivedFriendRequests="您收到 %ld 條好友請求";
+ReceivedNewMessage="您收到了新消息";
+ReceivedSecretMessage="您收到了新的密聊消息";
+MentionedInGroup="%@在群里@了你";
+SomeoneMentionedYou="有人在群里@了你";
+
+// PC Login
+ConfirmWindowsLogin="確認 Windows 登錄";
+ConfirmMacLogin="確認 Mac 登錄";
+ConfirmBrowserLogin="確認瀏覽器登錄";
+ConfirmLinuxLogin="確認 Linux 登錄";
+ConfirmIPadLogin="確認 iPad 登錄";
+ConfirmAndroidTabletLogin="確認 Android 平板登錄";
+ConfirmPCLogin="確認電腦登錄";
+PCLogin="登錄";
+CancelLogin="取消登錄";
+Close="關閉";
+Success="成功";
+
+// PC Session
+PCLoggedIn="電腦已登錄";
+WindowsLoggedIn="Windows 已登錄";
+MacLoggedIn="Mac 已登錄";
+LinuxLoggedIn="Linux 已登錄";
+WebLoggedIn="Web 已登錄";
+MiniProgramLoggedIn="小程序已登錄";
+IPadLoggedIn="iPad 已登錄";
+AndroidTabletLoggedIn="Android 平板已登錄";
+MutePhone="手機靜音";
+TransferFile="傳輸文件";
+LogoutPC="退出電腦登錄";
+LogoutWindows="退出 Windows 登錄";
+LogoutMac="退出 Mac 登錄";
+LogoutLinux="退出 Linux 登錄";
+LogoutWeb="退出 Web 登錄";
+LogoutMiniProgram="退出小程序登錄";
+LogoutIPad="退出 iPad 登錄";
+LogoutAndroidTablet="退出 Android 平板登錄";
+
+// PTT Channel
+ChannelName="頻道名稱";
+ChannelOfUser="%@的頻道";
+CreateChannel="創建頻道";
+OopsError="糟糕，出錯了";
+TryAgainLater="等會再試試吧！";
+Create="創建";
+JoinChannel="加入頻道";
+Channel="頻道";
+Delete="刪除";
+QuitChannel="退出";
+
+// Theme
+ThemeChangeSuccess="修改成功！請退回到應用主頁面查看效果。";
+Blue="藍色";
+White="白色";
+
+// Favorite
+DownloadFailed="下載失敗!";
+Forward="轉發";
+Copy="拷貝";
+Copied="已拷貝";
+
+// Privacy
+FindMeBy="找到我的方式";
+SecretChat="密聊";
+AddFriendNeedVerify="加我為好友時需要驗證";
+Account="賬號";
+PhoneNumberTitle="電話號碼";
+UserId="用戶ID";
+FindMeDescription="可以通過以下方法找到我";
+
+// Diagnose
+DiagnoseHint="點擊\"測試網絡\"開始測試";
+TestNetwork="測試網絡";
+UploadLogs="上傳日誌";
+SpeedTestSuccess="測速成功，延時為%dms";
+SpeedTestFailedUnrecognized="測速失敗，無法識別服務器返回的數據：%@";
+SpeedTestFailed="測速失敗，錯誤原因:%@";
+UploadSuccess="上傳成功";
+UploadFailed="上傳失敗：%@";
+
+// Security
+ModifyPassword="修改密碼";
+SMSCodeVerification="短信驗證碼驗證";
+UsePasswordVerification="使用密碼驗證";
+
+// Report
+ReportTitle="舉報";
+ReportDescription="如果您發現有違反法律和道德的內容，或者您的合法權益受到侵犯，請截圖之後發送給我們。我們會在24小時之內處理。處理辦法包括不限於刪除內容，對作者進行警告，凍結賬號，甚至報警處理。舉報請到\"設置->設置->舉報\"聯繫我們！";
+
+// Destroy Account
+DestroyAccountTitle="親，真的要狠心離開我們嗎😭😭😭！";
+DestroyAccountButton="銷毀賬戶";
+OldPassword="原密碼";
+OldPasswordPlaceholder="請輸入原密碼";
+
+// Org Service
+OrgServiceNotConfigured="沒有配置組織通訊錄服務!";
+OrgServiceNotAvailable="組織通訊錄服務不可用，請確保先登錄再使用組織通訊錄";
+NotLoggedIn="未登錄";
+
+// Common
+Seconds="%d 秒";
+
+// Share Extension
+ConfirmSendTo="確認發送給";
+Sending="正在發送中...";
+NotSupportMultiImages="不支持發送多張圖片";
+NotSupportMultiImagesMessage="每次只能發送一張。如果您需要一次發送多張，請打開野火IM選擇圖片發送。";
+Sent="已發送";
+ViewInWildFire="您可以在野火IM中查看";
+NetworkErrorTitle="網絡錯誤";
+NetworkErrorMessage="糟糕！網絡出問題了！";
+ForgetIt="算了吧";
+SendToFriend="發給朋友";
+SendToSelf="發給自己";
+ShareToMoments="分享到朋友圈";
+Self="自己";
+Image="[圖片]";
+
+// Things
+DeviceName="設備名稱：%@";
+DeviceIdLabel="設備ID：%@";
+DeviceToken="設備令牌：%@";
+ModifyDeviceName="修改名稱";
+DeleteDevice="刪除設備";
+SendToMe="發送給我";
+ModifyDeviceNameTitle="修改設備名";
+Deleting="刪除中...";
+Deleted="已刪除";
+DeleteFailed="刪除失敗";
+SendingTo="發送中...";
+SendToDeviceSuccess="發送成功";
+SendToDeviceFailed="發送失敗";
+CreateDevice="創建設備";
+DeviceNamePlaceholder="請輸入設備名稱";
+DeviceIdPlaceholder="請輸入設備ID，如果為空，系統會自動生成";
+Creating="創建中...";
+CreateFailed="創建失敗";
+OpenLED="打開LED";
+CloseLED="關閉LED";
+ManualUpdateData="手動更新數據";
+HumidityTemperature="濕度:%d.%d%% 溫度:%d.%dC";
+
+// Error Messages
+IMServerError="IM_SERVER_HOST只能填寫IP或者域名，不能帶HTTP頭或者端口！！！";
+ProfessionalVersionUnauthorized="專業版IM服務沒有授權或者授權過期！！！";
+TimeDifferenceTooLarge="服務器和客戶端時間相差太大！！！";
+GetuiMessage="個推消息";
+APNsMessage="APNs消息";
+Online="在線";
+Offline="離線";
+On="開啟";
+Off="關閉";
+
+// Additional strings
+PleaseLoginWildFireIM="請先登錄野火IM";
+MyDevices="我的設備";

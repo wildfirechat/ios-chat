@@ -29,7 +29,7 @@
     [self.view addSubview:pcView];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 300, 200, 16)];
-    [label setText:@"电脑已登录"];
+    [label setText:LocalizedString(@"PCLoggedIn")];
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
     
@@ -46,7 +46,7 @@
     [self.muteBtn addTarget:self action:@selector(onMuteBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.muteBtn];
     UILabel *muteLabel = [[UILabel alloc] initWithFrame:CGRectMake((width-width/3)/2-35, 410, 70, 15)];
-    [muteLabel setText:@"手机静音"];
+    [muteLabel setText:LocalizedString(@"MutePhone")];
     [muteLabel setFont:[UIFont systemFontOfSize:12]];
     [muteLabel setTextColor:[UIColor grayColor]];
     [muteLabel setTextAlignment:NSTextAlignmentCenter];
@@ -61,7 +61,7 @@
     [fileBtn addTarget:self action:@selector(onFileBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:fileBtn];
     UILabel *fileLabel = [[UILabel alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 410, 70, 15)];
-    [fileLabel setText:@"传输文件"];
+    [fileLabel setText:LocalizedString(@"TransferFile")];
     [fileLabel setFont:[UIFont systemFontOfSize:12]];
     [fileLabel setTextColor:[UIColor grayColor]];
     [fileLabel setTextAlignment:NSTextAlignmentCenter];
@@ -70,7 +70,7 @@
     
     UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(90, height - 120, width - 180, 36)];
     [logoutBtn setBackgroundColor:[UIColor redColor]];
-    [logoutBtn setTitle:@"退出电脑登录" forState:UIControlStateNormal];
+    [logoutBtn setTitle:LocalizedString(@"LogoutPC") forState:UIControlStateNormal];
     logoutBtn.layer.masksToBounds = YES;
     logoutBtn.layer.cornerRadius = 5.f;
     [logoutBtn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -78,26 +78,26 @@
     NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
     if (infos.count) {
         if (infos[0].platform == PlatformType_Windows) {
-            [logoutBtn setTitle:@"退出 Windows 登录" forState:UIControlStateNormal];
-            [label setText:@"Windows 已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutWindows") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"WindowsLoggedIn")];
         } else if(infos[0].platform == PlatformType_OSX) {
-            [logoutBtn setTitle:@"退出 Mac 登录" forState:UIControlStateNormal];
-            [label setText:@"Mac 已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutMac") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"MacLoggedIn")];
         } else if(infos[0].platform == PlatformType_Linux) {
-            [logoutBtn setTitle:@"退出 Linux 登录" forState:UIControlStateNormal];
-            [label setText:@"Linux 已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutLinux") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"LinuxLoggedIn")];
         } else if(infos[0].platform == PlatformType_WEB) {
-            [logoutBtn setTitle:@"退出 Web 登录" forState:UIControlStateNormal];
-            [label setText:@"Web 已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutWeb") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"WebLoggedIn")];
         } else if(infos[0].platform == PlatformType_WX) {
-            [logoutBtn setTitle:@"退出小程序登录" forState:UIControlStateNormal];
-            [label setText:@"小程序已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutMiniProgram") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"MiniProgramLoggedIn")];
         } else if(infos[0].platform == PlatformType_iPad) {
-            [logoutBtn setTitle:@"退出 iPad 登录" forState:UIControlStateNormal];
-            [label setText:@"iPad 已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutIPad") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"IPadLoggedIn")];
         } else if(infos[0].platform == PlatformType_Android) {
-            [logoutBtn setTitle:@"退出 Android 平板登录" forState:UIControlStateNormal];
-            [label setText:@"Android 平板已登录"];
+            [logoutBtn setTitle:LocalizedString(@"LogoutAndroidTablet") forState:UIControlStateNormal];
+            [label setText:LocalizedString(@"AndroidTabletLoggedIn")];
         }
     }
     
@@ -119,14 +119,14 @@
     if (!result) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"网络错误";
+        hud.label.text = LocalizedString(@"NetworkError");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         
         [hud hideAnimated:YES afterDelay:1.f];
     } else if(isLogin) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"成功";
+        hud.label.text = LocalizedString(@"Success");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         
         __weak typeof(self)ws = self;

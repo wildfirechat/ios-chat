@@ -384,7 +384,7 @@ static AppService *sharedSingleton = nil;
                 if ([responseObject isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *dict = (NSDictionary *)responseObject;
                     if([dict[@"code"] intValue] == 0) {
-                        NSLog(@"上传成功");
+                        NSLog(@"%@", LocalizedString(@"UploadSuccess"));
                         success = YES;
                         NSString *name = [logFile componentsSeparatedByString:@"/"].lastObject;
                         [uploadedFiles removeObject:name];
@@ -394,11 +394,11 @@ static AppService *sharedSingleton = nil;
                     }
                 }
                 if (!success) {
-                    errorMsg = @"服务器响应错误";
+                    errorMsg = LocalizedString(@"ServerResponseError");
                 }
                 dispatch_semaphore_signal(sema);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                NSLog(@"上传失败：%@", error);
+                NSLog(@"%@", [NSString stringWithFormat:LocalizedString(@"UploadFailed"), error]);
                 dispatch_semaphore_signal(sema);
                 errorMsg = error.localizedFailureReason;
             }];
@@ -586,9 +586,9 @@ static AppService *sharedSingleton = nil;
         } else {
             NSString *errmsg;
             if ([dict[@"code"] intValue] == 17) {
-                errmsg = @"用户名已经存在";
+                errmsg = LocalizedString(@"UsernameExists");
             } else {
-                errmsg = @"网络错误";
+                errmsg = LocalizedString(@"NetworkError");
             }
             if(errorBlock) errorBlock([dict[@"code"] intValue], errmsg);
         }

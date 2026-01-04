@@ -41,3 +41,221 @@ Diagnose="诊断";
 MsgReceipt="消息回执";
 Cancel="取消";
 MyFarovrites="我的收藏";
+
+// Login
+PhoneLogin="手机号登录";
+PhoneNumber="手机号";
+PhoneNumberPlaceholder="请输入手机号(仅支持中国大陆号码)";
+VerificationCode="验证码";
+VerificationCodePlaceholder="请输入验证码";
+GetVerificationCode="获取验证码";
+UsePasswordLogin="使用用户密码登录";
+Register="注册";
+Login="登录";
+LoginAgreement="登录即代表你已同意《野火IM用户协议》和《野火IM隐私政策》";
+PasswordLogin="密码登录";
+Password="密  码 ";
+PasswordPlaceholder="请输入密码";
+UseSMSCodeLogin="使用短信验证码登录";
+SMSCodeLogin="短信验证码登录";
+AccountLoggedInElsewhere="您的账号已在其他手机登录";
+GotIt="知道了";
+Tips="提示";
+SMSCodeLoginTip="使用短信验证码登录将会为您创建账户，请使用短信验证码登录。";
+Confirm="确定";
+SMSSending="短信发送中";
+SendSuccess="发送成功";
+SendFailed="发送失败";
+Logining="登录中...";
+LoginFailed="登录失败";
+
+// Reset Password
+SetNewPassword="设置新密码";
+SMSVerificationCode="请输入短信验证码";
+NewPassword="新密码";
+NewPasswordPlaceholder="请输入新密码";
+ConfirmPassword="确认密码";
+ConfirmPasswordPlaceholder="请输入确认密码";
+Done="完成";
+Saving="保存中...";
+SaveFailed="保存失败";
+
+// App Service
+UploadSuccess="上传成功";
+ServerResponseError="服务器响应错误";
+UploadFailed="上传失败：%@";
+UsernameExists="用户名已经存在";
+NetworkError="网络错误";
+
+// Call
+WildFire="野火";
+IncomingCall="来电话了";
+MissedCall="来电未接听";
+CallCancelled="来电已取消";
+NetworkCall="网络通话";
+
+// Meeting
+MeetingLoading="会议加载中";
+MeetingEnded="会议已结束！";
+MeetingNotSupported="不支持会议";
+
+// Notifications
+ReceivedFriendInvitation="收到好友邀请";
+ReceivedFriendRequests="您收到 %ld 条好友请求";
+ReceivedNewMessage="您收到了新消息";
+ReceivedSecretMessage="您收到了新的密聊消息";
+MentionedInGroup="%@在群里@了你";
+SomeoneMentionedYou="有人在群里@了你";
+
+// PC Login
+ConfirmWindowsLogin="确认 Windows 登录";
+ConfirmMacLogin="确认 Mac 登录";
+ConfirmBrowserLogin="确认浏览器登录";
+ConfirmLinuxLogin="确认 Linux 登录";
+ConfirmIPadLogin="确认 iPad 登录";
+ConfirmAndroidTabletLogin="确认 Android 平板登录";
+ConfirmPCLogin="确认电脑登录";
+PCLogin="登录";
+CancelLogin="取消登录";
+Close="关闭";
+Success="成功";
+
+// PC Session
+PCLoggedIn="电脑已登录";
+WindowsLoggedIn="Windows 已登录";
+MacLoggedIn="Mac 已登录";
+LinuxLoggedIn="Linux 已登录";
+WebLoggedIn="Web 已登录";
+MiniProgramLoggedIn="小程序已登录";
+IPadLoggedIn="iPad 已登录";
+AndroidTabletLoggedIn="Android 平板已登录";
+MutePhone="手机静音";
+TransferFile="传输文件";
+LogoutPC="退出电脑登录";
+LogoutWindows="退出 Windows 登录";
+LogoutMac="退出 Mac 登录";
+LogoutLinux="退出 Linux 登录";
+LogoutWeb="退出 Web 登录";
+LogoutMiniProgram="退出小程序登录";
+LogoutIPad="退出 iPad 登录";
+LogoutAndroidTablet="退出 Android 平板登录";
+
+// PTT Channel
+ChannelName="频道名称";
+ChannelOfUser="%@的频道";
+CreateChannel="创建频道";
+OopsError="糟糕，出错了";
+TryAgainLater="等会再试试吧！";
+Create="创建";
+JoinChannel="加入频道";
+Channel="频道";
+Delete="删除";
+QuitChannel="退出";
+
+// Theme
+ThemeChangeSuccess="修改成功！请退回到应用主页面查看效果。";
+Blue="蓝色";
+White="白色";
+
+// Favorite
+DownloadFailed="下载失败!";
+Forward="转发";
+Copy="拷贝";
+Copied="已拷贝";
+
+// Privacy
+FindMeBy="找到我的方式";
+SecretChat="密聊";
+AddFriendNeedVerify="加我为好友时需要验证";
+Account="账号";
+PhoneNumberTitle="电话号码";
+UserId="用户ID";
+FindMeDescription="可以通过以下方法找到我";
+
+// Diagnose
+DiagnoseHint="点击\"测试网络\"开始测试";
+TestNetwork="测试网络";
+UploadLogs="上传日志";
+SpeedTestSuccess="测速成功，延时为%dms";
+SpeedTestFailedUnrecognized="测速失败，无法识别服务器返回的数据：%@";
+SpeedTestFailed="测速失败，错误原因:%@";
+UploadSuccess="上传成功";
+UploadFailed="上传失败：%@";
+
+// Security
+ModifyPassword="修改密码";
+SMSCodeVerification="短信验证码验证";
+UsePasswordVerification="使用密码验证";
+
+// Report
+ReportTitle="举报";
+ReportDescription="如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！";
+
+// Destroy Account
+DestroyAccountTitle="亲，真的要狠心离开我们吗😭😭😭！";
+DestroyAccountButton="销毁账户";
+OldPassword="原密码";
+OldPasswordPlaceholder="请输入原密码";
+
+// Org Service
+OrgServiceNotConfigured="没有配置组织通讯录服务!";
+OrgServiceNotAvailable="组织通讯录服务不可用，请确保先登录再使用组织通讯录";
+NotLoggedIn="未登录";
+
+// Common
+Seconds="%d 秒";
+
+// Share Extension
+ConfirmSendTo="确认发送给";
+Sending="正在发送中...";
+NotSupportMultiImages="不支持发送多张图片";
+NotSupportMultiImagesMessage="每次只能发送一张。如果您需要一次发送多张，请打开野火IM选择图片发送。";
+Sent="已发送";
+ViewInWildFire="您可以在野火IM中查看";
+NetworkErrorTitle="网络错误";
+NetworkErrorMessage="糟糕！网络出问题了！";
+ForgetIt="算了吧";
+SendToFriend="发给朋友";
+SendToSelf="发给自己";
+ShareToMoments="分享到朋友圈";
+Self="自己";
+Image="[图片]";
+
+// Things
+DeviceName="设备名称：%@";
+DeviceIdLabel="设备ID：%@";
+DeviceToken="设备令牌：%@";
+ModifyDeviceName="修改名称";
+DeleteDevice="删除设备";
+SendToMe="发送给我";
+ModifyDeviceNameTitle="修改设备名";
+Deleting="删除中...";
+Deleted="已删除";
+DeleteFailed="删除失败";
+SendingTo="发送中...";
+SendToDeviceSuccess="发送成功";
+SendToDeviceFailed="发送失败";
+CreateDevice="创建设备";
+DeviceNamePlaceholder="请输入设备名称";
+DeviceIdPlaceholder="请输入设备ID，如果为空，系统会自动生成";
+Creating="创建中...";
+CreateFailed="创建失败";
+OpenLED="打开LED";
+CloseLED="关闭LED";
+ManualUpdateData="手动更新数据";
+HumidityTemperature="湿度:%d.%d%% 温度:%d.%dC";
+
+// Error Messages
+IMServerError="IM_SERVER_HOST只能填写IP或者域名，不能带HTTP头或者端口！！！";
+ProfessionalVersionUnauthorized="专业版IM服务没有授权或者授权过期！！！";
+TimeDifferenceTooLarge="服务器和客户端时间相差太大！！！";
+GetuiMessage="个推消息";
+APNsMessage="APNs消息";
+Online="在线";
+Offline="离线";
+On="开启";
+Off="关闭";
+
+// Additional strings
+PleaseLoginWildFireIM="请先登录野火IM";
+MyDevices="我的设备";

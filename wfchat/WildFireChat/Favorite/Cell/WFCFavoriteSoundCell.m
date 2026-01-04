@@ -29,7 +29,7 @@
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     int duration = [dict[@"duration"] intValue];
     
-    self.nameLabel.text = [NSString stringWithFormat:@"%d 秒", duration];
+    self.nameLabel.text = [NSString stringWithFormat:LocalizedString(@"Seconds"), duration];
 }
 
 + (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {

@@ -34,7 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"设置新密码";
+    self.title = LocalizedString(@"SetNewPassword");
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     CGFloat inputHeight = 40;
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 16;
@@ -51,7 +51,7 @@
         self.codePasswordfield.keyboardType = UIKeyboardTypeASCIICapable;
         
         self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - 16 - 72, topPos + (inputHeight - 23)/2, 72, 23)];
-        [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
         self.sendCodeBtn.titleLabel.font = [UIFont systemFontOfSize:12];
         self.sendCodeBtn.layer.borderWidth = 1;
         self.sendCodeBtn.layer.cornerRadius = 4;
@@ -110,13 +110,13 @@
     [self.view addSubview:self.repeatPasswordField];
     [self.view addSubview:self.repeatLine];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"Done") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void)onSendCode:(id)sender {
     self.sendCodeBtn.enabled = NO;
-    [self.sendCodeBtn setTitle:@"短信发送中" forState:UIControlStateNormal];
+    [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
     __weak typeof(self)ws = self;
     [[AppService sharedAppService] sendResetCode:nil success:^{
        [ws sendCodeDone:YES];
@@ -130,7 +130,7 @@
         if (success) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"发送成功";
+            hud.label.text = LocalizedString(@"SendSuccess");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             self.sendCodeTime = [NSDate date].timeIntervalSince1970;
             self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1
@@ -145,11 +145,11 @@
         } else {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"发送失败";
+            hud.label.text = LocalizedString(@"SendFailed");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+                [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
                 self.sendCodeBtn.enabled = YES;
             });
         }
@@ -162,7 +162,7 @@
     if (second >= 60) {
         [self.countdownTimer invalidate];
         self.countdownTimer = nil;
-        [self.sendCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
         self.sendCodeBtn.enabled = YES;
     }
 }
@@ -172,7 +172,7 @@
     NSString *code = self.resetCode.length ? self.resetCode : self.codePasswordfield.text;
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"保存中...";
+    hud.label.text = LocalizedString(@"Saving");
     [hud showAnimated:YES];
     __weak typeof(self)ws = self;
     [[AppService sharedAppService] resetPassword:nil code:code newPassword:password success:^{
@@ -184,7 +184,7 @@
         [hud hideAnimated:YES];
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"保存失败";
+        hud.label.text = LocalizedString(@"SaveFailed");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
