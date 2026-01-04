@@ -11,6 +11,7 @@
 #import "WFCConfig.h"
 #import "SharePredefine.h"
 #import "ShareUtility.h"
+#import "ShareLocalizationHelper.h"
 
 static ShareAppService *sharedSingleton = nil;
 #define AUTHORIZATION_HEADER @"authToken"
@@ -79,7 +80,7 @@ static ShareAppService *sharedSingleton = nil;
                  @"content_type":@(3),
                  @"content_media_type":@(1),
                  @"content_remote_url":mediaUrl,
-                 @"content_searchable":LocalizedString(@"Image"),
+                 @"content_searchable":ShareLocalizedString(@"Image"),
                  @"content_binary":[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]
           }
        success:successBlock
@@ -163,10 +164,10 @@ static ShareAppService *sharedSingleton = nil;
                     
                 }
             }
-            errorBlock(LocalizedString(@"ServerResponseError"));
+            errorBlock(ShareLocalizedString(@"ServerResponseError"));
         }
          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"%@", [NSString stringWithFormat:LocalizedString(@"UploadFailed"), error]);
+            NSLog(@"%@", [NSString stringWithFormat:ShareLocalizedString(@"UploadFailed"), error]);
             errorBlock(error.localizedFailureReason);
         }];
     });
@@ -221,10 +222,10 @@ static ShareAppService *sharedSingleton = nil;
                     
                 }
             }
-            errorBlock(LocalizedString(@"ServerResponseError"));
+            errorBlock(ShareLocalizedString(@"ServerResponseError"));
         }
          failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"%@", [NSString stringWithFormat:LocalizedString(@"UploadFailed"), error]);
+            NSLog(@"%@", [NSString stringWithFormat:ShareLocalizedString(@"UploadFailed"), error]);
             errorBlock(error.localizedFailureReason);
         }];
     });

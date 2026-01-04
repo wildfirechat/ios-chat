@@ -1154,6 +1154,7 @@
 		B7A1C05E28DDA65100AAB00F /* WFCUParticipantCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUParticipantCollectionViewCell.h; sourceTree = "<group>"; };
 		B7AF6251295946F700324247 /* WFCUOrganizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUOrganizationViewController.m; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.m; sourceTree = SOURCE_ROOT; };
 		B7AF6252295946F700324247 /* WFCUOrganizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUOrganizationViewController.h; path = WFChatUIKit/Contacts/ViewController/WFCUOrganizationViewController.h; sourceTree = SOURCE_ROOT; };
+		B7B2F84C2F0A11E6001CBF4C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/wfc.strings"; sourceTree = "<group>"; };
 		B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReadViewController.h; sourceTree = "<group>"; };
 		B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReadViewController.m; sourceTree = "<group>"; };
 		B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLPageViewController.m; sourceTree = "<group>"; };
@@ -2979,6 +2980,7 @@
 			knownRegions = (
 				en,
 				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 2F550BD5217F4D7B00F56C26;
 			productRefGroup = 2F550BE0217F4D7B00F56C26 /* Products */;
@@ -3317,6 +3319,7 @@
 			children = (
 				2BCEC52D232E10DF00D55E0D /* en */,
 				2BCEC52F232E10E900D55E0D /* zh-Hans */,
+				B7B2F84C2F0A11E6001CBF4C /* zh-Hant */,
 			);
 			name = wfc.strings;
 			sourceTree = "<group>";

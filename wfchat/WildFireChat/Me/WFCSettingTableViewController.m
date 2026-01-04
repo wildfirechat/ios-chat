@@ -18,6 +18,8 @@
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "WFCThemeTableViewController.h"
+#import "WFCLanguageTableViewController.h"
+#import "WFCLanguageManager.h"
 #import "AppService.h"
 #import "OrgService.h"
 #import "WFCDestroyAccountViewController.h"
@@ -62,7 +64,10 @@
     }else if(indexPath.section == 1) {
         WFCThemeTableViewController *vc = [[WFCThemeTableViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    } else if (indexPath.section == 2) {
+    } else if(indexPath.section == 2) {
+        WFCLanguageTableViewController *vc = [[WFCLanguageTableViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.section == 3) {
         if (indexPath.row == 1) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [[WFCCConversation alloc] init];
@@ -76,7 +81,7 @@
             WFCAboutViewController *avc = [[WFCAboutViewController alloc] init];
             [self.navigationController pushViewController:avc animated:YES];
         }
-    } else if(indexPath.section == 3) {
+    } else if(indexPath.section == 4) {
         if (indexPath.row == 0) {
             WFCPrivacyViewController * pvc = [[WFCPrivacyViewController alloc] init];
             pvc.isPrivacy = NO;
@@ -86,29 +91,29 @@
             pvc.isPrivacy = YES;
             [self.navigationController pushViewController:pvc animated:YES];
         }
-    } else if(indexPath.section == 4) {
+    } else if(indexPath.section == 5) {
         __weak typeof(self)ws = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"ReportTitle") message:LocalizedString(@"ReportMessage") preferredStyle:UIAlertControllerStyleAlert];
-        
+
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            
+
         }];
         [alertController addAction:action1];
-        
+
         UIAlertAction *action2 = [UIAlertAction actionWithTitle:LocalizedString(@"ReportTitle") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [[WFCCConversation alloc] init];
             mvc.conversation.type = Single_Type;
             mvc.conversation.target = @"cgc8c8VV";
             mvc.conversation.line = 0;
-            
+
             mvc.hidesBottomBarWhenPushed = YES;
             [ws.navigationController pushViewController:mvc animated:YES];
         }];
         [alertController addAction:action2];
-        
+
         [self presentViewController:alertController animated:YES completion:nil];
-    } else if (indexPath.section == 5) {
+    } else if (indexPath.section == 6) {
         WFCDiagnoseViewController *vc = [[WFCDiagnoseViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -139,23 +144,25 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 7;
+    return 8;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 1;
     } else if (section == 1) {
-        return 1; //
+        return 1; // 主题
     } else if (section == 2) {
-        return 3; //
+        return 1; // 语言
     } else if (section == 3) {
-        return 2; // 用户协议和隐私声明
+        return 3; // 关于、帮助反馈等
     } else if (section == 4) {
-        return 1; //举报
+        return 2; // 用户协议和隐私声明
     } else if (section == 5) {
-        return 1; //diagnose
+        return 1; //举报
     } else if (section == 6) {
+        return 1; //diagnose
+    } else if (section == 7) {
         return 1; //logout
     }
     return 0;
@@ -203,6 +210,11 @@
         cell.textLabel.text = LocalizedString(@"Theme");
         [self hiddenSeparatorLine:cell];
     } else if(indexPath.section == 2) {
+        cell.textLabel.text = LocalizedString(@"Language");
+        WFCLanguageType currentLanguage = [[WFCLanguageManager sharedManager] getCurrentLanguage];
+        cell.detailTextLabel.text = [[WFCLanguageManager sharedManager] getLanguageDisplayName:currentLanguage];
+        [self hiddenSeparatorLine:cell];
+    } else if(indexPath.section == 3) {
         if (indexPath.row == 0) {
             [self showSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"CurrentVersion");
@@ -215,7 +227,7 @@
             cell.textLabel.text = LocalizedString(@"AboutWFChat");
             [self hiddenSeparatorLine:cell];
         }
-    } else if(indexPath.section == 3) {
+    } else if(indexPath.section == 4) {
         if (indexPath.row == 0) {
             cell.textLabel.text = LocalizedString(@"UserAgreement");
             [self showSeparatorLine:cell];
@@ -224,15 +236,15 @@
             cell.textLabel.text = LocalizedString(@"PrivacyPolicy");
             [self hiddenSeparatorLine:cell];
         }
-    } else if(indexPath.section == 4) {
+    } else if(indexPath.section == 5) {
         if (indexPath.row == 0) {
             [self hiddenSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"Complain");
         }
-    } else if (indexPath.section == 5) {
+    } else if (indexPath.section == 6) {
         [self hiddenSeparatorLine:cell];
         cell.textLabel.text = LocalizedString(@"Diagnose");
-    } else if (indexPath.section == 6) {
+    } else if (indexPath.section == 7) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];
