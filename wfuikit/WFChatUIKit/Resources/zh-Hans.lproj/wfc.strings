@@ -467,3 +467,10 @@
 "Seconds"="%d秒";
 "SomeoneTyping"="有人正在输入";
 "EtcPeople"="等";
+"SearchByDate"="日期";
+"SearchMedia"="图片与视频";
+"SearchFile"="文件";
+"SearchLink"="链接";
+"Tip"="提示";
+"No media messages"="此会话中没有图片和视频";
+"Links"="链接";
