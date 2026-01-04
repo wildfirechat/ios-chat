@@ -9,20 +9,20 @@
 #import "WFCUTextCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
-#import "AttributedLabel.h"
+#import "SelectableTextView.h"
 #import "WFCUConfigManager.h"
 
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
 
-@interface WFCUTextCell () <AttributedLabelDelegate>
+@interface WFCUTextCell () <SelectableTextViewDelegate>
 
 @end
 
 @implementation WFCUTextCell
 + (UIFont *)defaultFont {
 //    return [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    return [UIFont systemFontOfSize:18];
+    return [UIFont systemFontOfSize:20];
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -56,22 +56,28 @@
     CGRect frame = self.contentArea.bounds;
   self.textLabel.frame = CGRectMake(0, TEXT_LABEL_TOP_PADDING, frame.size.width, frame.size.height - TEXT_LABEL_TOP_PADDING - TEXT_LABEL_BUTTOM_PADDING);
     self.textLabel.textAlignment = NSTextAlignmentLeft;
+
+    // 确保使用正确的字体（与计算高度时一致）
+    self.textLabel.font = [WFCUTextCell defaultFont];
+
     [self.textLabel setText:txtContent.text];
 }
 
-- (UILabel *)textLabel {
+- (SelectableTextView *)textLabel {
     if (!_textLabel) {
-        _textLabel = [[AttributedLabel alloc] init];
-        ((AttributedLabel*)_textLabel).attributedLabelDelegate = self;
-        _textLabel.numberOfLines = 0;
+        _textLabel = [[SelectableTextView alloc] init];
+        _textLabel.selectableTextViewDelegate = self;
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.scrollEnabled = NO;
+        _textLabel.editable = NO;
+        // 重要：使用与计算高度时相同的字体
         _textLabel.font = [WFCUTextCell defaultFont];
-        _textLabel.userInteractionEnabled = YES;
         [self.contentArea addSubview:_textLabel];
     }
     return _textLabel;
 }
 
-#pragma mark - AttributedLabelDelegate
+#pragma mark - SelectableTextViewDelegate
 - (void)didSelectUrl:(NSString *)urlString {
     [self.delegate didSelectUrl:self withModel:self.model withUrl:urlString];
 }
