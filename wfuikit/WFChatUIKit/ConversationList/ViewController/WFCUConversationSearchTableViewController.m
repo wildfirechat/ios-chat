@@ -27,6 +27,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUFilesViewController.h"
 #import "WFCULinksViewController.h"
+#import "WFCUCalendarSearchViewController.h"
 
 @interface WFCUConversationSearchTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCMessage* > *messages;
@@ -270,7 +271,12 @@
 }
 
 - (void)categoryButtonTapped:(UIButton *)sender {
-    if (sender.tag == 1) { // 图片与视频按钮
+    if (sender.tag == 0) { // 日期按钮
+        // 打开按日期查找界面
+        WFCUCalendarSearchViewController *calendarVC = [[WFCUCalendarSearchViewController alloc] init];
+        calendarVC.conversation = self.conversation;
+        [self.navigationController pushViewController:calendarVC animated:YES];
+    } else if (sender.tag == 1) { // 图片与视频按钮
         // 搜索图片和视频消息
         NSArray *contentTypes = @[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_VIDEO)];
         NSArray *messages = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:contentTypes fromTime:0 count:100 withUser:nil];

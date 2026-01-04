@@ -539,6 +539,8 @@
 		B7B1A4982F0A4EC2003316BB /* WFCULinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A4962F0A4EC2003316BB /* WFCULinksViewController.m */; };
 		B7B1A49B2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B1A4992F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h */; };
 		B7B1A49C2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A49A2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m */; };
+		B7B1A49F2F0A53D0003316BB /* WFCUCalendarSearchViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B1A49D2F0A53D0003316BB /* WFCUCalendarSearchViewController.h */; };
+		B7B1A4A02F0A53D0003316BB /* WFCUCalendarSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B1A49E2F0A53D0003316BB /* WFCUCalendarSearchViewController.m */; };
 		B7C1915D29CEFA6B00DBEA9B /* WFCUReadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */; };
 		B7C1915E29CEFA6B00DBEA9B /* WFCUReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */; };
 		B7C1916C29CEFF7D00DBEA9B /* XLPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C1916029CEFF7D00DBEA9B /* XLPageViewController.m */; };
@@ -1166,6 +1168,8 @@
 		B7B1A4962F0A4EC2003316BB /* WFCULinksViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCULinksViewController.m; sourceTree = "<group>"; };
 		B7B1A4992F0A4EDA003316BB /* WFCULinkRecordTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCULinkRecordTableViewCell.h; sourceTree = "<group>"; };
 		B7B1A49A2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCULinkRecordTableViewCell.m; sourceTree = "<group>"; };
+		B7B1A49D2F0A53D0003316BB /* WFCUCalendarSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCalendarSearchViewController.h; sourceTree = "<group>"; };
+		B7B1A49E2F0A53D0003316BB /* WFCUCalendarSearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCalendarSearchViewController.m; sourceTree = "<group>"; };
 		B7B2F84C2F0A11E6001CBF4C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/wfc.strings"; sourceTree = "<group>"; };
 		B7C1915B29CEFA6B00DBEA9B /* WFCUReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUReadViewController.h; sourceTree = "<group>"; };
 		B7C1915C29CEFA6B00DBEA9B /* WFCUReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUReadViewController.m; sourceTree = "<group>"; };
@@ -1618,6 +1622,8 @@
 		2F550ECF217F5CC000F56C26 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B7B1A49D2F0A53D0003316BB /* WFCUCalendarSearchViewController.h */,
+				B7B1A49E2F0A53D0003316BB /* WFCUCalendarSearchViewController.m */,
 				2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */,
 				2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */,
 				2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */,
@@ -2849,6 +2855,7 @@
 				2F5510B2217F5CC200F56C26 /* WFCUImagePreviewViewController.h in Headers */,
 				2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */,
 				B72FBB11283230F0005F2745 /* JSBUtil.h in Headers */,
+				B7B1A49F2F0A53D0003316BB /* WFCUCalendarSearchViewController.h in Headers */,
 				B701630C290E346C00DCD651 /* DACircularProgressView.h in Headers */,
 				2F5510C8217F5CC200F56C26 /* WFCUPluginItemView.h in Headers */,
 				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
@@ -3172,6 +3179,7 @@
 				B7C1915E29CEFA6B00DBEA9B /* WFCUReadViewController.m in Sources */,
 				2FB7125A25DA042900FD2E83 /* WFCUConferenceMember.m in Sources */,
 				2F5511F6217F5CC300F56C26 /* TabbarButton.m in Sources */,
+				B7B1A4A02F0A53D0003316BB /* WFCUCalendarSearchViewController.m in Sources */,
 				2F5510BB217F5CC200F56C26 /* WFCUInviteGroupMemberViewController.m in Sources */,
 				2F1EB5B22499A21A00FD3575 /* WFCUConferenceViewController.m in Sources */,
 				B7C5443428D5876700A2550F /* UIAlertView+LBXAlertAction.m in Sources */,
