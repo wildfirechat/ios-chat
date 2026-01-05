@@ -1745,7 +1745,7 @@
     
     __weak typeof(self)ws = self;
     if(self.selectedDate) {
-        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil fromTime:[self.selectedDate timeIntervalSince1970]*1000+1000 count:20 withUser:nil success:^(NSArray<WFCCMessage *> *messages) {
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil fromTime:[self.selectedDate timeIntervalSince1970]*1000+1 count:-20 withUser:nil success:^(NSArray<WFCCMessage *> *messages) {
             
             ws.modelList = [[NSMutableArray alloc] init];
             if(messages.count) {
