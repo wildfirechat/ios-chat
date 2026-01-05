@@ -178,6 +178,9 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     if (self.displayActionButton) {
         _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonPressed:)];
     }
+    if (self.displayQrCodeButton) {
+        _qrCodeButton = [[UIBarButtonItem alloc] initWithTitle:@"识别二维码" style:UIBarButtonItemStylePlain target:self action:@selector(qrCodeButtonPressed:)];
+    }
     
     // Update
     [self reloadData];
@@ -259,7 +262,10 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [items addObject:flexSpace];
     }
 
-    // Right - Action
+    // Right - QR Code & Action
+    if (_qrCodeButton) {
+        [items addObject:_qrCodeButton];
+    }
     if (_actionButton && !(!hasItems && !self.navigationItem.rightBarButtonItem)) {
         [items addObject:_actionButton];
     } else {
@@ -1116,6 +1122,15 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         _actionButton.enabled = YES;
         _actionButton.tintColor = nil;
     }
+
+    // Disable QR code button if there is no image or it's a video
+    if (_qrCodeButton) {
+        if ([photo underlyingImage] == nil && !([photo respondsToSelector:@selector(isVideo)] && photo.isVideo)) {
+            _qrCodeButton.enabled = NO;
+        } else {
+            _qrCodeButton.enabled = YES;
+        }
+    }
 	
 }
 
@@ -1608,7 +1623,24 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [self setControlsHidden:NO animated:YES permanent:YES];
 
     }
-    
+
+}
+
+- (void)qrCodeButtonPressed:(id)sender {
+    // Only react when image has loaded
+    id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
+
+    if ([self numberOfPhotos] > 0 && [photo underlyingImage]) {
+        // If they have defined a delegate method then just message them
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:qrCodeButtonPressedForPhotoAtIndex:)]) {
+            // Let delegate handle things
+            [self.delegate photoBrowser:self qrCodeButtonPressedForPhotoAtIndex:_currentPageIndex];
+        }
+
+        // Keep controls hidden
+        [self setControlsHidden:NO animated:YES permanent:YES];
+    }
+
 }
 
 #pragma mark - Action Progress
