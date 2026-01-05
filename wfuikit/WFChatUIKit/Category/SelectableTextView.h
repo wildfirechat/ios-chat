@@ -13,6 +13,7 @@
 @optional
 - (void)didSelectUrl:(NSString *)urlString;
 - (void)didSelectPhoneNumber:(NSString *)phoneNumberString;
+- (void)didSelectEmail:(NSString *)emailString;
 - (void)didLongPressTextView:(SelectableTextView *)textView;
 @end
 
@@ -20,8 +21,8 @@
  * 可选择的文本视图
  * 继承 UITextView，支持：
  * 1. 文本选择和复制
- * 2. URL 和电话号码检测
- * 3. 点击链接和电话号码回调
+ * 2. URL、电话号码和邮箱检测
+ * 3. 点击链接、电话号码和邮箱回调
  * 4. 外观类似 UILabel（无边框、不可编辑）
  * 5. 长按事件通知
  */

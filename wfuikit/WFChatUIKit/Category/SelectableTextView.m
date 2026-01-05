@@ -43,7 +43,8 @@
     self.selectable = YES;
     self.userInteractionEnabled = YES;
 
-    // 启用数据检测器（URL、电话号码等）
+    // 启用数据检测器（URL、电话号码、地址等）
+    // 注意：不包含 UIDataDetectorTypeAddress，因为地址检测会有误报
     self.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
 
     // 设置代理以捕获链接点击
@@ -53,6 +54,11 @@
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPress.delegate = self;
     [self addGestureRecognizer:longPress];
+
+    // 添加点击手势识别器，用于检测邮箱地址
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tapGesture.delegate = self;
+    [self addGestureRecognizer:tapGesture];
 
     // 注意：不在 setupView 中设置默认字体
     // 字体应该由创建者设置，以确保与计算高度时使用的字体一致
@@ -71,7 +77,7 @@
 
 - (void)highlightLinksAndPhoneNumbers {
     // UITextView 的 dataDetectorTypes 会自动处理 URL 和电话号码
-    // 我们只需要确保它们可以被点击
+    // 我们还需要手动检测邮箱地址
 
     // 如果需要自定义链接颜色，可以使用 attributedText
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.text];
@@ -86,7 +92,7 @@
 
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range];
 
-    // 检测 URL
+    // 检测 URL、电话号码和邮箱
     NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink | NSTextCheckingTypePhoneNumber error: nil];
     [detector enumerateMatchesInString:self.text options:0 range:range usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
         if (result.resultType == NSTextCheckingTypeLink) {
@@ -102,6 +108,18 @@
             if (self.font) {
                 [attributedString addAttribute:NSFontAttributeName value:self.font range:result.range];
             }
+        }
+    }];
+
+    // 手动检测邮箱地址（使用正则表达式）
+    NSString *emailPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}";
+    NSRegularExpression *emailRegex = [NSRegularExpression regularExpressionWithPattern:emailPattern options:0 error:nil];
+    [emailRegex enumerateMatchesInString:self.text options:0 range:range usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:result.range];
+        [attributedString addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleSingle) range:result.range];
+        // 邮箱也保持字体
+        if (self.font) {
+            [attributedString addAttribute:NSFontAttributeName value:self.font range:result.range];
         }
     }];
 
@@ -142,10 +160,20 @@
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction {
     // 拦截 URL 点击事件
-    if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectUrl:)]) {
-        [self.selectableTextViewDelegate didSelectUrl:URL.absoluteString];
-        return NO; // 返回 NO 阻止默认行为（在应用内打开）
+    NSString *urlString = URL.absoluteString;
+
+    // 检查是否是电话号码链接（tel:）
+    if ([urlString hasPrefix:@"tel:"]) {
+        NSString *phoneNumber = [urlString substringFromIndex:4];
+        if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectPhoneNumber:)]) {
+            [self.selectableTextViewDelegate didSelectPhoneNumber:phoneNumber];
+            return NO; // 阻止默认行为
+        }
+    } else if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectUrl:)]) {
+        [self.selectableTextViewDelegate didSelectUrl:urlString];
+        return NO; // 阻止默认行为（在应用内打开）
     }
+
     return YES;
 }
 
@@ -155,11 +183,54 @@
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
     // iOS 10 以前的版本使用这个方法
-    if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectUrl:)]) {
-        [self.selectableTextViewDelegate didSelectUrl:URL.absoluteString];
+    NSString *urlString = URL.absoluteString;
+
+    // 检查是否是电话号码链接（tel:）
+    if ([urlString hasPrefix:@"tel:"]) {
+        NSString *phoneNumber = [urlString substringFromIndex:4];
+        if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectPhoneNumber:)]) {
+            [self.selectableTextViewDelegate didSelectPhoneNumber:phoneNumber];
+            return NO;
+        }
+    } else if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectUrl:)]) {
+        [self.selectableTextViewDelegate didSelectUrl:urlString];
         return NO;
     }
+
     return YES;
+}
+
+#pragma mark - Tap Gesture (用于检测邮箱点击)
+
+- (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        // 获取点击位置
+        CGPoint point = [gestureRecognizer locationInView:self];
+
+        // 获取点击位置的字符索引
+        UITextPosition *position = [self closestPositionToPoint:point];
+        if (!position) {
+            return;
+        }
+
+        NSInteger offset = [self offsetFromPosition:self.beginningOfDocument toPosition:position];
+
+        // 检测是否点击了邮箱地址
+        NSString *emailPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}";
+        NSRegularExpression *emailRegex = [NSRegularExpression regularExpressionWithPattern:emailPattern options:0 error:nil];
+        NSRange searchRange = NSMakeRange(0, self.text.length);
+
+        [emailRegex enumerateMatchesInString:self.text options:0 range:searchRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+            if (offset >= result.range.location && offset < NSMaxRange(result.range)) {
+                // 点击了邮箱地址
+                NSString *email = [self.text substringWithRange:result.range];
+                if ([self.selectableTextViewDelegate respondsToSelector:@selector(didSelectEmail:)]) {
+                    [self.selectableTextViewDelegate didSelectEmail:email];
+                }
+                *stop = YES;
+            }
+        }];
+    }
 }
 
 #pragma mark - Long Press Gesture
