@@ -84,4 +84,8 @@
 - (void)didSelectPhoneNumber:(NSString *)phoneNumberString {
     [self.delegate didSelectPhoneNumber:self withModel:self.model withPhoneNumber:phoneNumberString];
 }
+- (void)didLongPressTextView:(SelectableTextView *)textView {
+    // 当 SelectableTextView 被长按时，触发 cell 的长按事件
+    [self.delegate didLongPressMessageCell:self withModel:self.model];
+}
 @end

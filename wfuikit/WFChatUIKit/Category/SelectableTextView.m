@@ -9,6 +9,9 @@
 #import "SelectableTextView.h"
 #import <WebKit/WebKit.h>
 
+@interface SelectableTextView () <UIGestureRecognizerDelegate>
+@end
+
 @implementation SelectableTextView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -45,6 +48,11 @@
 
     // 设置代理以捕获链接点击
     self.delegate = self;
+
+    // 添加长按手势识别器，用于触发 cell 的菜单
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    longPress.delegate = self;
+    [self addGestureRecognizer:longPress];
 
     // 注意：不在 setupView 中设置默认字体
     // 字体应该由创建者设置，以确保与计算高度时使用的字体一致
@@ -151,6 +159,25 @@
         [self.selectableTextViewDelegate didSelectUrl:URL.absoluteString];
         return NO;
     }
+    return YES;
+}
+
+#pragma mark - Long Press Gesture
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        // 通知 delegate 发生了长按事件
+        if ([self.selectableTextViewDelegate respondsToSelector:@selector(didLongPressTextView:)]) {
+            [self.selectableTextViewDelegate didLongPressTextView:self];
+        }
+    }
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    // 允许长按手势和 UITextView 的内置手势同时识别
+    // 这样既可以触发文本选择，也可以触发 cell 的菜单
     return YES;
 }
 
