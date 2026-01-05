@@ -56,9 +56,9 @@
         self.hasVoip = withWoip;
         self.hasPtt = withPtt;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-        
+
         int FACE_COUNT_ALL = (int)self.pluginItems.count;
-        
+
         CGRect frame;
         frame.size.width = RCPlaginBoardCellSize.width;
         frame.size.height = RCPlaginBoardCellSize.height;
@@ -68,10 +68,9 @@
             NSInteger currentColumn = i % HorizontalItemsCount;
             frame.origin.x = RCPlaginBoardCellSize.width * currentColumn + LeftOffset * (currentColumn+1);
             frame.origin.y = RCPlaginBoardCellSize.height * currentRow + 15 + currentRow * 18;
-            
+
             PluginItem *pluginItem = self.pluginItems[i];
-            
-            
+
             WFCUPluginItemView *item = [[WFCUPluginItemView alloc] initWithTitle:pluginItem.title image:pluginItem.image frame:frame];
             item.tag = pluginItem.tag;
             NSUInteger tag = item.tag;
@@ -82,7 +81,7 @@
             [self addSubview:item];
         }
     }
-    
+
     return self;
 }
 
