@@ -86,6 +86,7 @@
 #import "WFZConferenceInfo.h"
 
 #import "MWPhotoBrowser.h"
+#import "LBXScanNative.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate, NSURLSessionDelegate>
 
@@ -2588,6 +2589,7 @@
             
             MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
             browser.displayActionButton = YES;
+            browser.displayQrCodeButton = YES;
             browser.displayNavArrows = NO;
             browser.displaySelectionButtons = NO;
             browser.alwaysShowControls = NO;
@@ -2910,6 +2912,7 @@
         self.imageMsgs = @[msg];
         MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
         browser.displayActionButton = YES;
+        browser.displayQrCodeButton = YES;
         browser.displayNavArrows = NO;
         browser.displaySelectionButtons = NO;
         browser.alwaysShowControls = NO;
@@ -3956,6 +3959,80 @@
 
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
     NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
+}
+
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser qrCodeButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    WFCCMessage *msg = self.imageMsgs[index];
+    if([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
+        WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)msg.content;
+
+        // 显示识别中的提示
+        [self.view makeToastActivity:CSToastPositionCenter];
+
+        // 使用 LBXScanNative 识别二维码
+        [LBXScanNative recognizeImage:imgCnt.thumbnail success:^(NSArray<LBXScanResult*> *array) {
+            [self.view hideToastActivity];
+
+            if (array.count > 0) {
+                // 识别成功，显示结果
+                LBXScanResult *result = array.firstObject;
+                NSString *qrCode = result.strScanned;
+
+                // 处理识别结果（可以根据需要添加更多处理逻辑）
+                [self handleQrCodeResult:qrCode];
+            } else {
+                // 识别失败，未检测到二维码
+                [self.view makeToast:@"未检测到二维码" duration:2 position:CSToastPositionCenter];
+            }
+        }];
+    }
+}
+
+- (void)handleQrCodeResult:(NSString *)qrCode {
+    // 处理二维码识别结果
+    // 可以根据二维码内容类型进行不同处理，例如：
+    // - URL: 打开网页
+    // - 文本: 显示文本内容
+    // - 其他: 提供选项让用户选择
+
+    if ([qrCode hasPrefix:@"http://"] || [qrCode hasPrefix:@"https://"]) {
+        // 如果是 URL，询问是否打开
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"识别到网址" message:qrCode preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"打开" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:qrCode] options:@{} completionHandler:nil];
+        }];
+
+        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"复制" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = qrCode;
+            [self.view makeToast:@"已复制到剪贴板" duration:1.5 position:CSToastPositionCenter];
+        }];
+
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+
+        [alert addAction:openAction];
+        [alert addAction:copyAction];
+        [alert addAction:cancelAction];
+
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // 如果不是 URL，直接显示内容并提供复制选项
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"识别结果" message:qrCode preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"复制" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = qrCode;
+            [self.view makeToast:@"已复制到剪贴板" duration:1.5 position:CSToastPositionCenter];
+        }];
+
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+
+        [alert addAction:copyAction];
+        [alert addAction:cancelAction];
+
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
