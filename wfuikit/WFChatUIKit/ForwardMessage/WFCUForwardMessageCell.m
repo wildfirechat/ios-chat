@@ -88,7 +88,7 @@
 
 - (UIImageView *)portrait {
     if (!_portrait) {
-        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 40, 40)];
+        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(40, 8, 40, 40)];
         [self.contentView addSubview:_portrait];
     }
     return _portrait;
@@ -96,10 +96,33 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(56, 16, [UIScreen mainScreen].bounds.size.width - 64, 24)];
+        _name = [[UILabel alloc] initWithFrame:CGRectMake(88, 16, [UIScreen mainScreen].bounds.size.width - 96, 24)];
         [self.contentView addSubview:_name];
     }
     return _name;
+}
+
+- (UIImageView *)checkboxView {
+    if (!_checkboxView) {
+        _checkboxView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 18, 20, 20)];
+        _checkboxView.contentMode = UIViewContentModeScaleAspectFit;
+        [self updateCheckboxImage];
+        [self.contentView addSubview:_checkboxView];
+    }
+    return _checkboxView;
+}
+
+- (void)setIsChecked:(BOOL)isChecked {
+    _isChecked = isChecked;
+    [self updateCheckboxImage];
+}
+
+- (void)updateCheckboxImage {
+    if (self.isChecked) {
+        self.checkboxView.image = [WFCUImage imageNamed:@"multi_selected"];
+    } else {
+        self.checkboxView.image = [WFCUImage imageNamed:@"multi_unselected"];
+    }
 }
 
 @end

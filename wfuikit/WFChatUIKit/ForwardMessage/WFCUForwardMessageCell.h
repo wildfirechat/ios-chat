@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUForwardMessageCell : UITableViewCell
 @property (strong, nonatomic) WFCCConversation *conversation;
+@property (nonatomic, assign) BOOL isChecked;
+@property (nonatomic, strong) UIImageView *checkboxView;
 @end
 
 NS_ASSUME_NONNULL_END

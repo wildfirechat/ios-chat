@@ -28,17 +28,23 @@
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 @property (nonatomic, strong)NSArray<WFCCUserInfo *>  *searchFriendList;
 @property (nonatomic, strong)NSArray<WFCCGroupSearchInfo *>  *searchGroupList;
+@property (nonatomic, strong)NSMutableArray<WFCCConversation *> *selectedConversations;
+@property (nonatomic, assign)NSInteger maxSelectCount;
 @end
 
 @implementation WFCUForwardViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    self.selectedConversations = [[NSMutableArray alloc] init];
+    self.maxSelectCount = 9;
+
     CGRect frame = self.view.frame;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 54, frame.size.width, frame.size.height - 64)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.allowsMultipleSelection = YES;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
@@ -50,12 +56,12 @@
     self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(SecretChat_Type)] lines:@[@(0)]] mutableCopy];
 
     self.extendedLayoutIncludesOpaqueBars = YES;
-    
+
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
-    
+
     if (@available(iOS 13, *)) {
         self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
         self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
@@ -64,13 +70,13 @@
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }
-    
+
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
-    
+
     [self.searchController.searchBar setPlaceholder:WFCString(@"Search")];
-    
+
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchController;
         _searchController.hidesNavigationBarDuringPresentation = YES;
@@ -78,7 +84,9 @@
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
-    
+
+    [self updateRightBarButtonItem];
+
     self.tableView.sectionIndexColor = [UIColor grayColor];
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
@@ -86,6 +94,75 @@
 
 - (void)onLeftBarBtn:(UIBarButtonItem *)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)onRightBarBtn:(UIBarButtonItem *)sender {
+    if (self.selectedConversations.count == 0) {
+        [self.view makeToast:WFCString(@"PleaseSelectConversation") duration:1 position:CSToastPositionCenter];
+        return;
+    }
+
+    // 批量转发到所有选中的会话
+    __weak typeof(self)ws = self;
+    __block int successCount = 0;
+    __block int failCount = 0;
+    __block NSInteger totalCount = self.selectedConversations.count;
+
+    [self.selectedConversations enumerateObjectsUsingBlock:^(WFCCConversation *conversation, NSUInteger idx, BOOL *stop) {
+        [ws forwardMessages:conversation completion:^(BOOL success) {
+            if (success) {
+                successCount++;
+            } else {
+                failCount++;
+            }
+
+            if (successCount + failCount == totalCount) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failCount == 0) {
+                        [ws.view makeToast:WFCString(@"ForwardSuccess") duration:1 position:CSToastPositionCenter];
+                    } else if (successCount == 0) {
+                        [ws.view makeToast:WFCString(@"ForwardFailure") duration:1 position:CSToastPositionCenter];
+                    } else {
+                        [ws.view makeToast:[NSString stringWithFormat:WFCString(@"PartialForwardSuccess"), successCount, totalCount] duration:1 position:CSToastPositionCenter];
+                    }
+                    [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+                });
+            }
+        }];
+    }];
+}
+
+- (void)forwardMessages:(WFCCConversation *)conversation completion:(void (^)(BOOL success))completion {
+    WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
+    shareView.conversation = conversation;
+    if(!self.message && self.messages.count == 1) {
+        shareView.message = [self.messages firstObject];
+    } else {
+        shareView.message = self.message;
+        shareView.messages = self.messages;
+    }
+    shareView.forwardDone = ^(BOOL success) {
+        if (completion) {
+            completion(success);
+        }
+    };
+    TYAlertController *alertController = [TYAlertController alertControllerWithAlertView:shareView preferredStyle:TYAlertControllerStyleAlert];
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)updateRightBarButtonItem {
+    NSString *title = [NSString stringWithFormat:@"%@(%lu/%ld)", WFCString(@"Ok"), (unsigned long)self.selectedConversations.count, (long)self.maxSelectCount];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
+    self.navigationItem.rightBarButtonItem.enabled = self.selectedConversations.count > 0;
+}
+
+- (BOOL)isConversationSelected:(WFCCConversation *)conversation {
+    for (WFCCConversation *conv in self.selectedConversations) {
+        if ([conv isEqual:conversation]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)setMessage:(WFCCMessage *)message {
@@ -108,35 +185,6 @@
     } else {
         _message = message;
     }
-}
-
-- (void)altertSend:(WFCCConversation *)conversation {
-    WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
-    
-    shareView.conversation = conversation;
-    if(!self.message && self.messages.count == 1) {
-        shareView.message = [self.messages firstObject];
-    } else {
-        shareView.message = self.message;
-        shareView.messages = self.messages;
-    }
-    __weak typeof(self)ws = self;
-    shareView.forwardDone = ^(BOOL success) {
-        if (success) {
-            [ws.view makeToast:WFCString(@"ForwardSuccess") duration:1 position:CSToastPositionCenter];
-            [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [ws.view makeToast:WFCString(@"ForwardFailure") duration:1 position:CSToastPositionCenter];
-        }
-    };
-    TYAlertController *alertController = [TYAlertController alertControllerWithAlertView:shareView preferredStyle:TYAlertControllerStyleAlert];
-    
-//    // blur effect
-//    [alertController setBlurEffectWithView:self.view];
-//
-    //alertController.alertViewOriginY = 60;
-    [self.navigationController presentViewController:alertController animated:YES completion:nil];
-//    [shareView showInWindow];
 }
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -212,11 +260,15 @@
             }
             WFCCConversationInfo *info = [self.conversations objectAtIndex:indexPath.row];
             cell.conversation = info.conversation;
+
+            // 设置 checkbox 选中状态
+            cell.isChecked = [self isConversationSelected:info.conversation];
+
             return cell;
         }
-        
+
     }
-    
+
     return nil;
 }
 
@@ -329,19 +381,80 @@
                         conversation.type = Single_Type;
                         conversation.target = contacts[0];
                         conversation.line = 0;
-                        [ws altertSend:conversation];
+                        if (![ws isConversationSelected:conversation]) {
+                            if (ws.selectedConversations.count < ws.maxSelectCount) {
+                                [ws.selectedConversations addObject:conversation];
+                                [ws updateRightBarButtonItem];
+                            } else {
+                                [ws.view makeToast:[NSString stringWithFormat:WFCString(@"MaxSelectCount"), ws.maxSelectCount] duration:1 position:CSToastPositionCenter];
+                                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                            }
+                        }
                     }
                 });
             };
-            
+
             [self.navigationController pushViewController:pvc animated:YES];
             return;
         } else {
             selectedConv = self.conversations[indexPath.row].conversation;
         }
     }
+
     if (selectedConv) {
-        [self altertSend:selectedConv];
+        if (![self isConversationSelected:selectedConv]) {
+            if (self.selectedConversations.count < self.maxSelectCount) {
+                [self.selectedConversations addObject:selectedConv];
+                [self updateRightBarButtonItem];
+
+                // 刷新 cell 显示
+                if (!self.searchController.isActive && indexPath.section != 0) {
+                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+            } else {
+                [self.view makeToast:[NSString stringWithFormat:WFCString(@"MaxSelectCount"), self.maxSelectCount] duration:1 position:CSToastPositionCenter];
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            }
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    WFCCConversation *deselectedConv;
+    if (self.searchController.isActive) {
+        if (indexPath.section == 0 && self.searchFriendList.count > 0) {
+            WFCCUserInfo *userInfo = self.searchFriendList[indexPath.row];
+            deselectedConv = [[WFCCConversation alloc] init];
+            deselectedConv.type = Single_Type;
+            deselectedConv.target = userInfo.userId;
+            deselectedConv.line = 0;
+        } else {
+            WFCCGroupInfo *groupInfo = self.searchGroupList[indexPath.row].groupInfo;
+            deselectedConv = [[WFCCConversation alloc] init];
+            deselectedConv.type = Group_Type;
+            deselectedConv.target = groupInfo.target;
+            deselectedConv.line = 0;
+        }
+    } else {
+        if (indexPath.section != 0) {
+            deselectedConv = self.conversations[indexPath.row].conversation;
+        }
+    }
+
+    if (deselectedConv) {
+        for (int i = 0; i < self.selectedConversations.count; i++) {
+            WFCCConversation *conv = self.selectedConversations[i];
+            if ([conv isEqual:deselectedConv]) {
+                [self.selectedConversations removeObjectAtIndex:i];
+                [self updateRightBarButtonItem];
+
+                // 刷新 cell 显示
+                if (!self.searchController.isActive && indexPath.section != 0) {
+                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                break;
+            }
+        }
     }
 }
 
