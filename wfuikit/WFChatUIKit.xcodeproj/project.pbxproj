@@ -519,6 +519,8 @@
 		B764D493295868EC0082492F /* WFCUOrgRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D491295868EC0082492F /* WFCUOrgRelationship.m */; };
 		B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D49429586B060082492F /* WFCUOrganizationCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B764D49729586B060082492F /* WFCUOrganizationCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D49529586B060082492F /* WFCUOrganizationCache.m */; };
+		B764D6FF2F0B965300C595E3 /* WFCURecentImagesFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D6FD2F0B965300C595E3 /* WFCURecentImagesFloatView.m */; };
+		B764D7002F0B965300C595E3 /* WFCURecentImagesFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D6FC2F0B965300C595E3 /* WFCURecentImagesFloatView.h */; };
 		B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B767584928CC1AF200835A6A /* WFZConferenceInfo.m */; };
 		B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B77D1E0C29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */; };
@@ -1148,6 +1150,8 @@
 		B764D491295868EC0082492F /* WFCUOrgRelationship.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUOrgRelationship.m; sourceTree = "<group>"; };
 		B764D49429586B060082492F /* WFCUOrganizationCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUOrganizationCache.h; sourceTree = "<group>"; };
 		B764D49529586B060082492F /* WFCUOrganizationCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUOrganizationCache.m; sourceTree = "<group>"; };
+		B764D6FC2F0B965300C595E3 /* WFCURecentImagesFloatView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCURecentImagesFloatView.h; sourceTree = "<group>"; };
+		B764D6FD2F0B965300C595E3 /* WFCURecentImagesFloatView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCURecentImagesFloatView.m; sourceTree = "<group>"; };
 		B767584928CC1AF200835A6A /* WFZConferenceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfo.m; sourceTree = "<group>"; };
 		B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfo.h; sourceTree = "<group>"; };
 		B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralImageTextTableViewCell.h; sourceTree = "<group>"; };
@@ -1553,6 +1557,7 @@
 				2F550EB3217F5CC000F56C26 /* Cell */,
 				2F550ECC217F5CC000F56C26 /* Model */,
 				2F550ECF217F5CC000F56C26 /* ViewController */,
+				B764D6FE2F0B965300C595E3 /* View */,
 			);
 			path = MessageList;
 			sourceTree = "<group>";
@@ -2449,6 +2454,15 @@
 			path = Organization;
 			sourceTree = "<group>";
 		};
+		B764D6FE2F0B965300C595E3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B764D6FC2F0B965300C595E3 /* WFCURecentImagesFloatView.h */,
+				B764D6FD2F0B965300C595E3 /* WFCURecentImagesFloatView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B79021682C01F4A0005C382A /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2861,6 +2875,7 @@
 				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
+				B764D7002F0B965300C595E3 /* WFCURecentImagesFloatView.h in Headers */,
 				B71F0A7528F54156000A7C8A /* DDAbstractDatabaseLogger.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
 				2F5511DA217F5CC300F56C26 /* TYAlertView.h in Headers */,
@@ -3311,6 +3326,7 @@
 				2F44487B252D72D5007A570E /* WFCULinkCell.m in Sources */,
 				B7C5442328D5876700A2550F /* LBXScanLineAnimation.m in Sources */,
 				2F5511E6217F5CC300F56C26 /* WFCUForwardViewController.m in Sources */,
+				B764D6FF2F0B965300C595E3 /* WFCURecentImagesFloatView.m in Sources */,
 				B71F0A6F28F54156000A7C8A /* GCDAsyncUdpSocket.m in Sources */,
 				2B63367E24716864008D6B38 /* ZCCCircleProgressView.m in Sources */,
 				2F5511FB217F5CC300F56C26 /* WFCUSwitchTableViewCell.m in Sources */,

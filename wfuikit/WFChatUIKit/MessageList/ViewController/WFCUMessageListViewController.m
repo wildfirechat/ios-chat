@@ -88,7 +88,9 @@
 #import "MWPhotoBrowser.h"
 #import "LBXScanNative.h"
 
-@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate, NSURLSessionDelegate>
+#import "WFCURecentImagesFloatView.h"
+
+@interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate, NSURLSessionDelegate, WFCURecentImagesFloatViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray<WFCUMessageModel *> *modelList;
 
@@ -110,6 +112,7 @@
 @property(nonatomic, strong)WFCCSecretChatInfo *secretChatInfo;
 
 @property(nonatomic, strong)WFCUChatInputBar *chatInputBar;
+@property(nonatomic, strong)WFCURecentImagesFloatView *recentImagesFloatView;
 @property(nonatomic, strong)VideoPlayerKit *videoPlayerViewController;
 @property (strong, nonatomic) UICollectionView *collectionView;
 
@@ -212,8 +215,11 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageStartBurning:) name:kSecretMessageStartBurning object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
-    
-    
+
+    // 监听截图事件
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+
+
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
     
     __weak typeof(self)ws = self;
@@ -1301,10 +1307,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    // 进入消息列表就显示最近图片
+    [self showRecentImagesFloatView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    // 离开消息列表时隐藏漂浮视图
+    [self hideRecentImagesFloatView];
     NSString *newDraft = self.chatInputBar.draft;
     if (![self.orignalDraft isEqualToString:newDraft]) {
         self.orignalDraft = newDraft;
@@ -4039,6 +4049,54 @@
     // If we subscribe to this method we must dismiss the view controller ourselves
     NSLog(@"Did finish modal presentation");
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Recent Images Float View
+
+- (void)onUserDidTakeScreenshot:(NSNotification *)notification {
+    // 截图时也显示最近图片浮窗
+    [self showRecentImagesFloatView];
+}
+
+- (void)showRecentImagesFloatView {
+    // 避免重复创建
+    if (self.recentImagesFloatView) {
+        return;
+    }
+
+    self.recentImagesFloatView = [[WFCURecentImagesFloatView alloc] initWithFrame:CGRectZero];
+    self.recentImagesFloatView.delegate = self;
+
+    // 先加载并检查是否有新图片，只有确认有新图片时才显示
+    // 这样可以避免闪现问题
+    __weak typeof(self)ws = self;
+    [self.recentImagesFloatView loadAndShowRecentImageWithCompletion:^(BOOL hasImage) {
+        if (!hasImage) {
+            // 没有新图片，清空引用
+            ws.recentImagesFloatView = nil;
+        }
+    }];
+}
+
+- (void)hideRecentImagesFloatView {
+    if (self.recentImagesFloatView) {
+        [self.recentImagesFloatView dismiss];
+        self.recentImagesFloatView = nil;
+    }
+}
+
+#pragma mark - WFCURecentImagesFloatViewDelegate
+
+- (void)recentImagesFloatView:(WFCURecentImagesFloatView *)floatView didSelectImage:(UIImage *)image {
+    // 发送图片
+    if (image) {
+        [self imageDataDidSelect:@[image] isFullImage:NO];
+    }
+}
+
+- (void)recentImagesFloatViewDidDismiss:(WFCURecentImagesFloatView *)floatView {
+    // 浮窗关闭时清空引用
+    self.recentImagesFloatView = nil;
 }
 
 - (void)dealloc {
