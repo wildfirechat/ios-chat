@@ -22,7 +22,7 @@
 #define kImgKey     @"imageName"
 #define kSelImgKey  @"selectedImageName"
 
-@interface WFCBaseTabBarController ()
+@interface WFCBaseTabBarController () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong)UINavigationController *firstNav;
 @property (nonatomic, strong)UINavigationController *settingNav;
 @property (nonatomic, strong)WFCUConversationTableViewController *conversationsViewController;
@@ -44,6 +44,10 @@
     [self addChildViewController:nav];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)];
     doubleTap.numberOfTapsRequired = 2;
+    doubleTap.delegate = self;
+    doubleTap.cancelsTouchesInView = NO;
+    doubleTap.delaysTouchesBegan = NO;
+    doubleTap.delaysTouchesEnded = NO;
     [self.tabBar addGestureRecognizer:doubleTap];
     
     self.firstNav = nav;
@@ -108,6 +112,22 @@
         //点击第一个tab item。如果消息不是第一个需要调整一下。
         [self.conversationsViewController onTabbarItemDoubleClicked];
     }
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    // 让双击手势优先于单击手势识别
+    if ([otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        UITapGestureRecognizer *tap = (UITapGestureRecognizer *)otherGestureRecognizer;
+        if (tap.numberOfTapsRequired == 1) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)onUnreadCommentStatusChanged:(NSNotification *)notification {

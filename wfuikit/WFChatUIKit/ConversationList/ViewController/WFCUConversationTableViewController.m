@@ -713,12 +713,20 @@
 }
 
 - (void)onTabbarItemDoubleClicked {
-    //双击tabbar，跳到下一个未读的会话.
-    int currentRow = (int)self.tableView.indexPathsForVisibleRows.firstObject.row;
-    for (int i = currentRow+1; i < self.conversations.count; i++) {
+    //双击tabbar，跳到下一个会话
+    if (self.conversations.count == 0) {
+        return;
+    }
+
+    NSInteger currentRow = 0;
+    if (self.tableView.indexPathsForVisibleRows.count > 0) {
+        currentRow = self.tableView.indexPathsForVisibleRows.lastObject.row;
+    }
+    
+    for (int i = currentRow; i < self.conversations.count; i++) {
         if(!self.conversations[i].isSilent && self.conversations[i].unreadCount.unread > 0) {
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-            break;
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i==self.conversations.count-1?i:i+1 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            return;
         }
     }
 }
