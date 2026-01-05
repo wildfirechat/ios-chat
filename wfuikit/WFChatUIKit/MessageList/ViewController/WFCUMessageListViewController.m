@@ -504,7 +504,7 @@
         if (!reversedMsgs.count) {
             weakSelf.hasMoreOld = NO;
         } else {
-            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO firstIn:NO];
+            [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO firstIn:NO appendLast:NO];
         }
         weakSelf.loadingMore = NO;
         if (completion) {
@@ -540,7 +540,7 @@
         
         [[WFCCIMService sharedWFCIMService] getMessagesV2:weakSelf.conversation contentTypes:nil from:lastIndex count:10 withUser:self.privateChatUser  success:^(NSArray<WFCCMessage *> *messageList) {
             if(messageList.count) {
-                [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO firstIn:NO];
+                [weakSelf appendMessages:messageList newMessage:NO highlightId:0 forceButtom:NO firstIn:NO appendLast:NO];
                 weakSelf.loadingMore = NO;
                 if (completion) {
                     completion(messageList.count > 0);
@@ -562,10 +562,9 @@
             lastIndex = [self.modelList lastObject].message.messageId;
         }
         
-        dispatch_async(dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT), ^{
-            NSArray *messageList = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:nil from:lastIndex count:-10 withUser:self.privateChatUser];
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil from:lastIndex count:-10 withUser:self.privateChatUser success:^(NSArray<WFCCMessage *> *messageList) {
             if (!messageList.count || messageList.count < 10) {
-                self.hasNewMessage = NO;
+                weakSelf.hasNewMessage = NO;
             }
             NSMutableArray *mutableMessages = [messageList mutableCopy];
             for (int i = 0; i < mutableMessages.count/2; i++) {
@@ -576,15 +575,18 @@
                 [mutableMessages insertObject:msg atIndex:j];
                 [mutableMessages removeObjectAtIndex:j+1];
             }
-            [NSThread sleepForTimeInterval:0.5];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf appendMessages:mutableMessages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO];
-                weakSelf.loadingNew = NO;
-                if (completion) {
-                    completion(messageList.count > 0);
-                }
-            });
-        });
+
+            [weakSelf appendMessages:mutableMessages newMessage:NO highlightId:0 forceButtom:NO firstIn:NO appendLast:YES];
+            weakSelf.loadingNew = NO;
+            if (completion) {
+                completion(messageList.count > 0);
+            }
+        } error:^(int error_code) {
+            weakSelf.loadingNew = NO;
+            if (completion) {
+                completion(NO);
+            }
+        }];
     }
 }
 - (void)sendChatroomWelcomeMessage {
@@ -1377,7 +1379,7 @@
 
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
-    [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO];
+    [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO appendLast:YES];
     
     NSMutableArray<WFCCMessage *> *ongoingCalls = [[NSMutableArray alloc] init];
     for (WFCCMessage *msg in messages) {
@@ -1661,7 +1663,7 @@
     WFCCMessageStatus status = [[notification.userInfo objectForKey:@"status"] integerValue];
     if ((status == Message_Status_Sending || status == Message_Status_Sent) && message.messageId != 0) {
         if ([message.conversation isEqual:self.conversation]) {
-            [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES firstIn:NO];
+            [self appendMessages:@[message] newMessage:YES highlightId:0 forceButtom:YES firstIn:NO appendLast:YES];
         }
     }
 }
@@ -1743,12 +1745,12 @@
     
     __weak typeof(self)ws = self;
     if(self.selectedDate) {
-        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil fromTime:[self.selectedDate timeIntervalSince1970]*1000+1000 count:-20 withUser:nil success:^(NSArray<WFCCMessage *> *messages) {
+        [[WFCCIMService sharedWFCIMService] getMessagesV2:self.conversation contentTypes:nil fromTime:[self.selectedDate timeIntervalSince1970]*1000+1000 count:20 withUser:nil success:^(NSArray<WFCCMessage *> *messages) {
             
             ws.modelList = [[NSMutableArray alloc] init];
             if(messages.count) {
                 ws.highlightMessageId = messages.lastObject.messageId;
-                [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:true];
+                [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:YES appendLast:NO];
             }
             ws.highlightMessageId = 0;
             
@@ -1783,7 +1785,7 @@
         }
         self.modelList = [[NSMutableArray alloc] init];
         
-        [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO firstIn:NO];
+        [self appendMessages:messageList newMessage:NO highlightId:self.highlightMessageId forceButtom:NO firstIn:NO appendLast:NO];
         self.highlightMessageId = 0;
         
         if(self.conversation.type == SecretChat_Type) {
@@ -1827,7 +1829,7 @@
             
             ws.modelList = [[NSMutableArray alloc] init];
             
-            [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:firstIn];
+            [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:firstIn appendLast:NO];
             ws.highlightMessageId = 0;
             
             if(ws.conversation.type == SecretChat_Type) {
@@ -1975,8 +1977,20 @@
     }
 }
 
-- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom firstIn:(BOOL)firstIn {
+- (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom firstIn:(BOOL)firstIn appendLast:(BOOL)appendLast {
     if (messages.count == 0) {
+        return;
+    }
+    
+    if (self.hasNewMessage && newMessage) {
+        [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.messageId) {
+                [self.nMsgSet addObject:@(obj.messageId)];
+            }
+        }];
+        if(self.nMsgSet.count) {
+            [self showNewMsgTip];
+        }
         return;
     }
     
@@ -2065,7 +2079,7 @@
         
         count++;
         
-        if (newMessage) {
+        if (appendLast) {
             BOOL showTime = YES;
             if (self.modelList.count > 0 && (message.serverTime -  (self.modelList[self.modelList.count - 1]).message.serverTime < 60 * 1000)) {
                 showTime = NO;
@@ -2080,7 +2094,9 @@
                 [modifiedAliasUsers addObject:message.fromUser];
             }
             
-            [self.nMsgSet addObject:@(message.messageId)];
+            if(newMessage) {
+                [self.nMsgSet addObject:@(message.messageId)];
+            }
         } else {
             if (self.modelList.count > 0 && (self.modelList[0].message.serverTime - message.serverTime < 60 * 1000) && i != 0) {
                 self.modelList[0].showTimeLabel = NO;
@@ -2172,6 +2188,8 @@
                 [self scrollToBottom:!firstIn];
             });
         }
+    } else if(self.hasNewMessage && appendLast) {
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.modelList.count-messages.count inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
     }
     
     if (modifiedAliasUsers.count) {
@@ -2222,8 +2240,19 @@
     return _newMsgTipButton;;
 }
 - (void)onNewMsgTipBtn:(id)sender {
-    self.isAtButtom = YES;
-    [self scrollToBottom:YES];
+    if(self.hasNewMessage) {
+        [self.modelList removeAllObjects];
+        [self.collectionView reloadData];
+        self.isAtButtom = YES;
+        self.hasMoreOld = YES;
+        self.hasNewMessage = NO;
+        self.selectedDate = nil;
+        self.highlightMessageId = 0;
+        [self reloadMessageList];
+    } else {
+        self.isAtButtom = YES;
+        [self scrollToBottom:YES];
+    }
 }
 - (WFCUMessageModel *)modelOfMessage:(long)messageId {
     if (messageId == 0) {
@@ -2481,7 +2510,7 @@
         }
     }
     
-    if (self.nMsgSet.count) {
+    if (self.nMsgSet.count && !self.hasNewMessage) {
         if ([self.nMsgSet containsObject:@(model.message.messageId)]) {
             [self.nMsgSet removeObject:@(model.message.messageId)];
             if (self.nMsgSet.count) {
