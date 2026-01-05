@@ -44,7 +44,8 @@ namespace mars {
             bool UpdateGroupConvTimeline(int64_t timeline);
             bool UpdateNoFtsTimeline(bool noFts);
             bool UpdateFriendRequestTimeline(int64_t timeline);
-            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead, bool &noFts, int64_t &frHead);
+            bool UpdateJoinGroupRequestTimeline(int64_t timeline);
+            int64_t GetMessageTimeline(std::string &node, int64_t &recvHead, int64_t &readHead, int64_t &groupHead, bool &noFts, int64_t &frHead, int64_t &jgHead);
             int64_t GetSettingVersion();
             bool UpdateUserSettings(std::list<TUserSettingEntry> &settings, bool firstSync = false);
             std::string GetUserSetting(int scope, const std::string &key);
@@ -215,6 +216,18 @@ namespace mars {
             bool ClearFriendRequest(bool incomming, int64_t beforeTime = 0);
             bool DeleteFriendRequest(const std::string &friendUid, bool incomming);
             
+            
+            int64_t getJoinGroupRequestHead();
+            long InsertJoinGroupRequestOrReplace(const TJoinGroupRequest &joinGroupRequest);
+            
+            std::list<TJoinGroupRequest> getJoinGroupRequest(const std::string &groupId, const std::string &memberId, int status);
+            int getJoinGroupRequestCountByStatus(const std::string &groupId, const std::string &memberId, int status);
+            int unreadJoinGroupRequest();
+            int unreadJoinGroupRequest2(const std::string &groupId);
+            bool clearUnreadJoinGroupRequestStatus(const std::string &groupId);
+            int64_t getUnreadJoinGroupRequestMaxDt();
+            bool ClearJoinGroupRequest(const std::string &groupId, const std::string &memberId, const std::string &inviterId);
+
             
             TDomainInfo GetDomainInfo(const std::string &domainId, bool refresh);
             int SaveDomainInfo(const TDomainInfo &domain);

@@ -452,6 +452,27 @@ namespace mars{
 #endif //WFCHAT_PROTO_SERIALIZABLE
         };
 
+    
+        class TJoinGroupRequest : public TSerializable {
+        public:
+            TJoinGroupRequest() : status(0), readStatus(0), timestamp(0) {}
+            std::string gid;
+            std::string rid;
+            std::string mid;
+            std::string acceptUid;
+            std::string reason;
+            std::string extra;
+            int status;
+            int readStatus;
+            int64_t timestamp;
+            virtual ~TJoinGroupRequest(){}
+    #if WFCHAT_PROTO_SERIALIZABLE
+            virtual void Serialize(void *writer) const;
+            virtual void Unserialize(const Value& value);
+    #endif //WFCHAT_PROTO_SERIALIZABLE
+        };
+    
+    
         class TFriendRequest : public TSerializable {
         public:
             TFriendRequest() : direction(0), status(0), readStatus(0), timestamp(0) {}
@@ -885,6 +906,13 @@ namespace mars{
             virtual void onFalure(int errorCode) = 0;
             virtual ~GetFriendRequestCallback() {}
         };
+    
+    class GetJoinGroupRequestCallback {
+    public:
+        virtual void onSuccess() = 0;
+        virtual void onFalure(int errorCode) = 0;
+        virtual ~GetJoinGroupRequestCallback() {}
+    };
 
       class GetSettingCallback {
       public:
@@ -1032,6 +1060,7 @@ namespace mars{
         extern void setRefreshChannelInfoCallback(GetChannelInfoCallback *callback);
         extern void setRefreshFriendListCallback(GetMyFriendsCallback *callback);
         extern void setRefreshFriendRequestCallback(GetFriendRequestCallback *callback);
+        extern void setGetJoinGroupRequestCallback(GetJoinGroupRequestCallback *callback);
         extern void setRefreshSettingCallback(GetSettingCallback *callback);
         extern void setSecretChatStateCallback(SecretChatStateCallback *callback);
         extern void setSecretMessageBurnStateCallback(SecretMessageBurnStateCallback *callback);
@@ -1174,6 +1203,12 @@ namespace mars{
         extern void setGroupRemark(const std::string &groupId, const std::string &remark, GeneralOperationCallback *callback);
         extern std::string getGroupRemark(const std::string &groupId);
 
+        extern void sendJoinGroupRequest(const std::string &gid, const std::list<std::string> &userIds, const std::string &reason, const std::string &extra, GeneralOperationCallback *callback);
+        extern void handleJoinGroupRequest(const std::string &gid, const std::string &userId, const std::string &inviter, int status, const std::string &memberExtra, const std::list<int> &notifyLines, GeneralOperationCallback *callback);
+        extern void loadJoinGroupRequestFromRemote(int64_t head = 0);
+        extern void clearJoinGroupRequestUnread(const std::string &groupId, int64_t maxDt);
+        extern void clearRemoteJoinGroupRequest(GeneralOperationCallback *callback);
+    
         extern void createChannel(const std::string &channelId, const std::string &channelName, const std::string &channelPortrait, int status, const std::string &desc, const std::string &extra, const std::string &secret, const std::string &cb, CreateChannelCallback *callback);
 
         extern void modifyChannelInfo(const std::string &channelId, int type, const std::string &newValue, GeneralOperationCallback *callback);
