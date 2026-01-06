@@ -33,7 +33,8 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(56, 16, [UIScreen mainScreen].bounds.size.width - 64, 24)];
+        _name = [[UILabel alloc] initWithFrame:CGRectMake(56, 16, self.contentView.bounds.size.width - 64, 24)];
+        _name.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_name];
     }
     return _name;

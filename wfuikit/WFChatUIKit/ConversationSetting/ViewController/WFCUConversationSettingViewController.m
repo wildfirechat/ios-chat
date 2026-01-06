@@ -138,9 +138,9 @@
     } else if(self.conversation.type == Channel_Type) {
         CGFloat portraitWidth = 80;
         CGFloat top = 40;
-        CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+        CGFloat screenWidth = self.view.bounds.size.width;
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
-        
+
         self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
         [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
         self.channelPortrait.userInteractionEnabled = YES;
@@ -896,7 +896,7 @@
           
           
           
-          CGFloat width = [UIScreen mainScreen].bounds.size.width;
+          CGFloat width = self.view.bounds.size.width;
           UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
           UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
           qrview.image = qrcode;

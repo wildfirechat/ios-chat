@@ -66,7 +66,7 @@
         CGRect parentRect = self.bounds;
         
         CGPoint temPoint = [self convertPoint:CGPointMake(parentRect.size.width, 0) toView:self.superview.superview];
-        BOOL rightEdge = temPoint.x >= [UIScreen mainScreen].bounds.size.width - 3;
+        BOOL rightEdge = temPoint.x >= self.superview.superview.bounds.size.width - 3;
         self.subMenuContainer = [[UIView alloc] initWithFrame:CGRectMake(rightEdge ? -16 : -8, -1 * (self.channelMenu.subMenus.count * parentRect.size.height) - self.channelMenu.subMenus.count + 1, parentRect.size.width+8, self.channelMenu.subMenus.count*parentRect.size.height+self.channelMenu.subMenus.count-1)];
         self.backgroundColor = [UIColor whiteColor];
         self.subMenuContainer.layer.shadowColor = [UIColor blackColor].CGColor;

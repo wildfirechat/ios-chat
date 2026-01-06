@@ -7,6 +7,7 @@
 //
 
 #import "DiscoverViewController.h"
+#import "MainSplitViewController.h"
 #import "ChatroomListViewController.h"
 #import "DeviceTableViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
@@ -110,44 +111,39 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     NSString *des = self.dataSource[indexPath.section][@"des"];
     if ([des isEqualToString:@"moment"]) {
          UIViewController *vc = [[NSClassFromString(@"SDTimeLineTableViewController") alloc] init];
-                   vc.hidesBottomBarWhenPushed = YES;
-                   [self.navigationController pushViewController:vc animated:YES];
+         [self pushOrShowDetail:vc];
     }
-    
+
     if ([des isEqualToString:@"chatroom"]) {
         ChatroomListViewController *vc = [[ChatroomListViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
-                  [self.navigationController pushViewController:vc animated:YES];
+        [self pushOrShowDetail:vc];
     }
-    
+
     if ([des isEqualToString:@"channel"]) {
-        WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];;
-        channelVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:channelVC animated:YES];
+        WFCUFavChannelTableViewController *channelVC = [[WFCUFavChannelTableViewController alloc] init];
+        [self pushOrShowDetail:channelVC];
     }
-    
+
     if ([des isEqualToString:@"robot"]) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [[WFCCConversation alloc] init];
             mvc.conversation.type = Single_Type;
             mvc.conversation.target = @"FireRobot";
             mvc.conversation.line = 0;
-        
-            mvc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:mvc animated:YES];
-        
+
+            [self pushOrShowDetail:mvc];
+
     }
-    
+
 
     if ([des isEqualToString:@"Dev"]) {
         WFCUBrowserViewController *vc = [[WFCUBrowserViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         vc.url = @"http://docs.wildfirechat.cn";
-        [self.navigationController pushViewController:vc animated:YES];
+        [self pushOrShowDetail:vc];
     }
 //
 //    if ([des isEqualToString:@"Things"]) {
@@ -155,12 +151,25 @@
 //        vc.hidesBottomBarWhenPushed = YES;
 //        [self.navigationController pushViewController:vc animated:YES];
 //    }
-    
+
     if ([des isEqualToString:@"Conference"]) {
         WFZHomeViewController *vc = [[WFZHomeViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
+        [self pushOrShowDetail:vc];
     }
+}
+
+- (void)pushOrShowDetail:(UIViewController *)vc {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([rootVC isKindOfClass:[MainSplitViewController class]]) {
+            MainSplitViewController *splitVC = (MainSplitViewController *)rootVC;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+            [splitVC showDetailViewController:nav sender:self];
+            return;
+        }
+    }
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

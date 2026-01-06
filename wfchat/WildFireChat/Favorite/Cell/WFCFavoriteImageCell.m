@@ -30,7 +30,7 @@
     self.thumbView.image = image;
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     NSString *thumbStr = dict[@"thumb"];
     NSData *thumbData = [[NSData alloc] initWithBase64EncodedString:thumbStr options:NSDataBase64DecodingIgnoreUnknownCharacters];

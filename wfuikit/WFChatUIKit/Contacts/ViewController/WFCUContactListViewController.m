@@ -808,10 +808,24 @@ static NSString *aiRobot = @"AI";
         WFCCUserInfo *friend = dataSource[indexPath.row];
         vc.userId = friend.userId;
 
-        vc.hidesBottomBarWhenPushed = YES;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+        [self pushOrShowDetail:vc];
     }
+}
+
+- (void)pushOrShowDetail:(UIViewController *)vc {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        Class splitVCClass = NSClassFromString(@"MainSplitViewController");
+        if (splitVCClass && [rootVC isKindOfClass:splitVCClass]) {
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+            if ([rootVC respondsToSelector:@selector(showDetailViewController:sender:)]) {
+                [rootVC performSelector:@selector(showDetailViewController:sender:) withObject:nav withObject:self];
+            }
+            return;
+        }
+    }
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

@@ -211,7 +211,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     CGFloat posY = [[[NSUserDefaults standardUserDefaults] objectForKey:kFloatingWindowPosY] floatValue];
     posX = posX ? posX : 30;
     posY = posY ? posY : 30;
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    CGRect screenBounds = keyWindow.bounds;
+    if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+        screenBounds = [UIApplication sharedApplication].windows.firstObject.bounds;
+    }
+    if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+        screenBounds = [UIScreen mainScreen].bounds;
+    }
     posX = (posX + 30) > screenBounds.size.width ? (screenBounds.size.width - 30) : posX;
     posY = (posY + 48) > screenBounds.size.height ? (screenBounds.size.height - 48) : posY;
 
@@ -350,7 +357,14 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         CGFloat posY = [[[NSUserDefaults standardUserDefaults] objectForKey:kFloatingWindowPosY] floatValue];
         posX = (posX - 30) ? posX : 30;
         posY = (posY - 48) ? posY : 48;
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        CGRect screenBounds = keyWindow.bounds;
+        if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+            screenBounds = [UIApplication sharedApplication].windows.firstObject.bounds;
+        }
+        if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+            screenBounds = [UIScreen mainScreen].bounds;
+        }
         posX = (posX + 30) > screenBounds.size.width ? (screenBounds.size.width - 30) : posX;
         posY = (posY + 48) > screenBounds.size.height ? (screenBounds.size.height - 48) : posY;
         _window = [[UIWindow alloc] initWithFrame:CGRectMake(posX, posY, 64, 96)];
@@ -412,18 +426,28 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
     if (paramSender.state != UIGestureRecognizerStateEnded && paramSender.state != UIGestureRecognizerStateFailed) {
         CGPoint location = [paramSender locationInView:[UIApplication sharedApplication].windows[0]];
 
+        // 获取主窗口尺寸用于坐标转换，更好支持iPad分屏
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        CGSize mainWindowSize = keyWindow.bounds.size;
+        if (CGSizeEqualToSize(mainWindowSize, CGSizeZero)) {
+            mainWindowSize = [UIApplication sharedApplication].windows.firstObject.bounds.size;
+        }
+        if (CGSizeEqualToSize(mainWindowSize, CGSizeZero)) {
+            mainWindowSize = [UIScreen mainScreen].bounds.size;
+        }
+
         if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft) {
             CGFloat tmp = location.x;
-            location.x = [UIScreen mainScreen].bounds.size.height - location.y;
+            location.x = mainWindowSize.height - location.y;
             location.y = tmp;
         } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
             CGFloat tmp = location.x;
             location.x = location.y;
-            location.y = [UIScreen mainScreen].bounds.size.width - tmp;
+            location.y = mainWindowSize.width - tmp;
         } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortraitUpsideDown) {
             CGFloat tmp = location.x;
-            location.x = [UIScreen mainScreen].bounds.size.height - location.y;
-            location.y = [UIScreen mainScreen].bounds.size.width - tmp;
+            location.x = mainWindowSize.height - location.y;
+            location.y = mainWindowSize.width - tmp;
         }
 
         CGRect frame = self.window.frame;
@@ -437,23 +461,29 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
             frame.origin.y = 2;
         }
 
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
+        CGRect screenBounds = keyWindow.bounds;
+        if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+            screenBounds = [UIApplication sharedApplication].windows.firstObject.bounds;
+        }
+        if (CGRectEqualToRect(screenBounds, CGRectZero)) {
+            screenBounds = [UIScreen mainScreen].bounds;
+        }
         BOOL isLandscape = screenBounds.size.width > screenBounds.size.height;
         if (isLandscape) {
-            if (frame.origin.y + frame.size.height > [UIScreen mainScreen].bounds.size.width) {
-                frame.origin.y = [UIScreen mainScreen].bounds.size.width - 2 - frame.size.height;
+            if (frame.origin.y + frame.size.height > screenBounds.size.width) {
+                frame.origin.y = screenBounds.size.width - 2 - frame.size.height;
             }
 
-            if (frame.origin.x + frame.size.width > [UIScreen mainScreen].bounds.size.height) {
-                frame.origin.x = [UIScreen mainScreen].bounds.size.height - 2 - frame.size.width;
+            if (frame.origin.x + frame.size.width > screenBounds.size.height) {
+                frame.origin.x = screenBounds.size.height - 2 - frame.size.width;
             }
         } else {
-            if (frame.origin.x + frame.size.width > [UIScreen mainScreen].bounds.size.width) {
-                frame.origin.x = [UIScreen mainScreen].bounds.size.width - 2 - frame.size.width;
+            if (frame.origin.x + frame.size.width > screenBounds.size.width) {
+                frame.origin.x = screenBounds.size.width - 2 - frame.size.width;
             }
 
-            if (frame.origin.y + frame.size.height > [UIScreen mainScreen].bounds.size.height) {
-                frame.origin.y = [UIScreen mainScreen].bounds.size.height - 2 - frame.size.height;
+            if (frame.origin.y + frame.size.height > screenBounds.size.height) {
+                frame.origin.y = screenBounds.size.height - 2 - frame.size.height;
             }
         }
         self.window.frame = frame;

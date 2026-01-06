@@ -150,8 +150,9 @@
     if (!_nameLabel) {
         _nameLabel = [UILabel new];
         _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-        _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
+        _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, self.contentView.bounds.size.width - (16 + 40 + 11), 17);
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -160,8 +161,9 @@
 - (UIImageView *)onlineView {
     if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
         if (!_onlineView) {
-            _onlineView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 48, 16, 24, 24)];;
+            _onlineView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 48, 16, 24, 24)];;
             _onlineView.image = [WFCUImage imageNamed:@"ic_online"];
+            _onlineView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
             [self.contentView addSubview:_onlineView];
         }
     }

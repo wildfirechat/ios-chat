@@ -25,7 +25,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier conversation:(WFCCConversation*)conversation {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
-        self.valueSwitch = [[UISwitch alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 8, 64, 40)];
+        self.valueSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 72, 8, 64, 40)];
+        self.valueSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.contentView addSubview:self.valueSwitch];
         [self.valueSwitch addTarget:self action:@selector(onSwitch:) forControlEvents:UIControlEventValueChanged];
         self.type = SwitchType_Conversation_None;

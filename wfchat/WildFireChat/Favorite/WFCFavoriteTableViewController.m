@@ -130,20 +130,26 @@
     switch (item.favType) {
         case MESSAGE_CONTENT_TYPE_TEXT:
         {
-            UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+            CGRect windowBounds = keyWindow.bounds;
+            if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+                windowBounds = [UIScreen mainScreen].bounds;
+            }
+
+            UIView *textContainer = [[UIView alloc] initWithFrame:windowBounds];
             textContainer.backgroundColor = self.view.backgroundColor;
-            
-            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
-            
+
+            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], windowBounds.size.width, windowBounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+
              textView.text = self.selectedCell.favoriteItem.title;
             textView.textAlignment = NSTextAlignmentCenter;
             textView.font = [UIFont systemFontOfSize:28];
             textView.editable = NO;
             textView.backgroundColor = self.view.backgroundColor;
-            
+
             [textContainer addSubview:textView];
             [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-            [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+            [keyWindow addSubview:textContainer];
         }
             break;
         case MESSAGE_CONTENT_TYPE_SOUND: {
@@ -464,7 +470,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCUFavoriteItem *favItem = self.items[indexPath.section];
-    return [[[self cellOfFavType:favItem.favType tableView:tableView] class] heightOf:favItem];
+    return [[[self cellOfFavType:favItem.favType tableView:tableView] class] heightOf:favItem containerWidth:tableView.bounds.size.width];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

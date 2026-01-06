@@ -307,9 +307,13 @@
             cell.textLabel.text = WFCString(@"QRCode");
 
             UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            CGFloat width = cell.bounds.size.width;
+            if (width == 0) {
+                width = tableView.bounds.size.width;
+            }
             UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 8, 24, 24)];
             qrview.image = qrcode;
+            qrview.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
             [cell addSubview:qrview];
             return cell;
         } else if(indexPath.row == 4) {

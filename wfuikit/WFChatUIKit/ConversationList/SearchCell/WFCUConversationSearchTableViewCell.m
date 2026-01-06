@@ -74,7 +74,7 @@
 
 - (UILabel *)targetView {
     if (!_targetView) {
-        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 28 + 16, 19, [UIScreen mainScreen].bounds.size.width - 68  - 68, 10)];
+        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 28 + 16, 19, self.bounds.size.width - 68  - 68, 10)];
         _targetView.font = [UIFont systemFontOfSize:10];
         _targetView.textColor = [UIColor grayColor];
         [self.contentView addSubview:_targetView];
@@ -84,7 +84,7 @@
 
 - (UILabel *)digestView {
     if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 28 + 16, 34, [UIScreen mainScreen].bounds.size.width - 60  - 16, 14)];
+        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 28 + 16, 34, self.bounds.size.width - 60  - 16, 14)];
         _digestView.font = [UIFont systemFontOfSize:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.contentView addSubview:_digestView];
@@ -94,7 +94,7 @@
 
 - (UILabel *)timeView {
     if (!_timeView) {
-        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 8, 18, 52, 12)];
+        _timeView = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 52  - 8, 18, 52, 12)];
         _timeView.font = [UIFont systemFontOfSize:11];
         _timeView.textAlignment = NSTextAlignmentRight;
         _timeView.textColor = [UIColor grayColor];

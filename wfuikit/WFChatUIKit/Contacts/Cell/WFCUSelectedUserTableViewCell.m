@@ -110,7 +110,8 @@
 
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, self.contentView.bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
@@ -120,7 +121,8 @@
 
 - (UIButton *)nextLevel {
     if(!_nextLevel) {
-        _nextLevel = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 19, 80, 16)];
+        _nextLevel = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 80, 19, 80, 16)];
+        _nextLevel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [_nextLevel setTitle:@"下级" forState:UIControlStateNormal];
         [_nextLevel setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         _nextLevel.titleLabel.font = [UIFont systemFontOfSize:12];

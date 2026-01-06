@@ -24,7 +24,7 @@
     [self unknownLabel];
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     return 30;
 }
 

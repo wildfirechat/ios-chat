@@ -11,11 +11,28 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
 
-#define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f ||[UIScreen mainScreen].bounds.size.height == 844.0f ||[UIScreen mainScreen].bounds.size.height == 926.0f ||[UIScreen mainScreen].bounds.size.height == 932.0f)
+#define kIs_iPhoneX ([WFCUUtilities isIPhoneX])
 
 #define  kTabbarSafeBottomMargin        (kIs_iPhoneX ? 34.f : 0.f)
 
 @implementation WFCUUtilities
++ (BOOL)isIPhoneX {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return NO;
+    }
+
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    NSInteger height = (NSInteger)size.height;
+    NSInteger width = (NSInteger)size.width;
+
+    if (width > height) {
+        NSInteger temp = height;
+        height = width;
+        width = temp;
+    }
+
+    return (height == 812 || height == 896 || height == 844 || height == 926 || height == 932);
+}
 + (CGSize)getTextDrawingSize:(NSString *)text
                         font:(UIFont *)font
              constrainedSize:(CGSize)constrainedSize {

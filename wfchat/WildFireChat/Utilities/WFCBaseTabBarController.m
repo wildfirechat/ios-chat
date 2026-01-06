@@ -31,7 +31,9 @@
 @implementation WFCBaseTabBarController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
+
     self.conversationsViewController = [WFCUConversationTableViewController new];
     UIViewController *vc = self.conversationsViewController;
     vc.title = LocalizedString(@"Message");
@@ -41,7 +43,8 @@
     item.image = [UIImage imageNamed:@"tabbar_chat"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_chat_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
-    [self addChildViewController:nav];
+    [viewControllers addObject:nav];
+    self.firstNav = nav;
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onDoubleTap:)];
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.delegate = self;
@@ -49,10 +52,8 @@
     doubleTap.delaysTouchesBegan = NO;
     doubleTap.delaysTouchesEnded = NO;
     [self.tabBar addGestureRecognizer:doubleTap];
-    
-    self.firstNav = nav;
-    
- 
+
+
     vc = [WFCUContactListViewController new];
     vc.title = LocalizedString(@"Contact");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -61,13 +62,13 @@
     item.image = [UIImage imageNamed:@"tabbar_contacts"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_contacts_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
-    [self addChildViewController:nav];
-    
+    [viewControllers addObject:nav];
+
     if(WORK_PLATFORM_URL.length) {
         WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
         browserVC.url = WORK_PLATFORM_URL;
         browserVC.hidenOpenInBrowser = YES;
-        
+
         vc = browserVC;
         vc.title = LocalizedString(@"Work");
         nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -76,9 +77,9 @@
         item.image = [UIImage imageNamed:@"tabbar_work"];
         item.selectedImage = [[UIImage imageNamed:@"tabbar_work_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
-        [self addChildViewController:nav];
+        [viewControllers addObject:nav];
     }
-    
+
     vc = [DiscoverViewController new];
     vc.title = LocalizedString(@"Discover");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -87,8 +88,8 @@
     item.image = [UIImage imageNamed:@"tabbar_discover"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_discover_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
-    [self addChildViewController:nav];
-    
+    [viewControllers addObject:nav];
+
     vc = [WFCMeTableViewController new];
     vc.title = LocalizedString(@"Me");
     nav = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -97,8 +98,10 @@
     item.image = [UIImage imageNamed:@"tabbar_me"];
     item.selectedImage = [[UIImage imageNamed:@"tabbar_me_cover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
-    [self addChildViewController:nav];
+    [viewControllers addObject:nav];
     self.settingNav = nav;
+
+    self.viewControllers = viewControllers;
 
 #ifdef WFC_MOMENTS
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kReceiveComments object:nil];

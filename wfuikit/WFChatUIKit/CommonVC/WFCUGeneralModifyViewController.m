@@ -77,7 +77,8 @@
 
 - (UITextField *)textField {
     if(!_textField) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, [UIScreen mainScreen].bounds.size.width, 32)];
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, self.view.bounds.size.width, 32)];
+        _textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _textField.borderStyle = UITextBorderStyleRoundedRect;
         _textField.clearButtonMode = UITextFieldViewModeAlways;
         _textField.delegate = self;

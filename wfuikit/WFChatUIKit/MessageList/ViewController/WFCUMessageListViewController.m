@@ -956,19 +956,22 @@
             return nil;
         }
         _multiSelectPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, self.backgroundView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
+        _multiSelectPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         _multiSelectPanel.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
         UIButton *deleteBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
+        deleteBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         [deleteBtn setTitle:WFCString(@"Delete") forState:UIControlStateNormal];
         [deleteBtn addTarget:self action:@selector(onDeleteMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
         [deleteBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [_multiSelectPanel addSubview:deleteBtn];
-        
+
         UIButton *forwardBtn = [[UIButton alloc] initWithFrame:CGRectMake(_multiSelectPanel.bounds.size.width/2, 0, _multiSelectPanel.bounds.size.width/2, _multiSelectPanel.bounds.size.height)];
+        forwardBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
         [forwardBtn setTitle:WFCString(@"Forward") forState:UIControlStateNormal];
         [forwardBtn addTarget:self action:@selector(onForwardMultiSelectedMessage:) forControlEvents:UIControlEventTouchDown];
         [forwardBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         [_multiSelectPanel addSubview:forwardBtn];
-        
+
         [self.backgroundView addSubview:_multiSelectPanel];
     }
     return _multiSelectPanel;
@@ -1101,10 +1104,12 @@
     frame.origin.y += [WFCUUtilities wf_navigationFullHeight];
     frame.size.height -= ([WFCUUtilities wf_safeDistanceBottom] + [WFCUUtilities wf_navigationFullHeight]);
     self.backgroundView = [[UIView alloc] initWithFrame:frame];
+    self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.backgroundView];
-    
+
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.backgroundView.bounds.size.width, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT) collectionViewLayout:_customFlowLayout];
-    
+    self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
     [self.backgroundView addSubview:self.collectionView];
     
     self.backgroundView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
@@ -1166,6 +1171,7 @@
     self.collectionView.delegate = self;
     
     self.ongoingCallTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)];
+    self.ongoingCallTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.ongoingCallTableView.delegate = self;
     self.ongoingCallTableView.dataSource = self;
     self.ongoingCallTableView.backgroundColor = [UIColor clearColor];
@@ -1863,9 +1869,10 @@
 }
 
 - (void)showMentionedLabel {
+    CGRect bount = self.view.bounds;
     if (!self.mentionedButton) {
-        CGRect bount = self.view.bounds;
         self.mentionedButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 240, 0, 30)];
+        self.mentionedButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         self.mentionedButton.titleLabel.font = [UIFont systemFontOfSize:12];
         [self.mentionedButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         self.mentionedButton.backgroundColor = [UIColor whiteColor];
@@ -1930,6 +1937,7 @@
 - (void)showUnreadLabel {
     CGRect bount = self.view.bounds;
     self.unreadButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 200, 0, 30)];
+    self.unreadButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
     [self.unreadButton setTitle:[NSString stringWithFormat:WFCString(@"NewMessagesCount"), self.unreadMessageCount] forState:UIControlStateNormal];
     self.unreadButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.unreadButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
@@ -2736,20 +2744,26 @@
     if ([model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtMsgContent = (WFCCTextMessageContent *)model.message.content;
         [self.chatInputBar resetInputBarStatue];
-        
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        CGRect windowBounds = keyWindow.bounds;
+        if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+            windowBounds = [UIScreen mainScreen].bounds;
+        }
+
+        UIView *textContainer = [[UIView alloc] initWithFrame:windowBounds];
         textContainer.backgroundColor = self.view.backgroundColor;
-        
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], windowBounds.size.width, windowBounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtMsgContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];
         textView.editable = NO;
         textView.backgroundColor = self.view.backgroundColor;
-        
+
         [textContainer addSubview:textView];
         [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        [keyWindow addSubview:textContainer];
     }
 }
 
@@ -2902,22 +2916,28 @@
 - (void)showQuote:(WFCCQuoteInfo *)quoteInfo ofMessage:(WFCCMessage *)msg {
     if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
         WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)msg.content;
-        
+
         [self.chatInputBar resetInputBarStatue];
-        
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        CGRect windowBounds = keyWindow.bounds;
+        if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+            windowBounds = [UIScreen mainScreen].bounds;
+        }
+
+        UIView *textContainer = [[UIView alloc] initWithFrame:windowBounds];
         textContainer.backgroundColor = self.view.backgroundColor;
-        
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], windowBounds.size.width, windowBounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];
         textView.editable = NO;
         textView.backgroundColor = self.view.backgroundColor;
-        
+
         [textContainer addSubview:textView];
         [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        [keyWindow addSubview:textContainer];
     } else if ([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
         self.imageMsgs = @[msg];
         MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];

@@ -22,18 +22,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat width = self.view.bounds.size.width;
+    CGFloat height = self.view.bounds.size.height;
     UIImageView *pcView = [[UIImageView alloc] initWithFrame:CGRectMake((width - 200)/2, 100, 200, 200)];
     pcView.image = [UIImage imageNamed:@"pc"];
+    pcView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:pcView];
-    
+
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 300, 200, 16)];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [label setText:LocalizedString(@"PCLoggedIn")];
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
-    
+
     self.muteBtn = [[UIButton alloc] initWithFrame:CGRectMake((width-width/3)/2-35, 336, 70, 70)];
+    self.muteBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.muteBtn setImage:[UIImage imageNamed:@"mute_notification"] forState:UIControlStateNormal];
     [self.muteBtn setImage:[UIImage imageNamed:@"mute_notification_hover"] forState:UIControlStateSelected];
     self.muteBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
@@ -46,13 +49,15 @@
     [self.muteBtn addTarget:self action:@selector(onMuteBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.muteBtn];
     UILabel *muteLabel = [[UILabel alloc] initWithFrame:CGRectMake((width-width/3)/2-35, 410, 70, 15)];
+    muteLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [muteLabel setText:LocalizedString(@"MutePhone")];
     [muteLabel setFont:[UIFont systemFontOfSize:12]];
     [muteLabel setTextColor:[UIColor grayColor]];
     [muteLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:muteLabel];
-    
+
     UIButton *fileBtn = [[UIButton alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 336, 70, 70)];
+    fileBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [fileBtn setImage:[UIImage imageNamed:@"pc_file_transfer"] forState:UIControlStateNormal];
     [fileBtn setImage:[UIImage imageNamed:@"pc_file_transfer"] forState:UIControlStateSelected];
     fileBtn.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f];
@@ -61,14 +66,16 @@
     [fileBtn addTarget:self action:@selector(onFileBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:fileBtn];
     UILabel *fileLabel = [[UILabel alloc] initWithFrame:CGRectMake((width+width/3)/2-35, 410, 70, 15)];
+    fileLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [fileLabel setText:LocalizedString(@"TransferFile")];
     [fileLabel setFont:[UIFont systemFontOfSize:12]];
     [fileLabel setTextColor:[UIColor grayColor]];
     [fileLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:fileLabel];
-    
-    
+
+
     UIButton *logoutBtn = [[UIButton alloc] initWithFrame:CGRectMake(90, height - 120, width - 180, 36)];
+    logoutBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [logoutBtn setBackgroundColor:[UIColor redColor]];
     [logoutBtn setTitle:LocalizedString(@"LogoutPC") forState:UIControlStateNormal];
     logoutBtn.layer.masksToBounds = YES;

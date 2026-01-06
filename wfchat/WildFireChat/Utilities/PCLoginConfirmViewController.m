@@ -20,13 +20,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat width = self.view.bounds.size.width;
+    CGFloat height = self.view.bounds.size.height;
     UIImageView *pcView = [[UIImageView alloc] initWithFrame:CGRectMake((width - 200)/2, 120, 200, 200)];
     pcView.image = [UIImage imageNamed:@"pc"];
+    pcView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:pcView];
-    
+
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 320, 200, 16)];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     switch (self.platform) {
         case PlatformType_Windows:
             [label setText:@"确认 Windows 登录"];
@@ -50,31 +52,34 @@
             [label setText:@"确认电脑登录"];
             break;
     }
-    
+
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
-    
+
     UIButton *loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 150, width - 200, 40)];
+    loginBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [loginBtn setBackgroundColor:[UIColor greenColor]];
     [loginBtn setTitle:LocalizedString(@"Login") forState:UIControlStateNormal];
     loginBtn.layer.masksToBounds = YES;
     loginBtn.layer.cornerRadius = 5.f;
     [loginBtn addTarget:self action:@selector(onLoginBtn:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, height - 90, width - 200, 40)];
+    cancelBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [cancelBtn setTitle:LocalizedString(@"Cancel") forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(onLoginCancel:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     UIButton *closeBtn = [[UIButton alloc] initWithFrame:CGRectMake(12, 12, 40, 40)];
+    closeBtn.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [closeBtn setTitle:LocalizedString(@"Close") forState:UIControlStateNormal];
     [closeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     [self.view addSubview:loginBtn];
     [self.view addSubview:cancelBtn];
     [self.view addSubview:closeBtn];
-    
+
     [self notifyScaned];
 }
 

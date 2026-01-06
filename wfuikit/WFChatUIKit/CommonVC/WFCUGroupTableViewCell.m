@@ -30,7 +30,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     _portrait.frame = CGRectMake(18, (self.frame.size.height - 40) / 2.0, 40, 40);
-    _name.frame = CGRectMake(18 + 40 + 9, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (18 + 40 + 9), 17);
+    _name.frame = CGRectMake(18 + 40 + 9, (self.frame.size.height - 17) / 2.0, self.contentView.bounds.size.width - (18 + 40 + 9), 17);
 }
 
 - (UIImageView *)portrait {

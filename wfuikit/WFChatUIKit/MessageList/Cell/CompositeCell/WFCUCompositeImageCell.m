@@ -24,7 +24,7 @@
     // Configure the view for the selected state
 }
 
-+ (CGFloat)heightForMessageContent:(WFCCMessage *)message {
++ (CGFloat)heightForMessageContent:(WFCCMessage *)message containerWidth:(CGFloat)containerWidth {
     WFCCImageMessageContent *content = (WFCCImageMessageContent *)message.content;
     return content.thumbnail.size.height;
 }
@@ -32,7 +32,7 @@
 - (void)setMessage:(WFCCMessage *)message {
     [super setMessage:message];
     WFCCImageMessageContent *content = (WFCCImageMessageContent *)message.content;
-    CGRect frame = [self.class contentFrame];
+    CGRect frame = [self contentFrameInView];
     frame.size.height = content.thumbnail.size.height;
     frame.size.width = content.thumbnail.size.width;
     self.contentImageView.frame = frame;

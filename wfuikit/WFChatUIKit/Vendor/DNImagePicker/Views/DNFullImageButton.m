@@ -27,7 +27,17 @@ static NSInteger const buttonImageWidth = 16;
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.height = 28;
-        self.width = CGRectGetWidth([[UIScreen mainScreen] bounds])/2 -20;
+        if (frame.size.width > 0) {
+            self.width = frame.size.width;
+        } else {
+            // 使用更合理的默认宽度，支持iPad分屏
+            UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+            CGFloat windowWidth = keyWindow.bounds.size.width;
+            if (windowWidth == 0) {
+                windowWidth = [UIScreen mainScreen].bounds.size.width;
+            }
+            self.width = windowWidth/2 -20;
+        }
         [self fullImageButton];
         [self imageSizeLabel];
         [self indicatorView];

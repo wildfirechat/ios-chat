@@ -37,7 +37,8 @@
     _isSelectable = isSelectable;
     if (isSelectable) {
         if (self.selectView == nil) {
-            self.selectView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 32, 8, 20, 20)];
+            self.selectView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 32, 8, 20, 20)];
+            self.selectView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
             self.selectView.image = [WFCUImage imageNamed:@"multi_unselected"];
             [self.contentView addSubview:self.selectView];
         }

@@ -16,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)UIView *contentArea;
 
 //子类实现，必须重新返回内容区高度
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem;
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth;
 
 //基类实现，不能重写
-+ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem;
++ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -28,7 +28,7 @@
     self.nameLabel.text = favoriteItem.title;
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     return 56;
 }
 

@@ -30,10 +30,13 @@
 }
 
 - (CGFloat)itemAreaWidth {
-    if (!_itemAreaWidth) {
-        CGRect frame = [UIScreen mainScreen].bounds;
-        _itemAreaWidth = frame.size.width / self.itemsPerLine;
+    CGRect frame;
+    if (self.collectionView) {
+        frame = self.collectionView.bounds;
+    } else {
+        frame = CGRectZero;
     }
+    _itemAreaWidth = frame.size.width / self.itemsPerLine;
     return _itemAreaWidth;
 }
 - (CGFloat)itemWidth {

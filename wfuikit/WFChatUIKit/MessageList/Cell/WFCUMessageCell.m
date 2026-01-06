@@ -47,20 +47,20 @@
 @end
 
 @implementation WFCUMessageCell
-+ (CGFloat)clientAreaWidth {
-  return [WFCUMessageCell bubbleWidth] - Bubble_Padding_Arraw - Bubble_Padding_Another_Side;
++ (CGFloat)clientAreaWidth:(CGFloat)width {
+  return [WFCUMessageCell bubbleWidth:width] - Bubble_Padding_Arraw - Bubble_Padding_Another_Side;
 }
 
-+ (CGFloat)bubbleWidth {
-    return [UIScreen mainScreen].bounds.size.width - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
++ (CGFloat)bubbleWidth:(CGFloat)width {
+    return width - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
 }
 
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   CGFloat height = [super hightForHeaderArea:msgModel];
   CGFloat portraitSize = Portrait_Size;
   CGFloat nameLabelHeight = Name_Label_Height + Name_Client_Padding;
-  CGFloat clientAreaWidth = [self clientAreaWidth];
-  
+  CGFloat clientAreaWidth = [self clientAreaWidth:width];
+
   CGSize clientArea = [self sizeForClientArea:msgModel withViewWidth:clientAreaWidth];
   CGFloat nameAndClientHeight = clientArea.height;
   if (msgModel.showNameLabel) {
@@ -265,7 +265,7 @@
     }
 
       
-    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth:self.bounds.size.width]];
       self.bubbleView.image = [WFCUImage imageNamed:@"sent_msg_background"];
       self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side - selectViewOffset, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
@@ -295,8 +295,8 @@
               bubbleImageName = @"chat_from_bg_normal_dark";
           }
       }
-      
-    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+
+    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth:self.bounds.size.width]];
       self.bubbleView.image = [WFCUImage imageNamed:bubbleImageName];
       self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Arraw, Client_Bubble_Top_Padding, size.width, size.height);
@@ -391,8 +391,8 @@
                 [self.quoteContainer addSubview:self.quoteLabel];
                 [self.contentView addSubview:self.quoteContainer];
             }
-            CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-            
+            CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidth:self.bounds.size.width]];
+
             CGRect frame;
             if (model.message.direction == MessageDirection_Send) {
                 frame = CGRectMake(self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Another_Side - selectViewOffset, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);
@@ -448,9 +448,9 @@
             [self.translateContainer addSubview:self.translateActivity];
             [self.translateActivity startAnimating];
         }
-        
-        CGSize size = [self.class sizeForTranslateArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
-        
+
+        CGSize size = [self.class sizeForTranslateArea:model withViewWidth:[WFCUMessageCell clientAreaWidth:self.bounds.size.width]];
+
         CGRect frame;
         if (model.message.direction == MessageDirection_Send) {
             frame = CGRectMake(self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Another_Side - selectViewOffset, self.bubbleView.frame.origin.y + self.bubbleView.frame.size.height + 4, size.width, size.height-4);

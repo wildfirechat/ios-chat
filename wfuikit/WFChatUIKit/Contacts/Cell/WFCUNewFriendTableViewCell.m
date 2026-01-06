@@ -26,7 +26,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
-    self.nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 16) / 2.0, [UIScreen mainScreen].bounds.size.width - 64, 16);
+    self.nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 16) / 2.0, self.contentView.bounds.size.width - 64, 16);
 }
 
 - (void)onFriendRequestUpdated:(NSNotification *)notification {
@@ -73,9 +73,10 @@
 
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 11, 19, [UIScreen mainScreen].bounds.size.width - 64, 16)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 11, 19, self.contentView.bounds.size.width - 64, 16)];
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
         _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

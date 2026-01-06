@@ -198,9 +198,9 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
 }
 
 - (id)init {
-    width = [UIScreen mainScreen].bounds.size.width;
-    self = [super initWithFrame:CGRectMake(0, 0, width, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom])];
-    
+    width = 0; // Will be set in setFrame
+    self = [super initWithFrame:CGRectMake(0, 0, 0, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom])];
+
     [self loadStickers];
     if (self) {
 
@@ -208,17 +208,17 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
 
         NSString *resourcePath = [[NSBundle bundleForClass:[self class]] resourcePath];
         NSString *bundlePath = [resourcePath stringByAppendingPathComponent:@"Emoj.plist"];
-        
+
         self.faceEmojiArray = [[NSArray alloc]initWithContentsOfFile:bundlePath];
 
         [self addSubview:self.collectionView];
 
         //添加PageControl
         [self addSubview:self.facePageControl];
-        
+
         _tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [WFCUUtilities wf_safeDistanceBottom], self.frame.size.width, EMOJ_TAB_HEIGHT)];
         [self addSubview:_tabbarView];
-        
+
         _sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _sendBtn.tag = 333;
         _sendBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
@@ -229,9 +229,9 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
         self.sendBtn.layer.borderColor = HEXCOLOR(0xdbdbdd).CGColor;
         [_sendBtn addTarget:self action:@selector(sendBtnHandle:) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:_sendBtn];
-        
+
         [_tabbarView addSubview:self.tabView];
-        
+
         [_collectionView reloadData];
 
         [self.tabView setAllowsMultipleSelection:NO];
@@ -240,6 +240,22 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
     }
 
     return self;
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    if(self.superview) {
+        width = self.superview.bounds.size.width;
+        self.frame = CGRectMake(0, 0, width, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom]);
+
+        self.collectionView.frame = CGRectMake(0, 0, width, EMOJ_FACE_VIEW_HEIGHT);
+        self.facePageControl.frame = CGRectMake(width/2-100, EMOJ_FACE_VIEW_HEIGHT, 200, EMOJ_PAGE_CONTROL_HEIGHT);
+        self.tabbarView.frame = CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [WFCUUtilities wf_safeDistanceBottom], width, EMOJ_TAB_HEIGHT);
+        self.sendBtn.frame = CGRectMake(width - 52, 5, 52, 37);
+        self.tabView.frame = CGRectMake(0, 5, width - 52, 37);
+
+        [self.collectionView reloadData];
+    }
 }
 
 - (void)setSelectedTableRow:(int)selectedTableRow {

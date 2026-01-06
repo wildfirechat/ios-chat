@@ -32,7 +32,7 @@
     self.nameLabel.text = [NSString stringWithFormat:LocalizedString(@"Seconds"), duration];
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     return 56;
 }
 

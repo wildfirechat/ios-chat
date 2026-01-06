@@ -37,9 +37,9 @@
     if(userInfo.friendAlias.length) {
         title = userInfo.friendAlias;
     }
-    
+
     self.nameLabel.text = title;
-    self.nameLabel.frame = CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 18);
+    self.nameLabel.frame = CGRectMake(56, 8, self.contentView.bounds.size.width - 80-56, 18);
     if(member.isHost && member.isMe) {
         self.extraLabel.hidden = NO;
         self.extraLabel.text = @"(主持人，我)";
@@ -51,13 +51,13 @@
         self.extraLabel.text = @"(我)";
     } else {
         self.extraLabel.hidden = YES;
-        self.nameLabel.frame = CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 40);
+        self.nameLabel.frame = CGRectMake(56, 8, self.contentView.bounds.size.width - 80-56, 40);
     }
     if(member.isAudioOnly) {
-        self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24);
+        self.audioImageView.frame = CGRectMake(self.contentView.bounds.size.width - 40, 12, 24, 24);
         self.videoImageView.hidden = YES;
     } else {
-        self.audioImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24);
+        self.audioImageView.frame = CGRectMake(self.contentView.bounds.size.width - 72, 12, 24, 24);
         self.videoImageView.hidden = NO;
     }
     
@@ -84,8 +84,9 @@
 
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 18)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 8, self.contentView.bounds.size.width - 80-56, 18)];
         _nameLabel.font = [UIFont systemFontOfSize:18];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -93,16 +94,18 @@
 
 - (UILabel *)extraLabel {
     if (!_extraLabel) {
-        _extraLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 32, [UIScreen mainScreen].bounds.size.width - 80-56, 12)];
+        _extraLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 32, self.contentView.bounds.size.width - 80-56, 12)];
         _extraLabel.textColor = [UIColor grayColor];
         _extraLabel.font = [UIFont systemFontOfSize:12];
+        _extraLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_extraLabel];
     }
     return _extraLabel;
 }
 - (UIImageView *)videoImageView {
     if(!_videoImageView) {
-        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 12, 24, 24)];
+        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 40, 12, 24, 24)];
+        _videoImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.contentView addSubview:_videoImageView];
     }
     return _videoImageView;
@@ -110,7 +113,8 @@
 
 - (UIImageView *)audioImageView {
     if(!_audioImageView) {
-        _audioImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 12, 24, 24)];
+        _audioImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 72, 12, 24, 24)];
+        _audioImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.contentView addSubview:_audioImageView];
     }
     return _audioImageView;

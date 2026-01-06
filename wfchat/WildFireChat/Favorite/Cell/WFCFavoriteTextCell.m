@@ -25,8 +25,8 @@
     self.label.text = favoriteItem.title;
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
-    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width-16, 1000)].height;
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
+    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(containerWidth-32, 1000)].height;
 }
 
 - (UILabel *)label {

@@ -22,6 +22,7 @@
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
 #import "WFCBaseTabBarController.h"
+#import "MainSplitViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <UserNotifications/UserNotifications.h>
 #import "PCLoginConfirmViewController.h"
@@ -189,8 +190,12 @@
         }
     }
     
-    
-    self.window.rootViewController = [WFCBaseTabBarController new];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        self.window.rootViewController = [MainSplitViewController new];
+    } else {
+        self.window.rootViewController = [WFCBaseTabBarController new];
+    }
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self setupNavBar];

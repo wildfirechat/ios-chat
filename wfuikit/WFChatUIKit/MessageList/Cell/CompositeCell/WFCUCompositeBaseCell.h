@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign)BOOL lastMessage;
 
 + (CGRect)contentFrame;
+- (CGRect)contentFrameInView;
++ (CGRect)contentFrameWithWidth:(CGFloat)width;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -31,7 +31,7 @@
 
 - (void)setupView:(CGRect)frame {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width - flowLayout.minimumInteritemSpacing*2)/3-5;
+    CGFloat itemWidth = (frame.size.width - flowLayout.minimumInteritemSpacing*2)/3-5;
     flowLayout.itemSize = CGSizeMake(itemWidth, itemWidth);
 //    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     

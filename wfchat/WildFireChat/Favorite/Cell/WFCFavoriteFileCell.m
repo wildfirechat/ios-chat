@@ -33,7 +33,7 @@
     self.infoLabel.text = [WFCUUtilities formatSizeLable:size];
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     return 56;
 }
 

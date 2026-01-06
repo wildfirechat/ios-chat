@@ -46,7 +46,8 @@
 
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, self.contentView.bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
                _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];

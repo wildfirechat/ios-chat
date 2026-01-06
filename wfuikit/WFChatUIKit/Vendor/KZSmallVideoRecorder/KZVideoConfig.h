@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-#define kzSCREEN_WIDTH      [UIScreen mainScreen].bounds.size.width
-#define kzSCREEN_HEIGHT     [UIScreen mainScreen].bounds.size.height
-
+// 注意：以下宏定义已废弃，请使用容器视图的实际bounds
+// #define kzSCREEN_WIDTH      [UIScreen mainScreen].bounds.size.width
+// #define kzSCREEN_HEIGHT     [UIScreen mainScreen].bounds.size.height
 
 #define kzThemeBlackColor   [UIColor blackColor]
 #define kzThemeTineColor    [UIColor greenColor]

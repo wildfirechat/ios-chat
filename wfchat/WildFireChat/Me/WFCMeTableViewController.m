@@ -7,6 +7,7 @@
 //
 
 #import "WFCMeTableViewController.h"
+#import "MainSplitViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
@@ -171,32 +172,40 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         WFCUMyProfileTableViewController *vc = [[WFCUMyProfileTableViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:vc animated:YES];
+        [self pushOrShowDetail:vc];
     } else {
         int type = [self.itemDataSource[indexPath.section-1][@"type"] intValue];
         if (type == Notification_Setting_Cell) {
            WFCUMessageSettingViewController *mnvc = [[WFCUMessageSettingViewController alloc] init];
-           mnvc.hidesBottomBarWhenPushed = YES;
-           [self.navigationController pushViewController:mnvc animated:YES];
+           [self pushOrShowDetail:mnvc];
        } else if (type == Favorite_Settings_Cell) {
            WFCFavoriteTableViewController *mnvc = [[WFCFavoriteTableViewController alloc] init];
-           mnvc.hidesBottomBarWhenPushed = YES;
-           [self.navigationController pushViewController:mnvc animated:YES];
+           [self pushOrShowDetail:mnvc];
        } else if(type == File_Settings_Cell) {
            WFCUFilesEntryViewController *fevc = [[WFCUFilesEntryViewController alloc] init];
-           fevc.hidesBottomBarWhenPushed = YES;
-           [self.navigationController pushViewController:fevc animated:YES];
+           [self pushOrShowDetail:fevc];
        } else if(type == Safe_Setting_Cell) {
            WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
-           stvc.hidesBottomBarWhenPushed = YES;
-           [self.navigationController pushViewController:stvc animated:YES];
+           [self pushOrShowDetail:stvc];
        } else if(type == More_Setting_Cell) {
            WFCSettingTableViewController *vc = [[WFCSettingTableViewController alloc] init];
-                  vc.hidesBottomBarWhenPushed = YES;
-                  [self.navigationController pushViewController:vc animated:YES];
+           [self pushOrShowDetail:vc];
        }
     }
+}
+
+- (void)pushOrShowDetail:(UIViewController *)vc {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([rootVC isKindOfClass:[MainSplitViewController class]]) {
+            MainSplitViewController *splitVC = (MainSplitViewController *)rootVC;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+            [splitVC showDetailViewController:nav sender:self];
+            return;
+        }
+    }
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;

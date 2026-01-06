@@ -137,9 +137,9 @@
         self.imageView.image = self.asset.cacheImage;
         return;
     }
-    
+
     __weak typeof(self) wSelf = self;
-    CGFloat kThumbSizeLength =  ceil(([[UIScreen mainScreen] bounds].size.width -10)/4);
+    CGFloat kThumbSizeLength =  ceil((self.bounds.size.width -10)/4);
     [DNImagePickerHelper fetchImageWithAsset:self.asset
                                   targetSize:CGSizeMake(kThumbSizeLength, kThumbSizeLength)
                            imageResutHandler:^(UIImage * _Nonnull image) {

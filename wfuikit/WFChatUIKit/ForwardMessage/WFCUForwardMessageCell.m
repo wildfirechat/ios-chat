@@ -96,10 +96,19 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(88, 16, [UIScreen mainScreen].bounds.size.width - 96, 24)];
+        _name = [[UILabel alloc] initWithFrame:CGRectMake(88, 16, 0, 24)];
+        _name.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_name];
+
+        // 确保在 layoutSubviews 中正确设置宽度
     }
     return _name;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect bounds = self.contentView.bounds;
+    self.name.frame = CGRectMake(88, 16, bounds.size.width - 96, 24);
 }
 
 - (UIImageView *)checkboxView {

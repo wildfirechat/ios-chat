@@ -35,7 +35,8 @@
 }
 -(UILabel *)callHintLabel {
     if(!_callHintLabel) {
-        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 4, [UIScreen mainScreen].bounds.size.width-16, 20)];
+        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 4, self.contentView.bounds.size.width-16, 20)];
+        _callHintLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_callHintLabel];
     }
     return _callHintLabel;
@@ -43,8 +44,8 @@
 
 -(UIButton *)joinButton {
     if(!_joinButton) {
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
-        _joinButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2 - 60 - 40, 28, 60, 24)];
+        _joinButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width/2 - 60 - 40, 28, 60, 24)];
+        _joinButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [_joinButton setTitle:WFCString(@"Join") forState:UIControlStateNormal];
         [_joinButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_joinButton addTarget:self action:@selector(onJoinButton) forControlEvents:UIControlEventTouchUpInside];
@@ -55,8 +56,8 @@
 
 -(UIButton *)cancelButton {
     if(!_cancelButton) {
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
-        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2 + 40, 28, 60, 24)];
+        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width/2 + 40, 28, 60, 24)];
+        _cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [_cancelButton setTitle:WFCString(@"Cancel") forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(onCancelButton) forControlEvents:UIControlEventTouchUpInside];

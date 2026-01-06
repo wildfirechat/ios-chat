@@ -55,8 +55,14 @@
     LBXScanViewStyle *style = [[LBXScanViewStyle alloc]init];
     style.centerUpOffset = 60;
     style.xScanRetangleOffset = 30;
-    
-    if ([UIScreen mainScreen].bounds.size.height <= 480 )
+
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    CGFloat windowHeight = keyWindow.bounds.size.height;
+    if (windowHeight == 0) {
+        windowHeight = [UIScreen mainScreen].bounds.size.height;
+    }
+
+    if (windowHeight <= 480 )
     {
         //3.5inch 显示的扫码缩小
         style.centerUpOffset = 40;

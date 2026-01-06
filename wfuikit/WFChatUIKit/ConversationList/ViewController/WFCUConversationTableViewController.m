@@ -248,8 +248,7 @@
         if (contacts.count == 1) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:contacts[0] line:0];
-            mvc.hidesBottomBarWhenPushed = YES;
-            [ws.navigationController pushViewController:mvc animated:YES];
+            [ws pushOrShowDetail:mvc];
         } else {
             [self createGroup:contacts];
         }
@@ -271,8 +270,7 @@
             [[WFCCIMService sharedWFCIMService] createSecretChat:contacts[0] success:^(NSString *targetId, int line) {
                 WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
                 mvc.conversation = [WFCCConversation conversationWithType:SecretChat_Type target:targetId line:line];
-                mvc.hidesBottomBarWhenPushed = YES;
-                [ws.navigationController pushViewController:mvc animated:YES];
+                [ws pushOrShowDetail:mvc];
             } error:^(int error_code) {
                 
             }];
@@ -323,9 +321,8 @@
         mvc.conversation.type = Group_Type;
         mvc.conversation.target = groupId;
         mvc.conversation.line = 0;
-        
-        mvc.hidesBottomBarWhenPushed = YES;
-        [ws.navigationController pushViewController:mvc animated:YES];
+
+        [ws pushOrShowDetail:mvc];
     } error:^(int error_code) {
         NSLog(@"create group failure");
         [ws.view makeToast:WFCString(@"CreateGroupFailure")
@@ -337,14 +334,12 @@
 
 - (void)addFriendsAction:(id)sender {
     UIViewController *addFriendVC = [[WFCUFriendRequestViewController alloc] init];
-    addFriendVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:addFriendVC animated:YES];
+    [self pushOrShowDetail:addFriendVC];
 }
 
 - (void)listenChannelAction:(id)sender {
     UIViewController *searchChannelVC = [[WFCUSearchChannelViewController alloc] init];
-    searchChannelVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:searchChannelVC animated:YES];
+    [self pushOrShowDetail:searchChannelVC];
 }
 
 - (void)scanQrCodeAction:(id)sender {
@@ -385,7 +380,7 @@
     UIView *title;
     ConnectionStatus status = [WFCCNetworkService sharedInstance].currentConnectionStatus;
     if (status != kConnectionStatusConnecting && status != kConnectionStatusReceiving) {
-        UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 40, 0, 80, 44)];
+        UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 40, 0, 80, 44)];
         
         switch (status) {
             case kConnectionStatusLogout:
@@ -418,7 +413,7 @@
         navLabel.textAlignment = NSTextAlignmentCenter;
         title = navLabel;
     } else {
-        UIView *continer = [[UIView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 60, 0, 120, 44)];
+        UIView *continer = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 60, 0, 120, 44)];
         UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 80, 40)];
         if (status == kConnectionStatusConnecting) {
             navLabel.text = WFCString(@"Connecting");
@@ -1262,14 +1257,13 @@
                     mvc.conversation.type = Single_Type;
                     mvc.conversation.target = info.userId;
                     mvc.conversation.line = 0;
-                    
-                    mvc.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:mvc animated:YES];
+
+                    [self pushOrShowDetail:mvc];
                 }
 
             }
         }
-        
+
         if (self.searchGroupList.count) {
             sec++;
 
@@ -1285,14 +1279,13 @@
                     mvc.conversation.type = Group_Type;
                     mvc.conversation.target = info.groupInfo.target;
                     mvc.conversation.line = 0;
-                    
-                    mvc.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:mvc animated:YES];
+
+                    [self pushOrShowDetail:mvc];
                 }
 
             }
         }
-        
+
         if (self.searchConversationList.count) {
             sec++;
 
@@ -1306,29 +1299,26 @@
                     WFCCConversationSearchInfo *info = self.searchConversationList[indexPath.row];
                          if (info.marchedCount == 1) {
                              WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                             
+
                              mvc.conversation = info.conversation;
                              mvc.highlightMessageId = info.marchedMessage.messageId;
                              mvc.highlightText = info.keyword;
-                             mvc.hidesBottomBarWhenPushed = YES;
-                             [self.navigationController pushViewController:mvc animated:YES];
+                             [self pushOrShowDetail:mvc];
                          } else {
                              WFCUConversationSearchTableViewController *mvc = [[WFCUConversationSearchTableViewController alloc] init];
                              mvc.conversation = info.conversation;
                              mvc.keyword = info.keyword;
-                             mvc.hidesBottomBarWhenPushed = YES;
-                             [self.navigationController pushViewController:mvc animated:YES];
+                             [self pushOrShowDetail:mvc];
                          }
                 }
-     
+
             }
         }
     } else {
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         WFCCConversationInfo *info = self.conversations[indexPath.row];
         mvc.conversation = info.conversation;
-        mvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:mvc animated:YES];
+        [self pushOrShowDetail:mvc];
     }
 }
 
@@ -1569,5 +1559,21 @@
     }
 
     [self.tableView reloadData];
+}
+
+- (void)pushOrShowDetail:(UIViewController *)vc {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        Class splitVCClass = NSClassFromString(@"MainSplitViewController");
+        if (splitVCClass && [rootVC isKindOfClass:splitVCClass]) {
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+            if ([rootVC respondsToSelector:@selector(showDetailViewController:sender:)]) {
+                [rootVC performSelector:@selector(showDetailViewController:sender:) withObject:nav withObject:self];
+            }
+            return;
+        }
+    }
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

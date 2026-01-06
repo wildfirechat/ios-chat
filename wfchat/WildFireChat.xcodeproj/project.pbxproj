@@ -115,6 +115,7 @@
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
+		B764D70F2F0CE2DC00C595E3 /* MainSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D70E2F0CE2DC00C595E3 /* MainSplitViewController.m */; };
 		B76C1DDB2D695F5B00B1B0D8 /* GTSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */; };
 		B76C1DDC2D695F5B00B1B0D8 /* GTCommonSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */; };
 		B76C1DE22D69650500B1B0D8 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DDF2D69650500B1B0D8 /* Utils.m */; };
@@ -409,6 +410,8 @@
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B764D48D295854700082492F /* OrgService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrgService.m; sourceTree = "<group>"; };
 		B764D48E295854700082492F /* OrgService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrgService.h; sourceTree = "<group>"; };
+		B764D70D2F0CE2DC00C595E3 /* MainSplitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainSplitViewController.h; sourceTree = "<group>"; };
+		B764D70E2F0CE2DC00C595E3 /* MainSplitViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainSplitViewController.m; sourceTree = "<group>"; };
 		B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTCommonSDK.xcframework; sourceTree = "<group>"; };
 		B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTSDK.xcframework; sourceTree = "<group>"; };
 		B76C1DDE2D69650500B1B0D8 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -576,6 +579,8 @@
 		2BF692E5232DBA840072036A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B764D70D2F0CE2DC00C595E3 /* MainSplitViewController.h */,
+				B764D70E2F0CE2DC00C595E3 /* MainSplitViewController.m */,
 				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
 				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
 				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
@@ -1339,6 +1344,7 @@
 				2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */,
 				149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */,
 				2FCF7218254FD092006CF53B /* WFCFavoriteFileCell.m in Sources */,
+				B764D70F2F0CE2DC00C595E3 /* MainSplitViewController.m in Sources */,
 				2FFDDC982551545300CEFDBB /* WFCFavoriteLocationCell.m in Sources */,
 				90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */,
 				909ACDB321304CD900A64FE7 /* ChatroomItemCell.m in Sources */,
@@ -1619,7 +1625,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
@@ -1667,7 +1673,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
@@ -1701,7 +1707,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1734,7 +1743,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1764,8 +1776,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1794,8 +1809,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1825,8 +1843,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1855,8 +1876,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

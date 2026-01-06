@@ -65,7 +65,7 @@
 @implementation WFCUArticlesCell
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)msgModel.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = width - CELL_MARGIN - CELL_MARGIN;
     CGFloat coverHeight = containerWidth * COVER_HW_RATE;
     CGFloat labHeight = 0;
     if(content.subArticles.count) {
@@ -75,7 +75,7 @@
         labHeight = CELL_ITEM_PADDING;
         labHeight += titleSize.height;
     }
-    
+
     return CGSizeMake(width, CELL_MARGIN_TOP + CELL_PADDING_TOP + coverHeight + labHeight + CELL_PADDING_BUTTOM + CELL_MARGIN_BUTTOM);
 }
 
@@ -83,7 +83,7 @@
     [super setModel:model];
     [self containerView];
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)model.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = self.containerView.bounds.size.width;
     __block CGFloat offset = CELL_PADDING_TOP;
     [self removeAllItems];
 
@@ -184,8 +184,10 @@
 
 - (UIView *)containerView {
     if(!_containerView) {
-        CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+        CGFloat width = self.contentView.bounds.size.width;
+        CGFloat containerWidth = width - CELL_MARGIN - CELL_MARGIN;
         _containerView = [[UIView alloc] initWithFrame:CGRectMake(CELL_MARGIN, CELL_MARGIN_TOP, containerWidth, 0)];
+        _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.masksToBounds = YES;
         _containerView.layer.cornerRadius = 5.f;

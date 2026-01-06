@@ -121,7 +121,7 @@ static KZVideoViewController *__currentVideoVC = nil;
 }
 
 - (void)setupSubViews {
-    _view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _view = [[UIView alloc] initWithFrame:self.view.bounds];
     self.view.backgroundColor = [UIColor clearColor];
     
     UIPanGestureRecognizer *ges = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTopBarAction:)];
@@ -374,8 +374,8 @@ static KZVideoViewController *__currentVideoVC = nil;
         CGRect actionFrame = _actionView.frame;
         actionFrame.origin.y = pointAtView.y;
         _actionView.frame = actionFrame;
-        
-        CGFloat alpha = 0.4*(kzSCREEN_HEIGHT - pointAtView.y)/CGRectGetHeight(_actionView.frame);
+
+        CGFloat alpha = 0.4*(self.view.bounds.size.height - pointAtView.y)/CGRectGetHeight(_actionView.frame);
         self.view.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha: alpha];
     }
     if (gesture.state == UIGestureRecognizerStateEnded) {

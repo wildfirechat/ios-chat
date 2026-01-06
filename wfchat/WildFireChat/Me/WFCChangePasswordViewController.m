@@ -32,7 +32,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat inputHeight = 40;
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 16;
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenWidth = self.view.bounds.size.width;
     CGFloat labelWidth = 72;
     
     self.oldLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];

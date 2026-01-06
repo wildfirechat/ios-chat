@@ -34,7 +34,8 @@
 }
 -(UILabel *)callHintLabel {
     if(!_callHintLabel) {
-        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width-16, 20)];
+        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.contentView.bounds.size.width-16, 20)];
+        _callHintLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_callHintLabel];
     }
     return _callHintLabel;

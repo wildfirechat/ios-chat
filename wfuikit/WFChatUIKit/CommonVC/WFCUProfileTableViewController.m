@@ -288,8 +288,8 @@
     for (UIView *subView in self.headerCell.contentView.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    
+    CGFloat width = self.view.bounds.size.width;
+
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 14, 58, 58)];
     
     self.portraitView.layer.cornerRadius = 10;
@@ -331,10 +331,11 @@
     
     if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
         self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
+        self.starLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         self.starLabel.text = @"☆";
         self.starLabel.font = [UIFont systemFontOfSize:18];
         self.starLabel.textColor = [UIColor yellowColor];
-        
+
         [self.headerCell.contentView addSubview:self.starLabel];
     }
     
@@ -357,12 +358,13 @@
             UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
             alisaCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, width - 16 - 60, 50)];
             [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
             [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
             btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
             btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [alisaCell.contentView addSubview:btn];
             [self showSeparatorLine:alisaCell];
             [self.headerCells addObject:alisaCell];
@@ -426,11 +428,12 @@
                        [subView removeFromSuperview];
                 }
                 
-                UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
+                UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, width - 100, 70)];
                 [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
                 [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
                 momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
                 momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                momentButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
                 if (@available(iOS 14, *)) {
                     [self.momentCell.contentView addSubview:momentButton];
@@ -531,7 +534,7 @@
 }
 
 - (UIEdgeInsets)hiddenSeparatorLine:(UITableViewCell *)cell {
-    return cell.separatorInset = UIEdgeInsetsMake(self.view.frame.size.width, 0, 0, 0);
+    return cell.separatorInset = UIEdgeInsetsMake(0, self.view.frame.size.width, 0, 0);
 }
 
 - (void)showSeparatorLine:(UITableViewCell *)cell {

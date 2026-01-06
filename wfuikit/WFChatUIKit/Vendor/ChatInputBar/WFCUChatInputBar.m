@@ -122,6 +122,7 @@
 - (instancetype)initWithSuperView:(UIView *)parentView conversation:(WFCCConversation *)conversation delegate:(id<WFCUChatInputBarDelegate>)delegate {
     self = [super initWithFrame:CGRectMake(0, parentView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT, parentView.bounds.size.width, CHAT_INPUT_BAR_HEIGHT)];
     if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         [parentView addSubview:self];
         self.delegate = delegate;
         self.parentView = parentView;
@@ -170,21 +171,25 @@
         [self.publicSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.publicSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
         [self addSubview:self.publicSwitchBtn];
-        
+
         UIView *split = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2, parentRect.size.height/2 - CHAT_INPUT_BAR_ICON_SIZE/2, 1, CHAT_INPUT_BAR_ICON_SIZE)];
         split.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
         [self addSubview:split];
-        
+
         self.publicContainer = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1, 0, parentRect.size.width - (CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1), parentRect.size.height)];
+        self.publicContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.inputContainer = [[UIView alloc] initWithFrame:CGRectMake(CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1, 0, parentRect.size.width - (CHAT_INPUT_BAR_PADDING + CHAT_INPUT_BAR_ICON_SIZE + CHAT_INPUT_BAR_PADDING/2+1), parentRect.size.height)];
+        self.inputContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
         [self addSubview:self.publicContainer];
         [self addSubview:self.inputContainer];
-        
+
         self.inputContainer.hidden = YES;
         [self setupInputContainer:YES];
         [self setupPublicContainer:menus];
     } else {
         self.inputContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, parentRect.size.width, parentRect.size.height)];
+        self.inputContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:self.inputContainer];
         [self setupInputContainer:NO];
     }
@@ -255,19 +260,22 @@
 #endif
     
     self.pluginSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
+    self.pluginSwitchBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self.pluginSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_plugin"] forState:UIControlStateNormal];
     [self.pluginSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pluginSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self.inputContainer addSubview:self.pluginSwitchBtn];
-    
+
     self.emojSwitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(parentRect.size.width - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE, CHAT_INPUT_BAR_ICON_SIZE)];
+    self.emojSwitchBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_emoj"] forState:UIControlStateNormal];
     [self.emojSwitchBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.emojSwitchBtn addTarget:self action:@selector(onSwitchBtn:) forControlEvents:UIControlEventTouchDown];
     [self.inputContainer addSubview:self.emojSwitchBtn];
 
     self.textInputView = [[UITextView alloc] initWithFrame:CGRectMake(voiceAndPttOffset + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_PADDING, self.inputContainer.bounds.size.width - voiceAndPttOffset - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING, CHAT_INPUT_BAR_ICON_SIZE)];
-    
+    self.textInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
     self.textInputView.delegate = self;
     self.textInputView.layoutManager.allowsNonContiguousLayout = NO;
     [self.textInputView setExclusiveTouch:YES];
@@ -288,6 +296,7 @@
     
     
     self.voiceInputBtn = [[UIButton alloc] initWithFrame:self.textInputView.frame];
+    self.voiceInputBtn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.voiceInputBtn setTitle:WFCString(@"HoldToTalk") forState:UIControlStateNormal];
     [self.voiceInputBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.voiceInputBtn.layer.cornerRadius = 4;

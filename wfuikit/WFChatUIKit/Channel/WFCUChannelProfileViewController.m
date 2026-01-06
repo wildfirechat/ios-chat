@@ -32,29 +32,32 @@
     
     CGFloat portraitWidth = 80;
     CGFloat top = [WFCUUtilities wf_navigationFullHeight] + 40;
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    
+    CGFloat screenWidth = self.view.bounds.size.width;
+
     self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
+    self.channelPortrait.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
-    
+
     top += portraitWidth;
     top += 20;
     self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 40 - 40, 18)];
+    self.channelName.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.channelName.font = [UIFont systemFontOfSize:18];
     self.channelName.textAlignment = NSTextAlignmentCenter;
     self.channelName.text = self.channelInfo.name;
-    
-    
+
+
     top += 18;
     top += 20;
-    
+
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:self.channelInfo.desc];
     UIFont *font = [UIFont systemFontOfSize:14];
     [attributeString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, self.channelInfo.desc.length)];
     NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
     CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
-    
+
     self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
+    self.channelDesc.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.channelDesc.font = [UIFont systemFontOfSize:14];
     self.channelDesc.textAlignment = NSTextAlignmentCenter;
     self.channelDesc.text = self.channelInfo.desc;

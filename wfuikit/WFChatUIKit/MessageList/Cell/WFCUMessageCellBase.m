@@ -51,14 +51,15 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    
+    CGFloat screenWidth = self.contentView.bounds.size.width;
+
   _model = model;
     CGFloat offset = 5;
     if (model.lastReadMessage) {
         if (!self.lastReadContainerView) {
             self.lastReadContainerView = [[UIView alloc] initWithFrame:CGRectMake(16, offset, screenWidth-32, 20)];
-            
+            self.lastReadContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
             label.text = WFCString(@"last_read_here");
             label.font = [UIFont systemFontOfSize:16];
@@ -69,17 +70,20 @@
             CGSize size = [WFCUUtilities getTextDrawingSize:label.text font:label.font constrainedSize:CGSizeMake(screenWidth-16, 8000)];
             size.width += 16;
             label.frame = CGRectMake((screenWidth - 32 - size.width)/2,  (20-size.height)/2, size.width, size.height);
+            label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             [self.lastReadContainerView addSubview:label];
-            
-            
+
+
             UIView *leftline = [[UIView alloc] initWithFrame:CGRectMake(0, 10, (screenWidth-32-size.width)/2-8, 1)];
             leftline.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.f];
+            leftline.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
             [self.lastReadContainerView addSubview:leftline];
-            
+
             UIView *rightline = [[UIView alloc] initWithFrame:CGRectMake((screenWidth-32 + size.width)/2 + 8, 10, (screenWidth-32-size.width)/2-8, 1)];
             rightline.backgroundColor = leftline.backgroundColor;
+            rightline.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
             [self.lastReadContainerView addSubview:rightline];
-            
+
             [self.contentView addSubview:self.lastReadContainerView];
         }
         offset += 20;
@@ -87,19 +91,20 @@
         [self.lastReadContainerView removeFromSuperview];
         self.lastReadContainerView = nil;
     }
-    
+
   if (model.showTimeLabel) {
     if (self.timeLabel == nil) {
       self.timeLabel = [[UILabel alloc] init];
       _timeLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
         _timeLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
-      
+      _timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
       [self.contentView addSubview:self.timeLabel];
     }
     _timeLabel.hidden = NO;
     _timeLabel.text = [WFCUUtilities formatTimeDetailLabel:model.message.serverTime];
 
-    
+
     CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(screenWidth, 8000)];
     CGRect rect = CGRectMake((screenWidth - size.width)/2, offset + 5, size.width, size.height);
     _timeLabel.frame = rect;

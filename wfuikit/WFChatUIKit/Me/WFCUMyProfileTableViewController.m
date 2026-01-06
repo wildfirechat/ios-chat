@@ -78,16 +78,17 @@
     for (UIView *subView in headerCell.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    
+    CGFloat width = self.view.bounds.size.width;
+
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width - 104, 6, 64, 64)];
+    self.portraitView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
     [self.portraitView addGestureRecognizer:tap];
     self.portraitView.userInteractionEnabled = YES;
-    
-    
+
+
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[self.userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
-    
+
     [headerCell addSubview:self.portraitView];
     headerCell.tag = -1;
     headerCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -97,13 +98,14 @@
     UITableViewCell *cell = [self getAttrCell:WFCString(@"Nickname") rightText:self.userInfo.displayName mutable:YES];
     cell.tag = Modify_DisplayName;
     [self.cells1 addObject:cell];
-    
+
     cell = [self getAttrCell:WFCString(@"QRCode") rightText:@"" mutable:YES];
     cell.tag = 1000;
     [self.cells1 addObject:cell];
     UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
-    
+
     UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 5, 30, 30)];
+    qrview.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     qrview.image = qrcode;
     [cell addSubview:qrview];
 
@@ -171,11 +173,12 @@
         if (left) {
             title = [[UILabel alloc] initWithFrame:CGRectMake(8, 2, 72, 36)];
         } else {
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            CGFloat width = self.view.bounds.size.width;
             title = [[UILabel alloc] initWithFrame:CGRectMake(88, 2, width - 108 - 28, 36)];
+            title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         }
     }
-    
+
     [title setFont:[UIFont systemFontOfSize:16]];
     [title setText:titleStr];
     if (left) {

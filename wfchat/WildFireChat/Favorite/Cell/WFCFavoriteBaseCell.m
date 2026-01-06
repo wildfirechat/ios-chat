@@ -24,18 +24,18 @@
 }
 - (void)setFavoriteItem:(WFCUFavoriteItem *)favoriteItem {
     _favoriteItem = favoriteItem;
-    CGFloat contentHeight = [[self class] contentHeight:favoriteItem];
-    self.contentArea.frame = CGRectMake(16, 16, [UIScreen mainScreen].bounds.size.width - 16, contentHeight);
+    CGFloat contentHeight = [[self class] contentHeight:favoriteItem containerWidth:self.contentView.bounds.size.width];
+    self.contentArea.frame = CGRectMake(16, 16, self.contentView.bounds.size.width - 32, contentHeight);
     self.buttomLabel.frame = CGRectMake(16, contentHeight+24, self.bounds.size.width-32, 16);
     self.buttomLabel.text = [favoriteItem.origin stringByAppendingFormat:@"  %@", [WFCUUtilities formatTimeLabel:favoriteItem.timestamp]];
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
     return 0;
 }
 
-+ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem {
-    return [self contentHeight:favoriteItem] + 54;
++ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem containerWidth:(CGFloat)containerWidth {
+    return [self contentHeight:favoriteItem containerWidth:containerWidth] + 54;
 }
 
 - (UIView *)contentArea {

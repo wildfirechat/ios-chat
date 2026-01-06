@@ -13,7 +13,6 @@
 
 #define PLUGIN_AREA_HEIGHT 211
 
-#define LeftOffset ([UIScreen mainScreen].bounds.size.width-75*4)/5.0
 #define RCPlaginBoardCellSize ((CGSize){ 75, 80 })
 #define HorizontalItemsCount 4
 #define VerticalItemsCount 2
@@ -49,24 +48,38 @@
 
 @implementation WFCUPluginBoardView
 - (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt {
-    CGFloat width = [UIScreen mainScreen].bounds.size.width-16;
-    self = [super initWithFrame:CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT)];
+    self = [super initWithFrame:CGRectMake(0, 0, 0, PLUGIN_AREA_HEIGHT)];
     if (self) {
         self.delegate = delegate;
         self.hasVoip = withWoip;
         self.hasPtt = withPtt;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+    }
+
+    return self;
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    if(self.superview) {
+        CGFloat width = self.superview.bounds.size.width;
+        self.frame = CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT);
+        for(UIView *subView in self.subviews) {
+            [subView removeFromSuperview];
+        }
 
         int FACE_COUNT_ALL = (int)self.pluginItems.count;
 
         CGRect frame;
         frame.size.width = RCPlaginBoardCellSize.width;
         frame.size.height = RCPlaginBoardCellSize.height;
+        CGFloat leftOffset = (width-75*4)/5.0;
+
         __weak typeof(self)ws = self;
         for (int i = 0; i < FACE_COUNT_ALL; i++) {
             NSInteger currentRow = (NSInteger)floor((double)i / (double)HorizontalItemsCount);
             NSInteger currentColumn = i % HorizontalItemsCount;
-            frame.origin.x = RCPlaginBoardCellSize.width * currentColumn + LeftOffset * (currentColumn+1);
+            frame.origin.x = RCPlaginBoardCellSize.width * currentColumn + leftOffset * (currentColumn+1);
             frame.origin.y = RCPlaginBoardCellSize.height * currentRow + 15 + currentRow * 18;
 
             PluginItem *pluginItem = self.pluginItems[i];
@@ -81,8 +94,6 @@
             [self addSubview:item];
         }
     }
-
-    return self;
 }
 
 - (NSMutableArray *)pluginItems {

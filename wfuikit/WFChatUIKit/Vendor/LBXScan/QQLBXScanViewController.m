@@ -62,15 +62,15 @@
         self.topTitle = [[UILabel alloc]init];
         _topTitle.bounds = CGRectMake(0, 0, 145, 60);
         _topTitle.center = CGPointMake(CGRectGetWidth(self.view.frame)/2, 50);
-        
+
         //3.5inch iphone
-        if ([UIScreen mainScreen].bounds.size.height <= 568 )
+        if (self.view.bounds.size.height <= 568 )
         {
             _topTitle.center = CGPointMake(CGRectGetWidth(self.view.frame)/2, 38);
             _topTitle.font = [UIFont systemFontOfSize:14];
         }
-        
-        
+
+
         _topTitle.textAlignment = NSTextAlignmentCenter;
         _topTitle.numberOfLines = 0;
         _topTitle.text = WFCString(@"TargetToScanQRCode");

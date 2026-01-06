@@ -18,19 +18,35 @@ void kz_dispatch_after(float time, dispatch_block_t block)
 @implementation KZVideoConfig
 
 + (CGRect)viewFrameWithType:(KZVideoViewShowType)type {
-    if (type == KZVideoViewShowTypeSingle) {
-        return [UIScreen mainScreen].bounds;
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    CGRect windowBounds = keyWindow.bounds;
+    if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+        windowBounds = [UIScreen mainScreen].bounds;
     }
-    CGFloat viewHeight = kzSCREEN_WIDTH/kzVideo_w_h + 20 + kzControViewHeight;
-    return CGRectMake(0, kzSCREEN_HEIGHT - viewHeight, kzSCREEN_WIDTH, viewHeight);
+
+    if (type == KZVideoViewShowTypeSingle) {
+        return windowBounds;
+    }
+    CGFloat viewHeight = windowBounds.size.width/kzVideo_w_h + 20 + kzControViewHeight;
+    return CGRectMake(0, windowBounds.size.height - viewHeight, windowBounds.size.width, viewHeight);
 }
 
 + (CGSize)videoViewDefaultSize {
-    return [UIScreen mainScreen].bounds.size;
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    CGRect windowBounds = keyWindow.bounds;
+    if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+        windowBounds = [UIScreen mainScreen].bounds;
+    }
+    return windowBounds.size;
 }
 
 + (CGSize)defualtVideoSize {
-    CGSize size = [UIScreen mainScreen].bounds.size;
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    CGRect windowBounds = keyWindow.bounds;
+    if (CGRectEqualToRect(windowBounds, CGRectZero)) {
+        windowBounds = [UIScreen mainScreen].bounds;
+    }
+    CGSize size = windowBounds.size;
     return CGSizeMake(kzVideoWidthPX, kzVideoWidthPX * size.height / size.width);
 }
 

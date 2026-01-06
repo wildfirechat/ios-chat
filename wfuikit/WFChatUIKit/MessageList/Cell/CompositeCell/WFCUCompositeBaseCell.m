@@ -51,19 +51,28 @@
     return cell;
 }
 
-+ (CGFloat)heightForMessage:(WFCCMessage *)message {
-    return COMPOSITE_CELL_TOP_PADDING + COMPOSITE_CELL_NAME_LABEL_HEIGHT + COMPOSITE_CELL_NAME_CONTENT_PADDING + [self heightForMessageContent:message] + COMPOSITE_CELL_BUTTOM_PADDING + COMPOSITE_CELL_LINE_HEIGHT;
++ (CGFloat)heightForMessage:(WFCCMessage *)message containerWidth:(CGFloat)containerWidth {
+    return COMPOSITE_CELL_TOP_PADDING + COMPOSITE_CELL_NAME_LABEL_HEIGHT + COMPOSITE_CELL_NAME_CONTENT_PADDING + [self heightForMessageContent:message containerWidth:containerWidth] + COMPOSITE_CELL_BUTTOM_PADDING + COMPOSITE_CELL_LINE_HEIGHT;
 }
 
-+ (CGFloat)heightForMessageContent:(WFCCMessage *)message {
++ (CGFloat)heightForMessageContent:(WFCCMessage *)message containerWidth:(CGFloat)containerWidth {
     return 0;
 }
 
-+ (CGRect)contentFrame {
++ (CGRect)contentFrameWithWidth:(CGFloat)width {
     CGFloat x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
     CGFloat y = COMPOSITE_CELL_TOP_PADDING+COMPOSITE_CELL_NAME_LABEL_HEIGHT+COMPOSITE_CELL_NAME_CONTENT_PADDING;
-    CGFloat w = [UIScreen mainScreen].bounds.size.width - x - COMPOSITE_CELL_RIGHT_PADDING;
+    CGFloat w = width - x - COMPOSITE_CELL_RIGHT_PADDING;
     return CGRectMake(x, y, w, 0);
+}
+
++ (CGRect)contentFrame {
+    return [self contentFrameWithWidth:[UIScreen mainScreen].bounds.size.width];
+}
+
+// 在实例方法中使用此方法获取正确的frame，以支持iPad分屏
+- (CGRect)contentFrameInView {
+    return [self.class contentFrameWithWidth:self.contentView.bounds.size.width];
 }
 
 - (void)setMessage:(WFCCMessage *)message {
@@ -87,13 +96,13 @@
     self.timeLabel.text = [dateFormatter stringFromDate:from];
     
     CGFloat x;
-    CGFloat cellHeight = [self.class heightForMessage:message];
+    CGFloat cellHeight = [self.class heightForMessage:message containerWidth:self.contentView.bounds.size.width];
     if (self.lastMessage) {
         x = COMPOSITE_CELL_RIGHT_PADDING;
     } else {
         x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
     }
-    self.line.frame = CGRectMake(x, cellHeight-1, [UIScreen mainScreen].bounds.size.width-x-COMPOSITE_CELL_RIGHT_PADDING, 1);
+    self.line.frame = CGRectMake(x, cellHeight-1, self.contentView.bounds.size.width-x-COMPOSITE_CELL_RIGHT_PADDING, 1);
 }
 
 - (UIImageView *)portraitImageView {
@@ -107,11 +116,11 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         CGFloat x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
-        CGFloat w = [UIScreen mainScreen].bounds.size.width - x -
-        - COMPOSITE_CELL_RIGHT_PADDING - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
+        CGFloat w = self.contentView.bounds.size.width - x - COMPOSITE_CELL_RIGHT_PADDING - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, w, COMPOSITE_CELL_NAME_LABEL_HEIGHT)];
         [_nameLabel setFont:[UIFont systemFontOfSize:COMPOSITE_CELL_NAME_LABEL_FONT]];
         _nameLabel.textColor = [UIColor grayColor];
+        _nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -119,11 +128,12 @@
 
 - (UILabel *)timeLabel {
     if (!_timeLabel) {
-        CGFloat x = [UIScreen mainScreen].bounds.size.width - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
+        CGFloat x = self.contentView.bounds.size.width - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, COMPOSITE_CELL_TIME_LABEL_WIDTH, COMPOSITE_CELL_TIME_LABEL_HEIGHT)];
         [_timeLabel setFont:[UIFont systemFontOfSize:COMPOSITE_CELL_TIME_LABEL_FONT]];
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.textColor = [UIColor grayColor];
+        _timeLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.contentView addSubview:_timeLabel];
     }
     return _timeLabel;
