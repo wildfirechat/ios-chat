@@ -23,13 +23,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resetPassword:(NSString *)mobile code:(NSString *)code newPassword:(NSString *)newPassword success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;
 
 - (void)changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;
+- (void)changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;
 
 - (void)sendLoginCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
+- (void)sendLoginCode:(NSString *)phoneNumber slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
 
 - (void)sendResetCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
+- (void)sendResetCode:(NSString *)phoneNumber slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
 
 //发送删除账号验证码
 - (void)sendDestroyAccountCode:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+- (void)sendDestroyAccountCode:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 - (void)destroyAccount:(NSString *)code success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
@@ -55,6 +59,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)delDevice:(NSString *)deviceId
           success:(void(^)(Device *device))successBlock
             error:(void(^)(int error_code))errorBlock;
+
+// 滑动验证
+- (void)getSlideVerify:(void(^)(NSDictionary *result))successBlock error:(void(^)(NSString *message))errorBlock;
+- (void)verifySlide:(NSString *)token x:(int)x success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock;
 
 - (NSData *)getAppServiceCookies;
 - (NSString *)getAppServiceAuthToken;
