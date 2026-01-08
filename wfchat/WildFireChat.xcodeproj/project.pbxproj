@@ -126,6 +126,7 @@
 		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
 		B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
+		B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
 		B7B2F83E2F0A0228001CBF4C /* WFCLanguageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */; };
 		B7B2F83F2F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
@@ -425,6 +426,8 @@
 		B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
+		B79915CD2F0EA5AF001C4EE7 /* WFCSlideVerifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCSlideVerifyView.h; sourceTree = "<group>"; };
+		B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCSlideVerifyView.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
 		B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyFindMeViewController.m; sourceTree = "<group>"; };
 		B7B1A48B2F0A14A9003316BB /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -826,6 +829,8 @@
 		2FEA5D6721F4AC8900280B23 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				B79915CD2F0EA5AF001C4EE7 /* WFCSlideVerifyView.h */,
+				B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */,
 				2FEA5D6821F4AC8900280B23 /* WFCLoginViewController.m */,
 				2FEA5D6921F4AC8900280B23 /* WFCLoginViewController.h */,
 				B7CB3A8E289BB5CF00E9D688 /* WFCResetPasswordViewController.h */,
@@ -1308,6 +1313,7 @@
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
 				B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */,
 				2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */,
+				B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */,
 				2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */,
 				2F4B0EB0245C231D000A41C6 /* DeviceInfoViewController.m in Sources */,
 				2FFDDCA025515D9000CEFDBB /* WFCFavoriteVideoCell.m in Sources */,

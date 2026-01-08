@@ -11,8 +11,9 @@
 #import "MBProgressHUD.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "WFCSlideVerifyView.h"
 
-@interface WFCResetPasswordViewController () <UITextFieldDelegate>
+@interface WFCResetPasswordViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property(nonatomic, strong)UILabel *codeLabel;
 @property(nonatomic, strong)UITextField *codePasswordfield;
 @property(nonatomic, strong)UIView *codeLine;
@@ -28,6 +29,10 @@
 @property(nonatomic, strong)UILabel *repeatLabel;
 @property(nonatomic, strong)UITextField *repeatPasswordField;
 @property(nonatomic, strong)UIView *repeatLine;
+
+@property (strong, nonatomic) WFCSlideVerifyView *slideVerifyView;
+@property (strong, nonatomic) NSString *slideVerifyToken;
+@property (nonatomic, copy) void (^pendingAction)(void);
 @end
 
 @implementation WFCResetPasswordViewController
@@ -115,13 +120,16 @@
 }
 
 - (void)onSendCode:(id)sender {
-    self.sendCodeBtn.enabled = NO;
-    [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
-    __weak typeof(self)ws = self;
-    [[AppService sharedAppService] sendResetCode:nil success:^{
-       [ws sendCodeDone:YES];
-    } error:^(NSString * _Nonnull message) {
-        [ws sendCodeDone:NO];
+    // 显示滑动验证
+    [self showSlideVerifyWithAction:^{
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendResetCode:nil slideVerifyToken:self.slideVerifyToken success:^{
+           [ws sendCodeDone:YES];
+        } error:^(NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+        }];
     }];
 }
 
@@ -221,13 +229,75 @@
     NSString *txt = [textField.text stringByReplacingCharactersInRange:range withString:string];
     NSString *anotherTxt = self.passwordfield == textField ? self.repeatPasswordField.text : self.passwordfield.text;
     NSString *code = self.resetCode.length ? self.resetCode : self.codePasswordfield.text;
-    
+
     if(anotherTxt.length && [anotherTxt isEqualToString:txt] && code.length) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
     } else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     return YES;
+}
+
+#pragma mark - Slide Verify
+- (void)showSlideVerifyWithAction:(void(^)(void))action {
+    self.pendingAction = action;
+
+    // 创建半透明背景
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    backgroundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    backgroundView.tag = 9999;
+    [self.view addSubview:backgroundView];
+
+    // 创建滑动验证视图容器
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(20, (self.view.bounds.size.height - 280) / 2, self.view.bounds.size.width - 40, 280)];
+    containerView.backgroundColor = [UIColor whiteColor];
+    containerView.layer.cornerRadius = 12;
+    containerView.layer.masksToBounds = YES;
+    [backgroundView addSubview:containerView];
+
+    // 标题
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
+    titleLabel.text = @"安全验证";
+    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [containerView addSubview:titleLabel];
+
+    // 滑动验证视图
+    self.slideVerifyView = [[WFCSlideVerifyView alloc] initWithFrame:CGRectMake(10, 55, containerView.bounds.size.width - 20, 215)];
+    self.slideVerifyView.delegate = self;
+    [containerView addSubview:self.slideVerifyView];
+}
+
+- (void)hideSlideVerify {
+    UIView *backgroundView = [self.view viewWithTag:9999];
+    if (backgroundView) {
+        [backgroundView removeFromSuperview];
+    }
+    self.slideVerifyView = nil;
+    self.slideVerifyToken = nil;
+}
+
+#pragma mark - WFCSlideVerifyViewDelegate
+- (void)slideVerifyViewDidVerifySuccess:(NSString *)token {
+    self.slideVerifyToken = token;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self hideSlideVerify];
+
+        if (self.pendingAction) {
+            self.pendingAction();
+            self.pendingAction = nil;
+        }
+    });
+}
+
+- (void)slideVerifyViewDidVerifyFailed {
+    self.slideVerifyToken = nil;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = @"验证失败，请重试";
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    [hud hideAnimated:YES afterDelay:1.5];
 }
 
 @end

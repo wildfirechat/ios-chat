@@ -19,8 +19,9 @@
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "SSKeychain.h"
+#import "WFCSlideVerifyView.h"
 
-@interface WFCDestroyAccountViewController () <UITextFieldDelegate>
+@interface WFCDestroyAccountViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
 @property (strong, nonatomic) UITextField *passwordField;
 @property (strong, nonatomic) UIButton *loginBtn;
@@ -30,6 +31,10 @@
 @property (strong, nonatomic) UIButton *sendCodeBtn;
 @property (nonatomic, strong) NSTimer *countdownTimer;
 @property (nonatomic, assign) NSTimeInterval sendCodeTime;
+
+@property (strong, nonatomic) WFCSlideVerifyView *slideVerifyView;
+@property (strong, nonatomic) NSString *slideVerifyToken;
+@property (nonatomic, copy) void (^pendingAction)(void);
 @end
 
 @implementation WFCDestroyAccountViewController
@@ -112,13 +117,16 @@
 }
 
 - (void)onSendCode:(id)sender {
-    self.sendCodeBtn.enabled = NO;
-    [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
-    __weak typeof(self)ws = self;
-    [[AppService sharedAppService] sendDestroyAccountCode:^{
-       [ws sendCodeDone:YES];
-    } error:^(int errorCode, NSString * _Nonnull message) {
-        [ws sendCodeDone:NO];
+    // 显示滑动验证
+    [self showSlideVerifyWithAction:^{
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendDestroyAccountCode:self.slideVerifyToken success:^{
+           [ws sendCodeDone:YES];
+        } error:^(int errorCode, NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+        }];
     }];
 }
 
@@ -254,4 +262,67 @@
         return NO;
     }
 }
+
+#pragma mark - Slide Verify
+- (void)showSlideVerifyWithAction:(void(^)(void))action {
+    self.pendingAction = action;
+
+    // 创建半透明背景
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    backgroundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    backgroundView.tag = 9999;
+    [self.view addSubview:backgroundView];
+
+    // 创建滑动验证视图容器
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(20, (self.view.bounds.size.height - 280) / 2, self.view.bounds.size.width - 40, 280)];
+    containerView.backgroundColor = [UIColor whiteColor];
+    containerView.layer.cornerRadius = 12;
+    containerView.layer.masksToBounds = YES;
+    [backgroundView addSubview:containerView];
+
+    // 标题
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
+    titleLabel.text = @"安全验证";
+    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [containerView addSubview:titleLabel];
+
+    // 滑动验证视图
+    self.slideVerifyView = [[WFCSlideVerifyView alloc] initWithFrame:CGRectMake(10, 55, containerView.bounds.size.width - 20, 215)];
+    self.slideVerifyView.delegate = self;
+    [containerView addSubview:self.slideVerifyView];
+}
+
+- (void)hideSlideVerify {
+    UIView *backgroundView = [self.view viewWithTag:9999];
+    if (backgroundView) {
+        [backgroundView removeFromSuperview];
+    }
+    self.slideVerifyView = nil;
+    self.slideVerifyToken = nil;
+}
+
+#pragma mark - WFCSlideVerifyViewDelegate
+- (void)slideVerifyViewDidVerifySuccess:(NSString *)token {
+    self.slideVerifyToken = token;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self hideSlideVerify];
+
+        if (self.pendingAction) {
+            self.pendingAction();
+            self.pendingAction = nil;
+        }
+    });
+}
+
+- (void)slideVerifyViewDidVerifyFailed {
+    self.slideVerifyToken = nil;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = @"验证失败，请重试";
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    [hud hideAnimated:YES afterDelay:1.5];
+}
+
 @end

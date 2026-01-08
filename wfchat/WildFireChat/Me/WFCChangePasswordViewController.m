@@ -9,8 +9,9 @@
 #import "WFCChangePasswordViewController.h"
 #import "AppService.h"
 #import "MBProgressHUD.h"
+#import "WFCSlideVerifyView.h"
 
-@interface WFCChangePasswordViewController () <UITextFieldDelegate>
+@interface WFCChangePasswordViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property(nonatomic, strong)UILabel *oldLabel;
 @property(nonatomic, strong)UITextField *oldPasswordfield;
 @property(nonatomic, strong)UIView *oldLine;
@@ -22,6 +23,10 @@
 @property(nonatomic, strong)UILabel *repeatLabel;
 @property(nonatomic, strong)UITextField *repeatPasswordField;
 @property(nonatomic, strong)UIView *repeatLine;
+
+@property (strong, nonatomic) WFCSlideVerifyView *slideVerifyView;
+@property (strong, nonatomic) NSString *slideVerifyToken;
+@property (nonatomic, copy) void (^pendingAction)(void);
 @end
 
 @implementation WFCChangePasswordViewController
@@ -98,27 +103,30 @@
 - (void)onRightBtn:(id)sender {
     NSString *password = self.passwordfield.text;
     NSString *old = self.oldPasswordfield.text;
-    
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = LocalizedString(@"Saving");
-    [hud showAnimated:YES];
-    __weak typeof(self)ws = self;
-    [[AppService sharedAppService] changePassword:old newPassword:password success:^{
-        NSLog(@"change success");
-        [hud hideAnimated:YES];
-        [ws.navigationController popViewControllerAnimated:YES];
-    } error:^(int errCode, NSString * _Nonnull message) {
-        NSLog(@"change failure");
-        [hud hideAnimated:YES];
+
+    // 显示滑动验证
+    [self showSlideVerifyWithAction:^{
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.label.text = LocalizedString(@"SaveFailed");
-        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-        [hud hideAnimated:YES afterDelay:1.f];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        hud.label.text = LocalizedString(@"Saving");
+        [hud showAnimated:YES];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] changePassword:old newPassword:password slideVerifyToken:self.slideVerifyToken success:^{
+            NSLog(@"change success");
+            [hud hideAnimated:YES];
             [ws.navigationController popViewControllerAnimated:YES];
-        });
-        
+        } error:^(int errCode, NSString * _Nonnull message) {
+            NSLog(@"change failure");
+            [hud hideAnimated:YES];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = LocalizedString(@"SaveFailed");
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [ws.navigationController popViewControllerAnimated:YES];
+            });
+
+        }];
     }];
 }
 
@@ -156,6 +164,68 @@
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     return YES;
+}
+
+#pragma mark - Slide Verify
+- (void)showSlideVerifyWithAction:(void(^)(void))action {
+    self.pendingAction = action;
+
+    // 创建半透明背景
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    backgroundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    backgroundView.tag = 9999;
+    [self.view addSubview:backgroundView];
+
+    // 创建滑动验证视图容器
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(20, (self.view.bounds.size.height - 280) / 2, self.view.bounds.size.width - 40, 280)];
+    containerView.backgroundColor = [UIColor whiteColor];
+    containerView.layer.cornerRadius = 12;
+    containerView.layer.masksToBounds = YES;
+    [backgroundView addSubview:containerView];
+
+    // 标题
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
+    titleLabel.text = @"安全验证";
+    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [containerView addSubview:titleLabel];
+
+    // 滑动验证视图
+    self.slideVerifyView = [[WFCSlideVerifyView alloc] initWithFrame:CGRectMake(10, 55, containerView.bounds.size.width - 20, 215)];
+    self.slideVerifyView.delegate = self;
+    [containerView addSubview:self.slideVerifyView];
+}
+
+- (void)hideSlideVerify {
+    UIView *backgroundView = [self.view viewWithTag:9999];
+    if (backgroundView) {
+        [backgroundView removeFromSuperview];
+    }
+    self.slideVerifyView = nil;
+    self.slideVerifyToken = nil;
+}
+
+#pragma mark - WFCSlideVerifyViewDelegate
+- (void)slideVerifyViewDidVerifySuccess:(NSString *)token {
+    self.slideVerifyToken = token;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self hideSlideVerify];
+
+        if (self.pendingAction) {
+            self.pendingAction();
+            self.pendingAction = nil;
+        }
+    });
+}
+
+- (void)slideVerifyViewDidVerifyFailed {
+    self.slideVerifyToken = nil;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = @"验证失败，请重试";
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    [hud hideAnimated:YES afterDelay:1.5];
 }
 
 @end

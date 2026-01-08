@@ -21,8 +21,9 @@
 #import "TYHWaterMark.h"
 #import "WFCConfig.h"
 #import "SSKeychain.h"
+#import "WFCSlideVerifyView.h"
 
-@interface WFCLoginViewController () <UITextFieldDelegate>
+@interface WFCLoginViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
 @property (strong, nonatomic) UITextField *userNameField;
 @property (strong, nonatomic) UITextField *passwordField;
@@ -41,6 +42,12 @@
 
 @property (strong, nonatomic) UIButton *switchButton;
 @property (strong, nonatomic) UIButton *registerButton;
+
+@property (strong, nonatomic) WFCSlideVerifyView *slideVerifyView;
+@property (strong, nonatomic) NSString *slideVerifyToken;
+@property (nonatomic, assign) BOOL needSlideVerify;
+@property (nonatomic, assign) BOOL hasSlideVerifiedForCode; // 是否已通过滑动验证（用于验证码登录）
+@property (nonatomic, copy) void (^pendingLoginAction)(void);
 @end
 
 @implementation WFCLoginViewController
@@ -224,6 +231,10 @@
     }
     pwdFeildFrame.size.width = pwdFeildWidth;
     self.passwordField.frame = pwdFeildFrame;
+
+    // 切换登录模式后，重置验证标志并更新按钮状态
+    self.hasSlideVerifiedForCode = NO;
+    [self updateBtn];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -278,13 +289,29 @@
 }
 
 - (void)onSendCode:(id)sender {
-    self.sendCodeBtn.enabled = NO;
-    [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
-    __weak typeof(self)ws = self;
-    [[AppService sharedAppService] sendLoginCode:self.userNameField.text success:^{
-       [ws sendCodeDone:YES];
-    } error:^(NSString * _Nonnull message) {
-        [ws sendCodeDone:NO];
+    if (!self.userNameField.text.length) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"请输入手机号";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
+        return;
+    }
+
+    // 显示滑动验证
+    [self showSlideVerifyWithAction:^{
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendLoginCode:self.userNameField.text slideVerifyToken:self.slideVerifyToken success:^{
+           [ws sendCodeDone:YES];
+           // 标记已通过滑动验证
+           ws.hasSlideVerifiedForCode = YES;
+        } error:^(NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+            // 发送失败，重置验证标志
+            ws.hasSlideVerifiedForCode = NO;
+        }];
     }];
 }
 
@@ -339,69 +366,95 @@
 - (void)onLoginButton:(id)sender {
     NSString *user = self.userNameField.text;
     NSString *password = self.passwordField.text;
-  
+
     if (!user.length || !password.length) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"请输入手机号和密码/验证码";
+        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        [hud hideAnimated:YES afterDelay:1.f];
         return;
     }
-    
+
     [self resetKeyboard:nil];
-    
-  MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-  hud.label.text = LocalizedString(@"Logining");
-  [hud showAnimated:YES];
-    
-      void(^errorBlock)(int errCode, NSString *message) = ^(int errCode, NSString *message) {
-          NSLog(@"login error with code %d, message %@", errCode, message);
+
+    // 验证码登录且已通过滑动验证，直接执行登录
+    if (!self.isPwdLogin && self.hasSlideVerifiedForCode) {
+        [self performLogin];
+        return;
+    }
+
+    // 密码登录或验证码登录但未通过滑动验证，显示滑动验证
+    [self showSlideVerifyWithAction:^{
+        [self performLogin];
+    }];
+}
+
+- (void)performLogin {
+    NSString *user = self.userNameField.text;
+    NSString *password = self.passwordField.text;
+
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = LocalizedString(@"Logining");
+    [hud showAnimated:YES];
+
+    void(^errorBlock)(int errCode, NSString *message) = ^(int errCode, NSString *message) {
+        NSLog(@"login error with code %d, message %@", errCode, message);
         dispatch_async(dispatch_get_main_queue(), ^{
-          [hud hideAnimated:YES];
-          
-          MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-          hud.mode = MBProgressHUDModeText;
-          hud.label.text = LocalizedString(@"LoginFailed");
-          hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-          [hud hideAnimated:YES afterDelay:1.f];
-        });
-      };
-      
-      void(^successBlock)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) = ^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
-          [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
-          [SSKeychain setPassword:token forWFService:@"savedToken"];
-          [SSKeychain setPassword:userId forWFService:@"savedUserId"];
-          [[NSUserDefaults standardUserDefaults] synchronize];
-          
-          
-          //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
-          [[WFCCNetworkService sharedInstance] connect:userId token:token];
-          if(ENABLE_WATER_MARKER) {
-              [[UIApplication sharedApplication].delegate.window addSubview:[TYHWaterMarkView new]];
-              [TYHWaterMarkView setCharacter:userId];
-              [TYHWaterMarkView autoUpdateDate:YES];
-          }
-          
             [hud hideAnimated:YES];
-            WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
-            [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
-          if (resetCode) {
-              if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
-                  WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
-                  vc.resetCode = resetCode;
-                  vc.hidesBottomBarWhenPushed = YES;
-                  UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [nav pushViewController:vc animated:YES];
-                  });
-              }
-          }
-      };
-      
-      
-      if (self.isPwdLogin) {
-          [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
-              successBlock(userId, token, newUser, resetCode);
-          } error:errorBlock];
-      } else {
-          [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
-      }
+
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = LocalizedString(@"LoginFailed");
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+
+            // 登录失败，重置验证标志
+            if (!self.isPwdLogin) {
+                self.hasSlideVerifiedForCode = NO;
+            }
+        });
+    };
+
+    void(^successBlock)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) = ^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+        [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
+        [SSKeychain setPassword:token forWFService:@"savedToken"];
+        [SSKeychain setPassword:userId forWFService:@"savedUserId"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
+
+        //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
+        [[WFCCNetworkService sharedInstance] connect:userId token:token];
+        if(ENABLE_WATER_MARKER) {
+            [[UIApplication sharedApplication].delegate.window addSubview:[TYHWaterMarkView new]];
+            [TYHWaterMarkView setCharacter:userId];
+            [TYHWaterMarkView autoUpdateDate:YES];
+        }
+
+        [hud hideAnimated:YES];
+        WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
+        [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
+        if (resetCode) {
+            if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
+                WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
+                vc.resetCode = resetCode;
+                vc.hidesBottomBarWhenPushed = YES;
+                UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [nav pushViewController:vc animated:YES];
+                });
+            }
+        }
+    };
+
+
+    if (self.isPwdLogin) {
+        [[AppService sharedAppService] loginWithMobile:user password:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+            successBlock(userId, token, newUser, resetCode);
+        } error:errorBlock];
+    } else {
+        [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
+    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -434,30 +487,34 @@
 }
 
 - (void)updateBtn {
+    // 验证码发送按钮：只依赖手机号是否有效
     if ([self isValidNumber]) {
+        // 手机号有效，启用"获取验证码"按钮（如果没有倒计时）
         if (!self.countdownTimer) {
             self.sendCodeBtn.enabled = YES;
             [self.sendCodeBtn setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
             self.sendCodeBtn.layer.borderColor = [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9].CGColor;
         } else {
+            // 倒计时中，禁用按钮
             self.sendCodeBtn.enabled = NO;
             self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
             [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateNormal];
             [self.sendCodeBtn setTitleColor:[UIColor colorWithHexString:@"0x171717"] forState:UIControlStateSelected];
         }
-        
+
+        // 登录按钮：依赖验证码是否有效（验证码登录模式）或密码是否有效（密码登录模式）
         if ([self isValidCode]) {
             [self.loginBtn setBackgroundColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]];
-            
             self.loginBtn.enabled = YES;
         } else {
             [self.loginBtn setBackgroundColor:[UIColor grayColor]];
             self.loginBtn.enabled = NO;
         }
     } else {
+        // 手机号无效，禁用所有按钮
         self.sendCodeBtn.enabled = NO;
         [self.sendCodeBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        
+
         [self.loginBtn setBackgroundColor:[UIColor grayColor]];
         self.loginBtn.enabled = NO;
     }
@@ -474,10 +531,103 @@
 }
 
 - (BOOL)isValidCode {
+    // 验证码登录模式：验证码至少1位
+    // 密码登录模式：密码至少1位
     if (self.passwordField.text.length >= 1) {
         return YES;
     } else {
         return NO;
     }
 }
+
+#pragma mark - Slide Verify
+- (void)showSlideVerifyWithAction:(void(^)(void))action {
+    self.pendingLoginAction = action;
+
+    // 创建半透明背景
+    UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    backgroundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    backgroundView.tag = 9999;
+    [self.view addSubview:backgroundView];
+
+    // 添加点击背景取消的手势
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelSlideVerify)];
+    [backgroundView addGestureRecognizer:tapGesture];
+
+    // 创建滑动验证视图容器
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(20, (self.view.bounds.size.height - 280) / 2, self.view.bounds.size.width - 40, 280)];
+    containerView.backgroundColor = [UIColor whiteColor];
+    containerView.layer.cornerRadius = 12;
+    containerView.layer.masksToBounds = YES;
+    containerView.tag = 10000; // 给容器设置tag，防止点击容器时触发取消
+    [backgroundView addSubview:containerView];
+
+    // 标题
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
+    titleLabel.text = @"安全验证";
+    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [containerView addSubview:titleLabel];
+
+    // 滑动验证视图
+    self.slideVerifyView = [[WFCSlideVerifyView alloc] initWithFrame:CGRectMake(10, 55, containerView.bounds.size.width - 20, 215)];
+    self.slideVerifyView.delegate = self;
+    [containerView addSubview:self.slideVerifyView];
+}
+
+- (void)cancelSlideVerify {
+    [self hideSlideVerify];
+
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = @"已取消";
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    [hud hideAnimated:YES afterDelay:1.0];
+
+    // 清理待执行的操作
+    self.pendingLoginAction = nil;
+}
+
+- (void)hideSlideVerify {
+    UIView *backgroundView = [self.view viewWithTag:9999];
+    if (backgroundView) {
+        [backgroundView removeFromSuperview];
+    }
+    self.slideVerifyView = nil;
+    self.slideVerifyToken = nil;
+}
+
+#pragma mark - WFCSlideVerifyViewDelegate
+- (void)slideVerifyViewDidVerifySuccess:(NSString *)token {
+    self.slideVerifyToken = token;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self hideSlideVerify];
+
+        if (self.pendingLoginAction) {
+            self.pendingLoginAction();
+            self.pendingLoginAction = nil;
+        }
+    });
+}
+
+- (void)slideVerifyViewDidVerifyFailed {
+    // 验证失败（滑动位置不对），不关闭窗口，让用户重试
+    // 这个方法现在不需要做任何事，因为 WFCSlideVerifyView 已经处理了提示和重置
+}
+
+- (void)slideVerifyViewDidLoadFailed {
+    // 加载验证码失败，需要关闭窗口
+    [self hideSlideVerify];
+
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = @"加载验证码失败";
+    hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+    [hud hideAnimated:YES afterDelay:1.5];
+
+    // 清理待执行的操作
+    self.pendingLoginAction = nil;
+}
+
 @end

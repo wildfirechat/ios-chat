@@ -97,7 +97,16 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
-    [self post:@"/change_pwd" data:@{@"oldPassword":oldPassword, @"newPassword":newPassword} isLogin:NO success:^(NSDictionary *dict) {
+    [self changePassword:oldPassword newPassword:newPassword slideVerifyToken:nil success:successBlock error:errorBlock];
+}
+
+- (void)changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+    NSMutableDictionary *data = [@{@"oldPassword":oldPassword, @"newPassword":newPassword} mutableCopy];
+    if (slideVerifyToken) {
+        data[@"slideVerifyToken"] = slideVerifyToken;
+    }
+
+    [self post:@"/change_pwd" data:data isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -109,8 +118,16 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)sendLoginCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
-    
-    [self post:@"/send_code" data:@{@"mobile":phoneNumber} isLogin:NO success:^(NSDictionary *dict) {
+    [self sendLoginCode:phoneNumber slideVerifyToken:nil success:successBlock error:errorBlock];
+}
+
+- (void)sendLoginCode:(NSString *)phoneNumber slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
+    NSMutableDictionary *data = [@{@"mobile":phoneNumber} mutableCopy];
+    if (slideVerifyToken) {
+        data[@"slideVerifyToken"] = slideVerifyToken;
+    }
+
+    [self post:@"/send_code" data:data isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -122,11 +139,21 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)sendResetCode:(NSString *)phoneNumber success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
+    [self sendResetCode:phoneNumber slideVerifyToken:nil success:successBlock error:errorBlock];
+}
+
+- (void)sendResetCode:(NSString *)phoneNumber slideVerifyToken:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
     NSDictionary *data = @{};
     if (phoneNumber.length) {
         data = @{@"mobile":phoneNumber};
     }
-    [self post:@"/send_reset_code" data:data isLogin:NO success:^(NSDictionary *dict) {
+
+    NSMutableDictionary *mutableData = [data mutableCopy];
+    if (slideVerifyToken) {
+        mutableData[@"slideVerifyToken"] = slideVerifyToken;
+    }
+
+    [self post:@"/send_reset_code" data:mutableData isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -138,7 +165,16 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)sendDestroyAccountCode:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
-    [self post:@"/send_destroy_code" data:nil isLogin:NO success:^(NSDictionary *dict) {
+    [self sendDestroyAccountCode:nil success:successBlock error:errorBlock];
+}
+
+- (void)sendDestroyAccountCode:(NSString *)slideVerifyToken success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    if (slideVerifyToken) {
+        data[@"slideVerifyToken"] = slideVerifyToken;
+    }
+
+    [self post:@"/send_destroy_code" data:data isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
@@ -335,6 +371,31 @@ static AppService *sharedSingleton = nil;
                 errorBlock(error);
             });
           }];
+}
+
+// 滑动验证相关方法
+- (void)getSlideVerify:(void(^)(NSDictionary *result))successBlock error:(void(^)(NSString *message))errorBlock {
+    [self post:@"/slide_verify/generate" data:@{} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0 && dict[@"result"]) {
+            if(successBlock) successBlock(dict[@"result"]);
+        } else {
+            if(errorBlock) errorBlock(@"获取验证码失败");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(error.localizedDescription);
+    }];
+}
+
+- (void)verifySlide:(NSString *)token x:(int)x success:(void(^)(void))successBlock error:(void(^)(NSString *message))errorBlock {
+    [self post:@"/slide_verify/verify" data:@{@"token":token, @"x":@(x)} isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock(@"验证失败");
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(error.localizedDescription);
+    }];
 }
 
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock {
