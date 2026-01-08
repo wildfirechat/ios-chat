@@ -24,6 +24,11 @@
 @property (nonatomic, strong)NSString *invitor;
 
 /**
+ 批准者ID
+ */
+@property (nonatomic, strong)NSString *approver;
+
+/**
  被邀请者ID列表
  */
 @property (nonatomic, strong)NSArray<NSString *> *invitees;

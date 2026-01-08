@@ -2645,6 +2645,71 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return ret;
 }
 
+- (void)sendJoinGroupRequest:(NSString *)groupId members:(NSArray<NSString *> *)memberIds reason:(NSString *)reason  extra:(NSString *)extra success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock {
+    std::list<std::string> strIds;
+    for (NSString *userId in memberIds) {
+        strIds.insert(strIds.end(), [userId UTF8String]);
+    }
+    
+    mars::stn::sendJoinGroupRequest([groupId UTF8String], strIds, reason?[reason UTF8String]:"", extra?[extra UTF8String]:"", new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (void)handleJoinGroupRequest:(NSString *)groupId
+                      memberId:(NSString *)memberId
+                       inviter:(NSString *)inviter
+                        status:(int)status
+                   memberExtra:(NSString *)memberExtra
+                   notifyLines:(NSArray<NSNumber *> *)notifyLines
+                       success:(void(^)(void))successBlock
+                         error:(void(^)(int errorCode))errorBlock {
+    std::list<int> lines;
+    for (NSNumber *number in notifyLines) {
+        lines.push_back([number intValue]);
+    }
+    
+    mars::stn::handleJoinGroupRequest([groupId UTF8String], [memberId UTF8String], [inviter UTF8String], status, memberExtra?[memberExtra UTF8String]:"", lines, new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
+- (NSArray<WFCCJoinGroupRequest *> *)getJoinGroupRequests:(NSString *)groupId memberId:(NSString *)userId status:(int)status {
+    std::list<mars::stn::TJoinGroupRequest> trequests = mars::stn::MessageDB::Instance()->getJoinGroupRequest([groupId UTF8String], userId.length?[userId UTF8String]:"", status);
+    NSMutableArray<WFCCJoinGroupRequest *> *requests = [[NSMutableArray alloc] init];
+    for (std::list<mars::stn::TJoinGroupRequest>::iterator it = trequests.begin(); it != trequests.end(); ++it) {
+        WFCCJoinGroupRequest *request = [[WFCCJoinGroupRequest alloc] init];
+        request.groupId = [NSString stringWithUTF8String:it->gid.c_str()];
+        request.memberId = [NSString stringWithUTF8String:it->mid.c_str()];
+        request.requestUserId = [NSString stringWithUTF8String:it->rid.c_str()];
+        request.acceptUserId = [NSString stringWithUTF8String:it->acceptUid.c_str()];
+        request.reason = [NSString stringWithUTF8String:it->reason.c_str()];
+        request.extra = [NSString stringWithUTF8String:it->extra.c_str()];
+        
+        request.status = it->status;
+        request.readStatus = it->readStatus;
+        request.timestamp = it->timestamp;
+        [requests addObject:request];
+    }
+    return requests;
+}
+
+- (BOOL)clearJoinGroupRequest:(NSString *)groupId memberId:(NSString *)memberId inviter:(NSString *)inviter {
+    return mars::stn::MessageDB::Instance()->ClearJoinGroupRequest([groupId UTF8String], memberId?[memberId UTF8String]:"", inviter?[inviter UTF8String]:"");
+}
+
+- (int)getAllJoinGroupRequestUnread {
+    return mars::stn::MessageDB::Instance()->unreadJoinGroupRequest();
+}
+
+- (int)getJoinGroupRequestUnread:(NSString *)groupId {
+    return mars::stn::MessageDB::Instance()->unreadJoinGroupRequest2([groupId UTF8String]);
+}
+
+- (void)clearJoinGroupRequestUnread:(NSString *)groupId {
+    mars::stn::MessageDB::Instance()->clearUnreadJoinGroupRequestStatus([groupId UTF8String]);
+}
+
+- (void)clearRemoteJoinGroupRequest:(void(^)(void))successBlock
+                              error:(void(^)(int errorCode))errorBlock {
+    mars::stn::clearRemoteJoinGroupRequest(new IMGeneralOperationCallback(successBlock, errorBlock));
+}
 
 - (void)loadFriendRequestFromRemote {
     mars::stn::loadFriendRequestFromRemote();
