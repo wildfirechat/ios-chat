@@ -1041,6 +1041,7 @@ namespace mars{
         extern void setBackupAddress(const std::string &host, int port);
         extern int getConnectedNetworkType();
         extern int getRoutePort();
+        extern std::string getCustomerInfo();
         extern void AppWillTerminate();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setCustomSortAddressCallback(CustomSortAddressCallback *callback);

@@ -11,6 +11,8 @@
 #import "GroupMuteTableViewController.h"
 #import "GroupMemberControlTableViewController.h"
 #import "UIView+Toast.h"
+#include "WFCUJoinGroupRequestViewController.h"
+
 
 @interface GroupManageTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -46,6 +48,8 @@
             }
         }
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onJoinGroupRequestUpdated:) name:kJoinGroupRequestUpdated object:nil];
     
 }
 - (BOOL)isGroupOwner {
@@ -88,6 +92,8 @@
                 cell.detailTextLabel.text = WFCString(@"MemberInviteOnly");
             } else if(self.groupInfo.joinType == 2) {
                 cell.detailTextLabel.text = WFCString(@"ManagerInviteOnly");
+            } else if(self.groupInfo.joinType == 3) {
+                cell.detailTextLabel.text = WFCString(@"NeedManagerVerify");
             }
         } else if(indexPath.row == 1) {
             cell.textLabel.text = WFCString(@"GroupVisiable");
@@ -108,6 +114,10 @@
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", self.groupInfo.maxMemberCount];
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
+    } else if(indexPath.section == 2) {
+        cell.textLabel.text = @"加群申请信息";
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.groupInfo.target]];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     return cell;
@@ -125,6 +135,8 @@
         } else {
             return 2;//加群方式，查找权限
         }
+    } else if(section == 2) {
+        return 1;
     }
     return 0;
 }
@@ -134,6 +146,8 @@
         return WFCString(@"MemberManage");
     } else if(section == 1) {
         return WFCString(@"GroupGeneralSetting");
+    } else if(section == 2) {
+        return @"加群申请";
     }
     return nil;
 }
@@ -144,7 +158,16 @@
     return 0.f;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2; //成员管理，加群设置
+    if(self.groupInfo.joinType == 3 && [self isGroupOwner]) {
+        return 3; //成员管理，群设置, 验证列表
+    } else {
+        return 2; //成员管理，群设置
+    }
+}
+- (void)onJoinGroupRequestUpdated:(id)sender {
+    if(self.groupInfo.joinType == 3 && [self isGroupOwner]) {
+        [self.tableView reloadData];
+    }
 }
 - (void)toManagerVC {
     ManagerTableViewController *mtvc = [[ManagerTableViewController alloc] init];
@@ -192,32 +215,44 @@
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"Free2Join") style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
                     ws.groupInfo.joinType = 0;
-                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [ws.tableView reloadData];
                 } error:^(int error_code) {
                     [ws.view makeToast:@"设置失败"];
                 }];
             }];
             [alertController addAction:openAction];
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"MemberInviteOnly") style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *onlyManagerAction = [UIAlertAction actionWithTitle:WFCString(@"MemberInviteOnly") style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
                     ws.groupInfo.joinType = 1;
-                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [ws.tableView reloadData];
+                } error:^(int error_code) {
+                    [ws.view makeToast:@"设置失败"];
+                }];
+            }];
+            [alertController addAction:onlyManagerAction];
+            
+            UIAlertAction *normalAction = [UIAlertAction actionWithTitle:WFCString(@"ManagerInviteOnly") style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.joinType = 2;
+                    [ws.tableView reloadData];
+                } error:^(int error_code) {
+                    [ws.view makeToast:@"设置失败"];
+                }];
+            }];
+            [alertController addAction:normalAction];
+            
+            
+            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"NeedManagerVerify") style:self.groupInfo.joinType == 3 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"3" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    ws.groupInfo.joinType = 3;
+                    [ws.tableView reloadData];
                 } error:^(int error_code) {
                     [ws.view makeToast:@"设置失败"];
                 }];
             }];
             [alertController addAction:verifyAction];
             
-            UIAlertAction *normalAction = [UIAlertAction actionWithTitle:WFCString(@"ManagerInviteOnly") style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
-                    ws.groupInfo.joinType = 2;
-                    [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                } error:^(int error_code) {
-                    [ws.view makeToast:@"设置失败"];
-                }];
-            }];
-            [alertController addAction:normalAction];
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
         } else if(indexPath.row == 1) {
@@ -282,6 +317,12 @@
                 [self.navigationController presentViewController:alertController animated:YES completion:nil];
             }
         
+    } else if(indexPath.section == 2) {
+        if(indexPath.row == 0) {
+            WFCUJoinGroupRequestViewController *vc = [[WFCUJoinGroupRequestViewController alloc] init];
+            vc.groupId = self.groupInfo.target;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
     
 }

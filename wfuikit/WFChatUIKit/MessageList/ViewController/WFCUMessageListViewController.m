@@ -40,6 +40,7 @@
 #import "WFCULocationViewController.h"
 #import "WFCULocationPoint.h"
 #import "WFCUVideoViewController.h"
+#import "WFCUJoinGroupRequestViewController.h"
 
 #import "WFCUContactListViewController.h"
 #import "WFCUBrowserViewController.h"
@@ -136,6 +137,7 @@
 @property (nonatomic, strong)UICollectionReusableView *footerView;
 @property (nonatomic, strong)UIActivityIndicatorView *headerActivityView;
 @property (nonatomic, strong)UIActivityIndicatorView *footerActivityView;
+@property (nonatomic, strong)UIButton *joinGroupRequestButton;
 
 @property (nonatomic, strong)NSTimer *showTypingTimer;
 
@@ -219,7 +221,8 @@
     // 监听截图事件
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onJoinGroupRequestUpdated:) name:kJoinGroupRequestUpdated object:nil];
+    
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
     
     __weak typeof(self)ws = self;
@@ -463,6 +466,19 @@
     return _headerActivityView;
 }
 
+- (UIButton *)joinGroupRequestButton {
+    if(!_joinGroupRequestButton) {
+        _joinGroupRequestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 36)];
+        [_joinGroupRequestButton addTarget:self action:@selector(onJoinGroupRequestButton:) forControlEvents:UIControlEventTouchDown];
+        _joinGroupRequestButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_joinGroupRequestButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
+        [_joinGroupRequestButton setBackgroundColor:[UIColor whiteColor]];
+        _joinGroupRequestButton.layer.masksToBounds = YES;
+        _joinGroupRequestButton.layer.cornerRadius = 18;
+    }
+    return _joinGroupRequestButton;
+}
+
 - (UIActivityIndicatorView *)footerActivityView {
     if (!_footerActivityView) {
         _footerActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -477,6 +493,12 @@
     } else {
         [self.footerActivityView stopAnimating];
     }
+}
+
+- (void)onJoinGroupRequestButton:(id)sender {
+    WFCUJoinGroupRequestViewController *vc = [[WFCUJoinGroupRequestViewController alloc] init];
+    vc.groupId = self.conversation.target;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)setHasNewMessage:(BOOL)hasNewMessage {
@@ -1165,6 +1187,8 @@
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     
+    [self.view addSubview:self.joinGroupRequestButton];
+    
     self.ongoingCallTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)];
     self.ongoingCallTableView.delegate = self;
     self.ongoingCallTableView.dataSource = self;
@@ -1303,6 +1327,19 @@
         [self scrollToBottom:NO];
     }
     [self updateTitle];
+    [self updateUnreadJoinGroupRequestButton];
+}
+
+- (void)updateUnreadJoinGroupRequestButton {
+    if(self.conversation.type == Group_Type) {
+        int count = [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.conversation.target];
+        if(count > 0) {
+            [self.joinGroupRequestButton setTitle:[NSString stringWithFormat:@"有%d条新加群申请", count] forState:UIControlStateNormal];
+            self.joinGroupRequestButton.frame = CGRectMake(48, [WFCUUtilities wf_navigationFullHeight]+20, self.view.bounds.size.width-96, 36);
+        } else {
+            self.joinGroupRequestButton.frame = CGRectZero;
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1692,6 +1729,12 @@
     if(![orignalDraftText isEqualToString:draftText]) {
         self.orignalDraft = info.draft;
         self.chatInputBar.draft = info.draft;
+    }
+}
+
+- (void)onJoinGroupRequestUpdated:(NSNotification *)notification {
+    if(self.conversation.type == Group_Type) {
+        [self updateUnreadJoinGroupRequestButton];
     }
 }
 

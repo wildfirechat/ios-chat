@@ -201,7 +201,7 @@
                 self.extraBtnNumber = 2;
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             } else if(self.groupInfo.type == GroupType_Restricted) {
-                if (self.groupInfo.joinType == 1 || self.groupInfo.joinType == 0) {
+                if (self.groupInfo.joinType == 1 || self.groupInfo.joinType == 0 || self.groupInfo.joinType == 3) {
                     self.extraBtnNumber = 1;
                     self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
                 } else {
@@ -758,6 +758,39 @@
     return NO;
 }
 
+- (void)sendJoinGroupRequest:(NSArray<NSString *> *)contacts {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"已开启入群验证功能，请输入理由等待群主和管理员审批" preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"请输入加群理由";
+    }];
+        
+    __weak typeof(self)ws = self;
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *reason = alertController.textFields.firstObject.text;
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.label.text = WFCString(@"Sending");
+        [hud showAnimated:YES];
+        [[WFCCIMService sharedWFCIMService] sendJoinGroupRequest:self.groupInfo.target members:contacts reason:reason extra:nil success:^{
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+            hud.label.text = WFCString(@"Done");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        } error:^(int errorCode) {
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+            hud.label.text = WFCString(@"SendFailure");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        }];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alertController animated:true completion:nil];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.conversation.type == Group_Type) {
         if (section == 0) {
@@ -1220,7 +1253,11 @@
                   if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
                       [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
                   } else {
-                      [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                      if(error_code == 13) {
+                          [ws sendJoinGroupRequest:contacts];
+                      } else {
+                          [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                      }
                   }
               }];
           };
