@@ -163,6 +163,7 @@
 "ExceedGroupMaxMemberCount"="群成員數超過最大限制";
 "ForwardSuccess"="轉發成功";
 "ForwardFailure"="轉發失敗";
+"ForwardToMultipleConversations"="轉發到%d個會話";
 "CreateNewChat"="創建新聊天";
 "RecentChat"="最近聊天";
 "User"="用戶";

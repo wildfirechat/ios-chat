@@ -102,34 +102,30 @@
         return;
     }
 
-    // 批量转发到所有选中的会话
+    // 批量转发：将所有选中的会话传递给 WFCUShareMessageView，由其循环处理发送
+    WFCUShareMessageView *shareView = [WFCUShareMessageView createViewFromNib];
+    shareView.conversations = [self.selectedConversations copy];
+    if(!self.message && self.messages.count == 1) {
+        shareView.message = [self.messages firstObject];
+    } else {
+        shareView.message = self.message;
+        shareView.messages = self.messages;
+    }
+
     __weak typeof(self)ws = self;
-    __block int successCount = 0;
-    __block int failCount = 0;
-    __block NSInteger totalCount = self.selectedConversations.count;
-
-    [self.selectedConversations enumerateObjectsUsingBlock:^(WFCCConversation *conversation, NSUInteger idx, BOOL *stop) {
-        [ws forwardMessages:conversation completion:^(BOOL success) {
+    shareView.forwardDone = ^(BOOL success) {
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (success) {
-                successCount++;
+                [ws.view makeToast:WFCString(@"ForwardSuccess") duration:1 position:CSToastPositionCenter];
             } else {
-                failCount++;
+                [ws.view makeToast:WFCString(@"ForwardFailure") duration:1 position:CSToastPositionCenter];
             }
+            [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
+        });
+    };
 
-            if (successCount + failCount == totalCount) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (failCount == 0) {
-                        [ws.view makeToast:WFCString(@"ForwardSuccess") duration:1 position:CSToastPositionCenter];
-                    } else if (successCount == 0) {
-                        [ws.view makeToast:WFCString(@"ForwardFailure") duration:1 position:CSToastPositionCenter];
-                    } else {
-                        [ws.view makeToast:[NSString stringWithFormat:WFCString(@"PartialForwardSuccess"), successCount, totalCount] duration:1 position:CSToastPositionCenter];
-                    }
-                    [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
-                });
-            }
-        }];
-    }];
+    TYAlertController *alertController = [TYAlertController alertControllerWithAlertView:shareView preferredStyle:TYAlertControllerStyleAlert];
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)forwardMessages:(WFCCConversation *)conversation completion:(void (^)(BOOL success))completion {
