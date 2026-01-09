@@ -164,6 +164,7 @@
 "ExceedGroupMaxMemberCount"="Exceed max member count";
 "ForwardSuccess"="Forward success";
 "ForwardFailure"="Forward failure";
+"ForwardToMultipleConversations"="Forward to %d conversations";
 "CreateNewChat"="Create new chat";
 "RecentChat"="Recent chat";
 "User"="User";

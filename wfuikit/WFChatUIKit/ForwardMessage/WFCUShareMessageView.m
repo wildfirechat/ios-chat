@@ -44,6 +44,75 @@
     return content;
 }
 
+// 发送消息到单个会话
+- (void)sendMessageToConversation:(WFCCConversation *)conv
+                     textMessage:(WFCCTextMessageContent *)textMsg
+                      completion:(void (^)(BOOL success))completion {
+    if (self.message) {
+        [[WFCCIMService sharedWFCIMService] send:conv content:[self filterContent:self.message] success:^(long long messageUid, long long timestamp) {
+            if (textMsg) {
+                [[WFCCIMService sharedWFCIMService] send:conv content:textMsg success:^(long long messageUid, long long timestamp) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completion) {
+                            completion(YES);
+                        }
+                    });
+                } error:^(int error_code) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completion) {
+                            completion(NO);
+                        }
+                    });
+                }];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        completion(YES);
+                    }
+                });
+            }
+        } error:^(int error_code) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(NO);
+                }
+            });
+        }];
+    } else {
+        for (WFCCMessage *msg in self.messages) {
+            WFCCMessageContent *content = msg.content;
+            if([content isKindOfClass:[WFCCCallStartMessageContent class]]) {
+                content = [WFCCTextMessageContent contentWith:[content digest:msg]];
+            }
+            [[WFCCIMService sharedWFCIMService] send:conv content:[self filterContent:msg] success:^(long long messageUid, long long timestamp) {
+
+            } error:^(int error_code) {
+
+            }];
+            [NSThread sleepForTimeInterval:0.1];
+        }
+        if (textMsg) {
+            [[WFCCIMService sharedWFCIMService] send:conv content:textMsg success:^(long long messageUid, long long timestamp) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        completion(YES);
+                    }
+                });
+            } error:^(int error_code) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        completion(NO);
+                    }
+                });
+            }];
+        } else {
+            if (completion) {
+                completion(YES);
+            }
+        }
+    }
+}
+
 - (IBAction)sendAction:(id)sender {
     [self hideView];
     WFCCTextMessageContent *textMsg;
@@ -51,11 +120,38 @@
         textMsg = [[WFCCTextMessageContent alloc] init];
         textMsg.text = self.messageTextView.text;
     }
-    
+
     __strong WFCCConversation *conversation = self.conversation;
+    __strong NSArray<WFCCConversation *> *conversations = self.conversations;
     __strong void (^forwardDone)(BOOL success) = self.forwardDone;
-    
-    if (self.message) {
+
+    // 判断是否是批量转发
+    if (conversations && conversations.count > 0) {
+        // 批量转发逻辑
+        __block int successCount = 0;
+        __block int failCount = 0;
+        __block NSInteger totalCount = conversations.count;
+
+        [conversations enumerateObjectsUsingBlock:^(WFCCConversation *conv, NSUInteger idx, BOOL *stop) {
+            [self sendMessageToConversation:conv
+                              textMessage:textMsg
+                              completion:^(BOOL success) {
+                if (success) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+
+                if (successCount + failCount == totalCount) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (forwardDone) {
+                            forwardDone(failCount == 0);
+                        }
+                    });
+                }
+            }];
+        }];
+    } else if (self.message) {
         [[WFCCIMService sharedWFCIMService] send:conversation content:[self filterContent:self.message] success:^(long long messageUid, long long timestamp) {
             if (textMsg) {
                 [[WFCCIMService sharedWFCIMService] send:conversation content:textMsg success:^(long long messageUid, long long timestamp) {
@@ -127,9 +223,17 @@
 - (void)setConversation:(WFCCConversation *)conversation {
     [self updateUI];
     _conversation = conversation;
+
+    // 判断是否是批量转发
+    if (self.conversations && self.conversations.count > 0) {
+        self.nameLabel.text = [NSString stringWithFormat:WFCString(@"ForwardToMultipleConversations"), self.conversations.count];
+        [self.portraitImageView setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
+        return;
+    }
+
     NSString *name;
     NSString *portrait;
-    
+
     if (conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:conversation.target refresh:NO];
         if (userInfo) {
@@ -192,6 +296,16 @@
     _messages = messages;
     if (messages.count) {
         self.digestLabel.text = [NSString stringWithFormat:@"[逐条转发]共%d条消息", messages.count];
+    }
+}
+
+- (void)setConversations:(NSArray<WFCCConversation *> *)conversations {
+    _conversations = conversations;
+    // 更新标题显示
+    if (conversations && conversations.count > 0) {
+        [self updateUI];
+        self.nameLabel.text = [NSString stringWithFormat:WFCString(@"ForwardToMultipleConversations"), (int)conversations.count];
+        [self.portraitImageView setImage:[WFCUImage imageNamed:@"group_default_portrait"]];
     }
 }
 @end

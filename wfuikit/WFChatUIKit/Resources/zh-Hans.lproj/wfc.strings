@@ -164,6 +164,7 @@
 "ExceedGroupMaxMemberCount"="群成员数超过最大限制";
 "ForwardSuccess"="转发成功";
 "ForwardFailure"="转发失败";
+"ForwardToMultipleConversations"="转发到%d个会话";
 "CreateNewChat"="创建新聊天";
 "RecentChat"="最近聊天";
 "User"="用户";
