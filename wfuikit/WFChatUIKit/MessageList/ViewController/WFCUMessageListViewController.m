@@ -3558,7 +3558,15 @@
     
     [menu setMenuItems:items];
     self.cell4Menu = baseCell;
-    
+
+    // 确保 ViewController 成为第一响应者，以便菜单操作能正确响应
+    // 如果当前有第一响应者（可能是 SelectableTextView），先让它放弃
+    [self.view endEditing:YES];
+
+    if (!self.isFirstResponder) {
+        [self becomeFirstResponder];
+    }
+
     [menu setMenuVisible:YES];
 }
 

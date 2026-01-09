@@ -237,10 +237,17 @@
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        // 通知 delegate 发生了长按事件
-        if ([self.selectableTextViewDelegate respondsToSelector:@selector(didLongPressTextView:)]) {
-            [self.selectableTextViewDelegate didLongPressTextView:self];
-        }
+        // 延迟一小段时间，检查是否触发了文本选择
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 检查当前是否有选中的文本
+//            if (self.selectedTextRange == nil || [self offsetFromPosition:self.selectedTextRange.start toPosition:self.selectedTextRange.end] == 0) {
+                // 没有选中文本，说明用户是想操作消息，而不是选择文本
+                if ([self.selectableTextViewDelegate respondsToSelector:@selector(didLongPressTextView:)]) {
+                    [self.selectableTextViewDelegate didLongPressTextView:self];
+                }
+//            }
+            // 如果有选中文本，说明用户是想复制文本，不触发消息菜单
+        });
     }
 }
 
