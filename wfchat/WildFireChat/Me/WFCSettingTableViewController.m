@@ -24,6 +24,7 @@
 #import "OrgService.h"
 #import "WFCDestroyAccountViewController.h"
 #import "SSKeychain.h"
+#import "WFCBackupAndRestoreViewController.h"
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -116,6 +117,9 @@
     } else if (indexPath.section == 6) {
         WFCDiagnoseViewController *vc = [[WFCDiagnoseViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.section == 7) {
+        WFCBackupAndRestoreViewController *vc = [[WFCBackupAndRestoreViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -144,7 +148,7 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 8;
+    return 9;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -159,11 +163,13 @@
     } else if (section == 4) {
         return 2; // 用户协议和隐私声明
     } else if (section == 5) {
-        return 1; //举报
+        return 1; // 举报
     } else if (section == 6) {
-        return 1; //diagnose
+        return 1; // 诊断
     } else if (section == 7) {
-        return 1; //logout
+        return 1; // 备份与恢复
+    } else if (section == 8) {
+        return 1; // 退出登录
     }
     return 0;
 }
@@ -245,6 +251,9 @@
         [self hiddenSeparatorLine:cell];
         cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 7) {
+        [self hiddenSeparatorLine:cell];
+        cell.textLabel.text = @"备份与恢复";
+    } else if (indexPath.section == 8) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];

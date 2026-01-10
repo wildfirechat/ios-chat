@@ -215,6 +215,11 @@
 		B7A683772B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A683732B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m */; };
 		B7CA48C8283490D100CB2F71 /* WFCCRichNotificationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CA48C6283490D100CB2F71 /* WFCCRichNotificationMessageContent.m */; };
 		B7CA48C9283490D100CB2F71 /* WFCCRichNotificationMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7CA48C7283490D100CB2F71 /* WFCCRichNotificationMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7D2AE942F10D6D100DB1A98 /* WFCCBackupCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D2AE902F10D6D100DB1A98 /* WFCCBackupCrypto.m */; };
+		B7D2AE952F10D6D100DB1A98 /* WFCCMessageBackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D2AE922F10D6D100DB1A98 /* WFCCMessageBackupManager.m */; };
+		B7D2AE962F10D6D100DB1A98 /* WFCCBackupCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D2AE8F2F10D6D100DB1A98 /* WFCCBackupCrypto.h */; };
+		B7D2AE972F10D6D100DB1A98 /* WFCCMessageBackupManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D2AE912F10D6D100DB1A98 /* WFCCMessageBackupManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7D2AE992F10D6EB00DB1A98 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D2AE982F10D6EB00DB1A98 /* Security.framework */; };
 		B7E2D8B52EFB953A00C8F909 /* WFCCJoinGroupRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E2D8B42EFB953A00C8F909 /* WFCCJoinGroupRequest.m */; };
 		B7E2D8B62EFB953A00C8F909 /* WFCCJoinGroupRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E2D8B32EFB953A00C8F909 /* WFCCJoinGroupRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7E6DBD92845AE9A00A24AE8 /* WFCCJsonSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E6DBD72845AE9A00A24AE8 /* WFCCJsonSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -439,6 +444,11 @@
 		B7A683732B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStreamingTextGeneratedMessageContent.m; sourceTree = "<group>"; };
 		B7CA48C6283490D100CB2F71 /* WFCCRichNotificationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCRichNotificationMessageContent.m; sourceTree = "<group>"; };
 		B7CA48C7283490D100CB2F71 /* WFCCRichNotificationMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCRichNotificationMessageContent.h; sourceTree = "<group>"; };
+		B7D2AE8F2F10D6D100DB1A98 /* WFCCBackupCrypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCBackupCrypto.h; sourceTree = "<group>"; };
+		B7D2AE902F10D6D100DB1A98 /* WFCCBackupCrypto.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCBackupCrypto.m; sourceTree = "<group>"; };
+		B7D2AE912F10D6D100DB1A98 /* WFCCMessageBackupManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCMessageBackupManager.h; sourceTree = "<group>"; };
+		B7D2AE922F10D6D100DB1A98 /* WFCCMessageBackupManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCMessageBackupManager.m; sourceTree = "<group>"; };
+		B7D2AE982F10D6EB00DB1A98 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		B7E2D8B32EFB953A00C8F909 /* WFCCJoinGroupRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCJoinGroupRequest.h; sourceTree = "<group>"; };
 		B7E2D8B42EFB953A00C8F909 /* WFCCJoinGroupRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCJoinGroupRequest.m; sourceTree = "<group>"; };
 		B7E6DBD72845AE9A00A24AE8 /* WFCCJsonSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCJsonSerializer.h; sourceTree = "<group>"; };
@@ -475,6 +485,7 @@
 				2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */,
 				901E271221F1545900A163CB /* libc++.tbd in Frameworks */,
 				901E271021F1545000A163CB /* libresolv.tbd in Frameworks */,
+				B7D2AE992F10D6EB00DB1A98 /* Security.framework in Frameworks */,
 				901E270E21F1543D00A163CB /* CoreTelephony.framework in Frameworks */,
 				2F21769527618FCD00AF695B /* mars.xcframework in Frameworks */,
 			);
@@ -503,6 +514,7 @@
 		2E6B509D1FAE98E6006B6E31 /* WFChatClient */ = {
 			isa = PBXGroup;
 			children = (
+				B7D2AE932F10D6D100DB1A98 /* Backup */,
 				B7FF74112824CA5300DF2B39 /* AFNetworking */,
 				2F9106E1273B4DDD00B764DD /* AV */,
 				901E270921F153D800A163CB /* Proto */,
@@ -778,12 +790,24 @@
 		901E270C21F1543C00A163CB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B7D2AE982F10D6EB00DB1A98 /* Security.framework */,
 				901E271321F1546100A163CB /* libz.tbd */,
 				901E271121F1545900A163CB /* libc++.tbd */,
 				901E270F21F1545000A163CB /* libresolv.tbd */,
 				901E270D21F1543D00A163CB /* CoreTelephony.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B7D2AE932F10D6D100DB1A98 /* Backup */ = {
+			isa = PBXGroup;
+			children = (
+				B7D2AE8F2F10D6D100DB1A98 /* WFCCBackupCrypto.h */,
+				B7D2AE902F10D6D100DB1A98 /* WFCCBackupCrypto.m */,
+				B7D2AE912F10D6D100DB1A98 /* WFCCMessageBackupManager.h */,
+				B7D2AE922F10D6D100DB1A98 /* WFCCMessageBackupManager.m */,
+			);
+			path = Backup;
 			sourceTree = "<group>";
 		};
 		B7FF74112824CA5300DF2B39 /* AFNetworking */ = {
@@ -814,6 +838,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7E2D8B62EFB953A00C8F909 /* WFCCJoinGroupRequest.h in Headers */,
+				B7D2AE972F10D6D100DB1A98 /* WFCCMessageBackupManager.h in Headers */,
 				B74BCC7B2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h in Headers */,
 				B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */,
 				B7A683742B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h in Headers */,
@@ -906,6 +931,7 @@
 				90B1373C22D9D1CC005F103C /* WFCCGroupJoinTypeNotificationContent.h in Headers */,
 				2F19723722C6FC31009F7055 /* WFCCGroupSetManagerNotificationContent.h in Headers */,
 				2BA6622824CFD23B00E28BC5 /* WFCCGroupMemberMuteNotificationContent.h in Headers */,
+				B7D2AE962F10D6D100DB1A98 /* WFCCBackupCrypto.h in Headers */,
 				2B2492E9245D3982007268E3 /* WFCCDeleteMessageContent.h in Headers */,
 				2FF2A45E22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.h in Headers */,
 				2E6B510F1FAE9B10006B6E31 /* WFCCTransferGroupOwnerNotificationContent.h in Headers */,
@@ -1103,6 +1129,8 @@
 				B7FF74262824CA5300DF2B39 /* WFAFURLRequestSerialization.m in Sources */,
 				2E6B51161FAE9B10006B6E31 /* WFCCConversationInfo.m in Sources */,
 				6E6C69A720B959F100006628 /* WFCCGroupSearchInfo.m in Sources */,
+				B7D2AE942F10D6D100DB1A98 /* WFCCBackupCrypto.m in Sources */,
+				B7D2AE952F10D6D100DB1A98 /* WFCCMessageBackupManager.m in Sources */,
 				2E6B50B41FAE990D006B6E31 /* wav_amr.mm in Sources */,
 				2F48C9C5214D16250092B167 /* WFCCRecallMessageContent.m in Sources */,
 				2B6336752470DAB2008D6B38 /* WFCCDeliveryReport.m in Sources */,

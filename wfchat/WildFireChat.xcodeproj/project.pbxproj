@@ -128,6 +128,12 @@
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
+		B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */; };
+		B7ABFF3D2F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF312F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m */; };
+		B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF332F10DA7A00C3DEEC /* WFCBackupListViewController.m */; };
+		B7ABFF3F2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF3B2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m */; };
+		B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF352F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m */; };
+		B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF392F10DA7A00C3DEEC /* WFCConversationSelectViewController.m */; };
 		B7B2F83E2F0A0228001CBF4C /* WFCLanguageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */; };
 		B7B2F83F2F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
 		B7B2F8402F0A0228001CBF4C /* WFCLanguageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83B2F0A0228001CBF4C /* WFCLanguageManager.m */; };
@@ -430,6 +436,18 @@
 		B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCSlideVerifyView.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
 		B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyFindMeViewController.m; sourceTree = "<group>"; };
+		B7ABFF302F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupAndRestoreViewController.h; sourceTree = "<group>"; };
+		B7ABFF312F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupAndRestoreViewController.m; sourceTree = "<group>"; };
+		B7ABFF322F10DA7A00C3DEEC /* WFCBackupListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupListViewController.h; sourceTree = "<group>"; };
+		B7ABFF332F10DA7A00C3DEEC /* WFCBackupListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupListViewController.m; sourceTree = "<group>"; };
+		B7ABFF342F10DA7A00C3DEEC /* WFCBackupOptionsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupOptionsViewController.h; sourceTree = "<group>"; };
+		B7ABFF352F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupOptionsViewController.m; sourceTree = "<group>"; };
+		B7ABFF362F10DA7A00C3DEEC /* WFCBackupProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupProgressViewController.h; sourceTree = "<group>"; };
+		B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupProgressViewController.m; sourceTree = "<group>"; };
+		B7ABFF382F10DA7A00C3DEEC /* WFCConversationSelectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCConversationSelectViewController.h; sourceTree = "<group>"; };
+		B7ABFF392F10DA7A00C3DEEC /* WFCConversationSelectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCConversationSelectViewController.m; sourceTree = "<group>"; };
+		B7ABFF3A2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCRestoreOptionsViewController.h; sourceTree = "<group>"; };
+		B7ABFF3B2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCRestoreOptionsViewController.m; sourceTree = "<group>"; };
 		B7B1A48B2F0A14A9003316BB /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		B7B1A48C2F0A14A9003316BB /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B7B2F83A2F0A0228001CBF4C /* WFCLanguageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCLanguageManager.h; sourceTree = "<group>"; };
@@ -842,6 +860,18 @@
 		2FF07F4621F82E7200A78A62 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				B7ABFF302F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.h */,
+				B7ABFF312F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m */,
+				B7ABFF322F10DA7A00C3DEEC /* WFCBackupListViewController.h */,
+				B7ABFF332F10DA7A00C3DEEC /* WFCBackupListViewController.m */,
+				B7ABFF342F10DA7A00C3DEEC /* WFCBackupOptionsViewController.h */,
+				B7ABFF352F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m */,
+				B7ABFF362F10DA7A00C3DEEC /* WFCBackupProgressViewController.h */,
+				B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */,
+				B7ABFF382F10DA7A00C3DEEC /* WFCConversationSelectViewController.h */,
+				B7ABFF392F10DA7A00C3DEEC /* WFCConversationSelectViewController.m */,
+				B7ABFF3A2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.h */,
+				B7ABFF3B2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m */,
 				B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */,
 				B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */,
 				B7CB3A91289BD66C00E9D688 /* WFCChangePasswordViewController.h */,
@@ -1301,6 +1331,12 @@
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
 				B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
+				B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */,
+				B7ABFF3D2F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m in Sources */,
+				B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */,
+				B7ABFF3F2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m in Sources */,
+				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,
+				B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
