@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *backupFilePath;
 @property (nonatomic, strong) NSDictionary *backupInfo;
 
+// 从PC恢复时的属性
+@property (nonatomic, assign) BOOL isFromPC;
+@property (nonatomic, copy) NSString *serverIP;
+@property (nonatomic, assign) NSInteger serverPort;
+
 @end
 
 NS_ASSUME_NONNULL_END

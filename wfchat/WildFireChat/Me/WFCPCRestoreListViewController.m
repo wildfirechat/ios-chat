@@ -1,0 +1,285 @@
+//
+//  WFCPCRestoreListViewController.m
+//  WildFireChat
+//
+//  Created by Claude on 2025-01-12.
+//  Copyright © 2025 WildFireChat. All rights reserved.
+//
+
+#import "WFCPCRestoreListViewController.h"
+#import "WFCRestoreOptionsViewController.h"
+#import "WFCPCRestoreProgressViewController.h"
+#import <WFChatClient/WFCChatClient.h>
+#import <WFChatClient/WFCCRestoreRequestNotificationContent.h>
+#import <WFChatClient/WFCCRestoreResponseNotificationContent.h>
+
+@interface WFCPCRestoreListViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UILabel *statusLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) NSArray<NSDictionary *> *backupList;
+@property (nonatomic, strong) NSString *serverIP;
+@property (nonatomic, assign) NSInteger serverPort;
+@property (nonatomic, assign) BOOL isLoading;
+@property (nonatomic, strong) NSTimer *timeoutTimer;
+@end
+
+@implementation WFCPCRestoreListViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.title = @"电脑端备份";
+    self.view.backgroundColor = [UIColor systemBackgroundColor];
+    self.isLoading = YES;
+    self.backupList = [NSArray array];
+
+    [self setupUI];
+
+    // 发送恢复请求
+    [self sendRestoreRequest];
+}
+
+- (void)setupUI {
+    // 创建状态标签
+    self.statusLabel = [[UILabel alloc] init];
+    self.statusLabel.text = @"正在连接电脑端...";
+    self.statusLabel.font = [UIFont systemFontOfSize:16];
+    self.statusLabel.textAlignment = NSTextAlignmentCenter;
+    self.statusLabel.textColor = [UIColor secondaryLabelColor];
+    self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.statusLabel];
+
+    // 创建活动指示器
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+    if (@available(iOS 13.0, *)) {
+        self.activityIndicator.color = [UIColor systemBlueColor];
+    }
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+
+    // 创建表格视图
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    if (@available(iOS 15.0, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.hidden = YES;
+    [self.view addSubview:self.tableView];
+
+    // 设置约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.activityIndicator.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.activityIndicator.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor constant:-50],
+
+        [self.statusLabel.topAnchor constraintEqualToAnchor:self.activityIndicator.bottomAnchor constant:20],
+        [self.statusLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
+        [self.statusLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
+    ]];
+
+    // 注册消息监听
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onReceiveRestoreResponse:)
+                                                 name:kReceiveMessages
+                                               object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.timeoutTimer invalidate];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.tableView.frame = self.view.bounds;
+}
+
+#pragma mark - Restore Request
+
+- (void)sendRestoreRequest {
+    // 启动超时计时器（30秒）
+    self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:30.0
+                                                         target:self
+                                                       selector:@selector(onTimeout)
+                                                       userInfo:nil
+                                                        repeats:NO];
+
+    // 发送恢复请求消息
+    NSString *currentUserId = [[WFCCNetworkService sharedInstance] userId];
+
+    // 创建恢复请求通知消息
+    WFCCRestoreRequestNotificationContent *content = [[WFCCRestoreRequestNotificationContent alloc] initWithTimestamp:[[NSDate date] timeIntervalSince1970] * 1000];
+
+    // 创建一个给自己（PC端）的通知消息
+    WFCCConversation *conversation = [WFCCConversation conversationWithType:Single_Type target:currentUserId line:0];
+
+    __weak typeof(self) weakSelf = self;
+    [[WFCCIMService sharedWFCIMService] send:conversation
+                                     content:content
+                                     success:^(long long messageUid, long long timestamp) {
+        NSLog(@"恢复请求已发送");
+    } error:^(int error_code) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf showError:[NSString stringWithFormat:@"发送恢复请求失败，错误码: %d", error_code]];
+        });
+    }];
+}
+
+- (void)onReceiveRestoreResponse:(NSNotification *)notification {
+    NSArray *messages = notification.object;
+    for (WFCCMessage *msg in messages) {
+        if ([msg.content isKindOfClass:[WFCCRestoreResponseNotificationContent class]]) {
+            WFCCRestoreResponseNotificationContent *response = (WFCCRestoreResponseNotificationContent *)msg.content;
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.timeoutTimer invalidate];
+                self.serverIP = response.serverIP;
+                self.serverPort = response.serverPort;
+
+                if (response.approved) {
+                    // 同意恢复，获取备份列表
+                    [self fetchBackupList];
+                } else {
+                    // 拒绝恢复
+                    [self showError:@"电脑端拒绝了恢复请求"];
+                }
+            });
+            break;
+        }
+    }
+}
+
+- (void)fetchBackupList {
+    self.statusLabel.text = @"正在获取备份列表...";
+
+    // 创建HTTP请求
+    NSString *urlString = [NSString stringWithFormat:@"http://%@:%ld/restore_list", self.serverIP, (long)self.serverPort];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [self showError:[NSString stringWithFormat:@"获取备份列表失败: %@", error.localizedDescription]];
+                return;
+            }
+
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            if (httpResponse.statusCode == 200 && data) {
+                [self parseBackupList:data];
+            } else {
+                [self showError:[NSString stringWithFormat:@"获取备份列表失败，状态码: %ld", (long)httpResponse.statusCode]];
+            }
+        });
+    }];
+
+    [task resume];
+}
+
+- (void)parseBackupList:(NSData *)data {
+    NSError *error;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+
+    if (error || ![json isKindOfClass:[NSArray class]]) {
+        [self showError:@"解析备份列表失败"];
+        return;
+    }
+
+    self.backupList = json;
+
+    if (self.backupList.count == 0) {
+        [self showError:@"电脑端没有可用的备份"];
+        return;
+    }
+
+    // 显示备份列表
+    [self.activityIndicator stopAnimating];
+    self.statusLabel.hidden = YES;
+    self.tableView.hidden = NO;
+    [self.tableView reloadData];
+}
+
+- (void)showError:(NSString *)message {
+    self.isLoading = NO;
+    [self.activityIndicator stopAnimating];
+    self.statusLabel.text = message;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController popViewControllerAnimated:YES];
+    });
+}
+
+- (void)onTimeout {
+    [self showError:@"电脑端未在30秒内响应"];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.backupList.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"BackupCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+
+    NSDictionary *backup = self.backupList[indexPath.row];
+    NSString *backupName = backup[@"name"] ?: @"未知备份";
+    NSString *backupTime = backup[@"time"] ?: @"";
+    NSInteger fileCount = [backup[@"fileCount"] integerValue];
+    NSInteger conversationCount = [backup[@"conversationCount"] integerValue];
+    NSInteger messageCount = [backup[@"messageCount"] integerValue];
+    NSInteger mediaFileCount = [backup[@"mediaFileCount"] integerValue];
+
+    cell.textLabel.text = backupName;
+
+    // 构建详细信息字符串
+    NSMutableArray *details = [NSMutableArray array];
+    if (conversationCount > 0) {
+        [details addObject:[NSString stringWithFormat:@"%ld个会话", (long)conversationCount]];
+    }
+    if (messageCount > 0) {
+        [details addObject:[NSString stringWithFormat:@"%ld条消息", (long)messageCount]];
+    }
+    if (mediaFileCount > 0) {
+        [details addObject:[NSString stringWithFormat:@"%ld个媒体文件", (long)mediaFileCount]];
+    }
+    if (details.count == 0 && fileCount > 0) {
+        [details addObject:[NSString stringWithFormat:@"%ld个文件", (long)fileCount]];
+    }
+
+    NSString *detailText = [NSString stringWithFormat:@"%@ • %@", backupTime, [details componentsJoinedByString:@"，"]];
+    cell.detailTextLabel.text = detailText;
+    cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
+
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    NSDictionary *backup = self.backupList[indexPath.row];
+    NSString *backupPath = backup[@"path"];
+
+    // 跳转到PC恢复进度界面
+    WFCPCRestoreProgressViewController *vc = [[WFCPCRestoreProgressViewController alloc] init];
+    vc.backupPath = backupPath;
+    vc.serverIP = self.serverIP;
+    vc.serverPort = self.serverPort;
+    vc.overwriteExisting = NO; // 默认不覆盖
+
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+@end

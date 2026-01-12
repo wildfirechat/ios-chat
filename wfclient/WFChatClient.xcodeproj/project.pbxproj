@@ -204,6 +204,10 @@
 		B75866E62F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E42F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m */; };
 		B75866EC2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B75866ED2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */; };
+		B75866F82F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B75866F42F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B75866F92F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B75866F62F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B75866FA2F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866F52F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m */; };
+		B75866FB2F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866F72F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.m */; };
 		B76A39922BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B76A39932BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A39912BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m */; };
 		B77A8C842A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B77A8C822A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -437,6 +441,10 @@
 		B75866E42F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCBackupRequestNotificationContent.m; sourceTree = "<group>"; };
 		B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCBackupResponseNotificationContent.h; sourceTree = "<group>"; };
 		B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCBackupResponseNotificationContent.m; sourceTree = "<group>"; };
+		B75866F42F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCRestoreRequestNotificationContent.h; sourceTree = "<group>"; };
+		B75866F52F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCRestoreRequestNotificationContent.m; sourceTree = "<group>"; };
+		B75866F62F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCRestoreResponseNotificationContent.h; sourceTree = "<group>"; };
+		B75866F72F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCRestoreResponseNotificationContent.m; sourceTree = "<group>"; };
 		B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCNotDeliveredMessageContent.h; sourceTree = "<group>"; };
 		B76A39912BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCNotDeliveredMessageContent.m; sourceTree = "<group>"; };
 		B77A8C822A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupSettingsNotificationContent.h; sourceTree = "<group>"; };
@@ -571,6 +579,10 @@
 		2E6B50CA1FAE9B10006B6E31 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
+				B75866F42F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h */,
+				B75866F52F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m */,
+				B75866F62F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h */,
+				B75866F72F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.m */,
 				B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */,
 				B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */,
 				B75866E32F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h */,
@@ -865,6 +877,8 @@
 				B75322A82DE49ACD004F1064 /* WFCCDictionary.h in Headers */,
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
 				B748123D28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h in Headers */,
+				B75866F82F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h in Headers */,
+				B75866F92F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h in Headers */,
 				2F59FFF22774A3900046C2D5 /* WFCCPTTSoundMessageContent.h in Headers */,
 				90D1F597208D65B500C2A9CA /* WFCCCallStartMessageContent.h in Headers */,
 				B7F2A3D12826AC4C0046A4F0 /* WFCCMultiCallOngoingMessageContent.h in Headers */,
@@ -1085,6 +1099,8 @@
 				2F3D37B427BDE4A7000D1833 /* WFCCUserOnlineState.m in Sources */,
 				2E6B51141FAE9B10006B6E31 /* WFCCConversation.m in Sources */,
 				2FEF332621BE93980087B6C2 /* WFCCChannelInfo.m in Sources */,
+				B75866FA2F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m in Sources */,
+				B75866FB2F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.m in Sources */,
 				2E6B51121FAE9B10006B6E31 /* WFCCUtilities.m in Sources */,
 				2E6B51041FAE9B10006B6E31 /* WFCCMessage.m in Sources */,
 				2B5623A024FB8F1700EB2A03 /* WFCCPCLoginRequestMessageContent.m in Sources */,

@@ -9,6 +9,7 @@
 #import "WFCBackupAndRestoreViewController.h"
 #import "WFCConversationSelectViewController.h"
 #import "WFCBackupListViewController.h"
+#import "WFCRestoreSourceViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 
 @interface WFCBackupAndRestoreViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -112,7 +113,7 @@
 }
 
 - (void)restoreBackup {
-    WFCBackupListViewController *vc = [[WFCBackupListViewController alloc] init];
+    WFCRestoreSourceViewController *vc = [[WFCRestoreSourceViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
