@@ -200,6 +200,10 @@
 		B75322A92DE49ACD004F1064 /* WFCCDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B75322A72DE49ACD004F1064 /* WFCCDictionary.m */; };
 		B755656E2838999400BE047C /* WFCCArticlesMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B755656C2838999400BE047C /* WFCCArticlesMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B755656F2838999400BE047C /* WFCCArticlesMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B755656D2838999400BE047C /* WFCCArticlesMessageContent.m */; };
+		B75866E52F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B75866E32F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B75866E62F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E42F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m */; };
+		B75866EC2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B75866ED2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */; };
 		B76A39922BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B76A39932BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A39912BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m */; };
 		B77A8C842A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B77A8C822A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -429,6 +433,10 @@
 		B75322A72DE49ACD004F1064 /* WFCCDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCDictionary.m; sourceTree = "<group>"; };
 		B755656C2838999400BE047C /* WFCCArticlesMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCArticlesMessageContent.h; sourceTree = "<group>"; };
 		B755656D2838999400BE047C /* WFCCArticlesMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCArticlesMessageContent.m; sourceTree = "<group>"; };
+		B75866E32F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCBackupRequestNotificationContent.h; sourceTree = "<group>"; };
+		B75866E42F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCBackupRequestNotificationContent.m; sourceTree = "<group>"; };
+		B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCBackupResponseNotificationContent.h; sourceTree = "<group>"; };
+		B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCBackupResponseNotificationContent.m; sourceTree = "<group>"; };
 		B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCNotDeliveredMessageContent.h; sourceTree = "<group>"; };
 		B76A39912BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCNotDeliveredMessageContent.m; sourceTree = "<group>"; };
 		B77A8C822A90B53000A5AF40 /* WFCCGroupSettingsNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCGroupSettingsNotificationContent.h; sourceTree = "<group>"; };
@@ -563,6 +571,10 @@
 		2E6B50CA1FAE9B10006B6E31 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
+				B75866EA2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h */,
+				B75866EB2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m */,
+				B75866E32F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h */,
+				B75866E42F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m */,
 				2F7709962453DC740020DB77 /* Things */,
 				90D1F595208D65B500C2A9CA /* WFCCCallStartMessageContent.h */,
 				90D1F594208D65B500C2A9CA /* WFCCCallStartMessageContent.m */,
@@ -842,11 +854,13 @@
 				B74BCC7B2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h in Headers */,
 				B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */,
 				B7A683742B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h in Headers */,
+				B75866E52F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h in Headers */,
 				2B63367A2470DB7E008D6B38 /* WFCCReadReport.h in Headers */,
 				2F8CA19B274641E0000CC09C /* WFCCMarkUnreadMessageContent.h in Headers */,
 				2F3D37B327BDE4A7000D1833 /* WFCCUserOnlineState.h in Headers */,
 				B7E6DBD92845AE9A00A24AE8 /* WFCCJsonSerializer.h in Headers */,
 				2BC606E825C1A12400F77AD3 /* WFCCGroupPrivateChatNotificationContent.h in Headers */,
+				B75866EC2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.h in Headers */,
 				B79F81A628D958740092FA4B /* WFCCProtocol.h in Headers */,
 				B75322A82DE49ACD004F1064 /* WFCCDictionary.h in Headers */,
 				2FB87A622650BDE000790A26 /* WFCCFriend.h in Headers */,
@@ -1057,6 +1071,7 @@
 				2BA6622924CFD23B00E28BC5 /* WFCCGroupMemberMuteNotificationContent.m in Sources */,
 				2E6B510C1FAE9B10006B6E31 /* WFCCSoundMessageContent.m in Sources */,
 				B7F2A3D92826AEBE0046A4F0 /* WFCCJoinCallRequestMessageContent.m in Sources */,
+				B75866E62F14C2B700D62775 /* WFCCBackupRequestNotificationContent.m in Sources */,
 				2FB87C6E243EF0FE0078A199 /* WFCCFriendGreetingMessageContent.m in Sources */,
 				B748120D28A49D8A003BB0C3 /* WFCCChannelMenu.m in Sources */,
 				90B044461FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m in Sources */,
@@ -1147,6 +1162,7 @@
 				90B0444B1FEFDC1A00AFE79B /* WFCCChangeGroupNameNotificationContent.m in Sources */,
 				90B0444F1FEFDC4D00AFE79B /* WFCCModifyGroupAliasNotificationContent.m in Sources */,
 				2E6B51021FAE9B10006B6E31 /* WFCCMediaMessageContent.m in Sources */,
+				B75866ED2F14C9CF00D62775 /* WFCCBackupResponseNotificationContent.m in Sources */,
 				2FF2A45D22C4DBD1006A6D4C /* WFCCGroupMuteNotificationContent.m in Sources */,
 				2F8742DD219C4FED00F65EBA /* WFCCUnreadCount.m in Sources */,
 			);

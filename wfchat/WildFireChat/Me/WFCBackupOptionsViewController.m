@@ -7,7 +7,7 @@
 //
 
 #import "WFCBackupOptionsViewController.h"
-#import "WFCBackupProgressViewController.h"
+#import "WFCBackupTargetViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 
 @interface WFCBackupOptionsViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -49,12 +49,10 @@
 #pragma mark - Actions
 
 - (void)startBackup {
-    // 跳转到进度界面
-    WFCBackupProgressViewController *vc = [[WFCBackupProgressViewController alloc] init];
+    // 跳转到备份目标选择界面
+    WFCBackupTargetViewController *vc = [[WFCBackupTargetViewController alloc] init];
     vc.conversations = self.conversations;
     vc.includeMedia = self.includeMedia;
-    // 使用当前用户ID作为备份密码
-    vc.backupPassword = [WFCCNetworkService sharedInstance].userId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
