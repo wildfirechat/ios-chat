@@ -64,7 +64,7 @@
 }
 
 + (int)getContentType {
-    return 1004; // MESSAGE_CONTENT_TYPE_BACKUP_RESPONSE
+    return MESSAGE_CONTENT_TYPE_BACKUP_RESPONSE;
 }
 
 + (int)getContentFlags {

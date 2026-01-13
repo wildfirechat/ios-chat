@@ -41,7 +41,7 @@
 }
 
 + (int)getContentType {
-    return 1005; // MESSAGE_CONTENT_TYPE_RESTORE_REQUEST
+    return MESSAGE_CONTENT_TYPE_RESTORE_REQUEST;
 }
 
 + (int)getContentFlags {
