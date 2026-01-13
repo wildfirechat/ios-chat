@@ -177,7 +177,8 @@
 }
 
 - (void)downloadAllFiles {
-    self.statusLabel.text = @"正在下载备份文件...";
+    self.statusLabel.text = @"正在同步文件...";
+    [self.progressView setProgress:0.0 animated:YES];
     self.downloadedFiles = 0;
     self.totalFiles = 0;
 
@@ -219,14 +220,15 @@
     NSString *type = fileInfo[@"type"];
     NSString *relativePath = fileInfo[@"path"];
 
-    // 更新进度
+    // 更新进度（下载阶段占0-50%）
     dispatch_async(dispatch_get_main_queue(), ^{
         float progress = (float)self.downloadedFiles / (float)self.totalFiles;
-        [self.progressView setProgress:progress animated:YES];
-        self.statusLabel.text = [NSString stringWithFormat:@"正在下载文件 %ld/%ld",
+        float displayProgress = progress * 0.5; // 映射到0-50%
+        [self.progressView setProgress:displayProgress animated:YES];
+        self.statusLabel.text = [NSString stringWithFormat:@"正在同步文件 %ld/%ld",
                                   (long)(self.downloadedFiles + 1),
                                   (long)self.totalFiles];
-        self.detailLabel.text = relativePath;
+        self.detailLabel.text = [NSString stringWithFormat:@"%.0f%% - %@", displayProgress * 100, relativePath];
     });
 
     // 构建URL
@@ -280,7 +282,7 @@
 
 - (void)startRestore {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.statusLabel.text = @"正在恢复备份...";
+        self.statusLabel.text = @"正在导入数据...";
         self.detailLabel.text = @"请稍候...";
         [self.progressView setProgress:0.5 animated:YES];
     });
@@ -309,8 +311,9 @@
 
 - (void)handleProgress:(NSProgress *)progress {
     CGFloat completed = progress.fractionCompleted;
-    [self.progressView setProgress:completed animated:YES];
-    self.detailLabel.text = [NSString stringWithFormat:@"正在恢复... %d%%", (int)(completed * 100)];
+    CGFloat displayProgress = 0.5 + (completed * 0.5); // 映射到50-100%
+    [self.progressView setProgress:displayProgress animated:YES];
+    self.detailLabel.text = [NSString stringWithFormat:@"正在导入... %.0f%%", displayProgress * 100];
 }
 
 - (void)handleRestoreSuccess:(int)restoredMessageCount mediaCount:(int)restoredMediaCount {
@@ -321,7 +324,7 @@
     // 清理临时文件
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSFileManager defaultManager] removeItemAtPath:self.tempDirectory error:nil];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     });
 }
 

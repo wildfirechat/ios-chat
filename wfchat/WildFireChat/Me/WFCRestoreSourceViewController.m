@@ -10,10 +10,12 @@
 #import "WFCRestoreOptionsViewController.h"
 #import "WFCPCRestoreListViewController.h"
 #import "WFCBackupListViewController.h"
+#import <WFChatClient/WFCChatClient.h>
 
 @interface WFCRestoreSourceViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray<NSDictionary *> *sourceOptions;
+@property (nonatomic, assign) BOOL isPCOnline;
 @end
 
 @implementation WFCRestoreSourceViewController
@@ -56,6 +58,31 @@
     infoLabel.textColor = [UIColor secondaryLabelColor];
     infoLabel.font = [UIFont systemFontOfSize:14];
     self.tableView.tableHeaderView = infoLabel;
+
+    // 监听连接状态变化
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updatePCOnlineStatus)
+                                                 name:kSettingUpdated
+                                               object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updatePCOnlineStatus];
+}
+
+- (void)updatePCOnlineStatus {
+    BOOL previousStatus = self.isPCOnline;
+    self.isPCOnline = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos].count > 0;
+
+    // 如果状态发生变化，刷新表格
+    if (previousStatus != self.isPCOnline) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -78,17 +105,38 @@
     }
 
     NSDictionary *option = self.sourceOptions[indexPath.row];
+    NSString *action = option[@"action"];
+
     cell.textLabel.text = option[@"title"];
     cell.detailTextLabel.text = option[@"subtitle"];
-    cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
     cell.detailTextLabel.numberOfLines = 0;
 
-    if (@available(iOS 13.0, *)) {
-        NSString *iconName = option[@"icon"];
-        UIImage *icon = [UIImage systemImageNamed:iconName];
-        if (icon) {
-            cell.imageView.image = icon;
-            cell.imageView.tintColor = [UIColor systemBlueColor];
+    // 检查是否是PC选项且PC是否在线
+    if ([action isEqualToString:@"pc"] && !self.isPCOnline) {
+        // PC不在线时显示为灰色
+        cell.textLabel.textColor = [UIColor tertiaryLabelColor];
+        cell.detailTextLabel.textColor = [UIColor tertiaryLabelColor];
+        cell.userInteractionEnabled = NO;
+        if (@available(iOS 13.0, *)) {
+            NSString *iconName = option[@"icon"];
+            UIImage *icon = [UIImage systemImageNamed:iconName];
+            if (icon) {
+                cell.imageView.image = icon;
+                cell.imageView.tintColor = [UIColor tertiaryLabelColor];
+            }
+        }
+    } else {
+        // 正常状态
+        cell.textLabel.textColor = [UIColor labelColor];
+        cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
+        cell.userInteractionEnabled = YES;
+        if (@available(iOS 13.0, *)) {
+            NSString *iconName = option[@"icon"];
+            UIImage *icon = [UIImage systemImageNamed:iconName];
+            if (icon) {
+                cell.imageView.image = icon;
+                cell.imageView.tintColor = [UIColor systemBlueColor];
+            }
         }
     }
 

@@ -12,7 +12,6 @@
 
 @interface WFCRestoreOptionsViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UISwitch *overwriteSwitch;
 @property (nonatomic, assign) BOOL overwriteExisting;
 @end
 
@@ -70,10 +69,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)overwriteSwitchChanged:(UISwitch *)sender {
-    self.overwriteExisting = sender.isOn;
-}
-
 - (void)performRestore {
     // 跳转到进度界面
     WFCBackupProgressViewController *vc = [[WFCBackupProgressViewController alloc] init];
@@ -89,107 +84,71 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 1; // 覆盖选项
-    } else if (section == 1) {
-        // 基础信息3行 + 可选的媒体信息
-        NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
-        NSInteger baseRows = 3; // 备份时间、会话数量、消息数量
-        return mediaFileCount > 0 ? baseRows + 1 : baseRows;
-    }
-    return 0;
+    // 基础信息3行 + 可选的媒体信息
+    NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
+    NSInteger baseRows = 3; // 备份时间、会话数量、消息数量
+    return mediaFileCount > 0 ? baseRows + 1 : baseRows;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"恢复选项";
-    } else if (section == 1) {
-        return @"备份信息";
-    }
-    return nil;
+    return @"备份信息";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        static NSString *cellIdentifier = @"OptionCell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-            // 创建开关
-            self.overwriteSwitch = [[UISwitch alloc] init];
-            [self.overwriteSwitch addTarget:self action:@selector(overwriteSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = self.overwriteSwitch;
-        }
-
-        cell.textLabel.text = @"覆盖已存在的消息";
-        cell.detailTextLabel.text = @"开启后，如果消息已存在将被覆盖。关闭则跳过已存在的消息。";
-        cell.detailTextLabel.numberOfLines = 0;
-        self.overwriteSwitch.on = self.overwriteExisting;
-
-        return cell;
-    } else if (indexPath.section == 1) {
-        static NSString *cellIdentifier = @"InfoCell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-
-        switch (indexPath.row) {
-            case 0: {
-                // 备份时间
-                cell.textLabel.text = @"备份时间";
-                NSString *backupTime = self.backupInfo[@"backupTime"];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
-                NSDate *date = [formatter dateFromString:backupTime];
-                formatter.dateFormat = @"yyyy-MM-dd HH:mm";
-                cell.detailTextLabel.text = [formatter stringFromDate:date];
-                break;
-            }
-            case 1: {
-                // 会话数量
-                cell.textLabel.text = @"会话数量";
-                NSInteger count = [self.backupInfo[@"totalConversations"] integerValue];
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个", (long)count];
-                break;
-            }
-            case 2: {
-                // 消息数量
-                cell.textLabel.text = @"消息数量";
-                NSInteger count = [self.backupInfo[@"totalMessages"] integerValue];
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 条", (long)count];
-                break;
-            }
-            case 3: {
-                // 媒体文件
-                cell.textLabel.text = @"媒体文件";
-                NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
-                long long mediaTotalSize = [self.backupInfo[@"mediaTotalSize"] longLongValue];
-                NSString *sizeStr = [self formatFileSize:mediaTotalSize];
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个 (%@)", (long)mediaFileCount, sizeStr];
-                break;
-            }
-        }
-
-        return cell;
+    static NSString *cellIdentifier = @"InfoCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 
-    return [[UITableViewCell alloc] init];
+    switch (indexPath.row) {
+        case 0: {
+            // 备份时间
+            cell.textLabel.text = @"备份时间";
+            NSString *backupTime = self.backupInfo[@"backupTime"];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+            NSDate *date = [formatter dateFromString:backupTime];
+            formatter.dateFormat = @"yyyy-MM-dd HH:mm";
+            cell.detailTextLabel.text = [formatter stringFromDate:date];
+            break;
+        }
+        case 1: {
+            // 会话数量
+            cell.textLabel.text = @"会话数量";
+            NSInteger count = [self.backupInfo[@"totalConversations"] integerValue];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个", (long)count];
+            break;
+        }
+        case 2: {
+            // 消息数量
+            cell.textLabel.text = @"消息数量";
+            NSInteger count = [self.backupInfo[@"totalMessages"] integerValue];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 条", (long)count];
+            break;
+        }
+        case 3: {
+            // 媒体文件
+            cell.textLabel.text = @"媒体文件";
+            NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
+            long long mediaTotalSize = [self.backupInfo[@"mediaTotalSize"] longLongValue];
+            NSString *sizeStr = [self formatFileSize:mediaTotalSize];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个 (%@)", (long)mediaFileCount, sizeStr];
+            break;
+        }
+    }
+
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        return 70;
-    }
     return 44;
 }
 
