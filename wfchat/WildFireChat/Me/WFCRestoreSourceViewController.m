@@ -23,19 +23,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"选择恢复位置";
+    self.title = LocalizedString(@"SelectRestoreLocation");
 
     // 初始化恢复源选项
     self.sourceOptions = @[
         @{
-            @"title": @"从本地恢复",
-            @"subtitle": @"从iPhone本地存储恢复备份",
+            @"title": LocalizedString(@"RestoreFromLocal"),
+            @"subtitle": LocalizedString(@"RestoreFromLocalDescription"),
             @"icon": @"iphone",
             @"action": @"local"
         },
         @{
-            @"title": @"从电脑端恢复",
-            @"subtitle": @"从已登录的电脑端恢复备份",
+            @"title": LocalizedString(@"RestoreFromPC"),
+            @"subtitle": LocalizedString(@"RestoreFromPCDescription"),
             @"icon": @"desktopcomputer",
             @"action": @"pc"
         }
@@ -53,7 +53,7 @@
 
     // 添加说明文字
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    infoLabel.text = @"请选择恢复备份来源";
+    infoLabel.text = LocalizedString(@"PleaseSelectRestoreSource");
     infoLabel.textAlignment = NSTextAlignmentCenter;
     infoLabel.textColor = [UIColor secondaryLabelColor];
     infoLabel.font = [UIFont systemFontOfSize:14];

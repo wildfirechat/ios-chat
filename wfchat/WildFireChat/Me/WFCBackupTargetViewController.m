@@ -23,19 +23,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"选择备份位置";
+    self.title = LocalizedString(@"SelectBackupLocation");
 
     // 初始化备份目标选项
     self.targetOptions = @[
         @{
-            @"title": @"备份到本地",
-            @"subtitle": @"将备份保存到iPhone本地存储",
+            @"title": LocalizedString(@"BackupToLocal"),
+            @"subtitle": LocalizedString(@"BackupToLocalDescription"),
             @"icon": @"iphone",
             @"action": @"local"
         },
         @{
-            @"title": @"备份到电脑端",
-            @"subtitle": @"将备份保存到已登录的电脑端",
+            @"title": LocalizedString(@"BackupToPC"),
+            @"subtitle": LocalizedString(@"BackupToPCDescription"),
             @"icon": @"desktopcomputer",
             @"action": @"pc"
         }
@@ -53,7 +53,7 @@
 
     // 添加说明文字
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    infoLabel.text = @"请选择备份保存位置";
+    infoLabel.text = LocalizedString(@"PleaseSelectBackupLocation");
     infoLabel.textAlignment = NSTextAlignmentCenter;
     infoLabel.textColor = [UIColor secondaryLabelColor];
     infoLabel.font = [UIFont systemFontOfSize:14];

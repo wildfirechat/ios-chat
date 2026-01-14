@@ -31,7 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"选择备份";
+    self.title = LocalizedString(@"SelectBackup");
     self.backupItems = [NSMutableArray array];
 
     // 创建表格视图
@@ -155,13 +155,13 @@
     // 构建显示文本
     NSMutableArray *detailParts = [NSMutableArray array];
     [detailParts addObject:dateStr];
-    [detailParts addObject:[NSString stringWithFormat:@"%ld个会话", (long)totalConversations]];
-    [detailParts addObject:[NSString stringWithFormat:@"%ld条消息", (long)totalMessages]];
+    [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"ConversationsUnit"), (long)totalConversations]];
+    [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"MessagesUnit"), (long)totalMessages]];
 
     // 只有在有媒体文件时才显示媒体信息
     if (mediaFileCount > 0) {
         NSString *mediaSizeStr = [self formatFileSize:mediaTotalSize];
-        [detailParts addObject:[NSString stringWithFormat:@"%ld个媒体(%@)", (long)mediaFileCount, mediaSizeStr]];
+        [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"MediaUnit"), (long)mediaFileCount, mediaSizeStr]];
     }
 
     cell.detailTextLabel.text = [detailParts componentsJoinedByString:@" • "];

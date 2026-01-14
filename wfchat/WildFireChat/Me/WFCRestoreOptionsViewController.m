@@ -20,11 +20,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"恢复选项";
+    self.title = LocalizedString(@"RestoreOptions");
     self.overwriteExisting = NO;
 
     // 创建开始恢复按钮
-    UIBarButtonItem *restoreButton = [[UIBarButtonItem alloc] initWithTitle:@"开始恢复"
+    UIBarButtonItem *restoreButton = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"StartRestore")
                                                                      style:UIBarButtonItemStyleDone
                                                                     target:self
                                                                     action:@selector(startRestore)];
@@ -49,17 +49,17 @@
 
 - (void)startRestore {
     // 确认对话框
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认恢复"
-                                                                   message:@"恢复操作将会添加备份中的消息到当前设备。是否继续？"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmRestore")
+                                                                   message:LocalizedString(@"RestoreWarningMessage")
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确认"
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction *action) {
         [self performRestore];
     }];
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel")
                                                           style:UIAlertActionStyleCancel
                                                         handler:nil];
 

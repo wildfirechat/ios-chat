@@ -129,11 +129,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"选择会话";
+    self.title = LocalizedString(@"SelectConversation");
     self.isAllSelected = NO;
 
     // 左侧取消按钮
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消"
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"Cancel")
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(cancelButtonClicked:)];
@@ -141,11 +141,11 @@
 
     // 右侧按钮容器
     self.selectAllButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.selectAllButton setTitle:@"全选" forState:UIControlStateNormal];
+    [self.selectAllButton setTitle:LocalizedString(@"SelectAll") forState:UIControlStateNormal];
     [self.selectAllButton addTarget:self action:@selector(selectAllButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 
     self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.nextButton setTitle:@"下一步" forState:UIControlStateNormal];
+    [self.nextButton setTitle:LocalizedString(@"NextStep") forState:UIControlStateNormal];
     self.nextButton.enabled = NO;
     [self.nextButton addTarget:self action:@selector(nextButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -211,14 +211,14 @@
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
-        [self.selectAllButton setTitle:@"取消全选" forState:UIControlStateNormal];
+        [self.selectAllButton setTitle:LocalizedString(@"DeselectAll") forState:UIControlStateNormal];
     } else {
         // 取消全选：获取所有选中的行并取消
         NSArray<NSIndexPath *> *selectedRows = [self.tableView indexPathsForSelectedRows];
         for (NSIndexPath *indexPath in selectedRows) {
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         }
-        [self.selectAllButton setTitle:@"全选" forState:UIControlStateNormal];
+        [self.selectAllButton setTitle:LocalizedString(@"SelectAll") forState:UIControlStateNormal];
     }
 
     self.nextButton.enabled = self.tableView.indexPathsForSelectedRows.count > 0;
@@ -261,12 +261,12 @@
 
     // 获取消息条数
     int messageCount = [[WFCCIMService sharedWFCIMService] getMessageCount:conversation];
-    NSString *subtitle = [NSString stringWithFormat:@"%d 条消息", messageCount];
+    NSString *subtitle = [NSString stringWithFormat:@"%d %@", messageCount, LocalizedString(@"MessagesCount")];
 
     // 显示会话标题、头像和消息条数
     if (conversation.type == Single_Type) {
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:conversation.target refresh:NO];
-        NSString *title = user.displayName ?: @"未知用户";
+        NSString *title = user.displayName ?: LocalizedString(@"UnknownUser");
 
         [cell configureWithTitle:title
                          subtitle:subtitle
@@ -274,7 +274,7 @@
                    defaultAvatar:@"PersonalChat"];
     } else {
         WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
-        NSString *title = group.name ?: @"未知群组";
+        NSString *title = group.name ?: LocalizedString(@"UnknownGroup");
 
         [cell configureWithTitle:title
                          subtitle:subtitle
@@ -296,7 +296,7 @@
     // 如果全部选中，更新全选按钮状态
     if (tableView.indexPathsForSelectedRows.count == self.conversations.count) {
         self.isAllSelected = YES;
-        [self.selectAllButton setTitle:@"取消全选" forState:UIControlStateNormal];
+        [self.selectAllButton setTitle:LocalizedString(@"DeselectAll") forState:UIControlStateNormal];
     }
 }
 
@@ -307,7 +307,7 @@
     // 如果之前是全选状态，取消选中任何一个时更新全选按钮
     if (self.isAllSelected) {
         self.isAllSelected = NO;
-        [self.selectAllButton setTitle:@"全选" forState:UIControlStateNormal];
+        [self.selectAllButton setTitle:LocalizedString(@"SelectAll") forState:UIControlStateNormal];
     }
 }
 
@@ -319,7 +319,7 @@
 
 - (NSString *)formatLastMessage:(WFCCMessage *)message {
     if (!message || !message.content) {
-        return @"暂无消息";
+        return LocalizedString(@"NoMessages");
     }
 
     NSString *text = [message digest];

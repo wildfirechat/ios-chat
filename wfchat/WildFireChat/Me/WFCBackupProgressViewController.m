@@ -25,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = self.isRestoreMode ? @"恢复备份" : @"创建备份";
+    self.title = self.isRestoreMode ? LocalizedString(@"RestoringBackup") : LocalizedString(@"CreatingBackup");
     self.isCancelled = NO;
 
     [self setupUI];
@@ -79,7 +79,7 @@
     // 取消按钮
     self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [self.cancelButton setTitle:LocalizedString(@"Cancel") forState:UIControlStateNormal];
     [self.cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.progressView addSubview:self.cancelButton];
 
@@ -131,7 +131,7 @@
 
     // 显示会话数量
     NSInteger conversationCount = self.conversations.count;
-    self.detailLabel.text = [NSString stringWithFormat:@"共 %ld 个会话\n",
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"TotalConversations"),
                               (long)conversationCount];
 
     // 使用新的目录备份API
@@ -152,23 +152,23 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.progressBar.progress = 1.0;
         self.progressLabel.text = @"100%";
-        self.statusLabel.text = @"备份完成";
+        self.statusLabel.text = LocalizedString(@"BackupCompleted");
         self.cancelButton.hidden = YES;
 
         // 构建详细信息
         NSMutableString *detailMessage = [NSMutableString string];
-        [detailMessage appendFormat:@"成功备份 %d 条消息", msgCount];
+        [detailMessage appendFormat:LocalizedString(@"BackupSuccessDetail"), msgCount];
 
         if (mediaCount > 0) {
             NSString *sizeStr = [self formatFileSize:mediaSize];
-            [detailMessage appendFormat:@"\n%d 个媒体文件 (%@)", mediaCount, sizeStr];
+            [detailMessage appendFormat:LocalizedString(@"MediaFilesDetail"), mediaCount, sizeStr];
         }
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"备份成功"
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"BackupCompleted")
                                                                        message:detailMessage
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定"
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
@@ -181,17 +181,17 @@
 
 - (void)handleBackupError:(int)errorCode {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.statusLabel.text = @"备份失败";
+        self.statusLabel.text = LocalizedString(@"BackupFailed");
         self.progressBar.progressTintColor = [UIColor systemRedColor];
         self.cancelButton.hidden = YES;
 
         NSString *errorMessage = [self errorMessageForCode:errorCode];
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"备份失败"
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"BackupFailed")
                                                                        message:errorMessage
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定"
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
@@ -207,7 +207,7 @@
 - (void)startRestore {
     // 显示预估信息
     NSInteger totalMessages = [self.backupInfo[@"totalMessages"] integerValue];
-    self.detailLabel.text = [NSString stringWithFormat:@"共 %ld 条消息", (long)totalMessages];
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"TotalMessages"), (long)totalMessages];
 
     // 开始恢复（如果是加密备份，isRestoreMode时self.backupPassword会有值）
     NSString *password = self.isRestoreMode ? self.backupPassword : nil;
@@ -229,23 +229,23 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.progressBar.progress = 1.0;
         self.progressLabel.text = @"100%";
-        self.statusLabel.text = @"恢复完成";
+        self.statusLabel.text = LocalizedString(@"RestoreCompleted");
         self.cancelButton.hidden = YES;
 
         // 构建详细信息
         NSMutableString *message = [NSMutableString string];
-        [message appendFormat:@"成功恢复 %d 条消息", restoredMessageCount];
+        [message appendFormat:LocalizedString(@"RestoreSuccessDetail"), restoredMessageCount];
 
         // 只显示有媒体文件的数量
         if (restoredMediaCount > 0) {
-            [message appendFormat:@"\n%d 个媒体文件", restoredMediaCount];
+            [message appendFormat:LocalizedString(@"MediaFilesOnly"), restoredMediaCount];
         }
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"恢复成功"
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"RestoreCompleted")
                                                                        message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定"
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
@@ -258,17 +258,17 @@
 
 - (void)handleRestoreError:(int)errorCode {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.statusLabel.text = @"恢复失败";
+        self.statusLabel.text = LocalizedString(@"RestoreFailed");
         self.progressBar.progressTintColor = [UIColor systemRedColor];
         self.cancelButton.hidden = YES;
 
         NSString *errorMessage = [self errorMessageForCode:errorCode];
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"恢复失败"
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"RestoreFailed")
                                                                        message:errorMessage
                                                                 preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定"
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
@@ -293,9 +293,9 @@
         self.progressLabel.text = [NSString stringWithFormat:@"%.0f%%", progressValue * 100];
 
         if (self.isRestoreMode) {
-            self.statusLabel.text = @"正在恢复消息...";
+            self.statusLabel.text = LocalizedString(@"RestoringMessage");
         } else {
-            self.statusLabel.text = @"正在备份消息...";
+            self.statusLabel.text = LocalizedString(@"BackingUpMessage");
         }
     });
 }
@@ -303,16 +303,16 @@
 #pragma mark - Actions
 
 - (void)cancelButtonClicked:(UIButton *)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消"
-                                                                   message:@"确定要取消当前操作吗？"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmCancel")
+                                                                   message:LocalizedString(@"ConfirmCancelMessage")
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"取消操作"
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:LocalizedString(@"CancelOperation")
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction *action) {
         self.isCancelled = YES;
         [[WFCCMessageBackupManager sharedManager] cancelCurrentOperation];
-        self.statusLabel.text = @"已取消";
+        self.statusLabel.text = LocalizedString(@"Cancelled");
         self.cancelButton.hidden = YES;
         self.progressBar.progressTintColor = [UIColor systemOrangeColor];
 
@@ -321,7 +321,7 @@
         });
     }];
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"继续操作"
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:LocalizedString(@"ContinueOperation")
                                                           style:UIAlertActionStyleCancel
                                                         handler:nil];
 
@@ -347,25 +347,25 @@
 - (NSString *)errorMessageForCode:(int)errorCode {
     switch (errorCode) {
         case BackupError_FileNotFound:
-            return @"找不到备份文件";
+            return LocalizedString(@"BackupError_FileNotFound");
         case BackupError_InvalidFormat:
-            return @"备份文件格式不正确";
+            return LocalizedString(@"BackupError_InvalidFormat");
         case BackupError_IOError:
-            return @"文件读写错误";
+            return LocalizedString(@"BackupError_IOError");
         case BackupError_OutOfSpace:
-            return @"存储空间不足";
+            return LocalizedString(@"BackupError_OutOfSpace");
         case BackupError_Cancelled:
-            return @"操作已取消";
+            return LocalizedString(@"BackupError_Cancelled");
         case BackupError_EncryptionFailed:
-            return @"加密失败";
+            return LocalizedString(@"BackupError_EncryptionFailed");
         case BackupError_DecryptionFailed:
-            return @"解密失败";
+            return LocalizedString(@"BackupError_DecryptionFailed");
         case BackupError_WrongPassword:
-            return @"密码错误";
+            return LocalizedString(@"BackupError_WrongPassword");
         case BackupError_RestoreFailed:
-            return @"恢复失败";
+            return LocalizedString(@"BackupError_RestoreFailed");
         default:
-            return [NSString stringWithFormat:@"未知错误 (错误码: %d)", errorCode];
+            return [NSString stringWithFormat:LocalizedString(@"BackupError_Unknown"), errorCode];
     }
 }
 

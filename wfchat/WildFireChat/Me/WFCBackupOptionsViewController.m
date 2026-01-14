@@ -21,11 +21,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"备份选项";
+    self.title = LocalizedString(@"BackupOptions");
     self.includeMedia = NO;
 
     // 创建开始备份按钮
-    UIBarButtonItem *startButton = [[UIBarButtonItem alloc] initWithTitle:@"下一步"
+    UIBarButtonItem *startButton = [[UIBarButtonItem alloc] initWithTitle:LocalizedString(@"NextStep")
                                                                    style:UIBarButtonItemStyleDone
                                                                   target:self
                                                                   action:@selector(startBackup)];
@@ -77,9 +77,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"备份设置";
+        return LocalizedString(@"BackupSettings");
     } else if (section == 1) {
-        return [NSString stringWithFormat:@"已选择 %ld 个会话", (long)self.conversations.count];
+        return [NSString stringWithFormat:LocalizedString(@"SelectedConversationsCount"), (long)self.conversations.count];
     }
     return nil;
 }
@@ -98,7 +98,7 @@
             cell.accessoryView = self.mediaSwitch;
         }
 
-        cell.textLabel.text = @"包含媒体文件";
+        cell.textLabel.text = LocalizedString(@"IncludeMediaFiles");
         cell.textLabel.numberOfLines = 0;
         self.mediaSwitch.on = self.includeMedia;
 
@@ -126,7 +126,7 @@
 
         // 显示消息数量
         int messageCount = [[WFCCIMService sharedWFCIMService] getMessageCount:conversation];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d 条消息", messageCount];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d %@", messageCount, LocalizedString(@"MessagesCount")];
 
         return cell;
     }

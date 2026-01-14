@@ -252,7 +252,7 @@
         cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 7) {
         [self hiddenSeparatorLine:cell];
-        cell.textLabel.text = @"备份与恢复";
+        cell.textLabel.text = LocalizedString(@"BackupAndRestore");
     } else if (indexPath.section == 8) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {

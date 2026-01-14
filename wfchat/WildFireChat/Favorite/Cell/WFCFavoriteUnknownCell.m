@@ -33,7 +33,7 @@
         _unknownLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 30)];
         _unknownLabel.font = [UIFont systemFontOfSize:18];
         _unknownLabel.numberOfLines = 1;
-        _unknownLabel.text = @"当前版本不支持，请升级察看";
+        _unknownLabel.text = LocalizedString(@"VersionNotSupported");
         [self.contentArea addSubview:_unknownLabel];
     }
     return _unknownLabel;;

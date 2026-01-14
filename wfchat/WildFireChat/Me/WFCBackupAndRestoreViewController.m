@@ -22,19 +22,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"备份与恢复";
+    self.title = LocalizedString(@"BackupAndRestore");
 
     // 初始化菜单项
     self.menuItems = @[
         @{
-            @"title": @"创建备份",
-            @"subtitle": @"备份您的聊天消息",
+            @"title": LocalizedString(@"CreateBackup"),
+            @"subtitle": LocalizedString(@"CreateBackupDescription"),
             @"icon": @"doc.fill",
             @"action": @"createBackup"
         },
         @{
-            @"title": @"恢复备份",
-            @"subtitle": @"从备份文件恢复消息",
+            @"title": LocalizedString(@"RestoreBackup"),
+            @"subtitle": LocalizedString(@"RestoreBackupDescription"),
             @"icon": @"arrow.down.doc.fill",
             @"action": @"restoreBackup"
         }

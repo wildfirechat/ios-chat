@@ -25,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"从PC端恢复";
+    self.title = LocalizedString(@"RestoreFromPC_Title");
     self.view.backgroundColor = [UIColor systemBackgroundColor];
 
     [self setupUI];
@@ -41,7 +41,7 @@
 
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.text = @"正在准备...";
+    self.statusLabel.text = LocalizedString(@"Preparing");
     self.statusLabel.font = [UIFont boldSystemFontOfSize:18];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -49,7 +49,7 @@
 
     // 创建详细标签
     self.detailLabel = [[UILabel alloc] init];
-    self.detailLabel.text = @"正在获取备份信息";
+    self.detailLabel.text = LocalizedString(@"DownloadingBackupInfo");
     self.detailLabel.font = [UIFont systemFontOfSize:14];
     self.detailLabel.textColor = [UIColor secondaryLabelColor];
     self.detailLabel.textAlignment = NSTextAlignmentCenter;
@@ -88,8 +88,8 @@
 }
 
 - (void)downloadMetadata {
-    self.statusLabel.text = @"正在下载备份信息...";
-    self.detailLabel.text = @"正在连接到电脑端...";
+    self.statusLabel.text = LocalizedString(@"DownloadingBackupInfo");
+    self.detailLabel.text = LocalizedString(@"ConnectingToPC");
 
     NSString *urlString = [NSString stringWithFormat:@"http://%@:%ld/restore_metadata?path=%@",
                            self.serverIP,
@@ -108,7 +108,7 @@
 
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
-                [strongSelf showError:[NSString stringWithFormat:@"下载备份信息失败: %@", error.localizedDescription]];
+                [strongSelf showError:[NSString stringWithFormat:LocalizedString(@"DownloadBackupInfoFailed"), error.localizedDescription]];
                 return;
             }
 
@@ -116,7 +116,7 @@
             if (httpResponse.statusCode == 200 && data) {
                 [strongSelf parseMetadata:data];
             } else {
-                [strongSelf showError:[NSString stringWithFormat:@"下载失败，状态码: %ld", (long)httpResponse.statusCode]];
+                [strongSelf showError:[NSString stringWithFormat:LocalizedString(@"DownloadFailedStatusCode"), (long)httpResponse.statusCode]];
             }
         });
     }];
@@ -129,7 +129,7 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
     if (error || ![json isKindOfClass:[NSDictionary class]]) {
-        [self showError:@"解析备份信息失败"];
+        [self showError:LocalizedString(@"ParseBackupInfoFailed")];
         return;
     }
 
@@ -141,8 +141,8 @@
     NSInteger totalMessages = [statistics[@"totalMessages"] integerValue];
     NSInteger totalMediaFiles = [statistics[@"mediaFileCount"] integerValue];
 
-    self.statusLabel.text = @"准备开始恢复";
-    self.detailLabel.text = [NSString stringWithFormat:@"%ld个会话，%ld条消息，%ld个媒体文件",
+    self.statusLabel.text = LocalizedString(@"ReadyToRestore");
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"BackupInfoDetail"),
                              (long)totalConversations,
                              (long)totalMessages,
                              (long)totalMediaFiles];
@@ -154,17 +154,17 @@
 }
 
 - (void)showConfirmDialog {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认恢复"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LocalizedString(@"ConfirmRestore")
                                                                    message:self.detailLabel.text
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"开始恢复"
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:LocalizedString(@"StartRestore_Action")
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction *action) {
         [self downloadAllFiles];
     }];
 
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:LocalizedString(@"Cancel")
                                                           style:UIAlertActionStyleCancel
                                                         handler:^(UIAlertAction *action) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -177,7 +177,7 @@
 }
 
 - (void)downloadAllFiles {
-    self.statusLabel.text = @"正在同步文件...";
+    self.statusLabel.text = LocalizedString(@"SyncingFiles");
     [self.progressView setProgress:0.0 animated:YES];
     self.downloadedFiles = 0;
     self.totalFiles = 0;
@@ -225,7 +225,7 @@
         float progress = (float)self.downloadedFiles / (float)self.totalFiles;
         float displayProgress = progress * 0.5; // 映射到0-50%
         [self.progressView setProgress:displayProgress animated:YES];
-        self.statusLabel.text = [NSString stringWithFormat:@"正在同步文件 %ld/%ld",
+        self.statusLabel.text = [NSString stringWithFormat:LocalizedString(@"SyncingFileProgress"),
                                   (long)(self.downloadedFiles + 1),
                                   (long)self.totalFiles];
         self.detailLabel.text = [NSString stringWithFormat:@"%.0f%% - %@", displayProgress * 100, relativePath];
@@ -282,8 +282,8 @@
 
 - (void)startRestore {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.statusLabel.text = @"正在导入数据...";
-        self.detailLabel.text = @"请稍候...";
+        self.statusLabel.text = LocalizedString(@"ImportingData");
+        self.detailLabel.text = LocalizedString(@"PleaseWait");
         [self.progressView setProgress:0.5 animated:YES];
     });
 
@@ -313,13 +313,13 @@
     CGFloat completed = progress.fractionCompleted;
     CGFloat displayProgress = 0.5 + (completed * 0.5); // 映射到50-100%
     [self.progressView setProgress:displayProgress animated:YES];
-    self.detailLabel.text = [NSString stringWithFormat:@"正在导入... %.0f%%", displayProgress * 100];
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"ImportingProgress"), displayProgress * 100];
 }
 
 - (void)handleRestoreSuccess:(int)restoredMessageCount mediaCount:(int)restoredMediaCount {
     [self.progressView setProgress:1.0 animated:YES];
-    self.statusLabel.text = @"恢复完成";
-    self.detailLabel.text = [NSString stringWithFormat:@"共恢复 %d 条消息", restoredMessageCount];
+    self.statusLabel.text = LocalizedString(@"RestoreCompleted");
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"TotalRestored"), restoredMessageCount];
 
     // 清理临时文件
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -329,11 +329,11 @@
 }
 
 - (void)handleRestoreError:(int)errorCode {
-    [self showError:[NSString stringWithFormat:@"恢复失败，错误码: %d", errorCode]];
+    [self showError:[NSString stringWithFormat:LocalizedString(@"RestoreFailedWithError"), errorCode]];
 }
 
 - (void)showError:(NSString *)message {
-    self.statusLabel.text = @"恢复失败";
+    self.statusLabel.text = LocalizedString(@"RestoreFailed");
     self.detailLabel.text = message;
 
     // 清理临时文件
