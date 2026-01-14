@@ -25,7 +25,7 @@
     self.includeMedia = NO;
 
     // 创建开始备份按钮
-    UIBarButtonItem *startButton = [[UIBarButtonItem alloc] initWithTitle:@"开始备份"
+    UIBarButtonItem *startButton = [[UIBarButtonItem alloc] initWithTitle:@"下一步"
                                                                    style:UIBarButtonItemStyleDone
                                                                   target:self
                                                                   action:@selector(startBackup)];
