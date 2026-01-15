@@ -16,7 +16,7 @@
 static const NSUInteger kKeySize = kCCKeySizeAES256;           // 32 bytes
 static const NSUInteger kSaltSize = 16;                       // 128 bits
 static const NSUInteger kIVSize = kCCBlockSizeAES128;         // 16 bytes for AES128
-static const NSUInteger kPBKDF2Iterations = 100000;           // 推荐值
+static const NSUInteger kPBKDF2Iterations = 5000;           // 推荐值
 
 #pragma mark - Key Derivation
 
