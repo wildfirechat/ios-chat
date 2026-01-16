@@ -2947,7 +2947,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     
     if(largeMedia) {
         __weak typeof(self)ws = self;
-        [self getUploadUrl:@"" mediaType:mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+        [self getUploadUrl:fileName mediaType:mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
             NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
                 [ws uploadQiniuData:mediaData url:url remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];

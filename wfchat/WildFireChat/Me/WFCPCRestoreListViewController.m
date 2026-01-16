@@ -40,10 +40,20 @@
     [self sendRestoreRequest];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // 返回时刷新表格布局，避免界面错乱
+    if (!self.tableView.hidden && self.backupList.count > 0) {
+        [self.tableView reloadData];
+        [self.tableView layoutIfNeeded];
+    }
+}
+
 - (void)setupUI {
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.text = @"正在连接电脑端...";
+    self.statusLabel.text = @"正在等待电脑端确认...";
     self.statusLabel.font = [UIFont systemFontOfSize:16];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.textColor = [UIColor secondaryLabelColor];
@@ -67,6 +77,13 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.hidden = YES;
+
+    // 启用自动计算行高
+    if (@available(iOS 8.0, *)) {
+        self.tableView.rowHeight = UITableViewAutomaticDimension;
+        self.tableView.estimatedRowHeight = 80;
+    }
+
     [self.view addSubview:self.tableView];
 
     // 设置约束
@@ -230,11 +247,20 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+        // 设置文本布局以支持自动高度
+        cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
+
+        // 设置字体以确保布局计算正确
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     }
 
     NSDictionary *backup = self.backupList[indexPath.row];
     NSString *backupName = backup[@"name"] ?: @"未知备份";
     NSString *backupTime = backup[@"time"] ?: @"";
+    NSString *deviceName = backup[@"deviceName"] ?: @"";
     NSInteger fileCount = [backup[@"fileCount"] integerValue];
     NSInteger conversationCount = [backup[@"conversationCount"] integerValue];
     NSInteger messageCount = [backup[@"messageCount"] integerValue];
@@ -244,6 +270,12 @@
 
     // 构建详细信息字符串
     NSMutableArray *details = [NSMutableArray array];
+
+    // 添加设备名称
+    if (deviceName.length > 0) {
+        [details addObject:[NSString stringWithFormat:@"设备: %@", deviceName]];
+    }
+
     if (conversationCount > 0) {
         [details addObject:[NSString stringWithFormat:@"%ld个会话", (long)conversationCount]];
     }
@@ -257,7 +289,7 @@
         [details addObject:[NSString stringWithFormat:@"%ld个文件", (long)fileCount]];
     }
 
-    NSString *detailText = [NSString stringWithFormat:@"%@ • %@", backupTime, [details componentsJoinedByString:@"，"]];
+    NSString *detailText = [NSString stringWithFormat:@"%@ • %@", backupTime, [details componentsJoinedByString:@" • "]];
     cell.detailTextLabel.text = detailText;
     cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
 

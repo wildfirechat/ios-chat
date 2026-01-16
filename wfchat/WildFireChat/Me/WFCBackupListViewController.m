@@ -155,6 +155,13 @@
     // 构建显示文本
     NSMutableArray *detailParts = [NSMutableArray array];
     [detailParts addObject:dateStr];
+
+    // 添加设备名称
+    NSString *deviceName = info[@"deviceName"];
+    if (deviceName && deviceName.length > 0) {
+        [detailParts addObject:[NSString stringWithFormat:@"设备: %@", deviceName]];
+    }
+
     [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"ConversationsUnit"), (long)totalConversations]];
     [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"MessagesUnit"), (long)totalMessages]];
 

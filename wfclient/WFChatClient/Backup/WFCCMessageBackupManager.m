@@ -400,6 +400,7 @@ static const CGFloat kThumbnailCompressionQuality = 0.45;
     metadata[@"userId"] = [WFCCNetworkService sharedInstance].userId;
     metadata[@"appType"] = kBackupAppType;
     metadata[@"backupMode"] = kBackupModeMessageWithMedia;
+    metadata[@"deviceName"] = [[UIDevice currentDevice] name]; // 添加设备名称
 
     // 加密信息
     NSMutableDictionary *encryptionInfo = [NSMutableDictionary dictionary];
@@ -953,6 +954,7 @@ static const CGFloat kThumbnailCompressionQuality = 0.45;
         @"version": metadata[@"version"],
         @"backupTime": metadata[@"backupTime"],
         @"userId": metadata[@"userId"],
+        @"deviceName": metadata[@"deviceName"] ?: @"",
         @"totalConversations": @([metadata[@"conversations"] count]),
         @"totalMessages": metadata[@"statistics"][@"totalMessages"] ?: @0,
         @"mediaFileCount": metadata[@"statistics"][@"mediaFileCount"] ?: @0,

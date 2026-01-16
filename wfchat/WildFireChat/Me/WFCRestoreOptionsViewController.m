@@ -88,9 +88,9 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // 基础信息3行 + 可选的媒体信息
+    // 基础信息4行 + 可选的媒体信息
     NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
-    NSInteger baseRows = 3; // 备份时间、会话数量、消息数量
+    NSInteger baseRows = 4; // 备份时间、备份设备、会话数量、消息数量
     return mediaFileCount > 0 ? baseRows + 1 : baseRows;
 }
 
@@ -119,20 +119,27 @@
             break;
         }
         case 1: {
+            // 备份设备
+            cell.textLabel.text = @"备份设备";
+            NSString *deviceName = self.backupInfo[@"deviceName"];
+            cell.detailTextLabel.text = deviceName && deviceName.length > 0 ? deviceName : @"未知设备";
+            break;
+        }
+        case 2: {
             // 会话数量
             cell.textLabel.text = @"会话数量";
             NSInteger count = [self.backupInfo[@"totalConversations"] integerValue];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个", (long)count];
             break;
         }
-        case 2: {
+        case 3: {
             // 消息数量
             cell.textLabel.text = @"消息数量";
             NSInteger count = [self.backupInfo[@"totalMessages"] integerValue];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 条", (long)count];
             break;
         }
-        case 3: {
+        case 4: {
             // 媒体文件
             cell.textLabel.text = @"媒体文件";
             NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];

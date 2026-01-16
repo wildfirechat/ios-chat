@@ -324,7 +324,8 @@
     // 清理临时文件
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSFileManager defaultManager] removeItemAtPath:self.tempDirectory error:nil];
-        [self.navigationController popViewControllerAnimated:YES];
+        // 返回到备份与恢复主界面
+        [self popToBackupAndRestoreViewController];
     });
 }
 
@@ -340,8 +341,21 @@
     [[NSFileManager defaultManager] removeItemAtPath:self.tempDirectory error:nil];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController popViewControllerAnimated:YES];
+        [self popToBackupAndRestoreViewController];
     });
+}
+
+- (void)popToBackupAndRestoreViewController {
+    // 遍历导航栈，找到WFCBackupAndRestoreViewController并返回到它
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    for (UIViewController *vc in viewControllers) {
+        if ([vc isKindOfClass:NSClassFromString(@"WFCBackupAndRestoreViewController")]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            return;
+        }
+    }
+    // 如果找不到，返回到根视图控制器
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

@@ -171,7 +171,7 @@
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
-            [self.navigationController popViewControllerAnimated:YES];
+            [self popToBackupAndRestoreViewController];
         }];
 
         [alert addAction:okAction];
@@ -248,7 +248,7 @@
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:LocalizedString(@"Ok")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
-            [self.navigationController popViewControllerAnimated:YES];
+            [self popToBackupAndRestoreViewController];
         }];
 
         [alert addAction:okAction];
@@ -367,6 +367,19 @@
         default:
             return [NSString stringWithFormat:LocalizedString(@"BackupError_Unknown"), errorCode];
     }
+}
+
+- (void)popToBackupAndRestoreViewController {
+    // 遍历导航栈，找到WFCBackupAndRestoreViewController并返回到它
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    for (UIViewController *vc in viewControllers) {
+        if ([vc isKindOfClass:NSClassFromString(@"WFCBackupAndRestoreViewController")]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            return;
+        }
+    }
+    // 如果找不到，返回到根视图控制器
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end
