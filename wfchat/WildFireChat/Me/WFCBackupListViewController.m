@@ -159,7 +159,7 @@
     // 添加设备名称
     NSString *deviceName = info[@"deviceName"];
     if (deviceName && deviceName.length > 0) {
-        [detailParts addObject:[NSString stringWithFormat:@"设备: %@", deviceName]];
+        [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"DeviceLabel"), deviceName]];
     }
 
     [detailParts addObject:[NSString stringWithFormat:LocalizedString(@"ConversationsUnit"), (long)totalConversations]];

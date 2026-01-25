@@ -29,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"电脑端备份";
+    self.title = LocalizedString(@"PCBackupTitle");
     self.view.backgroundColor = [UIColor systemBackgroundColor];
     self.isLoading = YES;
     self.backupList = [NSArray array];
@@ -53,7 +53,7 @@
 - (void)setupUI {
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.text = @"正在等待电脑端确认...";
+    self.statusLabel.text = LocalizedString(@"WaitingForPCConfirm");
     self.statusLabel.font = [UIFont systemFontOfSize:16];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.textColor = [UIColor secondaryLabelColor];
@@ -139,7 +139,7 @@
         NSLog(@"恢复请求已发送");
     } error:^(int error_code) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf showError:[NSString stringWithFormat:@"发送恢复请求失败，错误码: %d", error_code]];
+            [weakSelf showError:[NSString stringWithFormat:LocalizedString(@"SendRestoreRequestFailed"), error_code]];
         });
     }];
 }
@@ -160,7 +160,7 @@
                     [self fetchBackupList];
                 } else {
                     // 拒绝恢复
-                    [self showError:@"电脑端拒绝了恢复请求"];
+                    [self showError:LocalizedString(@"PCRejectedRestoreRequest")];
                 }
             });
             break;
@@ -169,7 +169,7 @@
 }
 
 - (void)fetchBackupList {
-    self.statusLabel.text = @"正在获取备份列表...";
+    self.statusLabel.text = LocalizedString(@"FetchingBackupList");
 
     // 创建HTTP请求
     NSString *urlString = [NSString stringWithFormat:@"http://%@:%ld/restore_list", self.serverIP, (long)self.serverPort];
@@ -182,7 +182,7 @@
                                              completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
-                [self showError:[NSString stringWithFormat:@"获取备份列表失败: %@", error.localizedDescription]];
+                [self showError:[NSString stringWithFormat:LocalizedString(@"FetchBackupListFailed"), error.localizedDescription]];
                 return;
             }
 
@@ -190,7 +190,7 @@
             if (httpResponse.statusCode == 200 && data) {
                 [self parseBackupList:data];
             } else {
-                [self showError:[NSString stringWithFormat:@"获取备份列表失败，状态码: %ld", (long)httpResponse.statusCode]];
+                [self showError:[NSString stringWithFormat:LocalizedString(@"FetchBackupListFailedWithCode"), (long)httpResponse.statusCode]];
             }
         });
     }];
@@ -203,14 +203,14 @@
     id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
     if (error || ![json isKindOfClass:[NSArray class]]) {
-        [self showError:@"解析备份列表失败"];
+        [self showError:LocalizedString(@"ParseBackupInfoFailed")];
         return;
     }
 
     self.backupList = json;
 
     if (self.backupList.count == 0) {
-        [self showError:@"电脑端没有可用的备份"];
+        [self showError:LocalizedString(@"NoBackupAvailableOnPC")];
         return;
     }
 
@@ -232,7 +232,7 @@
 }
 
 - (void)onTimeout {
-    [self showError:@"电脑端未在30秒内响应"];
+    [self showError:LocalizedString(@"PCNotRespondInTime")];
 }
 
 #pragma mark - UITableViewDataSource
@@ -258,7 +258,7 @@
     }
 
     NSDictionary *backup = self.backupList[indexPath.row];
-    NSString *backupName = backup[@"name"] ?: @"未知备份";
+    NSString *backupName = backup[@"name"] ?: LocalizedString(@"UnknownBackup");
     NSString *backupTime = backup[@"time"] ?: @"";
     NSString *deviceName = backup[@"deviceName"] ?: @"";
     NSInteger fileCount = [backup[@"fileCount"] integerValue];
@@ -273,20 +273,20 @@
 
     // 添加设备名称
     if (deviceName.length > 0) {
-        [details addObject:[NSString stringWithFormat:@"设备: %@", deviceName]];
+        [details addObject:[NSString stringWithFormat:LocalizedString(@"DeviceLabel"), deviceName]];
     }
 
     if (conversationCount > 0) {
-        [details addObject:[NSString stringWithFormat:@"%ld个会话", (long)conversationCount]];
+        [details addObject:[NSString stringWithFormat:LocalizedString(@"ConversationsUnit"), (long)conversationCount]];
     }
     if (messageCount > 0) {
-        [details addObject:[NSString stringWithFormat:@"%ld条消息", (long)messageCount]];
+        [details addObject:[NSString stringWithFormat:LocalizedString(@"MessagesUnit"), (long)messageCount]];
     }
     if (mediaFileCount > 0) {
-        [details addObject:[NSString stringWithFormat:@"%ld个媒体文件", (long)mediaFileCount]];
+        [details addObject:[NSString stringWithFormat:LocalizedString(@"MediaFilesUnit"), (long)mediaFileCount]];
     }
     if (details.count == 0 && fileCount > 0) {
-        [details addObject:[NSString stringWithFormat:@"%ld个文件", (long)fileCount]];
+        [details addObject:[NSString stringWithFormat:LocalizedString(@"FileUnit"), (long)fileCount]];
     }
 
     NSString *detailText = [NSString stringWithFormat:@"%@ • %@", backupTime, [details componentsJoinedByString:@" • "]];

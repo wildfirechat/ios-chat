@@ -39,8 +39,8 @@
 }
 - (void)displayUpdatedAlert {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:LocalizedString(@"ThemeChangeSuccess") preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:LocalizedString(@"Confirm") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
     }];
     

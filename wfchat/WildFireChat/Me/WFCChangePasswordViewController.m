@@ -42,9 +42,9 @@
     
     self.oldLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
     self.oldLabel.font = [UIFont systemFontOfSize:16];
-    self.oldLabel.text = @"原密码";
+    self.oldLabel.text = LocalizedString(@"OldPassword");
     self.oldPasswordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
-    self.oldPasswordfield.placeholder = @"请输入原密码";
+    self.oldPasswordfield.placeholder = LocalizedString(@"OldPasswordPlaceholder");
     self.oldPasswordfield.delegate = self;
     self.oldPasswordfield.keyboardType = UIKeyboardTypeASCIICapable;
     self.oldPasswordfield.secureTextEntry = YES;
@@ -60,9 +60,9 @@
     
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
     self.label.font = [UIFont systemFontOfSize:16];
-    self.label.text = @"新密码";
+    self.label.text = LocalizedString(@"NewPassword");
     self.passwordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
-    self.passwordfield.placeholder = @"请输入新密码";
+    self.passwordfield.placeholder = LocalizedString(@"NewPasswordPlaceholder");
     self.passwordfield.delegate = self;
     self.passwordfield.keyboardType = UIKeyboardTypeASCIICapable;
     self.passwordfield.secureTextEntry = YES;
@@ -76,10 +76,10 @@
     topPos += 16;
     self.repeatLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
     self.repeatLabel.font = [UIFont systemFontOfSize:16];
-    self.repeatLabel.text = @"确认密码";
-    
+    self.repeatLabel.text = LocalizedString(@"ConfirmPassword");
+
     self.repeatPasswordField = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
-    self.repeatPasswordField.placeholder = @"请输入确认密码";
+    self.repeatPasswordField.placeholder = LocalizedString(@"ConfirmPasswordPlaceholder");
     self.repeatPasswordField.delegate = self;
     self.repeatPasswordField.keyboardType = UIKeyboardTypeASCIICapable;
     self.repeatPasswordField.secureTextEntry = YES;
@@ -185,7 +185,7 @@
 
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
-    titleLabel.text = @"安全验证";
+    titleLabel.text = LocalizedString(@"SecurityVerification");
     titleLabel.font = [UIFont boldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
@@ -223,7 +223,7 @@
     self.slideVerifyToken = nil;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.label.text = @"验证失败，请重试";
+    hud.label.text = LocalizedString(@"VerificationFailed");
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     [hud hideAnimated:YES afterDelay:1.5];
 }

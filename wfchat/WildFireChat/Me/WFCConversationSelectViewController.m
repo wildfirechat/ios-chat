@@ -324,7 +324,7 @@
 
     NSString *text = [message digest];
     if (text.length == 0) {
-        text = @"[消息]";
+        text = LocalizedString(@"MessageBracket");
     }
 
     return text;

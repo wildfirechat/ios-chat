@@ -95,7 +95,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"备份信息";
+    return LocalizedString(@"BackupInformation");
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -109,7 +109,7 @@
     switch (indexPath.row) {
         case 0: {
             // 备份时间
-            cell.textLabel.text = @"备份时间";
+            cell.textLabel.text = LocalizedString(@"BackupTime");
             NSString *backupTime = self.backupInfo[@"backupTime"];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
@@ -120,32 +120,32 @@
         }
         case 1: {
             // 备份设备
-            cell.textLabel.text = @"备份设备";
+            cell.textLabel.text = LocalizedString(@"BackupDevice");
             NSString *deviceName = self.backupInfo[@"deviceName"];
-            cell.detailTextLabel.text = deviceName && deviceName.length > 0 ? deviceName : @"未知设备";
+            cell.detailTextLabel.text = deviceName && deviceName.length > 0 ? deviceName : LocalizedString(@"UnknownDevice");
             break;
         }
         case 2: {
             // 会话数量
-            cell.textLabel.text = @"会话数量";
+            cell.textLabel.text = LocalizedString(@"ConversationsCountLabel");
             NSInteger count = [self.backupInfo[@"totalConversations"] integerValue];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个", (long)count];
+            cell.detailTextLabel.text = [NSString stringWithFormat:LocalizedString(@"ConversationsCount"), (long)count];
             break;
         }
         case 3: {
             // 消息数量
-            cell.textLabel.text = @"消息数量";
+            cell.textLabel.text = LocalizedString(@"MessagesCountLabel");
             NSInteger count = [self.backupInfo[@"totalMessages"] integerValue];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 条", (long)count];
+            cell.detailTextLabel.text = [NSString stringWithFormat:LocalizedString(@"MessagesCountUnit"), (long)count];
             break;
         }
         case 4: {
             // 媒体文件
-            cell.textLabel.text = @"媒体文件";
+            cell.textLabel.text = LocalizedString(@"MediaFiles");
             NSInteger mediaFileCount = [self.backupInfo[@"mediaFileCount"] integerValue];
             long long mediaTotalSize = [self.backupInfo[@"mediaTotalSize"] longLongValue];
             NSString *sizeStr = [self formatFileSize:mediaTotalSize];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld 个 (%@)", (long)mediaFileCount, sizeStr];
+            cell.detailTextLabel.text = [NSString stringWithFormat:LocalizedString(@"MediaFilesCountWithSize"), (long)mediaFileCount, sizeStr];
             break;
         }
     }

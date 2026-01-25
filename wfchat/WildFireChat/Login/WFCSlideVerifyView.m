@@ -77,7 +77,7 @@
 
     // 提示标签
     self.hintLabel = [[UILabel alloc] init];
-    self.hintLabel.text = @"向右滑动完成验证";
+    self.hintLabel.text = LocalizedString(@"SlideToVerify");
     self.hintLabel.textColor = [UIColor grayColor];
     self.hintLabel.font = [UIFont systemFontOfSize:14];
     self.hintLabel.textAlignment = NSTextAlignmentCenter;
@@ -121,7 +121,7 @@
 
 - (void)loadVerifyCode {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
-    hud.label.text = @"加载中...";
+    hud.label.text = LocalizedString(@"LoadingVerification");
     // 设置背景色为透明，避免白色方块闪烁
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.bezelView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.7];
@@ -302,7 +302,7 @@
     [[AppService sharedAppService] verifySlide:self.token x:originalX success:^{
         [hud hideAnimated:YES];
         weakSelf.isVerified = YES;
-        weakSelf.hintLabel.text = @"验证通过";
+        weakSelf.hintLabel.text = LocalizedString(@"VerificationPassed");
         weakSelf.hintLabel.textColor = [UIColor greenColor];
         weakSelf.sliderButton.backgroundColor = [UIColor greenColor];
 
@@ -335,7 +335,7 @@
         self.sliderImageView.frame = sliderFrame;
 
         self.hintLabel.alpha = 1.0;
-        self.hintLabel.text = @"向右滑动完成验证";
+        self.hintLabel.text = LocalizedString(@"SlideToVerify");
         self.hintLabel.textColor = [UIColor grayColor];
         self.sliderButton.backgroundColor = [UIColor whiteColor];
     }];

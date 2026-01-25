@@ -46,7 +46,7 @@
     __weak typeof(self)ws = self;
     
     WFCUGeneralSwitchTableViewCell *switchCell2 = [[WFCUGeneralSwitchTableViewCell alloc] init];
-    switchCell2.textLabel.text = @"账号";
+    switchCell2.textLabel.text = LocalizedString(@"Account");
     if (searchableValue & DisableSearch_Name_Mask) {
         switchCell2.on = NO;
     } else {
@@ -62,14 +62,14 @@
         [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Privacy_Searchable key:nil value:[NSString stringWithFormat:@"%d", intvalue] success:^{
                     result(YES);
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"网络错误"];
+                    [ws.view makeToast:LocalizedString(@"NetworkError")];
                     result(NO);
                 }];
     }];
     [section2 addObject:switchCell2];
     
     WFCUGeneralSwitchTableViewCell *switchCell3 = [[WFCUGeneralSwitchTableViewCell alloc] init];
-    switchCell3.textLabel.text = @"电话号码";
+    switchCell3.textLabel.text = LocalizedString(@"PhoneNumberTitle");
     if (searchableValue & DisableSearch_Mobile_Mask) {
         switchCell3.on = NO;
     } else {
@@ -85,7 +85,7 @@
         [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Privacy_Searchable key:nil value:[NSString stringWithFormat:@"%d", intvalue] success:^{
                     result(YES);
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"网络错误"];
+                    [ws.view makeToast:LocalizedString(@"NetworkError")];
                     result(NO);
                 }];
     }];
@@ -109,7 +109,7 @@
 //        [[WFCCIMService sharedWFCIMService] setUserSetting:UserSettingScope_Privacy_Searchable key:nil value:[NSString stringWithFormat:@"%d", intvalue] success:^{
 //                    result(YES);
 //                } error:^(int error_code) {
-//                    [ws.view makeToast:@"网络错误"];
+//                    [ws.view makeToast:LocalizedString(@"NetworkError")];
 //                    result(NO);
 //                }];
 //    }];
@@ -127,7 +127,7 @@
     return 36;
 }
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"可以通过以下方法找到我";
+    return LocalizedString(@"FindMeDescription");
 }
 
 
