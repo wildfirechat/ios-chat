@@ -84,11 +84,13 @@
         payload.contentType = [self.class getContentType];
         payload.localMediaPath = mediaContent.localPath;
         payload.remoteMediaUrl = mediaContent.remoteUrl;
+        payload.notLoaded = self.notLoaded;
         return payload;
     } else {
         WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
         payload.extra = self.extra;
         payload.contentType = [self.class getContentType];
+        payload.notLoaded = self.notLoaded;
         return payload;
     }
 }

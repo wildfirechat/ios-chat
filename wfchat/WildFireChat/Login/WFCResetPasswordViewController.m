@@ -49,9 +49,9 @@
     if (!self.resetCode.length) {
         self.codeLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
         self.codeLabel.font = [UIFont systemFontOfSize:16];
-        self.codeLabel.text = @"验证码";
+        self.codeLabel.text = LocalizedString(@"VerificationCode");
         self.codePasswordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16-72, inputHeight)];
-        self.codePasswordfield.placeholder = @"请输入短信验证码";
+        self.codePasswordfield.placeholder = LocalizedString(@"VerificationCodePlaceholder");
         self.codePasswordfield.delegate = self;
         self.codePasswordfield.keyboardType = UIKeyboardTypeASCIICapable;
         
@@ -79,9 +79,9 @@
     
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
     self.label.font = [UIFont systemFontOfSize:16];
-    self.label.text = @"新密码";
+    self.label.text = LocalizedString(@"NewPassword");
     self.passwordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
-    self.passwordfield.placeholder = @"请输入新密码";
+    self.passwordfield.placeholder = LocalizedString(@"NewPasswordPlaceholder");
     self.passwordfield.delegate = self;
     self.passwordfield.keyboardType = UIKeyboardTypeASCIICapable;
     self.passwordfield.secureTextEntry = YES;
@@ -95,10 +95,10 @@
     topPos += 16;
     self.repeatLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
     self.repeatLabel.font = [UIFont systemFontOfSize:16];
-    self.repeatLabel.text = @"确认密码";
-    
+    self.repeatLabel.text = LocalizedString(@"ConfirmPassword");
+
     self.repeatPasswordField = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
-    self.repeatPasswordField.placeholder = @"请输入确认密码";
+    self.repeatPasswordField.placeholder = LocalizedString(@"ConfirmPasswordPlaceholder");
     self.repeatPasswordField.delegate = self;
     self.repeatPasswordField.keyboardType = UIKeyboardTypeASCIICapable;
     self.repeatPasswordField.secureTextEntry = YES;

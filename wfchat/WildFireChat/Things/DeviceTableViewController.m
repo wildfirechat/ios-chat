@@ -22,19 +22,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"我的设备";
+    self.title = LocalizedString(@"MyDevices");
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
     }
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
-    
+
     [self.view addSubview:self.tableView];
-    
+
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
 }
 
@@ -43,19 +43,19 @@
     
     __weak typeof(self) ws = self;
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"获取中...";
+    hud.label.text = LocalizedString(@"Loading_Generic");
     [hud showAnimated:YES];
-    
+
     [[AppService sharedAppService] getMyDevices:^(NSArray<Device *> * _Nonnull devices) {
         [hud hideAnimated:NO];
-        
+
         ws.devices = devices;
         [ws.tableView reloadData];
     } error:^(int error_code) {
         [hud hideAnimated:NO];
         hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"获取失败";
+        hud.label.text = LocalizedString(@"LoadFailed_Generic");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
     }];

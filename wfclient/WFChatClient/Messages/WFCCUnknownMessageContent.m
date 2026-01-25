@@ -29,9 +29,7 @@
     return WFCCPersistFlag_PERSIST;
 }
 
-
-
 - (NSString *)digest:(WFCCMessage *)message {
-  return [NSString stringWithFormat:@"未知类型消息(%zd)", self.orignalType];
+    return [NSString stringWithFormat:self.orignalPayload.notLoaded?@"未加载的消息(%zd)":@"未知类型消息(%zd)", self.orignalType];
 }
 @end
