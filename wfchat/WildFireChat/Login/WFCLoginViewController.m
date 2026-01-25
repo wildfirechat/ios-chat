@@ -127,7 +127,7 @@
     topPos += 8;
     
     self.switchButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, 150, 40)];
-    [self.switchButton setTitle:@"使用用户密码登录" forState:UIControlStateNormal];
+    [self.switchButton setTitle:LocalizedString(@"UsePasswordLogin") forState:UIControlStateNormal];
     self.switchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     self.switchButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
@@ -292,7 +292,7 @@
     if (!self.userNameField.text.length) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"请输入手机号";
+        hud.label.text = LocalizedString(@"PleaseInputPhone");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
         return;
@@ -370,7 +370,7 @@
     if (!user.length || !password.length) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"请输入手机号和密码/验证码";
+        hud.label.text = LocalizedString(@"PleaseInputPhoneAndCode");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
         return;

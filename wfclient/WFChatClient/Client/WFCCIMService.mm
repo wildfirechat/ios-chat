@@ -962,6 +962,14 @@ static WFCCMessage *convertProtoMessage(const mars::stn::TMessage *tMessage) {
         payload.extra = [NSString stringWithUTF8String:tMessage->content.extra.c_str()];
         
         ret.content = [[WFCCIMService sharedWFCIMService] messageContentFromPayload:payload];
+    } else {
+        WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+        payload.contentType = tMessage->content.type;
+        payload.notLoaded = YES;
+        WFCCUnknownMessageContent *unknownContent = [[WFCCUnknownMessageContent alloc] init];
+        unknownContent.orignalType = payload.contentType;
+        unknownContent.orignalPayload = payload;
+        ret.content = unknownContent;
     }
     return ret;
 }
@@ -1085,6 +1093,7 @@ static void fillTMessageContent(mars::stn::TMessageContent &tmsgcontent, WFCCMes
         tmsgcontent.mentionedTargets.insert(tmsgcontent.mentionedTargets.end(), [target UTF8String]);
     }
     tmsgcontent.extra = payload.extra ? [payload.extra UTF8String] : "";
+    tmsgcontent.notLoaded = payload.notLoaded;
 }
 
 
@@ -2938,7 +2947,7 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     
     if(largeMedia) {
         __weak typeof(self)ws = self;
-        [self getUploadUrl:@"" mediaType:mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+        [self getUploadUrl:fileName mediaType:mediaType contentType:nil success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
             NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
                 [ws uploadQiniuData:mediaData url:url remoteUrl:downloadUrl success:successBlock progress:progressBlock error:errorBlock];
