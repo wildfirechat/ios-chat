@@ -58,17 +58,17 @@
     
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
-    passwordLabel.text = @"验证码";
+    passwordLabel.text = LocalizedString(@"VerificationCode");
     passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
-    
-    
+
+
     self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
     self.passwordLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
-    
-    
+
+
     self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
     self.passwordField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-    self.passwordField.placeholder = @"请输入验证码";
+    self.passwordField.placeholder = LocalizedString(@"VerificationCodePlaceholder");
     self.passwordField.returnKeyType = UIReturnKeyDone;
     self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
     self.passwordField.delegate = self;
@@ -282,7 +282,7 @@
 
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
-    titleLabel.text = @"安全验证";
+    titleLabel.text = LocalizedString(@"SecurityVerification");
     titleLabel.font = [UIFont boldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
@@ -320,7 +320,7 @@
     self.slideVerifyToken = nil;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.label.text = @"验证失败，请重试";
+    hud.label.text = LocalizedString(@"VerificationFailed");
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     [hud hideAnimated:YES afterDelay:1.5];
 }

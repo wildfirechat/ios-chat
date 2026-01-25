@@ -64,7 +64,7 @@
     self.statusLabel.font = [UIFont systemFontOfSize:16];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.textColor = [UIColor secondaryLabelColor];
-    self.statusLabel.text = @"正在准备...";
+    self.statusLabel.text = LocalizedString(@"Preparing");
     [self.progressView addSubview:self.statusLabel];
 
     // 详情标签

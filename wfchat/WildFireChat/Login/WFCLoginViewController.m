@@ -564,7 +564,7 @@
 
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
-    titleLabel.text = @"安全验证";
+    titleLabel.text = LocalizedString(@"SecurityVerification");
     titleLabel.font = [UIFont boldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
@@ -580,7 +580,7 @@
 
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.label.text = @"已取消";
+    hud.label.text = LocalizedString(@"Cancelled");
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     [hud hideAnimated:YES afterDelay:1.0];
 
@@ -622,7 +622,7 @@
 
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.label.text = @"加载验证码失败";
+    hud.label.text = LocalizedString(@"LoadVerificationCodeFailed");
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     [hud hideAnimated:YES afterDelay:1.5];
 

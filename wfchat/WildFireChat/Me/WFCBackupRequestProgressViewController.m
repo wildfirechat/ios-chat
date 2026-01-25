@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.title = @"备份请求";
+    self.title = LocalizedString(@"BackupRequestTitle");
     self.view.backgroundColor = [UIColor systemBackgroundColor];
 
     // 创建进度指示器
@@ -41,7 +41,7 @@
 
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.text = @"正在等待电脑端响应...";
+    self.statusLabel.text = LocalizedString(@"WaitingForPCResponse");
     self.statusLabel.font = [UIFont boldSystemFontOfSize:18];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -49,7 +49,7 @@
 
     // 创建详细标签
     self.detailLabel = [[UILabel alloc] init];
-    self.detailLabel.text = @"请在电脑端确认备份请求";
+    self.detailLabel.text = LocalizedString(@"PleaseConfirmBackupOnPC");
     self.detailLabel.font = [UIFont systemFontOfSize:14];
     self.detailLabel.textColor = [UIColor secondaryLabelColor];
     self.detailLabel.textAlignment = NSTextAlignmentCenter;
@@ -132,7 +132,7 @@
         NSLog(@"备份请求已发送");
     } error:^(int error_code) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf showErrorMessage:[NSString stringWithFormat:@"发送备份请求失败，错误码: %d", error_code]];
+            [weakSelf showErrorMessage:[NSString stringWithFormat:LocalizedString(@"SendBackupRequestFailed"), error_code]];
         });
     }];
 }
@@ -168,8 +168,8 @@
     self.serverIP = response.serverIP;
     self.serverPort = response.serverPort;
 
-    self.statusLabel.text = @"电脑端已同意备份";
-    self.detailLabel.text = [NSString stringWithFormat:@"正在创建备份数据...\n服务器: %@:%ld", response.serverIP, (long)response.serverPort];
+    self.statusLabel.text = LocalizedString(@"PCApprovedBackup");
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"CreatingBackupData"), response.serverIP, (long)response.serverPort];
 
     // 开始创建备份并上传
     [self createAndUploadBackup];
@@ -197,7 +197,7 @@
         [weakSelf uploadBackupToPC:backupPath];
     } error:^(int errorCode) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf showErrorMessage:[NSString stringWithFormat:@"创建备份失败，错误码: %d", errorCode]];
+            [weakSelf showErrorMessage:[NSString stringWithFormat:LocalizedString(@"CreateBackupFailed"), errorCode]];
         });
     }];
 }
@@ -206,26 +206,26 @@
     CGFloat completed = progress.fractionCompleted;
     NSInteger percent = (NSInteger)(completed * 100);
 
-    self.statusLabel.text = [NSString stringWithFormat:@"正在备份... %ld%%", (long)percent];
-    self.detailLabel.text = [NSString stringWithFormat:@"已完成: %lld/%lld", progress.completedUnitCount, progress.totalUnitCount];
+    self.statusLabel.text = [NSString stringWithFormat:LocalizedString(@"BackingUpProgress"), (long)percent];
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"CompletedCount"), progress.completedUnitCount, progress.totalUnitCount];
 }
 
 - (void)uploadBackupToPC:(NSString *)backupPath {
-    self.statusLabel.text = @"正在上传备份到电脑端...";
-    self.detailLabel.text = @"正在准备文件列表...";
+    self.statusLabel.text = LocalizedString(@"UploadingBackupToPC");
+    self.detailLabel.text = LocalizedString(@"PreparingFileList");
 
     // 获取所有文件
     NSArray *files = [self getAllFilesAtPath:backupPath];
 
     if (files.count == 0) {
-        [self showErrorMessage:@"没有找到备份文件"];
+        [self showErrorMessage:LocalizedString(@"BackupFileNotFound")];
         return;
     }
 
     // 记录文件总数
     self.uploadedFileCount = files.count;
 
-    self.detailLabel.text = [NSString stringWithFormat:@"共 %ld 个文件等待上传", (long)files.count];
+    self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"TotalFilesWaitingUpload"), (long)files.count];
 
     // 逐个发送文件
     [self uploadFilesSequentially:files currentIndex:0 basePath:backupPath];
@@ -244,8 +244,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat progress = (CGFloat)index / files.count;
         NSInteger percent = (NSInteger)(progress * 100);
-        self.statusLabel.text = [NSString stringWithFormat:@"正在上传... %ld%%", (long)percent];
-        self.detailLabel.text = [NSString stringWithFormat:@"文件 %ld/%ld", (long)(index + 1), (long)files.count];
+        self.statusLabel.text = [NSString stringWithFormat:LocalizedString(@"UploadingProgress"), (long)percent];
+        self.detailLabel.text = [NSString stringWithFormat:LocalizedString(@"FileProgress"), (long)(index + 1), (long)files.count];
     });
 
     // 读取文件数据
@@ -270,7 +270,7 @@
         } else {
             // 失败，停止上传
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showErrorMessage:@"上传文件失败"];
+                [self showErrorMessage:LocalizedString(@"UploadFileFailed")];
             });
         }
     }];
@@ -356,8 +356,8 @@
 }
 
 - (void)onUploadSuccess {
-    self.statusLabel.text = @"备份完成！";
-    self.detailLabel.text = @"正在通知电脑端...";
+    self.statusLabel.text = LocalizedString(@"BackupCompleted");
+    self.detailLabel.text = LocalizedString(@"NotifyingPC");
 
     // 发送完成请求给PC端
     [self sendCompletionRequest];
@@ -425,8 +425,8 @@
 
 - (void)onBackupRejected {
     [self.activityIndicator stopAnimating];
-    self.statusLabel.text = @"备份请求被拒绝";
-    self.detailLabel.text = @"电脑端拒绝了备份请求";
+    self.statusLabel.text = LocalizedString(@"BackupRequestRejected");
+    self.detailLabel.text = LocalizedString(@"PCRejectedBackupRequest");
 
     // 延迟一下返回
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -437,8 +437,8 @@
 - (void)onTimeout {
     self.isWaitingForResponse = NO;
     [self.activityIndicator stopAnimating];
-    self.statusLabel.text = @"请求超时";
-    self.detailLabel.text = @"电脑端未在30秒内响应";
+    self.statusLabel.text = LocalizedString(@"RequestTimeout");
+    self.detailLabel.text = LocalizedString(@"PCNotRespondInTime");
 
     // 延迟一下返回
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -448,7 +448,7 @@
 
 - (void)showErrorMessage:(NSString *)message {
     [self.activityIndicator stopAnimating];
-    self.statusLabel.text = @"操作失败";
+    self.statusLabel.text = LocalizedString(@"OperationFailed");
     self.detailLabel.text = message;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
