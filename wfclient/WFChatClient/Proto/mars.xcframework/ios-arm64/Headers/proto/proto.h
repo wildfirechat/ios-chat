@@ -1132,6 +1132,7 @@ namespace mars{
         extern void handleFriendRequest(const std::string &userId, bool accept, const std::string &extra, GeneralOperationCallback *callback);
         extern void deleteFriend(const std::string &userId, GeneralOperationCallback *callback);
         extern void setFriendAlias(const std::string &userId, const std::string &alias, GeneralOperationCallback *callback);
+        extern void setFriendExtra(const std::string &userId, const std::string &extra, GeneralOperationCallback *callback);
 
         extern void blackListRequest(const std::string &userId, bool blacked, GeneralOperationCallback *callback);
     

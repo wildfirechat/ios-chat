@@ -204,6 +204,7 @@ namespace mars {
             
             long InsertFriendOrReplace(const std::string &friendUid, int state, int blacked, int64_t timestamp, const std::string &alias, const std::string &extra);
             long UpdateFriendAlias(const std::string &friendUid, const std::string &alias);
+            long UpdateFriendExtra(const std::string &friendUid, const std::string &extra);
             long UpdateBlacklist(const std::string &friendUid, int blacked);
             
             bool DeleteFriend(const std::string &friendUid);

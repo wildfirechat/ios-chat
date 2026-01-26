@@ -2836,6 +2836,19 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     mars::stn::setFriendAlias([friendId UTF8String], alias ? [alias UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (void)setFriend:(NSString *)friendId
+            extra:(NSString *)extra
+          success:(void(^)(void))successBlock
+            error:(void(^)(int error_code))errorBlock {
+    if(!friendId) {
+        if(errorBlock) {
+            errorBlock(-1);
+        }
+        return;
+    }
+    mars::stn::setFriendExtra([friendId UTF8String], extra ? [extra UTF8String] : "", new IMGeneralOperationCallback(successBlock, errorBlock));
+}
+
 - (NSString *)getFriendExtra:(NSString *)friendId {
     if(!friendId)
         return nil;
