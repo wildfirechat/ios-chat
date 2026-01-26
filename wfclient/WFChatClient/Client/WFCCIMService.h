@@ -1864,6 +1864,11 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock;
 
+- (void)setFriend:(NSString *)friendId
+            extra:(NSString *)extra
+          success:(void(^)(void))successBlock
+            error:(void(^)(int error_code))errorBlock;
+
 - (NSString *)getFriendExtra:(NSString *)friendId;
 /**
  查询用户是否被加入黑名单
