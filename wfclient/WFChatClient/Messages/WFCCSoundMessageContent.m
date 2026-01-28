@@ -45,12 +45,12 @@
 
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
-    payload.searchableContent = @"[声音]";
+    payload.searchableContent = WFCCString(@"SoundMessageDigest");
     payload.mediaType = Media_Type_VOICE;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:@(_duration) forKey:@"duration"];
     payload.content = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:dict options:kNilOptions error:nil] encoding:NSUTF8StringEncoding];
-    
+
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
     return payload;
@@ -86,6 +86,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[声音]";
+    return WFCCString(@"SoundMessageDigest");
 }
 @end

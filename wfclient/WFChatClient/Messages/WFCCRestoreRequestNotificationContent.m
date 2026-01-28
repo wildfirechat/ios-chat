@@ -57,7 +57,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return @"请求从电脑端恢复备份";
+    return WFCCString(@"RestoreRequest");
 }
 
 @end

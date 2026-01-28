@@ -74,7 +74,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return @"请求备份到电脑端";
+    return WFCCString(@"BackupRequest");
 }
 
 @end

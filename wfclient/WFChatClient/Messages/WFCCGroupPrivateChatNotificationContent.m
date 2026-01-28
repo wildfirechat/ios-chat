@@ -66,13 +66,13 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
-        return [self.type isEqualToString:@"0"] ? @"你开启了成员私聊" : @"你关闭了成员私聊";
+        return [self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOnBySelf") : WFCCString(@"ChangeGroupPrivateChatOffBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"%@开启了成员私聊" : @"%@关闭了成员私聊", userInfo.readableName];
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOn") : WFCCString(@"ChangeGroupPrivateChatOff"), userInfo.readableName];
         } else {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? @"用户<%@>开启了成员私聊" : @"用户<%@>关闭了成员私聊", self.operatorId];
+            return [NSString stringWithFormat:[self.type isEqualToString:@"0"] ? WFCCString(@"ChangeGroupPrivateChatOnByUnknownUser") : WFCCString(@"ChangeGroupPrivateChatOffByUnknownUser"), self.operatorId];
         }
     }
 }

@@ -70,20 +70,20 @@
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.owner inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"TransferGroupOwnerBySelf"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"你把群主转让给了%@", self.owner];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"TransferGroupOwnerBySelfToUnknown"), self.owner];
         }
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"TransferGroupOwner"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"%@把群主转让给了", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"TransferGroupOwnerByUnknownUser"), self.operateUser];
         }
-        
+
         if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.owner]) {
-            formatMsg = [formatMsg stringByAppendingString:@"你"];
+            formatMsg = [formatMsg stringByAppendingString:WFCCString(@"You")];
         } else {
             userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.owner inGroup:self.groupId refresh:NO];
             if (userInfo) {
@@ -93,7 +93,7 @@
             }
         }
     }
-    
+
     return formatMsg;
 }
 @end

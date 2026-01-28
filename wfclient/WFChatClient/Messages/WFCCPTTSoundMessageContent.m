@@ -64,6 +64,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[对讲语音]";
+    return WFCCString(@"PTTVoice");
 }
 @end

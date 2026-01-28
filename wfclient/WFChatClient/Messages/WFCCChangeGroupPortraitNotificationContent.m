@@ -64,16 +64,16 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = @"你更新了群头像";
+        formatMsg = WFCCString(@"ChangeGroupPortraitBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@更新了群头像", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ChangeGroupPortrait"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"用户<%@>更新了群头像", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ChangeGroupPortraitByUnknownUser"), self.operateUser];
         }
     }
-    
+
     return formatMsg;
 }
 @end

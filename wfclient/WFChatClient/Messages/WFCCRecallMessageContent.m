@@ -60,13 +60,13 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if ([self.operatorId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        return WFCCString(@"你撤回了一条消息");
+        return WFCCString(@"RecallMessageBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId refresh:NO];
         if (userInfo) {
-            return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), userInfo.readableName];
+            return [NSString stringWithFormat:WFCCString(@"RecallMessageByOther"), userInfo.readableName];
         }
-        return [NSString stringWithFormat:WFCCString(@"%@撤回了一条消息"), self.operatorId];
+        return [NSString stringWithFormat:WFCCString(@"RecallMessageByUnknownUser"), self.operatorId];
     }
 }
 @end

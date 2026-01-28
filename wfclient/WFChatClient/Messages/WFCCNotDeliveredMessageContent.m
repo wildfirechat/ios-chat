@@ -63,12 +63,12 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if(self.allFailure) {
-        return @"消息未能送达";
+        return WFCCString(@"MessageNotDelivered");
     } else {
         if(message.conversation.type == Single_Type) {
-            return [NSString stringWithFormat:@"消息未能送达"];
+            return WFCCString(@"MessageNotDeliveredToSingleUser");
         } else {
-            return [NSString stringWithFormat:@"消息未能送达部分用户"];
+            return WFCCString(@"MessageNotDeliveredToSomeUsers");
         }
     }
 }

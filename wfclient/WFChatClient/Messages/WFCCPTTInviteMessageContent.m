@@ -67,6 +67,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[对讲邀请]";
+    return WFCCString(@"PTTInvite");
 }
 @end

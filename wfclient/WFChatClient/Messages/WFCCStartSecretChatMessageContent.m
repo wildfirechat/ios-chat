@@ -37,20 +37,20 @@
 - (NSString *)digest:(WFCCMessage *)message {
     WFCCSecretChatInfo *info = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:message.conversation.target];
     if (!info) {
-        return @"密聊会话不可用";
+        return WFCCString(@"SecretChatNotAvailable");
     }
-    
+
     WFCCSecretChatState state = info.state;
     if(state == SecretChatState_Starting) {
-        return @"等待对方响应";
+        return WFCCString(@"SecretChatWaitingResponse");
     } else if(state == SecretChatState_Accepting) {
-        return @"密聊会话建立中";
+        return WFCCString(@"SecretChatEstablishing");
     } else if(state == SecretChatState_Established) {
-        return @"密聊会话已建立";
+        return WFCCString(@"SecretChatEstablished");
     } else if(state == SecretChatState_Canceled) {
-        return @"密聊会话已取消";
+        return WFCCString(@"SecretChatCanceled");
     } else {
-        return @"密聊会话不可用";
+        return WFCCString(@"SecretChatNotAvailable");
     }
 }
 @end

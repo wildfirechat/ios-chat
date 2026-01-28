@@ -63,16 +63,16 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.quitMember]) {
-        formatMsg = @"你退出了群聊";
+        formatMsg = WFCCString(@"QuitGroupBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.quitMember inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@退出了群聊", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"QuitGroupByOther"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"用户<%@>退出了群聊", self.quitMember];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"QuitGroupByUnknownUser"), self.quitMember];
         }
     }
-    
+
     return formatMsg;
 }
 @end

@@ -73,31 +73,51 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = @"你修改";
+        if (self.memberId.length && ![self.memberId isEqualToString:self.operateUser]) {
+            if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.memberId]) {
+                formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasBySelfToSelf"), self.alias];
+            } else {
+                WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
+                if (member) {
+                    formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasBySelfToOther"), member.readableName, self.alias];
+                } else {
+                    formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasBySelfToUnknown"), self.memberId, self.alias];
+                }
+            }
+        } else {
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasBySelf"), self.alias];
+        }
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
-        
+
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.readableName];
-        } else {
-            formatMsg = [NSString stringWithFormat:@"%@修改", self.operateUser];
-        }
-    }
-    
-    if (self.memberId.length && ![self.memberId isEqualToString:self.operateUser]) {
-        if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.memberId]) {
-            formatMsg = [formatMsg stringByAppendingFormat:@"%@的", @"你"];
-        } else {
-            WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
-            if (member) {
-                formatMsg = [formatMsg stringByAppendingFormat:@"%@的", member.readableName];
+            if (self.memberId.length && ![self.memberId isEqualToString:self.operateUser]) {
+                if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.memberId]) {
+                    formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByOtherToSelf"), userInfo.readableName, self.alias];
+                } else {
+                    WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:self.memberId refresh:NO];
+                    if (member) {
+                        formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByOtherToOther"), userInfo.readableName, member.readableName, self.alias];
+                    } else {
+                        formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByOtherToUnknown"), userInfo.readableName, self.memberId, self.alias];
+                    }
+                }
             } else {
-                formatMsg = [formatMsg stringByAppendingFormat:@"%@的", self.memberId];
+                formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByOther"), userInfo.readableName, self.alias];
+            }
+        } else {
+            if (self.memberId.length && ![self.memberId isEqualToString:self.operateUser]) {
+                if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.memberId]) {
+                    formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByUnknownToSelf"), self.operateUser, self.alias];
+                } else {
+                    formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByUnknownToOther"), self.operateUser, self.memberId, self.alias];
+                }
+            } else {
+                formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupAliasByUnknown"), self.operateUser, self.alias];
             }
         }
     }
-    
-    formatMsg = [formatMsg stringByAppendingFormat:@"群昵称为%@", self.alias];
+
     return formatMsg;
 }
 @end

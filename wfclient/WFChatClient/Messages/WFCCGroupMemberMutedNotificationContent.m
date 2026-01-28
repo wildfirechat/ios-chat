@@ -75,7 +75,7 @@
     NSString *from;
     NSString *targets;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
-        from = @"你";
+        from = WFCCString(@"You");
     } else {
         WFCCUserInfo *fromUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (fromUserInfo.friendAlias.length > 0) {
@@ -85,14 +85,14 @@
         } else if (fromUserInfo.displayName.length > 0) {
             from = fromUserInfo.displayName;
         } else {
-            from = [NSString stringWithFormat:@"用户<%@>", self.operatorId];
+            from = [NSString stringWithFormat:WFCCString(@"UnknownUser"), self.operatorId];
         }
     }
-    
+
     for (NSString *memberId in self.memberIds) {
         NSString *target;
         if ([[WFCCNetworkService sharedInstance].userId isEqualToString:memberId]) {
-            target = @"你";
+            target = WFCCString(@"You");
         } else {
             WFCCUserInfo *memberUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId inGroup:self.groupId refresh:NO];
             if (memberUserInfo.friendAlias.length > 0) {
@@ -102,7 +102,7 @@
             } else if (memberUserInfo.displayName.length > 0) {
                 target = memberUserInfo.displayName;
             } else {
-                target = [NSString stringWithFormat:@"用户<%@>", memberId];
+                target = [NSString stringWithFormat:WFCCString(@"UnknownUser"), memberId];
             }
         }
         if (!targets) {
@@ -111,11 +111,11 @@
             targets = [NSString stringWithFormat:@"%@,%@", targets, target];
         }
     }
-    
+
     if ([self.type isEqualToString:@"1"]) {
-        return [NSString stringWithFormat:@"%@ 禁言了 %@", from, targets];
+        return [NSString stringWithFormat:WFCCString(@"MuteGroupMembers"), from, targets];
     } else {
-        return [NSString stringWithFormat:@"%@ 取消禁言了 %@", from, targets];
+        return [NSString stringWithFormat:WFCCString(@"UnmuteGroupMembers"), from, targets];
     }
 }
 @end

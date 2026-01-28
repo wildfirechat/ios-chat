@@ -66,18 +66,17 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = @"你修改";
+        formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupExtraBySelf"), self.groupExtra];
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser refresh:NO];
-        
+
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@修改", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupExtra"), userInfo.readableName, self.groupExtra];
         } else {
-            formatMsg = [NSString stringWithFormat:@"%@修改", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ModifyGroupExtraByUnknown"), self.operateUser, self.groupExtra];
         }
     }
-    
-    formatMsg = [formatMsg stringByAppendingFormat:@"群附加信息为%@", self.groupExtra];
+
     return formatMsg;
 }
 @end

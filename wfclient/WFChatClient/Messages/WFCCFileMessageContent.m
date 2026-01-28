@@ -12,7 +12,7 @@
 #import "Common.h"
 
 //需要兼容android发送的文件，android发送文件Name以"[文件] "开头
-const static NSString *FILE_NAME_PREFIX = @"[文件] ";
+const static NSString *FILE_NAME_PREFIX = @"[File] ";
 @implementation WFCCFileMessageContent
 + (instancetype)fileMessageContentFromPath:(NSString *)filePath {
     WFCCFileMessageContent *fileMsg = [[WFCCFileMessageContent alloc] init];
@@ -64,6 +64,6 @@ const static NSString *FILE_NAME_PREFIX = @"[文件] ";
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return [NSString stringWithFormat:@"[文件]%@", self.name];
+    return [NSString stringWithFormat:WFCCString(@"FileMessageDigest"), self.name];
 }
 @end

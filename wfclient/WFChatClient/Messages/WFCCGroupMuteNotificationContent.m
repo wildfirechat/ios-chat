@@ -66,13 +66,13 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
-        return [self.type isEqualToString:@"1"] ? @"你开启了全员禁言" : @"你关闭了全员禁言";
+        return [self.type isEqualToString:@"1"] ? WFCCString(@"ChangeGroupMuteOnBySelf") : WFCCString(@"ChangeGroupMuteOffBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"%@开启了全员禁言" : @"%@关闭了全员禁言", userInfo.readableName];
+            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? WFCCString(@"ChangeGroupMuteOn") : WFCCString(@"ChangeGroupMuteOff"), userInfo.readableName];
         } else {
-            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? @"用户<%@>开启了全员禁言" : @"用户<%@>关闭了全员禁言", self.creator];
+            return [NSString stringWithFormat:[self.type isEqualToString:@"1"] ? WFCCString(@"ChangeGroupMuteOnByUnknownUser") : WFCCString(@"ChangeGroupMuteOffByUnknownUser"), self.creator];
         }
     }
 }

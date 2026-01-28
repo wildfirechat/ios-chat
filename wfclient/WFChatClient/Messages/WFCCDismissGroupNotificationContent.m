@@ -64,16 +64,16 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = @"你解散了群聊";
+        formatMsg = WFCCString(@"DismissGroupBySelf");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@解散了群聊", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"DismissGroup"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"用户<%@>解散了群聊", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"DismissGroupByUnknownUser"), self.operateUser];
         }
     }
-    
+
     return formatMsg;
 }
 @end

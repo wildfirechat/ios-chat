@@ -73,7 +73,7 @@
     NSString *formatMsg;
 
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
-        formatMsg = @"你";
+        formatMsg = WFCCString(@"You");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator refresh:NO];
         if (userInfo.displayName.length > 0) {
@@ -82,19 +82,19 @@
             formatMsg = [NSString stringWithFormat:@"%@", self.creator];
         }
     }
-    
+
     if ([self.type isEqualToString:@"1"]) {
-        formatMsg = [NSString stringWithFormat:@"%@ 禁言了", formatMsg];
+        formatMsg = [NSString stringWithFormat:WFCCString(@"MuteGroupMember"), formatMsg];
     } else {
-        formatMsg = [NSString stringWithFormat:@"%@ 取消禁言了", formatMsg];
+        formatMsg = [NSString stringWithFormat:WFCCString(@"UnmuteGroupMember"), formatMsg];
     }
-    
+
     int count = 0;
     if([self.targetIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
-        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        formatMsg = [formatMsg stringByAppendingString:WFCCString(@"YouWithSpace")];
         count++;
     }
-    
+
     for (NSString *member in self.targetIds) {
         if ([member isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
             continue;
@@ -111,9 +111,9 @@
             }
         }
     }
-    
+
     if(self.targetIds.count > count) {
-        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.targetIds.count];
+        formatMsg = [formatMsg stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.targetIds.count];
     }
 
     return formatMsg;
