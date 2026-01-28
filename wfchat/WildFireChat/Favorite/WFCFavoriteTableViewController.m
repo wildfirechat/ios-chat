@@ -19,6 +19,7 @@
 #import "WFCFavoriteVideoCell.h"
 #import "WFCFavoriteLinkCell.h"
 #import "WFCFavoriteCompositeCell.h"
+#import "WFCFavoriteCardCell.h"
 #import "AFNetworking.h"
 #import <AVFoundation/AVFoundation.h>
 
@@ -201,6 +202,39 @@
             WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
             bvc.url = self.selectedCell.favoriteItem.url;
             [self.navigationController pushViewController:bvc animated:YES];
+        }
+            break;
+        case MESSAGE_CONTENT_TYPE_CARD:
+        {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.selectedCell.favoriteItem.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+            int type = [dict[@"type"] intValue];
+            NSString *targetId = dict[@"targetId"];
+
+            if (type == CardType_User) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:targetId refresh:NO];
+                if (!userInfo.deleted) {
+                    WFCUProfileTableViewController *vc = [[WFCUProfileTableViewController alloc] init];
+                    vc.userId = targetId;
+                    vc.sourceType = FriendSource_Card;
+                    vc.sourceTargetId = self.selectedCell.favoriteItem.sender;
+                    vc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+            } else if(type == CardType_Group) {
+                WFCUGroupInfoViewController *vc2 = [[WFCUGroupInfoViewController alloc] init];
+                vc2.groupId = targetId;
+                vc2.sourceType = GroupMemberSource_Card;
+                vc2.sourceTargetId = self.selectedCell.favoriteItem.sender;
+                vc2.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc2 animated:YES];
+            } else if(type == CardType_Channel) {
+                WFCUChannelProfileViewController *pvc = [[WFCUChannelProfileViewController alloc] init];
+                pvc.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:targetId refresh:NO];
+                if (pvc.channelInfo) {
+                    pvc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:pvc animated:YES];
+                }
+            }
         }
             break;
         default:
@@ -409,6 +443,11 @@
         if (!cell) {
             cell = [[WFCFavoriteCompositeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"composite"];
         }
+    } else if(favType == MESSAGE_CONTENT_TYPE_CARD) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"card"];
+        if (!cell) {
+            cell = [[WFCFavoriteCardCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"card"];
+        }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"unknown"];
         if (!cell) {
@@ -460,7 +499,11 @@
 
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    WFCFavoriteBaseCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    self.selectedCell = cell;
+    WFCUFavoriteItem *item = cell.favoriteItem;
+    [self showItem:item];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCUFavoriteItem *favItem = self.items[indexPath.section];

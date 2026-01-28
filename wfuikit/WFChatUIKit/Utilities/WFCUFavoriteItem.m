@@ -112,6 +112,16 @@
                                                                 options:kNilOptions
                                                          error:nil];
         item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    } else if ([content isKindOfClass:[WFCCCardMessageContent class]]) {
+        WFCCCardMessageContent *cardContent = (WFCCCardMessageContent *)content;
+        item.favType = MESSAGE_CONTENT_TYPE_CARD;
+        item.title = cardContent.name;
+
+        NSDictionary *dict = @{@"type":@(cardContent.type), @"targetId":cardContent.targetId, @"name":cardContent.name};
+        NSData *data = [NSJSONSerialization dataWithJSONObject:dict
+                                                                options:kNilOptions
+                                                         error:nil];
+        item.data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else {
         NSLog(@"Error, not implement!!!!");
         return nil;
@@ -224,11 +234,22 @@
             WFCCFileMessageContent *fileCnt = [[WFCCFileMessageContent alloc] init];
             fileCnt.remoteUrl = self.url;
             fileCnt.name = self.title;
-            
+
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
             fileCnt.size = [dict[@"size"] intValue];
-            
+
             msg.content = fileCnt;
+            break;
+        }
+        case MESSAGE_CONTENT_TYPE_CARD:
+        {
+            WFCCCardMessageContent *cardCnt = [[WFCCCardMessageContent alloc] init];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+            cardCnt.type = [dict[@"type"] intValue];
+            cardCnt.targetId = dict[@"targetId"];
+            cardCnt.name = dict[@"name"];
+
+            msg.content = cardCnt;
             break;
         }
         default:
