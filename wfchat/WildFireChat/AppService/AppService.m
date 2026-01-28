@@ -769,7 +769,7 @@ static AppService *sharedSingleton = nil;
                 if(![d[@"messageUid"] isEqual:[NSNull null]])
                     item.messageUid = [d[@"messageUid"] longLongValue];
                 item.timestamp = [d[@"timestamp"] longLongValue];
-                if(!d[@"url"] && ![d[@"url"] isEqual:[NSNull null]]) {
+                if(d[@"url"] && ![d[@"url"] isEqual:[NSNull null]]) {
                     item.url = d[@"url"];
                     if (item.url.length && [WFCCNetworkService sharedInstance].urlRedirector) {
                         item.url = [[WFCCNetworkService sharedInstance].urlRedirector redirect:item.url];

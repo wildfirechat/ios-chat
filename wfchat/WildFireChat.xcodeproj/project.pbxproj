@@ -131,6 +131,7 @@
 		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
 		B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
+		B7981A352F2A1356004AB1F3 /* WFCFavoriteCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */; };
 		B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
 		B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */; };
@@ -447,6 +448,8 @@
 		B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		B78DD43628167D1E009589F7 /* WFCCallKitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCallKitManager.h; sourceTree = "<group>"; };
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
+		B7981A332F2A1356004AB1F3 /* WFCFavoriteCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteCardCell.h; sourceTree = "<group>"; };
+		B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteCardCell.m; sourceTree = "<group>"; };
 		B79915CD2F0EA5AF001C4EE7 /* WFCSlideVerifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCSlideVerifyView.h; sourceTree = "<group>"; };
 		B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCSlideVerifyView.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
@@ -801,6 +804,8 @@
 		2F638925254E7D640084EEA6 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				B7981A332F2A1356004AB1F3 /* WFCFavoriteCardCell.h */,
+				B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */,
 				2F638926254E7D8A0084EEA6 /* WFCFavoriteBaseCell.h */,
 				2F638927254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m */,
 				2F63892A254E81910084EEA6 /* WFCFavoriteUnknownCell.h */,
@@ -1359,6 +1364,7 @@
 				B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */,
 				B7ABFF3D2F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m in Sources */,
 				B75866E92F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m in Sources */,
+				B7981A352F2A1356004AB1F3 /* WFCFavoriteCardCell.m in Sources */,
 				B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */,
 				B7ABFF3F2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m in Sources */,
 				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,

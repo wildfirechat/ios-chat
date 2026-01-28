@@ -380,7 +380,7 @@
 		2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F765FA8267C28B600E3B365 /* HWCircleView.m */; };
 		2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41A21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m */; };
 		2F9CE41D21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9CE41B21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.h */; };
-		2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9CE41E21BFE63C005E1BE1 /* WFCUChannelProfileViewController.h */; };
+		2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9CE41E21BFE63C005E1BE1 /* WFCUChannelProfileViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9CE41F21BFE63C005E1BE1 /* WFCUChannelProfileViewController.m */; };
 		2F9E85F9222B84690076B82B /* QrCodeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9E85F8222B83CE0076B82B /* QrCodeHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F9E85FF222B9D600076B82B /* QrCodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E85FE222B9D600076B82B /* QrCodeHelper.m */; };
@@ -2691,6 +2691,7 @@
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
 				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
+				2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */,
 				B707759928823635004034A5 /* WFCUImage.h in Headers */,
 				B7C5442928D5876700A2550F /* LBXScanViewStyle.h in Headers */,
 				2F551098217F5CC200F56C26 /* WFCUMessageCellBase.h in Headers */,
@@ -2808,7 +2809,6 @@
 				1450EA852438922800BF51FC /* WFCUUserSectionKeySupport.h in Headers */,
 				2F551100217F5CC200F56C26 /* CCHMapClusterControllerUtils.h in Headers */,
 				B70162F2290E2F1700DCD651 /* MWTapDetectingView.h in Headers */,
-				2F9CE42021BFE63C005E1BE1 /* WFCUChannelProfileViewController.h in Headers */,
 				2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */,
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
 				2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */,
