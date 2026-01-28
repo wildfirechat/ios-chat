@@ -25,7 +25,7 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     if(self.isPresent) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(onClose:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Close") style:UIBarButtonItemStylePlain target:self action:@selector(onClose:)];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
@@ -45,7 +45,7 @@
         ws.domains = domains;
         [ws.tableView reloadData];
     } error:^(int errorCode) {
-        [ws.view makeToast:@"网络错误"];
+        [ws.view makeToast:WFCString(@"NetworkError")];
     }];
 }
 

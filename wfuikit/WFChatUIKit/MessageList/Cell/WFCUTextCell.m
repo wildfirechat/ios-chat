@@ -125,10 +125,10 @@
             [[UIApplication sharedApplication] openURL:emailURL options:@{} completionHandler:nil];
         } else {
             // 如果都无法发送，显示提示
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                           message:@"您的设备不支持发送邮件"
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"Tip")
+                                                                           message:WFCString(@"DeviceNotSupportEmail")
                                                                     preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil];
             [alert addAction:okAction];
             [topVC presentViewController:alert animated:YES completion:nil];
         }

@@ -476,3 +476,16 @@
 "Tip"="提示";
 "No media messages"="此会话中没有图片和视频";
 "Links"="链接";
+"CopiedToClipboard"="已复制到剪贴板";
+"FunctionInDevelopment"="此功能开发中";
+"MemberAllAdded"="成员已全部添加";
+"Loading"="加载中...";
+"LoadFailed"="加载失败";
+"SavedSuccess"="保存成功";
+"DeviceNotSupportEmail"="您的设备不支持发送邮件";
+"DoneCount"="完成(%lu)";
+"DoneCountWithMax"="完成(%lu/%d)";
+"JoinGroupApplicationInfo"="加群申请信息";
+"JoinGroupRequest"="加群申请";
+"Close"="关闭";
+"SearchHistory"="搜索历史";

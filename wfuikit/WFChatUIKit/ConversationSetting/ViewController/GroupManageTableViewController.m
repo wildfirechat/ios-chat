@@ -115,7 +115,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     } else if(indexPath.section == 2) {
-        cell.textLabel.text = @"加群申请信息";
+        cell.textLabel.text = WFCString(@"JoinGroupApplicationInfo");
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.groupInfo.target]];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -147,7 +147,7 @@
     } else if(section == 1) {
         return WFCString(@"GroupGeneralSetting");
     } else if(section == 2) {
-        return @"加群申请";
+        return WFCString(@"JoinGroupRequest");
     }
     return nil;
 }
@@ -217,7 +217,7 @@
                     ws.groupInfo.joinType = 0;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"设置失败"];
+                    [ws.view makeToast:WFCString(@"SavedFailed")];
                 }];
             }];
             [alertController addAction:openAction];
@@ -227,7 +227,7 @@
                     ws.groupInfo.joinType = 1;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"设置失败"];
+                    [ws.view makeToast:WFCString(@"SavedFailed")];
                 }];
             }];
             [alertController addAction:onlyManagerAction];
@@ -237,7 +237,7 @@
                     ws.groupInfo.joinType = 2;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"设置失败"];
+                    [ws.view makeToast:WFCString(@"SavedFailed")];
                 }];
             }];
             [alertController addAction:normalAction];
@@ -248,7 +248,7 @@
                     ws.groupInfo.joinType = 3;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
-                    [ws.view makeToast:@"设置失败"];
+                    [ws.view makeToast:WFCString(@"SavedFailed")];
                 }];
             }];
             [alertController addAction:verifyAction];

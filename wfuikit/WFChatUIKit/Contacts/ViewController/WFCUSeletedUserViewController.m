@@ -294,7 +294,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         NSInteger orgId = [[self.organizationIds lastObject] integerValue];
 
         __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.label.text = @"加载中...";
+        hud.label.text = WFCString(@"Loading");
         [hud showAnimated:YES];
         
         __weak typeof(self)ws = self;
@@ -311,7 +311,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
             [hud hideAnimated:NO];
             hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"加载失败";
+            hud.label.text = WFCString(@"LoadFailed");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         }];
@@ -431,13 +431,13 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     if (enable) {
         self.doneButton.enabled = YES;
         self.doneButton.alpha = 1.0;
-        
+
         if (self.type == Horizontal) {
-            [self.doneButton setTitle:[NSString stringWithFormat:@"完成(%lu)", (unsigned long)self.selectedUsers.count] forState:UIControlStateNormal];
+            [self.doneButton setTitle:[NSString stringWithFormat:WFCString(@"DoneCount"), (unsigned long)self.selectedUsers.count] forState:UIControlStateNormal];
             [self.doneButton sizeToFit];
             self.doneButton.frame = CGRectMake(0, 0, self.doneButton.frame.size.width + 8 * 2, self.doneButton.frame.size.height);
         } else {
-            [self.doneButton setTitle:[NSString stringWithFormat:@"完成(%lu/%d)", (unsigned long)self.selectedUsers.count, self.maxSelectCount] forState:UIControlStateNormal];
+            [self.doneButton setTitle:[NSString stringWithFormat:WFCString(@"DoneCountWithMax"), (unsigned long)self.selectedUsers.count, self.maxSelectCount] forState:UIControlStateNormal];
             [self.doneButton sizeToFit];
             self.doneButton.frame = CGRectMake(0, 0, self.doneButton.frame.size.width + 8 * 2, self.doneButton.frame.size.height);
         }
@@ -487,7 +487,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     if(orgIds.count) {
         __weak typeof(self) ws = self;
         __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.label.text = @"获取中...";
+        hud.label.text = WFCString(@"Loading");
         [hud showAnimated:YES];
         
         [[WFCUConfigManager globalManager].orgServiceProvider getBatchOrgEmployees:orgIds success:^(NSArray<NSString *> * _Nonnull employeeIds) {
@@ -500,7 +500,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
             [hud hideAnimated:NO];
             hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"获取失败";
+            hud.label.text = WFCString(@"LoadFailed");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         }];
@@ -688,7 +688,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
         _searchBar.delegate = self;
-        _searchBar.placeholder = @"搜索";
+        _searchBar.placeholder = WFCString(@"Search");
         _searchBar.barStyle = UIBarStyleDefault;
     }
     return _searchBar;

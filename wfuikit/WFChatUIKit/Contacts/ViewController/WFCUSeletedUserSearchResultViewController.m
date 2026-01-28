@@ -28,7 +28,7 @@
     self.results = [NSMutableArray new];
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width - 16 * 2,44)];
     self.searchBar.backgroundColor = [UIColor clearColor];
-    self.searchBar.placeholder = @"搜索";
+    self.searchBar.placeholder = WFCString(@"Search");
     
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;

@@ -475,3 +475,16 @@
 "Tip"="提示";
 "No media messages"="此會話中沒有圖片和視頻";
 "Links"="鏈接";
+"CopiedToClipboard"="已複製到剪貼板";
+"FunctionInDevelopment"="此功能開發中";
+"MemberAllAdded"="成員已全部添加";
+"Loading"="加載中...";
+"LoadFailed"="加載失敗";
+"SavedSuccess"="保存成功";
+"DeviceNotSupportEmail"="您的設備不支持發送郵件";
+"DoneCount"="完成(%lu)";
+"DoneCountWithMax"="完成(%lu/%d)";
+"JoinGroupApplicationInfo"="加群申請信息";
+"JoinGroupRequest"="加群申請";
+"Close"="關閉";
+"SearchHistory"="搜索歷史";

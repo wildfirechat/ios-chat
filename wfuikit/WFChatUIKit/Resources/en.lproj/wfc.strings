@@ -476,3 +476,16 @@
 "Tip"="Tip";
 "No media messages"="No media messages in this conversation";
 "Links"="Links";
+"CopiedToClipboard"="Copied to clipboard";
+"FunctionInDevelopment"="This feature is under development";
+"MemberAllAdded"="All members have been added";
+"Loading"="Loading...";
+"LoadFailed"="Load failed";
+"SavedSuccess"="Saved successfully";
+"DeviceNotSupportEmail"="Your device does not support sending emails";
+"DoneCount"="Done(%lu)";
+"DoneCountWithMax"="Done(%lu/%d)";
+"JoinGroupApplicationInfo"="Join Group Application Info";
+"JoinGroupRequest"="Join Group Request";
+"Close"="Close";
+"SearchHistory"="Search History";
