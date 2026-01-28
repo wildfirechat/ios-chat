@@ -214,14 +214,14 @@
 
 - (void)onSaveBtn:(id)sender {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"保存中...";
+    hud.label.text = WFCString(@"Saving");
     [hud showAnimated:YES];
     
     [[WFCUConfigManager globalManager].appServiceProvider updateGroup:self.announcement.groupId announcement:self.textView.text success:^(long timestamp) {
         dispatch_async(dispatch_get_main_queue(), ^{
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"保存成功";
+            hud.label.text = WFCString(@"SavedSuccess");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
             
@@ -234,7 +234,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            hud.label.text = @"保存失败";
+            hud.label.text = WFCString(@"SavedFailed");
             hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
             [hud hideAnimated:YES afterDelay:1.f];
         });
@@ -254,10 +254,10 @@
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSString *newText = [textView.text stringByReplacingCharactersInRange:range withString:text];
     if(newText.length > MAX_TEXT_LENGTH) {
-        [self.view makeToast:@"超过大小限制"];
+        [self.view makeToast:WFCString(@"ExceedSizeLimit")];
         return NO;
     }
-    
+
     return YES;
 }
 

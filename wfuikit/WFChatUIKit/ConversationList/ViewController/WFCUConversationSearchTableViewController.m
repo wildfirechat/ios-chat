@@ -425,7 +425,7 @@
     } else {
         // 其他按钮，显示 TODO 提示
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"TODO"
-                                                                       message:@"此功能开发中"
+                                                                       message:WFCString(@"FunctionInDevelopment")
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:okAction];
@@ -552,14 +552,14 @@
 
     // 标题 - 减少上边距
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 2, 200, headerHeight)];
-    titleLabel.text = @"搜索历史";
+    titleLabel.text = WFCString(@"SearchHistory");
     titleLabel.font = [UIFont boldSystemFontOfSize:14];
     titleLabel.textColor = [UIColor blackColor];
     [self.historyContainer addSubview:titleLabel];
 
     // 清空按钮 - 调整位置
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [clearButton setTitle:@"清空" forState:UIControlStateNormal];
+    [clearButton setTitle:WFCString(@"Clear") forState:UIControlStateNormal];
     clearButton.titleLabel.font = [UIFont systemFontOfSize:13];
     clearButton.frame = CGRectMake(searchBarWidth - 60, 2, 60, headerHeight - 2);
     clearButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
