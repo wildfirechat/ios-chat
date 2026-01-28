@@ -71,18 +71,16 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = [NSString stringWithFormat:@"你修改群名称为：%@", self.name];
+        formatMsg = [NSString stringWithFormat:WFCCString(@"ChangeGroupNameBySelf"), self.name];
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ChangeGroupName"), userInfo.readableName, self.name];
         } else {
-            formatMsg = [NSString stringWithFormat:@"%@修改群名称为：", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"ChangeGroupNameByUnknownUser"), self.operateUser, self.name];
         }
-        
-        formatMsg = [formatMsg stringByAppendingString:self.name];
     }
-    
+
     return formatMsg;
 }
 @end

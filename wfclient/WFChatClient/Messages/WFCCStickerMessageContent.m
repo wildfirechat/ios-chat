@@ -23,19 +23,19 @@
 
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
-    payload.searchableContent = @"[动态表情]";
+    payload.searchableContent = WFCCString(@"StickerDigest");
     payload.mediaType = Media_Type_STICKER;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
-    
+
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     [dataDict setObject:@(self.size.width) forKey:@"x"];
     [dataDict setObject:@(self.size.height) forKey:@"y"];
-    
+
     payload.binaryContent = [NSJSONSerialization dataWithJSONObject:dataDict
                                                             options:kNilOptions
                                                               error:nil];
-    
+
     return payload;
 }
 
@@ -70,6 +70,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[动态表情]";
+    return WFCCString(@"StickerDigest");
 }
 @end

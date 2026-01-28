@@ -80,7 +80,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return self.approved ? @"已同意从电脑端恢复" : @"已拒绝从电脑端恢复";
+    return self.approved ? WFCCString(@"RestoreResponseApproved") : WFCCString(@"RestoreResponseRejected");
 }
 
 @end

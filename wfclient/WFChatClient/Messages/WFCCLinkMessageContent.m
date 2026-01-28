@@ -61,6 +61,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-  return [NSString stringWithFormat:@"[链接]%@", self.title];
+  return [NSString stringWithFormat:WFCCString(@"LinkMessageDigest"), self.title];
 }
 @end

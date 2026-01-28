@@ -36,7 +36,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return @"你们已经是好友了，可以开始聊天了。";
+    return WFCCString(@"FriendAddedTip");
 }
 
 - (NSString *)digest:(WFCCMessage *)message {

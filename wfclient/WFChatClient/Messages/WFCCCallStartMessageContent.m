@@ -94,9 +94,9 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if (_audioOnly) {
-        return @"[语音通话]";
+        return WFCCString(@"VoipCallStartAudio");
     } else {
-        return @"[视频通话]";
+        return WFCCString(@"VoipCallStartVideo");
     }
 }
 @end

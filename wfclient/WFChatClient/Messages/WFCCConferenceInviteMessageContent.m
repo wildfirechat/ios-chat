@@ -84,9 +84,9 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if (_audioOnly) {
-        return @"[音频会议邀请]";
+        return WFCCString(@"ConferenceInviteAudio");
     } else {
-        return @"[视频会议邀请]";
+        return WFCCString(@"ConferenceInviteVideo");
     }
 }
 @end

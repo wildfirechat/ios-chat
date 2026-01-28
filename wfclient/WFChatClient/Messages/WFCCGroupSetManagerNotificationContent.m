@@ -72,22 +72,22 @@
     NSString *from;
     NSString *targets = @"";
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
-        from = @"你";
+        from = WFCCString(@"You");
     } else {
         WFCCUserInfo *fromUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (fromUserInfo) {
             from = fromUserInfo.readableName;
         } else {
-            from = [NSString stringWithFormat:@"用户<%@>", self.operatorId];
+            from = [NSString stringWithFormat:WFCCString(@"UnknownUser"), self.operatorId];
         }
     }
-    
+
     int count = 0;
     if([self.memberIds containsObject:[WFCCNetworkService sharedInstance].userId]) {
-        targets = [targets stringByAppendingString:@" 你"];
+        targets = [targets stringByAppendingString:WFCCString(@"YouWithSpace")];
         count++;
     }
-    
+
     for (NSString *memberId in self.memberIds) {
         NSString *target;
         if ([[WFCCNetworkService sharedInstance].userId isEqualToString:memberId]) {
@@ -97,7 +97,7 @@
             if (memberUserInfo) {
                 target = memberUserInfo.readableName;
             } else {
-                target = [NSString stringWithFormat:@"用户<%@>", memberId];
+                target = [NSString stringWithFormat:WFCCString(@"UnknownUser"), memberId];
             }
         }
         if (!targets) {
@@ -110,15 +110,15 @@
             break;
         }
     }
-    
+
     if(self.memberIds.count > count) {
-        targets = [targets stringByAppendingFormat:@" 等%ld名成员", self.memberIds.count];
+        targets = [targets stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.memberIds.count];
     }
-    
+
     if ([self.type isEqualToString:@"1"]) {
-        return [NSString stringWithFormat:@"%@ 设置 %@ 为管理员", from, targets];
+        return [NSString stringWithFormat:WFCCString(@"SetManager"), from, targets];
     } else {
-        return [NSString stringWithFormat:@"%@ 取消 %@ 管理员权限", from, targets];
+        return [NSString stringWithFormat:WFCCString(@"UnsetManager"), from, targets];
     }
 }
 @end

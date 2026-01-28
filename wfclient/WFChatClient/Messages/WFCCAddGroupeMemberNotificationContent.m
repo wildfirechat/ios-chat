@@ -76,34 +76,34 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg = @"";
-    
+
     if(self.approver.length) {
-        formatMsg = [NSString stringWithFormat:@"%@ 批准了 ", [self getUserDisplayName:self.approver]];
+        formatMsg = [NSString stringWithFormat:WFCCString(@"ApproveToAddGroupMember"), [self getUserDisplayName:self.approver]];
     }
-    
+
     NSMutableString *sourceTargetId = [[NSMutableString alloc] init];
     WFCCGroupMemberSourceType sourceType = [WFCCUtilities getGroupMemberSourceType:self.extra sourceTargetId:sourceTargetId];
     if(sourceType == GroupMemberSource_QrCode && [sourceTargetId length] && [self.invitees count] == 1) {
-        NSString *text = [NSString stringWithFormat:@"%@ 扫描了 %@ 分享的二维码加入了群聊", [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
+        NSString *text = [NSString stringWithFormat:WFCCString(@"InviteJoinGroupViaQrCode"), [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
         formatMsg = [formatMsg stringByAppendingString:text];
         return formatMsg;
     } else if(sourceType == GroupMemberSource_Card && [sourceTargetId length] && [self.invitees count] == 1) {
-        NSString *text = [NSString stringWithFormat:@"%@ 通过 %@ 分享的群名片加入了群聊", [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
+        NSString *text = [NSString stringWithFormat:WFCCString(@"InviteJoinGroupViaCard"), [self getUserDisplayName:[self.invitees objectAtIndex:0]], [self getUserDisplayName:sourceTargetId]];
         formatMsg = [formatMsg stringByAppendingString:text];
         return formatMsg;
     }
-    
+
     if ([self.invitees count] == 1 && [[self.invitees objectAtIndex:0] isEqualToString:self.invitor]) {
-        NSString *text = [NSString stringWithFormat:@"%@ 加入了群聊", [self getUserDisplayName:self.invitor]];
+        NSString *text = [NSString stringWithFormat:WFCCString(@"JoinGroupBySelf"), [self getUserDisplayName:self.invitor]];
         formatMsg = [formatMsg stringByAppendingString:text];
         return formatMsg;
     }
-    
-    formatMsg = [NSString stringWithFormat:@"%@%@邀请", formatMsg, [self getUserDisplayName:self.invitor]];
-    
+
+    formatMsg = [NSString stringWithFormat:WFCCString(@"InviteJoinGroupPrefix"), formatMsg, [self getUserDisplayName:self.invitor]];
+
     int count = 0;
     if([self.invitees containsObject:[WFCCNetworkService sharedInstance].userId]) {
-        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        formatMsg = [formatMsg stringByAppendingString:WFCCString(@"YouWithSpace")];
         count++;
     }
 
@@ -112,18 +112,18 @@
             continue;
         } else {
             formatMsg = [formatMsg stringByAppendingFormat:@" %@", [self getUserDisplayName:member]];
-            
+
             count++;
             if(count >= 4) {
                 break;
             }
         }
     }
-    
+
     if(self.invitees.count > count) {
-        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.invitees.count];
+        formatMsg = [formatMsg stringByAppendingFormat:WFCCString(@"JoinGroupWithMore"), self.invitees.count];
     }
-    formatMsg = [formatMsg stringByAppendingString:@"加入了群聊"];
+    formatMsg = [formatMsg stringByAppendingString:WFCCString(@"JoinGroupSuffix")];
     return formatMsg;
 }
 @end

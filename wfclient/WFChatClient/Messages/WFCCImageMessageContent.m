@@ -39,15 +39,15 @@
 
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
-    payload.searchableContent = @"[图片]";
-    
+    payload.searchableContent = WFCCString(@"ImageMessageDigest");
+
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
     if (self.thumbParameter.length && self.size.width > 0) {
         [dataDict setValue:self.thumbParameter forKey:@"tp"];
         [dataDict setValue:@(self.size.width) forKey:@"w"];
         [dataDict setValue:@(self.size.height) forKey:@"h"];
     }
-    
+
     if (![[WFCCIMService sharedWFCIMService] imageThumbPara]) {
         dataDict = nil;
         if(!self.thumbnail && self.localPath.length) {
@@ -68,14 +68,14 @@
             dataDict = nil;
         }
     }
-    
+
     if (dataDict) {
         NSData *data = [NSJSONSerialization dataWithJSONObject:dataDict
                                                        options:kNilOptions
                                                          error:nil];
         payload.content = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
-    
+
     payload.mediaType = Media_Type_IMAGE;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
@@ -133,6 +133,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[图片]";
+    return WFCCString(@"ImageMessageDigest");
 }
 @end

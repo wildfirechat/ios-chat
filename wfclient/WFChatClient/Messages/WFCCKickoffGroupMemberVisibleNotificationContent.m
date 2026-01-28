@@ -65,19 +65,19 @@
 - (NSString *)formatNotification:(WFCCMessage *)message {
     NSString *formatMsg;
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operateUser]) {
-        formatMsg = @"你把";
+        formatMsg = WFCCString(@"KickoffYou");
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operateUser inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            formatMsg = [NSString stringWithFormat:@"%@把", userInfo.readableName];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"KickoffByOtherPrefix"), userInfo.readableName];
         } else {
-            formatMsg = [NSString stringWithFormat:@"用户<%@>把", self.operateUser];
+            formatMsg = [NSString stringWithFormat:WFCCString(@"KickoffByOtherPrefix"), [NSString stringWithFormat:WFCCString(@"UnknownUser"), self.operateUser]];
         }
     }
-    
+
     int count = 0;
     if([self.kickedMembers containsObject:[WFCCNetworkService sharedInstance].userId]) {
-        formatMsg = [formatMsg stringByAppendingString:@" 你"];
+        formatMsg = [formatMsg stringByAppendingString:WFCCString(@"YouWithSpace")];
         count++;
     }
     for (NSString *member in self.kickedMembers) {
@@ -88,7 +88,7 @@
             if (userInfo) {
                 formatMsg = [formatMsg stringByAppendingFormat:@" %@", userInfo.readableName];
             } else {
-                formatMsg = [formatMsg stringByAppendingFormat:@" 用户<%@>", member];
+                formatMsg = [formatMsg stringByAppendingFormat:@" %@", [NSString stringWithFormat:WFCCString(@"UnknownUser"), member]];
             }
             count++;
             if(count >= 4) {
@@ -97,9 +97,9 @@
         }
     }
     if(self.kickedMembers.count > count) {
-        formatMsg = [formatMsg stringByAppendingFormat:@" 等%ld名成员", self.kickedMembers.count];
+        formatMsg = [formatMsg stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.kickedMembers.count];
     }
-    formatMsg = [formatMsg stringByAppendingString:@"移出群聊"];
+    formatMsg = [formatMsg stringByAppendingString:WFCCString(@"KickoffVisibleSuffix")];
     return formatMsg;
 }
 @end

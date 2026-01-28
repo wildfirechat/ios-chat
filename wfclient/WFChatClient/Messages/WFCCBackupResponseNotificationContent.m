@@ -80,7 +80,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return self.approved ? @"已同意备份请求" : @"已拒绝备份请求";
+    return self.approved ? WFCCString(@"BackupResponseApproved") : WFCCString(@"BackupResponseRejected");
 }
 
 @end

@@ -44,7 +44,7 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"Bye";
+    return WFCCString(@"VoipCallEnd");
 }
 
 @end

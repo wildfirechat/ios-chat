@@ -40,6 +40,8 @@ typedef NS_ENUM(NSInteger, WFCCMediaType) {
 };
 
 
+#define WFCCString(key) [[NSBundle bundleForClass:[self class]] localizedStringForKey:key value:@"" table:@"wfc_client"]
+
 /**
  消息存储类型
  

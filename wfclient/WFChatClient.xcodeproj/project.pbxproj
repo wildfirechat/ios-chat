@@ -216,6 +216,7 @@
 		B7832E3B280FC774000233D1 /* WFCCSecretChatInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */; };
 		B790216F2C01F54A005C382A /* WFCCDomainInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B790216D2C01F54A005C382A /* WFCCDomainInfo.m */; };
 		B79021702C01F54A005C382A /* WFCCDomainInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B790216E2C01F54A005C382A /* WFCCDomainInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7981A392F2A2BB9004AB1F3 /* wfc_client.strings in Resources */ = {isa = PBXBuildFile; fileRef = B7981A372F2A2BB9004AB1F3 /* wfc_client.strings */; };
 		B79F81A628D958740092FA4B /* WFCCProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B79F81A528D958220092FA4B /* WFCCProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A683742B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683702B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -453,6 +454,9 @@
 		B7832E39280FC774000233D1 /* WFCCSecretChatInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCSecretChatInfo.m; sourceTree = "<group>"; };
 		B790216D2C01F54A005C382A /* WFCCDomainInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCDomainInfo.m; sourceTree = "<group>"; };
 		B790216E2C01F54A005C382A /* WFCCDomainInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCDomainInfo.h; sourceTree = "<group>"; };
+		B7981A382F2A2BB9004AB1F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/wfc_client.strings; sourceTree = "<group>"; };
+		B7981A3E2F2A2C5A004AB1F3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc_client.strings"; sourceTree = "<group>"; };
+		B7981A3F2F2A2C64004AB1F3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/wfc_client.strings"; sourceTree = "<group>"; };
 		B79F81A528D958220092FA4B /* WFCCProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCProtocol.h; sourceTree = "<group>"; };
 		B7A683702B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextGeneratingMessageContent.h; sourceTree = "<group>"; };
 		B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextGeneratedMessageContent.h; sourceTree = "<group>"; };
@@ -542,6 +546,7 @@
 				2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */,
 				2E6B509F1FAE98E6006B6E31 /* Info.plist */,
 				2F001FA9255F8AB7006F8DE8 /* PrefixHeader.h */,
+				B7981A372F2A2BB9004AB1F3 /* wfc_client.strings */,
 			);
 			path = WFChatClient;
 			sourceTree = "<group>";
@@ -1025,6 +1030,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 2E6B50911FAE98E5006B6E31;
 			productRefGroup = 2E6B509C1FAE98E6006B6E31 /* Products */;
@@ -1042,6 +1049,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7981A392F2A2BB9004AB1F3 /* wfc_client.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1186,6 +1194,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		B7981A372F2A2BB9004AB1F3 /* wfc_client.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B7981A382F2A2BB9004AB1F3 /* en */,
+				B7981A3E2F2A2C5A004AB1F3 /* zh-Hans */,
+				B7981A3F2F2A2C64004AB1F3 /* zh-Hant */,
+			);
+			name = wfc_client.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		2E6B50A11FAE98E6006B6E31 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1193,6 +1214,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1255,6 +1277,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

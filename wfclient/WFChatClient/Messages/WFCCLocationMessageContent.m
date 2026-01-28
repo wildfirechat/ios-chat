@@ -64,6 +64,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-  return @"[位置]";
+  return WFCCString(@"LocationMessageDigest");
 }
 @end

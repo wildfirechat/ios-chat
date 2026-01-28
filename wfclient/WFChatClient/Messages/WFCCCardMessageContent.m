@@ -95,8 +95,8 @@
 
 - (NSString *)digest:(WFCCMessage *)message {
     if (self.displayName.length) {
-        return [NSString stringWithFormat:@"[名片]:%@", self.displayName];
+        return [NSString stringWithFormat:WFCCString(@"CardMessageDigestWithName"), self.displayName];
     }
-    return @"[名片]";
+    return WFCCString(@"CardMessageDigest");
 }
 @end

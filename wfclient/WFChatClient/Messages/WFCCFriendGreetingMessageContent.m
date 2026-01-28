@@ -36,7 +36,7 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    return @"以上是打招呼的内容";
+    return WFCCString(@"FriendGreeting");
 }
 
 - (NSString *)digest:(WFCCMessage *)message {

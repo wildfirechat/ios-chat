@@ -67,13 +67,13 @@
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
     if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.creator]) {
-        return [NSString stringWithFormat:@"你创建了群\"%@\"", self.groupName];
+        return [NSString stringWithFormat:WFCCString(@"CreateGroupBySelf"), self.groupName];
     } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.creator inGroup:self.groupId refresh:NO];
         if (userInfo) {
-            return [NSString stringWithFormat:@"%@创建了群\"%@\"", userInfo.readableName, self.groupName];
+            return [NSString stringWithFormat:WFCCString(@"CreateGroupByOther"), userInfo.readableName, self.groupName];
         } else {
-            return [NSString stringWithFormat:@"用户<%@>创建了群\"%@\"", self.creator, self.groupName];
+            return [NSString stringWithFormat:WFCCString(@"CreateGroupByUnknownUser"), self.creator, self.groupName];
         }
     }
 }

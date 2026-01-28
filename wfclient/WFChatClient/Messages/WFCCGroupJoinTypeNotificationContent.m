@@ -65,27 +65,29 @@
 }
 
 - (NSString *)formatNotification:(WFCCMessage *)message {
-    NSString *user = @"你";
-    if (![[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+    NSString *user;
+    if ([[WFCCNetworkService sharedInstance].userId isEqualToString:self.operatorId]) {
+        user = WFCCString(@"You");
+    } else {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.operatorId inGroup:self.groupId refresh:NO];
         if (userInfo) {
             user = userInfo.readableName;
         } else {
-            user = [NSString stringWithFormat:@"管理员<%@>", self.operatorId];
+            user = [NSString stringWithFormat:WFCCString(@"Administrator"), self.operatorId];
         }
     }
-    
+
     if ([self.type isEqualToString:@"0"]) {
-        return [NSString stringWithFormat:@"%@开放了加入群组功能", user];
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeOpen"), user];
     } else if ([self.type isEqualToString:@"1"]) {
-        return [NSString stringWithFormat:@"%@仅允许群成员邀请加入群组", user];
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeMemberOnly"), user];
     } else if ([self.type isEqualToString:@"2"]) {
-        return [NSString stringWithFormat:@"%@仅限群管理邀请加入群组", user];
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeAdminOnly"), user];
     } else if ([self.type isEqualToString:@"3"]) {
-        return [NSString stringWithFormat:@"%@开启了加群验证", user];
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeNeedApproval"), user];
     } else {
-        return [NSString stringWithFormat:@"%@关闭了加入群组功能", user];
+        return [NSString stringWithFormat:WFCCString(@"ChangeGroupJoinTypeClose"), user];
     }
-    
+
 }
 @end

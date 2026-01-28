@@ -86,33 +86,33 @@
     WFCCUserInfo *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:message.fromUser inGroup:message.conversation.type == Group_Type ? message.conversation.target : nil refresh:NO];
     NSString *format = @"";
     if ([message.fromUser isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        format = [format stringByAppendingString:@"您"];
+        format = [format stringByAppendingString:WFCCString(@"You")];
     } else if (sender) {
         format = [format stringByAppendingString:sender.readableName];
     } else {
         format = [format stringByAppendingString:message.fromUser];
     }
-    
+
     if (!format) {
         format = @"";
     }
-    
-    format = [format stringByAppendingString:@" 邀请"];
-    
+
+    format = [format stringByAppendingString:WFCCString(@"InviteCall")];
+
     for (NSString *p in self.participants) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:p inGroup:message.conversation.type == Group_Type ? message.conversation.target : nil refresh:NO];
-    
+
         if ([p isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-            format = [format stringByAppendingString:@" 您 "];
+            format = [format stringByAppendingString:WFCCString(@"YouWithSpace")];
         } else if (userInfo) {
             format = [format stringByAppendingFormat:@" %@ ", userInfo.readableName];
         } else {
             format = [format stringByAppendingFormat:@" %@ ", p];
         }
     }
-    
-    format = [format stringByAppendingString:@"加入了网络通话"];
-    
+
+    format = [format stringByAppendingString:WFCCString(@"JoinedCall")];
+
     return format;
 }
 

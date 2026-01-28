@@ -29,17 +29,17 @@
 }
 - (WFCCMessagePayload *)encode {
     WFCCMediaMessagePayload *payload = (WFCCMediaMessagePayload *)[super encode];
-    payload.searchableContent = @"[视频]";
+    payload.searchableContent = WFCCString(@"VideoMessageDigest");
     payload.binaryContent = UIImageJPEGRepresentation(self.thumbnail, 0.45);
     payload.mediaType = Media_Type_VIDEO;
     payload.remoteMediaUrl = self.remoteUrl;
     payload.localMediaPath = self.localPath;
-    
+
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:@(_duration) forKey:@"duration"];
     [dict setObject:@(_duration) forKey:@"d"];
     payload.content = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:dict options:kNilOptions error:nil] encoding:NSUTF8StringEncoding];
-    
+
     return payload;
 }
 
@@ -78,6 +78,6 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return @"[视频]";
+    return WFCCString(@"VideoMessageDigest");
 }
 @end

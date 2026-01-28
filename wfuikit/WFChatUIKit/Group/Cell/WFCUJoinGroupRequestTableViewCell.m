@@ -91,6 +91,7 @@
     WFCCUserInfo *invitee = [[WFCCIMService sharedWFCIMService] getUserInfo:joinRequest.memberId refresh:NO];
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[invitee.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]  placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     
+    
     NSString *text;
     int startPos = 0;
     if([joinRequest.memberId isEqualToString:joinRequest.requestUserId]) {

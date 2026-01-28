@@ -1,0 +1,232 @@
+"FriendAddedTip"="You are already friends, can chat now!";
+
+// Create Group
+"CreateGroupBySelf"="You created group \"%@\"";
+"CreateGroupByOther"="%@ created group \"%@\"";
+"CreateGroupByUnknownUser"="User<%@> created group \"%@\"";
+
+// Add Group Members
+"ApproveToAddGroupMember"="%@ approved ";
+"InviteJoinGroupViaQrCode"="%@ scanned the QR code shared by %@ and joined the group";
+"InviteJoinGroupViaCard"="%@ joined the group via the group card shared by %@";
+"JoinGroupBySelf"="%@ joined the group";
+"InviteJoinGroupPrefix"="%@%@ invited";
+"You"="you";
+"JoinGroupSuffix"="joined the group";
+"JoinGroupWithMore"=" and %ld others";
+
+// Quit Group
+"QuitGroupBySelf"="You left the group";
+"QuitGroupByOther"="%@ left the group";
+"QuitGroupByUnknownUser"="User<%@> left the group";
+
+// Quit Group (Visible Notification)
+"QuitGroupVisibleBySelf"="You removed %@";
+"QuitGroupVisibleByOther"="%@ removed %@";
+"QuitGroupVisibleByUnknownUser"="User<%@> removed %@";
+
+// Kickoff Group Member
+"KickoffGroupMember"="%@ removed %@ from the group";
+
+// Kickoff Group Member (Visible Notification)
+"KickoffGroupMemberVisibleBySelf"="You removed %@ from the group";
+"KickoffGroupMemberVisible"="%@ removed %@ from the group";
+"KickoffGroupMemberVisibleByUnknownUser"="User<%@> removed %@ from the group";
+
+// Dismiss Group
+"DismissGroup"="%@ dismissed the group";
+
+// Transfer Group Owner
+"TransferGroupOwner"="%@ transferred the group to %@";
+"TransferGroupOwnerBySelf"="You transferred the group to %@";
+"TransferGroupOwnerBySelfToUnknown"="You transferred the group to user<%@>";
+"TransferGroupOwnerByUnknownUser"="User<%@> transferred the group to %@";
+
+// Change Group Name
+"ChangeGroupName"="%@ changed group name to \"%@\"";
+"ChangeGroupNameBySelf"="You changed group name to \"%@\"";
+"ChangeGroupNameByUnknownUser"="User<%@> changed group name to \"%@\"";
+
+// Modify Group Alias
+"ModifyGroupAliasBySelf"="You changed your group alias to \"%@\"";
+"ModifyGroupAliasByOther"="%@ changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasBySelfToSelf"="You changed your group alias to \"%@\"";
+"ModifyGroupAliasBySelfToOther"="You changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasBySelfToUnknown"="You changed user<%@>'s group alias to \"%@\"";
+"ModifyGroupAliasByOtherToSelf"="%@ changed your group alias to \"%@\"";
+"ModifyGroupAliasByOtherToOther"="%@ changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasByOtherToUnknown"="%@ changed user<%@>'s group alias to \"%@\"";
+"ModifyGroupAliasByUnknown"="User<%@> changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasByUnknownToSelf"="User<%@> changed your group alias to \"%@\"";
+"ModifyGroupAliasByUnknownToOther"="User<%@> changed %@'s group alias to \"%@\"";
+
+// Change Group Portrait
+"ChangeGroupPortrait"="%@ changed group portrait";
+"ChangeGroupPortraitBySelf"="You changed group portrait";
+"ChangeGroupPortraitByUnknownUser"="User<%@> changed group portrait";
+
+// Change Group Mute
+"ChangeGroupMuteOn"="%@ enabled group mute";
+"ChangeGroupMuteOff"="%@ disabled group mute";
+"ChangeGroupMuteOnBySelf"="You enabled group mute";
+"ChangeGroupMuteOffBySelf"="You disabled group mute";
+"ChangeGroupMuteOnByUnknownUser"="User<%@> enabled group mute";
+"ChangeGroupMuteOffByUnknownUser"="User<%@> disabled group mute";
+
+// Change Group Join Type
+"ChangeGroupJoinType"="%@ changed group join type";
+"ChangeGroupJoinTypeOpen"="%@ changed group join type to open";
+"ChangeGroupJoinTypeMemberOnly"="%@ changed group join type to members only";
+"ChangeGroupJoinTypeAdminOnly"="%@ changed group join type to admins only";
+"ChangeGroupJoinTypeNeedApproval"="%@ enabled join approval";
+"ChangeGroupJoinTypeClose"="%@ disabled join group function";
+"Administrator"="Administrator";
+
+// Change Group Private Chat
+"ChangeGroupPrivateChatOn"="%@ enabled private chat";
+"ChangeGroupPrivateChatOff"="%@ disabled private chat";
+"ChangeGroupPrivateChatOnBySelf"="You enabled private chat";
+"ChangeGroupPrivateChatOffBySelf"="You disabled private chat";
+"ChangeGroupPrivateChatOnByUnknownUser"="User<%@> enabled private chat";
+"ChangeGroupPrivateChatOffByUnknownUser"="User<%@> disabled private chat";
+
+// Set Manager
+"SetManager"="%@ set %@ as manager";
+"UnsetManager"="%@ unset %@ as manager";
+"UnknownUser"="User<%@>";
+"YouWithSpace"=" you";
+"AndMoreMembers"=" and %ld others";
+
+// Mute/Unmute Group Member
+"MuteGroupMember"="%@ muted %@";
+"UnmuteGroupMember"="%@ unmuted %@";
+
+// Allow/Disallow Group Member
+"AllowGroupMember"="%@ allowed %@ to speak";
+"DisallowGroupMember"="%@ disallowed %@ to speak";
+"SpeakingPermissionDuringMute"=" speaking permission during group mute";
+
+// Modify Group Extra
+"ModifyGroupExtra"="%@ modified group settings";
+"ModifyGroupExtraBySelf"="You modified group settings";
+"ModifyGroupExtraByUnknown"="User<%@> modified group settings";
+
+// Modify Group Member Extra
+"ModifyGroupMemberExtra"="%@ modified %@'s group member info";
+
+// Reject Join Group
+"RejectJoinGroup"="%@ rejected %@'s join request";
+
+// Recall Message
+"RecallMessageBySelf"="You recalled a message";
+"RecallMessageByOther"="%@ recalled a message";
+"RecallMessageByUnknownUser"="User<%@> recalled a message";
+
+// Delete Message
+"DeleteMessage"="A message was deleted";
+
+// Typing
+"TypingMessage"="Typing...";
+
+// Tip Message
+"TipMessage"="%@";
+
+// VoIP Messages
+"VoipCallStartAudio"="[Audio Call]";
+"VoipCallStartVideo"="[Video Call]";
+"VoipCallEnd"="Call ended";
+
+// PC Login Request
+"PCLoginRequest"="PC login request";
+
+// Enter Channel
+"EnterChannel"="%@ joined the channel";
+
+// Leave Channel
+"LeaveChannel"="%@ left the channel";
+
+// Channel Menu Event
+"ChannelMenuEvent"="%@";
+
+// Card Message
+"CardMessageDigest"="[Card]";
+"CardMessageDigestWithName"="[Card]:%@";
+
+// Composite Message
+"CompositeMessageDigest"="[Chat History]";
+
+// Conference Invite
+"ConferenceInvite"="[Conference Invite]";
+"ConferenceInviteAudio"="[Audio Conference Invite]";
+"ConferenceInviteVideo"="[Video Conference Invite]";
+
+// Articles Message
+"ArticlesMessageDigest"="[Articles]";
+
+// File Message
+"FileMessageDigest"="[File]%@";
+
+// Image Message
+"ImageMessageDigest"="[Image]";
+
+// Video Message
+"VideoMessageDigest"="[Video]";
+
+// Sound Message
+"SoundMessageDigest"="[Voice]";
+
+// Location Message
+"LocationMessageDigest"="[Location]";
+
+// Link Message
+"LinkMessageDigest"="[Link]%@";
+
+// Rich Notification
+"RichNotificationDigest"="[Notification]";
+
+// Backup Related
+"BackupRequest"="Request backup to PC";
+"BackupResponseApproved"="Backup request approved";
+"BackupResponseRejected"="Backup request rejected";
+"RestoreRequest"="Request restore from PC";
+"RestoreResponseApproved"="Restore from PC approved";
+"RestoreResponseRejected"="Restore from PC rejected";
+
+// VoIP Call Related
+"InviteCall"=" invited";
+"JoinedCall"="joined the call";
+
+// Friend Greeting
+"FriendGreeting"="The above is a greeting message";
+
+// Group Member Mute Status (Multiple Members)
+"MuteGroupMembers"="%@ muted %@";
+"UnmuteGroupMembers"="%@ unmuted %@";
+
+// Message Not Delivered
+"MessageNotDelivered"="Message not delivered";
+"MessageNotDeliveredToSingleUser"="Message not delivered";
+"MessageNotDeliveredToSomeUsers"="Message not delivered to some users";
+
+// Kickoff Visible Notification
+"KickoffYou"="You removed";
+"KickoffByOtherPrefix"="%@ removed";
+"KickoffVisibleSuffix"="from group chat";
+
+// PTT
+"PTTInvite"="[PTT Invite]";
+"PTTVoice"="[PTT Voice]";
+
+// Secret Chat
+"SecretChatNotAvailable"="Secret chat is not available";
+"SecretChatWaitingResponse"="Waiting for response";
+"SecretChatEstablishing"="Secret chat establishing";
+"SecretChatEstablished"="Secret chat established";
+"SecretChatCanceled"="Secret chat canceled";
+
+// Sticker
+"StickerDigest"="[Sticker]";
+
+// Unknown Message
+"UnknownMessageNotLoaded"="Message not loaded(%zd)";
+"UnknownMessageType"="Unknown message type(%zd)";

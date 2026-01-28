@@ -84,7 +84,7 @@
         }
         [str appendString:name];
     }];
-    [str appendString:@" 拒绝加入群组"];
+    [str appendString:WFCCString(@"RejectJoinGroup")];
 
 
     return [str copy];

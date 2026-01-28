@@ -1,0 +1,240 @@
+/*
+  wfc_client.strings
+  WFChatClient
+
+  Created by Rain on 28/1/2026.
+  Copyright © 2026 WildFireChat. All rights reserved.
+*/
+
+"FriendAddedTip"="你們已經是好友了，可以開始聊天了。";
+
+// 創建群
+"CreateGroupBySelf"="你創建了群\"%@\"";
+"CreateGroupByOther"="%@創建了群\"%@\"";
+"CreateGroupByUnknownUser"="用戶<%@>創建了群\"%@\"";
+
+// 添加群成員
+"ApproveToAddGroupMember"="%@ 批准了 ";
+"InviteJoinGroupViaQrCode"="%@ 掃描了 %@ 分享的二維碼加入了群聊";
+"InviteJoinGroupViaCard"="%@ 通過 %@ 分享的群名片加入了群聊";
+"JoinGroupBySelf"="%@ 加入了群聊";
+"InviteJoinGroupPrefix"="%@%@邀請";
+"You"="你";
+"JoinGroupSuffix"="加入了群聊";
+"JoinGroupWithMore"=" 等%ld名成員";
+
+// 退出群
+"QuitGroupBySelf"="你退出了群聊";
+"QuitGroupByOther"="%@退出了群聊";
+"QuitGroupByUnknownUser"="用戶<%@>退出了群聊";
+
+// 退出群（可見通知）
+"QuitGroupVisibleBySelf"="你移出了%@";
+"QuitGroupVisibleByOther"="%@移出了%@";
+"QuitGroupVisibleByUnknownUser"="用戶<%@>移出了%@";
+
+// 踢出群成員
+"KickoffGroupMember"="%@將%@移出群聊";
+
+// 踢出群成員（可見通知）
+"KickoffGroupMemberVisibleBySelf"="你將%@移出群聊";
+"KickoffGroupMemberVisible"="%@將%@移出群聊";
+"KickoffGroupMemberVisibleByUnknownUser"="用戶<%@>將%@移出群聊";
+
+// 解散群
+"DismissGroup"="%@解散了群";
+
+// 轉讓群主
+"TransferGroupOwner"="%@將群轉讓給%@";
+"TransferGroupOwnerBySelf"="你將群轉讓給%@";
+"TransferGroupOwnerBySelfToUnknown"="你將群轉讓給用戶<%@>";
+"TransferGroupOwnerByUnknownUser"="用戶<%@>將群轉讓給%@";
+
+// 修改群名稱
+"ChangeGroupName"="%@修改群名稱為\"%@\"";
+"ChangeGroupNameBySelf"="你修改群名稱為\"%@\"";
+"ChangeGroupNameByUnknownUser"="用戶<%@>修改群名稱為\"%@\"";
+
+// 修改群暱稱
+"ModifyGroupAliasBySelf"="你修改群暱稱為\"%@\"";
+"ModifyGroupAliasByOther"="%@修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasBySelfToSelf"="你修改自己的群暱稱為\"%@\"";
+"ModifyGroupAliasBySelfToOther"="你修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasBySelfToUnknown"="你修改用戶<%@>的群暱稱為\"%@\"";
+"ModifyGroupAliasByOtherToSelf"="%@修改你的群暱稱為\"%@\"";
+"ModifyGroupAliasByOtherToOther"="%@修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasByOtherToUnknown"="%@修改用戶<%@>的群暱稱為\"%@\"";
+"ModifyGroupAliasByUnknown"="用戶<%@>修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasByUnknownToSelf"="用戶<%@>修改你的群暱稱為\"%@\"";
+"ModifyGroupAliasByUnknownToOther"="用戶<%@>修改%@的群暱稱為\"%@\"";
+
+// 修改群頭像
+"ChangeGroupPortrait"="%@修改了群頭像";
+"ChangeGroupPortraitBySelf"="你修改了群頭像";
+"ChangeGroupPortraitByUnknownUser"="用戶<%@>修改了群頭像";
+
+// 修改群禁言
+"ChangeGroupMuteOn"="%@開啟了群禁言";
+"ChangeGroupMuteOff"="%@關閉了群禁言";
+"ChangeGroupMuteOnBySelf"="你開啟了群禁言";
+"ChangeGroupMuteOffBySelf"="你關閉了群禁言";
+"ChangeGroupMuteOnByUnknownUser"="用戶<%@>開啟了群禁言";
+"ChangeGroupMuteOffByUnknownUser"="用戶<%@>關閉了群禁言";
+
+// 修改群加入權限
+"ChangeGroupJoinType"="%@修改了群加入權限";
+"ChangeGroupJoinTypeOpen"="%@修改群加入權限為開放加入";
+"ChangeGroupJoinTypeMemberOnly"="%@修改群加入權限為僅允許群成員邀請";
+"ChangeGroupJoinTypeAdminOnly"="%@修改群加入權限為僅限群管理邀請";
+"ChangeGroupJoinTypeNeedApproval"="%@開啟了加群驗證";
+"ChangeGroupJoinTypeClose"="%@關閉了加入群組功能";
+"Administrator"="管理員";
+
+// 修改群私聊
+"ChangeGroupPrivateChatOn"="%@開啟了群成員私聊";
+"ChangeGroupPrivateChatOff"="%@關閉了群成員私聊";
+"ChangeGroupPrivateChatOnBySelf"="你開啟了群成員私聊";
+"ChangeGroupPrivateChatOffBySelf"="你關閉了群成員私聊";
+"ChangeGroupPrivateChatOnByUnknownUser"="用戶<%@>開啟了群成員私聊";
+"ChangeGroupPrivateChatOffByUnknownUser"="用戶<%@>關閉了群成員私聊";
+
+// 設置管理員
+"SetManager"="%@設置%@為管理員";
+"UnsetManager"="%@取消了%@的管理員";
+"UnknownUser"="用戶<%@>";
+"YouWithSpace"=" 你";
+"AndMoreMembers"=" 等%ld名成員";
+
+// 禁言/取消禁言群成員
+"MuteGroupMember"="%@禁言了%@";
+"UnmuteGroupMember"="%@取消禁言%@";
+
+// 允許/取消允許群成員發言
+"AllowGroupMember"="%@允許%@發言";
+"DisallowGroupMember"="%@取消%@的發言權限";
+"SpeakingPermissionDuringMute"=" 群組禁言時的發言權限";
+
+// 修改群Extra
+"ModifyGroupExtra"="%@修改了群設置";
+"ModifyGroupExtraBySelf"="你修改了群設置";
+"ModifyGroupExtraByUnknown"="用戶<%@>修改了群設置";
+
+// 修改群成員Extra
+"ModifyGroupMemberExtra"="%@修改了%@的群成員信息";
+
+// 拒絕加群
+"RejectJoinGroup"="%@拒絕了%@加群申請";
+
+// 撤回消息
+"RecallMessageBySelf"="你撤回了一條消息";
+"RecallMessageByOther"="%@撤回了一條消息";
+"RecallMessageByUnknownUser"="用戶<%@>撤回了一條消息";
+
+// 刪除消息
+"DeleteMessage"="刪除了一條消息";
+
+// 輸入中
+"TypingMessage"="對方正在輸入...";
+
+// 提示消息
+"TipMessage"="%@";
+
+// VoIP消息
+"VoipCallStartAudio"="[語音通話]";
+"VoipCallStartVideo"="[視頻通話]";
+"VoipCallEnd"="通話結束";
+
+// PC登錄請求
+"PCLoginRequest"="PC端請求登錄";
+
+// 進入頻道
+"EnterChannel"="%@ 加入了頻道";
+
+// 離開頻道
+"LeaveChannel"="%@ 離開了頻道";
+
+// 頻道菜單事件
+"ChannelMenuEvent"="%@";
+
+// 名片消息
+"CardMessageDigest"="[名片]";
+"CardMessageDigestWithName"="[名片]:%@";
+
+// 組合消息
+"CompositeMessageDigest"="[聊天記錄]";
+
+// 會議邀請
+"ConferenceInvite"="[會議邀請]";
+"ConferenceInviteAudio"="[音頻會議邀請]";
+"ConferenceInviteVideo"="[視頻會議邀請]";
+
+// 文章消息
+"ArticlesMessageDigest"="[文章]";
+
+// 文件消息
+"FileMessageDigest"="[文件]%@";
+
+// 圖片消息
+"ImageMessageDigest"="[圖片]";
+
+// 視頻消息
+"VideoMessageDigest"="[視頻]";
+
+// 語音消息
+"SoundMessageDigest"="[語音]";
+
+// 位置消息
+"LocationMessageDigest"="[位置]";
+
+// 鏈接消息
+"LinkMessageDigest"="[鏈接]%@";
+
+// 富通知消息
+"RichNotificationDigest"="[通知]";
+
+// 備份相關
+"BackupRequest"="請求備份到電腦端";
+"BackupResponseApproved"="已同意備份請求";
+"BackupResponseRejected"="已拒絕備份請求";
+"RestoreRequest"="請求從電腦端恢復備份";
+"RestoreResponseApproved"="已同意從電腦端恢復";
+"RestoreResponseRejected"="已拒絕從電腦端恢復";
+
+// VoIP 通話相關
+"InviteCall"=" 邀請";
+"JoinedCall"="加入了網絡通話";
+
+// 好友打招呼
+"FriendGreeting"="以上是打招呼的內容";
+
+// 群成員禁言狀態（多人）
+"MuteGroupMembers"="%@ 禁言了 %@";
+"UnmuteGroupMembers"="%@ 取消禁言了 %@";
+
+// 未送達消息
+"MessageNotDelivered"="消息未能送達";
+"MessageNotDeliveredToSingleUser"="消息未能送達";
+"MessageNotDeliveredToSomeUsers"="消息未能送達部分用戶";
+
+// 踢出可見通知
+"KickoffYou"="你把";
+"KickoffByOtherPrefix"="%@把";
+"KickoffVisibleSuffix"="移出群聊";
+
+// PTT對講
+"PTTInvite"="[對講邀請]";
+"PTTVoice"="[對講語音]";
+
+// 密聊
+"SecretChatNotAvailable"="密聊會話不可用";
+"SecretChatWaitingResponse"="等待對方響應";
+"SecretChatEstablishing"="密聊會話建立中";
+"SecretChatEstablished"="密聊會話已建立";
+"SecretChatCanceled"="密聊會話已取消";
+
+// 動態表情
+"StickerDigest"="[動態表情]";
+
+// 未知消息
+"UnknownMessageNotLoaded"="未加載的消息(%zd)";
+"UnknownMessageType"="未知類型消息(%zd)";
