@@ -80,12 +80,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIAlertController* actionSheet = [UIAlertController alertControllerWithTitle:nil message:LocalizedString(@"ModifyPassword") preferredStyle:UIAlertControllerStyleActionSheet];
     __weak typeof(self)ws = self;
-    UIAlertAction *actionCode = [UIAlertAction actionWithTitle:@"短信验证码验证" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *actionCode = [UIAlertAction actionWithTitle:LocalizedString(@"SMSCodeVerification") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
         [ws.navigationController pushViewController:vc animated:YES];
     }];
-    
-    UIAlertAction *actionPwd = [UIAlertAction actionWithTitle:@"使用密码验证" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+    UIAlertAction *actionPwd = [UIAlertAction actionWithTitle:LocalizedString(@"UsePasswordVerification") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         WFCChangePasswordViewController *vc = [[WFCChangePasswordViewController alloc] init];
         [ws.navigationController pushViewController:vc animated:YES];
     }];

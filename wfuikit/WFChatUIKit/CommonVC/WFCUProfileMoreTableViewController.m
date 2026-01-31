@@ -113,8 +113,8 @@
 - (UITableViewCell *)commonGroupCell {
     if(!_commonGroupCell) {
         _commonGroupCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"common_group"];
-        _commonGroupCell.textLabel.text = @"我和他的共同群组";
-        _commonGroupCell.detailTextLabel.text = [NSString stringWithFormat:@"%ld个", self.commonGroupIds.count];
+        _commonGroupCell.textLabel.text = WFCString(@"CommonGroupsWithUser");
+        _commonGroupCell.detailTextLabel.text = [NSString stringWithFormat:WFCString(@"CountGroups"), (long)self.commonGroupIds.count];
         _commonGroupCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return _commonGroupCell;
@@ -183,7 +183,7 @@
     if(selectedCell == self.commonGroupCell) {
         WFCUGroupTableViewController *groupsVC = [[WFCUGroupTableViewController alloc] init];
         groupsVC.groupIds = self.commonGroupIds;
-        groupsVC.titleString = @"我和他的共同群组";
+        groupsVC.titleString = WFCString(@"CommonGroupsWithUser");
         [self.navigationController pushViewController:groupsVC animated:YES];
     } else if (selectedCell == self.emailCell) {
         // 点击邮箱 cell，发送邮件

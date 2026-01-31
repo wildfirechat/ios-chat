@@ -73,49 +73,49 @@
     } else {
         switch (startContent.status) {
             case kWFAVCallEndReasonBusy:
-                text = @"线路忙";
+                text = WFCString(@"CallLineBusy");
                 break;
             case kWFAVCallEndReasonSignalError:
-                text = @"网络错误";
+                text = WFCString(@"NetworkError");
                 break;
             case kWFAVCallEndReasonHangup:
-                text = @"已取消";
+                text = WFCString(@"CallCancelled");
                 break;
             case kWFAVCallEndReasonMediaError:
-                text = @"网络错误";
+                text = WFCString(@"NetworkError");
                 break;
             case kWFAVCallEndReasonRemoteHangup:
-                text = @"对方已取消";
+                text = WFCString(@"CallRemoteCancelled");
                 break;
             case kWFAVCallEndReasonOpenCameraFailure:
-                text = @"网络错误";
+                text = WFCString(@"NetworkError");
                 break;
             case kWFAVCallEndReasonTimeout:
-                text = @"未接听";
+                text = WFCString(@"CallEndTimeout");
                 break;
             case kWFAVCallEndReasonAcceptByOtherClient:
-                text = @"其它端已接听";
+                text = WFCString(@"CallAnsweredElsewhere");
                 break;
             case kWFAVCallEndReasonAllLeft:
-                text = @"通话已结束";
+                text = WFCString(@"CallEnded");
                 break;
             case kWFAVCallEndReasonRemoteBusy:
-                text = @"对方线路忙";
+                text = WFCString(@"CallRemoteLineBusy");
                 break;
             case kWFAVCallEndReasonRemoteTimeout:
-                text = @"对方未接听";
+                text = WFCString(@"CallRemoteTimeout");
                 break;
             case kWFAVCallEndReasonRemoteNetworkError:
-                text = @"对方网络错误";
+                text = WFCString(@"CallRemoteNetworkError");
                 break;
             case kWFAVCallEndReasonRoomDestroyed:
-                text = @"通话已结束";
+                text = WFCString(@"CallEnded");
                 break;
             case kWFAVCallEndReasonRoomNotExist:
-                text = @"通话已结束";
+                text = WFCString(@"CallEnded");
                 break;
             case kWFAVCallEndReasonRoomParticipantsFull:
-                text = @"已达到最大参与人数";
+                text = WFCString(@"CallParticipantsFull");
                 break;
             case kWFAVCallEndReasonInterrupted:
                 text = @"通话中断";

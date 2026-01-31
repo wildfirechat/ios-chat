@@ -26,7 +26,7 @@
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
     
     if (userInfo.displayName.length) {
-        self.title = [NSString stringWithFormat:@"%@ 的消息", userInfo.displayName];
+        self.title = [NSString stringWithFormat:WFCString(@"%@`s messages"), userInfo.displayName];
     }
     
     self.messages = [[[WFCCIMService sharedWFCIMService] getUserMessages:self.userId conversation:self.conversation contentTypes:nil from:0 count:20] mutableCopy];

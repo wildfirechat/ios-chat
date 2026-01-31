@@ -391,21 +391,21 @@
                 } else if(self.groupSourceType == GroupMemberSource_QrCode) {
                     if(self.sourceTargetId.length) {
                         self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                        self.groupSourceCell.textLabel.text = @"进群方式";
-                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:@"扫描 %@ 分享的二维码入群", [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
+                        self.groupSourceCell.textLabel.text = WFCString(@"JoinGroupMethod");
+                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:WFCString(@"ScanQRCodeToJoinGroup"), [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
                         [self.cells addObject:self.groupSourceCell];
                     }
                 } else if(self.groupSourceType == GroupMemberSource_Card) {
                     if(self.sourceTargetId.length) {
                         self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                        self.groupSourceCell.textLabel.text = @"进群方式";
-                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:@"通过 %@ 分享的名片入群", [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
+                        self.groupSourceCell.textLabel.text = WFCString(@"JoinGroupMethod");
+                        self.groupSourceCell.detailTextLabel.text = [NSString stringWithFormat:WFCString(@"ShareCardToJoinGroup"), [WFCCUtilities getUserDisplayName:self.sourceTargetId inGroup:self.fromConversation.target]];
                         [self.cells addObject:self.groupSourceCell];
                     }
                 } else if(self.groupSourceType == GroupMemberSource_Search) {
                     self.groupSourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-                    self.groupSourceCell.textLabel.text = @"进群方式";
-                    self.groupSourceCell.detailTextLabel.text = @"通过搜索入群";
+                    self.groupSourceCell.textLabel.text = WFCString(@"JoinGroupMethod");
+                    self.groupSourceCell.detailTextLabel.text = WFCString(@"JoinGroupBySearch");
                     [self.cells addObject:self.groupSourceCell];
                 }
             }

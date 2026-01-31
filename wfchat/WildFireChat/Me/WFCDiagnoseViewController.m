@@ -87,10 +87,10 @@
                 int duration = (int)((-value)*1000 + 0.5);
                 [ws reportResult:[NSString stringWithFormat:LocalizedString(@"SpeedTestSuccess"), duration]];
             } else {
-                [ws reportResult:[NSString stringWithFormat:@"测速失败，无法识别服务器返回的数据：%@", responseObject]];
+                [ws reportResult:[NSString stringWithFormat:LocalizedString(@"SpeedTestFailedUnrecognized"), responseObject]];
             }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [ws reportResult:[NSString stringWithFormat:@"测速失败，错误原因:%@", error.localizedDescription]];
+            [ws reportResult:[NSString stringWithFormat:LocalizedString(@"SpeedTestFailed"), error.localizedDescription]];
     }];
     
 }

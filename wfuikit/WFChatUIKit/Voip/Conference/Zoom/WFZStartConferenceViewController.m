@@ -76,7 +76,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Create") style:UIBarButtonItemStyleDone target:self action:@selector(onRightBarBtn:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor redColor];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    self.conferenceTitle = [NSString stringWithFormat:@"%@ 发起的会议", userInfo.displayName];
+    self.conferenceTitle = [NSString stringWithFormat:WFCString(@"ConferenceByUser"), userInfo.displayName];
     [self.tableView reloadData];
 }
 
