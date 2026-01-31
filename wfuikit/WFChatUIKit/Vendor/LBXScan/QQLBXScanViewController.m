@@ -254,7 +254,7 @@
         }
         else if (!firstTime )
         {
-            [LBXPermissionSetting showAlertToDislayPrivacySettingWithTitle:@"提示" msg:@"没有相册权限，是否前往设置" cancel:@"取消" setting:@"设置"];
+            [LBXPermissionSetting showAlertToDislayPrivacySettingWithTitle:WFCString(@"Tip") msg:WFCString(@"NoAlbumPermissionTip") cancel:WFCString(@"Cancel") setting:WFCString(@"Setting")];
         }
     }];
 }

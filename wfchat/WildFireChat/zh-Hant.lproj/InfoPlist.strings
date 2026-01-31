@@ -49,6 +49,7 @@ PhoneNumberPlaceholder="請輸入手機號(僅支持中國大陸號碼)";
 VerificationCode="驗證碼";
 VerificationCodePlaceholder="請輸入驗證碼";
 GetVerificationCode="獲取驗證碼";
+GetVerificationCodeFailed="獲取驗證碼失敗";
 UsePasswordLogin="使用用戶密碼登錄";
 Register="註冊";
 Login="登錄";

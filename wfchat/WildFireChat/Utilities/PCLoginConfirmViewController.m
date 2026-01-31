@@ -29,25 +29,25 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, 320, 200, 16)];
     switch (self.platform) {
         case PlatformType_Windows:
-            [label setText:@"确认 Windows 登录"];
+            [label setText:LocalizedString(@"ConfirmWindowsLogin")];
             break;
         case PlatformType_OSX:
-            [label setText:@"确认 Mac 登录"];
+            [label setText:LocalizedString(@"ConfirmMacLogin")];
             break;
         case PlatformType_WEB:
-            [label setText:@"确认浏览器登录"];
+            [label setText:LocalizedString(@"ConfirmBrowserLogin")];
             break;
         case PlatformType_Linux:
-            [label setText:@"确认 Linux 登录"];
+            [label setText:LocalizedString(@"ConfirmLinuxLogin")];
             break;
         case PlatformType_iPad:
-            [label setText:@"确认 iPad 登录"];
+            [label setText:LocalizedString(@"ConfirmIPadLogin")];
             break;
         case PlatformType_APad:
-            [label setText:@"确认 Android 平板登录"];
+            [label setText:LocalizedString(@"ConfirmAndroidTabletLogin")];
             break;
         default:
-            [label setText:@"确认电脑登录"];
+            [label setText:LocalizedString(@"ConfirmPCLogin")];
             break;
     }
     

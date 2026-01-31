@@ -375,7 +375,7 @@
         [alertController addAction:settingsAction];
     }
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel")
                                                              style:UIAlertActionStyleCancel
                                                            handler:nil];
     [alertController addAction:cancelAction];
