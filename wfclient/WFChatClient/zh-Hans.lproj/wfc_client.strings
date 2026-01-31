@@ -26,21 +26,21 @@
 "QuitGroupVisibleByUnknownUser"="用户<%@>移出了%@";
 
 // 踢出群成员
-"KickoffGroupMember"="%@将%@移出群聊";
+"KickoffGroupMember"="%@将";
 
 // 踢出群成员（可见通知）
-"KickoffGroupMemberVisibleBySelf"="你将%@移出群聊";
-"KickoffGroupMemberVisible"="%@将%@移出群聊";
-"KickoffGroupMemberVisibleByUnknownUser"="用户<%@>将%@移出群聊";
+"KickoffGroupMemberVisibleBySelf"="你将";
+"KickoffGroupMemberVisible"="%@将";
+"KickoffGroupMemberVisibleByUnknownUser"="用户<%@>将";
 
 // 解散群
 "DismissGroup"="%@解散了群";
 
 // 转让群主
-"TransferGroupOwner"="%@将群转让给%@";
+"TransferGroupOwner"="%@将群转让给";
 "TransferGroupOwnerBySelf"="你将群转让给%@";
 "TransferGroupOwnerBySelfToUnknown"="你将群转让给用户<%@>";
-"TransferGroupOwnerByUnknownUser"="用户<%@>将群转让给%@";
+"TransferGroupOwnerByUnknownUser"="用户<%@>将群转让给";
 
 // 修改群名称
 "ChangeGroupName"="%@修改群名称为\"%@\"";
@@ -49,14 +49,14 @@
 
 // 修改群昵称
 "ModifyGroupAliasBySelf"="你修改群昵称为\"%@\"";
-"ModifyGroupAliasByOther"="%@修改%@的群昵称为\"%@\"";
+"ModifyGroupAliasByOther"="%@修改群昵称为\"%@\"";
 "ModifyGroupAliasBySelfToSelf"="你修改自己的群昵称为\"%@\"";
 "ModifyGroupAliasBySelfToOther"="你修改%@的群昵称为\"%@\"";
 "ModifyGroupAliasBySelfToUnknown"="你修改用户<%@>的群昵称为\"%@\"";
 "ModifyGroupAliasByOtherToSelf"="%@修改你的群昵称为\"%@\"";
 "ModifyGroupAliasByOtherToOther"="%@修改%@的群昵称为\"%@\"";
 "ModifyGroupAliasByOtherToUnknown"="%@修改用户<%@>的群昵称为\"%@\"";
-"ModifyGroupAliasByUnknown"="用户<%@>修改%@的群昵称为\"%@\"";
+"ModifyGroupAliasByUnknown"="用户<%@>修改群昵称为\"%@\"";
 "ModifyGroupAliasByUnknownToSelf"="用户<%@>修改你的群昵称为\"%@\"";
 "ModifyGroupAliasByUnknownToOther"="用户<%@>修改%@的群昵称为\"%@\"";
 
@@ -80,7 +80,7 @@
 "ChangeGroupJoinTypeAdminOnly"="%@修改群加入权限为仅限群管理邀请";
 "ChangeGroupJoinTypeNeedApproval"="%@开启了加群验证";
 "ChangeGroupJoinTypeClose"="%@关闭了加入群组功能";
-"Administrator"="管理员";
+"Administrator"="管理员<%@>";
 
 // 修改群私聊
 "ChangeGroupPrivateChatOn"="%@开启了群成员私聊";
@@ -98,18 +98,18 @@
 "AndMoreMembers"=" 等%ld名成员";
 
 // 禁言/取消禁言群成员
-"MuteGroupMember"="%@禁言了%@";
-"UnmuteGroupMember"="%@取消禁言%@";
+"MuteGroupMember"="%@ 禁言了";
+"UnmuteGroupMember"="%@ 取消禁言了";
 
 // 允许/取消允许群成员发言
-"AllowGroupMember"="%@允许%@发言";
-"DisallowGroupMember"="%@取消%@的发言权限";
+"AllowGroupMember"="%@ 允许了";
+"DisallowGroupMember"="%@ 取消了";
 "SpeakingPermissionDuringMute"=" 群组禁言时的发言权限";
 
 // 修改群Extra
-"ModifyGroupExtra"="%@修改了群设置";
-"ModifyGroupExtraBySelf"="你修改了群设置";
-"ModifyGroupExtraByUnknown"="用户<%@>修改了群设置";
+"ModifyGroupExtra"="%@修改群附加信息为\"%@";
+"ModifyGroupExtraBySelf"="你修改群附加信息为\"%@";
+"ModifyGroupExtraByUnknown"="用户<%@>修改群附加信息为\"%@";
 
 // 修改群成员Extra
 "ModifyGroupMemberExtra"="%@修改了%@的群成员信息";
@@ -153,7 +153,7 @@
 "CardMessageDigestWithName"="[名片]:%@";
 
 // 组合消息
-"CompositeMessageDigest"="[聊天记录]";
+"CompositeMessageDigest"="[聊天记录]:%@";
 
 // 会议邀请
 "ConferenceInvite"="[会议邀请]";

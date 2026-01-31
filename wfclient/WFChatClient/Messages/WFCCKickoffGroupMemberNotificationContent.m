@@ -102,6 +102,8 @@
         formatMsg = [formatMsg stringByAppendingFormat:WFCCString(@"AndMoreMembers"), self.kickedMembers.count];
     }
 
+    formatMsg = [formatMsg stringByAppendingString:WFCCString(@"KickoffVisibleSuffix")];
+
     return formatMsg;
 }
 @end

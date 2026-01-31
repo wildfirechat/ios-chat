@@ -26,21 +26,21 @@
 "QuitGroupVisibleByUnknownUser"="User<%@> removed %@";
 
 // Kickoff Group Member
-"KickoffGroupMember"="%@ removed %@ from the group";
+"KickoffGroupMember"="%@ removed";
 
 // Kickoff Group Member (Visible Notification)
-"KickoffGroupMemberVisibleBySelf"="You removed %@ from the group";
-"KickoffGroupMemberVisible"="%@ removed %@ from the group";
-"KickoffGroupMemberVisibleByUnknownUser"="User<%@> removed %@ from the group";
+"KickoffGroupMemberVisibleBySelf"="You removed";
+"KickoffGroupMemberVisible"="%@ removed";
+"KickoffGroupMemberVisibleByUnknownUser"="User<%@> removed";
 
 // Dismiss Group
 "DismissGroup"="%@ dismissed the group";
 
 // Transfer Group Owner
-"TransferGroupOwner"="%@ transferred the group to %@";
+"TransferGroupOwner"="%@ transferred the group to";
 "TransferGroupOwnerBySelf"="You transferred the group to %@";
 "TransferGroupOwnerBySelfToUnknown"="You transferred the group to user<%@>";
-"TransferGroupOwnerByUnknownUser"="User<%@> transferred the group to %@";
+"TransferGroupOwnerByUnknownUser"="User<%@> transferred the group to";
 
 // Change Group Name
 "ChangeGroupName"="%@ changed group name to \"%@\"";
@@ -49,14 +49,14 @@
 
 // Modify Group Alias
 "ModifyGroupAliasBySelf"="You changed your group alias to \"%@\"";
-"ModifyGroupAliasByOther"="%@ changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasByOther"="%@ changed group alias to \"%@\"";
 "ModifyGroupAliasBySelfToSelf"="You changed your group alias to \"%@\"";
 "ModifyGroupAliasBySelfToOther"="You changed %@'s group alias to \"%@\"";
 "ModifyGroupAliasBySelfToUnknown"="You changed user<%@>'s group alias to \"%@\"";
 "ModifyGroupAliasByOtherToSelf"="%@ changed your group alias to \"%@\"";
 "ModifyGroupAliasByOtherToOther"="%@ changed %@'s group alias to \"%@\"";
 "ModifyGroupAliasByOtherToUnknown"="%@ changed user<%@>'s group alias to \"%@\"";
-"ModifyGroupAliasByUnknown"="User<%@> changed %@'s group alias to \"%@\"";
+"ModifyGroupAliasByUnknown"="User<%@> changed group alias to \"%@\"";
 "ModifyGroupAliasByUnknownToSelf"="User<%@> changed your group alias to \"%@\"";
 "ModifyGroupAliasByUnknownToOther"="User<%@> changed %@'s group alias to \"%@\"";
 
@@ -80,7 +80,7 @@
 "ChangeGroupJoinTypeAdminOnly"="%@ changed group join type to admins only";
 "ChangeGroupJoinTypeNeedApproval"="%@ enabled join approval";
 "ChangeGroupJoinTypeClose"="%@ disabled join group function";
-"Administrator"="Administrator";
+"Administrator"="Administrator<%@>";
 
 // Change Group Private Chat
 "ChangeGroupPrivateChatOn"="%@ enabled private chat";
@@ -98,18 +98,18 @@
 "AndMoreMembers"=" and %ld others";
 
 // Mute/Unmute Group Member
-"MuteGroupMember"="%@ muted %@";
-"UnmuteGroupMember"="%@ unmuted %@";
+"MuteGroupMember"="%@ muted";
+"UnmuteGroupMember"="%@ unmuted";
 
 // Allow/Disallow Group Member
-"AllowGroupMember"="%@ allowed %@ to speak";
-"DisallowGroupMember"="%@ disallowed %@ to speak";
+"AllowGroupMember"="%@ allowed";
+"DisallowGroupMember"="%@ disallowed";
 "SpeakingPermissionDuringMute"=" speaking permission during group mute";
 
 // Modify Group Extra
-"ModifyGroupExtra"="%@ modified group settings";
-"ModifyGroupExtraBySelf"="You modified group settings";
-"ModifyGroupExtraByUnknown"="User<%@> modified group settings";
+"ModifyGroupExtra"="%@ modified group extra to \"%@\"";
+"ModifyGroupExtraBySelf"="You modified group extra to \"%@\"";
+"ModifyGroupExtraByUnknown"="User<%@> modified group extra to \"%@\"";
 
 // Modify Group Member Extra
 "ModifyGroupMemberExtra"="%@ modified %@'s group member info";
@@ -153,7 +153,7 @@
 "CardMessageDigestWithName"="[Card]:%@";
 
 // Composite Message
-"CompositeMessageDigest"="[Chat History]";
+"CompositeMessageDigest"="[Chat History]:%@";
 
 // Conference Invite
 "ConferenceInvite"="[Conference Invite]";
