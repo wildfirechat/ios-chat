@@ -379,7 +379,7 @@ static AppService *sharedSingleton = nil;
         if([dict[@"code"] intValue] == 0 && dict[@"result"]) {
             if(successBlock) successBlock(dict[@"result"]);
         } else {
-            if(errorBlock) errorBlock(@"获取验证码失败");
+            if(errorBlock) errorBlock(LocalizedString(@"GetVerificationCodeFailed"));
         }
     } error:^(NSError * _Nonnull error) {
         if(errorBlock) errorBlock(error.localizedDescription);
@@ -391,7 +391,7 @@ static AppService *sharedSingleton = nil;
         if([dict[@"code"] intValue] == 0) {
             if(successBlock) successBlock();
         } else {
-            if(errorBlock) errorBlock(@"验证失败");
+            if(errorBlock) errorBlock(LocalizedString(@"VerificationFailed"));
         }
     } error:^(NSError * _Nonnull error) {
         if(errorBlock) errorBlock(error.localizedDescription);

@@ -106,7 +106,7 @@
         WFCUGeneralSwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switchcell"];
         if (cell == nil) {
             cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"switchcell"];
-            cell.textLabel.text = WFCString(@"MuteAll");
+            cell.textLabel.text = WFCString(@"MuteAllMembers");
             cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
                 [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
                     ws.groupInfo.mute = value;
@@ -211,7 +211,7 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return WFCString(@"MuteAll");
+        return WFCString(@"MuteAllMembers");
     } else if(section == 1) {
         return WFCString(@"MutedList");
     } else if(section == 2) {

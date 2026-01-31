@@ -4058,19 +4058,19 @@
 
     if ([qrCode hasPrefix:@"http://"] || [qrCode hasPrefix:@"https://"]) {
         // 如果是 URL，询问是否打开
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"识别到网址" message:qrCode preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"URLDetected") message:qrCode preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *openAction = [UIAlertAction actionWithTitle:@"打开" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"Open") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:qrCode] options:@{} completionHandler:nil];
         }];
 
-        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"复制" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:WFCString(@"Copy") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = qrCode;
-            [self.view makeToast:@"已复制到剪贴板" duration:1.5 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"CopiedToClipboard") duration:1.5 position:CSToastPositionCenter];
         }];
 
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil];
 
         [alert addAction:openAction];
         [alert addAction:copyAction];
@@ -4079,15 +4079,15 @@
         [self presentViewController:alert animated:YES completion:nil];
     } else {
         // 如果不是 URL，直接显示内容并提供复制选项
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"识别结果" message:qrCode preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"ScanResult") message:qrCode preferredStyle:UIAlertControllerStyleAlert];
 
-        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:@"复制" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *copyAction = [UIAlertAction actionWithTitle:WFCString(@"Copy") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = qrCode;
-            [self.view makeToast:@"已复制到剪贴板" duration:1.5 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"CopiedToClipboard") duration:1.5 position:CSToastPositionCenter];
         }];
 
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleCancel handler:nil];
 
         [alert addAction:copyAction];
         [alert addAction:cancelAction];
