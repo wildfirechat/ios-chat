@@ -65,6 +65,19 @@ typedef NS_ENUM(NSInteger, ModifyMyInfoType) {
     Modify_Extra = 8
 };
 
+/**
+ 修改群组信息的内容
+
+ - Modify_Group_Name: 修改群名称
+ - Modify_Group_Portrait: 修改群头像
+ - Modify_Group_Extra: 修改群扩展信息
+ - Modify_Group_Mute: 修改群静音状态
+ - Modify_Group_JoinType: 修改群加入类型
+ - Modify_Group_PrivateChat: 修改群私聊状态
+ - Modify_Group_Searchable: 修改群可搜索状态
+ - Modify_Group_History_Message: 修改群历史消息状态
+ - Modify_Group_Max_Member_Count: 修改群最大成员数
+ */
 typedef NS_ENUM(NSInteger, ModifyGroupInfoType) {
     Modify_Group_Name = 0,
     Modify_Group_Portrait = 1,
@@ -78,6 +91,16 @@ typedef NS_ENUM(NSInteger, ModifyGroupInfoType) {
 };
 
 
+/**
+ 修改频道信息的内容
+
+ - Modify_Channel_Name: 修改频道名称
+ - Modify_Channel_Portrait: 修改频道头像
+ - Modify_Channel_Desc: 修改频道描述
+ - Modify_Channel_Extra: 修改频道扩展信息
+ - Modify_Channel_Secret: 修改频道私密状态
+ - Modify_Channel_Callback: 修改频道回调
+ */
 typedef NS_ENUM(NSInteger, ModifyChannelInfoType) {
     Modify_Channel_Name = 0,
     Modify_Channel_Portrait = 1,
@@ -208,6 +231,23 @@ typedef NS_ENUM(NSInteger, WFCCDisableSearchMask) {
 };
 
 
+/**
+ 平台类型枚举
+
+ - PlatformType_UNSET: 未设置
+ - PlatformType_iOS: iOS平台
+ - PlatformType_Android: Android平台
+ - PlatformType_Windows: Windows平台
+ - PlatformType_OSX: macOS平台
+ - PlatformType_WEB: Web平台
+ - PlatformType_WX: 微信平台
+ - PlatformType_Linux: Linux平台
+ - PlatformType_iPad: iPad平台
+ - PlatformType_APad: Android Pad平台
+ - PlatformType_Harmony: 鸿蒙平台
+ - PlatformType_HarmonyPad: 鸿蒙Pad平台
+ - PlatformType_HarmonyPC: 鸿蒙PC平台
+ */
 typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_UNSET = 0,
     PlatformType_iOS = 1,
@@ -225,6 +265,14 @@ typedef NS_ENUM(NSInteger, WFCCPlatformType) {
     PlatformType_HarmonyPC = 12
 } ;
 
+/**
+ 文件记录排序方式
+
+ - FileRecordOrder_TIME_DESC: 按时间降序
+ - FileRecordOrder_TIME_ASC: 按时间升序
+ - FileRecordOrder_SIZE_DESC: 按大小降序
+ - FileRecordOrder_SIZE_ASC: 按大小升序
+ */
 typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
     FileRecordOrder_TIME_DESC = 0,
     FileRecordOrder_TIME_ASC = 1,
@@ -233,41 +281,107 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 } ;
 
 #pragma mark - 用户源
-/*
- * ChatClient内置支持用户信息托管，但对于很多应用来说都已经拥有自己的用户信息。此时可以实现用户源并设置到IMServer中去。这样ChatClient会从源中读取信息，从而ChatUIKit不用修改代码。
- * 对于好友关系，由于页面简单。如果客户有自己的好友关系，建议客户自己修改相关UI。
- * 对于群组建议使用我们的托管。
+/**
+ ChatClient内置支持用户信息托管，但对于很多应用来说都已经拥有自己的用户信息。此时可以实现用户源并设置到IMServer中去。这样ChatClient会从源中读取信息，从而ChatUIKit不用修改代码。
+ 对于好友关系，由于页面简单。如果客户有自己的好友关系，建议客户自己修改相关UI。
+ 对于群组建议使用我们的托管。
  */
 @protocol WFCCUserSource <NSObject>
+/**
+ 获取用户信息
+
+ @param userId 用户ID
+ @param refresh 是否强制从服务器更新
+ @return 用户信息
+ */
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId
                       refresh:(BOOL)refresh;
 
+/**
+ 获取群组中的用户信息
+
+ @param userId 用户ID
+ @param groupId 群组ID
+ @param refresh 是否强制从服务器更新
+ @return 用户信息
+ */
 - (WFCCUserInfo *)getUserInfo:(NSString *)userId inGroup:(NSString *)groupId refresh:(BOOL)refresh;
 
+/**
+ 批量获取群组中的用户信息
+
+ @param userIds 用户ID列表
+ @param groupId 群组ID
+ @return 用户信息列表
+ */
 - (NSArray<WFCCUserInfo *> *)getUserInfos:(NSArray<NSString *> *)userIds inGroup:(NSString *)groupId;
 
+/**
+ 获取用户信息（异步）
+
+ @param userId 用户ID
+ @param refresh 是否强制从服务器更新
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getUserInfo:(NSString *)userId
             refresh:(BOOL)refresh
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
               error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 获取群组中的用户信息（异步）
+
+ @param userId 用户ID
+ @param groupId 群组ID
+ @param refresh 是否强制从服务器更新
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getUserInfo:(NSString *)userId
             groupId:(NSString *)groupId
             refresh:(BOOL)refresh
             success:(void(^)(WFCCUserInfo *userInfo))successBlock
               error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 批量获取群组中的用户信息（异步）
+
+ @param userIds 用户ID列表
+ @param groupId 群组ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getUserInfos:(NSArray<NSString *> *)userIds
              groupId:(NSString *)groupId
              success:(void(^)(NSArray<WFCCUserInfo *> *userInfos))successBlock
               error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 搜索用户
+
+ @param keyword 关键词
+ @param searchType 搜索类型
+ @param page 页码
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)searchUser:(NSString *)keyword
         searchType:(WFCCSearchUserType)searchType
               page:(int)page
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 搜索指定域的用户
+
+ @param keyword 关键词
+ @param domainId 域ID
+ @param searchType 搜索类型
+ @param page 页码
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)searchUser:(NSString *)keyword
             domain:(NSString *)domainId
         searchType:(WFCCSearchUserType)searchType
@@ -275,6 +389,17 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 搜索指定域的用户（指定用户类型）
+
+ @param keyword 关键词
+ @param domainId 域ID
+ @param searchType 搜索类型
+ @param userType 用户类型
+ @param page 页码
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)searchUser:(NSString *)keyword
             domain:(NSString *)domainId
         searchType:(WFCCSearchUserType)searchType
@@ -283,7 +408,13 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
            success:(void(^)(NSArray<WFCCUserInfo *> *machedUsers))successBlock
              error:(void(^)(int errorCode))errorBlock;
 
+/**
+ 修改个人信息
 
+ @param values 要修改的信息键值对
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock;
@@ -308,7 +439,7 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 + (WFCCIMService*)sharedWFCIMService;
 
 
-/*
+/**
  使用raw消息。当client用于uniapp时，messagePayload没有必要decode为messagecontent，使用raw消息，收发消息都是WFCCRawMessageContent。不要调用这个函数，仅仅当client用在uniapp时。
  */
 - (void)useRawMessage;
@@ -1857,18 +1988,46 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                     success:(void(^)(void))successBlock
                       error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取好友备注
+
+ @param friendId 好友用户ID
+ @return 好友备注
+ */
 - (NSString *)getFriendAlias:(NSString *)friendId;
 
+/**
+ 设置好友备注
+
+ @param friendId 好友用户ID
+ @param alias 备注
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)setFriend:(NSString *)friendId
             alias:(NSString *)alias
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock;
 
+/**
+ 设置好友扩展信息
+
+ @param friendId 好友用户ID
+ @param extra 扩展信息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)setFriend:(NSString *)friendId
             extra:(NSString *)extra
           success:(void(^)(void))successBlock
             error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取好友扩展信息
+
+ @param friendId 好友用户ID
+ @return 好友扩展信息
+ */
 - (NSString *)getFriendExtra:(NSString *)friendId;
 /**
  查询用户是否被加入黑名单
@@ -2475,6 +2634,8 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 
 /**
  当前时间是否是免打扰
+
+ @return YES当前是免打扰时间；NO当前不是免打扰时间
  */
 - (BOOL)isNoDisturbing;
 
@@ -2578,27 +2739,72 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  */
 - (void)setFavUser:(NSString *)userId fav:(BOOL)fav success:(void(^)(void))successBlock error:(void(^)(int errorCode))errorBlock;
 #pragma mark - 聊天室相关
+/**
+ 加入聊天室
+
+ @param chatroomId 聊天室ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)joinChatroom:(NSString *)chatroomId
              success:(void(^)(void))successBlock
                error:(void(^)(int error_code))errorBlock;
 
+/**
+ 退出聊天室
+
+ @param chatroomId 聊天室ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)quitChatroom:(NSString *)chatroomId
              success:(void(^)(void))successBlock
                error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取聊天室信息
+
+ @param chatroomId 聊天室ID
+ @param updateDt 更新时间
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getChatroomInfo:(NSString *)chatroomId
                 upateDt:(long long)updateDt
                 success:(void(^)(WFCCChatroomInfo *chatroomInfo))successBlock
                   error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取聊天室成员信息
+
+ @param chatroomId 聊天室ID
+ @param maxCount 最大成员数
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)getChatroomMemberInfo:(NSString *)chatroomId
                       maxCount:(int)maxCount
                       success:(void(^)(WFCCChatroomMemberInfo *memberInfo))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
+/**
+ 获取已加入的聊天室ID
+
+ @return 聊天室ID
+ */
 - (NSString *)getJoinedChatroomId;
 
 #pragma mark - 频道相关
+/**
+ 创建频道
+
+ @param channelName 频道名称
+ @param channelPortrait 频道头像
+ @param desc 频道描述
+ @param extra 扩展信息
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)createChannel:(NSString *)channelName
              portrait:(NSString *)channelPortrait
                  desc:(NSString *)desc
@@ -2990,67 +3196,126 @@ amr文件转成wav数据
 
 /**
 提交数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；需要跟beginTransaction配对使用
- 
+
+ @return 是否提交成功
 */
 - (BOOL)commitTransaction;
 
 /**
 回滚数据库事务。注意：该方法仅仅在做数据迁移时使用，其它情况不要使用；需要跟beginTransaction配对使用
- 
+
+ @return 是否回滚成功
 */
 - (BOOL)rollbackTransaction;
 
 /**
  是否是商业版IM服务。
+
+ @return YES是商业版IM服务；NO是社区版IM服务
  */
 - (BOOL)isCommercialServer;
 
 /**
 是否支持已阅读报告
+
+ @return YES支持已阅读报告；NO不支持已阅读报告
 */
 - (BOOL)isReceiptEnabled;
 
 /**
 群组是否支持已阅读报告
+
+ @return YES群组支持已阅读报告；NO群组不支持已阅读报告
 */
 - (BOOL)isGroupReceiptEnabled;
 
-/*
+/**
  是否应用关闭草稿同步功能
+
+ @return YES关闭草稿同步；NO开启草稿同步
  */
 - (BOOL)isGlobalDisableSyncDraft;
 
-/*
+/**
  是否应用开启了Mesh功能
+
+ @return YES开启Mesh功能；NO未开启
  */
 - (BOOL)isMeshEnabled;
 
-/*
+/**
  获取用户的在线状态
+
+ @param userId 用户ID
+ @return 用户在线状态
  */
 - (WFCCUserOnlineState *)getUserOnlineState:(NSString *)userId;
 
+/**
+ 获取当前用户自定义状态
+
+ @return 当前用户自定义状态
+ */
 - (WFCCUserCustomState *)getMyCustomState;
 
+/**
+ 设置当前用户自定义状态
+
+ @param state 自定义状态
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)setMyCustomState:(WFCCUserCustomState *)state
                  success:(void(^)(void))successBlock
                    error:(void(^)(int error_code))errorBlock;
 
+/**
+ 监听用户在线状态
+
+ @param conversationType 会话类型
+ @param targets 目标用户ID列表
+ @param watchDuration 监听时长
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)watchOnlineState:(WFCCConversationType)conversationType
                  targets:(NSArray<NSString *> *)targets
                 duration:(int)watchDuration
                  success:(void(^)(NSArray<WFCCUserOnlineState *> *states))successBlock
                    error:(void(^)(int error_code))errorBlock;
 
+/**
+ 取消监听用户在线状态
+
+ @param conversationType 会话类型
+ @param targets 目标用户ID列表
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)unwatchOnlineState:(WFCCConversationType)conversationType
                    targets:(NSArray<NSString *> *)targets
                    success:(void(^)(void))successBlock
                      error:(void(^)(int error_code))errorBlock;
 
+/**
+ 是否启用了用户在线状态功能
+
+ @return YES启用；NO未启用
+ */
 - (BOOL)isEnableUserOnlineState;
 
-/*
+/**
  音视频会议相关
+ */
+/**
+ 发送会议请求
+
+ @param sessionId 会话ID
+ @param roomId 房间ID
+ @param request 请求内容
+ @param data 数据
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
  */
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
@@ -3059,6 +3324,17 @@ amr文件转成wav数据
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
+/**
+ 发送会议请求（高级）
+
+ @param sessionId 会话ID
+ @param roomId 房间ID
+ @param request 请求内容
+ @param advanced 是否高级模式
+ @param data 数据
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)sendConferenceRequest:(long long)sessionId
                          room:(NSString *)roomId
                       request:(NSString *)request
@@ -3067,16 +3343,44 @@ amr文件转成wav数据
                       success:(void(^)(NSString *authorizedUrl))successBlock
                         error:(void(^)(int error_code))errorBlock;
 
+/**
+ 请求分布式锁
+
+ @param lockId 锁ID
+ @param duration 持续时长
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)requireLock:(NSString *)lockId
            duration:(NSUInteger)duration
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock;
 
+/**
+ 释放分布式锁
+
+ @param lockId 锁ID
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)releaseLock:(NSString *)lockId
             success:(void(^)(void))successBlock
               error:(void(^)(int error_code))errorBlock;
 
+/**
+ 发送朋友圈请求
+
+ @param path 路径
+ @param data 数据
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
 - (void)postMomentsRequest:(NSString *)path data:(NSData *)data success:(void(^)(NSData *responseData))successBlock error:(void(^)(int error_code))errorBlock;
-//内部调用，请勿使用
+
+/**
+ 内部调用，请勿使用
+
+ @param states 用户在线状态列表
+ */
 - (void)putUseOnlineStates:(NSArray<WFCCUserOnlineState *> *)states;
 @end
