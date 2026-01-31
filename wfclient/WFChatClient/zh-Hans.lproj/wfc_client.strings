@@ -27,6 +27,8 @@
 
 // 踢出群成员
 "KickoffGroupMember"="%@将";
+"KickoffGroupMemberBySelf"="你把";
+"KickoffGroupMemberByUnknown"="用户<%@>把";
 
 // 踢出群成员（可见通知）
 "KickoffGroupMemberVisibleBySelf"="你将";
@@ -35,6 +37,8 @@
 
 // 解散群
 "DismissGroup"="%@解散了群";
+"DismissGroupBySelf"="你解散了群聊";
+"DismissGroupByUnknownUser"="用户<%@>解散了群聊";
 
 // 转让群主
 "TransferGroupOwner"="%@将群转让给";
