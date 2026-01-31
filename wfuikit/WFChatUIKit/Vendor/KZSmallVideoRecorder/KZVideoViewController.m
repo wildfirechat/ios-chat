@@ -198,11 +198,11 @@ static KZVideoViewController *__currentVideoVC = nil;
 - (void)setupVideo {
     NSString *unUseInfo = nil;
     if (TARGET_IPHONE_SIMULATOR) {
-        unUseInfo = @"模拟器不可以的..";
+        unUseInfo = WFCString(@"SimulatorNotSupported");
     }
     AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if(videoAuthStatus == ALAuthorizationStatusRestricted || videoAuthStatus == ALAuthorizationStatusDenied){
-        unUseInfo = @"相机访问受限...";
+        unUseInfo = WFCString(@"CameraAccessRestricted");
     }
     AVAuthorizationStatus audioAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if(audioAuthStatus == ALAuthorizationStatusRestricted || audioAuthStatus == ALAuthorizationStatusDenied){

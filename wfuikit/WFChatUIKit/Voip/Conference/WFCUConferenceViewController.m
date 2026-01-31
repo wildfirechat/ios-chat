@@ -1036,10 +1036,10 @@
 }
 
 - (void)showAlert {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"警告" message:@"屏幕共享功能有可能泄漏您的隐私，已经有多个诈骗案例使用屏幕共享进行远程遥控诈骗。此功能野火测试环境上已经被关闭，私有部署的环境会开放此功能。" preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"ScreenSharePrivacyWarning") preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"IKnow") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+
     }];
     [alertController addAction:action1];
     
@@ -2033,7 +2033,7 @@
 - (void)didMedia:(NSString *_Nullable)media lostPackage:(int)lostPackage screenSharing:(BOOL)screenSharing {
     //发送方丢包超过6为网络不好
     if(lostPackage > 6) {
-        [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+        [self.view makeToast:WFCString(@"YourNetworkIsPoor") duration:3 position:CSToastPositionCenter];
     }
 }
 
@@ -2043,10 +2043,10 @@
     if(lostPackage > 10) {
         if(uplink) {
             NSLog(@"对方的网络不好");
-            [self.view makeToast:@"对方的网络不好" duration:3 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"PeerNetworkIsPoor") duration:3 position:CSToastPositionCenter];
         } else {
             NSLog(@"您的网络不好");
-            [self.view makeToast:@"您的网络不好" duration:3 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"YourNetworkIsPoor") duration:3 position:CSToastPositionCenter];
         }
     }
 }

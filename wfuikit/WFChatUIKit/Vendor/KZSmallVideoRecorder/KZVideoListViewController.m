@@ -193,7 +193,7 @@ static NSString *footerId = @"footer";
             label.textColor = kzThemeGraryColor;
             label.font = [UIFont systemFontOfSize:14];
             label.textAlignment = NSTextAlignmentCenter;
-            label.text = [NSString stringWithFormat:@"最近 %ld 天拍摄的小视频",(long)day];
+            label.text = [NSString stringWithFormat:WFCString(@"RecentDaysVideos"),(long)day];
             label.alpha = 0.6;
             [footerView addSubview:label];
         }

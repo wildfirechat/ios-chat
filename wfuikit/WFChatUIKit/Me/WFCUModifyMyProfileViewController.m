@@ -143,7 +143,7 @@
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
         BOOL ret = [string isEqualToString:filtered];
         if(!ret) {
-            [self.view makeToast:@"不支持的字符！仅支持英文字母和数字！" duration:0.5 position:CSToastPositionCenter];
+            [self.view makeToast:WFCString(@"UnsupportedCharacters") duration:0.5 position:CSToastPositionCenter];
         }
         return ret;
     }
