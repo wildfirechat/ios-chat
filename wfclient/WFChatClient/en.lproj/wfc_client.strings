@@ -27,6 +27,8 @@
 
 // Kickoff Group Member
 "KickoffGroupMember"="%@ removed";
+"KickoffGroupMemberBySelf"="You removed";
+"KickoffGroupMemberByUnknown"="User<%@> removed";
 
 // Kickoff Group Member (Visible Notification)
 "KickoffGroupMemberVisibleBySelf"="You removed";
@@ -35,6 +37,8 @@
 
 // Dismiss Group
 "DismissGroup"="%@ dismissed the group";
+"DismissGroupBySelf"="You dismissed the group";
+"DismissGroupByUnknownUser"="User<%@> dismissed the group";
 
 // Transfer Group Owner
 "TransferGroupOwner"="%@ transferred the group to";
