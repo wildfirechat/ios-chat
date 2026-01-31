@@ -263,6 +263,12 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  链接地址转换器，用于双网环境下媒体资源和头像等在不同网络下的转换
  */
 @protocol WFCCUrlRedirector <NSObject>
+/**
+ 转换链接地址
+
+ @param originalUrl 原始链接地址
+ @return 转换后的链接地址
+ */
 - (NSString *)redirect:(NSString *)originalUrl;
 @end
 
@@ -371,27 +377,29 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 */
 + (NSArray<NSString *> *)getLogFilesPath;
 
-/*
+/**
  使用国密加密。注意必须和服务器同时配置，否则无法连接。
  */
 - (void)useSM4;
 
-/*
+/**
  使用AES256加密。注意必须和服务器同时配置，否则无法连接。
  */
 - (void)useAES256;
 
-/*
+/**
  使用TCP的短连接。需要专业版IM服务支持。
  */
 - (void)useTcpShortLink;
 
-/*
+/**
  是否使用TCP的短连接。需要专业版IM服务支持。
+
+ @return 是否使用TCP短连接
  */
 - (BOOL)isTcpShortLink;
 
-/*
+/**
  不使用FTS搜索。仅在connect之前调用有效。
  */
 - (void)noUseFts;
@@ -488,43 +496,63 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  */
 - (void)forceConnect:(NSUInteger)second;
 
+/**
+ 取消强制连接
+ */
 - (void)cancelForceConnect;
 
-/*
+/**
  设置备选服务地址，仅专业版支持，一般用于政企单位内外网两种网络环境。请参考：https://docs.wildfirechat.cn/blogs/政企内外双网解决方案.html
+
+ @param strategy 备选地址策略
  */
 - (void)setBackupAddressStrategy:(int)strategy;
+
+/**
+ 设置备选服务地址和端口，仅专业版支持，一般用于政企单位内外网两种网络环境
+
+ @param host 备选服务器地址
+ @param port 备选服务器端口
+ */
 - (void)setBackupAddress:(NSString *)host port:(int)port;
+
+/**
+ 获取当前连接的网络类型
+
+ @return 连接的网络类型
+ */
 - (ConnectedNetworkType)getConnectedNetworkType;
 
-/*
- 设置协议栈短连接User agent。
- 
- @param userAgent  User agent
+/**
+ 设置协议栈短连接User agent
+
+ @param userAgent User agent
  */
 - (void)setProtoUserAgent:(NSString *)userAgent;
 
-/*
- 添加协议栈短连接自定义header，value为空时清除该header。
- 
- @param header header
- @param value  value
+/**
+ 添加协议栈短连接自定义header，value为空时清除该header
+
+ @param header header名称
+ @param value  header值
  */
 - (void)addHttpHeader:(NSString *)header value:(NSString *)value;
 
-/*
- 设置代理，注意只能支持socks5代理，http代理无法支持，只有专业版支持次功能。
- 
- @param host     代理服务域名，host和ip至少要有一个有效值。
- @param ip       代理服务IP地址，host和ip至少要有一个有效值。
+/**
+ 设置代理，注意只能支持socks5代理，http代理无法支持，只有专业版支持此功能
+
+ @param host     代理服务域名，host和ip至少要有一个有效值
+ @param ip       代理服务IP地址，host和ip至少要有一个有效值
  @param port     代理服务端口
- @param username 账户
- @param password 密码
+ @param username 代理账户
+ @param password 代理密码
  */
 - (void)setProxyInfo:(NSString *)host ip:(NSString *)ip port:(int)port username:(NSString *)username password:(NSString *)password;
 
 /**
  获取协议栈版本
+
+ @return 协议栈版本号
  */
 - (NSString *)getProtoRevision;
 @end
