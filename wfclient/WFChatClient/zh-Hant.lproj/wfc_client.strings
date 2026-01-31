@@ -34,21 +34,21 @@
 "QuitGroupVisibleByUnknownUser"="用戶<%@>移出了%@";
 
 // 踢出群成員
-"KickoffGroupMember"="%@將%@移出群聊";
+"KickoffGroupMember"="%@將";
 
 // 踢出群成員（可見通知）
-"KickoffGroupMemberVisibleBySelf"="你將%@移出群聊";
-"KickoffGroupMemberVisible"="%@將%@移出群聊";
-"KickoffGroupMemberVisibleByUnknownUser"="用戶<%@>將%@移出群聊";
+"KickoffGroupMemberVisibleBySelf"="你將";
+"KickoffGroupMemberVisible"="%@將";
+"KickoffGroupMemberVisibleByUnknownUser"="用戶<%@>將";
 
 // 解散群
 "DismissGroup"="%@解散了群";
 
 // 轉讓群主
-"TransferGroupOwner"="%@將群轉讓給%@";
+"TransferGroupOwner"="%@將群轉讓給";
 "TransferGroupOwnerBySelf"="你將群轉讓給%@";
 "TransferGroupOwnerBySelfToUnknown"="你將群轉讓給用戶<%@>";
-"TransferGroupOwnerByUnknownUser"="用戶<%@>將群轉讓給%@";
+"TransferGroupOwnerByUnknownUser"="用戶<%@>將群轉讓給";
 
 // 修改群名稱
 "ChangeGroupName"="%@修改群名稱為\"%@\"";
@@ -57,14 +57,14 @@
 
 // 修改群暱稱
 "ModifyGroupAliasBySelf"="你修改群暱稱為\"%@\"";
-"ModifyGroupAliasByOther"="%@修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasByOther"="%@修改群暱稱為\"%@\"";
 "ModifyGroupAliasBySelfToSelf"="你修改自己的群暱稱為\"%@\"";
 "ModifyGroupAliasBySelfToOther"="你修改%@的群暱稱為\"%@\"";
 "ModifyGroupAliasBySelfToUnknown"="你修改用戶<%@>的群暱稱為\"%@\"";
 "ModifyGroupAliasByOtherToSelf"="%@修改你的群暱稱為\"%@\"";
 "ModifyGroupAliasByOtherToOther"="%@修改%@的群暱稱為\"%@\"";
 "ModifyGroupAliasByOtherToUnknown"="%@修改用戶<%@>的群暱稱為\"%@\"";
-"ModifyGroupAliasByUnknown"="用戶<%@>修改%@的群暱稱為\"%@\"";
+"ModifyGroupAliasByUnknown"="用戶<%@>修改群暱稱為\"%@\"";
 "ModifyGroupAliasByUnknownToSelf"="用戶<%@>修改你的群暱稱為\"%@\"";
 "ModifyGroupAliasByUnknownToOther"="用戶<%@>修改%@的群暱稱為\"%@\"";
 
@@ -88,7 +88,7 @@
 "ChangeGroupJoinTypeAdminOnly"="%@修改群加入權限為僅限群管理邀請";
 "ChangeGroupJoinTypeNeedApproval"="%@開啟了加群驗證";
 "ChangeGroupJoinTypeClose"="%@關閉了加入群組功能";
-"Administrator"="管理員";
+"Administrator"="管理員<%@>";
 
 // 修改群私聊
 "ChangeGroupPrivateChatOn"="%@開啟了群成員私聊";
@@ -106,18 +106,18 @@
 "AndMoreMembers"=" 等%ld名成員";
 
 // 禁言/取消禁言群成員
-"MuteGroupMember"="%@禁言了%@";
-"UnmuteGroupMember"="%@取消禁言%@";
+"MuteGroupMember"="%@ 禁言了";
+"UnmuteGroupMember"="%@ 取消禁言了";
 
 // 允許/取消允許群成員發言
-"AllowGroupMember"="%@允許%@發言";
-"DisallowGroupMember"="%@取消%@的發言權限";
+"AllowGroupMember"="%@ 允許了";
+"DisallowGroupMember"="%@ 取消了";
 "SpeakingPermissionDuringMute"=" 群組禁言時的發言權限";
 
 // 修改群Extra
-"ModifyGroupExtra"="%@修改了群設置";
-"ModifyGroupExtraBySelf"="你修改了群設置";
-"ModifyGroupExtraByUnknown"="用戶<%@>修改了群設置";
+"ModifyGroupExtra"="%@修改群附加信息為\"%@";
+"ModifyGroupExtraBySelf"="你修改群附加信息為\"%@";
+"ModifyGroupExtraByUnknown"="用戶<%@>修改群附加信息為\"%@";
 
 // 修改群成員Extra
 "ModifyGroupMemberExtra"="%@修改了%@的群成員信息";
@@ -161,7 +161,7 @@
 "CardMessageDigestWithName"="[名片]:%@";
 
 // 組合消息
-"CompositeMessageDigest"="[聊天記錄]";
+"CompositeMessageDigest"="[聊天記錄]:%@";
 
 // 會議邀請
 "ConferenceInvite"="[會議邀請]";
