@@ -12,6 +12,12 @@
  富通知消息
  */
 @interface WFCCStreamingTextGeneratingMessageContent : WFCCMessageContent
+/**
+文本内容
+*/
 @property (nonatomic, strong)NSString *text;
+/**
+流ID
+*/
 @property (nonatomic, strong)NSString *streamId;
 @end

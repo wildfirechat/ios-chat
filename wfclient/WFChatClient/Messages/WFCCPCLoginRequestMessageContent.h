@@ -10,7 +10,7 @@
 #import "WFCCIMService.h"
 
 /**
- 建群的通知消息
+ PC登录请求消息
  */
 @interface WFCCPCLoginRequestMessageContent : WFCCMessageContent
 

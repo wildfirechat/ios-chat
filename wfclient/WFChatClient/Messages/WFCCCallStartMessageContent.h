@@ -9,8 +9,8 @@
 #import "WFCCMessageContent.h"
 
 /**
- 电话总结消息
- */
+通话开始消息
+*/
 @interface WFCCCallStartMessageContent : WFCCMessageContent
 
 

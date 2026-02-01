@@ -9,15 +9,15 @@
 #import "WFCCMediaMessageContent.h"
 
 /**
- 语音消息
- */
+文件消息
+*/
 @interface WFCCFileMessageContent : WFCCMediaMessageContent
 
 /**
  构造方法
 
  @param filePath 文件路径
- @return 语音消息
+ @return 文件消息
  */
 + (instancetype)fileMessageContentFromPath:(NSString *)filePath;
 
@@ -27,7 +27,7 @@
 @property (nonatomic, strong)NSString *name;
 
 /**
- 文件名
- */
+文件大小
+*/
 @property (nonatomic, assign)NSUInteger size;
 @end

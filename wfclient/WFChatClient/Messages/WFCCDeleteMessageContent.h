@@ -9,8 +9,8 @@
 #import "WFCCMessageContent.h"
 
 /**
- 文本消息
- */
+删除消息
+*/
 @interface WFCCDeleteMessageContent : WFCCMessageContent
 
 /**

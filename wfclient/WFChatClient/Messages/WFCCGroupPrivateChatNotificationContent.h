@@ -11,6 +11,9 @@
 /**
  建群的通知消息
  */
+/**
+群成员私聊设置变更通知消息
+*/
 @interface WFCCGroupPrivateChatNotificationContent : WFCCNotificationMessageContent
 
 /**

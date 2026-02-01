@@ -11,6 +11,9 @@
 /**
  群成员禁言的通知消息
  */
+/**
+拒绝加群通知消息
+*/
 @interface WFCCGroupRejectJoinNotificationContent : WFCCNotificationMessageContent
 
 /**
@@ -24,7 +27,7 @@
 @property (nonatomic, strong)NSString *operatorUserId;
 
 /**
- 被禁言/取消禁言者ID列表
+拒绝原因，key为用户ID，value为拒绝原因
  */
 @property (nonatomic, strong)NSDictionary<NSString *, NSNumber *> *rejectUser;
 @end

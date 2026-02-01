@@ -9,7 +9,7 @@
 #import "WFCCNotificationMessageContent.h"
 
 /**
- 文本消息
+ 撤回消息
  */
 @interface WFCCRecallMessageContent : WFCCNotificationMessageContent
 

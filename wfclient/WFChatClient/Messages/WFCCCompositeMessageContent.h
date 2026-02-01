@@ -11,9 +11,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+组合消息
+*/
 @interface WFCCCompositeMessageContent : WFCCMediaMessageContent
+
+/**
+标题
+*/
 @property (nonatomic, strong)NSString *title;
+
+/**
+包含的消息列表
+*/
 @property (nonatomic, strong)NSArray<WFCCMessage *> *messages;
+
+/**
+是否已加载
+*/
 @property(nonatomic, assign)BOOL loaded;
 @end
 

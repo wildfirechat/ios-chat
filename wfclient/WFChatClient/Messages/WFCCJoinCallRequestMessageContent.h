@@ -9,9 +9,15 @@
 #import "WFCCMessageContent.h"
 
 /**
- 通话正在进行消息
+ 加入通话请求消息
  */
 @interface WFCCJoinCallRequestMessageContent : WFCCMessageContent
+/**
+通话ID
+*/
 @property (nonatomic, strong)NSString *callId;
+/**
+客户端ID
+*/
 @property (nonatomic, strong)NSString *clientId;
 @end

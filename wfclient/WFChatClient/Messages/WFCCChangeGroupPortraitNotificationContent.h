@@ -23,4 +23,9 @@
  */
 @property (nonatomic, strong)NSString *operateUser;
 
+/**
+群头像URL
+*/
+@property (nonatomic, strong)NSString *portrait;
+
 @end
