@@ -9,12 +9,12 @@
 #import "WFCCNotificationMessageContent.h"
 
 /**
- 退群的通知消息
+提示通知消息
  */
 @interface WFCCTipNotificationContent : WFCCNotificationMessageContent
 
 /**
- 退群成员的ID
+提示文本
  */
 @property (nonatomic, strong)NSString *tip;
 @end

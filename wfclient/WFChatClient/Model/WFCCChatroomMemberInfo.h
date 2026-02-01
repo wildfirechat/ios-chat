@@ -9,7 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "WFCCJsonSerializer.h"
 
+/**
+聊天室成员信息
+*/
 @interface WFCCChatroomMemberInfo : WFCCJsonSerializer
+
+/**
+成员数量
+*/
 @property(nonatomic, assign)int memberCount;
+
+/**
+成员ID列表
+*/
 @property(nonatomic, strong)NSArray<NSString *> *members;
 @end

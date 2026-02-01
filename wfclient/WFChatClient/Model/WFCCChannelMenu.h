@@ -11,18 +11,64 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
+/**
+频道菜单项
+*/
 @interface WFCCChannelMenu : WFCCJsonSerializer
+
+/**
+菜单ID
+*/
 @property(nonatomic, strong)NSString *menuId;
+
+/**
+菜单类型
+*/
 @property(nonatomic, strong)NSString *type;
+
+/**
+菜单名称
+*/
 @property(nonatomic, strong)NSString *name;
+
+/**
+菜单键值
+*/
 @property(nonatomic, strong)NSString *key;
+
+/**
+菜单URL
+*/
 @property(nonatomic, strong)NSString *url;
+
+/**
+媒体ID
+*/
 @property(nonatomic, strong)NSString *mediaId;
+
+/**
+文章ID
+*/
 @property(nonatomic, strong)NSString *articleId;
+
+/**
+应用ID
+*/
 @property(nonatomic, strong)NSString *appId;
+
+/**
+应用页面
+*/
 @property(nonatomic, strong)NSString *appPage;
+
+/**
+扩展信息
+*/
 @property(nonatomic, strong)NSString *extra;
+
+/**
+子菜单列表
+*/
 @property(nonatomic, strong)NSArray<WFCCChannelMenu *> *subMenus;
 @end
 

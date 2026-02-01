@@ -10,15 +10,16 @@
 #import <UIKit/UIKit.h>
 
 /**
- 图片消息
- */
+视频消息
+*/
 @interface WFCCVideoMessageContent : WFCCMediaMessageContent
 
 /**
  构造方法
 
- @param image 图片
- @return 图片消息
+ @param localPath 本地路径
+ @param image 缩略图
+ @return 视频消息
  */
 + (instancetype)contentPath:(NSString *)localPath thumbnail:(UIImage *)image;
 

@@ -9,6 +9,14 @@
 #import "WFCCMessageContent.h"
 
 @class WFCCChannelMenu;
+
+/**
+频道菜单事件消息
+*/
 @interface WFCCChannelMenuEventMessageContent : WFCCMessageContent
+
+/**
+触发的菜单项
+*/
 @property (nonatomic, strong)WFCCChannelMenu *menu;
 @end

@@ -10,7 +10,7 @@
 
 
 /**
- 标记未读同步消息
+ 开始密聊消息
  */
 @interface WFCCStartSecretChatMessageContent : WFCCMessageContent
 

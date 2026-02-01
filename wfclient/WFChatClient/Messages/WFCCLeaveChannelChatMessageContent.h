@@ -10,8 +10,8 @@
 
 
 /**
- 进入频道会话消息
- */
+离开频道会话消息
+*/
 @interface WFCCLeaveChannelChatMessageContent : WFCCMessageContent
 
 @end

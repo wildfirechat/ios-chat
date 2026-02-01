@@ -9,6 +9,9 @@
 #import "WFCCMessageContent.h"
 
 @class WFCCLinkMessageContent;
+/**
+文章内容
+*/
 @interface WFCCArticle : NSObject
 @property (nonatomic, strong)NSString *articleId;
 @property (nonatomic, strong)NSString *cover;
@@ -22,8 +25,19 @@
  富通知消息
  */
 @interface WFCCArticlesMessageContent : WFCCMessageContent
+/**
+顶部文章
+*/
 @property (nonatomic, strong)WFCCArticle *topArticle;
+/**
+子文章列表
+*/
 @property (nonatomic, strong)NSArray<WFCCArticle *> *subArticles;
 
+/**
+转换为链接消息
+
+@return 链接消息数组
+*/
 - (NSArray<WFCCLinkMessageContent *> *)toLinkMessageContent;
 @end

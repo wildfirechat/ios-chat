@@ -9,9 +9,15 @@
 #import "WFCCMessageContent.h"
 
 /**
- 富通知消息
- */
+流式文本已生成消息
+*/
 @interface WFCCStreamingTextGeneratedMessageContent : WFCCMessageContent
+/**
+文本内容
+*/
 @property (nonatomic, strong)NSString *text;
+/**
+流ID
+*/
 @property (nonatomic, strong)NSString *streamId;
 @end

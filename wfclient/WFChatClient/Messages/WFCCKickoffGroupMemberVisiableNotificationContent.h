@@ -11,6 +11,9 @@
 /**
  群组踢人的通知消息
  */
+/**
+群组踢人可见通知消息
+*/
 @interface WFCCKickoffGroupMemberVisibleNotificationContent : WFCCNotificationMessageContent
 
 /**

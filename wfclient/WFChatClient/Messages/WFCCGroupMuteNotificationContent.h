@@ -11,6 +11,9 @@
 /**
  建群的通知消息
  */
+/**
+群禁言通知消息
+*/
 @interface WFCCGroupMuteNotificationContent : WFCCNotificationMessageContent
 
 /**

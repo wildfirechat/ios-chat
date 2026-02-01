@@ -11,6 +11,9 @@
 /**
  建群的通知消息
  */
+/**
+群加群类型变更通知消息
+*/
 @interface WFCCGroupJoinTypeNotificationContent : WFCCNotificationMessageContent
 
 /**
