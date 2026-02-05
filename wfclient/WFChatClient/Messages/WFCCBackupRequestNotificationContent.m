@@ -14,12 +14,14 @@
 
 @implementation WFCCBackupRequestNotificationContent
 
-- (instancetype)initWithConversations:(NSString *)conversationsJson
-                         includeMedia:(BOOL)includeMedia
-                            timestamp:(long long)timestamp {
+- (instancetype)initWithConversations:(long)conversationCount
+                             messageCount:(long)messageCount
+                             includeMedia:(BOOL)includeMedia
+                             timestamp:(long long)timestamp {
     self = [super init];
     if (self) {
-        self.conversationsJson = conversationsJson;
+        self.conversationCount = conversationCount;
+        self.messageCount = messageCount;
         self.includeMedia = includeMedia;
         self.timestamp = timestamp;
     }
@@ -31,9 +33,8 @@
 
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
 
-    if (self.conversationsJson) {
-        [dataDict setObject:self.conversationsJson forKey:@"c"];
-    }
+    [dataDict setObject:@(self.conversationCount) forKey:@"cc"];
+    [dataDict setObject:@(self.messageCount) forKey:@"mc"];
 
     [dataDict setObject:@(self.includeMedia) forKey:@"m"];
     [dataDict setObject:@(self.timestamp) forKey:@"t"];
@@ -51,7 +52,8 @@
     WFCCDictionary *dictionary = [WFCCDictionary fromData:payload.binaryContent error:&__error];
 
     if (!__error) {
-        self.conversationsJson = dictionary[@"c"];
+        self.conversationCount = [dictionary[@"cc"] longValue];
+        self.messageCount = [dictionary[@"mc"] longValue];
         self.includeMedia = [dictionary[@"m"] boolValue];
         self.timestamp = [dictionary[@"t"] longLongValue];
     }

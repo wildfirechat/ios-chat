@@ -97,28 +97,19 @@
     // 发送备份请求消息
     NSString *currentUserId = [[WFCCNetworkService sharedInstance] userId];
 
+    long totalMessageCount = 0;
     // 准备会话列表数据
     NSMutableArray *convsArray = [NSMutableArray array];
     for (WFCCConversationInfo *convInfo in self.conversations) {
         WFCCConversation *conversation = convInfo.conversation;
         int messageCount = [[WFCCIMService sharedWFCIMService] getMessageCount:conversation];
 
-        [convsArray addObject:@{
-            @"conversation": @{
-                @"type": @(conversation.type),
-                @"target": conversation.target,
-                @"line": @(conversation.line)
-            },
-            @"messageCount": @(messageCount)
-        }];
+        totalMessageCount += messageCount;
     }
 
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:convsArray options:0 error:&error];
-    NSString *conversationsJson = jsonData ? [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] : @"";
-
     // 创建备份请求通知消息
-    WFCCBackupRequestNotificationContent *content = [[WFCCBackupRequestNotificationContent alloc] initWithConversations:conversationsJson
+    WFCCBackupRequestNotificationContent *content = [[WFCCBackupRequestNotificationContent alloc] initWithConversations:self.conversations.count
+                                                                                                           messageCount: totalMessageCount
                                                                                                         includeMedia:self.includeMedia
                                                                                                            timestamp:[[NSDate date] timeIntervalSince1970] * 1000];
 

@@ -17,10 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WFCCBackupRequestNotificationContent : WFCCNotificationMessageContent
 
 /**
- * 会话列表（JSON字符串）
- * 格式: [{conversation: {type, target, line}, messageCount: int}, ...]
+ * 会话列数量
  */
-@property (nonatomic, strong) NSString *conversationsJson;
+@property (nonatomic, assign) long conversationCount;
+
+/**
+ * 消息总量
+ */
+@property (nonatomic, assign) long messageCount;
 
 /**
  * 是否包含媒体文件
@@ -35,7 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * 初始化方法
  */
-- (instancetype)initWithConversations:(NSString *)conversationsJson
+- (instancetype)initWithConversations:(long)conversationCount
+                         messageCount:(long)messageCount
                          includeMedia:(BOOL)includeMedia
                             timestamp:(long long)timestamp;
 
