@@ -1264,6 +1264,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     message.status = Message_Status_Sending;
     fillTMessage(tmsg, conversation, content);
     message.fromUser = [WFCCNetworkService sharedInstance].userId;
+    message.serverTime = tmsg.timestamp;
     
     BOOL largeMedia = NO;
     int fileSize  = 0;
@@ -1544,7 +1545,10 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                  success:(void(^)(long long messageUid, long long timestamp))successBlock
                    error:(void(^)(int error_code))errorBlock {
     
-    if(mars::stn::sendMessageEx(message.messageId, new IMSendMessageCallback(message, successBlock, nil, nil, errorBlock), expireDuration)) {
+    mars::stn::TMessage tmsg;
+    message.status = Message_Status_Sending;
+    fillTMessage(tmsg, message.conversation, message.content);
+    if(mars::stn::sendMessageEx2(message.messageId, tmsg, new IMSendMessageCallback(message, successBlock, nil, nil, errorBlock), expireDuration)) {
         return YES;
     } else {
         return NO;

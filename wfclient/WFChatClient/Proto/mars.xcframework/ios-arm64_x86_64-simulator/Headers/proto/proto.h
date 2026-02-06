@@ -1074,6 +1074,7 @@ namespace mars{
         extern long sendMessage(TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
 
         extern bool sendMessageEx(long messageId, SendMsgCallback *callback, int expireDuration);
+        extern bool sendMessageEx2(long messageId, TMessage &tmsg, SendMsgCallback *callback, int expireDuration);
     
         extern bool cancelSendingMessage(long messageId);
 
