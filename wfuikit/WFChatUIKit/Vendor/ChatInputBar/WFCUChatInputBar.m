@@ -444,7 +444,7 @@
                 }
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:@"警告" message:@"无法录音,请到设置-隐私-麦克风,允许程序访问" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+                [[[UIAlertView alloc] initWithTitle:WFCString(@"Warning") message:WFCString(@"CannotRecordAudio") delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
             });
         }
     }];
@@ -1196,7 +1196,7 @@
     }
     if (self.seconds < 1) {
         NSLog(@"record time too short");
-        [[[UIAlertView alloc] initWithTitle:@"警告" message:@"录音时间太短了" delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+        [[[UIAlertView alloc] initWithTitle:WFCString(@"Warning") message:WFCString(@"RecordingTooShort") delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
         
         return;
     }
@@ -1531,7 +1531,7 @@
         [ps showPhotoLibraryWithSender:[self.delegate requireNavi]];
     } else if(itemTag == 2) {
 #if TARGET_IPHONE_SIMULATOR
-        [self makeToast:@"模拟器不支持相机" duration:1 position:CSToastPositionCenter];
+        [self makeToast:WFCString(@"SimulatorNotSupportCamera") duration:1 position:CSToastPositionCenter];
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -1677,10 +1677,10 @@
     if (authStatus == AVAuthorizationStatusDenied ||
         authStatus == AVAuthorizationStatusRestricted) {
         UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"拍照权限"
-                                  message:@"需要拍照权限，请在设置里打开"
+                                  initWithTitle:WFCString(@"CameraPermissionRequired")
+                                  message:WFCString(@"CameraPermissionMessage")
                                   delegate:nil
-                                  cancelButtonTitle:@"确认"
+                                  cancelButtonTitle:WFCString(@"Ok")
                                   otherButtonTitles:nil, nil];
         [alertView show];
     }
@@ -2024,7 +2024,7 @@
          } else {
              dispatch_async(dispatch_get_main_queue(), ^{
                  [MBProgressHUD hideHUDForView:self.parentView animated:YES];
-                 [self.parentView makeToast:@"视频处理失败" duration:1 position:CSToastPositionCenter];
+                 [self.parentView makeToast:WFCString(@"VideoProcessingFailed") duration:1 position:CSToastPositionCenter];
              });
              NSLog(@"压缩失败");
          }
@@ -2085,7 +2085,7 @@
                    }
 
                    if ([info objectForKey:PHImageErrorKey]) {
-                       [weakself.parentView makeToast:@"下载图片失败"];
+                       [weakself.parentView makeToast:WFCString(@"ImageDownloadFailed")];
                        [weakself recursiveHandle:photos isFullImage:isFullImage];
                    }
                                                        

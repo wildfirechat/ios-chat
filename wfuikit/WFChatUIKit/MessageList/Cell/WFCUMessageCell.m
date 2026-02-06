@@ -127,12 +127,12 @@
     NSString *messageDigest;
     if(model.quotedMessage) {
         if([model.quotedMessage.content isKindOfClass:[WFCCRecallMessageContent class]]) {
-            messageDigest = @"消息已被撤回";
+            messageDigest = WFCString(@"MessageRecalled");
         } else {
             messageDigest = [model.quotedMessage.content digest:model.quotedMessage];
         }
     } else {
-        messageDigest = @"消息不可用，可能被删除或者过期";
+        messageDigest = WFCString(@"MessageUnavailable");
     }
     return messageDigest;
 }

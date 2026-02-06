@@ -657,7 +657,7 @@ static NSString *aiRobot = @"AI";
         title = WFCString(@"StarFriends");
     }
     if([title isEqualToString:aiRobot]) {
-        title = @"人工智能助手";
+        title = WFCString(@"AIAssistant");
     }
     label.text = [NSString stringWithFormat:@"%@", title];
     [view addSubview:label];

@@ -759,10 +759,10 @@
 }
 
 - (void)sendJoinGroupRequest:(NSArray<NSString *> *)contacts {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"已开启入群验证功能，请输入理由等待群主和管理员审批" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:WFCString(@"JoinGroupVerificationEnabled") preferredStyle:UIAlertControllerStyleAlert];
 
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"请输入加群理由";
+        textField.placeholder = WFCString(@"PleaseInputJoinGroupReason");
     }];
         
     __weak typeof(self)ws = self;

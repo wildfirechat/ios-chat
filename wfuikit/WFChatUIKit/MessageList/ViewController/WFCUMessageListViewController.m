@@ -837,9 +837,9 @@
             self.navigationItem.backBarButtonItem.title = WFCString(@"Message");
         } else {
             if(self.targetGroup.deleted) {
-                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, @"已删除"];
+                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, WFCString(@"GroupDeleted")];
             } else if(self.targetGroup.memberDt < 0) {
-                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, @"已退出"];
+                self.title = [NSString stringWithFormat:@"%@(%@)", self.targetGroup.displayName, WFCString(@"GroupQuitted")];
             } else {
                 self.title = [NSString stringWithFormat:@"%@(%d)", self.targetGroup.displayName, (int)self.targetGroup.memberCount];
             }
@@ -1334,7 +1334,7 @@
     if(self.conversation.type == Group_Type) {
         int count = [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.conversation.target];
         if(count > 0) {
-            [self.joinGroupRequestButton setTitle:[NSString stringWithFormat:@"有%d条新加群申请", count] forState:UIControlStateNormal];
+            [self.joinGroupRequestButton setTitle:[NSString stringWithFormat:WFCString(@"NewJoinGroupRequestCount"), count] forState:UIControlStateNormal];
             self.joinGroupRequestButton.frame = CGRectMake(48, [WFCUUtilities wf_navigationFullHeight]+20, self.view.bounds.size.width-96, 36);
         } else {
             self.joinGroupRequestButton.frame = CGRectZero;

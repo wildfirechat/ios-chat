@@ -202,7 +202,7 @@
     __weak typeof(self)ws = self;
     
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.label.text = @"加载中...";
+    hud.label.text = WFCString(@"Loading");
     [hud showAnimated:YES];
     [[WFCUOrganizationCache sharedCache] getOrganizationEx:self.lastOrganizationId refresh:YES success:^(NSInteger organizationId, WFCUOrganizationEx * _Nonnull ex) {
         [hud hideAnimated:NO];
@@ -218,7 +218,7 @@
         [hud hideAnimated:NO];
         hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        hud.label.text = @"加载失败";
+        hud.label.text = WFCString(@"LoadingFailed");
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:1.f];
     }];
@@ -302,7 +302,7 @@
 }
 
 - (NSString *)getOrganizationNameOfIndexPath:(NSIndexPath *)indexPath {
-    NSString *name = @"通讯录";
+    NSString *name = WFCString(@"ContactBook");
     if(indexPath.row > 0) {
         WFCUOrganizationEx *path = self.paths[indexPath.row - 1];
         if(path.organization.name.length) {

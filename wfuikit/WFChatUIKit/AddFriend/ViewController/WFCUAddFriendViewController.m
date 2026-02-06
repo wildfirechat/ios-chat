@@ -93,7 +93,7 @@
     
     self.noUserView = [[UITextView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 400)];
     self.noUserView.textAlignment = NSTextAlignmentCenter;
-    self.noUserView.text = @"用户不存在";
+    self.noUserView.text = WFCString(@"UserNotFound");
     self.noUserView.font = [UIFont systemFontOfSize:18];
     self.noUserView.hidden = YES;
     [self.view addSubview:self.noUserView];
@@ -107,9 +107,9 @@
         
         if(self.domainId) {
             WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:self.domainId refresh:NO];
-            label.text = [NSString stringWithFormat:@"在单位 %@ 中搜索用户", domainInfo.name];
+            label.text = [NSString stringWithFormat:WFCString(@"SearchInOrganization"), domainInfo.name];
         } else {
-            label.text = @"在本单位搜索用户";
+            label.text = WFCString(@"OrganizationSearchResult");
         }
         label.userInteractionEnabled = YES;
         label.textAlignment = NSTextAlignmentLeft;

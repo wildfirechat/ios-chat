@@ -707,7 +707,7 @@
         } else if(infos[0].platform == PlatformType_Linux) {
             self.pcSessionLabel.text = [NSString stringWithFormat:@"Linux %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_HarmonyPC) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"鸿蒙电脑 %@", WFCString(@"LoggedIn")];
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"%@ %@", WFCString(@"HarmonyOSPC"), WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WEB) {
             self.pcSessionLabel.text = [NSString stringWithFormat:@"Web %@", WFCString(@"LoggedIn")];
         } else if(infos[0].platform == PlatformType_WX) {
@@ -717,7 +717,7 @@
         } else if(infos[0].platform == PlatformType_APad) {
             self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"AndroidPad")];
         } else if(infos[0].platform == PlatformType_HarmonyPad) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"鸿蒙平板 %@", WFCString(@"LoggedIn")];
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"%@ %@", WFCString(@"HarmonyOSPad"), WFCString(@"LoggedIn")];
         }
         if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
             self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingFormat:@"，%@", WFCString(@"MobileNoNotification")];
@@ -892,7 +892,7 @@
                     if (indexPath.row == 2) {
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
-                        cell.textLabel.text = [NSString stringWithFormat:@"点击展开剩余%lu项", self.searchFriendList.count - 2];
+                        cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchFriendList.count - 2];
                         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
@@ -932,7 +932,7 @@
                     if (indexPath.row == 2) {
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
-                        cell.textLabel.text = [NSString stringWithFormat:@"点击展开剩余%lu项", self.searchGroupList.count - 2];
+                        cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchGroupList.count - 2];
                         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
@@ -971,7 +971,7 @@
                     if (indexPath.row == 2) {
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
-                        cell.textLabel.text = [NSString stringWithFormat:@"点击展开剩余%lu项", self.searchConversationList.count - 2];
+                        cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchConversationList.count - 2];
                         cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
@@ -1402,14 +1402,14 @@
 
     // 标题 - 减少上边距
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 2, 200, headerHeight)];
-    titleLabel.text = @"搜索历史";
+    titleLabel.text = WFCString(@"SearchHistory");
     titleLabel.font = [UIFont boldSystemFontOfSize:14];
     titleLabel.textColor = [UIColor blackColor];
     [self.historyContainer addSubview:titleLabel];
 
     // 清空按钮 - 调整位置
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [clearButton setTitle:@"清空" forState:UIControlStateNormal];
+    [clearButton setTitle:WFCString(@"Clear") forState:UIControlStateNormal];
     clearButton.titleLabel.font = [UIFont systemFontOfSize:13];
     clearButton.frame = CGRectMake(searchBarWidth - 60, 2, 60, headerHeight - 2);
     clearButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);

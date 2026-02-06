@@ -43,9 +43,9 @@
     
 #if WFCU_SUPPORT_VOIP
     if(startContent.status == kWFAVCallEndReasonInterrupted) {
-        text = @"通话中断";
+        text = WFCString(@"CallInterrupted");
     } else if(startContent.status == kWFAVCallEndReasonRemoteInterrupted) {
-        text = @"对方通话中断";
+        text = WFCString(@"PeerCallInterrupted");
     }
     
     if (startContent.connectTime > 0 && startContent.endTime > 0) {
@@ -118,10 +118,10 @@
                 text = WFCString(@"CallParticipantsFull");
                 break;
             case kWFAVCallEndReasonInterrupted:
-                text = @"通话中断";
+                text = WFCString(@"CallInterrupted");
                 break;
             case kWFAVCallEndReasonRemoteInterrupted:
-                text = @"对方通话中断";
+                text = WFCString(@"PeerCallInterrupted");
                 break;
             default:
                 break;
