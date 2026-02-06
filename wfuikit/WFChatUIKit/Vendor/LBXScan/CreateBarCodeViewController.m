@@ -155,7 +155,7 @@
     if (groupInfo.displayName.length) {
         self.labelStr = groupInfo.displayName;
     } else {
-        self.labelStr = @"群组";
+        self.labelStr = WFCString(@"Group");
     }
 }
 

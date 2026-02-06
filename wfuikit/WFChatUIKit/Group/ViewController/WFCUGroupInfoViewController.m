@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.groupNameLabel.text = @"群组";
+    self.groupNameLabel.text = WFCString(@"Group");
     self.groupProtraitView.image = [WFCUImage imageNamed:@"contact_group_icon"];
     __weak typeof(self)ws = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kGroupInfoUpdated object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
