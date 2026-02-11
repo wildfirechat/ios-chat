@@ -1882,9 +1882,16 @@
             }
             
             ws.modelList = [[NSMutableArray alloc] init];
-            
+
             [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:firstIn appendLast:NO];
             ws.highlightMessageId = 0;
+
+            // 检查是否有正在生成的流式文本消息
+            WFCCMessage *generatingMsg = [[WFCCIMService sharedWFCIMService] getStreamingTextGeneratingMessage:ws.conversation];
+            if (generatingMsg) {
+                NSMutableArray *generatingMessages = [NSMutableArray arrayWithObject:generatingMsg];
+                [ws appendMessages:generatingMessages newMessage:YES highlightId:0 forceButtom:YES firstIn:NO appendLast:YES];
+            }
             
             if(ws.conversation.type == SecretChat_Type) {
                 WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:ws.conversation.target];

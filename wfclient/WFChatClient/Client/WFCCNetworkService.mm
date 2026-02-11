@@ -25,6 +25,8 @@
 #import "WFCCNetworkStatus.h"
 #import "WFCCRecallMessageContent.h"
 #import "WFCCUserOnlineState.h"
+#import "WFCCStreamingTextGeneratingMessageContent.h"
+#import "WFCCStreamingTextGeneratedMessageContent.h"
 
 const NSString *SDKVERSION = @"0.1";
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
@@ -84,6 +86,28 @@ NSString *kJoinGroupRequestUpdated = @"kJoinGroupRequestUpdated";
 @protocol SecretMessageBurnStateDelegate <NSObject>
 - (void)onSecretMessageStartBurning:(NSString *)targetId playedMessageId:(long)messageId;
 - (void)onSecretMessageBurned:(NSArray<NSNumber *> *)messageIds;
+@end
+
+#pragma mark - 流式文本生成状态监听
+/**
+ 流式文本生成状态监听
+ */
+@protocol StreamingTextStatusDelegate <NSObject>
+@optional
+/**
+ 流式文本开始生成的回调
+
+ @param conversation 会话
+ @param message 生成中的消息
+ */
+- (void)onStreamingTextGenerating:(WFCCConversation *)conversation message:(WFCCMessage *)message;
+
+/**
+ 流式文本生成完成的回调
+
+ @param conversation 会话
+ */
+- (void)onStreamingTextGenerated:(WFCCConversation *)conversation;
 @end
 
 @protocol RefreshDomainInfoDelegate <NSObject>
@@ -624,6 +648,11 @@ class CSACB : public mars::stn::CustomSortAddressCallback {
 
 @property (nonatomic, assign)BOOL connectedToMainNetwork;
 @property (nonatomic, assign)int doubleNetworkStrategy;
+
+/**
+ 流式文本生成状态监听
+ */
+@property(nonatomic, weak) id<StreamingTextStatusDelegate> streamingTextStatusDelegate;
 @end
 
 @implementation WFCCNetworkService
@@ -715,9 +744,39 @@ static WFCCNetworkService * sharedSingleton = nil;
 - (void)onReceiveMessage:(NSArray<WFCCMessage *> *)messages hasMore:(BOOL)hasMore {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray<WFCCMessage *> *messageList = [self filterReceiveMessage:messages hasMore:hasMore];
+
+        // 处理流式文本消息
+        for (WFCCMessage *message in messageList) {
+            [self handleStreamingTextMessage:message];
+        }
+
         [[NSNotificationCenter defaultCenter] postNotificationName:kReceiveMessages object:messageList userInfo:@{@"hasMore":@(hasMore)}];
         [self.receiveMessageDelegate onReceiveMessage:messageList hasMore:hasMore];
     });
+}
+
+- (void)handleStreamingTextMessage:(WFCCMessage *)message {
+    if ([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+        // 流式文本正在生成，保存消息
+        NSString *key = [self conversationKeyForMessage:message];
+        self.streamingTextGeneratingMessages[key] = message;
+
+        if ([self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerating:message:)]) {
+            [self.streamingTextStatusDelegate onStreamingTextGenerating:message.conversation message:message];
+        }
+    } else if ([message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+        // 流式文本生成完成，清空对应会话的生成中消息
+        NSString *key = [self conversationKeyForMessage:message];
+        [self.streamingTextGeneratingMessages removeObjectForKey:key];
+
+        if ([self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerated:)]) {
+            [self.streamingTextStatusDelegate onStreamingTextGenerated:message.conversation];
+        }
+    }
+}
+
+- (NSString *)conversationKeyForMessage:(WFCCMessage *)message {
+    return [NSString stringWithFormat:@"%@_%d", message.conversation.target, message.conversation.line];
 }
 
 - (void)onMessageReaded:(NSArray<WFCCReadReport *> *)readeds {
@@ -858,7 +917,8 @@ static WFCCNetworkService * sharedSingleton = nil;
     if (self) {
         _currentConnectionStatus = kConnectionStatusLogout;
         _messageFilterList = [[NSMutableArray alloc] init];
-      
+        _streamingTextGeneratingMessages = [[NSMutableDictionary alloc] init];
+
       [[NSNotificationCenter defaultCenter] addObserver:self
                                                selector:@selector(onAppSuspend)
                                                    name:UIApplicationDidEnterBackgroundNotification

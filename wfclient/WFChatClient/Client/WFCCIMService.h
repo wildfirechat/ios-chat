@@ -1613,6 +1613,16 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
  @discussion 如果获取某天的消息，可以用 getMessagesV2:contentTypes:from:count:withUser:success:error: 方法，其中from可以用当天时间的毫秒数（也可用消息ID）。如果获取这天的消息，以降序排列，from就是这天的最后一秒毫秒数，然后count为正值。如果以升序排列，from为这一天的第一秒，count值为负值。
  */
 - (NSDictionary<NSString *, NSNumber *> *)getMessageCountByDay:(WFCCConversation *)conversation contentTypes:(NSArray<NSNumber *> *)contentTypes startTime:(int64_t)startTime endTime:(int64_t)endTime;
+
+#pragma mark - 流式文本相关
+/**
+ 获取会话的流式文本生成中的消息
+
+ @param conversation 会话
+ @return 流式文本生成中的消息，如果没有则返回nil
+ */
+- (WFCCMessage *)getStreamingTextGeneratingMessage:(WFCCConversation *)conversation;
+
 #pragma mark - 用户相关
 /**
  获取用户信息
