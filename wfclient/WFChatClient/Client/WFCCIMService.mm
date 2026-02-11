@@ -4789,6 +4789,21 @@ public:
     return result;
 }
 
+#pragma mark - 流式文本相关
+- (WFCCMessage *)getStreamingTextGeneratingMessage:(WFCCConversation *)conversation {
+    NSString *key = [NSString stringWithFormat:@"%@_%d", conversation.target, conversation.line];
+    WFCCMessage *message = [[WFCCNetworkService sharedInstance].streamingTextGeneratingMessages objectForKey:key];
+    if (message) {
+        // 如果消息生成时间超过1分钟，则认为是过期的，返回nil
+        int64_t now = [[NSDate date] timeIntervalSince1970] * 1000;
+        if (now - message.serverTime > 60 * 1000) {
+            [[WFCCNetworkService sharedInstance].streamingTextGeneratingMessages removeObjectForKey:key];
+            return nil;
+        }
+    }
+    return message;
+}
+
 - (BOOL)beginTransaction {
     return mars::stn::MessageDB::Instance()->BeginTransaction();
 }

@@ -327,6 +327,12 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 @property(nonatomic, strong)id<WFCCUrlRedirector> urlRedirector;
 
 /**
+ 记录每个会话的最后一个流式文本生成中的消息
+ key: conversationKey (targetId_line), value: WFCCMessage
+ */
+@property(nonatomic, strong) NSMutableDictionary<NSString *, WFCCMessage *> *streamingTextGeneratingMessages;
+
+/**
  当前是否处于登录状态
  */
 @property(nonatomic, assign, getter=isLogined, readonly)BOOL logined;
