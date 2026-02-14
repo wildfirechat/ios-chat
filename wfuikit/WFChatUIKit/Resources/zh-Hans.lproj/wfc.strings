@@ -586,4 +586,6 @@
 "CollectionStatusCancelled"="接龙已取消";
 "CollectionJoinAction"="参与接龙";
 "CollectionCreatorInfo"="由 %@ 发起的接龙，目前有 %d 人参与";
+"NotInGroup"="您已不在该群组中";
+"Submit"="提交";
 "

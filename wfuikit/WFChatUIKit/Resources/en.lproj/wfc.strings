@@ -585,4 +585,6 @@
 "CollectionStatusCancelled"="Collection cancelled";
 "CollectionJoinAction"="Join Collection";
 "CollectionCreatorInfo"="Started by %@, %d participants";
+"NotInGroup"="You are no longer in this group";
+"Submit"="Submit";
 "
