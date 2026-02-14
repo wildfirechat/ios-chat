@@ -3471,7 +3471,8 @@
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     [items addObject:deleteItem];
-    if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
+    if ([msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCCollectionMessageContent class]]) {
         [items addObject:copyItem];
     }
     
@@ -3688,6 +3689,31 @@
         if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = ((WFCCTextMessageContent *)self.cell4Menu.model.message.content).text;
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCCollectionMessageContent class]]) {
+            WFCCCollectionMessageContent *content = (WFCCCollectionMessageContent *)self.cell4Menu.model.message.content;
+            NSMutableString *copyText = [NSMutableString string];
+
+            // 标题
+            [copyText appendString:content.title];
+            [copyText appendString:@"\n"];
+
+            // 描述（如果有）
+            if (content.desc.length > 0) {
+                [copyText appendString:content.desc];
+                [copyText appendString:@"\n"];
+            }
+
+            // 参与项
+            if (content.entries.count > 0) {
+                for (int i = 0; i < content.entries.count; i++) {
+                    WFCCCollectionEntry *entry = content.entries[i];
+                    [copyText appendFormat:@"%d. %@", i + 1, entry.content];
+                    [copyText appendString:@"\n"];
+                }
+            }
+
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = copyText;
         }
     }
 }

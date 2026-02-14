@@ -1675,6 +1675,7 @@
             WFCUCreateCollectionViewController *vc = [[WFCUCreateCollectionViewController alloc] init];
             vc.conversation = self.conversation;
             UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
             [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
         } else {
             [self makeToast:WFCString(@"CollectionOnlyForGroup") duration:1 position:CSToastPositionCenter];
