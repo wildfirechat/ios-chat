@@ -204,7 +204,7 @@
         actionText = WFCString(@"CollectionJoinAction");
     }
     self.actionLabel.text = actionText;
-    self.actionLabel.frame = CGRectMake(0, currentY, width, 24);
+    self.actionLabel.frame = CGRectMake(PADDING, currentY, contentWidth, 24);
 
     // 添加点击手势
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -292,7 +292,7 @@
         _actionLabel = [[UILabel alloc] init];
         _actionLabel.font = [UIFont systemFontOfSize:14];
         _actionLabel.textColor = [UIColor systemBlueColor];
-        _actionLabel.textAlignment = NSTextAlignmentCenter;
+        _actionLabel.textAlignment = NSTextAlignmentLeft;
         [self.contentArea addSubview:_actionLabel];
     }
     return _actionLabel;
