@@ -13,6 +13,11 @@
 // 消息类型定义为17
 #define MESSAGE_CONTENT_TYPE_COLLECTION 17
 
+// 辅助函数：将NSNull转换为nil
+static id NilIfNull(id obj) {
+    return [obj isKindOfClass:[NSNull class]] ? nil : obj;
+}
+
 #pragma mark - WFCCCollectionEntry Implementation
 
 @implementation WFCCCollectionEntry
@@ -23,8 +28,8 @@
     }
 
     WFCCCollectionEntry *entry = [[WFCCCollectionEntry alloc] init];
-    entry.userId = dict[@"userId"];
-    entry.content = dict[@"content"];
+    entry.userId = NilIfNull(dict[@"userId"]);
+    entry.content = NilIfNull(dict[@"content"]);
     entry.createdAt = [dict[@"createdAt"] longLongValue];
 
     return entry;
@@ -120,11 +125,11 @@
                                                                   options:0
                                                                     error:&error];
         if (!error && [dataDict isKindOfClass:[NSDictionary class]]) {
-            self.collectionId = dataDict[@"collectionId"];
-            self.groupId = dataDict[@"groupId"];
-            self.creatorId = dataDict[@"creatorId"];
-            self.desc = dataDict[@"desc"];
-            self.template = dataDict[@"template"];
+            self.collectionId = NilIfNull(dataDict[@"collectionId"]);
+            self.groupId = NilIfNull(dataDict[@"groupId"]);
+            self.creatorId = NilIfNull(dataDict[@"creatorId"]);
+            self.desc = NilIfNull(dataDict[@"desc"]);
+            self.template = NilIfNull(dataDict[@"template"]);
             self.expireType = [dataDict[@"expireType"] intValue];
             self.expireAt = [dataDict[@"expireAt"] longLongValue];
             self.maxParticipants = [dataDict[@"maxParticipants"] intValue];

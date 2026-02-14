@@ -8,6 +8,11 @@
 
 #import "WFCUCollection.h"
 
+// 辅助函数：将NSNull转换为nil
+static id NilIfNull(id obj) {
+    return [obj isKindOfClass:[NSNull class]] ? nil : obj;
+}
+
 @implementation WFCUCollectionEntry
 
 + (instancetype)fromDictionary:(NSDictionary *)dict {
@@ -18,8 +23,8 @@
     WFCUCollectionEntry *entry = [[WFCUCollectionEntry alloc] init];
     entry.entryId = [dict[@"id"] longValue];
     entry.collectionId = [dict[@"collectionId"] longValue];
-    entry.userId = dict[@"userId"] ?: @"";
-    entry.content = dict[@"content"] ?: @"";
+    entry.userId = NilIfNull(dict[@"userId"]) ?: @"";
+    entry.content = NilIfNull(dict[@"content"]) ?: @"";
     entry.createdAt = [dict[@"createdAt"] longValue];
     entry.updatedAt = [dict[@"updatedAt"] longValue];
     entry.deleted = [dict[@"deleted"] intValue];
@@ -38,11 +43,11 @@
 
     WFCUCollection *collection = [[WFCUCollection alloc] init];
     collection.collectionId = [dict[@"id"] longValue];
-    collection.groupId = dict[@"groupId"] ?: @"";
-    collection.creatorId = dict[@"creatorId"] ?: @"";
-    collection.title = dict[@"title"] ?: @"";
-    collection.desc = dict[@"description"];
-    collection.template = dict[@"template"];
+    collection.groupId = NilIfNull(dict[@"groupId"]) ?: @"";
+    collection.creatorId = NilIfNull(dict[@"creatorId"]) ?: @"";
+    collection.title = NilIfNull(dict[@"title"]) ?: @"";
+    collection.desc = NilIfNull(dict[@"description"]);
+    collection.template = NilIfNull(dict[@"template"]);
     collection.expireType = [dict[@"expireType"] intValue];
     collection.expireAt = [dict[@"expireAt"] longValue];
     collection.maxParticipants = [dict[@"maxParticipants"] intValue];
