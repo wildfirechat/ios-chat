@@ -27,6 +27,7 @@
 #import "WFCULinkCell.h"
 #import "WFCURichNotificationCell.h"
 #import "WFCUStreamingTextCell.h"
+#import "WFCUCollectionCell.h"
 
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
@@ -73,6 +74,7 @@
 
 #import "WFCUQuoteViewController.h"
 #import "WFCUCompositeMessageViewController.h"
+#import "WFCUCollectionDetailViewController.h"
 
 #import "WFCUFavoriteItem.h"
 
@@ -1176,7 +1178,8 @@
     [self registerCell:[WFCUArticlesCell class] forContent:[WFCCArticlesMessageContent class]];
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratedMessageContent class]];
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratingMessageContent class]];
-    
+    [self registerCell:[WFCUCollectionCell class] forContent:[WFCCCollectionMessageContent class]];
+
     [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerCell:obj forContentType:key];
     }];
@@ -2760,6 +2763,13 @@
             bvc.url = richNotification.exUrl;
             [self.navigationController pushViewController:bvc animated:YES];
         }
+    } else if([model.message.content isKindOfClass:[WFCCCollectionMessageContent class]]) {
+        // 点击接龙消息，进入接龙详情/编辑界面
+        WFCUCollectionDetailViewController *vc = [[WFCUCollectionDetailViewController alloc] init];
+        vc.message = model.message;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
     }
 }
 

@@ -35,6 +35,7 @@
 #import "WFPttViewController.h"
 #endif
 #import "WFCUImage.h"
+#import "WFCUCreateCollectionViewController.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -1668,6 +1669,16 @@
         navi.modalPresentationStyle = UIModalPresentationFullScreen;
         [[self.delegate requireNavi] presentViewController:navi animated:YES completion:nil];
 #endif
+    } else if(itemTag == 8) {
+        // 接龙功能
+        if (self.conversation.type == Group_Type) {
+            WFCUCreateCollectionViewController *vc = [[WFCUCreateCollectionViewController alloc] init];
+            vc.conversation = self.conversation;
+            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+        } else {
+            [self makeToast:WFCString(@"CollectionOnlyForGroup") duration:1 position:CSToastPositionCenter];
+        }
     }
 }
 
