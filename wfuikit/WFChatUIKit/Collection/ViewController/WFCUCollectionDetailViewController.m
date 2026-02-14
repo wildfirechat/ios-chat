@@ -499,7 +499,11 @@
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hideAnimated:YES];
-            [weakSelf.view makeToast:message ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
+            NSString *errorMsg = message;
+            if (errorCode == 3003) {
+                errorMsg = WFCString(@"NotInGroup");
+            }
+            [weakSelf.view makeToast:errorMsg ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
         });
     }];
 }
@@ -529,7 +533,11 @@
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hideAnimated:YES];
-            [weakSelf.view makeToast:message ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
+            NSString *errorMsg = message;
+            if (errorCode == 3003) {
+                errorMsg = WFCString(@"NotInGroup");
+            }
+            [weakSelf.view makeToast:errorMsg ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
         });
     }];
 }
@@ -569,7 +577,11 @@
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hideAnimated:YES];
-            [weakSelf.view makeToast:message ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
+            NSString *errorMsg = message;
+            if (errorCode == 3003) {
+                errorMsg = WFCString(@"NotInGroup");
+            }
+            [weakSelf.view makeToast:errorMsg ?: WFCString(@"Failed") duration:2 position:CSToastPositionCenter];
         });
     }];
 }
