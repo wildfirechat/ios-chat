@@ -37,6 +37,7 @@
 #import "TYHWaterMark.h"
 
 #import "OrgService.h"
+#import "CollectionService.h"
 
 #if USE_CALL_KIT
 #import "WFCCallKitManager.h"
@@ -157,7 +158,11 @@
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
-    
+    if(COLLECTION_SERVER_ADDRESS) {
+        [CollectionService sharedService].baseUrl = COLLECTION_SERVER_ADDRESS;
+        [WFCUConfigManager globalManager].collectionServiceProvider = [CollectionService sharedService];
+    }
+
     [WFCUConfigManager globalManager].asrServiceUrl = ASR_SERVICE_URL;
     
     [WFCUConfigManager globalManager].aiRobotId = AI_ROBOT;

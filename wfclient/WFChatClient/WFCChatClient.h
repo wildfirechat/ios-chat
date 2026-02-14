@@ -114,3 +114,4 @@ FOUNDATION_EXPORT const unsigned char WFChatClientVersionString[];
 #import <WFChatClient/WFCCBackupResponseNotificationContent.h>
 #import <WFChatClient/WFCCRestoreRequestNotificationContent.h>
 #import <WFChatClient/WFCCRestoreResponseNotificationContent.h>
+#import <WFChatClient/WFCCCollectionMessageContent.h>

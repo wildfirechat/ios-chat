@@ -194,6 +194,8 @@
 		B748120D28A49D8A003BB0C3 /* WFCCChannelMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B748120B28A49D8A003BB0C3 /* WFCCChannelMenu.m */; };
 		B748123D28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B748123B28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B748123E28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B748123C28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m */; };
+		B749E9952F3F847E0092DEAE /* WFCCCollectionMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B749E9942F3F847E0092DEAE /* WFCCCollectionMessageContent.m */; };
+		B749E9962F3F847E0092DEAE /* WFCCCollectionMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B749E9932F3F847E0092DEAE /* WFCCCollectionMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B74BCC7A2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B74BCC792E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.m */; };
 		B74BCC7B2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B74BCC782E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B75322A82DE49ACD004F1064 /* WFCCDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = B75322A62DE49ACD004F1064 /* WFCCDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -432,6 +434,8 @@
 		B748120B28A49D8A003BB0C3 /* WFCCChannelMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelMenu.m; sourceTree = "<group>"; };
 		B748123B28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChannelMenuEventMessageContent.h; sourceTree = "<group>"; };
 		B748123C28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChannelMenuEventMessageContent.m; sourceTree = "<group>"; };
+		B749E9932F3F847E0092DEAE /* WFCCCollectionMessageContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCCollectionMessageContent.h; sourceTree = "<group>"; };
+		B749E9942F3F847E0092DEAE /* WFCCCollectionMessageContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCCollectionMessageContent.m; sourceTree = "<group>"; };
 		B74BCC782E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCGroupRejectJoinNotificationContent.h; sourceTree = "<group>"; };
 		B74BCC792E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCGroupRejectJoinNotificationContent.m; sourceTree = "<group>"; };
 		B75322A62DE49ACD004F1064 /* WFCCDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCDictionary.h; sourceTree = "<group>"; };
@@ -584,6 +588,8 @@
 		2E6B50CA1FAE9B10006B6E31 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
+				B749E9932F3F847E0092DEAE /* WFCCCollectionMessageContent.h */,
+				B749E9942F3F847E0092DEAE /* WFCCCollectionMessageContent.m */,
 				B75866F42F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.h */,
 				B75866F52F14E47E00D62775 /* WFCCRestoreRequestNotificationContent.m */,
 				B75866F62F14E47E00D62775 /* WFCCRestoreResponseNotificationContent.h */,
@@ -866,6 +872,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B749E9962F3F847E0092DEAE /* WFCCCollectionMessageContent.h in Headers */,
 				B7E2D8B62EFB953A00C8F909 /* WFCCJoinGroupRequest.h in Headers */,
 				B7D2AE972F10D6D100DB1A98 /* WFCCMessageBackupManager.h in Headers */,
 				B74BCC7B2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h in Headers */,
@@ -1097,6 +1104,7 @@
 				2FB87C6E243EF0FE0078A199 /* WFCCFriendGreetingMessageContent.m in Sources */,
 				B748120D28A49D8A003BB0C3 /* WFCCChannelMenu.m in Sources */,
 				90B044461FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m in Sources */,
+				B749E9952F3F847E0092DEAE /* WFCCCollectionMessageContent.m in Sources */,
 				2FB87C70243EF0FE0078A199 /* WFCCFriendAddedMessageContent.m in Sources */,
 				2B785A5525294C0D003CBF78 /* WFCCQuoteInfo.m in Sources */,
 				B748123E28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m in Sources */,

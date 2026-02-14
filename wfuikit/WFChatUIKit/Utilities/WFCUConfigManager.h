@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "WFCUAppServiceProvider.h"
 #import "WFCUOrgServiceProvider.h"
+#import "WFCUCollectionService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,6 +51,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
 
 @property(nonatomic, weak)id<WFCUOrgServiceProvider> orgServiceProvider;
+
+@property(nonatomic, weak)id<WFCUCollectionService> collectionServiceProvider;
 
 @property(nonatomic, strong)NSString *fileTransferId;
 

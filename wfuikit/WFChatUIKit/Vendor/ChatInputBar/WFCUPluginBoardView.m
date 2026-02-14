@@ -105,6 +105,9 @@
             [_pluginItems addObject:[[PluginItem alloc] initWithTitle:WFCString(@"Talk") image:[WFCUImage imageNamed:@"chat_input_plugin_intercom"] tag:7]];
         }
 #endif
+        if([WFCUConfigManager globalManager].collectionServiceProvider) {
+            [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"Collection") image:[WFCUImage imageNamed:@"chat_input_plugin_collection"] tag:8] atIndex:_pluginItems.count];
+        }
     }
     return _pluginItems;
 }

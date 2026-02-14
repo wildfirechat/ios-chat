@@ -108,6 +108,7 @@
 		B71F0B0728F547C2000A7C8A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF828F547C2000A7C8A /* DDLog.m */; };
 		B71F0B0828F547C2000A7C8A /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */; };
 		B71F0B0928F547C2000A7C8A /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */; };
+		B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */ = {isa = PBXBuildFile; fileRef = B749E9AB2F3F8EB60092DEAE /* CollectionService.m */; };
 		B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */; };
 		B75866E92F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E82F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m */; };
 		B75866F22F14E20F00D62775 /* WFCRestoreSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866F12F14E20F00D62775 /* WFCRestoreSourceViewController.m */; };
@@ -417,6 +418,8 @@
 		B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
 		B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
 		B71F0AFD28F547C2000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		B749E9AA2F3F8EB60092DEAE /* CollectionService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionService.h; sourceTree = "<group>"; };
+		B749E9AB2F3F8EB60092DEAE /* CollectionService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionService.m; sourceTree = "<group>"; };
 		B75866E02F14C29100D62775 /* WFCBackupTargetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupTargetViewController.h; sourceTree = "<group>"; };
 		B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupTargetViewController.m; sourceTree = "<group>"; };
 		B75866E72F14C9AA00D62775 /* WFCBackupRequestProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupRequestProgressViewController.h; sourceTree = "<group>"; };
@@ -655,6 +658,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B749E9AC2F3F8EB60092DEAE /* CollectionService */,
 				B76C1DD82D695EF900B1B0D8 /* Getui */,
 				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
@@ -1055,6 +1059,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		B749E9AC2F3F8EB60092DEAE /* CollectionService */ = {
+			isa = PBXGroup;
+			children = (
+				B749E9AA2F3F8EB60092DEAE /* CollectionService.h */,
+				B749E9AB2F3F8EB60092DEAE /* CollectionService.m */,
+			);
+			path = CollectionService;
+			sourceTree = "<group>";
+		};
 		B764D48C295854700082492F /* OrgService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1368,6 +1381,7 @@
 				B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */,
 				B7ABFF3F2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m in Sources */,
 				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,
+				B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */,
 				B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
