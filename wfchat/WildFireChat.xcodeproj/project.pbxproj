@@ -127,6 +127,7 @@
 		B76C1DE32D69650500B1B0D8 /* UIView+Gt.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DE12D69650500B1B0D8 /* UIView+Gt.m */; };
 		B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */; };
 		B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */; };
+		B770E8BD2F40C55400D4B219 /* PollService.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8BB2F40C55400D4B219 /* PollService.m */; };
 		B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B184F2CF719E0008A2C09 /* SSKeychain.m */; };
 		B78B18562CF719E0008A2C09 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */; };
 		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
@@ -444,6 +445,8 @@
 		B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		B76C1DF12D696E2100B1B0D8 /* WildFireChat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WildFireChat-Bridging-Header.h"; sourceTree = "<group>"; };
 		B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsCenterUtils.swift; sourceTree = "<group>"; };
+		B770E8BA2F40C55400D4B219 /* PollService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PollService.h; sourceTree = "<group>"; };
+		B770E8BB2F40C55400D4B219 /* PollService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PollService.m; sourceTree = "<group>"; };
 		B78B184E2CF719E0008A2C09 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		B78B184F2CF719E0008A2C09 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		B78B18502CF719E0008A2C09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SSKeychain.strings; sourceTree = "<group>"; };
@@ -658,6 +661,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B770E8BC2F40C55400D4B219 /* PollService */,
 				B749E9AC2F3F8EB60092DEAE /* CollectionService */,
 				B76C1DD82D695EF900B1B0D8 /* Getui */,
 				B764D48C295854700082492F /* OrgService */,
@@ -1100,6 +1104,15 @@
 			path = GTUtils;
 			sourceTree = "<group>";
 		};
+		B770E8BC2F40C55400D4B219 /* PollService */ = {
+			isa = PBXGroup;
+			children = (
+				B770E8BA2F40C55400D4B219 /* PollService.h */,
+				B770E8BB2F40C55400D4B219 /* PollService.m */,
+			);
+			path = PollService;
+			sourceTree = "<group>";
+		};
 		B78B184C2CF71943008A2C09 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1386,6 +1399,7 @@
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
+				B770E8BD2F40C55400D4B219 /* PollService.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
 				B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */,
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,

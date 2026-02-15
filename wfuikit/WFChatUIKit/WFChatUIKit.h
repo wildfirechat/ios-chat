@@ -101,3 +101,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 // Collection (接龙)
 #import <WFChatUIKit/WFCUCollection.h>
 #import <WFChatUIKit/WFCUCollectionService.h>
+
+#import <WFChatUIKit/WFCUPoll.h>
+#import <WFChatUIKit/WFCUPollService.h>
+

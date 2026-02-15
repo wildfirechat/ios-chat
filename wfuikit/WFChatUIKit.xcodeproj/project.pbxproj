@@ -532,6 +532,21 @@
 		B764D7002F0B965300C595E3 /* WFCURecentImagesFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D6FC2F0B965300C595E3 /* WFCURecentImagesFloatView.h */; };
 		B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B767584928CC1AF200835A6A /* WFZConferenceInfo.m */; };
 		B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B770E8C22F40C57A00D4B219 /* WFCUPollMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */; };
+		B770E8C32F40C57A00D4B219 /* WFCUPollResultMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */; };
+		B770E8C42F40C57A00D4B219 /* WFCUPollMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */; };
+		B770E8C52F40C57A00D4B219 /* WFCUPollResultMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8C12F40C57A00D4B219 /* WFCUPollResultMessageCell.m */; };
+		B770E8D02F40C59000D4B219 /* WFCUPollDetailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8CC2F40C59000D4B219 /* WFCUPollDetailViewController.h */; };
+		B770E8D12F40C59000D4B219 /* WFCUPollService.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8C82F40C59000D4B219 /* WFCUPollService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B770E8D22F40C59000D4B219 /* WFCUCreatePollViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8CA2F40C59000D4B219 /* WFCUCreatePollViewController.h */; };
+		B770E8D32F40C59000D4B219 /* WFCUPoll.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8C62F40C59000D4B219 /* WFCUPoll.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B770E8D42F40C59000D4B219 /* WFCUPollDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8CD2F40C59000D4B219 /* WFCUPollDetailViewController.m */; };
+		B770E8D52F40C59000D4B219 /* WFCUCreatePollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8CB2F40C59000D4B219 /* WFCUCreatePollViewController.m */; };
+		B770E8D62F40C59000D4B219 /* WFCUPoll.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8C72F40C59000D4B219 /* WFCUPoll.m */; };
+		B770E8DB2F40D2BD00D4B219 /* WFCUPollHomeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8D72F40D2BD00D4B219 /* WFCUPollHomeViewController.h */; };
+		B770E8DC2F40D2BD00D4B219 /* WFCUPollListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8D92F40D2BD00D4B219 /* WFCUPollListViewController.h */; };
+		B770E8DD2F40D2BD00D4B219 /* WFCUPollHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8D82F40D2BD00D4B219 /* WFCUPollHomeViewController.m */; };
+		B770E8DE2F40D2BD00D4B219 /* WFCUPollListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8DA2F40D2BD00D4B219 /* WFCUPollListViewController.m */; };
 		B77D1E0C29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */; };
 		B77D1E0D29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */; };
 		B77D33F7290C1EB500E72111 /* WFCUProfileMoreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77D33F5290C1EB500E72111 /* WFCUProfileMoreTableViewController.m */; };
@@ -1176,6 +1191,21 @@
 		B764D6FD2F0B965300C595E3 /* WFCURecentImagesFloatView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCURecentImagesFloatView.m; sourceTree = "<group>"; };
 		B767584928CC1AF200835A6A /* WFZConferenceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfo.m; sourceTree = "<group>"; };
 		B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfo.h; sourceTree = "<group>"; };
+		B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollMessageCell.h; sourceTree = "<group>"; };
+		B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollMessageCell.m; sourceTree = "<group>"; };
+		B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollResultMessageCell.h; sourceTree = "<group>"; };
+		B770E8C12F40C57A00D4B219 /* WFCUPollResultMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollResultMessageCell.m; sourceTree = "<group>"; };
+		B770E8C62F40C59000D4B219 /* WFCUPoll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPoll.h; sourceTree = "<group>"; };
+		B770E8C72F40C59000D4B219 /* WFCUPoll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPoll.m; sourceTree = "<group>"; };
+		B770E8C82F40C59000D4B219 /* WFCUPollService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollService.h; sourceTree = "<group>"; };
+		B770E8CA2F40C59000D4B219 /* WFCUCreatePollViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCreatePollViewController.h; sourceTree = "<group>"; };
+		B770E8CB2F40C59000D4B219 /* WFCUCreatePollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCreatePollViewController.m; sourceTree = "<group>"; };
+		B770E8CC2F40C59000D4B219 /* WFCUPollDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollDetailViewController.h; sourceTree = "<group>"; };
+		B770E8CD2F40C59000D4B219 /* WFCUPollDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollDetailViewController.m; sourceTree = "<group>"; };
+		B770E8D72F40D2BD00D4B219 /* WFCUPollHomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollHomeViewController.h; sourceTree = "<group>"; };
+		B770E8D82F40D2BD00D4B219 /* WFCUPollHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollHomeViewController.m; sourceTree = "<group>"; };
+		B770E8D92F40D2BD00D4B219 /* WFCUPollListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollListViewController.h; sourceTree = "<group>"; };
+		B770E8DA2F40D2BD00D4B219 /* WFCUPollListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollListViewController.m; sourceTree = "<group>"; };
 		B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUGeneralImageTextTableViewCell.h; sourceTree = "<group>"; };
 		B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUGeneralImageTextTableViewCell.m; sourceTree = "<group>"; };
 		B77D33F5290C1EB500E72111 /* WFCUProfileMoreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUProfileMoreTableViewController.m; sourceTree = "<group>"; };
@@ -1537,6 +1567,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				B770E8CF2F40C59000D4B219 /* Poll */,
 				B749E9A02F3F8A2D0092DEAE /* Collection */,
 				B79021682C01F4A0005C382A /* Mesh */,
 				B764D483295851570082492F /* Organization */,
@@ -1592,6 +1623,10 @@
 		2F550EB3217F5CC000F56C26 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */,
+				B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */,
+				B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */,
+				B770E8C12F40C57A00D4B219 /* WFCUPollResultMessageCell.m */,
 				B749E9982F3F86490092DEAE /* WFCUCollectionCell.h */,
 				B749E9992F3F86490092DEAE /* WFCUCollectionCell.m */,
 				B7D07586282756B5008A6C63 /* Voip */,
@@ -2525,6 +2560,40 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		B770E8C92F40C59000D4B219 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B770E8C62F40C59000D4B219 /* WFCUPoll.h */,
+				B770E8C72F40C59000D4B219 /* WFCUPoll.m */,
+				B770E8C82F40C59000D4B219 /* WFCUPollService.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B770E8CE2F40C59000D4B219 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B770E8D72F40D2BD00D4B219 /* WFCUPollHomeViewController.h */,
+				B770E8D82F40D2BD00D4B219 /* WFCUPollHomeViewController.m */,
+				B770E8D92F40D2BD00D4B219 /* WFCUPollListViewController.h */,
+				B770E8DA2F40D2BD00D4B219 /* WFCUPollListViewController.m */,
+				B770E8CA2F40C59000D4B219 /* WFCUCreatePollViewController.h */,
+				B770E8CB2F40C59000D4B219 /* WFCUCreatePollViewController.m */,
+				B770E8CC2F40C59000D4B219 /* WFCUPollDetailViewController.h */,
+				B770E8CD2F40C59000D4B219 /* WFCUPollDetailViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B770E8CF2F40C59000D4B219 /* Poll */ = {
+			isa = PBXGroup;
+			children = (
+				B770E8C92F40C59000D4B219 /* Model */,
+				B770E8CE2F40C59000D4B219 /* ViewController */,
+			);
+			path = Poll;
+			sourceTree = "<group>";
+		};
 		B79021682C01F4A0005C382A /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2739,7 +2808,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
+				B770E8D32F40C59000D4B219 /* WFCUPoll.h in Headers */,
 				B749E9A92F3F8D400092DEAE /* WFCUCollection.h in Headers */,
+				B770E8D12F40C59000D4B219 /* WFCUPollService.h in Headers */,
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
 				B764D49629586B060082492F /* WFCUOrganizationCache.h in Headers */,
@@ -2952,6 +3023,8 @@
 				B7C5441F28D5876700A2550F /* LBXScanNetAnimation.h in Headers */,
 				2BDF57A224AD70C8003C1F08 /* DNImagePickerController.h in Headers */,
 				2F5511EE217F5CC300F56C26 /* UIImage+ERCategory.h in Headers */,
+				B770E8DB2F40D2BD00D4B219 /* WFCUPollHomeViewController.h in Headers */,
+				B770E8DC2F40D2BD00D4B219 /* WFCUPollListViewController.h in Headers */,
 				B764D7002F0B965300C595E3 /* WFCURecentImagesFloatView.h in Headers */,
 				B71F0A7528F54156000A7C8A /* DDAbstractDatabaseLogger.h in Headers */,
 				2F551190217F5CC200F56C26 /* SDRefreshFooterView.h in Headers */,
@@ -2997,7 +3070,11 @@
 				2BB4191624ED212200ABFEF1 /* WFCUUserMessageListViewController.h in Headers */,
 				B71F0A7D28F54156000A7C8A /* DDDispatchQueueLogFormatter.h in Headers */,
 				9029D0FE21C5D7930002EBAA /* WFCUCreateChannelViewController.h in Headers */,
+				B770E8D02F40C59000D4B219 /* WFCUPollDetailViewController.h in Headers */,
+				B770E8D22F40C59000D4B219 /* WFCUCreatePollViewController.h in Headers */,
 				2F5EB44022C2E6BB00BC8C90 /* ManagerTableViewController.h in Headers */,
+				B770E8C22F40C57A00D4B219 /* WFCUPollMessageCell.h in Headers */,
+				B770E8C32F40C57A00D4B219 /* WFCUPollResultMessageCell.h in Headers */,
 				2F55109C217F5CC200F56C26 /* WFCUStickerCell.h in Headers */,
 				2F5511EC217F5CC300F56C26 /* WFCUForwardMessageCell.h in Headers */,
 				2BDF579D24AD70C8003C1F08 /* UIView+DNImagePicker.h in Headers */,
@@ -3294,11 +3371,16 @@
 				2F9CE42121BFE63C005E1BE1 /* WFCUChannelProfileViewController.m in Sources */,
 				B70162F7290E2F1700DCD651 /* MWTapDetectingImageView.m in Sources */,
 				2F5511F8217F5CC300F56C26 /* UITabBar+badge.m in Sources */,
+				B770E8DD2F40D2BD00D4B219 /* WFCUPollHomeViewController.m in Sources */,
+				B770E8DE2F40D2BD00D4B219 /* WFCUPollListViewController.m in Sources */,
 				2F5511F5217F5CC300F56C26 /* UIImage+ERCategory.m in Sources */,
 				2F551192217F5CC200F56C26 /* SDRefreshHeaderView.m in Sources */,
 				B7F892A628CC8F5F00E362DE /* WFCUConferenceLabelView.m in Sources */,
 				2F551113217F5CC200F56C26 /* VideoPlayerSampleView.m in Sources */,
 				2F5EB44922C2EEFC00BC8C90 /* WFCUGeneralSwitchTableViewCell.m in Sources */,
+				B770E8D42F40C59000D4B219 /* WFCUPollDetailViewController.m in Sources */,
+				B770E8D52F40C59000D4B219 /* WFCUCreatePollViewController.m in Sources */,
+				B770E8D62F40C59000D4B219 /* WFCUPoll.m in Sources */,
 				2F9CE41C21BFE5D9005E1BE1 /* WFCUSearchChannelViewController.m in Sources */,
 				2F5510B4217F5CC200F56C26 /* WFCUGeneralModifyViewController.m in Sources */,
 				2BDF579924AD70C8003C1F08 /* UIColor+Hex.m in Sources */,
@@ -3310,6 +3392,8 @@
 				2F56F6B52529EE0F00B829C4 /* WFCUCompositeMessageViewController.m in Sources */,
 				B701630A290E346C00DCD651 /* DACircularProgressView.m in Sources */,
 				2F5510FA217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.m in Sources */,
+				B770E8C42F40C57A00D4B219 /* WFCUPollMessageCell.m in Sources */,
+				B770E8C52F40C57A00D4B219 /* WFCUPollResultMessageCell.m in Sources */,
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				B733DFF028D404AD0094AD74 /* WFZConferenceHistoryListViewController.m in Sources */,
