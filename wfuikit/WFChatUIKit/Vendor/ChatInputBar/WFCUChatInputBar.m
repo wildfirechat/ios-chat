@@ -36,6 +36,7 @@
 #endif
 #import "WFCUImage.h"
 #import "WFCUCreateCollectionViewController.h"
+#import "WFCUPollHomeViewController.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -777,6 +778,8 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
+        // 刷新插件面板以获取最新的服务配置
+        [(WFCUPluginBoardView *)self.pluginInputView reloadItems];
         self.textInputView.inputView = self.pluginInputView;
         if (!self.textInputView.isFirstResponder) {
             [self.textInputView becomeFirstResponder];
@@ -1679,6 +1682,17 @@
             [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
         } else {
             [self makeToast:WFCString(@"CollectionOnlyForGroup") duration:1 position:CSToastPositionCenter];
+        }
+    } else if(itemTag == 9) {
+        // 投票功能
+        if (self.conversation.type == Group_Type) {
+            WFCUPollHomeViewController *vc = [[WFCUPollHomeViewController alloc] init];
+            vc.groupId = self.conversation.target;
+            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
+            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+        } else {
+            [self makeToast:WFCString(@"PollOnlyForGroup") duration:1 position:CSToastPositionCenter];
         }
     }
 }

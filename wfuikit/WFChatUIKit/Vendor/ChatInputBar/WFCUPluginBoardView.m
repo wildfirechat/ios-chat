@@ -45,6 +45,8 @@
 @property (nonatomic, weak)id<WFCUPluginBoardViewDelegate> delegate;
 @property (nonatomic, assign)BOOL hasVoip;
 @property (nonatomic, assign)BOOL hasPtt;
+@property (nonatomic, assign)BOOL hasCollection;
+@property (nonatomic, assign)BOOL hasPoll;
 @end
 
 @implementation WFCUPluginBoardView
@@ -55,6 +57,8 @@
         self.delegate = delegate;
         self.hasVoip = withWoip;
         self.hasPtt = withPtt;
+        self.hasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil;
+        self.hasPoll = [WFCUConfigManager globalManager].pollServiceProvider != nil;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
         int FACE_COUNT_ALL = (int)self.pluginItems.count;
@@ -105,10 +109,55 @@
             [_pluginItems addObject:[[PluginItem alloc] initWithTitle:WFCString(@"Talk") image:[WFCUImage imageNamed:@"chat_input_plugin_intercom"] tag:7]];
         }
 #endif
-        if([WFCUConfigManager globalManager].collectionServiceProvider) {
+        if(self.hasCollection) {
             [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"Collection") image:[WFCUImage imageNamed:@"chat_input_plugin_collection"] tag:8] atIndex:_pluginItems.count];
+        }
+        if(self.hasPoll) {
+            [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"Poll") image:[WFCUImage imageNamed:@"chat_input_plugin_poll"] tag:9] atIndex:_pluginItems.count];
         }
     }
     return _pluginItems;
+}
+
+- (void)reloadItems {
+    // 检查是否需要重新加载
+    BOOL currentHasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil;
+    BOOL currentHasPoll = [WFCUConfigManager globalManager].pollServiceProvider != nil;
+    
+    if (currentHasCollection != self.hasCollection || currentHasPoll != self.hasPoll) {
+        self.hasCollection = currentHasCollection;
+        self.hasPoll = currentHasPoll;
+        
+        // 清空并重新加载
+        _pluginItems = nil;
+        
+        // 移除所有子视图
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+        // 重新创建按钮
+        int FACE_COUNT_ALL = (int)self.pluginItems.count;
+        
+        CGRect frame;
+        frame.size.width = RCPlaginBoardCellSize.width;
+        frame.size.height = RCPlaginBoardCellSize.height;
+        __weak typeof(self)ws = self;
+        for (int i = 0; i < FACE_COUNT_ALL; i++) {
+            NSInteger currentRow = (NSInteger)floor((double)i / (double)HorizontalItemsCount);
+            NSInteger currentColumn = i % HorizontalItemsCount;
+            frame.origin.x = RCPlaginBoardCellSize.width * currentColumn + LeftOffset * (currentColumn+1);
+            frame.origin.y = RCPlaginBoardCellSize.height * currentRow + 15 + currentRow * 18;
+            
+            PluginItem *pluginItem = self.pluginItems[i];
+            
+            WFCUPluginItemView *item = [[WFCUPluginItemView alloc] initWithTitle:pluginItem.title image:pluginItem.image frame:frame];
+            item.tag = pluginItem.tag;
+            NSUInteger tag = item.tag;
+            item.onItemClicked = ^(void) {
+                NSLog(@"on item %lu pressed", tag);
+                [ws.delegate onItemClicked:tag];
+            };
+            [self addSubview:item];
+        }
+    }
 }
 @end

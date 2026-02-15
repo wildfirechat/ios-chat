@@ -28,9 +28,14 @@
 #import "WFCURichNotificationCell.h"
 #import "WFCUStreamingTextCell.h"
 #import "WFCUCollectionCell.h"
+#import "WFCUPollMessageCell.h"
+#import "WFCUPollResultMessageCell.h"
+#import "WFCUPollDetailViewController.h"
 
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatClient/WFCCPollMessageContent.h>
+#import <WFChatClient/WFCCPollResultMessageContent.h>
 #import "WFCUProfileTableViewController.h"
 #import "WFCUMultiVideoViewController.h"
 #import "WFCUChatInputBar.h"
@@ -1179,6 +1184,8 @@
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratedMessageContent class]];
     [self registerCell:[WFCUStreamingTextCell class] forContent:[WFCCStreamingTextGeneratingMessageContent class]];
     [self registerCell:[WFCUCollectionCell class] forContent:[WFCCCollectionMessageContent class]];
+    [self registerCell:[WFCUPollMessageCell class] forContent:[WFCCPollMessageContent class]];
+    [self registerCell:[WFCUPollResultMessageCell class] forContent:[WFCCPollResultMessageContent class]];
 
     [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerCell:obj forContentType:key];
@@ -2770,6 +2777,99 @@
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [self.navigationController presentViewController:nav animated:YES completion:nil];
+    } else if([model.message.content isKindOfClass:[WFCCPollMessageContent class]]) {
+        // 点击投票消息，先获取最新状态
+        WFCCMessage *message = model.message;
+        WFCCPollMessageContent *content = (WFCCPollMessageContent *)message.content;
+        
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = WFCString(@"Loading");
+        
+        typeof(self) __weak weakSelf = self;
+        [[WFCUConfigManager globalManager].pollServiceProvider getPoll:[content.pollId longLongValue]
+            success:^(WFCUPoll *poll) {
+                [hud hideAnimated:YES];
+                
+                // 如果投票已结束或被删除，更新消息内容
+                BOOL needUpdate = NO;
+                if (poll.status == 1 && content.status != 1) {
+                    content.status = 1;
+                    needUpdate = YES;
+                }
+                if (poll.status == 2) {
+                    // 投票已删除，显示提示
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.view makeToast:WFCString(@"PollDeleted")];
+                    });
+                    return;
+                }
+                
+                // 更新参与人数
+                if (content.totalVotes != poll.totalVotes) {
+                    content.totalVotes = poll.totalVotes;
+                    needUpdate = YES;
+                }
+                
+                // 如果内容有变化，更新本地消息并刷新UI
+                if (needUpdate) {
+                    [[WFCCIMService sharedWFCIMService] updateMessage:message.messageId
+                                                              content:content];
+                    [weakSelf.collectionView reloadData];
+                }
+                
+                // 进入投票详情界面
+                WFCUPollDetailViewController *vc = [[WFCUPollDetailViewController alloc] init];
+                vc.message = message;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [weakSelf.navigationController presentViewController:nav animated:YES completion:nil];
+            }
+            error:^(int errorCode, NSString *message) {
+                [hud hideAnimated:YES];
+                // 获取失败也允许进入详情，使用缓存的数据
+                WFCUPollDetailViewController *vc = [[WFCUPollDetailViewController alloc] init];
+                vc.message = message;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [weakSelf.navigationController presentViewController:nav animated:YES completion:nil];
+            }];
+    } else if([model.message.content isKindOfClass:[WFCCPollResultMessageContent class]]) {
+        // 点击投票结果消息，直接进入投票详情（结果消息只包含最终状态）
+        WFCCMessage *message = model.message;
+        WFCCPollResultMessageContent *content = (WFCCPollResultMessageContent *)message.content;
+        
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = WFCString(@"Loading");
+        
+        typeof(self) __weak weakSelf = self;
+        [[WFCUConfigManager globalManager].pollServiceProvider getPoll:[content.pollId longLongValue]
+            success:^(WFCUPoll *poll) {
+                [hud hideAnimated:YES];
+                
+                if (poll.status == 2) {
+                    // 投票已删除，显示提示
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.view makeToast:WFCString(@"PollDeleted")];
+                    });
+                    return;
+                }
+                
+                // 进入投票详情界面
+                WFCUPollDetailViewController *vc = [[WFCUPollDetailViewController alloc] init];
+                vc.message = message;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [weakSelf.navigationController presentViewController:nav animated:YES completion:nil];
+            }
+            error:^(int errorCode, NSString *message) {
+                [hud hideAnimated:YES];
+                // 获取失败也允许进入详情，使用缓存的数据
+                WFCUPollDetailViewController *vc = [[WFCUPollDetailViewController alloc] init];
+                vc.message = message;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [weakSelf.navigationController presentViewController:nav animated:YES completion:nil];
+            }];
     }
 }
 
@@ -3495,6 +3595,8 @@
             [msg.content isKindOfClass:[WFCCCardMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCConferenceInviteMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCCompositeMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCPollMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCPollResultMessageContent class]] ||
             //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
             [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [items addObject:forwardItem];
@@ -3569,7 +3671,9 @@
             [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCArticlesMessageContent class]] ||
-            [msg.content isKindOfClass:[WFCCCompositeMessageContent class]]) {
+            [msg.content isKindOfClass:[WFCCCompositeMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCPollMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCPollResultMessageContent class]]) {
             [items addObject:favoriteItem];
         }
     }
@@ -3714,6 +3818,14 @@
 
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = copyText;
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCPollMessageContent class]]) {
+            WFCCPollMessageContent *content = (WFCCPollMessageContent *)self.cell4Menu.model.message.content;
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = [NSString stringWithFormat:@"%@\n%@", content.title, content.desc ?: @""];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCPollResultMessageContent class]]) {
+            WFCCPollResultMessageContent *content = (WFCCPollResultMessageContent *)self.cell4Menu.model.message.content;
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = [NSString stringWithFormat:@"%@\n%@: %@", content.title, WFCString(@"Winner"), [content.winningOptionTexts componentsJoinedByString:@"、"]];
         }
     }
 }
