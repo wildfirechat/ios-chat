@@ -3235,6 +3235,36 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return isNoDisturbing;
 }
 
+#pragma mark - 缓存相关
+- (void)setCache:(int)cacheType key:(NSString *)key value:(NSString *)value {
+    mars::stn::MessageDB::Instance()->UpsertCache(cacheType, [key UTF8String], [value UTF8String]);
+}
+
+- (void)deleteCache:(int)cacheType key:(NSString *)key {
+    mars::stn::MessageDB::Instance()->DeleteCache(cacheType, [key UTF8String]);
+}
+
+- (void)deleteAllCache:(int)cacheType {
+    mars::stn::MessageDB::Instance()->DeleteAllCache(cacheType);
+}
+
+- (NSString *)getCache:(int)cacheType key:(NSString *)key {
+    std::string value = mars::stn::MessageDB::Instance()->getCache(cacheType, [key UTF8String]);
+    if (value.empty()) {
+        return nil;
+    }
+    return [NSString stringWithUTF8String:value.c_str()];
+}
+
+- (NSArray<NSString *> *)getAllCache:(int)cacheType {
+    std::list<std::string> values = mars::stn::MessageDB::Instance()->getAllCache(cacheType);
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (std::list<std::string>::const_iterator it = values.begin(); it != values.end(); ++it) {
+        [result addObject:[NSString stringWithUTF8String:it->c_str()]];
+    }
+    return result;
+}
+
 - (BOOL)isHiddenNotificationDetail {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Hidden_Notification_Detail key:@""];
     return [strValue isEqualToString:@"1"];
