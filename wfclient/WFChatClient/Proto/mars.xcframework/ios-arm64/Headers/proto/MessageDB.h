@@ -234,6 +234,12 @@ namespace mars {
             int SaveDomainInfo(const TDomainInfo &domain);
             
             
+            void UpsertCache(int cacheType, const std::string &key, const std::string &value);
+            void DeleteCache(int cacheType, const std::string &key);
+            void DeleteAllCache(int cacheType);
+            std::string getCache(int cacheType, const std::string &key);
+            std::list<std::string> getAllCache(int cacheType);
+            
             TChannelInfo GetChannelInfo(const std::string &channelId, bool refresh);
             long InsertOrUpdateChannelInfo(const TChannelInfo &channelInfo);
             

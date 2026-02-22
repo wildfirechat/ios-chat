@@ -2593,6 +2593,48 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
                           success:(void(^)(void))successBlock
                             error:(void(^)(int error_code))errorBlock;
 
+#pragma mark - 缓存相关
+/**
+ 插入或更新缓存
+
+ @param cacheType 缓存类型
+ @param key 缓存key
+ @param value 缓存值
+ */
+- (void)setCache:(int)cacheType key:(NSString *)key value:(NSString *)value;
+
+/**
+ 删除缓存
+
+ @param cacheType 缓存类型
+ @param key 缓存key
+ */
+- (void)deleteCache:(int)cacheType key:(NSString *)key;
+
+/**
+ 删除指定类型的所有缓存
+
+ @param cacheType 缓存类型
+ */
+- (void)deleteAllCache:(int)cacheType;
+
+/**
+ 获取缓存
+
+ @param cacheType 缓存类型
+ @param key 缓存key
+ @return 缓存值
+ */
+- (NSString *)getCache:(int)cacheType key:(NSString *)key;
+
+/**
+ 获取指定类型的所有缓存值
+
+ @param cacheType 缓存类型
+ @return 缓存值列表
+ */
+- (NSArray<NSString *> *)getAllCache:(int)cacheType;
+
 /**
 是否开启草稿同步
 
