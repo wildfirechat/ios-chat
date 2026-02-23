@@ -148,7 +148,7 @@
             // 锁定
             cell.textLabel.text = LocalizedString(@"LockPC");
             self.lockSwitch = [[UISwitch alloc] init];
-            self.lockSwitch.on = NO; // 默认未锁定，实际应该从服务获取状态
+            self.lockSwitch.on = [[WFCCIMService sharedWFCIMService] isPCClientLocked:self.pcClientInfo.clientId];
             [self.lockSwitch addTarget:self action:@selector(onLockSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = self.lockSwitch;
             break;
