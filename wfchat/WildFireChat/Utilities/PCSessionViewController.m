@@ -8,6 +8,7 @@
 
 #import "PCSessionViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import <WFChatClient/WFCCNetworkService.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "MBProgressHUD.h"
 #import "AppService.h"
@@ -26,7 +27,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.f]];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+    [self setupUI];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [self checkPCOnlineStatus];
+}
+
+- (void)onSettingUpdated:(NSNotification *)notification {
+    [self checkPCOnlineStatus];
+}
+
+- (void)checkPCOnlineStatus {
+    NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    BOOL pcStillOnline = NO;
+    for (WFCCPCOnlineInfo *info in infos) {
+        if ([info.clientId isEqualToString:self.pcClientInfo.clientId]) {
+            pcStillOnline = YES;
+            break;
+        }
+    }
+    if (!pcStillOnline) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void)setupUI {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     
@@ -249,6 +278,10 @@
     hud.label.text = message;
     hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
     [hud hideAnimated:YES afterDelay:1.f];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
