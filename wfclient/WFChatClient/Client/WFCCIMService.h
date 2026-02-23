@@ -177,6 +177,8 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_AddFriend_NoVerify = 28,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Sync_Badge = 29,
+    //不能直接使用，协议栈内会使用此值
+    UserSettingScope_Lock_PC = 30,
     
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
@@ -3078,6 +3080,27 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (void)kickoffPCClient:(NSString *)pcClientId
                 success:(void(^)(void))successBlock
                   error:(void(^)(int error_code))errorBlock;
+
+/**
+ 锁定PC或者Web
+ 
+ @param pcClientId PC或Web端的clientId
+ @param isLock 锁还是解锁
+ @param successBlock 成功的回调
+ @param errorBlock 失败的回调
+ */
+- (void)lockPCClient:(NSString *)pcClientId
+              isLock:(BOOL)isLock
+             success:(void(^)(void))successBlock
+               error:(void(^)(int error_code))errorBlock;
+
+/**
+ PC或者Web客户端是否被锁定。
+ 
+ @param pcClientId PC或Web端的clientId
+ @return 是否被锁定
+ */
+- (BOOL)isPCClientLocked:(NSString *)pcClientId;
 
 /**
  PC/Web在线时，是否停止通知

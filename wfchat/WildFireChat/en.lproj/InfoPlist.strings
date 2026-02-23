@@ -131,6 +131,7 @@ MiniProgramLoggedIn="Mini Program Logged In";
 IPadLoggedIn="iPad Logged In";
 AndroidTabletLoggedIn="Android Tablet Logged In";
 MutePhone="Mute Phone";
+LockPC="Lock PC";
 TransferFile="Transfer File";
 LogoutPC="Logout PC";
 LogoutWindows="Logout Windows";

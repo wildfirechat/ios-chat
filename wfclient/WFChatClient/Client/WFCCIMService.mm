@@ -4617,6 +4617,18 @@ public:
     mars::stn::KickoffPCClient([pcClientId UTF8String], new IMGeneralOperationCallback(successBlock, errorBlock));
 }
 
+- (void)lockPCClient:(NSString *)pcClientId
+              isLock:(BOOL)isLock
+             success:(void(^)(void))successBlock
+               error:(void(^)(int error_code))errorBlock {
+    [self setUserSetting:UserSettingScope_Lock_PC key:pcClientId value:isLock?@"1":@"0" success:successBlock error:errorBlock];
+}
+
+- (BOOL)isPCClientLocked:(NSString *)pcClientId {
+    NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Lock_PC key:pcClientId];
+    return [@"1" isEqualToString:strValue];
+}
+
 - (BOOL)isMuteNotificationWhenPcOnline {
     NSString *strValue = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Mute_When_PC_Online key:@""];
     if ([strValue isEqualToString:@"1"]) {

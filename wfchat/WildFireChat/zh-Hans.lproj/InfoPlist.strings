@@ -131,6 +131,7 @@ MiniProgramLoggedIn="小程序已登录";
 IPadLoggedIn="iPad 已登录";
 AndroidTabletLoggedIn="Android 平板已登录";
 MutePhone="手机静音";
+LockPC="锁定电脑";
 TransferFile="传输文件";
 LogoutPC="退出电脑登录";
 LogoutWindows="退出 Windows 登录";
