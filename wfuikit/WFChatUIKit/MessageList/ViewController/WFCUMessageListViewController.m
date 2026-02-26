@@ -39,6 +39,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "WFCUMultiVideoViewController.h"
 #import "WFCUChatInputBar.h"
+#import "WFCUPanFile.h"
 
 #import "UIView+Toast.h"
 
@@ -3426,6 +3427,36 @@
         }
         
         WFCCFileMessageContent *content = [WFCCFileMessageContent fileMessageContentFromPath:file];
+        [self sendMessage:content];
+        [NSThread sleepForTimeInterval:0.05];
+    }
+}
+
+- (void)didSelectNetDiskFiles:(NSArray<WFCUPanFile *> *)files {
+    for (WFCUPanFile *file in files) {
+        // 检查文件有效性
+        if (file.storageUrl.length == 0 || file.name.length == 0 || file.size == 0) {
+            NSLog(@"Invalid netdisk file: name=%@, url=%@, size=%lld", file.name, file.storageUrl, file.size);
+            continue;
+        }
+        
+        // 检查大文件限制
+        if(![[WFCCIMService sharedWFCIMService] isSupportBigFilesUpload]) {
+            if(file.size >= 100 * 1024 * 1024) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"FileTooLarge") preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"IKnow") style:UIAlertActionStyleCancel handler:nil];
+                [alertController addAction:actionCancel];
+                [self presentViewController:alertController animated:YES completion:nil];
+                continue;
+            }
+        }
+        
+        // 创建文件消息内容，直接使用网盘URL
+        WFCCFileMessageContent *content = [[WFCCFileMessageContent alloc] init];
+        content.name = file.name;
+        content.size = (NSUInteger)file.size;
+        content.remoteUrl = file.storageUrl;
+        
         [self sendMessage:content];
         [NSThread sleepForTimeInterval:0.05];
     }

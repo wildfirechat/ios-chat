@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <WFChatClient/WFCChatClient.h>
+#import "WFCUPanFile.h"
 
 #define CHAT_INPUT_BAR_HEIGHT 48
 #define TYPING_INTERVAL 10
@@ -40,6 +41,7 @@
 - (void)imageDataDidSelect:(NSArray<UIImage *> *)selectedImages isFullImage:(BOOL)fullImage;
 - (void)didTapChannelMenu:(WFCCChannelMenu *)channelMenu;
 - (void)didSelectFiles:(NSArray *)files;
+- (void)didSelectNetDiskFiles:(NSArray<WFCUPanFile *> *)files;
 #if WFCU_SUPPORT_VOIP
 - (void)didTouchVideoBtn:(BOOL)isAudioOnly;
 #endif

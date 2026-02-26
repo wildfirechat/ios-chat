@@ -156,6 +156,7 @@
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */; };
+		B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6312F4D8BFA003E481E /* PanService.m */; };
 		B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
@@ -492,6 +493,8 @@
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestRedirector.h; sourceTree = "<group>"; };
 		B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestRedirector.m; sourceTree = "<group>"; };
+		B7DEB6302F4D8BFA003E481E /* PanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanService.h; sourceTree = "<group>"; };
+		B7DEB6312F4D8BFA003E481E /* PanService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanService.m; sourceTree = "<group>"; };
 		B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
@@ -661,6 +664,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B7DEB6322F4D8BFA003E481E /* PanService */,
 				B770E8BC2F40C55400D4B219 /* PollService */,
 				B749E9AC2F3F8EB60092DEAE /* CollectionService */,
 				B76C1DD82D695EF900B1B0D8 /* Getui */,
@@ -1147,6 +1151,15 @@
 			path = TYHWaterMark;
 			sourceTree = "<group>";
 		};
+		B7DEB6322F4D8BFA003E481E /* PanService */ = {
+			isa = PBXGroup;
+			children = (
+				B7DEB6302F4D8BFA003E481E /* PanService.h */,
+				B7DEB6312F4D8BFA003E481E /* PanService.m */,
+			);
+			path = PanService;
+			sourceTree = "<group>";
+		};
 		B7E494E228F670BA00FF2333 /* libyuv */ = {
 			isa = PBXGroup;
 			children = (
@@ -1396,6 +1409,7 @@
 				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,
 				B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */,
 				B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */,
+				B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,

@@ -33,6 +33,7 @@
 #import "WFCUOrgRelationship.h"
 #import "WFCUUtilities.h"
 #import "WFCUEmployeeEx.h"
+#import "WFCUPanViewController.h"
 
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
@@ -438,7 +439,31 @@
                     [self.momentCell addSubview:momentButton];
                 }
                 self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-                self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+            
+            // 添加"他/她的网盘"入口
+            if([WFCUConfigManager globalManager].panServiceProvider) {
+                UITableViewCell *panCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"panCell"];
+                for (UIView *subView in panCell.subviews) {
+                    [subView removeFromSuperview];
+                }
+                
+                UIButton *panButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 50)];
+                [panButton setTitle: @"他/她的网盘" forState:UIControlStateNormal];
+                [panButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
+                panButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+                panButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                [panButton addTarget:self action:@selector(panCellClick) forControlEvents:UIControlEventTouchUpInside];
+                if (@available(iOS 14, *)) {
+                    [panCell.contentView addSubview:panButton];
+                } else {
+                    [panCell addSubview:panButton];
+                }
+                panCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                panCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                
+                // 添加到 cells
+                [self.cells addObject:panCell];
             }
         }
         
@@ -560,6 +585,13 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)panCellClick {
+    WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
+    vc.viewMode = WFCUPanViewModeUserPublic;
+    vc.targetUserId = self.userId;
+    vc.targetUserName = self.userInfo.displayName;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)onSendMessageBtn:(id)sender {
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];

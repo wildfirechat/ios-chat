@@ -13,11 +13,5 @@
 @end
 
 @interface WFCUPluginBoardView : UIView
-- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withVoip withPtt:(BOOL)withPtt;
-
-/**
- * 刷新插件项，根据当前配置动态添加/移除收藏和投票按钮
- * 在 pollServiceProvider 或 collectionServiceProvider 可能在初始化后设置的情况下调用
- */
-- (void)reloadItems;
+- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withVoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection;
 @end
