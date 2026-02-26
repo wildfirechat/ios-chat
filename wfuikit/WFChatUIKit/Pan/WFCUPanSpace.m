@@ -30,10 +30,6 @@
     NSString *typeStr = dict[@"spaceType"];
     if ([typeStr isEqualToString:@"GLOBAL_PUBLIC"]) {
         space.spaceType = WFCUPanSpaceTypeGlobalPublic;
-    } else if ([typeStr isEqualToString:@"DEPT_PUBLIC"]) {
-        space.spaceType = WFCUPanSpaceTypeDeptPublic;
-    } else if ([typeStr isEqualToString:@"DEPT_PRIVATE"]) {
-        space.spaceType = WFCUPanSpaceTypeDeptPrivate;
     } else if ([typeStr isEqualToString:@"USER_PUBLIC"]) {
         space.spaceType = WFCUPanSpaceTypeUserPublic;
     } else if ([typeStr isEqualToString:@"USER_PRIVATE"]) {

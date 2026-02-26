@@ -453,9 +453,9 @@
 
 - (void)startMoveFile:(WFCUPanFile *)file {
     // 进入全局空间列表选择目标，支持跨空间移动
-    // 可以从全局公共空间、部门空间、我的空间中选择
+    // 可以从全局公共空间、我的空间中选择
     WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
-    vc.viewMode = WFCUPanViewModeAll; // 显示所有空间（全局/部门/我的）
+    vc.viewMode = WFCUPanViewModeAll; // 显示所有空间（全局/我的）
     vc.isMoveMode = YES;
     vc.fileToMove = file;
     vc.sourceSpace = self.space;
@@ -467,9 +467,9 @@
 
 - (void)startCopyFile:(WFCUPanFile *)file {
     // 进入全局空间列表选择目标，支持跨空间复制
-    // 可以从全局公共空间、部门空间、我的空间中选择
+    // 可以从全局公共空间、我的空间中选择
     WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
-    vc.viewMode = WFCUPanViewModeAll; // 显示所有空间（全局/部门/我的）
+    vc.viewMode = WFCUPanViewModeAll; // 显示所有空间（全局/我的）
     vc.isCopyMode = YES;
     vc.fileToCopy = file;
     vc.sourceCopySpace = self.space;

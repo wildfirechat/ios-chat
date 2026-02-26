@@ -711,3 +711,4 @@
 "CannotMoveToSelf"="不能将文件夹移动到自身内";
 "Copy"="复制";
 "CannotCopyToSelf"="不能将文件夹复制到自身内";
+"SaveToPan"="保存到网盘";

@@ -54,7 +54,6 @@
 @interface WFCUPanViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray<WFCUPanSpace *> *spaces;
-@property (nonatomic, strong) UISegmentedControl *segmentControl;
 @end
 
 @implementation WFCUPanViewController
@@ -110,12 +109,7 @@
             
         case WFCUPanViewModeAll:
         default: {
-            // 添加空间类型切换（全局/部门/我的）
-            self.segmentControl = [[UISegmentedControl alloc] initWithItems:@[WFCString(@"Global"), WFCString(@"Dept"), WFCString(@"My")]];
-            self.segmentControl.selectedSegmentIndex = 0;
-            [self.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-            self.navigationItem.titleView = self.segmentControl;
-            
+            // 直接显示所有空间（全局公共空间/我的公共空间/我的私有空间）
             if (self.isMoveMode || self.isCopyMode) {
                 // 移动/复制模式下显示取消和粘贴按钮
                 [self updateRightBarButtonForMoveMode];
@@ -187,10 +181,6 @@
     [self loadSpaces];
 }
 
-- (void)segmentChanged:(UISegmentedControl *)sender {
-    [self loadSpaces];
-}
-
 - (void)loadSpaces {
     if (![WFCUConfigManager globalManager].panServiceProvider) {
         return;
@@ -241,16 +231,15 @@
     [[WFCUConfigManager globalManager].panServiceProvider getSpacesWithSuccess:^(NSArray<WFCUPanSpace *> *spaces) {
         [self.spaces removeAllObjects];
         
-        NSInteger segmentIndex = self.segmentControl.selectedSegmentIndex;
         NSString *currentUserId = [WFCCNetworkService sharedInstance].userId;
         
+        // 直接显示所有空间：全局公共空间、我的公共空间、我的私有空间
         for (WFCUPanSpace *space in spaces) {
-            if (segmentIndex == 0 && space.spaceType == WFCUPanSpaceTypeGlobalPublic) {
+            if (space.spaceType == WFCUPanSpaceTypeGlobalPublic) {
+                // 全局公共空间
                 [self.spaces addObject:space];
-            } else if (segmentIndex == 1 && (space.spaceType == WFCUPanSpaceTypeDeptPublic || space.spaceType == WFCUPanSpaceTypeDeptPrivate)) {
-                [self.spaces addObject:space];
-            } else if (segmentIndex == 2 && (space.spaceType == WFCUPanSpaceTypeUserPublic || space.spaceType == WFCUPanSpaceTypeUserPrivate)) {
-                // "我的"标签只显示当前用户自己的空间
+            } else if (space.spaceType == WFCUPanSpaceTypeUserPublic || space.spaceType == WFCUPanSpaceTypeUserPrivate) {
+                // 只显示当前用户自己的空间（公共和私有）
                 if ([space.ownerId isEqualToString:currentUserId]) {
                     [self.spaces addObject:space];
                 }
@@ -328,7 +317,17 @@
     WFCUPanSpaceCell *cell = [tableView dequeueReusableCellWithIdentifier:@"spaceCell" forIndexPath:indexPath];
     WFCUPanSpace *space = self.spaces[indexPath.row];
     
-    cell.nameLabel.text = space.name;
+    // 根据空间类型显示明确的名称
+    NSString *displayName = space.name;
+    if (space.spaceType == WFCUPanSpaceTypeGlobalPublic) {
+        displayName = @"全局公共空间";
+    } else if (space.spaceType == WFCUPanSpaceTypeUserPublic) {
+        displayName = @"我的公共空间";
+    } else if (space.spaceType == WFCUPanSpaceTypeUserPrivate) {
+        displayName = @"我的私有空间";
+    }
+    cell.nameLabel.text = displayName;
+    
     cell.infoLabel.text = [NSString stringWithFormat:@"%@: %lld/%lld MB", WFCString(@"Storage"), space.usedQuota / 1024 / 1024, space.totalQuota / 1024 / 1024];
     
     // 所有空间都显示 folder 图标

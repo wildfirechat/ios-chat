@@ -709,3 +709,4 @@
 "CannotMoveToSelf"="不能將文件夾移動到自身內";
 "Copy"="複製";
 "CannotCopyToSelf"="不能將文件夾複製到自身內";
+"SaveToPan"="保存到網盤";

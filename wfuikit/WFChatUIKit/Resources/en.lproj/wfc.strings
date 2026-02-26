@@ -710,3 +710,4 @@
 "CannotMoveToSelf"="Cannot move a folder into itself";
 "Copy"="Copy";
 "CannotCopyToSelf"="Cannot copy a folder into itself";
+"SaveToPan"="Save to Pan";
