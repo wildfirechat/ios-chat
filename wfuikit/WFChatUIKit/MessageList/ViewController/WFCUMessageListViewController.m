@@ -2115,11 +2115,13 @@
             if(message.messageId && message.messageId == model.message.messageId) {
                 model.message.content = message.content;
                 duplcated = YES;
+                [[WFCUConfigManager globalManager].cellSizeMap removeObjectForKey:@(model.message.messageId)];
                 break;
             }
             
             if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
                 model.message.content = message.content;
+                [[WFCUConfigManager globalManager].cellSizeMap removeObjectForKey:@(model.message.messageId)];
                 duplcated = YES;
                 break;
             }
