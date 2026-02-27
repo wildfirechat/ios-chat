@@ -51,6 +51,7 @@
 @property (strong, nonatomic)UITableViewCell *addFriendCell;
 @property (strong, nonatomic)UITableViewCell *momentCell;
 @property (strong, nonatomic)UITableViewCell *moreCell;
+@property (nonatomic, strong)UITableViewCell *panCell;
 @property (nonatomic, strong)UITableViewCell *userMessagesCell;
 @property (nonatomic, strong)UITableViewCell *groupSourceCell;
 
@@ -284,6 +285,7 @@
     self.momentCell = nil;
     self.moreCell = nil;
     self.userMessagesCell = nil;
+    self.panCell = nil;
     
     self.headerCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     for (UIView *subView in self.headerCell.contentView.subviews) {
@@ -441,29 +443,11 @@
                 self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            // 添加"他/她的网盘"入口
-            if([WFCUConfigManager globalManager].panServiceProvider) {
-                UITableViewCell *panCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"panCell"];
-                for (UIView *subView in panCell.subviews) {
-                    [subView removeFromSuperview];
-                }
-                
-                UIButton *panButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 50)];
-                [panButton setTitle: @"他/她的网盘" forState:UIControlStateNormal];
-                [panButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-                panButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
-                panButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-                [panButton addTarget:self action:@selector(panCellClick) forControlEvents:UIControlEventTouchUpInside];
-                if (@available(iOS 14, *)) {
-                    [panCell.contentView addSubview:panButton];
-                } else {
-                    [panCell addSubview:panButton];
-                }
-                panCell.selectionStyle = UITableViewCellSelectionStyleNone;
-                panCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                
-                // 添加到 cells
-                [self.cells addObject:panCell];
+            // 添加"他/她的网盘"入口（域外用户不显示）
+            if([WFCUConfigManager globalManager].panServiceProvider && ![WFCCUtilities isExternalTarget:self.userId]) {
+                self.panCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"panCell"];
+                self.panCell.textLabel.text = @"他/她的网盘";
+                self.panCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
         }
         
@@ -692,6 +676,9 @@
         if (self.momentCell) {
             count++;
         }
+        if (self.panCell) {
+            count++;
+        }
         
         count+= self.organizationIds.count;
         
@@ -725,6 +712,12 @@
         
         int index = indexPath.row;
         if(self.momentCell)
+            index--;
+        
+        if(self.panCell && index == 0) {
+            return self.panCell;
+        }
+        if(self.panCell)
             index--;
         
         if(index < self.organizationIds.count) {
@@ -808,10 +801,18 @@
     } else if(indexPath.section == 1) {
         if(self.momentCell && indexPath.row == 0) {
             //click momentCell
+            return;
         }
         
         int index = (int)indexPath.row;
         if(self.momentCell)
+            index--;
+        
+        if(self.panCell && index == 0) {
+            [self panCellClick];
+            return;
+        }
+        if(self.panCell)
             index--;
         
         if(index < self.organizationIds.count) {

@@ -167,6 +167,7 @@ static PanService *sharedSingleton = nil;
           mimeType:(NSString *)mimeType
                md5:(NSString *)md5
         storageUrl:(NSString *)storageUrl
+              copy:(BOOL)copy
            success:(void(^)(WFCUPanFile *file))successBlock
              error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/api/v1/files";
@@ -174,7 +175,8 @@ static PanService *sharedSingleton = nil;
         @"spaceId": @(spaceId),
         @"name": name ?: @"",
         @"size": @(size),
-        @"storageUrl": storageUrl ?: @""
+        @"storageUrl": storageUrl ?: @"",
+        @"copy": @(copy)
     } mutableCopy];
     
     if (parentId > 0) {
@@ -287,34 +289,6 @@ static PanService *sharedSingleton = nil;
          success:(void(^)(void))successBlock
            error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/api/v1/files/move";
-    NSMutableDictionary *params = [@{
-        @"fileId": @(fileId),
-        @"targetSpaceId": @(targetSpaceId)
-    } mutableCopy];
-    
-    if (targetParentId > 0) {
-        params[@"targetParentId"] = @(targetParentId);
-    } else {
-        params[@"targetParentId"] = @(0);
-    }
-    
-    [self postWithAuth:path data:params success:^(NSDictionary *dict) {
-        if([dict[@"code"] intValue] == 0) {
-            if(successBlock) successBlock();
-        } else {
-            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
-        }
-    } error:^(NSError * _Nonnull error) {
-        if(errorBlock) errorBlock(-1, error.localizedDescription);
-    }];
-}
-
-- (void)duplicateFile:(NSInteger)fileId
-              toSpace:(NSInteger)targetSpaceId
-             parentId:(NSInteger)targetParentId
-              success:(void(^)(void))successBlock
-                error:(void(^)(int errorCode, NSString *message))errorBlock {
-    NSString *path = @"/api/v1/files/duplicate";
     NSMutableDictionary *params = [@{
         @"fileId": @(fileId),
         @"targetSpaceId": @(targetSpaceId)

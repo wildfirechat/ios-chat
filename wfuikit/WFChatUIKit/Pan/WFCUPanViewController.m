@@ -90,9 +90,12 @@
 - (void)setupUI {
     switch (self.viewMode) {
         case WFCUPanViewModeMySpaces: {
-            if (self.isMoveMode || self.isCopyMode) {
+            if (self.isMoveMode) {
                 self.title = WFCString(@"SelectDestination");
                 [self updateRightBarButtonForMoveMode];
+            } else if (self.isCopyMode) {
+                self.title = WFCString(@"SelectDestination");
+                [self updateRightBarButtonForCopyMode];
             } else {
                 self.title = WFCString(@"MySpaces");
                 // 添加操作按钮
@@ -110,9 +113,12 @@
         case WFCUPanViewModeAll:
         default: {
             // 直接显示所有空间（全局公共空间/我的公共空间/我的私有空间）
-            if (self.isMoveMode || self.isCopyMode) {
-                // 移动/复制模式下显示取消和粘贴按钮
+            if (self.isMoveMode) {
+                // 移动模式下显示取消和粘贴按钮
                 [self updateRightBarButtonForMoveMode];
+            } else if (self.isCopyMode) {
+                // 复制模式下显示取消和粘贴按钮
+                [self updateRightBarButtonForCopyMode];
             } else {
                 // 普通模式下显示上传按钮
                 UIBarButtonItem *uploadItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
@@ -126,22 +132,23 @@
 }
 
 - (void)updateRightBarButtonForMoveMode {
-    // 移动模式下显示取消和粘贴按钮
-    // 在空间列表中，粘贴按钮禁用（因为还没有选择具体的空间目录）
+    // 移动模式下在空间列表只显示取消按钮
+    // 用户需要点击进入空间后，在文件列表中才显示粘贴按钮
     
     // 创建取消按钮
     UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(onCancelMove:)];
     
-    // 创建粘贴按钮（禁用状态，因为空间列表不是具体目录）
-    UIButton *pasteBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-    [pasteBtn setTitle:WFCString(@"Paste") forState:UIControlStateNormal];
-    [pasteBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    pasteBtn.enabled = NO;
+    self.navigationItem.rightBarButtonItems = @[cancelItem];
+}
+
+- (void)updateRightBarButtonForCopyMode {
+    // 复制模式下在空间列表只显示取消按钮
+    // 用户需要点击进入空间后，在文件列表中才显示粘贴按钮
     
-    UIBarButtonItem *pasteItem = [[UIBarButtonItem alloc] initWithCustomView:pasteBtn];
+    // 创建取消按钮
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:WFCString(@"Cancel") style:UIBarButtonItemStylePlain target:self action:@selector(onCancelMove:)];
     
-    // 同时显示取消和粘贴按钮（粘贴禁用）
-    self.navigationItem.rightBarButtonItems = @[pasteItem, cancelItem];
+    self.navigationItem.rightBarButtonItems = @[cancelItem];
 }
 
 - (void)onCancelMove:(id)sender {
@@ -343,26 +350,40 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     WFCUPanSpace *space = self.spaces[indexPath.row];
-    WFCUPanFileListViewController *vc = [[WFCUPanFileListViewController alloc] init];
-    vc.space = space;
-    vc.parentId = 0;
-    vc.hidesBottomBarWhenPushed = YES;
     
-    // 如果是移动模式，传递移动状态
+    // 移动模式下，点击空间进入该空间的文件列表，让用户可以选择目标目录
     if (self.isMoveMode) {
+        WFCUPanFileListViewController *vc = [[WFCUPanFileListViewController alloc] init];
+        vc.space = space;
+        vc.parentId = 0;
         vc.isMoveMode = YES;
         vc.fileToMove = self.fileToMove;
         vc.sourceSpace = self.sourceSpace;
         vc.sourceParentId = self.sourceParentId;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     
-    // 如果是复制模式，传递复制状态
+    // 复制模式下，点击空间进入该空间的文件列表，让用户可以选择目标目录
     if (self.isCopyMode) {
+        WFCUPanFileListViewController *vc = [[WFCUPanFileListViewController alloc] init];
+        vc.space = space;
+        vc.parentId = 0;
         vc.isCopyMode = YES;
         vc.fileToCopy = self.fileToCopy;
         vc.sourceCopySpace = self.sourceCopySpace;
         vc.sourceCopyParentId = self.sourceCopyParentId;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
+    
+    // 普通模式下，进入文件列表
+    WFCUPanFileListViewController *vc = [[WFCUPanFileListViewController alloc] init];
+    vc.space = space;
+    vc.parentId = 0;
+    vc.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController pushViewController:vc animated:YES];
 }

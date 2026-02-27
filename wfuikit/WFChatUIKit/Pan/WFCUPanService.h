@@ -48,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
           mimeType:(NSString *)mimeType
                md5:(NSString *)md5
         storageUrl:(NSString *)storageUrl
+              copy:(BOOL)copy
            success:(void(^)(WFCUPanFile *file))successBlock
              error:(void(^)(int errorCode, NSString *message))errorBlock;
 
@@ -83,13 +84,6 @@ NS_ASSUME_NONNULL_BEGIN
            newName:(NSString *)newName
            success:(void(^)(void))successBlock
              error:(void(^)(int errorCode, NSString *message))errorBlock;
-
-/// 复制文件到自己的空间（转存）
-- (void)duplicateFile:(NSInteger)fileId
-              toSpace:(NSInteger)targetSpaceId
-             parentId:(NSInteger)targetParentId
-              success:(void(^)(void))successBlock
-                error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 /// 复制文件/文件夹到其他空间（跨空间复制，不删除原文件）
 - (void)copyFile:(NSInteger)fileId

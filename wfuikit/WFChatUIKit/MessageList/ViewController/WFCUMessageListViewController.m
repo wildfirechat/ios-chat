@@ -4140,6 +4140,7 @@
                                                                 mimeType:mimeType 
                                                                      md5:@"" 
                                                               storageUrl:fileContent.remoteUrl 
+                                                                    copy:YES 
                                                                  success:^(WFCUPanFile *file) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [ws.view makeToast:@"已保存到网盘" duration:1 position:CSToastPositionCenter];

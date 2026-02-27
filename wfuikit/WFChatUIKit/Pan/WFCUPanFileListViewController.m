@@ -61,7 +61,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.space.name;
+    // 移动/复制模式下显示"选择目标位置"，普通模式下显示空间名称
+    if (self.isMoveMode || self.isCopyMode) {
+        self.title = WFCString(@"SelectDestination");
+    } else {
+        self.title = self.space.name;
+    }
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     self.files = [NSMutableArray array];
@@ -142,6 +147,11 @@
             [self startCopyFile:file];
         }]];
         
+        // 重命名
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Rename") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self renameFile:file];
+        }]];
+        
         // 删除
         [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Delete") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self deleteFile:file atIndexPath:indexPath];
@@ -150,7 +160,7 @@
     } else {
         // 无写权限：只显示转存
         [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Duplicate") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self duplicateFile:file];
+            [self startCopyFile:file];
         }]];
     }
     
@@ -256,7 +266,7 @@
     for (UIViewController *vc in viewControllers) {
         if ([vc isKindOfClass:[WFCUPanViewController class]]) {
             WFCUPanViewController *panVC = (WFCUPanViewController *)vc;
-            if (!panVC.isMoveMode) {
+            if (!panVC.isMoveMode && !panVC.isCopyMode) {
                 [self.navigationController popToViewController:vc animated:YES];
                 return;
             }
@@ -306,6 +316,15 @@
 - (void)executeMove {
     if (!self.fileToMove) return;
     
+    // 安全检查：如果是原位置（同一空间且同一父目录），不执行移动
+    BOOL isSameLocation = (self.space.spaceId == self.sourceSpace.spaceId && self.parentId == self.sourceParentId);
+    if (isSameLocation) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"不能将文件移动到原位置" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
     [[WFCUConfigManager globalManager].panServiceProvider moveFile:self.fileToMove.fileId toSpace:self.space.spaceId parentId:self.parentId success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             // 移动成功，返回到原始查看状态
@@ -350,6 +369,15 @@
 
 - (void)executeCopy {
     if (!self.fileToCopy) return;
+    
+    // 安全检查：如果是原位置（同一空间且同一父目录），不执行复制
+    BOOL isSameLocation = (self.space.spaceId == self.sourceCopySpace.spaceId && self.parentId == self.sourceCopyParentId);
+    if (isSameLocation) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"不能将文件复制到原位置" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
     
     [[WFCUConfigManager globalManager].panServiceProvider copyFile:self.fileToCopy.fileId toSpace:self.space.spaceId parentId:self.parentId success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -532,7 +560,7 @@
 }
 
 - (void)doDuplicate:(WFCUPanFile *)file toSpace:(WFCUPanSpace *)space {
-    [[WFCUConfigManager globalManager].panServiceProvider duplicateFile:file.fileId toSpace:space.spaceId parentId:0 success:^{
+    [[WFCUConfigManager globalManager].panServiceProvider copyFile:file.fileId toSpace:space.spaceId parentId:0 success:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:WFCString(@"DuplicateSuccess") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
@@ -548,6 +576,44 @@
             [self presentViewController:alert animated:YES completion:nil];
         });
     }];
+}
+
+- (void)renameFile:(WFCUPanFile *)file {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"Rename") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = WFCString(@"NewName");
+        textField.text = file.name;
+    }];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *newName = alert.textFields.firstObject.text;
+        if (newName.length > 0 && ![newName isEqualToString:file.name]) {
+            [[WFCUConfigManager globalManager].panServiceProvider renameFile:file.fileId newName:newName success:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self loadFiles];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"kPanSpaceDidUpdateNotification" object:nil];
+                });
+            } error:^(int errorCode, NSString *message) {
+                NSLog(@"Rename file error: %d, %@", errorCode, message);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *errorMsg = message ?: @"操作失败";
+                    if (errorCode == 403 || [errorMsg containsString:@"权限"]) {
+                        errorMsg = @"没有权限执行此操作";
+                    } else if ([errorMsg containsString:@"存在"] || [errorMsg containsString:@"重复"]) {
+                        errorMsg = @"该名称已存在";
+                    }
+                    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"提示" message:errorMsg preferredStyle:UIAlertControllerStyleAlert];
+                    [errorAlert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
+                    [self presentViewController:errorAlert animated:YES completion:nil];
+                });
+            }];
+        }
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UIDocumentPickerDelegate
@@ -575,6 +641,7 @@
                                                                 mimeType:mimeType 
                                                                      md5:md5 
                                                               storageUrl:storageUrl 
+                                                                    copy:NO 
                                                                  success:^(WFCUPanFile *file) {
             [hud hideAnimated:YES];
             [weakSelf loadFiles];
@@ -762,6 +829,14 @@
         copyAction.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.8 alpha:1];
         [actions addObject:copyAction];
         
+        // 重命名按钮
+        UIContextualAction *renameAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:WFCString(@"Rename") handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+            [self renameFile:file];
+            completionHandler(YES);
+        }];
+        renameAction.backgroundColor = [UIColor colorWithRed:0.9 green:0.6 blue:0.1 alpha:1];
+        [actions addObject:renameAction];
+        
         // 删除按钮
         UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:WFCString(@"Delete") handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
             [self deleteFile:file atIndexPath:indexPath];
@@ -772,8 +847,7 @@
     } else {
         // 无写权限：只显示复制按钮
         UIContextualAction *copyAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:WFCString(@"Duplicate") handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-            [self duplicateFile:file];
-            completionHandler(YES);
+            [self startCopyFile:file];
         }];
         copyAction.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1];
         [actions addObject:copyAction];
