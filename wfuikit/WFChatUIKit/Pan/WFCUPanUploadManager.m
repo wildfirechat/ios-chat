@@ -49,7 +49,7 @@
     // 使用 WildFireChat SDK 上传文件
     // Media_Type_FILE = 4 用于通用文件上传
     [[WFCCIMService sharedWFCIMService] uploadMediaFile:filePath
-                                               mediaType:Media_Type_CUSTOM1
+                                               mediaType:Media_Type_PAN
                                                  success:^(NSString *remoteUrl) {
         // 上传成功，返回存储URL
         if (successBlock) {
