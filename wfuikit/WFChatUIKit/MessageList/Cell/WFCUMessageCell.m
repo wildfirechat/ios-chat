@@ -511,7 +511,13 @@
                 if([model.message.conversation.target isEqualToString:[WFCUConfigManager globalManager].fileTransferId]) {
                     self.receiptView.hidden = YES;
                 } else {
-                    self.receiptView.hidden = NO;
+                    // 检查对方是否是机器人，如果是则不显示阅读状态
+                    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:model.message.conversation.target refresh:NO];
+                    if (userInfo.type == 1) {  // 1表示机器人
+                        self.receiptView.hidden = YES;
+                    } else {
+                        self.receiptView.hidden = NO;
+                    }
                 }
             } else if(model.message.conversation.type == SecretChat_Type) {
                 WFCCSecretChatInfo *secretChatInfo = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:model.message.conversation.target];
