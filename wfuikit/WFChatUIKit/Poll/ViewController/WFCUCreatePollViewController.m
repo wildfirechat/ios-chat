@@ -65,6 +65,11 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
     self.title = WFCString(@"CreatePoll");
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     
+    // 添加点击手势收起键盘
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    tapGesture.cancelsTouchesInView = NO;  // 允许触摸事件传递给其他视图
+    [self.view addGestureRecognizer:tapGesture];
+    
     // 导航栏按钮
     // 返回按钮（创建投票是被 push 的）
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -84,6 +89,10 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
     self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedSectionHeaderHeight = 30;
     [self.view addSubview:self.tableView];
+}
+
+- (void)dismissKeyboard {
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Actions

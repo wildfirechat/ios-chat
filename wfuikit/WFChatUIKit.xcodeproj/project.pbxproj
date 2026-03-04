@@ -646,6 +646,19 @@
 		B7D584E328CF0EC4009D09AF /* WFZConferenceInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7D584DB28CF0EC4009D09AF /* WFZConferenceInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7D8F7302783024E00752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7352783032F00752426 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7342783032F00752426 /* SDWebImage.xcframework */; };
+		B7DEB6272F4D8BDA003E481E /* WFCUPanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6252F4D8BDA003E481E /* WFCUPanViewController.m */; };
+		B7DEB6282F4D8BDA003E481E /* WFCUPanFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB61E2F4D8BDA003E481E /* WFCUPanFile.m */; };
+		B7DEB6292F4D8BDA003E481E /* WFCUPanFileListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6202F4D8BDA003E481E /* WFCUPanFileListViewController.m */; };
+		B7DEB62A2F4D8BDA003E481E /* WFCUPanSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6232F4D8BDA003E481E /* WFCUPanSpace.m */; };
+		B7DEB62B2F4D8BDA003E481E /* WFCUPanViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6242F4D8BDA003E481E /* WFCUPanViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB62C2F4D8BDA003E481E /* WFCUPanFile.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB61D2F4D8BDA003E481E /* WFCUPanFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB62D2F4D8BDA003E481E /* WFCUPanFileListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB61F2F4D8BDA003E481E /* WFCUPanFileListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB62E2F4D8BDA003E481E /* WFCUPanSpace.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6222F4D8BDA003E481E /* WFCUPanSpace.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB62F2F4D8BDA003E481E /* WFCUPanService.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6212F4D8BDA003E481E /* WFCUPanService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB6362F4DD574003E481E /* WFCUPanUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6352F4DD574003E481E /* WFCUPanUploadManager.m */; };
+		B7DEB6372F4DD574003E481E /* WFCUPanUploadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6342F4DD574003E481E /* WFCUPanUploadManager.h */; };
+		B7DEB63A2F4F23FE003E481E /* WFCUPanFilePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6392F4F23FE003E481E /* WFCUPanFilePickerViewController.m */; };
+		B7DEB63B2F4F23FE003E481E /* WFCUPanFilePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6382F4F23FE003E481E /* WFCUPanFilePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */; };
 		B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */; };
 		B7E2D8BD2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E2D8BC2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m */; };
@@ -1306,6 +1319,19 @@
 		B7D584DB28CF0EC4009D09AF /* WFZConferenceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfoViewController.h; sourceTree = "<group>"; };
 		B7D8F72F2783024E00752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7342783032F00752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; path = SDWebImage.xcframework; sourceTree = "<group>"; };
+		B7DEB61D2F4D8BDA003E481E /* WFCUPanFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanFile.h; sourceTree = "<group>"; };
+		B7DEB61E2F4D8BDA003E481E /* WFCUPanFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanFile.m; sourceTree = "<group>"; };
+		B7DEB61F2F4D8BDA003E481E /* WFCUPanFileListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanFileListViewController.h; sourceTree = "<group>"; };
+		B7DEB6202F4D8BDA003E481E /* WFCUPanFileListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanFileListViewController.m; sourceTree = "<group>"; };
+		B7DEB6212F4D8BDA003E481E /* WFCUPanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanService.h; sourceTree = "<group>"; };
+		B7DEB6222F4D8BDA003E481E /* WFCUPanSpace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanSpace.h; sourceTree = "<group>"; };
+		B7DEB6232F4D8BDA003E481E /* WFCUPanSpace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanSpace.m; sourceTree = "<group>"; };
+		B7DEB6242F4D8BDA003E481E /* WFCUPanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanViewController.h; sourceTree = "<group>"; };
+		B7DEB6252F4D8BDA003E481E /* WFCUPanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanViewController.m; sourceTree = "<group>"; };
+		B7DEB6342F4DD574003E481E /* WFCUPanUploadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanUploadManager.h; sourceTree = "<group>"; };
+		B7DEB6352F4DD574003E481E /* WFCUPanUploadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanUploadManager.m; sourceTree = "<group>"; };
+		B7DEB6382F4F23FE003E481E /* WFCUPanFilePickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanFilePickerViewController.h; sourceTree = "<group>"; };
+		B7DEB6392F4F23FE003E481E /* WFCUPanFilePickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanFilePickerViewController.m; sourceTree = "<group>"; };
 		B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUConferencePortraitCollectionViewCell.h; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.h; sourceTree = SOURCE_ROOT; };
 		B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WFCUConferencePortraitCollectionViewCell.m; path = WFChatUIKit/Voip/WFCUConferencePortraitCollectionViewCell.m; sourceTree = SOURCE_ROOT; };
 		B7E2D8BB2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUJoinGroupRequestViewController.h; sourceTree = "<group>"; };
@@ -1567,6 +1593,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				B7DEB6262F4D8BDA003E481E /* Pan */,
 				B770E8CF2F40C59000D4B219 /* Poll */,
 				B749E9A02F3F8A2D0092DEAE /* Collection */,
 				B79021682C01F4A0005C382A /* Mesh */,
@@ -2770,6 +2797,26 @@
 			path = Zoom;
 			sourceTree = "<group>";
 		};
+		B7DEB6262F4D8BDA003E481E /* Pan */ = {
+			isa = PBXGroup;
+			children = (
+				B7DEB6382F4F23FE003E481E /* WFCUPanFilePickerViewController.h */,
+				B7DEB6392F4F23FE003E481E /* WFCUPanFilePickerViewController.m */,
+				B7DEB6342F4DD574003E481E /* WFCUPanUploadManager.h */,
+				B7DEB6352F4DD574003E481E /* WFCUPanUploadManager.m */,
+				B7DEB61D2F4D8BDA003E481E /* WFCUPanFile.h */,
+				B7DEB61E2F4D8BDA003E481E /* WFCUPanFile.m */,
+				B7DEB61F2F4D8BDA003E481E /* WFCUPanFileListViewController.h */,
+				B7DEB6202F4D8BDA003E481E /* WFCUPanFileListViewController.m */,
+				B7DEB6212F4D8BDA003E481E /* WFCUPanService.h */,
+				B7DEB6222F4D8BDA003E481E /* WFCUPanSpace.h */,
+				B7DEB6232F4D8BDA003E481E /* WFCUPanSpace.m */,
+				B7DEB6242F4D8BDA003E481E /* WFCUPanViewController.h */,
+				B7DEB6252F4D8BDA003E481E /* WFCUPanViewController.m */,
+			);
+			path = Pan;
+			sourceTree = "<group>";
+		};
 		B7E2D8BF2EFBCAF800C8F909 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2809,7 +2856,13 @@
 			files = (
 				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				B770E8D32F40C59000D4B219 /* WFCUPoll.h in Headers */,
+				B7DEB63B2F4F23FE003E481E /* WFCUPanFilePickerViewController.h in Headers */,
 				B749E9A92F3F8D400092DEAE /* WFCUCollection.h in Headers */,
+				B7DEB62B2F4D8BDA003E481E /* WFCUPanViewController.h in Headers */,
+				B7DEB62D2F4D8BDA003E481E /* WFCUPanFileListViewController.h in Headers */,
+				B7DEB62C2F4D8BDA003E481E /* WFCUPanFile.h in Headers */,
+				B7DEB62E2F4D8BDA003E481E /* WFCUPanSpace.h in Headers */,
+				B7DEB62F2F4D8BDA003E481E /* WFCUPanService.h in Headers */,
 				B770E8D12F40C59000D4B219 /* WFCUPollService.h in Headers */,
 				2F55122A217F5CC300F56C26 /* WFCUUtilities.h in Headers */,
 				B7C5443D28D5876700A2550F /* StyleDIY.h in Headers */,
@@ -2950,6 +3003,7 @@
 				B7C5442828D5876700A2550F /* LBXScanVideoZoomView.h in Headers */,
 				B77D33F8290C1EB500E72111 /* WFCUProfileMoreTableViewController.h in Headers */,
 				2F5510CB217F5CC200F56C26 /* WFCUChatInputBar.h in Headers */,
+				B7DEB6372F4DD574003E481E /* WFCUPanUploadManager.h in Headers */,
 				2F551227217F5CC300F56C26 /* WFCUFriendRequestViewController.h in Headers */,
 				2F551202217F5CC300F56C26 /* WFCUConversationSettingMemberCollectionViewLayout.h in Headers */,
 				B7E2D8C32EFBCB0100C8F909 /* WFCUJoinGroupRequestTableViewCell.h in Headers */,
@@ -3277,6 +3331,10 @@
 				B7B1A4982F0A4EC2003316BB /* WFCULinksViewController.m in Sources */,
 				B70162FE290E2F1700DCD651 /* MWGridCell.m in Sources */,
 				B7B1A49C2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m in Sources */,
+				B7DEB6272F4D8BDA003E481E /* WFCUPanViewController.m in Sources */,
+				B7DEB6282F4D8BDA003E481E /* WFCUPanFile.m in Sources */,
+				B7DEB6292F4D8BDA003E481E /* WFCUPanFileListViewController.m in Sources */,
+				B7DEB62A2F4D8BDA003E481E /* WFCUPanSpace.m in Sources */,
 				B7C5443228D5876700A2550F /* UIWindow+LBXHierarchy.m in Sources */,
 				2F5511E2217F5CC300F56C26 /* YLImageView.m in Sources */,
 				2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */,
@@ -3329,6 +3387,7 @@
 				B74CF826295D313C009AFA88 /* WFCUEmployeeEx.m in Sources */,
 				B72FBB10283230F0005F2745 /* DSCallInfo.m in Sources */,
 				2F551156217F5CC200F56C26 /* KZVideoListViewController.m in Sources */,
+				B7DEB6362F4DD574003E481E /* WFCUPanUploadManager.m in Sources */,
 				2F551154217F5CC200F56C26 /* KZVideoViewController.m in Sources */,
 				2F5EB44D22C2F36A00BC8C90 /* GroupMemberControlTableViewController.m in Sources */,
 				2F55120B217F5CC300F56C26 /* WFCUNewFriendTableViewCell.m in Sources */,
@@ -3364,6 +3423,7 @@
 				2F55116B217F5CC200F56C26 /* AFURLRequestSerialization.m in Sources */,
 				B72D96362B3D81C600431D9B /* WFCUStreamingTextCell.m in Sources */,
 				2BEF78A523F6A84D000DE285 /* WFCUPortraitCollectionViewCell.m in Sources */,
+				B7DEB63A2F4F23FE003E481E /* WFCUPanFilePickerViewController.m in Sources */,
 				2BDF57AD24AD70C8003C1F08 /* DNFullImageButton.m in Sources */,
 				2B1F50DB254A59F800E6B93B /* WFCUFileRecordTableViewCell.m in Sources */,
 				2BDF579A24AD70C8003C1F08 /* UIView+DNImagePicker.m in Sources */,

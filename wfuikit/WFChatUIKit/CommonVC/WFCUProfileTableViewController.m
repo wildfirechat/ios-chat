@@ -33,6 +33,7 @@
 #import "WFCUOrgRelationship.h"
 #import "WFCUUtilities.h"
 #import "WFCUEmployeeEx.h"
+#import "WFCUPanViewController.h"
 
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
@@ -50,6 +51,7 @@
 @property (strong, nonatomic)UITableViewCell *addFriendCell;
 @property (strong, nonatomic)UITableViewCell *momentCell;
 @property (strong, nonatomic)UITableViewCell *moreCell;
+@property (nonatomic, strong)UITableViewCell *panCell;
 @property (nonatomic, strong)UITableViewCell *userMessagesCell;
 @property (nonatomic, strong)UITableViewCell *groupSourceCell;
 
@@ -283,6 +285,7 @@
     self.momentCell = nil;
     self.moreCell = nil;
     self.userMessagesCell = nil;
+    self.panCell = nil;
     
     self.headerCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     for (UIView *subView in self.headerCell.contentView.subviews) {
@@ -438,7 +441,13 @@
                     [self.momentCell addSubview:momentButton];
                 }
                 self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-                self.momentCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+            
+            // 添加"他/她的网盘"入口（域外用户不显示）
+            if([WFCUConfigManager globalManager].panServiceProvider && ![WFCCUtilities isExternalTarget:self.userId]) {
+                self.panCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"panCell"];
+                self.panCell.textLabel.text = @"他/她的网盘";
+                self.panCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
         }
         
@@ -560,6 +569,13 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)panCellClick {
+    WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
+    vc.viewMode = WFCUPanViewModeUserPublic;
+    vc.targetUserId = self.userId;
+    vc.targetUserName = self.userInfo.displayName;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)onSendMessageBtn:(id)sender {
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
@@ -660,6 +676,9 @@
         if (self.momentCell) {
             count++;
         }
+        if (self.panCell) {
+            count++;
+        }
         
         count+= self.organizationIds.count;
         
@@ -693,6 +712,12 @@
         
         int index = indexPath.row;
         if(self.momentCell)
+            index--;
+        
+        if(self.panCell && index == 0) {
+            return self.panCell;
+        }
+        if(self.panCell)
             index--;
         
         if(index < self.organizationIds.count) {
@@ -776,10 +801,18 @@
     } else if(indexPath.section == 1) {
         if(self.momentCell && indexPath.row == 0) {
             //click momentCell
+            return;
         }
         
         int index = (int)indexPath.row;
         if(self.momentCell)
+            index--;
+        
+        if(self.panCell && index == 0) {
+            [self panCellClick];
+            return;
+        }
+        if(self.panCell)
             index--;
         
         if(index < self.organizationIds.count) {

@@ -41,6 +41,10 @@
 //                     @{@"title":@"Things", @"image":@"discover_things",@"des":@"Things"}
     ]];
     
+    if(PAN_SERVER_ADDRESS) {
+        [self.dataSource addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
+    }
+    
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
         [self.dataSource insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
         self.hasMoments = YES;
@@ -155,6 +159,13 @@
 //        vc.hidesBottomBarWhenPushed = YES;
 //        [self.navigationController pushViewController:vc animated:YES];
 //    }
+    
+    if ([des isEqualToString:@"Pan"]) {
+        WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
+        vc.viewMode = WFCUPanViewModeAll;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
     if ([des isEqualToString:@"Conference"]) {
         WFZHomeViewController *vc = [[WFZHomeViewController alloc] init];

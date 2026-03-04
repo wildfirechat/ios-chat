@@ -37,6 +37,8 @@
 #import "WFCUImage.h"
 #import "WFCUCreateCollectionViewController.h"
 #import "WFCUPollHomeViewController.h"
+#import "WFCUPanFilePickerViewController.h"
+#import "WFCUPanFile.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -778,8 +780,6 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
-        // 刷新插件面板以获取最新的服务配置
-        [(WFCUPluginBoardView *)self.pluginInputView reloadItems];
         self.textInputView.inputView = self.pluginInputView;
         if (!self.textInputView.isFirstResponder) {
             [self.textInputView becomeFirstResponder];
@@ -983,7 +983,9 @@
 #else
         BOOL hasPtt = NO;
 #endif
-        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt];
+        BOOL hasPoll = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
+        BOOL hasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
+        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection];
     }
     return _pluginInputView;
 }
@@ -1694,6 +1696,22 @@
         } else {
             [self makeToast:WFCString(@"PollOnlyForGroup") duration:1 position:CSToastPositionCenter];
         }
+    } else if(itemTag == 10) {
+        // 网盘功能
+        if ([WFCUConfigManager globalManager].panServiceProvider) {
+            WFCUPanFilePickerViewController *vc = [[WFCUPanFilePickerViewController alloc] init];
+            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
+            
+            __weak typeof(self)ws = self;
+            vc.completionBlock = ^(NSArray<WFCUPanFile *> *selectedFiles) {
+                [ws sendPanFiles:selectedFiles];
+            };
+            
+            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+        } else {
+            [self makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
+        }
     }
 }
 
@@ -1789,6 +1807,36 @@
     }
     [MBProgressHUD hideHUDForView:self.parentView animated:YES];
     [self.delegate didSelectFiles:arr];
+}
+
+- (void)sendPanFiles:(NSArray<WFCUPanFile *> *)files {
+    if (files.count == 0) return;
+    
+    // 检查文件有效性
+    NSMutableArray<WFCUPanFile *> *validFiles = [NSMutableArray array];
+    for (WFCUPanFile *file in files) {
+        if (file.storageUrl.length > 0 && file.name.length > 0 && file.size > 0) {
+            [validFiles addObject:file];
+        } else {
+            NSLog(@"Invalid file: name=%@, url=%@, size=%lld", file.name, file.storageUrl, file.size);
+        }
+    }
+    
+    if (validFiles.count == 0) {
+        [self makeToast:WFCString(@"InvalidFiles") duration:1 position:CSToastPositionCenter];
+        return;
+    }
+    
+    if (validFiles.count < files.count) {
+        [self makeToast:WFCString(@"SomeFilesInvalid") duration:1 position:CSToastPositionCenter];
+    }
+    
+    // 通过delegate交给WFCUMessageListViewController发送
+    if ([self.delegate respondsToSelector:@selector(didSelectNetDiskFiles:)]) {
+        [self.delegate didSelectNetDiskFiles:validFiles];
+    } else {
+        NSLog(@"Warning: delegate does not implement didSelectNetDiskFiles:");
+    }
 }
 
 #pragma mark - UIImagePickerControllerDelegate<NSObject>
