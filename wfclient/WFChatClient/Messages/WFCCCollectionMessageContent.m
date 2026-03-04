@@ -81,8 +81,8 @@ static id NilIfNull(id obj) {
     if (self.desc) {
         dataDict[@"desc"] = self.desc;
     }
-    if (self.template) {
-        dataDict[@"template"] = self.template;
+    if (self.templateText) {
+        dataDict[@"template"] = self.templateText;
     }
 
     dataDict[@"expireType"] = @(self.expireType);
@@ -129,7 +129,7 @@ static id NilIfNull(id obj) {
             self.groupId = NilIfNull(dataDict[@"groupId"]);
             self.creatorId = NilIfNull(dataDict[@"creatorId"]);
             self.desc = NilIfNull(dataDict[@"desc"]);
-            self.template = NilIfNull(dataDict[@"template"]);
+            self.templateText = NilIfNull(dataDict[@"template"]);
             self.expireType = [dataDict[@"expireType"] intValue];
             self.expireAt = [dataDict[@"expireAt"] longLongValue];
             self.maxParticipants = [dataDict[@"maxParticipants"] intValue];
