@@ -8,6 +8,7 @@
 
 #import "WFCUMessageListViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "WFCUImagePreviewViewController.h"
 #import "WFCUVoiceRecordView.h"
 
@@ -39,6 +40,8 @@
 #import "WFCUProfileTableViewController.h"
 #import "WFCUMultiVideoViewController.h"
 #import "WFCUChatInputBar.h"
+#import "WFCUPanFile.h"
+#import "WFCUPanSpace.h"
 
 #import "UIView+Toast.h"
 
@@ -3433,6 +3436,36 @@
     }
 }
 
+- (void)didSelectNetDiskFiles:(NSArray<WFCUPanFile *> *)files {
+    for (WFCUPanFile *file in files) {
+        // 检查文件有效性
+        if (file.storageUrl.length == 0 || file.name.length == 0 || file.size == 0) {
+            NSLog(@"Invalid netdisk file: name=%@, url=%@, size=%lld", file.name, file.storageUrl, file.size);
+            continue;
+        }
+        
+        // 检查大文件限制
+        if(![[WFCCIMService sharedWFCIMService] isSupportBigFilesUpload]) {
+            if(file.size >= 100 * 1024 * 1024) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"FileTooLarge") preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:WFCString(@"IKnow") style:UIAlertActionStyleCancel handler:nil];
+                [alertController addAction:actionCancel];
+                [self presentViewController:alertController animated:YES completion:nil];
+                continue;
+            }
+        }
+        
+        // 创建文件消息内容，直接使用网盘URL
+        WFCCFileMessageContent *content = [[WFCCFileMessageContent alloc] init];
+        content.name = file.name;
+        content.size = (NSUInteger)file.size;
+        content.remoteUrl = file.storageUrl;
+        
+        [self sendMessage:content];
+        [NSThread sleepForTimeInterval:0.05];
+    }
+}
+
 - (void)saveStickerRemoteUrl:(WFCCStickerMessageContent *)stickerContent {
     if (stickerContent.localPath.length && [WFCUUtilities isFileExist:stickerContent.localPath] && stickerContent.remoteUrl.length) {
         if(self.conversation.type == SecretChat_Type) {
@@ -3560,6 +3593,9 @@
     UIMenuItem *favoriteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Favorite") action:@selector(performFavorite:)];
     UIMenuItem *toTextItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"ToText") action:@selector(performToText:)];
     
+    // 保存到网盘菜单项（仅当支持网盘功能时显示）
+    UIMenuItem *saveToPanItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"SaveToPan") action:@selector(performSaveToPan:)];
+    
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
         WFCUMessageCell *msgCell = (WFCUMessageCell *)baseCell;
@@ -3603,6 +3639,12 @@
             [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [items addObject:forwardItem];
         }
+    }
+    
+    // 保存到网盘：文件消息且支持网盘功能时显示
+    if ([msg.content isKindOfClass:[WFCCFileMessageContent class]] &&
+        [WFCUConfigManager globalManager].panServiceProvider) {
+        [items addObject:saveToPanItem];
     }
     
     if ([WFCUConfigManager globalManager].asrServiceUrl && !baseCell.model.translateText && [baseCell.model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
@@ -3701,7 +3743,7 @@
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCancel:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:) || action == @selector(performToText:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCancel:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:) || action == @selector(performToText:) || action == @selector(performSaveToPan:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -4030,6 +4072,161 @@
             [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
         }];
     }
+}
+
+- (void)performSaveToPan:(UIMenuItem *)sender {
+    // 保存文件到网盘
+    WFCCMessage *msg = self.cell4Menu.model.message;
+    if (![msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
+        return;
+    }
+    
+    WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+    
+    // 获取我的空间列表，让用户选择保存到哪个空间
+    __weak typeof(self)ws = self;
+    [[WFCUConfigManager globalManager].panServiceProvider getMySpacesWithSuccess:^(NSArray<WFCUPanSpace *> *spaces) {
+        if (spaces.count == 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ws.view makeToast:@"没有可用的网盘空间" duration:1 position:CSToastPositionCenter];
+            });
+            return;
+        }
+        
+        // 显示选择空间的 ActionSheet
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"SaveToPan") message:@"选择要保存到的空间" preferredStyle:UIAlertControllerStyleActionSheet];
+            
+            for (WFCUPanSpace *space in spaces) {
+                [alert addAction:[UIAlertAction actionWithTitle:space.name style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [ws saveFileToSpace:space fileContent:fileContent];
+                }]];
+            }
+            
+            [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+            
+            if (ws.presentedViewController) {
+                [ws.presentedViewController presentViewController:alert animated:YES completion:nil];
+            } else {
+                [ws presentViewController:alert animated:YES completion:nil];
+            }
+        });
+    } error:^(int errorCode, NSString *message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ws.view makeToast:@"获取网盘空间失败" duration:1 position:CSToastPositionCenter];
+        });
+    }];
+}
+
+// 保存文件到指定空间
+- (void)saveFileToSpace:(WFCUPanSpace *)space fileContent:(WFCCFileMessageContent *)fileContent {
+    __weak typeof(self)ws = self;
+    
+    // 首先检查空间写入权限
+    [[WFCUConfigManager globalManager].panServiceProvider checkSpaceWritePermission:space.spaceId success:^(BOOL hasPermission) {
+        if (!hasPermission) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ws.view makeToast:@"没有权限写入该空间" duration:1 position:CSToastPositionCenter];
+            });
+            return;
+        }
+        
+        // 根据文件扩展名获取 MIME 类型
+        NSString *mimeType = [ws mimeTypeForFileName:fileContent.name];
+        
+        // 创建文件记录
+        [[WFCUConfigManager globalManager].panServiceProvider createFile:space.spaceId 
+                                                                parentId:0 
+                                                                    name:fileContent.name 
+                                                                    size:(int64_t)fileContent.size 
+                                                                mimeType:mimeType 
+                                                                     md5:@"" 
+                                                              storageUrl:fileContent.remoteUrl 
+                                                                    copy:YES 
+                                                                 success:^(WFCUPanFile *file) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ws.view makeToast:@"已保存到网盘" duration:1 position:CSToastPositionCenter];
+            });
+        } error:^(int errorCode, NSString *message) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ws.view makeToast:@"保存失败" duration:1 position:CSToastPositionCenter];
+            });
+        }];
+    } error:^(int errorCode, NSString *message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ws.view makeToast:@"检查权限失败" duration:1 position:CSToastPositionCenter];
+        });
+    }];
+}
+
+// 根据文件名获取 MIME 类型
+- (NSString *)mimeTypeForFileName:(NSString *)fileName {
+    NSString *extension = [[fileName pathExtension] lowercaseString];
+    
+    // 常见文件类型的 MIME 类型映射
+    NSDictionary *mimeTypes = @{
+        @"jpg": @"image/jpeg",
+        @"jpeg": @"image/jpeg",
+        @"png": @"image/png",
+        @"gif": @"image/gif",
+        @"bmp": @"image/bmp",
+        @"webp": @"image/webp",
+        @"pdf": @"application/pdf",
+        @"doc": @"application/msword",
+        @"docx": @"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        @"xls": @"application/vnd.ms-excel",
+        @"xlsx": @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        @"ppt": @"application/vnd.ms-powerpoint",
+        @"pptx": @"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        @"txt": @"text/plain",
+        @"rtf": @"application/rtf",
+        @"zip": @"application/zip",
+        @"rar": @"application/x-rar-compressed",
+        @"7z": @"application/x-7z-compressed",
+        @"tar": @"application/x-tar",
+        @"gz": @"application/gzip",
+        @"mp3": @"audio/mpeg",
+        @"mp4": @"video/mp4",
+        @"avi": @"video/x-msvideo",
+        @"mov": @"video/quicktime",
+        @"wmv": @"video/x-ms-wmv",
+        @"flv": @"video/x-flv",
+        @"mkv": @"video/x-matroska",
+        @"wav": @"audio/wav",
+        @"m4a": @"audio/mp4",
+        @"aac": @"audio/aac",
+        @"ogg": @"audio/ogg",
+        @"flac": @"audio/flac",
+        @"html": @"text/html",
+        @"htm": @"text/html",
+        @"css": @"text/css",
+        @"js": @"application/javascript",
+        @"json": @"application/json",
+        @"xml": @"application/xml",
+        @"csv": @"text/csv",
+        @"apk": @"application/vnd.android.package-archive",
+        @"ipa": @"application/octet-stream"
+    };
+    
+    NSString *mimeType = mimeTypes[extension];
+    if (mimeType) {
+        return mimeType;
+    }
+    
+    // 使用系统方法尝试获取
+    CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, 
+                                                            (__bridge CFStringRef)extension, 
+                                                            NULL);
+    if (uti) {
+        CFStringRef mimeTypeRef = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType);
+        CFRelease(uti);
+        if (mimeTypeRef) {
+            NSString *result = (__bridge_transfer NSString *)mimeTypeRef;
+            return result;
+        }
+    }
+    
+    return @"application/octet-stream";
 }
 
 - (void)onMenuHidden:(id)sender {

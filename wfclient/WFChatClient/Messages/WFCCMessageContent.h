@@ -21,8 +21,9 @@
  - Media_Type_STICKER：动态表情
  - Media_Type_MOMENTS：朋友圈
  - Media_Type_CUSTOM1：客户保留类型1
- - Media_Type_CUSTOM2：客户保留类型1
- - Media_Type_CUSTOM3：客户保留类型1
+ - Media_Type_CUSTOM2：客户保留类型2
+ - Media_Type_CUSTOM3：客户保留类型3
+ - Media_Type_PAN：网盘
  */
 typedef NS_ENUM(NSInteger, WFCCMediaType) {
     Media_Type_GENERAL = 0,
@@ -37,6 +38,7 @@ typedef NS_ENUM(NSInteger, WFCCMediaType) {
     Media_Type_CUSTOM1 = 9,
     Media_Type_CUSTOM2 = 10,
     Media_Type_CUSTOM3 = 11,
+    Media_Type_PAN = 12,
 };
 
 

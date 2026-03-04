@@ -40,6 +40,7 @@
 #import "CollectionService.h"
 
 #import "PollService.h"
+#import "PanService.h"
 
 #if USE_CALL_KIT
 #import "WFCCallKitManager.h"
@@ -167,6 +168,10 @@
     if(POLL_SERVER_ADDRESS) {
         [PollService sharedService].baseUrl = POLL_SERVER_ADDRESS;
         [WFCUConfigManager globalManager].pollServiceProvider = [PollService sharedService];
+    }
+    if(PAN_SERVER_ADDRESS) {
+        [PanService sharedService].baseUrl = PAN_SERVER_ADDRESS;
+        [WFCUConfigManager globalManager].panServiceProvider = [PanService sharedService];
     }
 
     [WFCUConfigManager globalManager].asrServiceUrl = ASR_SERVICE_URL;

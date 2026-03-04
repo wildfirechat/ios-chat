@@ -31,8 +31,12 @@ NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
 NSString *COLLECTION_SERVER_ADDRESS = @"https://jielong.wildfirechat.net";
 
 //投票服务地址，如果没有部署，可以设置为nil。
-NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.6:8082";
-//NSString *POLL_SERVER_ADDRESS = @"https://poll.wildfirechat.net";
+//NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.81:8082";
+NSString *POLL_SERVER_ADDRESS = @"https://poll.wildfirechat.net";
+
+// 网盘服务地址，如果没有部署，可以设置为nil。
+//NSString *PAN_SERVER_ADDRESS = @"http://192.168.1.81:8083";
+NSString *PAN_SERVER_ADDRESS = @"https://pan.wildfirechat.net";
 
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
