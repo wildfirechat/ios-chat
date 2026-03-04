@@ -73,7 +73,7 @@
 /**
  格式模板
  */
-@property (nonatomic, strong) NSString *template;
+@property (nonatomic, strong) NSString *templateText;
 
 /**
  过期类型：0=无限期 1=有限期
