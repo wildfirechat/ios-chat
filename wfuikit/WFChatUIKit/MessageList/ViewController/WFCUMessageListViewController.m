@@ -872,6 +872,11 @@
             self.navigationItem.backBarButtonItem.title = self.targetChatroom.title;
         }
     }
+    
+    [self updateDomainTitle];
+}
+
+- (void)updateDomainTitle {
     if([WFCCUtilities isExternalTarget:self.conversation.target]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:self.conversation.target];
         UIView *titleContainer = [[UIView alloc] initWithFrame:CGRectMake(80, 0, self.view.bounds.size.width - 160, 36)];
@@ -1273,6 +1278,8 @@
     } else if(self.typingDict.count > 1) {
         self.title = [NSString stringWithFormat:WFCString(@"TypingCount"), self.typingDict.count];
     }
+    
+    [self updateDomainTitle];
 }
 
 - (void)checkUserTyping {
