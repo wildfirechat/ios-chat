@@ -3618,7 +3618,9 @@
     NSMutableArray *items = [[NSMutableArray alloc] init];
     [items addObject:deleteItem];
     if ([msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
-        [msg.content isKindOfClass:[WFCCCollectionMessageContent class]]) {
+        [msg.content isKindOfClass:[WFCCCollectionMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]] ||
+        [msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
         [items addObject:copyItem];
     }
     
@@ -3643,6 +3645,8 @@
             [msg.content isKindOfClass:[WFCCCompositeMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCPollMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCPollResultMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]] ||
+            [msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] ||
             //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
             [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
             [items addObject:forwardItem];
@@ -3878,6 +3882,14 @@
             WFCCPollResultMessageContent *content = (WFCCPollResultMessageContent *)self.cell4Menu.model.message.content;
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = [NSString stringWithFormat:@"%@\n%@: %@", content.title, WFCString(@"Winner"), [content.winningOptionTexts componentsJoinedByString:@"、"]];
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+            WFCCStreamingTextGeneratedMessageContent *content = (WFCCStreamingTextGeneratedMessageContent *)self.cell4Menu.model.message.content;
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = content.text;
+        } else if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            WFCCStreamingTextGeneratingMessageContent *content = (WFCCStreamingTextGeneratingMessageContent *)self.cell4Menu.model.message.content;
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = content.text;
         }
     }
 }

@@ -195,6 +195,7 @@ static NSString *SizeCacheKey(NSString *text, UIFont *font, CGFloat width) {
             
             [headerPlaceholders insertObject:@{
                 @"placeholder": placeholder,
+                @"content": content,
                 @"font": headerFont
             } atIndex:0];
             [text replaceCharactersInRange:match.range withString:placeholder];
@@ -361,10 +362,13 @@ static NSString *SizeCacheKey(NSString *text, UIFont *font, CGFloat width) {
     // 恢复标题
     for (NSDictionary *info in headerPlaceholders) {
         NSString *placeholder = info[@"placeholder"];
+        NSString *content = info[@"content"];
         NSRange range = [result.string rangeOfString:placeholder];
         if (range.location != NSNotFound) {
             UIFont *headerFont = info[@"font"];
-            [result addAttribute:NSFontAttributeName value:headerFont range:range];
+            NSMutableAttributedString *contentAttr = [[NSMutableAttributedString alloc] initWithString:content];
+            [contentAttr addAttribute:NSFontAttributeName value:headerFont range:NSMakeRange(0, content.length)];
+            [result replaceCharactersInRange:range withAttributedString:contentAttr];
         }
     }
     
