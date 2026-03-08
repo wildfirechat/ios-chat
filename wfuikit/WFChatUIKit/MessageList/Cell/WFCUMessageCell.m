@@ -324,9 +324,8 @@
             self.selectView.image = [WFCUImage imageNamed:@"multi_unselected"];
         }
         CGFloat top = [WFCUMessageCellBase hightForHeaderArea:model];
-        CGRect frame = self.selectView.frame;
-        frame.origin.y = top;
-        self.selectView.frame = frame;
+        CGRect frame = self.frame;
+        self.selectView.frame = CGRectMake(frame.size.width - SelectView_Size - Portrait_Padding_Right, top, SelectView_Size, SelectView_Size);
     } else {
         self.selectView.hidden = YES;
     }
