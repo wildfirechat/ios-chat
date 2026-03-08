@@ -711,4 +711,93 @@ static NSLock *wfcImageLock;
     //返回下个月开头时间减一秒。
     return [WFCCUtilities startSecondOf:year month:month] -1;
 }
+
+#pragma mark - Markdown 处理
+
++ (NSString *)plainTextFromMarkdown:(NSString *)markdownText {
+    if (!markdownText || markdownText.length == 0) {
+        return markdownText;
+    }
+    
+    NSMutableString *text = [markdownText mutableCopy];
+    
+    // 1. 移除代码块 ```code```
+    NSRegularExpression *codeBlockRegex = [NSRegularExpression regularExpressionWithPattern:@"```\\n?([\\s\\S]*?)\\n?```" options:0 error:nil];
+    [codeBlockRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1"];
+    
+    // 2. 移除行内代码 `code`
+    NSRegularExpression *inlineCodeRegex = [NSRegularExpression regularExpressionWithPattern:@"`([^`]+)`" options:0 error:nil];
+    [inlineCodeRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1"];
+    
+    // 3. 移除标题标记 # ######
+    NSRegularExpression *headerRegex = [NSRegularExpression regularExpressionWithPattern:@"^#{1,6}\\s+" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [headerRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    
+    // 4. 移除粗体标记 **text** 和 __text__
+    NSRegularExpression *boldRegex = [NSRegularExpression regularExpressionWithPattern:@"\\*\\*([^\\*]+)\\*\\*|__([^_]+)__" options:0 error:nil];
+    [boldRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1$2"];
+    
+    // 5. 移除斜体标记 *text* 和 _text_
+    NSRegularExpression *italicRegex = [NSRegularExpression regularExpressionWithPattern:@"(?<!\\*)\\*([^\\*]+)\\*(?!\\*)|(?<!_)_([^_]+)_(?!_)" options:0 error:nil];
+    [italicRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1$2"];
+    
+    // 6. 移除删除线标记 ~~text~~
+    NSRegularExpression *strikeRegex = [NSRegularExpression regularExpressionWithPattern:@"~~([^~]+)~~" options:0 error:nil];
+    [strikeRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1"];
+    
+    // 7. 转换链接 [text](url) -> text
+    NSRegularExpression *linkRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[([^\\]]+)\\]\\(([^\\)]+)\\)" options:0 error:nil];
+    [linkRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"$1"];
+    
+    // 8. 移除引用标记 >
+    NSRegularExpression *quoteRegex = [NSRegularExpression regularExpressionWithPattern:@"^>\\s?" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [quoteRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    
+    // 9. 转换无序列表 - * + item -> item
+    NSRegularExpression *ulRegex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[-\\*\\+]\\s+" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [ulRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    
+    // 10. 转换有序列表 1. item -> item
+    NSRegularExpression *olRegex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*\\d+\\.\\s+" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [olRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    
+    // 11. 移除水平分割线 --- *** ___
+    NSRegularExpression *hrRegex = [NSRegularExpression regularExpressionWithPattern:@"^[-\\*_]{3,}$" options:NSRegularExpressionAnchorsMatchLines error:nil];
+    [hrRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@""];
+    
+    // 12. 移除多余的空行
+    NSRegularExpression *extraNewlineRegex = [NSRegularExpression regularExpressionWithPattern:@"\\n{3,}" options:0 error:nil];
+    [extraNewlineRegex replaceMatchesInString:text options:0 range:NSMakeRange(0, text.length) withTemplate:@"\\n\\n"];
+    
+    return [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
++ (BOOL)containsMarkdown:(NSString *)text {
+    if (!text || text.length == 0) return NO;
+    
+    // 简单启发式：先检查是否包含关键字符（快速路径）
+    NSCharacterSet *markdownChars = [NSCharacterSet characterSetWithCharactersInString:@"#*_`[~>-|"];
+    NSRange range = [text rangeOfCharacterFromSet:markdownChars];
+    if (range.location == NSNotFound) {
+        return NO;
+    }
+    
+    NSArray *patterns = @[
+        @"\\[.+?\\]\\(.+?\\)", @"!\\[.*?\\]\\(.+?\\)",
+        @"^#{1,6}\\s", @"\\*\\*.+?\\*\\*", @"__.+?__",
+        @"(?<!\\*)\\*[^\\*]+\\*(?!\\*)", @"(?<!_)_[^_]+_(?!_)",
+        @"`.+?`", @"```[\\s\\S]*?```",
+        @"^\\s*[-\\*\\+]\\s", @"^\\s*\\d+\\.\\s",
+        @"^>\\s", @"~~.+?~~", @"^[-\\*_]{3,}$"
+    ];
+    
+    for (NSString *pattern in patterns) {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
+        if ([regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, text.length)] > 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end

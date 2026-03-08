@@ -14,6 +14,8 @@
 
 #import "WFCUImageCell.h"
 #import "WFCUTextCell.h"
+#import "WFCUMarkdownCell.h"
+#import "WFCUMarkdownLabel.h"
 #import "WFCUVoiceCell.h"
 #import "WFCULocationCell.h"
 #import "WFCUFileCell.h"
@@ -709,7 +711,7 @@
         self.checkOngoingCallTimer = nil;
     }
     //clean cached cell size
-    [[WFCUConfigManager globalManager].cellSizeMap removeAllObjects];
+    [[WFCUConfigManager globalManager] clearAllCache];
 }
 
 - (void)onRightBarBtn:(UIBarButtonItem *)sender {
@@ -1153,8 +1155,9 @@
     
     self.view.backgroundColor = self.collectionView.backgroundColor;
     
-    [self registerCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
-    [self registerCell:[WFCUTextCell class] forContent:[WFCCPTextMessageContent class]];
+    [self registerCell:[WFCUMarkdownCell class] forContent:[WFCCTextMessageContent class]];
+    [self registerCell:[WFCUMarkdownCell class] forContent:[WFCCPTextMessageContent class]];
+    
     [self registerCell:[WFCUImageCell class] forContent:[WFCCImageMessageContent class]];
     [self registerCell:[WFCUVoiceCell class] forContent:[WFCCSoundMessageContent class]];
     [self registerCell:[WFCUVoiceCell class] forContent:[WFCCPTTSoundMessageContent class]];
@@ -2125,13 +2128,11 @@
             if(message.messageId && message.messageId == model.message.messageId) {
                 model.message.content = message.content;
                 duplcated = YES;
-                [[WFCUConfigManager globalManager].cellSizeMap removeObjectForKey:@(model.message.messageId)];
                 break;
             }
             
             if (model.message.messageUid !=0 && model.message.messageUid == message.messageUid) {
                 model.message.content = message.content;
-                [[WFCUConfigManager globalManager].cellSizeMap removeObjectForKey:@(model.message.messageId)];
                 duplcated = YES;
                 break;
             }

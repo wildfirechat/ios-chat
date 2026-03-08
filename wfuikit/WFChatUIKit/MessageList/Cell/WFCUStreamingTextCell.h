@@ -8,7 +8,15 @@
 
 #import "WFCUMessageCell.h"
 
+@class WFCUMarkdownLabel;
+
+/**
+ * 流式文本消息 Cell（支持 Markdown）
+ * 用于显示 AI 生成中的文本内容
+ */
 @interface WFCUStreamingTextCell : WFCUMessageCell
-@property (strong, nonatomic)UILabel *textLabel;
-@property (strong, nonatomic)UIActivityIndicatorView *indicatorView;
+
+@property (strong, nonatomic) WFCUMarkdownLabel *markdownLabel;
+@property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
+
 @end

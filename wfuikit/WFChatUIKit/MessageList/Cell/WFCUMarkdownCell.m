@@ -1,28 +1,30 @@
 //
-//  TextCell.m
+//  WFCUMarkdownCell.m
 //  WFChat UIKit
 //
-//  Created by WF Chat on 2017/9/1.
-//  Copyright © 2017年 WildFireChat. All rights reserved.
+//  Created by Kimi on 2025/3/8.
+//  Copyright © 2025 WildFireChat. All rights reserved.
 //
 
-#import "WFCUTextCell.h"
+#import "WFCUMarkdownCell.h"
+#import "WFCUMarkdownLabel.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
-#import "SelectableTextView.h"
 #import "WFCUConfigManager.h"
 #import <MessageUI/MessageUI.h>
+#import "Predefine.h"
 
-#define TEXT_LABEL_TOP_PADDING 3
-#define TEXT_LABEL_BUTTOM_PADDING 5
+#define MARKDOWN_TEXT_TOP_PADDING 3
+#define MARKDOWN_TEXT_BOTTOM_PADDING 5
+#define MARKDOWN_TEXT_LEFT_PADDING 0
+#define MARKDOWN_TEXT_RIGHT_PADDING 0
 
-@interface WFCUTextCell () <SelectableTextViewDelegate, MFMailComposeViewControllerDelegate>
-
+@interface WFCUMarkdownCell () <WFCUMarkdownLabelDelegate, MFMailComposeViewControllerDelegate>
 @end
 
-@implementation WFCUTextCell
+@implementation WFCUMarkdownCell
+
 + (UIFont *)defaultFont {
-//    return [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     return [UIFont systemFontOfSize:18];
 }
 
@@ -44,96 +46,87 @@
         return CGSizeMake(cellWidth, cellHeight);
     }
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:text font:[WFCUTextCell defaultFont] constrainedSize:CGSizeMake(width, 8000)];
-    size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING;
-    if (size.width < 40) {
-        size.width += 4;
-        if (size.width > 40) {
-            size.width = 40;
-        } else if (size.width < 24) {
-            size.width = 24;
-        }
+    // 计算 Markdown 文本实际尺寸
+    CGFloat maxContentWidth = width - MARKDOWN_TEXT_LEFT_PADDING - MARKDOWN_TEXT_RIGHT_PADDING;
+    CGSize contentSize = [WFCUMarkdownLabel sizeForText:text maxWidth:maxContentWidth font:[self defaultFont]];
+    
+    // 最终尺寸 = 内容尺寸 + padding
+    CGFloat finalWidth = contentSize.width;
+    CGFloat finalHeight = contentSize.height + MARKDOWN_TEXT_TOP_PADDING + MARKDOWN_TEXT_BOTTOM_PADDING;
+    
+    if (finalHeight < 20) {
+        finalHeight = 20;
     }
     
-    [[WFCUConfigManager globalManager].cellSizeCache setObject:@{@"width":@(size.width), @"height":@(size.height)} forKey:cacheKey];
-    return size;
+    [[WFCUConfigManager globalManager].cellSizeCache setObject:@{
+        @"width": @(finalWidth),
+        @"height": @(finalHeight)
+    } forKey:cacheKey];
+    
+    return CGSizeMake(finalWidth, finalHeight);
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-  [super setModel:model];
+    [super setModel:model];
     
-  WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)model.message.content;
+    WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)model.message.content;
     CGRect frame = self.contentArea.bounds;
-  self.textLabel.frame = CGRectMake(0, TEXT_LABEL_TOP_PADDING, frame.size.width, frame.size.height - TEXT_LABEL_TOP_PADDING - TEXT_LABEL_BUTTOM_PADDING);
-    self.textLabel.textAlignment = NSTextAlignmentLeft;
-
-    // 确保使用正确的字体（与计算高度时一致）
-    self.textLabel.font = [WFCUTextCell defaultFont];
-
-    [self.textLabel setText:txtContent.text];
+    
+    self.markdownLabel.frame = CGRectMake(0, 
+                                           MARKDOWN_TEXT_TOP_PADDING, 
+                                           frame.size.width, 
+                                           frame.size.height - MARKDOWN_TEXT_TOP_PADDING - MARKDOWN_TEXT_BOTTOM_PADDING);
+    
+    [self.markdownLabel setMarkdownText:txtContent.text font:[WFCUMarkdownCell defaultFont]];
 }
 
-- (SelectableTextView *)textLabel {
-    if (!_textLabel) {
-        _textLabel = [[SelectableTextView alloc] init];
-        _textLabel.selectableTextViewDelegate = self;
-        _textLabel.backgroundColor = [UIColor clearColor];
-        _textLabel.scrollEnabled = NO;
-        _textLabel.editable = NO;
-        // 重要：使用与计算高度时相同的字体
-        _textLabel.font = [WFCUTextCell defaultFont];
-        [self.contentArea addSubview:_textLabel];
+- (WFCUMarkdownLabel *)markdownLabel {
+    if (!_markdownLabel) {
+        _markdownLabel = [[WFCUMarkdownLabel alloc] init];
+        _markdownLabel.markdownDelegate = self;
+        _markdownLabel.backgroundColor = [UIColor clearColor];
+        [self.contentArea addSubview:_markdownLabel];
     }
-    return _textLabel;
+    return _markdownLabel;
 }
 
-#pragma mark - SelectableTextViewDelegate
-- (void)didSelectUrl:(NSString *)urlString {
+#pragma mark - WFCUMarkdownLabelDelegate
+
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectUrl:(NSString *)urlString {
     [self.delegate didSelectUrl:self withModel:self.model withUrl:urlString];
 }
 
-- (void)didSelectPhoneNumber:(NSString *)phoneNumberString {
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectPhoneNumber:(NSString *)phoneNumberString {
     [self.delegate didSelectPhoneNumber:self withModel:self.model withPhoneNumber:phoneNumberString];
 }
 
-- (void)didSelectEmail:(NSString *)emailString {
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectEmail:(NSString *)emailString {
     [self sendEmailTo:emailString];
 }
 
-- (void)didLongPressTextView:(SelectableTextView *)textView {
-    // 当 SelectableTextView 被长按时，触发 cell 的长按事件
+- (void)markdownLabelDidLongPress:(WFCUMarkdownLabel *)label {
     [self.delegate didLongPressMessageCell:self withModel:self.model];
 }
 
-// 发送邮件
+#pragma mark - 邮件发送
+
 - (void)sendEmailTo:(NSString *)email {
-    if (!email || email.length == 0) {
-        return;
-    }
-
-    // 获取当前视图控制器
+    if (!email || email.length == 0) return;
+    
     UIViewController *topVC = [self topViewController];
-    if (!topVC) {
-        return;
-    }
-
-    // 检查设备是否支持发送邮件
+    if (!topVC) return;
+    
     if ([MFMailComposeViewController canSendMail]) {
-        // 使用 MFMailComposeViewController
         MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
         mailComposeVC.mailComposeDelegate = self;
         [mailComposeVC setToRecipients:@[email]];
-
         [topVC presentViewController:mailComposeVC animated:YES completion:nil];
     } else {
-        // 如果不支持，使用 mailto: URL scheme
         NSString *emailString = [NSString stringWithFormat:@"mailto:%@", email];
         NSURL *emailURL = [NSURL URLWithString:emailString];
-
         if ([[UIApplication sharedApplication] canOpenURL:emailURL]) {
             [[UIApplication sharedApplication] openURL:emailURL options:@{} completionHandler:nil];
         } else {
-            // 如果都无法发送，显示提示
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"Tip")
                                                                            message:WFCString(@"DeviceNotSupportEmail")
                                                                     preferredStyle:UIAlertControllerStyleAlert];
@@ -144,20 +137,15 @@
     }
 }
 
-// 获取当前最顶层的视图控制器
 - (UIViewController *)topViewController {
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     UIViewController *rootVC = keyWindow.rootViewController;
-
     while (rootVC.presentedViewController) {
         rootVC = rootVC.presentedViewController;
     }
-
     if ([rootVC isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *nav = (UINavigationController *)rootVC;
-        return nav.visibleViewController;
+        return [(UINavigationController *)rootVC visibleViewController];
     }
-
     return rootVC;
 }
 
@@ -166,23 +154,6 @@
 - (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError *)error {
-    switch (result) {
-        case MFMailComposeResultSent:
-            NSLog(@"邮件已发送");
-            break;
-        case MFMailComposeResultSaved:
-            NSLog(@"邮件已保存");
-            break;
-        case MFMailComposeResultCancelled:
-            NSLog(@"邮件已取消");
-            break;
-        case MFMailComposeResultFailed:
-            NSLog(@"邮件发送失败: %@", error.localizedDescription);
-            break;
-        default:
-            break;
-    }
-
     UIViewController *topVC = [self topViewController];
     [topVC dismissViewControllerAnimated:YES completion:nil];
 }

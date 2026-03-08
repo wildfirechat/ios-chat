@@ -30,9 +30,32 @@ static WFCUConfigManager *sharedSingleton = nil;
     self = [super init];
     if (self) {
         _selectedTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"WFC_THEME_TYPE"];
-        _cellSizeMap = [[NSMutableDictionary alloc] init];
+        
+        // 初始化 cell size 缓存（使用 NSCache 自动管理内存）
+        _cellSizeCache = [[NSCache alloc] init];
+        _cellSizeCache.countLimit = 500; // 最多缓存 500 个尺寸
+        _cellSizeCache.totalCostLimit = 5 * 1024 * 1024; // 最多 5MB
+        
+        // Markdown 配置默认值
+        _enableMarkdownSupport = YES;
+        _markdownDisplayStrategy = 0; // 0: 自动检测
+        
+        // 监听内存警告通知
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveMemoryWarning)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)didReceiveMemoryWarning {
+    // 内存警告时清理所有缓存
+    [self.cellSizeCache removeAllObjects];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)setSelectedTheme:(WFCUThemeType)themeType {
@@ -225,4 +248,16 @@ static WFCUConfigManager *sharedSingleton = nil;
 - (void)registerCustomCell:(Class)cellCls forContent:(Class)msgContentCls {
     self.cellContentDict[@([msgContentCls getContentType])] = cellCls;
 }
+
+#pragma mark - 缓存清理
+
+- (void)clearCellSizeCache {
+    [self.cellSizeCache removeAllObjects];
+}
+
+- (void)clearAllCache {
+    [self.cellSizeCache removeAllObjects];
+    // 也可以在这里清理其他缓存
+}
+
 @end

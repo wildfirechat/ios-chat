@@ -9,17 +9,28 @@
 #import "WFCUStreamingTextCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
-#import "AttributedLabel.h"
+#import "WFCUMarkdownLabel.h"
+#import "WFCUConfigManager.h"
 
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
+#define INDICTATORVIEW_HEIGHT 18
 
-#define INDICTATORVIEW_HEGITH 18
-@interface WFCUStreamingTextCell () <AttributedLabelDelegate>
+@interface WFCUStreamingTextCell () <WFCUMarkdownLabelDelegate>
 
 @end
 
 @implementation WFCUStreamingTextCell
+
++ (UIFont *)defaultFont {
+    return [UIFont systemFontOfSize:18];
+}
+
++ (NSString *)cacheKeyForText:(NSString *)text viewWidth:(CGFloat)width generating:(BOOL)generating {
+    // 使用文本内容+宽度+生成状态作为缓存键
+    return [NSString stringWithFormat:@"%@_%.0f_%d", @(text.hash), width, generating];
+}
+
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     NSString *text;
     BOOL generating = NO;
@@ -32,24 +43,40 @@
         generating = YES;
     }
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
+    if (!text) {
+        text = @"";
+    }
+    
+    // 使用内容+宽度作为缓存键
+    NSString *cacheKey = [self cacheKeyForText:text viewWidth:width generating:generating];
+    NSDictionary *dict = [[WFCUConfigManager globalManager].cellSizeCache objectForKey:cacheKey];
+    if (dict) {
+        float cellWidth = [dict[@"width"] floatValue];
+        float cellHeight = [dict[@"height"] floatValue];
+        return CGSizeMake(cellWidth, cellHeight);
+    }
+    
+    // 计算 Markdown 文本实际尺寸
+    CGSize contentSize = [WFCUMarkdownLabel sizeForText:text maxWidth:width font:[self defaultFont]];
+    
+    CGSize size = contentSize;
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING;
-    if (size.width < 40) {
-        size.width += 4;
-        if (size.width > 40) {
-            size.width = 40;
-        } else if (size.width < 24) {
-            size.width = 24;
-        }
-    }
+    
     if(generating) {
-        size.height += INDICTATORVIEW_HEGITH;
+        size.height += INDICTATORVIEW_HEIGHT;
     }
-  return size;
+    
+    // 缓存结果
+    [[WFCUConfigManager globalManager].cellSizeCache setObject:@{
+        @"width": @(size.width),
+        @"height": @(size.height)
+    } forKey:cacheKey];
+    
+    return size;
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-  [super setModel:model];
+    [super setModel:model];
     
     NSString *text;
     BOOL generating = NO;
@@ -65,13 +92,14 @@
     CGRect frame = self.contentArea.bounds;
     CGFloat indicatorHeight = 0;
     if(generating) {
-        indicatorHeight = INDICTATORVIEW_HEGITH;
+        indicatorHeight = INDICTATORVIEW_HEIGHT;
     }
-  self.textLabel.frame = CGRectMake(0, TEXT_LABEL_TOP_PADDING, frame.size.width, frame.size.height - TEXT_LABEL_TOP_PADDING - TEXT_LABEL_BUTTOM_PADDING - indicatorHeight);
-    self.textLabel.textAlignment = NSTextAlignmentLeft;
-    [self.textLabel setText:text];
+    
+    self.markdownLabel.frame = CGRectMake(0, TEXT_LABEL_TOP_PADDING, frame.size.width, frame.size.height - TEXT_LABEL_TOP_PADDING - TEXT_LABEL_BUTTOM_PADDING - indicatorHeight);
+    [self.markdownLabel setMarkdownText:text font:[WFCUStreamingTextCell defaultFont]];
+    
     if(generating) {
-        CGRect textRect = self.textLabel.frame;
+        CGRect textRect = self.markdownLabel.frame;
         self.indicatorView.frame = CGRectMake(0, textRect.origin.y + textRect.size.height + 4, 12, 12);
         self.indicatorView.hidden = NO;
         [self.indicatorView startAnimating];
@@ -82,16 +110,14 @@
     }
 }
 
-- (UILabel *)textLabel {
-    if (!_textLabel) {
-        _textLabel = [[AttributedLabel alloc] init];
-        ((AttributedLabel*)_textLabel).attributedLabelDelegate = self;
-        _textLabel.numberOfLines = 0;
-        _textLabel.font = [UIFont systemFontOfSize:18];
-        _textLabel.userInteractionEnabled = YES;
-        [self.contentArea addSubview:_textLabel];
+- (WFCUMarkdownLabel *)markdownLabel {
+    if (!_markdownLabel) {
+        _markdownLabel = [[WFCUMarkdownLabel alloc] init];
+        _markdownLabel.markdownDelegate = self;
+        _markdownLabel.backgroundColor = [UIColor clearColor];
+        [self.contentArea addSubview:_markdownLabel];
     }
-    return _textLabel;
+    return _markdownLabel;
 }
 
 - (UIActivityIndicatorView *)indicatorView {
@@ -99,13 +125,25 @@
         _indicatorView = [[UIActivityIndicatorView alloc] init];
         [self.contentArea addSubview:_indicatorView];
     }
-    return _indicatorView;;
+    return _indicatorView;
 }
-#pragma mark - AttributedLabelDelegate
-- (void)didSelectUrl:(NSString *)urlString {
+
+#pragma mark - WFCUMarkdownLabelDelegate
+
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectUrl:(NSString *)urlString {
     [self.delegate didSelectUrl:self withModel:self.model withUrl:urlString];
 }
-- (void)didSelectPhoneNumber:(NSString *)phoneNumberString {
+
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectPhoneNumber:(NSString *)phoneNumberString {
     [self.delegate didSelectPhoneNumber:self withModel:self.model withPhoneNumber:phoneNumberString];
 }
+
+- (void)markdownLabel:(WFCUMarkdownLabel *)label didSelectEmail:(NSString *)emailString {
+    // 邮件点击处理
+}
+
+- (void)markdownLabelDidLongPress:(WFCUMarkdownLabel *)label {
+    [self.delegate didLongPressMessageCell:self withModel:self.model];
+}
+
 @end

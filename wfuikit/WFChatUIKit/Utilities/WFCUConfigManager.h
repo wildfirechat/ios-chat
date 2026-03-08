@@ -72,6 +72,21 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, assign)BOOL displaySpeakingInMultiCall;
 
+/**
+ * 是否启用 Markdown 文本消息支持
+ * 启用后，包含 Markdown 语法的文本消息将使用 WFCUMarkdownCell 显示
+ * 默认为 YES
+ */
+@property(nonatomic, assign)BOOL enableMarkdownSupport;
+
+/**
+ * Markdown 检测策略
+ * - 0: 自动检测（消息内容包含 Markdown 语法时使用 Markdown Cell）
+ * - 1: 全部使用 Markdown Cell
+ * - 2: 全部不使用 Markdown Cell（使用普通 Text Cell）
+ */
+@property(nonatomic, assign)NSInteger markdownDisplayStrategy;
+
 @property (nonatomic, strong)NSMutableDictionary<NSNumber*, Class>* cellContentDict;
 
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;
@@ -79,8 +94,19 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 //[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
 - (void)registerCustomCell:(Class)cellCls forContent:(Class)msgContentCls;
 
-//缓存文本cell的size，避免卡顿
-@property (nonatomic, strong)NSMutableDictionary<NSNumber*, NSDictionary*> *cellSizeMap;
+//缓存文本cell的size，避免卡顿（使用 NSCache 自动管理内存）
+@property (nonatomic, strong)NSCache<NSString*, NSDictionary*> *cellSizeCache;
+
+/**
+ * 清理 Cell 尺寸缓存（可在内存警告时调用）
+ */
+- (void)clearCellSizeCache;
+
+/**
+ * 清理所有缓存
+ */
+- (void)clearAllCache;
+
 @end
 
 NS_ASSUME_NONNULL_END
