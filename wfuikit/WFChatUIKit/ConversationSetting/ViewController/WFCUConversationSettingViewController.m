@@ -758,38 +758,6 @@
     return NO;
 }
 
-- (void)sendJoinGroupRequest:(NSArray<NSString *> *)contacts {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:WFCString(@"JoinGroupVerificationEnabled") preferredStyle:UIAlertControllerStyleAlert];
-
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = WFCString(@"PleaseInputJoinGroupReason");
-    }];
-        
-    __weak typeof(self)ws = self;
-    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString *reason = alertController.textFields.firstObject.text;
-        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
-        hud.label.text = WFCString(@"Sending");
-        [hud showAnimated:YES];
-        [[WFCCIMService sharedWFCIMService] sendJoinGroupRequest:self.groupInfo.target members:contacts reason:reason extra:nil success:^{
-            [hud hideAnimated:NO];
-            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
-            hud.label.text = WFCString(@"Done");
-            hud.mode = MBProgressHUDModeText;
-            hud.removeFromSuperViewOnHide = YES;
-            [hud hideAnimated:NO afterDelay:1.5];
-        } error:^(int errorCode) {
-            [hud hideAnimated:NO];
-            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
-            hud.label.text = WFCString(@"SendFailure");
-            hud.mode = MBProgressHUDModeText;
-            hud.removeFromSuperViewOnHide = YES;
-            [hud hideAnimated:NO afterDelay:1.5];
-        }];
-    }]];
-    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alertController animated:true completion:nil];
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.conversation.type == Group_Type) {
@@ -1253,8 +1221,8 @@
                   if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
                       [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
                   } else {
-                      if(error_code == 13) {
-                          [ws sendJoinGroupRequest:contacts];
+                      if(error_code == ERROR_CODE_JOIN_GROUP_NEED_VERIFY) {
+                          [WFCUUtilities sendJoinGroupRequestWithGroupId:ws.groupInfo.target contacts:contacts fromViewController:ws];
                       } else {
                           [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
                       }

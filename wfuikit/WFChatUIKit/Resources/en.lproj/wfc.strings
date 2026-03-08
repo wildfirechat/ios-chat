@@ -526,6 +526,7 @@
 "ContactBook"="Contact Book";
 "JoinGroupVerificationEnabled"="Group join verification enabled, please input reason and wait for approval";
 "PleaseInputJoinGroupReason"="Please input join group reason";
+"JoinGroupRequestSent"="Request sent to admin, please wait for approval";
 "CannotRecordAudio"="Cannot record audio, please enable microphone access in Settings -> Privacy";
 "RecordingTooShort"="Recording time is too short";
 "SimulatorNotSupportCamera"="Simulator not support camera";

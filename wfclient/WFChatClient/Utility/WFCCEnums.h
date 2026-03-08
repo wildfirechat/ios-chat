@@ -28,8 +28,9 @@ typedef NS_ENUM(NSInteger, WFCCErrorCode) {
 
     //Group error
     ERROR_CODE_GROUP_ALREADY_EXIST = 11,  //"group aleady exist"),
-
-
+    ERROR_CODE_ALREADY_IN_GROUP =12, //"member already in group"),
+    ERROR_CODE_JOIN_GROUP_NEED_VERIFY = 13, //"join group need verify"),
+    
     //user error
     ERROR_CODE_PASSWORD_INCORRECT = 15,  //"password incorrect"),
 

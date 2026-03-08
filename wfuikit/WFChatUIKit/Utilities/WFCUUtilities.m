@@ -10,6 +10,10 @@
 #import "WFCUImage.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
+#import <WFChatClient/WFCChatClient.h>
+#import "MBProgressHUD.h"
+
+#define WFCString(key) [[NSBundle bundleForClass:[self class]] localizedStringForKey:key value:@"" table:@"wfc"]
 
 #define kIs_iPhoneX ([UIScreen mainScreen].bounds.size.height == 812.0f ||[UIScreen mainScreen].bounds.size.height == 896.0f ||[UIScreen mainScreen].bounds.size.height == 844.0f ||[UIScreen mainScreen].bounds.size.height == 926.0f ||[UIScreen mainScreen].bounds.size.height == 932.0f)
 
@@ -382,4 +386,40 @@
     
     [controller presentViewController:alertController animated:YES completion:nil];
 }
+
++ (void)sendJoinGroupRequestWithGroupId:(NSString *)groupId
+                               contacts:(NSArray<NSString *> *)contacts
+                     fromViewController:(UIViewController *)viewController {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:WFCString(@"JoinGroupVerificationEnabled") preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = WFCString(@"PleaseInputJoinGroupReason");
+    }];
+        
+    __weak typeof(viewController)ws = viewController;
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *reason = alertController.textFields.firstObject.text;
+        __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];
+        hud.label.text = WFCString(@"Sending");
+        [hud showAnimated:YES];
+        [[WFCCIMService sharedWFCIMService] sendJoinGroupRequest:groupId members:contacts reason:reason extra:nil success:^{
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+            hud.label.text = WFCString(@"JoinGroupRequestSent");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        } error:^(int errorCode) {
+            [hud hideAnimated:NO];
+            hud = [MBProgressHUD showHUDAddedTo:ws.view animated:NO];
+            hud.label.text = WFCString(@"SendFailure");
+            hud.mode = MBProgressHUDModeText;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hideAnimated:NO afterDelay:1.5];
+        }];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleDefault handler:nil]];
+    [viewController presentViewController:alertController animated:true completion:nil];
+}
+
 @end
