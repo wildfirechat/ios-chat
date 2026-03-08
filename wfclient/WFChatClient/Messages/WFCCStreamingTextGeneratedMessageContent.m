@@ -9,6 +9,7 @@
 #import "WFCCStreamingTextGeneratedMessageContent.h"
 #import "WFCCIMService.h"
 #import "Common.h"
+#import "WFCCUtilities.h"
 
 
 @implementation WFCCStreamingTextGeneratedMessageContent
@@ -39,6 +40,7 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return self.text;
+    // 将 Markdown 转换为纯文本用于显示摘要
+    return [WFCCUtilities plainTextFromMarkdown:self.text];
 }
 @end

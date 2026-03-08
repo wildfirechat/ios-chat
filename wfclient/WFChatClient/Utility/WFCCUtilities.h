@@ -86,4 +86,23 @@
  获取指定年月的最后一秒，UTC时间
  */
 + (NSTimeInterval)endSendOf:(NSUInteger)year month:(NSUInteger)month;
+
+#pragma mark - Markdown 处理
+
+/**
+ 将 Markdown 文本转换为纯文本（去除 Markdown 标记）
+ 
+ @param markdownText Markdown 格式的文本
+ @return 去除 Markdown 标记后的纯文本
+ */
++ (NSString *)plainTextFromMarkdown:(NSString *)markdownText;
+
+/**
+ 检查文本是否包含 Markdown 标记
+ 
+ @param text 文本内容
+ @return YES 如果包含 Markdown 标记
+ */
++ (BOOL)containsMarkdown:(NSString *)text;
+
 @end
