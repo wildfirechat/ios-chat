@@ -10,6 +10,7 @@
 #import "WFCCIMService.h"
 #import "Common.h"
 #import "WFCCDictionary.h"
+#import "WFCCUtilities.h"
 
 @implementation WFCCTextMessageContent
 - (WFCCMessagePayload *)encode {
@@ -65,6 +66,7 @@
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-  return self.text;
+    // 将 Markdown 转换为纯文本用于显示摘要
+    return [WFCCUtilities plainTextFromMarkdown:self.text];
 }
 @end
