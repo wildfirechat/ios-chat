@@ -35,4 +35,9 @@
 ///已授权返回YES，否则返回NO
 + (BOOL)checkRecordOrCameraPermission:(BOOL)isAudio complete:(void (^)(BOOL granted))complete viewController:(UIViewController *)controller;
 
+/// 发送加入群组请求
++ (void)sendJoinGroupRequestWithGroupId:(NSString *)groupId
+                               contacts:(NSArray<NSString *> *)contacts
+                     fromViewController:(UIViewController *)viewController;
+
 @end

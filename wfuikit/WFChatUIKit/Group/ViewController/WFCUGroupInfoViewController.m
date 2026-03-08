@@ -13,6 +13,8 @@
 #import "WFCUImage.h"
 #import "WFCUMessageListViewController.h"
 #import "WFCUUtilities.h"
+#import "UIView+Toast.h"
+#import "MBProgressHUD.h"
 
 @interface WFCUGroupInfoViewController ()
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;
@@ -154,10 +156,19 @@
             ws.isJoined = YES;
             [ws onButtonPressed:nil];
         } error:^(int error_code) {
-            
+            if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
+                [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
+            } else {
+                if(error_code == ERROR_CODE_JOIN_GROUP_NEED_VERIFY) {
+                    [WFCUUtilities sendJoinGroupRequestWithGroupId:ws.groupInfo.target contacts:@[[WFCCNetworkService sharedInstance].userId] fromViewController:ws];
+                } else {
+                    [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                }
+            }
         }];
     }
 }
+
 
 - (UIButton *)btn {
     if (!_btn) {

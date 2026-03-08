@@ -527,6 +527,7 @@
 "ContactBook"="通讯录";
 "JoinGroupVerificationEnabled"="已开启入群验证功能，请输入理由等待群主和管理员审批";
 "PleaseInputJoinGroupReason"="请输入加群理由";
+"JoinGroupRequestSent"="已发送给管理员，请等待管理员批准";
 "CannotRecordAudio"="无法录音,请到设置-隐私-麦克风,允许程序访问";
 "RecordingTooShort"="录音时间太短了";
 "SimulatorNotSupportCamera"="模拟器不支持相机";

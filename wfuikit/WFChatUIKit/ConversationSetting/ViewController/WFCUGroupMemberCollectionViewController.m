@@ -16,6 +16,8 @@
 #import "UIView+Toast.h"
 #import "WFCUEnum.h"
 #import "WFCUImage.h"
+#import "MBProgressHUD.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -154,9 +156,16 @@
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
             [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.groupId memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:YES];
-                
             } error:^(int error_code) {
-                
+                if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
+                    [ws.view makeToast:WFCString(@"ExceedGroupMaxMemberCount") duration:1 position:CSToastPositionCenter];
+                } else {
+                    if(error_code == ERROR_CODE_JOIN_GROUP_NEED_VERIFY) {
+                        [WFCUUtilities sendJoinGroupRequestWithGroupId:ws.groupId contacts:@[[WFCCNetworkService sharedInstance].userId] fromViewController:ws];
+                    } else {
+                        [ws.view makeToast:WFCString(@"NetworkError") duration:1 position:CSToastPositionCenter];
+                    }
+                }
             }];
         };
         pvc.disableUsersSelected = YES;
@@ -228,6 +237,8 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
+
+
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

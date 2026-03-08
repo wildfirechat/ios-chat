@@ -525,6 +525,7 @@
 "ContactBook"="通訊錄";
 "JoinGroupVerificationEnabled"="已開啟入群驗證功能，請輸入理由等待群主和管理員審批";
 "PleaseInputJoinGroupReason"="請輸入加群理由";
+"JoinGroupRequestSent"="已發送給管理員，請等待管理員批准";
 "CannotRecordAudio"="無法錄音,請到設置-隱私-麥克風,允許程序訪問";
 "RecordingTooShort"="錄音時間太短了";
 "SimulatorNotSupportCamera"="模擬器不支持相機";
