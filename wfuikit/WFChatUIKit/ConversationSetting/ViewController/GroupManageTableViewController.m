@@ -158,14 +158,16 @@
     return 0.f;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if(self.groupInfo.joinType == 3 && [self isGroupOwner]) {
+    // 只有群组类型为 GroupType_Restricted (值为2) 且 joinType == 3 且是群主时才显示验证列表
+    if(self.groupInfo.type == GroupType_Restricted && self.groupInfo.joinType == 3 && [self isGroupOwner]) {
         return 3; //成员管理，群设置, 验证列表
     } else {
         return 2; //成员管理，群设置
     }
 }
 - (void)onJoinGroupRequestUpdated:(id)sender {
-    if(self.groupInfo.joinType == 3 && [self isGroupOwner]) {
+    // 只有群组类型为 GroupType_Restricted (值为2) 且 joinType == 3 且是群主时才刷新验证列表
+    if(self.groupInfo.type == GroupType_Restricted && self.groupInfo.joinType == 3 && [self isGroupOwner]) {
         [self.tableView reloadData];
     }
 }
@@ -243,15 +245,18 @@
             [alertController addAction:normalAction];
             
             
-            UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"NeedManagerVerify") style:self.groupInfo.joinType == 3 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"3" notifyLines:@[@(0)] notifyContent:nil success:^{
-                    ws.groupInfo.joinType = 3;
-                    [ws.tableView reloadData];
-                } error:^(int error_code) {
-                    [ws.view makeToast:WFCString(@"SavedFailed")];
+            // 只有群组类型为 GroupType_Restricted (值为2) 时才显示"需要管理员验证"选项
+            if (self.groupInfo.type == GroupType_Restricted) {
+                UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"NeedManagerVerify") style:self.groupInfo.joinType == 3 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"3" notifyLines:@[@(0)] notifyContent:nil success:^{
+                        ws.groupInfo.joinType = 3;
+                        [ws.tableView reloadData];
+                    } error:^(int error_code) {
+                        [ws.view makeToast:WFCString(@"SavedFailed")];
+                    }];
                 }];
-            }];
-            [alertController addAction:verifyAction];
+                [alertController addAction:verifyAction];
+            }
             
             
             [self.navigationController presentViewController:alertController animated:YES completion:nil];
