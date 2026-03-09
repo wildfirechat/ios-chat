@@ -29,7 +29,8 @@
 //#define WFC_MOMENTS
 
 
-//关于启用callkit功能，请参考 https://docs.wildfirechat.cn/blogs/iOS如何启用CallKit.html
+//关于启用callkit功能，请参考 https://docs.wildfirechat.cn/blogs/iOS如何启用CallKit.html ，
+//另外项目中添加上CallKit和PushKit这2个库
 #define USE_CALL_KIT 0
 //模拟器不支持callkit
 #if TARGET_IPHONE_SIMULATOR
