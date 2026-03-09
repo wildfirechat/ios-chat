@@ -256,8 +256,6 @@
 		2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewController.m; sourceTree = "<group>"; };
 		2B840F412442125B006BE3D8 /* WFCThemeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCThemeTableViewCell.h; sourceTree = "<group>"; };
 		2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewCell.m; sourceTree = "<group>"; };
-		2BDCE7E0233627450004212B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
-		2BDCE7E22336278E0004212B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
 		2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		2E1D1FF71FAF0AE600F4405D /* 野火IM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火IM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -719,8 +717,6 @@
 				B75D81662782B8AD009D4A19 /* WebRTC.xcframework */,
 				B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */,
 				2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */,
-				2BDCE7E22336278E0004212B /* CallKit.framework */,
-				2BDCE7E0233627450004212B /* PushKit.framework */,
 				905177512243CDA60020A2AC /* libc++.tbd */,
 				9051774F2243CD9A0020A2AC /* libz.tbd */,
 				9051774D2243CD8D0020A2AC /* Security.framework */,
