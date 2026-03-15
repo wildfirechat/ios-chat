@@ -542,20 +542,94 @@
             }
         }
         
+        //远程消息可能有重复拉去的，要先排重才能判断是否还有。
+        if(reversedMsgs.count) {
+            for (WFCUMessageModel *model in self.modelList) {
+                for (WFCCMessage *msg in reversedMsgs) {
+                    if(model.message.messageUid == msg.messageUid) {
+                        [reversedMsgs removeObject:msg];
+                        break;
+                    }
+                }
+            }
+        }
+        
         if (!reversedMsgs.count) {
-            weakSelf.hasMoreOld = NO;
+            // 远程IM服务没有更多消息，尝试从备份服务获取
+            [weakSelf loadArchivedHistoryMessages:completion];
         } else {
             [weakSelf appendMessages:reversedMsgs newMessage:NO highlightId:0 forceButtom:NO firstIn:NO appendLast:NO];
-        }
-        weakSelf.loadingMore = NO;
-        if (completion) {
-            completion(messages.count > 0);
+            weakSelf.loadingMore = NO;
+            if (completion) {
+                completion(messages.count > 0);
+            }
         }
     } error:^(int error_code) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        // 远程获取失败，尝试从备份服务获取
+        [weakSelf loadArchivedHistoryMessages:completion];
+    }];
+}
+
+#pragma mark - 归档消息加载
+
+- (void)loadArchivedHistoryMessages:(void (^ __nullable)(BOOL more))completion {
+    // 检查是否配置了备份服务
+    id<WFCUArchiveService> archiveService = [WFCUConfigManager globalManager].archiveServiceProvider;
+    if (!archiveService) {
+        // 没有配置备份服务，直接标记没有更多消息
+        self.hasMoreOld = NO;
+        self.loadingMore = NO;
+        if (completion) completion(NO);
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    // 转换 lastUid 为 startMid
+    int64_t startMid = self.lastUid > 0 ? self.lastUid : 0;
+    
+    [archiveService getArchivedMessages:(int)self.conversation.type
+                             convTarget:self.conversation.target
+                               convLine:(int)self.conversation.line
+                               startMid:startMid
+                                 before:YES
+                                  limit:10
+                                success:^(NSArray<WFCCMessage *> *messages, BOOL hasMore, int64_t nextStartMid) {
+        
+        if (messages.count == 0) {
+            // 备份服务也没有更多消息
             weakSelf.hasMoreOld = NO;
             weakSelf.loadingMore = NO;
+            if (completion) completion(NO);
+            return;
+        }
+        
+        // 更新 lastUid（使用返回消息中最小的 messageUid）
+        for (WFCCMessage *msg in messages) {
+            if (msg.messageUid > 0 && msg.messageUid < weakSelf.lastUid) {
+                weakSelf.lastUid = msg.messageUid;
+            }
+        }
+        
+        // 更新 hasMore 标志
+        weakSelf.hasMoreOld = hasMore;
+        
+        // 在主线程刷新 UI
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (messages.count > 0) {
+                [weakSelf appendMessages:messages newMessage:NO highlightId:0 forceButtom:NO firstIn:NO appendLast:NO];
+            }
+            
+            weakSelf.loadingMore = NO;
+            if (completion) completion(messages.count > 0);
         });
+        
+    } error:^(int errorCode, NSString *message) {
+        // 备份服务获取失败
+        NSLog(@"Failed to load archived messages: %d, %@", errorCode, message);
+        weakSelf.hasMoreOld = NO;
+        weakSelf.loadingMore = NO;
+        if (completion) completion(NO);
     }];
 }
 

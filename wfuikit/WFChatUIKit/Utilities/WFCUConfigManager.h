@@ -14,6 +14,7 @@
 #import "WFCUCollectionService.h"
 #import "WFCUPollService.h"
 #import "WFCUPanService.h"
+#import "WFCUArchiveService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -59,6 +60,8 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 @property(nonatomic, weak)id<WFCUPollService> pollServiceProvider;
 
 @property(nonatomic, weak)id<WFCUPanService> panServiceProvider;
+
+@property(nonatomic, weak)id<WFCUArchiveService> archiveServiceProvider;
 
 @property(nonatomic, strong)NSString *fileTransferId;
 
