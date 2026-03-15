@@ -17,6 +17,7 @@ extern NSString *ORG_SERVER_ADDRESS;
 extern NSString *COLLECTION_SERVER_ADDRESS;
 extern NSString *POLL_SERVER_ADDRESS;
 extern NSString *PAN_SERVER_ADDRESS;
+extern NSString *ARCHIVE_SERVER_ADDRESS;
 
 
 extern NSString *ICE_ADDRESS;

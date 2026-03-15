@@ -110,3 +110,5 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUPanViewController.h>
 #import <WFChatUIKit/WFCUPanFilePickerViewController.h>
 
+// Archive (消息归档/备份服务)
+#import <WFChatUIKit/WFCUArchiveService.h>

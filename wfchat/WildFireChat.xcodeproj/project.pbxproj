@@ -128,6 +128,8 @@
 		B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */; };
 		B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */; };
 		B770E8BD2F40C55400D4B219 /* PollService.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8BB2F40C55400D4B219 /* PollService.m */; };
+		B7719FFE2F624F9400735720 /* ArchiveMessagePayload.m in Sources */ = {isa = PBXBuildFile; fileRef = B7719FFD2F624F9400735720 /* ArchiveMessagePayload.m */; };
+		B771A0012F6258F600735720 /* ArchiveMessageResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B771A0002F6258F600735720 /* ArchiveMessageResult.m */; };
 		B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B184F2CF719E0008A2C09 /* SSKeychain.m */; };
 		B78B18562CF719E0008A2C09 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B18532CF719E0008A2C09 /* SSKeychainQuery.m */; };
 		B78B18582CF719E0008A2C09 /* SSKeychain.strings in Resources */ = {isa = PBXBuildFile; fileRef = B78B18512CF719E0008A2C09 /* SSKeychain.strings */; };
@@ -156,6 +158,8 @@
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */; };
+		B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */; };
+		B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */; };
 		B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6312F4D8BFA003E481E /* PanService.m */; };
 		B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -446,6 +450,10 @@
 		B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsCenterUtils.swift; sourceTree = "<group>"; };
 		B770E8BA2F40C55400D4B219 /* PollService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PollService.h; sourceTree = "<group>"; };
 		B770E8BB2F40C55400D4B219 /* PollService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PollService.m; sourceTree = "<group>"; };
+		B7719FFC2F624F9400735720 /* ArchiveMessagePayload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMessagePayload.h; sourceTree = "<group>"; };
+		B7719FFD2F624F9400735720 /* ArchiveMessagePayload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveMessagePayload.m; sourceTree = "<group>"; };
+		B7719FFF2F6258F600735720 /* ArchiveMessageResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMessageResult.h; sourceTree = "<group>"; };
+		B771A0002F6258F600735720 /* ArchiveMessageResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveMessageResult.m; sourceTree = "<group>"; };
 		B78B184E2CF719E0008A2C09 /* SSKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		B78B184F2CF719E0008A2C09 /* SSKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		B78B18502CF719E0008A2C09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SSKeychain.strings; sourceTree = "<group>"; };
@@ -491,6 +499,10 @@
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestRedirector.h; sourceTree = "<group>"; };
 		B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestRedirector.m; sourceTree = "<group>"; };
+		B7DA71FB2F60FBEB00C112C8 /* ArchiveService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveService.h; sourceTree = "<group>"; };
+		B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveService.m; sourceTree = "<group>"; };
+		B7DA71FD2F60FBEB00C112C8 /* ArchivedMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchivedMessage.h; sourceTree = "<group>"; };
+		B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchivedMessage.m; sourceTree = "<group>"; };
 		B7DEB6302F4D8BFA003E481E /* PanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanService.h; sourceTree = "<group>"; };
 		B7DEB6312F4D8BFA003E481E /* PanService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanService.m; sourceTree = "<group>"; };
 		B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
@@ -662,6 +674,7 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B7DA71FF2F60FBEB00C112C8 /* ArchiveService */,
 				B7DEB6322F4D8BFA003E481E /* PanService */,
 				B770E8BC2F40C55400D4B219 /* PollService */,
 				B749E9AC2F3F8EB60092DEAE /* CollectionService */,
@@ -1147,6 +1160,21 @@
 			path = TYHWaterMark;
 			sourceTree = "<group>";
 		};
+		B7DA71FF2F60FBEB00C112C8 /* ArchiveService */ = {
+			isa = PBXGroup;
+			children = (
+				B7719FFC2F624F9400735720 /* ArchiveMessagePayload.h */,
+				B7719FFD2F624F9400735720 /* ArchiveMessagePayload.m */,
+				B7DA71FB2F60FBEB00C112C8 /* ArchiveService.h */,
+				B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */,
+				B7DA71FD2F60FBEB00C112C8 /* ArchivedMessage.h */,
+				B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */,
+				B7719FFF2F6258F600735720 /* ArchiveMessageResult.h */,
+				B771A0002F6258F600735720 /* ArchiveMessageResult.m */,
+			);
+			path = ArchiveService;
+			sourceTree = "<group>";
+		};
 		B7DEB6322F4D8BFA003E481E /* PanService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1402,6 +1430,8 @@
 				B7981A352F2A1356004AB1F3 /* WFCFavoriteCardCell.m in Sources */,
 				B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */,
 				B7ABFF3F2F10DA7A00C3DEEC /* WFCRestoreOptionsViewController.m in Sources */,
+				B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */,
+				B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */,
 				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,
 				B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */,
 				B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */,
@@ -1415,6 +1445,7 @@
 				2FF07F5F21F82E7200A78A62 /* WFCSecurityTableViewController.m in Sources */,
 				2E1D200A1FAF0AE600F4405D /* main.m in Sources */,
 				2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */,
+				B7719FFE2F624F9400735720 /* ArchiveMessagePayload.m in Sources */,
 				B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */,
 				B764D48F295854700082492F /* OrgService.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
@@ -1431,6 +1462,7 @@
 				B76C1DE32D69650500B1B0D8 /* UIView+Gt.m in Sources */,
 				2F638934254E8FAB0084EEA6 /* WFCFavoriteImageCell.m in Sources */,
 				B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */,
+				B771A0012F6258F600735720 /* ArchiveMessageResult.m in Sources */,
 				149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */,
 				2FFDDCA4255164DA00CEFDBB /* WFCFavoriteLinkCell.m in Sources */,
 				B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */,
