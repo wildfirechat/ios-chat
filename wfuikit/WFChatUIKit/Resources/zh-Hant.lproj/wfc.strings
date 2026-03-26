@@ -375,10 +375,10 @@
 "MobileOnline"="手機在線";
 "Busy"="忙碌";
 "Away"="離開";
-"DaysAgoMobileOnline"="%d天前手機在線";
-"HoursAgoMobileOnline"="%d小時前手機在線";
-"MinsAgoMobileOnline"="%d分鐘前手機在線";
-"ShortlyAgoMobileOnline"="不久前手機在線";
+"DaysAgoMobileOnline"="%@(%d天前手機在線)";
+"HoursAgoMobileOnline"="%@(%d小時前手機在線)";
+"MinsAgoMobileOnline"="%@(%d分鐘前手機在線)";
+"ShortlyAgoMobileOnline"="%@(不久前手機在線)";
 "ForwardOneByOne"="逐條轉發";
 "ForwardMerge"="合併轉發";
 "ChatHistoryWith"="%@和%@ 的聊天記錄";

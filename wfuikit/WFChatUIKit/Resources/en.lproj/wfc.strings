@@ -376,10 +376,10 @@
 "MobileOnline"="Mobile Online";
 "Busy"="Busy";
 "Away"="Away";
-"DaysAgoMobileOnline"="%d days ago mobile online";
-"HoursAgoMobileOnline"="%d hours ago mobile online";
-"MinsAgoMobileOnline"="%d mins ago mobile online";
-"ShortlyAgoMobileOnline"="Shortly ago mobile online";
+"DaysAgoMobileOnline"="%@(%d days ago mobile online)";
+"HoursAgoMobileOnline"="%@(%d hours ago mobile online)";
+"MinsAgoMobileOnline"="%@(%d mins ago mobile online)";
+"ShortlyAgoMobileOnline"="%@(Shortly ago mobile online)";
 "ForwardOneByOne"="Forward One by One";
 "ForwardMerge"="Merge Forward";
 "ChatHistoryWith"="Chat history of %@ and %@";

@@ -376,10 +376,10 @@
 "MobileOnline"="手机在线";
 "Busy"="忙碌";
 "Away"="离开";
-"DaysAgoMobileOnline"="%d天前手机在线";
-"HoursAgoMobileOnline"="%d小时前手机在线";
-"MinsAgoMobileOnline"="%d分钟前手机在线";
-"ShortlyAgoMobileOnline"="不久前手机在线";
+"DaysAgoMobileOnline"="%@(%d天前手机在线)";
+"HoursAgoMobileOnline"="%@(%d小时前手机在线)";
+"MinsAgoMobileOnline"="%@(%d分钟前手机在线)";
+"ShortlyAgoMobileOnline"="%@(不久前手机在线)";
 "ForwardOneByOne"="逐条转发";
 "ForwardMerge"="合并转发";
 "ChatHistoryWith"="%@和%@ 的聊天记录";
