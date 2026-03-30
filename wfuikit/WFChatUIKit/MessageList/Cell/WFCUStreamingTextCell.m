@@ -15,6 +15,7 @@
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
 #define INDICTATORVIEW_HEIGHT 18
+#define WFCString(key) [[NSBundle bundleForClass:[self class]] localizedStringForKey:key value:@"" table:@"wfc"]
 
 @interface WFCUStreamingTextCell () <WFCUMarkdownLabelDelegate>
 
@@ -24,6 +25,10 @@
 
 + (UIFont *)defaultFont {
     return [UIFont systemFontOfSize:18];
+}
+
++ (NSString *)additionalText {
+    return WFCString(@"AIGeneratedContent");
 }
 
 + (NSString *)cacheKeyForText:(NSString *)text viewWidth:(CGFloat)width generating:(BOOL)generating {
