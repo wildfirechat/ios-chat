@@ -21,5 +21,7 @@
 @property (nonatomic, strong)UIView *translateContainer;
 @property (nonatomic, strong)UILabel *translateLabel;
 @property (nonatomic, strong)UIActivityIndicatorView *translateActivity;
+@property (nonatomic, strong)UILabel *additionalLabel;
 - (void)setMaskImage:(UIImage *)maskImage;
++ (NSString *)additionalText;
 @end

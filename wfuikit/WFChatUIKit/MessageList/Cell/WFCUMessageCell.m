@@ -79,8 +79,20 @@
     
   height += [self sizeForQuoteArea:msgModel withViewWidth:clientAreaWidth].height;
   height += [self sizeForTranslateArea:msgModel withViewWidth:clientAreaWidth].height;
+  height += [self sizeForAdditionalArea:msgModel withViewWidth:clientAreaWidth].height;
     
   return CGSizeMake(width, height);
+}
+
++ (CGSize)sizeForAdditionalArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+    NSString *additionalText = [self additionalText];
+    if (additionalText.length) {
+        UIFont *font = [UIFont systemFontOfSize:12];
+        CGSize size = [WFCUUtilities getTextDrawingSize:additionalText font:font constrainedSize:CGSizeMake(width, 1000)];
+        size.height += 4; // 上下间距
+        return size;
+    }
+    return CGSizeZero;
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -493,6 +505,31 @@
         self.translateContainer.hidden = NO;
         self.translateLabel.text = self.model.translateText;
     }
+    
+    // 处理附加文本 label，放置在 cell 最底部
+    NSString *additionalText = [[self class] additionalText];
+    if (additionalText.length) {
+        self.additionalLabel.text = additionalText;
+        self.additionalLabel.hidden = NO;
+        
+        CGFloat selectViewOffset = model.selecting ? SelectView_Size + Portrait_Padding_Right : 0;
+        CGFloat maxLabelWidth = [WFCUMessageCell clientAreaWidth];
+        CGSize textSize = [WFCUUtilities getTextDrawingSize:additionalText font:self.additionalLabel.font constrainedSize:CGSizeMake(maxLabelWidth, 1000)];
+        
+        CGFloat labelX;
+        if (model.message.direction == MessageDirection_Send) {
+            labelX = self.frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - textSize.width - Bubble_Padding_Another_Side - selectViewOffset;
+        } else {
+            labelX = Portrait_Padding_Left + Portrait_Size + Name_Label_Padding + Bubble_Padding_Arraw;
+        }
+        
+        // 放置在 cell 最底部
+        CGFloat labelY = self.frame.size.height - textSize.height - 4;
+        
+        self.additionalLabel.frame = CGRectMake(labelX, labelY, textSize.width, textSize.height);
+    } else {
+        self.additionalLabel.hidden = YES;
+    }
 }
 
 - (void)updateReceiptView {
@@ -728,5 +765,21 @@
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
++ (NSString *)additionalText {
+    return nil;
+}
+
+- (UILabel *)additionalLabel {
+    if (!_additionalLabel) {
+        _additionalLabel = [[UILabel alloc] init];
+        _additionalLabel.font = [UIFont systemFontOfSize:12];
+        _additionalLabel.textColor = [UIColor grayColor];
+        _additionalLabel.textAlignment = NSTextAlignmentLeft;
+        _additionalLabel.numberOfLines = 0;
+        [self.contentView addSubview:_additionalLabel];
+    }
+    return _additionalLabel;
 }
 @end
