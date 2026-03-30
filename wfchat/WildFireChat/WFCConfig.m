@@ -25,7 +25,7 @@ NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 
 //组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
 //组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
-NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.cn";
+NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.net";
 
 //接龙服务地址，如果没有部署，可以设置为nil。
 NSString *COLLECTION_SERVER_ADDRESS = @"https://jielong.wildfirechat.net";
