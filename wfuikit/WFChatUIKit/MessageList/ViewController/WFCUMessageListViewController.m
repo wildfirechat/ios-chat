@@ -97,6 +97,7 @@
 
 #import "WFZConferenceInfoViewController.h"
 #import "WFZConferenceInfo.h"
+#import "KxMenu.h"
 
 #import "MWPhotoBrowser.h"
 #import "LBXScanNative.h"
@@ -3662,22 +3663,7 @@
 
 #pragma mark - menu
 - (void)displayMenu:(WFCUMessageCellBase *)baseCell {
-    UIMenuController *menu = [UIMenuController sharedMenuController];
-    
-    UIMenuItem *deleteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Delete") action:@selector(performDelete:)];
-    UIMenuItem *cancelItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Cancel") action:@selector(performCancel:)];
-    UIMenuItem *copyItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Copy") action:@selector(performCopy:)];
-    UIMenuItem *forwardItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Forward") action:@selector(performForward:)];
-    UIMenuItem *recallItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Recall") action:@selector(performRecall:)];
-    UIMenuItem *complainItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Complain") action:@selector(performComplain:)];
-    UIMenuItem *multiSelectItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"MultiSelect") action:@selector(performMultiSelect:)];
-    UIMenuItem *quoteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Quote") action:@selector(performQuote:)];
-    UIMenuItem *favoriteItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"Favorite") action:@selector(performFavorite:)];
-    UIMenuItem *toTextItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"ToText") action:@selector(performToText:)];
-    
-    // 保存到网盘菜单项（仅当支持网盘功能时显示）
-    UIMenuItem *saveToPanItem = [[UIMenuItem alloc]initWithTitle:WFCString(@"SaveToPan") action:@selector(performSaveToPan:)];
-    
+    // 使用 KxMenu 显示多排网格菜单
     CGRect menuPos;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
         WFCUMessageCell *msgCell = (WFCUMessageCell *)baseCell;
@@ -3686,26 +3672,48 @@
         menuPos = baseCell.frame;
     }
     
-    [menu setTargetRect:menuPos inView:baseCell];
-    WFCCMessage *msg = baseCell.model.message;
+    // 将坐标从 baseCell 转换到 self.view
+    menuPos = [baseCell convertRect:menuPos toView:self.view];
     
-    NSMutableArray *items = [[NSMutableArray alloc] init];
-    [items addObject:deleteItem];
+    WFCCMessage *msg = baseCell.model.message;
+    self.cell4Menu = baseCell;
+    
+    NSMutableArray *menuItems = [[NSMutableArray alloc] init];
+    
+    // 删除
+    [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Delete")
+                                        image:nil
+                                       target:self
+                                       action:@selector(onMenuDelete:)]];
+    
+    // 复制
     if ([msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCCollectionMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]] ||
         [msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
-        [items addObject:copyItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Copy")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuCopy:)]];
     }
     
+    // 取消发送
     if (baseCell.model.message.direction == MessageDirection_Send && baseCell.model.message.status == Message_Status_Sending && [baseCell.model.message.content isKindOfClass:[WFCCMediaMessageContent class]]) {
-        [items addObject:cancelItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Cancel")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuCancel:)]];
     }
     
+    // 投诉
     if (baseCell.model.message.direction == MessageDirection_Receive) {
-        [items addObject:complainItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Complain")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuComplain:)]];
     }
     
+    // 转发
     if(self.conversation.type != SecretChat_Type) {
         if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
@@ -3721,22 +3729,32 @@
             [msg.content isKindOfClass:[WFCCPollResultMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] ||
-            //        [msg.content isKindOfClass:[WFCCSoundMessageContent class]] || //语音消息禁止转发，出于安全原因考虑，微信就禁止转发。如果您能确保安全，可以把这行注释打开
             [msg.content isKindOfClass:[WFCCStickerMessageContent class]]) {
-            [items addObject:forwardItem];
+            [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Forward")
+                                                image:nil
+                                               target:self
+                                               action:@selector(onMenuForward:)]];
         }
     }
     
-    // 保存到网盘：文件消息且支持网盘功能时显示
+    // 保存到网盘
     if ([msg.content isKindOfClass:[WFCCFileMessageContent class]] &&
         [WFCUConfigManager globalManager].panServiceProvider) {
-        [items addObject:saveToPanItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"SaveToPan")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuSaveToPan:)]];
     }
     
+    // 语音转文字
     if ([WFCUConfigManager globalManager].asrServiceUrl && !baseCell.model.translateText && [baseCell.model.message.content isKindOfClass:[WFCCSoundMessageContent class]]) {
-        [items addObject:toTextItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"ToText")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuToText:)]];
     }
     
+    // 撤回
     BOOL canRecall = NO;
     if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
         if(msg.direction == MessageDirection_Send) {
@@ -3776,21 +3794,33 @@
     }
     
     if (canRecall) {
-        [items addObject:recallItem];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Recall")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuRecall:)]];
     }
     
+    // 多选
     if(self.conversation.type != SecretChat_Type) {
         if ([baseCell isKindOfClass:[WFCUMessageCell class]] || [baseCell isKindOfClass:[WFCUArticlesCell class]]) {
-            [items addObject:multiSelectItem];
+            [menuItems addObject:[KxMenuItem menuItem:WFCString(@"MultiSelect")
+                                                image:nil
+                                               target:self
+                                               action:@selector(onMenuMultiSelect:)]];
         }
     }
     
+    // 引用
     if (msg.messageUid > 0) {
         if ([msg.content.class getContentFlags] & 0x2) {
-            [items addObject:quoteItem];
+            [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Quote")
+                                                image:nil
+                                               target:self
+                                               action:@selector(onMenuQuote:)]];
         }
     }
     
+    // 收藏
     if(self.conversation.type != SecretChat_Type) {
         if ([msg.content isKindOfClass:[WFCCImageMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCTextMessageContent class]] ||
@@ -3798,28 +3828,78 @@
             [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCVideoMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCSoundMessageContent class]] ||
-            [msg.content isKindOfClass:[WFCCFileMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCLinkMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCArticlesMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCCompositeMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCPollMessageContent class]] ||
             [msg.content isKindOfClass:[WFCCPollResultMessageContent class]]) {
-            [items addObject:favoriteItem];
+            [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Favorite")
+                                                image:nil
+                                               target:self
+                                               action:@selector(onMenuFavorite:)]];
         }
     }
     
-    [menu setMenuItems:items];
-    self.cell4Menu = baseCell;
-
-    // 确保 ViewController 成为第一响应者，以便菜单操作能正确响应
-    // 如果当前有第一响应者（可能是 SelectableTextView），先让它放弃
-    [self.view endEditing:YES];
-
-    if (!self.isFirstResponder) {
-        [self becomeFirstResponder];
+    // 计算每行显示的列数（根据菜单项数量动态调整，最多4列）
+    NSInteger columnsPerRow = 4;
+    if (menuItems.count <= 3) {
+        columnsPerRow = menuItems.count;
+    } else if (menuItems.count <= 6) {
+        columnsPerRow = 3;
+    } else {
+        columnsPerRow = 4;
     }
+    
+    // 显示多排网格菜单
+    [KxMenu showMenuInView:self.view
+                  fromRect:menuPos
+                 menuItems:menuItems
+             columnsPerRow:columnsPerRow];
+}
 
-    [menu setMenuVisible:YES];
+// KxMenu 菜单项回调方法
+- (void)onMenuDelete:(KxMenuItem *)item {
+    [self performDelete:nil];
+}
+
+- (void)onMenuCancel:(KxMenuItem *)item {
+    [self performCancel:nil];
+}
+
+- (void)onMenuCopy:(KxMenuItem *)item {
+    [self performCopy:nil];
+}
+
+- (void)onMenuForward:(KxMenuItem *)item {
+    [self performForward:nil];
+}
+
+- (void)onMenuRecall:(KxMenuItem *)item {
+    [self performRecall:nil];
+}
+
+- (void)onMenuComplain:(KxMenuItem *)item {
+    [self performComplain:nil];
+}
+
+- (void)onMenuMultiSelect:(KxMenuItem *)item {
+    [self performMultiSelect:nil];
+}
+
+- (void)onMenuQuote:(KxMenuItem *)item {
+    [self performQuote:nil];
+}
+
+- (void)onMenuFavorite:(KxMenuItem *)item {
+    [self performFavorite:nil];
+}
+
+- (void)onMenuToText:(KxMenuItem *)item {
+    [self performToText:nil];
+}
+
+- (void)onMenuSaveToPan:(KxMenuItem *)item {
+    [self performSaveToPan:nil];
 }
 
 
@@ -3863,7 +3943,7 @@
     [self deleteMessageUI:messageId];
 }
 
--(void)performDelete:(UIMenuController *)sender {
+-(void)performDelete:(id)sender {
     WFCCMessage *message = self.cell4Menu.model.message;
     if([[WFCCIMService sharedWFCIMService] isCommercialServer] && self.conversation.type != Channel_Type && self.conversation.type != Chatroom_Type) {
         __weak typeof(self)weakSelf = self;
@@ -3910,7 +3990,7 @@
     }
 }
 
--(void)performCancel:(UIMenuController *)sender {
+-(void)performCancel:(id)sender {
     if (self.cell4Menu) {
         if(![[WFCCIMService sharedWFCIMService] cancelSendingMessage:self.cell4Menu.model.message.messageId]) {
             [self.view makeToast:WFCString(@"CancelFailed") duration:1 position:CSToastPositionCenter];
@@ -3918,7 +3998,7 @@
     }
 }
 
--(void)performCopy:(UIMenuItem *)sender {
+-(void)performCopy:(id)sender {
     if (self.cell4Menu) {
         if ([self.cell4Menu.model.message.content isKindOfClass:[WFCCTextMessageContent class]]) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
@@ -3968,7 +4048,7 @@
     }
 }
 
--(void)performForward:(UIMenuItem *)sender {
+-(void)performForward:(id)sender {
     if (self.cell4Menu) {
         WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
         controller.message = self.cell4Menu.model.message;
@@ -3977,7 +4057,7 @@
     }
 }
 
--(void)performRecall:(UIMenuItem *)sender {
+-(void)performRecall:(id)sender {
     if (self.cell4Menu.model.message) {
         __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.label.text = WFCString(@"Recalling");
@@ -4032,7 +4112,7 @@
     }
 }
 
-- (void)performComplain:(UIMenuItem *)sender {
+- (void)performComplain:(id)sender {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Complain") message:@"如果您发现有违反法律和道德的内容，或者您的合法权益受到侵犯，请截图之后发送给我们。我们会在24小时之内处理。处理办法包括不限于删除内容，对作者进行警告，冻结账号，甚至报警处理。举报请到\"设置->设置->举报\"联系我们！" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *action = [UIAlertAction actionWithTitle:WFCString(WFCString(@"Ok")) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -4043,17 +4123,17 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)performMultiSelect:(UIMenuItem *)sender {
+- (void)performMultiSelect:(id)sender {
     self.multiSelecting = !self.multiSelecting;
 }
 
-- (void)performQuote:(UIMenuItem *)sender {
+- (void)performQuote:(id)sender {
     if (self.cell4Menu.model.message) {
         [self.chatInputBar appendQuote:self.cell4Menu.model.message];
     }
 }
 
-- (void)performToText:(UIMenuItem *)sender {
+- (void)performToText:(id)sender {
     self.toTextModel = self.cell4Menu.model;
     __block NSString *link = ((WFCCSoundMessageContent *)self.toTextModel.message.content).remoteUrl;
     self.toTextModel.translating = YES;
@@ -4132,7 +4212,7 @@
     });
 }
 
-- (void)performFavorite:(UIMenuItem *)sender {
+- (void)performFavorite:(id)sender {
     if (self.cell4Menu.model.message) {
         WFCUFavoriteItem *item = [WFCUFavoriteItem itemFromMessage:self.cell4Menu.model.message];
         if (!item) {
@@ -4168,7 +4248,7 @@
     }
 }
 
-- (void)performSaveToPan:(UIMenuItem *)sender {
+- (void)performSaveToPan:(id)sender {
     // 保存文件到网盘
     WFCCMessage *msg = self.cell4Menu.model.message;
     if (![msg.content isKindOfClass:[WFCCFileMessageContent class]]) {

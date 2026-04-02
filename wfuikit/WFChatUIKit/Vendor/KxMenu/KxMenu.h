@@ -57,6 +57,12 @@
                fromRect:(CGRect)rect
               menuItems:(NSArray *)menuItems;
 
+// 多排网格布局显示菜单
++ (void) showMenuInView:(UIView *)view
+               fromRect:(CGRect)rect
+              menuItems:(NSArray *)menuItems
+              columnsPerRow:(NSInteger)columnsPerRow;
+
 + (void) dismissMenu;
 
 + (UIColor *) tintColor;
