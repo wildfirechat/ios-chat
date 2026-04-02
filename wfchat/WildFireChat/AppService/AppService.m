@@ -913,7 +913,8 @@ static inline BOOL isHTTPURL(NSString *str) {
                success:(void(^)(NSArray<NSDictionary *> *reactions))successBlock
                  error:(void(^)(int errorCode, NSString *message))errorBlock {
     NSString *path = @"/messages/update_reaction";
-    NSDictionary *param = @{@"messageUid": @(messageUid), @"emoji": emoji};
+    // messageUid 转为字符串传递，避免 JSON 序列化精度丢失问题
+    NSDictionary *param = @{@"messageUid": @(messageUid).stringValue, @"emoji": emoji};
     [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
         if ([dict[@"code"] intValue] == 0) {
             NSArray *reactions = dict[@"result"][@"reactions"];
