@@ -158,6 +158,7 @@ typedef enum {
     CGFloat                     _arrowPosition;
     UIView                      *_contentView;
     NSArray                     *_menuItems;
+    NSInteger                   _columnsPerRow;  // 每行显示的列数，0表示单列垂直布局
 }
 
 - (id)init
@@ -315,7 +316,16 @@ typedef enum {
               fromRect:(CGRect)rect
              menuItems:(NSArray *)menuItems
 {
+    [self showMenuInView:view fromRect:rect menuItems:menuItems columnsPerRow:0];
+}
+
+- (void)showMenuInView:(UIView *)view
+              fromRect:(CGRect)rect
+             menuItems:(NSArray *)menuItems
+         columnsPerRow:(NSInteger)columnsPerRow
+{
     _menuItems = menuItems;
+    _columnsPerRow = columnsPerRow;
     
     _contentView = [self mkContentView];
     [self addSubview:_contentView];
@@ -390,6 +400,11 @@ typedef enum {
     
     if (!_menuItems.count)
         return nil;
+    
+    // 如果设置了多列布局，使用网格布局
+    if (_columnsPerRow > 1) {
+        return [self mkGridContentView];
+    }
  
     const CGFloat kMinMenuItemHeight = 32.f;
     const CGFloat kMinMenuItemWidth = 32.f;
@@ -536,6 +551,156 @@ typedef enum {
     }    
     
     contentView.frame = (CGRect){0, 0, maxItemWidth, itemY + kMarginY * 2};
+    
+    return contentView;
+}
+
+// 网格布局内容视图
+- (UIView *) mkGridContentView
+{
+    const CGFloat kMinMenuItemHeight = 44.f;  // 减小最小高度，适合纯文本
+    const CGFloat kMinMenuItemWidth = 60.f;   // 减小最小宽度
+    const CGFloat kMarginX = 6.f;
+    const CGFloat kMarginY = 6.f;
+    
+    UIFont *titleFont = [KxMenu titleFont];
+    if (!titleFont) titleFont = [UIFont systemFontOfSize:14];  // 增大字体大小
+    
+    CGFloat maxImageWidth = 0;
+    CGFloat maxItemHeight = 0;
+    CGFloat maxItemWidth = 0;
+    BOOL hasImage = NO;
+    
+    // 计算最大图片宽度
+    for (KxMenuItem *menuItem in _menuItems) {
+        if (menuItem.image) {
+            hasImage = YES;
+            const CGSize imageSize = menuItem.image.size;
+            if (imageSize.width > maxImageWidth)
+                maxImageWidth = imageSize.width;
+        }
+    }
+    
+    // 计算每个项目的尺寸
+    for (KxMenuItem *menuItem in _menuItems) {
+        const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+        const CGSize imageSize = menuItem.image ? menuItem.image.size : CGSizeZero;
+        
+        // 网格布局：图标在上，文字在下；如果没有图片，只显示文字居中
+        CGFloat itemHeight;
+        if (hasImage) {
+            itemHeight = imageSize.height + titleSize.height + kMarginY * 3;
+        } else {
+            itemHeight = titleSize.height + kMarginY * 2;  // 纯文本时更紧凑
+        }
+        CGFloat itemWidth = MAX(MAX(imageSize.width, titleSize.width) + kMarginX * 2, kMinMenuItemWidth);
+        
+        if (itemHeight > maxItemHeight)
+            maxItemHeight = itemHeight;
+        
+        if (itemWidth > maxItemWidth)
+            maxItemWidth = itemWidth;
+    }
+    
+    maxItemWidth = MAX(maxItemWidth, kMinMenuItemWidth);
+    maxItemHeight = MAX(maxItemHeight, kMinMenuItemHeight);
+    
+    // 计算总行数和总尺寸
+    NSInteger totalItems = _menuItems.count;
+    NSInteger numRows = (totalItems + _columnsPerRow - 1) / _columnsPerRow;  // 向上取整
+    
+    CGFloat contentWidth = maxItemWidth * _columnsPerRow + kMarginX * 2;
+    CGFloat contentHeight = maxItemHeight * numRows + kMarginY * 2;
+    
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, contentWidth, contentHeight)];
+    contentView.autoresizingMask = UIViewAutoresizingNone;
+    contentView.backgroundColor = [UIColor clearColor];
+    contentView.opaque = NO;
+    
+    // 创建选中背景图
+    UIImage *selectedImage = [KxMenuView selectedImage:(CGSize){maxItemWidth - 4, maxItemHeight - 4}];
+    
+    NSUInteger itemNum = 0;
+    for (KxMenuItem *menuItem in _menuItems) {
+        NSInteger row = itemNum / _columnsPerRow;
+        NSInteger col = itemNum % _columnsPerRow;
+        
+        CGFloat itemX = kMarginX + col * maxItemWidth + 2;
+        CGFloat itemY = kMarginY + row * maxItemHeight + 2;
+        
+        const CGRect itemFrame = CGRectMake(itemX, itemY, maxItemWidth - 4, maxItemHeight - 4);
+        
+        UIView *itemView = [[UIView alloc] initWithFrame:itemFrame];
+        itemView.autoresizingMask = UIViewAutoresizingNone;
+        itemView.backgroundColor = [UIColor clearColor];
+        itemView.opaque = NO;
+        
+        [contentView addSubview:itemView];
+        
+        // 添加按钮
+        if (menuItem.enabled) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.tag = itemNum;
+            button.frame = itemView.bounds;
+            button.enabled = menuItem.enabled;
+            button.backgroundColor = [UIColor clearColor];
+            button.opaque = NO;
+            button.autoresizingMask = UIViewAutoresizingNone;
+            
+            [button addTarget:self
+                       action:@selector(performAction:)
+             forControlEvents:UIControlEventTouchUpInside];
+            
+            [button setBackgroundImage:selectedImage forState:UIControlStateHighlighted];
+            
+            [itemView addSubview:button];
+        }
+        
+        // 计算图标和文字的布局（垂直居中）
+        CGFloat totalHeight = 0;
+        if (menuItem.image) {
+            totalHeight += menuItem.image.size.height;
+        }
+        if (menuItem.title.length) {
+            totalHeight += 2;  // 图标和文字间距
+            const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+            totalHeight += titleSize.height;
+        }
+        
+        CGFloat currentY = (itemView.bounds.size.height - totalHeight) / 2;
+        
+        // 添加图标
+        if (menuItem.image) {
+            const CGSize imageSize = menuItem.image.size;
+            CGFloat imageX = (itemView.bounds.size.width - imageSize.width) / 2;
+            const CGRect imageFrame = CGRectMake(imageX, currentY, imageSize.width, imageSize.height);
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.image = menuItem.image;
+            imageView.clipsToBounds = YES;
+            imageView.contentMode = UIViewContentModeCenter;
+            imageView.autoresizingMask = UIViewAutoresizingNone;
+            [itemView addSubview:imageView];
+            currentY += imageSize.height + 2;
+        }
+        
+        // 添加文字
+        if (menuItem.title.length) {
+            const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+            CGFloat titleX = (itemView.bounds.size.width - titleSize.width) / 2;
+            CGRect titleFrame = CGRectMake(titleX, currentY, titleSize.width, titleSize.height);
+            
+            UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleFrame];
+            titleLabel.text = menuItem.title;
+            titleLabel.font = titleFont;
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor whiteColor];
+            titleLabel.backgroundColor = [UIColor clearColor];
+            titleLabel.autoresizingMask = UIViewAutoresizingNone;
+            [itemView addSubview:titleLabel];
+        }
+        
+        ++itemNum;
+    }
     
     return contentView;
 }
@@ -805,6 +970,14 @@ static UIFont *gTitleFont;
                fromRect:(CGRect)rect
               menuItems:(NSArray *)menuItems
 {
+    [self showMenuInView:view fromRect:rect menuItems:menuItems columnsPerRow:0];
+}
+
+- (void) showMenuInView:(UIView *)view
+               fromRect:(CGRect)rect
+              menuItems:(NSArray *)menuItems
+          columnsPerRow:(NSInteger)columnsPerRow
+{
     NSParameterAssert(view);
     NSParameterAssert(menuItems.count);
     
@@ -826,7 +999,7 @@ static UIFont *gTitleFont;
 
     
     _menuView = [[KxMenuView alloc] init];
-    [_menuView showMenuInView:view fromRect:rect menuItems:menuItems];    
+    [_menuView showMenuInView:view fromRect:rect menuItems:menuItems columnsPerRow:columnsPerRow];    
 }
 
 - (void) dismissMenu
@@ -854,6 +1027,14 @@ static UIFont *gTitleFont;
               menuItems:(NSArray *)menuItems
 {
     [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems];
+}
+
++ (void) showMenuInView:(UIView *)view
+               fromRect:(CGRect)rect
+              menuItems:(NSArray *)menuItems
+          columnsPerRow:(NSInteger)columnsPerRow
+{
+    [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems columnsPerRow:columnsPerRow];
 }
 
 + (void) dismissMenu
