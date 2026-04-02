@@ -3662,6 +3662,87 @@
 
 
 #pragma mark - menu
+
+// 从配置文件读取表情列表（如果没有配置则使用默认）
+- (NSArray<NSString *> *)reactionEmojis {
+    // 先从配置文件中读取
+    NSString *configPath = [[NSBundle mainBundle] pathForResource:@"reaction_config" ofType:@"json"];
+    if (configPath) {
+        NSData *data = [NSData dataWithContentsOfFile:configPath];
+        if (data) {
+            NSError *error;
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (!error && dict[@"reactions"]) {
+                return dict[@"reactions"];
+            }
+        }
+    }
+    // 默认表情列表
+    return @[@"👍", @"👌", @"😂", @"🐶", @"♥️", @"🌹", @"😱", @"🤝", @"😊", @"😁"];
+}
+
+- (void)showReactionPanel:(WFCUMessageCellBase *)baseCell {
+    CGRect menuPos;
+    if ([baseCell isKindOfClass:[WFCUMessageCell class]]) {
+        WFCUMessageCell *msgCell = (WFCUMessageCell *)baseCell;
+        menuPos = msgCell.bubbleView.frame;
+    } else {
+        menuPos = baseCell.frame;
+    }
+    menuPos = [baseCell convertRect:menuPos toView:self.view];
+    
+    NSMutableArray *menuItems = [[NSMutableArray alloc] init];
+    NSArray *emojis = [self reactionEmojis];
+    
+    for (NSString *emoji in emojis) {
+        [menuItems addObject:[KxMenuItem menuItem:emoji
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuReaction:)]];
+    }
+    
+    // 表情面板使用5列显示
+    [KxMenu showMenuInView:self.view
+                  fromRect:menuPos
+                 menuItems:menuItems
+             columnsPerRow:5];
+}
+
+- (void)onMenuReaction:(KxMenuItem *)item {
+    if (!self.cell4Menu) return;
+    
+    NSString *emoji = item.title;
+    long long messageUid = self.cell4Menu.model.message.messageUid;
+    
+    if (messageUid == 0) {
+        [self.view makeToast:@"消息还未同步完成，请稍后重试"];
+        return;
+    }
+    
+    // 调用 AppService 更新表情
+    __weak typeof(self)weakSelf = self;
+    [[WFCUConfigManager globalManager].appServiceProvider updateReaction:messageUid
+                                                                   emoji:emoji
+                                                                 success:^(NSArray<NSDictionary *> *reactions) {
+        // 成功后更新本地消息
+        WFCCMessage *message = weakSelf.cell4Menu.model.message;
+        if ([message.content isKindOfClass:[WFCCTextMessageContent class]]) {
+            WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)message.content;
+            textContent.reactions = reactions;
+            // 更新消息到 IM 服务（本地更新）
+            [[WFCCIMService sharedWFCIMService] updateMessage:message.messageId content:textContent];
+            // 刷新 UI
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.collectionView reloadData];
+            });
+        }
+    } error:^(int errorCode, NSString *message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.view makeToast:[NSString stringWithFormat:@"操作失败，请重试, %d, %@", errorCode, message]];
+        });
+    }];
+}
+
 - (void)displayMenu:(WFCUMessageCellBase *)baseCell {
     // 使用 KxMenu 显示多排网格菜单
     CGRect menuPos;
@@ -3679,6 +3760,14 @@
     self.cell4Menu = baseCell;
     
     NSMutableArray *menuItems = [[NSMutableArray alloc] init];
+    
+    // 文本消息第一个显示表情入口
+    if ([msg.content isKindOfClass:[WFCCTextMessageContent class]]) {
+        [menuItems addObject:[KxMenuItem menuItem:@"👍"
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuShowReactions:)]];
+    }
     
     // 删除
     [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Delete")
@@ -3858,6 +3947,11 @@
 }
 
 // KxMenu 菜单项回调方法
+- (void)onMenuShowReactions:(KxMenuItem *)item {
+    // 显示表情面板
+    [self showReactionPanel:self.cell4Menu];
+}
+
 - (void)onMenuDelete:(KxMenuItem *)item {
     [self performDelete:nil];
 }

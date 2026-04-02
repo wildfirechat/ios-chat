@@ -19,6 +19,9 @@
 #define MARKDOWN_TEXT_LEFT_PADDING 0
 #define MARKDOWN_TEXT_RIGHT_PADDING 0
 
+#define REACTION_VIEW_TOP_PADDING 6
+#define REACTION_VIEW_HEIGHT 20
+
 @interface WFCUMarkdownCell () <WFCUMarkdownLabelDelegate, MFMailComposeViewControllerDelegate>
 @end
 
@@ -43,6 +46,10 @@
     if (dict) {
         float cellWidth = [dict[@"width"] floatValue];
         float cellHeight = [dict[@"height"] floatValue];
+        // 如果有表情反应，增加高度
+        if (txtContent.reactions.count > 0) {
+            cellHeight += REACTION_VIEW_TOP_PADDING + REACTION_VIEW_HEIGHT;
+        }
         return CGSizeMake(cellWidth, cellHeight);
     }
     
@@ -58,6 +65,11 @@
         finalHeight = 20;
     }
     
+    // 如果有表情反应，增加高度
+    if (txtContent.reactions.count > 0) {
+        finalHeight += REACTION_VIEW_TOP_PADDING + REACTION_VIEW_HEIGHT;
+    }
+    
     [[WFCUConfigManager globalManager].cellSizeCache setObject:@{
         @"width": @(finalWidth),
         @"height": @(finalHeight)
@@ -66,18 +78,69 @@
     return CGSizeMake(finalWidth, finalHeight);
 }
 
+- (NSString *)reactionDisplayText:(NSArray<NSDictionary *> *)reactions {
+    NSMutableString *displayText = [NSMutableString string];
+    for (NSDictionary *reaction in reactions) {
+        NSString *emoji = reaction[@"emoji"];
+        NSArray *users = reaction[@"users"];
+        if (emoji.length && users.count > 0) {
+            if (displayText.length > 0) {
+                [displayText appendString:@"  "];
+            }
+            [displayText appendString:emoji];
+            [displayText appendString:@" "];
+            // 获取用户 displayName
+            NSMutableArray *names = [NSMutableArray array];
+            for (NSString *userId in users) {
+                WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
+                NSString *name = userInfo.displayName.length > 0 ? userInfo.displayName : userId;
+                [names addObject:name];
+            }
+            [displayText appendString:[names componentsJoinedByString:@", "]];
+        }
+    }
+    return displayText;
+}
+
 - (void)setModel:(WFCUMessageModel *)model {
     [super setModel:model];
     
     WFCCTextMessageContent *txtContent = (WFCCTextMessageContent *)model.message.content;
     CGRect frame = self.contentArea.bounds;
     
+    // 计算文本区域高度
+    CGFloat textHeight = frame.size.height - MARKDOWN_TEXT_TOP_PADDING - MARKDOWN_TEXT_BOTTOM_PADDING;
+    if (txtContent.reactions.count > 0) {
+        textHeight -= (REACTION_VIEW_TOP_PADDING + REACTION_VIEW_HEIGHT);
+    }
+    
     self.markdownLabel.frame = CGRectMake(0, 
                                            MARKDOWN_TEXT_TOP_PADDING, 
                                            frame.size.width, 
-                                           frame.size.height - MARKDOWN_TEXT_TOP_PADDING - MARKDOWN_TEXT_BOTTOM_PADDING);
+                                           textHeight);
     
     [self.markdownLabel setMarkdownText:txtContent.text font:[WFCUMarkdownCell defaultFont]];
+    
+    // 设置表情显示
+    if (txtContent.reactions.count > 0) {
+        self.reactionLabel.hidden = NO;
+        CGFloat reactionY = textHeight + MARKDOWN_TEXT_BOTTOM_PADDING + REACTION_VIEW_TOP_PADDING;
+        self.reactionLabel.frame = CGRectMake(0, reactionY, frame.size.width, REACTION_VIEW_HEIGHT);
+        self.reactionLabel.text = [self reactionDisplayText:txtContent.reactions];
+    } else {
+        self.reactionLabel.hidden = YES;
+    }
+}
+
+- (UILabel *)reactionLabel {
+    if (!_reactionLabel) {
+        _reactionLabel = [[UILabel alloc] init];
+        _reactionLabel.font = [UIFont systemFontOfSize:12];
+        _reactionLabel.textColor = [UIColor grayColor];
+        _reactionLabel.backgroundColor = [UIColor clearColor];
+        [self.contentArea addSubview:_reactionLabel];
+    }
+    return _reactionLabel;
 }
 
 - (WFCUMarkdownLabel *)markdownLabel {

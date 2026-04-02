@@ -908,4 +908,22 @@ static inline BOOL isHTTPURL(NSString *str) {
     }];
 }
 
+- (void)updateReaction:(long long)messageUid
+                 emoji:(NSString *)emoji
+               success:(void(^)(NSArray<NSDictionary *> *reactions))successBlock
+                 error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/messages/update_reaction";
+    NSDictionary *param = @{@"messageUid": @(messageUid), @"emoji": emoji};
+    [self post:path data:param isLogin:NO success:^(NSDictionary *dict) {
+        if ([dict[@"code"] intValue] == 0) {
+            NSArray *reactions = dict[@"result"][@"reactions"];
+            if (successBlock) successBlock(reactions);
+        } else {
+            if (errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 @end

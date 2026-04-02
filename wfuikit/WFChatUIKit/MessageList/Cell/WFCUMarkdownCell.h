@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WFCUMarkdownCell : WFCUMessageCell
 
 @property (strong, nonatomic) WFCUMarkdownLabel *markdownLabel;
+@property (strong, nonatomic, nullable) UILabel *reactionLabel;
 
 @end
 

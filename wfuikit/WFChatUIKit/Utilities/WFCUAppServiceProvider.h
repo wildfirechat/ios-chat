@@ -69,6 +69,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getFavConferences:(void(^)(NSArray<WFZConferenceInfo *> *))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
+- (void)updateReaction:(long long)messageUid
+                 emoji:(NSString *)emoji
+               success:(void(^)(NSArray<NSDictionary *> *reactions))successBlock
+                 error:(void(^)(int errorCode, NSString *message))errorBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

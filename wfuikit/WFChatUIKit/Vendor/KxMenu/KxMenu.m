@@ -555,6 +555,27 @@ typedef enum {
     return contentView;
 }
 
+// 检查是否是纯表情菜单（所有 item 都是单个 emoji）
+- (BOOL)isEmojiMenu
+{
+    for (KxMenuItem *menuItem in _menuItems) {
+        if (menuItem.title.length == 0 || menuItem.title.length > 2) {
+            return NO;
+        }
+        // 检查是否是 emoji（简单判断：长度1-2且是 emoji 字符）
+        unichar c = [menuItem.title characterAtIndex:0];
+        // 基本 emoji 范围
+        BOOL isEmoji = (c >= 0x2600 && c <= 0x27BF) ||  // 杂项符号和 dingbats
+                       (c >= 0x2B50 && c <= 0x2B55) ||  // 更多符号
+                       (c >= 0x1F300 && c <= 0x1F9FF) || // 各种 emoji
+                       (c >= 0x1F600 && c <= 0x1F64F);   // 表情符号
+        if (!isEmoji) {
+            return NO;
+        }
+    }
+    return _menuItems.count > 0;
+}
+
 // 网格布局内容视图
 - (UIView *) mkGridContentView
 {
@@ -563,8 +584,14 @@ typedef enum {
     const CGFloat kMarginX = 6.f;
     const CGFloat kMarginY = 6.f;
     
+    // 检测是否是纯表情菜单
+    BOOL isEmojiMenu = [self isEmojiMenu];
+    
     UIFont *titleFont = [KxMenu titleFont];
-    if (!titleFont) titleFont = [UIFont systemFontOfSize:14];  // 增大字体大小
+    if (!titleFont) {
+        // 表情菜单使用更大字体
+        titleFont = isEmojiMenu ? [UIFont systemFontOfSize:28] : [UIFont systemFontOfSize:14];
+    }
     
     CGFloat maxImageWidth = 0;
     CGFloat maxItemHeight = 0;

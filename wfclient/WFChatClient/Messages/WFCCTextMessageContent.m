@@ -44,6 +44,29 @@
             }
         }
     }
+    
+    // 表情反应从 content 字段解析（服务端存储在 MessagePayload.content）
+    NSString *jsonString = payload.content;
+    if (jsonString.length) {
+        NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        if (jsonData) {
+            NSError *__error = nil;
+            WFCCDictionary *dictionary = [WFCCDictionary fromData:jsonData error:&__error];
+            if (!__error) {
+                NSArray *reactionsArray = dictionary[@"r"];
+                if (reactionsArray.count) {
+                    NSMutableArray *reactions = [NSMutableArray array];
+                    for (NSDictionary *shortDict in reactionsArray) {
+                        NSMutableDictionary *reaction = [NSMutableDictionary dictionary];
+                        reaction[@"emoji"] = shortDict[@"e"];
+                        reaction[@"users"] = shortDict[@"u"];
+                        [reactions addObject:reaction];
+                    }
+                    self.reactions = reactions;
+                }
+            }
+        }
+    }
 }
 
 + (int)getContentType {

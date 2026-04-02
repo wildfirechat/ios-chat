@@ -41,4 +41,9 @@
  引用信息
  */
 @property (nonatomic, strong)WFCCQuoteInfo *quoteInfo;
+
+/**
+ 表情反应列表，格式: @[@{"emoji": @"👍", "users": @[userId1, userId2]}, ...]
+ */
+@property (nonatomic, strong)NSArray<NSDictionary *> *reactions;
 @end

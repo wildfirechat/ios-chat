@@ -69,6 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 //清除应用服务认证cookies和认证token
 - (void)clearAppServiceAuthInfos;
+
+// 更新消息表情反应
+- (void)updateReaction:(long long)messageUid
+                 emoji:(NSString *)emoji
+               success:(void(^)(NSArray<NSDictionary *> *reactions))successBlock
+                 error:(void(^)(int errorCode, NSString *message))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
