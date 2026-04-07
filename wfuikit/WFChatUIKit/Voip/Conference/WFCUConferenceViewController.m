@@ -55,6 +55,7 @@
 @property (nonatomic, strong) UIButton *informationButton;
 
 @property (nonatomic, strong)WFCUConferenceParticipantCollectionViewCell *smallVideoView;
+@property (nonatomic, assign)BOOL swapVideoView;
 
 @property (nonatomic, strong) UIImageView *portraitView;
 @property (nonatomic, strong) UILabel *userNameLabel;
@@ -1304,8 +1305,9 @@
 }
 
 - (void)onSmallVideoTaped:(id)sender {
-    if (self.currentSession.state == kWFAVEngineStateConnected) {
-//        self.swapVideoView = !_swapVideoView;
+    if (self.currentSession.state == kWFAVEngineStateConnected && self.participants.count == 2) {
+        self.swapVideoView = !_swapVideoView;
+        [self reloadParticipantCollectionView];
     }
 }
 
@@ -1844,6 +1846,7 @@
 
 - (void)didParticipantJoined:(NSString *)userId screenSharing:(BOOL)screenSharing {
     [self updateSpeakerButton];
+    self.swapVideoView = NO;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kConferenceMemberChanged" object:nil];
     
@@ -2445,47 +2448,61 @@
 }
 
 - (void)onItemsEnter:(NSArray<NSIndexPath *> *)enterItems itemsLeave:(NSMutableArray<NSIndexPath *> *)leaveItems {
-    __block BOOL hasMain = NO;
-    [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.row == 0) {
-            hasMain = YES;
-            *stop = YES;
-        }
-    }];
-    
     [enterItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         WFCUConferenceParticipantCollectionViewCell *cell = (WFCUConferenceParticipantCollectionViewCell *)[self.participantCollectionView cellForItemAtIndexPath:indexPath];
         BOOL isMain = (indexPath.row == 0);
+        BOOL isSwap = isMain && self.participants.count == 2 && self.swapVideoView;
         WFAVParticipantProfile *profile = cell.profile;
-
-        if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId] || !profile.userId) {
+        
+        if(isSwap) {
+            WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+            [cell setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
             [self.currentSession setupLocalVideoView:cell.videoCanvs scalingType:self.scalingType];
-        } else {
-            [self.currentSession setupRemoteVideoView:cell.videoCanvs scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
-
-            if(isMain) {
-                [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_BigStream];
-            } else {
-                [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_SmallStream];
+            
+            
+            if(self.smallVideoView.superview != cell) {
+                [self.smallVideoView removeFromSuperview];
             }
-        }
-
-        if(isMain) {
-            if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                self.smallVideoView.hidden = YES;
+            if(!self.smallVideoView.superview) {
+                [cell addSubview:self.smallVideoView];
+            }
+            
+            WFAVParticipantProfile *targetProfile = self.participants.lastObject;
+            WFCCUserInfo *targetUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:targetProfile.userId refresh:NO];
+            [self.smallVideoView setUserInfo:targetUserInfo callProfile:targetProfile];
+            [self.currentSession setupRemoteVideoView:self.smallVideoView.videoCanvs scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
+            self.smallVideoView.hidden = NO;
+            [cell bringSubviewToFront:self.smallVideoView];
+        } else {
+            if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId] || !profile.userId) {
+                [self.currentSession setupLocalVideoView:cell.videoCanvs scalingType:self.scalingType];
             } else {
-                if(self.smallVideoView.superview != cell) {
-                    [self.smallVideoView removeFromSuperview];
+                [self.currentSession setupRemoteVideoView:cell.videoCanvs scalingType:self.scalingType forUser:profile.userId screenSharing:profile.screeSharing];
+                
+                if(isMain) {
+                    [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_BigStream];
+                } else {
+                    [self.currentSession setParticipant:profile.userId screenSharing:profile.screeSharing videoType:WFAVVideoType_SmallStream];
                 }
-                if(!self.smallVideoView.superview) {
-                    [cell addSubview:self.smallVideoView];
+            }
+            
+            if(isMain) {
+                if([profile.userId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+                    self.smallVideoView.hidden = YES;
+                } else {
+                    if(self.smallVideoView.superview != cell) {
+                        [self.smallVideoView removeFromSuperview];
+                    }
+                    if(!self.smallVideoView.superview) {
+                        [cell addSubview:self.smallVideoView];
+                    }
+                    
+                    WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
+                    [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
+                    [self.currentSession setupLocalVideoView:self.smallVideoView.videoCanvs scalingType:self.scalingType];
+                    self.smallVideoView.hidden = NO;
+                    [cell bringSubviewToFront:self.smallVideoView];
                 }
-
-                WFCCUserInfo *myUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-                [self.smallVideoView setUserInfo:myUserInfo callProfile:self.currentSession.myProfile];
-                [self.currentSession setupLocalVideoView:self.smallVideoView.videoCanvs scalingType:self.scalingType];
-                self.smallVideoView.hidden = NO;
-                [cell bringSubviewToFront:self.smallVideoView];
             }
         }
         
