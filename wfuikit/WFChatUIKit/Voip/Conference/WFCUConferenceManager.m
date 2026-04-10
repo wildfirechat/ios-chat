@@ -225,7 +225,8 @@ static WFCUConferenceManager *sharedSingleton = nil;
 }
 
 - (void)checkConferenceEndTime {
-    if (!self.currentConferenceInfo || self.currentConferenceInfo.endTime <= 0) {
+    if (!self.currentConferenceInfo || self.currentConferenceInfo.endTime <= 0 || [WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIdle) {
+        [self stopEndTimeCheckTimer];
         return;
     }
     
