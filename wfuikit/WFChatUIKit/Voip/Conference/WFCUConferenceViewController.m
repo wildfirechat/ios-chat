@@ -96,6 +96,9 @@
 @property(nonatomic, strong)WFCUMoreBoardView *boardView;
 
 @property(nonatomic, strong)WFZConferenceInfo *conferenceInfo;
+
+//会议结束倒计时相关
+@property(nonatomic, assign)BOOL hasNotifiedWillEnd; //是否已经通知过会议将要结束
 @end
 
 #define ButtonSize 60
@@ -340,6 +343,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     self.messages = [[NSMutableArray alloc] init];
+    self.hasNotifiedWillEnd = NO;
     
     WFCUConferenceCollectionViewLayout *layout = [[WFCUConferenceCollectionViewLayout alloc] init];
     self.scalingType = kWFAVVideoScalingTypeAspectFit;
@@ -594,7 +598,7 @@
         _informationButton.imageEdgeInsets = UIEdgeInsetsMake(0, _informationButton.titleLabel.frame.size.width + space, 0,  -_informationButton.titleLabel.frame.size.width - space);
     }
     
-    self.connectTimeLabel.frame = CGRectMake(self.view.bounds.size.width/2 - 60, topPadding + 6 + 18 + 4 , 120, 14);
+    self.connectTimeLabel.frame = CGRectMake(self.view.bounds.size.width/2 - 80, topPadding + 6 + 18 + 4 , 160, 14);
     self.hangupButton.frame = CGRectMake(self.view.bounds.size.width - 8 - CONFERENCE_TOP_BAR_WIDTH, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
     self.speakerButton.frame = CGRectMake(8, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
     self.switchCameraButton.frame = CGRectMake(8+CONFERENCE_TOP_BAR_WIDTH+4, topPadding + 2, CONFERENCE_TOP_BAR_WIDTH, CONFERENCE_BAR_HEIGHT);
@@ -872,6 +876,38 @@
 }
 
 - (void)updateConnectedTimeLabel {
+    //检查会议结束时间
+    if (self.conferenceInfo.endTime > 0) {
+        long long now = (long long)[[NSDate date] timeIntervalSince1970];
+        long long remainingTime = self.conferenceInfo.endTime - now;
+        
+        //如果距离结束还有5分钟（300秒）以内，显示倒计时
+        if (remainingTime <= 300 && remainingTime > 0) {
+            //首次进入5分钟内，显示提示
+            if (!self.hasNotifiedWillEnd) {
+                self.hasNotifiedWillEnd = YES;
+                NSString *toastMessage = [NSString stringWithFormat:@"会议将在%lld分钟后结束，请注意", remainingTime / 60];
+                [self.view makeToast:toastMessage duration:3 position:CSToastPositionCenter];
+            }
+            
+            //计算倒计时显示文本
+            NSString *countdownText;
+            if (remainingTime < 60) {
+                countdownText = [NSString stringWithFormat:@"即将结束(%llds)", remainingTime];
+            } else {
+                long long min = remainingTime / 60;
+                long long sec = remainingTime % 60;
+                countdownText = [NSString stringWithFormat:@"即将结束(%02lld:%02lld)", min, sec];
+            }
+            self.connectTimeLabel.text = countdownText;
+            return;
+        } else if (remainingTime <= 0) {
+            self.connectTimeLabel.text = @"会议已结束";
+            return;
+        }
+    }
+    
+    //正常显示会议时长
     long sec = [[NSDate date] timeIntervalSince1970] - (self.currentSession.connectedTime+500) / 1000;
     if(sec <0) {
         sec = 0;

@@ -27,6 +27,10 @@ NSString *kMuteStateChanged = @"kMuteStateChanged";
 @interface WFCUConferenceManager () <GCDAsyncSocketDelegate, WFAVExternalVideoSource, WFAVCallSessionAudioDataDelegate>
 @property(nonatomic, strong)UIButton *alertViewCheckBtn;
 
+//会议结束时间检查相关
+@property (nonatomic, strong) NSTimer *endTimeCheckTimer;
+@property (nonatomic, assign) BOOL isProcessingEnd; //是否正在处理会议结束
+
 @property (nonatomic, strong)GCDAsyncSocket *socket;
 @property (nonatomic, strong)dispatch_queue_t queue;
 @property (nonatomic, strong)NSMutableArray *sockets;
@@ -55,6 +59,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
                                                          selector:@selector(onAppTerminate)
                                                              name:UIApplicationWillTerminateNotification
                                                            object:nil];
+#if WFCU_SUPPORT_VOIP
+                [[NSNotificationCenter defaultCenter] addObserver:sharedSingleton selector:@selector(onCallStateChanged:) name:kCallStateUpdated object:nil];
+#endif
             }
         }
     }
@@ -192,8 +199,60 @@ static WFCUConferenceManager *sharedSingleton = nil;
 - (void)setCurrentConferenceInfo:(WFZConferenceInfo *)currentConferenceInfo {
     if(![_currentConferenceInfo.conferenceId isEqualToString:currentConferenceInfo.conferenceId]) {
         [self resetCommandState];
+        [self startEndTimeCheckTimer];
     }
     _currentConferenceInfo = currentConferenceInfo;
+}
+
+#pragma mark - 会议结束时间检查
+- (void)startEndTimeCheckTimer {
+    [self stopEndTimeCheckTimer];
+    self.isProcessingEnd = NO;
+    
+    //每秒检查一次会议结束时间
+    self.endTimeCheckTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                                target:self
+                                                              selector:@selector(checkConferenceEndTime)
+                                                              userInfo:nil
+                                                               repeats:YES];
+}
+
+- (void)stopEndTimeCheckTimer {
+    if (self.endTimeCheckTimer) {
+        [self.endTimeCheckTimer invalidate];
+        self.endTimeCheckTimer = nil;
+    }
+}
+
+- (void)checkConferenceEndTime {
+    if (!self.currentConferenceInfo || self.currentConferenceInfo.endTime <= 0) {
+        return;
+    }
+    
+    long long now = (long long)[[NSDate date] timeIntervalSince1970];
+    long long remainingTime = self.currentConferenceInfo.endTime - now;
+    
+    //如果会议已经结束
+    if (remainingTime <= 0) {
+        [self handleConferenceEnded];
+        return;
+    }
+}
+
+- (void)handleConferenceEnded {
+    if (self.isProcessingEnd) {
+        return;
+    }
+    self.isProcessingEnd = YES;
+    
+    [self stopEndTimeCheckTimer];
+    
+    //如果是owner，销毁会议；否则离开会议
+    if (self.isOwner) {
+        [self leaveConference:YES];
+    } else {
+        [self leaveConference:NO];
+    }
 }
 
 - (void)leaveConference:(BOOL)destroy {
@@ -480,7 +539,16 @@ static WFCUConferenceManager *sharedSingleton = nil;
         NSLog(@"is broadcating...");
         [self cancelBroadcast];
     }
+    [self stopEndTimeCheckTimer];
 }
+
+#if WFCU_SUPPORT_VOIP
+- (void)onCallStateChanged:(NSNotification *)notification {
+    if ([[notification.userInfo objectForKey:@"state"] intValue] == kWFAVEngineStateIdle) {
+        [self stopEndTimeCheckTimer];
+    }
+}
+#endif
 
 - (void)resetCommandState {
     [self.applyingUnmuteAudioMembers removeAllObjects];
@@ -491,6 +559,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     self.isHandup = NO;
     self.isMuteAllAudio = NO;
     self.isMuteAllVideo = NO;
+    [self stopEndTimeCheckTimer];
 }
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
