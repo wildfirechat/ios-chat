@@ -134,8 +134,10 @@
             }];
         }
     } error:^(int errorCode, NSString * _Nonnull message) {
-        NSLog(@"error");
-        [ws stopProgress:hud finishText:@"网络错误，请稍后重试！"];
+        NSLog(@"create conference error: %d, %@", errorCode, message);
+        NSString *errorMsg = message.length ? message : @"网络错误，请稍后重试！";
+        [ws stopProgress:hud finishText:errorMsg];
+        ws.joinBtn.enabled = YES;
     }];
 }
 

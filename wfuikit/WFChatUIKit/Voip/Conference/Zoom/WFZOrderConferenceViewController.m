@@ -125,7 +125,10 @@
         [ws stopProgress:hud finishText:@"创建成功"];
         [ws.navigationController dismissViewControllerAnimated:YES completion:nil];
     } error:^(int errorCode, NSString * _Nonnull message) {
-        [ws stopProgress:hud finishText:@"网络错误"];
+        NSLog(@"create conference error: %d, %@", errorCode, message);
+        NSString *errorMsg = message.length ? message : @"网络错误";
+        [ws stopProgress:hud finishText:errorMsg];
+        btn.enabled = YES;
     }];
 }
 

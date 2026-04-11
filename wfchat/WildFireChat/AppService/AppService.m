@@ -640,6 +640,20 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (void)getConferenceQuota:(void(^)(WFZConferenceQuota *quota))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    [self post:@"/conference/quota" data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if(code == 0) {
+            WFZConferenceQuota *quota = [WFZConferenceQuota fromDictionary:dict[@"result"]];
+            successBlock(quota);
+        } else {
+            errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
     [self post:@"/change_name" data:@{@"newName":newName} isLogin:NO success:^(NSDictionary *dict) {
         if([dict[@"code"] intValue] == 0) {

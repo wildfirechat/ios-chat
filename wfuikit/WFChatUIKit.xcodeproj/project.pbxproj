@@ -532,6 +532,8 @@
 		B764D7002F0B965300C595E3 /* WFCURecentImagesFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = B764D6FC2F0B965300C595E3 /* WFCURecentImagesFloatView.h */; };
 		B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B767584928CC1AF200835A6A /* WFZConferenceInfo.m */; };
 		B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8D206C9FA9C447D6B130DB8A2C82F22B /* WFZConferenceQuota.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D206C9FA9C447D6B130DB8A2C82F22C /* WFZConferenceQuota.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E55F7318C7184DF09705ECCCAAE8B391 /* WFZConferenceQuota.m in Sources */ = {isa = PBXBuildFile; fileRef = E55F7318C7184DF09705ECCCAAE8B392 /* WFZConferenceQuota.m */; };
 		B770E8C22F40C57A00D4B219 /* WFCUPollMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */; };
 		B770E8C32F40C57A00D4B219 /* WFCUPollResultMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */; };
 		B770E8C42F40C57A00D4B219 /* WFCUPollMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */; };
@@ -1222,6 +1224,8 @@
 		B764D6FD2F0B965300C595E3 /* WFCURecentImagesFloatView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCURecentImagesFloatView.m; sourceTree = "<group>"; };
 		B767584928CC1AF200835A6A /* WFZConferenceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceInfo.m; sourceTree = "<group>"; };
 		B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceInfo.h; sourceTree = "<group>"; };
+		8D206C9FA9C447D6B130DB8A2C82F22C /* WFZConferenceQuota.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFZConferenceQuota.h; sourceTree = "<group>"; };
+		E55F7318C7184DF09705ECCCAAE8B392 /* WFZConferenceQuota.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFZConferenceQuota.m; sourceTree = "<group>"; };
 		B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollMessageCell.h; sourceTree = "<group>"; };
 		B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPollMessageCell.m; sourceTree = "<group>"; };
 		B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPollResultMessageCell.h; sourceTree = "<group>"; };
@@ -2384,6 +2388,8 @@
 				2FB7125825DA042900FD2E83 /* WFCUConferenceMember.m */,
 				B767584A28CC1AF200835A6A /* WFZConferenceInfo.h */,
 				B767584928CC1AF200835A6A /* WFZConferenceInfo.m */,
+				8D206C9FA9C447D6B130DB8A2C82F22C /* WFZConferenceQuota.h */,
+				E55F7318C7184DF09705ECCCAAE8B392 /* WFZConferenceQuota.m */,
 				B733DFF128D4071F0094AD74 /* WFCUConferenceHistory.h */,
 				B733DFF228D4071F0094AD74 /* WFCUConferenceHistory.m */,
 			);
@@ -2963,6 +2969,7 @@
 				2F5511F7217F5CC300F56C26 /* BubbleTipView.h in Headers */,
 				2F63891B254E3FE30084EEA6 /* WFCUFavoriteItem.h in Headers */,
 				B767584C28CC1AF200835A6A /* WFZConferenceInfo.h in Headers */,
+				8D206C9FA9C447D6B130DB8A2C82F22B /* WFZConferenceQuota.h in Headers */,
 				B7311DEC28EACC1A009E88B5 /* WFCUConferenceUnmuteRequestTableViewController.h in Headers */,
 				2F551159217F5CC200F56C26 /* KZVideoViewController.h in Headers */,
 				1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */,
@@ -3585,6 +3592,7 @@
 				B74CF822295D298F009AFA88 /* WFCUOrganizationEx.m in Sources */,
 				B72FBB14283230F0005F2745 /* DWKWebView.m in Sources */,
 				B767584B28CC1AF200835A6A /* WFZConferenceInfo.m in Sources */,
+				E55F7318C7184DF09705ECCCAAE8B391 /* WFZConferenceQuota.m in Sources */,
 				2F3A6C18219EE941009A8B4B /* WFCUFaceBoard.m in Sources */,
 				2F765FAA267C28B600E3B365 /* HWCircleView.m in Sources */,
 				9029D0FF21C5D7930002EBAA /* WFCUCreateChannelViewController.m in Sources */,

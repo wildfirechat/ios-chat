@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class WFCCPCOnlineInfo;
 @class WFZConferenceInfo;
+@class WFZConferenceQuota;
 @protocol WFCUAppServiceProvider <NSObject>
 - (void)getGroupAnnouncement:(NSString *)groupId
                      success:(void(^)(WFCUGroupAnnouncement *))successBlock
@@ -68,6 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)isFavConference:(NSString *)conferenceId success:(void(^)(BOOL isFav))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 - (void)getFavConferences:(void(^)(NSArray<WFZConferenceInfo *> *))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+- (void)getConferenceQuota:(void(^)(WFZConferenceQuota *quota))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 @end
 
