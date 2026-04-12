@@ -341,7 +341,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor blackColor]];
+    [self.view setBackgroundColor:[UIColor colorWithRed:0.25 green:0.25 blue:0.25 alpha:1]];
     self.messages = [[NSMutableArray alloc] init];
     self.hasNotifiedWillEnd = NO;
     
@@ -623,12 +623,14 @@
         
         _connectTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _connectTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _connectTimeLabel.font = [UIFont systemFontOfSize:14];
-        _connectTimeLabel.textColor = [UIColor whiteColor];
+        _connectTimeLabel.font = [UIFont systemFontOfSize:12];
+        _connectTimeLabel.textColor = [UIColor lightGrayColor];
         [_topBarView addSubview:_connectTimeLabel];
         
         _hangupButton = [[UIButton alloc] initWithFrame:CGRectZero];
-        [_hangupButton setImage:[WFCUImage imageNamed:@"conference_end_call"] forState:UIControlStateNormal];
+//        [_hangupButton setImage:[WFCUImage imageNamed:@"conference_end_call"] forState:UIControlStateNormal];
+        [_hangupButton setTitle:@"结束" forState:UIControlStateNormal];
+        [_hangupButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _hangupButton.backgroundColor = [UIColor clearColor];
         [_hangupButton addTarget:self action:@selector(hanupButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         [_topBarView addSubview:_hangupButton];
@@ -1586,7 +1588,9 @@
     if (self.bottomBarView.hidden) {
         [self showPanel];
     } else {
-        [self hidePanel];
+        if(![self isAudioOnly]) {
+            [self hidePanel];
+        }
     }
     
     [self.boardView dismiss];
@@ -1644,6 +1648,10 @@
 }
 
 - (void)hidePanel {
+    if([self isAudioOnly]) {
+        return;
+    }
+    
     if(self.boardView.hidden && self.topBarView.hidden) {
         return;
     }
@@ -1778,7 +1786,7 @@
             self.managerButton.hidden = YES;
             self.screenSharingButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.stateLabel.text = WFCString(@"WaitingAccept");
+            self.stateLabel.text = WFCString(@"CallConnecting");
             self.participantCollectionView.hidden = YES;
             self.userNameLabel.hidden = YES;
             self.portraitView.hidden = YES;
@@ -1840,7 +1848,7 @@
             self.topBarView.hidden = YES;
             self.audioButton.hidden = YES;
             self.videoButton.hidden = YES;
-            self.stateLabel.text = WFCString(@"InvitingYou");
+            self.stateLabel.text = WFCString(@"CallConnecting");
             self.participantCollectionView.hidden = YES;
             break;
         default:

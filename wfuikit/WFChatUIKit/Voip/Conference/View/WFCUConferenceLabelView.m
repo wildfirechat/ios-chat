@@ -65,7 +65,7 @@
 
 - (UIImageView *)audioView {
     if (!_audioView) {
-        _audioView = [[UIImageView alloc] initWithFrame:CGRectMake(4, 4, 20, 20)];
+        _audioView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 6, 16, 16)];
         [self addSubview:_audioView];
     }
     return _audioView;
@@ -75,7 +75,7 @@
     if(!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(28, 4, 48, 20)];
         _nameLabel.font = [UIFont systemFontOfSize:14];
-        _nameLabel.textColor = [UIColor grayColor];
+        _nameLabel.textColor = [UIColor whiteColor];
         [self addSubview:_nameLabel];
     }
     return _nameLabel;

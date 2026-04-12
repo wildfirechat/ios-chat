@@ -330,7 +330,9 @@
                 timeCell.detailTextLabel.text = WFCString(@"Now");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.conferenceInfo.startTime];
-                timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"MM月dd日 HH:mm"];
+                timeCell.detailTextLabel.text = [formatter stringFromDate:date];
             }
         } else {
             timeCell.textLabel.text = WFCString(@"EndTime");
@@ -338,7 +340,9 @@
                 timeCell.detailTextLabel.text = WFCString(@"NoLimit");
             } else {
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.conferenceInfo.endTime];
-                timeCell.detailTextLabel.text = [date descriptionWithLocale:[NSLocale systemLocale]];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"MM月dd日 HH:mm"];
+                timeCell.detailTextLabel.text = [formatter stringFromDate:date];
             }
         }
         
