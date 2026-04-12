@@ -1805,6 +1805,11 @@
             self.stateLabel.hidden = YES;
             self.managerButton.hidden = NO;
             self.screenSharingButton.hidden = NO;
+            if(![self.currentSession isBluetoothSpeaker] && ![self.currentSession isHeadsetPluggedIn]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.currentSession enableSpeaker:YES];
+                });
+            }
             if (self.currentSession.isAudioOnly) {
                 self.audioButton.hidden = NO;
                 self.videoButton.hidden = YES;
