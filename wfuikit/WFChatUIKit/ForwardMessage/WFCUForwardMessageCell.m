@@ -88,7 +88,7 @@
 
 - (UIImageView *)portrait {
     if (!_portrait) {
-        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(40, 8, 40, 40)];
+        _portrait = [[UIImageView alloc] initWithFrame:CGRectMake(self.checkable?40:8, 8, 40, 40)];
         [self.contentView addSubview:_portrait];
     }
     return _portrait;
@@ -96,7 +96,7 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(88, 16, [UIScreen mainScreen].bounds.size.width - 96, 24)];
+        _name = [[UILabel alloc] initWithFrame:CGRectMake(self.checkable?88:56, 16, [UIScreen mainScreen].bounds.size.width - (self.checkable?96:64), 24)];
         [self.contentView addSubview:_name];
     }
     return _name;

@@ -253,6 +253,7 @@
             WFCUForwardMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSECONVIDENTIFY];
             if(!cell) {
                 cell = [[WFCUForwardMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:REUSECONVIDENTIFY];
+                cell.checkable = YES;
             }
             WFCCConversationInfo *info = [self.conversations objectAtIndex:indexPath.row];
             cell.conversation = info.conversation;

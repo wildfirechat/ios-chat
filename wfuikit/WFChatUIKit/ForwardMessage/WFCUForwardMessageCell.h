@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) WFCCConversation *conversation;
 @property (nonatomic, assign) BOOL isChecked;
 @property (nonatomic, strong) UIImageView *checkboxView;
+@property (nonatomic, assign) BOOL checkable;
 @end
 
 NS_ASSUME_NONNULL_END

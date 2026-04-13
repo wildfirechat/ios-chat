@@ -659,13 +659,13 @@
 
     int index = 0;
     CGFloat btnWidth = self.view.bounds.size.width/(self.currentSession.isAudioOnly ? 4 : 5);
-    self.audioButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
-    self.videoButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.audioButton.frame = CGRectMake(btnWidth * index++, 4, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.videoButton.frame = CGRectMake(btnWidth * index++, 4, btnWidth, CONFERENCE_BAR_HEIGHT);
     if(!self.currentSession.isAudioOnly) {
-        self.screenSharingButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+        self.screenSharingButton.frame = CGRectMake(btnWidth * index++, 4, btnWidth, CONFERENCE_BAR_HEIGHT);
     }
-    self.managerButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
-    self.moreButton.frame = CGRectMake(btnWidth * index++, 0, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.managerButton.frame = CGRectMake(btnWidth * index++, 4, btnWidth, CONFERENCE_BAR_HEIGHT);
+    self.moreButton.frame = CGRectMake(btnWidth * index++, 4, btnWidth, CONFERENCE_BAR_HEIGHT);
 }
 
 - (UIView *)bottomBarView {

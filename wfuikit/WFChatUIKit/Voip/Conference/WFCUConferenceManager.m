@@ -29,6 +29,7 @@ NSString *kMuteStateChanged = @"kMuteStateChanged";
 
 //会议结束时间检查相关
 @property (nonatomic, strong) NSTimer *endTimeCheckTimer;
+@property (nonatomic, strong) NSTimer *keepChatroomAliveTimer;
 @property (nonatomic, assign) BOOL isProcessingEnd; //是否正在处理会议结束
 
 @property (nonatomic, strong)GCDAsyncSocket *socket;
@@ -172,8 +173,9 @@ static WFCUConferenceManager *sharedSingleton = nil;
 - (void)startScreansharing:(UIView *)view withAudio:(BOOL)withAudio {
     if(![self isBroadcasting]) {
         [self broadcast:view withAudio:withAudio];
-        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
-        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
+        //发起屏幕共享时，不改变mute的各种状态
+//        [[WFAVEngineKit sharedEngineKit].currentSession muteAudio:NO];
+//        [[WFAVEngineKit sharedEngineKit].currentSession muteVideo:YES];
         if([WFAVEngineKit sharedEngineKit].currentSession.isAudience) {
             [[WFAVEngineKit sharedEngineKit].currentSession switchAudience:NO];
         }
@@ -240,6 +242,34 @@ static WFCUConferenceManager *sharedSingleton = nil;
     }
 }
 
+
+- (void)startKeepChatroomAliveTimer {
+    [self stopKeepChatroomAliveTimer];
+    
+    //每秒检查一次会议结束时间
+    self.keepChatroomAliveTimer = [NSTimer scheduledTimerWithTimeInterval:180
+                                                                target:self
+                                                              selector:@selector(keepAliveChatroom)
+                                                              userInfo:nil
+                                                               repeats:YES];
+}
+
+- (void)stopKeepChatroomAliveTimer {
+    if (self.keepChatroomAliveTimer) {
+        [self.keepChatroomAliveTimer invalidate];
+        self.keepChatroomAliveTimer = nil;
+    }
+}
+
+- (void)keepAliveChatroom {
+    if (!self.currentConferenceInfo || self.currentConferenceInfo.endTime <= 0 || [WFAVEngineKit sharedEngineKit].currentSession.state == kWFAVEngineStateIdle) {
+        [self stopKeepChatroomAliveTimer];
+        [[WFCCIMService sharedWFCIMService] quitChatroom:self.currentConferenceInfo.conferenceId success:nil error:nil];
+        return;
+    }
+    [[WFCCIMService sharedWFCIMService] joinChatroom:self.currentConferenceInfo.conferenceId success:nil error:nil];
+}
+
 - (void)handleConferenceEnded {
     if (self.isProcessingEnd) {
         return;
@@ -247,6 +277,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     self.isProcessingEnd = YES;
     
     [self stopEndTimeCheckTimer];
+    [self stopKeepChatroomAliveTimer];
     
     //如果是owner，销毁会议；否则离开会议
     if (self.isOwner) {
@@ -541,12 +572,16 @@ static WFCUConferenceManager *sharedSingleton = nil;
         [self cancelBroadcast];
     }
     [self stopEndTimeCheckTimer];
+    [self stopKeepChatroomAliveTimer];
+    [[WFCCIMService sharedWFCIMService] quitChatroom:self.currentConferenceInfo.conferenceId success:nil error:nil];
 }
 
 #if WFCU_SUPPORT_VOIP
 - (void)onCallStateChanged:(NSNotification *)notification {
     if ([[notification.userInfo objectForKey:@"state"] intValue] == kWFAVEngineStateIdle) {
         [self stopEndTimeCheckTimer];
+        [self stopKeepChatroomAliveTimer];
+        [[WFCCIMService sharedWFCIMService] quitChatroom:self.currentConferenceInfo.conferenceId success:nil error:nil];
     }
 }
 #endif
@@ -561,6 +596,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     self.isMuteAllAudio = NO;
     self.isMuteAllVideo = NO;
     [self stopEndTimeCheckTimer];
+    [self stopKeepChatroomAliveTimer];
 }
 
 - (void)request:(NSString *)userId changeModel:(BOOL)isAudience inConference:(NSString *)conferenceId {
@@ -634,6 +670,7 @@ static WFCUConferenceManager *sharedSingleton = nil;
     [[WFCCIMService sharedWFCIMService] joinChatroom:self.currentConferenceInfo.conferenceId success:nil error:^(int error_code) {
         ws.failureJoinChatroom = YES;
     }];
+    [self startKeepChatroomAliveTimer];
 }
 
 - (BOOL)isOwner {
