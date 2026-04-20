@@ -20,6 +20,7 @@
 #import "UIFont+YH.h"
 #import "SSKeychain.h"
 #import "WFCSlideVerifyView.h"
+#import "WFCConfig.h"
 
 @interface WFCDestroyAccountViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
@@ -117,6 +118,18 @@
 }
 
 - (void)onSendCode:(id)sender {
+    if (!ENABLE_SLIDE_VERIFY) {
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendDestroyAccountCode:nil success:^{
+           [ws sendCodeDone:YES];
+        } error:^(int errorCode, NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+        }];
+        return;
+    }
+
     // 显示滑动验证
     [self showSlideVerifyWithAction:^{
         self.sendCodeBtn.enabled = NO;

@@ -12,6 +12,7 @@
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "WFCSlideVerifyView.h"
+#import "WFCConfig.h"
 
 @interface WFCResetPasswordViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property(nonatomic, strong)UILabel *codeLabel;
@@ -120,6 +121,18 @@
 }
 
 - (void)onSendCode:(id)sender {
+    if (!ENABLE_SLIDE_VERIFY) {
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendResetCode:nil slideVerifyToken:nil success:^{
+           [ws sendCodeDone:YES];
+        } error:^(NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+        }];
+        return;
+    }
+
     // 显示滑动验证
     [self showSlideVerifyWithAction:^{
         self.sendCodeBtn.enabled = NO;

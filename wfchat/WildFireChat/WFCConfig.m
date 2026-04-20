@@ -72,4 +72,8 @@ NSString *Send_Log_Command = @"*#marslog#";
 //是否开启水印
 BOOL ENABLE_WATER_MARKER = YES;
 
+//是否开启滑动验证。如果关闭，需要在应用服务同步关闭。
+BOOL ENABLE_SLIDE_VERIFY = YES;
+
+//AI机器人ID，可以在单聊或者群里@ 
 NSString *AI_ROBOT = @"FireRobot";

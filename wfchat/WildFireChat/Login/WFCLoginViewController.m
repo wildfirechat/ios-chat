@@ -298,6 +298,22 @@
         return;
     }
 
+    if (!ENABLE_SLIDE_VERIFY) {
+        self.sendCodeBtn.enabled = NO;
+        [self.sendCodeBtn setTitle:LocalizedString(@"SMSSending") forState:UIControlStateNormal];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] sendLoginCode:self.userNameField.text slideVerifyToken:nil success:^{
+           [ws sendCodeDone:YES];
+           // 标记已通过滑动验证
+           ws.hasSlideVerifiedForCode = YES;
+        } error:^(NSString * _Nonnull message) {
+            [ws sendCodeDone:NO];
+            // 发送失败，重置验证标志
+            ws.hasSlideVerifiedForCode = NO;
+        }];
+        return;
+    }
+
     // 显示滑动验证
     [self showSlideVerifyWithAction:^{
         self.sendCodeBtn.enabled = NO;
@@ -377,6 +393,11 @@
     }
 
     [self resetKeyboard:nil];
+
+    if (!ENABLE_SLIDE_VERIFY) {
+        [self performLogin];
+        return;
+    }
 
     // 验证码登录且已通过滑动验证，直接执行登录
     if (!self.isPwdLogin && self.hasSlideVerifiedForCode) {

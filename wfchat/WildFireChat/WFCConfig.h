@@ -47,6 +47,9 @@ extern NSString *Send_Log_Command;
 //是否开启水印
 extern BOOL ENABLE_WATER_MARKER;
 
-//AI机器人ID
+//是否开启滑动验证。如果关闭，需要在应用服务同步关闭。
+extern BOOL ENABLE_SLIDE_VERIFY;
+
+//AI机器人ID，可以在单聊或者群里@ 
 extern NSString *AI_ROBOT;
 #endif /* Config_h */

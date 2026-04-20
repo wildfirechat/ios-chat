@@ -10,6 +10,7 @@
 #import "AppService.h"
 #import "MBProgressHUD.h"
 #import "WFCSlideVerifyView.h"
+#import "WFCConfig.h"
 
 @interface WFCChangePasswordViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property(nonatomic, strong)UILabel *oldLabel;
@@ -103,6 +104,30 @@
 - (void)onRightBtn:(id)sender {
     NSString *password = self.passwordfield.text;
     NSString *old = self.oldPasswordfield.text;
+
+    if (!ENABLE_SLIDE_VERIFY) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = LocalizedString(@"Saving");
+        [hud showAnimated:YES];
+        __weak typeof(self)ws = self;
+        [[AppService sharedAppService] changePassword:old newPassword:password slideVerifyToken:nil success:^{
+            NSLog(@"change success");
+            [hud hideAnimated:YES];
+            [ws.navigationController popViewControllerAnimated:YES];
+        } error:^(int errCode, NSString * _Nonnull message) {
+            NSLog(@"change failure");
+            [hud hideAnimated:YES];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.label.text = LocalizedString(@"SaveFailed");
+            hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+            [hud hideAnimated:YES afterDelay:1.f];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [ws.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+        return;
+    }
 
     // 显示滑动验证
     [self showSlideVerifyWithAction:^{
