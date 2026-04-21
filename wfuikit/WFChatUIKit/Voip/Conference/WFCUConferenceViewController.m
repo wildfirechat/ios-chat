@@ -1965,7 +1965,7 @@
 }
 
 - (void)didParticipantConnected:(NSString *)userId screenSharing:(BOOL)screenSharing {
-
+    [self reloadParticipantCollectionView];
 }
 
 - (void)didParticipantLeft:(NSString *)userId screenSharing:(BOOL)screenSharing withReason:(WFAVCallEndReason)reason {

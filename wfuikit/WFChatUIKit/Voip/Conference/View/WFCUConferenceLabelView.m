@@ -54,18 +54,18 @@
 - (void)setName:(NSString *)name {
     _name = name;
     self.nameLabel.text = name;
-    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(1000, 20)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(60, 20)];
     CGRect frame = self.nameLabel.frame;
     frame.size.width = size.width;
     self.nameLabel.frame = frame;
     frame = self.frame;
-    frame.size.width = 28 + size.width + 4;
+    frame.size.width = 30 + size.width + 4;
     self.frame = frame;
 }
 
 - (UIImageView *)audioView {
     if (!_audioView) {
-        _audioView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 6, 16, 16)];
+        _audioView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 6, 16, 16)];
         [self addSubview:_audioView];
     }
     return _audioView;
@@ -73,7 +73,7 @@
 
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(28, 4, 48, 20)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 4, 48, 20)];
         _nameLabel.font = [UIFont systemFontOfSize:14];
         _nameLabel.textColor = [UIColor whiteColor];
         [self addSubview:_nameLabel];
@@ -83,4 +83,5 @@
 + (CGSize)sizeOffView {
     return CGSizeMake(100, 28);
 }
+
 @end

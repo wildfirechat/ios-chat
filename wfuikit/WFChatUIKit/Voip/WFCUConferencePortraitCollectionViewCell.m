@@ -25,8 +25,8 @@
     self.layer.borderWidth = 1.f;
     self.layer.borderColor = [UIColor clearColor].CGColor;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    self.nameLabel.text = userInfo.displayName;
-    self.conferenceLabelView.name = userInfo.displayName;
+    self.nameLabel.text = userInfo.readableName;
+    self.conferenceLabelView.name = userInfo.readableName;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];

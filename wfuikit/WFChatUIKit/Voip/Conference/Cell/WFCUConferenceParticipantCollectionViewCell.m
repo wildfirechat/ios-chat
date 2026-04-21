@@ -52,7 +52,7 @@
 
     self.layer.borderColor = [UIColor clearColor].CGColor;
     self.portraitView.layer.borderColor = [UIColor clearColor].CGColor;
-    self.conferenceLabelView.name = userInfo.displayName;
+    self.conferenceLabelView.name = userInfo.readableName;
     
     BOOL isVideoMuted = YES;
     BOOL isAudioMuted = YES;
