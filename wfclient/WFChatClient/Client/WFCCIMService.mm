@@ -1306,7 +1306,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
         
         __weak typeof(self)ws = self;
         NSString *fileContentTypeString = [self mimeTypeOfFile:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()]];
-        [self getUploadUrl:@"" mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
+        [self getUploadUrl:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()].lastPathComponent mediaType:(WFCCMediaType)tmsg.content.mediaType contentType:fileContentTypeString success:^(NSString *uploadUrl, NSString *downloadUrl, NSString *backupUploadUrl, int type) {
             NSString *url = ([WFCCNetworkService sharedInstance].connectedToMainNetwork || !backupUploadUrl.length)?uploadUrl:backupUploadUrl;
             if(type == 1) {
                 [ws uploadQiniu:url messageId:msgId file:[NSString stringWithUTF8String:tmsg.content.localMediaPath.c_str()] remoteUrl:downloadUrl fileSize:fileSize expireDuration:expireDuration callback:callback];
