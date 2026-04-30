@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DIALINC5414A5FCF1342DB8AC4 /* WFCUDialPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */; };
+
 		149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3105241D292C00B935D3 /* UIColor+YH.m */; };
 		149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3109241E300C00B935D3 /* UIFont+YH.m */; };
 		149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B311D242247E900B935D3 /* UIImage+ERCategory.m */; };
@@ -236,6 +238,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUDialPadViewController.h; sourceTree = "<group>"; };
+		DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUDialPadViewController.m; sourceTree = "<group>"; };
+
 		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
 		149B3106241D292C00B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
 		149B3108241E300C00B935D3 /* UIFont+YH.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+YH.h"; sourceTree = "<group>"; };
@@ -703,6 +708,8 @@
 				B78DD43728167D1E009589F7 /* WFCCallKitManager.m */,
 				2F44485A252D522F007A570E /* WFCConfig.h */,
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
+				DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */,
+				DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */,
 				B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */,
 				B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
@@ -1426,6 +1433,7 @@
 				B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */,
 				2FF07F5D21F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m in Sources */,
 				2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */,
+				DIALINC5414A5FCF1342DB8AC4 /* WFCUDialPadViewController.m in Sources */,
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
 				B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,

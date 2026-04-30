@@ -2212,7 +2212,7 @@
                 break;
             }
             
-            if(([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] || [message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) && [model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            if(([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]] || [message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]] || [message.content isKindOfClass:[WFCCStreamingTextCanceledMessageContent class]]) && [model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
                 WFCCStreamingTextGeneratingMessageContent *existStreamingTextContent = (WFCCStreamingTextGeneratingMessageContent *)model.message.content;
                 
                 if([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
@@ -2222,10 +2222,17 @@
                         duplcated = YES;
                         break;
                     }
-                } else {
+                } else if([message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
                     WFCCStreamingTextGeneratedMessageContent *streamingTextContent = (WFCCStreamingTextGeneratedMessageContent *)message.content;
                     if([existStreamingTextContent.streamId isEqualToString:streamingTextContent.streamId]) {
                         model.message.content = message.content;
+                        duplcated = YES;
+                        break;
+                    }
+                } else if([message.content isKindOfClass:[WFCCStreamingTextCanceledMessageContent class]]) {
+                    WFCCStreamingTextCanceledMessageContent *streamingTextContent = (WFCCStreamingTextCanceledMessageContent *)message.content;
+                    if([existStreamingTextContent.streamId isEqualToString:streamingTextContent.streamId]) {
+                        [self.modelList removeObject:model];
                         duplcated = YES;
                         break;
                     }

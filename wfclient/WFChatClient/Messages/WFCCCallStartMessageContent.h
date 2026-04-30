@@ -49,6 +49,17 @@ WFAVCallEndReason
  */
 @property (nonatomic, assign)int type;
 
+
+/*
+ 0 voip对voip电话；1 voip打PSTN电话；2 PSTN打voip电话。
+ */
+@property (nonatomic, assign)int pstnType;
+
+/*
+ 当pstnType为1或者2时，PSTN电话号码.
+ */
+@property (nonatomic, strong)NSString *pstnNumber;
+
 /*
  * 是否仅音频
  */

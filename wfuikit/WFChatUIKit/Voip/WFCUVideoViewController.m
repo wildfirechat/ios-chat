@@ -88,6 +88,11 @@
     self = [super init];
     return self;
 }
+
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly pstnType:(int)pstnType pstnNumber:(NSString *)pstnNumber {
+    self = [super init];
+    return self;
+}
 #else
 - (instancetype)initWithSession:(WFAVCallSession *)session {
     self = [super init];
@@ -106,6 +111,21 @@
                                                                     audioOnly:audioOnly
                                                                     callExtra:nil
                                                                  conversation:conversation
+                                                              sessionDelegate:self];
+        self.currentSession = session;
+    }
+    return self;
+}
+
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly pstnType:(int)pstnType pstnNumber:(NSString *)pstnNumber {
+    self = [super init];
+    if (self) {
+        WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
+                                                                    audioOnly:audioOnly
+                                                                    callExtra:nil
+                                                                 conversation:conversation
+                                                                     pstnType:pstnType
+                                                                   pstnNumber:pstnNumber
                                                               sessionDelegate:self];
         self.currentSession = session;
     }

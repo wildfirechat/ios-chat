@@ -33,6 +33,12 @@
     if(self.type > 0) {
         [dataDict setObject:@(self.type) forKey:@"ty"];
     }
+    
+    if(self.pstnType > 0) {
+        [dataDict setObject:@(self.pstnType) forKey:@"pstnty"];
+        [dataDict setObject:self.pstnNumber forKey:@"pstnn"];
+    }
+    
     if(self.targetIds.count) {
         [dataDict setObject:self.targetIds forKey:@"ts"];
         //多人音视频与单人音视频兼容
@@ -66,6 +72,8 @@
         self.endTime = dictionary[@"e"] ? [dictionary[@"e"] longLongValue] : 0;
         self.status = dictionary[@"s"] ? [dictionary[@"s"] intValue] : 0;
         self.type = dictionary[@"ty"] ? [dictionary[@"ty"] intValue] : 0;
+        self.pstnType = dictionary[@"pstnty"] ? [dictionary[@"pstnty"] intValue] : 0;
+        self.pstnNumber = [dictionary[@"pstnn"] stringValue];
         self.audioOnly = [dictionary[@"a"] intValue] ? YES : NO;
         self.targetIds = dictionary[@"ts"];
         self.pin = dictionary[@"p"];

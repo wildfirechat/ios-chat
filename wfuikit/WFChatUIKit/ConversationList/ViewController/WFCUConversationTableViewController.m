@@ -1266,15 +1266,31 @@
                     NSIndexSet *set = [NSIndexSet indexSetWithIndex:indexPath.section];
                     [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
                 } else {
-                    WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
                     WFCCUserInfo *info = self.searchFriendList[indexPath.row];
-                    mvc.conversation = [[WFCCConversation alloc] init];
-                    mvc.conversation.type = Single_Type;
-                    mvc.conversation.target = info.userId;
-                    mvc.conversation.line = 0;
-                    
-                    mvc.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:mvc animated:YES];
+                    NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
+                    if (dialinRobotId.length && [dialinRobotId isEqualToString:info.userId]) {
+                        void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
+                        if (handler) {
+                            handler(self);
+                        } else {
+                            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                            mvc.conversation = [[WFCCConversation alloc] init];
+                            mvc.conversation.type = Single_Type;
+                            mvc.conversation.target = info.userId;
+                            mvc.conversation.line = 0;
+                            mvc.hidesBottomBarWhenPushed = YES;
+                            [self.navigationController pushViewController:mvc animated:YES];
+                        }
+                    } else {
+                        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                        mvc.conversation = [[WFCCConversation alloc] init];
+                        mvc.conversation.type = Single_Type;
+                        mvc.conversation.target = info.userId;
+                        mvc.conversation.line = 0;
+                        
+                        mvc.hidesBottomBarWhenPushed = YES;
+                        [self.navigationController pushViewController:mvc animated:YES];
+                    }
                 }
 
             }
@@ -1334,11 +1350,24 @@
             }
         }
     } else {
-        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         WFCCConversationInfo *info = self.conversations[indexPath.row];
-        mvc.conversation = info.conversation;
-        mvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:mvc animated:YES];
+        NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
+        if (dialinRobotId.length && info.conversation.type == Single_Type && [dialinRobotId isEqualToString:info.conversation.target]) {
+            void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
+            if (handler) {
+                handler(self);
+            } else {
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = info.conversation;
+                mvc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:mvc animated:YES];
+            }
+        } else {
+            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+            mvc.conversation = info.conversation;
+            mvc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:mvc animated:YES];
+        }
     }
 }
 

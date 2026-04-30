@@ -13,5 +13,6 @@
 @interface WFCUVideoViewController : UIViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session;
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly;
+- (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly pstnType:(int)pstnType pstnNumber:(NSString *)pstnNumber;
 @end
 

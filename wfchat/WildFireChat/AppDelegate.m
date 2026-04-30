@@ -21,6 +21,7 @@
 #endif
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
+#import "WFCUDialPadViewController.h"
 #import "WFCBaseTabBarController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <UserNotifications/UserNotifications.h>
@@ -182,6 +183,15 @@
     [WFCUConfigManager globalManager].asrServiceUrl = ASR_SERVICE_URL;
     
     [WFCUConfigManager globalManager].aiRobotId = AI_ROBOT;
+    
+    [WFCUConfigManager globalManager].dialinRobotId = DIALIN_ROBOT_ID;
+    [WFCUConfigManager globalManager].dialinRobotHandler = ^(UIViewController *fromVC) {
+        WFCUDialPadViewController *dialVC = [[WFCUDialPadViewController alloc] init];
+        dialVC.targetUserId = DIALIN_ROBOT_ID;
+        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:dialVC];
+        navi.modalPresentationStyle = UIModalPresentationFullScreen;
+        [fromVC presentViewController:navi animated:YES completion:nil];
+    };
     
     //可以在WFCUMessageListViewController界面代码中绑定消息和Cell的对应关系（注册Cell），也可以在这里注册。
     //Cell分为2种类型，一种类型是带有头像的，另外一种是没有头像的。写Cell时可以参考下面这2个Cell。

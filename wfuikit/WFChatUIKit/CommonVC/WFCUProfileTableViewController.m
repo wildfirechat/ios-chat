@@ -578,6 +578,14 @@
 }
 
 - (void)onSendMessageBtn:(id)sender {
+    NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
+    if (dialinRobotId.length && [dialinRobotId isEqualToString:self.userId]) {
+        void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
+        if (handler) {
+            handler(self);
+            return;
+        }
+    }
     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
     mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:self.userId line:0];
     for (UIViewController *vc in self.navigationController.viewControllers) {

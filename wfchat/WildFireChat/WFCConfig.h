@@ -52,4 +52,7 @@ extern BOOL ENABLE_SLIDE_VERIFY;
 
 //AI机器人ID，可以在单聊或者群里@ 
 extern NSString *AI_ROBOT;
+
+//拨号机器人ID，点击该机器人会话进入拨号界面
+extern NSString *DIALIN_ROBOT_ID;
 #endif /* Config_h */

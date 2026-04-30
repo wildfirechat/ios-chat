@@ -69,6 +69,11 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 
 @property(nonatomic, strong)NSString *aiRobotId;
 
+//拨号机器人ID，设置后点击该机器人会话会触发dialinRobotHandler而不是进入聊天界面
+@property(nonatomic, strong)NSString *dialinRobotId;
+//拨号机器人点击处理，如果不设置则进入普通聊天界面
+@property(nonatomic, copy)void (^dialinRobotHandler)(UIViewController *fromVC);
+
 @property(nonatomic, strong)NSString *conversationFilesDir;
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;
