@@ -17,7 +17,7 @@
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
 
-@interface WFCUChannelProfileViewController () <UIActionSheetDelegate>
+@interface WFCUChannelProfileViewController ()
 @property (nonatomic, strong)UIImageView *channelPortrait;
 @property (nonatomic, strong)UILabel *channelName;
 @property (nonatomic, strong)UILabel *channelDesc;
@@ -110,8 +110,16 @@
     }
     
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:WFCString(@"Cancel") destructiveButtonTitle:title otherButtonTitles:nil, nil];
-    [actionSheet showInView:self.view];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self handleChannelAction];
+    }]];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        actionSheet.popoverPresentationController.sourceView = self.view;
+        actionSheet.popoverPresentationController.sourceRect = self.view.bounds;
+    }
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 - (void)onSendMessageBtn:(id)sender {
@@ -138,14 +146,19 @@
 }
 
 - (void)modifyChannelPortrait {
-    UIActionSheet *actionSheet =
-    [[UIActionSheet alloc] initWithTitle:WFCString(@"ChangePortrait")
-                                delegate:self
-                       cancelButtonTitle:WFCString(@"Cancel")
-                  destructiveButtonTitle:WFCString(@"TakePhotos")
-                       otherButtonTitles:WFCString(@"Album"), nil];
-    [actionSheet showInView:self.view];
-    actionSheet.tag = 1;
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:WFCString(@"ChangePortrait") message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:WFCString(@"TakePhotos") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self handlePortraitActionWithCamera:YES];
+    }]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:WFCString(@"Album") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self handlePortraitActionWithCamera:NO];
+    }]];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        actionSheet.popoverPresentationController.sourceView = self.view;
+        actionSheet.popoverPresentationController.sourceRect = self.view.bounds;
+    }
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 - (void)modifyChannelName {
@@ -185,83 +198,74 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark -  UIActionSheetDelegate <NSObject>
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(actionSheet.tag == 0) {
-        if(buttonIndex == 0) {
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.label.text = WFCString(@"Updating");
-            [hud showAnimated:YES];
-            
-            if ([self.channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-                [[WFCCIMService sharedWFCIMService] destoryChannel:self.channelInfo.channelId success:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [hud hideAnimated:YES];
-                        
-                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        hud.mode = MBProgressHUDModeText;
-                        hud.label.text = WFCString(@"UpdateDone");
-                        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                        [hud hideAnimated:YES afterDelay:1.f];
-                    });
-                } error:^(int error_code) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [hud hideAnimated:YES];
-                        
-                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        hud.mode = MBProgressHUDModeText;
-                        hud.label.text = WFCString(@"UpdateFailure");
-                        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                        [hud hideAnimated:YES afterDelay:1.f];
-                    });
-                }];
-            } else {
-                BOOL isListen = ![[WFCCIMService sharedWFCIMService] isListenedChannel:self.channelInfo.channelId];
-                [[WFCCIMService sharedWFCIMService] listenChannel:self.channelInfo.channelId listen:isListen success:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [hud hideAnimated:YES];
-                        
-                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        hud.mode = MBProgressHUDModeText;
-                        hud.label.text = WFCString(@"UpdateDone");
-                        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                        [hud hideAnimated:YES afterDelay:1.f];
-                    });
-                } error:^(int errorCode) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [hud hideAnimated:YES];
-                        
-                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        hud.mode = MBProgressHUDModeText;
-                        hud.label.text = WFCString(@"UpdateFailure");
-                        hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-                        [hud hideAnimated:YES afterDelay:1.f];
-                    });
-                }];
-            }
-        }
-    } else if(actionSheet.tag == 1) {
-        if(buttonIndex == 0) {
-            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-            picker.allowsEditing = YES;
-            picker.delegate = self;
-            if ([UIImagePickerController
-                 isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            } else {
-                NSLog(@"无法连接相机");
-                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            }
-            [self presentViewController:picker animated:YES completion:nil];
-            
-        } else if (buttonIndex == 1) {
-            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-            picker.allowsEditing = YES;
-            picker.delegate = self;
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            [self presentViewController:picker animated:YES completion:nil];
-        }
+- (void)handleChannelAction {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = WFCString(@"Updating");
+    [hud showAnimated:YES];
+    
+    if ([self.channelInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
+        [[WFCCIMService sharedWFCIMService] destoryChannel:self.channelInfo.channelId success:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hideAnimated:YES];
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"UpdateDone");
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            });
+        } error:^(int error_code) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hideAnimated:YES];
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"UpdateFailure");
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            });
+        }];
+    } else {
+        BOOL isListen = ![[WFCCIMService sharedWFCIMService] isListenedChannel:self.channelInfo.channelId];
+        [[WFCCIMService sharedWFCIMService] listenChannel:self.channelInfo.channelId listen:isListen success:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hideAnimated:YES];
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"UpdateDone");
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            });
+        } error:^(int errorCode) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hideAnimated:YES];
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.label.text = WFCString(@"UpdateFailure");
+                hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+                [hud hideAnimated:YES afterDelay:1.f];
+            });
+        }];
     }
+}
+
+- (void)handlePortraitActionWithCamera:(BOOL)useCamera {
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    if (useCamera) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        } else {
+            NSLog(@"无法连接相机");
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+    } else {
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 

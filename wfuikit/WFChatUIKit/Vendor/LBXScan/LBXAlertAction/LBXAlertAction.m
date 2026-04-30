@@ -8,8 +8,6 @@
 
 #import "LBXAlertAction.h"
 #import <UIKit/UIKit.h>
-#import "UIAlertView+LBXAlertAction.h"
-#import "UIActionSheet+LBXAlertAction.h"
 #import "UIWindow+LBXHierarchy.h"
 
 @implementation LBXAlertAction
@@ -48,29 +46,28 @@
         return;
     }
     
-    //UIAlertView style
-    
-    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:argsArray[0] otherButtonTitles:nil, nil];
-    
-    [argsArray removeObject:argsArray[0]];
-    for (NSString *buttonTitle in argsArray) {
-        
-        NSLog(@"buttonTitle:%@",buttonTitle);
-        [alertView addButtonWithTitle:buttonTitle];
+    // UIAlertView fallback removed; UIAlertController is used for all iOS versions.
+    if (block) {
+        block(0);
     }
-    
-    [alertView showWithBlock:^(NSInteger buttonIdx)
-     {
-         
-         block(buttonIdx);
-     }];
 }
 
 
 + (UIViewController*)getTopViewController
 {
-    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
-    
+    UIWindow *window = nil;
+    if (@available(iOS 13.0, *)) {
+        for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+            if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
+                UIWindowScene *windowScene = (UIWindowScene *)scene;
+                window = windowScene.windows.firstObject;
+                break;
+            }
+        }
+    }
+    if (!window) {
+        window = [[UIApplication sharedApplication] keyWindow] ?: [UIApplication sharedApplication].windows.firstObject;
+    }
     return window.currentViewController;
 }
 
@@ -120,83 +117,11 @@
         return;
     }
     
-    //UIActionSheet
-    UIView *view = [self getTopViewController].view;
-    UIActionSheet *sheet = nil;
-    
-    NSInteger count = argsArray.count;
-    
-    if (cancelString) {
-        [argsArray removeObject:cancelString];
+    // UIActionSheet fallback removed; UIAlertController is used for all iOS versions.
+    if (block) {
+        block(0);
     }
-    if (destructiveButtonTitle) {
-        [argsArray removeObject:destructiveButtonTitle];
-    }
-    if (argsArray.count == 0)
-    {
-        sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:nil, nil];
-    }
-    
-    switch (argsArray.count) {
-        case 0:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:nil, nil];
-            break;
-            
-        case 1:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0], nil];
-            break;
-            
-        case 2:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1], nil];
-            break;
-        case 3:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2], nil];
-            break;
-            
-        case 4:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2],argsArray[3], nil];
-            break;
-            
-        case 5:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2],argsArray[3],argsArray[4], nil];
-            break;
-            
-        case 6:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2],argsArray[3],argsArray[4],argsArray[5], nil];
-            break;
-            
-        case 7:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2],argsArray[3],argsArray[4],argsArray[5],argsArray[6], nil];
-            break;
-            
-        case 8:
-            sheet =  [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelString destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:argsArray[0],argsArray[1],argsArray[2],argsArray[3],argsArray[4],argsArray[5],argsArray[6],argsArray[7], nil];
-            break;
-            
-        default:
-            break;
-    }
-    
-    [sheet showInView:view block:^(NSInteger buttonIdx,NSString* buttonTitle)
-     {
-         NSInteger idx = buttonIdx;
-         
-         if (idx == count -1) {
-             idx = 0;
-         }
-         else
-         {
-             ++idx;
-         }
-         
-//         NSLog(@"idx:%ld",idx);
-         
-         if (block) {
-             block(idx);
-         }
-     }];
-    
-    
+
 }
 
 

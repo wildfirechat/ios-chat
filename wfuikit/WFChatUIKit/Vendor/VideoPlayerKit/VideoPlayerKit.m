@@ -260,13 +260,9 @@ static const NSTimeInterval controlsAnimationDuration = 0.4;
 
 - (void)showCannotFetchStreamError
 {
-    UIAlertView *alertView = [[UIAlertView alloc]
-                              initWithTitle:@"Sad Panda says..."
-                              message:@"I can't seem to fetch that stream. Please try again later."
-                              delegate:nil
-                              cancelButtonTitle:@"Bummer!"
-                              otherButtonTitles:nil];
-    [alertView show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sad Panda says..." message:@"I can't seem to fetch that stream. Please try again later." preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Bummer!" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)playPauseHandler

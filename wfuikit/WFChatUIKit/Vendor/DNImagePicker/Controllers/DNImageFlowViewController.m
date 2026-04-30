@@ -191,12 +191,9 @@ static NSString* const dnAssetsViewCellReuseIdentifier = @"DNAssetsViewCell";
     UIBarButtonItem *firstItem = self.toolbarItems.firstObject;
     firstItem.enabled = YES;
     if (self.selectedAssetsArray.count >= kDNImageFlowMaxSeletedNumber) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:WFCString(@"alertTitle")
-                                                        message:WFCString(@"alertContent")
-                                                       delegate:self
-                                              cancelButtonTitle:WFCString(@"alertButton")
-                                              otherButtonTitles:nil, nil];
-        [alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"alertTitle") message:WFCString(@"alertContent") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"alertButton") style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
         return NO;
     } else {
         [self addAssetsObject:asset];

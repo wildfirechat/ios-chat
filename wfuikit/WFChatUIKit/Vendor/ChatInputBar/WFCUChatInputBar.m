@@ -63,7 +63,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIActionSheetDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -448,7 +448,10 @@
                 }
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:WFCString(@"Warning") message:WFCString(@"CannotRecordAudio") delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+                UINavigationController *navi = [self.delegate requireNavi];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"CannotRecordAudio") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil]];
+                [navi presentViewController:alert animated:YES completion:nil];
             });
         }
     }];
@@ -1202,7 +1205,10 @@
     }
     if (self.seconds < 1) {
         NSLog(@"record time too short");
-        [[[UIAlertView alloc] initWithTitle:WFCString(@"Warning") message:WFCString(@"RecordingTooShort") delegate:nil cancelButtonTitle:WFCString(@"Ok") otherButtonTitles:nil, nil] show];
+        UINavigationController *navi = [self.delegate requireNavi];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"Warning") message:WFCString(@"RecordingTooShort") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil]];
+        [navi presentViewController:alert animated:YES completion:nil];
         
         return;
     }
@@ -1582,13 +1588,23 @@
         return;
     } else if(itemTag == 4) {
 #if WFCU_SUPPORT_VOIP
-        UIActionSheet *actionSheet =
-        [[UIActionSheet alloc] initWithTitle:nil
-                                    delegate:self
-                           cancelButtonTitle:WFCString(@"Cancel")
-                      destructiveButtonTitle:@"视频"
-                           otherButtonTitles:@"音频", nil];
-        [actionSheet showInView:self.parentView];
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        [actionSheet addAction:[UIAlertAction actionWithTitle:WFCString(@"Cancel") style:UIAlertActionStyleCancel handler:nil]];
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"视频" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+#if WFCU_SUPPORT_VOIP
+            [self.delegate didTouchVideoBtn:NO];
+#endif
+        }]];
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"音频" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+#if WFCU_SUPPORT_VOIP
+            [self.delegate didTouchVideoBtn:YES];
+#endif
+        }]];
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            actionSheet.popoverPresentationController.sourceView = self.parentView;
+            actionSheet.popoverPresentationController.sourceRect = self.parentView.bounds;
+        }
+        [navi presentViewController:actionSheet animated:YES completion:nil];
 #endif
     } else if(itemTag == 5) {
         NSArray*documentTypes =@[
@@ -1720,13 +1736,10 @@
     [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (authStatus == AVAuthorizationStatusDenied ||
         authStatus == AVAuthorizationStatusRestricted) {
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:WFCString(@"CameraPermissionRequired")
-                                  message:WFCString(@"CameraPermissionMessage")
-                                  delegate:nil
-                                  cancelButtonTitle:WFCString(@"Ok")
-                                  otherButtonTitles:nil, nil];
-        [alertView show];
+        UINavigationController *navi = [self.delegate requireNavi];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"CameraPermissionRequired") message:WFCString(@"CameraPermissionMessage") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleDefault handler:nil]];
+        [navi presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -1928,18 +1941,6 @@
     [self.delegate locationDidSelect:locationPoint.coordinate locationName:locationPoint.title mapScreenShot:locationPoint.thumbnail];
 }
 
-#pragma mark - UIActionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-#if WFCU_SUPPORT_VOIP
-        [self.delegate didTouchVideoBtn:NO];
-#endif
-    } else if(buttonIndex == 1) {
-#if WFCU_SUPPORT_VOIP
-        [self.delegate didTouchVideoBtn:YES];
-#endif
-    }
-}
 
 #pragma mark - WFCUPublicMenuButtonDelegate
 - (void)didTapButton:(WFCUPublicMenuButton *)button menu:(WFCCChannelMenu *)channelMenu {
