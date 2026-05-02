@@ -186,55 +186,48 @@
         [KxMenu dismissMenu];
         return;
     }
-    NSArray *menuItems;
+    NSMutableArray *menuItems = [NSMutableArray array];
+    [menuItems addObject:[KxMenuItem menuItem:WFCString(@"StartChat")
+                           image:[WFCUImage imageNamed:@"menu_start_chat"]
+                          target:self
+                          action:@selector(startChatAction:)]];
     if ([[WFCCIMService sharedWFCIMService] isEnableSecretChat] && [[WFCCIMService sharedWFCIMService] isUserEnableSecretChat]) {
-        menuItems = @[
-            [KxMenuItem menuItem:WFCString(@"StartChat")
-                           image:[WFCUImage imageNamed:@"menu_start_chat"]
-                          target:self
-                          action:@selector(startChatAction:)],
-            [KxMenuItem menuItem:WFCString(@"StartSecretChat")
-                           image:[WFCUImage imageNamed:@"menu_start_chat"]
-                          target:self
-                          action:@selector(startSecretChatAction:)],
-            [KxMenuItem menuItem:WFCString(@"AddFriend")
-                           image:[WFCUImage imageNamed:@"menu_add_friends"]
-                          target:self
-                          action:@selector(addFriendsAction:)],
-            [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
-                           image:[WFCUImage imageNamed:@"menu_listen_channel"]
-                          target:self
-                          action:@selector(listenChannelAction:)],
-            [KxMenuItem menuItem:WFCString(@"ScanQRCode")
-                           image:[WFCUImage imageNamed:@"menu_scan_qr"]
-                          target:self
-                          action:@selector(scanQrCodeAction:)]
-        ];
-    } else {
-        menuItems = @[
-            [KxMenuItem menuItem:WFCString(@"StartChat")
-                           image:[WFCUImage imageNamed:@"menu_start_chat"]
-                          target:self
-                          action:@selector(startChatAction:)],
-            [KxMenuItem menuItem:WFCString(@"AddFriend")
-                           image:[WFCUImage imageNamed:@"menu_add_friends"]
-                          target:self
-                          action:@selector(addFriendsAction:)],
-            [KxMenuItem menuItem:WFCString(@"SubscribeChannel")
-                           image:[WFCUImage imageNamed:@"menu_listen_channel"]
-                          target:self
-                          action:@selector(listenChannelAction:)],
-            [KxMenuItem menuItem:WFCString(@"ScanQRCode")
-                           image:[WFCUImage imageNamed:@"menu_scan_qr"]
-                          target:self
-                          action:@selector(scanQrCodeAction:)]
-        ];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"StartSecretChat")
+                               image:[WFCUImage imageNamed:@"menu_start_chat"]
+                              target:self
+                              action:@selector(startSecretChatAction:)]];
     }
+    [menuItems addObject:[KxMenuItem menuItem:WFCString(@"AddFriend")
+                           image:[WFCUImage imageNamed:@"menu_add_friends"]
+                          target:self
+                          action:@selector(addFriendsAction:)]];
+    [menuItems addObject:[KxMenuItem menuItem:WFCString(@"SubscribeChannel")
+                           image:[WFCUImage imageNamed:@"menu_listen_channel"]
+                          target:self
+                          action:@selector(listenChannelAction:)]];
+    NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
+    if (dialinRobotId.length) {
+        [menuItems addObject:[KxMenuItem menuItem:@"落地电话"
+                               image:[WFCUImage imageNamed:@"msg_audio_call"]
+                              target:self
+                              action:@selector(dialinAction:)]];
+    }
+    [menuItems addObject:[KxMenuItem menuItem:WFCString(@"ScanQRCode")
+                           image:[WFCUImage imageNamed:@"menu_scan_qr"]
+                          target:self
+                          action:@selector(scanQrCodeAction:)]];
     
     
     [KxMenu showMenuInView:self.navigationController.view
                   fromRect:CGRectMake(self.view.bounds.size.width - 56, [WFCUUtilities wf_navigationFullHeight] + searchExtra, 48, 5)
                  menuItems:menuItems];
+}
+
+- (void)dialinAction:(id)sender {
+    void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
+    if (handler) {
+        handler(self);
+    }
 }
 
 - (void)startChatAction:(id)sender {
@@ -1267,30 +1260,13 @@
                     [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
                 } else {
                     WFCCUserInfo *info = self.searchFriendList[indexPath.row];
-                    NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
-                    if (dialinRobotId.length && [dialinRobotId isEqualToString:info.userId]) {
-                        void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
-                        if (handler) {
-                            handler(self);
-                        } else {
-                            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                            mvc.conversation = [[WFCCConversation alloc] init];
-                            mvc.conversation.type = Single_Type;
-                            mvc.conversation.target = info.userId;
-                            mvc.conversation.line = 0;
-                            mvc.hidesBottomBarWhenPushed = YES;
-                            [self.navigationController pushViewController:mvc animated:YES];
-                        }
-                    } else {
-                        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                        mvc.conversation = [[WFCCConversation alloc] init];
-                        mvc.conversation.type = Single_Type;
-                        mvc.conversation.target = info.userId;
-                        mvc.conversation.line = 0;
-                        
-                        mvc.hidesBottomBarWhenPushed = YES;
-                        [self.navigationController pushViewController:mvc animated:YES];
-                    }
+                    WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                    mvc.conversation = [[WFCCConversation alloc] init];
+                    mvc.conversation.type = Single_Type;
+                    mvc.conversation.target = info.userId;
+                    mvc.conversation.line = 0;
+                    mvc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:mvc animated:YES];
                 }
 
             }
@@ -1351,23 +1327,10 @@
         }
     } else {
         WFCCConversationInfo *info = self.conversations[indexPath.row];
-        NSString *dialinRobotId = [WFCUConfigManager globalManager].dialinRobotId;
-        if (dialinRobotId.length && info.conversation.type == Single_Type && [dialinRobotId isEqualToString:info.conversation.target]) {
-            void (^handler)(UIViewController *) = [WFCUConfigManager globalManager].dialinRobotHandler;
-            if (handler) {
-                handler(self);
-            } else {
-                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-                mvc.conversation = info.conversation;
-                mvc.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:mvc animated:YES];
-            }
-        } else {
-            WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
-            mvc.conversation = info.conversation;
-            mvc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:mvc animated:YES];
-        }
+        WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+        mvc.conversation = info.conversation;
+        mvc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:mvc animated:YES];
     }
 }
 
