@@ -78,7 +78,7 @@
     for (UIView *subView in headerCell.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width = self.view.bounds.size.width;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width - 104, 6, 64, 64)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
@@ -171,7 +171,7 @@
         if (left) {
             title = [[UILabel alloc] initWithFrame:CGRectMake(8, 2, 72, 36)];
         } else {
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            CGFloat width = self.view.bounds.size.width;
             title = [[UILabel alloc] initWithFrame:CGRectMake(88, 2, width - 108 - 28, 36)];
         }
     }

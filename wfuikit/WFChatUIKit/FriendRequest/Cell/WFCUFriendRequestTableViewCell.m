@@ -41,17 +41,16 @@
     for (UIView *view in self.contentView.subviews) {
         [view removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
     self.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 40, 40)];
-    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20,11, width - 128, 16)];
+    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
     self.nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
-    self.reasonLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20, 11 + 15 + 6, width - 128, 14)];
+    self.reasonLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.reasonLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.reasonLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
     
-    self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectMake(width - (46 + 16), 16, 46, 28)];
+    self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.acceptBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.acceptBtn setTitle:WFCString(@"Accept") forState:UIControlStateNormal];
     [self.acceptBtn setBackgroundColor:[UIColor colorWithHexString:@"0x4764DC"]];
@@ -69,6 +68,14 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.contentView.bounds.size.width;
+    self.nameLabel.frame = CGRectMake(16 + 40 + 20, 11, width - 128, 16);
+    self.reasonLabel.frame = CGRectMake(16 + 40 + 20, 11 + 15 + 6, width - 128, 14);
+    self.acceptBtn.frame = CGRectMake(width - (46 + 16), 16, 46, 28);
 }
 
 - (void)onAddBtn:(id)sender {

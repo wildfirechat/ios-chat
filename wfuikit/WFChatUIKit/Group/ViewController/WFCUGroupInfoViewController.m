@@ -172,7 +172,7 @@
 
 - (UIButton *)btn {
     if (!_btn) {
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        CGFloat width = self.view.bounds.size.width;
         _btn = [[UIButton alloc] initWithFrame:CGRectMake(width/2 - 80, 280, 160, 44)];
         _btn.layer.masksToBounds = YES;
         _btn.layer.cornerRadius = 5.f;
@@ -185,7 +185,7 @@
 
 - (UILabel *)groupNameLabel {
     if (!_groupNameLabel) {
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        CGFloat width = self.view.bounds.size.width;
         _groupNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(width/2 - 100, 200, 200, 24)];
         _groupNameLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_groupNameLabel];
@@ -195,7 +195,7 @@
 
 - (UIImageView *)groupProtraitView {
     if (!_groupProtraitView) {
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        CGFloat width = self.view.bounds.size.width;
         _groupProtraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width/2 - 32, 120, 64, 64)];
         [self.view addSubview:_groupProtraitView];
     }

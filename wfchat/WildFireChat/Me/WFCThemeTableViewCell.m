@@ -27,7 +27,7 @@
 
 - (UIImageView *)checkImageView {
     if (!_checkImageView) {
-        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 44, 18, 20, 20)];
+        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 44, 18, 20, 20)];
         [self.contentView addSubview:_checkImageView];
     }
     return _checkImageView;

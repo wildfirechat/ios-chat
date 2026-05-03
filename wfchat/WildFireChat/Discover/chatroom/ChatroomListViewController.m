@@ -66,7 +66,7 @@ static NSString * identifier = @"cxCellID";
         CGFloat edgeInset = 10;
         int countInLine = 2;
         flowLayout.sectionInset = UIEdgeInsetsMake(edgeInset, edgeInset, edgeInset, edgeInset);
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        CGFloat width = self.view.bounds.size.width;
         width = (width - edgeInset)/countInLine - edgeInset;
         flowLayout.itemSize = CGSizeMake(width, width + 20);
 

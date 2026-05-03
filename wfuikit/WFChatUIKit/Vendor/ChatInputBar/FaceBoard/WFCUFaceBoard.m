@@ -198,11 +198,11 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
 }
 
 - (id)init {
-    width = [UIScreen mainScreen].bounds.size.width;
-    self = [super initWithFrame:CGRectMake(0, 0, width, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom])];
+    self = [super initWithFrame:CGRectMake(0, 0, 0, EMOJ_AREA_HEIGHT + [WFCUUtilities wf_safeDistanceBottom])];
     
     [self loadStickers];
     if (self) {
+        width = (int)self.bounds.size.width;
 
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
@@ -240,6 +240,17 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
     }
 
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    width = (int)self.bounds.size.width;
+    self.collectionView.frame = CGRectMake(0, 0, self.bounds.size.width, EMOJ_FACE_VIEW_HEIGHT);
+    self.facePageControl.frame = CGRectMake(width/2-100, EMOJ_FACE_VIEW_HEIGHT, 200, EMOJ_PAGE_CONTROL_HEIGHT);
+    _tabbarView.frame = CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [WFCUUtilities wf_safeDistanceBottom], self.bounds.size.width, EMOJ_TAB_HEIGHT);
+    _sendBtn.frame = CGRectMake(self.bounds.size.width - 52, 5, 52, 37);
+    self.tabView.frame = CGRectMake(0, 5, self.bounds.size.width - 52, 37);
+    [self.collectionView reloadData];
 }
 
 - (void)setSelectedTableRow:(int)selectedTableRow {

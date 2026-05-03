@@ -33,9 +33,18 @@
 
     // Configure the view for the selected state
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.contentView.bounds.size.width;
+    self.callHintLabel.frame = CGRectMake(16, 4, width - 16, 20);
+    self.joinButton.frame = CGRectMake(width/2 - 60 - 40, 28, 60, 24);
+    self.cancelButton.frame = CGRectMake(width/2 + 40, 28, 60, 24);
+}
+
 -(UILabel *)callHintLabel {
     if(!_callHintLabel) {
-        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 4, [UIScreen mainScreen].bounds.size.width-16, 20)];
+        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 4, 0, 20)];
         [self.contentView addSubview:_callHintLabel];
     }
     return _callHintLabel;
@@ -43,8 +52,7 @@
 
 -(UIButton *)joinButton {
     if(!_joinButton) {
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
-        _joinButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2 - 60 - 40, 28, 60, 24)];
+        _joinButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 60, 24)];
         [_joinButton setTitle:WFCString(@"Join") forState:UIControlStateNormal];
         [_joinButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_joinButton addTarget:self action:@selector(onJoinButton) forControlEvents:UIControlEventTouchUpInside];
@@ -55,8 +63,7 @@
 
 -(UIButton *)cancelButton {
     if(!_cancelButton) {
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
-        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2 + 40, 28, 60, 24)];
+        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 60, 24)];
         [_cancelButton setTitle:WFCString(@"Cancel") forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(onCancelButton) forControlEvents:UIControlEventTouchUpInside];

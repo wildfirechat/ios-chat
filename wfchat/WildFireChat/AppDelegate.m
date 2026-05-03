@@ -22,6 +22,8 @@
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
 #import "WFCBaseTabBarController.h"
+#import "WFCPadModeManager.h"
+#import "WFCPadMainViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <UserNotifications/UserNotifications.h>
 #import "PCLoginConfirmViewController.h"
@@ -187,6 +189,8 @@
     //Cell分为2种类型，一种类型是带有头像的，另外一种是没有头像的。写Cell时可以参考下面这2个Cell。
     //[[WFCUConfigManager globalManager] registerCustomCell:[WFCUTextCell class] forContent:[WFCCTextMessageContent class]];
     //[[WFCUConfigManager globalManager] registerCustomCell::[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
+    
+    [WFCCNetworkService sharedInstance].isPad = [WFCPadModeManager isPadMode];
 #ifdef WFC_PTT
     //初始化对讲SDK
     [WFPttClient sharedClient].delegate = self;
@@ -211,7 +215,11 @@
     }
     
     
-    self.window.rootViewController = [WFCBaseTabBarController new];
+    if ([WFCPadModeManager isPadMode]) {
+        self.window.rootViewController = [[WFCPadMainViewController alloc] init];
+    } else {
+        self.window.rootViewController = [WFCBaseTabBarController new];
+    }
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self setupNavBar];
@@ -292,6 +300,9 @@
 //会议需要支持方向旋转
 -(UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     if([NSStringFromClass([window.rootViewController class]) isEqualToString:@"WFCUConferenceViewController"]) {
+        return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+    if ([WFCPadModeManager isPadMode]) {
         return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
     }
     return UIInterfaceOrientationMaskPortrait;
@@ -545,29 +556,11 @@
             }
         }
         if (pcLoginRequest) {
-            __block UINavigationController *nav;
-            if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
-                nav = (UINavigationController *)self.window.rootViewController;
-            } else if ([self.window.rootViewController isKindOfClass:[UITabBarController class]]) {
-                UITabBarController *tab = (UITabBarController *)self.window.rootViewController;
-                [tab.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj isKindOfClass:[UINavigationController class]]) {
-                        nav = obj;
-                        *stop = YES;
-                    }
-                }];
-            }
-            
-            if (nav) {
-                PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
-                vc2.sessionId = pcLoginRequest.sessionId;
-                vc2.platform = pcLoginRequest.platform;
-                vc2.modalPresentationStyle = UIModalPresentationFullScreen;
-                [self.window.rootViewController presentViewController:vc2 animated:YES completion:nil];
-            } else {
-                NSLog(@"怎么样才能模态弹出PC登录确认画面呢？");
-            }
-            
+            PCLoginConfirmViewController *vc2 = [[PCLoginConfirmViewController alloc] init];
+            vc2.sessionId = pcLoginRequest.sessionId;
+            vc2.platform = pcLoginRequest.platform;
+            vc2.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self.window.rootViewController presentViewController:vc2 animated:YES completion:nil];
         }
     }
 }
@@ -785,7 +778,22 @@
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];
+    UINavigationController *nav = nil;
+    UIViewController *rootVC = application.delegate.window.rootViewController;
+    if ([rootVC isKindOfClass:[UINavigationController class]]) {
+        nav = (UINavigationController *)rootVC;
+    } else if ([rootVC isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tab = (UITabBarController *)rootVC;
+        for (UIViewController *vc in tab.viewControllers) {
+            if ([vc isKindOfClass:[UINavigationController class]]) {
+                nav = (UINavigationController *)vc;
+                break;
+            }
+        }
+    } else {
+        nav = rootVC.navigationController;
+    }
+    return [self handleUrl:[url absoluteString] withNav:nav];
 }
 
 - (BOOL)handleUrl:(NSString *)str withNav:(UINavigationController *)navigator {

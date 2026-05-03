@@ -96,7 +96,7 @@
 
 - (UILabel *)name {
     if (!_name) {
-        _name = [[UILabel alloc] initWithFrame:CGRectMake(self.checkable?88:56, 16, [UIScreen mainScreen].bounds.size.width - (self.checkable?96:64), 24)];
+        _name = [[UILabel alloc] initWithFrame:CGRectMake(self.checkable?88:56, 16, self.contentView.bounds.size.width - (self.checkable?96:64), 24)];
         [self.contentView addSubview:_name];
     }
     return _name;

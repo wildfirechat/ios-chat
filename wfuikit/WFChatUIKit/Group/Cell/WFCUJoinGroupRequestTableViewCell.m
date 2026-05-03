@@ -42,7 +42,7 @@
     for (UIView *view in self.contentView.subviews) {
         [view removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width = self.contentView.bounds.size.width;
     self.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 40, 40)];
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20, 11, width - 128, 16)];

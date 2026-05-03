@@ -44,7 +44,7 @@
 
 - (UILabel *)displayName {
     if (!_displayName) {
-        _displayName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64, [UIScreen mainScreen].bounds.size.width - 64, 32)];
+        _displayName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64, self.contentView.bounds.size.width - 64, 32)];
         [_displayName setFont:[UIFont pingFangSCWithWeight:FontWeightStyleSemibold size:20]];
         _displayName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_displayName];
@@ -54,7 +54,7 @@
 
 - (UILabel *)userName {
     if (!_userName) {
-        _userName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64 + 32 + 8, [UIScreen mainScreen].bounds.size.width - 128, 14)];
+        _userName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64 + 32 + 8, self.contentView.bounds.size.width - 128, 14)];
         [_userName setFont:[UIFont systemFontOfSize:14]];
         _userName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_userName];

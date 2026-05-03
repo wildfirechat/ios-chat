@@ -27,13 +27,14 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
+    CGFloat cellWidth = self.contentView.bounds.size.width;
     if (!self.isBig) {
         _potraitView.frame = CGRectMake(16, 10, 40, 40);
-        _targetView.frame = CGRectMake(16 + 40 + 20, 11, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 100), 16);
+        _targetView.frame = CGRectMake(16 + 40 + 20, 11, cellWidth - (16 + 40 + 20 + 100), 16);
         _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
-        _digestView.frame = CGRectMake(16 + 40 + 20, 11 + 16 + 8, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 20), 19);
+        _digestView.frame = CGRectMake(16 + 40 + 20, 11 + 16 + 8, cellWidth - (16 + 40 + 20 + 20), 19);
+        _timeView.frame = CGRectMake(cellWidth - 52 - 16, 20, 52, 12);
     }
-
 }
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
@@ -193,9 +194,9 @@
 
 - (void)updateDigestFrame:(BOOL)isSending {
     if (isSending) {
-        _digestView.frame = CGRectMake(16 + 48 + 12 + 18, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16 - 18, 19);
+        _digestView.frame = CGRectMake(16 + 48 + 12 + 18, 40, self.contentView.bounds.size.width - 76 - 16 - 16 - 18, 19);
     } else {
-        _digestView.frame = CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16, 19);
+        _digestView.frame = CGRectMake(16 + 48 + 12, 40, self.contentView.bounds.size.width - 76 - 16 - 16, 19);
     }
 }
 
@@ -236,7 +237,7 @@
         [self updateExternalDomainInfo];
     }
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake(self.contentView.bounds.size.width - 76  - 68 - 24, 8000)];
     
     if(conversation.type == SecretChat_Type) {
         self.secretChatView.hidden = NO;
@@ -411,7 +412,7 @@
 
 - (UILabel *)targetView {
     if (!_targetView) {
-        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
+        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, self.contentView.bounds.size.width - 76  - 68, 20)];
         _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
         _targetView.textColor = [WFCUConfigManager globalManager].textColor;
         _targetView.lineBreakMode = NSLineBreakByTruncatingMiddle;
@@ -447,7 +448,7 @@
 }
 - (UILabel *)digestView {
     if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
+        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, self.contentView.bounds.size.width - 76  - 16 - 16, 19)];
         _digestView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         _digestView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
@@ -458,7 +459,7 @@
 
 - (UIImageView *)silentView {
     if (!_silentView) {
-        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 20, 45, 12, 12)];
+        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 12  - 20, 45, 12, 12)];
         _silentView.image = [WFCUImage imageNamed:@"conversation_mute"];
         [self.contentView addSubview:_silentView];
     }
@@ -467,7 +468,7 @@
 
 - (UILabel *)timeView {
     if (!_timeView) {
-        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 16, 20, 52, 12)];
+        _timeView = [[UILabel alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 52  - 16, 20, 52, 12)];
         _timeView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
         _timeView.textAlignment = NSTextAlignmentRight;
         _timeView.textColor = [UIColor colorWithHexString:@"b3b3b3"];

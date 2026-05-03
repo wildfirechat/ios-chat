@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class WFCPadMainViewController;
+
 @interface WFCBaseTabBarController : UITabBarController
+
+@property (nonatomic, weak) WFCPadMainViewController *padController;
 
 @end

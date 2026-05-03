@@ -63,6 +63,7 @@ AccountLoggedInElsewhere="您的賬號已在其他手機登錄";
 GotIt="知道了";
 Tips="提示";
 SMSCodeLoginTip="使用短信驗證碼登錄將會為您創建賬戶，請使用短信驗證碼登錄。";
+LoginAsPad="以Pad平台登錄";
 Confirm="確定";
 SMSSending="短信發送中";
 SendSuccess="發送成功";

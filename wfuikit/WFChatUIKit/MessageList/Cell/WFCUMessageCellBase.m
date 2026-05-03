@@ -51,13 +51,13 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat viewWidth = self.contentView.bounds.size.width;
     
   _model = model;
     CGFloat offset = 5;
     if (model.lastReadMessage) {
         if (!self.lastReadContainerView) {
-            self.lastReadContainerView = [[UIView alloc] initWithFrame:CGRectMake(16, offset, screenWidth-32, 20)];
+            self.lastReadContainerView = [[UIView alloc] initWithFrame:CGRectMake(16, offset, viewWidth-32, 20)];
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
             label.text = WFCString(@"last_read_here");
@@ -66,17 +66,17 @@
             label.textColor = [UIColor grayColor];
             label.layer.cornerRadius = 5.f;
             label.layer.masksToBounds = YES;
-            CGSize size = [WFCUUtilities getTextDrawingSize:label.text font:label.font constrainedSize:CGSizeMake(screenWidth-16, 8000)];
+            CGSize size = [WFCUUtilities getTextDrawingSize:label.text font:label.font constrainedSize:CGSizeMake(viewWidth-16, 8000)];
             size.width += 16;
-            label.frame = CGRectMake((screenWidth - 32 - size.width)/2,  (20-size.height)/2, size.width, size.height);
+            label.frame = CGRectMake((viewWidth - 32 - size.width)/2,  (20-size.height)/2, size.width, size.height);
             [self.lastReadContainerView addSubview:label];
             
             
-            UIView *leftline = [[UIView alloc] initWithFrame:CGRectMake(0, 10, (screenWidth-32-size.width)/2-8, 1)];
+            UIView *leftline = [[UIView alloc] initWithFrame:CGRectMake(0, 10, (viewWidth-32-size.width)/2-8, 1)];
             leftline.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.f];
             [self.lastReadContainerView addSubview:leftline];
             
-            UIView *rightline = [[UIView alloc] initWithFrame:CGRectMake((screenWidth-32 + size.width)/2 + 8, 10, (screenWidth-32-size.width)/2-8, 1)];
+            UIView *rightline = [[UIView alloc] initWithFrame:CGRectMake((viewWidth-32 + size.width)/2 + 8, 10, (viewWidth-32-size.width)/2-8, 1)];
             rightline.backgroundColor = leftline.backgroundColor;
             [self.lastReadContainerView addSubview:rightline];
             
@@ -100,8 +100,8 @@
     _timeLabel.text = [WFCUUtilities formatTimeDetailLabel:model.message.serverTime];
 
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(screenWidth, 8000)];
-    CGRect rect = CGRectMake((screenWidth - size.width)/2, offset + 5, size.width, size.height);
+    CGSize size = [WFCUUtilities getTextDrawingSize:_timeLabel.text font:_timeLabel.font constrainedSize:CGSizeMake(viewWidth, 8000)];
+    CGRect rect = CGRectMake((viewWidth - size.width)/2, offset + 5, size.width, size.height);
     _timeLabel.frame = rect;
   } else {
     _timeLabel.hidden = YES;

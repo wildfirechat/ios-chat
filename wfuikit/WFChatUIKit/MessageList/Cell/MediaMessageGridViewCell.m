@@ -70,14 +70,14 @@
 }
 - (UIImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self addSubview:_imageView];
     }
     return _imageView;
 }
 - (UIImageView *)videoFlag {
     if (!_videoFlag) {
-        _videoFlag = [[UIImageView alloc] initWithFrame:CGRectMake(8, self.bounds.size.height-24, 15, 12)];
+        _videoFlag = [[UIImageView alloc] initWithFrame:CGRectMake(8, 0, 15, 12)];
         _videoFlag.image = [WFCUImage imageNamed:@"video"];
         [self addSubview:_videoFlag];
     }
@@ -85,7 +85,7 @@
 }
 -(UILabel *)videoDuration {
     if (!_videoDuration) {
-        _videoDuration = [[UILabel alloc] initWithFrame:CGRectMake(28, self.bounds.size.height-24-2, 40, 16)];
+        _videoDuration = [[UILabel alloc] initWithFrame:CGRectMake(28, 0, 40, 16)];
         _videoDuration.font = [UIFont systemFontOfSize:12];
         _videoDuration.lineBreakMode = NSLineBreakByTruncatingHead;
         [self addSubview:_videoDuration];
@@ -94,7 +94,7 @@
 }
 -(UILabel *)fileName {
     if (!_fileName) {
-        _fileName = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, self.bounds.size.width-16, 40)];
+        _fileName = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, 0, 40)];
         _fileName.font = [UIFont systemFontOfSize:14];
         _fileName.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _fileName.numberOfLines = 2;
@@ -104,11 +104,20 @@
 }
 -(UILabel *)fileSize {
     if (!_fileSize) {
-        _fileSize = [[UILabel alloc] initWithFrame:CGRectMake(8, self.bounds.size.height-24, self.bounds.size.width-16, 16)];
+        _fileSize = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 0, 16)];
         _fileSize.font = [UIFont systemFontOfSize:14];
         _fileSize.lineBreakMode = NSLineBreakByTruncatingHead;
         [self addSubview:_fileSize];
     }
     return _fileSize;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.imageView.frame = self.bounds;
+    self.videoFlag.frame = CGRectMake(8, self.bounds.size.height - 24, 15, 12);
+    self.videoDuration.frame = CGRectMake(28, self.bounds.size.height - 26, 40, 16);
+    self.fileName.frame = CGRectMake(8, 8, self.bounds.size.width - 16, 40);
+    self.fileSize.frame = CGRectMake(8, self.bounds.size.height - 24, self.bounds.size.width - 16, 16);
 }
 @end

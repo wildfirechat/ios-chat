@@ -32,9 +32,15 @@
 
     // Configure the view for the selected state
 }
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.callHintLabel.frame = CGRectMake(16, 0, self.contentView.bounds.size.width - 16, 20);
+}
+
 -(UILabel *)callHintLabel {
     if(!_callHintLabel) {
-        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width-16, 20)];
+        _callHintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 0, 20)];
         [self.contentView addSubview:_callHintLabel];
     }
     return _callHintLabel;

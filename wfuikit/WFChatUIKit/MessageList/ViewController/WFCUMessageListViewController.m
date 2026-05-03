@@ -199,6 +199,19 @@
     self.hasMoreOld = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onResetKeyboard:)];
     [self.collectionView addGestureRecognizer:tap];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (self.backgroundView) {
+        CGRect frame = self.view.bounds;
+        frame.origin.y = [WFCUUtilities wf_navigationFullHeight];
+        frame.size.height -= ([WFCUUtilities wf_safeDistanceBottom] + [WFCUUtilities wf_navigationFullHeight]);
+        self.backgroundView.frame = frame;
+    }
+    if (self.collectionView) {
+        self.collectionView.frame = CGRectMake(0, 0, self.backgroundView.bounds.size.width, self.backgroundView.bounds.size.height - CHAT_INPUT_BAR_HEIGHT);
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
     
@@ -2985,10 +2998,10 @@
         WFCCTextMessageContent *txtMsgContent = (WFCCTextMessageContent *)model.message.content;
         [self.chatInputBar resetInputBarStatue];
         
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIView *textContainer = [[UIView alloc] initWithFrame:self.view.window.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
         
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.window.bounds.size.width, self.view.window.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtMsgContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];
@@ -3153,10 +3166,10 @@
         
         [self.chatInputBar resetInputBarStatue];
         
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIView *textContainer = [[UIView alloc] initWithFrame:self.view.window.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
         
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.window.bounds.size.width, self.view.window.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];

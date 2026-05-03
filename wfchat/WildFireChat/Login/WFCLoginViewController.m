@@ -22,6 +22,8 @@
 #import "WFCConfig.h"
 #import "SSKeychain.h"
 #import "WFCSlideVerifyView.h"
+#import "WFCPadModeManager.h"
+#import "WFCPadMainViewController.h"
 
 @interface WFCLoginViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property (strong, nonatomic) UILabel *hintLabel;
@@ -39,6 +41,8 @@
 @property (nonatomic, strong) NSTimer *countdownTimer;
 @property (nonatomic, assign) NSTimeInterval sendCodeTime;
 @property (nonatomic, strong) UILabel *privacyLabel;
+
+@property (nonatomic, strong) UISwitch *padSwitch;
 
 @property (strong, nonatomic) UIButton *switchButton;
 @property (strong, nonatomic) UIButton *registerButton;
@@ -192,6 +196,26 @@
     }];
     
     [self.view addSubview:self.privacyLabel];
+    
+    // iPad模式选择
+    if ([WFCPadModeManager isPadDevice]) {
+        CGFloat padModeY = self.view.bounds.size.height - 80 - [WFCUUtilities wf_safeDistanceBottom];
+        UIView *padModeContainer = [[UIView alloc] initWithFrame:CGRectMake(16, padModeY, self.view.bounds.size.width - 32, 30)];
+        
+        self.padSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 51, 31)];
+        self.padSwitch.on = [WFCPadModeManager isPadMode];
+        [self.padSwitch addTarget:self action:@selector(onPadModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        
+        UILabel *padLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, padModeContainer.frame.size.width - 60, 31)];
+        padLabel.text = LocalizedString(@"LoginAsPad");
+        padLabel.font = [UIFont systemFontOfSize:14];
+        padLabel.textColor = [UIColor darkGrayColor];
+        
+        [padModeContainer addSubview:self.padSwitch];
+        [padModeContainer addSubview:padLabel];
+        [self.view addSubview:padModeContainer];
+    }
+    
     [self setIsPwdLogin:self.isPwdLogin];
 }
 
@@ -272,6 +296,10 @@
 //    [UIView animateWithDuration:0.5 animations:^{
         self.isPwdLogin = !self.isPwdLogin;
 //    }];
+}
+
+- (void)onPadModeSwitchChanged:(UISwitch *)sender {
+    [WFCPadModeManager setPadMode:sender.isOn];
 }
 
 - (void)onRegister:(id)sender {
@@ -398,6 +426,9 @@
         [self performLogin];
         return;
     }
+    if([WFCPadModeManager isPadDevice]) {
+        [WFCPadModeManager setPadMode:self.padSwitch.isOn];
+    }
 
     // 验证码登录且已通过滑动验证，直接执行登录
     if (!self.isPwdLogin && self.hasSlideVerifiedForCode) {
@@ -453,14 +484,19 @@
         }
 
         [hud hideAnimated:YES];
-        WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
-        [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
+        UIViewController *mainVC = nil;
+        if ([WFCPadModeManager isPadMode]) {
+            mainVC = [[WFCPadMainViewController alloc] init];
+        } else {
+            mainVC = [WFCBaseTabBarController new];
+        }
+        [UIApplication sharedApplication].delegate.window.rootViewController = mainVC;
         if (resetCode) {
-            if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
+            if ([mainVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
                 WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
                 vc.resetCode = resetCode;
                 vc.hidesBottomBarWhenPushed = YES;
-                UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
+                UINavigationController *nav = (UINavigationController *)mainVC.childViewControllers.firstObject;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [nav pushViewController:vc animated:YES];
                 });

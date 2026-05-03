@@ -65,6 +65,8 @@
 
 @property(nonatomic, assign)WFCCGroupMemberSourceType groupSourceType;
 @property (nonatomic, strong)NSString *groupSourceTargetId;
+
+@property(nonatomic, assign)CGFloat lastWidth;
 @end
 
 @implementation WFCUProfileTableViewController
@@ -80,6 +82,7 @@
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.delegate = self;
@@ -95,6 +98,14 @@
     [self loadOrganizationData:YES];
 
     [self loadData];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.tableView.frame = self.view.bounds;
+    if (self.lastWidth != self.view.bounds.size.width) {
+        [self loadData];
+    }
 }
 
 - (void)loadOrganizationData:(BOOL)refresh {
@@ -291,7 +302,8 @@
     for (UIView *subView in self.headerCell.contentView.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    self.lastWidth = self.view.bounds.size.width;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 14, 58, 58)];
     
@@ -308,16 +320,16 @@
     CGFloat startPos = 8;
 
     if (alias.length) {
-        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 8, width - 64 - 8, 21)];
+        self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 8, self.lastWidth - 64 - 8, 21)];
         self.aliasLabel.text = alias;
         startPos += 24;
     }
     
-    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 21)];
+    self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, self.lastWidth - 94 - 8, 21)];
     self.displayNameLabel.text = self.userInfo.displayName;
     startPos += 24;
 
-    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, self.lastWidth - 94 - 8, 11)];
     self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
     self.userNameLabel.font = [UIFont systemFontOfSize:12];
     self.userNameLabel.textColor = [UIColor grayColor];
@@ -325,7 +337,7 @@
     
     if([WFCCUtilities isExternalTarget:self.userId]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:self.userId];
-        self.domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+        self.domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, self.lastWidth - 94 - 8, 11)];
         self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
         self.domainLabel.font = [UIFont systemFontOfSize:12];
         startPos += 16;
@@ -333,7 +345,7 @@
     
     
     if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
-        self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
+        self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.lastWidth - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
         self.starLabel.text = @"☆";
         self.starLabel.font = [UIFont systemFontOfSize:18];
         self.starLabel.textColor = [UIColor yellowColor];
@@ -354,7 +366,7 @@
     [self.headerCells addObject:self.headerCell];
     
     if (self.userInfo.type == 1) {
-        [self setupSendMessageCell:width];
+        [self setupSendMessageCell:self.lastWidth];
     } else {
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
             UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
@@ -452,9 +464,9 @@
         }
         
         if ([[WFCCIMService sharedWFCIMService] isMyFriend:self.userId]) {
-            [self setupSendMessageCell:width];
+            [self setupSendMessageCell:self.lastWidth];
             [self showSeparatorLine:self.sendMessageCell];
-            [self setupVoipCallCell:width];
+            [self setupVoipCallCell:self.lastWidth];
         } else if([[WFCCNetworkService sharedInstance].userId isEqualToString:self.userId]) {
             
         } else {
@@ -462,7 +474,7 @@
             for (UIView *subView in self.addFriendCell.subviews) {
                 [subView removeFromSuperview];
             }
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, self.lastWidth - 40, 40)];
             [btn setTitle:WFCString(@"AddFriend") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
@@ -476,13 +488,13 @@
             if(self.fromConversation.type == Group_Type) {
                 WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.fromConversation.target refresh:NO];
                 if(!groupInfo.privateChat) {
-                    [self setupSendMessageCell:width];
+                    [self setupSendMessageCell:self.lastWidth];
                 }
             } else if(self.sourceType == FriendSource_Org)  {
                 //组织通讯录用户允许不添加好友聊天
-                [self setupSendMessageCell:width];
+                [self setupSendMessageCell:self.lastWidth];
                 [self showSeparatorLine:self.sendMessageCell];
-                [self setupVoipCallCell:width];
+                [self setupVoipCallCell:self.lastWidth];
                 [self showSeparatorLine:self.sendMessageCell];
             }
         }

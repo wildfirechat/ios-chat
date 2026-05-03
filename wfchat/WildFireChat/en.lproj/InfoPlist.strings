@@ -63,6 +63,7 @@ AccountLoggedInElsewhere="Your account has been logged in on another device";
 GotIt="Got It";
 Tips="Tips";
 SMSCodeLoginTip="Using SMS code login will create an account for you. Please use SMS code login.";
+LoginAsPad="Login as Pad";
 Confirm="Confirm";
 SMSSending="Sending SMS...";
 SendSuccess="Sent successfully";

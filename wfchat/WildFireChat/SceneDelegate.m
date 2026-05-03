@@ -10,6 +10,8 @@
 #import "WFCConfig.h"
 #import "TYHWaterMark.h"
 #import "SSKeychain.h"
+#import "WFCPadModeManager.h"
+#import "WFCPadMainViewController.h"
 
 @implementation SceneDelegate
 
@@ -30,7 +32,11 @@
     }
     
     if (savedToken.length > 0 && savedUserId.length > 0) {
-        self.window.rootViewController = [WFCBaseTabBarController new];
+        if ([WFCPadModeManager isPadMode]) {
+            self.window.rootViewController = [[WFCPadMainViewController alloc] init];
+        } else {
+            self.window.rootViewController = [WFCBaseTabBarController new];
+        }
         if (ENABLE_WATER_MARKER) {
             [self.window addSubview:[TYHWaterMarkView new]];
             [TYHWaterMarkView setCharacter:savedUserId];

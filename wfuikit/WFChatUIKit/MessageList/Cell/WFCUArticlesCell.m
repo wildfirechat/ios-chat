@@ -65,7 +65,7 @@
 @implementation WFCUArticlesCell
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)msgModel.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = width - CELL_MARGIN - CELL_MARGIN;
     CGFloat coverHeight = containerWidth * COVER_HW_RATE;
     CGFloat labHeight = 0;
     if(content.subArticles.count) {
@@ -83,7 +83,7 @@
     [super setModel:model];
     [self containerView];
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)model.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = self.contentView.bounds.size.width - CELL_MARGIN - CELL_MARGIN;
     __block CGFloat offset = CELL_PADDING_TOP;
     [self removeAllItems];
 
@@ -175,6 +175,58 @@
     label.numberOfLines = 0;
     return titleSize.height;
 }
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat containerWidth = self.contentView.bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat coverHeight = containerWidth * COVER_HW_RATE;
+    
+    CGRect frame = self.containerView.frame;
+    frame.origin.x = CELL_MARGIN;
+    frame.size.width = containerWidth;
+    self.containerView.frame = frame;
+    
+    self.coverImageView.frame = CGRectMake(0, 0, containerWidth, coverHeight);
+    
+    frame = self.topTitleLabel.frame;
+    frame.size.width = containerWidth - CELL_PADDING - CELL_PADDING;
+    if (self.itemViews.count) {
+        frame.origin.y = coverHeight - frame.size.height - CELL_ITEM_PADDING;
+    } else {
+        frame.origin.y = CELL_PADDING_TOP + coverHeight + CELL_ITEM_PADDING;
+    }
+    self.topTitleLabel.frame = frame;
+    
+    __block CGFloat offset = CELL_PADDING_TOP + coverHeight + CELL_ITEM_PADDING;
+    if (self.itemViews.count) {
+        for (UIView *container in self.itemViews) {
+            CGRect cf = container.frame;
+            cf.origin.y = offset;
+            cf.size.width = containerWidth;
+            container.frame = cf;
+            
+            if (container.subviews.count > 0) {
+                UILabel *subTitle = container.subviews[0];
+                subTitle.frame = CGRectMake(CELL_PADDING, (SUB_COVER_SIZE - SUB_TITLE_FONT_SIZE - SUB_TITLE_FONT_SIZE)/2, containerWidth - CELL_PADDING*3 - SUB_COVER_SIZE, SUB_TITLE_FONT_SIZE * 2);
+            }
+            if (container.subviews.count > 1) {
+                UIImageView *subCover = container.subviews[1];
+                subCover.frame = CGRectMake(containerWidth - CELL_PADDING - SUB_COVER_SIZE, 0, SUB_COVER_SIZE, SUB_COVER_SIZE);
+            }
+            
+            offset += SUB_COVER_SIZE;
+            offset += CELL_ITEM_PADDING;
+        }
+        offset -= CELL_ITEM_PADDING;
+    } else {
+        offset += frame.size.height;
+    }
+    offset += CELL_PADDING_BUTTOM;
+    
+    frame = self.containerView.frame;
+    frame.size.height = offset;
+    self.containerView.frame = frame;
+}
+
 -(NSMutableArray<UIView *> *)itemViews {
     if(!_itemViews) {
         _itemViews = [[NSMutableArray alloc] init];
@@ -184,7 +236,7 @@
 
 - (UIView *)containerView {
     if(!_containerView) {
-        CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+        CGFloat containerWidth = 0; // placeholder, updated in layoutSubviews
         _containerView = [[UIView alloc] initWithFrame:CGRectMake(CELL_MARGIN, CELL_MARGIN_TOP, containerWidth, 0)];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.masksToBounds = YES;
@@ -204,10 +256,10 @@
         
         [_containerView setUserInteractionEnabled:YES];
         
-        _coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containerWidth, containerWidth * COVER_HW_RATE)];
+        _coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containerWidth, 0)];
         [_containerView addSubview:_coverImageView];
         
-        _topTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, 0, containerWidth - CELL_PADDING - CELL_PADDING, TOP_TITLE_FONT_SIZE * 2)];
+        _topTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, 0, 0, TOP_TITLE_FONT_SIZE * 2)];
         _topTitleLabel.numberOfLines = 2;
         _topTitleLabel.font = [UIFont systemFontOfSize:TOP_TITLE_FONT_SIZE];
         [_containerView addSubview:_topTitleLabel];

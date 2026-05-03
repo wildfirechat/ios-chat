@@ -24,16 +24,16 @@
     // Configure the view for the selected state
 }
 
-+ (CGFloat)heightForMessageContent:(WFCCMessage *)message {
-    CGRect frame = [self.class contentFrame];
++ (CGFloat)heightForMessageContent:(WFCCMessage *)message withCellWidth:(CGFloat)width {
+    CGRect frame = [self.class contentFrameWithCellWidth:width];
     CGSize size = [WFCUUtilities getTextDrawingSize:[message.content digest:message] font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(frame.size.width, 8000)];
     return size.height;
 }
 
 - (void)setMessage:(WFCCMessage *)message {
     [super setMessage:message];
-    CGRect frame = [self.class contentFrame];
-    frame.size.height = [self.class heightForMessageContent:message];
+    CGRect frame = [self.class contentFrameWithCellWidth:self.contentView.bounds.size.width];
+    frame.size.height = [self.class heightForMessageContent:message withCellWidth:self.contentView.bounds.size.width];
     self.contentLabel.frame = frame;
     self.contentLabel.text = [message.content digest:message];
 }

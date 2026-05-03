@@ -63,6 +63,7 @@ AccountLoggedInElsewhere="您的账号已在其他手机登录";
 GotIt="知道了";
 Tips="提示";
 SMSCodeLoginTip="使用短信验证码登录将会为您创建账户，请使用短信验证码登录。";
+LoginAsPad="以Pad平台登录";
 Confirm="确定";
 SMSSending="短信发送中";
 SendSuccess="发送成功";

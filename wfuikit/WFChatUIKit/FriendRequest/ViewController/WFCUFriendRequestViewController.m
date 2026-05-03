@@ -25,13 +25,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initSearchUIAndData];
   
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFriendRequestUpdated:) name:kFriendRequestUpdated object:nil];
     
     
     [[WFCCIMService sharedWFCIMService] clearUnreadFriendRequestStatus];
+}
+
+- (void)viewDidLayoutSubviews {
+    [self initSearchUIAndData];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {

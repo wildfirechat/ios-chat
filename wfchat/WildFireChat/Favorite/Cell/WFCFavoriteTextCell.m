@@ -10,6 +10,7 @@
 
 @interface WFCFavoriteTextCell ()
 @property(nonatomic, strong)UILabel *label;
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width;
 @end
 
 @implementation WFCFavoriteTextCell
@@ -25,8 +26,8 @@
     self.label.text = favoriteItem.title;
 }
 
-+ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
-    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width-16, 1000)].height;
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width {
+    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width-16, 1000)].height;
 }
 
 - (UILabel *)label {

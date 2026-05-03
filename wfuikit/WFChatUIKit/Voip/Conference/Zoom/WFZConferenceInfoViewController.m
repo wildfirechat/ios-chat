@@ -307,7 +307,7 @@
             cell.textLabel.text = WFCString(@"QRCode");
 
             UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            CGFloat width = self.view.bounds.size.width;
             UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 8, 24, 24)];
             qrview.image = qrcode;
             [cell addSubview:qrview];

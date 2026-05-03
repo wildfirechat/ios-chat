@@ -196,7 +196,7 @@
         cell = [WFCUCompositeBaseCell cellOfMessage:msg];
     }
 
-    return [cell.class heightForMessage:msg];
+    return [cell.class heightForMessage:msg withCellWidth:tableView.bounds.size.width];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -243,10 +243,10 @@
         // 处理文本消息 - 显示大文本
         WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)msg.content;
 
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIView *textContainer = [[UIView alloc] initWithFrame:self.view.window.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
 
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.window.bounds.size.width, self.view.window.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = textContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont systemFontOfSize:28];

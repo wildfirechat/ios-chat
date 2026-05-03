@@ -356,18 +356,22 @@ static NSString *aiRobot = @"AI";
     if (self.searchController.active || self.selectContact) {
         if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
             if (section == 0) {
+                NSLog(@"count section 0, row 1");
                 return 1;
             }
             dataSource = self.allFriendSectionDic[self.allKeys[section-1]];
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[section]];
         }
+        NSLog(@"count section %d, row %d", section, dataSource.count);
         return dataSource.count;
     } else {
         if (section == 0) {
+            NSLog(@"count section 0, row %d", 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count + (self.meshEnabled?1:0));
             return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count + (self.meshEnabled?1:0);
         } else {
             dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
+            NSLog(@"count section %d, row %d", section, dataSource.count);
             return dataSource.count;
         }
     }
@@ -433,6 +437,29 @@ static NSString *aiRobot = @"AI";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
+    
+    /*
+     NSArray *dataSource;
+
+     if (self.searchController.active || self.selectContact) {
+         if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+             if (section == 0) {
+                 return 1;
+             }
+             dataSource = self.allFriendSectionDic[self.allKeys[section-1]];
+         } else {
+             dataSource = self.allFriendSectionDic[self.allKeys[section]];
+         }
+         return dataSource.count;
+     } else {
+         if (section == 0) {
+             return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count + (self.meshEnabled?1:0);
+         } else {
+             dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
+             return dataSource.count;
+         }
+     }
+     */
     
     NSArray *dataSource;
     if (self.searchController.active || self.selectContact) {
@@ -549,28 +576,11 @@ static NSString *aiRobot = @"AI";
             cell = selectCell;
         }
     } else {
-        if (indexPath.section == 0 && !self.searchController.active) {
-            if (indexPath.row == 0) {
-              WFCUNewFriendTableViewCell *contactCell = [self dequeueOrAllocNewFriendCell:tableView];
-              [contactCell refresh];
-
-              contactCell.nameLabel.text = WFCString(@"NewFriend");
-              contactCell.portraitView.image = [WFCUImage imageNamed:@"friend_request_icon"];
-              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-              cell = contactCell;
-            } else {
-              WFCUContactTableViewCell *contactCell = [self dequeueOrAllocFavGroupCell:tableView];
-              contactCell.nameLabel.text = WFCString(@"Group");
-              contactCell.portraitView.image = [WFCUImage imageNamed:@"contact_group_icon"];
-              contactCell.nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-              cell = contactCell;
-            }
-        } else {
-            WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
-            WFCCUserInfo *userInfo = dataSource[indexPath.row];
-            [contactCell setUserId:userInfo.userId groupId:self.groupId];
-            cell = contactCell;
-        }
+        NSLog(@"section %d, row %d", indexPath.section, indexPath.row);
+        WFCUContactTableViewCell *contactCell = [self dequeueOrAllocContactCell:tableView];
+        WFCCUserInfo *userInfo = dataSource[indexPath.row];
+        [contactCell setUserId:userInfo.userId groupId:self.groupId];
+        cell = contactCell;
     }
     if (cell == nil) {
         NSLog(@"error");

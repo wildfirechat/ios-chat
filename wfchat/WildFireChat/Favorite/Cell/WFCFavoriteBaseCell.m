@@ -10,6 +10,8 @@
 
 @interface WFCFavoriteBaseCell ()
 @property(nonatomic, strong)UILabel *buttomLabel;
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width;
++ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width;
 @end
 
 @implementation WFCFavoriteBaseCell
@@ -24,8 +26,8 @@
 }
 - (void)setFavoriteItem:(WFCUFavoriteItem *)favoriteItem {
     _favoriteItem = favoriteItem;
-    CGFloat contentHeight = [[self class] contentHeight:favoriteItem];
-    self.contentArea.frame = CGRectMake(16, 16, [UIScreen mainScreen].bounds.size.width - 16, contentHeight);
+    CGFloat contentHeight = [[self class] contentHeight:favoriteItem width:self.contentView.bounds.size.width];
+    self.contentArea.frame = CGRectMake(16, 16, self.contentView.bounds.size.width - 16, contentHeight);
     self.buttomLabel.frame = CGRectMake(16, contentHeight+24, self.bounds.size.width-32, 16);
     self.buttomLabel.text = [favoriteItem.origin stringByAppendingFormat:@"  %@", [WFCUUtilities formatTimeLabel:favoriteItem.timestamp]];
 }
@@ -34,8 +36,16 @@
     return 0;
 }
 
++ (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width {
+    return [self contentHeight:favoriteItem];
+}
+
 + (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem {
     return [self contentHeight:favoriteItem] + 54;
+}
+
++ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width {
+    return [self contentHeight:favoriteItem width:width] + 54;
 }
 
 - (UIView *)contentArea {

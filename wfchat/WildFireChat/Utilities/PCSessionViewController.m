@@ -56,8 +56,8 @@
 }
 
 - (void)setupUI {
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat width = self.view.bounds.size.width;
+    CGFloat height = self.view.bounds.size.height;
     
     // 计算导航栏和状态栏高度
     CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;

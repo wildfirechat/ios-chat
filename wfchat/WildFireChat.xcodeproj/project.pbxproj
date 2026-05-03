@@ -26,6 +26,9 @@
 		2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20051FAF0AE600F4405D /* LaunchScreen.storyboard */; };
 		2E1D200A1FAF0AE600F4405D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20091FAF0AE600F4405D /* main.m */; };
 		2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */; };
+		13833405272A41A5A8E878E1 /* WFCPadModeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A1079293C946D382E60578 /* WFCPadModeManager.m */; };
+		23A0108A75DB41D58C35D82A /* WFCPadMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D76EFB414A42DB926F5156 /* WFCPadMainViewController.m */; };
+		A8C64D19E33F4F07B37533ED /* WFCWorkPlatformViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAC6E5F457C4ACE903B5FB6 /* WFCWorkPlatformViewController.m */; };
 		2E1D20D41FAF127100F4405D /* WFCConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20B11FAF127100F4405D /* WFCConfig.m */; };
 		2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */; };
 		2F196512252F3AEB0005F1A3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F196511252F3AEB0005F1A3 /* CoreGraphics.framework */; };
@@ -275,6 +278,12 @@
 		2E1D20091FAF0AE600F4405D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCBaseTabBarController.h; sourceTree = "<group>"; };
 		2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCBaseTabBarController.m; sourceTree = "<group>"; };
+		A7DFB13540BF43B2908C72ED /* WFCPadModeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPadModeManager.h; sourceTree = "<group>"; };
+		93A1079293C946D382E60578 /* WFCPadModeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPadModeManager.m; sourceTree = "<group>"; };
+		1D586E8D4C234D21B7F9146D /* WFCPadMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPadMainViewController.h; sourceTree = "<group>"; };
+		E7D76EFB414A42DB926F5156 /* WFCPadMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPadMainViewController.m; sourceTree = "<group>"; };
+		047219ADA59E4222838CDB13 /* WFCWorkPlatformViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCWorkPlatformViewController.h; sourceTree = "<group>"; };
+		BAAC6E5F457C4ACE903B5FB6 /* WFCWorkPlatformViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCWorkPlatformViewController.m; sourceTree = "<group>"; };
 		2E1D20B11FAF127100F4405D /* WFCConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCConfig.m; sourceTree = "<group>"; };
 		2E1D20BD1FAF127100F4405D /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
 		2E1D20BE1FAF127100F4405D /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
@@ -639,6 +648,12 @@
 			children = (
 				2E1D20AE1FAF125D00F4405D /* WFCBaseTabBarController.h */,
 				2E1D20AF1FAF125D00F4405D /* WFCBaseTabBarController.m */,
+				A7DFB13540BF43B2908C72ED /* WFCPadModeManager.h */,
+				93A1079293C946D382E60578 /* WFCPadModeManager.m */,
+				1D586E8D4C234D21B7F9146D /* WFCPadMainViewController.h */,
+				E7D76EFB414A42DB926F5156 /* WFCPadMainViewController.m */,
+				047219ADA59E4222838CDB13 /* WFCWorkPlatformViewController.h */,
+				BAAC6E5F457C4ACE903B5FB6 /* WFCWorkPlatformViewController.m */,
 				90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */,
 				90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */,
 				2FC50B7B245273A700B36F8A /* PCSessionViewController.h */,
@@ -1473,6 +1488,9 @@
 				B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */,
 				2E1D20D91FAF127100F4405D /* DiscoverViewController.m in Sources */,
 				2E1D20B01FAF125D00F4405D /* WFCBaseTabBarController.m in Sources */,
+				13833405272A41A5A8E878E1 /* WFCPadModeManager.m in Sources */,
+				23A0108A75DB41D58C35D82A /* WFCPadMainViewController.m in Sources */,
+				A8C64D19E33F4F07B37533ED /* WFCWorkPlatformViewController.m in Sources */,
 				2FF07F5A21F82E7200A78A62 /* WFCSettingTableViewController.m in Sources */,
 				90E927F222DFF45F00F168BC /* WFCPrivacyTableViewController.m in Sources */,
 				2F638922254E5A7E0084EEA6 /* WFCFavoriteTableViewController.m in Sources */,
@@ -1773,7 +1791,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
@@ -1821,7 +1839,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "WildFireChat/Getui/GTUtils/WildFireChat-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
@@ -1855,7 +1873,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1888,7 +1906,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1919,7 +1937,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1949,7 +1967,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1980,7 +1998,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -2010,7 +2028,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

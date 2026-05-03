@@ -902,9 +902,6 @@ static WFCCNetworkService * sharedSingleton = nil;
                 sharedSingleton = [[WFCCNetworkService alloc] init];
                 [sharedSingleton addReceiveMessageFilter:[WFCCIMService sharedWFCIMService]];
                 sharedSingleton.firstTimeResume = YES;
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                    sharedSingleton.isPad = YES;
-                }
             }
         }
     }

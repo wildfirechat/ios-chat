@@ -385,7 +385,7 @@
     UIView *title;
     ConnectionStatus status = [WFCCNetworkService sharedInstance].currentConnectionStatus;
     if (status != kConnectionStatusConnecting && status != kConnectionStatusReceiving) {
-        UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 40, 0, 80, 44)];
+        UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 40, 0, 80, 44)];
         
         switch (status) {
             case kConnectionStatusLogout:
@@ -418,7 +418,7 @@
         navLabel.textAlignment = NSTextAlignmentCenter;
         title = navLabel;
     } else {
-        UIView *continer = [[UIView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 60, 0, 120, 44)];
+        UIView *continer = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 60, 0, 120, 44)];
         UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 2, 80, 40)];
         if (status == kConnectionStatusConnecting) {
             navLabel.text = WFCString(@"Connecting");

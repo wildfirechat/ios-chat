@@ -30,16 +30,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WFCUCompositeBaseCell : UITableViewCell
 + (instancetype)cellOfMessage:(WFCCMessage *)message;
-+ (CGFloat)heightForMessage:(WFCCMessage *)message;
++ (CGFloat)heightForMessage:(WFCCMessage *)message withCellWidth:(CGFloat)width;
 
 //子类需要实现这个方法来计算内容区大小
-+ (CGFloat)heightForMessageContent:(WFCCMessage *)message;
++ (CGFloat)heightForMessageContent:(WFCCMessage *)message withCellWidth:(CGFloat)width;
 
 @property(nonatomic, strong)WFCCMessage *message;
 @property(nonatomic, assign)BOOL hiddenPortrait;
 @property(nonatomic, assign)BOOL lastMessage;
 
-+ (CGRect)contentFrame;
++ (CGRect)contentFrameWithCellWidth:(CGFloat)width;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -23,11 +23,16 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
-        self.valueSwitch = [[UISwitch alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 72, 8, 64, 40)];
+        self.valueSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 8, 64, 40)];
         [self.contentView addSubview:self.valueSwitch];
         [self.valueSwitch addTarget:self action:@selector(onSwitch:) forControlEvents:UIControlEventValueChanged];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.valueSwitch.frame = CGRectMake(self.contentView.bounds.size.width - 72, 8, 64, 40);
 }
 
 - (void)onSwitch:(id)sender {

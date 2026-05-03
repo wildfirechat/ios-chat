@@ -138,7 +138,7 @@
     } else if(self.conversation.type == Channel_Type) {
         CGFloat portraitWidth = 80;
         CGFloat top = 40;
-        CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+        CGFloat screenWidth = self.view.bounds.size.width;
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         
         self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
@@ -223,12 +223,15 @@
             self.extraBtnNumber = 0;
         }
         
-        self.memberCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [self.memberCollectionViewLayout getHeigthOfItemCount:self.memberCollectionCount]) collectionViewLayout:self.memberCollectionViewLayout];
+        self.memberCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0) collectionViewLayout:self.memberCollectionViewLayout];
         self.memberCollectionView.delegate = self;
         self.memberCollectionView.dataSource = self;
         self.memberCollectionView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         [self.memberCollectionView registerClass:[WFCUConversationSettingMemberCell class] forCellWithReuseIdentifier:Group_Member_Cell_Reuese_ID];
         
+        CGRect frame = self.memberCollectionView.frame;
+        frame.size.height = [self.memberCollectionViewLayout getHeigthOfItemCount:self.memberCollectionCount];
+        self.memberCollectionView.frame = frame;
         if (self.showMoreMember) {
             UIView *head = [[UIView alloc] init];
             CGRect frame = self.memberCollectionView.frame;
@@ -897,7 +900,7 @@
           
           
           
-          CGFloat width = [UIScreen mainScreen].bounds.size.width;
+          CGFloat width = self.view.bounds.size.width;
           UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
           UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
           qrview.image = qrcode;

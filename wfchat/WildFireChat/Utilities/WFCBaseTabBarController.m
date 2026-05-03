@@ -7,6 +7,8 @@
 //
 
 #import "WFCBaseTabBarController.h"
+#import "WFCPadMainViewController.h"
+#import "WFCWorkPlatformViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "DiscoverViewController.h"
@@ -22,6 +24,24 @@
 #define kImgKey     @"imageName"
 #define kSelImgKey  @"selectedImageName"
 
+@interface WFCPadTabNavigationController : UINavigationController
+@end
+
+@implementation WFCPadTabNavigationController
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    WFCBaseTabBarController *tabVC = (WFCBaseTabBarController *)self.tabBarController;
+    if ([tabVC isKindOfClass:[WFCBaseTabBarController class]] && tabVC.padController) {
+        if ([tabVC.padController shouldShowInDetailPanel:viewController]) {
+            [tabVC.padController showDetailViewController:viewController];
+            return;
+        }
+    }
+    [super pushViewController:viewController animated:animated];
+}
+
+@end
+
 @interface WFCBaseTabBarController () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong)UINavigationController *firstNav;
 @property (nonatomic, strong)UINavigationController *settingNav;
@@ -35,7 +55,7 @@
     self.conversationsViewController = [WFCUConversationTableViewController new];
     UIViewController *vc = self.conversationsViewController;
     vc.title = LocalizedString(@"Message");
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    UINavigationController *nav = [[WFCPadTabNavigationController alloc] initWithRootViewController:vc];
     UITabBarItem *item = nav.tabBarItem;
     item.title = LocalizedString(@"Message");
     item.image = [UIImage imageNamed:@"tabbar_chat"];
@@ -55,7 +75,7 @@
  
     vc = [WFCUContactListViewController new];
     vc.title = LocalizedString(@"Contact");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCPadTabNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Contact");
     item.image = [UIImage imageNamed:@"tabbar_contacts"];
@@ -64,13 +84,13 @@
     [self addChildViewController:nav];
     
     if(WORK_PLATFORM_URL.length) {
-        WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
+        WFCWorkPlatformViewController *browserVC = [WFCWorkPlatformViewController new];
         browserVC.url = WORK_PLATFORM_URL;
         browserVC.hidenOpenInBrowser = YES;
         
         vc = browserVC;
         vc.title = LocalizedString(@"Work");
-        nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav = [[WFCPadTabNavigationController alloc] initWithRootViewController:vc];
         item = nav.tabBarItem;
         item.title = LocalizedString(@"Work");
         item.image = [UIImage imageNamed:@"tabbar_work"];
@@ -81,7 +101,7 @@
     
     vc = [DiscoverViewController new];
     vc.title = LocalizedString(@"Discover");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCPadTabNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Discover");
     item.image = [UIImage imageNamed:@"tabbar_discover"];
@@ -91,7 +111,7 @@
     
     vc = [WFCMeTableViewController new];
     vc.title = LocalizedString(@"Me");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCPadTabNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Me");
     item.image = [UIImage imageNamed:@"tabbar_me"];
@@ -148,6 +168,15 @@
         momentIndex = 3;
     [self.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
+}
+
+- (UITraitCollection *)traitCollection {
+    if (self.padController) {
+        // 在 iPad 分栏模式下强制使用 compact 水平尺寸，防止 tabBar 变成侧边栏
+        UITraitCollection *compactWidth = [UITraitCollection traitCollectionWithHorizontalSizeClass:UIUserInterfaceSizeClassCompact];
+        return [UITraitCollection traitCollectionWithTraitsFromCollections:@[[super traitCollection], compactWidth]];
+    }
+    return [super traitCollection];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

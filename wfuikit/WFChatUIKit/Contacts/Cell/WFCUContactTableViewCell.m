@@ -33,6 +33,15 @@
     // Configure the view for the selected state
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
+    self.nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, self.contentView.bounds.size.width - (16 + 40 + 11), 17);
+    if (_onlineView) {
+        _onlineView.frame = CGRectMake(self.contentView.bounds.size.width - 48, 16, 24, 24);
+    }
+}
+
 - (void)onUserInfoUpdated:(NSNotification *)notification {
     NSArray<WFCCUserInfo *> *userInfoList = notification.userInfo[@"userInfoList"];
     for (WFCCUserInfo *userInfo in userInfoList) {
@@ -140,7 +149,7 @@
         _portraitView = [UIImageView new];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
-        _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
+        _portraitView.frame = CGRectMake(16, 8, 40, 40);
         [self.contentView addSubview:_portraitView];
     }
     return _portraitView;
@@ -150,7 +159,7 @@
     if (!_nameLabel) {
         _nameLabel = [UILabel new];
         _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-        _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
+        _nameLabel.frame = CGRectMake(16 + 40 + 11, 0, 200, 17);
         _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
         [self.contentView addSubview:_nameLabel];
     }
@@ -160,7 +169,7 @@
 - (UIImageView *)onlineView {
     if([[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
         if (!_onlineView) {
-            _onlineView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 48, 16, 24, 24)];;
+            _onlineView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 16, 24, 24)];
             _onlineView.image = [WFCUImage imageNamed:@"ic_online"];
             [self.contentView addSubview:_onlineView];
         }

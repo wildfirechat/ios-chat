@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //基类实现，不能重写
 + (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem;
++ (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem width:(CGFloat)width;
 @end
 
 NS_ASSUME_NONNULL_END

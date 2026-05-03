@@ -54,7 +54,7 @@
 
 - (UIImageView *)lastFeedPortrait {
     if (!_lastFeedPortrait) {
-        _lastFeedPortrait = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 8, 32, 32)];
+        _lastFeedPortrait = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.bounds.size.width - 80, 8, 32, 32)];
         [self.contentView addSubview:_lastFeedPortrait];
     }
     return _lastFeedPortrait;

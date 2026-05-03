@@ -47,19 +47,19 @@
 @end
 
 @implementation WFCUMessageCell
-+ (CGFloat)clientAreaWidth {
-  return [WFCUMessageCell bubbleWidth] - Bubble_Padding_Arraw - Bubble_Padding_Another_Side;
++ (CGFloat)clientAreaWidthForViewWidth:(CGFloat)viewWidth {
+  return [WFCUMessageCell bubbleWidthForViewWidth:viewWidth] - Bubble_Padding_Arraw - Bubble_Padding_Another_Side;
 }
 
-+ (CGFloat)bubbleWidth {
-    return [UIScreen mainScreen].bounds.size.width - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
++ (CGFloat)bubbleWidthForViewWidth:(CGFloat)viewWidth {
+    return viewWidth - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
 }
 
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
   CGFloat height = [super hightForHeaderArea:msgModel];
   CGFloat portraitSize = Portrait_Size;
   CGFloat nameLabelHeight = Name_Label_Height + Name_Client_Padding;
-  CGFloat clientAreaWidth = [self clientAreaWidth];
+  CGFloat clientAreaWidth = [self clientAreaWidthForViewWidth:width];
   
   CGSize clientArea = [self sizeForClientArea:msgModel withViewWidth:clientAreaWidth];
   CGFloat nameAndClientHeight = clientArea.height;
@@ -277,7 +277,7 @@
     }
 
       
-    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidthForViewWidth:frame.size.width]];
       self.bubbleView.image = [WFCUImage imageNamed:@"sent_msg_background"];
       self.bubbleView.frame = CGRectMake(frame.size.width - Portrait_Size - Portrait_Padding_Right - Name_Label_Padding - size.width - Bubble_Padding_Arraw - Bubble_Padding_Another_Side - selectViewOffset, top + Name_Client_Padding, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Another_Side, Client_Bubble_Top_Padding, size.width, size.height);
@@ -308,7 +308,7 @@
           }
       }
       
-    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+    CGSize size = [self.class sizeForClientArea:model withViewWidth:[WFCUMessageCell clientAreaWidthForViewWidth:self.frame.size.width]];
       self.bubbleView.image = [WFCUImage imageNamed:bubbleImageName];
       self.bubbleView.frame = CGRectMake(Portrait_Padding_Left + Portrait_Size + Name_Label_Padding, top, size.width + Bubble_Padding_Arraw + Bubble_Padding_Another_Side, size.height + Client_Bubble_Top_Padding + Client_Bubble_Bottom_Padding);
     self.contentArea.frame = CGRectMake(Bubble_Padding_Arraw, Client_Bubble_Top_Padding, size.width, size.height);
@@ -402,7 +402,7 @@
                 [self.quoteContainer addSubview:self.quoteLabel];
                 [self.contentView addSubview:self.quoteContainer];
             }
-            CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+            CGSize size = [self.class sizeForQuoteArea:model withViewWidth:[WFCUMessageCell clientAreaWidthForViewWidth:self.frame.size.width]];
             
             CGRect frame;
             if (model.message.direction == MessageDirection_Send) {
@@ -460,7 +460,7 @@
             [self.translateActivity startAnimating];
         }
         
-        CGSize size = [self.class sizeForTranslateArea:model withViewWidth:[WFCUMessageCell clientAreaWidth]];
+        CGSize size = [self.class sizeForTranslateArea:model withViewWidth:[WFCUMessageCell clientAreaWidthForViewWidth:self.frame.size.width]];
         
         CGRect frame;
         if (model.message.direction == MessageDirection_Send) {
@@ -513,7 +513,7 @@
         self.additionalLabel.hidden = NO;
         
         CGFloat selectViewOffset = model.selecting ? SelectView_Size + Portrait_Padding_Right : 0;
-        CGFloat maxLabelWidth = [WFCUMessageCell clientAreaWidth];
+        CGFloat maxLabelWidth = [WFCUMessageCell clientAreaWidthForViewWidth:self.frame.size.width];
         CGSize textSize = [WFCUUtilities getTextDrawingSize:additionalText font:self.additionalLabel.font constrainedSize:CGSizeMake(maxLabelWidth, 1000)];
         
         CGFloat labelX;

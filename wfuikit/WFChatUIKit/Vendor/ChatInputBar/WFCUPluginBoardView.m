@@ -14,7 +14,7 @@
 #define PLUGIN_AREA_HEIGHT 211
 #define PLUGIN_PAGE_CONTROL_HEIGHT 20
 
-#define LeftOffset ([UIScreen mainScreen].bounds.size.width-75*4)/5.0
+#define LeftOffset (self.bounds.size.width-75*4)/5.0
 #define RCPlaginBoardCellSize ((CGSize){ 75, 80 })
 #define HorizontalItemsCount 4
 #define VerticalItemsCount 2
@@ -55,8 +55,7 @@
 
 @implementation WFCUPluginBoardView
 - (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection {
-    CGFloat width = [UIScreen mainScreen].bounds.size.width-16;
-    self = [super initWithFrame:CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT)];
+    self = [super initWithFrame:CGRectMake(0, 0, 0, PLUGIN_AREA_HEIGHT)];
     if (self) {
         self.delegate = delegate;
         self.hasVoip = withWoip;
@@ -67,10 +66,27 @@
         
         [self setupScrollView];
         [self setupPageControl];
-        [self setupPluginItems];
     }
 
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    CGFloat scrollViewHeight = PLUGIN_AREA_HEIGHT - PLUGIN_PAGE_CONTROL_HEIGHT;
+    self.scrollView.frame = CGRectMake(0, 0, self.bounds.size.width, scrollViewHeight);
+    self.pageControl.frame = CGRectMake(0, PLUGIN_AREA_HEIGHT - PLUGIN_PAGE_CONTROL_HEIGHT, self.bounds.size.width, PLUGIN_PAGE_CONTROL_HEIGHT);
+    
+    int totalItems = (int)self.pluginItems.count;
+    int pageCount = (totalItems + ItemsPerPage - 1) / ItemsPerPage;
+    self.pageControl.numberOfPages = pageCount;
+    self.scrollView.contentSize = CGSizeMake(self.bounds.size.width * pageCount, scrollViewHeight);
+    
+    for (UIView *subview in self.scrollView.subviews) {
+        [subview removeFromSuperview];
+    }
+    [self setupPluginItems];
 }
 
 - (void)setupScrollView {

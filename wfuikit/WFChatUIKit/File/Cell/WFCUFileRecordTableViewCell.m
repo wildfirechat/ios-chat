@@ -38,6 +38,23 @@
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.contentView.bounds.size.width;
+    if (self.nameLabel.text.length) {
+        CGSize size = [WFCUUtilities getTextDrawingSize:self.nameLabel.text font:self.nameLabel.font constrainedSize:CGSizeMake(width - 74, 48)];
+        self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
+    }
+    NSString *infoText = self.infoLabel.attributedText.string;
+    if (!infoText.length) {
+        infoText = self.infoLabel.text;
+    }
+    if (infoText.length) {
+        CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:self.infoLabel.font constrainedSize:CGSizeMake(width - 74, 40)];
+        self.infoLabel.frame = CGRectMake(66, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 8, size.width, size.height);
+    }
+}
+
 - (void)setFileIcon:(NSString *)fileName {
     NSString *ext = [[fileName pathExtension] lowercaseString];
     self.iconView.image = [WFCUUtilities imageForExt:ext];
@@ -48,8 +65,6 @@
     
     [self setFileIcon:fileRecord.name];
     self.nameLabel.text = self.fileRecord.name;
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
-    self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
     NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
     if(!sender.length) {
@@ -64,8 +79,7 @@
     
     self.infoLabel.attributedText = attStr;
     
-    size = [WFCUUtilities getTextDrawingSize:attStr.string font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(self.bounds.size.width - 74, 40)];
-    self.infoLabel.frame = CGRectMake(66, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 8, size.width, size.height);
+    [self setNeedsLayout];
 }
 
 
