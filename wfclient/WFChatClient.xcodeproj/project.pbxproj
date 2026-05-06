@@ -111,7 +111,6 @@
 		2F1A931B21B250F5006625CD /* WFCCTypingMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A931921B250F5006625CD /* WFCCTypingMessageContent.m */; };
 		2F1EB5BF2499AB4600FD3575 /* WFCCConferenceInviteMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1EB5BD2499AB4500FD3575 /* WFCCConferenceInviteMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F1EB5C02499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1EB5BE2499AB4600FD3575 /* WFCCConferenceInviteMessageContent.m */; };
-		2F21769527618FCD00AF695B /* mars.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F21769427618FCD00AF695B /* mars.xcframework */; };
 		2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2176962761A50600AF695B /* opencore-amrnb.xcframework */; };
 		2F3223D52144C5FB0016A2C4 /* WFCCVideoMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F3223D32144C5FB0016A2C4 /* WFCCVideoMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F3223D62144C5FB0016A2C4 /* WFCCVideoMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3223D42144C5FB0016A2C4 /* WFCCVideoMessageContent.m */; };
@@ -182,6 +181,16 @@
 		90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */; };
 		90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90F5849A1FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */; };
+		B70BE5EE2FAA0D1A000C8DFA /* libapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5ED2FAA0D1A000C8DFA /* libapp.a */; };
+		B70BE5F02FAA0D1F000C8DFA /* libbaseevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5EF2FAA0D1F000C8DFA /* libbaseevent.a */; };
+		B70BE5F22FAA0D21000C8DFA /* libcomm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5F12FAA0D21000C8DFA /* libcomm.a */; };
+		B70BE5F42FAA0D24000C8DFA /* libmars-boost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5F32FAA0D24000C8DFA /* libmars-boost.a */; };
+		B70BE5F62FAA0D28000C8DFA /* libproto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5F52FAA0D28000C8DFA /* libproto.a */; };
+		B70BE5F82FAA0D2B000C8DFA /* libsdt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5F72FAA0D2B000C8DFA /* libsdt.a */; };
+		B70BE5FA2FAA0D2D000C8DFA /* libstn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5F92FAA0D2D000C8DFA /* libstn.a */; };
+		B70BE5FC2FAA0D31000C8DFA /* libxlog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5FB2FAA0D31000C8DFA /* libxlog.a */; };
+		B70BE5FF2FAA10CA000C8DFA /* crypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5FD2FAA10CA000C8DFA /* crypto.xcframework */; };
+		B70BE6002FAA10CA000C8DFA /* ssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B70BE5FE2FAA10CA000C8DFA /* ssl.xcframework */; };
 		B733C7FB2816737500F70316 /* WFCCCallAddParticipantMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */; };
 		B733C7FC2816737500F70316 /* WFCCCallAddParticipantMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B733C7FF281673D000F70316 /* WFCCCallByeMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */; };
@@ -426,6 +435,16 @@
 		90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLocationMessageContent.m; sourceTree = "<group>"; };
 		90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChangeGroupPortraitNotificationContent.h; sourceTree = "<group>"; };
 		90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChangeGroupPortraitNotificationContent.m; sourceTree = "<group>"; };
+		B70BE5ED2FAA0D1A000C8DFA /* libapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libapp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5EF2FAA0D1F000C8DFA /* libbaseevent.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libbaseevent.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5F12FAA0D21000C8DFA /* libcomm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcomm.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5F32FAA0D24000C8DFA /* libmars-boost.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libmars-boost.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5F52FAA0D28000C8DFA /* libproto.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libproto.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5F72FAA0D2B000C8DFA /* libsdt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsdt.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5F92FAA0D2D000C8DFA /* libstn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libstn.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5FB2FAA0D31000C8DFA /* libxlog.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libxlog.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70BE5FD2FAA10CA000C8DFA /* crypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = crypto.xcframework; sourceTree = "<group>"; };
+		B70BE5FE2FAA10CA000C8DFA /* ssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ssl.xcframework; sourceTree = "<group>"; };
 		B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallAddParticipantMessageContent.m; sourceTree = "<group>"; };
 		B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCCallAddParticipantMessageContent.h; sourceTree = "<group>"; };
 		B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallByeMessageContent.m; sourceTree = "<group>"; };
@@ -514,12 +533,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				901E271421F1546100A163CB /* libz.tbd in Frameworks */,
+				B70BE5FC2FAA0D31000C8DFA /* libxlog.a in Frameworks */,
+				B70BE5F02FAA0D1F000C8DFA /* libbaseevent.a in Frameworks */,
+				B70BE5F42FAA0D24000C8DFA /* libmars-boost.a in Frameworks */,
+				B70BE5F22FAA0D21000C8DFA /* libcomm.a in Frameworks */,
 				2F2176972761A50600AF695B /* opencore-amrnb.xcframework in Frameworks */,
 				901E271221F1545900A163CB /* libc++.tbd in Frameworks */,
+				B70BE5FF2FAA10CA000C8DFA /* crypto.xcframework in Frameworks */,
+				B70BE6002FAA10CA000C8DFA /* ssl.xcframework in Frameworks */,
 				901E271021F1545000A163CB /* libresolv.tbd in Frameworks */,
+				B70BE5EE2FAA0D1A000C8DFA /* libapp.a in Frameworks */,
 				B7D2AE992F10D6EB00DB1A98 /* Security.framework in Frameworks */,
+				B70BE5F82FAA0D2B000C8DFA /* libsdt.a in Frameworks */,
 				901E270E21F1543D00A163CB /* CoreTelephony.framework in Frameworks */,
-				2F21769527618FCD00AF695B /* mars.xcframework in Frameworks */,
+				B70BE5F62FAA0D28000C8DFA /* libproto.a in Frameworks */,
+				B70BE5FA2FAA0D2D000C8DFA /* libstn.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +857,8 @@
 		901E270921F153D800A163CB /* Proto */ = {
 			isa = PBXGroup;
 			children = (
+				B70BE5FD2FAA10CA000C8DFA /* crypto.xcframework */,
+				B70BE5FE2FAA10CA000C8DFA /* ssl.xcframework */,
 				2F21769427618FCD00AF695B /* mars.xcframework */,
 			);
 			path = Proto;
@@ -839,6 +869,14 @@
 			children = (
 				B7D2AE982F10D6EB00DB1A98 /* Security.framework */,
 				901E271321F1546100A163CB /* libz.tbd */,
+				B70BE5F92FAA0D2D000C8DFA /* libstn.a */,
+				B70BE5FB2FAA0D31000C8DFA /* libxlog.a */,
+				B70BE5F72FAA0D2B000C8DFA /* libsdt.a */,
+				B70BE5F32FAA0D24000C8DFA /* libmars-boost.a */,
+				B70BE5EF2FAA0D1F000C8DFA /* libbaseevent.a */,
+				B70BE5F52FAA0D28000C8DFA /* libproto.a */,
+				B70BE5ED2FAA0D1A000C8DFA /* libapp.a */,
+				B70BE5F12FAA0D21000C8DFA /* libcomm.a */,
 				901E271121F1545900A163CB /* libc++.tbd */,
 				901E270F21F1545000A163CB /* libresolv.tbd */,
 				901E270D21F1543D00A163CB /* CoreTelephony.framework */,
@@ -1384,6 +1422,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WFChatClient/amr",
 					"$(PROJECT_DIR)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/xlog/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/baseevent/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/boost/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/comm/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/sdt/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/proto/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/stn/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/app/$(CONFIGURATION)-$(PLATFORM_NAME)",
 				);
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = (
@@ -1430,6 +1476,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WFChatClient/amr",
 					"$(PROJECT_DIR)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/xlog/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/baseevent/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/boost/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/comm/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/sdt/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/proto/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/stn/$(CONFIGURATION)-$(PLATFORM_NAME)",
+					"/Users/rain/Workspace/proto2/mars/cmake_build/iOS/app/$(CONFIGURATION)-$(PLATFORM_NAME)",
 				);
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = (
