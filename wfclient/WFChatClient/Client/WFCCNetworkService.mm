@@ -971,9 +971,6 @@ static WFCCNetworkService * sharedSingleton = nil;
         return;
     }
     
-    [self reportEvent_OnForeground:NO];
-    
-    
     self.backgroudRunTime = 0;
     [self startBackgroundTask];
     
@@ -1011,9 +1008,10 @@ static WFCCNetworkService * sharedSingleton = nil;
       }
 #pragma clang diagnostic pop
       
-      if ((mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) || (inCall && self.backgroudRunTime < 1800)) {
+      if ((mars::stn::GetTaskCount() > 0 && self.backgroudRunTime < 60) || (inCall && self.backgroudRunTime < 3600)) {
           [self checkBackGroundTask];
       } else {
+          [self reportEvent_OnForeground:NO];
           mars::stn::ClearTasks();
           _endBgTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1
                                                        target:self
