@@ -118,7 +118,7 @@
 #endif
     [WFCCNetworkService sharedInstance].sendLogCommand = Send_Log_Command;
     [WFCCNetworkService startLog];
-//    [[WFCCNetworkService sharedInstance] useSM4];
+    [[WFCCNetworkService sharedInstance] enableKcp:88];
     [WFCCNetworkService sharedInstance].connectionStatusDelegate = self;
     [WFCCNetworkService sharedInstance].connectToServerDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;

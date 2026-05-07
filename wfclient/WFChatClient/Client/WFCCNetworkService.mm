@@ -1217,6 +1217,10 @@ static WFCCNetworkService * sharedSingleton = nil;
     return mars::stn::getServerDeltaTime();
 }
 
+- (void)enableKcp:(int)kcpShortPort {
+    mars::stn::setUseKcp(kcpShortPort, true);
+}
+
 - (void)useSM4 {
     mars::stn::useEncryptSM4();
 }

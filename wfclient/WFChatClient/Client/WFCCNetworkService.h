@@ -389,6 +389,11 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (void)useSM4;
 
 /**
+ 使用KCP，需要同时在专业版IM服务开启。
+ */
+- (void)enableKcp:(int)kcpShortPort;
+
+/**
  使用AES256加密。注意必须和服务器同时配置，否则无法连接。
  */
 - (void)useAES256;
