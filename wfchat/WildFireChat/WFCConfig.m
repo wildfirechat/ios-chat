@@ -79,4 +79,4 @@ BOOL ENABLE_SLIDE_VERIFY = YES;
 NSString *AI_ROBOT = @"FireRobot";
 
 //拨号机器人ID，点击该机器人会话进入拨号界面
-NSString *DIALIN_ROBOT_ID = @"robotdialin";
+NSString *DIALIN_ROBOT_ID = nil;//@"robotdialin";
