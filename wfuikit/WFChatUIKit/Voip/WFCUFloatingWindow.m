@@ -353,7 +353,34 @@ static NSString *kFloatingWindowPosY = @"kFloatingWindowPosY";
         CGRect screenBounds = [UIScreen mainScreen].bounds;
         posX = (posX + 30) > screenBounds.size.width ? (screenBounds.size.width - 30) : posX;
         posY = (posY + 48) > screenBounds.size.height ? (screenBounds.size.height - 48) : posY;
-        _window = [[UIWindow alloc] initWithFrame:CGRectMake(posX, posY, 64, 96)];
+        
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *windowScene = nil;
+            // 优先从现有 window 中获取 windowScene，确保悬浮窗与主界面在同一个 scene
+            for (UIWindow *window in [UIApplication sharedApplication].windows) {
+                if ([window.windowScene isKindOfClass:[UIWindowScene class]]) {
+                    windowScene = window.windowScene;
+                    break;
+                }
+            }
+            // 如果现有 window 中没有，再从 connectedScenes 中找
+            if (!windowScene) {
+                for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+                    if ([scene isKindOfClass:[UIWindowScene class]]) {
+                        windowScene = (UIWindowScene *)scene;
+                        break;
+                    }
+                }
+            }
+            if (windowScene) {
+                _window = [[UIWindow alloc] initWithWindowScene:windowScene];
+            } else {
+                _window = [[UIWindow alloc] initWithFrame:CGRectMake(posX, posY, 64, 96)];
+            }
+        } else {
+            _window = [[UIWindow alloc] initWithFrame:CGRectMake(posX, posY, 64, 96)];
+        }
+        _window.frame = CGRectMake(posX, posY, 64, 96);
         _window.backgroundColor = [UIColor whiteColor];
         _window.windowLevel = UIWindowLevelAlert + 1;
         _window.layer.cornerRadius = 4;
