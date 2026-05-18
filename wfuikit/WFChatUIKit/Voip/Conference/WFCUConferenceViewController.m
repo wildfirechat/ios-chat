@@ -33,6 +33,7 @@
 #import "WFCUMessageListViewController.h"
 #import "WFCUMoreBoardView.h"
 #import "WFCUConferenceAudioCollectionViewCell.h"
+#import <WFChatClient/WFCCTranscriptionMessageContent.h>
 
 @interface WFCUConferenceViewController () <UITextFieldDelegate
     ,WFAVCallSessionDelegate
@@ -81,7 +82,9 @@
 
 
 @property (nonatomic, strong)UITableView *messageTableView;
+@property (nonatomic, strong) UILabel *transcriptionLabel;
 @property (nonatomic, strong)NSMutableArray<WFCCMessage *> *messages;
+@property (nonatomic, strong) NSMutableArray<WFCCMessage *> *transcriptionMessages;
 @property (nonatomic, strong)NSTimer *removeOldMessageTimer;
 @property (nonatomic, strong)UIButton *chatButton;
 @property(nonatomic, strong)UIView *inputContainer;
@@ -343,6 +346,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithRed:0.25 green:0.25 blue:0.25 alpha:1]];
     self.messages = [[NSMutableArray alloc] init];
+    self.transcriptionMessages = [[NSMutableArray alloc] init];
     self.hasNotifiedWillEnd = NO;
     
     WFCUConferenceCollectionViewLayout *layout = [[WFCUConferenceCollectionViewLayout alloc] init];
@@ -518,6 +522,18 @@
         
     }
     return _messageTableView;
+}
+
+- (UILabel *)transcriptionLabel {
+    if(!_transcriptionLabel) {
+        _transcriptionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _transcriptionLabel.backgroundColor = [UIColor clearColor];
+        _transcriptionLabel.font = [UIFont systemFontOfSize:12];
+        _transcriptionLabel.numberOfLines = 0;
+        _transcriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        [self.view addSubview:_transcriptionLabel];
+    }
+    return _transcriptionLabel;
 }
 
 - (UIButton *)floatingAudioButton {
@@ -707,11 +723,13 @@
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
     [self append:messages];
+    [self appendTranscriptionMessages:messages];
 }
 
 - (void)onMessageSent:(NSNotification *)notification {
     WFCCMessage *message = notification.userInfo[@"message"];
     [self append:@[message]];
+    [self appendTranscriptionMessages:@[message]];
 }
 
 - (void)onLocalMuteStateChanged:(id)sender {
@@ -758,6 +776,29 @@
     [self resizeMessageTable];
 }
 
+- (void)appendTranscriptionMessages:(NSArray<WFCCMessage *> *)messages {
+    [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.conversation.type == Chatroom_Type && [obj.conversation.target isEqualToString:self.currentSession.callId] && [obj.content isKindOfClass:[WFCCTranscriptionMessageContent class]]) {
+            __block BOOL alreadyExist = NO;
+            [self.transcriptionMessages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj2, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(obj2.messageUid == obj.messageUid) {
+                    alreadyExist = YES;
+                    *stop = YES;
+                }
+            }];
+            if(!alreadyExist) {
+                [self.transcriptionMessages addObject:obj];
+            }
+        }
+    }];
+    
+    while(self.transcriptionMessages.count > 5) {
+        [self.transcriptionMessages removeObjectAtIndex:0];
+    }
+    
+    [self updateTranscriptionLabel];
+}
+
 - (void)removeOldMessageAndShow {
     if(!self.messages.count) {
         return;
@@ -787,6 +828,31 @@
     
     BOOL landscape = [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIInterfaceOrientationLandscapeRight;
     self.messageTableView.frame = CGRectMake(0, self.view.bounds.size.height - (landscape ? 0 :[WFCUUtilities wf_safeDistanceBottom]) - CONFERENCE_BAR_HEIGHT - 16 - 20 - size.height, 200, size.height);
+}
+
+- (void)updateTranscriptionLabel {
+    NSMutableAttributedString *fullText = [[NSMutableAttributedString alloc] init];
+    [self.transcriptionMessages enumerateObjectsUsingBlock:^(WFCCMessage *msg, NSUInteger idx, BOOL *stop) {
+        WFCCTranscriptionMessageContent *content = (WFCCTranscriptionMessageContent *)msg.content;
+        WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:content.userId refresh:NO];
+        NSString *name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+        
+        NSMutableAttributedString *line = [[NSMutableAttributedString alloc] initWithString:name attributes:@{NSForegroundColorAttributeName : [UIColor orangeColor], NSFontAttributeName : [UIFont systemFontOfSize:12]}];
+        [line appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@":%@", content.content] attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont systemFontOfSize:12]}]];
+        
+        if (idx < self.transcriptionMessages.count - 1) {
+            [line appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+        }
+        
+        [fullText appendAttributedString:line];
+    }];
+    
+    self.transcriptionLabel.attributedText = fullText;
+    
+    CGFloat maxWidth = self.view.bounds.size.width - 20;
+    CGSize size = [self.transcriptionLabel sizeThatFits:CGSizeMake(maxWidth, 150)];
+    CGFloat topOffset = [WFCUUtilities wf_statusBarHeight] + CONFERENCE_TOP_BAR_WIDTH;
+    self.transcriptionLabel.frame = CGRectMake(10, topOffset, maxWidth, MIN(size.height, 150));
 }
 
 - (void)sendTextMessage:(NSString *)text {
@@ -1632,6 +1698,7 @@
         self.chatButton.hidden = NO;
         self.rotateButton.hidden = NO;
         self.lockButton.hidden = NO;
+        self.transcriptionLabel.hidden = NO;
     } completion:^(BOOL finished) {
         
     }];
@@ -1645,6 +1712,7 @@
     [self startHidePanelTimer];
     [self.view bringSubviewToFront:self.bottomBarView];
     [self.view bringSubviewToFront:self.topBarView];
+    [self.view bringSubviewToFront:self.transcriptionLabel];
 }
 
 - (void)hidePanel {
@@ -1676,6 +1744,7 @@
         self.chatButton.hidden = YES;
         self.rotateButton.hidden = YES;
         self.lockButton.hidden = YES;
+        self.transcriptionLabel.hidden = YES;
     } completion:^(BOOL finished) {
         self.bottomBarView.hidden = YES;
         self.topBarView.hidden = YES;
@@ -1842,6 +1911,7 @@
             [self updatePortraitAndStateViewFrame];
             [self reloadVideoUI];
             [self showPanel];
+            [self transcriptionLabel]; // trigger lazy init
             break;
         case kWFAVEngineStateIncomming:
             self.moreButton.hidden = NO;

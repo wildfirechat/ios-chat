@@ -80,3 +80,9 @@ NSString *AI_ROBOT = @"FireRobot";
 
 //拨号机器人ID，点击该机器人会话进入拨号界面
 NSString *DIALIN_ROBOT_ID = nil;//@"robotdialin";
+
+//AI语音记录助手ID，在和该助手单聊中点击通话记录可查看语音记录
+NSString *AI_MINUTES_ROBOT_ID = @"robotminutes";
+
+//语音记录查看页面地址，如：http://192.168.1.81:8883/index.html
+NSString *MINUTES_URL = @"http://101.42.4.222:8883/index.html";

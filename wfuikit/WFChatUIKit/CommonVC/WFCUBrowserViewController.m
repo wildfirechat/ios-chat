@@ -16,6 +16,8 @@
 @interface WFCUBrowserViewController ()
 @property (nonatomic, strong)DWKWebView *webView;
 @property(nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *configDict;
+
+@property (nonatomic, assign)BOOL authed;
 @end
 
 @implementation WFCUBrowserViewController
@@ -62,16 +64,19 @@
     }];
     [alertController addAction:cancelAction];
     
-    UIAlertAction *openInBrowserAction = [UIAlertAction actionWithTitle:WFCString(@"OpenInBrowser") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        if (@available(iOS 10, *)) {
-            [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url] options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url]];
-        }
-        
-        [ws.navigationController popViewControllerAnimated:NO];
-    }];
-    [alertController addAction:openInBrowserAction];
+    if(!self.authed) {
+        //需要认证的页面不让用浏览器打开
+        UIAlertAction *openInBrowserAction = [UIAlertAction actionWithTitle:WFCString(@"OpenInBrowser") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if (@available(iOS 10, *)) {
+                [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url] options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:ws.url]];
+            }
+            
+            [ws.navigationController popViewControllerAnimated:NO];
+        }];
+        [alertController addAction:openInBrowserAction];
+    }
     
     UIAlertAction *sendToFriendAction = [UIAlertAction actionWithTitle:WFCString(@"SendToFriend") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         WFCUForwardViewController *controller = [[WFCUForwardViewController alloc] init];
@@ -106,7 +111,12 @@
 - (void)getAuthCode:(NSDictionary *)message completion:(JSCallback)completionHandler {
     NSString *appId = message[@"appId"];
     int appType = [message[@"appType"] intValue];
-    [[WFCCIMService sharedWFCIMService] getAuthCode:appId type:appType host:self.webView.URL.host success:^(NSString *authCode) {
+    if (!appType) {
+        appType = [message[@"apptype"] intValue];
+    }
+    __weak typeof(self) ws = self;
+    [[WFCCIMService sharedWFCIMService] getAuthCode:appId type:appType host:@"192.168.4.6" success:^(NSString *authCode) {
+        ws.authed = YES;
         completionHandler(0, authCode,YES);
     } error:^(int error_code) {
         completionHandler(error_code, nil,YES);
@@ -128,7 +138,10 @@
 
 - (id)config:(NSDictionary *)message {
     NSString *appId = message[@"appId"];
-    int appType = [message[@"apptype"] intValue];
+    int appType = [message[@"appType"] intValue];
+    if (!appType) {
+        appType = [message[@"apptype"] intValue];
+    }
     int64_t timestamp = [message[@"timestamp"] longLongValue];
     NSString *nonceStr = message[@"nonceStr"];
     NSString *signature = message[@"signature"];
