@@ -115,7 +115,7 @@
         appType = [message[@"apptype"] intValue];
     }
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] getAuthCode:appId type:appType host:@"192.168.4.6" success:^(NSString *authCode) {
+    [[WFCCIMService sharedWFCIMService] getAuthCode:appId type:appType host:self.webView.URL.host success:^(NSString *authCode) {
         ws.authed = YES;
         completionHandler(0, authCode,YES);
     } error:^(int error_code) {
