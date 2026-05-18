@@ -55,4 +55,10 @@ extern NSString *AI_ROBOT;
 
 //拨号机器人ID，点击该机器人会话进入拨号界面
 extern NSString *DIALIN_ROBOT_ID;
+
+//AI语音记录助手ID，在和该助手单聊中点击通话记录可查看语音记录
+extern NSString *AI_MINUTES_ROBOT_ID;
+
+//语音记录查看页面地址
+extern NSString *MINUTES_URL;
 #endif /* Config_h */

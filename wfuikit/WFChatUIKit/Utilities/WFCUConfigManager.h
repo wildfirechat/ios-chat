@@ -74,6 +74,10 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
 //拨号机器人点击处理，点击落地电话菜单时触发
 @property(nonatomic, copy)void (^dialinRobotHandler)(UIViewController *fromVC);
 
+
+@property(nonatomic, strong)NSString *AI_MINUTES_ROBOT_ID;
+@property(nonatomic, strong)NSString *MINUTES_URL;
+
 @property(nonatomic, strong)NSString *conversationFilesDir;
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;

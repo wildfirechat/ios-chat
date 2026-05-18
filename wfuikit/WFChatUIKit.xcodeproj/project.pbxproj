@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7e4f731f3f014aca9230ac69f5985754 /* WFCUMeetingMinutesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5878453c420b42d09b576c6c254ef0f6 /* WFCUMeetingMinutesCell.m */; };
+		ef62c26f3e3d4f69856136eafb4de248 /* WFCUMeetingMinutesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3e48f5e5bd394270ab55c86824474bd5 /* WFCUMeetingMinutesCell.h */; };
 		14349FA624362A6600FE38B3 /* WFCUSeletedUserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14349FA424362A6600FE38B3 /* WFCUSeletedUserViewController.h */; };
 		14349FA724362A6600FE38B3 /* WFCUSeletedUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14349FA524362A6600FE38B3 /* WFCUSeletedUserViewController.m */; };
 		1450EA80243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1450EA7E243872E500BF51FC /* WFCUSelectedUserCollectionViewCell.h */; };
@@ -826,6 +828,8 @@
 		2F550EB4217F5CC000F56C26 /* WFCUMediaMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUMediaMessageCell.m; sourceTree = "<group>"; };
 		2F550EB5217F5CC000F56C26 /* WFCULocationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCULocationCell.h; sourceTree = "<group>"; };
 		2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUFileCell.m; sourceTree = "<group>"; };
+		3e48f5e5bd394270ab55c86824474bd5 /* WFCUMeetingMinutesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUMeetingMinutesCell.h; sourceTree = "<group>"; };
+		5878453c420b42d09b576c6c254ef0f6 /* WFCUMeetingMinutesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUMeetingMinutesCell.m; sourceTree = "<group>"; };
 		2F550EB7217F5CC000F56C26 /* WFCUCallSummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUCallSummaryCell.m; sourceTree = "<group>"; };
 		2F550EB8217F5CC000F56C26 /* WFCUInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUInformationCell.m; sourceTree = "<group>"; };
 		2F550EB9217F5CC000F56C26 /* WFCUImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUImageCell.h; sourceTree = "<group>"; };
@@ -1690,6 +1694,8 @@
 				2F56F6B7252A078500B829C4 /* CompositeCell */,
 				2F550EC8217F5CC000F56C26 /* WFCUCallSummaryCell.h */,
 				2F550EB7217F5CC000F56C26 /* WFCUCallSummaryCell.m */,
+				3e48f5e5bd394270ab55c86824474bd5 /* WFCUMeetingMinutesCell.h */,
+				5878453c420b42d09b576c6c254ef0f6 /* WFCUMeetingMinutesCell.m */,
 				2F550EC1217F5CC000F56C26 /* WFCUFileCell.h */,
 				2F550EB6217F5CC000F56C26 /* WFCUFileCell.m */,
 				2F550EB9217F5CC000F56C26 /* WFCUImageCell.h */,
@@ -3034,6 +3040,7 @@
 				B70162F2290E2F1700DCD651 /* MWTapDetectingView.h in Headers */,
 				2F55109E217F5CC200F56C26 /* WFCUFileCell.h in Headers */,
 				2B07FBE1247562D90035C4DF /* WFCUReceiptViewController.h in Headers */,
+				ef62c26f3e3d4f69856136eafb4de248 /* WFCUMeetingMinutesCell.h in Headers */,
 				2F5510A5217F5CC200F56C26 /* WFCUCallSummaryCell.h in Headers */,
 				2F5511DE217F5CC300F56C26 /* TYAlertScaleFadeAnimation.h in Headers */,
 				2B97D4892505C7BE00162A2B /* WFCUCardCell.h in Headers */,
@@ -3503,6 +3510,7 @@
 				B770E8C42F40C57A00D4B219 /* WFCUPollMessageCell.m in Sources */,
 				B770E8C52F40C57A00D4B219 /* WFCUPollResultMessageCell.m in Sources */,
 				2F63891C254E3FE30084EEA6 /* WFCUFavoriteItem.m in Sources */,
+				7e4f731f3f014aca9230ac69f5985754 /* WFCUMeetingMinutesCell.m in Sources */,
 				2F551094217F5CC200F56C26 /* WFCUCallSummaryCell.m in Sources */,
 				B733DFF028D404AD0094AD74 /* WFZConferenceHistoryListViewController.m in Sources */,
 				2FBDAB9D25DA453300FEF2C3 /* WFCUConferenceChangeModelContent.m in Sources */,

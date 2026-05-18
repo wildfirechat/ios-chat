@@ -21,6 +21,7 @@
 #import "WFCUFileCell.h"
 #import "WFCUInformationCell.h"
 #import "WFCUCallSummaryCell.h"
+#import "WFCUMeetingMinutesCell.h"
 #import "WFCUStickerCell.h"
 #import "WFCUVideoCell.h"
 #import "WFCURecallCell.h"
@@ -1258,6 +1259,7 @@
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCGroupRejectJoinNotificationContent class]];
     
     [self registerCell:[WFCUCallSummaryCell class] forContent:[WFCCCallStartMessageContent class]];
+    [self registerCell:[WFCUMeetingMinutesCell class] forContent:[WFCCMeetingMinutesMessageContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCTipNotificationContent class]];
     [self registerCell:[WFCUInformationCell class] forContent:[WFCCUnknownMessageContent class]];
     [self registerCell:[WFCURecallCell class] forContent:[WFCCRecallMessageContent class]];
@@ -2783,6 +2785,15 @@
             bvc.url = fileContent.remoteUrl;
             [ws.navigationController pushViewController:bvc animated:YES];
         }];
+    } else if ([model.message.content isKindOfClass:[WFCCMeetingMinutesMessageContent class]]) {
+        WFCCMeetingMinutesMessageContent *minutesMsg = (WFCCMeetingMinutesMessageContent *)model.message.content;
+        if ([[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID length] && [self.conversation.target isEqualToString:[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID]) {
+            NSString *url = [NSString stringWithFormat:@"%@?conferenceId=%@&robotId=%@", [WFCUConfigManager globalManager].MINUTES_URL, minutesMsg.meetingId, self.conversation.target];
+            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+            bvc.url = url;
+            bvc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:bvc animated:YES];
+        }
     } else if ([model.message.content isKindOfClass:[WFCCCallStartMessageContent class]]) {
         WFCCCallStartMessageContent *callStartMsg = (WFCCCallStartMessageContent *)model.message.content;
 #if WFCU_SUPPORT_VOIP
