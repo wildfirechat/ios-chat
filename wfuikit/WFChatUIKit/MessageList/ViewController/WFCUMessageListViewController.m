@@ -2788,7 +2788,8 @@
     } else if ([model.message.content isKindOfClass:[WFCCMeetingMinutesMessageContent class]]) {
         WFCCMeetingMinutesMessageContent *minutesMsg = (WFCCMeetingMinutesMessageContent *)model.message.content;
         if ([[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID length] && [self.conversation.target isEqualToString:[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID]) {
-            NSString *url = [NSString stringWithFormat:@"%@?conferenceId=%@&robotId=%@", [WFCUConfigManager globalManager].MINUTES_URL, minutesMsg.meetingId, self.conversation.target];
+            NSString *encodedConferenceId = [minutesMsg.meetingId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            NSString *url = [NSString stringWithFormat:@"%@?conferenceId=%@", [WFCUConfigManager globalManager].MINUTES_URL, encodedConferenceId];
             WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
             bvc.url = url;
             bvc.hidesBottomBarWhenPushed = YES;
