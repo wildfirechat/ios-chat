@@ -561,6 +561,15 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  @return 协议栈版本号
  */
 - (NSString *)getProtoRevision;
+
+/**
+ 使用TLS，需要专业版IM服务，且开启TLS。
+ 
+ @param skipVerifyCert 本地是否跳过验证证书，一般用来自签名。
+ @param certs 自签名证书列表。如果是公签，传nil。
+ */
+-(void)UseTls:(BOOL)skipVerifyCert selfSignedCerts:(NSArray<NSString *> *)certs;
+
 @end
 
 #endif

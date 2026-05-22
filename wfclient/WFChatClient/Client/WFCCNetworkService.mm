@@ -1097,8 +1097,11 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setGetDomainInfoCallback(new GDCB(self));
   mars::stn::setCustomSortAddressCallback(new CSACB());
   mars::stn::setGetJoinGroupRequestCallback(new GJGRCB(self));
+  //KCP需要专业版IM服务支持，并打开KCP端口。这个函数要在onCreate之前调用，否则会无效.
+  //mars::stn::setUseKcp(88, true);
   mars::baseevent::OnCreate();
 }
+
 - (int64_t)connect:(NSString *)host {
     int64_t lastActiveTime = mars::stn::Connect([host UTF8String]);
     
@@ -1413,6 +1416,14 @@ static WFCCNetworkService * sharedSingleton = nil;
 
 - (NSString *)getProtoRevision {
     return [NSString stringWithUTF8String:mars::stn::getProtoRevision().c_str()];
+}
+
+-(void)UseTls:(BOOL)skipVerifyCert selfSignedCerts:(NSArray<NSString *> *)certs {
+    std::list<std::string> selfSigendCerts;
+    for (NSString *cert in certs) {
+        selfSigendCerts.push_back(cert.UTF8String);
+    }
+    mars::stn::UseTls(skipVerifyCert, selfSigendCerts);
 }
 
 - (void)setVoipDeviceToken:(NSString *)token {

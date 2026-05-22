@@ -1031,6 +1031,8 @@ namespace mars{
         extern void setTimeOffset(int timeoffset);
         extern void setTcpShortLink();
         extern bool isTCPShortLink();
+        extern void setUseKcp(int kcpPort, bool useKcp);
+        extern bool isUseKcp();
         extern void noUseFts();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
@@ -1043,6 +1045,7 @@ namespace mars{
         extern int getRoutePort();
         extern std::string getCustomerInfo();
         extern void AppWillTerminate();
+        extern void removeDeletedUserMessages();
         extern void setConnectionStatusCallback(ConnectionStatusCallback *callback);
         extern void setCustomSortAddressCallback(CustomSortAddressCallback *callback);
         extern void setNotifyConnectToServerCallback(NotifyConnectToServerCallback *callback);
@@ -1255,6 +1258,9 @@ namespace mars{
         extern bool IsEnableRemoteControl();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
+    
+        //使用TLS连接
+        extern void UseTls(bool skipVerifyCert, const std::list<std::string> &selfSignedCerts);
     
         extern bool filesystem_exists(const std::string &path);
 		extern bool filesystem_create_directories(const std::string &path);
