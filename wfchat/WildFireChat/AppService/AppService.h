@@ -69,6 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //清除应用服务认证cookies和认证token
 - (void)clearAppServiceAuthInfos;
+
+// 版本检查
+- (void)checkVersion:(void(^)(NSDictionary *versionInfo))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -285,6 +285,11 @@
         self.window.rootViewController = nav;
     }
     
+    // 延迟3秒后检查版本更新
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self checkVersionUpdate];
+    });
+    
 #if USE_CALL_KIT
     self.callKitManager = [[WFCCallKitManager alloc] init];
 #endif
@@ -792,6 +797,42 @@
 
 - (void)setupNavBar {
     [[WFCUConfigManager globalManager] setupNavBar];
+}
+
+- (void)checkVersionUpdate {
+    [[AppService sharedAppService] checkVersion:^(NSDictionary *versionInfo) {
+        [[NSUserDefaults standardUserDefaults] setObject:versionInfo forKey:@"kVersionCheckResult"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        if (![versionInfo[@"needUpdate"] boolValue]) {
+            return;
+        }
+        BOOL forceUpdate = [versionInfo[@"forceUpdate"] boolValue];
+        NSString *title = versionInfo[@"title"] ?: @"发现新版本";
+        NSString *message = versionInfo[@"message"] ?: @"";
+        NSString *url = versionInfo[@"redirectUrl"] ?: @"";
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if (url.length) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }
+            if (forceUpdate) {
+                exit(0);
+            }
+        }]];
+        if (!forceUpdate) {
+            [alert addAction:[UIAlertAction actionWithTitle:@"以后再说" style:UIAlertActionStyleCancel handler:nil]];
+        }
+        
+        UIViewController *vc = self.window.rootViewController;
+        while (vc.presentedViewController) {
+            vc = vc.presentedViewController;
+        }
+        [vc presentViewController:alert animated:YES completion:nil];
+    } error:^(int errorCode, NSString *message) {
+        // 静默处理
+    }];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {

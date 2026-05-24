@@ -902,6 +902,33 @@ static inline BOOL isHTTPURL(NSString *str) {
     return [[NSUserDefaults standardUserDefaults] objectForKey:WFC_APPSERVER_AUTH_TOKEN];
 }
 
+- (void)checkVersion:(void(^)(NSDictionary *versionInfo))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock {
+    int platform = [WFCCNetworkService sharedInstance].isPad ? Platform_iPad : Platform_iOS;
+    NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/version/check?platform=%d&currentVersion=%@&buildNumber=%@", APP_SERVER_ADDRESS, platform, currentVersion, buildNumber];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
+    
+    NSString *authToken = [self getAppServiceAuthToken];
+    if(authToken.length) {
+        [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
+    }
+    
+    [manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dict = responseObject;
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock(dict[@"result"]);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)clearAppServiceAuthInfos {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_APPSERVER_COOKIES];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:WFC_APPSERVER_AUTH_TOKEN];

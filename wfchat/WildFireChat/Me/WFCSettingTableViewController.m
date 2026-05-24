@@ -28,6 +28,7 @@
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
+@property (nonatomic, strong)NSDictionary *versionInfo;
 @end
 
 @implementation WFCSettingTableViewController
@@ -47,6 +48,48 @@
     
     [self.view addSubview:self.tableView];
     
+    [self loadVersionInfo];
+    [self refreshVersionInfo];
+}
+
+- (void)loadVersionInfo {
+    self.versionInfo = [[NSUserDefaults standardUserDefaults] objectForKey:@"kVersionCheckResult"];
+    [self.tableView reloadData];
+}
+
+- (void)refreshVersionInfo {
+    [[AppService sharedAppService] checkVersion:^(NSDictionary *versionInfo) {
+        [[NSUserDefaults standardUserDefaults] setObject:versionInfo forKey:@"kVersionCheckResult"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.versionInfo = versionInfo;
+            [self.tableView reloadData];
+        });
+    } error:^(int errorCode, NSString *message) {
+        // 静默处理
+    }];
+}
+
+- (void)showVersionUpdateAlert {
+    if (!self.versionInfo) return;
+    BOOL forceUpdate = [self.versionInfo[@"forceUpdate"] boolValue];
+    NSString *title = self.versionInfo[@"title"] ?: @"发现新版本";
+    NSString *message = self.versionInfo[@"message"] ?: @"";
+    NSString *url = self.versionInfo[@"redirectUrl"] ?: @"";
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (url.length) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        }
+        if (forceUpdate) {
+            exit(0);
+        }
+    }]];
+    if (!forceUpdate) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"以后再说" style:UIAlertActionStyleCancel handler:nil]];
+    }
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,7 +112,11 @@
         WFCLanguageTableViewController *vc = [[WFCLanguageTableViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     } else if (indexPath.section == 3) {
-        if (indexPath.row == 1) {
+        if (indexPath.row == 0) {
+            if (self.versionInfo && [self.versionInfo[@"needUpdate"] boolValue]) {
+                [self showVersionUpdateAlert];
+            }
+        } else if (indexPath.row == 1) {
             WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
             mvc.conversation = [[WFCCConversation alloc] init];
             mvc.conversation.type = Single_Type;
@@ -199,9 +246,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"style1Cell"];
+    NSString *identifier = (indexPath.section == 3 && indexPath.row == 0)?@"upgradecell":@"style1Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -226,6 +275,23 @@
             cell.textLabel.text = LocalizedString(@"CurrentVersion");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@(%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[WFCCNetworkService sharedInstance] getProtoRevision]];
             cell.accessoryType = UITableViewCellAccessoryNone;
+            
+            // 移除旧的红点
+            UIView *oldDot = [cell.contentView viewWithTag:10001];
+            if (oldDot) {
+                [oldDot removeFromSuperview];
+            }
+            
+            if (self.versionInfo && [self.versionInfo[@"needUpdate"] boolValue]) {
+                UIView *redDot = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+                redDot.backgroundColor = [UIColor redColor];
+                redDot.layer.cornerRadius = 5;
+                redDot.tag = 10001;
+                [cell.contentView addSubview:redDot];
+                [cell layoutIfNeeded];
+                CGRect textFrame = cell.detailTextLabel.frame;
+                redDot.center = CGPointMake(CGRectGetMaxX(textFrame) + 5, CGRectGetMidY(textFrame)-5);
+            }
         } if (indexPath.row == 1) {
             cell.textLabel.text = LocalizedString(@"HelpFeedback");
             [self showSeparatorLine:cell];
