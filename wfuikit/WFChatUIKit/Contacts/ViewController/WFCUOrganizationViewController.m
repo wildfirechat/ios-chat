@@ -421,7 +421,11 @@
             WFCUOrganization *org = path.subOrganizations[indexPath.row];
             WFCUContactTableViewCell *contactCell = [self dequeueOrAllocOrganizationCell:tableView];
             contactCell.nameLabel.text = [NSString stringWithFormat:@"%@(%d)", org.name, org.memberCount];
-            contactCell.imageView.image = [WFCUImage imageNamed:@"organization_icon"];
+            if(org.portraitUrl.length) {
+                [contactCell.portraitView sd_setImageWithURL:[NSURL URLWithString:[org.portraitUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"organization_icon"]];
+            } else {
+                contactCell.portraitView.image = [WFCUImage imageNamed:@"organization_icon"];
+            }
             cell = contactCell;
         } else {
             WFCUEmployee *emp = path.employees[indexPath.row];
@@ -453,7 +457,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 64;
+    return 52;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {

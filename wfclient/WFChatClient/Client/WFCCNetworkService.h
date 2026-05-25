@@ -250,6 +250,14 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (NSString *)userDefaultPortrait:(WFCCUserInfo *)userInfo;
 
 /**
+ 获取名称的默认头像链接
+ 
+ @param name 名称
+ @return 返回此名称的默认头像
+ */
+- (NSString *)nameDefaultPortrait:(NSString *)name;
+
+/**
  获取群组的默认头像链接
  
  @param groupInfo 群组信息

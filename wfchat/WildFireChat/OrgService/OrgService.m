@@ -108,6 +108,11 @@ static OrgService *sharedSingleton = nil;
     emp.office = obj[@"office"];
     emp.city = obj[@"city"];
     emp.portraitUrl = obj[@"portraitUrl"];
+    if(!emp.portraitUrl.length || ![emp.portraitUrl hasPrefix:@"http"]) {
+        if([WFCCNetworkService sharedInstance].defaultPortraitProvider && [[WFCCNetworkService sharedInstance].defaultPortraitProvider respondsToSelector:@selector(userDefaultPortrait:)]) {
+            emp.portraitUrl = [[WFCCNetworkService sharedInstance].defaultPortraitProvider nameDefaultPortrait:emp.name];
+        }
+    }
     emp.jobNumber = obj[@"jobNumber"];
     emp.joinTime = obj[@"joinTime"];
     emp.type = [obj[@"type"] intValue];

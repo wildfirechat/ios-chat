@@ -870,8 +870,12 @@ static inline BOOL isHTTPURL(NSString *str) {
     if(isHTTPURL(userInfo.portrait)) {
         return userInfo.portrait;
     } else {
-        return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar?name=%@", userInfo.displayName];
+        return [self nameDefaultPortrait:userInfo.displayName];
     }
+}
+
+- (NSString *)nameDefaultPortrait:(NSString *)name {
+    return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar?name=%@", name];
 }
 
 - (NSString *)groupDefaultPortrait:(WFCCGroupInfo *)groupInfo memberInfos:(NSArray<WFCCUserInfo *> *)memberInfos {
