@@ -79,6 +79,17 @@ static WFCUMediaMessageDownloader *sharedSingleton = nil;
     }
     
     WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)msg.content;
+    
+    // 检查禁止接收的文件类型
+    if ([mediaContent isKindOfClass:[WFCCFileMessageContent class]]) {
+        WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)mediaContent;
+        NSString *ext = [[fileContent.name pathExtension] lowercaseString];
+        if ([[WFCUConfigManager globalManager].disabledReceiveFileTypes containsObject:ext]) {
+            NSLog(@"file type not allowed to receive: %@", ext);
+            errorBlock(msg.messageUid, -1);
+            return NO;
+        }
+    }
     if (mediaContent.localPath.length && [WFCUUtilities isFileExist:mediaContent.localPath]) {
         successBlock(msg.messageUid, mediaContent.localPath);
         return NO;

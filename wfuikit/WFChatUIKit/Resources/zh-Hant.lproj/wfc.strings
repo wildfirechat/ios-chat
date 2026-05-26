@@ -713,3 +713,11 @@
 "SaveToPan"="保存到網盤";
 
 "AIGeneratedContent"="本內容由AI生成";
+
+"OpenLinkForbidden"="禁止打开外部链接";
+"OpenLinkWarning"="謹防釣魚網站或者帶毒網站，只有確認已知安全的鏈接才可以打開。請確實該鏈接是否是已知安全的？";
+"ConfirmSafe"="確認安全";
+"Close"="關閉";
+"OpenFileForbidden"="禁止打開此類型";
+"SendFileForbidden"="不能發送該類型文件";
+

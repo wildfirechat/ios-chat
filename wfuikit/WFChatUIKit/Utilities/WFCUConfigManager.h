@@ -99,6 +99,24 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
  */
 @property(nonatomic, assign)NSInteger markdownDisplayStrategy;
 
+/**
+ * 禁止发送的文件类型，例如 @["exe", "bat", "apk"]
+ */
+@property(nonatomic, strong)NSArray<NSString *> *disabledSendFileTypes;
+
+/**
+ * 禁止接收/下载的文件类型，例如 @["exe", "bat", "apk"]
+ */
+@property(nonatomic, strong)NSArray<NSString *> *disabledReceiveFileTypes;
+
+/**
+ * 打开消息链接的策略
+ * 0 = 不限制，直接打开
+ * 1 = 提醒确认（默认）
+ * 2 = 禁止打开
+ */
+@property(nonatomic, assign)NSInteger openLinkPolicy;
+
 @property (nonatomic, strong)NSMutableDictionary<NSNumber*, Class>* cellContentDict;
 
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType;

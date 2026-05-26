@@ -40,6 +40,13 @@ static WFCUConfigManager *sharedSingleton = nil;
         _enableMarkdownSupport = YES;
         _markdownDisplayStrategy = 0; // 0: 自动检测
         
+        // 文件类型限制默认值
+        _disabledSendFileTypes = @[@"exe", @"bat", @"apk"];
+        _disabledReceiveFileTypes = @[@"exe", @"bat", @"apk"];
+        
+        // 打开链接策略默认值：1 = 提醒确认
+        _openLinkPolicy = 1;
+        
         // 监听内存警告通知
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(didReceiveMemoryWarning)

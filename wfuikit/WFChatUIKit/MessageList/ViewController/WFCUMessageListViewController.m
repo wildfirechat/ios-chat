@@ -2774,6 +2774,11 @@
         [self.navigationController pushViewController:vc animated:YES];
     } else if ([model.message.content isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)model.message.content;
+        NSString *ext = [[fileContent.name pathExtension] lowercaseString];
+        if ([[WFCUConfigManager globalManager].disabledReceiveFileTypes containsObject:ext]) {
+            [self.view makeToast:WFCString(@"OpenFileForbidden")];
+            return;
+        }
         
         __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:model.message.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
@@ -2860,9 +2865,7 @@
         [self.navigationController pushViewController:vc animated:YES];
     } else if([model.message.content isKindOfClass:[WFCCLinkMessageContent class]]) {
         WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)model.message.content;
-        WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
-        bvc.url = content.url;
-        [self.navigationController pushViewController:bvc animated:YES];
+        [self handleOpenLink:content.url];
     } else if([model.message.content isKindOfClass:WFCCRichNotificationMessageContent.class]) {
         WFCCRichNotificationMessageContent *richNotification = (WFCCRichNotificationMessageContent *)model.message.content;
         if(richNotification.exUrl.length) {
@@ -3115,6 +3118,30 @@
 }
 
 - (void)didSelectUrl:(WFCUMessageCellBase *)cell withModel:(WFCUMessageModel *)model withUrl:(NSString *)urlString {
+    [self handleOpenLink:urlString];
+}
+
+- (void)handleOpenLink:(NSString *)urlString {
+    NSInteger policy = [WFCUConfigManager globalManager].openLinkPolicy;
+    if (policy == 2) {
+        [self.view makeToast:WFCString(@"OpenLinkForbidden")];
+        return;
+    }
+    if (policy == 1) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:WFCString(@"Tip") message:WFCString(@"OpenLinkWarning") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:WFCString(@"ConfirmSafe") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self openUrlInBrowser:urlString];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:WFCString(@"Close") style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:confirmAction];
+        [alertController addAction:cancelAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    [self openUrlInBrowser:urlString];
+}
+
+- (void)openUrlInBrowser:(NSString *)urlString {
     WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
     bvc.url = urlString;
     [self.navigationController pushViewController:bvc animated:YES];
@@ -3527,6 +3554,12 @@
             continue;;
         }
         
+        NSString *ext = [[file pathExtension] lowercaseString];
+        if ([[WFCUConfigManager globalManager].disabledSendFileTypes containsObject:ext]) {
+            [self.view makeToast:WFCString(@"SendFileForbidden")];
+            continue;
+        }
+        
         WFCCFileMessageContent *content = [WFCCFileMessageContent fileMessageContentFromPath:file];
         [self sendMessage:content];
         [NSThread sleepForTimeInterval:0.05];
@@ -3538,6 +3571,13 @@
         // 检查文件有效性
         if (file.storageUrl.length == 0 || file.name.length == 0 || file.size == 0) {
             NSLog(@"Invalid netdisk file: name=%@, url=%@, size=%lld", file.name, file.storageUrl, file.size);
+            continue;
+        }
+        
+        // 检查禁止发送的文件类型
+        NSString *ext = [[file.name pathExtension] lowercaseString];
+        if ([[WFCUConfigManager globalManager].disabledSendFileTypes containsObject:ext]) {
+            [self.view makeToast:WFCString(@"SendFileForbidden")];
             continue;
         }
         

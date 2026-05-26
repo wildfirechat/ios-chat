@@ -717,3 +717,11 @@
 "NewName"="新名称";
 
 "AIGeneratedContent"="本内容由AI生成";
+
+"OpenLinkForbidden"="禁止打开外部链接";
+"OpenLinkWarning"="谨防钓鱼网站或者带毒网站，只有确认已知安全的链接才可以打开。请确实该链接是否是已知安全的？";
+"ConfirmSafe"="确认安全";
+"Close"="关闭";
+"OpenFileForbidden"="禁止打开此类型";
+"SendFileForbidden"="不能发送该类型文件";
+
