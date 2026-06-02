@@ -975,6 +975,7 @@ static WFCCNetworkService * sharedSingleton = nil;
     [self startBackgroundTask];
     
     [self checkBackGroundTask];
+    [self uploadBadgeNumber];
 }
 
 - (void)checkBackGroundTask {
@@ -995,6 +996,7 @@ static WFCCNetworkService * sharedSingleton = nil;
                                                     repeats:NO];
 
 }
+
 - (void)suspend {
   if(_bgTaskId != UIBackgroundTaskInvalid) {
       self.backgroudRunTime += 3;
@@ -1070,6 +1072,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     if(self.currentConnectionStatus == kConnectionStatusConnected) {
         mars::baseevent::OnNetworkChange();
     }
+}
+
+- (void)uploadBadgeNumber {
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+    int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
+    int count = unreadCount.unread + unreadFriendRequest;
+    //同步到IM服务，IM服务当需要推送时，把这个数字发到推送服务，从而计算较为精确的角标数
+    [[WFCCIMService sharedWFCIMService] uploadBadgeNumber:count];
 }
 
 - (void)dealloc {
