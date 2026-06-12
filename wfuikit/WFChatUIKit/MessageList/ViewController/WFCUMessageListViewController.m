@@ -531,7 +531,7 @@
         self.lastUid = self.modelList.lastObject.message.messageUid;
     }
     for (WFCUMessageModel *model in self.modelList) {
-        if (model.message.messageUid > 0 && model.message.messageUid < self.lastUid) {
+        if (model.message.messageUid != 0 && model.message.messageUid < self.lastUid) {
             self.lastUid = model.message.messageUid;
         }
     }
