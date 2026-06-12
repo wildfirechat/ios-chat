@@ -1028,6 +1028,8 @@ namespace mars{
 
         extern void useEncryptSM4();
         extern void useEncryptAES256();
+        extern void useDataVerify(bool enabled);
+        extern void useEncryptMaxMinutes(int minutes);
         extern void setTimeOffset(int timeoffset);
         extern void setTcpShortLink();
         extern bool isTCPShortLink();

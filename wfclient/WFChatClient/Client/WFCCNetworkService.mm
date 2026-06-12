@@ -1238,6 +1238,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::useEncryptAES256();
 }
 
+- (void)setDataVerify:(BOOL)enabled {
+    mars::stn::useDataVerify(enabled);
+}
+
+- (void)setEncryptMaxMinutes:(int)minutes {
+    mars::stn::useEncryptMaxMinutes(minutes);
+}
+
 - (void)useTcpShortLink {
     mars::stn::setTcpShortLink();
 }
