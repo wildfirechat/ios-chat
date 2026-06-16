@@ -539,7 +539,7 @@
         NSMutableArray *reversedMsgs = [[NSMutableArray alloc] init];
         for (WFCCMessage *msg in messages) {
             [reversedMsgs insertObject:msg atIndex:0];
-            if (msg.messageUid > 0 && msg.messageUid < self.lastUid) {
+            if (msg.messageUid != 0 && msg.messageUid < self.lastUid) {
                 self.lastUid = msg.messageUid;
             }
         }
