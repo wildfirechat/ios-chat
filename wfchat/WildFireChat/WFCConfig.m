@@ -13,6 +13,11 @@
 //NSString *IM_SERVER_HOST = @"2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10"; //ipv6地址，不能带[]和端口
 NSString *IM_SERVER_HOST = @"wildfirechat.net";
 
+// 主网媒体地址前缀，双网环境下用于头像/媒体类消息的 URL 转换。
+NSString *MAIN_MEDIA_URL_PREFIX = nil;
+// 备网媒体地址前缀，双网环境下用于头像/媒体类消息的 URL 转换。
+NSString *BACKUP_MEDIA_URL_PREFIX = nil;
+
 
 // App Server默认使用的是8888端口，替换为自己部署的服务时需要注意端口别填错了，使用http访问appserver时，需要确保appserver的配置文件中的wfc.all_client_support_ssl参数为false
 // 正式商用时，建议用https，确保token安全，可以使用nginx反向代理添加对ssl的支持。需要确保appserver的配置文件中的wfc.all_client_support_ssl参数为true

@@ -12,6 +12,11 @@
 
 extern NSString *IM_SERVER_HOST;
 
+// 双网媒体地址前缀，用于头像/媒体类消息中的 URL 转换。
+// 只在双网环境下配置，不需要双网时保持为 nil。
+extern NSString *MAIN_MEDIA_URL_PREFIX;
+extern NSString *BACKUP_MEDIA_URL_PREFIX;
+
 extern NSString *APP_SERVER_ADDRESS;
 extern NSString *APP_SERVER_BACKUP_ADDRESS;
 extern NSString *ORG_SERVER_ADDRESS;

@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DIALINC5414A5FCF1342DB8AC4 /* WFCUDialPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */; };
-
 		149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3105241D292C00B935D3 /* UIColor+YH.m */; };
 		149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3109241E300C00B935D3 /* UIFont+YH.m */; };
 		149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B311D242247E900B935D3 /* UIImage+ERCategory.m */; };
+		155cfc85be4049a2948636f5 /* WFCFontSizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9e0199c33edd409eb672e618 /* WFCFontSizeViewController.m */; };
 		2B4C027B252F4A570043FA41 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C026F252F4A570043FA41 /* AFURLResponseSerialization.m */; };
 		2B4C027C252F4A570043FA41 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0270252F4A570043FA41 /* AFHTTPSessionManager.m */; };
 		2B4C027D252F4A570043FA41 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0272252F4A570043FA41 /* AFURLSessionManager.m */; };
@@ -21,9 +20,7 @@
 		2B4C0281252F4A570043FA41 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4C0279252F4A570043FA41 /* MBProgressHUD.m */; };
 		2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */; };
 		2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */; };
-		155cfc85be4049a2948636f5 /* WFCFontSizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9e0199c33edd409eb672e618 /* WFCFontSizeViewController.m */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
-		D8DD2FE9D1B342D18C7568ED /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B19FEFF8908544218632F7FE /* SceneDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
 		2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20051FAF0AE600F4405D /* LaunchScreen.storyboard */; };
@@ -161,7 +158,7 @@
 		B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */; };
 		B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; };
 		B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */; };
+		B7D9B2AF2D8447E000402CC4 /* WFRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* WFRedirector.m */; };
 		B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */; };
 		B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */; };
 		B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6312F4D8BFA003E481E /* PanService.m */; };
@@ -169,6 +166,8 @@
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
+		D8DD2FE9D1B342D18C7568ED /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B19FEFF8908544218632F7FE /* SceneDelegate.m */; };
+		DIALINC5414A5FCF1342DB8AC4 /* WFCUDialPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,9 +238,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUDialPadViewController.h; sourceTree = "<group>"; };
-		DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUDialPadViewController.m; sourceTree = "<group>"; };
-
 		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
 		149B3106241D292C00B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
 		149B3108241E300C00B935D3 /* UIFont+YH.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+YH.h"; sourceTree = "<group>"; };
@@ -267,15 +263,11 @@
 		2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewController.m; sourceTree = "<group>"; };
 		2B840F412442125B006BE3D8 /* WFCThemeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCThemeTableViewCell.h; sourceTree = "<group>"; };
 		2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCThemeTableViewCell.m; sourceTree = "<group>"; };
-		9e15bdb7a13741f8bac84f2d /* WFCFontSizeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFontSizeViewController.h; sourceTree = "<group>"; };
-		9e0199c33edd409eb672e618 /* WFCFontSizeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFontSizeViewController.m; sourceTree = "<group>"; };
 		2BED56732395EC4D00B55C79 /* WFMomentClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = "<group>"; };
 		2BED56742395EC4D00B55C79 /* WFMomentUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = "<group>"; };
 		2E1D1FF71FAF0AE600F4405D /* 野火IM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火IM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		BD491388F852427B98C2D0AE /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		B19FEFF8908544218632F7FE /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		2E1D20011FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2E1D20031FAF0AE600F4405D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E1D20061FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -396,6 +388,9 @@
 		90E927F122DFF45F00F168BC /* WFCPrivacyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyTableViewController.m; sourceTree = "<group>"; };
 		90FF267C222AB34B0001D8AF /* PCLoginConfirmViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLoginConfirmViewController.h; sourceTree = "<group>"; };
 		90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLoginConfirmViewController.m; sourceTree = "<group>"; };
+		9e0199c33edd409eb672e618 /* WFCFontSizeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFontSizeViewController.m; sourceTree = "<group>"; };
+		9e15bdb7a13741f8bac84f2d /* WFCFontSizeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFontSizeViewController.h; sourceTree = "<group>"; };
+		B19FEFF8908544218632F7FE /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		B709CCEA28F7BA080036EDFA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		B709CCEC28F7BCCC0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
 		B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
@@ -508,8 +503,8 @@
 		B7CB3A92289BD66C00E9D688 /* WFCChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCChangePasswordViewController.m; sourceTree = "<group>"; };
 		B7D8F7312783029400752426 /* ZLPhotoBrowser.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZLPhotoBrowser.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/ZLPhotoBrowser/ZLPhotoBrowser.xcframework; sourceTree = "<group>"; };
 		B7D8F7362783035200752426 /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
-		B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestRedirector.h; sourceTree = "<group>"; };
-		B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestRedirector.m; sourceTree = "<group>"; };
+		B7D9B2AD2D8447E000402CC4 /* WFRedirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFRedirector.h; sourceTree = "<group>"; };
+		B7D9B2AE2D8447E000402CC4 /* WFRedirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFRedirector.m; sourceTree = "<group>"; };
 		B7DA71FB2F60FBEB00C112C8 /* ArchiveService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveService.h; sourceTree = "<group>"; };
 		B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveService.m; sourceTree = "<group>"; };
 		B7DA71FD2F60FBEB00C112C8 /* ArchivedMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchivedMessage.h; sourceTree = "<group>"; };
@@ -521,6 +516,9 @@
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
 		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
+		BD491388F852427B98C2D0AE /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUDialPadViewController.h; sourceTree = "<group>"; };
+		DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUDialPadViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -713,8 +711,8 @@
 				2E1D20B11FAF127100F4405D /* WFCConfig.m */,
 				DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */,
 				DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */,
-				B7D9B2AD2D8447E000402CC4 /* TestRedirector.h */,
-				B7D9B2AE2D8447E000402CC4 /* TestRedirector.m */,
+				B7D9B2AD2D8447E000402CC4 /* WFRedirector.h */,
+				B7D9B2AE2D8447E000402CC4 /* WFRedirector.m */,
 				903EBC942136313B00312C16 /* SupportFiles */,
 			);
 			path = WildFireChat;
@@ -1468,7 +1466,7 @@
 				B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */,
 				B764D48F295854700082492F /* OrgService.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
-				B7D9B2AF2D8447E000402CC4 /* TestRedirector.m in Sources */,
+				B7D9B2AF2D8447E000402CC4 /* WFRedirector.m in Sources */,
 				2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */,
 				B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */,
 				2F94FAB224551D82007713CD /* DeviceViewController.m in Sources */,
