@@ -15,9 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CollectionService *)sharedService;
 
-/// 设置接龙服务基础 URL，例如：http://localhost:8081
-@property (nonatomic, strong) NSString *baseUrl;
-
 @end
 
 NS_ASSUME_NONNULL_END

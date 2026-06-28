@@ -13,6 +13,7 @@
 #import <WFChatClient/WFCCNetworkService.h>
 #import "WFCConfig.h"
 
+
 static CollectionService *sharedSingleton = nil;
 
 @implementation CollectionService
@@ -31,8 +32,6 @@ static CollectionService *sharedSingleton = nil;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // 默认基础 URL，可在 AppDelegate 中设置
-        //_baseUrl = @"http://localhost:8081";
     }
     return self;
 }
@@ -181,6 +180,10 @@ static CollectionService *sharedSingleton = nil;
     }];
 }
 
+- (NSString *)effectiveBaseUrl {
+    return WFCGetCollectionServerAddress();
+}
+
 - (void)post:(NSString *)path
         data:(nullable id)data
     authCode:(NSString *)authCode
@@ -195,7 +198,7 @@ static CollectionService *sharedSingleton = nil;
         [manager.requestSerializer setValue:authCode forHTTPHeaderField:@"authCode"];
     }
 
-    NSString *url = [self.baseUrl stringByAppendingString:path];
+    NSString *url = [[self effectiveBaseUrl] stringByAppendingString:path];
 
     [manager POST:url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{

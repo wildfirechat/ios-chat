@@ -79,6 +79,12 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
 
 @property(nonatomic, strong)NSString *asrServiceUrl;
 
+/**
+ * 动态提供语音转文字服务地址，双网环境下根据当前网络返回主网或备网地址。
+ * 设置后优先于 asrServiceUrl 属性。
+ */
+@property(nonatomic, copy)NSString *(^asrServiceUrlProvider)(void);
+
 @property(nonatomic, strong)NSString *aiRobotId;
 
 //拨号机器人ID，设置后会在首页+号菜单中显示落地电话选项
@@ -89,6 +95,12 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
 
 @property(nonatomic, strong)NSString *AI_MINUTES_ROBOT_ID;
 @property(nonatomic, strong)NSString *MINUTES_URL;
+
+/**
+ * 动态提供会议纪要页面地址，双网环境下根据当前网络返回主网或备网地址。
+ * 设置后优先于 MINUTES_URL 属性。
+ */
+@property(nonatomic, copy)NSString *(^minutesUrlProvider)(void);
 
 @property(nonatomic, strong)NSString *conversationFilesDir;
 

@@ -12,6 +12,7 @@
 #import <WFChatClient/WFCCNetworkService.h>
 #import "WFCConfig.h"
 
+
 static PanService *sharedSingleton = nil;
 
 @implementation PanService
@@ -353,6 +354,10 @@ static PanService *sharedSingleton = nil;
     }];
 }
 
+- (NSString *)effectiveBaseUrl {
+    return WFCGetPanServerAddress();
+}
+
 - (void)post:(NSString *)path
         data:(nullable id)data
     authCode:(NSString *)authCode
@@ -366,7 +371,7 @@ static PanService *sharedSingleton = nil;
         [manager.requestSerializer setValue:authCode forHTTPHeaderField:@"authCode"];
     }
     
-    NSString *url = [self.baseUrl stringByAppendingString:path];
+    NSString *url = [[self effectiveBaseUrl] stringByAppendingString:path];
     
     [manager POST:url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{

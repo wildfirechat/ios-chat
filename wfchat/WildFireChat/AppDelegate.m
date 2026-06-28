@@ -21,6 +21,7 @@
 #endif
 #import "WFCLoginViewController.h"
 #import "WFCConfig.h"
+
 #import "WFCUDialPadViewController.h"
 #import "WFCBaseTabBarController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
@@ -165,24 +166,22 @@
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
     [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
-    if(COLLECTION_SERVER_ADDRESS) {
-        [CollectionService sharedService].baseUrl = COLLECTION_SERVER_ADDRESS;
+    if(COLLECTION_SERVER_ADDRESS || COLLECTION_SERVER_BACKUP_ADDRESS) {
         [WFCUConfigManager globalManager].collectionServiceProvider = [CollectionService sharedService];
     }
-    if(POLL_SERVER_ADDRESS) {
-        [PollService sharedService].baseUrl = POLL_SERVER_ADDRESS;
+    if(POLL_SERVER_ADDRESS || POLL_SERVER_BACKUP_ADDRESS) {
         [WFCUConfigManager globalManager].pollServiceProvider = [PollService sharedService];
     }
-    if(PAN_SERVER_ADDRESS) {
-        [PanService sharedService].baseUrl = PAN_SERVER_ADDRESS;
+    if(PAN_SERVER_ADDRESS || PAN_SERVER_BACKUP_ADDRESS) {
         [WFCUConfigManager globalManager].panServiceProvider = [PanService sharedService];
     }
-    if(ARCHIVE_SERVER_ADDRESS) {
-        [ArchiveService sharedService].baseUrl = ARCHIVE_SERVER_ADDRESS;
+    if(ARCHIVE_SERVER_ADDRESS || ARCHIVE_SERVER_BACKUP_ADDRESS) {
         [WFCUConfigManager globalManager].archiveServiceProvider = [ArchiveService sharedService];
     }
 
-    [WFCUConfigManager globalManager].asrServiceUrl = ASR_SERVICE_URL;
+    [WFCUConfigManager globalManager].asrServiceUrlProvider = ^NSString *{
+        return WFCGetAsrServiceUrl();
+    };
     
     [WFCUConfigManager globalManager].aiRobotId = AI_ROBOT;
     
@@ -196,7 +195,9 @@
     };
     
     [WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID = AI_MINUTES_ROBOT_ID;
-    [WFCUConfigManager globalManager].MINUTES_URL = MINUTES_URL;
+    [WFCUConfigManager globalManager].minutesUrlProvider = ^NSString *{
+        return WFCGetMinutesUrl();
+    };
     
     //可以在WFCUMessageListViewController界面代码中绑定消息和Cell的对应关系（注册Cell），也可以在这里注册。
     //Cell分为2种类型，一种类型是带有头像的，另外一种是没有头像的。写Cell时可以参考下面这2个Cell。
@@ -395,6 +396,12 @@
             NSArray *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_ADDRESS]];
             for (NSHTTPCookie *cookie in cookies) {
                 [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:cookie];
+            }
+            if (APP_SERVER_BACKUP_ADDRESS.length) {
+                cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:APP_SERVER_BACKUP_ADDRESS]];
+                for (NSHTTPCookie *cookie in cookies) {
+                    [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:cookie];
+                }
             }
         }
     }

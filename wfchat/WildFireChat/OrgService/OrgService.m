@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "AFNetworking.h"
 #import "WFCConfig.h"
+
 #import <WFChatUIKit/WFChatUIKit.h>
 #import <WebKit/WebKit.h>
 
@@ -36,7 +37,7 @@ static OrgService *sharedSingleton = nil;
 }
 
 - (void)login:(void(^)(void))successBlock error:(void(^)(int errCode))errorBlock {
-    if(!ORG_SERVER_ADDRESS) {
+    if(!WFCGetOrgServerAddress()) {
         NSLog(@"没有配置组织通讯录服务!");
         errorBlock(-1);
         return;
@@ -328,7 +329,7 @@ static OrgService *sharedSingleton = nil;
         [manager.requestSerializer setValue:authToken forHTTPHeaderField:AUTHORIZATION_HEADER];
     }
     
-    [manager POST:[ORG_SERVER_ADDRESS stringByAppendingPathComponent:path]
+    [manager POST:[WFCGetOrgServerAddress() stringByAppendingPathComponent:path]
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

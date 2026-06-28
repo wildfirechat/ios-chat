@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "AFNetworking.h"
 #import "WFCConfig.h"
+
 #import "PCSessionViewController.h"
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "SharePredefine.h"
@@ -321,7 +322,76 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+- (void)appServerAddressWithCompletion:(void(^)(NSString *appServerAddress))completion {
+    if (!APP_SERVER_BACKUP_ADDRESS.length) {
+        completion(APP_SERVER_ADDRESS);
+        return;
+    }
+    
+    // IM 已连接时，直接用网络状态判断
+    if ([WFCCNetworkService sharedInstance].currentConnectionStatus == kConnectionStatusConnected) {
+        completion([WFCCNetworkService sharedInstance].connectedToMainNetwork ? APP_SERVER_ADDRESS : APP_SERVER_BACKUP_ADDRESS);
+        return;
+    }
+    
+    // IM 未连接时（登录前），实时探测主备地址，返回首个可达地址
+    __block BOOL mainReachable = NO;
+    __block BOOL backupReachable = NO;
+    dispatch_group_t group = dispatch_group_create();
+    
+    dispatch_group_enter(group);
+    [self probeAppServer:APP_SERVER_ADDRESS completion:^(BOOL reachable) {
+        mainReachable = reachable;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self probeAppServer:APP_SERVER_BACKUP_ADDRESS completion:^(BOOL reachable) {
+        backupReachable = reachable;
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (mainReachable) {
+            completion(APP_SERVER_ADDRESS);
+        } else if (backupReachable) {
+            completion(APP_SERVER_BACKUP_ADDRESS);
+        } else {
+            // 都探测失败时回退到主地址，让后续请求正常报错
+            completion(APP_SERVER_ADDRESS);
+        }
+    });
+}
+
+- (void)probeAppServer:(NSString *)url completion:(void(^)(BOOL reachable))completion {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 5.0;
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", nil];
+    
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if ([responseObject isKindOfClass:[NSData class]]) {
+            NSString *response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            completion([response isEqualToString:@"Ok"]);
+        } else if ([responseObject isKindOfClass:[NSString class]]) {
+            completion([responseObject isEqualToString:@"Ok"]);
+        } else {
+            completion(NO);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"probe app server %@ failed: %@", url, error);
+        completion(NO);
+    }];
+}
+
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
+    [self appServerAddressWithCompletion:^(NSString *appServerAddress) {
+        [self post:path data:data isLogin:isLogin appServerAddress:appServerAddress success:successBlock error:errorBlock];
+    }];
+}
+
+- (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin appServerAddress:(NSString *)appServerAddress success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
@@ -341,7 +411,7 @@ static AppService *sharedSingleton = nil;
         }
     }
     
-    [manager POST:[APP_SERVER_ADDRESS stringByAppendingPathComponent:path]
+    [manager POST:[appServerAddress stringByAppendingPathComponent:path]
        parameters:data
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -355,7 +425,7 @@ static AppService *sharedSingleton = nil;
                 if(appToken.length) {
                     [[NSUserDefaults standardUserDefaults] setObject:appToken forKey:WFC_APPSERVER_AUTH_TOKEN];
                 } else {
-                    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:APP_SERVER_ADDRESS]];
+                    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:appServerAddress]];
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookies];
                     [[NSUserDefaults standardUserDefaults] setObject:data forKey:WFC_APPSERVER_COOKIES];
                 }
@@ -427,7 +497,7 @@ static AppService *sharedSingleton = nil;
             AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
             manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
             
-            NSString *url = [APP_SERVER_ADDRESS stringByAppendingFormat:@"/logs/%@/upload", [WFCCNetworkService sharedInstance].userId];
+            NSString *url = [WFCGetAppServerAddress() stringByAppendingFormat:@"/logs/%@/upload", [WFCCNetworkService sharedInstance].userId];
             
              dispatch_semaphore_t sema = dispatch_semaphore_create(0);
             
@@ -875,7 +945,7 @@ static inline BOOL isHTTPURL(NSString *str) {
 }
 
 - (NSString *)nameDefaultPortrait:(NSString *)name {
-    return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar?name=%@", name];
+    return [WFCGetAppServerAddress() stringByAppendingFormat:@"/avatar?name=%@", name];
 }
 
 - (NSString *)groupDefaultPortrait:(WFCCGroupInfo *)groupInfo memberInfos:(NSArray<WFCCUserInfo *> *)memberInfos {
@@ -885,7 +955,7 @@ static inline BOOL isHTTPURL(NSString *str) {
     
     NSMutableArray *reqMembers = [[NSMutableArray alloc] init];
     [memberInfos enumerateObjectsUsingBlock:^(WFCCUserInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(isHTTPURL(obj.portrait) && [obj.portrait rangeOfString:APP_SERVER_ADDRESS].location == NSNotFound) {
+        if(isHTTPURL(obj.portrait) && [obj.portrait rangeOfString:WFCGetAppServerAddress()].location == NSNotFound) {
             [reqMembers addObject:@{@"avatarUrl" : obj.portrait}];
         } else {
             [reqMembers addObject:@{@"name" : obj.displayName}];
@@ -895,7 +965,7 @@ static inline BOOL isHTTPURL(NSString *str) {
     NSError * err;
     NSData * jsonData = [NSJSONSerialization  dataWithJSONObject:request options:0 error:&err];
 
-    return [APP_SERVER_ADDRESS stringByAppendingFormat:@"/avatar/group?request=%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+    return [WFCGetAppServerAddress() stringByAppendingFormat:@"/avatar/group?request=%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
 }
 
 - (NSData *)getAppServiceCookies {
@@ -910,7 +980,7 @@ static inline BOOL isHTTPURL(NSString *str) {
     int platform = [WFCCNetworkService sharedInstance].isPad ? Platform_iPad : Platform_iOS;
     NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-    NSString *urlString = [NSString stringWithFormat:@"%@/version/check?platform=%d&currentVersion=%@&buildNumber=%@", APP_SERVER_ADDRESS, platform, currentVersion, buildNumber];
+    NSString *urlString = [NSString stringWithFormat:@"%@/version/check?platform=%d&currentVersion=%@&buildNumber=%@", WFCGetAppServerAddress(), platform, currentVersion, buildNumber];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -940,10 +1010,18 @@ static inline BOOL isHTTPURL(NSString *str) {
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:WFC_SHARE_APP_GROUP_ID];//此处id要与开发者中心创建时一致
         
     [sharedDefaults removeObjectForKey:WFC_SHARE_APPSERVICE_AUTH_TOKEN];
-    NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookies];
-    [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:obj];
-    }];
+    
+    // 清除主网和备网对应的共享 cookies
+    NSArray<NSString *> *appServerAddresses = @[WFCGetAppServerAddress()];
+    if (APP_SERVER_BACKUP_ADDRESS.length) {
+        appServerAddresses = @[APP_SERVER_ADDRESS, APP_SERVER_BACKUP_ADDRESS];
+    }
+    for (NSString *serverAddress in appServerAddresses) {
+        NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] cookiesForURL:[NSURL URLWithString:serverAddress]];
+        for (NSHTTPCookie *cookie in cookies) {
+            [[NSHTTPCookieStorage sharedCookieStorageForGroupContainerIdentifier:WFC_SHARE_APP_GROUP_ID] deleteCookie:cookie];
+        }
+    }
     
 
     [[WKWebsiteDataStore defaultDataStore] fetchDataRecordsOfTypes:[WKWebsiteDataStore allWebsiteDataTypes] completionHandler:^(NSArray * __nonnull records) {

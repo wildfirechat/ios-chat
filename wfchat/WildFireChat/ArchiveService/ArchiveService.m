@@ -36,8 +36,6 @@ static ArchiveService *sharedSingleton = nil;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // 默认基础 URL
-        //_baseUrl = @"http://localhost:8088";
         _messageIdCounter = 0;
     }
     return self;
@@ -238,13 +236,17 @@ static ArchiveService *sharedSingleton = nil;
     }];
 }
 
+- (NSString *)effectiveBaseUrl {
+    return WFCGetArchiveServerAddress();
+}
+
 - (void)post:(NSString *)path
         data:(nullable id)data
     authCode:(NSString *)authCode
      success:(void(^)(NSDictionary *dict))successBlock
        error:(void(^)(NSError *error))errorBlock {
     
-    if (!self.baseUrl.length) {
+    if (![self effectiveBaseUrl].length) {
         NSError *err = [NSError errorWithDomain:@"ArchiveService" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Base URL not set"}];
         if (errorBlock) errorBlock(err);
         return;
@@ -259,7 +261,7 @@ static ArchiveService *sharedSingleton = nil;
         [manager.requestSerializer setValue:authCode forHTTPHeaderField:@"authCode"];
     }
     
-    NSString *url = [self.baseUrl stringByAppendingString:path];
+    NSString *url = [[self effectiveBaseUrl] stringByAppendingString:path];
     
     [manager POST:url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{

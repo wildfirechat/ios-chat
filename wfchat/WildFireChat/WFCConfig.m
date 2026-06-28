@@ -22,24 +22,36 @@ NSString *IM_SERVER_HOST = @"wildfirechat.net";
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
 //NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
 NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
+//应用服务备选地址，双网环境下使用。不需要双网时保持为 nil。
+NSString *APP_SERVER_BACKUP_ADDRESS = nil;
 
 //组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
 //组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
 NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.net";
+//组织通讯录服务备选地址，双网环境下使用。
+NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
 
 //接龙服务地址，如果没有部署，可以设置为nil。
 NSString *COLLECTION_SERVER_ADDRESS = @"https://jielong.wildfirechat.net";
+//接龙服务备选地址，双网环境下使用。
+NSString *COLLECTION_SERVER_BACKUP_ADDRESS = nil;
 
 //投票服务地址，如果没有部署，可以设置为nil。
 //NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.81:8082";
 NSString *POLL_SERVER_ADDRESS = @"https://poll.wildfirechat.net";
+//投票服务备选地址，双网环境下使用。
+NSString *POLL_SERVER_BACKUP_ADDRESS = nil;
 
 // 网盘服务地址，如果没有部署，可以设置为nil。
 //NSString *PAN_SERVER_ADDRESS = @"http://192.168.1.81:8083";
 NSString *PAN_SERVER_ADDRESS = @"https://pan.wildfirechat.net";
+//网盘服务备选地址，双网环境下使用。
+NSString *PAN_SERVER_BACKUP_ADDRESS = nil;
 
 //NSString *ARCHIVE_SERVER_ADDRESS = @"http://192.168.1.81:8088";
 NSString *ARCHIVE_SERVER_ADDRESS = nil;
+//消息归档服务备选地址，双网环境下使用。
+NSString *ARCHIVE_SERVER_BACKUP_ADDRESS = nil;
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
 // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
@@ -56,11 +68,15 @@ NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 //如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了。工作平台项目地址：https://gitee.com/wfchat/open-platform
 //NSString *WORK_PLATFORM_URL = nil;
 NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
+//工作台备选地址，双网环境下使用。
+NSString *WORK_PLATFORM_BACKUP_URL = nil;
 
 //语音转文字服务地址。关于语音转文字信息请参考：https://gitee.com/wfchat/asr-api 。
 //野火提供的测试服务会记录语音文件和转换后的文字，上线会有可能泄密风险。因此请确保务必上线时购买部署自己的语音转文字服务，或者设置为nil。
 //NSString *ASR_SERVICE_URL = nil;
 NSString *ASR_SERVICE_URL = @"https://app.wildfirechat.net/asr/api/recognize";
+//语音转文字服务备选地址，双网环境下使用。
+NSString *ASR_SERVICE_BACKUP_URL = nil;
 
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
@@ -86,3 +102,71 @@ NSString *AI_MINUTES_ROBOT_ID = @"robotminutes";
 
 //语音记录查看页面地址，如：http://192.168.1.81:8883/index.html
 NSString *MINUTES_URL = @"http://101.42.4.222:8883/index.html";
+//语音记录查看页面备选地址，双网环境下使用。
+NSString *MINUTES_BACKUP_URL = nil;
+
+#pragma mark - 双网地址选择辅助函数
+
+NSString *WFCSelectServer(NSString *main, NSString *backup) {
+    if (!main.length && !backup.length) {
+        return nil;
+    }
+    if (!backup.length) {
+        return main;
+    }
+    if (!main.length) {
+        return backup;
+    }
+    
+    // 在 Extension 等未链接 WFChatClient 的场景下，直接返回主网地址
+    Class networkServiceClass = NSClassFromString(@"WFCCNetworkService");
+    if (!networkServiceClass) {
+        return main;
+    }
+    
+    id networkService = [networkServiceClass performSelector:@selector(sharedInstance)];
+    NSInteger currentConnectionStatus = [[networkService valueForKey:@"currentConnectionStatus"] integerValue];
+    if (currentConnectionStatus == 1) { // kConnectionStatusConnected
+        BOOL connectedToMainNetwork = [[networkService valueForKey:@"connectedToMainNetwork"] boolValue];
+        return connectedToMainNetwork ? main : backup;
+    }
+    
+    // 未连接时无法判断主备网络，优先使用主网，主网未配置则使用备网
+    return main ?: backup;
+}
+
+NSString *WFCGetAppServerAddress(void) {
+    return WFCSelectServer(APP_SERVER_ADDRESS, APP_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetOrgServerAddress(void) {
+    return WFCSelectServer(ORG_SERVER_ADDRESS, ORG_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetCollectionServerAddress(void) {
+    return WFCSelectServer(COLLECTION_SERVER_ADDRESS, COLLECTION_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetPollServerAddress(void) {
+    return WFCSelectServer(POLL_SERVER_ADDRESS, POLL_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetPanServerAddress(void) {
+    return WFCSelectServer(PAN_SERVER_ADDRESS, PAN_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetArchiveServerAddress(void) {
+    return WFCSelectServer(ARCHIVE_SERVER_ADDRESS, ARCHIVE_SERVER_BACKUP_ADDRESS);
+}
+
+NSString *WFCGetWorkPlatformUrl(void) {
+    return WFCSelectServer(WORK_PLATFORM_URL, WORK_PLATFORM_BACKUP_URL);
+}
+
+NSString *WFCGetAsrServiceUrl(void) {
+    return WFCSelectServer(ASR_SERVICE_URL, ASR_SERVICE_BACKUP_URL);
+}
+
+NSString *WFCGetMinutesUrl(void) {
+    return WFCSelectServer(MINUTES_URL, MINUTES_BACKUP_URL);
+}

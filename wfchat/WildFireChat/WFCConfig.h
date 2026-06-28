@@ -13,11 +13,17 @@
 extern NSString *IM_SERVER_HOST;
 
 extern NSString *APP_SERVER_ADDRESS;
+extern NSString *APP_SERVER_BACKUP_ADDRESS;
 extern NSString *ORG_SERVER_ADDRESS;
+extern NSString *ORG_SERVER_BACKUP_ADDRESS;
 extern NSString *COLLECTION_SERVER_ADDRESS;
+extern NSString *COLLECTION_SERVER_BACKUP_ADDRESS;
 extern NSString *POLL_SERVER_ADDRESS;
+extern NSString *POLL_SERVER_BACKUP_ADDRESS;
 extern NSString *PAN_SERVER_ADDRESS;
+extern NSString *PAN_SERVER_BACKUP_ADDRESS;
 extern NSString *ARCHIVE_SERVER_ADDRESS;
+extern NSString *ARCHIVE_SERVER_BACKUP_ADDRESS;
 
 
 extern NSString *ICE_ADDRESS;
@@ -33,9 +39,11 @@ extern NSString *FILE_TRANSFER_ID;
 
 //如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
 extern NSString *WORK_PLATFORM_URL;
+extern NSString *WORK_PLATFORM_BACKUP_URL;
 
 //语音转文字服务
 extern NSString *ASR_SERVICE_URL;
+extern NSString *ASR_SERVICE_BACKUP_URL;
 
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
@@ -61,4 +69,25 @@ extern NSString *AI_MINUTES_ROBOT_ID;
 
 //语音记录查看页面地址
 extern NSString *MINUTES_URL;
+extern NSString *MINUTES_BACKUP_URL;
+
+#pragma mark - 双网地址选择辅助函数
+
+/**
+ * 根据当前网络状态在主营和备选地址之间选择。
+ * 当 IM 已连接时，使用 connectedToMainNetwork 判断；
+ * 未连接或未配置备选地址时，返回主网地址。
+ */
+NSString *WFCSelectServer(NSString *main, NSString *backup);
+
+NSString *WFCGetAppServerAddress(void);
+NSString *WFCGetOrgServerAddress(void);
+NSString *WFCGetCollectionServerAddress(void);
+NSString *WFCGetPollServerAddress(void);
+NSString *WFCGetPanServerAddress(void);
+NSString *WFCGetArchiveServerAddress(void);
+NSString *WFCGetWorkPlatformUrl(void);
+NSString *WFCGetAsrServiceUrl(void);
+NSString *WFCGetMinutesUrl(void);
+
 #endif /* Config_h */

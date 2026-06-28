@@ -338,6 +338,22 @@ NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNot
     self.cellContentDict[@([msgContentCls getContentType])] = cellCls;
 }
 
+#pragma mark - 双网动态地址
+
+- (NSString *)asrServiceUrl {
+    if (_asrServiceUrlProvider) {
+        return _asrServiceUrlProvider();
+    }
+    return _asrServiceUrl;
+}
+
+- (NSString *)MINUTES_URL {
+    if (_minutesUrlProvider) {
+        return _minutesUrlProvider();
+    }
+    return _MINUTES_URL;
+}
+
 #pragma mark - 缓存清理
 
 - (void)clearCellSizeCache {

@@ -23,6 +23,7 @@
 #import "UIColor+YH.h"
 #import "WFCConfig.h"
 
+
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, assign)BOOL hasMoments;
@@ -41,7 +42,7 @@
 //                     @{@"title":@"Things", @"image":@"discover_things",@"des":@"Things"}
     ]];
     
-    if(PAN_SERVER_ADDRESS) {
+    if(PAN_SERVER_ADDRESS || PAN_SERVER_BACKUP_ADDRESS) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
     }
     
@@ -93,7 +94,7 @@
     [self.tableView reloadData];
 #ifdef WFC_MOMENTS
     int momentIndex = 2;
-    if(WORK_PLATFORM_URL.length)
+    if((WORK_PLATFORM_URL ?: WORK_PLATFORM_BACKUP_URL).length)
         momentIndex = 3;
     [self.tabBarController.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif

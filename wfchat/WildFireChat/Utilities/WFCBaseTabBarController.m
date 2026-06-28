@@ -12,6 +12,7 @@
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
 #import "WFCConfig.h"
+
 #import "UIFont+YH.h"
 #ifdef WFC_MOMENTS
 #import <WFMomentUIKit/WFMomentUIKit.h>
@@ -87,9 +88,9 @@
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
-    if(WORK_PLATFORM_URL.length) {
+    if((WORK_PLATFORM_URL ?: WORK_PLATFORM_BACKUP_URL).length) {
         WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
-        browserVC.url = WORK_PLATFORM_URL;
+        browserVC.url = WFCGetWorkPlatformUrl();
         browserVC.hidenOpenInBrowser = YES;
         
         vc = browserVC;
@@ -194,7 +195,7 @@
 - (void)updateBadgeNumber {
 #ifdef WFC_MOMENTS
     int momentIndex = 2;
-    if(WORK_PLATFORM_URL.length)
+    if((WORK_PLATFORM_URL ?: WORK_PLATFORM_BACKUP_URL).length)
         momentIndex = 3;
     [self.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
