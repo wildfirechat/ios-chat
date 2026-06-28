@@ -8,13 +8,14 @@
 
 #import "BubbleTipView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIFont+YH.h"
 
 
 #define kDefaultbubbleTipTextColor [UIColor whiteColor]
 #define kDefaultbubbleTipBackgroundColor [UIColor redColor]
 #define kDefaultOverlayColor [UIColor colorWithWhite:1.0f alpha:0.3]
 
-#define kDefaultbubbleTipTextFont [UIFont systemFontOfSize:[UIFont smallSystemFontSize]]
+#define kDefaultbubbleTipTextFont [UIFont scaledSystemFontOfSize:[UIFont smallSystemFontSize]]
 
 #define kDefaultbubbleTipShadowColor [UIColor clearColor]
 

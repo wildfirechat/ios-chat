@@ -9,6 +9,7 @@
 #import "WFCUFileCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 @implementation WFCUFileCell
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -56,7 +57,7 @@
 - (UILabel *)fileNameLabel {
     if (!_fileNameLabel) {
         _fileNameLabel = [[UILabel alloc] init];
-        _fileNameLabel.font = [UIFont systemFontOfSize:20];
+        _fileNameLabel.font = [UIFont scaledSystemFontOfSize:20];
         [_fileNameLabel setTextColor:[UIColor blackColor]];
         [self.contentArea addSubview:_fileNameLabel];
     }
@@ -65,7 +66,7 @@
 - (UILabel *)sizeLabel {
     if (!_sizeLabel) {
         _sizeLabel = [[UILabel alloc] init];
-        _sizeLabel.font = [UIFont systemFontOfSize:15];
+        _sizeLabel.font = [UIFont scaledSystemFontOfSize:15];
         [self.contentArea addSubview:_sizeLabel];
     }
     return _sizeLabel;

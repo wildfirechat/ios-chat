@@ -14,8 +14,21 @@
 #import "WFCSecurityTableViewController.h"
 #import "WFCMeTableViewHeaderViewCell.h"
 #import "UIColor+YH.h"
+#import "UIFont+YH.h"
 #import "WFCFavoriteTableViewController.h"
 
+
+@interface WFCMeItemTableViewCell : UITableViewCell
+@end
+
+@implementation WFCMeItemTableViewCell
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat imageSize = 24 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    self.imageView.frame = CGRectMake(16, (self.frame.size.height - imageSize) / 2.0, imageSize, imageSize);
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+}
+@end
 
 @interface WFCMeTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -63,6 +76,7 @@
     [self.view addSubview:self.tableView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFontScaleChanged:) name:WFCUFontScaleDidChangeNotification object:nil];
     
     if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
         self.itemDataSource = @[
@@ -92,6 +106,10 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)onFontScaleChanged:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -144,9 +162,9 @@
         cell.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
         return cell;
     } else {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleDefault"];
+        WFCMeItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"styleDefault"];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"styleDefault"];
+            cell = [[WFCMeItemTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"styleDefault"];
         }
         
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -154,6 +172,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
   
         cell.textLabel.text = self.itemDataSource[indexPath.section - 1][@"title"];
+        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         cell.imageView.image = [WFCUImage imageNamed:self.itemDataSource[indexPath.section - 1][@"image"]];
         return cell;
     }
@@ -164,7 +183,7 @@
     if (indexPath.section == 0) {
         return 154;
     } else {
-        return 50;
+        return [WFCUConfigManager scaledSize:50];
     }
 }
 

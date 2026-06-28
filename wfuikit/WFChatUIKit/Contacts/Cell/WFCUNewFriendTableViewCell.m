@@ -11,6 +11,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUNewFriendTableViewCell ()
 
@@ -25,8 +26,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
-    self.nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 16) / 2.0, [UIScreen mainScreen].bounds.size.width - 64, 16);
+    CGFloat portraitSize = 40 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    self.portraitView.frame = CGRectMake(16, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
+    CGFloat labelHeight = MAX(16, [WFCUConfigManager scaledSize:16]);
+    self.nameLabel.frame = CGRectMake(16 + portraitSize + 11, (self.frame.size.height - labelHeight) / 2.0, [UIScreen mainScreen].bounds.size.width - 64, labelHeight);
 }
 
 - (void)onFriendRequestUpdated:(NSNotification *)notification {
@@ -74,7 +77,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 11, 19, [UIScreen mainScreen].bounds.size.width - 64, 16)];
-        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+        _nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
         _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }

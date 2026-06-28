@@ -13,6 +13,7 @@
 #import "WFCUConfigManager.h"
 #import <MessageUI/MessageUI.h>
 #import "Predefine.h"
+#import "UIFont+YH.h"
 
 #define MARKDOWN_TEXT_TOP_PADDING 3
 #define MARKDOWN_TEXT_BOTTOM_PADDING 5
@@ -25,7 +26,7 @@
 @implementation WFCUMarkdownCell
 
 + (UIFont *)defaultFont {
-    return [UIFont systemFontOfSize:18];
+    return [UIFont scaledSystemFontOfSize:18];
 }
 
 + (NSString *)cacheKeyForText:(NSString *)text viewWidth:(CGFloat)width {

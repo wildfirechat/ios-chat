@@ -27,11 +27,13 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
+    CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    _potraitView.frame = CGRectMake(16, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
+    
     if (!self.isBig) {
-        _potraitView.frame = CGRectMake(16, 10, 40, 40);
-        _targetView.frame = CGRectMake(16 + 40 + 20, 11, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 100), 16);
-        _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
-        _digestView.frame = CGRectMake(16 + 40 + 20, 11 + 16 + 8, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 20 + 20), 19);
+        _targetView.frame = CGRectMake(16 + portraitSize + 20, 11, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 100), 16);
+        _targetView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
+        _digestView.frame = CGRectMake(16 + portraitSize + 20, 11 + 16 + 8, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 20), 19);
     }
 
 }
@@ -151,9 +153,16 @@
         _silentView.hidden = YES;
     }
   
-    [self update:info.conversation];
     self.timeView.hidden = NO;
     self.timeView.text = [WFCUUtilities formatTimeLabel:info.timestamp];
+    
+    // 根据时间文字和字体动态计算所需宽高，避免字体放大后显示不全
+    CGFloat timeHeight = [WFCUConfigManager scaledSize:12];
+    CGSize timeSize = [WFCUUtilities getTextDrawingSize:self.timeView.text font:self.timeView.font constrainedSize:CGSizeMake(CGFLOAT_MAX, timeHeight)];
+    CGFloat timeWidth = MAX(52, ceil(timeSize.width));
+    self.timeView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - timeWidth - 16, 16, timeWidth, timeHeight);
+    
+    [self update:info.conversation];
     
     BOOL darkMode = NO;
     if (@available(iOS 13.0, *)) {
@@ -192,10 +201,11 @@
 }
 
 - (void)updateDigestFrame:(BOOL)isSending {
+    CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
     if (isSending) {
-        _digestView.frame = CGRectMake(16 + 48 + 12 + 18, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16 - 18, 19);
+        _digestView.frame = CGRectMake(16 + portraitSize + 12 + 18, 40, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 12) - 16 - 16 - 18, 19);
     } else {
-        _digestView.frame = CGRectMake(16 + 48 + 12, 40, [UIScreen mainScreen].bounds.size.width - 76 - 16 - 16, 19);
+        _digestView.frame = CGRectMake(16 + portraitSize + 12, 40, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 12) - 16 - 16, 19);
     }
 }
 
@@ -236,14 +246,18 @@
         [self updateExternalDomainInfo];
     }
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 76  - 68 - 24, 8000)];
+    CGFloat timeViewWidth = self.timeView.frame.size.width + 8; // 时间 label 宽度 + 间距
+    CGFloat maxTargetWidth = [UIScreen mainScreen].bounds.size.width - 76 - timeViewWidth - 24;
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake(maxTargetWidth, 8000)];
     
+    CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
     if(conversation.type == SecretChat_Type) {
         self.secretChatView.hidden = NO;
-        self.targetView.frame = CGRectMake(16 + 48 + 12 + 24, 16, size.width, 20);
+        self.secretChatView.frame = CGRectMake(16 + portraitSize + 12, 16, 20, 20);
+        self.targetView.frame = CGRectMake(16 + portraitSize + 12 + 24, 16, size.width, 20);
     } else {
         self.secretChatView.hidden = YES;
-        self.targetView.frame = CGRectMake(16 + 48 + 12, 16, size.width, 20);
+        self.targetView.frame = CGRectMake(16 + portraitSize + 12, 16, size.width, 20);
     }
     
     if(conversation.type == Group_Type && groupInfo.type == GroupType_Organization) {
@@ -412,7 +426,7 @@
 - (UILabel *)targetView {
     if (!_targetView) {
         _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
-        _targetView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+        _targetView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
         _targetView.textColor = [WFCUConfigManager globalManager].textColor;
         _targetView.lineBreakMode = NSLineBreakByTruncatingMiddle;
         [self.contentView addSubview:_targetView];
@@ -423,7 +437,7 @@
 - (UILabel *)offcialView {
     if(!_offcialView) {
         _offcialView = [[UILabel alloc] initWithFrame:CGRectZero];
-        _offcialView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:10];
+        _offcialView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:10];
         _offcialView.layer.cornerRadius = 3;
         _offcialView.layer.masksToBounds = YES;
         _offcialView.textColor = [UIColor whiteColor];
@@ -448,7 +462,7 @@
 - (UILabel *)digestView {
     if (!_digestView) {
         _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
-        _digestView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+        _digestView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         _digestView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
         [self.contentView addSubview:_digestView];
@@ -468,7 +482,7 @@
 - (UILabel *)timeView {
     if (!_timeView) {
         _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 16, 20, 52, 12)];
-        _timeView.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+        _timeView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
         _timeView.textAlignment = NSTextAlignmentRight;
         _timeView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
         [self.contentView addSubview:_timeView];

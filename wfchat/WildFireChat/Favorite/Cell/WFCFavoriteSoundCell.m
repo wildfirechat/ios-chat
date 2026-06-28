@@ -8,6 +8,7 @@
 
 #import "WFCFavoriteSoundCell.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "UIFont+YH.h"
 
 
 @interface WFCFavoriteSoundCell ()
@@ -71,7 +72,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, self.bounds.size.width-72, 20)];
-        _nameLabel.font = [UIFont systemFontOfSize:18];
+        _nameLabel.font = [UIFont scaledSystemFontOfSize:18];
         [self.contentArea addSubview:_nameLabel];
     }
     return _nameLabel;

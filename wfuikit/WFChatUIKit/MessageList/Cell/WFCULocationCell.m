@@ -8,6 +8,7 @@
 
 #import "WFCULocationCell.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 @interface WFCULocationCell ()
 @property(nonatomic, strong) UIImageView *shadowMaskView;
@@ -49,7 +50,7 @@
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bubbleView.frame.size.width, 20)];
-        _titleLabel.font = [UIFont systemFontOfSize:12];
+        _titleLabel.font = [UIFont scaledSystemFontOfSize:12];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.backgroundColor = [UIColor colorWithRed:0.7f green:0.7f blue:0.7f alpha:0.5f];
         [self.bubbleView addSubview:_titleLabel];

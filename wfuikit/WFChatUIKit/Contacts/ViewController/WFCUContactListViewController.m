@@ -308,7 +308,7 @@ static NSString *aiRobot = @"AI";
             [countLabel addSubview:line];
             
             [countLabel setText:[NSString stringWithFormat:WFCString(@"NumberOfContacts"), (int)self.dataArray.count]];
-            countLabel.font = [UIFont systemFontOfSize:14];
+            countLabel.font = [UIFont scaledSystemFontOfSize:14];
             countLabel.textColor = [UIColor grayColor];
             
             self.tableView.tableFooterView = countLabel;
@@ -444,6 +444,7 @@ static NSString *aiRobot = @"AI";
                 } else {
                     cell.textLabel.text = WFCString(@"MentionAll");
                 }
+                cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
                 cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
                 return cell;
             }
@@ -651,7 +652,7 @@ static NSString *aiRobot = @"AI";
 
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, self.view.frame.size.width, 30)];
-    label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
+    label.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:13];
     label.textAlignment = NSTextAlignmentLeft;
     if ([title isEqualToString:wfcstar]) {
         title = WFCString(@"StarFriends");
@@ -665,7 +666,9 @@ static NSString *aiRobot = @"AI";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 52;
+    // 行高轻微跟随字体变化，避免跳动过大
+    CGFloat fontScale = [WFCUConfigManager globalManager].fontScale;
+    return 52 + (fontScale - 1.0) * 4;
 }
 
 - (UIActivityIndicatorView *)activityIndicator {

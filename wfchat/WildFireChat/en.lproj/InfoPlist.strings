@@ -159,6 +159,15 @@ ThemeChangeSuccess="Changed successfully! Please go back to the app main page to
 Blue="Blue";
 White="White";
 
+// Font Size
+FontSize="Font Size";
+FontSizeSampleText="Drag the slider below to adjust the font size. The setting will apply to chat, contacts, and settings.";
+FontSizeSmall="Small";
+FontSizeLarge="Large";
+FontSizeChangeRestart="Font size setting saved. Please restart the app to take effect.";
+FontSizeChangeRestartTip="App will restart to apply the new font size.";
+Save="Save";
+
 // Favorite
 DownloadFailed="Download failed!";
 Forward="Forward";

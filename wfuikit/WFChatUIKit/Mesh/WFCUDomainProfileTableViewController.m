@@ -13,6 +13,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 
 @interface WFCUDomainProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -135,7 +136,7 @@
         }
     }
     
-    [title setFont:[UIFont systemFontOfSize:16]];
+    [title setFont:[UIFont scaledSystemFontOfSize:16]];
     [title setText:titleStr];
     if (left) {
         [title setTextAlignment:NSTextAlignmentLeft];

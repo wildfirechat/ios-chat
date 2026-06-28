@@ -16,6 +16,7 @@
 #import <WFChatClient/WFCCPollMessageContent.h>
 #import <WFChatClient/WFCCPollResultMessageContent.h>
 #import <SDWebImage/SDWebImage.h>
+#import "UIFont+YH.h"
 
 #define HEADER_HEIGHT 140
 #define OPTION_CELL_HEIGHT 50
@@ -54,28 +55,28 @@
     
     // 创建者名称
     self.creatorLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin + 50, 20, self.bounds.size.width - margin * 2 - 50, 16)];
-    self.creatorLabel.font = [UIFont systemFontOfSize:13];
+    self.creatorLabel.font = [UIFont scaledSystemFontOfSize:13];
     self.creatorLabel.textColor = [UIColor grayColor];
     self.creatorLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.creatorLabel];
     
     // 状态标签
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - margin - 80, 20, 80, 20)];
-    self.statusLabel.font = [UIFont systemFontOfSize:11];
+    self.statusLabel.font = [UIFont scaledSystemFontOfSize:11];
     self.statusLabel.textAlignment = NSTextAlignmentRight;
     self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self addSubview:self.statusLabel];
     
     // 标题
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin, 68, self.bounds.size.width - margin * 2, 24)];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     self.titleLabel.numberOfLines = 0;
     self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.titleLabel];
     
     // 描述
     self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin, 96, self.bounds.size.width - margin * 2, 20)];
-    self.descLabel.font = [UIFont systemFontOfSize:14];
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.descLabel.textColor = [UIColor grayColor];
     self.descLabel.numberOfLines = 0;
     self.descLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -257,7 +258,7 @@
     [self.exportButton setTitle:WFCString(@"ExportPoll") forState:UIControlStateNormal];
     [self.exportButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.exportButton.layer.cornerRadius = 8;
-    self.exportButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    self.exportButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15];
     [self.exportButton addTarget:self action:@selector(onExport:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.exportButton];
     
@@ -267,7 +268,7 @@
     [self.closeButton setTitle:WFCString(@"EndPoll") forState:UIControlStateNormal];
     [self.closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.closeButton.layer.cornerRadius = 8;
-    self.closeButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    self.closeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15];
     [self.closeButton addTarget:self action:@selector(onClosePoll:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.closeButton];
     
@@ -277,7 +278,7 @@
     [self.deleteButton setTitle:WFCString(@"DeletePoll") forState:UIControlStateNormal];
     [self.deleteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.deleteButton.layer.cornerRadius = 8;
-    self.deleteButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    self.deleteButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15];
     [self.deleteButton addTarget:self action:@selector(onDeletePoll:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.deleteButton];
     
@@ -684,14 +685,14 @@
         // 选项文字标签
         UILabel *optionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 200, 44)];
         optionLabel.tag = 100;
-        optionLabel.font = [UIFont systemFontOfSize:16];
+        optionLabel.font = [UIFont scaledSystemFontOfSize:16];
         [cell.contentView addSubview:optionLabel];
         
         // 对勾标签（在选项后面，间隔16）
         UILabel *checkmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 44)];
         checkmarkLabel.tag = 101;
         checkmarkLabel.text = @"✓";
-        checkmarkLabel.font = [UIFont systemFontOfSize:18];
+        checkmarkLabel.font = [UIFont scaledSystemFontOfSize:18];
         checkmarkLabel.textColor = [UIColor systemBlueColor];
         checkmarkLabel.textAlignment = NSTextAlignmentCenter;
         checkmarkLabel.hidden = YES;
@@ -700,7 +701,7 @@
         // 比例标签（最右侧，右对齐）
         UILabel *percentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 44)];
         percentLabel.tag = 102;
-        percentLabel.font = [UIFont systemFontOfSize:15];
+        percentLabel.font = [UIFont scaledSystemFontOfSize:15];
         percentLabel.textColor = [UIColor grayColor];
         percentLabel.textAlignment = NSTextAlignmentRight;
         percentLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

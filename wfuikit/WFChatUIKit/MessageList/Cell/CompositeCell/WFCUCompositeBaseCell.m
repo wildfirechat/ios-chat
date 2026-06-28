@@ -14,6 +14,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCUCompositeBaseCell ()
 @property(nonatomic, strong)UIImageView *portraitImageView;
@@ -110,7 +111,7 @@
         CGFloat w = [UIScreen mainScreen].bounds.size.width - x -
         - COMPOSITE_CELL_RIGHT_PADDING - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, w, COMPOSITE_CELL_NAME_LABEL_HEIGHT)];
-        [_nameLabel setFont:[UIFont systemFontOfSize:COMPOSITE_CELL_NAME_LABEL_FONT]];
+        [_nameLabel setFont:[UIFont scaledSystemFontOfSize:COMPOSITE_CELL_NAME_LABEL_FONT]];
         _nameLabel.textColor = [UIColor grayColor];
         [self.contentView addSubview:_nameLabel];
     }
@@ -121,7 +122,7 @@
     if (!_timeLabel) {
         CGFloat x = [UIScreen mainScreen].bounds.size.width - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, COMPOSITE_CELL_TIME_LABEL_WIDTH, COMPOSITE_CELL_TIME_LABEL_HEIGHT)];
-        [_timeLabel setFont:[UIFont systemFontOfSize:COMPOSITE_CELL_TIME_LABEL_FONT]];
+        [_timeLabel setFont:[UIFont scaledSystemFontOfSize:COMPOSITE_CELL_TIME_LABEL_FONT]];
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.textColor = [UIColor grayColor];
         [self.contentView addSubview:_timeLabel];

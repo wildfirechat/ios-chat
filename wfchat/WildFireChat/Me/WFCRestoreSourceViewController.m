@@ -11,6 +11,7 @@
 #import "WFCPCRestoreListViewController.h"
 #import "WFCBackupListViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 @interface WFCRestoreSourceViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -56,7 +57,7 @@
     infoLabel.text = LocalizedString(@"PleaseSelectRestoreSource");
     infoLabel.textAlignment = NSTextAlignmentCenter;
     infoLabel.textColor = [UIColor secondaryLabelColor];
-    infoLabel.font = [UIFont systemFontOfSize:14];
+    infoLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.tableView.tableHeaderView = infoLabel;
 
     // 监听连接状态变化

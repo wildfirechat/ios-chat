@@ -8,6 +8,7 @@
 
 #import "WFCBackupProgressViewController.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 @interface WFCBackupProgressViewController ()
 @property (nonatomic, strong) UIView *progressView;
@@ -53,7 +54,7 @@
     // 进度标签
     self.progressLabel = [[UILabel alloc] init];
     self.progressLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.progressLabel.font = [UIFont boldSystemFontOfSize:24];
+    self.progressLabel.font = [UIFont scaledBoldSystemFontOfSize:24];
     self.progressLabel.textAlignment = NSTextAlignmentCenter;
     self.progressLabel.text = @"0%";
     [self.progressView addSubview:self.progressLabel];
@@ -61,7 +62,7 @@
     // 状态标签
     self.statusLabel = [[UILabel alloc] init];
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.statusLabel.font = [UIFont systemFontOfSize:16];
+    self.statusLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.textColor = [UIColor secondaryLabelColor];
     self.statusLabel.text = LocalizedString(@"Preparing");
@@ -70,7 +71,7 @@
     // 详情标签
     self.detailLabel = [[UILabel alloc] init];
     self.detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.detailLabel.font = [UIFont systemFontOfSize:14];
+    self.detailLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.detailLabel.textAlignment = NSTextAlignmentCenter;
     self.detailLabel.textColor = [UIColor tertiaryLabelColor];
     self.detailLabel.numberOfLines = 0;

@@ -111,7 +111,7 @@
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
-        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        _nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }
@@ -123,7 +123,7 @@
         _nextLevel = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 19, 80, 16)];
         [_nextLevel setTitle:@"下级" forState:UIControlStateNormal];
         [_nextLevel setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        _nextLevel.titleLabel.font = [UIFont systemFontOfSize:12];
+        _nextLevel.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
         [_nextLevel addTarget:self action:@selector(onNextLevel:) forControlEvents:UIControlEventTouchDown];
         [self.contentView addSubview:_nextLevel];
     }

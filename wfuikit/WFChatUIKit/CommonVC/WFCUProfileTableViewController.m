@@ -319,7 +319,7 @@
 
     self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
     self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
-    self.userNameLabel.font = [UIFont systemFontOfSize:12];
+    self.userNameLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.userNameLabel.textColor = [UIColor grayColor];
     startPos += 16;
     
@@ -327,7 +327,7 @@
         NSString *domainId = [WFCCUtilities getExternalDomain:self.userId];
         self.domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
         self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
-        self.domainLabel.font = [UIFont systemFontOfSize:12];
+        self.domainLabel.font = [UIFont scaledSystemFontOfSize:12];
         startPos += 16;
     }
     
@@ -335,7 +335,7 @@
     if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
         self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
         self.starLabel.text = @"☆";
-        self.starLabel.font = [UIFont systemFontOfSize:18];
+        self.starLabel.font = [UIFont scaledSystemFontOfSize:18];
         self.starLabel.textColor = [UIColor yellowColor];
         
         [self.headerCell.contentView addSubview:self.starLabel];
@@ -363,7 +363,7 @@
             UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
             [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
             [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn addTarget:self action:@selector(setFriendNote) forControlEvents:UIControlEventTouchUpInside];
             btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             [alisaCell.contentView addSubview:btn];
@@ -432,7 +432,7 @@
                 UIButton *momentButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 100, 70)];
                 [momentButton setTitle: @"朋友圈" forState:UIControlStateNormal];
                 [momentButton setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-                momentButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+                momentButton.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
                 momentButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                 [momentButton addTarget:self action:@selector(momentClick) forControlEvents:UIControlEventTouchUpInside];
                 if (@available(iOS 14, *)) {
@@ -500,7 +500,7 @@
     btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
     [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
     [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+    btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:16];
     [btn addTarget:self action:@selector(onSendMessageBtn:) forControlEvents:UIControlEventTouchDown];
     if (@available(iOS 14, *)) {
         [self.sendMessageCell.contentView addSubview:btn];
@@ -521,7 +521,7 @@
         [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(onVoipCallBtn:) forControlEvents:UIControlEventTouchDown];
         [btn setTitleColor:[UIColor colorWithHexString:@"0x5b6e8e"] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+        btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:16];
         if (@available(iOS 14, *)) {
             [self.voipCallCell.contentView addSubview:btn];
         } else {

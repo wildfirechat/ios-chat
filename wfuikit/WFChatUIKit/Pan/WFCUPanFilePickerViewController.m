@@ -13,6 +13,7 @@
 #import "WFCUImage.h"
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 @interface WFCUPanFilePickerCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -36,12 +37,12 @@
     [self.contentView addSubview:self.iconImageView];
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, self.contentView.frame.size.width - 100, 20)];
-    self.nameLabel.font = [UIFont systemFontOfSize:16];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.contentView addSubview:self.nameLabel];
     
     self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 30, self.contentView.frame.size.width - 100, 16)];
-    self.infoLabel.font = [UIFont systemFontOfSize:12];
+    self.infoLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.infoLabel.textColor = [UIColor grayColor];
     self.infoLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.contentView addSubview:self.infoLabel];

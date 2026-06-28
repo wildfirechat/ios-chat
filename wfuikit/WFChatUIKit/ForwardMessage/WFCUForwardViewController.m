@@ -20,6 +20,7 @@
 #import "WFCUConfigManager.h"
 #import "UIImage+ERCategory.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 
 @interface WFCUForwardViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
@@ -305,7 +306,7 @@
             UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, section == 0 ? 44 : 20)];
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, section == 0 ? 24 : 0, self.tableView.frame.size.width, 20)];
             
-            label.font = [UIFont systemFontOfSize:13];
+            label.font = [UIFont scaledSystemFontOfSize:13];
             label.textColor = [UIColor grayColor];
             label.textAlignment = NSTextAlignmentLeft;
             label.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
@@ -334,7 +335,7 @@
     } else {
         NSString *title = WFCString(@"RecentChat");
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 21)];
-        label.font = [UIFont systemFontOfSize:13];
+        label.font = [UIFont scaledSystemFontOfSize:13];
         label.textColor = [UIColor grayColor];
         label.textAlignment = NSTextAlignmentLeft;
         label.text = [NSString stringWithFormat:@"  %@", title];

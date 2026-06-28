@@ -684,7 +684,7 @@
         iv.image = [WFCUImage imageNamed:@"pc_session"];
         [_pcSessionView addSubview:iv];
         self.pcSessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, self.view.bounds.size.width - 68 - 16, 20)];
-        self.pcSessionLabel.font = [UIFont systemFontOfSize:16];
+        self.pcSessionLabel.font = [UIFont scaledSystemFontOfSize:16];
         [_pcSessionView addSubview:self.pcSessionLabel];
         _pcSessionView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];
@@ -844,7 +844,7 @@
         // 创建文本标签
         UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, cell.bounds.size.width - 60, 44)];
         textLabel.text = self.searchHistory[indexPath.row];
-        textLabel.font = [UIFont systemFontOfSize:15];
+        textLabel.font = [UIFont scaledSystemFontOfSize:15];
         textLabel.textColor = [UIColor blackColor];
         textLabel.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:textLabel];
@@ -855,7 +855,7 @@
         // 添加删除按钮到contentView
         UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [deleteButton setTitle:@"✕" forState:UIControlStateNormal];
-        deleteButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        deleteButton.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
         deleteButton.frame = CGRectMake(cell.bounds.size.width - 44, 0, 44, 44);
         deleteButton.tintColor = [UIColor grayColor];
         deleteButton.tag = indexPath.row; // 使用行号作为tag
@@ -886,7 +886,7 @@
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
                         cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchFriendList.count - 2];
-                        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+                        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
                         WFCUContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"friendCell"];
@@ -926,7 +926,7 @@
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
                         cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchGroupList.count - 2];
-                        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+                        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
                         WFCUSearchGroupTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"groupCell"];
@@ -965,7 +965,7 @@
                         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expansion" forIndexPath:indexPath];
                         cell.textLabel.textColor = [UIColor colorWithHexString:@"5b6e8e"];
                         cell.textLabel.text = [NSString stringWithFormat:WFCString(@"ClickToExpandItems"), self.searchConversationList.count - 2];
-                        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+                        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
                         return cell;
                     } else {
                         WFCUConversationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchConversationCell"];
@@ -1056,7 +1056,9 @@
         }
         return 60;
     } else {
-        return 72;
+        // 主会话列表行高轻微跟随字体变化，避免跳动过大
+        CGFloat fontScale = [WFCUConfigManager globalManager].fontScale;
+        return 72 + (fontScale - 1.0) * 4;
     }
 }
 
@@ -1074,7 +1076,7 @@
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.tableView.frame.size.width, 32)];
             
-            label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
+            label.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:13];
             label.textColor = [UIColor colorWithHexString:@"0x828282"];
             label.textAlignment = NSTextAlignmentLeft;
             
@@ -1395,14 +1397,14 @@
     // 标题 - 减少上边距
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 2, 200, headerHeight)];
     titleLabel.text = WFCString(@"SearchHistory");
-    titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:14];
     titleLabel.textColor = [UIColor blackColor];
     [self.historyContainer addSubview:titleLabel];
 
     // 清空按钮 - 调整位置
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [clearButton setTitle:WFCString(@"Clear") forState:UIControlStateNormal];
-    clearButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    clearButton.titleLabel.font = [UIFont scaledSystemFontOfSize:13];
     clearButton.frame = CGRectMake(searchBarWidth - 60, 2, 60, headerHeight - 2);
     clearButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
     [clearButton addTarget:self action:@selector(clearSearchHistory) forControlEvents:UIControlEventTouchUpInside];

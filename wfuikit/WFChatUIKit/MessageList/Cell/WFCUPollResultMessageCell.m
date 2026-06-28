@@ -9,6 +9,7 @@
 #import "WFCUPollResultMessageCell.h"
 #import <WFChatClient/WFCCPollResultMessageContent.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 @interface WFCUPollResultMessageCell ()
 @property (nonatomic, strong) UIView *containerView;
@@ -41,18 +42,18 @@
     
     // 标题
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:14];
     [self.containerView addSubview:self.titleLabel];
     
     // 获胜选项
     self.winnerLabel = [[UILabel alloc] init];
-    self.winnerLabel.font = [UIFont systemFontOfSize:13];
+    self.winnerLabel.font = [UIFont scaledSystemFontOfSize:13];
     self.winnerLabel.textColor = [UIColor systemBlueColor];
     [self.containerView addSubview:self.winnerLabel];
     
     // 统计信息
     self.infoLabel = [[UILabel alloc] init];
-    self.infoLabel.font = [UIFont systemFontOfSize:11];
+    self.infoLabel.font = [UIFont scaledSystemFontOfSize:11];
     self.infoLabel.textColor = [UIColor blackColor];
     [self.containerView addSubview:self.infoLabel];
     

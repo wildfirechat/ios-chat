@@ -28,6 +28,7 @@
 #import "WFCUFilesViewController.h"
 #import "WFCULinksViewController.h"
 #import "WFCUCalendarSearchViewController.h"
+#import "UIFont+YH.h"
 
 @interface WFCUConversationSearchTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)NSMutableArray<WFCCMessage* > *messages;
@@ -143,7 +144,7 @@
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         button.frame = CGRectMake(padding + col * (buttonWidth + padding), topMargin + row * (buttonHeight + padding), buttonWidth, buttonHeight);
-        button.titleLabel.font = [UIFont systemFontOfSize:16];
+        button.titleLabel.font = [UIFont scaledSystemFontOfSize:16];
         [button setTitle:category[@"title"] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor colorWithRed:0.0 green:0.48 blue:1.0 alpha:1.0] forState:UIControlStateNormal]; // 浅蓝色
         button.backgroundColor = [WFCUConfigManager globalManager].backgroudColor; // 与背景一致
@@ -194,7 +195,7 @@
         // 创建文本标签
         UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, cell.bounds.size.width - 60, 44)];
         textLabel.text = self.searchHistory[indexPath.row];
-        textLabel.font = [UIFont systemFontOfSize:15];
+        textLabel.font = [UIFont scaledSystemFontOfSize:15];
         textLabel.textColor = [UIColor blackColor];
         textLabel.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:textLabel];
@@ -205,7 +206,7 @@
         // 添加删除按钮到contentView
         UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [deleteButton setTitle:@"✕" forState:UIControlStateNormal];
-        deleteButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        deleteButton.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
         deleteButton.frame = CGRectMake(cell.bounds.size.width - 44, 0, 44, 44);
         deleteButton.tintColor = [UIColor grayColor];
         deleteButton.tag = indexPath.row;
@@ -246,7 +247,7 @@
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, self.tableView.frame.size.width, 40)];
     
-    label.font = [UIFont boldSystemFontOfSize:18];
+    label.font = [UIFont scaledBoldSystemFontOfSize:18];
     label.textColor = [UIColor blackColor];
     label.textAlignment = NSTextAlignmentLeft;
     header.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
@@ -553,14 +554,14 @@
     // 标题 - 减少上边距
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 2, 200, headerHeight)];
     titleLabel.text = WFCString(@"SearchHistory");
-    titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:14];
     titleLabel.textColor = [UIColor blackColor];
     [self.historyContainer addSubview:titleLabel];
 
     // 清空按钮 - 调整位置
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [clearButton setTitle:WFCString(@"Clear") forState:UIControlStateNormal];
-    clearButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    clearButton.titleLabel.font = [UIFont scaledSystemFontOfSize:13];
     clearButton.frame = CGRectMake(searchBarWidth - 60, 2, 60, headerHeight - 2);
     clearButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
     [clearButton addTarget:self action:@selector(clearSearchHistory) forControlEvents:UIControlEventTouchUpInside];

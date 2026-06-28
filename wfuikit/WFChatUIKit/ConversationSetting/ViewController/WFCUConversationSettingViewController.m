@@ -149,7 +149,7 @@
         top += portraitWidth;
         top += 20;
         self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 40 - 40, 18)];
-        self.channelName.font = [UIFont systemFontOfSize:18];
+        self.channelName.font = [UIFont scaledSystemFontOfSize:18];
         self.channelName.textAlignment = NSTextAlignmentCenter;
         self.channelName.text = self.channelInfo.name;
         
@@ -159,13 +159,13 @@
         
         if (self.channelInfo.desc) {
             NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:self.channelInfo.desc];
-            UIFont *font = [UIFont systemFontOfSize:14];
+            UIFont *font = [UIFont scaledSystemFontOfSize:14];
             [attributeString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, self.channelInfo.desc.length)];
             NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
             CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
             
             self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
-            self.channelDesc.font = [UIFont systemFontOfSize:14];
+            self.channelDesc.font = [UIFont scaledSystemFontOfSize:14];
             self.channelDesc.textAlignment = NSTextAlignmentCenter;
             self.channelDesc.text = self.channelInfo.desc;
             self.channelDesc.numberOfLines = 0;
@@ -238,7 +238,7 @@
             
             UIButton *moreBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width, 36)];
             [moreBtn setTitle:WFCString(@"ShowAllMembers") forState:UIControlStateNormal];
-            moreBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+            moreBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
             [moreBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             moreBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
             [moreBtn addTarget:self action:@selector(onViewAllMember:) forControlEvents:UIControlEventTouchDown];
@@ -836,7 +836,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self isGroupAnnouncementCell:indexPath]) {
-        float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
+        float height = [WFCUUtilities getTextDrawingSize:self.groupAnnouncement.text font:[UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12] constrainedSize:CGSizeMake(self.view.bounds.size.width - 48, 1000)].height;
         if (height > 12 * 3.2) {
             height = 12 * 3.2;
         }
@@ -851,7 +851,7 @@
         if(cell == nil) {
             cell = [[WFCUSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"styleSwitch" conversation:self.conversation];
         }
-        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         cell.textLabel.textColor = [WFCUConfigManager globalManager].textColor;
         cell.detailTextLabel.text = nil;
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -866,10 +866,10 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"style1Cell"];
         }
-        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         cell.textLabel.text = title;
         cell.detailTextLabel.text = detailTitle;
-        cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+        cell.detailTextLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
         cell.accessoryType = withDI ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -886,10 +886,10 @@
       if (cell == nil) {
           cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QrCell"];
       } else {
-          cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+          cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
           cell.textLabel.text = WFCString(@"GroupQRCode");
           cell.detailTextLabel.text = nil;
-          cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+          cell.detailTextLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
           cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
           cell.accessoryView = nil;
           cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -916,10 +916,10 @@
         }
 
         cell.textLabel.text = WFCString(@"GroupAnnouncement");
-        cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         cell.detailTextLabel.text = self.groupAnnouncement.text;
         cell.detailTextLabel.numberOfLines = 3;
-        cell.detailTextLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+        cell.detailTextLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -955,7 +955,7 @@
           UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
           [btn setTitle:WFCString(@"ClearChatHistory") forState:UIControlStateNormal];
 
-          btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+          btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
           [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
           [btn addTarget:self action:@selector(clearMessageAction) forControlEvents:UIControlEventTouchUpInside];
           if (@available(iOS 14, *)) {
@@ -978,7 +978,7 @@
             } else {
                 [btn setTitle:WFCString(@"QuitGroup") forState:UIControlStateNormal];
             }
-            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onDeleteAndQuit:) forControlEvents:UIControlEventTouchUpInside];
             if (@available(iOS 14, *)) {
@@ -997,7 +997,7 @@
             }
             UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
             [btn setTitle:WFCString(@"TransferGroup") forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+            btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
             [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(onTransferGroup:) forControlEvents:UIControlEventTouchUpInside];
             if (@available(iOS 14, *)) {
@@ -1044,7 +1044,7 @@
           }
           UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
           [btn setTitle:WFCString(@"DestroySecretChat") forState:UIControlStateNormal];
-          btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+          btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
           [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"] forState:UIControlStateNormal];
           [btn addTarget:self action:@selector(onDestroySecretChat:) forControlEvents:UIControlEventTouchUpInside];
           if (@available(iOS 14, *)) {

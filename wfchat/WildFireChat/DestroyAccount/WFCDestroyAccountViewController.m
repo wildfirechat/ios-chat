@@ -52,7 +52,7 @@
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
     [self.hintLabel setText:LocalizedString(@"DestroyAccountTitle")];
     self.hintLabel.textAlignment = NSTextAlignmentLeft;
-    self.hintLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
+    self.hintLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
     
     topPos += hintHeight + 100;
     
@@ -60,7 +60,7 @@
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     passwordLabel.text = LocalizedString(@"VerificationCode");
-    passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+    passwordLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
 
 
     self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
@@ -68,7 +68,7 @@
 
 
     self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
-    self.passwordField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+    self.passwordField.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.passwordField.placeholder = LocalizedString(@"VerificationCodePlaceholder");
     self.passwordField.returnKeyType = UIReturnKeyDone;
     self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
@@ -78,7 +78,7 @@
     
     self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
     [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
-    self.sendCodeBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+    self.sendCodeBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.sendCodeBtn.layer.borderWidth = 1;
     self.sendCodeBtn.layer.cornerRadius = 4;
     self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
@@ -95,7 +95,7 @@
     [self.loginBtn setTitle:LocalizedString(@"DestroyAccountButton") forState:UIControlStateNormal];
     self.loginBtn.backgroundColor = [UIColor colorWithHexString:@"0xe1e1e1"];
     [self.loginBtn setTitleColor:[UIColor colorWithHexString:@"0xb1b1b1"] forState:UIControlStateNormal];
-    self.loginBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+    self.loginBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:16];
     self.loginBtn.enabled = NO;
     
     [self.view addSubview:self.hintLabel];
@@ -296,7 +296,7 @@
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
     titleLabel.text = LocalizedString(@"SecurityVerification");
-    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
 

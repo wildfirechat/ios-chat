@@ -13,6 +13,7 @@
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
 #import "MBProgressHUD.h"
+#import "UIFont+YH.h"
 
 @interface WFCUCreateCollectionViewController () <UITextFieldDelegate, UITextViewDelegate>
 @property (nonatomic, strong) UITextField *titleTextField;
@@ -85,7 +86,7 @@
     self.descTextView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.descTextView.layer.borderWidth = 0.5;
     self.descTextView.layer.cornerRadius = 5;
-    self.descTextView.font = [UIFont systemFontOfSize:16];
+    self.descTextView.font = [UIFont scaledSystemFontOfSize:16];
     self.descTextView.delegate = self;
     [self.contentView addSubview:self.descTextView];
 
@@ -136,7 +137,7 @@
 - (UILabel *)createLabel:(NSString *)text {
     UILabel *label = [[UILabel alloc] init];
     label.text = text;
-    label.font = [UIFont systemFontOfSize:14];
+    label.font = [UIFont scaledSystemFontOfSize:14];
     label.textColor = [UIColor grayColor];
     return label;
 }

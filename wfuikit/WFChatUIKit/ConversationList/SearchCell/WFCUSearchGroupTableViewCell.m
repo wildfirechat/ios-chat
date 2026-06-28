@@ -49,7 +49,7 @@
 - (UILabel *)name {
     if (!_name) {
         _name = [UILabel new];
-        [_name setFont:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15]];
+        [_name setFont:[UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15]];
         _name.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_name];
     }
@@ -59,7 +59,7 @@
 - (UILabel *)haveMember {
     if (!_haveMember) {
         _haveMember = [UILabel new];
-        [_haveMember setFont:[UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12]];
+        [_haveMember setFont:[UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12]];
         _haveMember.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
         [self.contentView addSubview:_haveMember];
     }

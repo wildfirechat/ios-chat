@@ -9,6 +9,7 @@
 #import "WFCUVoiceCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCUVoiceCell ()
 @property(nonatomic, strong) NSTimer *animationTimer;
@@ -78,7 +79,7 @@
 - (UILabel *)durationLabel {
     if (!_durationLabel) {
         _durationLabel = [[UILabel alloc] init];
-        _durationLabel.font = [UIFont systemFontOfSize:9];
+        _durationLabel.font = [UIFont scaledSystemFontOfSize:9];
         [self.contentArea addSubview:_durationLabel];
     }
     return _durationLabel;

@@ -8,6 +8,7 @@
 #import "WFCSlideVerifyView.h"
 #import "AppService.h"
 #import "MBProgressHUD.h"
+#import "UIFont+YH.h"
 
 @interface WFCSlideVerifyView () <UIGestureRecognizerDelegate>
 
@@ -79,7 +80,7 @@
     self.hintLabel = [[UILabel alloc] init];
     self.hintLabel.text = LocalizedString(@"SlideToVerify");
     self.hintLabel.textColor = [UIColor grayColor];
-    self.hintLabel.font = [UIFont systemFontOfSize:14];
+    self.hintLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.hintLabel.textAlignment = NSTextAlignmentCenter;
     [self.sliderTrackView addSubview:self.hintLabel];
 

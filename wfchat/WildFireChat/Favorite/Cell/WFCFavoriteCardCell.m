@@ -8,6 +8,7 @@
 
 #import "WFCFavoriteCardCell.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "UIFont+YH.h"
 
 @interface WFCFavoriteCardCell ()
 @property(nonatomic, strong)UIImageView *iconView;
@@ -65,7 +66,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 8, self.bounds.size.width-72, 44)];
-        _nameLabel.font = [UIFont systemFontOfSize:16];
+        _nameLabel.font = [UIFont scaledSystemFontOfSize:16];
         _nameLabel.numberOfLines = 2;
         [self.contentArea addSubview:_nameLabel];
     }

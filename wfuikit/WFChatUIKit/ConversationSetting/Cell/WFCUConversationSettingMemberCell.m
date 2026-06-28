@@ -39,7 +39,7 @@
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
-        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:11];
+        _nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:11];
         [[self contentView] addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -50,7 +50,7 @@
         _domainLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _domainLabel.textColor = [WFCUConfigManager globalManager].textColor;
         _domainLabel.textAlignment = NSTextAlignmentCenter;
-        _domainLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:11];
+        _domainLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:11];
         [[self contentView] addSubview:_domainLabel];
     }
     return _domainLabel;

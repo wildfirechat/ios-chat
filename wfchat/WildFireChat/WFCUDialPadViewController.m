@@ -12,6 +12,7 @@
 #import <WFChatUIKit/WFCUUtilities.h>
 #import <WFChatUIKit/WFCUVideoViewController.h>
 #import <WFChatUIKit/WFCUImage.h>
+#import "UIFont+YH.h"
 
 @interface WFCUDialPadViewController ()
 @property (nonatomic, strong) UILabel *numberLabel;
@@ -47,7 +48,7 @@
     
     // Number display
     self.numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, topY, screenW - 40, 60)];
-    self.numberLabel.font = [UIFont systemFontOfSize:36 weight:UIFontWeightMedium];
+    self.numberLabel.font = [UIFont scaledSystemFontOfSize:36 weight:UIFontWeightMedium];
     self.numberLabel.textAlignment = NSTextAlignmentCenter;
     self.numberLabel.textColor = [UIColor blackColor];
     self.numberLabel.adjustsFontSizeToFitWidth = YES;
@@ -58,7 +59,7 @@
     UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     deleteBtn.frame = CGRectMake(screenW - 80, topY + 10, 60, 40);
     [deleteBtn setTitle:@"⌫" forState:UIControlStateNormal];
-    deleteBtn.titleLabel.font = [UIFont systemFontOfSize:24];
+    deleteBtn.titleLabel.font = [UIFont scaledSystemFontOfSize:24];
     [deleteBtn addTarget:self action:@selector(onDelete:) forControlEvents:UIControlEventTouchUpInside];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onDeleteLongPress:)];
@@ -114,7 +115,7 @@
     CGFloat digitH = letter.length > 0 ? 30 : frame.size.height;
     UILabel *digitLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, digitY, frame.size.width, digitH)];
     digitLabel.text = digit;
-    digitLabel.font = [UIFont systemFontOfSize:28 weight:UIFontWeightMedium];
+    digitLabel.font = [UIFont scaledSystemFontOfSize:28 weight:UIFontWeightMedium];
     digitLabel.textAlignment = NSTextAlignmentCenter;
     digitLabel.textColor = [UIColor blackColor];
     digitLabel.userInteractionEnabled = NO;
@@ -124,7 +125,7 @@
     if (letter.length > 0) {
         UILabel *letterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 16)];
         letterLabel.text = letter;
-        letterLabel.font = [UIFont systemFontOfSize:9];
+        letterLabel.font = [UIFont scaledSystemFontOfSize:9];
         letterLabel.textAlignment = NSTextAlignmentCenter;
         letterLabel.textColor = [UIColor grayColor];
         letterLabel.userInteractionEnabled = NO;

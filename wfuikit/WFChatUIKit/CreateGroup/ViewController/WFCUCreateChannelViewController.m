@@ -14,6 +14,7 @@
 #import "UIView+Toast.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCUCreateChannelViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -60,13 +61,13 @@
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(namePadding, top, labelWidth, 25)];
     self.nameLabel.text = WFCString(@"ChannelName");
-    self.nameLabel.font = [UIFont systemFontOfSize:14];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:14];
     [self.view addSubview:self.nameLabel];
     
     
     self.nameField = [[UITextField alloc] initWithFrame:CGRectMake(namePadding + labelWidth + labelFeildPadding, top, bound.size.width - namePadding - labelWidth - labelFeildPadding - namePadding, 24)];
     [self.nameField setPlaceholder:WFCString(@"InputChannelNameHint")];
-    [self.nameField setFont:[UIFont systemFontOfSize:14]];
+    [self.nameField setFont:[UIFont scaledSystemFontOfSize:14]];
     self.nameField.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.nameField];
     
@@ -78,13 +79,13 @@
     top += 16;
     self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(namePadding, top, labelWidth, 25)];
     self.descLabel.text = WFCString(@"ChannelDescription");
-    self.descLabel.font = [UIFont systemFontOfSize:14];
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:14];
     [self.view addSubview:self.descLabel];
     
     
     self.descField = [[UITextField alloc] initWithFrame:CGRectMake(namePadding + labelWidth + labelFeildPadding, top, bound.size.width - namePadding - labelWidth - labelFeildPadding - namePadding, 24)];
     [self.descField setPlaceholder:WFCString(@"InputChannelDescHint")];
-    [self.descField setFont:[UIFont systemFontOfSize:14]];
+    [self.descField setFont:[UIFont scaledSystemFontOfSize:14]];
     self.descField.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.descField];
     

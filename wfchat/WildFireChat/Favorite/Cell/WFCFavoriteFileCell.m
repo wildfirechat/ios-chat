@@ -8,6 +8,7 @@
 
 #import "WFCFavoriteFileCell.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "UIFont+YH.h"
 
 
 @interface WFCFavoriteFileCell ()
@@ -50,7 +51,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 4, self.bounds.size.width-72, 20)];
-        _nameLabel.font = [UIFont systemFontOfSize:18];
+        _nameLabel.font = [UIFont scaledSystemFontOfSize:18];
         [self.contentArea addSubview:_nameLabel];
     }
     return _nameLabel;
@@ -59,7 +60,7 @@
 - (UILabel *)infoLabel {
     if (!_infoLabel) {
         _infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 30, self.bounds.size.width-80, 18)];
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         _infoLabel.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_infoLabel];
     }

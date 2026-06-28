@@ -12,6 +12,7 @@
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCULinkCell ()
 @property (nonatomic, strong)UIImageView *thumbnailImageView;
@@ -23,7 +24,7 @@
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)msgModel.message.content;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width, 50)];
     
     CGFloat contentWidth = width - 56;
     NSString *contentTxt = content.url;
@@ -31,7 +32,7 @@
         contentTxt = content.contentDigest;
     }
     
-    CGSize contentSize = [WFCUUtilities getTextDrawingSize:contentTxt font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(contentWidth, 68)];
+    CGSize contentSize = [WFCUUtilities getTextDrawingSize:contentTxt font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(contentWidth, 68)];
     
     CGFloat height = titleSize.height + 4 + MAX(contentSize.height, 56);
     
@@ -43,7 +44,7 @@
     
     WFCCLinkMessageContent *content = (WFCCLinkMessageContent *)model.message.content;
     CGFloat width = self.contentArea.bounds.size.width;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width, 50)];
     
     CGFloat contentWidth = width - 56;
     NSString *contentTxt = content.url;
@@ -51,7 +52,7 @@
         contentTxt = content.contentDigest;
     }
     
-    CGSize contentSize = [WFCUUtilities getTextDrawingSize:contentTxt font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(contentWidth, 68)];
+    CGSize contentSize = [WFCUUtilities getTextDrawingSize:contentTxt font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(contentWidth, 68)];
     
     
     self.TitleLabel.text = content.title;
@@ -74,7 +75,7 @@
     if (!_TitleLabel) {
         CGRect bounds = self.contentArea.bounds;
         _TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 10, bounds.size.width - 72 - 8, 24)];
-        _TitleLabel.font = [UIFont systemFontOfSize:18];
+        _TitleLabel.font = [UIFont scaledSystemFontOfSize:18];
         _TitleLabel.numberOfLines = 0;
         [self.contentArea addSubview:_TitleLabel];
     }
@@ -85,7 +86,7 @@
     if (!_contentLabel) {
         CGRect bounds = self.contentArea.bounds;
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 40, bounds.size.width - 72 - 8, 18)];
-        _contentLabel.font = [UIFont systemFontOfSize:14];
+        _contentLabel.font = [UIFont scaledSystemFontOfSize:14];
         _contentLabel.textColor = [UIColor grayColor];
         _contentLabel.numberOfLines = 0;
         [self.contentArea addSubview:_contentLabel];

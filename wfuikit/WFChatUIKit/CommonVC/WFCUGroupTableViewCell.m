@@ -47,7 +47,7 @@
     if (!_name) {
         _name = [UILabel new];
         _name.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
-        _name.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+        _name.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
         [self.contentView addSubview:_name];
     }
     return _name;

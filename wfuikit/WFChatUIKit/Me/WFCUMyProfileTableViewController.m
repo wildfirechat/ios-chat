@@ -16,6 +16,7 @@
 #import "QrCodeHelper.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCUMyProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic)UIImageView *portraitView;
@@ -176,7 +177,7 @@
         }
     }
     
-    [title setFont:[UIFont systemFontOfSize:16]];
+    [title setFont:[UIFont scaledSystemFontOfSize:16]];
     [title setText:titleStr];
     if (left) {
         [title setTextAlignment:NSTextAlignmentLeft];

@@ -46,10 +46,10 @@
     self.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 40, 40)];
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20, 11, width - 128, 16)];
-    self.nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+    self.nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
     self.nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
     self.reasonLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 40 + 20, 11 + 16 + 8, width - 128, 14)];
-    self.reasonLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+    self.reasonLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.reasonLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
     
     self.acceptBtn = [[UIButton alloc] initWithFrame:CGRectMake(width - (46 + 16), 16, 46, 28)];
@@ -59,7 +59,7 @@
     self.acceptBtn.layer.cornerRadius = 4.f;
     self.acceptBtn.layer.masksToBounds = YES;
     [self.acceptBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.acceptBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+    self.acceptBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
     
     [self.contentView addSubview:self.portraitView];
     [self.contentView addSubview:self.nameLabel];
@@ -105,8 +105,8 @@
     }
     
     int attrLength = (int)invitee.readableName.length;
-    NSMutableAttributedString *attrtext = [[NSMutableAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16]}];
-    [attrtext setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
+    NSMutableAttributedString *attrtext = [[NSMutableAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:16]}];
+    [attrtext setAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:16],
                           NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(startPos, attrLength)];
     
     self.nameLabel.attributedText = attrtext;

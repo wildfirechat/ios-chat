@@ -7,6 +7,7 @@
 //
 
 #import "WFCFavoriteUnknownCell.h"
+#import "UIFont+YH.h"
 
 @interface WFCFavoriteUnknownCell ()
 @property(nonatomic, strong)UILabel *unknownLabel;
@@ -31,7 +32,7 @@
 - (UILabel *)unknownLabel {
     if (!_unknownLabel) {
         _unknownLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 30)];
-        _unknownLabel.font = [UIFont systemFontOfSize:18];
+        _unknownLabel.font = [UIFont scaledSystemFontOfSize:18];
         _unknownLabel.numberOfLines = 1;
         _unknownLabel.text = LocalizedString(@"VersionNotSupported");
         [self.contentArea addSubview:_unknownLabel];

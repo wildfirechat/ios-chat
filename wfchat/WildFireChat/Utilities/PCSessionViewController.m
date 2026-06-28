@@ -12,6 +12,7 @@
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "MBProgressHUD.h"
 #import "AppService.h"
+#import "UIFont+YH.h"
 
 #define CELL_HEIGHT 56
 
@@ -98,7 +99,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width - 200)/2, topOffset + 150, 200, 20)];
     [label setText:self.pcStatusText];
     [label setTextAlignment:NSTextAlignmentCenter];
-    [label setFont:[UIFont systemFontOfSize:16]];
+    [label setFont:[UIFont scaledSystemFontOfSize:16]];
     [label setTextColor:[UIColor darkGrayColor]];
     [self.view addSubview:label];
     

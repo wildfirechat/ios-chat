@@ -104,6 +104,7 @@
 #import "LBXScanNative.h"
 
 #import "WFCURecentImagesFloatView.h"
+#import "UIFont+YH.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate, NSURLSessionDelegate, WFCURecentImagesFloatViewDelegate>
 
@@ -484,7 +485,7 @@
     if(!_joinGroupRequestButton) {
         _joinGroupRequestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 36)];
         [_joinGroupRequestButton addTarget:self action:@selector(onJoinGroupRequestButton:) forControlEvents:UIControlEventTouchDown];
-        _joinGroupRequestButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _joinGroupRequestButton.titleLabel.font = [UIFont scaledSystemFontOfSize:16];
         [_joinGroupRequestButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
         [_joinGroupRequestButton setBackgroundColor:[UIColor whiteColor]];
         _joinGroupRequestButton.layer.masksToBounds = YES;
@@ -966,7 +967,7 @@
         
         domainLabel.textAlignment = NSTextAlignmentCenter;
         domainLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        domainLabel.font = [UIFont systemFontOfSize:12];
+        domainLabel.font = [UIFont scaledSystemFontOfSize:12];
         domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
         
         [titleContainer addSubview:titleLabel];
@@ -2016,7 +2017,7 @@
     if (!self.mentionedButton) {
         CGRect bount = self.view.bounds;
         self.mentionedButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 240, 0, 30)];
-        self.mentionedButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        self.mentionedButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
         [self.mentionedButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         self.mentionedButton.backgroundColor = [UIColor whiteColor];
         self.mentionedButton.layer.cornerRadius = 15;
@@ -2081,7 +2082,7 @@
     CGRect bount = self.view.bounds;
     self.unreadButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width+15, 200, 0, 30)];
     [self.unreadButton setTitle:[NSString stringWithFormat:WFCString(@"NewMessagesCount"), self.unreadMessageCount] forState:UIControlStateNormal];
-    self.unreadButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    self.unreadButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
     [self.unreadButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     self.unreadButton.backgroundColor = [UIColor whiteColor];
     self.unreadButton.layer.cornerRadius = 15;
@@ -2391,7 +2392,7 @@
     if (!_newMsgTipButton) {
         _newMsgTipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 36, self.chatInputBar.frame.origin.y - 40, 24, 24)];
         _newMsgTipButton.layer.cornerRadius = 12;
-        _newMsgTipButton.titleLabel.font = [UIFont systemFontOfSize:8];
+        _newMsgTipButton.titleLabel.font = [UIFont scaledSystemFontOfSize:8];
         _newMsgTipButton.layer.borderColor = [UIColor blackColor].CGColor;
         _newMsgTipButton.backgroundColor = [UIColor blueColor];
         [_newMsgTipButton addTarget:self action:@selector(onNewMsgTipBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -3006,7 +3007,7 @@
         UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtMsgContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
-        textView.font = [UIFont systemFontOfSize:28];
+        textView.font = [UIFont scaledSystemFontOfSize:28];
         textView.editable = NO;
         textView.backgroundColor = self.view.backgroundColor;
         
@@ -3198,7 +3199,7 @@
         UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
-        textView.font = [UIFont systemFontOfSize:28];
+        textView.font = [UIFont scaledSystemFontOfSize:28];
         textView.editable = NO;
         textView.backgroundColor = self.view.backgroundColor;
         

@@ -16,6 +16,7 @@
 #import "UIView+Toast.h"
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCUChannelProfileViewController ()
 @property (nonatomic, strong)UIImageView *channelPortrait;
@@ -40,7 +41,7 @@
     top += portraitWidth;
     top += 20;
     self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 40 - 40, 18)];
-    self.channelName.font = [UIFont systemFontOfSize:18];
+    self.channelName.font = [UIFont scaledSystemFontOfSize:18];
     self.channelName.textAlignment = NSTextAlignmentCenter;
     self.channelName.text = self.channelInfo.name;
     
@@ -49,13 +50,13 @@
     top += 20;
     
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:self.channelInfo.desc];
-    UIFont *font = [UIFont systemFontOfSize:14];
+    UIFont *font = [UIFont scaledSystemFontOfSize:14];
     [attributeString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, self.channelInfo.desc.length)];
     NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
     CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
     
     self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
-    self.channelDesc.font = [UIFont systemFontOfSize:14];
+    self.channelDesc.font = [UIFont scaledSystemFontOfSize:14];
     self.channelDesc.textAlignment = NSTextAlignmentCenter;
     self.channelDesc.text = self.channelInfo.desc;
     self.channelDesc.numberOfLines = 0;

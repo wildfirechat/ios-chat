@@ -31,11 +31,23 @@ typedef NS_ENUM(NSInteger, WFCUThemeType) {
     ThemeType_White
 };
 
+extern NSString *const WFCUFontScaleDidChangeNotification;
+
 @interface WFCUConfigManager : NSObject
 + (WFCUConfigManager *)globalManager;
 
 - (void)setupNavBar;
 @property(nonatomic, assign)WFCUThemeType selectedTheme;
+
+/**
+ * 全局字体缩放比例，默认 1.0，范围 0.8 ~ 1.5
+ */
+@property(nonatomic, assign)CGFloat fontScale;
+
+/**
+ * 根据基础字号返回缩放后的字号，最小不小于 8
+ */
++ (CGFloat)scaledSize:(CGFloat)baseSize;
 
 @property(nonatomic, strong)UIColor *backgroudColor;
 /*

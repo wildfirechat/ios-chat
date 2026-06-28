@@ -9,6 +9,7 @@
 #import "MediaMessageGridViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface MediaMessageGridViewCell ()
 @property(nonatomic, strong)UIImageView *imageView;
@@ -86,7 +87,7 @@
 -(UILabel *)videoDuration {
     if (!_videoDuration) {
         _videoDuration = [[UILabel alloc] initWithFrame:CGRectMake(28, self.bounds.size.height-24-2, 40, 16)];
-        _videoDuration.font = [UIFont systemFontOfSize:12];
+        _videoDuration.font = [UIFont scaledSystemFontOfSize:12];
         _videoDuration.lineBreakMode = NSLineBreakByTruncatingHead;
         [self addSubview:_videoDuration];
     }
@@ -95,7 +96,7 @@
 -(UILabel *)fileName {
     if (!_fileName) {
         _fileName = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, self.bounds.size.width-16, 40)];
-        _fileName.font = [UIFont systemFontOfSize:14];
+        _fileName.font = [UIFont scaledSystemFontOfSize:14];
         _fileName.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _fileName.numberOfLines = 2;
         [self addSubview:_fileName];
@@ -105,7 +106,7 @@
 -(UILabel *)fileSize {
     if (!_fileSize) {
         _fileSize = [[UILabel alloc] initWithFrame:CGRectMake(8, self.bounds.size.height-24, self.bounds.size.width-16, 16)];
-        _fileSize.font = [UIFont systemFontOfSize:14];
+        _fileSize.font = [UIFont scaledSystemFontOfSize:14];
         _fileSize.lineBreakMode = NSLineBreakByTruncatingHead;
         [self addSubview:_fileSize];
     }

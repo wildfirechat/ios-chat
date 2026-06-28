@@ -66,7 +66,7 @@
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
     [self.hintLabel setText:LocalizedString(@"PhoneLogin")];
     self.hintLabel.textAlignment = NSTextAlignmentLeft;
-    self.hintLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
+    self.hintLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
     
     topPos += hintHeight + 50;
     
@@ -74,14 +74,14 @@
     
     UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     userNameLabel.text = LocalizedString(@"PhoneNumber");
-    userNameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+    userNameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, userNameContainer.frame.size.width, 1.f)];
     self.userNameLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
     
     
     self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, userNameContainer.frame.size.width - 87, inputHeight - 1)];
-    self.userNameField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+    self.userNameField.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.userNameField.placeholder = LocalizedString(@"PhoneNumberPlaceholder");
     self.userNameField.returnKeyType = UIReturnKeyNext;
     self.userNameField.keyboardType = UIKeyboardTypePhonePad;
@@ -94,7 +94,7 @@
     UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
     self.passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     self.passwordLabel.text = LocalizedString(@"VerificationCode");
-    self.passwordLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:17];
+    self.passwordLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     
     self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
@@ -102,7 +102,7 @@
     
     
     self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
-    self.passwordField.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+    self.passwordField.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.passwordField.placeholder = LocalizedString(@"VerificationCodePlaceholder");
     self.passwordField.returnKeyType = UIReturnKeyDone;
     self.passwordField.keyboardType = UIKeyboardTypeNumberPad;
@@ -112,7 +112,7 @@
     
     self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
     [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
-    self.sendCodeBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:12];
+    self.sendCodeBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.sendCodeBtn.layer.borderWidth = 1;
     self.sendCodeBtn.layer.cornerRadius = 4;
     self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
@@ -129,14 +129,14 @@
     self.switchButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, 150, 40)];
     [self.switchButton setTitle:LocalizedString(@"UsePasswordLogin") forState:UIControlStateNormal];
     self.switchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    self.switchButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    self.switchButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
     [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
     [self.switchButton addTarget:self action:@selector(onSwitchLoginType:) forControlEvents:UIControlEventTouchDown];
     
     self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - 100, topPos, 100, 40)];
     [self.registerButton setTitle:LocalizedString(@"Register") forState:UIControlStateNormal];
     self.registerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    self.registerButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    self.registerButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
     [self.registerButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
     [self.registerButton addTarget:self action:@selector(onRegister:) forControlEvents:UIControlEventTouchDown];
     
@@ -150,7 +150,7 @@
     [self.loginBtn setTitle:LocalizedString(@"Login") forState:UIControlStateNormal];
     self.loginBtn.backgroundColor = [UIColor colorWithHexString:@"0xe1e1e1"];
     [self.loginBtn setTitleColor:[UIColor colorWithHexString:@"0xb1b1b1"] forState:UIControlStateNormal];
-    self.loginBtn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleMedium size:16];
+    self.loginBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:16];
     self.loginBtn.enabled = NO;
     
     [self.view addSubview:self.hintLabel];
@@ -177,11 +177,11 @@
     
     self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 40 - [WFCUUtilities wf_safeDistanceBottom], self.view.bounds.size.width-32, 40)];
     self.privacyLabel.textAlignment = NSTextAlignmentCenter;
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:LocalizedString(@"LoginAgreement") attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:LocalizedString(@"LoginAgreement") attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:10],
                                                                                                                      NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
-    [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
+    [text setAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:10],
                           NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(9, 10)];
-    [text setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10],
+    [text setAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:10],
                           NSForegroundColorAttributeName : [UIColor blueColor]} range:NSMakeRange(20, 10)];
     self.privacyLabel.attributedText = text ;
     __weak typeof(self)ws = self;
@@ -586,7 +586,7 @@
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
     titleLabel.text = LocalizedString(@"SecurityVerification");
-    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
 

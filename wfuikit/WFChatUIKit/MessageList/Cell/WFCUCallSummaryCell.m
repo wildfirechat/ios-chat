@@ -24,12 +24,13 @@
 
 #if WFCU_SUPPORT_VOIP
 #import <WFAVEngineKit/WFAVEngineKit.h>
+#import "UIFont+YH.h"
 #endif
 @implementation WFCUCallSummaryCell
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     NSString *text = [WFCUCallSummaryCell getCallText:msgModel.message.content];
-    CGSize textSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
+    CGSize textSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width, 8000)];
     return CGSizeMake(textSize.width + 25, 30);
 }
 
@@ -161,12 +162,12 @@
     if (!_infoLabel) {
         _infoLabel = [[UILabel alloc] init];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         
         _infoLabel.numberOfLines = 0;
         _infoLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _infoLabel.textAlignment = NSTextAlignmentCenter;
-        _infoLabel.font = [UIFont systemFontOfSize:14.f];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14.f];
         _infoLabel.layer.masksToBounds = YES;
         _infoLabel.layer.cornerRadius = 5.f;
         _infoLabel.textAlignment = NSTextAlignmentCenter;

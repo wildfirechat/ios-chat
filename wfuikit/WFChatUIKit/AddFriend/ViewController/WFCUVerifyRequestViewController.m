@@ -11,6 +11,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 @interface WFCUVerifyRequestViewController ()
 @property(nonatomic, strong)UITextField *verifyField;
@@ -24,14 +25,14 @@
     CGRect clientArea = self.view.bounds;
     UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8 + [WFCUUtilities wf_navigationFullHeight], clientArea.size.width - 16, 16)];
     hintLabel.text = WFCString(@"AddFriendReasonHint");
-    hintLabel.font = [UIFont systemFontOfSize:12];
+    hintLabel.font = [UIFont scaledSystemFontOfSize:12];
     hintLabel.textColor = [UIColor grayColor];
     [self.view addSubview:hintLabel];
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     
     self.verifyField = [[UITextField alloc] initWithFrame:CGRectMake(0, 32 + [WFCUUtilities wf_navigationFullHeight], clientArea.size.width, 32)];
     WFCCUserInfo *me = [[WFCCIMService sharedWFCIMService] getUserInfo:[WFCCNetworkService sharedInstance].userId refresh:NO];
-    self.verifyField.font = [UIFont systemFontOfSize:16];
+    self.verifyField.font = [UIFont scaledSystemFontOfSize:16];
     if(me.displayName){
         self.verifyField.text = [NSString stringWithFormat:WFCString(@"DefaultAddFriendReason"), me.displayName];
     }else {

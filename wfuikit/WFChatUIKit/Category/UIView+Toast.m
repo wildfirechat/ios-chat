@@ -26,6 +26,7 @@
 #import "UIView+Toast.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
+#import "UIFont+YH.h"
 
 NSString * CSToastPositionTop       = @"CSToastPositionTop";
 NSString * CSToastPositionCenter    = @"CSToastPositionCenter";
@@ -443,8 +444,8 @@ static const NSString * CSToastQueueKey             = @"CSToastQueueKey";
         self.horizontalPadding = 10.0;
         self.verticalPadding = 10.0;
         self.cornerRadius = 10.0;
-        self.titleFont = [UIFont boldSystemFontOfSize:16.0];
-        self.messageFont = [UIFont systemFontOfSize:16.0];
+        self.titleFont = [UIFont scaledBoldSystemFontOfSize:16.0];
+        self.messageFont = [UIFont scaledSystemFontOfSize:16.0];
         self.titleAlignment = NSTextAlignmentLeft;
         self.messageAlignment = NSTextAlignmentLeft;
         self.titleNumberOfLines = 0;

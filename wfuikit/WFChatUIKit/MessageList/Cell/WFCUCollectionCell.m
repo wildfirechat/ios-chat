@@ -9,6 +9,7 @@
 #import "WFCUCollectionCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 #define TITLE_FONT_SIZE 16
 #define DESC_FONT_SIZE 13
@@ -33,19 +34,19 @@
 @implementation WFCUCollectionCell
 
 + (UIFont *)titleFont {
-    return [UIFont boldSystemFontOfSize:TITLE_FONT_SIZE];
+    return [UIFont scaledBoldSystemFontOfSize:TITLE_FONT_SIZE];
 }
 
 + (UIFont *)descFont {
-    return [UIFont systemFontOfSize:DESC_FONT_SIZE];
+    return [UIFont scaledSystemFontOfSize:DESC_FONT_SIZE];
 }
 
 + (UIFont *)entryFont {
-    return [UIFont systemFontOfSize:ENTRY_FONT_SIZE];
+    return [UIFont scaledSystemFontOfSize:ENTRY_FONT_SIZE];
 }
 
 + (UIFont *)countFont {
-    return [UIFont systemFontOfSize:COUNT_FONT_SIZE];
+    return [UIFont scaledSystemFontOfSize:COUNT_FONT_SIZE];
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
@@ -290,7 +291,7 @@
 - (UILabel *)actionLabel {
     if (!_actionLabel) {
         _actionLabel = [[UILabel alloc] init];
-        _actionLabel.font = [UIFont systemFontOfSize:14];
+        _actionLabel.font = [UIFont scaledSystemFontOfSize:14];
         _actionLabel.textColor = [UIColor systemBlueColor];
         _actionLabel.textAlignment = NSTextAlignmentLeft;
         [self.contentArea addSubview:_actionLabel];

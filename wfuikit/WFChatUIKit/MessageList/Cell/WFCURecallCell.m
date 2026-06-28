@@ -9,6 +9,7 @@
 #import "WFCURecallCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 #define TEXT_TOP_PADDING 6
 #define TEXT_BUTTOM_PADDING 6
@@ -31,7 +32,7 @@
     CGFloat height = [super hightForHeaderArea:msgModel];
     NSString *infoText = [WFCURecallCell recallMsg:(WFCCRecallMessageContent *)msgModel.message.content];
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING + TEXT_TOP_PADDING + TEXT_BUTTOM_PADDING;
     size.height += height;
     return CGSizeMake(width, size.height);
@@ -48,13 +49,13 @@
     CGFloat reeditBtnWidth = 0;
     
     if (content.originalContentType == MESSAGE_CONTENT_TYPE_TEXT && [content.originalSender isEqualToString:[WFCCNetworkService sharedInstance].userId] && content.originalSearchableContent.length > 0 && [content.operatorId isEqualToString:[WFCCNetworkService sharedInstance].userId]) {
-        CGSize btnsize = [WFCUUtilities getTextDrawingSize:self.reeditButton.titleLabel.text font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
+        CGSize btnsize = [WFCUUtilities getTextDrawingSize:self.reeditButton.titleLabel.text font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
         
         reeditBtnWidth = btnsize.width + 4;
     }
     
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
     
     
     self.infoLabel.text = infoText;
@@ -84,13 +85,13 @@
     if (!_infoLabel) {
         _infoLabel = [[UILabel alloc] init];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         
         _infoLabel.textColor = [UIColor whiteColor];
         _infoLabel.numberOfLines = 0;
         _infoLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _infoLabel.textAlignment = NSTextAlignmentCenter;
-        _infoLabel.font = [UIFont systemFontOfSize:14.f];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14.f];
         _infoLabel.textAlignment = NSTextAlignmentCenter;
         _infoLabel.backgroundColor = [UIColor clearColor];
         
@@ -107,7 +108,7 @@
         [_reeditButton setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
         [_reeditButton addTarget:self action:@selector(onReeditBtn:) forControlEvents:UIControlEventTouchDown];
         [_reeditButton setBackgroundColor:[UIColor clearColor]];
-        _reeditButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _reeditButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14];
         [self.recallContainer addSubview:_reeditButton];
     }
     return _reeditButton;

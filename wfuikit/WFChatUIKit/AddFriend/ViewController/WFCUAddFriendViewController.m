@@ -16,6 +16,7 @@
 #import "WFCUImage.h"
 #import "WFCUGeneralImageTextTableViewCell.h"
 #import "WFCUDomainTableViewController.h"
+#import "UIFont+YH.h"
 
 
 #define CELL_HEIGHT 56
@@ -94,7 +95,7 @@
     self.noUserView = [[UITextView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 400)];
     self.noUserView.textAlignment = NSTextAlignmentCenter;
     self.noUserView.text = WFCString(@"UserNotFound");
-    self.noUserView.font = [UIFont systemFontOfSize:18];
+    self.noUserView.font = [UIFont scaledSystemFontOfSize:18];
     self.noUserView.hidden = YES;
     [self.view addSubview:self.noUserView];
     self.domainId = _domainId;
@@ -113,7 +114,7 @@
         }
         label.userInteractionEnabled = YES;
         label.textAlignment = NSTextAlignmentLeft;
-        label.font = [UIFont systemFontOfSize:14];
+        label.font = [UIFont scaledSystemFontOfSize:14];
         UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectDomain:)];
         [label addGestureRecognizer:gestureRecognizer];
         

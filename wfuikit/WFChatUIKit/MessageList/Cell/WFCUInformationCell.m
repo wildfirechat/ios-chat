@@ -9,6 +9,7 @@
 #import "WFCUInformationCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 
 #define TEXT_TOP_PADDING 6
@@ -33,7 +34,7 @@
     } else {
         infoText = [msgModel.message digest];
     }
-    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
     size.height += TEXT_LABEL_TOP_PADDING + TEXT_LABEL_BUTTOM_PADDING + TEXT_TOP_PADDING + TEXT_BUTTOM_PADDING;
     size.height += height;
     return CGSizeMake(width, size.height);
@@ -56,7 +57,7 @@
     
     CGFloat width = self.contentView.bounds.size.width;
     
-    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:infoText font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - TEXT_LABEL_LEFT_PADDING - TEXT_LABEL_RIGHT_PADDING - TEXT_LEFT_PADDING - TEXT_RIGHT_PADDING, 8000)];
     
     
     self.infoLabel.text = infoText;
@@ -99,13 +100,13 @@
     if (!_infoLabel) {
         _infoLabel = [[UILabel alloc] init];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         
         _infoLabel.textColor = [UIColor whiteColor];
         _infoLabel.numberOfLines = 0;
         _infoLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _infoLabel.textAlignment = NSTextAlignmentCenter;
-        _infoLabel.font = [UIFont systemFontOfSize:14.f];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14.f];
         _infoLabel.layer.masksToBounds = YES;
         _infoLabel.layer.cornerRadius = 5.f;
         _infoLabel.textAlignment = NSTextAlignmentCenter;

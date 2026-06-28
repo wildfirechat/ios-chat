@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DiscoverMomentsTableViewCell.h"
 #import <SDWebImage/SDWebImage.h>
+#import <WFChatUIKit/WFCUConfigManager.h>
 
 
 @interface DiscoverMomentsTableViewCell ()
@@ -21,6 +22,12 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat portraitSize = 32 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    self.lastFeedPortrait.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 80, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

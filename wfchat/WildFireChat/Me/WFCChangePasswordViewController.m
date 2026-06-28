@@ -11,6 +11,7 @@
 #import "MBProgressHUD.h"
 #import "WFCSlideVerifyView.h"
 #import "WFCConfig.h"
+#import "UIFont+YH.h"
 
 @interface WFCChangePasswordViewController () <UITextFieldDelegate, WFCSlideVerifyViewDelegate>
 @property(nonatomic, strong)UILabel *oldLabel;
@@ -42,7 +43,7 @@
     CGFloat labelWidth = 72;
     
     self.oldLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-    self.oldLabel.font = [UIFont systemFontOfSize:16];
+    self.oldLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.oldLabel.text = LocalizedString(@"OldPassword");
     self.oldPasswordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
     self.oldPasswordfield.placeholder = LocalizedString(@"OldPasswordPlaceholder");
@@ -60,7 +61,7 @@
     topPos += 16;
     
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-    self.label.font = [UIFont systemFontOfSize:16];
+    self.label.font = [UIFont scaledSystemFontOfSize:16];
     self.label.text = LocalizedString(@"NewPassword");
     self.passwordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
     self.passwordfield.placeholder = LocalizedString(@"NewPasswordPlaceholder");
@@ -76,7 +77,7 @@
     
     topPos += 16;
     self.repeatLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-    self.repeatLabel.font = [UIFont systemFontOfSize:16];
+    self.repeatLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.repeatLabel.text = LocalizedString(@"ConfirmPassword");
 
     self.repeatPasswordField = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
@@ -211,7 +212,7 @@
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
     titleLabel.text = LocalizedString(@"SecurityVerification");
-    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
 

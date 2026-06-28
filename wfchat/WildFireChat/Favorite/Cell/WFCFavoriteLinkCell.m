@@ -8,6 +8,7 @@
 
 #import "WFCFavoriteLinkCell.h"
 #import <WFChatUIKit/WFChatUIKit.h>
+#import "UIFont+YH.h"
 
 
 @interface WFCFavoriteLinkCell ()
@@ -47,7 +48,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, 4, self.bounds.size.width-72, 56)];
-        _nameLabel.font = [UIFont systemFontOfSize:18];
+        _nameLabel.font = [UIFont scaledSystemFontOfSize:18];
         _nameLabel.numberOfLines = 0;
         [self.contentArea addSubview:_nameLabel];
     }

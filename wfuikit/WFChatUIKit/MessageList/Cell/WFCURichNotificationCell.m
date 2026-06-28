@@ -13,6 +13,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 @interface WFCURichNotificationCell ()
 @property(nonatomic, strong)UIView *containerView;
@@ -62,15 +63,15 @@
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCRichNotificationMessageContent *content = (WFCCRichNotificationMessageContent *)msgModel.message.content;
     CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
     
     
-    CGSize descSize = [WFCUUtilities getTextDrawingSize:content.desc font:[UIFont systemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
+    CGSize descSize = [WFCUUtilities getTextDrawingSize:content.desc font:[UIFont scaledSystemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
     
     CGFloat itemsHeight = 0;
     for (NSDictionary<NSString*, NSString*> *data in content.datas) {
         NSString *value = data[@"value"];
-        CGSize itemSize = [WFCUUtilities getTextDrawingSize:value font:[UIFont systemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, 50)];
+        CGSize itemSize = [WFCUUtilities getTextDrawingSize:value font:[UIFont scaledSystemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, 50)];
         itemsHeight += itemSize.height;
         itemsHeight += CELL_ITEM_PADDING;
     }
@@ -80,7 +81,7 @@
     itemsHeight += CELL_ITEM_LINE_PADDING;
     
     
-    CGSize remarkSize = [WFCUUtilities getTextDrawingSize:content.remark font:[UIFont systemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
+    CGSize remarkSize = [WFCUUtilities getTextDrawingSize:content.remark font:[UIFont scaledSystemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
     
     
     CGSize exSize = CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, content.exName.length ? EX_FONT_SIZE + CELL_ITEM_PADDING + CELL_PADDING_BUTTOM + EX_LINE_WIDTH : 0);
@@ -152,7 +153,7 @@
 - (void)addKeyLabel:(CGFloat)offset text:(NSString *)text {
     UILabel *keyLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, offset, KEY_WIDTH, FONT_SIZE)];
     keyLabel.text = [NSString stringWithFormat:@"%@:", text];
-    keyLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
+    keyLabel.font = [UIFont scaledSystemFontOfSize:FONT_SIZE];
     keyLabel.textColor = [UIColor grayColor];
     [self.containerView addSubview:keyLabel];
     [self.itemViews addObject:keyLabel];
@@ -165,10 +166,10 @@
     }
     
     CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
-    CGSize itemSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, 50)];
+    CGSize itemSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont scaledSystemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, 50)];
     UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING+VALUE_BOARD_PADDING_LEFT, offset, containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, itemSize.height)];
     valueLabel.text = text;
-    valueLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
+    valueLabel.font = [UIFont scaledSystemFontOfSize:FONT_SIZE];
     valueLabel.numberOfLines = 0;
     valueLabel.textColor = color;
     [self.containerView addSubview:valueLabel];
@@ -184,7 +185,7 @@
 }
 
 - (CGFloat)setLabel:(UILabel *)label widht:(CGFloat)width text:(NSString *)text offset:(CGFloat)offset fontSize:(int)fontSize {
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:fontSize] constrainedSize:CGSizeMake(width, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont scaledSystemFontOfSize:fontSize] constrainedSize:CGSizeMake(width, 50)];
     label.text = text;
     CGRect frame = label.frame;
     frame.origin.y = offset;
@@ -226,7 +227,7 @@
 - (UILabel *)titleLabel {
     if(!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, TITLE_FONT_SIZE)];
-        [_titleLabel setFont:[UIFont systemFontOfSize:TITLE_FONT_SIZE]];
+        [_titleLabel setFont:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE]];
         [_titleLabel setTextColor:[UIColor blackColor]];
         [self.containerView addSubview:_titleLabel];
     }
@@ -236,7 +237,7 @@
 -(UILabel *)descLabel {
     if(!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
-        [_descLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+        [_descLabel setFont:[UIFont scaledSystemFontOfSize:FONT_SIZE]];
         [_descLabel setTextColor:[UIColor grayColor]];
         [self.containerView addSubview:_descLabel];
     }
@@ -246,7 +247,7 @@
 -(UILabel *)remarkLabel {
     if(!_remarkLabel) {
         _remarkLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
-        [_remarkLabel setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+        [_remarkLabel setFont:[UIFont scaledSystemFontOfSize:FONT_SIZE]];
         [_remarkLabel setTextColor:[UIColor grayColor]];
         [self.containerView addSubview:_remarkLabel];
     }
@@ -276,7 +277,7 @@
 -(UILabel *)exName {
     if(!_exName) {
         _exName = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING + EX_FW_WIDTH, EX_LINE_WIDTH+CELL_ITEM_PADDING, self.exView.frame.size.width - CELL_PADDING - CELL_PADDING - EX_FW_WIDTH - EX_FW_WIDTH, EX_FONT_SIZE)];
-        _exName.font = [UIFont systemFontOfSize:EX_FONT_SIZE];
+        _exName.font = [UIFont scaledSystemFontOfSize:EX_FONT_SIZE];
         [self.exView addSubview:_exName];
     }
     return _exName;

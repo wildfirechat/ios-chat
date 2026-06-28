@@ -61,7 +61,7 @@
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
             label.text = WFCString(@"last_read_here");
-            label.font = [UIFont systemFontOfSize:16];
+            label.font = [UIFont scaledSystemFontOfSize:16];
             label.textAlignment = NSTextAlignmentCenter;
             label.textColor = [UIColor grayColor];
             label.layer.cornerRadius = 5.f;
@@ -91,7 +91,7 @@
   if (model.showTimeLabel) {
     if (self.timeLabel == nil) {
       self.timeLabel = [[UILabel alloc] init];
-      _timeLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:14];
+      _timeLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:14];
         _timeLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
       
       [self.contentView addSubview:self.timeLabel];

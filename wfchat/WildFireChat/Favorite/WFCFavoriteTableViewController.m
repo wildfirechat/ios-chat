@@ -22,6 +22,7 @@
 #import "WFCFavoriteCardCell.h"
 #import "AFNetworking.h"
 #import <AVFoundation/AVFoundation.h>
+#import "UIFont+YH.h"
 
 
 @interface WFCFavoriteTableViewController () <UITableViewDataSource, UITableViewDelegate, MWPhotoBrowserDelegate, AVAudioPlayerDelegate>
@@ -138,7 +139,7 @@
             
              textView.text = self.selectedCell.favoriteItem.title;
             textView.textAlignment = NSTextAlignmentCenter;
-            textView.font = [UIFont systemFontOfSize:28];
+            textView.font = [UIFont scaledSystemFontOfSize:28];
             textView.editable = NO;
             textView.backgroundColor = self.view.backgroundColor;
             

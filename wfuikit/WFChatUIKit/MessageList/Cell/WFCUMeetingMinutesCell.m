@@ -9,6 +9,7 @@
 #import "WFCUMeetingMinutesCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 #define TEXT_TOP_PADDING 6
 #define TEXT_BOTTOM_PADDING 6
@@ -18,11 +19,11 @@
 @implementation WFCUMeetingMinutesCell
 
 + (UIFont *)titleFont {
-    return [UIFont boldSystemFontOfSize:16];
+    return [UIFont scaledBoldSystemFontOfSize:16];
 }
 
 + (UIFont *)bodyFont {
-    return [UIFont systemFontOfSize:14];
+    return [UIFont scaledSystemFontOfSize:14];
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {

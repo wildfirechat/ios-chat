@@ -9,6 +9,7 @@
 #import "WFCUPTTInviteCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 #define TEXT_TOP_PADDING 6
 #define TEXT_BUTTOM_PADDING 6
@@ -57,11 +58,11 @@
         CGRect bounds = self.contentArea.bounds;
         _infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 30, bounds.size.width-16, 32)];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         
         _infoLabel.textColor = [UIColor grayColor];
         _infoLabel.numberOfLines = 0;
-        _infoLabel.font = [UIFont systemFontOfSize:12.f];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:12.f];
         
         [self.contentArea addSubview:_infoLabel];
     }
@@ -73,12 +74,12 @@
         CGRect bounds = self.contentArea.bounds;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, bounds.size.width - 16, 18)];
         _titleLabel.numberOfLines = 0;
-        _titleLabel.font = [UIFont systemFontOfSize:14];
+        _titleLabel.font = [UIFont scaledSystemFontOfSize:14];
         
         _titleLabel.textColor = [UIColor blackColor];
         _titleLabel.numberOfLines = 1;
         _titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        _titleLabel.font = [UIFont systemFontOfSize:14.f];
+        _titleLabel.font = [UIFont scaledSystemFontOfSize:14.f];
         
         
         [self.contentArea addSubview:_titleLabel];
@@ -100,7 +101,7 @@
 - (UILabel *)hint {
     if (!_hint) {
         _hint = [[UILabel alloc] initWithFrame:CGRectMake(8, 68, 80, 16)];
-        _hint.font = [UIFont systemFontOfSize:8];
+        _hint.font = [UIFont scaledSystemFontOfSize:8];
         _hint.text = @"野火对讲";
         _hint.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_hint];

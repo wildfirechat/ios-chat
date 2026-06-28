@@ -13,6 +13,7 @@
 #import "ZCCCircleProgressView.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 #define Portrait_Size 40
 #define SelectView_Size 20
@@ -87,7 +88,7 @@
 + (CGSize)sizeForAdditionalArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     NSString *additionalText = [self additionalText];
     if (additionalText.length) {
-        UIFont *font = [UIFont systemFontOfSize:12];
+        UIFont *font = [UIFont scaledSystemFontOfSize:12];
         CGSize size = [WFCUUtilities getTextDrawingSize:additionalText font:font constrainedSize:CGSizeMake(width, 1000)];
         size.height += 4; // 上下间距
         return size;
@@ -104,7 +105,7 @@
         CGFloat quoteWidth = width;
         CGSize size = CGSizeZero;
         if (msgModel.translateText.length) {
-            size = [WFCUUtilities getTextDrawingSize:msgModel.translateText font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 1000)];
+            size = [WFCUUtilities getTextDrawingSize:msgModel.translateText font:[UIFont scaledSystemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 1000)];
         }
         if (msgModel.translating) {
             size.height += 20;
@@ -126,7 +127,7 @@
         if (txtContent.quoteInfo) {
             CGFloat quoteWidth = width;
             NSString *quoteTxt = [NSString stringWithFormat:@"%@:%@", txtContent.quoteInfo.userDisplayName, [WFCUMessageCell quoteMessageDigest:msgModel]];
-            CGSize size = [WFCUUtilities getTextDrawingSize:quoteTxt font:[UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 44)];
+            CGSize size = [WFCUUtilities getTextDrawingSize:quoteTxt font:[UIFont scaledSystemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE] constrainedSize:CGSizeMake(quoteWidth, 44)];
             size.height += 12;
             size.width += 8;
             return size;
@@ -386,7 +387,7 @@
         if (txtContent.quoteInfo) {
             if (!self.quoteLabel) {
                 self.quoteLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-                self.quoteLabel.font = [UIFont systemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE];
+                self.quoteLabel.font = [UIFont scaledSystemFontOfSize:MESSAGE_BASE_CELL_QUOTE_SIZE];
                 self.quoteLabel.numberOfLines = 0;
                 self.quoteLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 self.quoteLabel.layer.cornerRadius = 3.f;
@@ -427,7 +428,7 @@
     if (model.translateText.length || model.translating) {
         if (model.translateText.length && !self.translateLabel) {
             self.translateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-            self.translateLabel.font = [UIFont systemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE];
+            self.translateLabel.font = [UIFont scaledSystemFontOfSize:MESSAGE_BASE_CELL_TRANSLATE_SIZE];
             self.translateLabel.numberOfLines = 0;
             self.translateLabel.lineBreakMode = NSLineBreakByTruncatingTail;
             self.translateLabel.layer.cornerRadius = 3.f;
@@ -683,7 +684,7 @@
 - (UILabel *)nameLabel {
   if (!_nameLabel) {
     _nameLabel = [[UILabel alloc] init];
-    _nameLabel.font = [UIFont systemFontOfSize:Name_Label_Height-2];
+    _nameLabel.font = [UIFont scaledSystemFontOfSize:Name_Label_Height-2];
     _nameLabel.textColor = [UIColor grayColor];
     [self.contentView addSubview:_nameLabel];
   }
@@ -774,7 +775,7 @@
 - (UILabel *)additionalLabel {
     if (!_additionalLabel) {
         _additionalLabel = [[UILabel alloc] init];
-        _additionalLabel.font = [UIFont systemFontOfSize:12];
+        _additionalLabel.font = [UIFont scaledSystemFontOfSize:12];
         _additionalLabel.textColor = [UIColor grayColor];
         _additionalLabel.textAlignment = NSTextAlignmentLeft;
         _additionalLabel.numberOfLines = 0;

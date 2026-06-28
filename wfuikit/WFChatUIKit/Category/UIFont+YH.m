@@ -7,11 +7,37 @@
 //
 
 #import "UIFont+YH.h"
+#import "WFCUConfigManager.h"
 
 
 
 @implementation UIFont (YH)
 + (UIFont *)pingFangSCWithWeight:(FontWeightStyle)fontWeight size:(CGFloat)fontSize {
+    return [self _pingFangSCWithWeight:fontWeight size:fontSize];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize {
+    return [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:fontSize]];
+}
+
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize {
+    return [UIFont boldSystemFontOfSize:[WFCUConfigManager scaledSize:fontSize]];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight {
+    return [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:fontSize] weight:weight];
+}
+
++ (UIFont *)scaledPingFangSCWithWeight:(FontWeightStyle)fontWeight size:(CGFloat)fontSize {
+    return [self _pingFangSCWithWeight:fontWeight size:[WFCUConfigManager scaledSize:fontSize]];
+}
+
++ (UIFont *)scaledFontWithName:(NSString *)fontName size:(CGFloat)fontSize {
+    UIFont *font = [UIFont fontWithName:fontName size:[WFCUConfigManager scaledSize:fontSize]];
+    return font ?: [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:fontSize]];
+}
+
++ (UIFont *)_pingFangSCWithWeight:(FontWeightStyle)fontWeight size:(CGFloat)fontSize {
     if (fontWeight < FontWeightStyleMedium || fontWeight > FontWeightStyleThin) {
         fontWeight = FontWeightStyleRegular;
     }

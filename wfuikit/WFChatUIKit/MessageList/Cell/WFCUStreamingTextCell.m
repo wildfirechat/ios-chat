@@ -11,6 +11,7 @@
 #import "WFCUUtilities.h"
 #import "WFCUMarkdownLabel.h"
 #import "WFCUConfigManager.h"
+#import "UIFont+YH.h"
 
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
@@ -24,7 +25,7 @@
 @implementation WFCUStreamingTextCell
 
 + (UIFont *)defaultFont {
-    return [UIFont systemFontOfSize:18];
+    return [UIFont scaledSystemFontOfSize:18];
 }
 
 + (NSString *)additionalText {

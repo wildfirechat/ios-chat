@@ -190,7 +190,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
         view.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, self.view.frame.size.width, 30)];
-        label.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:13];
+        label.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:13];
         label.textColor = [UIColor colorWithHexString:@"0x828282"];
         label.textAlignment = NSTextAlignmentLeft;
         label.text = [NSString stringWithFormat:@"%@", title];
@@ -397,7 +397,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
-        self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+        self.doneButton.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
         self.doneButton.layer.cornerRadius = 4;
         self.doneButton.layer.masksToBounds = YES;
@@ -417,7 +417,7 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         self.doneButton.frame = CGRectMake(0, 0, 52, 30);
         [self setDoneButtonStyleAndContent:NO];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
-        self.doneButton.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:15];
+        self.doneButton.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
         [self.doneButton setTintColor:[UIColor whiteColor]];
         self.doneButton.layer.cornerRadius = 4;
         self.doneButton.layer.masksToBounds = YES;

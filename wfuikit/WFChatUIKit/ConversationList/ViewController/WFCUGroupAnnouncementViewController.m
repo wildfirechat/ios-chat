@@ -14,6 +14,7 @@
 #import "WFCUImage.h"
 #import "WFCUUtilities.h"
 #import "UIView+Toast.h"
+#import "UIFont+YH.h"
 
 @interface WFCUGroupAnnouncementViewController () <UITextViewDelegate>
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -47,7 +48,7 @@
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 48, self.view.bounds.size.width - 80 - 16, 14)];
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.announcement.timestamp/1000];
         self.timeLabel.text = date.description;
-        self.timeLabel.font = [UIFont systemFontOfSize:14];
+        self.timeLabel.font = [UIFont scaledSystemFontOfSize:14];
         self.timeLabel.textColor = [UIColor grayColor];
         
         
@@ -80,7 +81,7 @@
         hint.textAlignment = NSTextAlignmentCenter;
         hint.text = @"仅群主和管理员可编辑";
         hint.textColor = [UIColor grayColor];
-        hint.font = [UIFont systemFontOfSize:12];
+        hint.font = [UIFont scaledSystemFontOfSize:12];
         [self.view addSubview:hint];
         hintSize = 40;
     } else {
@@ -93,14 +94,14 @@
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, [WFCUUtilities wf_navigationFullHeight] + offset + 1, self.view.bounds.size.width - 32, textHeigh)];
     self.textView.editable = NO;
     self.textView.text = self.announcement.text;
-    self.textView.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    self.textView.font = [UIFont scaledSystemFontOfSize:[UIFont systemFontSize]];
     self.textView.delegate = self;
     [self.view addSubview:self.textView];
     offset += textHeigh;
     offset += 4;
     
     self.maxLengthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 80 - 16, [WFCUUtilities wf_navigationFullHeight] + offset, 80, maxLenLabelHeight - 4)];
-    self.maxLengthLabel.font = [UIFont systemFontOfSize:12];
+    self.maxLengthLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.maxLengthLabel.textColor = [UIColor grayColor];
     self.maxLengthLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:self.maxLengthLabel];

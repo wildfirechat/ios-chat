@@ -14,6 +14,7 @@
 #import "WFCUImage.h"
 #import "MBProgressHUD.h"
 #import "UIView+Toast.h"
+#import "UIFont+YH.h"
 
 #define WFCString(key) [[NSBundle bundleForClass:[self class]] localizedStringForKey:key value:@"" table:@"wfc"]
 
@@ -45,13 +46,13 @@
     
     // 标题
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightMedium];
     self.titleLabel.numberOfLines = 2;
     [self.contentView addSubview:self.titleLabel];
     
     // 状态标签
     self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.font = [UIFont systemFontOfSize:12];
+    self.statusLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.statusLabel.textColor = [UIColor whiteColor];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.layer.cornerRadius = 4;
@@ -60,13 +61,13 @@
     
     // 参与人数
     self.countLabel = [[UILabel alloc] init];
-    self.countLabel.font = [UIFont systemFontOfSize:13];
+    self.countLabel.font = [UIFont scaledSystemFontOfSize:13];
     self.countLabel.textColor = [UIColor grayColor];
     [self.contentView addSubview:self.countLabel];
     
     // 创建时间
     self.timeLabel = [[UILabel alloc] init];
-    self.timeLabel.font = [UIFont systemFontOfSize:12];
+    self.timeLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.timeLabel.textColor = [UIColor lightGrayColor];
     [self.contentView addSubview:self.timeLabel];
 }
@@ -189,7 +190,7 @@
     emptyLabel.text = WFCString(@"NoPolls");
     emptyLabel.textColor = [UIColor grayColor];
     emptyLabel.textAlignment = NSTextAlignmentCenter;
-    emptyLabel.font = [UIFont systemFontOfSize:16];
+    emptyLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.tableView.backgroundView = emptyLabel;
     self.tableView.backgroundView.hidden = YES;
 }

@@ -49,7 +49,7 @@
     
     if (!self.resetCode.length) {
         self.codeLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-        self.codeLabel.font = [UIFont systemFontOfSize:16];
+        self.codeLabel.font = [UIFont scaledSystemFontOfSize:16];
         self.codeLabel.text = LocalizedString(@"VerificationCode");
         self.codePasswordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16-72, inputHeight)];
         self.codePasswordfield.placeholder = LocalizedString(@"VerificationCodePlaceholder");
@@ -58,7 +58,7 @@
         
         self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - 16 - 72, topPos + (inputHeight - 23)/2, 72, 23)];
         [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
-        self.sendCodeBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        self.sendCodeBtn.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
         self.sendCodeBtn.layer.borderWidth = 1;
         self.sendCodeBtn.layer.cornerRadius = 4;
         self.sendCodeBtn.layer.borderColor = [UIColor colorWithHexString:@"0x191919"].CGColor;
@@ -79,7 +79,7 @@
     }
     
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-    self.label.font = [UIFont systemFontOfSize:16];
+    self.label.font = [UIFont scaledSystemFontOfSize:16];
     self.label.text = LocalizedString(@"NewPassword");
     self.passwordfield = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
     self.passwordfield.placeholder = LocalizedString(@"NewPasswordPlaceholder");
@@ -95,7 +95,7 @@
     
     topPos += 16;
     self.repeatLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, topPos, labelWidth, inputHeight)];
-    self.repeatLabel.font = [UIFont systemFontOfSize:16];
+    self.repeatLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.repeatLabel.text = LocalizedString(@"ConfirmPassword");
 
     self.repeatPasswordField = [[UITextField alloc] initWithFrame:CGRectMake(16 + labelWidth + 8, topPos, screenWidth - 16 - labelWidth - 8 - 16, inputHeight)];
@@ -271,7 +271,7 @@
     // 标题
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, containerView.bounds.size.width, 30)];
     titleLabel.text = LocalizedString(@"SecurityVerification");
-    titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [containerView addSubview:titleLabel];
 

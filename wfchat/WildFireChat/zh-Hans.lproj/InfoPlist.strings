@@ -159,6 +159,15 @@ ThemeChangeSuccess="修改成功！请退回到应用主页面查看效果。";
 Blue="蓝色";
 White="白色";
 
+// Font Size
+FontSize="字体大小";
+FontSizeSampleText="拖动下方滑块，可调整字体大小。设置会应用到聊天、通讯录和设置等界面。";
+FontSizeSmall="小";
+FontSizeLarge="大";
+FontSizeChangeRestart="字体大小设置已保存，请重启应用后生效。";
+FontSizeChangeRestartTip="应用将重启以应用新的字体大小。";
+Save="保存";
+
 // Favorite
 DownloadFailed="下载失败!";
 Forward="转发";

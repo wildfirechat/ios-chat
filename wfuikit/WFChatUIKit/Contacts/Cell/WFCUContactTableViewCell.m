@@ -135,12 +135,19 @@
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat portraitSize = 40 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    self.portraitView.frame = CGRectMake(16, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
+    CGFloat labelHeight = MAX(16, [WFCUConfigManager scaledSize:17]);
+    self.nameLabel.frame = CGRectMake(16 + portraitSize + 11, (self.frame.size.height - labelHeight) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 11), labelHeight);
+}
+
 - (UIImageView *)portraitView {
     if (!_portraitView) {
         _portraitView = [UIImageView new];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
-        _portraitView.frame = CGRectMake(16, (self.frame.size.height - 40) / 2.0, 40, 40);
         [self.contentView addSubview:_portraitView];
     }
     return _portraitView;
@@ -150,8 +157,7 @@
     if (!_nameLabel) {
         _nameLabel = [UILabel new];
         _nameLabel.textColor = [WFCUConfigManager globalManager].textColor;
-        _nameLabel.frame = CGRectMake(16 + 40 + 11, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 40 + 11), 17);
-        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        _nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         [self.contentView addSubview:_nameLabel];
     }
     return _nameLabel;

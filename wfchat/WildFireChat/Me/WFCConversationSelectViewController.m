@@ -10,6 +10,7 @@
 #import "WFCBackupOptionsViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
+#import "UIFont+YH.h"
 
 // 自定义Cell类
 @interface WFCConversationSelectCell : UITableViewCell
@@ -39,13 +40,13 @@
         // 标题
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+        self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:16];
         [self.contentView addSubview:self.titleLabel];
 
         // 副标题（消息条数）
         self.subtitleLabel = [[UILabel alloc] init];
         self.subtitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.subtitleLabel.font = [UIFont systemFontOfSize:14];
+        self.subtitleLabel.font = [UIFont scaledSystemFontOfSize:14];
         self.subtitleLabel.textColor = [UIColor grayColor];
         [self.contentView addSubview:self.subtitleLabel];
 
@@ -63,7 +64,7 @@
             [self.radioButton setTitle:@"●" forState:UIControlStateSelected];
             [self.radioButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [self.radioButton setTitleColor:[UIColor systemBlueColor] forState:UIControlStateSelected];
-            self.radioButton.titleLabel.font = [UIFont systemFontOfSize:20];
+            self.radioButton.titleLabel.font = [UIFont scaledSystemFontOfSize:20];
         }
 
         [self.contentView addSubview:self.radioButton];

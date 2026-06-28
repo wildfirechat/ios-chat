@@ -25,6 +25,7 @@
 #import "WFCDestroyAccountViewController.h"
 #import "SSKeychain.h"
 #import "WFCBackupAndRestoreViewController.h"
+#import "WFCFontSizeViewController.h"
 
 @interface WFCSettingTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)UITableView *tableView;
@@ -47,6 +48,11 @@
     [self.tableView reloadData];
     
     [self.view addSubview:self.tableView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onFontScaleChanged:)
+                                                 name:WFCUFontScaleDidChangeNotification
+                                               object:nil];
     
     [self loadVersionInfo];
     [self refreshVersionInfo];
@@ -96,8 +102,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)onFontScaleChanged:(NSNotification *)notification {
+    [self.tableView reloadData];
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 48;
+    return [WFCUConfigManager scaledSize:48];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -112,6 +122,9 @@
         WFCLanguageTableViewController *vc = [[WFCLanguageTableViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     } else if (indexPath.section == 3) {
+        WFCFontSizeViewController *vc = [[WFCFontSizeViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.section == 4) {
         if (indexPath.row == 0) {
             if (self.versionInfo && [self.versionInfo[@"needUpdate"] boolValue]) {
                 [self showVersionUpdateAlert];
@@ -129,7 +142,7 @@
             WFCAboutViewController *avc = [[WFCAboutViewController alloc] init];
             [self.navigationController pushViewController:avc animated:YES];
         }
-    } else if(indexPath.section == 4) {
+    } else if(indexPath.section == 5) {
         if (indexPath.row == 0) {
             WFCPrivacyViewController * pvc = [[WFCPrivacyViewController alloc] init];
             pvc.isPrivacy = NO;
@@ -139,7 +152,7 @@
             pvc.isPrivacy = YES;
             [self.navigationController pushViewController:pvc animated:YES];
         }
-    } else if(indexPath.section == 5) {
+    } else if(indexPath.section == 6) {
         __weak typeof(self)ws = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:LocalizedString(@"ReportTitle") message:LocalizedString(@"ReportMessage") preferredStyle:UIAlertControllerStyleAlert];
 
@@ -161,10 +174,10 @@
         [alertController addAction:action2];
 
         [self presentViewController:alertController animated:YES completion:nil];
-    } else if (indexPath.section == 6) {
+    } else if (indexPath.section == 7) {
         WFCDiagnoseViewController *vc = [[WFCDiagnoseViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    } else if (indexPath.section == 7) {
+    } else if (indexPath.section == 8) {
         WFCBackupAndRestoreViewController *vc = [[WFCBackupAndRestoreViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -195,7 +208,7 @@
 
 //#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 9;
+    return 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -206,16 +219,18 @@
     } else if (section == 2) {
         return 1; // 语言
     } else if (section == 3) {
-        return 3; // 关于、帮助反馈等
+        return 1; // 字体大小
     } else if (section == 4) {
-        return 2; // 用户协议和隐私声明
+        return 3; // 关于、帮助反馈等
     } else if (section == 5) {
-        return 1; // 举报
+        return 2; // 用户协议和隐私声明
     } else if (section == 6) {
-        return 1; // 诊断
+        return 1; // 举报
     } else if (section == 7) {
-        return 1; // 备份与恢复
+        return 1; // 诊断
     } else if (section == 8) {
+        return 1; // 备份与恢复
+    } else if (section == 9) {
         return 1; // 退出登录
     }
     return 0;
@@ -246,7 +261,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *identifier = (indexPath.section == 3 && indexPath.row == 0)?@"upgradecell":@"style1Cell";
+    NSString *identifier = (indexPath.section == 4 && indexPath.row == 0)?@"upgradecell":@"style1Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
@@ -256,6 +271,8 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.accessoryView = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
+    cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:14];
 
     
     if(indexPath.section == 0) {
@@ -270,6 +287,11 @@
         cell.detailTextLabel.text = [[WFCLanguageManager sharedManager] getLanguageDisplayName:currentLanguage];
         [self hiddenSeparatorLine:cell];
     } else if(indexPath.section == 3) {
+        cell.textLabel.text = LocalizedString(@"FontSize");
+        int percent = (int)round([WFCUConfigManager globalManager].fontScale * 100);
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d%%", percent];
+        [self hiddenSeparatorLine:cell];
+    } else if(indexPath.section == 4) {
         if (indexPath.row == 0) {
             [self showSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"CurrentVersion");
@@ -299,7 +321,7 @@
             cell.textLabel.text = LocalizedString(@"AboutWFChat");
             [self hiddenSeparatorLine:cell];
         }
-    } else if(indexPath.section == 4) {
+    } else if(indexPath.section == 5) {
         if (indexPath.row == 0) {
             cell.textLabel.text = LocalizedString(@"UserAgreement");
             [self showSeparatorLine:cell];
@@ -308,27 +330,27 @@
             cell.textLabel.text = LocalizedString(@"PrivacyPolicy");
             [self hiddenSeparatorLine:cell];
         }
-    } else if(indexPath.section == 5) {
+    } else if(indexPath.section == 6) {
         if (indexPath.row == 0) {
             [self hiddenSeparatorLine:cell];
             cell.textLabel.text = LocalizedString(@"Complain");
         }
-    } else if (indexPath.section == 6) {
-        [self hiddenSeparatorLine:cell];
-        cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 7) {
         [self hiddenSeparatorLine:cell];
-        cell.textLabel.text = LocalizedString(@"BackupAndRestore");
+        cell.textLabel.text = LocalizedString(@"Diagnose");
     } else if (indexPath.section == 8) {
+        [self hiddenSeparatorLine:cell];
+        cell.textLabel.text = LocalizedString(@"BackupAndRestore");
+    } else if (indexPath.section == 9) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"buttonCell"];
         for (UIView *subView in cell.subviews) {
             [subView removeFromSuperview];
         }
        [self setLastCellSeperatorToLeft:cell];
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [WFCUConfigManager scaledSize:48])];
         [btn setTitle:LocalizedString(@"Logout") forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(onLogoutBtn:) forControlEvents:UIControlEventTouchUpInside];
-        btn.titleLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
         [btn setTitleColor:[UIColor colorWithHexString:@"0xf95569"]
                   forState:UIControlStateNormal];
         

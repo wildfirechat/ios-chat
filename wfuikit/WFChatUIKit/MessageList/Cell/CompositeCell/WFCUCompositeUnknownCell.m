@@ -9,6 +9,7 @@
 #import "WFCUCompositeUnknownCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 
 @implementation WFCUCompositeUnknownCell
@@ -26,7 +27,7 @@
 
 + (CGFloat)heightForMessageContent:(WFCCMessage *)message {
     CGRect frame = [self.class contentFrame];
-    CGSize size = [WFCUUtilities getTextDrawingSize:[message.content digest:message] font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(frame.size.width, 8000)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:[message.content digest:message] font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(frame.size.width, 8000)];
     return size.height;
 }
 

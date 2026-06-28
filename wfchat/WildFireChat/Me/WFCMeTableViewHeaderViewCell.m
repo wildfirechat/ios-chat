@@ -25,6 +25,15 @@
     // Initialization code
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat portraitSize = 60 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 6;
+    self.portrait.frame = CGRectMake(16, 64, portraitSize, portraitSize);
+    self.portrait.layer.cornerRadius = portraitSize / 6.0;
+    self.displayName.frame = CGRectMake(16 + portraitSize + 20, 64, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 16), 32);
+    self.userName.frame = CGRectMake(16 + portraitSize + 20, 64 + 32 + 8, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 16), 14);
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
@@ -45,7 +54,7 @@
 - (UILabel *)displayName {
     if (!_displayName) {
         _displayName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64, [UIScreen mainScreen].bounds.size.width - 64, 32)];
-        [_displayName setFont:[UIFont pingFangSCWithWeight:FontWeightStyleSemibold size:20]];
+        [_displayName setFont:[UIFont scaledPingFangSCWithWeight:FontWeightStyleSemibold size:20]];
         _displayName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_displayName];
     }
@@ -55,7 +64,7 @@
 - (UILabel *)userName {
     if (!_userName) {
         _userName = [[UILabel alloc] initWithFrame:CGRectMake(16 + 60 + 20, 64 + 32 + 8, [UIScreen mainScreen].bounds.size.width - 128, 14)];
-        [_userName setFont:[UIFont systemFontOfSize:14]];
+        [_userName setFont:[UIFont scaledSystemFontOfSize:14]];
         _userName.textColor = [WFCUConfigManager globalManager].naviTextColor;
         [self.contentView addSubview:_userName];
     }

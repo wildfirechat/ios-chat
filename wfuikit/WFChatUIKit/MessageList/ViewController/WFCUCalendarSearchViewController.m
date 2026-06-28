@@ -12,6 +12,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
 #import "MBProgressHUD.h"
+#import "UIFont+YH.h"
 
 @interface WFCUCalendarDayCell : UICollectionViewCell
 @property(nonatomic, strong)UILabel *dayLabel;
@@ -33,7 +34,7 @@
 - (void)setupUI {
     self.dayLabel = [[UILabel alloc] initWithFrame:self.bounds];
     self.dayLabel.textAlignment = NSTextAlignmentCenter;
-    self.dayLabel.font = [UIFont systemFontOfSize:16];
+    self.dayLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.dayLabel.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2;
     self.dayLabel.layer.masksToBounds = YES;
     [self.contentView addSubview:self.dayLabel];
@@ -69,7 +70,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 8, frame.size.width - 32, 30)];
-        self.monthLabel.font = [UIFont boldSystemFontOfSize:18];
+        self.monthLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
         self.monthLabel.textColor = [UIColor blackColor];
         [self addSubview:self.monthLabel];
     }
@@ -283,7 +284,7 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + i * weekdayWidth, 45, weekdayWidth, 20)];
             label.text = weekdays[i];
             label.textAlignment = NSTextAlignmentCenter;
-            label.font = [UIFont systemFontOfSize:14];
+            label.font = [UIFont scaledSystemFontOfSize:14];
             label.textColor = [UIColor grayColor];
             [header addSubview:label];
         }

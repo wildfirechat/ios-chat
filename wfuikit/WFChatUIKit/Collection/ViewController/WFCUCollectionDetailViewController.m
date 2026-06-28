@@ -15,6 +15,7 @@
 #import "WFCUImage.h"
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 #define HEADER_HEIGHT 120
 #define ENTRY_CELL_HEIGHT 50
@@ -50,14 +51,14 @@
 
     // 序号
     self.indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
-    self.indexLabel.font = [UIFont systemFontOfSize:12];
+    self.indexLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.indexLabel.textColor = [UIColor darkGrayColor];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
     [self.indexCircleView addSubview:self.indexLabel];
 
     // 内容
     self.contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 14, self.contentView.bounds.size.width - 66, 20)];
-    self.contentLabel.font = [UIFont systemFontOfSize:14];
+    self.contentLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.contentLabel.textColor = [UIColor blackColor];
     self.contentLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.contentView addSubview:self.contentLabel];
@@ -109,7 +110,7 @@
 
     // 序号
     self.indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
-    self.indexLabel.font = [UIFont systemFontOfSize:12];
+    self.indexLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.indexLabel.textColor = [UIColor darkGrayColor];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
     [self.indexCircleView addSubview:self.indexLabel];
@@ -117,7 +118,7 @@
     // 内容输入框（占据剩余空间，无按钮）
     self.contentTextField = [[UITextField alloc] initWithFrame:CGRectMake(50, 8, self.contentView.bounds.size.width - 66, 34)];
     self.contentTextField.borderStyle = UITextBorderStyleRoundedRect;
-    self.contentTextField.font = [UIFont systemFontOfSize:14];
+    self.contentTextField.font = [UIFont scaledSystemFontOfSize:14];
     self.contentTextField.delegate = self;
     self.contentTextField.returnKeyType = UIReturnKeyDone;
     self.contentTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -265,7 +266,7 @@
     [headerView addSubview:self.creatorAvatarView];
 
     self.creatorLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin + 44, currentY + 8, headerView.bounds.size.width - margin * 2 - 44, 20)];
-    self.creatorLabel.font = [UIFont systemFontOfSize:13];
+    self.creatorLabel.font = [UIFont scaledSystemFontOfSize:13];
     self.creatorLabel.textColor = [UIColor grayColor];
     [headerView addSubview:self.creatorLabel];
     currentY += 44;
@@ -273,14 +274,14 @@
 
     // 标题
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin, currentY, headerView.bounds.size.width - margin * 2, 22)];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     self.titleLabel.numberOfLines = 0;
     [headerView addSubview:self.titleLabel];
     currentY += 26;
 
     // 描述
     self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin, currentY, headerView.bounds.size.width - margin * 2, 18)];
-    self.descLabel.font = [UIFont systemFontOfSize:14];
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.descLabel.textColor = [UIColor grayColor];
     self.descLabel.numberOfLines = 2;
     [headerView addSubview:self.descLabel];
@@ -288,7 +289,7 @@
 
     // 模板
     self.templateLabel = [[UILabel alloc] initWithFrame:CGRectMake(margin, currentY, headerView.bounds.size.width - margin * 2, 16)];
-    self.templateLabel.font = [UIFont systemFontOfSize:12];
+    self.templateLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.templateLabel.textColor = [UIColor systemBlueColor];
     [headerView addSubview:self.templateLabel];
     currentY += 20;

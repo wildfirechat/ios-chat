@@ -9,6 +9,7 @@
 #import "WFCUPollMessageCell.h"
 #import <WFChatClient/WFCCPollMessageContent.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 @interface WFCUPollMessageCell ()
 @property (nonatomic, strong) UIView *containerView;
@@ -29,14 +30,14 @@
     // 标题高度
     NSString *title = [NSString stringWithFormat:@"🗳️ %@", content.title];
     CGSize titleSize = [WFCUUtilities getTextDrawingSize:title
-                                                    font:[UIFont boldSystemFontOfSize:14]
+                                                    font:[UIFont scaledBoldSystemFontOfSize:14]
                                            constrainedSize:CGSizeMake(contentWidth, 40)];
     height += MAX(titleSize.height, 20) + 8;
     
     // 描述高度
     if (content.desc.length > 0) {
         CGSize descSize = [WFCUUtilities getTextDrawingSize:content.desc
-                                                       font:[UIFont systemFontOfSize:12]
+                                                       font:[UIFont scaledSystemFontOfSize:12]
                                               constrainedSize:CGSizeMake(contentWidth, 60)];
         height += descSize.height + 4;
     }
@@ -67,26 +68,26 @@
     
     // 标题
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:14];
     self.titleLabel.numberOfLines = 2;
     [self.containerView addSubview:self.titleLabel];
     
     // 描述
     self.descLabel = [[UILabel alloc] init];
-    self.descLabel.font = [UIFont systemFontOfSize:12];
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.descLabel.textColor = [UIColor blackColor];
     self.descLabel.numberOfLines = 2;
     [self.containerView addSubview:self.descLabel];
     
     // 信息
     self.infoLabel = [[UILabel alloc] init];
-    self.infoLabel.font = [UIFont systemFontOfSize:11];
+    self.infoLabel.font = [UIFont scaledSystemFontOfSize:11];
     self.infoLabel.textColor = [UIColor blackColor];
     [self.containerView addSubview:self.infoLabel];
     
     // 操作按钮
     self.actionLabel = [[UILabel alloc] init];
-    self.actionLabel.font = [UIFont systemFontOfSize:12];
+    self.actionLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.actionLabel.textColor = [UIColor systemBlueColor];
     [self.containerView addSubview:self.actionLabel];
     

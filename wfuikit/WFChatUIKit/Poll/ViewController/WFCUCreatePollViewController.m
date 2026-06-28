@@ -14,6 +14,7 @@
 #import "UIView+Toast.h"
 #import "WFCUUtilities.h"
 #import <WFChatClient/WFCChatClient.h>
+#import "UIFont+YH.h"
 
 #define MAX_OPTIONS 10
 #define MIN_OPTIONS 2
@@ -271,7 +272,7 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
         deleteBtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         deleteBtn.tag = 101;
         [deleteBtn setTitle:@"×" forState:UIControlStateNormal];
-        deleteBtn.titleLabel.font = [UIFont systemFontOfSize:24];
+        deleteBtn.titleLabel.font = [UIFont scaledSystemFontOfSize:24];
         [deleteBtn addTarget:self action:@selector(deleteOption:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:deleteBtn];
     }

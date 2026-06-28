@@ -8,9 +8,13 @@
 
 #import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
+#import "UIFont+YH.h"
 #import <WFChatClient/WFCChatClient.h>
 
 static WFCUConfigManager *sharedSingleton = nil;
+
+NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNotification";
+
 @implementation WFCUConfigManager
 
 + (WFCUConfigManager *)globalManager {
@@ -47,6 +51,14 @@ static WFCUConfigManager *sharedSingleton = nil;
         // 打开链接策略默认值：1 = 提醒确认
         _openLinkPolicy = 1;
         
+        // 全局字体缩放默认值
+        CGFloat savedFontScale = [[NSUserDefaults standardUserDefaults] doubleForKey:@"WFC_FONT_SCALE"];
+        if (savedFontScale < 0.8 || savedFontScale > 1.5) {
+            _fontScale = 1.0;
+        } else {
+            _fontScale = savedFontScale;
+        }
+        
         // 监听内存警告通知
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(didReceiveMemoryWarning)
@@ -65,6 +77,70 @@ static WFCUConfigManager *sharedSingleton = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+-(void)setFontScale:(CGFloat)fontScale {
+    fontScale = MAX(0.8, MIN(1.5, fontScale));
+    if (_fontScale != fontScale) {
+        _fontScale = fontScale;
+        [[NSUserDefaults standardUserDefaults] setDouble:fontScale forKey:@"WFC_FONT_SCALE"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // 清理文本 cell 尺寸缓存，避免气泡高度沿用旧值
+        [self.cellSizeCache removeAllObjects];
+        
+        // 立即更新所有已创建导航栏的标题字体，无需重启即可生效
+        [self applyFontScaleToNavigationBars];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WFCUFontScaleDidChangeNotification object:nil];
+    }
+}
+
+- (void)applyFontScaleToNavigationBars {
+    UIFont *naviTitleFont = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:18];
+    NSDictionary *titleAttributes = @{
+        NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor,
+        NSFontAttributeName : naviTitleFont
+    };
+    
+    // 更新全局 appearance，确保后续创建的导航栏也使用新字体
+    UINavigationBar *appearanceBar = [UINavigationBar appearance];
+    appearanceBar.titleTextAttributes = titleAttributes;
+    if (@available(iOS 13, *)) {
+        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
+        navBarAppearance.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+        navBarAppearance.titleTextAttributes = titleAttributes;
+        appearanceBar.standardAppearance = navBarAppearance;
+        appearanceBar.scrollEdgeAppearance = navBarAppearance;
+    }
+    
+    // 同步更新所有已存在的导航栏
+    for (UIWindow *window in [UIApplication sharedApplication].windows) {
+        [self updateNavigationBarInViewController:window.rootViewController withAttributes:titleAttributes];
+    }
+}
+
+- (void)updateNavigationBarInViewController:(UIViewController *)vc withAttributes:(NSDictionary *)titleAttributes {
+    if (!vc) return;
+    
+    if (vc.navigationController) {
+        vc.navigationController.navigationBar.titleTextAttributes = titleAttributes;
+        if (@available(iOS 13, *)) {
+            vc.navigationController.navigationBar.standardAppearance.titleTextAttributes = titleAttributes;
+            vc.navigationController.navigationBar.scrollEdgeAppearance.titleTextAttributes = titleAttributes;
+        }
+    }
+    
+    for (UIViewController *child in vc.childViewControllers) {
+        [self updateNavigationBarInViewController:child withAttributes:titleAttributes];
+    }
+    
+    [self updateNavigationBarInViewController:vc.presentedViewController withAttributes:titleAttributes];
+}
+
++ (CGFloat)scaledSize:(CGFloat)baseSize {
+    CGFloat scaled = baseSize * [WFCUConfigManager globalManager].fontScale;
+    return MAX(8, scaled);
+}
+
 -(void)setSelectedTheme:(WFCUThemeType)themeType {
     _selectedTheme = themeType;
     
@@ -77,10 +153,16 @@ static WFCUConfigManager *sharedSingleton = nil;
 - (void)setupNavBar {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    UIFont *naviTitleFont = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:18];
+    NSDictionary *titleAttributes = @{
+        NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor,
+        NSFontAttributeName : naviTitleFont
+    };
+    
     UINavigationBar *bar = [UINavigationBar appearance];
     bar.barTintColor = [WFCUConfigManager globalManager].naviBackgroudColor;
     bar.tintColor = [WFCUConfigManager globalManager].naviTextColor;
-    bar.titleTextAttributes = @{NSForegroundColorAttributeName : [WFCUConfigManager globalManager].naviTextColor};
+    bar.titleTextAttributes = titleAttributes;
     bar.barStyle = UIBarStyleDefault;
     
     if (@available(iOS 13, *)) {
@@ -88,7 +170,7 @@ static WFCUConfigManager *sharedSingleton = nil;
         bar.standardAppearance = navBarAppearance;
         bar.scrollEdgeAppearance = navBarAppearance;
         navBarAppearance.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        navBarAppearance.titleTextAttributes = @{NSForegroundColorAttributeName:[WFCUConfigManager globalManager].naviTextColor};
+        navBarAppearance.titleTextAttributes = titleAttributes;
     }
     
     [[UITabBar appearance] setBarTintColor:[WFCUConfigManager globalManager].frameBackgroudColor];

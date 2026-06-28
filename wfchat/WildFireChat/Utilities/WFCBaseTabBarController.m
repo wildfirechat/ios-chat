@@ -12,6 +12,7 @@
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
 #import "WFCConfig.h"
+#import "UIFont+YH.h"
 #ifdef WFC_MOMENTS
 #import <WFMomentUIKit/WFMomentUIKit.h>
 #import <WFMomentClient/WFMomentClient.h>
@@ -22,6 +23,20 @@
 #define kImgKey     @"imageName"
 #define kSelImgKey  @"selectedImageName"
 
+@interface WFCTabBar : UITabBar
+@end
+
+@implementation WFCTabBar
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGSize sizeThatFits = [super sizeThatFits:size];
+    // 字体放大时稍微增加 TabBar 高度，但变化幅度远小于字体缩放比例，避免突兀
+    CGFloat fontScale = [WFCUConfigManager globalManager].fontScale;
+    sizeThatFits.height += (fontScale - 1.0) * 20;
+    
+    return sizeThatFits;
+}
+@end
+
 @interface WFCBaseTabBarController () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong)UINavigationController *firstNav;
 @property (nonatomic, strong)UINavigationController *settingNav;
@@ -30,7 +45,16 @@
 
 @implementation WFCBaseTabBarController
 - (void)viewDidLoad {
+    // 替换为自定义 TabBar，微调高度随字体变化
+    WFCTabBar *tabBar = [[WFCTabBar alloc] init];
+    [self setValue:tabBar forKey:@"tabBar"];
+    
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onFontScaleChanged:)
+                                                 name:WFCUFontScaleDidChangeNotification
+                                               object:nil];
     
     self.conversationsViewController = [WFCUConversationTableViewController new];
     UIViewController *vc = self.conversationsViewController;
@@ -104,6 +128,32 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kReceiveComments object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kClearUnreadComments object:nil];
 #endif
+    
+    [self applyTabBarItemFont];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (NSDictionary *)tabBarTitleAttributes {
+    UIFont *font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:10];
+    return @{NSFontAttributeName : font};
+}
+
+- (void)applyTabBarItemFont {
+    for (UINavigationController *nav in self.viewControllers) {
+        if (![nav isKindOfClass:[UINavigationController class]]) continue;
+        UITabBarItem *item = nav.tabBarItem;
+        if (!item) continue;
+        NSDictionary *attrs = [self tabBarTitleAttributes];
+        [item setTitleTextAttributes:attrs forState:UIControlStateNormal];
+        [item setTitleTextAttributes:attrs forState:UIControlStateSelected];
+    }
+}
+
+- (void)onFontScaleChanged:(NSNotification *)notification {
+    [self applyTabBarItemFont];
 }
 
 - (void)onDoubleTap:(UITapGestureRecognizer *)sender {

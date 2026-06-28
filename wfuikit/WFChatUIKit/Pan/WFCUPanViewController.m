@@ -14,6 +14,7 @@
 #import "WFCUPanFile.h"
 #import "WFCUImage.h"
 #import <WFChatClient/WFCCIMService.h>
+#import "UIFont+YH.h"
 
 @interface WFCUPanSpaceCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *iconView;
@@ -31,11 +32,11 @@
         [self.contentView addSubview:self.iconView];
         
         self.nameLabel = [[UILabel alloc] init];
-        self.nameLabel.font = [UIFont systemFontOfSize:16];
+        self.nameLabel.font = [UIFont scaledSystemFontOfSize:16];
         [self.contentView addSubview:self.nameLabel];
         
         self.infoLabel = [[UILabel alloc] init];
-        self.infoLabel.font = [UIFont systemFontOfSize:12];
+        self.infoLabel.font = [UIFont scaledSystemFontOfSize:12];
         self.infoLabel.textColor = [UIColor grayColor];
         [self.contentView addSubview:self.infoLabel];
     }

@@ -12,6 +12,7 @@
 #import "SelectableTextView.h"
 #import "WFCUConfigManager.h"
 #import <MessageUI/MessageUI.h>
+#import "UIFont+YH.h"
 
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
@@ -23,7 +24,7 @@
 @implementation WFCUTextCell
 + (UIFont *)defaultFont {
 //    return [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    return [UIFont systemFontOfSize:18];
+    return [UIFont scaledSystemFontOfSize:18];
 }
 
 + (NSString *)cacheKeyForText:(NSString *)text viewWidth:(CGFloat)width {

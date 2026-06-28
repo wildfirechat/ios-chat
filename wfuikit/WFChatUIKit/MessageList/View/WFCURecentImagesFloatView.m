@@ -9,6 +9,7 @@
 #import "WFCURecentImagesFloatView.h"
 #import "WFCUUtilities.h"
 #import <Photos/Photos.h>
+#import "UIFont+YH.h"
 
 #define IMAGE_SIZE 100
 #define PADDING 12
@@ -61,7 +62,7 @@
     // 关闭按钮
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.closeButton setTitle:@"✕" forState:UIControlStateNormal];
-    self.closeButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    self.closeButton.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:16];
     self.closeButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.closeButton.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
     self.closeButton.contentEdgeInsets = UIEdgeInsetsMake(-4, 0, 0, 0);

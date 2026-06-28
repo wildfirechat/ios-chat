@@ -9,6 +9,7 @@
 #import "WFCUFileRecordTableViewCell.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 
 @interface WFCUFileRecordTableViewCell ()
@@ -20,12 +21,12 @@
 @implementation WFCUFileRecordTableViewCell
 
 + (CGFloat)sizeOfRecord:(WFCCFileRecord *)record withCellWidth:(CGFloat)width {
-    CGSize size1 = [WFCUUtilities getTextDrawingSize:record.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake(width - 74, 48)];
+    CGSize size1 = [WFCUUtilities getTextDrawingSize:record.name font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width - 74, 48)];
     
     NSString *info = [NSString stringWithFormat:@"%@ 来自%@ %@", [WFCUUtilities formatTimeLabel:record.timestamp], [[WFCCIMService sharedWFCIMService] getUserInfo:record.userId inGroup:record.conversation.type == Group_Type ? record.conversation.target : nil refresh:NO].displayName, [WFCUUtilities formatSizeLable:record.size]];
     
     
-    CGSize size2 = [WFCUUtilities getTextDrawingSize:info font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(width - 74, 40)];
+    CGSize size2 = [WFCUUtilities getTextDrawingSize:info font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - 74, 40)];
     
     return 8 + size1.height + 8 + size2.height + 8;
 }
@@ -48,7 +49,7 @@
     
     [self setFileIcon:fileRecord.name];
     self.nameLabel.text = self.fileRecord.name;
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
     self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
     NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
@@ -64,7 +65,7 @@
     
     self.infoLabel.attributedText = attStr;
     
-    size = [WFCUUtilities getTextDrawingSize:attStr.string font:[UIFont systemFontOfSize:14] constrainedSize:CGSizeMake(self.bounds.size.width - 74, 40)];
+    size = [WFCUUtilities getTextDrawingSize:attStr.string font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(self.bounds.size.width - 74, 40)];
     self.infoLabel.frame = CGRectMake(66, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 8, size.width, size.height);
 }
 
@@ -86,7 +87,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.font = [UIFont systemFontOfSize:18];
+        _nameLabel.font = [UIFont scaledSystemFontOfSize:18];
         _nameLabel.numberOfLines = 0;
         [self.contentView addSubview:_nameLabel];
     }
@@ -96,7 +97,7 @@
 - (UILabel *)infoLabel {
     if (!_infoLabel) {
         _infoLabel = [[UILabel alloc] init];
-        _infoLabel.font = [UIFont systemFontOfSize:14];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:14];
         _infoLabel.numberOfLines = 0;
         _infoLabel.textColor = [UIColor grayColor];
         [self.contentView addSubview:_infoLabel];

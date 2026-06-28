@@ -7,6 +7,7 @@
 //
 
 #import "WFCUPluginItemView.h"
+#import "UIFont+YH.h"
 
 
 
@@ -34,7 +35,7 @@
     UILabel *label = [UILabel new];
     [label setText:title];
     [label setTextColor:HEXCOLOR(0x6f7277)];
-    [label setFont:[UIFont systemFontOfSize:11]];
+    [label setFont:[UIFont scaledSystemFontOfSize:11]];
     [label setTextAlignment:NSTextAlignmentCenter];
     [myView addSubview:label];
     [self addSubview:myView];
@@ -67,7 +68,7 @@
                                                             metrics:nil
                                                               views:NSDictionaryOfVariableBindings(label, myView)]];
     [self addConstraints:[NSLayoutConstraint
-                                      constraintsWithVisualFormat:@"V:|[imageButton(60)]-5.5-[label(14)]"
+                                      constraintsWithVisualFormat:@"V:|[imageButton(50)]-5.5-[label]"
                                       options:kNilOptions
                                       metrics:nil
                                       views:NSDictionaryOfVariableBindings(label, imageButton)]];

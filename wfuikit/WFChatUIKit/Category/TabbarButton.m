@@ -11,6 +11,7 @@
 
 #import "TabbarButton.h"
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification";
 
@@ -82,7 +83,7 @@ NSString *const kTabBarClearBadgeNotification = @"kTabBarClearBadgeNotification"
     CGFloat cornerRadius = (kBtnHeight > kBtnWidth ? kBtnWidth / 2.0 : kBtnHeight / 2.0);
     self.backgroundColor = [UIColor redColor];
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.titleLabel.font = [UIFont systemFontOfSize:12.f];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:12.f];
     _maxDistance = cornerRadius * 5;
     
     self.layer.masksToBounds = YES;

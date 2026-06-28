@@ -7,6 +7,7 @@
 //
 
 #import "WFCFavoriteBaseCell.h"
+#import "UIFont+YH.h"
 
 @interface WFCFavoriteBaseCell ()
 @property(nonatomic, strong)UILabel *buttomLabel;
@@ -50,7 +51,7 @@
     if (!_buttomLabel) {
         _buttomLabel = [[UILabel alloc] init];
         _buttomLabel.numberOfLines = 1;
-        _buttomLabel.font = [UIFont systemFontOfSize:14];
+        _buttomLabel.font = [UIFont scaledSystemFontOfSize:14];
         _buttomLabel.textColor = [UIColor grayColor];
         _buttomLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         [self.contentView addSubview:_buttomLabel];

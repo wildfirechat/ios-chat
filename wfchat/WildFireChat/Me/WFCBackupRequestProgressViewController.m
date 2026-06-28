@@ -11,6 +11,7 @@
 #import <WFChatClient/WFCCBackupRequestNotificationContent.h>
 #import <WFChatClient/WFCCBackupResponseNotificationContent.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "UIFont+YH.h"
 
 @interface WFCBackupRequestProgressViewController ()
 @property (nonatomic, strong) UILabel *statusLabel;
@@ -42,7 +43,7 @@
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
     self.statusLabel.text = LocalizedString(@"WaitingForPCResponse");
-    self.statusLabel.font = [UIFont boldSystemFontOfSize:18];
+    self.statusLabel.font = [UIFont scaledBoldSystemFontOfSize:18];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.statusLabel];
@@ -50,7 +51,7 @@
     // 创建详细标签
     self.detailLabel = [[UILabel alloc] init];
     self.detailLabel.text = LocalizedString(@"PleaseConfirmBackupOnPC");
-    self.detailLabel.font = [UIFont systemFontOfSize:14];
+    self.detailLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.detailLabel.textColor = [UIColor secondaryLabelColor];
     self.detailLabel.textAlignment = NSTextAlignmentCenter;
     self.detailLabel.numberOfLines = 0;

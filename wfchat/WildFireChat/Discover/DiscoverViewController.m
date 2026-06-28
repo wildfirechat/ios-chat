@@ -203,7 +203,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.accessoryView = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.textLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+    cell.textLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     cell.textLabel.text = self.dataSource[indexPath.section][@"title"];
     cell.imageView.image = [UIImage imageNamed:self.dataSource[indexPath.section][@"image"]];
     if (indexPath.section == 0 && self.hasMoments) {

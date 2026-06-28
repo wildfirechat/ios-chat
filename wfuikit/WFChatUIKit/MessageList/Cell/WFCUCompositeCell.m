@@ -11,6 +11,7 @@
 #import "WFCUUtilities.h"
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
+#import "UIFont+YH.h"
 
 
 #define TITLE_TOP_PADDING 4
@@ -38,9 +39,9 @@
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCCompositeMessageContent *content = (WFCCCompositeMessageContent *)msgModel.message.content;
     
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
     
-    CGSize contentSize = [WFCUUtilities getTextDrawingSize:[WFCUCompositeCell digestContent:content inConversation:msgModel.message.conversation] font:[UIFont systemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
+    CGSize contentSize = [WFCUUtilities getTextDrawingSize:[WFCUCompositeCell digestContent:content inConversation:msgModel.message.conversation] font:[UIFont scaledSystemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
     
     CGSize size = CGSizeMake(width, 0);
     
@@ -114,9 +115,9 @@
     self.contentLabel.text = [self.class digestContent:content inConversation:model.message.conversation];
     
     CGFloat width = self.contentArea.frame.size.width;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont systemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(width, TITLE_FONT_SIZE * 3)];
     
-    CGSize contentSize = [WFCUUtilities getTextDrawingSize:self.contentLabel.text font:[UIFont systemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
+    CGSize contentSize = [WFCUUtilities getTextDrawingSize:self.contentLabel.text font:[UIFont scaledSystemFontOfSize:CONTENT_FONT_SIZE] constrainedSize:CGSizeMake(width, 8000)];
     
     int offset = TITLE_TOP_PADDING;
     self.targetNameLabel.frame = CGRectMake(0, offset, width, titleSize.height);
@@ -134,7 +135,7 @@
 - (UILabel *)targetNameLabel {
     if (!_targetNameLabel) {
         _targetNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _targetNameLabel.font = [UIFont systemFontOfSize:TITLE_FONT_SIZE];
+        _targetNameLabel.font = [UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE];
         _targetNameLabel.textColor = [UIColor blackColor];
         _targetNameLabel.numberOfLines = 0;
         [self.contentArea addSubview:_targetNameLabel];
@@ -145,7 +146,7 @@
 - (UILabel *)contentLabel {
     if (!_contentLabel) {
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _contentLabel.font = [UIFont systemFontOfSize:CONTENT_FONT_SIZE];
+        _contentLabel.font = [UIFont scaledSystemFontOfSize:CONTENT_FONT_SIZE];
         _contentLabel.textColor = [UIColor grayColor];
         _contentLabel.numberOfLines = 0;
         [self.contentArea addSubview:_contentLabel];
@@ -165,7 +166,7 @@
 - (UILabel *)hintLabel {
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _hintLabel.font = [UIFont systemFontOfSize:HINT_FONT_SIZE];
+        _hintLabel.font = [UIFont scaledSystemFontOfSize:HINT_FONT_SIZE];
         _hintLabel.text = WFCString(@"ChatHistory");
         _hintLabel.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_hintLabel];

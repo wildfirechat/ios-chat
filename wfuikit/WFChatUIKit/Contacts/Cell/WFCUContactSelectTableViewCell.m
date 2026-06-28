@@ -27,16 +27,25 @@
     // Initialization code
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat portraitSize = 40 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
+    self.checkImageView.frame = CGRectMake(16, (self.frame.size.height - 20) / 2.0, 20, 20);
+    self.portraitView.frame = CGRectMake(50, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
+    CGFloat labelHeight = MAX(16, [WFCUConfigManager scaledSize:16]);
+    self.nameLabel.frame = CGRectMake(50 + portraitSize + 12, (self.frame.size.height - labelHeight) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + portraitSize + 12) - 48, labelHeight);
+}
+
 - (UIImageView *)checkImageView {
     if (!_checkImageView) {
-        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 18, 20, 20)];
+        _checkImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:_checkImageView];
     }
     return _checkImageView;
 }
 - (UIImageView *)portraitView {
     if (!_portraitView) {
-        _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 8, 40, 40)];
+        _portraitView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _portraitView.layer.masksToBounds = YES;
         _portraitView.layer.cornerRadius = 3.f;
         [self.contentView addSubview:_portraitView];
@@ -46,8 +55,8 @@
 
 - (UILabel *)nameLabel {
     if(!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50 + 40 + 12, 19, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48, 16)];
-        _nameLabel.font = [UIFont pingFangSCWithWeight:FontWeightStyleRegular size:16];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _nameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
                _nameLabel.textColor = [UIColor colorWithHexString:@"0x1d1d1d"];
         [self.contentView addSubview:_nameLabel];
     }

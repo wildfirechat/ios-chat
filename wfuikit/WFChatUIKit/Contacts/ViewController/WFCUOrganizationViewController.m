@@ -330,12 +330,12 @@
     [cell.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj removeFromSuperview];
     }];
-    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont scaledSystemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, 32)];
     label.text = name;
     label.textColor = [UIColor blueColor];
-    label.font = [UIFont systemFontOfSize:16];
+    label.font = [UIFont scaledSystemFontOfSize:16];
     [cell.contentView addSubview:label];
     
     BOOL lastItem = (indexPath.row == self.paths.count);
@@ -365,7 +365,7 @@
     [cell.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj removeFromSuperview];
     }];
-    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:name font:[UIFont scaledSystemFontOfSize:16] constrainedSize:CGSizeMake(10000, 20)];
     BOOL lastItem = (indexPath.row == self.paths.count);
     if(!lastItem) {
         size.width += 25;

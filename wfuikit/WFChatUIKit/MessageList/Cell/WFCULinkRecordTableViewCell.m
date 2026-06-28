@@ -11,6 +11,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
 #import "WFCUUtilities.h"
+#import "UIFont+YH.h"
 
 @interface WFCULinkRecordTableViewCell ()
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -48,21 +49,21 @@
 
     // 链接标题
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:16];
     self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.numberOfLines = 2;
     [self.contentView addSubview:self.titleLabel];
 
     // 链接URL
     self.urlLabel = [[UILabel alloc] init];
-    self.urlLabel.font = [UIFont systemFontOfSize:14];
+    self.urlLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.urlLabel.textColor = [UIColor grayColor];
     self.urlLabel.numberOfLines = 1;
     [self.contentView addSubview:self.urlLabel];
 
     // 时间标签
     self.timeLabel = [[UILabel alloc] init];
-    self.timeLabel.font = [UIFont systemFontOfSize:12];
+    self.timeLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.timeLabel.textColor = [UIColor lightGrayColor];
     [self.contentView addSubview:self.timeLabel];
 }

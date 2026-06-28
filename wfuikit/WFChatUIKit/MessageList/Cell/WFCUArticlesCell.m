@@ -12,6 +12,7 @@
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
+#import "UIFont+YH.h"
 
 @interface WFCUArticlesCell ()
 @property(nonatomic, strong)UIView *containerView;
@@ -71,7 +72,7 @@
     if(content.subArticles.count) {
         labHeight = (SUB_COVER_SIZE + CELL_ITEM_PADDING) * content.subArticles.count;
     } else {
-        CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.topArticle.title font:[UIFont systemFontOfSize:TOP_TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
+        CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.topArticle.title font:[UIFont scaledSystemFontOfSize:TOP_TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
         labHeight = CELL_ITEM_PADDING;
         labHeight += titleSize.height;
     }
@@ -92,7 +93,7 @@
     offset += CELL_ITEM_PADDING;
     
     CGRect frame = self.topTitleLabel.frame;
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.topArticle.title font:[UIFont systemFontOfSize:TOP_TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.topArticle.title font:[UIFont scaledSystemFontOfSize:TOP_TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
     frame.size.height = titleSize.height;
     
     if(content.subArticles.count) {
@@ -126,7 +127,7 @@
     
     UILabel *subTitle = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, (SUB_COVER_SIZE - SUB_TITLE_FONT_SIZE - SUB_TITLE_FONT_SIZE)/2, containerWidth - CELL_PADDING*3 - SUB_COVER_SIZE, SUB_TITLE_FONT_SIZE * 2)];
     subTitle.numberOfLines = 2;
-    subTitle.font = [UIFont systemFontOfSize:SUB_TITLE_FONT_SIZE];
+    subTitle.font = [UIFont scaledSystemFontOfSize:SUB_TITLE_FONT_SIZE];
     subTitle.text = article.title;
     [container addSubview:subTitle];
     
@@ -166,7 +167,7 @@
 }
 
 - (CGFloat)setLabel:(UILabel *)label widht:(CGFloat)width text:(NSString *)text offset:(CGFloat)offset fontSize:(int)fontSize {
-    CGSize titleSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont systemFontOfSize:fontSize] constrainedSize:CGSizeMake(width, 50)];
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont scaledSystemFontOfSize:fontSize] constrainedSize:CGSizeMake(width, 50)];
     label.text = text;
     CGRect frame = label.frame;
     frame.origin.y = offset;
@@ -209,7 +210,7 @@
         
         _topTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, 0, containerWidth - CELL_PADDING - CELL_PADDING, TOP_TITLE_FONT_SIZE * 2)];
         _topTitleLabel.numberOfLines = 2;
-        _topTitleLabel.font = [UIFont systemFontOfSize:TOP_TITLE_FONT_SIZE];
+        _topTitleLabel.font = [UIFont scaledSystemFontOfSize:TOP_TITLE_FONT_SIZE];
         [_containerView addSubview:_topTitleLabel];
         
         [self.contentView addSubview:_containerView];

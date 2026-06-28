@@ -7,6 +7,7 @@
 //
 
 #import "WatermarkViewController.h"
+#import "UIFont+YH.h"
 
 @interface WatermarkViewController ()
 
@@ -27,7 +28,7 @@
 //    UILabel *watermarkLabel = [[UILabel alloc] init];
 //    watermarkLabel.text = @"Watermark";
 //    watermarkLabel.textColor = [UIColor whiteColor];
-//    watermarkLabel.font = [UIFont systemFontOfSize:24];
+//    watermarkLabel.font = [UIFont scaledSystemFontOfSize:24];
 //    watermarkLabel.textAlignment = NSTextAlignmentCenter;
 //    
 //    // 将水印标签添加到水印视图中

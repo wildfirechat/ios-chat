@@ -11,6 +11,7 @@
 #import "WFCBackupRequestProgressViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatClient/WFCCBackupRequestNotificationContent.h>
+#import "UIFont+YH.h"
 
 @interface WFCBackupTargetViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -56,7 +57,7 @@
     infoLabel.text = LocalizedString(@"PleaseSelectBackupLocation");
     infoLabel.textAlignment = NSTextAlignmentCenter;
     infoLabel.textColor = [UIColor secondaryLabelColor];
-    infoLabel.font = [UIFont systemFontOfSize:14];
+    infoLabel.font = [UIFont scaledSystemFontOfSize:14];
     self.tableView.tableHeaderView = infoLabel;
 
     // 监听连接状态变化

@@ -7,6 +7,7 @@
 //
 
 #import "WFCFavoriteVideoCell.h"
+#import "UIFont+YH.h"
 
 @interface WFCFavoriteVideoCell ()
 @property(nonatomic, strong)UIImageView *thumbView;
@@ -65,7 +66,7 @@
     if (!_durationLabel) {
         _durationLabel = [[UILabel alloc] init];
         _durationLabel.textAlignment = NSTextAlignmentRight;
-        _durationLabel.font = [UIFont systemFontOfSize:14];
+        _durationLabel.font = [UIFont scaledSystemFontOfSize:14];
         [self.thumbView addSubview:_durationLabel];
     }
     return _durationLabel;

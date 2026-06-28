@@ -30,6 +30,31 @@ typedef NS_ENUM(NSInteger, FontWeightStyle) {
  @return 返回指定字重大小的苹方字体
  */
 + (UIFont *)pingFangSCWithWeight:(FontWeightStyle)fontWeight size:(CGFloat)fontSize;
+
+/**
+ 根据当前全局字体缩放比例返回 systemFont
+ */
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize;
+
+/**
+ 根据当前全局字体缩放比例返回 boldSystemFont
+ */
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize;
+
+/**
+ 根据当前全局字体缩放比例返回 systemFontWithWeight
+ */
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight NS_AVAILABLE_IOS(8_2);
+
+/**
+ 根据当前全局字体缩放比例返回苹方字体
+ */
++ (UIFont *)scaledPingFangSCWithWeight:(FontWeightStyle)fontWeight size:(CGFloat)fontSize;
+
+/**
+ 根据当前全局字体缩放比例返回指定 name 的字体
+ */
++ (UIFont *)scaledFontWithName:(NSString *)fontName size:(CGFloat)fontSize;
 @end
 
 NS_ASSUME_NONNULL_END

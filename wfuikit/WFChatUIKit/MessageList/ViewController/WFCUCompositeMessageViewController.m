@@ -22,6 +22,7 @@
 #import "WFCUImagePreviewViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "UIView+Toast.h"
+#import "UIFont+YH.h"
 
 
 @interface WFCUCompositeMessageViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate, AVAudioPlayerDelegate>
@@ -140,7 +141,7 @@
     } else {
         timeString = [NSString stringWithFormat:@"%@ 至 %@", fromString, toString];
     }
-    CGSize size = [WFCUUtilities getTextDrawingSize:timeString font:[UIFont systemFontOfSize:HEADER_FONT_SIZE] constrainedSize:CGSizeMake(width, HEADER_HEIGHT)];
+    CGSize size = [WFCUUtilities getTextDrawingSize:timeString font:[UIFont scaledSystemFontOfSize:HEADER_FONT_SIZE] constrainedSize:CGSizeMake(width, HEADER_HEIGHT)];
     
     UIView *leftLine = [[UIView alloc] initWithFrame:CGRectMake(HEADER_LINE_PADDING, HEADER_HEIGHT/2, (width-size.width)/2-HEADER_LINE_PADDING-HEADER_LINE_PADDING, 1)];
     leftLine.backgroundColor = [UIColor grayColor];
@@ -149,7 +150,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width-size.width)/2, (HEADER_HEIGHT-size.height)/2, size.width, size.height)];
     label.text = timeString;
     label.textColor = [UIColor grayColor];
-    label.font = [UIFont systemFontOfSize:HEADER_FONT_SIZE];
+    label.font = [UIFont scaledSystemFontOfSize:HEADER_FONT_SIZE];
     [headerView addSubview:label];
     
     UIView *rightLine = [[UIView alloc] initWithFrame:CGRectMake((width+size.width)/2+HEADER_LINE_PADDING, HEADER_HEIGHT/2, (width-size.width)/2-HEADER_LINE_PADDING-HEADER_LINE_PADDING, 1)];
@@ -249,7 +250,7 @@
         UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = textContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
-        textView.font = [UIFont systemFontOfSize:28];
+        textView.font = [UIFont scaledSystemFontOfSize:28];
         textView.editable = NO;
         textView.backgroundColor = self.view.backgroundColor;
 

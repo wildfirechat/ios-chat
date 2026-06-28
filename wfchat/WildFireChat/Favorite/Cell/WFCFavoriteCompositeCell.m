@@ -7,6 +7,7 @@
 //
 
 #import "WFCFavoriteCompositeCell.h"
+#import "UIFont+YH.h"
 
 @interface WFCFavoriteCompositeCell ()
 @property(nonatomic, strong)UILabel *label;
@@ -26,13 +27,13 @@
 }
 
 + (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
-    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont systemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width-16, 1000)].height;
+    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width-16, 1000)].height;
 }
 
 - (UILabel *)label {
     if (!_label) {
         _label = [[UILabel alloc] init];
-        _label.font = [UIFont systemFontOfSize:18];
+        _label.font = [UIFont scaledSystemFontOfSize:18];
         _label.numberOfLines = 0;
         [self.contentArea addSubview:_label];
     }

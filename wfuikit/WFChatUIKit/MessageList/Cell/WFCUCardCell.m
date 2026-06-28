@@ -12,6 +12,7 @@
 #import "UILabel+YBAttributeTextTapAction.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "UIFont+YH.h"
 
 #define TEXT_TOP_PADDING 6
 #define TEXT_BUTTOM_PADDING 6
@@ -72,7 +73,7 @@
     if (!_cardName) {
         CGRect bounds = self.contentArea.bounds;
         _cardName = [[UILabel alloc] initWithFrame:CGRectMake(72, 40, bounds.size.width - 72 - 8, 18)];
-        _cardName.font = [UIFont systemFontOfSize:14];
+        _cardName.font = [UIFont scaledSystemFontOfSize:14];
         _cardName.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_cardName];
     }
@@ -92,7 +93,7 @@
 - (UILabel *)cardHint {
     if (!_cardHint) {
         _cardHint = [[UILabel alloc] initWithFrame:CGRectMake(8, 84, 80, 12)];
-        _cardHint.font = [UIFont systemFontOfSize:10];
+        _cardHint.font = [UIFont scaledSystemFontOfSize:10];
         _cardHint.text = WFCString(@"PersonalCard");
         _cardHint.textColor = [UIColor grayColor];
         [self.contentArea addSubview:_cardHint];

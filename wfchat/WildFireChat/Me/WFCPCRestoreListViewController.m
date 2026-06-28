@@ -12,6 +12,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatClient/WFCCRestoreRequestNotificationContent.h>
 #import <WFChatClient/WFCCRestoreResponseNotificationContent.h>
+#import "UIFont+YH.h"
 
 @interface WFCPCRestoreListViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -54,7 +55,7 @@
     // 创建状态标签
     self.statusLabel = [[UILabel alloc] init];
     self.statusLabel.text = LocalizedString(@"WaitingForPCConfirm");
-    self.statusLabel.font = [UIFont systemFontOfSize:16];
+    self.statusLabel.font = [UIFont scaledSystemFontOfSize:16];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.textColor = [UIColor secondaryLabelColor];
     self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -253,8 +254,8 @@
         cell.detailTextLabel.numberOfLines = 0;
 
         // 设置字体以确保布局计算正确
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
+        cell.textLabel.font = [UIFont scaledBoldSystemFontOfSize:16];
+        cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:14];
     }
 
     NSDictionary *backup = self.backupList[indexPath.row];
