@@ -3071,6 +3071,10 @@ WFCCGroupInfo *convertProtoGroupInfo(const mars::stn::TGroupInfo &tgi) {
     return mars::stn::HasMediaPresignedUrl() ? YES : NO;
 }
 
+- (BOOL)isForcePresignedUrlUpload {
+    return mars::stn::ForcePresignedUrlUpload() ? YES : NO;
+}
+
 -(void)modifyMyInfo:(NSDictionary<NSNumber */*ModifyMyInfoType*/, NSString *> *)values
             success:(void(^)())successBlock
               error:(void(^)(int error_code))errorBlock {

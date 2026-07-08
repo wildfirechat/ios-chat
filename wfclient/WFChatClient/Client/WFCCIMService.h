@@ -1409,6 +1409,10 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 - (BOOL)isSupportBigFilesUpload;
 
 /**
+ 是否强制大文件上传
+ */
+- (BOOL)isForcePresignedUrlUpload;
+/**
  删除本地消息
  
  @param messageId 消息ID
