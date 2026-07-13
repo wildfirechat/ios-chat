@@ -135,8 +135,14 @@
     }
 
     NSArray *messages = notification.object;
+    NSString *currentUserId = [[WFCCNetworkService sharedInstance] userId];
     for (WFCCMessage *msg in messages) {
         if ([msg.content isKindOfClass:[WFCCBackupResponseNotificationContent class]]) {
+            // 校验发送者是否为自己，避免冒用攻击
+            if (![msg.fromUser isEqualToString:currentUserId] || msg.direction != MessageDirection_Receive) {
+                continue;
+            }
+
             WFCCBackupResponseNotificationContent *response = (WFCCBackupResponseNotificationContent *)msg.content;
 
             dispatch_async(dispatch_get_main_queue(), ^{
