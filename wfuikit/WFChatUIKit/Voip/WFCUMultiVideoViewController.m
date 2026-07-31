@@ -285,7 +285,7 @@
 
 - (UIButton *)minimizeButton {
     if (!_minimizeButton) {
-        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 26, 30, 30)];
+        _minimizeButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 46, 30, 30)];
         
         [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize"] forState:UIControlStateNormal];
         [_minimizeButton setImage:[WFCUImage imageNamed:@"minimize_hover"] forState:UIControlStateHighlighted];
@@ -301,7 +301,7 @@
 
 - (UIButton *)addParticipantButton {
     if (!_addParticipantButton) {
-        _addParticipantButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 26, 30, 30)];
+        _addParticipantButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 16 - 30, 46, 30, 30)];
         
         [_addParticipantButton setImage:[WFCUImage imageNamed:@"plus-circle"] forState:UIControlStateNormal];
         [_addParticipantButton setImage:[WFCUImage imageNamed:@"plus-circle"] forState:UIControlStateHighlighted];
