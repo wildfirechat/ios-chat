@@ -1,0 +1,6 @@
+framework module WFAVEngineKit {
+  umbrella header "WFAVEngineKit.h"
+  export *
+
+  module * { export * }
+}
