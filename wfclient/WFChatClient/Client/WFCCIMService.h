@@ -179,7 +179,10 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     UserSettingScope_Sync_Badge = 29,
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Lock_PC = 30,
-    
+
+    //会话级用户设置，DSH 会话状态通道。key 为 "{conversationType}-{line}-{target}_{type}"，type=1 表示状态
+    UserSettingScope_Conversation_User_Setting = 31,
+
     //自定义用户设置，请使用1000以上的key
     UserSettingScope_Custom_Begin = 1000
 } ;
