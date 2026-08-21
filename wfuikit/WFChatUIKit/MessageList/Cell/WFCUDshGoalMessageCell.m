@@ -1,0 +1,111 @@
+//
+//  WFCUDshGoalMessageCell.m
+//  WFChatUIKit
+//
+//  DSH 目标进度卡片 Cell（206），纯展示。
+//
+
+#import "WFCUDshGoalMessageCell.h"
+#import <WFChatClient/WFCChatClient.h>
+#import <WFChatClient/WFCCDshMessageContents.h>
+#import "WFCUUtilities.h"
+#import "WFCUDshState.h"
+#import "UIFont+YH.h"
+
+#define DSH_CARD_PADDING 12
+
+@interface WFCUDshGoalMessageCell ()
+@property (nonatomic, strong)UILabel *titleLabel;
+@property (nonatomic, strong)UILabel *phaseLabel;
+@property (nonatomic, strong)UILabel *objectiveLabel;
+@property (nonatomic, strong)UILabel *metaLabel;
+@end
+
+@implementation WFCUDshGoalMessageCell
+
++ (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+    WFCCDshGoalMessageContent *content = (WFCCDshGoalMessageContent *)msgModel.message.content;
+    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
+    CGFloat height = DSH_CARD_PADDING;
+
+    //标题行（含 phase 徽标）
+    height += 20 + 8;
+
+    CGSize objectiveSize = [WFCUUtilities getTextDrawingSize:content.objective ?: @""
+                                                        font:[UIFont scaledSystemFontOfSize:14]
+                                               constrainedSize:CGSizeMake(contentWidth, 200)];
+    height += MAX(objectiveSize.height, 18) + 4;
+
+    //已执行 N 轮
+    height += 16 + DSH_CARD_PADDING;
+    return CGSizeMake(width, height);
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setupUI];
+    }
+    return self;
+}
+
+- (void)setupUI {
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.font = [UIFont scaledBoldSystemFontOfSize:14];
+    self.titleLabel.textColor = [UIColor blackColor];
+    [self.contentArea addSubview:self.titleLabel];
+
+    self.phaseLabel = [[UILabel alloc] init];
+    self.phaseLabel.font = [UIFont scaledSystemFontOfSize:10];
+    self.phaseLabel.textColor = [UIColor whiteColor];
+    self.phaseLabel.textAlignment = NSTextAlignmentCenter;
+    self.phaseLabel.layer.cornerRadius = 8;
+    self.phaseLabel.layer.masksToBounds = YES;
+    [self.contentArea addSubview:self.phaseLabel];
+
+    self.objectiveLabel = [[UILabel alloc] init];
+    self.objectiveLabel.font = [UIFont scaledSystemFontOfSize:14];
+    self.objectiveLabel.textColor = [UIColor blackColor];
+    self.objectiveLabel.numberOfLines = 0;
+    [self.contentArea addSubview:self.objectiveLabel];
+
+    self.metaLabel = [[UILabel alloc] init];
+    self.metaLabel.font = [UIFont scaledSystemFontOfSize:12];
+    self.metaLabel.textColor = [UIColor grayColor];
+    [self.contentArea addSubview:self.metaLabel];
+}
+
+- (void)setModel:(WFCUMessageModel *)model {
+    [super setModel:model];
+
+    WFCCDshGoalMessageContent *content = (WFCCDshGoalMessageContent *)model.message.content;
+    CGFloat width = self.contentArea.bounds.size.width;
+    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
+    CGFloat currentY = DSH_CARD_PADDING;
+
+    self.titleLabel.text = @"🎯 目标进度";
+    CGSize titleSize = [WFCUUtilities getTextDrawingSize:self.titleLabel.text
+                                                    font:self.titleLabel.font
+                                           constrainedSize:CGSizeMake(contentWidth, 20)];
+    self.titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, titleSize.width, 20);
+
+    self.phaseLabel.text = [WFCUDshState goalPhaseText:content.phase];
+    self.phaseLabel.backgroundColor = [WFCUDshState goalPhaseColor:content.phase];
+    CGSize phaseSize = [WFCUUtilities getTextDrawingSize:self.phaseLabel.text
+                                                    font:self.phaseLabel.font
+                                           constrainedSize:CGSizeMake(contentWidth, 16)];
+    self.phaseLabel.frame = CGRectMake(DSH_CARD_PADDING + titleSize.width + 6, currentY + 2, phaseSize.width + 12, 16);
+    currentY += 20 + 8;
+
+    self.objectiveLabel.text = content.objective;
+    CGSize objectiveSize = [WFCUUtilities getTextDrawingSize:content.objective ?: @""
+                                                        font:self.objectiveLabel.font
+                                               constrainedSize:CGSizeMake(contentWidth, 200)];
+    self.objectiveLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(objectiveSize.height, 18));
+    currentY += MAX(objectiveSize.height, 18) + 4;
+
+    self.metaLabel.text = [NSString stringWithFormat:@"已执行 %d 轮", (int)content.roundsStarted];
+    self.metaLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 16);
+}
+
+@end

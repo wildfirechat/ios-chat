@@ -35,6 +35,13 @@
 #import "WFCUPollMessageCell.h"
 #import "WFCUPollResultMessageCell.h"
 #import "WFCUPollDetailViewController.h"
+#import "WFCUDshQuestionMessageCell.h"
+#import "WFCUDshApprovalMessageCell.h"
+#import "WFCUDshGoalMessageCell.h"
+#import "WFCUDshTextMessageCell.h"
+#import "WFCUDshPlanDetailViewController.h"
+#import "WFCUDshState.h"
+#import <WFChatClient/WFCCDshMessageContents.h>
 
 #import "WFCUBrowserViewController.h"
 #import <WFChatClient/WFCChatClient.h>
@@ -135,6 +142,10 @@
 @property (strong, nonatomic)NSArray<WFCCMessage *> *imageMsgs;
 
 @property (strong, nonatomic)NSString *orignalDraft;
+
+//DSH 会话运行时状态（scope=31 会话级用户设置），非 DSH 会话为 nil
+@property (nonatomic, strong)NSDictionary *dshState;
+@property (nonatomic, assign)BOOL dshStopSending;
 
 @property (nonatomic, strong)id<UIGestureRecognizerDelegate> scrollBackDelegate;
 
@@ -237,6 +248,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserDidTakeScreenshot:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onJoinGroupRequestUpdated:) name:kJoinGroupRequestUpdated object:nil];
+
+    //DSH：提问卡片"自定义回答"聚焦输入框、"查看计划"push 计划详情页
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDshFocusInput:) name:WFCUDshFocusInputNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDshShowPlanDetail:) name:WFCUDshShowPlanDetailNotification object:nil];
     
     self.chatInputBar = [[WFCUChatInputBar alloc] initWithSuperView:self.backgroundView conversation:self.conversation delegate:self];
     
@@ -273,6 +288,9 @@
     [self setupNavigationItem];
     
     self.orignalDraft = [[WFCCIMService sharedWFCIMService] getConversationInfo:self.conversation].draft;
+
+    //DSH：进入会话时读取一次会话状态（user/group info 未缓存时由 kUserInfoUpdated/kGroupInfoUpdated 触发重判）
+    [self refreshDshState];
     
     if (self.conversation.type == Chatroom_Type) {
 #if DISABLE_CHATROOM
@@ -377,6 +395,8 @@
             break;
         }
     }
+    //用户信息可能异步拉取，拉取回来后重新判断是否为 DSH 会话
+    [self refreshDshState];
 }
 
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
@@ -387,6 +407,8 @@
             break;
         }
     }
+    //群信息可能异步拉取，拉取回来后重新判断是否为 DSH 会话
+    [self refreshDshState];
 }
 
 - (void)onGroupMemberUpdated:(NSNotification *)notification {
@@ -951,8 +973,134 @@
             self.navigationItem.backBarButtonItem.title = self.targetChatroom.title;
         }
     }
-    
+
     [self updateDomainTitle];
+    [self updateDshTitle];
+}
+
+#pragma mark - DSH 会话状态
+//读取当前会话的 DSH 运行时状态（scope=31），并刷新标题副标题与输入框占位。非 DSH 会话不查询
+- (void)refreshDshState {
+    self.dshState = [WFCUDshState dshState:self.conversation];
+    [self updateDshTitle];
+
+    NSString *placeholder = nil;
+    if ([self.dshState[@"state"] isEqualToString:@"waiting_user"]) {
+        placeholder = @"可直接输入文字回答，或点击上方卡片按钮";
+    } else if ([self.dshState[@"state"] isEqualToString:@"running"]) {
+        placeholder = @"Agent 运行中…";
+    }
+    self.chatInputBar.placeholder = placeholder;
+}
+
+//DSH 会话：双行标题，第二行=状态副标题；state==running 时副标题行内联"■ 停止"小按钮
+- (void)updateDshTitle {
+    if ([WFCCUtilities isExternalTarget:self.conversation.target]) {
+        //外部域会话使用 updateDomainTitle 的双行标题，不覆盖
+        return;
+    }
+    NSString *stateText = [WFCUDshState stateText:self.dshState[@"state"]];
+    if (!stateText.length) {
+        if (self.navigationItem.titleView) {
+            self.navigationItem.titleView = nil;
+        }
+        return;
+    }
+    if ([self.dshState[@"phase"] isEqualToString:@"tool"]) {
+        NSString *toolName = [self.dshState[@"toolName"] isKindOfClass:[NSString class]] ? self.dshState[@"toolName"] : nil;
+        stateText = [NSString stringWithFormat:@"%@ · %@", stateText, toolName.length ? toolName : @"工具"];
+    }
+
+    CGFloat containerWidth = self.view.bounds.size.width - 160;
+    UIView *titleContainer = [[UIView alloc] initWithFrame:CGRectMake(80, 0, containerWidth, 36)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, containerWidth, 22)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    titleLabel.text = self.title;
+    [titleContainer addSubview:titleLabel];
+
+    UIFont *subFont = [UIFont scaledSystemFontOfSize:12];
+    CGSize subSize = [WFCUUtilities getTextDrawingSize:stateText font:subFont constrainedSize:CGSizeMake(containerWidth, 14)];
+    subSize.width = MIN(subSize.width, containerWidth);
+
+    BOOL showStop = [self.dshState[@"state"] isEqualToString:@"running"];
+    CGFloat stopWidth = 0;
+    UIButton *stopButton = nil;
+    if (showStop) {
+        stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [stopButton setTitle:@"■ 停止" forState:UIControlStateNormal];
+        [stopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        stopButton.titleLabel.font = [UIFont scaledSystemFontOfSize:11];
+        stopButton.layer.cornerRadius = 8;
+        stopButton.layer.borderWidth = 1;
+        stopButton.layer.borderColor = [UIColor redColor].CGColor;
+        stopWidth = 52;
+        stopButton.frame = CGRectMake(0, 22, stopWidth, 16);
+        [stopButton addTarget:self action:@selector(onDshStop:) forControlEvents:UIControlEventTouchUpInside];
+        if (self.dshStopSending) {
+            stopButton.enabled = NO;
+            stopButton.alpha = 0.5;
+        }
+        [titleContainer addSubview:stopButton];
+    }
+
+    CGFloat rowWidth = subSize.width + (showStop ? stopWidth + 6 : 0);
+    CGFloat rowX = (containerWidth - rowWidth) / 2.0;
+    UILabel *subLabel = [[UILabel alloc] initWithFrame:CGRectMake(rowX, 22, subSize.width, 14)];
+    subLabel.textAlignment = NSTextAlignmentCenter;
+    subLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    subLabel.font = subFont;
+    subLabel.textColor = [UIColor grayColor];
+    subLabel.text = stateText;
+    [titleContainer addSubview:subLabel];
+    if (stopButton) {
+        CGRect stopFrame = stopButton.frame;
+        stopFrame.origin.x = rowX + subSize.width + 6;
+        stopButton.frame = stopFrame;
+    }
+
+    self.navigationItem.titleView = titleContainer;
+}
+
+//标题栏停止按钮：向当前 DSH 会话发送 /stop 命令文本，中断当前 Agent turn；1.5s 防重复点击
+- (void)onDshStop:(UIButton *)button {
+    if (self.dshStopSending) {
+        return;
+    }
+    self.dshStopSending = YES;
+    button.enabled = NO;
+    button.alpha = 0.5;
+    WFCCTextMessageContent *textContent = [[WFCCTextMessageContent alloc] init];
+    textContent.text = @"/stop";
+    [[WFCCIMService sharedWFCIMService] send:self.conversation content:textContent success:nil error:nil];
+    __weak typeof(self)ws = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        ws.dshStopSending = NO;
+        [ws updateDshTitle];
+    });
+}
+
+- (void)onDshFocusInput:(NSNotification *)notification {
+    WFCCConversation *conversation = notification.object;
+    if (conversation && conversation.type == self.conversation.type && conversation.line == self.conversation.line && [conversation.target isEqualToString:self.conversation.target]) {
+        [self.chatInputBar focusTextInput];
+    }
+}
+
+- (void)onDshShowPlanDetail:(NSNotification *)notification {
+    NSDictionary *info = notification.userInfo;
+    WFCCConversation *conversation = info[@"conversation"];
+    if (!conversation || conversation.type != self.conversation.type || ![conversation.target isEqualToString:self.conversation.target]) {
+        return;
+    }
+    WFCUDshPlanDetailViewController *vc = [[WFCUDshPlanDetailViewController alloc] initWithConversation:conversation
+                                                                                                   qid:info[@"qid"]
+                                                                                            questionId:info[@"questionId"]
+                                                                                                  plan:info[@"plan"]
+                                                                                          approveLabel:info[@"approveLabel"]
+                                                                                           rejectLabel:info[@"rejectLabel"]];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)updateDomainTitle {
@@ -1275,6 +1423,12 @@
     [self registerCell:[WFCUCollectionCell class] forContent:[WFCCCollectionMessageContent class]];
     [self registerCell:[WFCUPollMessageCell class] forContent:[WFCCPollMessageContent class]];
     [self registerCell:[WFCUPollResultMessageCell class] forContent:[WFCCPollResultMessageContent class]];
+
+    [self registerCell:[WFCUDshQuestionMessageCell class] forContent:[WFCCDshQuestionMessageContent class]];
+    [self registerCell:[WFCUDshTextMessageCell class] forContent:[WFCCDshAnswerMessageContent class]];
+    [self registerCell:[WFCUDshApprovalMessageCell class] forContent:[WFCCDshApprovalMessageContent class]];
+    [self registerCell:[WFCUDshTextMessageCell class] forContent:[WFCCDshApprovalResultMessageContent class]];
+    [self registerCell:[WFCUDshGoalMessageCell class] forContent:[WFCCDshGoalMessageContent class]];
 
     [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerCell:obj forContentType:key];
@@ -1930,6 +2084,8 @@
         self.orignalDraft = info.draft;
         self.chatInputBar.draft = info.draft;
     }
+    //DSH 会话状态可能变化（kSettingUpdated 不带 scope/key，重读当前会话 key）
+    [self refreshDshState];
 }
 
 - (void)onJoinGroupRequestUpdated:(NSNotification *)notification {
