@@ -186,6 +186,7 @@
 		90E4D1E01FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */; };
 		90F584991FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90F5849A1FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */; };
+		B7163B023037F93900C14338 /* WFChatClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B7163B013037F93900C14338 /* WFChatClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B733C7FB2816737500F70316 /* WFCCCallAddParticipantMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */; };
 		B733C7FC2816737500F70316 /* WFCCCallAddParticipantMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B733C7FF281673D000F70316 /* WFCCCallByeMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */; };
@@ -434,6 +435,7 @@
 		90E4D1DE1FFB0AE200B9A4E4 /* WFCCLocationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCLocationMessageContent.m; sourceTree = "<group>"; };
 		90F584971FFDB39700F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCChangeGroupPortraitNotificationContent.h; sourceTree = "<group>"; };
 		90F584981FFDB39800F7FFA8 /* WFCCChangeGroupPortraitNotificationContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCChangeGroupPortraitNotificationContent.m; sourceTree = "<group>"; };
+		B7163B013037F93900C14338 /* WFChatClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFChatClient.h; sourceTree = "<group>"; };
 		B733C7F92816737500F70316 /* WFCCCallAddParticipantMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallAddParticipantMessageContent.m; sourceTree = "<group>"; };
 		B733C7FA2816737500F70316 /* WFCCCallAddParticipantMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCCallAddParticipantMessageContent.h; sourceTree = "<group>"; };
 		B733C7FD281673CF00F70316 /* WFCCCallByeMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCCallByeMessageContent.m; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 				2E6B50B91FAE9B08006B6E31 /* Client */,
 				2E6B50A61FAE990D006B6E31 /* amr */,
 				2E6B509E1FAE98E6006B6E31 /* WFCChatClient.h */,
+				B7163B013037F93900C14338 /* WFChatClient.h */,
 				2E6B509F1FAE98E6006B6E31 /* Info.plist */,
 				2F001FA9255F8AB7006F8DE8 /* PrefixHeader.h */,
 				B7981A372F2A2BB9004AB1F3 /* wfc_client.strings */,
@@ -896,6 +899,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7163B023037F93900C14338 /* WFChatClient.h in Headers */,
 				B749E9962F3F847E0092DEAE /* WFCCCollectionMessageContent.h in Headers */,
 				B7E2D8B62EFB953A00C8F909 /* WFCCJoinGroupRequest.h in Headers */,
 				B770E8B72F40C4DE00D4B219 /* WFCCPollMessageContent.h in Headers */,
@@ -1376,7 +1380,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1422,7 +1426,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
