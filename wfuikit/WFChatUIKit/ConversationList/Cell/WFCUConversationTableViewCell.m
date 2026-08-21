@@ -14,6 +14,7 @@
 #import "UIColor+YH.h"
 #import <UIFont+YH.h>
 #import "WFCUImage.h"
+#import "WFCUDshState.h"
 
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
@@ -270,6 +271,28 @@
     } else {
         _offcialView.hidden = YES;
     }
+
+    //DSH 会话：标题后加 8pt 状态圆点；DSH 群标题旁加"DSH"描边小徽标（仅 DSH 会话显示）
+    BOOL isDsh = [WFCUDshState isDshConversation:conversation];
+    NSDictionary *dshState = isDsh ? [WFCUDshState dshState:conversation] : nil;
+    CGFloat dshX = self.targetView.frame.origin.x + self.targetView.frame.size.width + 4;
+    if (!self.offcialView.hidden) {
+        dshX = self.offcialView.frame.origin.x + self.offcialView.frame.size.width + 4;
+    }
+    if (dshState) {
+        self.dshDotView.hidden = NO;
+        self.dshDotView.backgroundColor = [WFCUDshState stateColor:dshState[@"state"]];
+        self.dshDotView.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 6, 8, 8);
+        dshX += 8 + 4;
+    } else {
+        _dshDotView.hidden = YES;
+    }
+    if (isDsh && conversation.type == Group_Type) {
+        self.dshBadgeLabel.hidden = NO;
+        self.dshBadgeLabel.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 3, 24, 14);
+    } else {
+        _dshBadgeLabel.hidden = YES;
+    }
     
     self.potraitView.layer.cornerRadius = 4.f;
     self.digestView.attributedText = nil;
@@ -459,9 +482,36 @@
     }
     return _secretChatView;
 }
+- (UIView *)dshDotView {
+    if (!_dshDotView) {
+        _dshDotView = [[UIView alloc] initWithFrame:CGRectZero];
+        _dshDotView.layer.cornerRadius = 4;
+        _dshDotView.layer.masksToBounds = YES;
+        _dshDotView.hidden = YES;
+        [self.contentView addSubview:_dshDotView];
+    }
+    return _dshDotView;
+}
+
+- (UILabel *)dshBadgeLabel {
+    if (!_dshBadgeLabel) {
+        _dshBadgeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _dshBadgeLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:9];
+        _dshBadgeLabel.textColor = [WFCUDshState accentColor];
+        _dshBadgeLabel.layer.borderWidth = 1;
+        _dshBadgeLabel.layer.borderColor = [WFCUDshState accentColor].CGColor;
+        _dshBadgeLabel.layer.cornerRadius = 2;
+        _dshBadgeLabel.layer.masksToBounds = YES;
+        _dshBadgeLabel.textAlignment = NSTextAlignmentCenter;
+        _dshBadgeLabel.text = @"DSH";
+        _dshBadgeLabel.hidden = YES;
+        [self.contentView addSubview:_dshBadgeLabel];
+    }
+    return _dshBadgeLabel;
+}
+
 - (UILabel *)digestView {
-    if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
+    if (!_digestView) {        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
         _digestView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         _digestView.textColor = [UIColor colorWithHexString:@"b3b3b3"];

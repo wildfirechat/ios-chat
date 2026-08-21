@@ -39,6 +39,7 @@
 #import "WFCUPollHomeViewController.h"
 #import "WFCUPanFilePickerViewController.h"
 #import "WFCUPanFile.h"
+#import "WFCUDshState.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -63,7 +64,7 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -83,6 +84,11 @@
 @property (nonatomic, strong)UIView *inputCoverView;
 
 @property (nonatomic, strong)UIButton *voiceInputBtn;
+
+//DSH：输入框占位文本 & '/' 命令浮层
+@property (nonatomic, strong)UILabel *placeholderLabel;
+@property (nonatomic, strong)UITableView *dshCommandMenu;
+@property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *dshFilteredCommands;
 
 @property (nonatomic, strong)UIView *inputContainer;
 @property (nonatomic, strong)UIView *publicContainer;
@@ -945,6 +951,106 @@
     self.textInputView.text = [self.textInputView.text stringByAppendingString:text];
 }
 
+#pragma mark - DSH 占位文本 & '/' 命令浮层
+- (void)setPlaceholder:(NSString *)placeholder {
+    _placeholder = [placeholder copy];
+    [self updatePlaceholderVisibility];
+}
+
+- (void)updatePlaceholderVisibility {
+    if (self.placeholder.length == 0 || self.textInputView.text.length > 0) {
+        self.placeholderLabel.hidden = YES;
+        return;
+    }
+    self.placeholderLabel.text = self.placeholder;
+    self.placeholderLabel.hidden = NO;
+}
+
+- (UILabel *)placeholderLabel {
+    if (!_placeholderLabel) {
+        _placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.textInputView.bounds.size.width - 10, self.textInputView.bounds.size.height)];
+        _placeholderLabel.font = [UIFont systemFontOfSize:14];
+        _placeholderLabel.textColor = [UIColor colorWithHexString:@"0xb3b3b3"];
+        _placeholderLabel.userInteractionEnabled = NO;
+        _placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.textInputView addSubview:_placeholderLabel];
+    }
+    return _placeholderLabel;
+}
+
+- (void)focusTextInput {
+    //textViewShouldBeginEditing 里会把状态切到键盘态
+    [self.textInputView becomeFirstResponder];
+}
+
+//DSH '/' 命令浮层：输入框文本以"/"开头时弹出，按输入实时前缀过滤；仅 DSH 会话启用
+- (void)updateDshCommandMenu:(NSString *)text {
+    NSArray<NSDictionary<NSString *, NSString *> *> *commands = [WFCUDshState dshCommands:self.conversation];
+    if (!commands.count || ![text hasPrefix:@"/"] || [text containsString:@"\n"] || [text containsString:@" "]) {
+        [self hideDshCommandMenu];
+        return;
+    }
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *filtered = [NSMutableArray array];
+    for (NSDictionary *command in commands) {
+        if (text.length <= 1 || [command[@"command"] hasPrefix:text]) {
+            [filtered addObject:command];
+        }
+    }
+    if (!filtered.count) {
+        [self hideDshCommandMenu];
+        return;
+    }
+    self.dshFilteredCommands = filtered;
+
+    CGFloat rowHeight = 36;
+    CGFloat menuHeight = MIN(filtered.count, 5) * rowHeight;
+    if (!self.dshCommandMenu) {
+        self.dshCommandMenu = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.dshCommandMenu.delegate = self;
+        self.dshCommandMenu.dataSource = self;
+        self.dshCommandMenu.rowHeight = rowHeight;
+        self.dshCommandMenu.layer.cornerRadius = 6;
+        self.dshCommandMenu.layer.borderWidth = 0.5;
+        self.dshCommandMenu.layer.borderColor = [UIColor colorWithHexString:@"0xededed"].CGColor;
+        self.dshCommandMenu.backgroundColor = [UIColor whiteColor];
+        [self.dshCommandMenu registerClass:[UITableViewCell class] forCellReuseIdentifier:@"DshCommandCell"];
+        [self.parentView addSubview:self.dshCommandMenu];
+    }
+    self.dshCommandMenu.frame = CGRectMake(8, self.frame.origin.y - menuHeight - 4, self.bounds.size.width - 16, menuHeight);
+    [self.parentView bringSubviewToFront:self.dshCommandMenu];
+    self.dshCommandMenu.hidden = NO;
+    [self.dshCommandMenu reloadData];
+}
+
+- (void)hideDshCommandMenu {
+    self.dshCommandMenu.hidden = YES;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dshFilteredCommands.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DshCommandCell" forIndexPath:indexPath];
+    NSDictionary *command = self.dshFilteredCommands[indexPath.row];
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:command[@"command"]
+                                                                             attributes:@{NSFontAttributeName: [UIFont monospacedSystemFontOfSize:14 weight:UIFontWeightMedium]}];
+    [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", command[@"desc"]]
+                                                                 attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: [UIColor grayColor]}]];
+    cell.textLabel.attributedText = attr;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    //点选把"命令+空格"填入输入框（不直接发送）
+    NSDictionary *command = self.dshFilteredCommands[indexPath.row];
+    self.textInputView.text = [command[@"command"] stringByAppendingString:@" "];
+    [self hideDshCommandMenu];
+    [self updatePlaceholderVisibility];
+}
+
+
 - (NSString *)getDraftText:(NSString *)draft {
     if(!draft) {
         return nil;
@@ -1259,6 +1365,8 @@
     
     [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos withQuoteInfo:self.quoteInfo];
     self.textInputView.text = nil;
+    [self hideDshCommandMenu];
+    [self updatePlaceholderVisibility];
     [self clearQuoteInfo];
     [self updateQuoteView:NO showKeyboard:YES];
     [self.mentionInfos removeAllObjects];
@@ -1375,6 +1483,7 @@
     
   NSString *oldStr = textView.text;
   NSString *newStr = [oldStr stringByReplacingCharactersInRange:range withString:text];
+  [self updateDshCommandMenu:newStr];
   CGFloat textAreaWidth = textView.frame.size.width - 2 * textView.textContainer.lineFragmentPadding;
   CGSize size = [WFCUUtilities getTextDrawingSize:newStr font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(textAreaWidth, 1000)];
   
@@ -1481,6 +1590,8 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+    [self updatePlaceholderVisibility];
+    [self updateDshCommandMenu:textView.text];
     if (textView.text.length > 0) {
         [self notifyTyping:0];
     }
