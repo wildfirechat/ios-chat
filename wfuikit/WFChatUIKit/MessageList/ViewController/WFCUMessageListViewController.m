@@ -1795,7 +1795,37 @@
         [result addObject:msg];
     }
     return result;
-}
+    }
+
+    /**
+ 生成中的流式消息（type 14，MESSAGE_CONTENT_TYPE_STREAMING_TEXT_GENERATING）必须固定在列表最新位置（视觉最底部）。
+ 生成期间用户自己发消息、或其它消息（含最终 type 15 完成消息）插入/替换，
+ 都可能把它顶到中间。这里在每次列表变更后把「最后一条生成中的消息」移到数组末尾，
+ 其余消息保持相对顺序；本来就已在末尾则不动。
+ */
+- (void)pinStreamingGeneratingToBottom {
+    if (self.modelList.count <= 1) {
+        return;
+    }
+    WFCUMessageModel *lastModel = self.modelList.lastObject;
+    if ([lastModel.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+        return;
+    }
+    NSInteger idx = -1;
+    for (NSInteger i = self.modelList.count - 1; i >= 0; i--) {
+        WFCUMessageModel *model = self.modelList[i];
+        if ([model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx < 0) {
+        return;
+    }
+    WFCUMessageModel *generatingModel = self.modelList[idx];
+    [self.modelList removeObjectAtIndex:idx];
+    [self.modelList addObject:generatingModel];
+    }
 
 - (void)updateQuotedMessageWhenRecall:(long long)messageUid {
     for (int i = 0; i < self.modelList.count; i++) {
@@ -1877,6 +1907,8 @@
                 return NSOrderedAscending;
             }
         }];
+        // 流式生成消息（type 14）必须钉在列表末尾：按 serverTime 排序可能把它顶到中间
+        [self pinStreamingGeneratingToBottom];
         [self.collectionView reloadData];
     }
 }
@@ -2576,6 +2608,9 @@
     if (count > 0) {
         [self stopShowTyping];
     }
+    
+    // 流式生成消息（type 14）必须钉在列表末尾：追加/替换消息可能把它顶到中间
+    [self pinStreamingGeneratingToBottom];
     
     [self.collectionView reloadData];
     
