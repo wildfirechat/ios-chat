@@ -27,6 +27,7 @@
 #import "WFCCUserOnlineState.h"
 #import "WFCCStreamingTextGeneratingMessageContent.h"
 #import "WFCCStreamingTextGeneratedMessageContent.h"
+#import "WFCCStreamingTextCancelledMessageContent.h"
 
 const NSString *SDKVERSION = @"0.1";
 extern NSMutableArray* convertProtoMessageList(const std::list<mars::stn::TMessage> &messageList, BOOL reverse);
@@ -772,6 +773,11 @@ static WFCCNetworkService * sharedSingleton = nil;
         if ([self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerated:)]) {
             [self.streamingTextStatusDelegate onStreamingTextGenerated:message.conversation];
         }
+    } else if ([message.content isKindOfClass:[WFCCStreamingTextCancelledMessageContent class]]) {
+        // 流式文本已取消（无产出/失败），清空对应会话的生成中消息；
+        // 列表中的 14/15 消息由 UI 层（WFCUMessageListViewController）按 streamId 移除，取消消息自身透传不显示。
+        NSString *key = [self conversationKeyForMessage:message];
+        [self.streamingTextGeneratingMessages removeObjectForKey:key];
     }
 }
 

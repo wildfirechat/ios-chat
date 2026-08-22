@@ -51,6 +51,9 @@
 //消息未能送达消息
 #define MESSAGE_CONTENT_NOT_DELIVERED 16
 
+//流式文本取消消息（生成无产出/失败时发送，客户端按 streamId 删除对应的生成中/已生成消息，自身不落库）
+#define MESSAGE_CONTENT_TYPE_STREAMING_TEXT_CANCELLED 20
+
 //Dumy1
 #define MESSAGE_CONTENT_TYPE_DUMY1 21
 

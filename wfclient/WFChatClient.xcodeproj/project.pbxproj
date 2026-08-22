@@ -233,6 +233,8 @@
 		B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7A683762B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A683722B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.m */; };
 		B7A683772B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A683732B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m */; };
+		B7A6837A2B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A683782B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7A6837B2B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A683792B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.m */; };
 		B7CA48C8283490D100CB2F71 /* WFCCRichNotificationMessageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CA48C6283490D100CB2F71 /* WFCCRichNotificationMessageContent.m */; };
 		B7CA48C9283490D100CB2F71 /* WFCCRichNotificationMessageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = B7CA48C7283490D100CB2F71 /* WFCCRichNotificationMessageContent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7D2AE942F10D6D100DB1A98 /* WFCCBackupCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D2AE902F10D6D100DB1A98 /* WFCCBackupCrypto.m */; };
@@ -484,6 +486,8 @@
 		B7A683712B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextGeneratedMessageContent.h; sourceTree = "<group>"; };
 		B7A683722B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStreamingTextGeneratingMessageContent.m; sourceTree = "<group>"; };
 		B7A683732B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStreamingTextGeneratedMessageContent.m; sourceTree = "<group>"; };
+		B7A683782B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCStreamingTextCancelledMessageContent.h; sourceTree = "<group>"; };
+		B7A683792B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCStreamingTextCancelledMessageContent.m; sourceTree = "<group>"; };
 		B7CA48C6283490D100CB2F71 /* WFCCRichNotificationMessageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCCRichNotificationMessageContent.m; sourceTree = "<group>"; };
 		B7CA48C7283490D100CB2F71 /* WFCCRichNotificationMessageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCCRichNotificationMessageContent.h; sourceTree = "<group>"; };
 		B7D2AE8F2F10D6D100DB1A98 /* WFCCBackupCrypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCCBackupCrypto.h; sourceTree = "<group>"; };
@@ -746,6 +750,8 @@
 				B7A683732B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.m */,
 				B7A683702B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h */,
 				B7A683722B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.m */,
+				B7A683782B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.h */,
+				B7A683792B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.m */,
 				B76A39902BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.h */,
 				B76A39912BCAAF3900FEC1FE /* WFCCNotDeliveredMessageContent.m */,
 				B74BCC782E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h */,
@@ -908,6 +914,7 @@
 				B74BCC7B2E18100A002D3E30 /* WFCCGroupRejectJoinNotificationContent.h in Headers */,
 				B7A683752B4023D70090F19A /* WFCCStreamingTextGeneratedMessageContent.h in Headers */,
 				B7A683742B4023D70090F19A /* WFCCStreamingTextGeneratingMessageContent.h in Headers */,
+				B7A6837A2B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.h in Headers */,
 				B75866E52F14C2B700D62775 /* WFCCBackupRequestNotificationContent.h in Headers */,
 				2B63367A2470DB7E008D6B38 /* WFCCReadReport.h in Headers */,
 				2F8CA19B274641E0000CC09C /* WFCCMarkUnreadMessageContent.h in Headers */,
@@ -1137,6 +1144,7 @@
 				B748120D28A49D8A003BB0C3 /* WFCCChannelMenu.m in Sources */,
 				90B044461FEFD6BA00AFE79B /* WFCCUnknownMessageContent.m in Sources */,
 				B749E9952F3F847E0092DEAE /* WFCCCollectionMessageContent.m in Sources */,
+				B7A6837B2B4023D70090F19A /* WFCCStreamingTextCancelledMessageContent.m in Sources */,
 				2FB87C70243EF0FE0078A199 /* WFCCFriendAddedMessageContent.m in Sources */,
 				2B785A5525294C0D003CBF78 /* WFCCQuoteInfo.m in Sources */,
 				B748123E28A4F372003BB0C3 /* WFCCChannelMenuEventMessageContent.m in Sources */,

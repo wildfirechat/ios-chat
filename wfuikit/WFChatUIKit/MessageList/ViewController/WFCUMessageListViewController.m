@@ -1528,6 +1528,23 @@
 
 - (void)onReceiveMessages:(NSNotification *)notification {
     NSArray<WFCCMessage *> *messages = notification.object;
+    
+    // 处理流式文本取消消息（20）：按 streamId 从列表删除对应的生成中(14)/已生成(15)消息，
+    // 取消消息自身不进入列表、不显示。
+    NSMutableArray<WFCCMessage *> *displayMessages = [messages mutableCopy];
+    for (WFCCMessage *msg in messages) {
+        if ([msg.content isKindOfClass:[WFCCStreamingTextCancelledMessageContent class]]) {
+            [displayMessages removeObject:msg];
+            if ([msg.conversation isEqual:self.conversation]) {
+                WFCCStreamingTextCancelledMessageContent *cancelledContent = (WFCCStreamingTextCancelledMessageContent *)msg.content;
+                [self removeStreamingMessageByStreamId:cancelledContent.streamId];
+            }
+        }
+    }
+    if (displayMessages.count != messages.count) {
+        messages = displayMessages;
+    }
+    
     [self appendMessages:messages newMessage:YES highlightId:0 forceButtom:NO firstIn:NO appendLast:YES];
     
     NSMutableArray<WFCCMessage *> *ongoingCalls = [[NSMutableArray alloc] init];
@@ -1542,6 +1559,30 @@
     }
     
     [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
+}
+
+/**
+ 流式文本取消消息（20）：按 streamId 移除列表中正在生成(14)/已生成(15)的消息，气泡直接消失。
+ */
+- (void)removeStreamingMessageByStreamId:(NSString *)streamId {
+    if (!streamId.length) {
+        return;
+    }
+    for (NSInteger i = self.modelList.count - 1; i >= 0; i--) {
+        WFCUMessageModel *model = self.modelList[i];
+        WFCCMessageContent *content = model.message.content;
+        NSString *existStreamId = nil;
+        if ([content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            existStreamId = ((WFCCStreamingTextGeneratingMessageContent *)content).streamId;
+        } else if ([content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+            existStreamId = ((WFCCStreamingTextGeneratedMessageContent *)content).streamId;
+        }
+        if (existStreamId.length && [existStreamId isEqualToString:streamId]) {
+            [self.modelList removeObjectAtIndex:i];
+            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+            break;
+        }
+    }
 }
 
 - (void)updateQuotedMessageWhenRecall:(long long)messageUid {
@@ -2179,6 +2220,11 @@
         WFCCMessage *message = [messages objectAtIndex:i];
         
         if (![message.conversation isEqual:self.conversation]) {
+            continue;
+        }
+        
+        // 流式文本取消消息（20）只是删除信号：实时接收时已按 streamId 移除对应 14/15 消息，自身不进入列表、不显示
+        if ([message.content isKindOfClass:[WFCCStreamingTextCancelledMessageContent class]]) {
             continue;
         }
         
