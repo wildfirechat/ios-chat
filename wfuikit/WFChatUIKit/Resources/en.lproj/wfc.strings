@@ -734,3 +734,10 @@
 "GreetingNight"="Working late";
 "WorkspaceWelcomeSubtitle"="Have a great day";
 "WorkspaceWelcomeHint"="Here's to a productive day";
+"Online"="Online";
+"Offline"="Offline";
+"AI_Not_Online"="AI offline";
+"DaysAgoMobileOnlineShort"="%d days ago mobile online";
+"HoursAgoMobileOnlineShort"="%d hours ago mobile online";
+"MinsAgoMobileOnlineShort"="%d mins ago mobile online";
+"ShortlyAgoMobileOnlineShort"="Shortly ago mobile online";

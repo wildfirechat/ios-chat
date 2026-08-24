@@ -9,7 +9,9 @@
 #import "WFCUPluginItemView.h"
 #import "UIFont+YH.h"
 
-
+@interface WFCUPluginItemView ()
+@property (nonatomic, strong) UIButton *imageButton;
+@end
 
 @implementation WFCUPluginItemView
 - (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image frame:(CGRect)frame
@@ -25,6 +27,7 @@
     UIView *myView = [UIView new];
     UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [imageButton setImage:image forState:UIControlStateNormal];
+    _imageButton = imageButton;
     myView.layer.cornerRadius = 5;
     
     [imageButton addTarget:self action:@selector(itemPlugined:) forControlEvents:UIControlEventTouchUpInside];
@@ -33,6 +36,7 @@
     [myView addSubview:imageButton];
     
     UILabel *label = [UILabel new];
+    _titleLabel = label;
     [label setText:title];
     [label setTextColor:HEXCOLOR(0x6f7277)];
     [label setFont:[UIFont scaledSystemFontOfSize:11]];
@@ -75,7 +79,23 @@
 }
 
 
+- (void)setDisabled:(BOOL)disabled {
+    _disabled = disabled;
+    if (disabled) {
+        self.alpha = 0.35;
+        _imageButton.enabled = NO;
+        _titleLabel.textColor = HEXCOLOR(0xbbbbbb);
+    } else {
+        self.alpha = 1.0;
+        _imageButton.enabled = YES;
+        _titleLabel.textColor = HEXCOLOR(0x6f7277);
+    }
+}
+
 - (void)itemPlugined:(id)sender {
+    if (self.disabled) {
+        return;
+    }
     self.onItemClicked();
 }
 @end

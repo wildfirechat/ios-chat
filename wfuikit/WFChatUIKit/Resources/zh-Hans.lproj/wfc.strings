@@ -737,3 +737,10 @@
 "GreetingNight"="夜深了";
 "WorkspaceWelcomeSubtitle"="祝你有美好的一天";
 "WorkspaceWelcomeHint"="探索今天的高效工作吧";
+"Online"="在线";
+"Offline"="离线";
+"AI_Not_Online"="AI 不在线";
+"DaysAgoMobileOnlineShort"="%d天前手机在线";
+"HoursAgoMobileOnlineShort"="%d小时前手机在线";
+"MinsAgoMobileOnlineShort"="%d分钟前手机在线";
+"ShortlyAgoMobileOnlineShort"="不久前手机在线";

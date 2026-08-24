@@ -733,3 +733,10 @@
 "GreetingNight"="夜深了";
 "WorkspaceWelcomeSubtitle"="祝你有美好的一天";
 "WorkspaceWelcomeHint"="探索今天的高效工作吧";
+"Online"="在線";
+"Offline"="離線";
+"AI_Not_Online"="AI 不在線";
+"DaysAgoMobileOnlineShort"="%d天前手機在線";
+"HoursAgoMobileOnlineShort"="%d小時前手機在線";
+"MinsAgoMobileOnlineShort"="%d分鐘前手機在線";
+"ShortlyAgoMobileOnlineShort"="不久前手機在線";
