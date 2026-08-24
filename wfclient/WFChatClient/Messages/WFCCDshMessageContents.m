@@ -15,6 +15,8 @@ static const int DSHMessageContentTypeAnswer = 201;
 static const int DSHMessageContentTypeApproval = 202;
 static const int DSHMessageContentTypeApprovalResult = 203;
 static const int DSHMessageContentTypeGoal = 206;
+static const int DSHMessageContentTypeCommand = 207;
+static const int DSHMessageContentTypeTaskProgress = 208;
 
 @implementation WFCCDshMessageContentBase
 
@@ -65,6 +67,9 @@ static const int DSHMessageContentTypeGoal = 206;
     NSArray *questions = dict[@"questions"];
     self.questions = [questions isKindOfClass:[NSArray class]] ? questions : @[];
     self.state = dict[@"state"];
+    //服务端 updateMessage 回填的用户选择；只读，不参与编码（客户端不发送提问卡片）
+    NSArray *answers = dict[@"answers"];
+    self.answers = [answers isKindOfClass:[NSArray class]] ? answers : @[];
 }
 
 + (int)getContentType {
@@ -233,6 +238,95 @@ static const int DSHMessageContentTypeGoal = 206;
 
 - (NSString *)digest:(WFCCMessage *)message {
     return [NSString stringWithFormat:@"🎯 %@（%@，round %d）", self.objective.length ? self.objective : @"目标", self.phase ?: @"", (int)self.roundsStarted];
+}
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+@end
+
+@implementation WFCCDshTaskProgressMessageContent
+
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"tasks"] = self.tasks ?: @[];
+    dict[@"updatedAt"] = @(self.updatedAt);
+    [self encodeJsonDict:dict payload:payload digest:[self digest:nil]];
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSArray *tasks = dict[@"tasks"];
+    self.tasks = [tasks isKindOfClass:[NSArray class]] ? tasks : @[];
+    self.updatedAt = [dict[@"updatedAt"] longLongValue];
+}
+
++ (int)getContentType {
+    return DSHMessageContentTypeTaskProgress;
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    //与 PC 端 searchableContent 一致："🧩 任务 N（M 运行中）" / "🧩 任务 N（全部完成）" / "🧩 任务：无"
+    NSInteger running = 0;
+    for (NSDictionary *task in self.tasks) {
+        if ([task isKindOfClass:[NSDictionary class]] && [task[@"status"] isEqualToString:@"running"]) {
+            running++;
+        }
+    }
+    if (self.tasks.count == 0) {
+        return @"🧩 任务：无";
+    }
+    if (running > 0) {
+        return [NSString stringWithFormat:@"🧩 任务 %lu（%ld 运行中）", (unsigned long)self.tasks.count, (long)running];
+    }
+    return [NSString stringWithFormat:@"🧩 任务 %lu（全部完成）", (unsigned long)self.tasks.count];
+}
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+@end
+
+@implementation WFCCDshCommandMessageContent
+
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"op"] = self.op.length ? self.op : @"query";
+    if (self.cmd.length) {
+        dict[@"cmd"] = self.cmd;
+    }
+    dict[@"seq"] = @(self.seq);
+    [self encodeJsonDict:dict payload:payload digest:@""];
+    //透明消息：不携带可搜索/推送内容
+    payload.searchableContent = @"";
+    payload.pushContent = @"";
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    self.op = [dict[@"op"] isKindOfClass:[NSString class]] && [dict[@"op"] length] ? dict[@"op"] : @"query";
+    self.cmd = [dict[@"cmd"] isKindOfClass:[NSString class]] ? dict[@"cmd"] : nil;
+    self.seq = [dict[@"seq"] integerValue];
+}
+
++ (int)getContentType {
+    return DSHMessageContentTypeCommand;
+}
+
++ (int)getContentFlags {
+    //静默通道：透明消息（不存储、不计未读、不多端同步，对端不在线则丢弃），与会议命令消息一致
+    return WFCCPersistFlag_TRANSPARENT;
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    //digest 为空：不显示在消息流/会话列表/通知
+    return @"";
 }
 
 + (void)load {

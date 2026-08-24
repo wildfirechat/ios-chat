@@ -275,13 +275,32 @@
     //DSH 会话：标题后加 8pt 状态圆点；DSH 群标题旁加"DSH"描边小徽标（仅 DSH 会话显示）
     BOOL isDsh = [WFCUDshState isDshConversation:conversation];
     NSDictionary *dshState = isDsh ? [WFCUDshState dshState:conversation] : nil;
+    //AI 群群主（AI 机器人）不在线：状态圆点/徽标置灰（不显示运行态颜色）
+    BOOL aiOffline = NO;
+    if (isDsh && conversation.type == Group_Type) {
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
+        NSString *ownerId = groupInfo.owner;
+        if (ownerId.length) {
+            WFCCUserOnlineState *uos = [[WFCCIMService sharedWFCIMService] getUserOnlineState:ownerId];
+            aiOffline = YES;
+            if (uos && [uos.clientStates count]) {
+                for (WFCCClientState *cs in uos.clientStates) {
+                    if (cs.platform >= 1 && cs.platform <= 9 && cs.state == 0) {
+                        aiOffline = NO;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    UIColor *dshMutedColor = [UIColor grayColor];
     CGFloat dshX = self.targetView.frame.origin.x + self.targetView.frame.size.width + 4;
     if (!self.offcialView.hidden) {
         dshX = self.offcialView.frame.origin.x + self.offcialView.frame.size.width + 4;
     }
     if (dshState) {
         self.dshDotView.hidden = NO;
-        self.dshDotView.backgroundColor = [WFCUDshState stateColor:dshState[@"state"]];
+        self.dshDotView.backgroundColor = aiOffline ? dshMutedColor : [WFCUDshState stateColor:dshState[@"state"]];
         self.dshDotView.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 6, 8, 8);
         dshX += 8 + 4;
     } else {
@@ -290,6 +309,13 @@
     if (isDsh && conversation.type == Group_Type) {
         self.dshBadgeLabel.hidden = NO;
         self.dshBadgeLabel.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 3, 24, 14);
+        if (aiOffline) {
+            self.dshBadgeLabel.textColor = dshMutedColor;
+            self.dshBadgeLabel.layer.borderColor = dshMutedColor.CGColor;
+        } else {
+            self.dshBadgeLabel.textColor = [WFCUDshState accentColor];
+            self.dshBadgeLabel.layer.borderColor = [WFCUDshState accentColor].CGColor;
+        }
     } else {
         _dshBadgeLabel.hidden = YES;
     }

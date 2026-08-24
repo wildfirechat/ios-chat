@@ -47,6 +47,47 @@
     return [value isKindOfClass:[NSString class]] ? value : nil;
 }
 
+//服务端 updateMessage 回填的用户选择：answers[].selected join、或 answers[].custom。
+//仅 state==answered 时展示；多题答案以"；"连接，整体包裹"（）"。
++ (NSString *)selectionTextOfContent:(WFCCDshQuestionMessageContent *)content {
+    if (![content.state isEqualToString:@"answered"]) {
+        return @"";
+    }
+    NSArray *answers = content.answers;
+    if (![answers isKindOfClass:[NSArray class]] || answers.count == 0) {
+        return @"";
+    }
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    for (NSDictionary *answer in answers) {
+        if (![answer isKindOfClass:[NSDictionary class]]) {
+            continue;
+        }
+        NSArray *selected = answer[@"selected"];
+        if ([selected isKindOfClass:[NSArray class]] && selected.count) {
+            [parts addObject:[selected componentsJoinedByString:@"、"]];
+            continue;
+        }
+        NSString *custom = answer[@"custom"];
+        if ([custom isKindOfClass:[NSString class]] && custom.length) {
+            [parts addObject:custom];
+        }
+    }
+    if (!parts.count) {
+        return @"";
+    }
+    return [NSString stringWithFormat:@"（%@）", [parts componentsJoinedByString:@"；"]];
+}
+
+//状态行完整文案："已作答（选项1、选项2）" / "已过期"
++ (NSString *)stateTextOfContent:(WFCCDshQuestionMessageContent *)content {
+    NSString *base = [content.state isEqualToString:@"expired"] ? @"已过期" : @"已作答";
+    NSString *selection = [self selectionTextOfContent:content];
+    if (selection.length) {
+        return [base stringByAppendingString:selection];
+    }
+    return base;
+}
+
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)msgModel.message.content;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
@@ -101,8 +142,12 @@
     }
 
     if (locked) {
-        //状态行
-        height += 16;
+        //状态行（可能含用户选择，支持换行）
+        NSString *stateText = [self stateTextOfContent:content];
+        CGSize stateSize = [WFCUUtilities getTextDrawingSize:stateText
+                                                        font:[UIFont scaledSystemFontOfSize:12]
+                                               constrainedSize:CGSizeMake(contentWidth, 100)];
+        height += MAX(stateSize.height, 16);
     } else {
         if (hasMulti) {
             height += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
@@ -297,9 +342,14 @@
     }
 
     if (locked) {
-        UILabel *stateLabel = [self makeLabel:[UIFont scaledSystemFontOfSize:12] color:[UIColor grayColor] lines:1];
-        stateLabel.text = [content.state isEqualToString:@"expired"] && !self.locallyAnswered ? @"已过期" : @"已作答";
-        stateLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 16);
+        //本地刚作答（服务端尚未回填）只显示"已作答"；否则用服务端 state + answers 拼状态行
+        NSString *stateText = self.locallyAnswered ? @"已作答" : [[self class] stateTextOfContent:content];
+        UILabel *stateLabel = [self makeLabel:[UIFont scaledSystemFontOfSize:12] color:[UIColor grayColor] lines:0];
+        stateLabel.text = stateText;
+        CGSize stateSize = [WFCUUtilities getTextDrawingSize:stateText
+                                                        font:stateLabel.font
+                                               constrainedSize:CGSizeMake(contentWidth, 100)];
+        stateLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(stateSize.height, 16));
         [self addView:stateLabel];
     } else {
         if (hasMulti) {

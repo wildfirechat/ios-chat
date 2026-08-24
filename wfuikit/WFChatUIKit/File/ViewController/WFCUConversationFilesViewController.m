@@ -30,7 +30,7 @@
     }
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
-    self.conversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type),@(Group_Type),@(SecretChat_Type)] lines:@[@(0)]];
+    self.conversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type),@(Group_Type),@(SecretChat_Type)] lines:@[@(0), @(2)]];
     [self.tableView reloadData];
 }
 

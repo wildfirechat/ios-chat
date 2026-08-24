@@ -1,0 +1,16 @@
+//
+//  WFCUDshTaskProgressMessageCell.h
+//  WFChatUIKit
+//
+//  DSH 任务进度卡片 Cell（208），纯展示。
+//
+
+#import "WFCUMessageCell.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface WFCUDshTaskProgressMessageCell : WFCUMessageCell
+
+@end
+
+NS_ASSUME_NONNULL_END

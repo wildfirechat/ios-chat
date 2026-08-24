@@ -10,6 +10,8 @@
 #import "WFCUPluginItemView.h"
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
+#import "UIColor+YH.h"
+#import "WFCUDshState.h"
 
 #define PLUGIN_AREA_HEIGHT 211
 #define PLUGIN_PAGE_CONTROL_HEIGHT 20
@@ -20,10 +22,32 @@
 #define VerticalItemsCount 2
 #define ItemsPerPage (HorizontalItemsCount * VerticalItemsCount)
 
+//DSH 插件项 tag
+#define PLUGIN_TAG_DSH_AGENT WFCU_PLUGIN_TAG_DSH_AGENT
+
+//DSH "AI 会话设置" 图标（运行时绘制，避免新增资源）
+static UIImage *WFCUDshAgentPluginIcon(void) {
+    CGFloat size = 60;
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(size, size)];
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
+        //圆角底色
+        UIBezierPath *bg = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, size - 4, size - 4) cornerRadius:12];
+        [[WFCUDshState accentColor] setFill];
+        [bg fill];
+        //白色 "AI" 字样
+        NSDictionary *attrs = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:20],
+                                NSForegroundColorAttributeName: [UIColor whiteColor]};
+        NSString *text = @"AI";
+        CGSize ts = [text sizeWithAttributes:attrs];
+        [text drawAtPoint:CGPointMake((size - ts.width) / 2.0, (size - ts.height) / 2.0) withAttributes:attrs];
+    }];
+}
+
 @interface PluginItem : NSObject
 @property(nonatomic, strong)UIImage *image;
 @property(nonatomic, strong)NSString *title;
 @property(nonatomic, assign)NSUInteger tag;
+@property(nonatomic, assign)BOOL disabled;
 - (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSUInteger)tag;
 @end
 
@@ -49,12 +73,13 @@
 @property (nonatomic, assign)BOOL hasPtt;
 @property (nonatomic, assign)BOOL hasCollection;
 @property (nonatomic, assign)BOOL hasPoll;
+@property (nonatomic, assign)BOOL hasDsh;
 @property (nonatomic, strong)UIScrollView *scrollView;
 @property (nonatomic, strong)UIPageControl *pageControl;
 @end
 
 @implementation WFCUPluginBoardView
-- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection {
+- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection withDsh:(BOOL)withDsh {
     CGFloat width = [UIScreen mainScreen].bounds.size.width-16;
     self = [super initWithFrame:CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT)];
     if (self) {
@@ -63,6 +88,7 @@
         self.hasPtt = withPtt;
         self.hasCollection = withCollection;
         self.hasPoll = withPoll;
+        self.hasDsh = withDsh;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         [self setupScrollView];
@@ -119,6 +145,7 @@
         
         WFCUPluginItemView *item = [[WFCUPluginItemView alloc] initWithTitle:pluginItem.title image:pluginItem.image frame:frame];
         item.tag = pluginItem.tag;
+        item.disabled = pluginItem.disabled;
         NSUInteger tag = item.tag;
         item.onItemClicked = ^(void) {
             NSLog(@"on item %lu pressed", tag);
@@ -161,6 +188,12 @@
         }
         if(self.hasPoll) {
             [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"Poll") image:[WFCUImage imageNamed:@"chat_input_plugin_poll"] tag:9] atIndex:_pluginItems.count];
+        }
+        //DSH/AI 会话（line==2）专属："AI 会话设置"面板入口
+        if(self.hasDsh) {
+            PluginItem *dshItem = [[PluginItem alloc] initWithTitle:@"AI 会话设置" image:WFCUDshAgentPluginIcon() tag:PLUGIN_TAG_DSH_AGENT];
+            dshItem.disabled = self.dshDisabled;
+            [_pluginItems addObject:dshItem];
         }
     }
     return _pluginItems;

@@ -38,6 +38,7 @@
 #import "WFCUDshQuestionMessageCell.h"
 #import "WFCUDshApprovalMessageCell.h"
 #import "WFCUDshGoalMessageCell.h"
+#import "WFCUDshTaskProgressMessageCell.h"
 #import "WFCUDshTextMessageCell.h"
 #import "WFCUDshPlanDetailViewController.h"
 #import "WFCUDshState.h"
@@ -143,9 +144,14 @@
 
 @property (strong, nonatomic)NSString *orignalDraft;
 
-//DSH 会话运行时状态（scope=31 会话级用户设置），非 DSH 会话为 nil
+//DSH 会话运行时状态（scope=31 type=1 会话级用户设置），非 DSH 会话为 nil
 @property (nonatomic, strong)NSDictionary *dshState;
+//DSH 会话 Token 统计（scope=31 type=2 计量，独立于运行状态，回合结束必推），非 DSH 会话为 nil
+@property (nonatomic, strong)NSDictionary *dshMetrics;
 @property (nonatomic, assign)BOOL dshStopSending;
+
+//DSH：AI 群（line==2）已订阅在线状态的群主 ID，离开会话时取消订阅
+@property (nonatomic, strong)NSString *dshWatchedOwnerId;
 
 @property (nonatomic, strong)id<UIGestureRecognizerDelegate> scrollBackDelegate;
 
@@ -803,6 +809,10 @@
         }
     } else if(self.conversation.type == Group_Type) {
         //当群超级大时，订阅群成员在线状态非常消耗资源。因此进入会话时不能订阅状态，只有在展示列表时订阅。
+        //DSH：AI 群（line==2）仅订阅群主（AI 机器人）在线状态，离开会话时取消订阅
+        if ([WFCUDshState isDshConversation:self.conversation]) {
+            [self unwatchDshOwnerOnlineState];
+        }
     }
     
     if(self.checkOngoingCallTimer) {
@@ -956,6 +966,15 @@
             }
             self.navigationItem.backBarButtonItem.title = self.targetGroup.displayName;
         }
+        //DSH：AI 群（line==2）群主（AI 机器人）在线状态已并入 updateDshTitle 的
+        //"AI 在线 · 计量" 合并行（参考 PC 端 conversationStatusLine），不再追加到标题；
+        //外部域会话不走 updateDshTitle 的自定义标题，仍追加到标题行
+        if ([WFCUDshState isDshConversation:self.conversation] && [WFCCUtilities isExternalTarget:self.conversation.target]) {
+            NSString *aiDesc = [self dshOwnerOnlineStateDesc];
+            if (aiDesc.length) {
+                self.title = [NSString stringWithFormat:@"%@ · AI %@", self.title, aiDesc];
+            }
+        }
     } else if(self.conversation.type == Channel_Type) {
         if(self.targetChannel.name.length == 0) {
             self.title = WFCString(@"Channel");
@@ -979,9 +998,166 @@
 }
 
 #pragma mark - DSH 会话状态
-//读取当前会话的 DSH 运行时状态（scope=31），并刷新标题副标题与输入框占位。非 DSH 会话不查询
+
+//AI 群（群聊 + line==2）群主在线状态订阅：进入会话时调用（群信息可能异步拉取，群主 ID 就绪后生效）
+- (void)watchDshOwnerOnlineStateIfNeed {
+    if (self.conversation.type != Group_Type || ![WFCUDshState isDshConversation:self.conversation]) {
+        return;
+    }
+    if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        return;
+    }
+    NSString *ownerId = self.targetGroup.owner;
+    if (ownerId.length == 0 || [WFCCUtilities isExternalTarget:ownerId]) {
+        return;
+    }
+    if ([self.dshWatchedOwnerId isEqualToString:ownerId]) {
+        return;
+    }
+    //与单聊一致：非好友才需要主动 watch，好友在线状态由服务端自动推送
+    if ([[WFCCIMService sharedWFCIMService] isMyFriend:ownerId]) {
+        return;
+    }
+    self.dshWatchedOwnerId = ownerId;
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] watchOnlineState:Single_Type targets:@[ownerId] duration:3600 success:^(NSArray<WFCCUserOnlineState *> *states) {
+        [ws updateTitle];
+    } error:^(int error_code) {
+        NSLog(@"watch dsh owner online state failure");
+    }];
+}
+
+//AI 群群主在线状态取消订阅：离开会话时调用
+- (void)unwatchDshOwnerOnlineState {
+    if (self.dshWatchedOwnerId.length == 0) {
+        return;
+    }
+    NSString *ownerId = self.dshWatchedOwnerId;
+    self.dshWatchedOwnerId = nil;
+    [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:@[ownerId] success:^{
+        NSLog(@"unwatch dsh owner online state success");
+    } error:^(int error_code) {
+        NSLog(@"unwatch dsh owner online state failure");
+    }];
+}
+
+//AI 群群主（AI 机器人）是否在线：clientStates 中存在 state==0（在线）视为在线；
+//无状态/未取到（getUserOnlineState 返回 nil 或 clientStates 为空）视为不在线。
+//非 AI 群返回 YES（不影响原逻辑）。
+- (BOOL)dshOwnerOnline {
+    if (![WFCUDshState isDshConversation:self.conversation]) {
+        return YES;
+    }
+    NSString *ownerId = self.targetGroup.owner;
+    if (ownerId.length == 0 || [WFCCUtilities isExternalTarget:ownerId]) {
+        return YES;
+    }
+    if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        return YES;
+    }
+    WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:ownerId];
+    if (!onlineState || ![onlineState.clientStates count]) {
+        return NO;
+    }
+    for (WFCCClientState *cs in onlineState.clientStates) {
+        if (cs.platform >= 1 && cs.platform <= 9 && cs.state == 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+//AI 群群主（AI 机器人）在线状态描述：在线/离线/忙碌/离开 等（复用单聊在线状态文案）；不可用返回 nil
+- (NSString *)dshOwnerOnlineStateDesc {
+    if (![WFCUDshState isDshConversation:self.conversation]) {
+        return nil;
+    }
+    NSString *ownerId = self.targetGroup.owner;
+    if (ownerId.length == 0 || [WFCCUtilities isExternalTarget:ownerId]) {
+        return nil;
+    }
+    if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        return nil;
+    }
+    WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:ownerId];
+    if (!onlineState || ![onlineState.clientStates count]) {
+        return WFCString(@"Offline");
+    }
+    int pcState = -1;
+    int mobileState = -1;
+    int webState = -1;
+    int wxState = -1;
+    int padState = -1;
+    BOOL hasOnline = NO;
+    BOOL hasMobileSession = NO;
+    long long mobileLastSeen = 0;
+    for (WFCCClientState *cs in onlineState.clientStates) {
+        if (cs.platform >= 1 && cs.platform <= 9 && cs.state == 0) {
+            hasOnline = YES;
+        }
+        if (cs.platform == 1 || cs.platform == 2) {
+            mobileState = cs.state;
+            if (cs.state == 1) {
+                hasMobileSession = YES;
+                if (mobileLastSeen < cs.lastSeen) {
+                    mobileLastSeen = cs.lastSeen;
+                }
+            }
+        } else if (cs.platform == 3 || cs.platform == 4 || cs.platform == 7) {
+            pcState = cs.state;
+        } else if (cs.platform == 5) {
+            webState = cs.state;
+        } else if (cs.platform == 6) {
+            wxState = cs.state;
+        } else if (cs.platform == 8 || cs.platform == 9) {
+            padState = cs.state;
+        }
+    }
+    if (hasOnline) {
+        if (onlineState.customState.state == 1) {
+            return WFCString(@"Busy");
+        } else if (onlineState.customState.state == 2 || onlineState.customState.state == 3) {
+            return WFCString(@"Away");
+        } else if (onlineState.customState.state == 4) {
+            return WFCString(@"Offline");
+        }
+        if (pcState == 0) {
+            return WFCString(@"PCOnline");
+        } else if (padState == 0) {
+            return WFCString(@"PadOnline");
+        } else if (webState == 0) {
+            return WFCString(@"WebOnline");
+        } else if (wxState == 0) {
+            return WFCString(@"MicroAppOnline");
+        } else if (mobileState == 0) {
+            return WFCString(@"MobileOnline");
+        }
+        return WFCString(@"Online");
+    } else if (hasMobileSession && mobileLastSeen) {
+        long long duration = [[[NSDate alloc] init] timeIntervalSince1970] - (mobileLastSeen / 1000);
+        int days = (int)(duration / 86400);
+        if (days) {
+            return [NSString stringWithFormat:WFCString(@"DaysAgoMobileOnlineShort"), days];
+        }
+        int hours = (int)(duration / 3600);
+        if (hours) {
+            return [NSString stringWithFormat:WFCString(@"HoursAgoMobileOnlineShort"), hours];
+        }
+        int mins = (int)(duration / 60);
+        if (mins) {
+            return [NSString stringWithFormat:WFCString(@"MinsAgoMobileOnlineShort"), mins];
+        }
+        return WFCString(@"ShortlyAgoMobileOnlineShort");
+    }
+    return WFCString(@"Offline");
+}
+
+//读取当前会话的 DSH 运行时状态（scope=31 type=1）与 Token 统计（type=2 独立通道），
+//并刷新标题副标题与输入框占位。非 DSH 会话不查询
 - (void)refreshDshState {
     self.dshState = [WFCUDshState dshState:self.conversation];
+    //Token 统计走 type=2 独立通道（回合结束必推，含出错/取消），与运行状态分开读
+    self.dshMetrics = [WFCUDshState dshMetrics:self.conversation];
     [self updateDshTitle];
 
     NSString *placeholder = nil;
@@ -993,26 +1169,83 @@
     self.chatInputBar.placeholder = placeholder;
 }
 
-//DSH 会话：双行标题，第二行=状态副标题；state==running 时副标题行内联"■ 停止"小按钮
+//DSH 会话：标题 + 状态副标题（state==running 时副标题行内联"■ 停止"小按钮）+
+//合并行：AI 在线状态（群主在线）+ 运行态提示（type=1：等待确认/审批、错误、取消）
+//+ 最近变更（type=1 lastChange，AI 面板 207 操作后可见，如 "推理等级 → low"）+ Token 统计（type=2）
+//合并为一行小字，如 "AI 在线 · 🤔 等待确认 · 推理等级 → low · 上下文 0.8% · 缓存 98%"
+//（参考 PC 端 conversationStatusLine：非空段用 " · " 连接，都空则整行省略，不占位）
 - (void)updateDshTitle {
     if ([WFCCUtilities isExternalTarget:self.conversation.target]) {
         //外部域会话使用 updateDomainTitle 的双行标题，不覆盖
         return;
     }
     NSString *stateText = [WFCUDshState stateText:self.dshState[@"state"]];
-    if (!stateText.length) {
+    if ([self.dshState[@"phase"] isEqualToString:@"tool"]) {
+        NSString *toolName = [self.dshState[@"toolName"] isKindOfClass:[NSString class]] ? self.dshState[@"toolName"] : nil;
+        stateText = [NSString stringWithFormat:@"%@ · %@", stateText, toolName.length ? toolName : @"工具"];
+    }
+    //合并行：AI 在线 + 运行态提示（type=1）+ 最近变更（type=1 lastChange）+ Token 统计（type=2），各自为空则跳过
+    //AI 群群主（AI 机器人）不在线：去掉所有 AI 状态段（状态文本/运行提示/最近变更/统计），只显示 "AI 不在线"
+    BOOL ownerOffline = ![self dshOwnerOnline];
+    if (ownerOffline) {
+        stateText = @"";
+    }
+    NSString *aiDesc = [self dshOwnerOnlineStateDesc];
+    NSString *onlineText = aiDesc.length ? [NSString stringWithFormat:@"AI %@", aiDesc] : @"";
+    NSString *hintText = [WFCUDshState dshStatusHint:self.dshState];
+    NSString *lastChange = [self.dshState[@"lastChange"] isKindOfClass:[NSString class]] ? self.dshState[@"lastChange"] : @"";
+    //Token 统计（type=2 独立通道）：统计属于当前会话才显示——type=2 统计带 sessionId 且与
+    //type=1 状态（dshState）sessionId 不一致（切目录后旧会话统计残留）时不显示统计段；
+    //任一侧缺失 sessionId（旧数据）不拦截，按现状显示（参考 PC 端 dshMetricsText computed）
+    NSString *metricsText = @"";
+    id metricsSessionId = [self.dshMetrics isKindOfClass:[NSDictionary class]] ? self.dshMetrics[@"sessionId"] : nil;
+    id stateSessionId = [self.dshState isKindOfClass:[NSDictionary class]] ? self.dshState[@"sessionId"] : nil;
+    BOOL metricsSessionMismatch = [metricsSessionId isKindOfClass:[NSString class]] && [(NSString *)metricsSessionId length]
+        && [stateSessionId isKindOfClass:[NSString class]] && [(NSString *)stateSessionId length]
+        && ![(NSString *)metricsSessionId isEqualToString:(NSString *)stateSessionId];
+    if (!metricsSessionMismatch) {
+        metricsText = [WFCUDshState dshMetricsText:self.dshMetrics];
+    }
+    NSMutableArray<NSString *> *statusParts = [NSMutableArray array];
+    if (ownerOffline) {
+        //AI 不在线：只显示 "AI 不在线"，其余 AI 状态段全部隐藏
+        [statusParts addObject:WFCString(@"AI_Not_Online")];
+    } else {
+        if (onlineText.length) {
+            [statusParts addObject:onlineText];
+        }
+        if (hintText.length) {
+            [statusParts addObject:hintText];
+        }
+        if (lastChange.length) {
+            [statusParts addObject:lastChange];
+        }
+        if (metricsText.length) {
+            [statusParts addObject:metricsText];
+        }
+    }
+    NSString *statusLine = [statusParts componentsJoinedByString:@" · "];
+    if (!stateText.length && !statusLine.length) {
+        //非 DSH 会话（或暂无任何状态可显示）：沿用系统导航标题
         if (self.navigationItem.titleView) {
             self.navigationItem.titleView = nil;
         }
         return;
     }
-    if ([self.dshState[@"phase"] isEqualToString:@"tool"]) {
-        NSString *toolName = [self.dshState[@"toolName"] isKindOfClass:[NSString class]] ? self.dshState[@"toolName"] : nil;
-        stateText = [NSString stringWithFormat:@"%@ · %@", stateText, toolName.length ? toolName : @"工具"];
-    }
+
+    BOOL hasStateRow = stateText.length > 0;
+    BOOL hasStatusRow = statusLine.length > 0;
 
     CGFloat containerWidth = self.view.bounds.size.width - 160;
-    UIView *titleContainer = [[UIView alloc] initWithFrame:CGRectMake(80, 0, containerWidth, 36)];
+    CGFloat containerHeight = 36;
+    CGFloat statusY = 23; //无状态副标题行时，合并行紧贴标题下方，避免空行占位
+    if (hasStateRow) {
+        statusY = 37;
+        if (hasStatusRow) {
+            containerHeight = 50;
+        }
+    }
+    UIView *titleContainer = [[UIView alloc] initWithFrame:CGRectMake(80, 0, containerWidth, containerHeight)];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, containerWidth, 22)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
@@ -1020,44 +1253,60 @@
     titleLabel.text = self.title;
     [titleContainer addSubview:titleLabel];
 
-    UIFont *subFont = [UIFont scaledSystemFontOfSize:12];
-    CGSize subSize = [WFCUUtilities getTextDrawingSize:stateText font:subFont constrainedSize:CGSizeMake(containerWidth, 14)];
-    subSize.width = MIN(subSize.width, containerWidth);
+    if (hasStateRow) {
+        UIFont *subFont = [UIFont scaledSystemFontOfSize:12];
+        CGSize subSize = [WFCUUtilities getTextDrawingSize:stateText font:subFont constrainedSize:CGSizeMake(containerWidth, 14)];
+        subSize.width = MIN(subSize.width, containerWidth);
 
-    BOOL showStop = [self.dshState[@"state"] isEqualToString:@"running"];
-    CGFloat stopWidth = 0;
-    UIButton *stopButton = nil;
-    if (showStop) {
-        stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [stopButton setTitle:@"■ 停止" forState:UIControlStateNormal];
-        [stopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        stopButton.titleLabel.font = [UIFont scaledSystemFontOfSize:11];
-        stopButton.layer.cornerRadius = 8;
-        stopButton.layer.borderWidth = 1;
-        stopButton.layer.borderColor = [UIColor redColor].CGColor;
-        stopWidth = 52;
-        stopButton.frame = CGRectMake(0, 22, stopWidth, 16);
-        [stopButton addTarget:self action:@selector(onDshStop:) forControlEvents:UIControlEventTouchUpInside];
-        if (self.dshStopSending) {
-            stopButton.enabled = NO;
-            stopButton.alpha = 0.5;
+        BOOL showStop = [self.dshState[@"state"] isEqualToString:@"running"];
+        CGFloat stopWidth = 0;
+        UIButton *stopButton = nil;
+        if (showStop) {
+            stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [stopButton setTitle:@"■ 停止" forState:UIControlStateNormal];
+            [stopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            stopButton.titleLabel.font = [UIFont scaledSystemFontOfSize:11];
+            stopButton.layer.cornerRadius = 8;
+            stopButton.layer.borderWidth = 1;
+            stopButton.layer.borderColor = [UIColor redColor].CGColor;
+            stopWidth = 52;
+            stopButton.frame = CGRectMake(0, 22, stopWidth, 16);
+            [stopButton addTarget:self action:@selector(onDshStop:) forControlEvents:UIControlEventTouchUpInside];
+            if (self.dshStopSending) {
+                stopButton.enabled = NO;
+                stopButton.alpha = 0.5;
+            }
+            [titleContainer addSubview:stopButton];
         }
-        [titleContainer addSubview:stopButton];
+
+        CGFloat rowWidth = subSize.width + (showStop ? stopWidth + 6 : 0);
+        CGFloat rowX = (containerWidth - rowWidth) / 2.0;
+        UILabel *subLabel = [[UILabel alloc] initWithFrame:CGRectMake(rowX, 22, subSize.width, 14)];
+        subLabel.textAlignment = NSTextAlignmentCenter;
+        subLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        subLabel.font = subFont;
+        subLabel.textColor = [UIColor grayColor];
+        subLabel.text = stateText;
+        [titleContainer addSubview:subLabel];
+        if (stopButton) {
+            CGRect stopFrame = stopButton.frame;
+            stopFrame.origin.x = rowX + subSize.width + 6;
+            stopButton.frame = stopFrame;
+        }
     }
 
-    CGFloat rowWidth = subSize.width + (showStop ? stopWidth + 6 : 0);
-    CGFloat rowX = (containerWidth - rowWidth) / 2.0;
-    UILabel *subLabel = [[UILabel alloc] initWithFrame:CGRectMake(rowX, 22, subSize.width, 14)];
-    subLabel.textAlignment = NSTextAlignmentCenter;
-    subLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-    subLabel.font = subFont;
-    subLabel.textColor = [UIColor grayColor];
-    subLabel.text = stateText;
-    [titleContainer addSubview:subLabel];
-    if (stopButton) {
-        CGRect stopFrame = stopButton.frame;
-        stopFrame.origin.x = rowX + subSize.width + 6;
-        stopButton.frame = stopFrame;
+    //AI 在线 + Token/上下文计量合并行：小字居中，宽度不足时中间截断；无内容时整行省略（不占位）
+    if (hasStatusRow) {
+        UIFont *metricsFont = [UIFont scaledSystemFontOfSize:10];
+        CGSize metricsSize = [WFCUUtilities getTextDrawingSize:statusLine font:metricsFont constrainedSize:CGSizeMake(containerWidth, 13)];
+        metricsSize.width = MIN(metricsSize.width, containerWidth);
+        UILabel *metricsLabel = [[UILabel alloc] initWithFrame:CGRectMake((containerWidth - metricsSize.width) / 2.0, statusY, metricsSize.width, 13)];
+        metricsLabel.textAlignment = NSTextAlignmentCenter;
+        metricsLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        metricsLabel.font = metricsFont;
+        metricsLabel.textColor = [UIColor grayColor];
+        metricsLabel.text = statusLine;
+        [titleContainer addSubview:metricsLabel];
     }
 
     self.navigationItem.titleView = titleContainer;
@@ -1134,6 +1383,8 @@
     _targetGroup = targetGroup;
     [self updateTitle];
     [self setupNavigationItem];
+    //DSH：AI 群（line==2）进入会话时订阅群主在线状态（群信息异步拉取就绪后同样会走到这里）
+    [self watchDshOwnerOnlineStateIfNeed];
     
     ChatInputBarStatus defaultStatus = ChatInputBarDefaultStatus;
     WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:targetGroup.target memberId:[WFCCNetworkService sharedInstance].userId];
@@ -1429,6 +1680,7 @@
     [self registerCell:[WFCUDshApprovalMessageCell class] forContent:[WFCCDshApprovalMessageContent class]];
     [self registerCell:[WFCUDshTextMessageCell class] forContent:[WFCCDshApprovalResultMessageContent class]];
     [self registerCell:[WFCUDshGoalMessageCell class] forContent:[WFCCDshGoalMessageContent class]];
+    [self registerCell:[WFCUDshTaskProgressMessageCell class] forContent:[WFCCDshTaskProgressMessageContent class]];
 
     [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerCell:obj forContentType:key];
@@ -2487,6 +2739,11 @@
         
         // 流式文本取消消息（20）只是删除信号：实时接收时已按 streamId 移除对应 14/15 消息，自身不进入列表、不显示
         if ([message.content isKindOfClass:[WFCCStreamingTextCancelledMessageContent class]]) {
+            continue;
+        }
+
+        // DSH 命令消息（207）是 AI 面板静默指令（透明消息）：不进入列表、不显示
+        if ([message.content isKindOfClass:[WFCCDshCommandMessageContent class]]) {
             continue;
         }
         

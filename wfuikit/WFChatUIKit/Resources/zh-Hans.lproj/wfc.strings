@@ -727,4 +727,10 @@
 "Close"="关闭";
 "OpenFileForbidden"="禁止打开此类型";
 "SendFileForbidden"="不能发送该类型文件";
-
+"Online"="在线";
+"Offline"="离线";
+"AI_Not_Online"="AI 不在线";
+"DaysAgoMobileOnlineShort"="%d天前手机在线";
+"HoursAgoMobileOnlineShort"="%d小时前手机在线";
+"MinsAgoMobileOnlineShort"="%d分钟前手机在线";
+"ShortlyAgoMobileOnlineShort"="不久前手机在线";

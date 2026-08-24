@@ -8,6 +8,7 @@
 
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationTableViewCell.h"
+#import "WFCUDshState.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUFriendRequestViewController.h"
 #import "WFCUSearchGroupTableViewCell.h"
@@ -38,6 +39,7 @@
 
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) NSArray<NSString *> *dshWatchedAiOwners;
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 
 @property (nonatomic, strong)  UISearchController       *searchController;
@@ -113,6 +115,11 @@
 
     // 初始化搜索历史
     self.searchHistory = [self loadSearchHistory];
+}
+
+//AI 在线状态变化（含 AI 群群主上线/下线）：刷新列表——DSH 状态圆点/徽标按在线状态置灰
+- (void)onUserOnlineStateUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -349,6 +356,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.conversations = [[NSMutableArray alloc] init];
+    self.dshWatchedAiOwners = [NSArray array];
     
     [self initSearchUIAndTableView];
     self.definesPresentationContext = YES;
@@ -367,6 +375,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kSecretChatStateUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserOnlineStateUpdated:) name:kUserOnlineStateUpdated object:nil];
     
     self.firstAppear = YES;
 }
@@ -558,9 +567,43 @@
 }
 
 - (void)refreshList {
-    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5)]] mutableCopy];
+    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5), @(2)]] mutableCopy];
     [self updateBadgeNumber];
     [self.tableView reloadData];
+    //AI 群（line 2）：订阅群主（AI 机器人）在线状态，AI 不在线时列表状态圆点/徽标置灰
+    [self watchAiOwnersOnlineStateIfNeed];
+}
+
+//AI 群（line 2）群主在线状态订阅：遍历当前会话列表收集 AI 群主批量订阅；
+//回调刷新列表（列表项按 getUserOnlineState 判定 AI 在线状态）
+- (void)watchAiOwnersOnlineStateIfNeed {
+    if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        return;
+    }
+    NSMutableArray<NSString *> *owners = [NSMutableArray array];
+    for (WFCCConversationInfo *info in self.conversations) {
+        WFCCConversation *conv = info.conversation;
+        if (conv.type != Group_Type || conv.line != 2 || ![WFCUDshState isDshConversation:conv]) {
+            continue;
+        }
+        WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.target refresh:NO];
+        NSString *ownerId = groupInfo.owner;
+        if (ownerId.length && ![owners containsObject:ownerId]) {
+            [owners addObject:ownerId];
+        }
+    }
+    if (self.dshWatchedAiOwners.count) {
+        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.dshWatchedAiOwners success:nil error:nil];
+    }
+    self.dshWatchedAiOwners = owners;
+    if (owners.count) {
+        __weak typeof(self)ws = self;
+        [[WFCCIMService sharedWFCIMService] watchOnlineState:Single_Type targets:owners duration:3600 success:^(NSArray<WFCCUserOnlineState *> *states) {
+            [ws.tableView reloadData];
+        } error:^(int error_code) {
+            NSLog(@"watch ai owners online state failure %d", error_code);
+        }];
+    }
 }
 
 - (void)updateBadgeNumber {
@@ -645,7 +688,7 @@
 }
 - (void)refreshLeftButton {
     dispatch_async(dispatch_get_main_queue(), ^{
-        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(2)]];
         NSUInteger count = unreadCount.unread;
         
         NSString *title = nil;
@@ -1412,6 +1455,9 @@
 }
 
 - (void)dealloc {
+    if (self.dshWatchedAiOwners.count) {
+        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.dshWatchedAiOwners success:nil error:nil];
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     _searchController = nil;
     _searchConversationList       = nil;
@@ -1638,7 +1684,7 @@
     if (searchString.length) {
         [self hideSearchHistory]; // 隐藏历史记录
         // 不在这里保存历史，在点击取消或搜索结果时保存
-        self.searchConversationList = [[WFCCIMService sharedWFCIMService] searchConversation:searchString inConversation:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+        self.searchConversationList = [[WFCCIMService sharedWFCIMService] searchConversation:searchString inConversation:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(2)]];
         self.searchFriendList = [self searchFriends:searchString];
         self.searchGroupList = [[WFCCIMService sharedWFCIMService] searchGroups:searchString];
     } else {

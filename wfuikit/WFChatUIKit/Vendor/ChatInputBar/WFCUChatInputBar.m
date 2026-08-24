@@ -40,6 +40,7 @@
 #import "WFCUPanFilePickerViewController.h"
 #import "WFCUPanFile.h"
 #import "WFCUDshState.h"
+#import "WFCUDshAgentPanelViewController.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -789,6 +790,10 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
+        //每次打开扩展面板刷新 "AI 会话设置" 置灰状态（AI 不在线时禁用）
+        if ([self.pluginInputView isKindOfClass:[WFCUPluginBoardView class]]) {
+            ((WFCUPluginBoardView *)self.pluginInputView).dshDisabled = ![self dshOwnerOnline];
+        }
         self.textInputView.inputView = self.pluginInputView;
         if (!self.textInputView.isFirstResponder) {
             [self.textInputView becomeFirstResponder];
@@ -1094,7 +1099,11 @@
 #endif
         BOOL hasPoll = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
         BOOL hasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
-        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection];
+        //DSH/AI 会话（line==2）显示 "AI 会话设置" 入口
+        BOOL hasDsh = [WFCUDshState isDshConversation:self.conversation];
+        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection withDsh:hasDsh];
+        //AI 不在线时 "AI 会话设置" 入口置灰禁用
+        ((WFCUPluginBoardView *)_pluginInputView).dshDisabled = ![self dshOwnerOnline];
     }
     return _pluginInputView;
 }
@@ -1839,7 +1848,40 @@
         } else {
             [self makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
         }
+    } else if(itemTag == WFCU_PLUGIN_TAG_DSH_AGENT) {
+        // DSH/AI 会话设置面板（仅 line==2 AI 会话显示该入口）；AI 不在线时置灰不可点
+        if (![self dshOwnerOnline]) {
+            return;
+        }
+        WFCUDshAgentPanelViewController *vc = [[WFCUDshAgentPanelViewController alloc] initWithConversation:self.conversation];
+        [[self.delegate requireNavi] presentViewController:vc animated:YES completion:nil];
     }
+}
+
+//AI 群（line==2）群主（AI 机器人）是否在线：clientStates 中存在 state==0 视为在线；
+//无状态/未取到视为不在线；非 AI 群返回 YES（不影响原逻辑）
+- (BOOL)dshOwnerOnline {
+    if (![WFCUDshState isDshConversation:self.conversation]) {
+        return YES;
+    }
+    WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
+    NSString *ownerId = groupInfo.owner;
+    if (ownerId.length == 0) {
+        return YES;
+    }
+    if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
+        return YES;
+    }
+    WFCCUserOnlineState *onlineState = [[WFCCIMService sharedWFCIMService] getUserOnlineState:ownerId];
+    if (!onlineState || ![onlineState.clientStates count]) {
+        return NO;
+    }
+    for (WFCCClientState *cs in onlineState.clientStates) {
+        if (cs.platform >= 1 && cs.platform <= 9 && cs.state == 0) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)checkAndAlertCameraAccessRight {
