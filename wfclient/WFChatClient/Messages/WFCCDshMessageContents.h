@@ -2,7 +2,7 @@
 //  WFCCDshMessageContents.h
 //  WFChatClient
 //
-//  DSH × Wildfire 结构化交互消息内容类（200-206，官方预留 AI 交互段）。
+//  DSH × Wildfire 结构化交互消息内容类（200-208，官方预留 AI 交互段）。
 //
 //  Payload 约定:
 //    payload.content           = JSON 字符串（结构化数据）
@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<NSDictionary *> *questions;
 /// 状态：pending/answered/expired
 @property (nonatomic, strong) NSString *state;
+/// 用户回答（服务端 updateMessage 回填，只读）：元素为 NSDictionary：{id, selected:[label], custom}
+@property (nonatomic, strong) NSArray<NSDictionary *> *answers;
 @end
 
 /// DSH 用户回答（用户→机器人），MessageContentType: 201
@@ -70,6 +72,32 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *phase;
 /// 已执行轮数
 @property (nonatomic, assign) NSInteger roundsStarted;
+@end
+
+/// DSH 任务进度卡片（机器人→用户），MessageContentType: 208
+/// 插件派生子任务/后台任务时以 sendCard 首推、updateMessage 原地更新；
+/// content = {tasks:[{kind:"subagent|job", id, label?, status, reason?, updatedAt}], updatedAt}
+/// status: running / done / completed / failed / killed
+@interface WFCCDshTaskProgressMessageContent : WFCCDshMessageContentBase
+/// 任务列表，元素为 NSDictionary：{kind, id, label?, status, reason?, updatedAt}
+@property (nonatomic, strong) NSArray<NSDictionary *> *tasks;
+/// 更新时间戳（毫秒）
+@property (nonatomic, assign) long long updatedAt;
+@end
+
+/// DSH 命令消息（用户→机器人），MessageContentType: 207
+/// AI 面板静默指令（静默通道）：透明消息（不存储、不计未读、不多端同步），
+/// digest 为空、不显示在消息流；payload.content = JSON 字符串
+/// {"op":"query"|"set","cmd":"/model xxx","seq":123}。
+/// op=query：组合查询（插件聚合面板数据写 scope=31 type=3，不回复消息）；
+/// op=set：更新（cmd 为命令文本，如 "/model deepseek-official/xxx"）。
+@interface WFCCDshCommandMessageContent : WFCCDshMessageContentBase
+/// 操作：query=组合查询 / set=执行命令更新
+@property (nonatomic, strong) NSString *op;
+/// 命令文本（op=set 时，如 "/model xxx"、" /effort high"、" /cwd server"）；query 时为 nil
+@property (nonatomic, strong, nullable) NSString *cmd;
+/// 序号（防重/追踪，客户端自增）
+@property (nonatomic, assign) NSInteger seq;
 @end
 
 NS_ASSUME_NONNULL_END

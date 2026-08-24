@@ -750,3 +750,10 @@
 "VoiceInputCountDown" = "%d 秒后将停止录音";
 "AsrRecognizeError" = "语音识别错误：%@";
 "AsrNotConfigured" = "未配置语音识别服务地址";
+"Online"="在线";
+"Offline"="离线";
+"AI_Not_Online"="AI 不在线";
+"DaysAgoMobileOnlineShort"="%d天前手机在线";
+"HoursAgoMobileOnlineShort"="%d小时前手机在线";
+"MinsAgoMobileOnlineShort"="%d分钟前手机在线";
+"ShortlyAgoMobileOnlineShort"="不久前手机在线";
