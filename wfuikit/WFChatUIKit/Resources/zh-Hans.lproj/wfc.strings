@@ -294,6 +294,9 @@
 "MicroApp"="小程序";
 "AndroidPad"="安卓平板";
 "MobileNoNotification"="手机通知已关闭";
+"DevicesLoggedIn"="个设备已经登录";
+"PlatformComputer"="电脑";
+"PlatformPad"="平板";
 "Subject"="会议主题";
 "StartTime"="开始时间";
 "Now"="现在";

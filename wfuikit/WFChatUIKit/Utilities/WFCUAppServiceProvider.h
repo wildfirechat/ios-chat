@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
                              error:(void(^)(int error_code))errorBlock;
 
 - (void)showPCSessionViewController:(UIViewController *)baseController
-                          pcClient:(WFCCPCOnlineInfo *)clientInfo;
+                      pcOnlineInfos:(NSArray<WFCCPCOnlineInfo *> *)onlineInfos;
 
 - (void)changeName:(NSString *)newName success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 

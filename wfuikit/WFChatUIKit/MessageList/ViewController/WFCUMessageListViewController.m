@@ -1585,6 +1585,64 @@
     }
 }
 
+/**
+ 加载历史消息时对流式消息按 streamId 归一化去重（与 HarmonyOS 版 normalizeStreaming 逻辑一致），
+ 解决切换会话后同一 AI 回复的多条「生成中(14)」气泡重复显示的问题：
+ - 同 streamId 组内存在「已生成(15)」时：丢弃该组所有「生成中(14)」，只保留最终结果；
+ - 同 streamId 组内只有「生成中(14)」时：只保留数组顺序中最后出现的那一条（最新一次推送）；
+ - 非流式消息全部保留，且保持原有相对顺序不变。
+ */
+- (NSArray<WFCCMessage *> *)normalizeStreamingMessages:(NSArray<WFCCMessage *> *)messages {
+    if (messages.count == 0) {
+        return messages;
+    }
+    // 第一遍：按 streamId 统计「已生成」是否存在、该组最后一条「生成中」的下标
+    NSMutableArray<NSString *> *streamIds = [[NSMutableArray alloc] init];
+    NSMutableArray<NSNumber *> *hasGenerated = [[NSMutableArray alloc] init];
+    NSMutableArray<NSNumber *> *lastGeneratingIndex = [[NSMutableArray alloc] init];
+    for (NSUInteger i = 0; i < messages.count; i++) {
+        WFCCMessage *msg = messages[i];
+        NSString *streamId = nil;
+        if ([msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            streamId = ((WFCCStreamingTextGeneratingMessageContent *)msg.content).streamId;
+        } else if ([msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+            streamId = ((WFCCStreamingTextGeneratedMessageContent *)msg.content).streamId;
+        }
+        if (!streamId.length) {
+            continue;
+        }
+        NSUInteger idx = [streamIds indexOfObject:streamId];
+        if (idx == NSNotFound) {
+            [streamIds addObject:streamId];
+            [hasGenerated addObject:@NO];
+            [lastGeneratingIndex addObject:@(-1)];
+            idx = streamIds.count - 1;
+        }
+        if ([msg.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
+            hasGenerated[idx] = @YES;
+        } else if ([msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            lastGeneratingIndex[idx] = @(i);
+        }
+    }
+    if (streamIds.count == 0) {
+        return messages;
+    }
+    // 第二遍：过滤重复的「生成中」，非流式消息原样保留
+    NSMutableArray<WFCCMessage *> *result = [[NSMutableArray alloc] initWithCapacity:messages.count];
+    for (NSUInteger i = 0; i < messages.count; i++) {
+        WFCCMessage *msg = messages[i];
+        if ([msg.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+            NSString *streamId = ((WFCCStreamingTextGeneratingMessageContent *)msg.content).streamId;
+            NSUInteger idx = [streamIds indexOfObject:streamId];
+            if (idx != NSNotFound && ([hasGenerated[idx] boolValue] || [lastGeneratingIndex[idx] unsignedIntegerValue] != i)) {
+                continue;
+            }
+        }
+        [result addObject:msg];
+    }
+    return result;
+}
+
 - (void)updateQuotedMessageWhenRecall:(long long)messageUid {
     for (int i = 0; i < self.modelList.count; i++) {
         WFCUMessageModel *model = [self.modelList objectAtIndex:i];
@@ -2028,7 +2086,10 @@
             [ws appendMessages:messages newMessage:NO highlightId:ws.highlightMessageId forceButtom:NO firstIn:firstIn appendLast:NO];
             ws.highlightMessageId = 0;
 
-            // 检查是否有正在生成的流式文本消息
+            // 检查是否有正在生成的流式文本消息。
+            // 注意：缓存里的这条「生成中(14)」与上面历史里归一化后保留的最后一条「生成中(14)」可能是同一 streamId，
+            // 追加时会被 appendMessages 中既有的按 streamId 去重逻辑命中（见该方法内 duplcated 判断），
+            // 以缓存这条的最新 text 替换历史那条的内容，而不是再追加一个气泡，因此不会重复显示。
             WFCCMessage *generatingMsg = [[WFCCIMService sharedWFCIMService] getStreamingTextGeneratingMessage:ws.conversation];
             if (generatingMsg) {
                 NSMutableArray *generatingMessages = [NSMutableArray arrayWithObject:generatingMsg];
@@ -2183,6 +2244,19 @@
 - (void)appendMessages:(NSArray<WFCCMessage *> *)messages newMessage:(BOOL)newMessage highlightId:(long)highlightId forceButtom:(BOOL)forceButtom firstIn:(BOOL)firstIn appendLast:(BOOL)appendLast {
     if (messages.count == 0) {
         return;
+    }
+
+    // 历史消息加载（newMessage == NO，覆盖初次加载/load more/按日期加载/高亮定位等所有从数据库拉取后设置列表的入口）：
+    // 对同一批次内的流式消息按 streamId 归一化去重，避免切换会话后同一 AI 回复的多条「生成中(14)」气泡重复显示。
+    // 实时接收（newMessage == YES）走下方既有的按 streamId 替换/追加逻辑，不在此处归一化。
+    if (!newMessage) {
+        NSArray<WFCCMessage *> *normalizedMessages = [self normalizeStreamingMessages:messages];
+        if (normalizedMessages != messages) {
+            messages = normalizedMessages;
+            if (messages.count == 0) {
+                return;
+            }
+        }
     }
     
     if (self.hasNewMessage && newMessage) {

@@ -293,6 +293,9 @@
 "MicroApp"="小程序";
 "AndroidPad"="安卓平板";
 "MobileNoNotification"="手機通知已關閉";
+"DevicesLoggedIn"="個設備已經登錄";
+"PlatformComputer"="電腦";
+"PlatformPad"="平板";
 "Subject"="會議主題";
 "StartTime"="開始時間";
 "Now"="現在";

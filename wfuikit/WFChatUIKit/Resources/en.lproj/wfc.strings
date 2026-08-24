@@ -294,6 +294,9 @@
 "MicroApp"="Micro app";
 "AndroidPad"="Android pad";
 "MobileNoNotification"="Mobile no notification";
+"DevicesLoggedIn"=" devices logged in";
+"PlatformComputer"="Computer";
+"PlatformPad"="Pad";
 "Subject"="Subject";
 "StartTime"="Start time";
 "Now"="Now";

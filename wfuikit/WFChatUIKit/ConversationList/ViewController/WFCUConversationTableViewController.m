@@ -55,6 +55,7 @@
 
 @property (nonatomic, strong) UIView *pcSessionView;
 @property (nonatomic, strong) UILabel *pcSessionLabel;
+@property (nonatomic, strong) UIImageView *pcSessionIconView;
 
 // 搜索历史
 @property (nonatomic, strong) UITableView *historyTableView;
@@ -678,13 +679,14 @@
             bgColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.f];
         }
         
-        _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+        _pcSessionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
         [_pcSessionView setBackgroundColor:bgColor];
-        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 32, 32)];
-        iv.image = [WFCUImage imageNamed:@"pc_session"];
-        [_pcSessionView addSubview:iv];
-        self.pcSessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(68, 10, self.view.bounds.size.width - 68 - 16, 20)];
-        self.pcSessionLabel.font = [UIFont scaledSystemFontOfSize:16];
+        self.pcSessionIconView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 10, 24, 24)];
+        self.pcSessionIconView.tintColor = [UIColor colorWithHexString:@"0x666666"];
+        [_pcSessionView addSubview:self.pcSessionIconView];
+        self.pcSessionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + 24 + 10, 12, self.view.bounds.size.width - 16 - 24 - 10 - 16, 20)];
+        self.pcSessionLabel.font = [UIFont scaledSystemFontOfSize:15];
+        self.pcSessionLabel.textColor = [UIColor colorWithHexString:@"0x666666"];
         [_pcSessionView addSubview:self.pcSessionLabel];
         _pcSessionView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];
@@ -693,37 +695,110 @@
     NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
     self.pcSessionLabel.text = nil;
     if (infos.count) {
-        if (infos[0].platform == PlatformType_Windows) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"Windows %@", WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_OSX) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"Mac %@", WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_Linux) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"Linux %@", WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_HarmonyPC) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"%@ %@", WFCString(@"HarmonyOSPC"), WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_WEB) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"Web %@", WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_WX) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"MicroApp")];
-        } else if(infos[0].platform == PlatformType_iPad) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"iPad %@", WFCString(@"LoggedIn")];
-        } else if(infos[0].platform == PlatformType_APad) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:WFCString(@"%@LoggedIn"), WFCString(@"AndroidPad")];
-        } else if(infos[0].platform == PlatformType_HarmonyPad) {
-            self.pcSessionLabel.text = [NSString stringWithFormat:@"%@ %@", WFCString(@"HarmonyOSPad"), WFCString(@"LoggedIn")];
-        }
-        if(self.pcSessionLabel.text.length && [[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
-            self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingFormat:@"，%@", WFCString(@"MobileNoNotification")];
+        if (infos.count == 1) {
+            // 单台设备：显示对应平台的图标和名称
+            WFCCPCOnlineInfo *info = infos[0];
+            self.pcSessionIconView.image = [self pcPlatformIcon:info];
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"%@ %@", [self pcPlatformName:info], WFCString(@"LoggedIn")];
+            if ([[WFCCIMService sharedWFCIMService] isMuteNotificationWhenPcOnline]) {
+                self.pcSessionLabel.text = [self.pcSessionLabel.text stringByAppendingFormat:@"，%@", WFCString(@"MobileNoNotification")];
+            }
+        } else {
+            // 多台设备：统一显示电脑图标，文案为「N个设备已经登录」
+            self.pcSessionIconView.image = [self pcPlatformIcon:nil];
+            self.pcSessionLabel.text = [NSString stringWithFormat:@"%lu%@", (unsigned long)infos.count, WFCString(@"DevicesLoggedIn")];
         }
     }
     
     return _pcSessionView;
 }
 
+// 平台名称（微信风格）：保留现有映射并补充缺失平台，platform 未上报(UNSET)时按在线类型兜底
+- (NSString *)pcPlatformName:(WFCCPCOnlineInfo *)info {
+    switch (info.platform) {
+        case PlatformType_Windows:
+            return @"Windows";
+        case PlatformType_OSX:
+            return @"Mac";
+        case PlatformType_Linux:
+            return @"Linux";
+        case PlatformType_HarmonyPC:
+            return WFCString(@"HarmonyOSPC");
+        case PlatformType_WEB:
+            return @"Web";
+        case PlatformType_WX:
+            return WFCString(@"MicroApp");
+        case PlatformType_iPad:
+            return @"iPad";
+        case PlatformType_APad:
+        case PlatformType_Android:
+            return WFCString(@"AndroidPad");
+        case PlatformType_HarmonyPad:
+            return WFCString(@"HarmonyOSPad");
+        default:
+            break;
+    }
+    if (info.type == Web_Online) {
+        return @"Web";
+    }
+    if (info.type == WX_Online) {
+        return WFCString(@"MicroApp");
+    }
+    if (info.type == Pad_Online) {
+        return WFCString(@"PlatformPad");
+    }
+    return WFCString(@"PlatformComputer");
+}
+
+// 平台灰色图标：单台设备按平台显示（电脑/浏览器/手机/平板），多台设备（info 为 nil）统一显示电脑图标
+- (UIImage *)pcPlatformIcon:(WFCCPCOnlineInfo *)info {
+    NSString *symbol = @"desktopcomputer";
+    if (info) {
+        switch (info.platform) {
+            case PlatformType_Windows:
+            case PlatformType_OSX:
+            case PlatformType_Linux:
+            case PlatformType_HarmonyPC:
+                symbol = @"desktopcomputer";
+                break;
+            case PlatformType_WEB:
+                symbol = @"globe";
+                break;
+            case PlatformType_WX:
+                symbol = @"iphone";
+                break;
+            case PlatformType_iPad:
+            case PlatformType_APad:
+            case PlatformType_HarmonyPad:
+                symbol = @"ipad";
+                break;
+            default: {
+                if (info.type == Web_Online) {
+                    symbol = @"globe";
+                } else if (info.type == WX_Online) {
+                    symbol = @"iphone";
+                } else if (info.type == Pad_Online) {
+                    symbol = @"ipad";
+                }
+                break;
+            }
+        }
+    }
+    UIImage *image = nil;
+    if (@available(iOS 13.0, *)) {
+        image = [UIImage systemImageNamed:symbol];
+    }
+    if (!image) {
+        image = [WFCUImage imageNamed:@"pc_session"];
+    }
+    return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
 - (void)onTapPCBar:(id)sender {
     NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
-    if ([[WFCUConfigManager globalManager].appServiceProvider respondsToSelector:@selector(showPCSessionViewController:pcClient:)] && onlines.count) {
-        [[WFCUConfigManager globalManager].appServiceProvider showPCSessionViewController:self pcClient:[onlines objectAtIndex:0]];
+    if ([[WFCUConfigManager globalManager].appServiceProvider respondsToSelector:@selector(showPCSessionViewController:pcOnlineInfos:)] && onlines.count) {
+        // 传入全部在线设备
+        [[WFCUConfigManager globalManager].appServiceProvider showPCSessionViewController:self pcOnlineInfos:onlines];
     }
     
 }

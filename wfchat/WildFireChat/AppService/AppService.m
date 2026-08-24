@@ -742,9 +742,9 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
-- (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo {
+- (void)showPCSessionViewController:(UIViewController *)baseController pcOnlineInfos:(NSArray<WFCCPCOnlineInfo *> *)onlineInfos {
     PCSessionViewController *vc = [[PCSessionViewController alloc] init];
-    vc.pcClientInfo = clientInfo;
+    vc.pcOnlineInfos = onlineInfos;
     vc.hidesBottomBarWhenPushed = YES;
     [baseController.navigationController pushViewController:vc animated:YES];
 }

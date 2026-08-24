@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock;
 
-- (void)showPCSessionViewController:(UIViewController *)baseController pcClient:(WFCCPCOnlineInfo *)clientInfo;
+- (void)showPCSessionViewController:(UIViewController *)baseController pcOnlineInfos:(NSArray<WFCCPCOnlineInfo *> *)onlineInfos;
 
 - (void)addDevice:(NSString *)name
          deviceId:(NSString *)deviceId

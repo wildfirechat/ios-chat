@@ -12,7 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PCSessionViewController : UIViewController
-@property (nonatomic, strong)WFCCPCOnlineInfo *pcClientInfo;
+// 全部在线设备（调用方传入，页面内会随 kSettingUpdated 通知刷新）
+@property (nonatomic, strong)NSArray<WFCCPCOnlineInfo *> *pcOnlineInfos;
 @end
 
 NS_ASSUME_NONNULL_END
