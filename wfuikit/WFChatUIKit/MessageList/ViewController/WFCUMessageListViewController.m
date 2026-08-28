@@ -2050,34 +2050,76 @@
     }
 
     /**
- 生成中的流式消息（type 14，MESSAGE_CONTENT_TYPE_STREAMING_TEXT_GENERATING）必须固定在列表最新位置（视觉最底部）。
- 生成期间用户自己发消息、或其它消息（含最终 type 15 完成消息）插入/替换，
- 都可能把它顶到中间。这里在每次列表变更后把「最后一条生成中的消息」移到数组末尾，
- 其余消息保持相对顺序；本来就已在末尾则不动。
+ 进行中的 AI 交互元素（流式生成中、进度卡、选择/审批卡等）固定在列表最新位置（视觉最底部）。
+ 交互进行期间用户自己发消息、或其它消息（含最终 type 15 完成消息）插入/替换，
+ 都可能把它们顶到中间。这里在每次列表变更后把所有「进行中的 AI 交互元素」整体移到数组末尾
+ （元素之间、及其余消息之间保持相对顺序），本来就在末尾连续一段则不动。
  */
-- (void)pinStreamingGeneratingToBottom {
+- (void)pinLiveAIToBottom {
     if (self.modelList.count <= 1) {
         return;
     }
-    WFCUMessageModel *lastModel = self.modelList.lastObject;
-    if ([lastModel.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+    NSMutableArray *live = [[NSMutableArray alloc] init];
+    NSMutableArray *rest = [[NSMutableArray alloc] init];
+    for (WFCUMessageModel *model in self.modelList) {
+        if ([self isLiveAIMessage:model]) {
+            [live addObject:model];
+        } else {
+            [rest addObject:model];
+        }
+    }
+    if (live.count == 0) {
         return;
     }
-    NSInteger idx = -1;
-    for (NSInteger i = self.modelList.count - 1; i >= 0; i--) {
-        WFCUMessageModel *model = self.modelList[i];
-        if ([model.message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
-            idx = i;
+    // 尾部连续一段正好是 live 组（顺序一致）则已满足，不动
+    NSInteger start = self.modelList.count - live.count;
+    BOOL alreadyPinned = YES;
+    for (NSInteger i = start; i < self.modelList.count; i++) {
+        if (![self isLiveAIMessage:self.modelList[i]]) {
+            alreadyPinned = NO;
             break;
         }
     }
-    if (idx < 0) {
+    if (alreadyPinned) {
         return;
     }
-    WFCUMessageModel *generatingModel = self.modelList[idx];
-    [self.modelList removeObjectAtIndex:idx];
-    [self.modelList addObject:generatingModel];
+    [self.modelList removeAllObjects];
+    [self.modelList addObjectsFromArray:rest];
+    [self.modelList addObjectsFromArray:live];
+}
+
+/**
+ 判断消息是否为「进行中的 AI 交互元素」（与 HarmonyOS 版 ConversationPage.isLiveAIMessage 语义一致）：
+ - 流式生成中（类型 14 WFCCStreamingTextGeneratingMessageContent）→ YES；
+ - 提问卡片（200 WFCCDshQuestionMessageContent）state == "pending"（等待用户选择）→ YES；
+ - 审批卡片（202 WFCCDshApprovalMessageContent）state == "pending"（等待用户审批）→ YES；
+ - 目标卡片（206 WFCCDshGoalMessageContent）phase != "complete"（目标未完成）→ YES；
+ - 任务进度卡片（208 WFCCDshTaskProgressMessageContent）tasks 中任一 status == "running" → YES。
+ */
+- (BOOL)isLiveAIMessage:(WFCUMessageModel *)model {
+    WFCCMessageContent *content = model.message.content;
+    if ([content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
+        return YES;
     }
+    if ([content isKindOfClass:[WFCCDshQuestionMessageContent class]]) {
+        return [((WFCCDshQuestionMessageContent *)content).state isEqualToString:@"pending"];
+    }
+    if ([content isKindOfClass:[WFCCDshApprovalMessageContent class]]) {
+        return [((WFCCDshApprovalMessageContent *)content).state isEqualToString:@"pending"];
+    }
+    if ([content isKindOfClass:[WFCCDshGoalMessageContent class]]) {
+        return ![((WFCCDshGoalMessageContent *)content).phase isEqualToString:@"complete"];
+    }
+    if ([content isKindOfClass:[WFCCDshTaskProgressMessageContent class]]) {
+        NSArray<NSDictionary *> *tasks = ((WFCCDshTaskProgressMessageContent *)content).tasks;
+        for (NSDictionary *task in tasks) {
+            if ([[task objectForKey:@"status"] isEqualToString:@"running"]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
 
 - (void)updateQuotedMessageWhenRecall:(long long)messageUid {
     for (int i = 0; i < self.modelList.count; i++) {
@@ -2159,8 +2201,8 @@
                 return NSOrderedAscending;
             }
         }];
-        // 流式生成消息（type 14）必须钉在列表末尾：按 serverTime 排序可能把它顶到中间
-        [self pinStreamingGeneratingToBottom];
+        // 进行中的 AI 交互元素（流式生成中、进度卡、选择/审批卡等）必须钉在列表末尾：按 serverTime 排序可能把它们顶到中间
+        [self pinLiveAIToBottom];
         [self.collectionView reloadData];
     }
 }
@@ -2866,8 +2908,8 @@
         [self stopShowTyping];
     }
     
-    // 流式生成消息（type 14）必须钉在列表末尾：追加/替换消息可能把它顶到中间
-    [self pinStreamingGeneratingToBottom];
+    // 进行中的 AI 交互元素（流式生成中、进度卡、选择/审批卡等）必须钉在列表末尾：追加/替换消息可能把它们顶到中间
+    [self pinLiveAIToBottom];
     
     [self.collectionView reloadData];
     
