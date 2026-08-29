@@ -52,6 +52,17 @@
     return cell;
 }
 
+//见头文件：0 表示未设置，退回屏幕宽（iPhone 原行为）
+static CGFloat gWFCUCompositeListWidth = 0;
+
++ (void)setListWidth:(CGFloat)width {
+    gWFCUCompositeListWidth = width;
+}
+
++ (CGFloat)listWidth {
+    return gWFCUCompositeListWidth > 0 ? gWFCUCompositeListWidth : [UIScreen mainScreen].bounds.size.width;
+}
+
 + (CGFloat)heightForMessage:(WFCCMessage *)message {
     return COMPOSITE_CELL_TOP_PADDING + COMPOSITE_CELL_NAME_LABEL_HEIGHT + COMPOSITE_CELL_NAME_CONTENT_PADDING + [self heightForMessageContent:message] + COMPOSITE_CELL_BUTTOM_PADDING + COMPOSITE_CELL_LINE_HEIGHT;
 }
@@ -63,7 +74,7 @@
 + (CGRect)contentFrame {
     CGFloat x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
     CGFloat y = COMPOSITE_CELL_TOP_PADDING+COMPOSITE_CELL_NAME_LABEL_HEIGHT+COMPOSITE_CELL_NAME_CONTENT_PADDING;
-    CGFloat w = [UIScreen mainScreen].bounds.size.width - x - COMPOSITE_CELL_RIGHT_PADDING;
+    CGFloat w = [WFCUCompositeBaseCell listWidth] - x - COMPOSITE_CELL_RIGHT_PADDING;
     return CGRectMake(x, y, w, 0);
 }
 
@@ -94,7 +105,7 @@
     } else {
         x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
     }
-    self.line.frame = CGRectMake(x, cellHeight-1, [UIScreen mainScreen].bounds.size.width-x-COMPOSITE_CELL_RIGHT_PADDING, 1);
+    self.line.frame = CGRectMake(x, cellHeight-1, [WFCUCompositeBaseCell listWidth]-x-COMPOSITE_CELL_RIGHT_PADDING, 1);
 }
 
 - (UIImageView *)portraitImageView {
@@ -108,7 +119,7 @@
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         CGFloat x = COMPOSITE_CELL_PORTRAIT_PADDING + COMPOSITE_CELL_PORTRAIT_WIDTH + COMPOSITE_CELL_PORTRAIT_PADDING;
-        CGFloat w = [UIScreen mainScreen].bounds.size.width - x -
+        CGFloat w = [WFCUCompositeBaseCell listWidth] - x -
         - COMPOSITE_CELL_RIGHT_PADDING - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, w, COMPOSITE_CELL_NAME_LABEL_HEIGHT)];
         [_nameLabel setFont:[UIFont scaledSystemFontOfSize:COMPOSITE_CELL_NAME_LABEL_FONT]];
@@ -120,7 +131,7 @@
 
 - (UILabel *)timeLabel {
     if (!_timeLabel) {
-        CGFloat x = [UIScreen mainScreen].bounds.size.width - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
+        CGFloat x = [WFCUCompositeBaseCell listWidth] - COMPOSITE_CELL_TIME_LABEL_WIDTH - COMPOSITE_CELL_RIGHT_PADDING;
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, COMPOSITE_CELL_TOP_PADDING, COMPOSITE_CELL_TIME_LABEL_WIDTH, COMPOSITE_CELL_TIME_LABEL_HEIGHT)];
         [_timeLabel setFont:[UIFont scaledSystemFontOfSize:COMPOSITE_CELL_TIME_LABEL_FONT]];
         _timeLabel.textAlignment = NSTextAlignmentRight;

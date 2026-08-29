@@ -205,12 +205,21 @@
     }];
 }
 
+// iPad 双栏下本页是压进右栏的（pop），其余形态是模态弹出的（dismiss）
+- (void)closePage {
+    if (self.navigationController.viewControllers.count > 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - Actions
 - (void)onCancel:(id)sender {
     if (self.cancelBlock) {
         self.cancelBlock();
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self closePage];
 }
 
 - (void)onBack:(id)sender {
@@ -243,7 +252,7 @@
     if (self.completionBlock && self.selectedFiles.count > 0) {
         self.completionBlock([self.selectedFiles copy]);
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self closePage];
 }
 
 - (BOOL)isFileSelected:(WFCUPanFile *)file {

@@ -13,6 +13,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
+#import "WFCUMessageCell.h"
 
 @interface WFCUArticlesCell ()
 @property(nonatomic, strong)UIView *containerView;
@@ -63,10 +64,11 @@
 
 #define COVER_HW_RATE 0.35
 
+//同 WFCURichNotificationCell：按聊天内容区宽度排，不是屏幕宽。iPhone 上两者相等。
 @implementation WFCUArticlesCell
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)msgModel.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
     CGFloat coverHeight = containerWidth * COVER_HW_RATE;
     CGFloat labHeight = 0;
     if(content.subArticles.count) {
@@ -84,7 +86,7 @@
     [super setModel:model];
     [self containerView];
     WFCCArticlesMessageContent *content = (WFCCArticlesMessageContent *)model.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
     __block CGFloat offset = CELL_PADDING_TOP;
     [self removeAllItems];
 
@@ -185,7 +187,7 @@
 
 - (UIView *)containerView {
     if(!_containerView) {
-        CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+        CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
         _containerView = [[UIView alloc] initWithFrame:CGRectMake(CELL_MARGIN, CELL_MARGIN_TOP, containerWidth, 0)];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.masksToBounds = YES;

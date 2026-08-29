@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4207A7EEB0BCCCD28230C515 /* WFCUPadUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = FD331595C506A5C9F6725C33 /* WFCUPadUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C4384AB77B6BF84087BD7DC3 /* WFCUPadUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C38C0DFF7F7B294962BF98ED /* WFCUPadUtility.m */; };
+		EBF8C8E622F6A87C765FCC7D /* WFCUPadPlaceholderViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A43598E23DEAA81ADE1C556 /* WFCUPadPlaceholderViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5376F09F15244C0AB6EA4347 /* WFCUPadSearchResultViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = AA88ED0825C545C9BFD1DCCE /* WFCUPadSearchResultViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		580D9D4D79233E33C693165B /* WFCUPadWorkspaceWelcomeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CAF547326B31E4277838B0F /* WFCUPadWorkspaceWelcomeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63234328E01A4A5F9FF81E07 /* WFCUPadSearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A718C4A1ACE452BADC60654 /* WFCUPadSearchResultViewController.m */; };
+		8DC14D38764F39CB6B598959 /* WFCUPadWorkspaceWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5304CBD8FACEDDA26E27B5C /* WFCUPadWorkspaceWelcomeViewController.m */; };
+		624EA04F39F05CF32D35F53D /* WFCUPadPlaceholderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6CEA91F370B1BB71EE67458 /* WFCUPadPlaceholderViewController.m */; };
+		763D52C6DAE2FC82C4C8A7EE /* WFCUPadSplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E83F69DF927E9810355D1EC7 /* WFCUPadSplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B4DB6DD2A98CB3C646F988C /* WFCUPadSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97609B4A6692774CE3EABC16 /* WFCUPadSplitViewController.m */; };
+		BDA4098ECB3FB427F09B462B /* WFCUPadPrimaryNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ACB57310A250FC85B820D7E /* WFCUPadPrimaryNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		93B99771BBCE30E376535693 /* WFCUPadPrimaryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95435749C8C7671AD8E96D51 /* WFCUPadPrimaryNavigationController.m */; };
 		7e4f731f3f014aca9230ac69f5985754 /* WFCUMeetingMinutesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5878453c420b42d09b576c6c254ef0f6 /* WFCUMeetingMinutesCell.m */; };
 		ef62c26f3e3d4f69856136eafb4de248 /* WFCUMeetingMinutesCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 3e48f5e5bd394270ab55c86824474bd5 /* WFCUMeetingMinutesCell.h */; };
 		14349FA624362A6600FE38B3 /* WFCUSeletedUserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14349FA424362A6600FE38B3 /* WFCUSeletedUserViewController.h */; };
@@ -697,6 +709,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FD331595C506A5C9F6725C33 /* WFCUPadUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadUtility.h; sourceTree = "<group>"; };
+		C38C0DFF7F7B294962BF98ED /* WFCUPadUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadUtility.m; sourceTree = "<group>"; };
+		2A43598E23DEAA81ADE1C556 /* WFCUPadPlaceholderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadPlaceholderViewController.h; sourceTree = "<group>"; };
+		AA88ED0825C545C9BFD1DCCE /* WFCUPadSearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadSearchResultViewController.h; sourceTree = "<group>"; };
+		7CAF547326B31E4277838B0F /* WFCUPadWorkspaceWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadWorkspaceWelcomeViewController.h; sourceTree = "<group>"; };
+		4A718C4A1ACE452BADC60654 /* WFCUPadSearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadSearchResultViewController.m; sourceTree = "<group>"; };
+		F5304CBD8FACEDDA26E27B5C /* WFCUPadWorkspaceWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadWorkspaceWelcomeViewController.m; sourceTree = "<group>"; };
+		E6CEA91F370B1BB71EE67458 /* WFCUPadPlaceholderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadPlaceholderViewController.m; sourceTree = "<group>"; };
+		E83F69DF927E9810355D1EC7 /* WFCUPadSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadSplitViewController.h; sourceTree = "<group>"; };
+		97609B4A6692774CE3EABC16 /* WFCUPadSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadSplitViewController.m; sourceTree = "<group>"; };
+		7ACB57310A250FC85B820D7E /* WFCUPadPrimaryNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadPrimaryNavigationController.h; sourceTree = "<group>"; };
+		95435749C8C7671AD8E96D51 /* WFCUPadPrimaryNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadPrimaryNavigationController.m; sourceTree = "<group>"; };
 		14349F61243392E300FE38B3 /* WFChatUIKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WFChatUIKit.xcassets; sourceTree = "<group>"; };
 		14349FA424362A6600FE38B3 /* WFCUSeletedUserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUSeletedUserViewController.h; sourceTree = "<group>"; };
 		14349FA524362A6600FE38B3 /* WFCUSeletedUserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUSeletedUserViewController.m; sourceTree = "<group>"; };
@@ -1396,6 +1420,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		253773BC2E0ED852FB34A2DB /* Pad */ = {
+			isa = PBXGroup;
+			children = (
+				FD331595C506A5C9F6725C33 /* WFCUPadUtility.h */,
+				C38C0DFF7F7B294962BF98ED /* WFCUPadUtility.m */,
+				2A43598E23DEAA81ADE1C556 /* WFCUPadPlaceholderViewController.h */,
+				AA88ED0825C545C9BFD1DCCE /* WFCUPadSearchResultViewController.h */,
+				4A718C4A1ACE452BADC60654 /* WFCUPadSearchResultViewController.m */,
+				7CAF547326B31E4277838B0F /* WFCUPadWorkspaceWelcomeViewController.h */,
+				F5304CBD8FACEDDA26E27B5C /* WFCUPadWorkspaceWelcomeViewController.m */,
+				E6CEA91F370B1BB71EE67458 /* WFCUPadPlaceholderViewController.m */,
+				E83F69DF927E9810355D1EC7 /* WFCUPadSplitViewController.h */,
+				97609B4A6692774CE3EABC16 /* WFCUPadSplitViewController.m */,
+				7ACB57310A250FC85B820D7E /* WFCUPadPrimaryNavigationController.h */,
+				95435749C8C7671AD8E96D51 /* WFCUPadPrimaryNavigationController.m */,
+			);
+			path = Pad;
+			sourceTree = "<group>";
+		};
 		1450EA82243891F300BF51FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
@@ -1624,6 +1667,7 @@
 		2F550BE1217F4D7B00F56C26 /* WFChatUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				253773BC2E0ED852FB34A2DB /* Pad */,
 				B7DA72062F60FC1500C112C8 /* Archive */,
 				B7DEB6262F4D8BDA003E481E /* Pan */,
 				B770E8CF2F40C59000D4B219 /* Poll */,
@@ -2902,6 +2946,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4207A7EEB0BCCCD28230C515 /* WFCUPadUtility.h in Headers */,
+				EBF8C8E622F6A87C765FCC7D /* WFCUPadPlaceholderViewController.h in Headers */,
+				5376F09F15244C0AB6EA4347 /* WFCUPadSearchResultViewController.h in Headers */,
+				580D9D4D79233E33C693165B /* WFCUPadWorkspaceWelcomeViewController.h in Headers */,
+				763D52C6DAE2FC82C4C8A7EE /* WFCUPadSplitViewController.h in Headers */,
+				BDA4098ECB3FB427F09B462B /* WFCUPadPrimaryNavigationController.h in Headers */,
 				2F551201217F5CC300F56C26 /* WFCUConversationSettingViewController.h in Headers */,
 				B7DA72092F60FC1500C112C8 /* WFCUArchiveService.h in Headers */,
 				B770E8D32F40C59000D4B219 /* WFCUPoll.h in Headers */,
@@ -3324,6 +3374,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4384AB77B6BF84087BD7DC3 /* WFCUPadUtility.m in Sources */,
+				624EA04F39F05CF32D35F53D /* WFCUPadPlaceholderViewController.m in Sources */,
+				63234328E01A4A5F9FF81E07 /* WFCUPadSearchResultViewController.m in Sources */,
+				8DC14D38764F39CB6B598959 /* WFCUPadWorkspaceWelcomeViewController.m in Sources */,
+				7B4DB6DD2A98CB3C646F988C /* WFCUPadSplitViewController.m in Sources */,
+				93B99771BBCE30E376535693 /* WFCUPadPrimaryNavigationController.m in Sources */,
 				B7E2D8BD2EFBC92C00C8F909 /* WFCUJoinGroupRequestViewController.m in Sources */,
 				2F551105217F5CC200F56C26 /* CCHMapViewDelegateProxy.m in Sources */,
 				2F551224217F5CC300F56C26 /* WFCUMyPortraitViewController.m in Sources */,

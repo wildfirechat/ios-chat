@@ -725,3 +725,12 @@
 "OpenFileForbidden"="Opening this file type is forbidden";
 "SendFileForbidden"="Sending this file type is not allowed";
 
+
+//The workspace welcome panel in the iPad primary column, mirrors flutter-chat's PadWorkspaceWelcome
+"GreetingMorning"="Good morning";
+"GreetingNoon"="Good afternoon";
+"GreetingAfternoon"="Good afternoon";
+"GreetingEvening"="Good evening";
+"GreetingNight"="Working late";
+"WorkspaceWelcomeSubtitle"="Have a great day";
+"WorkspaceWelcomeHint"="Here's to a productive day";

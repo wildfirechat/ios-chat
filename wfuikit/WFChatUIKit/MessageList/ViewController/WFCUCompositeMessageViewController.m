@@ -11,6 +11,7 @@
 #import "WFCUUtilities.h"
 #import "WFCUCompositeBaseCell.h"
 #import "WFCUCompositeTextCell.h"
+#import "WFCUPadUtility.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "MBProgressHUD.h"
 #import "WFCUBrowserViewController.h"
@@ -32,13 +33,35 @@
 @property (nonatomic, strong)NSMutableArray<WFCCMessage *> *currentImageMessages;
 @property (nonatomic, strong)AVAudioPlayer *player;
 @property (nonatomic, assign)long long playingMessageId;
+//已按哪个宽度排过版，仅 iPad 用
+@property (nonatomic, assign)CGFloat laidOutWidth;
 @end
 
 @implementation WFCUCompositeMessageViewController
 
+//iPad 上右栏宽度会变（旋转、分屏），cell 的手写 frame 不会自己跟，这里整页重排一次。
+//iPhone 锁竖屏、页面恒等于屏幕宽，整段直接返回。
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if (![WFCUPadUtility isPad]) {
+        return;
+    }
+    CGFloat width = self.view.bounds.size.width;
+    if (width <= 0 || width == self.laidOutWidth) {
+        return;
+    }
+    self.laidOutWidth = width;
+    [WFCUCompositeBaseCell setListWidth:width];
+    self.tableView.frame = self.view.bounds;
+    [self setupTableHeaderView];
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    //cell 全是手写 frame，宽度得从外面给。iPhone 上本页恒等于屏幕宽，与改之前同一个数。
+    [WFCUCompositeBaseCell setListWidth:self.view.frame.size.width];
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;

@@ -14,6 +14,7 @@
 #import "UIColor+YH.h"
 #import <UIFont+YH.h>
 #import "WFCUImage.h"
+#import "WFCUPadUtility.h"
 
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
@@ -23,19 +24,103 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    [self applyRowBackground];
 }
+
+/// 行背景色。iPad 双栏布局下，右侧正在展示的会话在左侧列表里保持高亮，和微信 iPad 一致；
+/// iPhone 上不显示选中态（点完就 push 走了）。
+- (void)applyRowBackground {
+    BOOL darkMode = NO;
+    if (@available(iOS 13.0, *)) {
+        if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            darkMode = YES;
+        }
+    }
+
+    if (self.isBig && self.selected && [WFCUPadUtility isSplitLayoutActive]) {
+        self.contentView.backgroundColor = darkMode ? [UIColor colorWithHexString:@"0x3d3d3d"] : [UIColor colorWithHexString:@"0xdedede"];
+        return;
+    }
+
+    if (darkMode) {
+        if (self.info.isTop) {
+            self.contentView.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.f];
+        } else {
+            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
+        }
+    } else {
+        if (self.info.isTop) {
+            self.contentView.backgroundColor = [UIColor colorWithHexString:@"0xf7f7f7"];
+        } else {
+            self.contentView.backgroundColor = [UIColor whiteColor];
+        }
+    }
+}
+//cell 的实际宽度。iPad 上会话列表在左侧栏里，宽度远小于屏幕宽度，所以不能用屏幕宽度算布局。
+- (CGFloat)layoutWidth {
+    CGFloat width = self.contentView.bounds.size.width;
+    if (width <= 0) {
+        width = self.bounds.size.width;
+    }
+    if (width <= 0) {
+        width = self.superview.bounds.size.width;
+    }
+    if (width <= 0) {
+        width = [UIScreen mainScreen].bounds.size.width;
+    }
+    return width;
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
     _potraitView.frame = CGRectMake(16, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
     
     if (!self.isBig) {
-        _targetView.frame = CGRectMake(16 + portraitSize + 20, 11, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 100), 16);
+        _targetView.frame = CGRectMake(16 + portraitSize + 20, 11, [self layoutWidth] - (16 + portraitSize + 20 + 100), 16);
         _targetView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
-        _digestView.frame = CGRectMake(16 + portraitSize + 20, 11 + 16 + 8, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 20 + 20), 19);
+        _digestView.frame = CGRectMake(16 + portraitSize + 20, 11 + 16 + 8, [self layoutWidth] - (16 + portraitSize + 20 + 20), 19);
+    } else {
+        //赋值 info 时 cell 还没拿到最终宽度，这里按真实宽度再对齐一次右侧元素
+        [self applyWidthDependentLayout];
+    }
+}
+
+/// 重新计算依赖 cell 宽度的横向布局（时间、免打扰图标、标题截断、摘要）
+- (void)applyWidthDependentLayout {
+    CGFloat width = [self layoutWidth];
+    if (width <= 0 || !self.info) {
+        return;
     }
 
+    if (_timeView && !_timeView.hidden) {
+        CGRect timeFrame = _timeView.frame;
+        timeFrame.origin.x = width - timeFrame.size.width - 16;
+        _timeView.frame = timeFrame;
+    }
+    if (_silentView && !_silentView.hidden) {
+        CGRect silentFrame = _silentView.frame;
+        silentFrame.origin.x = width - 12 - 20;
+        _silentView.frame = silentFrame;
+    }
+    if (_targetView) {
+        CGFloat timeViewWidth = (_timeView && !_timeView.hidden) ? _timeView.frame.size.width + 8 : 0;
+        CGFloat maxTargetWidth = width - 76 - timeViewWidth - 24;
+        CGSize size = [WFCUUtilities getTextDrawingSize:_targetView.text
+                                                   font:_targetView.font
+                                        constrainedSize:CGSizeMake(MAX(maxTargetWidth, 1), 8000)];
+        CGRect targetFrame = _targetView.frame;
+        targetFrame.size.width = size.width;
+        _targetView.frame = targetFrame;
+
+        if (_offcialView && !_offcialView.hidden) {
+            CGRect frame = _offcialView.frame;
+            frame.origin.x = targetFrame.origin.x + targetFrame.size.width + 4;
+            frame.origin.y = targetFrame.origin.y;
+            _offcialView.frame = frame;
+        }
+    }
+    [self updateDigestFrame:(_statusView && !_statusView.hidden)];
 }
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
@@ -160,29 +245,11 @@
     CGFloat timeHeight = [WFCUConfigManager scaledSize:12];
     CGSize timeSize = [WFCUUtilities getTextDrawingSize:self.timeView.text font:self.timeView.font constrainedSize:CGSizeMake(CGFLOAT_MAX, timeHeight)];
     CGFloat timeWidth = MAX(52, ceil(timeSize.width));
-    self.timeView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - timeWidth - 16, 16, timeWidth, timeHeight);
+    self.timeView.frame = CGRectMake([self layoutWidth] - timeWidth - 16, 16, timeWidth, timeHeight);
     
     [self update:info.conversation];
     
-    BOOL darkMode = NO;
-    if (@available(iOS 13.0, *)) {
-        if(UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-            darkMode = YES;
-        }
-    }
-    if (darkMode) {
-        if (info.isTop) {
-            [self.contentView setBackgroundColor:[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.f]];
-        } else {
-            self.contentView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-        }
-    } else {
-        if (info.isTop) {
-            [self.contentView setBackgroundColor:[UIColor colorWithHexString:@"0xf7f7f7"]];
-        } else {
-            self.contentView.backgroundColor = [UIColor whiteColor];
-        }
-    }
+    [self applyRowBackground];
     
     if (info.lastMessage && info.lastMessage.direction == MessageDirection_Send) {
         if (info.lastMessage.status == Message_Status_Sending) {
@@ -203,9 +270,9 @@
 - (void)updateDigestFrame:(BOOL)isSending {
     CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
     if (isSending) {
-        _digestView.frame = CGRectMake(16 + portraitSize + 12 + 18, 40, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 12) - 16 - 16 - 18, 19);
+        _digestView.frame = CGRectMake(16 + portraitSize + 12 + 18, 40, [self layoutWidth] - (16 + portraitSize + 12) - 16 - 16 - 18, 19);
     } else {
-        _digestView.frame = CGRectMake(16 + portraitSize + 12, 40, [UIScreen mainScreen].bounds.size.width - (16 + portraitSize + 12) - 16 - 16, 19);
+        _digestView.frame = CGRectMake(16 + portraitSize + 12, 40, [self layoutWidth] - (16 + portraitSize + 12) - 16 - 16, 19);
     }
 }
 
@@ -247,7 +314,7 @@
     }
     
     CGFloat timeViewWidth = self.timeView.frame.size.width + 8; // 时间 label 宽度 + 间距
-    CGFloat maxTargetWidth = [UIScreen mainScreen].bounds.size.width - 76 - timeViewWidth - 24;
+    CGFloat maxTargetWidth = [self layoutWidth] - 76 - timeViewWidth - 24;
     CGSize size = [WFCUUtilities getTextDrawingSize:self.targetView.text font:self.targetView.font constrainedSize:CGSizeMake(maxTargetWidth, 8000)];
     
     CGFloat portraitSize = 48 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
@@ -425,7 +492,7 @@
 
 - (UILabel *)targetView {
     if (!_targetView) {
-        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [UIScreen mainScreen].bounds.size.width - 76  - 68, 20)];
+        _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 16, [self layoutWidth] - 76  - 68, 20)];
         _targetView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
         _targetView.textColor = [WFCUConfigManager globalManager].textColor;
         _targetView.lineBreakMode = NSLineBreakByTruncatingMiddle;
@@ -461,7 +528,7 @@
 }
 - (UILabel *)digestView {
     if (!_digestView) {
-        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [UIScreen mainScreen].bounds.size.width - 76  - 16 - 16, 19)];
+        _digestView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 48 + 12, 42, [self layoutWidth] - 76  - 16 - 16, 19)];
         _digestView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:14];
         _digestView.lineBreakMode = NSLineBreakByTruncatingTail;
         _digestView.textColor = [UIColor colorWithHexString:@"b3b3b3"];
@@ -472,7 +539,7 @@
 
 - (UIImageView *)silentView {
     if (!_silentView) {
-        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 12  - 20, 45, 12, 12)];
+        _silentView = [[UIImageView alloc] initWithFrame:CGRectMake([self layoutWidth] - 12  - 20, 45, 12, 12)];
         _silentView.image = [WFCUImage imageNamed:@"conversation_mute"];
         [self.contentView addSubview:_silentView];
     }
@@ -481,7 +548,7 @@
 
 - (UILabel *)timeView {
     if (!_timeView) {
-        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 52  - 16, 20, 52, 12)];
+        _timeView = [[UILabel alloc] initWithFrame:CGRectMake([self layoutWidth] - 52  - 16, 20, 52, 12)];
         _timeView.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
         _timeView.textAlignment = NSTextAlignmentRight;
         _timeView.textColor = [UIColor colorWithHexString:@"b3b3b3"];

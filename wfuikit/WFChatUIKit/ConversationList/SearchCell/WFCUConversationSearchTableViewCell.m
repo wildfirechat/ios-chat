@@ -73,6 +73,27 @@
     return _potraitView;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //按 cell 自己的宽度排，不是屏幕宽：搜索结果现在开在右栏里。iPhone 上两者相等。
+    CGFloat width = self.bounds.size.width;
+    if (_targetView) {
+        CGRect frame = _targetView.frame;
+        frame.size.width = width - 68 - 68;
+        _targetView.frame = frame;
+    }
+    if (_digestView) {
+        CGRect frame = _digestView.frame;
+        frame.size.width = width - 60 - 16;
+        _digestView.frame = frame;
+    }
+    if (_timeView) {
+        CGRect frame = _timeView.frame;
+        frame.origin.x = width - 52 - 8;
+        _timeView.frame = frame;
+    }
+}
+
 - (UILabel *)targetView {
     if (!_targetView) {
         _targetView = [[UILabel alloc] initWithFrame:CGRectMake(16 + 28 + 16, 19, [UIScreen mainScreen].bounds.size.width - 68  - 68, 10)];

@@ -35,4 +35,11 @@
 @property (nonatomic, weak) id<WFCUFaceBoardDelegate> delegate;
 
 @property (nonatomic, assign) BOOL disableSticker;
+
+/// 面板高度（不含底部安全区）。
++ (CGFloat)boardHeight;
+
+/// YES 表示面板不是当作键盘（inputView）弹出，而是内联在会话页里 —— iPad 双栏下走这条路。
+/// 内联时页面本身已经避开了底部安全区，面板不再自己留那一档。
+@property (nonatomic, assign) BOOL inlineHosted;
 @end

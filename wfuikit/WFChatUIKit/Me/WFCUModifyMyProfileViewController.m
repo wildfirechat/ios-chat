@@ -127,7 +127,8 @@
 
 - (UITextField *)textField {
     if(!_textField) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, [UIScreen mainScreen].bounds.size.width, 32)];
+        //按本页宽度：双栏下这一页在右栏里。iPhone 上两者相等。
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, self.view.bounds.size.width, 32)];
         _textField.borderStyle = UITextBorderStyleRoundedRect;
         _textField.clearButtonMode = UITextFieldViewModeAlways;
         _textField.delegate = self;

@@ -30,9 +30,10 @@
     [super layoutSubviews];
     CGFloat postionY = (self.frame.size.height - 40) / 2.0;
     self.portrait.frame = CGRectMake(16, postionY, 40, 40);
-    self.name.frame = CGRectMake(10 + 40 + 20, postionY, [UIScreen mainScreen].bounds.size.width - (10 + 40 + 20), 20);
+    //按 cell 自己的宽度排，不是屏幕宽：搜索结果现在开在右栏里。iPhone 上两者相等。
+    self.name.frame = CGRectMake(10 + 40 + 20, postionY, self.bounds.size.width - (10 + 40 + 20), 20);
     postionY += 15 + 8;
-    self.haveMember.frame  = CGRectMake(10 + 40 + 20, postionY, [UIScreen mainScreen].bounds.size.width - (10 + 40 + 20), 19);
+    self.haveMember.frame  = CGRectMake(10 + 40 + 20, postionY, self.bounds.size.width - (10 + 40 + 20), 19);
 
 }
 

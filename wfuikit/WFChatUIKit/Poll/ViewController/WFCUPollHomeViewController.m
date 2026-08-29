@@ -89,6 +89,10 @@
 
 - (void)setupTableView {
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    //页面宽高不再恒等于屏幕：iPad 右栏比屏幕窄，栏宽还会随旋转/分屏/台前调度变。
+    //手写的 frame 是按 viewDidLoad 那一刻定死的，补一个 autoresizing 让它跟着父视图走。
+    //iPhone 锁竖屏、页面恒等于整屏，这一行永远不会改变任何取值。
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
@@ -98,7 +102,12 @@
 }
 
 - (void)closeButtonTapped:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    //iPad 双栏下本页是压进右栏的（pop），其余形态是模态弹出的（dismiss）
+    if (self.navigationController.viewControllers.count > 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - UITableViewDataSource

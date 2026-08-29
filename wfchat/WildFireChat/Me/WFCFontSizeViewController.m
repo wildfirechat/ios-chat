@@ -165,7 +165,7 @@
         
         // 重建主窗口根控制器，使整个应用 UI 按新字体重新渲染
         UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
-        window.rootViewController = [WFCBaseTabBarController new];
+        window.rootViewController = [WFCBaseTabBarController rootViewController];
         [window makeKeyAndVisible];
     }];
     [alert addAction:confirm];

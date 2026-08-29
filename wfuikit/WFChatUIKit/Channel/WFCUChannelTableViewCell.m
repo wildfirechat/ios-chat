@@ -39,6 +39,15 @@
     return _name;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //名字按 cell 自己的宽度排，不是屏幕宽（iPad 上这张列表在右栏里）。
+    //iPhone 上 cell 宽恒等于屏幕宽，取值没变。
+    if (_name) {
+        _name.frame = CGRectMake(56, 16, self.bounds.size.width - 64, 24);
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

@@ -30,6 +30,15 @@
     return self;
 }
 
+//开关是在 init 里按屏幕宽定的位置，双栏下 cell 比屏幕窄，它会跑到栏外看不见。
+//这里按 cell 自己的宽度纠回来 —— iPhone 上 cell 宽恒等于表宽、表宽恒等于屏幕宽，与原来同一个数。
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect frame = self.valueSwitch.frame;
+    frame.origin.x = self.bounds.size.width - 72;
+    self.valueSwitch.frame = frame;
+}
+
 - (void)onSwitch:(id)sender {
     BOOL value = _valueSwitch.on;
     __weak typeof(self)ws = self;

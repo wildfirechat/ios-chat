@@ -38,6 +38,8 @@
 
 @property(nonatomic, strong)NSMutableDictionary<NSString *, WFCUStickerItem *> *stickers;
 @property(nonatomic, assign)int selectedTableRow;
+//已按这个尺寸排过版。iPad 双栏下面板宽度是会话栏的宽度，且内联时高度也与键盘形态不同。
+@property(nonatomic, assign)CGSize laidOutSize;
 @end
 
 #define EMOJ_TAB_HEIGHT 42
@@ -216,7 +218,7 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
         //添加PageControl
         [self addSubview:self.facePageControl];
         
-        _tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [WFCUUtilities wf_safeDistanceBottom], self.frame.size.width, EMOJ_TAB_HEIGHT)];
+        _tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - EMOJ_TAB_HEIGHT - [self bottomInset], self.frame.size.width, EMOJ_TAB_HEIGHT)];
         [self addSubview:_tabbarView];
         
         _sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -237,9 +239,43 @@ void checkAndCopyFiles(NSString *defaultBundlePath, NSString *cacheBundlePath) {
         [self.tabView setAllowsMultipleSelection:NO];
         self.tabView.allowsSelection = YES;
         self.selectedTableRow = 0;
+        self.laidOutSize = self.bounds.size;
     }
 
     return self;
+}
+
++ (CGFloat)boardHeight {
+    return EMOJ_AREA_HEIGHT;
+}
+
+//内联时页面自己已经避开了底部安全区，面板不再留那一档；当作键盘弹出时它盖在整屏底部，得自己留。
+- (CGFloat)bottomInset {
+    return self.inlineHosted ? 0 : [WFCUUtilities wf_safeDistanceBottom];
+}
+
+//尺寸变了重新排一遍。iPhone 上锁竖屏、面板又是按屏宽建的，这个分支永远进不来。
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGSize size = self.bounds.size;
+    if (size.width <= 0 ||
+        (fabs(size.width - self.laidOutSize.width) < 0.5 && fabs(size.height - self.laidOutSize.height) < 0.5)) {
+        return;
+    }
+    self.laidOutSize = size;
+    width = (int)size.width;
+
+    CGRect frame = self.bounds;
+    frame.size.height = EMOJ_FACE_VIEW_HEIGHT;
+    self.collectionView.frame = frame;
+    self.facePageControl.frame = CGRectMake(size.width / 2 - 100, EMOJ_FACE_VIEW_HEIGHT, 200, EMOJ_PAGE_CONTROL_HEIGHT);
+    self.tabbarView.frame = CGRectMake(0, size.height - EMOJ_TAB_HEIGHT - [self bottomInset], size.width, EMOJ_TAB_HEIGHT);
+    self.sendBtn.frame = CGRectMake(size.width - 52, 5, 52, 37);
+    self.tabView.frame = CGRectMake(0, 5, size.width - 52, 37);
+
+    //表情格子是在 cellForItemAtIndexPath 里按 width 摆的，宽度变了只能重建
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView reloadData];
 }
 
 - (void)setSelectedTableRow:(int)selectedTableRow {

@@ -27,7 +27,7 @@
 }
 
 + (CGFloat)contentHeight:(WFCUFavoriteItem *)favoriteItem {
-    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width-16, 1000)].height;
+    return [WFCUUtilities getTextDrawingSize:favoriteItem.title font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake([WFCFavoriteBaseCell layoutWidth]-16, 1000)].height;
 }
 
 - (UILabel *)label {

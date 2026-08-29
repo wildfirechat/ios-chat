@@ -10,6 +10,7 @@
 #import "WFCUChatInputBar.h"
 
 #import "WFCUFaceBoard.h"
+#import "WFCUPadUtility.h"
 #import "WFCUVoiceRecordView.h"
 #import "WFCUPluginBoardView.h"
 #import "WFCUUtilities.h"
@@ -89,6 +90,14 @@
 
 @property (nonatomic, strong)UIView *emojInputView;
 @property (nonatomic, strong)UIView *pluginInputView;
+
+//iPad 双栏：表情/扩展面板内联在会话栏里，而不是当作键盘（inputView）弹出。
+//键盘由系统摆在整个窗口底部，宽度必然是整屏，面板走 inputView 就会横跨左右两栏；
+//android(EmotionLayout) 与 flutter(ConversationPane 里的表情面板) 两端本来就是会话页里的一层视图。
+@property (nonatomic, weak)UIView *padBoard;
+@property (nonatomic, assign)CGFloat padBoardHeight;
+//内联面板展示期间输入框不是第一响应者，selectedTextRange 为 nil，光标位置只能自己记
+@property (nonatomic, assign)NSRange padSavedSelectedRange;
 
 @property (nonatomic, strong)UIView *quoteContainerView;
 @property (nonatomic, strong)UILabel *quoteLabel;
@@ -576,6 +585,82 @@
     }
 }
 
+//iPad 上旋转屏幕或拖动分屏分隔条时，父视图宽度会变，这里把与宽度相关的子视图重新摆一遍。
+//输入框高度、引用条等纵向状态保持不变，只调整横向布局。
+- (void)relayoutForParentBoundsChange {
+    CGFloat width = self.parentView.bounds.size.width;
+    if (width <= 0) {
+        return;
+    }
+    BOOL widthChanged = fabs(width - self.bounds.size.width) > 0.5;
+
+    if (widthChanged) {
+        //面板和键盘是按旧宽度布局的，先收起来
+        if ([self.textInputView isFirstResponder]) {
+            [self.textInputView resignFirstResponder];
+        }
+        [self resetInputBarStatue];
+    }
+
+    CGFloat height = self.bounds.size.height;
+    CGRect frame = CGRectMake(0, self.parentView.bounds.size.height - height, width, height);
+    self.frame = frame;
+    self.backupFrame = frame;
+
+    if (!widthChanged) {
+        return;
+    }
+
+    CGFloat containerLeft = self.publicContainer ? CGRectGetMinX(self.inputContainer.frame) : 0;
+    CGFloat containerWidth = width - containerLeft;
+    CGRect containerFrame = CGRectMake(containerLeft, 0, containerWidth, height);
+    self.inputContainer.frame = containerFrame;
+    if (self.publicContainer) {
+        self.publicContainer.frame = containerFrame;
+        [self relayoutPublicMenuButtons];
+    }
+
+    CGRect rect = self.pluginSwitchBtn.frame;
+    rect.origin.x = containerWidth - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING;
+    self.pluginSwitchBtn.frame = rect;
+
+    rect = self.emojSwitchBtn.frame;
+    rect.origin.x = containerWidth - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_ICON_SIZE;
+    self.emojSwitchBtn.frame = rect;
+
+    CGRect tvFrame = self.textInputView.frame;
+    tvFrame.size.width = containerWidth - tvFrame.origin.x - CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_HEIGHT + CHAT_INPUT_BAR_PADDING;
+    self.textInputView.frame = tvFrame;
+    self.inputCoverView.frame = self.textInputView.bounds;
+    self.voiceInputBtn.frame = tvFrame;
+
+    if (self.quoteContainerView) {
+        CGRect quoteFrame = self.quoteContainerView.frame;
+        quoteFrame.size.width = tvFrame.size.width;
+        self.quoteContainerView.frame = quoteFrame;
+    }
+}
+
+- (void)relayoutPublicMenuButtons {
+    if (!self.menuButtons.count) {
+        return;
+    }
+    CGRect parentRect = self.publicContainer.bounds;
+    CGFloat butWidth = (parentRect.size.width - (self.menuButtons.count - 1) * 1) / self.menuButtons.count;
+    for (int i = 0; i < self.menuButtons.count; ++i) {
+        self.menuButtons[i].frame = CGRectMake(butWidth * i + (i > 0 ? (i - 1) : 0), 0, butWidth, parentRect.size.height);
+    }
+    //按钮之间的分割线（publicContainer 里除按钮之外的子视图），按创建顺序落在第 1..n-1 个分界处
+    int splitIndex = 1;
+    for (UIView *subview in self.publicContainer.subviews) {
+        if ([subview isKindOfClass:[WFCUPublicMenuButton class]]) {
+            continue;
+        }
+        subview.frame = CGRectMake(splitIndex * butWidth, parentRect.size.height / 2 - CHAT_INPUT_BAR_ICON_SIZE / 2, 1, CHAT_INPUT_BAR_ICON_SIZE);
+        splitIndex++;
+    }
+}
+
 - (void)onSwitchBtn:(id)sender {
 #ifdef WFC_PTT
     if(sender == self.pttSwitchBtn) {
@@ -704,6 +789,89 @@
         self.textInputView.tintColor = self.textInputViewTintColor;
         self.inputCoverView.hidden = YES;
     }
+
+    //iPad 双栏：内联面板的显示/收起收口在这里，而不是散在各个 setXxxInput: 里 ——
+    //上面那一串 setter 会连着改好几个状态，逐个去动面板会来回弹好几次。
+    if ([self usePadInlineBoard] || self.padBoard) {
+        if (inputBarStatus == ChatInputBarEmojiStatus) {
+            [self showPadInlineBoard:self.emojInputView];
+        } else if (inputBarStatus == ChatInputBarPluginStatus) {
+            [self showPadInlineBoard:self.pluginInputView];
+        } else if (self.padBoard) {
+            [self hidePadInlineBoard];
+            if (![self.textInputView isFirstResponder]) {
+                //键盘不会再弹了（keyboardWillShow: 不会来），输入栏得自己落回底部
+                [self layoutForBottomInset:0 duration:0.25 keyboardShowing:NO];
+            }
+        }
+    }
+}
+
+#pragma mark - iPad 双栏：内联的表情/扩展面板
+
+- (BOOL)usePadInlineBoard {
+    return [WFCUPadUtility isSplitLayoutActive];
+}
+
+- (void)showPadInlineBoard:(UIView *)board {
+    UIView *parent = self.parentView;
+    if (!board || !parent) {
+        return;
+    }
+    CGFloat height;
+    if ([board isKindOfClass:[WFCUFaceBoard class]]) {
+        ((WFCUFaceBoard *)board).inlineHosted = YES;
+        height = [WFCUFaceBoard boardHeight];
+    } else {
+        height = [WFCUPluginBoardView boardHeight];
+    }
+    CGRect frame = CGRectMake(0, parent.bounds.size.height - height, parent.bounds.size.width, height);
+    if (self.padBoard == board && CGRectEqualToRect(board.frame, frame)) {
+        return;
+    }
+    if (self.padBoard && self.padBoard != board) {
+        [self.padBoard removeFromSuperview];
+    }
+    board.frame = frame;
+    [parent addSubview:board];
+    self.padBoard = board;
+    self.padBoardHeight = height;
+
+    if ([self.textInputView isFirstResponder]) {
+        self.padSavedSelectedRange = self.textInputView.selectedRange;
+        //收起系统键盘。keyboardWillHide: 会按新的 padBoardHeight 把输入栏摆到面板上面，
+        //所以只有一次动画，不会先落到底再弹上来
+        [self.textInputView resignFirstResponder];
+    } else {
+        self.padSavedSelectedRange = NSMakeRange(self.textInputView.textStorage.length, 0);
+        [self layoutForBottomInset:height duration:0.25 keyboardShowing:YES];
+    }
+}
+
+- (void)hidePadInlineBoard {
+    [self.padBoard removeFromSuperview];
+    self.padBoard = nil;
+    self.padBoardHeight = 0;
+}
+
+//输入栏抬到距底部 inset 的位置，并把新的位置告诉会话页（消息列表据此让出空间）。
+//键盘与内联面板走的是同一段逻辑，区别只在 inset 是谁给的。
+- (void)layoutForBottomInset:(CGFloat)inset duration:(CGFloat)duration keyboardShowing:(BOOL)keyboardShowing {
+    if (!self.superview) {
+        return;
+    }
+    CGRect frame = CGRectMake(0, self.superview.bounds.size.height - self.bounds.size.height - inset, self.superview.bounds.size.width, self.bounds.size.height);
+    [self.delegate willChangeFrame:frame withDuration:duration keyboardShowing:keyboardShowing];
+    self.backupFrame = frame;
+    [UIView animateWithDuration:duration animations:^{
+        self.frame = frame;
+        CGRect inputFrame = self.inputContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.inputContainer.frame = inputFrame;
+        inputFrame = self.publicContainer.frame;
+        inputFrame.size.height = frame.size.height;
+        self.publicContainer.frame = inputFrame;
+    }];
 }
 
 - (void)setVoiceInput:(BOOL)voiceInput {
@@ -763,11 +931,14 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
-        self.textInputView.inputView = self.emojInputView;
-        if (!self.textInputView.isFirstResponder) {
-            [self.textInputView becomeFirstResponder];
+        if (![self usePadInlineBoard]) {
+            self.textInputView.inputView = self.emojInputView;
+            if (!self.textInputView.isFirstResponder) {
+                [self.textInputView becomeFirstResponder];
+            }
+            [self.textInputView reloadInputViews];
         }
-        [self.textInputView reloadInputViews];
+        //双栏下面板内联展示，统一收口在 setInputBarStatus: 末尾
         [self.emojSwitchBtn setImage:[WFCUImage imageNamed:@"chat_input_bar_keyboard"] forState:UIControlStateNormal];
         if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
             [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
@@ -783,11 +954,13 @@
         [self.textInputView setHidden:NO];
         self.quoteContainerView.hidden = NO;
         [self.voiceInputBtn setHidden:YES];
-        self.textInputView.inputView = self.pluginInputView;
-        if (!self.textInputView.isFirstResponder) {
-            [self.textInputView becomeFirstResponder];
+        if (![self usePadInlineBoard]) {
+            self.textInputView.inputView = self.pluginInputView;
+            if (!self.textInputView.isFirstResponder) {
+                [self.textInputView becomeFirstResponder];
+            }
+            [self.textInputView reloadInputViews];
         }
-        [self.textInputView reloadInputViews];
         self.quoteContainerView.hidden = NO;
         if (self.textInputView.frame.size.height+self.quoteContainerView.frame.size.height > self.frame.size.height) {
             [self textView:self.textInputView shouldChangeTextInRange:NSMakeRange(self.textInputView.text.length, 0) replacementText:@""];
@@ -997,6 +1170,8 @@
     if (![self.textInputView isFirstResponder]) {
         return;
     }
+    //系统键盘要上来了，内联面板让位：两者都占底部那块空间，不能同时在
+    [self hidePadInlineBoard];
     NSDictionary *userInfo = [notification userInfo];
     NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [value CGRectValue];
@@ -1026,25 +1201,21 @@
     NSDictionary *userInfo = [notification userInfo];
     
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    CGRect frame = CGRectMake(0, self.superview.bounds.size.height - self.bounds.size.height, self.superview.bounds.size.width, self.bounds.size.height);
-    [self.delegate willChangeFrame:frame withDuration:duration keyboardShowing:NO];
-    self.backupFrame = frame;
-    [UIView animateWithDuration:duration animations:^{
-        self.frame = frame;
-        CGRect inputFrame = self.inputContainer.frame;
-        inputFrame.size.height = frame.size.height;
-        self.inputContainer.frame = inputFrame;
-        inputFrame = self.publicContainer.frame;
-        inputFrame.size.height = frame.size.height;
-        self.publicContainer.frame = inputFrame;
-    }];
-    
-    if(self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarEmojiStatus) {
+    //双栏下切到内联面板时，键盘是被我们主动收起的：输入栏不落回底部，直接停在面板上面，
+    //整个过程只有这一次动画。padBoardHeight 为 0 时与原来逐字节相同。
+    [self layoutForBottomInset:self.padBoardHeight duration:duration keyboardShowing:(self.padBoardHeight > 0)];
+
+    if(self.padBoardHeight <= 0 &&
+       (self.inputBarStatus == ChatInputBarKeyboardStatus || self.inputBarStatus == ChatInputBarPluginStatus || self.inputBarStatus == ChatInputBarEmojiStatus)) {
         _inputBarStatus = ChatInputBarDefaultStatus;
     }
 }
 
 -(void)keyboardDidHide:(NSNotification *)notification{
+    if (self.padBoard) {
+        //双栏下面板是内联的，键盘本来就该收着，别再把它抢回来
+        return;
+    }
     if ((self.emojInput || self.pluginInput || self.textInput) && self.inputBarStatus != ChatInputBarDefaultStatus && self.inputBarStatus != ChatInputBarPublicStatus) {
         [self.textInputView becomeFirstResponder];
     } else if(self.inputBarStatus == ChatInputBarDefaultStatus && [self.textInputView isFirstResponder]) {
@@ -1227,6 +1398,10 @@
     NSInteger cursorPosition;
     if (self.textInputView.selectedTextRange) {
         cursorPosition = self.textInputView.selectedRange.location ;
+    } else if (self.padBoard) {
+        //双栏下面板是内联的，输入框不是第一响应者，selectedTextRange 为 nil，
+        //用收起键盘前记下的光标位置，否则表情会一律插到最前面
+        cursorPosition = MIN(self.padSavedSelectedRange.location, self.textInputView.textStorage.length);
     } else {
         cursorPosition = 0;
     }
@@ -1241,9 +1416,32 @@
     range.length = 1;
     
     self.textInputView.selectedRange = range;
+
+    if (self.padBoard) {
+        //上面两行是按第一响应者形态写的（selectedRange 跟着插入自己走），内联形态下它读到的
+        //是插入前的旧值，这里按刚才实际插入的位置纠正回来
+        NSRange caret = NSMakeRange(cursorPosition + emojString.length, 0);
+        self.padSavedSelectedRange = caret;
+        self.textInputView.selectedRange = caret;
+    }
 }
 
 - (void)didTouchBackEmoj {
+    if (self.padBoard) {
+        //内联形态下输入框不是第一响应者，deleteBackward 不保证落到文本上，自己删。
+        //按 composedCharacterSequence 取：emoji 是多码位的，退一个 UTF-16 单元会把它劈开
+        NSUInteger loc = MIN(self.padSavedSelectedRange.location, self.textInputView.textStorage.length);
+        if (loc == 0) {
+            return;
+        }
+        NSRange del = [self.textInputView.text rangeOfComposedCharacterSequenceAtIndex:loc - 1];
+        [self.textInputView.textStorage deleteCharactersInRange:del];
+        NSRange caret = NSMakeRange(del.location, 0);
+        self.padSavedSelectedRange = caret;
+        self.textInputView.selectedRange = caret;
+        [self textViewDidChange:self.textInputView];
+        return;
+    }
     [self.textInputView deleteBackward];
 }
 
@@ -1600,10 +1798,10 @@
             [self.delegate didTouchVideoBtn:YES];
 #endif
         }]];
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            actionSheet.popoverPresentationController.sourceView = self.parentView;
-            actionSheet.popoverPresentationController.sourceRect = self.parentView.bounds;
-        }
+        //iPad 的锚点交给 WFCUPadUtility 那条统一兜底（会话栏底部居中、不带箭头），
+        //与项目里另外三十来处 actionSheet 落点一致。
+        //原先这里把 sourceRect 设成整块会话视图的 bounds，UIKit 只能把气泡硬塞进这块矩形里，
+        //落点跟别处对不上（双栏下尤其明显）。iPhone 走的是从底部升起的那条路径，与此无关。
         [navi presentViewController:actionSheet animated:YES completion:nil];
 #endif
     } else if(itemTag == 5) {
@@ -1695,9 +1893,12 @@
         if (self.conversation.type == Group_Type) {
             WFCUCreateCollectionViewController *vc = [[WFCUCreateCollectionViewController alloc] init];
             vc.conversation = self.conversation;
-            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
-            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+            //iPad 双栏下直接压进右栏（第二栏），其余形态保持原来的全屏模态
+            if (![WFCUPadUtility pushDetailViewController:vc animated:YES]) {
+                UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+                naviController.modalPresentationStyle = UIModalPresentationFullScreen;
+                [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+            }
         } else {
             [self makeToast:WFCString(@"CollectionOnlyForGroup") duration:1 position:CSToastPositionCenter];
         }
@@ -1706,9 +1907,12 @@
         if (self.conversation.type == Group_Type) {
             WFCUPollHomeViewController *vc = [[WFCUPollHomeViewController alloc] init];
             vc.groupId = self.conversation.target;
-            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
-            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+            //iPad 双栏下直接压进右栏（第二栏），其余形态保持原来的全屏模态
+            if (![WFCUPadUtility pushDetailViewController:vc animated:YES]) {
+                UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+                naviController.modalPresentationStyle = UIModalPresentationFullScreen;
+                [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+            }
         } else {
             [self makeToast:WFCString(@"PollOnlyForGroup") duration:1 position:CSToastPositionCenter];
         }
@@ -1716,15 +1920,18 @@
         // 网盘功能
         if ([WFCUConfigManager globalManager].panServiceProvider) {
             WFCUPanFilePickerViewController *vc = [[WFCUPanFilePickerViewController alloc] init];
-            UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
-            naviController.modalPresentationStyle = UIModalPresentationFullScreen;
-            
+
             __weak typeof(self)ws = self;
             vc.completionBlock = ^(NSArray<WFCUPanFile *> *selectedFiles) {
                 [ws sendPanFiles:selectedFiles];
             };
-            
-            [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+
+            //iPad 双栏下直接压进右栏（第二栏），其余形态保持原来的全屏模态
+            if (![WFCUPadUtility pushDetailViewController:vc animated:YES]) {
+                UINavigationController *naviController = [[UINavigationController alloc] initWithRootViewController:vc];
+                naviController.modalPresentationStyle = UIModalPresentationFullScreen;
+                [[self.delegate requireNavi] presentViewController:naviController animated:YES completion:nil];
+            }
         } else {
             [self makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
         }

@@ -58,7 +58,7 @@
     NSString *savedName = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedName"];
    
     CGRect bgRect = self.view.bounds;
-    CGFloat paddingEdge = 16;
+    CGFloat paddingEdge = [self formPaddingEdge];
     CGFloat inputHeight = 40;
     CGFloat hintHeight = 26;
     CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
@@ -195,11 +195,18 @@
     [self setIsPwdLogin:self.isPwdLogin];
 }
 
+/// 表单左右留白。iPad 屏幕很宽，登录表单限制到 420pt 并居中，不然输入框会横跨整屏。
+- (CGFloat)formPaddingEdge {
+    CGFloat viewWidth = self.view.bounds.size.width;
+    CGFloat contentWidth = MIN(viewWidth, 420);
+    return 16 + (viewWidth - contentWidth) / 2;
+}
+
 - (void)setIsPwdLogin:(BOOL)isPwdLogin {
     _isPwdLogin = isPwdLogin;
     CGRect bgRect = self.view.bounds;
     CGRect pwdFeildFrame = self.passwordField.frame;
-    CGFloat paddingEdge = 16;
+    CGFloat paddingEdge = [self formPaddingEdge];
     CGFloat pwdFeildWidth = bgRect.size.width - paddingEdge * 2 - 87;
     if (isPwdLogin) {
         self.hintLabel.text = LocalizedString(@"PasswordLogin");
@@ -453,8 +460,9 @@
         }
 
         [hud hideAnimated:YES];
-        WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController new];
-        [UIApplication sharedApplication].delegate.window.rootViewController =  tabBarVC;
+        UIViewController *rootVC = [WFCBaseTabBarController rootViewController];
+        [UIApplication sharedApplication].delegate.window.rootViewController = rootVC;
+        WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController tabBarControllerInRoot:rootVC];
         if (resetCode) {
             if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
                 WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
@@ -576,7 +584,8 @@
     [backgroundView addGestureRecognizer:tapGesture];
 
     // 创建滑动验证视图容器
-    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(20, (self.view.bounds.size.height - 280) / 2, self.view.bounds.size.width - 40, 280)];
+    CGFloat verifyWidth = MIN(self.view.bounds.size.width - 40, 400);
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake((self.view.bounds.size.width - verifyWidth) / 2, (self.view.bounds.size.height - 280) / 2, verifyWidth, 280)];
     containerView.backgroundColor = [UIColor whiteColor];
     containerView.layer.cornerRadius = 12;
     containerView.layer.masksToBounds = YES;

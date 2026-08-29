@@ -18,6 +18,12 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 
 
 #import <WFChatUIKit/Predefine.h>
+#import <WFChatUIKit/WFCUPadUtility.h>
+#import <WFChatUIKit/WFCUPadSplitViewController.h>
+#import <WFChatUIKit/WFCUPadPrimaryNavigationController.h>
+#import <WFChatUIKit/WFCUPadPlaceholderViewController.h>
+#import <WFChatUIKit/WFCUPadWorkspaceWelcomeViewController.h>
+#import <WFChatUIKit/WFCUPadSearchResultViewController.h>
 #import <WFChatUIKit/WFCUConversationTableViewController.h>
 #import <WFChatUIKit/WFCUContactListViewController.h>
 #import <WFChatUIKit/WFCUMessageListViewController.h>

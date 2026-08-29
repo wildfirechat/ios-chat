@@ -40,6 +40,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign)BOOL lastMessage;
 
 + (CGRect)contentFrame;
+
+/// 这一屏（合并消息详情）的可用宽度。cell 里全是手写 frame，宽度只能从外面给。
+/// 默认 0 表示按屏幕宽算，即 iPhone 上的原行为；iPad 双栏下这一页在右栏里，
+/// 由 WFCUCompositeMessageViewController 在布局时写进来。
++ (void)setListWidth:(CGFloat)width;
++ (CGFloat)listWidth;
 @end
 
 NS_ASSUME_NONNULL_END

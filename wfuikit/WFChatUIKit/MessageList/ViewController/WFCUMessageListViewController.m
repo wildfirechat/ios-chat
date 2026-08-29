@@ -43,6 +43,7 @@
 #import "WFCUProfileTableViewController.h"
 #import "WFCUMultiVideoViewController.h"
 #import "WFCUChatInputBar.h"
+#import "WFCUMessageCell.h"
 #import "WFCUPanFile.h"
 #import "WFCUPanSpace.h"
 
@@ -105,6 +106,7 @@
 
 #import "WFCURecentImagesFloatView.h"
 #import "UIFont+YH.h"
+#import "WFCUPadUtility.h"
 
 @interface WFCUMessageListViewController () <UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, WFCUMessageCellDelegate, AVAudioPlayerDelegate, WFCUChatInputBarDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, WFCUMultiCallOngoingExpendedCellDelegate, MWPhotoBrowserDelegate, NSURLSessionDelegate, WFCURecentImagesFloatViewDelegate>
 
@@ -483,7 +485,9 @@
 
 - (UIButton *)joinGroupRequestButton {
     if(!_joinGroupRequestButton) {
-        _joinGroupRequestButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 36)];
+        //初始必须是 CGRectZero：单聊不会走 updateUnreadJoinGroupRequestButton 的置零分支，
+        //iPhone 上它藏在不透明导航栏后面看不见，iPad 右栏没有导航栏遮挡就露出来了
+        _joinGroupRequestButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [_joinGroupRequestButton addTarget:self action:@selector(onJoinGroupRequestButton:) forControlEvents:UIControlEventTouchDown];
         _joinGroupRequestButton.titleLabel.font = [UIFont scaledSystemFontOfSize:16];
         [_joinGroupRequestButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
@@ -1405,6 +1409,97 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - 响应式布局（iPad 旋转 / 分屏 / 左右栏宽度变化）
+
+/// 内容区顶部位置。iPad 的导航栏高度和状态栏高度都与 iPhone 不同，用安全区更准。
+- (CGFloat)contentTopInset {
+    CGFloat top = 0;
+    if (@available(iOS 11.0, *)) {
+        top = self.view.safeAreaInsets.top;
+    }
+    if (top <= 0) {
+        top = [WFCUUtilities wf_navigationFullHeight];
+    }
+    return top;
+}
+
+- (CGFloat)contentBottomInset {
+    if (@available(iOS 11.0, *)) {
+        return self.view.safeAreaInsets.bottom;
+    }
+    return [WFCUUtilities wf_safeDistanceBottom];
+}
+
+/// iOS 26 起 UISplitViewController 的右栏是整屏满铺的，左栏悬浮在它上面，
+/// 栏宽通过 safeAreaInsets.left 表达而不是 view.frame。iPhone 竖屏时左右恒为 0。
+- (CGFloat)contentLeftInset {
+    if (@available(iOS 11.0, *)) {
+        return self.view.safeAreaInsets.left;
+    }
+    return 0;
+}
+
+- (CGFloat)contentRightInset {
+    if (@available(iOS 11.0, *)) {
+        return self.view.safeAreaInsets.right;
+    }
+    return 0;
+}
+
+/// 聊天内容真正可见的区域（self.view 坐标系）
+- (CGRect)contentFrame {
+    CGFloat top = [self contentTopInset];
+    CGFloat left = [self contentLeftInset];
+    CGFloat right = [self contentRightInset];
+    return CGRectMake(left,
+                      top,
+                      self.view.bounds.size.width - left - right,
+                      self.view.bounds.size.height - top - [self contentBottomInset]);
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [self relayoutContentIfNeeded];
+}
+
+- (void)relayoutContentIfNeeded {
+    if (!self.backgroundView) {
+        return;
+    }
+    CGRect frame = [self contentFrame];
+    CGFloat top = CGRectGetMinY(frame);
+    if (CGRectEqualToRect(frame, self.backgroundView.frame)) {
+        return;
+    }
+    BOOL widthChanged = fabs(frame.size.width - self.backgroundView.bounds.size.width) > 0.5;
+    self.backgroundView.frame = frame;
+
+    [self.chatInputBar relayoutForParentBoundsChange];
+
+    CGFloat inputBarTop = self.chatInputBar ? CGRectGetMinY(self.chatInputBar.frame) : frame.size.height - CHAT_INPUT_BAR_HEIGHT;
+    self.collectionView.frame = CGRectMake(0, 0, frame.size.width, inputBarTop);
+
+    self.ongoingCallTableView.frame = CGRectMake(frame.origin.x, top, frame.size.width, self.ongoingCallTableView.frame.size.height);
+    if (_joinGroupRequestButton && !CGRectEqualToRect(_joinGroupRequestButton.frame, CGRectZero)) {
+        _joinGroupRequestButton.frame = CGRectMake(frame.origin.x + 48, top + 20, frame.size.width - 96, 36);
+    }
+    if (_newMsgTipButton) {
+        //newMsgTipButton 挂在 backgroundView 上，用内容区宽度而不是整个 view 的宽度
+        _newMsgTipButton.frame = CGRectMake(frame.size.width - 36, inputBarTop - 40, 24, 24);
+    }
+
+    if (widthChanged) {
+        //气泡宽度依赖内容区宽度，宽度变了要重新计算所有 cell 的尺寸
+        [WFCUMessageCell setChatContentWidth:frame.size.width];
+        [self.collectionView.collectionViewLayout invalidateLayout];
+        [self.collectionView reloadData];
+        [self.collectionView layoutIfNeeded];
+        if (self.isAtButtom) {
+            [self scrollToBottom:NO];
+        }
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (!self.firstAppear) {
@@ -1412,6 +1507,7 @@
     }
     
     self.tabBarController.tabBar.hidden = YES;
+    [WFCUMessageCell setChatContentWidth:self.collectionView.frame.size.width];
     [self.collectionView reloadData];
     
     if (self.navigationController.viewControllers.count > 1) {          // 记录系统返回手势的代理
@@ -1432,14 +1528,16 @@
 }
 
 - (void)updateUnreadJoinGroupRequestButton {
+    int count = 0;
     if(self.conversation.type == Group_Type) {
-        int count = [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.conversation.target];
-        if(count > 0) {
-            [self.joinGroupRequestButton setTitle:[NSString stringWithFormat:WFCString(@"NewJoinGroupRequestCount"), count] forState:UIControlStateNormal];
-            self.joinGroupRequestButton.frame = CGRectMake(48, [WFCUUtilities wf_navigationFullHeight]+20, self.view.bounds.size.width-96, 36);
-        } else {
-            self.joinGroupRequestButton.frame = CGRectZero;
-        }
+        count = [[WFCCIMService sharedWFCIMService] getJoinGroupRequestUnread:self.conversation.target];
+    }
+    if(count > 0) {
+        CGRect content = [self contentFrame];
+        [self.joinGroupRequestButton setTitle:[NSString stringWithFormat:WFCString(@"NewJoinGroupRequestCount"), count] forState:UIControlStateNormal];
+        self.joinGroupRequestButton.frame = CGRectMake(content.origin.x + 48, CGRectGetMinY(content) + 20, content.size.width - 96, 36);
+    } else {
+        self.joinGroupRequestButton.frame = CGRectZero;
     }
 }
 
@@ -1504,7 +1602,8 @@
     }
     
     if(self.ongoingCallDict.count) {
-        self.ongoingCallTableView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.bounds.size.width, MIN(200, self.ongoingCallDict.count * 28 + 28));
+        CGRect content = [self contentFrame];
+        self.ongoingCallTableView.frame = CGRectMake(content.origin.x, CGRectGetMinY(content), content.size.width, MIN(200, self.ongoingCallDict.count * 28 + 28));
         [self.ongoingCallTableView reloadData];
         if(!self.checkOngoingCallTimer) {
             if (@available(iOS 10.0, *)) {
@@ -1517,7 +1616,8 @@
             }
         }
     } else {
-        self.ongoingCallTableView.frame = CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], self.view.bounds.size.width, 0);
+        CGRect content = [self contentFrame];
+        self.ongoingCallTableView.frame = CGRectMake(content.origin.x, CGRectGetMinY(content), content.size.width, 0);
         if(self.checkOngoingCallTimer) {
             [self.checkOngoingCallTimer invalidate];
             self.checkOngoingCallTimer = nil;
@@ -2510,7 +2610,7 @@
 
 - (UIButton *)newMsgTipButton {
     if (!_newMsgTipButton) {
-        _newMsgTipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 36, self.chatInputBar.frame.origin.y - 40, 24, 24)];
+        _newMsgTipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.backgroundView.bounds.size.width - 36, self.chatInputBar.frame.origin.y - 40, 24, 24)];
         _newMsgTipButton.layer.cornerRadius = 12;
         _newMsgTipButton.titleLabel.font = [UIFont scaledSystemFontOfSize:8];
         _newMsgTipButton.layer.borderColor = [UIColor blackColor].CGColor;
@@ -4858,6 +4958,30 @@
 - (void)recentImagesFloatViewDidDismiss:(WFCURecentImagesFloatView *)floatView {
     // 浮窗关闭时清空引用
     self.recentImagesFloatView = nil;
+}
+
+#pragma mark - iPad 右栏
+
+//右栏页面的去重标识，对应 android `PaneRegistry.pageKeyOf(intent)`、flutter 的 ValueKey('pad-conv-...')。
+//从左栏重复点开同一个会话时原地保留，不重建：草稿、滚动位置、正在放的语音都会丢。
+- (NSString *)wfcu_padPageKey {
+    if (!self.conversation.target.length) {
+        return nil;
+    }
+    NSMutableString *key = [NSMutableString stringWithFormat:@"conv-%d-%@-%d",
+                            (int)self.conversation.type, self.conversation.target, (int)self.conversation.line];
+    //带定位参数（搜索命中的那条消息、按日期跳转）时必须重建：同一个会话但要停在不同的位置上。
+    //flutter 那边也是把 toFocusMessageId 编进页面 key 里的。
+    if (self.highlightMessageId > 0) {
+        [key appendFormat:@"-m%ld", self.highlightMessageId];
+    }
+    if (self.highlightText.length) {
+        [key appendFormat:@"-t%@", self.highlightText];
+    }
+    if (self.selectedDate) {
+        [key appendFormat:@"-d%.0f", self.selectedDate.timeIntervalSince1970];
+    }
+    return key;
 }
 
 - (void)dealloc {

@@ -45,6 +45,24 @@
 @end
 
 @implementation WFCBaseTabBarController
++ (UIViewController *)rootViewController {
+    WFCBaseTabBarController *tabBarController = [WFCBaseTabBarController new];
+    if ([WFCUPadUtility isPad]) {
+        return [[WFCUPadSplitViewController alloc] initWithPrimaryViewController:tabBarController];
+    }
+    return tabBarController;
+}
+
++ (WFCBaseTabBarController *)tabBarControllerInRoot:(UIViewController *)rootViewController {
+    if ([rootViewController isKindOfClass:[UISplitViewController class]]) {
+        rootViewController = ((UISplitViewController *)rootViewController).viewControllers.firstObject;
+    }
+    if ([rootViewController isKindOfClass:[WFCBaseTabBarController class]]) {
+        return (WFCBaseTabBarController *)rootViewController;
+    }
+    return nil;
+}
+
 - (void)viewDidLoad {
     // 替换为自定义 TabBar，微调高度随字体变化
     WFCTabBar *tabBar = [[WFCTabBar alloc] init];
@@ -60,7 +78,7 @@
     self.conversationsViewController = [WFCUConversationTableViewController new];
     UIViewController *vc = self.conversationsViewController;
     vc.title = LocalizedString(@"Message");
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    UINavigationController *nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
     UITabBarItem *item = nav.tabBarItem;
     item.title = LocalizedString(@"Message");
     item.image = [UIImage imageNamed:@"tabbar_chat"];
@@ -80,7 +98,7 @@
  
     vc = [WFCUContactListViewController new];
     vc.title = LocalizedString(@"Contact");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Contact");
     item.image = [UIImage imageNamed:@"tabbar_contacts"];
@@ -92,10 +110,18 @@
         WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
         browserVC.url = WFCGetWorkPlatformUrl();
         browserVC.hidenOpenInBrowser = YES;
-        
-        vc = browserVC;
+        browserVC.title = LocalizedString(@"Work");
+
+        //工作台特例：它没有「列表 → 详情」的层次，一整个远端网页挤进 320pt 宽的左栏没法看。
+        //iPad 上左栏换成迎宾面板，网页常驻右栏（flutter 的 PadWorkspaceWelcome，
+        //android/hm-chat 的 WorkspacePane 也是这一套）。iPhone 上仍然是整页网页，一行没动。
+        if([WFCUPadUtility isPad]) {
+            vc = [[WFCUPadWorkspaceWelcomeViewController alloc] initWithWorkspaceViewController:browserVC];
+        } else {
+            vc = browserVC;
+        }
         vc.title = LocalizedString(@"Work");
-        nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
         item = nav.tabBarItem;
         item.title = LocalizedString(@"Work");
         item.image = [UIImage imageNamed:@"tabbar_work"];
@@ -106,7 +132,7 @@
     
     vc = [DiscoverViewController new];
     vc.title = LocalizedString(@"Discover");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Discover");
     item.image = [UIImage imageNamed:@"tabbar_discover"];
@@ -116,7 +142,7 @@
     
     vc = [WFCMeTableViewController new];
     vc.title = LocalizedString(@"Me");
-    nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
     item = nav.tabBarItem;
     item.title = LocalizedString(@"Me");
     item.image = [UIImage imageNamed:@"tabbar_me"];
@@ -135,6 +161,17 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//代码里切 tab 不会走 UITabBarControllerDelegate，右栏得手动换到对应那条栈
+- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+    [super setSelectedIndex:selectedIndex];
+    [WFCUPadUtility syncDetailStackForCurrentTab];
+}
+
+- (void)setSelectedViewController:(__kindof UIViewController *)selectedViewController {
+    [super setSelectedViewController:selectedViewController];
+    [WFCUPadUtility syncDetailStackForCurrentTab];
 }
 
 - (NSDictionary *)tabBarTitleAttributes {

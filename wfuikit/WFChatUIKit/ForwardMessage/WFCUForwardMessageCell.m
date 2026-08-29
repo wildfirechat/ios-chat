@@ -94,6 +94,16 @@
     return _portrait;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //name 是在 getter 里按屏幕宽定的宽度，双栏下 cell 比屏幕窄。iPhone 上两者相等。
+    if (_name) {
+        CGRect frame = _name.frame;
+        frame.size.width = self.bounds.size.width - (self.checkable ? 96 : 64);
+        _name.frame = frame;
+    }
+}
+
 - (UILabel *)name {
     if (!_name) {
         _name = [[UILabel alloc] initWithFrame:CGRectMake(self.checkable?88:56, 16, [UIScreen mainScreen].bounds.size.width - (self.checkable?96:64), 24)];

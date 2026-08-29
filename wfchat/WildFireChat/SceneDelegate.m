@@ -30,7 +30,7 @@
     }
     
     if (savedToken.length > 0 && savedUserId.length > 0) {
-        self.window.rootViewController = [WFCBaseTabBarController new];
+        self.window.rootViewController = [WFCBaseTabBarController rootViewController];
         if (ENABLE_WATER_MARKER) {
             [self.window addSubview:[TYHWaterMarkView new]];
             [TYHWaterMarkView setCharacter:savedUserId];

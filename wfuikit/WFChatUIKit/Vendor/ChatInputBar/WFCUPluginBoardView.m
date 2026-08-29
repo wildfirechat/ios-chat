@@ -51,6 +51,9 @@
 @property (nonatomic, assign)BOOL hasPoll;
 @property (nonatomic, strong)UIScrollView *scrollView;
 @property (nonatomic, strong)UIPageControl *pageControl;
+//已按这个宽度排过版。iPad 双栏下面板宽度是会话栏的宽度，且会随旋转/分屏拖拽变化。
+@property (nonatomic, assign)CGFloat laidOutWidth;
+@property (nonatomic, strong)NSMutableArray<WFCUPluginItemView *> *itemViews;
 @end
 
 @implementation WFCUPluginBoardView
@@ -65,12 +68,50 @@
         self.hasPoll = withPoll;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
+        self.itemViews = [[NSMutableArray alloc] init];
         [self setupScrollView];
         [self setupPageControl];
         [self setupPluginItems];
+        self.laidOutWidth = width;
     }
 
     return self;
+}
+
++ (CGFloat)boardHeight {
+    return PLUGIN_AREA_HEIGHT;
+}
+
+//宽度变了重新排一遍。iPhone 上锁竖屏、面板又是按屏宽建的，这个分支永远进不来。
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.bounds.size.width;
+    if (width <= 0 || fabs(width - self.laidOutWidth) < 0.5) {
+        return;
+    }
+    self.laidOutWidth = width;
+
+    CGFloat scrollViewHeight = PLUGIN_AREA_HEIGHT - PLUGIN_PAGE_CONTROL_HEIGHT;
+    self.scrollView.frame = CGRectMake(0, 0, width, scrollViewHeight);
+    self.pageControl.frame = CGRectMake(0, PLUGIN_AREA_HEIGHT - PLUGIN_PAGE_CONTROL_HEIGHT, width, PLUGIN_PAGE_CONTROL_HEIGHT);
+
+    NSInteger pageCount = self.pageControl.numberOfPages;
+    self.scrollView.contentSize = CGSizeMake(width * pageCount, scrollViewHeight);
+    //宽度变了之后原来的翻页偏移就不对了，回到第一页，比停在半页上强
+    self.scrollView.contentOffset = CGPointZero;
+    self.pageControl.currentPage = 0;
+
+    CGFloat leftOffset = (width - RCPlaginBoardCellSize.width * HorizontalItemsCount) / (HorizontalItemsCount + 1);
+    for (NSUInteger i = 0; i < self.itemViews.count; i++) {
+        NSUInteger pageIndex = i / ItemsPerPage;
+        NSUInteger indexInPage = i % ItemsPerPage;
+        NSInteger currentRow = indexInPage / HorizontalItemsCount;
+        NSInteger currentColumn = indexInPage % HorizontalItemsCount;
+        CGRect frame = self.itemViews[i].frame;
+        frame.origin.x = pageIndex * width + RCPlaginBoardCellSize.width * currentColumn + leftOffset * (currentColumn + 1);
+        frame.origin.y = RCPlaginBoardCellSize.height * currentRow + 15 + currentRow * 18;
+        self.itemViews[i].frame = frame;
+    }
 }
 
 - (void)setupScrollView {
@@ -125,6 +166,7 @@
             [ws.delegate onItemClicked:tag];
         };
         [self.scrollView addSubview:item];
+        [self.itemViews addObject:item];
     }
 }
 

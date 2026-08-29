@@ -17,6 +17,7 @@
 #import "WFCUUtilities.h"
 #import "WFCUImage.h"
 #import "UIFont+YH.h"
+#import "WFCUPadUtility.h"
 
 @interface WFCUChannelProfileViewController ()
 @property (nonatomic, strong)UIImageView *channelPortrait;
@@ -33,14 +34,18 @@
     
     CGFloat portraitWidth = 80;
     CGFloat top = [WFCUUtilities wf_navigationFullHeight] + 40;
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    //按页面自己的宽度排，不是屏幕宽：iPad 双栏下这张页面在右栏里，
+    //按整屏宽排的话头像不在中间、简介和底部按钮都会伸到栏外。iPhone 上取值不变。
+    CGFloat screenWidth = [WFCUPadUtility layoutWidthForView:self.view];
     
     self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
+    self.channelPortrait.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.channelPortrait sd_setImageWithURL:[NSURL URLWithString:[self.channelInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"channel_default_portrait"]];
     
     top += portraitWidth;
     top += 20;
     self.channelName = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 40 - 40, 18)];
+    self.channelName.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.channelName.font = [UIFont scaledSystemFontOfSize:18];
     self.channelName.textAlignment = NSTextAlignmentCenter;
     self.channelName.text = self.channelInfo.name;
@@ -56,6 +61,7 @@
     CGRect rect = [attributeString boundingRectWithSize:CGSizeMake(screenWidth - 80, CGFLOAT_MAX) options:options context:nil];
     
     self.channelDesc = [[UILabel alloc] initWithFrame:CGRectMake(40, top, screenWidth - 80, rect.size.height)];
+    self.channelDesc.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.channelDesc.font = [UIFont scaledSystemFontOfSize:14];
     self.channelDesc.textAlignment = NSTextAlignmentCenter;
     self.channelDesc.text = self.channelInfo.desc;
@@ -87,6 +93,7 @@
 
         btn.layer.cornerRadius = 5.f;
         btn.layer.masksToBounds = YES;
+        btn.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         [self.view addSubview:btn];
     } else {
         self.channelPortrait.userInteractionEnabled = YES;

@@ -508,6 +508,9 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     WFCUFavoriteItem *favItem = self.items[indexPath.section];
+    //量文字高度要按这张表的实际宽度来（iPad 双栏下它在右栏里，不是整屏宽）。
+    //iPhone 上表宽恒等于屏幕宽，取值没变。
+    [WFCFavoriteBaseCell setLayoutWidth:tableView.bounds.size.width];
     return [[[self cellOfFavType:favItem.favType tableView:tableView] class] heightOf:favItem];
 }
 

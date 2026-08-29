@@ -75,6 +75,10 @@
 
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    //页面宽高不再恒等于屏幕：iPad 右栏比屏幕窄，栏宽还会随旋转/分屏/台前调度变。
+    //手写的 frame 是按 viewDidLoad 那一刻定死的，补一个 autoresizing 让它跟着父视图走。
+    //iPhone 锁竖屏、页面恒等于整屏，这一行永远不会改变任何取值。
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -120,11 +124,6 @@
 }
 
 - (void)setupCategoryButtonsView {
-    CGFloat buttonWidth = (self.view.frame.size.width - 16 * 3) / 2; // 2列，间距16
-    CGFloat buttonHeight = 80;
-    CGFloat padding = 16;
-    CGFloat topMargin = 220; // 向下移动200px
-
     self.categoryButtonsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 200)];
     self.categoryButtonsView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.categoryButtonsView.hidden = YES; // 默认隐藏
@@ -139,11 +138,8 @@
 
     for (int i = 0; i < categories.count; i++) {
         NSDictionary *category = categories[i];
-        int row = i / 2;
-        int col = i % 2;
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = CGRectMake(padding + col * (buttonWidth + padding), topMargin + row * (buttonHeight + padding), buttonWidth, buttonHeight);
         button.titleLabel.font = [UIFont scaledSystemFontOfSize:16];
         [button setTitle:category[@"title"] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor colorWithRed:0.0 green:0.48 blue:1.0 alpha:1.0] forState:UIControlStateNormal]; // 浅蓝色
@@ -153,8 +149,42 @@
 
         [self.categoryButtonsView addSubview:button];
     }
+    [self layoutCategoryButtons];
 
     self.tableView.backgroundView = self.categoryButtonsView;
+}
+
+//这四颗分类按钮原先是按 viewDidLoad 那一刻的页面宽定死的两列。iPad 上这一页在右栏里，
+//栏宽既不等于屏幕宽、还会随旋转/分屏/台前调度变，定死就会顶到栏外。
+//排版抽出来按当前宽度算，布局时再跑一遍。iPhone 上宽度恒定，算出来与原先同一个数。
+- (void)layoutCategoryButtons {
+    CGFloat width = self.categoryButtonsView.bounds.size.width;
+    if (width <= 0) {
+        width = self.view.bounds.size.width;
+    }
+    if (width <= 0) {
+        return;
+    }
+    CGFloat padding = 16;
+    CGFloat buttonWidth = (width - padding * 3) / 2; // 2列，间距16
+    CGFloat buttonHeight = 80;
+    CGFloat topMargin = 220;
+    for (UIView *sub in self.categoryButtonsView.subviews) {
+        if (![sub isKindOfClass:[UIButton class]]) {
+            continue;
+        }
+        NSInteger i = sub.tag;
+        sub.frame = CGRectMake(padding + (i % 2) * (buttonWidth + padding),
+                               topMargin + (i / 2) * (buttonHeight + padding),
+                               buttonWidth,
+                               buttonHeight);
+    }
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    //backgroundView 由表格自己拉伸到表宽，里面的按钮得跟着重排
+    [self layoutCategoryButtons];
 }
 
 - (void)updateCategoryButtonsVisibility {

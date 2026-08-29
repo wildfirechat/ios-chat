@@ -33,7 +33,9 @@
     self.checkImageView.frame = CGRectMake(16, (self.frame.size.height - 20) / 2.0, 20, 20);
     self.portraitView.frame = CGRectMake(50, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
     CGFloat labelHeight = MAX(16, [WFCUConfigManager scaledSize:16]);
-    self.nameLabel.frame = CGRectMake(50 + portraitSize + 12, (self.frame.size.height - labelHeight) / 2.0, [UIScreen mainScreen].bounds.size.width - (16 + 20 + 19 + portraitSize + 12) - 48, labelHeight);
+    //按 cell 自己的宽度排，不是屏幕宽：iPad 上通讯录在 320 宽的左栏里、选人页在右栏里。
+    //iPhone 上 cell 宽恒等于表宽、表宽恒等于屏幕宽，取值一个没变。
+    self.nameLabel.frame = CGRectMake(50 + portraitSize + 12, (self.frame.size.height - labelHeight) / 2.0, self.bounds.size.width - (16 + 20 + 19 + portraitSize + 12) - 48, labelHeight);
 }
 
 - (UIImageView *)checkImageView {

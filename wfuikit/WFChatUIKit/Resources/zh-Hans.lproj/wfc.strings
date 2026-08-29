@@ -728,3 +728,12 @@
 "OpenFileForbidden"="禁止打开此类型";
 "SendFileForbidden"="不能发送该类型文件";
 
+
+//iPad 工作台左栏的迎宾面板，取自 flutter-chat 的 PadWorkspaceWelcome
+"GreetingMorning"="早上好";
+"GreetingNoon"="中午好";
+"GreetingAfternoon"="下午好";
+"GreetingEvening"="晚上好";
+"GreetingNight"="夜深了";
+"WorkspaceWelcomeSubtitle"="祝你有美好的一天";
+"WorkspaceWelcomeHint"="探索今天的高效工作吧";

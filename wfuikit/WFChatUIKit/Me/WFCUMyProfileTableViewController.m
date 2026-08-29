@@ -33,6 +33,10 @@
     [super viewDidLoad];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    //页面宽高不再恒等于屏幕：iPad 右栏比屏幕窄，栏宽还会随旋转/分屏/台前调度变。
+    //手写的 frame 是按 viewDidLoad 那一刻定死的，补一个 autoresizing 让它跟着父视图走。
+    //iPhone 锁竖屏、页面恒等于整屏，这一行永远不会改变任何取值。
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.tableView];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
@@ -79,7 +83,8 @@
     for (UIView *subView in headerCell.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    //按本页宽度排：双栏下这一页在右栏里，按屏幕宽算头像会落到栏外。iPhone 上两者相等。
+    CGFloat width = self.view.frame.size.width;
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(width - 104, 6, 64, 64)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPortrait:)];
@@ -172,7 +177,8 @@
         if (left) {
             title = [[UILabel alloc] initWithFrame:CGRectMake(8, 2, 72, 36)];
         } else {
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            //同上
+            CGFloat width = self.view.frame.size.width;
             title = [[UILabel alloc] initWithFrame:CGRectMake(88, 2, width - 108 - 28, 36)];
         }
     }

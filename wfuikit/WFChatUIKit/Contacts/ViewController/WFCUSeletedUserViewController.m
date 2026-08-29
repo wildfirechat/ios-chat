@@ -398,7 +398,10 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         [self setDoneButtonStyleAndContent:NO];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
-        [self.doneButton setTintColor:[UIColor whiteColor]];
+        //这一支把导航条临时改成了 0x1f2026、tintColor 白色，白字是对的，显式写出来即可。
+        //（UIButtonTypeCustom 的标题色默认就是白色，但 setTintColor: 根本管不到自定义按钮的标题，
+        //  靠默认值是碰巧对上的。）
+        [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.doneButton.layer.cornerRadius = 4;
         self.doneButton.layer.masksToBounds = YES;
         self.doneButton.enabled = NO;
@@ -418,7 +421,11 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
         [self setDoneButtonStyleAndContent:NO];
         [self.doneButton setTitle:WFCString(@"Done") forState:UIControlStateNormal];
         self.doneButton.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:15];
-        [self.doneButton setTintColor:[UIColor whiteColor]];
+        //这一支用的是全局导航条外观。原先没设标题色，靠的是 UIButtonTypeCustom 的默认白色
+        //（setTintColor: 管不到自定义按钮的标题），白字落在浅色导航条上就完全看不见。
+        //改成与左边那颗「取消」同一个颜色 —— 系统画 bar button 用的就是 bar.tintColor，
+        //而 setupNavBar 把它设成了 naviTextColor，两颗按钮从此一致，换主题、深色模式也跟着走。
+        [self.doneButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
         self.doneButton.layer.cornerRadius = 4;
         self.doneButton.layer.masksToBounds = YES;
         self.doneButton.enabled = NO;
@@ -453,6 +460,12 @@ UISearchBarDelegate, WFCUSelectedUserTableViewCellDelegate>
 - (void)cancel {
     [_selectedUserCollectionView removeObserver:self forKeyPath:@"contentSize"];
     [[WFCUConfigManager globalManager] setupNavBar];
+    //iPad 双栏下这一页是压进右栏的（发起聊天等入口），没有模态可关，只能退回下面那一层。
+    //presentingViewController 在模态里的子页面上也是非空的，据此区分两种形态即可。
+    if (!self.presentingViewController && self.navigationController.viewControllers.count > 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 

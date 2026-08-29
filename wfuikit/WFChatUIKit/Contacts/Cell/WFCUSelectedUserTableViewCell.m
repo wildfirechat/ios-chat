@@ -98,6 +98,22 @@
     }
     return _checkImageView;
 }
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //按 cell 自己的宽度排，不是屏幕宽：iPad 上通讯录在 320 宽的左栏里、选人页在右栏里。
+    //iPhone 上 cell 宽恒等于表宽、表宽恒等于屏幕宽，取值一个没变。
+    if (_nameLabel) {
+        CGRect frame = _nameLabel.frame;
+        frame.size.width = self.bounds.size.width - (16 + 20 + 19 + 40 + 12) - 48;
+        _nameLabel.frame = frame;
+    }
+    if (_nextLevel) {
+        CGRect frame = _nextLevel.frame;
+        frame.origin.x = self.bounds.size.width - 80;
+        _nextLevel.frame = frame;
+    }
+}
+
 - (UIImageView *)portraitView {
     if (!_portraitView) {
         _portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 8, 40, 40)];

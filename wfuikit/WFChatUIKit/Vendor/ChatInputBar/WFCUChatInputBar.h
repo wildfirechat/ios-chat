@@ -84,4 +84,7 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 - (void)appendText:(NSString *)text;
 - (NSString *)getDraftText:(NSString *)draft;
 - (void)resetTyping;
+
+/// 父视图宽度变化（iPad 旋转、分屏拖拽、左右栏切换）后重新排版
+- (void)relayoutForParentBoundsChange;
 @end

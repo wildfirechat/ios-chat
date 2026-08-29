@@ -14,6 +14,7 @@
 #import "WFCUImage.h"
 #import "WFCUUtilities.h"
 #import "UIFont+YH.h"
+#import "WFCUPadUtility.h"
 
 
 @interface WFCUDomainProfileTableViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -131,8 +132,10 @@
         if (left) {
             title = [[UILabel alloc] initWithFrame:CGRectMake(8, 2, 72, 36)];
         } else {
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            //右对齐那一列按页面自己的宽度排，不是屏幕宽（iPad 双栏下这张页面在右栏里）
+            CGFloat width = [WFCUPadUtility layoutWidthForView:self.view];
             title = [[UILabel alloc] initWithFrame:CGRectMake(88, 2, width - 108 - 28, 36)];
+            title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         }
     }
     

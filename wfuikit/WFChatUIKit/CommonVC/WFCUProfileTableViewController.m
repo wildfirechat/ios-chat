@@ -34,6 +34,7 @@
 #import "WFCUUtilities.h"
 #import "WFCUEmployeeEx.h"
 #import "WFCUPanViewController.h"
+#import "WFCUPadUtility.h"
 
 
 @interface WFCUProfileTableViewController () <UITableViewDelegate, UITableViewDataSource, MWPhotoBrowserDelegate>
@@ -80,6 +81,10 @@
     self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:YES];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    //页面刚上屏时可能先按整屏宽排过一遍（安全区还没传下来，容器随后才把它钉回右栏），
+    //表格不跟宽度走就会停在整屏宽上：整行按钮按 1210pt 排出来，内容中心偏到栏外
+    //（缺陷 #24 实测：发送消息/视频聊天不居中）。跟上页面宽高，被钉回右栏时自己缩回来。
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.delegate = self;
@@ -291,7 +296,11 @@
     for (UIView *subView in self.headerCell.contentView.subviews) {
         [subView removeFromSuperview];
     }
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    //按页面自己的宽度排，不是屏幕宽：iPad 双栏下这张资料页在右栏里，
+    //按整屏宽排的话昵称、野火号会一路顶到栏外，右上角那颗星也落到看不见的地方。
+    //下面这些 label 另配了 autoresizing，页面还没上屏时宽度先按屏幕宽算，
+    //真宽度下来会自己纠回去。iPhone 上取值一个没变。
+    CGFloat width = [WFCUPadUtility layoutWidthForView:self.view];
     
     self.portraitView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 14, 58, 58)];
     
@@ -309,15 +318,18 @@
 
     if (alias.length) {
         self.aliasLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, 8, width - 64 - 8, 21)];
+        self.aliasLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.aliasLabel.text = alias;
         startPos += 24;
     }
     
     self.displayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 21)];
+    self.displayNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.displayNameLabel.text = self.userInfo.displayName;
     startPos += 24;
 
     self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+    self.userNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.userNameLabel.text = [NSString stringWithFormat:@"野火号:%@", self.userInfo.name];
     self.userNameLabel.font = [UIFont scaledSystemFontOfSize:12];
     self.userNameLabel.textColor = [UIColor grayColor];
@@ -326,6 +338,7 @@
     if([WFCCUtilities isExternalTarget:self.userId]) {
         NSString *domainId = [WFCCUtilities getExternalDomain:self.userId];
         self.domainLabel = [[UILabel alloc] initWithFrame:CGRectMake(94, startPos, width - 94 - 8, 11)];
+        self.domainLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.domainLabel.attributedText = [WFCCUtilities getExternal:domainId withName:nil withColor:[WFCUConfigManager globalManager].externalNameColor];
         self.domainLabel.font = [UIFont scaledSystemFontOfSize:12];
         startPos += 16;
@@ -334,6 +347,8 @@
     
     if ([[WFCCIMService sharedWFCIMService] isFavUser:self.userId]) {
         self.starLabel = [[UILabel alloc] initWithFrame:CGRectMake(width - 16 - 20, self.displayNameLabel.frame.origin.y, 20, 20)];
+        //贴右边，跟着行宽走
+        self.starLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         self.starLabel.text = @"☆";
         self.starLabel.font = [UIFont scaledSystemFontOfSize:18];
         self.starLabel.textColor = [UIColor yellowColor];
@@ -360,7 +375,10 @@
             UITableViewCell *alisaCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setAlisa"];
             alisaCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 - 60, 50)];
+            //与下面那两颗整行按钮同一条：按承载它的视图起排 + FlexibleWidth，
+            //否则页面还没上屏时按屏幕宽算，在 iPad 右栏里会一路顶到栏外
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(16, 0, [self buttonWidthInHostView:alisaCell.contentView fallback:width] - 16 - 60, 50)];
+            btn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [btn setTitle:WFCString(@"ModifyNickname") forState:UIControlStateNormal];
             [btn setTitleColor:[WFCUConfigManager globalManager].textColor forState:UIControlStateNormal];
             btn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
@@ -462,7 +480,9 @@
             for (UIView *subView in self.addFriendCell.subviews) {
                 [subView removeFromSuperview];
             }
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, width - 40, 40)];
+            UIView *host = [self hostViewOfCell:self.addFriendCell];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, [self buttonWidthInHostView:host fallback:width] - 40, 40)];
+            btn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [btn setTitle:WFCString(@"AddFriend") forState:UIControlStateNormal];
             [btn setBackgroundColor:[UIColor greenColor]];
             [btn addTarget:self action:@selector(onAddFriendBtn:) forControlEvents:UIControlEventTouchDown];
@@ -490,12 +510,33 @@
     [self.tableView reloadData];
 }
 
+//整行按钮实际挂在哪个视图上：iOS 14 起是 contentView，更早是 cell 本身。
+//autoresizing 是相对父视图算的，所以起始宽度也得取自同一个视图。
+- (UIView *)hostViewOfCell:(UITableViewCell *)cell {
+    if (@available(iOS 14, *)) {
+        return cell.contentView;
+    }
+    return cell;
+}
+
+- (CGFloat)buttonWidthInHostView:(UIView *)host fallback:(CGFloat)fallback {
+    CGFloat width = host.bounds.size.width;
+    return width > 0 ? width : fallback;
+}
+
 - (void)setupSendMessageCell:(CGFloat)width {
     self.sendMessageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     for (UIView *subView in self.sendMessageCell.subviews) {
         [subView removeFromSuperview];
     }
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+    //按钮铺满整行、内容居中，所以宽度必须是行宽本身。loadData 有可能在页面还没上屏时跑
+    //（viewDidLoad 里就调了一次），那时 width 退回的是屏幕宽 —— iPad 右栏比屏幕窄，
+    //按屏幕宽排出来的按钮中心就偏到栏外去了，「发送消息」「视频聊天」于是不居中。
+    //改成按承载它的那个视图起排，再配上 FlexibleWidth，真实行宽下来时自己纠回来。
+    //iPhone 上行宽恒等于屏幕宽，最终取值与改之前一致。
+    UIView *host = [self hostViewOfCell:self.sendMessageCell];
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [self buttonWidthInHostView:host fallback:width], 50)];
+    btn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [btn setImage:[WFCUImage imageNamed:@"message"] forState:UIControlStateNormal];
     btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
     [btn setTitle:WFCString(@"SendMessage") forState:UIControlStateNormal];
@@ -515,7 +556,10 @@
         for (UIView *subView in self.voipCallCell.subviews) {
             [subView removeFromSuperview];
         }
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width, 50)];
+        //与 setupSendMessageCell: 同一条，见那里的注释
+        UIView *host = [self hostViewOfCell:self.voipCallCell];
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [self buttonWidthInHostView:host fallback:width], 50)];
+        btn.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [btn setImage:[WFCUImage imageNamed:@"video"] forState:UIControlStateNormal];
         btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
         [btn setTitle:WFCString(@"VOIPCall") forState:UIControlStateNormal];
@@ -789,6 +833,53 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return @" ";
+}
+
+//「发送消息」「视频聊天」「加好友」「设置备注」这几颗按钮和头部那颗星，
+//frame 都是在 loadData（viewDidLoad 里就跑了一次）那一刻按当时拿到的宽度定的，
+//页面还没上屏时拿到的会是屏幕宽 —— 双栏下右栏比屏幕窄，整行按钮按屏幕宽排出来
+//中心就偏到栏外去了（缺陷 #24）。行宽到 willDisplayCell: 才真正定下来，
+//按真实行宽把这几处重排一次；之后旋转/分屏宽度再变，也会再走这里。
+//iPhone 上行宽恒等于屏幕宽，整段是 no-op。
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (![WFCUPadUtility isPad] || tableView != self.tableView) {
+        return;
+    }
+    UIView *host = [self hostViewOfCell:cell];
+    CGFloat rowWidth = host.bounds.size.width;
+    if (rowWidth <= 0) {
+        return;
+    }
+    for (UIView *subview in host.subviews) {
+        if (![subview isKindOfClass:[UIButton class]]) {
+            continue;
+        }
+        CGRect frame = subview.frame;
+        if (cell == self.sendMessageCell || cell == self.voipCallCell) {
+            //铺满整行、内容居中
+            frame.origin.x = 0;
+            frame.size.width = rowWidth;
+        } else if (cell == self.addFriendCell) {
+            //左右各留 20
+            frame.origin.x = 20;
+            frame.size.width = rowWidth - 40;
+        } else if (cell == self.momentCell) {
+            //「朋友圈」：左边 16，与 loadData 里同一个算法
+            frame.origin.x = 16;
+            frame.size.width = rowWidth - 100;
+        } else if (indexPath.section == 0 && indexPath.row == 1) {
+            //「设置备注」：左边 16、右边给 accessory 留 60，内容靠左
+            frame.origin.x = 16;
+            frame.size.width = rowWidth - 16 - 60;
+        }
+        subview.frame = frame;
+    }
+    if (indexPath.section == 0 && indexPath.row == 0 && self.starLabel) {
+        //头部右上角那颗星贴行右缘
+        CGRect frame = self.starLabel.frame;
+        frame.origin.x = rowWidth - 16 - 20;
+        self.starLabel.frame = frame;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

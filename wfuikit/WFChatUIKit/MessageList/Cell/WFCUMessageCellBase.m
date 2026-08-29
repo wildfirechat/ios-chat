@@ -51,11 +51,23 @@
 }
 
 - (void)setModel:(WFCUMessageModel *)model {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    //iPad 上聊天区只占窗口的一部分，这里用 cell 自身宽度，不能再用屏幕宽度
+    CGFloat screenWidth = self.contentView.bounds.size.width;
+    if (screenWidth <= 0) {
+        screenWidth = self.bounds.size.width;
+    }
+    if (screenWidth <= 0) {
+        screenWidth = [UIScreen mainScreen].bounds.size.width;
+    }
     
   _model = model;
     CGFloat offset = 5;
     if (model.lastReadMessage) {
+        //宽度变化（旋转/分屏）后需要重建，否则分割线还是旧宽度
+        if (self.lastReadContainerView && fabs(self.lastReadContainerView.bounds.size.width - (screenWidth - 32)) > 0.5) {
+            [self.lastReadContainerView removeFromSuperview];
+            self.lastReadContainerView = nil;
+        }
         if (!self.lastReadContainerView) {
             self.lastReadContainerView = [[UIView alloc] initWithFrame:CGRectMake(16, offset, screenWidth-32, 20)];
             

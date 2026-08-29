@@ -33,6 +33,15 @@
     
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //多选的那个勾原先按屏幕宽定位，iPad 上会落到栏外看不见。
+    //iPhone 上 cell 宽恒等于屏幕宽，取值没变。
+    if (_selectView) {
+        _selectView.frame = CGRectMake(self.bounds.size.width - 32, 8, 20, 20);
+    }
+}
+
 - (void)setIsSelectable:(BOOL)isSelectable {
     _isSelectable = isSelectable;
     if (isSelectable) {

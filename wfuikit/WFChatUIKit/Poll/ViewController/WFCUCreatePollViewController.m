@@ -7,6 +7,7 @@
 //
 
 #import "WFCUCreatePollViewController.h"
+#import "WFCUPollHomeViewController.h"
 #import "WFCUConfigManager.h"
 #import "WFCUPoll.h"
 #import "WFCUForwardViewController.h"
@@ -96,6 +97,28 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
     [self.view endEditing:YES];
 }
 
+/// 关闭整个投票创建流程。
+/// iPhone 上「投票首页」是模态弹出来的，直接 dismiss 掉整条模态即可；
+/// iPad 双栏下整个流程是压进右栏的，要退回到投票首页之下的发起页（消息列表），
+/// 而不是只退到投票首页 —— 投票创建成功后该回到会话里看到那条新消息。
+- (void)closePollCreationFlowWithCompletion:(void (^)(void))completion {
+    NSArray<UIViewController *> *vcs = self.navigationController.viewControllers;
+    for (NSInteger i = (NSInteger)vcs.count - 1; i >= 0; i--) {
+        if ([vcs[i] isKindOfClass:[WFCUPollHomeViewController class]]) {
+            if (i > 0) {
+                [self.navigationController popToViewController:vcs[i - 1] animated:YES];
+                if (completion) {
+                    completion();
+                }
+            } else {
+                [self.navigationController dismissViewControllerAnimated:YES completion:completion];
+            }
+            return;
+        }
+    }
+    [self.navigationController dismissViewControllerAnimated:YES completion:completion];
+}
+
 #pragma mark - Actions
 
 - (void)onCancel:(id)sender {
@@ -159,7 +182,7 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"PollCreated") message:WFCString(@"ForwardPublicPollTip") preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"No") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     // 不转发，直接关闭
-                    [weakSelf.navigationController dismissViewControllerAnimated:YES completion:nil];
+                    [weakSelf closePollCreationFlowWithCompletion:nil];
                 }]];
                 [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Forward") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     // 显示转发界面
@@ -170,7 +193,7 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
                 // 群内投票：提示已发送到本群
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"PollCreated") message:WFCString(@"PollSentToGroup") preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:WFCString(@"Confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [weakSelf.navigationController dismissViewControllerAnimated:YES completion:nil];
+                    [weakSelf closePollCreationFlowWithCompletion:nil];
                 }]];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }
@@ -460,7 +483,7 @@ typedef NS_ENUM(NSInteger, CreatePollSection) {
 
 - (void)showForwardPoll:(WFCUPoll *)poll {
     // 先关闭创建投票界面
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+    [self closePollCreationFlowWithCompletion:^{
         // 构建投票消息内容
         WFCCPollMessageContent *content = [[WFCCPollMessageContent alloc] init];
         content.pollId = [NSString stringWithFormat:@"%lld", poll.pollId];

@@ -10,6 +10,7 @@
 #import "MBProgressHUD.h"
 #import "WFCUConfigManager.h"
 #import "WFCUUtilities.h"
+#import "WFCUPadUtility.h"
 
 @interface WFCUGeneralModifyViewController () <UITextFieldDelegate>
 @property (nonatomic, strong)UITextField *textField;
@@ -77,7 +78,9 @@
 
 - (UITextField *)textField {
     if(!_textField) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, [UIScreen mainScreen].bounds.size.width, 32)];
+        //按页面自己的宽度排，不是屏幕宽：iPad 双栏下这一页（改群名、改昵称…）在右栏里
+        _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight] + 20, [WFCUPadUtility layoutWidthForView:self.view], 32)];
+        _textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _textField.borderStyle = UITextBorderStyleRoundedRect;
         _textField.clearButtonMode = UITextFieldViewModeAlways;
         _textField.delegate = self;

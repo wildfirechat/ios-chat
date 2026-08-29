@@ -13,7 +13,17 @@
 @property(nonatomic, strong)UILabel *buttomLabel;
 @end
 
+static CGFloat gWFCFavoriteLayoutWidth = 0;
+
 @implementation WFCFavoriteBaseCell
+
++ (void)setLayoutWidth:(CGFloat)layoutWidth {
+    gWFCFavoriteLayoutWidth = layoutWidth;
+}
+
++ (CGFloat)layoutWidth {
+    return gWFCFavoriteLayoutWidth > 0 ? gWFCFavoriteLayoutWidth : [UIScreen mainScreen].bounds.size.width;
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -26,7 +36,7 @@
 - (void)setFavoriteItem:(WFCUFavoriteItem *)favoriteItem {
     _favoriteItem = favoriteItem;
     CGFloat contentHeight = [[self class] contentHeight:favoriteItem];
-    self.contentArea.frame = CGRectMake(16, 16, [UIScreen mainScreen].bounds.size.width - 16, contentHeight);
+    self.contentArea.frame = CGRectMake(16, 16, [WFCFavoriteBaseCell layoutWidth] - 16, contentHeight);
     self.buttomLabel.frame = CGRectMake(16, contentHeight+24, self.bounds.size.width-32, 16);
     self.buttomLabel.text = [favoriteItem.origin stringByAppendingFormat:@"  %@", [WFCUUtilities formatTimeLabel:favoriteItem.timestamp]];
 }

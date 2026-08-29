@@ -27,7 +27,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat portraitSize = 32 + ([WFCUConfigManager globalManager].fontScale - 1.0) * 4;
-    self.lastFeedPortrait.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 80, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
+    //按 cell 自己的宽度排，不是屏幕宽：iPad 上「发现」在 320 宽的左栏里，
+    //按屏幕宽定位这张小头像会落到栏外。iPhone 上取值没变。
+    self.lastFeedPortrait.frame = CGRectMake(self.bounds.size.width - 80, (self.frame.size.height - portraitSize) / 2.0, portraitSize, portraitSize);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

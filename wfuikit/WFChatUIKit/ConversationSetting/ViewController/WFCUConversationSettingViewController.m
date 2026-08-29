@@ -33,10 +33,13 @@
 #import "UIColor+YH.h"
 #import "WFCUEnum.h"
 #import "WFCUImage.h"
+#import "WFCUPadUtility.h"
 
 @interface WFCUConversationSettingViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
 @property (nonatomic, strong)WFCUConversationSettingMemberCollectionViewLayout *memberCollectionViewLayout;
+//已按哪个宽度排过版。仅 iPad 用：右栏宽度会随旋转/分屏变，变了要整页重排一次。
+@property (nonatomic, assign)CGFloat laidOutWidth;
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)WFCCGroupInfo *groupInfo;
 @property (nonatomic, strong)WFCCUserInfo *userInfo;
@@ -88,6 +91,9 @@
     }
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    //与资料页同一条：页面刚上屏可能先按整屏宽排过（安全区还没传下来），表格不跟宽度
+    //走就会停在整屏宽上，宫格、cell 全按 1210pt 排（「全屏布局了的样子」）。跟上页面。
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
     }
@@ -138,7 +144,8 @@
     } else if(self.conversation.type == Channel_Type) {
         CGFloat portraitWidth = 80;
         CGFloat top = 40;
-        CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+        //按本页宽度排，不是屏幕宽：双栏下这一页在右栏里。iPhone 上两者相等。
+        CGFloat screenWidth = self.view.frame.size.width;
         self.channelInfo = [[WFCCIMService sharedWFCIMService] getChannelInfo:self.conversation.target refresh:YES];
         
         self.channelPortrait = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth - portraitWidth)/2, top, portraitWidth, portraitWidth)];
@@ -189,6 +196,9 @@
 - (void)setupMemberCollectionView {
     if (self.conversation.type == Single_Type || self.conversation.type == Group_Type) {
         self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:8];
+        //宫格按本页宽度排，不是按屏幕宽（缺陷 #7：双栏下这一页在右栏里，5 列按整屏宽排会溢出栏外）。
+        //iPhone 上本页恒等于屏幕宽，与改之前同一个数。
+        self.memberCollectionViewLayout.layoutWidth = self.view.frame.size.width;
 
         if (self.conversation.type == Single_Type) {
             self.extraBtnNumber = 1;
@@ -212,8 +222,10 @@
                 self.memberCollectionCount = (int)self.memberList.count + self.extraBtnNumber;
             }
             
-            if (self.memberCollectionCount > Group_Member_Visible_Lines * 5) {
-                self.memberCollectionCount = Group_Member_Visible_Lines * 5;
+            //「最多两行，多的收进『查看更多』」——一行几个交给布局算，iPad 上不再是 5
+            int visibleCount = Group_Member_Visible_Lines * self.memberCollectionViewLayout.itemsPerLine;
+            if (self.memberCollectionCount > visibleCount) {
+                self.memberCollectionCount = visibleCount;
                 self.showMoreMember = YES;
             }
         } else if(self.conversation.type == Channel_Type) {
@@ -565,6 +577,37 @@
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
+//表格与宫格都是手写 frame、按 viewDidLoad 那一刻的宽度定死的，宽度变了不会自己跟。
+//iPad 上右栏宽度会变（旋转、分屏、台前调度），这里按新宽度重排一次。
+//iPhone 锁竖屏、页面恒等于屏幕宽，整段直接返回，一行都不会执行。
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if (![WFCUPadUtility isPad]) {
+        return;
+    }
+    //模态（改群名、改我的群名片、弹层…）弹起/收回期间，本页宽度会被压成过渡值
+    //（整屏宽、0 等），按它重建的宫格会从左上角「飞」到正确位置（缺陷 #21）。
+    //转场中跳过；转场结束后的下一次布局会以最终宽度再进来一次。
+    //注意：presentedViewController 在 dismiss 一开始就被系统清掉，罩不住收回动画那一段，
+    //所以这里用和右栏容器同一套转场标记（present/dismiss 的 swizzle 维护）。
+    if ([WFCUPadUtility isModalTransitionInProgress]) {
+        return;
+    }
+    CGFloat width = self.view.bounds.size.width;
+    if (width <= 0 || width == self.laidOutWidth) {
+        return;
+    }
+    self.laidOutWidth = width;
+    //宽度变化若落在系统动画（旋转、分屏）的事务里，直接换 tableHeaderView 会被
+    //当成一次隐式动画，把新建的宫格从 CGRectZero 拉到最终位置；关掉动画一步到位。
+    [UIView performWithoutAnimation:^{
+        self.tableView.frame = self.view.bounds;
+        [self setupMemberCollectionView];
+        [self.memberCollectionView reloadData];
+        [self.tableView reloadData];
+    }];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -582,10 +625,22 @@
         self.userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         self.memberList = @[userId];
     }
-    [self setupMemberCollectionView];
-    
-    [self.memberCollectionView reloadData];
-    [self.tableView reloadData];
+    if ([WFCUPadUtility isPad] && [WFCUPadUtility isModalTransitionInProgress]) {
+        //模态（改群名、改我的群名片…）收回时 viewWillAppear 落在转场里：此刻本页宽度
+        //还是过渡值（整屏宽），按它重建的宫格会从左上角「飞」到正确位置（缺陷 #21）。
+        //只刷数据不重建；右栏容器会在转场期间把本页钉回正确宽度，宽度从未变过，
+        //宫格也一直是 push 时排好的正确布局，不需要重建。
+        [self.memberCollectionView reloadData];
+        [self.tableView reloadData];
+    } else {
+        //第一次出现（push）、iPhone：正常重建（存量行为）。
+        [UIView performWithoutAnimation:^{
+            [self setupMemberCollectionView];
+            [self.memberCollectionView reloadData];
+            [self.tableView reloadData];
+            [self.tableView layoutIfNeeded];
+        }];
+    }
 }
 #pragma mark - UITableViewDataSource<NSObject>
 - (BOOL)isGroupNameCell:(NSIndexPath *)indexPath {
@@ -897,7 +952,8 @@
           
           
           
-          CGFloat width = [UIScreen mainScreen].bounds.size.width;
+          //同上：按表宽算，否则双栏下这个图标落在右栏之外
+          CGFloat width = tableView.bounds.size.width;
           UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
           UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 60, (50 - 22) / 2.0, 22, 22)];
           qrview.image = qrcode;

@@ -37,6 +37,23 @@
     [self initSubViews];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //三个控件是在 initSubViews 里按屏幕宽定的位置，双栏下 cell 比屏幕窄，
+    //按钮会落到栏外、文字也会顶出去。这里按 cell 真实宽度纠回来 ——
+    //iPhone 上排版时 cell 宽恒等于屏幕宽，与原来同一个数。
+    CGFloat width = self.bounds.size.width;
+    CGRect frame = self.nameLabel.frame;
+    frame.size.width = width - 128;
+    self.nameLabel.frame = frame;
+    frame = self.reasonLabel.frame;
+    frame.size.width = width - 128;
+    self.reasonLabel.frame = frame;
+    frame = self.acceptBtn.frame;
+    frame.origin.x = width - (46 + 16);
+    self.acceptBtn.frame = frame;
+}
+
 - (void)initSubViews {
     for (UIView *view in self.contentView.subviews) {
         [view removeFromSuperview];

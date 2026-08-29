@@ -215,7 +215,19 @@
 
 - (UIView *)qrView {
     if (!_qrView) {
-        UIView *view = [[UIView alloc]initWithFrame:CGRectMake( (CGRectGetWidth(self.view.frame)-CGRectGetWidth(self.view.frame)*5/6)/2, 100, CGRectGetWidth(self.view.frame)*5/6, CGRectGetWidth(self.view.frame)*5/6+60)];
+        //原先是「页面宽的 5/6」。iPad 双栏下右栏有 700 多点宽，5/6 算出来接近 600pt，
+        //一张二维码卡片比半个屏幕还大。这里按 android `values-sw600dp/dimens.xml` 的
+        //`wfc_form_max_width`（400dp，「平板整宽拉伸既难看也难用，统一约束后居中显示」）封顶。
+        //android 那张页面（`qrcode_activity.xml`）的二维码干脆是固定 250dp，两端都不随屏宽走。
+        //iPhone 上 layoutWidthForView: 返回屏幕宽，与原先的 self.view.frame 宽等值。
+        CGFloat viewWidth = [WFCUPadUtility layoutWidthForView:self.view];
+        CGFloat cardWidth = viewWidth * 5 / 6;
+        if ([WFCUPadUtility isPad]) {
+            cardWidth = MIN(cardWidth, WFCUPadFormMaxWidth);
+        }
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake((viewWidth - cardWidth)/2, 100, cardWidth, cardWidth+60)];
+        //换栏宽/旋转时保持居中
+        view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:view];
         view.backgroundColor = [UIColor whiteColor];
         view.layer.shadowOffset = CGSizeMake(0, 2);

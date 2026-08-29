@@ -44,13 +44,34 @@
     self.iconView.image = [WFCUUtilities imageForExt:ext];
 }
 
+//两个 label 的换行宽度原先一个按屏幕宽算、一个按 cell 宽算。双栏下 cell 比屏幕窄，
+//按屏幕宽算的那个长文件名会顶出栏外。排版时 cell 已经是真实宽度了，两个都在这里算。
+//iPhone 上排版时 cell 宽恒等于屏幕宽，与原来同一个数。
+- (void)layoutLabels {
+    CGFloat width = self.bounds.size.width;
+    if (width <= 0) {
+        return;
+    }
+    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width - 74, 48)];
+    self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
+
+    NSString *info = self.infoLabel.attributedText.string;
+    if (info.length) {
+        size = [WFCUUtilities getTextDrawingSize:info font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - 74, 40)];
+        self.infoLabel.frame = CGRectMake(66, CGRectGetMaxY(self.nameLabel.frame) + 8, size.width, size.height);
+    }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self layoutLabels];
+}
+
 - (void)setFileRecord:(WFCCFileRecord *)fileRecord {
     _fileRecord = fileRecord;
     
     [self setFileIcon:fileRecord.name];
     self.nameLabel.text = self.fileRecord.name;
-    CGSize size = [WFCUUtilities getTextDrawingSize:self.fileRecord.name font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 74, 48)];
-    self.nameLabel.frame = CGRectMake(66, 8, size.width, size.height);
     
     NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
     if(!sender.length) {
@@ -65,8 +86,7 @@
     
     self.infoLabel.attributedText = attStr;
     
-    size = [WFCUUtilities getTextDrawingSize:attStr.string font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(self.bounds.size.width - 74, 40)];
-    self.infoLabel.frame = CGRectMake(66, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height + 8, size.width, size.height);
+    [self layoutLabels];
 }
 
 

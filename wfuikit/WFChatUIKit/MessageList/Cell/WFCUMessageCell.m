@@ -14,6 +14,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "UIFont+YH.h"
+#import "WFCUPadUtility.h"
 
 #define Portrait_Size 40
 #define SelectView_Size 20
@@ -47,16 +48,32 @@
 @property (nonatomic, strong)UIImageView *selectView;
 @end
 
+//聊天内容区宽度。iPhone 上等于屏幕宽度，iPad 上是右侧详情栏宽度（且有上限，避免横屏时气泡被拉得过长）。
+//同一时刻只有一个聊天界面在展示，这里用一个全局值保存，由消息列表在布局时更新。
+static CGFloat gWFCUChatContentWidth = 0;
+
 @implementation WFCUMessageCell
++ (void)setChatContentWidth:(CGFloat)width {
+    gWFCUChatContentWidth = [WFCUPadUtility chatContentWidthForViewWidth:width];
+}
+
++ (CGFloat)chatContentWidth {
+    if (gWFCUChatContentWidth > 0) {
+        return gWFCUChatContentWidth;
+    }
+    return [WFCUPadUtility chatContentWidthForViewWidth:[UIScreen mainScreen].bounds.size.width];
+}
+
 + (CGFloat)clientAreaWidth {
   return [WFCUMessageCell bubbleWidth] - Bubble_Padding_Arraw - Bubble_Padding_Another_Side;
 }
 
 + (CGFloat)bubbleWidth {
-    return [UIScreen mainScreen].bounds.size.width - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
+    return [WFCUMessageCell chatContentWidth] - Portrait_Size - Portrait_Padding_Left - Portrait_Padding_Right - Portrait_Size - Portrait_Padding_Left;
 }
 
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
+  [WFCUMessageCell setChatContentWidth:width];
   CGFloat height = [super hightForHeaderArea:msgModel];
   CGFloat portraitSize = Portrait_Size;
   CGFloat nameLabelHeight = Name_Label_Height + Name_Client_Padding;

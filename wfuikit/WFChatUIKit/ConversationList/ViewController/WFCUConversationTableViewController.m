@@ -35,9 +35,11 @@
 #import "WFCUSeletedUserViewController.h"
 #import "WFCUEnum.h"
 #import "WFCUImage.h"
+#import "WFCUPadUtility.h"
+#import "WFCUPadSearchResultViewController.h"
 
 
-@interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
+@interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource, WFCUPadSearchResultDelegate>
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 
 @property (nonatomic, strong)  UISearchController       *searchController;
@@ -62,6 +64,19 @@
 @property (nonatomic, strong) NSMutableArray<NSString *> *searchHistory;
 @property (nonatomic, strong) UIView *historyContainer;
 @property (nonatomic, assign) BOOL showingHistory;
+
+//iPad 双栏布局下右侧正在展示的会话，用于保持左侧列表的选中态
+@property (nonatomic, strong) WFCCConversation *padSelectedConversation;
+//它压在哪条栈上。五个 tab 各一条栈，会话可能压在一条已经切走的栈上，只记「有没有」不够
+//（android 那边同样单记了一个 selectedConversationTab）。
+@property (nonatomic, assign) NSInteger padSelectedTabIndex;
+//它在左栏列表里出现过。新建的会话在发出首条消息前本来就不在列表里，
+//不先确认「来过」就清栏，会把刚点开的新会话立刻关掉（android: selectedSeenInList）。
+@property (nonatomic, assign) BOOL padSelectedSeenInList;
+
+//iPad 双栏布局下承载搜索结果的右栏页面。非 nil 即表示「搜索结果在右栏」这一形态生效中，
+//此时左栏那张表始终是会话列表，不再被搜索结果顶掉。
+@property (nonatomic, strong) WFCUPadSearchResultViewController *padSearchVC;
 
 @end
 
@@ -108,6 +123,11 @@
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
+    //双栏下这条搜索框只是一颗按钮：点它不取焦点，只把搜索页压进右栏，
+    //输入框长在那张页面上（见 WFCUPadSearchResultViewController）。
+    [WFCUPadUtility installSearchTriggerOnSearchBar:_searchController.searchBar
+                                             target:self
+                                             action:@selector(onPadSearchEntryTapped)];
 
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 
@@ -115,28 +135,59 @@
     self.searchHistory = [self loadSearchHistory];
 }
 
+//是否正在搜索。双栏下搜索框长在右栏那张搜索页上，searchController 根本不会 active；
+//单栏（含 iPhone）下 padSearchVC 恒为 nil，取值与 `searchController.active` 逐字节相同。
+- (BOOL)isSearching {
+    return self.padSearchVC != nil || self.searchController.active;
+}
+
+//当前那条搜索框。双栏下在右栏那张搜索页上，单栏（含 iPhone）下是左栏导航条里那条。
+- (UISearchBar *)activeSearchBar {
+    return self.padSearchVC ? self.padSearchVC.searchBar : self.searchController.searchBar;
+}
+
+//当前的搜索关键字
+- (NSString *)currentSearchText {
+    return [[self activeSearchBar] text];
+}
+
+//搜索历史那块浮层挂在谁身上。双栏下挂右栏那条导航栈的 view ——
+//挂左栏会被 320 宽的栏切掉，而且它要盖住的是搜索结果，不是会话列表。
+- (UIView *)searchHistoryHostView {
+    if (self.padSearchVC) {
+        return self.padSearchVC.navigationController.view ?: self.padSearchVC.view;
+    }
+    return self.navigationController.view;
+}
+
 - (void)onUserInfoUpdated:(NSNotification *)notification {
-    if (self.searchController.active) {
-        [self.tableView reloadData];
+    if ([self isSearching]) {
+        [self reloadSearchResultTableView];
     }
 }
 
 - (void)onGroupInfoUpdated:(NSNotification *)notification {
-    if (self.searchController.active) {
-        [self.tableView reloadData];
+    if ([self isSearching]) {
+        [self reloadSearchResultTableView];
     }
 }
 
 - (void)onChannelInfoUpdated:(NSNotification *)notification {
-    if (self.searchController.active) {
-        [self.tableView reloadData];
+    if ([self isSearching]) {
+        [self reloadSearchResultTableView];
     } 
 }
 
 - (void)onSendingMessageStatusUpdated:(NSNotification *)notification {
-    if (self.searchController.active) {
-        [self.tableView reloadData];
-    } else {
+    if ([self isSearching]) {
+        [self reloadSearchResultTableView];
+        //单栏下左栏这张表此刻显示的就是搜索结果，下面那段按会话下标取行会错位；
+        //双栏下搜索结果在右栏，左栏仍是会话列表，照常往下更新
+        if (!self.padSearchVC) {
+            return;
+        }
+    }
+    {
         long messageId = [notification.object longValue];
         NSArray *dataSource = self.conversations;
         
@@ -234,6 +285,29 @@
 - (void)startChatAction:(id)sender {
     WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
     pvc.type = Horizontal;
+
+    //双栏下选人页进右栏，不再全屏模态盖住整个窗口。对应 android 把 CreateConversationActivity
+    //登记进 PaneRegistry 的那一条。会话建好之后用 replacePage 顶掉选人页
+    //（android `TwoPaneNavigator.replacePage`：「从『发起群聊』的选人页建完群，选人页就该消失」）——
+    //从新会话返回时应当回到欢迎页，而不是回到那张已经用完的选人表。
+    //页面 key 取类名（android 那边写作 CreateConversationActivity.class.getName()）：
+    //连点两次「+ → 发起聊天」不会在右栏叠出两张选人表。
+    if ([WFCUPadUtility isSplitLayoutActive]) {
+        __weak typeof(self)ws = self;
+        pvc.wfcu_padPageKey = NSStringFromClass([WFCUSeletedUserViewController class]);
+        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+            if (contacts.count == 1) {
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [WFCCConversation conversationWithType:Single_Type target:contacts[0] line:0];
+                [WFCUPadUtility replaceDetailViewController:mvc animated:YES];
+            } else {
+                [ws createGroup:contacts];
+            }
+        };
+        [WFCUPadUtility showDetailViewController:pvc];
+        return;
+    }
+
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
     navi.modalPresentationStyle = UIModalPresentationFullScreen;
     __weak typeof(self)ws = self;
@@ -256,6 +330,26 @@
     WFCUSeletedUserViewController *pvc = [[WFCUSeletedUserViewController alloc] init];
     pvc.type = Horizontal;
     pvc.maxSelectCount = 1;
+
+    //与 startChatAction: 同一条规则，见那里的注释。密聊建好之后同样顶掉选人页。
+    if ([WFCUPadUtility isSplitLayoutActive]) {
+        pvc.wfcu_padPageKey = [NSStringFromClass([WFCUSeletedUserViewController class]) stringByAppendingString:@":secret"];
+        pvc.selectResult = ^(NSArray<NSString *> *contacts) {
+            if (contacts.count != 1) {
+                return;
+            }
+            [[WFCCIMService sharedWFCIMService] createSecretChat:contacts[0] success:^(NSString *targetId, int line) {
+                WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
+                mvc.conversation = [WFCCConversation conversationWithType:SecretChat_Type target:targetId line:line];
+                [WFCUPadUtility replaceDetailViewController:mvc animated:YES];
+            } error:^(int error_code) {
+                
+            }];
+        };
+        [WFCUPadUtility showDetailViewController:pvc];
+        return;
+    }
+
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:pvc];
     navi.modalPresentationStyle = UIModalPresentationFullScreen;
     __weak typeof(self)ws = self;
@@ -319,6 +413,12 @@
         mvc.conversation.line = 0;
         
         mvc.hidesBottomBarWhenPushed = YES;
+        //双栏下建完的群会话顶掉右栏栈顶那张选人页（android `replacePage`：
+        //「从『发起群聊』的选人页建完群，选人页就该消失」），从群会话返回时回到欢迎页。
+        //走左栏的导航栈不行：那会被 WFCUPadPrimaryNavigationController 当成「换内容」而清到栈底。
+        if ([WFCUPadUtility replaceDetailViewController:mvc animated:YES]) {
+            return;
+        }
         [ws.navigationController pushViewController:mvc animated:YES];
     } error:^(int error_code) {
         NSLog(@"create group failure");
@@ -559,6 +659,7 @@
 
 - (void)refreshList {
     self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5)]] mutableCopy];
+    [self padCheckSelectedConversationAlive];
     [self updateBadgeNumber];
     [self.tableView reloadData];
 }
@@ -620,6 +721,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onJoinGroupRequestUpdated:) name:kJoinGroupRequestUpdated object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPadDetailChanged:) name:WFCUPadDetailDidChangeNotification object:nil];
     }
     
     [self updateConnectionStatus:[WFCCNetworkService sharedInstance].currentConnectionStatus];
@@ -637,9 +740,15 @@
     }
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    //分栏形态会变（旋转、Stage Manager、Slide Over），同步一下顶上那条搜索框能不能取焦点
+    [WFCUPadUtility syncSearchTriggerOnSearchBar:self.searchController.searchBar];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (self.searchController.isActive) {
+    if (self.searchController.isActive && ![WFCUPadUtility isSplitLayoutActive]) {
         self.tabBarController.tabBar.hidden = YES;
     }
 }
@@ -822,9 +931,29 @@
     }
 }
 
+#pragma mark - 搜索结果渲染在哪张表上
+
+//双栏下搜索结果在右栏那张表上，左栏那张表始终是会话列表；单栏下仍是老样子——
+//同一张表按 searchController.active 在两种内容之间切。
+- (BOOL)isSearchTableView:(UITableView *)tableView {
+    if (self.padSearchVC) {
+        return tableView == self.padSearchVC.tableView;
+    }
+    return self.searchController.active;
+}
+
+- (void)reloadSearchResultTableView {
+    [(self.padSearchVC ? self.padSearchVC.tableView : self.tableView) reloadData];
+}
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (tableView == self.historyTableView) {
+        return 1;
+    }
+    if (![self isSearchTableView:tableView]) {
+        //会话列表恒为一个 section。单栏下不搜索时三个搜索结果数组都是空的，
+        //走下面那段算出来同样是 1，逐字节等价。
         return 1;
     }
     int sec = 0;
@@ -851,7 +980,7 @@
         return self.searchHistory.count;
     }
 
-    if (self.searchController.active) {
+    if ([self isSearchTableView:tableView]) {
         int sec = 0;
         if (self.searchFriendList.count) {
             sec++;
@@ -942,7 +1071,7 @@
     }
 
     // 原有的搜索结果逻辑
-    if (self.searchController.active) {
+    if ([self isSearchTableView:tableView]) {
         int sec = 0;
         if (self.searchFriendList.count) {
             sec++;
@@ -1082,7 +1211,7 @@
         return 44;
     }
 
-    if (self.searchController.active) {
+    if ([self isSearchTableView:tableView]) {
         int sec = 0;
         if (self.searchFriendList.count) {
             sec++;
@@ -1143,7 +1272,7 @@
         return nil;
     }
     
-    if (self.searchController.isActive) {
+    if ([self isSearchTableView:tableView]) {
         
         if (self.searchConversationList.count + self.searchGroupList.count + self.searchFriendList.count > 0) {
             UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 32)];
@@ -1192,7 +1321,7 @@
     if (tableView == self.historyTableView) {
         return 0;
     }
-    if (self.searchController.isActive) {
+    if ([self isSearchTableView:tableView]) {
         return 32;
     }
     return 0;
@@ -1204,7 +1333,7 @@
         return NO;
     }
     // Return NO if you do not want the specified item to be editable.
-    if (self.searchController.active) {
+    if ([self isSearchTableView:tableView]) {
         return NO;
     }
     return YES;
@@ -1296,6 +1425,13 @@
         return;
     }
 
+    if (self.padSearchVC) {
+        //双栏下搜索框在右栏那张页面上，只有拖它自己那张结果表才收键盘
+        if (scrollView == self.padSearchVC.tableView) {
+            [self.padSearchVC.searchBar resignFirstResponder];
+        }
+        return;
+    }
     if (self.searchController.active) {
         [self.searchController.searchBar resignFirstResponder];
     }
@@ -1306,7 +1442,9 @@
         NSString *searchText = self.searchHistory[indexPath.row];
 
         // 设置搜索框文本并触发搜索
-        if (@available(iOS 13.0, *)) {
+        if (self.padSearchVC) {
+            self.padSearchVC.searchBar.text = searchText;
+        } else if (@available(iOS 13.0, *)) {
             self.searchController.searchBar.searchTextField.text = searchText;
         } else {
             self.searchController.searchBar.text = searchText;
@@ -1315,14 +1453,14 @@
         [self hideSearchHistory];
 
         // 触发搜索
-        [self updateSearchResultsForSearchController:self.searchController];
+        [self performSearchWithText:searchText];
         return;
     }
 
     // 原有的逻辑
-    if (self.searchController.active) {
+    if ([self isSearchTableView:tableView]) {
         // 点击搜索结果时保存搜索历史
-        NSString *searchString = [self.searchController.searchBar text];
+        NSString *searchString = [self currentSearchText];
         if (searchString.length > 0) {
             [self addSearchHistory:searchString];
         }
@@ -1334,7 +1472,7 @@
                 if (!self.isSearchFriendListExpansion && indexPath.row == 2) {
                     self.isSearchFriendListExpansion = YES;
                     NSIndexSet *set = [NSIndexSet indexSetWithIndex:indexPath.section];
-                    [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
+                    [tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
                 } else {
                     WFCCUserInfo *info = self.searchFriendList[indexPath.row];
                     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
@@ -1356,7 +1494,7 @@
                 if (!self.isSearchGroupListExpansion && indexPath.row == 2) {
                     self.isSearchGroupListExpansion = YES;
                       NSIndexSet *set = [NSIndexSet indexSetWithIndex:indexPath.section];
-                      [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
+                      [tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
                 } else {
                     WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
                     WFCCGroupSearchInfo *info = self.searchGroupList[indexPath.row];
@@ -1380,7 +1518,7 @@
                 if (!self.isSearchConversationListExpansion && indexPath.row == 2) {
                     self.isSearchConversationListExpansion = YES;
                     NSIndexSet *set = [NSIndexSet indexSetWithIndex:indexPath.section];
-                    [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
+                    [tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
                 } else {
                     WFCCConversationSearchInfo *info = self.searchConversationList[indexPath.row];
                          if (info.marchedCount == 1) {
@@ -1404,10 +1542,100 @@
         }
     } else {
         WFCCConversationInfo *info = self.conversations[indexPath.row];
+        if ([WFCUPadUtility isSplitLayoutActive]) {
+            //右侧已经是这个会话了就不重建，否则会丢失滚动位置和草稿输入状态
+            if ([self isPadSelectedConversation:info.conversation]) {
+                return;
+            }
+            self.padSelectedConversation = info.conversation;
+        } else {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
         WFCUMessageListViewController *mvc = [[WFCUMessageListViewController alloc] init];
         mvc.conversation = info.conversation;
         mvc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:mvc animated:YES];
+    }
+}
+
+#pragma mark - iPad 双栏选中态
+
+static BOOL WFCUIsSameConversation(WFCCConversation *a, WFCCConversation *b) {
+    if (!a || !b) {
+        return NO;
+    }
+    return a.type == b.type && a.line == b.line && [a.target isEqualToString:b.target];
+}
+
+- (BOOL)isPadSelectedConversation:(WFCCConversation *)conversation {
+    //R7：高亮只跟消息 tab 走 —— 当前 tab 不是消息时，右栏挂的是别的 tab 那条栈，
+    //跟这张列表没有关系，左栏就没有可高亮的行。
+    //切 tab 会走 syncDetailStackForCurrentTab 发一次通知，高亮跟着重算，回到消息 tab 时会亮回来。
+    if (self.tabBarController && self.tabBarController.selectedViewController != self.navigationController) {
+        return NO;
+    }
+    return WFCUIsSameConversation(self.padSelectedConversation, conversation);
+}
+
+//R7：右栏打开的会话从列表里消失了（删除会话、退群）→ 把它所在的那一栏退回欢迎页。
+//对应 android `TwoPaneNavigator.onConversationListChanged`，连守卫一起照搬：
+//必须先确认它「在列表里出现过」——新建的会话在发出第一条消息之前本来就不在列表里，
+//不守这一下，刚点开的新会话会被立刻关掉。
+- (void)padCheckSelectedConversationAlive {
+    if (!self.padSelectedConversation || ![WFCUPadUtility isSplitLayoutActive]) {
+        return;
+    }
+    for (WFCCConversationInfo *info in self.conversations) {
+        if (WFCUIsSameConversation(info.conversation, self.padSelectedConversation)) {
+            self.padSelectedSeenInList = YES;
+            return;
+        }
+    }
+    if (!self.padSelectedSeenInList) {
+        return;
+    }
+    NSInteger tab = self.padSelectedTabIndex;
+    self.padSelectedSeenInList = NO;
+    self.padSelectedConversation = nil;
+    self.padSelectedTabIndex = NSNotFound;
+    [WFCUPadUtility resetDetailStackForTabAtIndex:tab];
+}
+
+- (void)onPadDetailChanged:(NSNotification *)notification {
+    UIViewController *detail = notification.object;
+    if (self.padSearchVC && detail != self.padSearchVC) {
+        //右栏换成了搜索结果以外的东西——用户点开了某条命中，或者退回了欢迎页。搜索到此为止。
+        //放在这里而不是 didSelectRow: 里，是因为三类命中（好友/群/会话）各有各的分支，
+        //还夹着「展开更多」这种不算打开页面的点击。
+        [self padSearchDidEnd];
+    }
+    WFCCConversation *conversation = nil;
+    if ([detail isKindOfClass:[WFCUMessageListViewController class]]) {
+        conversation = ((WFCUMessageListViewController *)detail).conversation;
+    }
+    if (!WFCUIsSameConversation(conversation, self.padSelectedConversation)) {
+        self.padSelectedConversation = conversation;
+        //换了一个会话就重新等它在列表里出现一次（android rememberSelectedConversation
+        //里那句 selectedSeenInList = false）。同一个会话的重复通知（往下钻、返回）不重置，
+        //否则中间来一次刷新就会误判成「没来过」。
+        self.padSelectedSeenInList = NO;
+        self.padSelectedTabIndex = conversation ? self.tabBarController.selectedIndex : NSNotFound;
+    }
+    [self.tableView reloadData];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView != self.tableView || [self isSearchTableView:tableView]) {
+        return;
+    }
+    if (![WFCUPadUtility isSplitLayoutActive] || indexPath.row >= self.conversations.count) {
+        return;
+    }
+    WFCCConversationInfo *info = self.conversations[indexPath.row];
+    if ([self isPadSelectedConversation:info.conversation]) {
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    } else {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 
@@ -1421,7 +1649,7 @@
 
 - (void)textFieldDidBeginEditing:(NSNotification *)notification {
     if (@available(iOS 13, *)) {
-        UITextField *textField = self.searchController.searchBar.searchTextField;
+        UITextField *textField = [self activeSearchBar].searchTextField;
         if (notification.object == textField && self.searchHistory.count > 0) {
             [self showSearchHistory];
         }
@@ -1436,9 +1664,10 @@
     self.showingHistory = YES;
 
     // 获取文本框的宽度
+    UIView *hostView = [self searchHistoryHostView];
     CGFloat searchBarWidth;
     if (@available(iOS 13.0, *)) {
-        searchBarWidth = self.searchController.searchBar.searchTextField.bounds.size.width;
+        searchBarWidth = [self activeSearchBar].searchTextField.bounds.size.width;
     } else {
         searchBarWidth = self.view.bounds.size.width - 16;
     }
@@ -1449,7 +1678,7 @@
     CGFloat tableHeight = MIN(5 * 44, self.searchHistory.count * 44); // 最多显示5条，少于5条则全部显示
 
     // 创建一个更大的背景视图来接收点击事件
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    UIView *bgView = [[UIView alloc] initWithFrame:hostView.bounds];
     bgView.backgroundColor = [UIColor clearColor];
     bgView.tag = 9999;
 
@@ -1498,10 +1727,10 @@
 
     // 显示在搜索框下方
     if (@available(iOS 13.0, *)) {
-        UITextField *textField = self.searchController.searchBar.searchTextField;
+        UITextField *textField = [self activeSearchBar].searchTextField;
 
         // 将背景视图添加到导航控制器的视图上，确保覆盖整个屏幕
-        [self.navigationController.view addSubview:bgView];
+        [hostView addSubview:bgView];
 
         // 设置位置
         CGRect textFieldFrame = [textField convertRect:textField.bounds toView:bgView];
@@ -1517,8 +1746,8 @@
 }
 
 - (void)hideSearchHistory {
-    // 查找并移除背景视图（通过tag识别）
-    UIView *bgView = [self.navigationController.view viewWithTag:9999];
+    // 查找并移除背景视图（双栏下它挂在右栏那条导航栈上，按 tag 到左栏去找是找不到的）
+    UIView *bgView = self.historyContainer.superview ?: [self.navigationController.view viewWithTag:9999];
     if (bgView) {
         [UIView animateWithDuration:0.2 animations:^{
             self.historyContainer.alpha = 0;
@@ -1599,8 +1828,8 @@
     self.isSearchFriendListExpansion = NO;
     self.isSearchConversationListExpansion = NO;
     self.isSearchGroupListExpansion = NO;
-    self.tabBarController.tabBar.hidden = YES;
     self.extendedLayoutIncludesOpaqueBars = YES;
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
@@ -1612,6 +1841,62 @@
     [self hideSearchHistory]; // 隐藏历史记录
     self.tabBarController.tabBar.hidden = NO;
     self.extendedLayoutIncludesOpaqueBars = NO;
+}
+
+#pragma mark - 双栏下的搜索：整页开在右栏，输入框长在那张页面上
+
+//点了左栏顶上那条搜索框。对应 android 主界面 toolbar 上那颗 `R.id.search`
+//（`showSearchPortal()` 起 SearchPortalActivity，它登记在 `PaneRegistry` 里，所以落进右栏）、
+//以及 flutter `_onTapSearchButton` -> `openSearch`。两端的搜索入口本来就是一颗按钮。
+//左栏这条框不取焦点（输入框已由 `installSearchTriggerOnSearchBar:` 关掉），
+//焦点归右栏那张搜索页自己的输入框（它在 viewDidAppear 里自己抢）。
+//每点一次都是一张新页面 —— android：「都不去重：每次进来都该是一张空搜索框」。
+- (void)onPadSearchEntryTapped {
+    if (![WFCUPadUtility isSplitLayoutActive]) {
+        return;
+    }
+    WFCUPadSearchResultViewController *searchVC = [[WFCUPadSearchResultViewController alloc] init];
+    searchVC.tableView.delegate = self;
+    searchVC.tableView.dataSource = self;
+    searchVC.searchDelegate = self;
+    //与 didPresentSearchController: 里那三行同义：每次进搜索都从「未展开」开始
+    self.isSearchFriendListExpansion = NO;
+    self.isSearchConversationListExpansion = NO;
+    self.isSearchGroupListExpansion = NO;
+    self.searchConversationList = nil;
+    self.searchFriendList = nil;
+    self.searchGroupList = nil;
+    //先设再送：showDetailViewController: 会同步发出右栏变更通知，
+    //通知回来时 padSearchVC 得已经对上号，否则这一页会被当成「别人」而立刻收工。
+    self.padSearchVC = searchVC;
+    [WFCUPadUtility showDetailViewController:searchVC];
+    [self.tableView reloadData];
+}
+
+//右栏不再是那张搜索页了（点开了某条命中、或者退回欢迎页），搜索到此为止。
+- (void)padSearchDidEnd {
+    NSString *searchString = self.padSearchVC.searchBar.text;
+    if (searchString.length > 0) {
+        //与 willDismissSearchController: 一样，收工时把关键字记进历史
+        [self addSearchHistory:searchString];
+    }
+    [self hideSearchHistory];
+    self.padSearchVC = nil;
+    self.searchConversationList = nil;
+    self.searchFriendList = nil;
+    self.searchGroupList = nil;
+}
+
+#pragma mark - WFCUPadSearchResultDelegate
+
+- (void)padSearchResultController:(WFCUPadSearchResultViewController *)controller textDidChange:(NSString *)text {
+    [self performSearchWithText:text];
+}
+
+- (void)padSearchResultControllerDidCancel:(WFCUPadSearchResultViewController *)controller {
+    //「取消」就是关掉这张搜索页（android `onCancelClick` -> `finishPage`）。
+    //右栏退回欢迎页，padSearchVC 由随之而来的右栏变更通知清掉。
+    [WFCUPadUtility resetDetailViewController];
 }
 
 - (NSArray<WFCCUserInfo *> *)searchFriends:(NSString *)searchString {
@@ -1634,7 +1919,11 @@
 }
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSString *searchString = [self.searchController.searchBar text];
+    [self performSearchWithText:[self.searchController.searchBar text]];
+}
+
+//按关键字取数。单栏下关键字来自左栏那条搜索框，双栏下来自右栏搜索页上那条。
+- (void)performSearchWithText:(NSString *)searchString {
     if (searchString.length) {
         [self hideSearchHistory]; // 隐藏历史记录
         // 不在这里保存历史，在点击取消或搜索结果时保存
@@ -1647,6 +1936,6 @@
         self.searchGroupList = nil;
     }
 
-    [self.tableView reloadData];
+    [self reloadSearchResultTableView];
 }
 @end

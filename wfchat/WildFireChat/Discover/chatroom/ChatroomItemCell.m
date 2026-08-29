@@ -21,6 +21,19 @@
     self.titleLable.text = _chatroomInfo.title;
 }
 
+//格子尺寸不是固定的：iPad 上按栏宽算，栏宽还会随旋转/分屏/台前调度变（见
+//ChatroomListViewController 的 viewWillLayoutSubviews）。子视图是在 getter 里按当时的
+//bounds 定死的，尺寸变了不会自己跟，头像就还是旧的大小、圆角也对不上。
+//排版统一放到这里，按每次的真实 bounds 来。iPhone 上格子宽度恒定，算出来与原先同一个数。
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    self.portraitIV.frame = CGRectMake(0, 0, width, width);
+    self.portraitIV.layer.cornerRadius = width / 2;
+    self.titleLable.frame = CGRectMake(0, width, width, MAX(height - width, 0));
+}
+
 - (UIImageView *)portraitIV {
     if (!_portraitIV) {
         _portraitIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.width)];

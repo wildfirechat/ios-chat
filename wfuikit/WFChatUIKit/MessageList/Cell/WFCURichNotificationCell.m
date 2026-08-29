@@ -14,6 +14,7 @@
 #import "UIColor+YH.h"
 #import "WFCUImage.h"
 #import "UIFont+YH.h"
+#import "WFCUMessageCell.h"
 
 @interface WFCURichNotificationCell ()
 @property(nonatomic, strong)UIView *containerView;
@@ -59,10 +60,13 @@
 
 #define EX_FW_WIDTH 28
 
+//这块通知卡片一直是按屏幕宽减两侧留白排的。双栏下聊天区只有右栏那么宽，
+//再按屏幕宽排就会顶到栏外，所以统一改成聊天内容区宽度（气泡也是按它算的）。
+//iPhone 上 chatContentWidth 恒等于屏幕宽，8 处取值一个没变。
 @implementation WFCURichNotificationCell
 + (CGSize)sizeForCell:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCRichNotificationMessageContent *content = (WFCCRichNotificationMessageContent *)msgModel.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
     CGSize titleSize = [WFCUUtilities getTextDrawingSize:content.title font:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING, 50)];
     
     
@@ -95,7 +99,7 @@
     [super setModel:model];
     [self removeAllItems];
     WFCCRichNotificationMessageContent *content = (WFCCRichNotificationMessageContent *)model.message.content;
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
     CGFloat offset = CELL_PADDING_TOP;
     
     CGFloat height = [self setLabel:self.titleLabel widht:containerWidth-CELL_PADDING-CELL_PADDING text:content.title offset:offset fontSize:TITLE_FONT_SIZE];
@@ -165,7 +169,7 @@
         color = [UIColor grayColor];
     }
     
-    CGFloat containerWidth = [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN;
+    CGFloat containerWidth = [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN;
     CGSize itemSize = [WFCUUtilities getTextDrawingSize:text font:[UIFont scaledSystemFontOfSize:FONT_SIZE] constrainedSize:CGSizeMake(containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, 50)];
     UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING+VALUE_BOARD_PADDING_LEFT, offset, containerWidth-CELL_PADDING-CELL_PADDING-VALUE_BOARD_PADDING_LEFT, itemSize.height)];
     valueLabel.text = text;
@@ -203,7 +207,7 @@
 
 - (UIView *)containerView {
     if(!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(CELL_MARGIN, CELL_MARGIN_TOP_BUTTOM, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN, 0)];
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(CELL_MARGIN, CELL_MARGIN_TOP_BUTTOM, [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN, 0)];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.layer.masksToBounds = YES;
         _containerView.layer.cornerRadius = 5.f;
@@ -226,7 +230,7 @@
 
 - (UILabel *)titleLabel {
     if(!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, TITLE_FONT_SIZE)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, TITLE_FONT_SIZE)];
         [_titleLabel setFont:[UIFont scaledSystemFontOfSize:TITLE_FONT_SIZE]];
         [_titleLabel setTextColor:[UIColor blackColor]];
         [self.containerView addSubview:_titleLabel];
@@ -236,7 +240,7 @@
 
 -(UILabel *)descLabel {
     if(!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
         [_descLabel setFont:[UIFont scaledSystemFontOfSize:FONT_SIZE]];
         [_descLabel setTextColor:[UIColor grayColor]];
         [self.containerView addSubview:_descLabel];
@@ -246,7 +250,7 @@
 
 -(UILabel *)remarkLabel {
     if(!_remarkLabel) {
-        _remarkLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
+        _remarkLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_PADDING, CELL_PADDING_TOP, [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN - CELL_PADDING - CELL_PADDING, FONT_SIZE)];
         [_remarkLabel setFont:[UIFont scaledSystemFontOfSize:FONT_SIZE]];
         [_remarkLabel setTextColor:[UIColor grayColor]];
         [self.containerView addSubview:_remarkLabel];
@@ -256,7 +260,7 @@
 
 - (UIView *)exView {
     if(!_exView) {
-        _exView = [[UILabel alloc] initWithFrame:CGRectMake(0, CELL_PADDING_TOP, [UIScreen mainScreen].bounds.size.width - CELL_MARGIN - CELL_MARGIN, EX_FONT_SIZE + CELL_ITEM_PADDING + CELL_PADDING_BUTTOM + EX_LINE_WIDTH)];
+        _exView = [[UILabel alloc] initWithFrame:CGRectMake(0, CELL_PADDING_TOP, [WFCUMessageCell chatContentWidth] - CELL_MARGIN - CELL_MARGIN, EX_FONT_SIZE + CELL_ITEM_PADDING + CELL_PADDING_BUTTOM + EX_LINE_WIDTH)];
         
         _exLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _exView.frame.size.width, 0.5)];
         _exLine.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.9];

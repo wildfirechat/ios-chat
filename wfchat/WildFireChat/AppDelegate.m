@@ -227,7 +227,7 @@
     }
     
     
-    self.window.rootViewController = [WFCBaseTabBarController new];
+    self.window.rootViewController = [WFCBaseTabBarController rootViewController];
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self setupNavBar];
@@ -314,6 +314,10 @@
 -(UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     if([NSStringFromClass([window.rootViewController class]) isEqualToString:@"WFCUConferenceViewController"]) {
         return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+    //iPad 需要支持全部方向：横屏是双栏布局的主要使用场景，也是分屏多任务的前提
+    if([WFCUPadUtility isPad]) {
+        return UIInterfaceOrientationMaskAll;
     }
     return UIInterfaceOrientationMaskPortrait;
 }
@@ -844,8 +848,44 @@
     }];
 }
 
+/// 当前用于 push 的导航控制器。根控制器可能是登录页的导航、TabBar，
+/// 或者 iPad 上的双栏容器（此时取左栏当前 tab 的导航控制器）。
+///
+/// iPad 上**不要**直接返回右栏的导航控制器：那样是往右栏裸 push，绕过了
+/// 「换内容还是往下钻」（R4）与「同一个会话不重建」（R5）这两条规则。
+/// 交给左栏那条导航控制器，它的 pushViewController: 会按规则把页面转到当前 tab 的右栏栈上。
+- (UINavigationController *)currentNavigationController {
+    UIViewController *root = self.window.rootViewController;
+    if ([root isKindOfClass:[UISplitViewController class]]) {
+        root = ((UISplitViewController *)root).viewControllers.firstObject;
+    }
+    if ([root isKindOfClass:[UITabBarController class]]) {
+        root = ((UITabBarController *)root).selectedViewController;
+    }
+    if ([root isKindOfClass:[UINavigationController class]]) {
+        return (UINavigationController *)root;
+    }
+    return root.navigationController;
+}
+
+/// 外部入口（深链、扫码结果里的 wildfirechat:// 链接）打开页面用的导航控制器。
+/// 对应 android `TwoPaneNavigator.openInTab(tab, intent, resetFirst)` —— 那边注释写的是
+/// 「在指定 tab 的栈里打开页面，并把左栏切到该 tab。用于外部入口（通知点击、深链）」。
+/// 外部进来的用户资料/群资料落在消息 tab 的栈上：不能压到当前恰好停在的那个 tab
+/// （比如「我 → 设置」）的栈上去。
+/// 单栏（iPhone 与 iPad 窄形态）下切 tab 会把用户从当前页面拽走，与原行为不符，故不切。
+- (UINavigationController *)externalEntryNavigationController {
+    if ([WFCUPadUtility isSplitLayoutActive]) {
+        WFCBaseTabBarController *tabBarController = [WFCBaseTabBarController tabBarControllerInRoot:self.window.rootViewController];
+        if (tabBarController.viewControllers.count) {
+            tabBarController.selectedIndex = 0;
+        }
+    }
+    return [self currentNavigationController];
+}
+
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [self handleUrl:[url absoluteString] withNav:application.delegate.window.rootViewController.navigationController];
+    return [self handleUrl:[url absoluteString] withNav:[self externalEntryNavigationController]];
 }
 
 - (BOOL)handleUrl:(NSString *)str withNav:(UINavigationController *)navigator {

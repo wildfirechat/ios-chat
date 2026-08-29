@@ -18,6 +18,7 @@
 #import "WFCUImage.h"
 #import "MBProgressHUD.h"
 #import "WFCUUtilities.h"
+#import "WFCUPadUtility.h"
 
 @interface WFCUGroupMemberCollectionViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong)UICollectionView *memberCollectionView;
@@ -51,8 +52,14 @@
         memberCollectionCount = (int)self.memberList.count + 1;
     }
     self.memberCollectionViewLayout = [[WFCUConversationSettingMemberCollectionViewLayout alloc] initWithItemMargin:8];
+    //宫格按本页宽度排，不是按屏幕宽（同缺陷 #7）。iPhone 上两者相等。
+    self.memberCollectionViewLayout.layoutWidth = self.view.bounds.size.width;
     
     self.memberCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self.memberCollectionViewLayout];
+    //页面宽高不再恒等于屏幕：iPad 右栏比屏幕窄，栏宽还会随旋转/分屏/台前调度变。
+    //手写的 frame 是按 viewDidLoad 那一刻定死的，补一个 autoresizing 让它跟着父视图走。
+    //iPhone 锁竖屏、页面恒等于整屏，这一行永远不会改变任何取值。
+    self.memberCollectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.memberCollectionView.delegate = self;
     self.memberCollectionView.dataSource = self;
     
@@ -71,6 +78,22 @@
     }];
 }
 
+
+//宫格是按 viewDidLoad 那一刻的宽度排的。iPad 上这一页在右栏里，栏宽既不等于屏幕宽、
+//还会随旋转/分屏/台前调度变，所以宽度变了要把 layoutWidth 同步过去再重排一次。
+//iPhone 锁竖屏、页面恒等于整屏宽，整段直接返回，一行都不会执行。
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    if (![WFCUPadUtility isPad]) {
+        return;
+    }
+    CGFloat width = self.view.bounds.size.width;
+    if (width <= 0 || width == self.memberCollectionViewLayout.layoutWidth) {
+        return;
+    }
+    self.memberCollectionViewLayout.layoutWidth = width;
+    [self.memberCollectionViewLayout invalidateLayout];
+}
 
 - (BOOL)isGroupOwner {
     return [self.groupInfo.owner isEqualToString:[WFCCNetworkService sharedInstance].userId];

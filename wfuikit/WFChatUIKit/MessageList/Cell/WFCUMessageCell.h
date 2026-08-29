@@ -10,6 +10,9 @@
 #import "WFCUMessageCellBase.h"
 
 @interface WFCUMessageCell : WFCUMessageCellBase
+/// 设置聊天内容区宽度（iPad 上等于右侧详情栏宽度），影响气泡最大宽度
++ (void)setChatContentWidth:(CGFloat)width;
++ (CGFloat)chatContentWidth;
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width;
 + (CGSize)sizeForTranslateArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width;
 @property (nonatomic, strong)UIImageView *portraitView;

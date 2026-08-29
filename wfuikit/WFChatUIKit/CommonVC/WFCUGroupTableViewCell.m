@@ -30,7 +30,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     _portrait.frame = CGRectMake(18, (self.frame.size.height - 40) / 2.0, 40, 40);
-    _name.frame = CGRectMake(18 + 40 + 9, (self.frame.size.height - 17) / 2.0, [UIScreen mainScreen].bounds.size.width - (18 + 40 + 9), 17);
+    //按 cell 自己的宽度排，不是屏幕宽：iPad 上这张列表可能在 320 宽的左栏、也可能在右栏。
+    //iPhone 上 cell 宽恒等于表宽、表宽恒等于屏幕宽，取值没变。
+    _name.frame = CGRectMake(18 + 40 + 9, (self.frame.size.height - 17) / 2.0, self.bounds.size.width - (18 + 40 + 9), 17);
 }
 
 - (UIImageView *)portrait {

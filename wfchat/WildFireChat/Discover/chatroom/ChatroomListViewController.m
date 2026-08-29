@@ -66,11 +66,14 @@ static NSString * identifier = @"cxCellID";
         CGFloat edgeInset = 10;
         int countInLine = 2;
         flowLayout.sectionInset = UIEdgeInsetsMake(edgeInset, edgeInset, edgeInset, edgeInset);
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        //按页面自己的宽度算格子，不是屏幕宽：iPad 双栏下这张页面在右栏里，
+        //按整屏宽算出来的两列会溢出栏外。iPhone 上取值没变。
+        CGFloat width = [WFCUPadUtility layoutWidthForView:self.view];
         width = (width - edgeInset)/countInLine - edgeInset;
         flowLayout.itemSize = CGSizeMake(width, width + 20);
 
-        _collectionView = [[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:flowLayout];
+        _collectionView = [[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
+        _collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_collectionView registerClass:[ChatroomItemCell class] forCellWithReuseIdentifier:identifier];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
@@ -78,6 +81,25 @@ static NSString * identifier = @"cxCellID";
     }
     return _collectionView;
     
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    //栏宽会变（旋转、Stage Manager），格子跟着重算一次
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    if (![flowLayout isKindOfClass:[UICollectionViewFlowLayout class]]) {
+        return;
+    }
+    CGFloat edgeInset = flowLayout.sectionInset.left;
+    CGFloat width = self.collectionView.bounds.size.width;
+    if (width <= 0) {
+        return;
+    }
+    width = (width - edgeInset)/2 - edgeInset;
+    if (ABS(flowLayout.itemSize.width - width) > 0.5) {
+        flowLayout.itemSize = CGSizeMake(width, width + 20);
+        [flowLayout invalidateLayout];
+    }
 }
 
 #pragma mark - deleDate

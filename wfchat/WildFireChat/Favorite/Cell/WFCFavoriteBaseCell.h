@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 //基类实现，不能重写
 + (CGFloat)heightOf:(WFCUFavoriteItem *)favoriteItem;
+
+/// 排版基准宽度。收藏列表在算行高之前把表宽写进来 —— iPad 双栏下这张表在右栏里，
+/// 继续按整屏宽量文字高度会量少，长文本被切掉一截。
+/// 0（默认）表示按屏幕宽，即 iPhone 上的原行为。
++ (void)setLayoutWidth:(CGFloat)layoutWidth;
++ (CGFloat)layoutWidth;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -146,6 +146,15 @@
     [self.view endEditing:YES];
 }
 
+- (void)closePage {
+    //iPad 双栏下本页是压进右栏的（pop），其余形态是模态弹出的（dismiss）
+    if (self.navigationController.viewControllers.count > 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (void)expireTypeChanged:(UISegmentedControl *)sender {
     self.expireDatePicker.hidden = (sender.selectedSegmentIndex == 0);
 }
@@ -155,7 +164,7 @@
     if ([self.delegate respondsToSelector:@selector(createCollectionViewControllerDidCancel:)]) {
         [self.delegate createCollectionViewControllerDidCancel:self];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self closePage];
 }
 
 - (void)onDone:(id)sender {
@@ -210,7 +219,7 @@
                 if ([weakSelf.delegate respondsToSelector:@selector(createCollectionViewController:didCreateCollection:)]) {
                     [weakSelf.delegate createCollectionViewController:weakSelf didCreateCollection:collection];
                 }
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                [weakSelf closePage];
             }
         });
     } error:^(int errorCode, NSString *message) {

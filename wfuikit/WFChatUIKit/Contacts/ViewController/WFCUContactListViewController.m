@@ -32,8 +32,10 @@
 #import "WFCUOrganizationViewController.h"
 #import "WFCUOrgRelationship.h"
 #import "WFCUDomainTableViewController.h"
+#import "WFCUPadUtility.h"
+#import "WFCUPadSearchResultViewController.h"
 
-@interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating>
+@interface WFCUContactListViewController () <UITableViewDataSource, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, WFCUPadSearchResultDelegate>
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic, strong)NSMutableArray<WFCCUserInfo *> *dataArray;
 @property (nonatomic, strong)NSMutableArray<NSString *> *selectedContacts;
@@ -51,6 +53,14 @@
 @property(nonatomic, strong)UIActivityIndicatorView *activityIndicator;
 
 @property(nonatomic, assign)BOOL meshEnabled;
+
+//iPad 双栏下承载搜索结果的右栏页面。非 nil 即表示「搜索结果在右栏」这一形态生效中，
+//此时左栏那张表始终是完整通讯录，不再被搜索结果顶掉。
+@property(nonatomic, strong) WFCUPadSearchResultViewController *padSearchVC;
+//右栏那张表自己的分组数据。左栏那份（allFriendSectionDic / allKeys）留给完整通讯录，
+//两份各排各的 —— 单栏下搜索是「把列表换成结果」，双栏下是「另开一页」，不能共用一份。
+@property(nonatomic, strong) NSDictionary *padSearchSectionDic;
+@property(nonatomic, strong) NSArray *padSearchKeys;
 @end
 
 static NSMutableDictionary *hanziStringDict = nil;
@@ -148,6 +158,17 @@ static NSString *aiRobot = @"AI";
         self.tableView.tableHeaderView = _searchController.searchBar;
     }
     self.definesPresentationContext = YES;
+    //双栏下这条搜索框只是一颗按钮：点它不取焦点，只把搜索页压进右栏，输入框长在那张页面上。
+    //选人形态（转发、拉群、@某人）是模态弹出的一页，没有「左栏列表 + 右栏内容」，不装。
+    if (!self.selectContact) {
+        [WFCUPadUtility installSearchTriggerOnSearchBar:_searchController.searchBar
+                                                 target:self
+                                                 action:@selector(onPadSearchEntryTapped)];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onPadDetailChanged:)
+                                                     name:WFCUPadDetailDidChangeNotification
+                                                   object:nil];
+    }
 
     self.tableView.sectionIndexColor = [UIColor colorWithHexString:@"0x4e4e4e"];
     [self.view addSubview:self.tableView];
@@ -155,6 +176,12 @@ static NSString *aiRobot = @"AI";
     [self.view bringSubviewToFront:self.activityIndicator];
     
     [self.tableView reloadData];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    //分栏形态会变（旋转、Stage Manager、Slide Over），同步一下顶上那条搜索框能不能取焦点
+    [WFCUPadUtility syncSearchTriggerOnSearchBar:self.searchController.searchBar];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -251,7 +278,10 @@ static NSString *aiRobot = @"AI";
     _needSort = needSort;
     if (needSort && !self.sorting) {
         _needSort = NO;
-        if (self.searchController.active) {
+        if (self.padSearchVC) {
+            //双栏：结果排进右栏那张表，左栏保持完整通讯录
+            [self sortPadSearchList];
+        } else if (self.searchController.active) {
             [self sortAndRefreshWithList:self.searchList];
         } else {
             [self sortAndRefreshWithList:self.dataArray];
@@ -349,25 +379,69 @@ static NSString *aiRobot = @"AI";
 }
 
 
+#pragma mark - 双栏：左栏通讯录 / 右栏搜索结果
+
+//这张表是不是搜索结果表。双栏形态下左右两张表共用同一套 dataSource，靠 tableView 参数分辨；
+//单栏（含 iPhone）下 padSearchVC 恒为 nil，取值与改之前逐字节一致。
+- (BOOL)isSearchTableView:(UITableView *)tableView {
+    if (self.padSearchVC) {
+        return tableView == self.padSearchVC.tableView;
+    }
+    return self.searchController.active;
+}
+
+- (NSArray *)keysForTableView:(UITableView *)tableView {
+    if (self.padSearchVC && tableView == self.padSearchVC.tableView) {
+        return self.padSearchKeys;
+    }
+    return self.allKeys;
+}
+
+- (NSDictionary *)sectionDicForTableView:(UITableView *)tableView {
+    if (self.padSearchVC && tableView == self.padSearchVC.tableView) {
+        return self.padSearchSectionDic;
+    }
+    return self.allFriendSectionDic;
+}
+
+//只把搜索结果排进右栏那张表，左栏那份完整通讯录原封不动 ——
+//否则每敲一个字都要把整本通讯录重排一遍。
+- (void)sortPadSearchList {
+    self.sorting = YES;
+    NSArray *list = [self.searchList copy];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSDictionary *result = [WFCUContactListViewController sortedArrayWithPinYinDic:list];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.padSearchSectionDic = result[@"infoDic"];
+            self.padSearchKeys = result[@"allKeys"] ?: @[];
+            [self.padSearchVC.tableView reloadData];
+            self.sorting = NO;
+            if (self.needSort) {
+                self.needSort = self.needSort;
+            }
+        });
+    });
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSArray *dataSource;
 
-    if (self.searchController.active || self.selectContact) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+    if ([self isSearchTableView:tableView] || self.selectContact) {
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
             if (section == 0) {
                 return 1;
             }
-            dataSource = self.allFriendSectionDic[self.allKeys[section-1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][section-1]];
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[section]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][section]];
         }
         return dataSource.count;
     } else {
         if (section == 0) {
             return 3 + [WFCUOrganizationCache sharedCache].rootOrganizationIds.count + [WFCUOrganizationCache sharedCache].bottomOrganizationIds.count + (self.meshEnabled?1:0);
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[section - 1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][section - 1]];
             return dataSource.count;
         }
     }
@@ -435,8 +509,8 @@ static NSString *aiRobot = @"AI";
     UITableViewCell *cell = nil;
     
     NSArray *dataSource;
-    if (self.searchController.active || self.selectContact) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+    if ([self isSearchTableView:tableView] || self.selectContact) {
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
             if (indexPath.section == 0) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"new_channel"];
                 if (self.showCreateChannel) {
@@ -448,9 +522,9 @@ static NSString *aiRobot = @"AI";
                 cell.separatorInset = UIEdgeInsetsMake(0, 68, 0, 0);
                 return cell;
             }
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section-1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section-1]];
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section]];
         }
     } else {
         if (indexPath.section == 0) {
@@ -511,7 +585,7 @@ static NSString *aiRobot = @"AI";
                 }
             }
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section - 1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section - 1]];
         }
     }
 
@@ -550,7 +624,7 @@ static NSString *aiRobot = @"AI";
             cell = selectCell;
         }
     } else {
-        if (indexPath.section == 0 && !self.searchController.active) {
+        if (indexPath.section == 0 && ![self isSearchTableView:tableView]) {
             if (indexPath.row == 0) {
               WFCUNewFriendTableViewCell *contactCell = [self dequeueOrAllocNewFriendCell:tableView];
               [contactCell refresh];
@@ -583,17 +657,17 @@ static NSString *aiRobot = @"AI";
 -(NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     if (@available(iOS 11.0, *)) {
         if (self.selectContact) {
-            if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
-                NSMutableArray *indexs = [self.allKeys mutableCopy];
+            if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
+                NSMutableArray *indexs = [[self keysForTableView:tableView] mutableCopy];
                 [indexs insertObject:@"" atIndex:0];
                 return indexs;
             }
-            return self.allKeys;
+            return [self keysForTableView:tableView];
         }
-        if (self.searchController.active) {
-            return self.allKeys;
+        if ([self isSearchTableView:tableView]) {
+            return [self keysForTableView:tableView];
         }
-        NSMutableArray *indexs = [self.allKeys mutableCopy];
+        NSMutableArray *indexs = [[self keysForTableView:tableView] mutableCopy];
         [indexs insertObject:@"" atIndex:0];
         return indexs;
     } else {
@@ -603,20 +677,20 @@ static NSString *aiRobot = @"AI";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.selectContact) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
-            return self.allKeys.count + 1;
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
+            return [self keysForTableView:tableView].count + 1;
         }
-        return self.allKeys.count;
+        return [self keysForTableView:tableView].count;
     }
-    if (self.searchController.active) {
-        return self.allKeys.count;
+    if ([self isSearchTableView:tableView]) {
+        return [self keysForTableView:tableView].count;
     }
-    return 1 + self.allKeys.count;
+    return 1 + [self keysForTableView:tableView].count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (self.selectContact || self.searchController.active) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+    if (self.selectContact || [self isSearchTableView:tableView]) {
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
             if (section == 0) {
                 return 0;
             }
@@ -630,20 +704,20 @@ static NSString *aiRobot = @"AI";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *title;
-    if (self.selectContact || self.searchController.active) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+    if (self.selectContact || [self isSearchTableView:tableView]) {
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
             if (section == 0) {
                 return nil;
             }
-            title = self.allKeys[section-1];
+            title = [self keysForTableView:tableView][section-1];
         } else {
-            title = self.allKeys[section];
+            title = [self keysForTableView:tableView][section];
         }
     } else {
         if (section == 0) {
             return nil;
         } else {
-            title = self.allKeys[section - 1];
+            title = [self keysForTableView:tableView][section - 1];
         }
     }
     if (title == nil || title.length == 0) {
@@ -686,7 +760,7 @@ static NSString *aiRobot = @"AI";
   if (self.selectContact) {
     return index;
   }
-  if (self.searchController.active) {
+  if ([self isSearchTableView:tableView]) {
     return index;
   }
   return index;
@@ -698,8 +772,8 @@ static NSString *aiRobot = @"AI";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *dataSource;
-    if (self.searchController.active || self.selectContact) {
-        if ((self.showCreateChannel || self.showMentionAll) && !self.searchController.active) {
+    if ([self isSearchTableView:tableView] || self.selectContact) {
+        if ((self.showCreateChannel || self.showMentionAll) && ![self isSearchTableView:tableView]) {
             if (indexPath.section == 0) {
                 if (self.showCreateChannel) {
                     [self left:^{
@@ -717,9 +791,9 @@ static NSString *aiRobot = @"AI";
                 
                 return;
             }
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section-1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section-1]];
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section]];
         }
         
     } else {
@@ -778,7 +852,7 @@ static NSString *aiRobot = @"AI";
             }
             return;
         } else {
-            dataSource = self.allFriendSectionDic[self.allKeys[indexPath.section - 1]];
+            dataSource = [self sectionDicForTableView:tableView][[self keysForTableView:tableView][indexPath.section - 1]];
         }
     }
     
@@ -818,14 +892,22 @@ static NSString *aiRobot = @"AI";
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (self.padSearchVC) {
+        //双栏下搜索框在右栏那张页面上，只有拖它自己那张结果表才收键盘
+        if (scrollView == self.padSearchVC.tableView) {
+            [self.padSearchVC.searchBar resignFirstResponder];
+        }
+        return;
+    }
     if (self.searchController.active) {
         [self.searchController.searchBar resignFirstResponder];
     }
 }
 #pragma mark - UISearchControllerDelegate
+
 - (void)didPresentSearchController:(UISearchController *)searchController {
-    self.tabBarController.tabBar.hidden = YES;
     self.extendedLayoutIncludesOpaqueBars = YES;
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
@@ -837,27 +919,85 @@ static NSString *aiRobot = @"AI";
     self.needSort = YES;
 }
 
+#pragma mark - 双栏下的搜索：整页开在右栏，输入框长在那张页面上
+
+//点了左栏顶上那条搜索框，与会话列表同一套。对应 android 把 `SearchPortalActivity`
+//登记进 `PaneRegistry`、flutter `openSearch` 把搜索路由压进右栏 Navigator 那两条；
+//左栏这条框不取焦点（输入框已由 `installSearchTriggerOnSearchBar:` 关掉），
+//焦点归右栏那张搜索页自己的输入框。
+//每点一次都是一张新页面 —— android：「都不去重：每次进来都该是一张空搜索框」。
+- (void)onPadSearchEntryTapped {
+    //选人形态（转发、拉群、@某人）本来就没装触发器，这里再兜一道
+    if (self.selectContact || !self.tabBarController || ![WFCUPadUtility isSplitLayoutActive]) {
+        return;
+    }
+    WFCUPadSearchResultViewController *searchVC = [[WFCUPadSearchResultViewController alloc] init];
+    searchVC.tableView.delegate = self;
+    searchVC.tableView.dataSource = self;
+    searchVC.searchDelegate = self;
+    [self.searchList removeAllObjects];
+    self.padSearchSectionDic = nil;
+    self.padSearchKeys = @[];
+    //先设再送：showDetailViewController: 会同步发出右栏变更通知，
+    //通知回来时 padSearchVC 得已经对上号，否则这一页会被当成「别人」而立刻收工。
+    self.padSearchVC = searchVC;
+    [WFCUPadUtility showDetailViewController:searchVC];
+}
+
+//右栏不再是那张搜索页了：用户点开了某个人，或者退回了欢迎页。搜索到此为止。
+//放在通知里而不是 didSelectRow: 里，是因为「取消」「返回欢迎页」也得收工。
+- (void)onPadDetailChanged:(NSNotification *)notification {
+    if (self.padSearchVC && notification.object != self.padSearchVC) {
+        [self padSearchDidEnd];
+    }
+}
+
+- (void)padSearchDidEnd {
+    self.padSearchVC = nil;
+    self.padSearchSectionDic = nil;
+    self.padSearchKeys = nil;
+    [self.searchList removeAllObjects];
+}
+
+#pragma mark - WFCUPadSearchResultDelegate
+
+- (void)padSearchResultController:(WFCUPadSearchResultViewController *)controller textDidChange:(NSString *)text {
+    [self performSearchWithText:text];
+}
+
+- (void)padSearchResultControllerDidCancel:(WFCUPadSearchResultViewController *)controller {
+    //「取消」就是关掉这张搜索页（android `onCancelClick` -> `finishPage`）。
+    //右栏退回欢迎页，padSearchVC 由随之而来的右栏变更通知清掉。
+    [WFCUPadUtility resetDetailViewController];
+}
+
+#pragma mark - UISearchResultsUpdating
+
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     if (searchController.active) {
-        NSString *searchString = [self.searchController.searchBar text];
-        if (self.searchList!= nil) {
-            [self.searchList removeAllObjects];
-            if(searchString.length) {
-                WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
-                BOOL isChinese = [pu isChinese:searchString];
-                for (WFCCUserInfo *friend in self.dataArray) {
-                    if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+        [self performSearchWithText:[self.searchController.searchBar text]];
+    }
+}
+
+//按关键字筛好友。单栏下关键字来自左栏那条搜索框，双栏下来自右栏搜索页上那条。
+- (void)performSearchWithText:(NSString *)searchString {
+    if (self.searchList!= nil) {
+        [self.searchList removeAllObjects];
+        if(searchString.length) {
+            WFCUPinyinUtility *pu = [[WFCUPinyinUtility alloc] init];
+            BOOL isChinese = [pu isChinese:searchString];
+            for (WFCCUserInfo *friend in self.dataArray) {
+                if ([friend.displayName.lowercaseString containsString:searchString.lowercaseString] || [friend.friendAlias.lowercaseString containsString:searchString.lowercaseString]) {
+                    [self.searchList addObject:friend];
+                } else if(!isChinese) {
+                    if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
                         [self.searchList addObject:friend];
-                    } else if(!isChinese) {
-                        if([pu isMatch:friend.displayName ofPinYin:searchString] || [pu isMatch:friend.friendAlias ofPinYin:searchString]) {
-                            [self.searchList addObject:friend];
-                        }
                     }
                 }
             }
         }
-        self.needSort = YES;
     }
+    self.needSort = YES;
 }
 
 + (NSMutableDictionary *)sortedArrayWithPinYinDic:(NSArray *)userList {
