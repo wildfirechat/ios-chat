@@ -222,7 +222,7 @@
 
 // 设备列表变化：全部掉线则退出页面；展开索引越界则重置为第一张
 - (void)checkPCOnlineStatus {
-    NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    NSArray<WFCCPCOnlineInfo *> *infos = [self otherOnlineInfos];
     if (!infos.count) {
         [self.navigationController popViewControllerAnimated:YES];
         return;
@@ -234,6 +234,23 @@
     if (self.tableView) {
         [self.tableView reloadData];
     }
+}
+
+//「已登录设备」管理页同样不列出本机：getPCOnlineInfos 会把本机（iPad 上就是自己）也算进去，
+//与会话列表横幅同一套过滤规则，按 clientId 剔除。
+- (NSArray<WFCCPCOnlineInfo *> *)otherOnlineInfos {
+    NSString *selfClientId = [[WFCCNetworkService sharedInstance] getClientId];
+    NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    if (!selfClientId.length || !onlines.count) {
+        return onlines;
+    }
+    NSMutableArray<WFCCPCOnlineInfo *> *others = [[NSMutableArray alloc] init];
+    for (WFCCPCOnlineInfo *info in onlines) {
+        if (![info.clientId isEqualToString:selfClientId]) {
+            [others addObject:info];
+        }
+    }
+    return others;
 }
 
 - (void)setupUI {
