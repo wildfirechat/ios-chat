@@ -158,7 +158,13 @@
         //注意：系统在 iOS 26.0 上忽略此设置（26.1 起修复，见 SO 79784364）；26.0 之前 None 本就是
         //系统默认行为，此行是 no-op。iPhone 单栏与此无关。
         if (@available(iOS 13.0, *)) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 260000
+            //iOS 26 SDK 起该枚举更名为 UISplitViewControllerBackgroundStyle（旧名已从 SDK 移除）
             self.primaryBackgroundStyle = UISplitViewControllerBackgroundStyleNone;
+#else
+            //iOS 13–25 SDK 使用旧枚举名（UISplitViewControllerPrimaryBackgroundStyleNone）
+            self.primaryBackgroundStyle = UISplitViewControllerPrimaryBackgroundStyleNone;
+#endif
         }
         //左栏定宽，min 与 max 取同一个值。比例宽会让 11 寸横屏时左栏被拉到 375，
         //与 android/flutter 两端的 320 / 360 对不上。
