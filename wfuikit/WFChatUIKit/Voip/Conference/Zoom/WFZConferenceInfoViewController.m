@@ -46,6 +46,8 @@
     self.enableVideo = NO;
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    //页面在 iPad 右栏里，宽高不恒等于屏幕，补 autoresizing 跟随父视图（iPhone 上 no-op）
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.tableView];
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
@@ -307,7 +309,8 @@
             cell.textLabel.text = WFCString(@"QRCode");
 
             UIImage *qrcode = [WFCUImage imageNamed:@"qrcode"];
-            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            //按表格宽度定位（iPad 右栏比屏幕窄），而不是整屏宽
+            CGFloat width = self.tableView.frame.size.width;
             UIImageView *qrview = [[UIImageView alloc] initWithFrame:CGRectMake(width - 56, 8, 24, 24)];
             qrview.image = qrcode;
             [cell addSubview:qrview];
@@ -378,7 +381,7 @@
         for (UIView *subView in cell.contentView.subviews) {
             [subView removeFromSuperview];
         }
-        self.joinBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 48)];
+        self.joinBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 48)];
         [self.joinBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
         [self.joinBtn addTarget:self action:@selector(onStartConference:) forControlEvents:UIControlEventTouchUpInside];
         if (@available(iOS 14, *)) {

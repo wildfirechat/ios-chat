@@ -101,6 +101,8 @@
         }
     } else /*if (self.locationPoint)*/ {
         self.mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
+        //页面在 iPad 右栏里，宽高不恒等于屏幕，补 autoresizing 跟随父视图（iPhone 上 no-op）
+        self.mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         MKCoordinateRegion theRegion;
         theRegion.center = self.locationPoint.coordinate;
         theRegion.span.longitudeDelta    = 0.01f;

@@ -78,6 +78,13 @@
 #define PortraitItemSize 100
 
 @implementation WFCUMultiVideoViewController
+//通话/会议必须全屏（R6）。WFAVEngineKit（二进制）以默认样式模态弹出，且可能在呈现前
+//覆盖 modalPresentationStyle（iOS 13+ 在 iPad 上默认 pageSheet，界面就成了一张小卡片）。
+//重写 getter 恒返回全屏：无论以什么路径弹出、样式被改成什么，UIKit 读取时都是 FullScreen。
+- (UIModalPresentationStyle)modalPresentationStyle {
+    return UIModalPresentationFullScreen;
+}
+
 #if !WFCU_SUPPORT_VOIP
 - (instancetype)initWithSession:(WFAVCallSession *)session {
     self = [super init];

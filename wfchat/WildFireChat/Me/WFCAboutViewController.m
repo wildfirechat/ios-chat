@@ -19,6 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.webview = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    //页面在 iPad 右栏里，宽高不恒等于屏幕，补 autoresizing 跟随父视图（iPhone 上 no-op）
+    self.webview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.wildfirechat.cn"]]];
     [self.view addSubview:self.webview];
 }

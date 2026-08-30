@@ -126,6 +126,13 @@
  3. 点击网格窗口，则设置为焦点用户，界面切换至首页。自己不能被设置为焦点用户。
  */
 @implementation WFCUConferenceViewController
+//通话/会议必须全屏（R6）。WFAVEngineKit（二进制）以默认样式模态弹出，且可能在呈现前
+//覆盖 modalPresentationStyle（iOS 13+ 在 iPad 上默认 pageSheet，界面就成了一张小卡片）。
+//重写 getter 恒返回全屏：无论以什么路径弹出、样式被改成什么，UIKit 读取时都是 FullScreen。
+- (UIModalPresentationStyle)modalPresentationStyle {
+    return UIModalPresentationFullScreen;
+}
+
 - (instancetype)initWithSession:(WFAVCallSession *)session conferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     self = [super init];
     //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成

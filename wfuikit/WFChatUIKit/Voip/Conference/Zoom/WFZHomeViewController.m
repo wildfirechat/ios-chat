@@ -26,6 +26,7 @@
 @property(nonatomic, strong)UIButton *joinButton;
 @property(nonatomic, strong)UIButton *startButton;
 @property(nonatomic, strong)UIButton *orderButton;
+@property(nonatomic, strong)UIView *topLine;
 
 @property(nonatomic, strong)NSString *privateConferenceId;
 
@@ -67,6 +68,57 @@
     if(self.isPresent) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(onLeftBarBtn:)];
     }
+    [self layoutViews];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    //iPad 右栏里 viewDidLoad 那一刻的 bounds 可能是整屏宽（转场首帧按整屏排），
+    //布局要在每次布局时按当前宽度重排；iPhone 上 bounds 恒等于屏幕宽，取值不变。
+    [self layoutViews];
+}
+
+//所有子视图按当前 bounds 重新排一遍（创建与定位分离：控件只建一次，位置每次重算）
+- (void)layoutViews {
+    CGRect bounds = self.view.bounds;
+    if (bounds.size.width <= 0 || bounds.size.height <= 0) {
+        return;
+    }
+    
+    CGFloat offset = [WFCUUtilities wf_navigationFullHeight] + 32;
+    CGFloat btnSize = 80;
+    CGFloat labelHeight = 30;
+    if (@available(iOS 13, *)) {
+        labelHeight = 0;
+    }
+    CGFloat padding = (bounds.size.width - 3*btnSize)/3;
+    self.topPanel.frame = CGRectMake(0, 0, bounds.size.width, 0);
+    self.joinButton.frame = CGRectMake(padding/2, offset, btnSize, btnSize+labelHeight);
+    self.startButton.frame = CGRectMake(padding/2 + padding + btnSize, offset, btnSize, btnSize+labelHeight);
+    self.orderButton.frame = CGRectMake(bounds.size.width-btnSize-padding/2, offset, btnSize, btnSize+labelHeight);
+    //标题在图片下方的 insets 必须在按钮有真实尺寸、内部子视图排版完成后才算：
+    //创建时（CGRectZero）imageView/titleLabel 还是 0，算出来标题会压到图片上/看不见
+    [self.joinButton layoutIfNeeded];
+    [self layoutButtonText:self.joinButton];
+    [self.startButton layoutIfNeeded];
+    [self layoutButtonText:self.startButton];
+    [self.orderButton layoutIfNeeded];
+    [self layoutButtonText:self.orderButton];
+    
+    offset += btnSize;
+    offset += labelHeight;
+    offset += 30;
+    self.topLine.frame = CGRectMake(0, offset, bounds.size.width, 1);
+    offset += 1;
+    CGRect frame = self.topPanel.frame;
+    frame.size.height = offset;
+    self.topPanel.frame = frame;
+    
+    CGRect topFrame = self.topPanel.frame;
+    self.tableView.frame = CGRectMake(0, topFrame.origin.y + topFrame.size.height, topFrame.size.width, bounds.size.height - topFrame.origin.y - topFrame.size.height);
+    self.historyButton.frame = CGRectMake(bounds.size.width - 85, topFrame.origin.y + topFrame.size.height + 36, 100, 30);
+    self.emptyLabel.frame = CGRectMake(bounds.size.width/2 - 100, bounds.size.height/2 + 60, 200, 20);
+    self.emptyImageView.center = CGPointMake(bounds.size.width/2, bounds.size.height/2);
 }
 
 - (void)onLeftBarBtn:(id)sender {
@@ -74,53 +126,31 @@
 }
 
 - (void)initTopPannel {
-    CGRect bounds = self.view.bounds;
-    self.topPanel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, 0)];
+    self.topPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.topPanel];
     
-    CGFloat offset = [WFCUUtilities wf_navigationFullHeight] + 32;
-    
-    
-    CGFloat btnSize = 80;
-    CGFloat labelHeight = 30;
-    if (@available(iOS 13, *)) {
-        labelHeight = 0;
-    }
-    CGFloat padding = (bounds.size.width - 3*btnSize)/3;
-    self.joinButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2, offset, btnSize, btnSize+labelHeight)];
+    self.joinButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.joinButton setImage:[WFCUImage imageNamed:@"join_conference"] forState:UIControlStateNormal];
     [self.joinButton setTitle:WFCString(@"JoinConference") forState:UIControlStateNormal];
-    [self layoutButtonText:self.joinButton];
     [self.joinButton addTarget:self action:@selector(onJoinBtn:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(padding/2 + padding + btnSize, offset, btnSize, btnSize+labelHeight)];
+    self.startButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.startButton setImage:[WFCUImage imageNamed:@"start_conference"] forState:UIControlStateNormal];
     [self.startButton setTitle:WFCString(@"StartConference") forState:UIControlStateNormal];
-    [self layoutButtonText:self.startButton];
     [self.startButton addTarget:self action:@selector(onStartBtn:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.orderButton = [[UIButton alloc] initWithFrame:CGRectMake(bounds.size.width-btnSize-padding/2, offset, btnSize, btnSize+labelHeight)];
+    self.orderButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.orderButton setImage:[WFCUImage imageNamed:@"order_conference"] forState:UIControlStateNormal];
     [self.orderButton setTitle:WFCString(@"OrderConference") forState:UIControlStateNormal];
-    [self layoutButtonText:self.orderButton];
     [self.orderButton addTarget:self action:@selector(onOrderBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.topPanel addSubview:self.joinButton];
     [self.topPanel addSubview:self.startButton];
     [self.topPanel addSubview:self.orderButton];
     
-    offset += btnSize;
-    offset += labelHeight;
-    
-    offset += 30;
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, offset, bounds.size.width, 1)];
-    line.backgroundColor = [WFCUConfigManager globalManager].separateColor;
-    [self.topPanel addSubview:line];
-    offset += 1;
-    
-    CGRect frame = self.topPanel.frame;
-    frame.size.height = offset;
-    self.topPanel.frame = frame;
+    self.topLine = [[UIView alloc] initWithFrame:CGRectZero];
+    self.topLine.backgroundColor = [WFCUConfigManager globalManager].separateColor;
+    [self.topPanel addSubview:self.topLine];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -161,13 +191,21 @@
     [button setTitleColor:HEXCOLOR(0x0195ff) forState:UIControlStateNormal];
     button.imageView.layer.masksToBounds = YES;
     button.imageView.layer.cornerRadius = 8.f;
+    //图标保持纵横比，绝不被压扁
+    button.imageView.contentMode = UIViewContentModeScaleAspectFit;
 
-    //top left buttom right
-    button.titleEdgeInsets = UIEdgeInsetsMake(button.imageView.frame.size.height+6, -button.imageView.frame.size.width,
-                                              0, 0);
+    [button layoutIfNeeded];
+    CGFloat spacing = 6;
+    CGFloat imageW = button.imageView.frame.size.width;
+    CGFloat imageH = button.imageView.frame.size.height;
+    CGFloat titleW = button.titleLabel.frame.size.width;
+    CGFloat titleH = button.titleLabel.frame.size.height;
 
-    button.imageEdgeInsets = UIEdgeInsetsMake(0,
-                                              button.titleLabel.bounds.size.width, button.titleLabel.bounds.size.height+6, 0);
+    //图片在上、文字在下，各自水平居中（标准 image-above-text 公式）。
+    //注意：imageEdgeInsets 的 right 用 -文字宽（把图片拉回中间），而不是 left 用 +文字宽
+    //（那会把图片往右挤、可用宽度变小，图标被压扁）。
+    button.titleEdgeInsets = UIEdgeInsetsMake(imageH + spacing, -imageW, 0, 0);
+    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, titleH + spacing, -titleW);
 }
 
 - (void)onJoinBtn:(id)sender {
@@ -224,8 +262,7 @@
 }
 
 - (void)initTableView {
-    CGRect topFrame = self.topPanel.frame;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, topFrame.origin.y + topFrame.size.height, topFrame.size.width, self.view.bounds.size.height - topFrame.origin.y - topFrame.size.height)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     if (@available(iOS 15, *)) {
@@ -238,7 +275,7 @@
 
 - (UILabel *)emptyLabel {
     if (!_emptyLabel) {
-        _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 100, self.view.bounds.size.height /2 + 60, 200, 20)];
+        _emptyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _emptyLabel.font = [UIFont systemFontOfSize:14];
         _emptyLabel.textAlignment = NSTextAlignmentCenter;
         _emptyLabel.text = WFCString(@"NoConference");
@@ -252,7 +289,6 @@
     if (!_emptyImageView) {
         UIImage *img = [UIImage imageNamed:@"tea"];
         _emptyImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, img.size.width*2, img.size.height*2)];
-        _emptyImageView.center = self.view.center;
         _emptyImageView.image = img;
         _emptyImageView.alpha = 0.5;
         [self.view addSubview:_emptyImageView];
@@ -261,9 +297,7 @@
 }
 
 - (void)showHistoryButton {
-    CGRect bount = self.view.bounds;
-    CGRect topFrame = self.topPanel.frame;
-    self.historyButton = [[UIButton alloc] initWithFrame:CGRectMake(bount.size.width - 85, topFrame.origin.y + topFrame.size.height + 36, 100, 30)];
+    self.historyButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.historyButton setTitle:WFCString(@"ConferenceHistory") forState:UIControlStateNormal];
     self.historyButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.historyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
