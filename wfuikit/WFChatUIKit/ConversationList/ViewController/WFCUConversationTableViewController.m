@@ -195,11 +195,23 @@
             return;
         }
         
+        BOOL matched = NO;
         for (int i = 0; i < dataSource.count; i++) {
             WFCCConversationInfo *conv = dataSource[i];
             if (conv.lastMessage && conv.lastMessage.direction == MessageDirection_Send && conv.lastMessage.messageId == messageId) {
                 conv.lastMessage = [[WFCCIMService sharedWFCIMService] getMessage:messageId];
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                matched = YES;
+            }
+        }
+        
+        //上面那段只认「列表里那条会话的末条消息就是这一条」，刚发出去的新消息一条都不匹配：
+        //它所在的会话还挂着上一条消息，也还排在原来的位置。iPhone 上从会话页返回列表会走
+        //viewWillAppear 整表刷新，看不出来；iPad 双栏下左栏一直挂在屏上，得在这里更新并重排。
+        if (!matched && [WFCUPadUtility isSplitLayoutActive]) {
+            WFCCMessage *message = notification.userInfo[@"message"];
+            if (message.conversation.target.length) {
+                [self padUpdateConversation:message.conversation];
             }
         }
     }
@@ -467,6 +479,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMessageUpdated:) name:kMessageUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretChatStateChanged:) name:kSecretChatStateUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSecretMessageBurned:) name:kSecretMessageBurned object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConversationInfoChanged:) name:WFCUConversationInfoDidChangeNotification object:nil];
     
     self.firstAppear = YES;
 }
@@ -564,7 +577,9 @@
     if ([messages count]) {
         NSMutableSet<WFCCConversation *> *updatedConversations = [[NSMutableSet alloc] init];
         [messages enumerateObjectsUsingBlock:^(WFCCMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if(obj.messageId != 0) {
+            //聊天室这类会话本来就不进列表（refreshList 的查询条件里没有它），
+            //不挡一下的话收到一条聊天室消息就会往列表里补出一行来。
+            if(obj.messageId != 0 && [self isListedConversation:obj.conversation]) {
                 [updatedConversations addObject:obj.conversation];
             }
         }];
@@ -657,8 +672,23 @@
     }
 }
 
+//会话列表只装这几类会话，聊天室这类不在其中。取值集中在这里，refreshList 与
+//「这条会话该不该进列表」两处判断共用一份，不会各写各的。
+- (NSArray<NSNumber *> *)listedConversationTypes {
+    return @[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)];
+}
+
+- (NSArray<NSNumber *> *)listedConversationLines {
+    return @[@(0), @(5)];
+}
+
+- (BOOL)isListedConversation:(WFCCConversation *)conversation {
+    return [[self listedConversationTypes] containsObject:@(conversation.type)]
+        && [[self listedConversationLines] containsObject:@(conversation.line)];
+}
+
 - (void)refreshList {
-    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(5)]] mutableCopy];
+    self.conversations = [[[WFCCIMService sharedWFCIMService] getConversationInfos:[self listedConversationTypes] lines:[self listedConversationLines]] mutableCopy];
     [self padCheckSelectedConversationAlive];
     [self updateBadgeNumber];
     [self.tableView reloadData];
@@ -1599,6 +1629,48 @@ static BOOL WFCUIsSameConversation(WFCCConversation *a, WFCCConversation *b) {
     self.padSelectedConversation = nil;
     self.padSelectedTabIndex = NSNotFound;
     [WFCUPadUtility resetDetailStackForTabAtIndex:tab];
+}
+
+//右栏那张会话页改了会话本身的状态（清未读、存/清草稿），左栏这张列表跟着更新那一行。
+//单栏（iPhone、iPad 窄态）下这张列表不在屏上，回到它会走 viewWillAppear 整表刷新，
+//这里一行都不跑，行为与适配前完全一致。
+- (void)onConversationInfoChanged:(NSNotification *)notification {
+    if (![WFCUPadUtility isSplitLayoutActive]) {
+        return;
+    }
+    WFCCConversation *conversation = notification.object;
+    if (!conversation.target.length) {
+        return;
+    }
+    [self padUpdateConversation:conversation];
+    [self refreshLeftButton];
+}
+
+//按数据库里的最新状态重建某个会话那一行，重建结果与整表刷新一模一样。
+- (void)padUpdateConversation:(WFCCConversation *)conversation {
+    if (![self isListedConversation:conversation]) {
+        //聊天室这类本来就不进会话列表，没有对应的行要更新
+        return;
+    }
+    __block NSUInteger index = NSNotFound;
+    [self.conversations enumerateObjectsUsingBlock:^(WFCCConversationInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.conversation isEqual:conversation]) {
+            index = idx;
+            *stop = YES;
+        }
+    }];
+    if (index == NSNotFound) {
+        //新建的会话刚发出第一条消息，列表里还没有它这一行。整表拉一次，
+        //行的来源与过滤条件跟 refreshList 完全一致。
+        [self refreshList];
+        return;
+    }
+    WFCCConversationInfo *info = [[WFCCIMService sharedWFCIMService] getConversationInfo:conversation];
+    if (!info) {
+        return;
+    }
+    [self.conversations replaceObjectAtIndex:index withObject:info];
+    [self sortAndReloadConversationList];
 }
 
 - (void)onPadDetailChanged:(NSNotification *)notification {

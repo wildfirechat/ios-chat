@@ -187,7 +187,30 @@
 @property(nonatomic, strong)WFCUMessageModel *toTextModel;
 @end
 
+NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationInfoDidChangeNotification";
+
 @implementation WFCUMessageListViewController
+
+#pragma mark - 会话状态变更
+//清未读、存草稿这两件事 SDK 都不发通知。iPhone 上返回会话列表会走 viewWillAppear 整表刷新，
+//看不出来；iPad 双栏下左栏那张列表一直挂在屏上，不主动说一声，未读红点和「[草稿]」就一直是旧的。
+//所以这两件事统一从下面两个入口走，改完顺手发一条通知。
+- (void)clearUnreadStatus {
+    [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
+    [self notifyConversationInfoChanged];
+}
+
+- (void)saveDraft:(NSString *)draft {
+    [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:draft];
+    [self notifyConversationInfoChanged];
+}
+
+- (void)notifyConversationInfoChanged {
+    if (!self.conversation.target) {
+        return;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUConversationInfoDidChangeNotification object:self.conversation];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -1554,7 +1577,7 @@
     NSString *newDraft = self.chatInputBar.draft;
     if (![self.orignalDraft isEqualToString:newDraft]) {
         self.orignalDraft = newDraft;
-        [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:newDraft];
+        [self saveDraft:newDraft];
     }
     // 设置系统返回手势的代理为我们刚进入控制器的时候记录的系统的返回手势代理
     self.navigationController.interactivePopGestureRecognizer.delegate = _scrollBackDelegate;
@@ -1658,7 +1681,7 @@
         [self onReceiveCallOngoingNotifications:ongoingCalls];
     }
     
-    [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
+    [self clearUnreadStatus];
 }
 
 /**
@@ -2133,7 +2156,7 @@
         [list addObject:highlightMessage];
         [list addObjectsFromArray:messageListOld];
         messageList = [list copy];
-        [[WFCCIMService sharedWFCIMService] clearUnreadStatus:self.conversation];
+        [self clearUnreadStatus];
         if (messageListNew.count == 15) {
             self.hasNewMessage = YES;
         }
@@ -2178,7 +2201,7 @@
                     ws.firstUnreadMessageId = [[WFCCIMService sharedWFCIMService] getFirstUnreadMessageId:ws.conversation];
                     [ws showUnreadLabel];
                 }
-                [[WFCCIMService sharedWFCIMService] clearUnreadStatus:ws.conversation];
+                [ws clearUnreadStatus];
             }
             
             ws.modelList = [[NSMutableArray alloc] init];
@@ -3674,7 +3697,7 @@
     
     if(self.orignalDraft) {
         self.orignalDraft = nil;
-        [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:nil];
+        [self saveDraft:nil];
     }
     
     [self sendMessage:txtContent];
@@ -3683,7 +3706,7 @@
 
 - (void)needSaveDraft {
     self.orignalDraft = self.chatInputBar.draft;
-    [[WFCCIMService sharedWFCIMService] setConversation:self.conversation draft:self.orignalDraft];
+    [self saveDraft:self.orignalDraft];
 }
 
 - (void)recordDidEnd:(NSString *)dataUri duration:(long)duration error:(NSError *)error {

@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class WFCCConversation;
+
+/// 会话页改动了会话本身的状态（清未读、存/清草稿），object 是那个会话。
+/// 这两件事 SDK 都不发通知：iPhone 上返回会话列表会走 viewWillAppear 整表刷新，看不出来；
+/// iPad 双栏下左栏那张列表一直挂在屏上，靠这条通知更新对应的那一行。
+UIKIT_EXTERN NSString *const WFCUConversationInfoDidChangeNotification;
+
 @interface WFCUMessageListViewController : UIViewController
 @property (nonatomic, strong)WFCCConversation *conversation;
 
