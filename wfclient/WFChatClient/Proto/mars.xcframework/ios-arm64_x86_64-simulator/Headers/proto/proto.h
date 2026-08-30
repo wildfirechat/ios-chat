@@ -1258,6 +1258,7 @@ namespace mars{
         extern bool ForcePresignedUrlUpload();
         extern bool IsEnableMesh();
         extern bool IsEnableRemoteControl();
+        extern bool isAllowMoments();
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
