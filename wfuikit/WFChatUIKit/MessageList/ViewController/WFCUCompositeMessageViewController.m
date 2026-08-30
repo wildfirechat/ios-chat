@@ -267,10 +267,12 @@
         // 处理文本消息 - 显示大文本
         WFCCTextMessageContent *textContent = (WFCCTextMessageContent *)msg.content;
 
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        //iPad 双栏下盖住右栏而不是整个窗口：以导航控制器视图为宿主（iPhone 上它就是整屏，与改前一致）
+        UIView *host = self.navigationController.view ?: self.view;
+        UIView *textContainer = [[UIView alloc] initWithFrame:host.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
 
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], textContainer.bounds.size.width, textContainer.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = textContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont scaledSystemFontOfSize:28];
@@ -279,7 +281,7 @@
 
         [textContainer addSubview:textView];
         [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        [host addSubview:textContainer];
     } else if([msg.content isKindOfClass:[WFCCSoundMessageContent class]]) {
         // 处理语音消息 - 播放语音
         [self playVoiceMessage:msg];

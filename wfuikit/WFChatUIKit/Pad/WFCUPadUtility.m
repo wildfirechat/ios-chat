@@ -648,8 +648,11 @@ static const void *kWFCUPadPageKeyKey = &kWFCUPadPageKeyKey;
             }
             if (anchor) {
                 popover.sourceView = anchor;
-                popover.sourceRect = CGRectMake(CGRectGetMidX(anchor.bounds), CGRectGetMaxY(anchor.bounds), 1, 1);
-                //不带箭头，居中偏下弹出，观感接近微信 iPad 的操作面板
+                //菜单在呈现方视图的正中央弹出（不带箭头）。原先钉在底部正中，用户在联系人详情页的
+                //「...」菜单上实测觉得落在窗口底部别扭、要求居中 —— 兜底就统一居中，同类页面
+                //（群资料、频道资料、域资料等）的未锚点菜单一次全部对齐。iPhone 走的是从底部
+                //升起的那条路径，与这一段无关。
+                popover.sourceRect = CGRectMake(CGRectGetMidX(anchor.bounds), CGRectGetMidY(anchor.bounds), 1, 1);
                 popover.permittedArrowDirections = (UIPopoverArrowDirection)0;
             }
         }

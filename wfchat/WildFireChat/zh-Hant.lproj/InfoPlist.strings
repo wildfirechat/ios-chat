@@ -63,7 +63,12 @@ AccountLoggedInElsewhere="您的賬號已在其他手機登錄";
 GotIt="知道了";
 Tips="提示";
 SMSCodeLoginTip="使用短信驗證碼登錄將會為您創建賬戶，請使用短信驗證碼登錄。";
-Confirm="確定";
+
+UsePasswordOrCodeLogin="使用密碼/驗證碼登錄";
+ScanCodeLogin="掃碼登錄";
+QRLoginWaiting="使用野火手機端掃碼登錄";
+QRLoginScanned="%@已掃碼，請在手機上確認登錄";
+QRCodeGenerateFailed="生成二維碼失敗，點擊二維碼重試";Confirm="確定";
 SMSSending="短信發送中";
 SendSuccess="發送成功";
 SendFailed="發送失敗";

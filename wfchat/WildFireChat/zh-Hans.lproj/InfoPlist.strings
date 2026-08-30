@@ -63,7 +63,12 @@ AccountLoggedInElsewhere="您的账号已在其他手机登录";
 GotIt="知道了";
 Tips="提示";
 SMSCodeLoginTip="使用短信验证码登录将会为您创建账户，请使用短信验证码登录。";
-Confirm="确定";
+
+UsePasswordOrCodeLogin="使用密码/验证码登录";
+ScanCodeLogin="扫码登录";
+QRLoginWaiting="使用野火手机端扫码登录";
+QRLoginScanned="%@已扫码，请在手机上确认登录";
+QRCodeGenerateFailed="生成二维码失败，点击二维码重试";Confirm="确定";
 SMSSending="短信发送中";
 SendSuccess="发送成功";
 SendFailed="发送失败";

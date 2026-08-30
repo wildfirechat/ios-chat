@@ -150,6 +150,16 @@
             self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
         }
         self.presentsWithGesture = NO;
+        //iOS 26 起系统默认按 HIG 把左栏画成悬浮的玻璃面板（圆角、四周留白、压在满铺整屏的右栏上），
+        //观感是「两个窗口叠在一起」（实测见计划 1.4）。显式声明左栏不用侧栏样式，恢复 iOS 25 及更早
+        //那种同一窗口内贴边的硬分栏：左栏通顶、与右栏并排，中间一条分隔线（微信 iPad 的形态）。
+        //右栏内容本就按 safeAreaInsets.left 钉在栏内（WFCUPadDetailContainerViewController），
+        //硬分栏下 left inset 恒为 0，那一层自动退化成整块铺满，无需另改。
+        //注意：系统在 iOS 26.0 上忽略此设置（26.1 起修复，见 SO 79784364）；26.0 之前 None 本就是
+        //系统默认行为，此行是 no-op。iPhone 单栏与此无关。
+        if (@available(iOS 13.0, *)) {
+            self.primaryBackgroundStyle = UISplitViewControllerBackgroundStyleNone;
+        }
         //左栏定宽，min 与 max 取同一个值。比例宽会让 11 寸横屏时左栏被拉到 375，
         //与 android/flutter 两端的 320 / 360 对不上。
         CGFloat columnWidth = [WFCUPadUtility primaryColumnWidth];

@@ -705,8 +705,26 @@
     [self updateTitle];
 }
 
-- (void)updatePcSession {
+//「其他端登录提醒」只统计其他端：getPCOnlineInfos 会把本机也算进去（iPad 上就是自己），
+//按 clientId 过滤掉，横幅就不会出现「iPad 已登录」或把自己数进「N 个设备已登录」。
+//只有自己在线时过滤结果为空，横幅自然隐藏。iPhone 上服务端本来就不回本机的话，过滤是 no-op。
+- (NSArray<WFCCPCOnlineInfo *> *)otherOnlineInfos {
+    NSString *selfClientId = [[WFCCNetworkService sharedInstance] getClientId];
     NSArray<WFCCPCOnlineInfo *> *onlines = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    if (!selfClientId.length || !onlines.count) {
+        return onlines;
+    }
+    NSMutableArray<WFCCPCOnlineInfo *> *others = [[NSMutableArray alloc] init];
+    for (WFCCPCOnlineInfo *info in onlines) {
+        if (![info.clientId isEqualToString:selfClientId]) {
+            [others addObject:info];
+        }
+    }
+    return others;
+}
+
+- (void)updatePcSession {
+    NSArray<WFCCPCOnlineInfo *> *onlines = [self otherOnlineInfos];
     
     if (@available(iOS 11.0, *)) {
         if (onlines.count && [WFCCNetworkService sharedInstance].currentConnectionStatus == kConnectionStatusConnected) {
@@ -831,7 +849,8 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapPCBar:)];
         [_pcSessionView addGestureRecognizer:tap];
     }
-    NSArray<WFCCPCOnlineInfo *> *infos = [[WFCCIMService sharedWFCIMService] getPCOnlineInfos];
+    //横幅内容同样只统计其他端，与 updatePcSession 的显隐判断共用一份过滤
+    NSArray<WFCCPCOnlineInfo *> *infos = [self otherOnlineInfos];
     self.pcSessionLabel.text = nil;
     if (infos.count) {
         if (infos.count == 1) {
@@ -1793,7 +1812,11 @@ static BOOL WFCUIsSameConversation(WFCCConversation *a, WFCCConversation *b) {
     self.historyTableView.scrollEnabled = YES; // 允许滚动
     self.historyTableView.backgroundColor = [UIColor clearColor];
     self.historyTableView.backgroundView = nil;
-    self.historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone; // 去掉分隔线让界面更紧凑
+    self.historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //关键：关掉自动安全区 inset。默认 automatic 会把内容往下顶约半个行高，
+    //最后一行被表格底边裁掉一半（「最后一行只显示一半」）。
+    self.historyTableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.historyTableView.contentInset = UIEdgeInsetsZero; // 去掉分隔线让界面更紧凑
     [self.historyTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"historyCell"];
     [self.historyContainer addSubview:self.historyTableView];
 
@@ -1806,7 +1829,13 @@ static BOOL WFCUIsSameConversation(WFCCConversation *a, WFCCConversation *b) {
 
         // 设置位置
         CGRect textFieldFrame = [textField convertRect:textField.bounds toView:bgView];
-        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2);
+        //面板以搜索框下方为起点向下展开；若会超出宿主视图底部（最后一行被裁），整体上移，保证最后一行完整可见
+        CGFloat historyCenterY = textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2;
+        CGFloat maxHistoryCenterY = self.navigationController.view.bounds.size.height - (tableY + tableHeight) / 2;
+        if (historyCenterY > maxHistoryCenterY) {
+            historyCenterY = maxHistoryCenterY;
+        }
+        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, historyCenterY);
         self.historyContainer.alpha = 0;
         self.historyContainer.transform = CGAffineTransformMakeScale(0.8, 0.8);
 

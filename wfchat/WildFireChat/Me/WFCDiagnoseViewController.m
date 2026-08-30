@@ -34,40 +34,54 @@
         
     }
     self.indicatorView.color = [UIColor grayColor];
-    
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
-    self.indicatorView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4 - 10);
     self.indicatorView.hidden = YES;
     [self.view addSubview:self.indicatorView];
     
-    self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 150, self.view.bounds.size.height/4-40, 300, 60)];
+    self.resultLabel = [[UILabel alloc] init];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
     self.resultLabel.text = LocalizedString(@"DiagnoseHint");
     self.resultLabel.numberOfLines = 0;
     [self.view addSubview:self.resultLabel];
     
-    self.startButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 - 20, 160, 40)];
+    self.startButton = [[UIButton alloc] init];
     [self.startButton  setTitle:LocalizedString(@"TestNetwork") forState:UIControlStateNormal];
     [self.startButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
     [self.startButton setBackgroundColor:[UIColor greenColor]];
     self.startButton.layer.masksToBounds = YES;
     self.startButton.layer.cornerRadius = 5.0;
-    
     [self.startButton addTarget:self action:@selector(onStart:) forControlEvents:UIControlEventTouchDown];
-    
     [self.view addSubview:self.startButton];
     
-    
-    self.uploadLogsButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 80, self.view.bounds.size.height/2 + 40, 160, 40)];
+    self.uploadLogsButton = [[UIButton alloc] init];
     [self.uploadLogsButton  setTitle:LocalizedString(@"UploadLogs") forState:UIControlStateNormal];
     [self.uploadLogsButton setTitleColor:[WFCUConfigManager globalManager].naviTextColor forState:UIControlStateNormal];
     [self.uploadLogsButton setBackgroundColor:[UIColor redColor]];
     self.uploadLogsButton.layer.masksToBounds = YES;
     self.uploadLogsButton.layer.cornerRadius = 5.0;
-    
     [self.uploadLogsButton addTarget:self action:@selector(onUploadLogs:) forControlEvents:UIControlEventTouchDown];
-    
     [self.view addSubview:self.uploadLogsButton];
+    
+    [self layoutViews];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    //iPad 右栏里 viewDidLoad 那一刻的 bounds 可能是整屏宽（转场首帧按整屏排），
+    //控件会偏到左栏那边；每次布局按当前 bounds 重排。iPhone 上 bounds 恒等于屏幕宽，取值不变。
+    [self layoutViews];
+}
+
+- (void)layoutViews {
+    CGFloat width = self.view.bounds.size.width;
+    CGFloat height = self.view.bounds.size.height;
+    if (width <= 0 || height <= 0) {
+        return;
+    }
+    self.indicatorView.center = CGPointMake(width/2, height/4 - 10);
+    self.resultLabel.frame = CGRectMake(width/2 - 150, height/4 - 40, 300, 60);
+    self.startButton.frame = CGRectMake(width/2 - 80, height/2 - 20, 160, 40);
+    self.uploadLogsButton.frame = CGRectMake(width/2 - 80, height/2 + 40, 160, 40);
 }
 
 - (void)onStart:(id)sender {

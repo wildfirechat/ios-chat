@@ -32,6 +32,10 @@
     [super viewDidLoad];
     self.configDict = [[NSMutableDictionary alloc] init];
     self.webView = [[DWKWebView alloc] initWithFrame:self.view.bounds];
+    //viewDidLoad 那一刻的 bounds 还不是真实尺寸（工作台网页在 iPad 上常驻右栏，
+    //首次上屏时是过渡值，之后旋转/分屏/栏宽变化还会再变），不跟的话网页就停在
+    //初始尺寸上、填不满右栏。iPhone 上视图恒等于屏幕宽，这一行是 no-op。
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [self.view addSubview:self.webView];
     [self.webView addJavascriptObject:self namespace:nil];

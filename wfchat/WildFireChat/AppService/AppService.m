@@ -239,6 +239,55 @@ static AppService *sharedSingleton = nil;
     }];
 }
 
+//扫码登录（本端为被扫码端）：创建 PC 登录会话，token 拼成二维码内容供手机端扫描
+- (void)createPCLoginSession:(NSString *)userId success:(void(^)(NSString *token))successBlock error:(void(^)(int errCode, NSString *message))errorBlock {
+    int platform = [WFCCNetworkService sharedInstance].isPad ? Platform_iPad : Platform_iOS;
+    NSMutableDictionary *data = [@{@"flag":@1,
+                                   @"device_name":@"pad",
+                                   @"clientId":[[WFCCNetworkService sharedInstance] getClientId],
+                                   @"platform":@(platform)} mutableCopy];
+    if (userId.length) {
+        data[@"userId"] = userId;
+    }
+    [self post:@"/pc_session" data:data isLogin:NO success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSString *token = dict[@"result"][@"token"];
+            if(successBlock) successBlock(token);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+//轮询扫码登录状态。code 0 登录成功；9 已被扫码（返回扫码用户信息，等手机端确认）；18 已取消
+- (void)loginWithPCLoginSession:(NSString *)token
+                        success:(void(^)(NSString *userId, NSString *imToken))successBlock
+                        scanned:(void(^)(NSString *userName, NSString *portrait))scannedBlock
+                       canceled:(void(^)(void))canceledBlock
+                          error:(void(^)(int errCode, NSString *message))errorBlock {
+    NSString *path = [NSString stringWithFormat:@"/session_login/%@", token];
+    [self post:path data:nil isLogin:NO success:^(NSDictionary *dict) {
+        int code = [dict[@"code"] intValue];
+        if (code == 0) {
+            NSString *userId = dict[@"result"][@"userId"];
+            NSString *imToken = dict[@"result"][@"token"];
+            if(successBlock) successBlock(userId, imToken);
+        } else if (code == 9) {
+            NSString *userName = dict[@"result"][@"userName"];
+            NSString *portrait = dict[@"result"][@"portrait"];
+            if(scannedBlock) scannedBlock(userName, portrait);
+        } else if (code == 18) {
+            if(canceledBlock) canceledBlock();
+        } else {
+            if(errorBlock) errorBlock(code, dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)getGroupAnnouncement:(NSString *)groupId
                      success:(void(^)(WFCUGroupAnnouncement *))successBlock
                       error:(void(^)(int error_code))errorBlock {

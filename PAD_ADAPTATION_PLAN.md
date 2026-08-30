@@ -361,6 +361,7 @@ iOS 这边不少页面是拿 `[UIScreen mainScreen].bounds.size.width` 直接算
 
 ### P4 — 各 tab 下钻页与工作台　⚠️ 部分完成
 
+- [x] **pad 登录页支持扫码登录**（按用户要求参考 PC 端 `vue-pc-chat` 的 `LoginPage.vue`）。iOS 登录页原本只有验证码/密码登录，现增加**扫码登录**：`AppService` 新增 `createPCLoginSession`（`POST /pc_session`）与 `loginWithPCLoginSession`（`POST /session_login/<token>` 轮询，0=成功/9=已扫码/18=取消）；登录页增加 loginType 三态（0 扫码/1 密码/2 验证码），pad 默认扫码、iPhone 维持默认验证码；二维码内容 `wildfirechat://pcsession/<token>` 与手机端扫码识别格式一致，CIFilter 生成，2s 轮询 + 60s 自动刷新，手机端扫码确认后自动连接登录；底部「扫码登录 ⇄ 密码/验证码登录」切换，与 PC 端一致。登录成功逻辑抽成 `loginSuccessWithUserId:token:savedName:resetCode:` 三方式共用。**待实测复验** |
 - [x] 会话详情页的成员宫格（缺陷 #7）。根因是 `WFCUConversationSettingMemberCollectionViewLayout`
       按屏幕宽除以 5 排格子、还把结果缓存住了：右栏比屏幕窄，5 列一排就顶到栏外，
       表头高度也跟着算大。改成由调用方给 `layoutWidth`（未设时退回屏幕宽 = iPhone 原行为），
@@ -388,7 +389,7 @@ iOS 这边不少页面是拿 `[UIScreen mainScreen].bounds.size.width` 直接算
 - [x] **会话扩展里「视频通话」的类型选择框位置**。它是全项目唯一一处自带 iPad 分支的
       actionSheet：`sourceRect` 设成整块会话视图的 `bounds`，UIKit 只能把气泡硬塞进这块矩形里，
       落点跟另外三十来处对不上。删掉这段，交给 `WFCUPadUtility` 那条统一兜底
-      （会话栏底部居中、不带箭头）。iPhone 走的是从底部升起的那条路径，与此无关
+      （会话栏正中、不带箭头，见缺陷 #28）。iPhone 走的是从底部升起的那条路径，与此无关
 - [x] **按栏宽排版的页面**（R10）。统一入口 `WFCUPadUtility.layoutWidthForView:` ——
       iPhone 上原样返回屏幕宽（这些页面恒等于整屏宽，取值一个不变），iPad 上返回页面自己的宽度；
       同时给相关子视图配上 autoresizing，页面还没上屏、以及旋转/Stage Manager 改栏宽时会自己纠回来。
@@ -476,6 +477,16 @@ iPhone 回归是全程红线，每阶段都要跑。
 | 24 | 用户资料页「发送消息」「视频聊天」未水平居中；实测进一步收敛为：表格停在整屏宽（1210pt）上，按钮按 1210pt 排、内容中心偏到栏外；从模态返回后位置对了但很快往右挪；modal 返回后顶部头像等保持不动（不再闪） | ✅ 已修。这两颗是铺满整行、内容居中的按钮，宽度取自 `layoutWidthForView:`；而 `loadData` 在 `viewDidLoad` 里就跑了一次，那时页面还没上屏、退回的是屏幕宽，按屏幕宽排出来的中心就偏到栏外。第一版按 `contentView` 起排 + `FlexibleWidth` 实测无效——创建那一刻 cell 的 `contentView` 还没排版（宽度为 0 或默认值），autoresizing 的纠偏不可靠。第二版：行宽到 `tableView:willDisplayCell:forRowAtIndexPath:` 才真正定下来，在那一刻按真实行宽重排「发送消息」「视频聊天」「加好友」「设置备注」四颗按钮和头部那颗星，之后旋转/分屏宽度再变也会再走这里；iPhone 上行宽恒等于屏幕宽，整段是 no-op。**实测仍坏**，`willDisplayCell` 按 `host.bounds.width`（即表格宽）排，而表格本身停在了 `viewDidLoad` 时的整屏宽上：页面刚上屏时安全区还没传下来、容器按 0 钉过一帧，页面 1210pt，表格无 `autoresizingMask` 也没人纠正 frame，之后容器把页面钉回右栏（825pt）时表格不跟。第三版：表格补 `autoresizingMask = FlexibleWidth|FlexibleHeight`，被钉回右栏时自己缩回来，`willDisplayCell` 的纠偏随即生效；「从模态返回后往右挪」同 #21，容器层根治。**实测：按钮居中已好，模态返回后顶部头像保持原位不再闪**（本页没有宽度重建逻辑，容器转场中钉回正确 frame 后页面稳定不动）。**已实测复验通过**，与 #21 同一套容器层机制（CADisplayLink 每帧钉回 + 冷却期）一并生效 |
 | 25 | 右栏会话页里发消息、存草稿、清未读，左栏会话列表都不刷新 | ✅ 已修。这三件事 iPhone 上都靠「返回会话列表 → `viewWillAppear` → `refreshList` 整表刷新」兜底，双栏下左栏一直挂在屏上，那一下永远不会来：① 发消息 —— `onSendingMessageStatusUpdated` 只认「列表里那条会话的末条消息就是这一条」，刚发出的新消息一条都不匹配，末条消息与排序都停在原样，补一条按数据库重建该行并重排的分支；② 草稿、③ 清未读 —— SDK 的 `setConversation:draft:` 与 `clearUnreadStatus:` 都不发通知，会话页里这两处改动外面根本看不见，改为统一从 `WFCUMessageListViewController` 的 `saveDraft:` / `clearUnreadStatus` 两个入口走，改完发一条 `WFCUConversationInfoDidChangeNotification`（object 是那个会话），左栏据此重建那一行。重建走 `getConversationInfo:`，结果与整表刷新逐字段一致；列表里还没有那条会话（新建会话刚发出第一条消息）就整表拉一次，过滤条件与 `refreshList` 共用一份（新抽出 `listedConversationTypes` / `listedConversationLines` / `isListedConversation:`），聊天室这类不进列表的会话不会混进来。左栏的更新分支一律以 `isSplitLayoutActive` 为前提，单栏（iPhone、iPad 窄态）一行都不跑。**待实测复验** |
 | 26 | 在聊天室里收消息，左栏会话列表会多出一行聊天室 | ✅ 已修。`onReceiveMessages:` 给 `self.conversations` 补行时不看会话类型，而 `refreshList` 的查询条件里根本没有聊天室，收一条聊天室消息就补出一行来。收消息时按 `isListedConversation:`（与 `refreshList` 共用同一份类型/line 条件）先挡一道。**这是存量缺陷，不是 iPad 引入的** —— iPhone 上退出聊天室回到列表会走 `viewWillAppear` 整表刷新冲掉，看不见；双栏下左栏一直挂着，那一行就一直留在那儿。**待实测复验** |
+| 27 | iPad 双栏的观感是「左栏悬浮面板 + 满铺右栏」，像两个窗口叠在一起，用户要的是同一窗口内的硬分栏 | ✅ 已改（按用户反馈撤销第五节原决定）。系统没设 `primaryBackgroundStyle` 时，iOS 26 默认把左栏画成悬浮玻璃面板（HIG：sidebar floats above content）；改设 `UISplitViewControllerBackgroundStyleNone` 即恢复 iOS 25 及更早的贴边硬分栏——左栏通顶、与右栏并排、中间一条分隔线。系统在 **iOS 26.0 忽略此设置**（26.1 起修复，SO 79784364），实测机 26.5 生效；更早系统 None 本就是默认，no-op。右栏容器按 `safeAreaInsets.left` 钉内容的逻辑在硬分栏下 left 恒为 0，自动退化成整块铺满，无需改动；容器层与转场期重钉保留（26.0 设备仍需要）。**待实测复验** |
+| 28 | 联系人详情页右上角「...」弹出的菜单落在窗口底部，用户要求居中 | ✅ 已改（按用户反馈）。根因：这批菜单是没设锚点的 actionSheet，由 `WFCUPadUtility` 的 swizzle 统一兜底钉锚点，而兜底钉在「呈现方视图底部正中」（`(midX, maxY)`），popover 就落在窗口底部。把兜底改成钉在**呈现方视图正中**（`(midX, midY)`，不带箭头）——同一套兜底下的所有未锚点菜单（联系人/群/频道/域资料页的「...」、会话扩展的视频通话类型选择等）一次全部居中。iPhone 走底部升起的原生路径，与此无关。**待实测复验** |
+| 29 | 工作台网页没按窗口大小铺满（Pad 双栏下填不满右栏） | ✅ 已改。`WFCUBrowserViewController` 的 webView 在 `viewDidLoad` 里按当时的 `self.view.bounds` 定死 frame、没有 `autoresizingMask`：工作台网页是右栏的常驻栈底（`wfcu_padDetailRootViewController`），首次上屏时尺寸是过渡值，之后旋转/分屏/栏宽变化也不会跟。补 `autoresizingMask = FlexibleWidth|FlexibleHeight`，网页随右栏尺寸走。连带惠及所有 push 出来的浏览器页。iPhone 上视图恒等于屏幕宽，no-op。**待实测复验** |
+| 30 | 搜索框在 iPad 右栏渲染不对（白边漏出/蓝晕/胶囊形，多轮修复无效） | ✅ 已修（用户实测确认「我的文件」页正确后，按同一方法推广）。方案：搜索框放在导航栏（`navigationItem.searchController`），**去掉全部自定义背景**（白色背景图/改底色）——固定高度的背景图盖不满系统搜索框是蓝晕/胶囊的根因，全部交给系统默认外观，任何栏宽下渲染正确。已应用页面：**①「我的 → 文件 → 所有文件」（用户确认）；②「设置/会话详情 → 查找聊天内容」；③「我的 → 文件 → 用户文件」的好友列表（`WFCUContactListViewController` 选人模式）**——通讯录 tab（左栏 320pt）搜索正常，保持原样式未动。其余页面搜索框未动。iPhone 上同样走导航栏搜索，外观从自定义白图变为系统默认（同为白色圆角输入框，无感知差异）。**待实测复验** |
+| 31 | 会话列表顶部的「其他端登录状态」横幅把 iPad 自己也算进去了（显示「iPad 已登录」或把自己数进「N 个设备已登录」） | ✅ 已改（按用户反馈）。根因：横幅取 `getPCOnlineInfos` 全量列表，而服务端会把本机（iPad 端）也回给请求方，横幅把「自己」当成了「其他端」。改法：新增 `otherOnlineInfos`，用 `[WFCCNetworkService getClientId]` 与每条 `WFCCPCOnlineInfo.clientId` 比对、过滤掉本机，`updatePcSession`（显隐判断）与横幅内容共用这一份过滤；只有自己在线时过滤结果为空，横幅自然隐藏。点横幅打开的「已登录设备页」（`PCSessionViewController`）仍展示全部设备（含当前端），管理页本就该列出全部，不在本次改动范围。iPhone 上服务端若本来就不回本机，过滤是 no-op。**待实测复验** |
+| 32 | 左栏与右栏标题之间有一条 1px 分栏分隔线 | ⛔ **不修改**（按用户决定）。根因：硬分栏（`primaryBackgroundStyle = None`）下系统会在左右栏之间画 1px 分隔线（悬浮态宽度为 0，见 1.4 实测）。曾尝试社区隐藏键 `gutterWidth = 0`（无公开 API、App Store 有被拒风险），实测未生效，**已回退**，维持系统分隔线现状 |
+| 33 | 「我的 → 设置 → 诊断」界面未按窗口大小显示；全局排查仍用整屏宽的地方 | ✅ 已修（按用户反馈）。① 诊断页（`WFCDiagnoseViewController`）：控件在 `viewDidLoad` 用当时的 `self.view.bounds` 定死居中，而右栏页面头一帧按整屏宽排版（缺陷 #12），控件偏到左栏那边；布局抽出 `layoutViews`，`viewWillLayoutSubviews` 每次按当前 bounds 重排，iPhone 上取值不变。② 全仓 `[UIScreen mainScreen]` 排查（104 处）：绝大多数在 Voip/会议（全屏本就按整屏算）、第三方库（MWPhotoBrowser/相册/扫码，全屏模态）、或已有 `layoutSubviews`/`setListWidth` 纠偏的 cell（逐一核实过）。**新发现并修复 5 处真问题**：双击文本气泡/合并消息详情/收藏文本的**全屏文本查看层**（4 处）原来加到 `keyWindow` 且用整屏 bounds，双栏下会盖住左栏，改为以右栏导航控制器视图为宿主；「我」tab 头部 cell 的名字/野火号 label 宽按整屏算（在 320pt 左栏里是栏宽 3 倍），改为按 cell 宽。**待实测复验** |
+| 34 | pad 登录页需参考 PC 端支持扫码登录（原只有验证码/密码登录） | ✅ 已改（按用户要求，参考 `vue-pc-chat/LoginPage.vue`）。`AppService` 新增 `createPCLoginSession`（`POST /pc_session`）与 `loginWithPCLoginSession`（`POST /session_login/<token>` 轮询：0 成功/9 已扫码/18 取消）；登录页 `loginType` 三态（0 扫码/1 密码/2 验证码），pad 默认扫码，二维码内容 `wildfirechat://pcsession/<token>` 与手机端扫码格式一致，CIFilter 生成，2s 轮询 + 60s 自动刷新；登录成功逻辑抽成三方式共用。**扫码登录入口仅 pad 显示**，iPhone 登录界面与适配前一致。**pad 端登录改为卡片式**（白色圆角卡片容纳二维码/表单/底部切换/用户协议，参考 PC 卡片容器，按用户要求）。**修复启动时「二维码与表单同时显示」**：根因是 `AppDelegate` 在 `viewDidLoad` 之前设 `isPwdLogin`，`setLoginType:` 访问 `self.view` 提前触发 `viewDidLoad`，外层调用随后又把表单显示回来；`setLoginType:` 增加「视图未加载时只记录不布局」守卫，启动只显示当前模式。**待实测复验** |
+| 35 | 全量改动 iPhone 影响审计 | ✅ 已完成（按用户要求逐文件核对）。结论：**所有改动要么在 iPad 独有的控制器/分支里（`WFCUPadSplitViewController` 仅 pad 创建、`WFCUPadUtility` 的菜单兜底在 `isPad` 块内），要么在 iPhone 上取值逐字节不变**（诊断页/Me cell/文本查看层/浏览器 autoresizing/AppService 新增接口）。审计中发现 **2 处会波及 iPhone，已改为仅 pad 生效**：① 两个搜索框页面（文件页/查找聊天内容页）的「表格头搜索条」重写——原实现 iPhone 上也会把搜索条从导航栏挪到表格头，现改为 `isSplitLayoutActive` 双栏才走表格头搜索条，iPhone/窄态保持原导航栏搜索框与原样式；② 登录页「扫码登录」入口——原实现 iPhone 上也会出现该按钮，现 `qrSwitchButton` 仅 pad 显示、`setLoginType` 强制非 pad 不进扫码模式、切换按钮加守卫。 |
+| 36 | 搜索框点开后「搜索历史」浮层：界面大小不对，最后一行只显示一半 | ✅ 已修。根因：历史表格（`historyTableView`）的 `contentInsetAdjustmentBehavior` 默认 automatic，自动安全区 inset 把内容往下顶约半个行高，最后一行被表格底边裁掉一半；且面板定位未限制底部，极端情况下会超出宿主视图。修法（4 个带历史浮层的页面：文件页/聊天记录链接/会话列表/查找聊天内容）：历史表格设 `contentInsetAdjustmentBehavior = Never` + `contentInset = Zero`；面板定位加「底部不超出宿主视图」的上移钳制，保证最后一行完整可见。**待实测复验** |
 
 另有一处**非本次改动引入**的既有崩溃需留意：IM 未连接完成时点进会话，
 `-[WFCCIMService clearUnreadStatus:]` 内部 abort（`reloadMessageList` 回调里）。
@@ -487,13 +498,16 @@ iPhone 回归是全程红线，每阶段都要跑。
 
 已经定下来的：
 
-- **iOS 26 的悬浮左栏：外观保留，内容不许穿过去**。见 1.4：系统在 iOS 26 把左栏画成悬浮面板
-  压在满铺的右栏上，而 R1 描述的是「左栏定宽 + 1pt 分隔线」的硬分栏，微信 iPad 也是硬分栏。
-  没有替掉 `UISplitViewController`（那要自己实现折叠/展开与手势，代价远大于收益），
-  而是在右栏外面套一层容器，把内容钉在安全区右侧那一块并裁掉外面——
-  观感上就是硬分栏，左栏那一条留给容器的背景色，系统的悬浮面板照旧浮在上面。
-  缺陷 #12（压页面进右栏时左栏后面闪内容）是这条决定的直接动因：满铺右栏 + 手写 frame，
-  只要有一帧安全区没传到，内容就画到左栏底下去了。
+- ~~**iOS 26 的悬浮左栏：外观保留，内容不许穿过去**~~。**此决定已按用户反馈撤销**：
+  悬浮玻璃面板的观感是「两个窗口叠在一起」，不是要的形态。现在在 `WFCUPadSplitViewController`
+  显式设 `primaryBackgroundStyle = None`，恢复 iOS 25 及更早那种同一窗口内贴边的硬分栏
+  （左栏通顶、与右栏并排、中间一条分隔线），见缺陷 #27。系统在 iOS 26.0 上忽略这个设置、
+  26.1 起生效（实测机 26.5 没问题）；更早的系统上 None 本就是默认行为，此设置是 no-op。
+  当时记下的 1.4 实测结论（右栏满铺、栏宽藏在 `safeAreaInsets.left` 里）仍然成立，且恰好是
+  「布局统一按安全区算」这条约定的直接受益者：硬分栏下 left inset 恒为 0，右栏容器钉内容的
+  逻辑自动退化成整块铺满，一行不用改。容器层与转场期重钉（#21/#24 那套）保留——
+  26.0 设备上仍是悬浮形态，那些兜底照旧需要。缺陷 #12（压页面进右栏时左栏后面闪内容）
+  最初是这条决定的动因：满铺右栏 + 手写 frame，只要有一帧安全区没传到，内容就画到左栏底下去了。
   代价：显式断点与每 tab 一条栈的完全控制权仍然没有，前者见上面那条待定。
 
 - **选择器在 iOS 上保持模态形态，只是把它关进右栏**。android 把转发/选人这些登记成右栏的

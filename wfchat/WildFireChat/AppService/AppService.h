@@ -43,6 +43,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pcCancelLogin:(NSString *)sessionId success:(void(^)(void))successBlock error:(void(^)(int errorCode, NSString *message))errorBlock;
 
+//创建扫码登录会话（本端=被扫码端）。userId 为空表示全新的登录二维码；
+//返回的 token 用于拼二维码内容：wildfirechat://pcsession/<token>（手机端扫码后确认登录）。
+- (void)createPCLoginSession:(NSString *)userId success:(void(^)(NSString *token))successBlock error:(void(^)(int errCode, NSString *message))errorBlock;
+
+//轮询扫码登录状态（与 PC 端 loginWithPCSession 同一接口）。
+//code 0 = 登录成功，result 里是 userId/imToken；9 = 已被扫码、等待手机端确认；
+//18 = 会话已取消（手机端拒绝/取消），应重新生成二维码。
+- (void)loginWithPCLoginSession:(NSString *)token
+                        success:(void(^)(NSString *userId, NSString *imToken))successBlock
+                        scanned:(void(^)(NSString *userName, NSString *portrait))scannedBlock
+                       canceled:(void(^)(void))canceledBlock
+                          error:(void(^)(int errCode, NSString *message))errorBlock;
+
 - (void)uploadLogs:(void(^)(void))successBlock error:(void(^)(NSString *errorMsg))errorBlock;
 
 - (void)showPCSessionViewController:(UIViewController *)baseController pcOnlineInfos:(NSArray<WFCCPCOnlineInfo *> *)onlineInfos;

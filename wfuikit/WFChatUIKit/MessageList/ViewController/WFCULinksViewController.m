@@ -436,6 +436,10 @@
     self.historyTableView.backgroundColor = [UIColor clearColor];
     self.historyTableView.backgroundView = nil;
     self.historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //关键：关掉自动安全区 inset。默认 automatic 会把内容往下顶约半个行高，
+    //最后一行被表格底边裁掉一半（「最后一行只显示一半」）。
+    self.historyTableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.historyTableView.contentInset = UIEdgeInsetsZero;
     [self.historyTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"historyCell"];
     [self.historyContainer addSubview:self.historyTableView];
 
@@ -445,7 +449,13 @@
         [self.navigationController.view addSubview:bgView];
 
         CGRect textFieldFrame = [textField convertRect:textField.bounds toView:bgView];
-        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2);
+        //面板以搜索框下方为起点向下展开；若会超出宿主视图底部（最后一行被裁），整体上移，保证最后一行完整可见
+        CGFloat historyCenterY = textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2;
+        CGFloat maxHistoryCenterY = self.navigationController.view.bounds.size.height - (tableY + tableHeight) / 2;
+        if (historyCenterY > maxHistoryCenterY) {
+            historyCenterY = maxHistoryCenterY;
+        }
+        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, historyCenterY);
         self.historyContainer.alpha = 0;
         self.historyContainer.transform = CGAffineTransformMakeScale(0.8, 0.8);
 

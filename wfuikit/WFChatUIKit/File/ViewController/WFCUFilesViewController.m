@@ -11,6 +11,7 @@
 #import "WFCUFileRecordTableViewCell.h"
 #import "WFCUBrowserViewController.h"
 #import "WFCUConfigManager.h"
+#import "WFCUPadUtility.h"
 #import "UIImage+ERCategory.h"
 #import "UIFont+YH.h"
 
@@ -44,24 +45,12 @@
     self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
-    if (@available(iOS 13, *)) {
-        self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-        self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
-        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
-
-        // 监听搜索框的焦点变化
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidBeginEditing:) name:UITextFieldTextDidBeginEditingNotification object:nil];
-    } else {
-        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
-    }
-
-
     if (@available(iOS 9.1, *)) {
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
     self.searchController.searchBar.placeholder = WFCString(@"Search");
-
+    // 监听搜索框的焦点变化（搜索历史浮层）
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidBeginEditing:) name:UITextFieldTextDidBeginEditingNotification object:nil];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     //页面宽高不再恒等于屏幕：iPad 右栏比屏幕窄，栏宽还会随旋转/分屏/台前调度变。
@@ -74,10 +63,14 @@
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0;
     }
+    //搜索框放在导航栏（标题栏）上，与其余页面的搜索形态一致。
+    //不再用自定义白色背景图/改底色：固定高度的背景图盖不满系统搜索框（iPad 右栏尤甚），
+    //会漏出蓝晕/胶囊形；全部交给系统默认外观，任何栏宽下都渲染正确。
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
     if (@available(iOS 11.0, *)) {
-        self.navigationItem.searchController = _searchController;
+        self.navigationItem.searchController = self.searchController;
     } else {
-        self.tableView.tableHeaderView = _searchController.searchBar;
+        self.tableView.tableHeaderView = self.searchController.searchBar;
     }
 
     [self.view addSubview:self.tableView];
@@ -423,7 +416,10 @@
 #pragma mark - UISearchControllerDelegate
 - (void)didPresentSearchController:(UISearchController *)searchController {
     self.searchController.view.frame = self.view.bounds;
-    self.tabBarController.tabBar.hidden = YES;
+    //双栏下 tabBar 在左栏，搜索只发生在右栏，别把左栏的 tabBar 藏掉（iPhone 单栏仍按原逻辑隐藏）
+    if (![WFCUPadUtility isSplitLayoutActive]) {
+        self.tabBarController.tabBar.hidden = YES;
+    }
     self.extendedLayoutIncludesOpaqueBars = YES;
 }
 
@@ -434,7 +430,9 @@
         [self addSearchHistory:searchString];
     }
     [self hideSearchHistory]; // 隐藏历史记录
-    self.tabBarController.tabBar.hidden = NO;
+    if (![WFCUPadUtility isSplitLayoutActive]) {
+        self.tabBarController.tabBar.hidden = NO;
+    }
     self.extendedLayoutIncludesOpaqueBars = NO;
 }
 
@@ -531,6 +529,10 @@
     self.historyTableView.backgroundColor = [UIColor clearColor];
     self.historyTableView.backgroundView = nil;
     self.historyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //关键：关掉自动安全区 inset。默认 automatic 会把内容往下顶约半个行高，
+    //最后一行被表格底边裁掉一半（「最后一行只显示一半」）。
+    self.historyTableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.historyTableView.contentInset = UIEdgeInsetsZero;
     [self.historyTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"historyCell"];
     [self.historyContainer addSubview:self.historyTableView];
 
@@ -540,7 +542,13 @@
         [self.navigationController.view addSubview:bgView];
 
         CGRect textFieldFrame = [textField convertRect:textField.bounds toView:bgView];
-        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2);
+        //面板以搜索框下方为起点向下展开；若会超出宿主视图底部（最后一行被裁），整体上移，保证最后一行完整可见
+        CGFloat historyCenterY = textFieldFrame.origin.y + textFieldFrame.size.height + (tableY + tableHeight) / 2;
+        CGFloat maxHistoryCenterY = self.navigationController.view.bounds.size.height - (tableY + tableHeight) / 2;
+        if (historyCenterY > maxHistoryCenterY) {
+            historyCenterY = maxHistoryCenterY;
+        }
+        self.historyContainer.center = CGPointMake(textFieldFrame.origin.x + textFieldFrame.size.width / 2, historyCenterY);
         self.historyContainer.alpha = 0;
         self.historyContainer.transform = CGAffineTransformMakeScale(0.8, 0.8);
 

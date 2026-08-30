@@ -9,6 +9,8 @@
 #import "WFCLoginViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
+#import <CoreImage/CoreImage.h>
+#import <SDWebImage/SDWebImage.h>
 #import "AppDelegate.h"
 #import "WFCBaseTabBarController.h"
 #import "WFCResetPasswordViewController.h"
@@ -34,6 +36,8 @@
 
 @property (strong, nonatomic) UIView *userNameLine;
 @property (strong, nonatomic) UIView *passwordLine;
+@property (strong, nonatomic) UIView *userNameContainer;
+@property (strong, nonatomic) UIView *passwordContainer;
 
 @property (strong, nonatomic) UIButton *sendCodeBtn;
 @property (nonatomic, strong) NSTimer *countdownTimer;
@@ -42,6 +46,24 @@
 
 @property (strong, nonatomic) UIButton *switchButton;
 @property (strong, nonatomic) UIButton *registerButton;
+//底部「扫码登录 ⇄ 密码/验证码登录」切换（参考 PC 端 LoginPage）
+@property (strong, nonatomic) UIButton *qrSwitchButton;
+//pad 端卡片式登录：所有内容放在这张白色圆角卡片上（参考 PC 端 LoginPage 的卡片容器）
+@property (strong, nonatomic) UIView *cardView;
+
+//登录方式：0 扫码登录，1 密码登录，2 验证码登录（参考 PC 端 loginType）
+@property (nonatomic, assign) NSInteger loginType;
+
+//扫码登录
+@property (strong, nonatomic) UIView *qrContainer;
+@property (strong, nonatomic) UIImageView *qrImageView;
+@property (strong, nonatomic) UILabel *qrStatusLabel;
+@property (strong, nonatomic) UIActivityIndicatorView *qrLoadingView;
+@property (strong, nonatomic) NSString *pcSessionToken;
+@property (nonatomic, strong) NSTimer *qrPollTimer;
+@property (nonatomic, strong) NSTimer *qrRefreshTimer;
+//0 等待扫码；1 已被扫码、等手机端确认
+@property (nonatomic, assign) NSInteger qrStatus;
 
 @property (strong, nonatomic) WFCSlideVerifyView *slideVerifyView;
 @property (strong, nonatomic) NSString *slideVerifyToken;
@@ -58,29 +80,57 @@
     NSString *savedName = [[NSUserDefaults standardUserDefaults] stringForKey:@"savedName"];
    
     CGRect bgRect = self.view.bounds;
-    CGFloat paddingEdge = [self formPaddingEdge];
+    BOOL isPad = [WFCUPadUtility isPad];
+
+    //pad 端卡片式登录（参考 PC 端 LoginPage 的卡片容器）：所有内容放在白色圆角卡片上；
+    //iPhone 保持原有的整页表单布局。
+    UIView *contentHost = self.view;
+    CGFloat contentWidth = 0;
+    CGFloat cardHeight = 0;
+    if (isPad) {
+        CGFloat cardWidth = 420;
+        cardHeight = 580;
+        self.cardView = [[UIView alloc] initWithFrame:CGRectMake((bgRect.size.width - cardWidth) / 2, (bgRect.size.height - cardHeight) / 2 - 20, cardWidth, cardHeight)];
+        self.cardView.backgroundColor = [UIColor whiteColor];
+        self.cardView.layer.cornerRadius = 16;
+        self.cardView.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.cardView.layer.shadowOpacity = 0.12;
+        self.cardView.layer.shadowOffset = CGSizeMake(0, 4);
+        self.cardView.layer.shadowRadius = 14;
+        //四周弹性边距：旋转 / 分屏 / 台前调度改窗口大小时，卡片始终保持在窗口中央
+        self.cardView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [self.view addSubview:self.cardView];
+        contentHost = self.cardView;
+        contentWidth = cardWidth - 56;
+    } else {
+        contentWidth = bgRect.size.width - 2 * [self formPaddingEdge];
+    }
+    CGFloat paddingEdge = isPad ? 28 : [self formPaddingEdge];
     CGFloat inputHeight = 40;
     CGFloat hintHeight = 26;
-    CGFloat topPos = [WFCUUtilities wf_navigationFullHeight] + 45;
+    CGFloat topPos = isPad ? 40 : ([WFCUUtilities wf_navigationFullHeight] + 45);
+    //内容区顶部起始位置。topPos 后面会被表单逐段累加，二维码区要用这个原始值，
+    //否则二维码区域会从表单下方开始（二维码掉到卡片底部、把底部按钮盖住）。
+    CGFloat contentTop = topPos;
     
-    self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge - paddingEdge, hintHeight)];
+    self.hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(paddingEdge, topPos, contentWidth, hintHeight)];
     [self.hintLabel setText:LocalizedString(@"PhoneLogin")];
     self.hintLabel.textAlignment = NSTextAlignmentLeft;
     self.hintLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:hintHeight];
     
     topPos += hintHeight + 50;
     
-    UIView *userNameContainer = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - 2 * paddingEdge, inputHeight)];
+    self.userNameContainer = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, contentWidth, inputHeight)];
     
     UILabel *userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     userNameLabel.text = LocalizedString(@"PhoneNumber");
     userNameLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
     
-    self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, userNameContainer.frame.size.width, 1.f)];
+    self.userNameLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, self.userNameContainer.frame.size.width, 1.f)];
     self.userNameLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
     
     
-    self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, userNameContainer.frame.size.width - 87, inputHeight - 1)];
+    self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, self.userNameContainer.frame.size.width - 87, inputHeight - 1)];
     self.userNameField.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.userNameField.placeholder = LocalizedString(@"PhoneNumberPlaceholder");
     self.userNameField.returnKeyType = UIReturnKeyNext;
@@ -91,17 +141,17 @@
     
     topPos += inputHeight + 1;
 
-    UIView *passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, inputHeight)];
+    self.passwordContainer  = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, topPos, contentWidth, inputHeight)];
     self.passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, inputHeight - 1)];
     self.passwordLabel.text = LocalizedString(@"VerificationCode");
     self.passwordLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:17];
     
     
-    self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, passwordContainer.frame.size.width, 1.f)];
+    self.passwordLine = [[UIView alloc] initWithFrame:CGRectMake(0, inputHeight - 1, self.passwordContainer.frame.size.width, 1.f)];
     self.passwordLine.backgroundColor = [UIColor colorWithHexString:@"0xd4d4d4"];
     
     
-    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
+    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(87, 0, self.passwordContainer.frame.size.width - 87 - 72, inputHeight - 1)];
     self.passwordField.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:16];
     self.passwordField.placeholder = LocalizedString(@"VerificationCodePlaceholder");
     self.passwordField.returnKeyType = UIReturnKeyDone;
@@ -110,7 +160,7 @@
     self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.passwordField addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
+    self.sendCodeBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.passwordContainer.frame.size.width - 72, (inputHeight - 1 - 23) / 2.0, 72, 23)];
     [self.sendCodeBtn setTitle:LocalizedString(@"GetVerificationCode") forState:UIControlStateNormal];
     self.sendCodeBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:12];
     self.sendCodeBtn.layer.borderWidth = 1;
@@ -133,7 +183,7 @@
     [self.switchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
     [self.switchButton addTarget:self action:@selector(onSwitchLoginType:) forControlEvents:UIControlEventTouchDown];
     
-    self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(bgRect.size.width - paddingEdge - 100, topPos, 100, 40)];
+    self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge + contentWidth - 100, topPos, 100, 40)];
     [self.registerButton setTitle:LocalizedString(@"Register") forState:UIControlStateNormal];
     self.registerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     self.registerButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
@@ -143,7 +193,7 @@
     topPos += 40;
     topPos += 31;
     
-    self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, bgRect.size.width - paddingEdge * 2, 43)];
+    self.loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(paddingEdge, topPos, contentWidth, 43)];
     [self.loginBtn addTarget:self action:@selector(onLoginButton:) forControlEvents:UIControlEventTouchDown];
     self.loginBtn.layer.masksToBounds = YES;
     self.loginBtn.layer.cornerRadius = 4.f;
@@ -153,29 +203,79 @@
     self.loginBtn.titleLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleMedium size:16];
     self.loginBtn.enabled = NO;
     
-    [self.view addSubview:self.hintLabel];
+    [contentHost addSubview:self.hintLabel];
     
-    [userNameContainer addSubview:userNameLabel];
-    [userNameContainer addSubview:self.userNameField];
-    [userNameContainer addSubview:self.userNameLine];
-    [self.view addSubview:userNameContainer];
+    [self.userNameContainer addSubview:userNameLabel];
+    [self.userNameContainer addSubview:self.userNameField];
+    [self.userNameContainer addSubview:self.userNameLine];
+    [contentHost addSubview:self.userNameContainer];
     
-    [self.view addSubview:passwordContainer];
-    [passwordContainer addSubview:self.passwordLabel];
-    [passwordContainer addSubview:self.passwordField];
-    [passwordContainer addSubview:self.passwordLine];
-    [passwordContainer addSubview:self.sendCodeBtn];
+    [contentHost addSubview:self.passwordContainer];
+    [self.passwordContainer addSubview:self.passwordLabel];
+    [self.passwordContainer addSubview:self.passwordField];
+    [self.passwordContainer addSubview:self.passwordLine];
+    [self.passwordContainer addSubview:self.sendCodeBtn];
     
-    [self.view addSubview:self.switchButton];
-    [self.view addSubview:self.registerButton];
-    [self.view addSubview:self.loginBtn];
+    [contentHost addSubview:self.switchButton];
+    [contentHost addSubview:self.registerButton];
+    [contentHost addSubview:self.loginBtn];
+
+    //底部「扫码登录 ⇄ 密码/验证码登录」切换，参考 PC 端 LoginPage
+    self.qrSwitchButton = [[UIButton alloc] init];
+    [self.qrSwitchButton setTitle:LocalizedString(@"UsePasswordOrCodeLogin") forState:UIControlStateNormal];
+    self.qrSwitchButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.qrSwitchButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12];
+    [self.qrSwitchButton setTitleColor:[UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9] forState:UIControlStateNormal];
+    [self.qrSwitchButton addTarget:self action:@selector(onSwitchQRLogin:) forControlEvents:UIControlEventTouchDown];
+    //扫码登录仅 pad 提供（按用户要求参考 PC 端），iPhone 上不显示这个入口，登录界面与适配前一致
+    self.qrSwitchButton.hidden = !isPad;
+    if (isPad) {
+        self.qrSwitchButton.frame = CGRectMake(paddingEdge, cardHeight - 96, contentWidth, 30);
+    } else {
+        self.qrSwitchButton.frame = CGRectMake(paddingEdge, bgRect.size.height - 30 - [WFCUUtilities wf_safeDistanceBottom] - 40, contentWidth, 30);
+    }
+    [contentHost addSubview:self.qrSwitchButton];
+
+    //扫码登录区域（二维码 + 状态文字），与表单互斥显示
+    //从 contentTop 起排：二维码显示在卡片顶部
+    CGFloat qrAreaHeight = isPad ? (cardHeight - contentTop - 120) : 420;
+    self.qrContainer = [[UIView alloc] initWithFrame:CGRectMake(paddingEdge, contentTop, contentWidth, qrAreaHeight)];
+    self.qrContainer.hidden = YES;
+
+    self.qrImageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.qrContainer.frame.size.width - 250) / 2.0, 20, 250, 250)];
+    self.qrImageView.backgroundColor = [UIColor whiteColor];
+    self.qrImageView.layer.cornerRadius = 8;
+    self.qrImageView.layer.masksToBounds = YES;
+    self.qrImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.qrImageView.userInteractionEnabled = YES;
+    [self.qrImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onQRTapped:)]];
+    [self.qrContainer addSubview:self.qrImageView];
+
+    self.qrLoadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.qrLoadingView.center = self.qrImageView.center;
+    self.qrLoadingView.hidden = YES;
+    [self.qrContainer addSubview:self.qrLoadingView];
+
+    self.qrStatusLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 290, self.qrContainer.frame.size.width - 32, 60)];
+    self.qrStatusLabel.textAlignment = NSTextAlignmentCenter;
+    self.qrStatusLabel.numberOfLines = 0;
+    self.qrStatusLabel.font = [UIFont scaledSystemFontOfSize:14];
+    self.qrStatusLabel.textColor = [UIColor grayColor];
+    [self.qrContainer addSubview:self.qrStatusLabel];
+
+    [contentHost addSubview:self.qrContainer];
     
     self.userNameField.text = savedName;
     
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetKeyboard:)]];
     
-    self.privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 40 - [WFCUUtilities wf_safeDistanceBottom], self.view.bounds.size.width-32, 40)];
+    self.privacyLabel = [[UILabel alloc] init];
+    if (isPad) {
+        self.privacyLabel.frame = CGRectMake(paddingEdge, cardHeight - 60, contentWidth, 40);
+    } else {
+        self.privacyLabel.frame = CGRectMake(16, self.view.bounds.size.height - 40 - [WFCUUtilities wf_safeDistanceBottom], self.view.bounds.size.width - 32, 40);
+    }
     self.privacyLabel.textAlignment = NSTextAlignmentCenter;
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:LocalizedString(@"LoginAgreement") attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:10],
                                                                                                                      NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
@@ -191,8 +291,9 @@
         [ws.navigationController pushViewController:pvc animated:YES];
     }];
     
-    [self.view addSubview:self.privacyLabel];
-    [self setIsPwdLogin:self.isPwdLogin];
+    [contentHost addSubview:self.privacyLabel];
+    //默认登录方式：pad 参考 PC 端默认扫码登录；iPhone 尊重 AppDelegate 预设（Prefer_Password_Login）
+    [self setLoginType:isPad ? 0 : (self.isPwdLogin ? 1 : 2)];
 }
 
 /// 表单左右留白。iPad 屏幕很宽，登录表单限制到 420pt 并居中，不然输入框会横跨整屏。
@@ -203,11 +304,68 @@
 }
 
 - (void)setIsPwdLogin:(BOOL)isPwdLogin {
-    _isPwdLogin = isPwdLogin;
-    CGRect bgRect = self.view.bounds;
+    [self setLoginType:isPwdLogin ? 1 : 2];
+}
+
+//登录方式切换：0 扫码登录，1 密码登录，2 验证码登录（参考 PC 端 LoginPage 的 loginType）
+- (void)setLoginType:(NSInteger)loginType {
+    //视图未加载时只记录、不布局：AppDelegate 会在 viewDidLoad 之前设置 isPwdLogin，
+    //此刻子视图还不存在，一旦往下走访问 self.view 就会提前触发 viewDidLoad，
+    //外层调用随后再把表单显示回来，造成启动时「二维码和表单同时显示」。
+    if (!self.isViewLoaded) {
+        _loginType = loginType;
+        _isPwdLogin = (loginType == 1);
+        return;
+    }
+    //扫码登录仅 pad 提供：iPhone 上即使外部试图切到扫码也回到验证码登录
+    if (loginType == 0 && ![WFCUPadUtility isPad]) {
+        loginType = 2;
+    }
+    _loginType = loginType;
+    _isPwdLogin = (loginType == 1);
+
+    if (loginType == 0) {
+        //扫码登录：显示二维码区，隐藏表单
+        [self hideFormLogin];
+        [self.qrSwitchButton setTitle:LocalizedString(@"UsePasswordOrCodeLogin") forState:UIControlStateNormal];
+        [self showQRLogin];
+    } else {
+        //密码/验证码登录：显示表单，停掉扫码轮询
+        [self stopQRPolling];
+        [self.qrContainer setHidden:YES];
+        [self.qrSwitchButton setTitle:LocalizedString(@"ScanCodeLogin") forState:UIControlStateNormal];
+        [self configureFormForLoginType:loginType];
+        [self showFormLogin];
+    }
+
+    // 切换登录模式后，重置验证标志并更新按钮状态
+    self.hasSlideVerifiedForCode = NO;
+    [self updateBtn];
+}
+
+- (void)showFormLogin {
+    self.hintLabel.hidden = NO;
+    self.userNameContainer.hidden = NO;
+    self.passwordContainer.hidden = NO;
+    self.switchButton.hidden = NO;
+    self.registerButton.hidden = NO;
+    self.loginBtn.hidden = NO;
+}
+
+- (void)hideFormLogin {
+    self.hintLabel.hidden = YES;
+    self.userNameContainer.hidden = YES;
+    self.passwordContainer.hidden = YES;
+    self.switchButton.hidden = YES;
+    self.registerButton.hidden = YES;
+    self.loginBtn.hidden = YES;
+}
+
+- (void)configureFormForLoginType:(NSInteger)loginType {
     CGRect pwdFeildFrame = self.passwordField.frame;
-    CGFloat paddingEdge = [self formPaddingEdge];
-    CGFloat pwdFeildWidth = bgRect.size.width - paddingEdge * 2 - 87;
+    //按输入框容器的实际宽度算（iPhone 上 = 屏宽减两侧留白，与原来一致；pad 卡片上 = 卡片内容宽）
+    CGFloat pwdFeildWidth = self.passwordContainer.frame.size.width - 87;
+    BOOL isPwdLogin = (loginType == 1);
     if (isPwdLogin) {
         self.hintLabel.text = LocalizedString(@"PasswordLogin");
         self.passwordLabel.text = LocalizedString(@"Password");
@@ -238,10 +396,6 @@
     }
     pwdFeildFrame.size.width = pwdFeildWidth;
     self.passwordField.frame = pwdFeildFrame;
-
-    // 切换登录模式后，重置验证标志并更新按钮状态
-    self.hasSlideVerifiedForCode = NO;
-    [self updateBtn];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -268,6 +422,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
+    //离开登录页（登录成功切根 / 被 push 走）时停掉扫码轮询与刷新
+    [self stopQRPolling];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -276,9 +432,17 @@
 }
 
 - (void)onSwitchLoginType:(id)sender {
-//    [UIView animateWithDuration:0.5 animations:^{
-        self.isPwdLogin = !self.isPwdLogin;
-//    }];
+    //表单内：密码 ⇄ 验证码
+    [self setLoginType:self.loginType == 1 ? 2 : 1];
+}
+
+- (void)onSwitchQRLogin:(id)sender {
+    //扫码登录仅 pad 提供，iPhone 上按钮本身也不显示，双保险
+    if (![WFCUPadUtility isPad]) {
+        return;
+    }
+    //底部：扫码 ⇄ 密码/验证码
+    [self setLoginType:self.loginType == 0 ? 2 : 0];
 }
 
 - (void)onRegister:(id)sender {
@@ -445,35 +609,8 @@
     };
 
     void(^successBlock)(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) = ^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
-        [[NSUserDefaults standardUserDefaults] setObject:user forKey:@"savedName"];
-        [SSKeychain setPassword:token forWFService:@"savedToken"];
-        [SSKeychain setPassword:userId forWFService:@"savedUserId"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-
-
-        //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
-        [[WFCCNetworkService sharedInstance] connect:userId token:token];
-        if(ENABLE_WATER_MARKER) {
-            [[UIApplication sharedApplication].delegate.window addSubview:[TYHWaterMarkView new]];
-            [TYHWaterMarkView setCharacter:userId];
-            [TYHWaterMarkView autoUpdateDate:YES];
-        }
-
         [hud hideAnimated:YES];
-        UIViewController *rootVC = [WFCBaseTabBarController rootViewController];
-        [UIApplication sharedApplication].delegate.window.rootViewController = rootVC;
-        WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController tabBarControllerInRoot:rootVC];
-        if (resetCode) {
-            if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
-                WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
-                vc.resetCode = resetCode;
-                vc.hidesBottomBarWhenPushed = YES;
-                UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [nav pushViewController:vc animated:YES];
-                });
-            }
-        }
+        [self loginSuccessWithUserId:userId token:token savedName:user resetCode:resetCode];
     };
 
 
@@ -484,6 +621,167 @@
     } else {
         [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
     }
+}
+
+//登录成功：保存凭证、连接 IM、切换到主界面（密码/验证码/扫码三种方式共用）
+- (void)loginSuccessWithUserId:(NSString *)userId token:(NSString *)token savedName:(NSString *)savedName resetCode:(NSString *)resetCode {
+    [[NSUserDefaults standardUserDefaults] setObject:(savedName.length ? savedName : userId) forKey:@"savedName"];
+    [SSKeychain setPassword:token forWFService:@"savedToken"];
+    [SSKeychain setPassword:userId forWFService:@"savedUserId"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    //需要注意token跟clientId是强依赖的，一定要调用getClientId获取到clientId，然后用这个clientId获取token，这样connect才能成功，如果随便使用一个clientId获取到的token将无法链接成功。
+    [[WFCCNetworkService sharedInstance] connect:userId token:token];
+    if(ENABLE_WATER_MARKER) {
+        [[UIApplication sharedApplication].delegate.window addSubview:[TYHWaterMarkView new]];
+        [TYHWaterMarkView setCharacter:userId];
+        [TYHWaterMarkView autoUpdateDate:YES];
+    }
+
+    UIViewController *rootVC = [WFCBaseTabBarController rootViewController];
+    [UIApplication sharedApplication].delegate.window.rootViewController = rootVC;
+    WFCBaseTabBarController *tabBarVC = [WFCBaseTabBarController tabBarControllerInRoot:rootVC];
+    if (resetCode) {
+        if ([tabBarVC.childViewControllers.firstObject isKindOfClass:[UINavigationController class]]) {
+            WFCResetPasswordViewController *vc = [[WFCResetPasswordViewController alloc] init];
+            vc.resetCode = resetCode;
+            vc.hidesBottomBarWhenPushed = YES;
+            UINavigationController *nav = (UINavigationController *)tabBarVC.childViewControllers.firstObject;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [nav pushViewController:vc animated:YES];
+            });
+        }
+    }
+}
+
+#pragma mark - 扫码登录（参考 PC 端 LoginPage 的扫码流程）
+
+- (void)showQRLogin {
+    self.qrContainer.hidden = NO;
+    self.qrStatus = 0;
+    self.qrStatusLabel.text = LocalizedString(@"QRLoginWaiting");
+    [self refreshQRCode];
+}
+
+- (void)onQRTapped:(id)sender {
+    //生成失败时点击重试；轮询中点击直接刷新二维码
+    [self refreshQRCode];
+}
+
+- (void)refreshQRCode {
+    [self stopQRPolling];
+    self.pcSessionToken = nil;
+    self.qrImageView.image = nil;
+    self.qrImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.qrLoadingView.hidden = NO;
+    [self.qrLoadingView startAnimating];
+    self.qrStatus = 0;
+    self.qrStatusLabel.text = LocalizedString(@"QRLoginWaiting");
+
+    __weak typeof(self) ws = self;
+    [[AppService sharedAppService] createPCLoginSession:nil success:^(NSString *token) {
+        if (!ws || ws.loginType != 0) {
+            return;
+        }
+        ws.pcSessionToken = token;
+        ws.qrLoadingView.hidden = YES;
+        [ws.qrLoadingView stopAnimating];
+        //二维码内容与手机端扫码识别的格式一致：wildfirechat://pcsession/<token>
+        ws.qrImageView.image = [WFCLoginViewController qrCodeImageWithString:[NSString stringWithFormat:@"wildfirechat://pcsession/%@", token] size:240];
+        [ws startQRPolling];
+    } error:^(int errCode, NSString *message) {
+        if (!ws || ws.loginType != 0) {
+            return;
+        }
+        ws.qrLoadingView.hidden = YES;
+        [ws.qrLoadingView stopAnimating];
+        ws.qrStatusLabel.text = LocalizedString(@"QRCodeGenerateFailed");
+    }];
+}
+
+- (void)startQRPolling {
+    if (self.qrPollTimer) {
+        return;
+    }
+    self.qrPollTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(pollQRStatus) userInfo:nil repeats:YES];
+    [self.qrPollTimer fire];
+    //60秒后自动刷新二维码（与 PC 端 refreshQrCode 一致）
+    self.qrRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshQRCode) userInfo:nil repeats:YES];
+}
+
+- (void)stopQRPolling {
+    if (self.qrPollTimer) {
+        [self.qrPollTimer invalidate];
+        self.qrPollTimer = nil;
+    }
+    if (self.qrRefreshTimer) {
+        [self.qrRefreshTimer invalidate];
+        self.qrRefreshTimer = nil;
+    }
+}
+
+- (void)pollQRStatus {
+    if (!self.pcSessionToken.length || self.loginType != 0) {
+        return;
+    }
+    NSString *token = self.pcSessionToken;
+    __weak typeof(self) ws = self;
+    [[AppService sharedAppService] loginWithPCLoginSession:token success:^(NSString *userId, NSString *imToken) {
+        if (!ws || ws.loginType != 0 || ![token isEqualToString:ws.pcSessionToken]) {
+            //二维码已刷新，丢弃过期结果
+            return;
+        }
+        [ws stopQRPolling];
+        [ws loginSuccessWithUserId:userId token:imToken savedName:nil resetCode:nil];
+    } scanned:^(NSString *userName, NSString *portrait) {
+        if (!ws || ws.loginType != 0 || ![token isEqualToString:ws.pcSessionToken]) {
+            return;
+        }
+        if (ws.qrStatus != 1) {
+            ws.qrStatus = 1;
+            //扫码后、手机端确认前：二维码区域换成扫码用户的头像（参考 PC 端 LoginPage），
+            //下方提示「XXX 已扫码，请在手机上确认登录」
+            ws.qrImageView.contentMode = UIViewContentModeScaleAspectFill;
+            if (portrait.length) {
+                [ws.qrImageView sd_setImageWithURL:[NSURL URLWithString:portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
+            } else {
+                ws.qrImageView.image = [WFCUImage imageNamed:@"PersonalChat"];
+            }
+            ws.qrStatusLabel.text = [NSString stringWithFormat:LocalizedString(@"QRLoginScanned"), userName ?: @""];
+        }
+    } canceled:^{
+        if (!ws || ws.loginType != 0 || ![token isEqualToString:ws.pcSessionToken]) {
+            return;
+        }
+        //手机端取消/拒绝登录，重新生成二维码
+        [ws refreshQRCode];
+    } error:^(int errCode, NSString *message) {
+        //网络波动等暂时性错误：继续轮询即可
+    }];
+}
+
++ (UIImage *)qrCodeImageWithString:(NSString *)string size:(CGFloat)size {
+    if (!string.length) {
+        return nil;
+    }
+    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    [filter setDefaults];
+    [filter setValue:[string dataUsingEncoding:NSUTF8StringEncoding] forKey:@"inputMessage"];
+    [filter setValue:@"M" forKey:@"inputCorrectionLevel"];
+    CIImage *output = filter.outputImage;
+    if (!output) {
+        return nil;
+    }
+    CGFloat scale = size / output.extent.size.width;
+    CIImage *scaled = [output imageByApplyingTransform:CGAffineTransformMakeScale(scale, scale)];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cgImage = [context createCGImage:scaled fromRect:scaled.extent];
+    if (!cgImage) {
+        return nil;
+    }
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    return image;
 }
 
 #pragma mark - UITextFieldDelegate

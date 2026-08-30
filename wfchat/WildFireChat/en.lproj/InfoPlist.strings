@@ -63,7 +63,12 @@ AccountLoggedInElsewhere="Your account has been logged in on another device";
 GotIt="Got It";
 Tips="Tips";
 SMSCodeLoginTip="Using SMS code login will create an account for you. Please use SMS code login.";
-Confirm="Confirm";
+
+UsePasswordOrCodeLogin="Use Password / Code Login";
+ScanCodeLogin="Scan QR Code Login";
+QRLoginWaiting="Scan the QR code with the WildfireChat mobile app";
+QRLoginScanned="%@ scanned. Confirm login on your phone";
+QRCodeGenerateFailed="Failed to generate QR code. Tap to retry";Confirm="Confirm";
 SMSSending="Sending SMS...";
 SendSuccess="Sent successfully";
 SendFailed="Failed to send";

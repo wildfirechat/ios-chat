@@ -136,13 +136,21 @@ static NSString *aiRobot = @"AI";
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     
-    if (@available(iOS 13, *)) {
+    if (self.selectContact) {
+        //选人形态（用户文件选好友、转发、拉群等）在 iPad 右栏/模态里，导航栏很宽，
+        //自定义白色背景图（固定宽度/高度）会渲染不对（白边漏出/蓝晕/胶囊形，同「我的文件」问题），
+        //改用系统默认外观，任何栏宽下都渲染正确。
         self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-        self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
-        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
     } else {
-        [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+        //通讯录 tab（左栏 320/360pt）：保持原有自定义白色背景，与适配前逐字节一致
+        if (@available(iOS 13, *)) {
+            self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
+            self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
+            UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
+            [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
+        } else {
+            [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
+        }
     }
     
     if (@available(iOS 9.1, *)) {

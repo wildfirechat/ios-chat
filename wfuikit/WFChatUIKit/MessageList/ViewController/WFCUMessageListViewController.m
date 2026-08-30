@@ -3251,10 +3251,12 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         WFCCTextMessageContent *txtMsgContent = (WFCCTextMessageContent *)model.message.content;
         [self.chatInputBar resetInputBarStatue];
         
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        //iPad 双栏下盖住右栏而不是整个窗口：以导航控制器视图为宿主（iPhone 上它就是整屏，与改前一致）
+        UIView *host = self.navigationController.view ?: self.view;
+        UIView *textContainer = [[UIView alloc] initWithFrame:host.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
         
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], textContainer.bounds.size.width, textContainer.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtMsgContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont scaledSystemFontOfSize:28];
@@ -3263,7 +3265,7 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         
         [textContainer addSubview:textView];
         [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        [host addSubview:textContainer];
     }
 }
 
@@ -3443,10 +3445,12 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         
         [self.chatInputBar resetInputBarStatue];
         
-        UIView *textContainer = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        //iPad 双栏下盖住右栏而不是整个窗口：以导航控制器视图为宿主（iPhone 上它就是整屏，与改前一致）
+        UIView *host = self.navigationController.view ?: self.view;
+        UIView *textContainer = [[UIView alloc] initWithFrame:host.bounds];
         textContainer.backgroundColor = self.view.backgroundColor;
         
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, [WFCUUtilities wf_navigationFullHeight], textContainer.bounds.size.width, textContainer.bounds.size.height - [WFCUUtilities wf_navigationFullHeight] - [WFCUUtilities wf_safeDistanceBottom])];
         textView.text = txtContent.text;
         textView.textAlignment = NSTextAlignmentCenter;
         textView.font = [UIFont scaledSystemFontOfSize:28];
@@ -3455,7 +3459,7 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         
         [textContainer addSubview:textView];
         [textView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTextMessageDetailView:)]];
-        [[UIApplication sharedApplication].keyWindow addSubview:textContainer];
+        [host addSubview:textContainer];
     } else if ([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
         self.imageMsgs = @[msg];
         MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
