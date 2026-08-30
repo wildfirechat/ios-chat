@@ -118,11 +118,12 @@
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     
+    //搜索框放在导航栏（标题栏）上，与"我的文件/查找聊天内容"的搜索形态一致。
+    //不再用自定义白色背景图/改底色：固定高度的背景图盖不满系统搜索框（iPad 右栏尤甚），
+    //会漏出蓝晕/胶囊形；全部交给系统默认外观，任何栏宽下都渲染正确。
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
     if (@available(iOS 13, *)) {
-        self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-        self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
-        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
+        // 保持系统默认外观，不做任何自定义背景
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }

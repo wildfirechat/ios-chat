@@ -60,11 +60,13 @@
         self.searchController.obscuresBackgroundDuringPresentation = NO;
     }
     
+    //搜索框放在导航栏（标题栏）上。iPad 右栏页面 viewDidLoad 时 bounds 还是整屏宽，
+    //自定义白色背景图（固定宽度/高度）按整屏宽生成会盖不满/错位（蓝晕/胶囊漏出，
+    //同「我的文件/组织通讯录」问题），改用系统默认外观，任何栏宽下都渲染正确。
+    //iPhone 锁竖屏、页面恒等于整屏，不受影响。
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
     if (@available(iOS 13, *)) {
-        self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-        self.searchController.searchBar.searchTextField.backgroundColor = [WFCUConfigManager globalManager].naviBackgroudColor;
-        UIImage* searchBarBg = [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(self.view.frame.size.width - 8 * 2, 36) cornerRadius:4];
-        [self.searchController.searchBar setSearchFieldBackgroundImage:searchBarBg forState:UIControlStateNormal];
+        // 保持系统默认外观，不做任何自定义背景
     } else {
         [self.searchController.searchBar setValue:WFCString(@"Cancel") forKey:@"_cancelButtonText"];
     }
