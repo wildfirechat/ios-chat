@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:../wfmomentclient/WFMomentClient.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "container:../ios-pttclient/PttClient.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "container:../ios-momentkit/WFMomentUIKit.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "container:../WFAVEngineKit/WFAVEngineKit.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:wfchat/WildFireChat.xcodeproj">
    </FileRef>
    <FileRef

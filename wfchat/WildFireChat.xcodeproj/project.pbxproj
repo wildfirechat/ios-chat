@@ -21,7 +21,6 @@
 		2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */; };
 		2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
-		D8DD2FE9D1B342D18C7568ED /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B19FEFF8908544218632F7FE /* SceneDelegate.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
 		2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20051FAF0AE600F4405D /* LaunchScreen.storyboard */; };
@@ -91,10 +90,6 @@
 		90FF267E222AB34B0001D8AF /* PCLoginConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90FF267D222AB34B0001D8AF /* PCLoginConfirmViewController.m */; };
 		B709CCEB28F7BA080036EDFA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B709CCEA28F7BA080036EDFA /* CoreMedia.framework */; };
 		B709CCEE28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */; };
-		B70DE24B2F8F09250097C920 /* WFAVEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B70DE2482F8F09250097C920 /* WFAVEngineKit.framework */; };
-		B70DE24C2F8F09250097C920 /* WFAVEngineKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B70DE2482F8F09250097C920 /* WFAVEngineKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B70DE2502F8F09960097C920 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B70DE24F2F8F09960097C920 /* WebRTC.xcframework */; };
-		B70DE2512F8F09960097C920 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B70DE24F2F8F09960097C920 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B71F0AC228F54759000A7C8A /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0AC128F54759000A7C8A /* ReplayKit.framework */; };
 		B71F0AC628F54759000A7C8A /* SampleHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AC528F54759000A7C8A /* SampleHandler.mm */; };
 		B71F0ACD28F54759000A7C8A /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71F0AC128F54759000A7C8A /* ReplayKit.framework */; };
@@ -115,17 +110,15 @@
 		B71F0B0828F547C2000A7C8A /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */; };
 		B71F0B0928F547C2000A7C8A /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */; };
 		B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */ = {isa = PBXBuildFile; fileRef = B749E9AB2F3F8EB60092DEAE /* CollectionService.m */; };
-		B75357EF2F978657002488BF /* PttClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75357EC2F978657002488BF /* PttClient.framework */; };
-		B75357F02F978657002488BF /* PttClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75357EC2F978657002488BF /* PttClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B75357F12F978657002488BF /* WFMomentClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75357ED2F978657002488BF /* WFMomentClient.framework */; };
-		B75357F22F978657002488BF /* WFMomentClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75357ED2F978657002488BF /* WFMomentClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B75357F32F978657002488BF /* WFMomentUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75357EE2F978657002488BF /* WFMomentUIKit.framework */; };
-		B75357F42F978657002488BF /* WFMomentUIKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75357EE2F978657002488BF /* WFMomentUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */; };
 		B75866E92F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E82F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m */; };
 		B75866F22F14E20F00D62775 /* WFCRestoreSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866F12F14E20F00D62775 /* WFCRestoreSourceViewController.m */; };
 		B75866F32F14E20F00D62775 /* WFCPCRestoreListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866EF2F14E20F00D62775 /* WFCPCRestoreListViewController.m */; };
 		B75866FE2F150C9400D62775 /* WFCPCRestoreProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866FD2F150C9400D62775 /* WFCPCRestoreProgressViewController.m */; };
+		B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; };
+		B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81662782B8AD009D4A19 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; };
+		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
@@ -158,6 +151,7 @@
 		B7B2F8412F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
 		B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8432F0A0279001CBF4C /* WFCLanguageTableViewController.m */; };
 		B7B2F8452F0A0576001CBF4C /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
+		B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7B2F84A2F0A0862001CBF4C /* ShareLocalizationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */; };
 		B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C177572CE83720005A5E1B /* TYHWaterMark.m */; };
 		B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */; };
@@ -220,15 +214,23 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B75357F22F978657002488BF /* WFMomentClient.framework in Embed Frameworks */,
 				B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */,
-				B70DE24C2F8F09250097C920 /* WFAVEngineKit.framework in Embed Frameworks */,
-				B70DE2512F8F09960097C920 /* WebRTC.xcframework in Embed Frameworks */,
 				B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */,
 				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
-				B75357F42F978657002488BF /* WFMomentUIKit.framework in Embed Frameworks */,
+				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
+				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
-				B75357F02F978657002488BF /* PttClient.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7B2F8472F0A0576001CBF4C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,8 +268,6 @@
 		2E1D1FF71FAF0AE600F4405D /* 野火IM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火IM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		BD491388F852427B98C2D0AE /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		B19FEFF8908544218632F7FE /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		2E1D20011FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2E1D20031FAF0AE600F4405D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E1D20061FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -395,9 +395,6 @@
 		B709CCEC28F7BCCC0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
 		B709CCED28F7BCCC0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
 		B709CCF028F8E8D00036EDFA /* WFCUBroadcastDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WFCUBroadcastDefine.h; path = ../../wfuikit/WFChatUIKit/Voip/Conference/WFCUBroadcastDefine.h; sourceTree = "<group>"; };
-		B70DE2472F8F09250097C920 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../WFAVEngineKit/Frameworks/WebRTC.xcframework; sourceTree = "<group>"; };
-		B70DE2482F8F09250097C920 /* WFAVEngineKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFAVEngineKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B70DE24F2F8F09960097C920 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "/Users/rain/Workspace/WFAVEngineKit/../ios-chat/wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework"; sourceTree = "<absolute>"; };
 		B71F0AC028F54759000A7C8A /* Broadcast.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Broadcast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71F0AC128F54759000A7C8A /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		B71F0AC428F54759000A7C8A /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
@@ -433,9 +430,6 @@
 		B71F0AFD28F547C2000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
 		B749E9AA2F3F8EB60092DEAE /* CollectionService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionService.h; sourceTree = "<group>"; };
 		B749E9AB2F3F8EB60092DEAE /* CollectionService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionService.m; sourceTree = "<group>"; };
-		B75357EC2F978657002488BF /* PttClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PttClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B75357ED2F978657002488BF /* WFMomentClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFMomentClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B75357EE2F978657002488BF /* WFMomentUIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFMomentUIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B75866E02F14C29100D62775 /* WFCBackupTargetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupTargetViewController.h; sourceTree = "<group>"; };
 		B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupTargetViewController.m; sourceTree = "<group>"; };
 		B75866E72F14C9AA00D62775 /* WFCBackupRequestProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupRequestProgressViewController.h; sourceTree = "<group>"; };
@@ -532,26 +526,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B70DE2502F8F09960097C920 /* WebRTC.xcframework in Frameworks */,
 				B76C1DDB2D695F5B00B1B0D8 /* GTSDK.xcframework in Frameworks */,
 				B76C1DDC2D695F5B00B1B0D8 /* GTCommonSDK.xcframework in Frameworks */,
+				B75D816A2782CEB5009D4A19 /* WebRTC.xcframework in Frameworks */,
 				B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */,
 				905177522243CDA60020A2AC /* libc++.tbd in Frameworks */,
 				2F79F32C2783059000D6F254 /* WFChatUIKit.framework in Frameworks */,
-				B75357F32F978657002488BF /* WFMomentUIKit.framework in Frameworks */,
 				905177502243CD9A0020A2AC /* libz.tbd in Frameworks */,
 				B7D8F7322783029400752426 /* ZLPhotoBrowser.xcframework in Frameworks */,
 				B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */,
 				B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */,
-				B75357EF2F978657002488BF /* PttClient.framework in Frameworks */,
 				B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */,
-				B75357F12F978657002488BF /* WFMomentClient.framework in Frameworks */,
+				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
 				2F1B0DD521E1E29400139CB1 /* AudioToolbox.framework in Frameworks */,
 				2F1B0DCF21E19AF400139CB1 /* UserNotificationsUI.framework in Frameworks */,
-				B70DE24B2F8F09250097C920 /* WFAVEngineKit.framework in Frameworks */,
 				2F1B0DD021E19AF400139CB1 /* NotificationCenter.framework in Frameworks */,
 				2F1B0DD121E19AF400139CB1 /* UserNotifications.framework in Frameworks */,
 			);
@@ -742,12 +733,6 @@
 		2EAC88E61FB0A0D6004B34D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B75357EC2F978657002488BF /* PttClient.framework */,
-				B75357ED2F978657002488BF /* WFMomentClient.framework */,
-				B75357EE2F978657002488BF /* WFMomentUIKit.framework */,
-				B70DE24F2F8F09960097C920 /* WebRTC.xcframework */,
-				B70DE2472F8F09250097C920 /* WebRTC.xcframework */,
-				B70DE2482F8F09250097C920 /* WFAVEngineKit.framework */,
 				B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */,
 				B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */,
 				B709CCEA28F7BA080036EDFA /* CoreMedia.framework */,
@@ -1267,6 +1252,7 @@
 				2F56F6EF252C956700B829C4 /* Sources */,
 				2F56F6F0252C956700B829C4 /* Frameworks */,
 				2F56F6F1252C956700B829C4 /* Resources */,
+				B7B2F8472F0A0576001CBF4C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1768,7 +1754,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1789,7 +1775,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "野火IM";
@@ -1817,7 +1803,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1838,7 +1824,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger;
 				PRODUCT_NAME = "野火IM";
@@ -1863,7 +1849,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1877,7 +1863,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
@@ -1896,7 +1882,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1910,7 +1896,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1928,7 +1914,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Broadcast/Info.plist;
@@ -1940,7 +1926,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
@@ -1959,7 +1945,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Broadcast/Info.plist;
@@ -1971,7 +1957,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.Broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1989,7 +1975,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
@@ -2001,7 +1987,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
@@ -2020,7 +2006,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
@@ -2032,7 +2018,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.50;
+				MARKETING_VERSION = 1.1.41;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.wildfirechat.messanger.BroadcastSetupUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
