@@ -128,6 +128,10 @@
 @implementation WFCUConferenceViewController
 - (instancetype)initWithSession:(WFAVCallSession *)session conferenceInfo:(WFZConferenceInfo *)conferenceInfo {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         self.currentSession = session;
         self.currentSession.delegate = self;
@@ -152,6 +156,10 @@
                maxParticipants:(int)maxParticipants
                          extra:(NSString *)extra {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         if (moCall) {
             self.currentSession = [[WFAVEngineKit sharedEngineKit] startConference:callId audioOnly:audioOnly pin:pin host:host title:title desc:desc callExtra:extra audience:audience advanced:advanced record:NO maxParticipants:maxParticipants sessionDelegate:self];
@@ -182,6 +190,10 @@
 
 -(instancetype)initWithConferenceInfo:(WFZConferenceInfo *)conferenceInfo muteAudio:(BOOL)muteAudio muteVideo:(BOOL)muteVideo {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         [WFCUConferenceManager sharedInstance].currentConferenceInfo = conferenceInfo;
         self.currentSession = [[WFAVEngineKit sharedEngineKit] joinConference:conferenceInfo.conferenceId audioOnly:NO pin:conferenceInfo.pin host:conferenceInfo.owner title:conferenceInfo.conferenceTitle desc:nil callExtra:nil audience:(muteAudio && muteVideo) || conferenceInfo.audience advanced:conferenceInfo.advance muteAudio:muteAudio muteVideo:muteVideo sessionDelegate:self];

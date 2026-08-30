@@ -81,21 +81,37 @@
 #if !WFCU_SUPPORT_VOIP
 - (instancetype)initWithSession:(WFAVCallSession *)session {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     return self;
 }
 
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     return self;
 }
 
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly pstnType:(int)pstnType pstnNumber:(NSString *)pstnNumber {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     return self;
 }
 #else
 - (instancetype)initWithSession:(WFAVCallSession *)session {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         self.currentSession = session;
         self.currentSession.delegate = self;
@@ -106,6 +122,10 @@
 
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
                                                                     audioOnly:audioOnly
@@ -119,6 +139,10 @@
 
 - (instancetype)initWithTargets:(NSArray<NSString *> *)targetIds conversation:(WFCCConversation *)conversation audioOnly:(BOOL)audioOnly pstnType:(int)pstnType pstnNumber:(NSString *)pstnNumber {
     self = [super init];
+    //通话/会议必须全屏（R6）：WFAVEngineKit 以默认样式弹出，iOS 13+ 在 iPad 上会退化成
+    //pageSheet 卡片，这里在 init 阶段直接钉死全屏（呈现时若被 SDK 覆盖，WFCUPadUtility 的
+    //swizzle 会再强制一次，双保险）
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     if (self) {
         WFAVCallSession *session = [[WFAVEngineKit sharedEngineKit] startCall:targetIds
                                                                     audioOnly:audioOnly

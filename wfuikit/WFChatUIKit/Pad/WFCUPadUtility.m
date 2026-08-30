@@ -208,7 +208,12 @@ static const void *kWFCUPadSearchTriggerKey = &kWFCUPadSearchTriggerKey;
                   //全局坐标算的，压错栈连动画起点都是偏的。」
                   @"MWPhotoBrowser",
                   //密聊里的单图预览
-                  @"WFCUImagePreviewViewController"];
+                  @"WFCUImagePreviewViewController",
+                  //音视频通话与会议（R6：必须全屏）。这三个页面由 WFAVEngineKit（二进制）
+                  //以默认样式弹出，iOS 13+ 在 iPad 上默认是 pageSheet 卡片，必须强制全屏
+                  @"WFCUConferenceViewController",
+                  @"WFCUVideoViewController",
+                  @"WFCUMultiVideoViewController"];
     });
     return names;
 }
