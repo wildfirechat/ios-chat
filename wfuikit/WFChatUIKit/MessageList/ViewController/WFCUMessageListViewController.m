@@ -2855,7 +2855,14 @@
                 }
                 self.imageMsgs = imageMsgs;
             } else {
-                self.imageMsgs = [[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:0 count:100 withUser:self.privateChatUser];
+                NSMutableArray *images = [[NSMutableArray alloc] init];
+                [images addObjectsFromArray:[[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:model.message.messageId count:-500 withUser:self.privateChatUser]];
+                [images addObject:model.message];
+                [images addObjectsFromArray:[[WFCCIMService sharedWFCIMService] getMessages:self.conversation contentTypes:@[@(MESSAGE_CONTENT_TYPE_IMAGE), @(MESSAGE_CONTENT_TYPE_VIDEO)] from:model.message.messageId count:500 withUser:self.privateChatUser]];
+                [images sortUsingComparator:^NSComparisonResult(WFCCMessage*  _Nonnull obj1, WFCCMessage*  _Nonnull obj2) {
+                    return obj1.serverTime < obj2.serverTime;
+                }];
+                self.imageMsgs = images;
             }
             
             int i;
