@@ -341,14 +341,24 @@
         [AVCaptureDevice
          requestAccessForMediaType:isAudio?AVMediaTypeAudio:AVMediaTypeVideo
          completionHandler:^(BOOL granted) {
-            if(!granted) {
-                [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"通话需要麦克风权限，请开启麦克风权限":@"视频通话需要摄像头权限，请开启摄像头权限" withSettingAction:YES withController:controller];
-            }
-            if(complete) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    complete(granted);
-                });
-            }
+            // requestAccessForMediaType 的回调可能不在主线程，统一切回主线程
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(!granted) {
+                    [WFCUUtilities showPermissionAlertWithMessage:isAudio?@"通话需要麦克风权限，请开启麦克风权限":@"视频通话需要摄像头权限，请开启摄像头权限" withSettingAction:YES withController:controller];
+                }
+                if(complete) {
+                    if(granted) {
+                        // 系统权限弹窗（TCC）收起动画期间，app 的 scene 处于 ForegroundInactive 状态，
+                        // 此时立即弹通话窗口可能失败（iOS 13+ 上无 windowScene 的 UIWindow 无法显示）。
+                        // 延迟 0.5 秒等弹窗完全消失、scene 恢复 Active 后再回调，确保通话窗口一定能弹出。
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            complete(granted);
+                        });
+                    } else {
+                        complete(granted);
+                    }
+                }
+            });
          }];
     } else {
         if(complete) complete(YES);
