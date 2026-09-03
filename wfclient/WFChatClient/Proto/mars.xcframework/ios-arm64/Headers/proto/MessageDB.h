@@ -50,6 +50,7 @@ namespace mars {
             bool UpdateUserSettings(std::list<TUserSettingEntry> &settings, bool firstSync = false);
             std::string GetUserSetting(int scope, const std::string &key);
             std::map<std::string, std::string> GetUserSettings(int scope);
+            std::map<std::string, std::string> GetUserSettingsLike(int scope, const std::string &prefix);
             
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp, long messageId, bool unread, bool mentionedMe, bool mentionAll, bool isRecall, bool isRein = false);
             bool updateConversationTimestamp(int conversationType, const std::string &target, int line, int64_t timestamp);

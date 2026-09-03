@@ -4214,6 +4214,17 @@ public:
     return result;
 }
 
+- (NSDictionary<NSString *, NSString *> *)getUserSettings:(UserSettingScope)scope keyPrefix:(NSString *)prefix {
+    std::map<std::string, std::string> settings = mars::stn::MessageDB::Instance()->GetUserSettingsLike((int)scope, [prefix UTF8String]);
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    for (std::map<std::string, std::string>::iterator it = settings.begin() ; it != settings.end(); it++) {
+        NSString *key = [NSString stringWithUTF8String:it->first.c_str()];
+        NSString *value = [NSString stringWithUTF8String:it->second.c_str()];
+        [result setObject:value forKey:key];
+    }
+    return result;
+}
+
 - (void)setUserSetting:(UserSettingScope)scope key:(NSString *)key value:(NSString *)value
                success:(void(^)())successBlock
                  error:(void(^)(int error_code))errorBlock {
