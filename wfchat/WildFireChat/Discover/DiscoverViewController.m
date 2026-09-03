@@ -22,6 +22,7 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCConfig.h"
+#import "CombineServices.h"
 
 
 @interface DiscoverViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -42,7 +43,7 @@
 //                     @{@"title":@"Things", @"image":@"discover_things",@"des":@"Things"}
     ]];
     
-    if(PAN_SERVER_ADDRESS || PAN_SERVER_BACKUP_ADDRESS) {
+    if([CombineServices isFeatureEnabled:@"pan"]) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
     }
     
@@ -77,6 +78,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUnreadCommentStatusChanged:) name:kClearUnreadComments object:nil];
     
 #endif
+    // combine 登录后功能清单变化时刷新入口
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCombineFeaturesDidUpdate) name:WFCCombineFeaturesDidUpdateNotification object:nil];
 }
 
 - (void)onUnreadCommentStatusChanged:(NSNotification *)notification {
@@ -238,6 +241,30 @@
 #endif
         }
     return cell;
+}
+
+
+#pragma mark - combine 功能刷新
+- (void)onCombineFeaturesDidUpdate {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray *newDS = [NSMutableArray arrayWithArray:@[
+            @{@"title":LocalizedString(@"Chatroom"),@"image":@"discover_chatroom",@"des":@"chatroom"},
+            @{@"title":LocalizedString(@"Robot"),@"image":@"robot",@"des":@"robot"},
+            @{@"title":LocalizedString(@"Channel"), @"image":@"chat_channel",@"des":@"channel"},
+            @{@"title":LocalizedString(@"DevDocs"), @"image":@"dev_docs",@"des":@"Dev"}
+        ]];
+        if([CombineServices isFeatureEnabled:@"pan"]) {
+            [newDS addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
+        }
+        if(NSClassFromString(@"SDTimeLineTableViewController")) {
+            [newDS insertObject:@{@"title":LocalizedString(@"Moments"),@"image":@"AlbumReflashIcon",@"des":@"moment"} atIndex:0];
+            self.hasMoments = YES;
+        } else {
+            self.hasMoments = NO;
+        }
+        self.dataSource = newDS;
+        [self.tableView reloadData];
+    });
 }
 
 @end

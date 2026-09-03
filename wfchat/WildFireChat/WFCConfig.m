@@ -7,11 +7,16 @@
 //
 
 #import "WFCConfig.h"
+#import <WFChatClient/WFCCIMService.h>
+
+// combine-server 统一服务地址：各业务已合并，客户端只配这一个地址（用户端口 8080）。
+// 运行时逻辑（统一登录/功能开关/业务请求）见 CombineServices.m。
+NSString *COMBINE_SERVER_ADDRESS = @"http://192.168.1.81:8080";
 
 //IM服务HOST，域名或者IP，注意不能带http头，也不能带端口。
-//NSString *IM_SERVER_HOST = @"192.168.1.81";
+NSString *IM_SERVER_HOST = @"192.168.1.81";
 //NSString *IM_SERVER_HOST = @"2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10"; //ipv6地址，不能带[]和端口
-NSString *IM_SERVER_HOST = @"wildfirechat.net";
+//NSString *IM_SERVER_HOST = @"wildfirechat.net";
 
 // 主网媒体地址前缀，双网环境下用于头像/媒体类消息的 URL 转换。
 NSString *MAIN_MEDIA_URL_PREFIX = nil;
@@ -24,39 +29,17 @@ NSString *BACKUP_MEDIA_URL_PREFIX = nil;
 // 如果您使用web-chat，由于最新chrome浏览器的策略，只有使用https才能带上cookie访问appserver的接口，所以就必须使
 // wfc.all_client_support_ssl为tue，所以客户端也必须使用https的应用服务地址
 
-//NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
+NSString *APP_SERVER_ADDRESS = @"http://192.168.1.81:8888";
 //NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
-NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
+//NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
 //应用服务备选地址，双网环境下使用。不需要双网时保持为 nil。
 NSString *APP_SERVER_BACKUP_ADDRESS = nil;
 
-//组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
-//组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
-NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.net";
-//组织通讯录服务备选地址，双网环境下使用。
-NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
-
-//接龙服务地址，如果没有部署，可以设置为nil。
-NSString *COLLECTION_SERVER_ADDRESS = @"https://jielong.wildfirechat.net";
-//接龙服务备选地址，双网环境下使用。
-NSString *COLLECTION_SERVER_BACKUP_ADDRESS = nil;
-
-//投票服务地址，如果没有部署，可以设置为nil。
-//NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.81:8082";
-NSString *POLL_SERVER_ADDRESS = @"https://poll.wildfirechat.net";
-//投票服务备选地址，双网环境下使用。
-NSString *POLL_SERVER_BACKUP_ADDRESS = nil;
-
-// 网盘服务地址，如果没有部署，可以设置为nil。
-//NSString *PAN_SERVER_ADDRESS = @"http://192.168.1.81:8083";
-NSString *PAN_SERVER_ADDRESS = @"https://pan.wildfirechat.net";
-//网盘服务备选地址，双网环境下使用。
-NSString *PAN_SERVER_BACKUP_ADDRESS = nil;
-
-//NSString *ARCHIVE_SERVER_ADDRESS = @"http://192.168.1.81:8088";
+//消息归档服务地址（未并入 combine，如未部署保持 nil）。
 NSString *ARCHIVE_SERVER_ADDRESS = nil;
 //消息归档服务备选地址，双网环境下使用。
 NSString *ARCHIVE_SERVER_BACKUP_ADDRESS = nil;
+
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
 // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
@@ -70,16 +53,18 @@ NSString *USER_AGREEMENT_URL = @"https://example.com/user_agreement.html";
 
 NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 
-//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了。工作平台项目地址：https://gitee.com/wfchat/open-platform
-//NSString *WORK_PLATFORM_URL = nil;
-NSString *WORK_PLATFORM_URL = @"https://open.wildfirechat.cn/work.html";
+//工作台页面已随 combine-server 部署（用户端口 /open-work/，见 open-platform/open-work）。
+//保持 nil 即跟随 combine（WFCGetWorkPlatformUrl 自动拼 COMBINE_SERVER_ADDRESS + /open-work/index.html），
+//改地址只需改上面的 COMBINE_SERVER_ADDRESS 一处。
+//如需指向其它部署（自建/公网工作台），在此填完整 URL；彻底不要工作台入口时把该地址一并置空即可。
+NSString *WORK_PLATFORM_URL = nil;
 //工作台备选地址，双网环境下使用。
 NSString *WORK_PLATFORM_BACKUP_URL = nil;
 
 //语音转文字服务地址。关于语音转文字信息请参考：https://gitee.com/wfchat/asr-api 。
 //野火提供的测试服务会记录语音文件和转换后的文字，上线会有可能泄密风险。因此请确保务必上线时购买部署自己的语音转文字服务，或者设置为nil。
 //NSString *ASR_SERVICE_URL = nil;
-NSString *ASR_SERVICE_URL = @"https://app.wildfirechat.net/asr/api/recognize";
+NSString *ASR_SERVICE_URL = @"http://192.168.1.81:8080/asr/recognize";
 //语音转文字服务备选地址，双网环境下使用。
 NSString *ASR_SERVICE_BACKUP_URL = nil;
 
@@ -105,8 +90,10 @@ NSString *DIALIN_ROBOT_ID = nil;//@"robotdialin";
 //AI语音记录助手ID，在和该助手单聊中点击通话记录可查看语音记录
 NSString *AI_MINUTES_ROBOT_ID = @"robotminutes";
 
-//语音记录查看页面地址，如：http://192.168.1.81:8883/index.html
-NSString *MINUTES_URL = @"http://101.42.4.222:8883/index.html";
+//语音记录查看页面地址（minutes 用户端 H5）：已随 combine-server 部署（用户端口 /minutes/）。
+//保持 nil 即跟随 combine（WFCGetMinutesUrl 自动拼 COMBINE_SERVER_ADDRESS + /minutes/index.html）；
+//如需指向其它部署在此填完整 URL。
+NSString *MINUTES_URL = nil;
 //语音记录查看页面备选地址，双网环境下使用。
 NSString *MINUTES_BACKUP_URL = nil;
 
@@ -144,28 +131,19 @@ NSString *WFCGetAppServerAddress(void) {
     return WFCSelectServer(APP_SERVER_ADDRESS, APP_SERVER_BACKUP_ADDRESS);
 }
 
-NSString *WFCGetOrgServerAddress(void) {
-    return WFCSelectServer(ORG_SERVER_ADDRESS, ORG_SERVER_BACKUP_ADDRESS);
-}
-
-NSString *WFCGetCollectionServerAddress(void) {
-    return WFCSelectServer(COLLECTION_SERVER_ADDRESS, COLLECTION_SERVER_BACKUP_ADDRESS);
-}
-
-NSString *WFCGetPollServerAddress(void) {
-    return WFCSelectServer(POLL_SERVER_ADDRESS, POLL_SERVER_BACKUP_ADDRESS);
-}
-
-NSString *WFCGetPanServerAddress(void) {
-    return WFCSelectServer(PAN_SERVER_ADDRESS, PAN_SERVER_BACKUP_ADDRESS);
-}
-
 NSString *WFCGetArchiveServerAddress(void) {
     return WFCSelectServer(ARCHIVE_SERVER_ADDRESS, ARCHIVE_SERVER_BACKUP_ADDRESS);
 }
 
 NSString *WFCGetWorkPlatformUrl(void) {
-    return WFCSelectServer(WORK_PLATFORM_URL, WORK_PLATFORM_BACKUP_URL);
+    if (WORK_PLATFORM_URL.length || WORK_PLATFORM_BACKUP_URL.length) {
+        return WFCSelectServer(WORK_PLATFORM_URL, WORK_PLATFORM_BACKUP_URL);
+    }
+    // 未单独配置：跟随 combine（工作台 H5 由 combine 用户端口托管）
+    if (COMBINE_SERVER_ADDRESS.length) {
+        return [COMBINE_SERVER_ADDRESS stringByAppendingString:@"/open-work/index.html"];
+    }
+    return nil;
 }
 
 NSString *WFCGetAsrServiceUrl(void) {
@@ -173,5 +151,12 @@ NSString *WFCGetAsrServiceUrl(void) {
 }
 
 NSString *WFCGetMinutesUrl(void) {
-    return WFCSelectServer(MINUTES_URL, MINUTES_BACKUP_URL);
+    if (MINUTES_URL.length || MINUTES_BACKUP_URL.length) {
+        return WFCSelectServer(MINUTES_URL, MINUTES_BACKUP_URL);
+    }
+    // 未单独配置：跟随 combine（会议纪要 H5 由 combine 用户端口托管）
+    if (COMBINE_SERVER_ADDRESS.length) {
+        return [COMBINE_SERVER_ADDRESS stringByAppendingString:@"/minutes/index.html"];
+    }
+    return nil;
 }

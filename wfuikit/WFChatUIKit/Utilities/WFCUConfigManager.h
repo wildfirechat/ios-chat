@@ -102,6 +102,12 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
  */
 @property(nonatomic, copy)NSString *(^minutesUrlProvider)(void);
 
+/**
+ * 提供 combine 全局 authToken（宿主 App 注入）。业务 H5（工作台/会议纪要）打开时，
+ * 若本 provider 有值，会在页面 URL 上附加 authToken 参数，页面存 localStorage 后请求自动带头。
+ */
+@property(nonatomic, copy)NSString *(^combineAuthTokenProvider)(void);
+
 @property(nonatomic, strong)NSString *conversationFilesDir;
 
 @property(nonatomic, assign)BOOL enableMultiCallAutoJoin;

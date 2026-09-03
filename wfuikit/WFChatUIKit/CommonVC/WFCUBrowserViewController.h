@@ -12,4 +12,6 @@
 @property(nonatomic, strong)NSString *url;
 @property(nonatomic, strong)NSString *htmlString;
 @property(nonatomic, assign)BOOL hidenOpenInBrowser;
+// 重新加载指定 URL（可用于 token 刷新后重载页面；webView 未初始化时仅更新 url，viewDidLoad 会加载）
+- (void)loadUrl:(NSString *)urlString;
 @end

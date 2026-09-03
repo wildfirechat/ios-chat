@@ -7,6 +7,7 @@
 //
 
 #import "WFCDestroyAccountViewController.h"
+#import "CombineServices.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #import "AppDelegate.h"
@@ -15,7 +16,6 @@
 #import "UILabel+YBAttributeTextTapAction.h"
 #import "WFCPrivacyViewController.h"
 #import "AppService.h"
-#import "OrgService.h"
 #import "UIColor+YH.h"
 #import "UIFont+YH.h"
 #import "SSKeychain.h"
@@ -206,7 +206,7 @@
         [SSKeychain deletePasswordForWFService:@"savedToken"];
         [SSKeychain deletePasswordForWFService:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
-        [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
+        [[CombineServices sharedInstance] clearAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         //服务器已经删除所有信息了，这里都传NO。不能传YES，如果传YES协议栈会需要跟IM服务进行交互。

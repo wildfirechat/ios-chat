@@ -7,6 +7,7 @@
 //
 
 #import "WFCSettingTableViewController.h"
+#import "CombineServices.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import <WFChatUIKit/WFChatUIKit.h>
@@ -21,7 +22,6 @@
 #import "WFCLanguageTableViewController.h"
 #import "WFCLanguageManager.h"
 #import "AppService.h"
-#import "OrgService.h"
 #import "WFCDestroyAccountViewController.h"
 #import "SSKeychain.h"
 #import "WFCBackupAndRestoreViewController.h"
@@ -379,7 +379,7 @@
         [SSKeychain deletePasswordForWFService:@"savedToken"];
         [SSKeychain deletePasswordForWFService:@"savedUserId"];
         [[AppService sharedAppService] clearAppServiceAuthInfos];
-        [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
+        [[CombineServices sharedInstance] clearAuthInfos];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         //退出后就不需要推送了，第一个参数为YES

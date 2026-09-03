@@ -12,6 +12,7 @@
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
 #import "WFCConfig.h"
+#import "CombineServices.h"
 
 #import "UIFont+YH.h"
 #ifdef WFC_MOMENTS
@@ -38,10 +39,14 @@
 }
 @end
 
-@interface WFCBaseTabBarController () <UIGestureRecognizerDelegate>
+@interface WFCBaseTabBarController () <UIGestureRecognizerDelegate, UITabBarControllerDelegate>
 @property (nonatomic, strong)UINavigationController *firstNav;
 @property (nonatomic, strong)UINavigationController *settingNav;
 @property (nonatomic, strong)WFCUConversationTableViewController *conversationsViewController;
+// 工作台（combine）自动刷新 token：每次切到工作台 Tab 时若全局 authToken 已变化则重载页面
+@property (nonatomic, weak)UINavigationController *workNav;
+@property (nonatomic, weak)WFCUBrowserViewController *workBrowserVC;
+@property (nonatomic, copy)NSString *lastWorkUrl;
 @end
 
 @implementation WFCBaseTabBarController
@@ -69,6 +74,8 @@
     [self setValue:tabBar forKey:@"tabBar"];
     
     [super viewDidLoad];
+    
+    self.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onFontScaleChanged:)
@@ -106,9 +113,11 @@
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.1 green:0.27 blue:0.9 alpha:0.9]} forState:UIControlStateSelected];
     [self addChildViewController:nav];
     
-    if((WORK_PLATFORM_URL ?: WORK_PLATFORM_BACKUP_URL).length) {
+    if(WFCGetWorkPlatformUrl().length) {
         WFCUBrowserViewController *browserVC = [WFCUBrowserViewController new];
-        browserVC.url = WFCGetWorkPlatformUrl();
+        // combine 工作台：URL 携带全局 authToken，页面存入 localStorage 后 /api/open 请求自动带头（见 open-work）
+        NSString *workUrl = [self workPlatformUrlWithAuthToken];
+        browserVC.url = workUrl;
         browserVC.hidenOpenInBrowser = YES;
         browserVC.title = LocalizedString(@"Work");
 
@@ -122,6 +131,9 @@
         }
         vc.title = LocalizedString(@"Work");
         nav = [[WFCUPadPrimaryNavigationController alloc] initWithRootViewController:vc];
+        self.workNav = nav;
+        self.workBrowserVC = browserVC;
+        self.lastWorkUrl = workUrl;
         item = nav.tabBarItem;
         item.title = LocalizedString(@"Work");
         item.image = [UIImage imageNamed:@"tabbar_work"];
@@ -232,7 +244,7 @@
 - (void)updateBadgeNumber {
 #ifdef WFC_MOMENTS
     int momentIndex = 2;
-    if((WORK_PLATFORM_URL ?: WORK_PLATFORM_BACKUP_URL).length)
+    if(WFCGetWorkPlatformUrl().length)
         momentIndex = 3;
     [self.tabBar showBadgeOnItemIndex:momentIndex badgeValue:[[WFMomentService sharedService] getUnreadCount]];
 #endif
@@ -248,6 +260,31 @@
             UIView *superView = self.view.superview;
             [self.view removeFromSuperview];
             [superView addSubview:self.view];
+        }
+    }
+}
+
+#pragma mark - combine 工作台 token 自动刷新
+
+// 工作台地址 + 当前 combine 全局 authToken（URL 参数，页面存 localStorage 后请求自动带头）
+- (NSString *)workPlatformUrlWithAuthToken {
+    NSString *workUrl = WFCGetWorkPlatformUrl();
+    NSString *combineToken = [CombineServices authToken];
+    if (combineToken.length) {
+        NSString *sep = [workUrl containsString:@"?"] ? @"&" : @"?";
+        workUrl = [workUrl stringByAppendingFormat:@"%@authToken=%@", sep, combineToken];
+    }
+    return workUrl;
+}
+
+// 每次切到工作台 Tab：若 authToken 与上次加载时不同（重新登录/过期重登/被踢清理后），
+// 重拼 URL 并重载页面，用户无需手动退出重进
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if (self.workBrowserVC && viewController == self.workNav) {
+        NSString *workUrl = [self workPlatformUrlWithAuthToken];
+        if (![workUrl isEqualToString:self.lastWorkUrl]) {
+            self.lastWorkUrl = workUrl;
+            [self.workBrowserVC loadUrl:workUrl];
         }
     }
 }

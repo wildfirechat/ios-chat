@@ -13,6 +13,7 @@
 //删除掉应用工程中的WebRTC.framework和WFAVEngineKit.framework这两个库。
 
 #import "AppDelegate.h"
+#import "CombineServices.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatUIKit/WFChatUIKit.h>
 #if WFCU_SUPPORT_VOIP
@@ -38,11 +39,7 @@
 
 #import "TYHWaterMark.h"
 
-#import "OrgService.h"
-#import "CollectionService.h"
 
-#import "PollService.h"
-#import "PanService.h"
 #import "ArchiveService.h"
 
 #if USE_CALL_KIT
@@ -165,16 +162,12 @@
     
     [WFCUConfigManager globalManager].appServiceProvider = [AppService sharedAppService];
     [WFCUConfigManager globalManager].fileTransferId = FILE_TRANSFER_ID;
-    [WFCUConfigManager globalManager].orgServiceProvider = [OrgService sharedOrgService];
-    if(COLLECTION_SERVER_ADDRESS || COLLECTION_SERVER_BACKUP_ADDRESS) {
-        [WFCUConfigManager globalManager].collectionServiceProvider = [CollectionService sharedService];
-    }
-    if(POLL_SERVER_ADDRESS || POLL_SERVER_BACKUP_ADDRESS) {
-        [WFCUConfigManager globalManager].pollServiceProvider = [PollService sharedService];
-    }
-    if(PAN_SERVER_ADDRESS || PAN_SERVER_BACKUP_ADDRESS) {
-        [WFCUConfigManager globalManager].panServiceProvider = [PanService sharedService];
-    }
+    // 4 个业务协议（投票/网盘/接龙/组织通讯录）由单一 CombineServices 实例提供（合并自 Poll/Pan/Collection/OrgService）
+    CombineServices *combineServices = [CombineServices sharedInstance];
+    [WFCUConfigManager globalManager].orgServiceProvider = combineServices;
+    [WFCUConfigManager globalManager].collectionServiceProvider = combineServices;
+    [WFCUConfigManager globalManager].pollServiceProvider = combineServices;
+    [WFCUConfigManager globalManager].panServiceProvider = combineServices;
     if(ARCHIVE_SERVER_ADDRESS || ARCHIVE_SERVER_BACKUP_ADDRESS) {
         [WFCUConfigManager globalManager].archiveServiceProvider = [ArchiveService sharedService];
     }
@@ -197,6 +190,10 @@
     [WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID = AI_MINUTES_ROBOT_ID;
     [WFCUConfigManager globalManager].minutesUrlProvider = ^NSString *{
         return WFCGetMinutesUrl();
+    };
+    // combine 全局 authToken：业务 H5（工作台/会议纪要）打开时附加到 URL，页面存 localStorage 后请求自动带头
+    [WFCUConfigManager globalManager].combineAuthTokenProvider = ^NSString *{
+        return [CombineServices authToken];
     };
     
     //可以在WFCUMessageListViewController界面代码中绑定消息和Cell的对应关系（注册Cell），也可以在这里注册。
@@ -755,6 +752,7 @@
             [SSKeychain deletePasswordForWFService:@"savedToken"];
             [SSKeychain deletePasswordForWFService:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
+            [[CombineServices sharedInstance] clearAuthInfos]; // 退出/被踢：清空 combine 登录态，避免新账号沿用旧 token/功能清单
             [[NSUserDefaults standardUserDefaults] synchronize];
         } else if (status == kConnectionStatusLogout) {
             BOOL alreadyShowLoginVC = NO;
@@ -772,7 +770,7 @@
             [SSKeychain deletePasswordForWFService:@"savedToken"];
             [SSKeychain deletePasswordForWFService:@"savedUserId"];
             [[AppService sharedAppService] clearAppServiceAuthInfos];
-            [[OrgService sharedOrgService] clearOrgServiceAuthInfos];
+            [[CombineServices sharedInstance] clearAuthInfos]; // 登出/切换账号：清空 combine 登录态与业务缓存
             [[NSUserDefaults standardUserDefaults] synchronize];
             
             self.firstConnected = NO;
@@ -783,11 +781,14 @@
                     [self prepardDataForShareExtension];
                 });
                 
-                [[OrgService sharedOrgService] login:^{
-                    NSLog(@"on org service login success");
-                    [[WFCUOrganizationCache sharedCache] loadMyOrganizationInfos];
-                } error:^(int errCode) {
-                    NSLog(@"on org service login failure");
+                [CombineServices ensureLogin:^(BOOL ok) {
+                    if (ok) {
+                        NSLog(@"on combine login success");
+                        [[WFCUOrganizationCache sharedCache] loadMyOrganizationInfos];
+                        [self applyCombineFeatures];
+                    } else {
+                        NSLog(@"on combine login failure");
+                    }
                 }];
             }
         } else if(status == kConnectionStatusNotLicensed) {
@@ -1477,6 +1478,20 @@ void systemAudioCallback (SystemSoundID soundID, void* clientData) {
 }
 
 - (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0)) {
+}
+
+
+#pragma mark - combine 功能开关收敛
+// 按 combine user_login 返回的 features 设置各业务 provider（nil=未开启，UI 隐藏入口）
+- (void)applyCombineFeatures {
+    WFCUConfigManager *cfg = [WFCUConfigManager globalManager];
+    // 单一 CombineServices 实例按功能清单挂载/摘除到各 provider
+    CombineServices *combineServices = [CombineServices sharedInstance];
+    cfg.pollServiceProvider = [CombineServices isFeatureEnabled:@"poll"] ? combineServices : nil;
+    cfg.collectionServiceProvider = [CombineServices isFeatureEnabled:@"collection"] ? combineServices : nil;
+    cfg.panServiceProvider = [CombineServices isFeatureEnabled:@"pan"] ? combineServices : nil;
+    cfg.orgServiceProvider = [CombineServices isFeatureEnabled:@"org"] ? combineServices : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCCombineFeaturesDidUpdateNotification object:nil];
 }
 
 @end

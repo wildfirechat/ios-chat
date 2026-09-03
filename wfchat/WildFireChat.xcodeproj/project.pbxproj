@@ -109,7 +109,6 @@
 		B71F0B0728F547C2000A7C8A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AF828F547C2000A7C8A /* DDLog.m */; };
 		B71F0B0828F547C2000A7C8A /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */; };
 		B71F0B0928F547C2000A7C8A /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */; };
-		B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */ = {isa = PBXBuildFile; fileRef = B749E9AB2F3F8EB60092DEAE /* CollectionService.m */; };
 		B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */; };
 		B75866E92F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866E82F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m */; };
 		B75866F22F14E20F00D62775 /* WFCRestoreSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75866F12F14E20F00D62775 /* WFCRestoreSourceViewController.m */; };
@@ -121,14 +120,12 @@
 		B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B75D81872782E0C5009D4A19 /* WFChatClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; };
 		B75D81882782E0C5009D4A19 /* WFChatClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B75D81862782E0C5009D4A19 /* WFChatClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B764D48F295854700082492F /* OrgService.m in Sources */ = {isa = PBXBuildFile; fileRef = B764D48D295854700082492F /* OrgService.m */; };
 		B76C1DDB2D695F5B00B1B0D8 /* GTSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */; };
 		B76C1DDC2D695F5B00B1B0D8 /* GTCommonSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */; };
 		B76C1DE22D69650500B1B0D8 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DDF2D69650500B1B0D8 /* Utils.m */; };
 		B76C1DE32D69650500B1B0D8 /* UIView+Gt.m in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DE12D69650500B1B0D8 /* UIView+Gt.m */; };
 		B76C1DE52D6965DA00B1B0D8 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */; };
 		B76C1DF32D696E7600B1B0D8 /* ControlsCenterUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */; };
-		B770E8BD2F40C55400D4B219 /* PollService.m in Sources */ = {isa = PBXBuildFile; fileRef = B770E8BB2F40C55400D4B219 /* PollService.m */; };
 		B7719FFE2F624F9400735720 /* ArchiveMessagePayload.m in Sources */ = {isa = PBXBuildFile; fileRef = B7719FFD2F624F9400735720 /* ArchiveMessagePayload.m */; };
 		B771A0012F6258F600735720 /* ArchiveMessageResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B771A0002F6258F600735720 /* ArchiveMessageResult.m */; };
 		B78B18552CF719E0008A2C09 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B184F2CF719E0008A2C09 /* SSKeychain.m */; };
@@ -137,6 +134,7 @@
 		B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051774D2243CD8D0020A2AC /* Security.framework */; };
 		B78DD43828167D1E009589F7 /* WFCCallKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78DD43728167D1E009589F7 /* WFCCallKitManager.m */; };
 		B7981A352F2A1356004AB1F3 /* WFCFavoriteCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */; };
+		B79889683048448900FC7EE6 /* CombineServices.m in Sources */ = {isa = PBXBuildFile; fileRef = B79889673048448900FC7EE6 /* CombineServices.m */; };
 		B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
 		B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */; };
@@ -161,7 +159,6 @@
 		B7D9B2AF2D8447E000402CC4 /* WFRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* WFRedirector.m */; };
 		B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */; };
 		B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */; };
-		B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6312F4D8BFA003E481E /* PanService.m */; };
 		B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
@@ -428,8 +425,6 @@
 		B71F0AFB28F547C2000A7C8A /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
 		B71F0AFC28F547C2000A7C8A /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
 		B71F0AFD28F547C2000A7C8A /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
-		B749E9AA2F3F8EB60092DEAE /* CollectionService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionService.h; sourceTree = "<group>"; };
-		B749E9AB2F3F8EB60092DEAE /* CollectionService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionService.m; sourceTree = "<group>"; };
 		B75866E02F14C29100D62775 /* WFCBackupTargetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupTargetViewController.h; sourceTree = "<group>"; };
 		B75866E12F14C29100D62775 /* WFCBackupTargetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupTargetViewController.m; sourceTree = "<group>"; };
 		B75866E72F14C9AA00D62775 /* WFCBackupRequestProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupRequestProgressViewController.h; sourceTree = "<group>"; };
@@ -443,8 +438,6 @@
 		B75D81662782B8AD009D4A19 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WebRTC.xcframework; sourceTree = "<group>"; };
 		B75D81672782B8AD009D4A19 /* WFAVEngineKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFAVEngineKit.xcframework; path = ../../wfuikit/WFChatUIKit/AVEngine/WFAVEngineKit.xcframework; sourceTree = "<group>"; };
 		B75D81862782E0C5009D4A19 /* WFChatClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WFChatClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B764D48D295854700082492F /* OrgService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrgService.m; sourceTree = "<group>"; };
-		B764D48E295854700082492F /* OrgService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrgService.h; sourceTree = "<group>"; };
 		B76C1DD92D695F5B00B1B0D8 /* GTCommonSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTCommonSDK.xcframework; sourceTree = "<group>"; };
 		B76C1DDA2D695F5B00B1B0D8 /* GTSDK.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:3MJY223U56:Zhejiang Merit Interactive Network Technology Co., Ltd."; lastKnownFileType = wrapper.xcframework; path = GTSDK.xcframework; sourceTree = "<group>"; };
 		B76C1DDE2D69650500B1B0D8 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -454,8 +447,6 @@
 		B76C1DE42D6965B600B1B0D8 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		B76C1DF12D696E2100B1B0D8 /* WildFireChat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WildFireChat-Bridging-Header.h"; sourceTree = "<group>"; };
 		B76C1DF22D696E7600B1B0D8 /* ControlsCenterUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsCenterUtils.swift; sourceTree = "<group>"; };
-		B770E8BA2F40C55400D4B219 /* PollService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PollService.h; sourceTree = "<group>"; };
-		B770E8BB2F40C55400D4B219 /* PollService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PollService.m; sourceTree = "<group>"; };
 		B7719FFC2F624F9400735720 /* ArchiveMessagePayload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMessagePayload.h; sourceTree = "<group>"; };
 		B7719FFD2F624F9400735720 /* ArchiveMessagePayload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveMessagePayload.m; sourceTree = "<group>"; };
 		B7719FFF2F6258F600735720 /* ArchiveMessageResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMessageResult.h; sourceTree = "<group>"; };
@@ -469,6 +460,8 @@
 		B78DD43728167D1E009589F7 /* WFCCallKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCCallKitManager.m; sourceTree = "<group>"; };
 		B7981A332F2A1356004AB1F3 /* WFCFavoriteCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCFavoriteCardCell.h; sourceTree = "<group>"; };
 		B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCFavoriteCardCell.m; sourceTree = "<group>"; };
+		B79889663048448900FC7EE6 /* CombineServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CombineServices.h; sourceTree = "<group>"; };
+		B79889673048448900FC7EE6 /* CombineServices.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombineServices.m; sourceTree = "<group>"; };
 		B79915CD2F0EA5AF001C4EE7 /* WFCSlideVerifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCSlideVerifyView.h; sourceTree = "<group>"; };
 		B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCSlideVerifyView.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
@@ -509,8 +502,6 @@
 		B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveService.m; sourceTree = "<group>"; };
 		B7DA71FD2F60FBEB00C112C8 /* ArchivedMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchivedMessage.h; sourceTree = "<group>"; };
 		B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchivedMessage.m; sourceTree = "<group>"; };
-		B7DEB6302F4D8BFA003E481E /* PanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanService.h; sourceTree = "<group>"; };
-		B7DEB6312F4D8BFA003E481E /* PanService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanService.m; sourceTree = "<group>"; };
 		B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
 		B7E494E328F670BA00FF2333 /* libyuv.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libyuv.xcframework; sourceTree = "<group>"; };
 		B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCDestroyAccountViewController.m; sourceTree = "<group>"; };
@@ -683,12 +674,9 @@
 		2E1D1FF91FAF0AE600F4405D /* WildFireChat */ = {
 			isa = PBXGroup;
 			children = (
+				B79889653048447400FC7EE6 /* CombineServices */,
 				B7DA71FF2F60FBEB00C112C8 /* ArchiveService */,
-				B7DEB6322F4D8BFA003E481E /* PanService */,
-				B770E8BC2F40C55400D4B219 /* PollService */,
-				B749E9AC2F3F8EB60092DEAE /* CollectionService */,
 				B76C1DD82D695EF900B1B0D8 /* Getui */,
-				B764D48C295854700082492F /* OrgService */,
 				B7EDF7DC285815EF0013602E /* DestroyAccount */,
 				2F63891F254E5A500084EEA6 /* Favorite */,
 				2F5527BD252CB2F900B0CDCB /* ShareExtension */,
@@ -1091,24 +1079,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		B749E9AC2F3F8EB60092DEAE /* CollectionService */ = {
-			isa = PBXGroup;
-			children = (
-				B749E9AA2F3F8EB60092DEAE /* CollectionService.h */,
-				B749E9AB2F3F8EB60092DEAE /* CollectionService.m */,
-			);
-			path = CollectionService;
-			sourceTree = "<group>";
-		};
-		B764D48C295854700082492F /* OrgService */ = {
-			isa = PBXGroup;
-			children = (
-				B764D48E295854700082492F /* OrgService.h */,
-				B764D48D295854700082492F /* OrgService.m */,
-			);
-			path = OrgService;
-			sourceTree = "<group>";
-		};
 		B76C1DD82D695EF900B1B0D8 /* Getui */ = {
 			isa = PBXGroup;
 			children = (
@@ -1130,15 +1100,6 @@
 				B76C1DF12D696E2100B1B0D8 /* WildFireChat-Bridging-Header.h */,
 			);
 			path = GTUtils;
-			sourceTree = "<group>";
-		};
-		B770E8BC2F40C55400D4B219 /* PollService */ = {
-			isa = PBXGroup;
-			children = (
-				B770E8BA2F40C55400D4B219 /* PollService.h */,
-				B770E8BB2F40C55400D4B219 /* PollService.m */,
-			);
-			path = PollService;
 			sourceTree = "<group>";
 		};
 		B78B184C2CF71943008A2C09 /* Vendor */ = {
@@ -1166,6 +1127,15 @@
 			path = SSKeychain;
 			sourceTree = "<group>";
 		};
+		B79889653048447400FC7EE6 /* CombineServices */ = {
+			isa = PBXGroup;
+			children = (
+				B79889663048448900FC7EE6 /* CombineServices.h */,
+				B79889673048448900FC7EE6 /* CombineServices.m */,
+			);
+			path = CombineServices;
+			sourceTree = "<group>";
+		};
 		B7C177582CE83720005A5E1B /* TYHWaterMark */ = {
 			isa = PBXGroup;
 			children = (
@@ -1188,15 +1158,6 @@
 				B771A0002F6258F600735720 /* ArchiveMessageResult.m */,
 			);
 			path = ArchiveService;
-			sourceTree = "<group>";
-		};
-		B7DEB6322F4D8BFA003E481E /* PanService */ = {
-			isa = PBXGroup;
-			children = (
-				B7DEB6302F4D8BFA003E481E /* PanService.h */,
-				B7DEB6312F4D8BFA003E481E /* PanService.m */,
-			);
-			path = PanService;
 			sourceTree = "<group>";
 		};
 		B7E494E228F670BA00FF2333 /* libyuv */ = {
@@ -1440,6 +1401,7 @@
 				2FF07F5E21F82E7200A78A62 /* WFCMeTableViewController.m in Sources */,
 				B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */,
 				2F638928254E7D8A0084EEA6 /* WFCFavoriteBaseCell.m in Sources */,
+				B79889683048448900FC7EE6 /* CombineServices.m in Sources */,
 				B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */,
 				B7ABFF3D2F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m in Sources */,
 				B75866E92F14C9AA00D62775 /* WFCBackupRequestProgressViewController.m in Sources */,
@@ -1449,13 +1411,10 @@
 				B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */,
 				B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */,
 				B7ABFF402F10DA7A00C3DEEC /* WFCBackupOptionsViewController.m in Sources */,
-				B749E9AD2F3F8EB60092DEAE /* CollectionService.m in Sources */,
 				B7ABFF412F10DA7A00C3DEEC /* WFCConversationSelectViewController.m in Sources */,
-				B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */,
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
-				B770E8BD2F40C55400D4B219 /* PollService.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
 				B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */,
 				155cfc85be4049a2948636f5 /* WFCFontSizeViewController.m in Sources */,
@@ -1464,7 +1423,6 @@
 				2FFDDCA8255168D100CEFDBB /* WFCFavoriteCompositeCell.m in Sources */,
 				B7719FFE2F624F9400735720 /* ArchiveMessagePayload.m in Sources */,
 				B75866E22F14C29100D62775 /* WFCBackupTargetViewController.m in Sources */,
-				B764D48F295854700082492F /* OrgService.m in Sources */,
 				2F70C73B2417DB6C0058BD27 /* DiscoverMomentsTableViewCell.m in Sources */,
 				B7D9B2AF2D8447E000402CC4 /* WFRedirector.m in Sources */,
 				2F4B0EAA245BFCE7000A41C6 /* DeviceTableViewController.m in Sources */,
@@ -1632,9 +1590,9 @@
 		2E1D200B1FAF0AE600F4405D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1692,9 +1650,9 @@
 		2E1D200C1FAF0AE600F4405D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

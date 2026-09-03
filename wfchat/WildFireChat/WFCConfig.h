@@ -12,6 +12,10 @@
 
 extern NSString *IM_SERVER_HOST;
 
+// combine-server 统一服务地址：poll/collection/pan/org 已合并到 combine，客户端只配这一个地址。
+// 统一登录 / 功能开关 / 业务请求等运行时逻辑见 CombineServices（WFCConfig 只负责配置）。
+extern NSString *COMBINE_SERVER_ADDRESS;
+
 // 双网媒体地址前缀，用于头像/媒体类消息中的 URL 转换。
 // 只在双网环境下配置，不需要双网时保持为 nil。
 extern NSString *MAIN_MEDIA_URL_PREFIX;
@@ -19,14 +23,6 @@ extern NSString *BACKUP_MEDIA_URL_PREFIX;
 
 extern NSString *APP_SERVER_ADDRESS;
 extern NSString *APP_SERVER_BACKUP_ADDRESS;
-extern NSString *ORG_SERVER_ADDRESS;
-extern NSString *ORG_SERVER_BACKUP_ADDRESS;
-extern NSString *COLLECTION_SERVER_ADDRESS;
-extern NSString *COLLECTION_SERVER_BACKUP_ADDRESS;
-extern NSString *POLL_SERVER_ADDRESS;
-extern NSString *POLL_SERVER_BACKUP_ADDRESS;
-extern NSString *PAN_SERVER_ADDRESS;
-extern NSString *PAN_SERVER_BACKUP_ADDRESS;
 extern NSString *ARCHIVE_SERVER_ADDRESS;
 extern NSString *ARCHIVE_SERVER_BACKUP_ADDRESS;
 
@@ -42,7 +38,8 @@ extern NSString *USER_AGREEMENT_URL;
 //文件传输助手用户ID，服务器有个默认文件助手的机器人，如果修改它的ID，需要客户端和服务器数据库同步修改
 extern NSString *FILE_TRANSFER_ID;
 
-//如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了
+//工作台入口：WORK_PLATFORM_URL 置 nil 时跟随 combine（地址 = COMBINE_SERVER_ADDRESS + /open-work/index.html）；
+//填 URL 则指向该地址；两者都为空且未配置 COMBINE_SERVER_ADDRESS 时不显示工作台 Tab
 extern NSString *WORK_PLATFORM_URL;
 extern NSString *WORK_PLATFORM_BACKUP_URL;
 
@@ -86,10 +83,6 @@ extern NSString *MINUTES_BACKUP_URL;
 NSString *WFCSelectServer(NSString *main, NSString *backup);
 
 NSString *WFCGetAppServerAddress(void);
-NSString *WFCGetOrgServerAddress(void);
-NSString *WFCGetCollectionServerAddress(void);
-NSString *WFCGetPollServerAddress(void);
-NSString *WFCGetPanServerAddress(void);
 NSString *WFCGetArchiveServerAddress(void);
 NSString *WFCGetWorkPlatformUrl(void);
 NSString *WFCGetAsrServiceUrl(void);

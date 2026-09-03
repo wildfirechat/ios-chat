@@ -3046,6 +3046,11 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         if ([[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID length] && [self.conversation.target isEqualToString:[WFCUConfigManager globalManager].AI_MINUTES_ROBOT_ID]) {
             NSString *encodedConferenceId = [minutesMsg.meetingId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             NSString *url = [NSString stringWithFormat:@"%@?conferenceId=%@", [WFCUConfigManager globalManager].MINUTES_URL, encodedConferenceId];
+            // combine 会议纪要 H5：附加全局 authToken，页面存 localStorage 后 /webapi 请求自动带头
+            NSString *combineToken = [WFCUConfigManager globalManager].combineAuthTokenProvider ? [WFCUConfigManager globalManager].combineAuthTokenProvider() : nil;
+            if (combineToken.length) {
+                url = [url stringByAppendingFormat:@"&authToken=%@", combineToken];
+            }
             WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
             bvc.url = url;
             bvc.hidesBottomBarWhenPushed = YES;

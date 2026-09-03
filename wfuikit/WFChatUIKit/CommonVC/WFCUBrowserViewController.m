@@ -45,17 +45,32 @@
 #endif
     
     if(self.url.length) {
-        NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self.url, (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL, kCFStringEncodingUTF8));
-        if (![NSURL URLWithString:encodedString].scheme) {
-            encodedString = [@"http://" stringByAppendingString:encodedString];
-        }
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:encodedString]]];
+        [self reloadCurrentUrl];
         if(!self.hidenOpenInBrowser) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStyleDone target:self action:@selector(onRightBtn:)];
         }
     } else {
         [self.webView loadHTMLString:self.htmlString baseURL:nil];
     }
+}
+
+- (void)loadUrl:(NSString *)urlString {
+    self.url = urlString;
+    if (self.webView) {
+        [self reloadCurrentUrl];
+    }
+    // webView 尚未创建（viewDidLoad 未执行）：仅更新 url，由 viewDidLoad 统一加载
+}
+
+- (void)reloadCurrentUrl {
+    if (!self.webView || !self.url.length) {
+        return;
+    }
+    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self.url, (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]", NULL, kCFStringEncodingUTF8));
+    if (![NSURL URLWithString:encodedString].scheme) {
+        encodedString = [@"http://" stringByAppendingString:encodedString];
+    }
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:encodedString]]];
 }
 
 - (void)onRightBtn:(id)sender {
