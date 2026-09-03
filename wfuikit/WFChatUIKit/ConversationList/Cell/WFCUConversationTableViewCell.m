@@ -272,9 +272,9 @@
         _offcialView.hidden = YES;
     }
 
-    //DSH 会话：标题后加 8pt 状态圆点；DSH 群标题旁加"DSH"描边小徽标（仅 DSH 会话显示）
-    BOOL isDsh = [WFCUDshState isDshConversation:conversation];
-    NSDictionary *dshState = isDsh ? [WFCUDshState dshState:conversation] : nil;
+    //AI 会话：标题后加 8pt 状态圆点；AI 群标题旁加"AI"描边小徽标（仅 AI 会话显示）
+    BOOL isDsh = [WFCUAgentState isDshConversation:conversation];
+    NSDictionary *dshState = isDsh ? [WFCUAgentState dshState:conversation] : nil;
     //AI 群群主（AI 机器人）不在线：状态圆点/徽标置灰（不显示运行态颜色）
     BOOL aiOffline = NO;
     if (isDsh && conversation.type == Group_Type) {
@@ -300,7 +300,7 @@
     }
     if (dshState) {
         self.dshDotView.hidden = NO;
-        self.dshDotView.backgroundColor = aiOffline ? dshMutedColor : [WFCUDshState stateColor:dshState[@"state"]];
+        self.dshDotView.backgroundColor = aiOffline ? dshMutedColor : [WFCUAgentState stateColor:dshState[@"state"]];
         self.dshDotView.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 6, 8, 8);
         dshX += 8 + 4;
     } else {
@@ -313,8 +313,8 @@
             self.dshBadgeLabel.textColor = dshMutedColor;
             self.dshBadgeLabel.layer.borderColor = dshMutedColor.CGColor;
         } else {
-            self.dshBadgeLabel.textColor = [WFCUDshState accentColor];
-            self.dshBadgeLabel.layer.borderColor = [WFCUDshState accentColor].CGColor;
+            self.dshBadgeLabel.textColor = [WFCUAgentState accentColor];
+            self.dshBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
         }
     } else {
         _dshBadgeLabel.hidden = YES;
@@ -523,13 +523,13 @@
     if (!_dshBadgeLabel) {
         _dshBadgeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _dshBadgeLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:9];
-        _dshBadgeLabel.textColor = [WFCUDshState accentColor];
+        _dshBadgeLabel.textColor = [WFCUAgentState accentColor];
         _dshBadgeLabel.layer.borderWidth = 1;
-        _dshBadgeLabel.layer.borderColor = [WFCUDshState accentColor].CGColor;
+        _dshBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
         _dshBadgeLabel.layer.cornerRadius = 2;
         _dshBadgeLabel.layer.masksToBounds = YES;
         _dshBadgeLabel.textAlignment = NSTextAlignmentCenter;
-        _dshBadgeLabel.text = @"DSH";
+        _dshBadgeLabel.text = @"AI";
         _dshBadgeLabel.hidden = YES;
         [self.contentView addSubview:_dshBadgeLabel];
     }

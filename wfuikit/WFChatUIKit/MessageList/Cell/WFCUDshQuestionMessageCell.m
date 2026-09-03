@@ -20,7 +20,7 @@
 #define DSH_OPTION_ROW_HEIGHT 40
 #define DSH_OPTION_SPACING 6
 
-@interface WFCUDshQuestionMessageCell ()
+@interface WFCUAgentQuestionMessageCell ()
 @property (nonatomic, strong)NSMutableArray<UIView *> *dynamicViews;
 //选项按钮元数据，tag 为下标：@{questionId, label, multiSelect}
 @property (nonatomic, strong)NSMutableArray<NSDictionary *> *optionMeta;
@@ -30,7 +30,7 @@
 @property (nonatomic, strong)UIButton *submitButton;
 @end
 
-@implementation WFCUDshQuestionMessageCell
+@implementation WFCUAgentQuestionMessageCell
 
 + (BOOL)isPlanReview:(NSDictionary *)question {
     NSDictionary *intent = question[@"intent"];
@@ -49,7 +49,7 @@
 
 //服务端 updateMessage 回填的用户选择：answers[].selected join、或 answers[].custom。
 //仅 state==answered 时展示；多题答案以"；"连接，整体包裹"（）"。
-+ (NSString *)selectionTextOfContent:(WFCCDshQuestionMessageContent *)content {
++ (NSString *)selectionTextOfContent:(WFCCAgentQuestionMessageContent *)content {
     if (![content.state isEqualToString:@"answered"]) {
         return @"";
     }
@@ -79,7 +79,7 @@
 }
 
 //状态行完整文案："已作答（选项1、选项2）" / "已过期"
-+ (NSString *)stateTextOfContent:(WFCCDshQuestionMessageContent *)content {
++ (NSString *)stateTextOfContent:(WFCCAgentQuestionMessageContent *)content {
     NSString *base = [content.state isEqualToString:@"expired"] ? @"已过期" : @"已作答";
     NSString *selection = [self selectionTextOfContent:content];
     if (selection.length) {
@@ -89,7 +89,7 @@
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)msgModel.message.content;
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)msgModel.message.content;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat height = DSH_CARD_PADDING;
     BOOL locked = [content.state isEqualToString:@"answered"] || [content.state isEqualToString:@"expired"];
@@ -175,8 +175,8 @@
 }
 
 - (void)onDshAnswered:(NSNotification *)notification {
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
-    if (![content isKindOfClass:[WFCCDshQuestionMessageContent class]]) {
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
+    if (![content isKindOfClass:[WFCCAgentQuestionMessageContent class]]) {
         return;
     }
     NSString *qid = notification.userInfo[@"qid"];
@@ -187,7 +187,7 @@
 }
 
 - (BOOL)isLocked {
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
     return self.locallyAnswered || [content.state isEqualToString:@"answered"] || [content.state isEqualToString:@"expired"];
 }
 
@@ -219,13 +219,13 @@
     button.layer.cornerRadius = 6;
     button.clipsToBounds = YES;
     if (primary) {
-        button.backgroundColor = [WFCUDshState accentColor];
+        button.backgroundColor = [WFCUAgentState accentColor];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
         button.backgroundColor = [UIColor clearColor];
         button.layer.borderWidth = 1;
-        button.layer.borderColor = [WFCUDshState accentColor].CGColor;
-        [button setTitleColor:[WFCUDshState accentColor] forState:UIControlStateNormal];
+        button.layer.borderColor = [WFCUAgentState accentColor].CGColor;
+        [button setTitleColor:[WFCUAgentState accentColor] forState:UIControlStateNormal];
     }
     return button;
 }
@@ -238,8 +238,8 @@
     [self.optionMeta removeAllObjects];
     self.submitButton = nil;
 
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
-    if (![content isKindOfClass:[WFCCDshQuestionMessageContent class]]) {
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
+    if (![content isKindOfClass:[WFCCAgentQuestionMessageContent class]]) {
         return;
     }
     CGFloat width = self.contentArea.bounds.size.width;
@@ -331,7 +331,7 @@
                     [self addView:button];
                     [self.optionMeta addObject:@{@"questionId": questionId, @"label": label, @"multiSelect": @(multiSelect)}];
                     if (multiSelect && [self.localSelected[questionId] containsObject:label]) {
-                        button.backgroundColor = [[WFCUDshState accentColor] colorWithAlphaComponent:0.12];
+                        button.backgroundColor = [[WFCUAgentState accentColor] colorWithAlphaComponent:0.12];
                     }
                     currentY += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
                 }
@@ -402,7 +402,7 @@
     if ([self isLocked]) {
         return;
     }
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
     NSMutableArray *answers = [NSMutableArray array];
     for (NSDictionary *question in content.questions) {
         if (![question isKindOfClass:[NSDictionary class]]) {
@@ -425,7 +425,7 @@
 }
 
 - (void)onShowPlan:(UIButton *)button {
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
     if (button.tag >= content.questions.count) {
         return;
     }
@@ -458,8 +458,8 @@
     if ([self isLocked]) {
         return;
     }
-    WFCCDshQuestionMessageContent *content = (WFCCDshQuestionMessageContent *)self.model.message.content;
-    WFCCDshAnswerMessageContent *answer = [[WFCCDshAnswerMessageContent alloc] init];
+    WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
+    WFCCAgentAnswerMessageContent *answer = [[WFCCAgentAnswerMessageContent alloc] init];
     answer.qid = content.qid;
     answer.answers = answers;
     [[WFCCIMService sharedWFCIMService] send:self.model.message.conversation content:answer success:nil error:nil];

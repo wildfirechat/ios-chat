@@ -3,12 +3,15 @@
 //  WFChatUIKit
 //
 //  DSH 会话运行时状态工具（scope=31 会话级用户设置）。
-//  运行状态 key 后缀 _1：机器人把 {state, phase, toolName, model, ...} JSON 写到
-//  "<convType>-<line>-<target>_1"；Token 统计 key 后缀 _2（type=2 独立通道）：
+//  运行状态 type=1：机器人把 {state, phase, toolName, model, ...} JSON 写到
+//  "<convType>-<line>-<target>_1_<机器人uid>"；Token 统计 type=2（独立通道）：
 //  回合结束必推 {usage, turn, context, cacheHitRatePct, speed, metricsAt}，
-//  独立于状态推送（含出错/取消）；AI 面板数据 key 后缀 _3（type=3 组合查询结果）：
+//  独立于状态推送（含出错/取消）；AI 面板数据 type=3（组合查询结果）：
 //  打开面板发 DSH_Command(207) query 后插件聚合 {model, effort, sandbox, plan,
 //  cwd, sessionId, dirs} 写入，操作（207 set）后插件写 type=1 lastChange 并刷新 type=3。
+//  server 统一在 scope=31 key 尾部追加机器人 uid（无旧式无后缀 key），读取不做精确
+//  key 匹配：全量读 scope=31（getUserSettings:）后取首个 key 以
+//  "<convType>-<line>-<target>_<type>_" 前缀开头的条目（dshStateKey: 等返回该前缀）。
 //  群成员以会话级用户设置收到；会话判断依据：conversation.line == 2
 //  （AI 消息统一使用 line 2，普通消息 line 0、朋友圈 line 1），不再依赖
 //  userInfo.type==1 或群 extra {"dsh":true}。
@@ -27,15 +30,15 @@ extern NSString *const WFCUDshShowPlanDetailNotification;
 //某提问卡片已作答（本地立即置灰用，userInfo: qid）
 extern NSString *const WFCUDshAnsweredNotification;
 
-@interface WFCUDshState : NSObject
+@interface WFCUAgentState : NSObject
 
-/// 状态 key："{conversationType}-{line}-{target}_1"
+/// 状态 key 前缀："{conversationType}-{line}-{target}_1_"（server 追加机器人 uid 后缀）
 + (NSString *)dshStateKey:(WFCCConversation *)conversation;
 
-/// 计量 key："{conversationType}-{line}-{target}_2"（Token 统计，独立于运行状态）
+/// 计量 key 前缀："{conversationType}-{line}-{target}_2_"（Token 统计，独立于运行状态）
 + (NSString *)dshMetricsKey:(WFCCConversation *)conversation;
 
-/// AI 面板 key："{conversationType}-{line}-{target}_3"（组合查询结果，面板打开/更新后刷新）
+/// AI 面板 key 前缀："{conversationType}-{line}-{target}_3_"（组合查询结果，面板打开/更新后刷新）
 + (NSString *)dshPanelKey:(WFCCConversation *)conversation;
 
 /// 群 extra 是否带 {"dsh":true} 标记（容错：非 JSON 返回 NO）。
@@ -49,14 +52,15 @@ extern NSString *const WFCUDshAnsweredNotification;
 /// 是否 DSH/AI 会话：conversation.line == 2 即为 AI 会话（单聊/群聊均可）。
 + (BOOL)isDshConversation:(WFCCConversation *)conversation;
 
-/// 读取 DSH 运行时状态。非 DSH 会话/未设置/非法时返回 nil。
+/// 读取 DSH 运行时状态（scope=31 type=1，按 "<...>_1_" 前缀匹配带机器人 uid 的 key）。
+/// 非 DSH 会话/未设置/非法时返回 nil。
 + (nullable NSDictionary *)dshState:(WFCCConversation *)conversation;
 
-/// 读取 DSH Token 统计（scope=31 type=2 计量）。
+/// 读取 DSH Token 统计（scope=31 type=2 计量，按 "<...>_2_" 前缀匹配）。
 /// 回合结束必推（含出错/取消），带 metricsAt 时间戳；未设置/非法时返回 nil。
 + (nullable NSDictionary *)dshMetrics:(WFCCConversation *)conversation;
 
-/// 读取 AI 面板数据（scope=31 type=3，DSH_Command 207 query 组合查询结果）：
+/// 读取 AI 面板数据（scope=31 type=3，DSH_Command 207 query 组合查询结果，按 "<...>_3_" 前缀匹配）：
 /// {model:{current,options[]}, effort:{current,options[]}, sandbox:{current,options[]},
 ///  plan:{on}, cwd, sessionId, dirs[]}。未设置/非法时返回 nil。
 + (nullable NSDictionary *)dshPanelData:(WFCCConversation *)conversation;

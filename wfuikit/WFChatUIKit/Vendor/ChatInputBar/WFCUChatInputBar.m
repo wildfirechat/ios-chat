@@ -990,7 +990,7 @@
 
 //DSH '/' 命令浮层：输入框文本以"/"开头时弹出，按输入实时前缀过滤；仅 DSH 会话启用
 - (void)updateDshCommandMenu:(NSString *)text {
-    NSArray<NSDictionary<NSString *, NSString *> *> *commands = [WFCUDshState dshCommands:self.conversation];
+    NSArray<NSDictionary<NSString *, NSString *> *> *commands = [WFCUAgentState dshCommands:self.conversation];
     if (!commands.count || ![text hasPrefix:@"/"] || [text containsString:@"\n"] || [text containsString:@" "]) {
         [self hideDshCommandMenu];
         return;
@@ -1100,7 +1100,7 @@
         BOOL hasPoll = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
         BOOL hasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
         //DSH/AI 会话（line==2）显示 "AI 会话设置" 入口
-        BOOL hasDsh = [WFCUDshState isDshConversation:self.conversation];
+        BOOL hasDsh = [WFCUAgentState isDshConversation:self.conversation];
         _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection withDsh:hasDsh];
         //AI 不在线时 "AI 会话设置" 入口置灰禁用
         ((WFCUPluginBoardView *)_pluginInputView).dshDisabled = ![self dshOwnerOnline];
@@ -1853,7 +1853,7 @@
         if (![self dshOwnerOnline]) {
             return;
         }
-        WFCUDshAgentPanelViewController *vc = [[WFCUDshAgentPanelViewController alloc] initWithConversation:self.conversation];
+        WFCUAgentPanelViewController *vc = [[WFCUAgentPanelViewController alloc] initWithConversation:self.conversation];
         [[self.delegate requireNavi] presentViewController:vc animated:YES completion:nil];
     }
 }
@@ -1861,7 +1861,7 @@
 //AI 群（line==2）群主（AI 机器人）是否在线：clientStates 中存在 state==0 视为在线；
 //无状态/未取到视为不在线；非 AI 群返回 YES（不影响原逻辑）
 - (BOOL)dshOwnerOnline {
-    if (![WFCUDshState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isDshConversation:self.conversation]) {
         return YES;
     }
     WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];

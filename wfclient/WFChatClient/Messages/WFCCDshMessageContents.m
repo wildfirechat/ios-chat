@@ -10,15 +10,26 @@
 #import "Common.h"
 
 //官方预留 AI 交互段（200-209）
-static const int DSHMessageContentTypeQuestion = 200;
-static const int DSHMessageContentTypeAnswer = 201;
-static const int DSHMessageContentTypeApproval = 202;
-static const int DSHMessageContentTypeApprovalResult = 203;
-static const int DSHMessageContentTypeGoal = 206;
-static const int DSHMessageContentTypeCommand = 207;
-static const int DSHMessageContentTypeTaskProgress = 208;
+static const int AgentMessageContentTypeQuestion = 200;
+static const int AgentMessageContentTypeAnswer = 201;
+static const int AgentMessageContentTypeApproval = 202;
+static const int AgentMessageContentTypeApprovalResult = 203;
+static const int AgentMessageContentTypeGoal = 206;
+static const int AgentMessageContentTypeCommand = 207;
+static const int AgentMessageContentTypeTaskProgress = 208;
 
-@implementation WFCCDshMessageContentBase
+//取 dict 中首个非空 NSString 值（goal ver:2 兼容：v1 字段缺失时回退读取 v2 字段）
+static NSString *firstNonEmptyString(NSDictionary *dict, NSArray<NSString *> *keys) {
+    for (NSString *key in keys) {
+        id value = dict[key];
+        if ([value isKindOfClass:[NSString class]] && [value length]) {
+            return value;
+        }
+    }
+    return nil;
+}
+
+@implementation WFCCAgentMessageContentBase
 
 + (NSDictionary *)decodeJsonDict:(WFCCMessagePayload *)payload {
     if (payload.content.length == 0) {
@@ -49,7 +60,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshQuestionMessageContent
+@implementation WFCCAgentQuestionMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -62,7 +73,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     self.qid = dict[@"qid"];
     NSArray *questions = dict[@"questions"];
     self.questions = [questions isKindOfClass:[NSArray class]] ? questions : @[];
@@ -73,7 +84,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeQuestion;
+    return AgentMessageContentTypeQuestion;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
@@ -95,7 +106,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshAnswerMessageContent
+@implementation WFCCAgentAnswerMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -107,14 +118,14 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     self.qid = dict[@"qid"];
     NSArray *answers = dict[@"answers"];
     self.answers = [answers isKindOfClass:[NSArray class]] ? answers : @[];
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeAnswer;
+    return AgentMessageContentTypeAnswer;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
@@ -139,7 +150,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshApprovalMessageContent
+@implementation WFCCAgentApprovalMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -155,7 +166,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     self.aid = dict[@"aid"];
     self.toolName = dict[@"toolName"];
     self.reason = dict[@"reason"];
@@ -163,7 +174,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeApproval;
+    return AgentMessageContentTypeApproval;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
@@ -180,7 +191,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshApprovalResultMessageContent
+@implementation WFCCAgentApprovalResultMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -192,13 +203,13 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     self.aid = dict[@"aid"];
     self.action = dict[@"action"];
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeApprovalResult;
+    return AgentMessageContentTypeApprovalResult;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
@@ -211,7 +222,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshGoalMessageContent
+@implementation WFCCAgentGoalMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -225,19 +236,25 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
-    self.gid = dict[@"gid"];
-    self.objective = dict[@"objective"];
-    self.phase = dict[@"phase"];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
+    self.gid = [dict[@"gid"] isKindOfClass:[NSString class]] ? dict[@"gid"] : nil;
+    //ver:2 兼容：objective 缺省回退 title；phase 缺省回退 state（枚举字符串一致）
+    self.objective = firstNonEmptyString(dict, @[@"objective", @"title"]);
+    self.title = firstNonEmptyString(dict, @[@"title"]);
+    self.phase = firstNonEmptyString(dict, @[@"phase", @"state"]);
+    self.stage = firstNonEmptyString(dict, @[@"stage"]);
     self.roundsStarted = [dict[@"roundsStarted"] integerValue];
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeGoal;
+    return AgentMessageContentTypeGoal;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
-    return [NSString stringWithFormat:@"🎯 %@（%@，round %d）", self.objective.length ? self.objective : @"目标", self.phase ?: @"", (int)self.roundsStarted];
+    //v1 载荷渲染不变；ver:2 缺省时回退 title，存在 stage 时附加展示
+    NSString *objective = self.objective.length ? self.objective : (self.title.length ? self.title : @"目标");
+    NSString *stage = self.stage.length ? [NSString stringWithFormat:@"，%@", self.stage] : @"";
+    return [NSString stringWithFormat:@"🎯 %@（%@%@，round %d）", objective, self.phase ?: @"", stage, (int)self.roundsStarted];
 }
 
 + (void)load {
@@ -246,7 +263,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshTaskProgressMessageContent
+@implementation WFCCAgentTaskProgressMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -258,14 +275,14 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     NSArray *tasks = dict[@"tasks"];
     self.tasks = [tasks isKindOfClass:[NSArray class]] ? tasks : @[];
     self.updatedAt = [dict[@"updatedAt"] longLongValue];
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeTaskProgress;
+    return AgentMessageContentTypeTaskProgress;
 }
 
 - (NSString *)digest:(WFCCMessage *)message {
@@ -291,7 +308,7 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 
 @end
 
-@implementation WFCCDshCommandMessageContent
+@implementation WFCCAgentCommandMessageContent
 
 - (WFCCMessagePayload *)encode {
     WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
@@ -309,14 +326,14 @@ static const int DSHMessageContentTypeTaskProgress = 208;
 }
 
 - (void)decode:(WFCCMessagePayload *)payload {
-    NSDictionary *dict = [WFCCDshMessageContentBase decodeJsonDict:payload];
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
     self.op = [dict[@"op"] isKindOfClass:[NSString class]] && [dict[@"op"] length] ? dict[@"op"] : @"query";
     self.cmd = [dict[@"cmd"] isKindOfClass:[NSString class]] ? dict[@"cmd"] : nil;
     self.seq = [dict[@"seq"] integerValue];
 }
 
 + (int)getContentType {
-    return DSHMessageContentTypeCommand;
+    return AgentMessageContentTypeCommand;
 }
 
 + (int)getContentFlags {

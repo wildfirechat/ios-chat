@@ -37,7 +37,7 @@
 @implementation WFCUDshOptionButton
 - (void)setOptionSelected:(BOOL)selected {
     if (selected) {
-        self.backgroundColor = [WFCUDshState accentColor];
+        self.backgroundColor = [WFCUAgentState accentColor];
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
         self.backgroundColor = [UIColor colorWithHexString:@"0xf2f3f5"];
@@ -108,7 +108,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 面板
 
-@interface WFCUDshAgentPanelViewController ()
+@interface WFCUAgentPanelViewController ()
 @property (nonatomic, strong)WFCCConversation *conversation;
 
 //数据（全部来自 scope=31 type=3 面板数据；207 set 后由 kSettingUpdated 重读刷新）
@@ -337,7 +337,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     UIButton *doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     doneBtn.frame = CGRectMake(_cardView.bounds.size.width - 72, 0, 64, 44);
     [doneBtn setTitle:@"完成" forState:UIControlStateNormal];
-    [doneBtn setTitleColor:[WFCUDshState accentColor] forState:UIControlStateNormal];
+    [doneBtn setTitleColor:[WFCUAgentState accentColor] forState:UIControlStateNormal];
     doneBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [doneBtn addTarget:self action:@selector(onDone) forControlEvents:UIControlEventTouchUpInside];
     [_cardView addSubview:doneBtn];
@@ -434,7 +434,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 }
 
 - (void)applyStyle {
-    UIColor *accent = [WFCUDshState accentColor];
+    UIColor *accent = [WFCUAgentState accentColor];
     _ringView.layer.borderColor = (self.radioSelected ? accent : [UIColor colorWithHexString:@"0xc8c8c8"]).CGColor;
     _dotView.backgroundColor = self.radioSelected ? accent : [UIColor clearColor];
     _titleLabel.textColor = self.radioSelected ? [UIColor colorWithHexString:@"0x333333"] : [UIColor colorWithHexString:@"0x888888"];
@@ -614,7 +614,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 面板实现
 
-@implementation WFCUDshAgentPanelViewController
+@implementation WFCUAgentPanelViewController
 
 - (instancetype)initWithConversation:(WFCCConversation *)conversation {
     self = [super init];
@@ -730,7 +730,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     CGFloat btnWidth = (footer.bounds.size.width - btnPadding * 4) / 3.0;
     CGFloat btnHeight = 40;
 
-    self.compactBtn = [self makeActionButtonWithTitle:@"压缩上下文" color:[WFCUDshState accentColor] selector:@selector(onCompact)];
+    self.compactBtn = [self makeActionButtonWithTitle:@"压缩上下文" color:[WFCUAgentState accentColor] selector:@selector(onCompact)];
     self.compactBtn.frame = CGRectMake(btnPadding, 12, btnWidth, btnHeight);
     [footer addSubview:self.compactBtn];
 
@@ -825,7 +825,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     [self.cwdSwitchBtn setTitle:@"切换" forState:UIControlStateNormal];
     [self.cwdSwitchBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.cwdSwitchBtn.titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13]];
-    self.cwdSwitchBtn.backgroundColor = [WFCUDshState accentColor];
+    self.cwdSwitchBtn.backgroundColor = [WFCUAgentState accentColor];
     self.cwdSwitchBtn.layer.cornerRadius = 6;
     [self.cwdSwitchBtn addTarget:self action:@selector(onOpenCwdPicker) forControlEvents:UIControlEventTouchUpInside];
     [self.cwdRowView addSubview:self.cwdSwitchBtn];
@@ -984,10 +984,10 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 //读 scope=31 type=3 面板数据（零解析）：model/effort/sandbox/plan/cwd/dirs
 - (void)loadPanelDataFromUserSetting {
-    if (![WFCUDshState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isDshConversation:self.conversation]) {
         return;
     }
-    NSDictionary *data = [WFCUDshState dshPanelData:self.conversation];
+    NSDictionary *data = [WFCUAgentState dshPanelData:self.conversation];
     if (![data isKindOfClass:[NSDictionary class]]) {
         return;
     }
@@ -1101,10 +1101,10 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 //发送 207 面板指令（透明消息：不存储、不显示、不计未读，全部交互不落消息流）
 - (void)sendDshCommand:(NSString *)op cmd:(nullable NSString *)cmd {
-    if (![WFCUDshState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isDshConversation:self.conversation]) {
         return;
     }
-    WFCCDshCommandMessageContent *content = [[WFCCDshCommandMessageContent alloc] init];
+    WFCCAgentCommandMessageContent *content = [[WFCCAgentCommandMessageContent alloc] init];
     content.op = op;
     content.cmd = cmd;
     //seq 防重/追踪（与 PC 端一致：毫秒时间戳取模）

@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUDshTaskProgressMessageCell : WFCUMessageCell
+@interface WFCUAgentTaskProgressMessageCell : WFCUMessageCell
 
 @end
 

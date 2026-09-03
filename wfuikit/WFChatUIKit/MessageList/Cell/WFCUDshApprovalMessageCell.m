@@ -15,7 +15,7 @@
 
 #define DSH_CARD_PADDING 12
 
-@interface WFCUDshApprovalMessageCell ()
+@interface WFCUAgentApprovalMessageCell ()
 @property (nonatomic, strong)UILabel *titleLabel;
 @property (nonatomic, strong)UILabel *toolLabel;
 @property (nonatomic, strong)UILabel *reasonLabel;
@@ -26,10 +26,10 @@
 @property (nonatomic, strong)NSString *localAction;
 @end
 
-@implementation WFCUDshApprovalMessageCell
+@implementation WFCUAgentApprovalMessageCell
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    WFCCDshApprovalMessageContent *content = (WFCCDshApprovalMessageContent *)msgModel.message.content;
+    WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)msgModel.message.content;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat height = DSH_CARD_PADDING;
 
@@ -78,7 +78,7 @@
     [self.approveButton setTitle:@"同意" forState:UIControlStateNormal];
     [self.approveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.approveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15];
-    self.approveButton.backgroundColor = [WFCUDshState accentColor];
+    self.approveButton.backgroundColor = [WFCUAgentState accentColor];
     self.approveButton.layer.cornerRadius = 6;
     [self.approveButton addTarget:self action:@selector(onApprove) forControlEvents:UIControlEventTouchUpInside];
     [self.contentArea addSubview:self.approveButton];
@@ -99,12 +99,12 @@
 }
 
 - (BOOL)isLocked {
-    WFCCDshApprovalMessageContent *content = (WFCCDshApprovalMessageContent *)self.model.message.content;
+    WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)self.model.message.content;
     return self.locallyDecided || [content.state isEqualToString:@"approved"] || [content.state isEqualToString:@"rejected"] || [content.state isEqualToString:@"expired"];
 }
 
 - (NSString *)stateText {
-    WFCCDshApprovalMessageContent *content = (WFCCDshApprovalMessageContent *)self.model.message.content;
+    WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)self.model.message.content;
     if ([content.state isEqualToString:@"rejected"]) {
         return @"已拒绝";
     }
@@ -120,7 +120,7 @@
     self.locallyDecided = NO;
     self.localAction = nil;
 
-    WFCCDshApprovalMessageContent *content = (WFCCDshApprovalMessageContent *)model.message.content;
+    WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)model.message.content;
     CGFloat width = self.contentArea.bounds.size.width;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat currentY = DSH_CARD_PADDING;
@@ -163,8 +163,8 @@
     if ([self isLocked]) {
         return;
     }
-    WFCCDshApprovalMessageContent *content = (WFCCDshApprovalMessageContent *)self.model.message.content;
-    WFCCDshApprovalResultMessageContent *result = [[WFCCDshApprovalResultMessageContent alloc] init];
+    WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)self.model.message.content;
+    WFCCAgentApprovalResultMessageContent *result = [[WFCCAgentApprovalResultMessageContent alloc] init];
     result.aid = content.aid;
     result.action = action;
     [[WFCCIMService sharedWFCIMService] send:self.model.message.conversation content:result success:nil error:nil];

@@ -14,11 +14,11 @@
 #define TEXT_LABEL_TOP_PADDING 3
 #define TEXT_LABEL_BUTTOM_PADDING 5
 
-@interface WFCUDshTextMessageCell ()
+@interface WFCUAgentTextMessageCell ()
 @property (nonatomic, strong)UILabel *digestLabel;
 @end
 
-@implementation WFCUDshTextMessageCell
+@implementation WFCUAgentTextMessageCell
 
 + (UIFont *)defaultFont {
     return [UIFont scaledSystemFontOfSize:18];

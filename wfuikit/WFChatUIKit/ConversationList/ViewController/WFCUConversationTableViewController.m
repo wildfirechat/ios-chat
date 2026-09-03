@@ -583,7 +583,7 @@
     NSMutableArray<NSString *> *owners = [NSMutableArray array];
     for (WFCCConversationInfo *info in self.conversations) {
         WFCCConversation *conv = info.conversation;
-        if (conv.type != Group_Type || conv.line != 2 || ![WFCUDshState isDshConversation:conv]) {
+        if (conv.type != Group_Type || conv.line != 2 || ![WFCUAgentState isDshConversation:conv]) {
             continue;
         }
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.target refresh:NO];

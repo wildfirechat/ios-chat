@@ -17,7 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUDshAgentPanelViewController : UIViewController
+@interface WFCUAgentPanelViewController : UIViewController
 
 /// 仅限 DSH/AI 会话（conversation.line == 2）使用
 - (instancetype)initWithConversation:(WFCCConversation *)conversation;

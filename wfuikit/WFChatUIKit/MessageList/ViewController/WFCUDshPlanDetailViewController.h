@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUDshPlanDetailViewController : UIViewController
+@interface WFCUAgentPlanDetailViewController : UIViewController
 
 - (instancetype)initWithConversation:(WFCCConversation *)conversation
                                  qid:(NSString *)qid

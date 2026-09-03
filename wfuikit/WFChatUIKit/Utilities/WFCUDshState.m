@@ -32,18 +32,37 @@ static NSString *fmtDshNum(NSNumber *num) {
     return [NSString stringWithFormat:@"%.1f", round(value * 10) / 10.0];
 }
 
-@implementation WFCUDshState
+@implementation WFCUAgentState
 
+//scope=31（会话级用户设置）本地库全量读：server 现统一写
+//"<convType>-<line>-<target>_<type>_<机器人uid>"（uid 后缀，不再有无后缀 key），
+//因此不做精确 key 读取：扫描全部 scope=31 条目，返回首个 key 以 prefix 开头
+//（"<convType>-<line>-<target>_<type>_"）的 value。
++ (NSString *)settingValueWithKeyPrefix:(NSString *)prefix {
+    if (prefix.length == 0) {
+        return nil;
+    }
+    NSDictionary<NSString *, NSString *> *settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting keyPrefix:prefix];
+    settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting];
+    for (NSString *key in settings) {
+        if ([key hasPrefix:prefix]) {
+            return settings[key];
+        }
+    }
+    return nil;
+}
+
+//server v2 统一在 key 尾追加机器人 uid，以下三个方法返回匹配前缀（以 "_" 结尾）
 + (NSString *)dshStateKey:(WFCCConversation *)conversation {
-    return [NSString stringWithFormat:@"%d-%d-%@_%d", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHStateType];
+    return [NSString stringWithFormat:@"%d-%d-%@_%d_", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHStateType];
 }
 
 + (NSString *)dshMetricsKey:(WFCCConversation *)conversation {
-    return [NSString stringWithFormat:@"%d-%d-%@_%d", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHMetricsType];
+    return [NSString stringWithFormat:@"%d-%d-%@_%d_", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHMetricsType];
 }
 
 + (NSString *)dshPanelKey:(WFCCConversation *)conversation {
-    return [NSString stringWithFormat:@"%d-%d-%@_%d", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHPanelType];
+    return [NSString stringWithFormat:@"%d-%d-%@_%d_", (int)conversation.type, (int)conversation.line, conversation.target, (int)DSHPanelType];
 }
 
 + (BOOL)isDshGroupExtra:(NSString *)extra {
@@ -81,7 +100,7 @@ static NSString *fmtDshNum(NSNumber *num) {
     if (![self isDshConversation:conversation]) {
         return nil;
     }
-    NSString *value = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Conversation_User_Setting key:[self dshStateKey:conversation]];
+    NSString *value = [self settingValueWithKeyPrefix:[self dshStateKey:conversation]];
     if (value.length == 0) {
         return nil;
     }
@@ -99,7 +118,7 @@ static NSString *fmtDshNum(NSNumber *num) {
     if (![self isDshConversation:conversation]) {
         return nil;
     }
-    NSString *value = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Conversation_User_Setting key:[self dshMetricsKey:conversation]];
+    NSString *value = [self settingValueWithKeyPrefix:[self dshMetricsKey:conversation]];
     if (value.length == 0) {
         return nil;
     }
@@ -118,7 +137,7 @@ static NSString *fmtDshNum(NSNumber *num) {
     if (![self isDshConversation:conversation]) {
         return nil;
     }
-    NSString *value = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Conversation_User_Setting key:[self dshPanelKey:conversation]];
+    NSString *value = [self settingValueWithKeyPrefix:[self dshPanelKey:conversation]];
     if (value.length == 0) {
         return nil;
     }
@@ -271,7 +290,7 @@ static NSString *fmtDshNum(NSNumber *num) {
                   @[@"/stop", @"停止当前任务"]];
     } else {
         pairs = @[@[@"/help", @"命令帮助"],
-                  @[@"/create", @"创建 DSH 工作区群"],
+                  @[@"/create", @"创建 AI 工作区群"],
                   @[@"/workspaces", @"列出工作区"],
                   @[@"/goal", @"目标管理"],
                   @[@"/jobs", @"后台任务"],

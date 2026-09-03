@@ -810,7 +810,7 @@
     } else if(self.conversation.type == Group_Type) {
         //当群超级大时，订阅群成员在线状态非常消耗资源。因此进入会话时不能订阅状态，只有在展示列表时订阅。
         //DSH：AI 群（line==2）仅订阅群主（AI 机器人）在线状态，离开会话时取消订阅
-        if ([WFCUDshState isDshConversation:self.conversation]) {
+        if ([WFCUAgentState isDshConversation:self.conversation]) {
             [self unwatchDshOwnerOnlineState];
         }
     }
@@ -969,7 +969,7 @@
         //DSH：AI 群（line==2）群主（AI 机器人）在线状态已并入 updateDshTitle 的
         //"AI 在线 · 计量" 合并行（参考 PC 端 conversationStatusLine），不再追加到标题；
         //外部域会话不走 updateDshTitle 的自定义标题，仍追加到标题行
-        if ([WFCUDshState isDshConversation:self.conversation] && [WFCCUtilities isExternalTarget:self.conversation.target]) {
+        if ([WFCUAgentState isDshConversation:self.conversation] && [WFCCUtilities isExternalTarget:self.conversation.target]) {
             NSString *aiDesc = [self dshOwnerOnlineStateDesc];
             if (aiDesc.length) {
                 self.title = [NSString stringWithFormat:@"%@ · AI %@", self.title, aiDesc];
@@ -1001,7 +1001,7 @@
 
 //AI 群（群聊 + line==2）群主在线状态订阅：进入会话时调用（群信息可能异步拉取，群主 ID 就绪后生效）
 - (void)watchDshOwnerOnlineStateIfNeed {
-    if (self.conversation.type != Group_Type || ![WFCUDshState isDshConversation:self.conversation]) {
+    if (self.conversation.type != Group_Type || ![WFCUAgentState isDshConversation:self.conversation]) {
         return;
     }
     if (![[WFCCIMService sharedWFCIMService] isEnableUserOnlineState]) {
@@ -1045,7 +1045,7 @@
 //无状态/未取到（getUserOnlineState 返回 nil 或 clientStates 为空）视为不在线。
 //非 AI 群返回 YES（不影响原逻辑）。
 - (BOOL)dshOwnerOnline {
-    if (![WFCUDshState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isDshConversation:self.conversation]) {
         return YES;
     }
     NSString *ownerId = self.targetGroup.owner;
@@ -1069,7 +1069,7 @@
 
 //AI 群群主（AI 机器人）在线状态描述：在线/离线/忙碌/离开 等（复用单聊在线状态文案）；不可用返回 nil
 - (NSString *)dshOwnerOnlineStateDesc {
-    if (![WFCUDshState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isDshConversation:self.conversation]) {
         return nil;
     }
     NSString *ownerId = self.targetGroup.owner;
@@ -1155,9 +1155,9 @@
 //读取当前会话的 DSH 运行时状态（scope=31 type=1）与 Token 统计（type=2 独立通道），
 //并刷新标题副标题与输入框占位。非 DSH 会话不查询
 - (void)refreshDshState {
-    self.dshState = [WFCUDshState dshState:self.conversation];
+    self.dshState = [WFCUAgentState dshState:self.conversation];
     //Token 统计走 type=2 独立通道（回合结束必推，含出错/取消），与运行状态分开读
-    self.dshMetrics = [WFCUDshState dshMetrics:self.conversation];
+    self.dshMetrics = [WFCUAgentState dshMetrics:self.conversation];
     [self updateDshTitle];
 
     NSString *placeholder = nil;
@@ -1179,7 +1179,7 @@
         //外部域会话使用 updateDomainTitle 的双行标题，不覆盖
         return;
     }
-    NSString *stateText = [WFCUDshState stateText:self.dshState[@"state"]];
+    NSString *stateText = [WFCUAgentState stateText:self.dshState[@"state"]];
     if ([self.dshState[@"phase"] isEqualToString:@"tool"]) {
         NSString *toolName = [self.dshState[@"toolName"] isKindOfClass:[NSString class]] ? self.dshState[@"toolName"] : nil;
         stateText = [NSString stringWithFormat:@"%@ · %@", stateText, toolName.length ? toolName : @"工具"];
@@ -1192,7 +1192,7 @@
     }
     NSString *aiDesc = [self dshOwnerOnlineStateDesc];
     NSString *onlineText = aiDesc.length ? [NSString stringWithFormat:@"AI %@", aiDesc] : @"";
-    NSString *hintText = [WFCUDshState dshStatusHint:self.dshState];
+    NSString *hintText = [WFCUAgentState dshStatusHint:self.dshState];
     NSString *lastChange = [self.dshState[@"lastChange"] isKindOfClass:[NSString class]] ? self.dshState[@"lastChange"] : @"";
     //Token 统计（type=2 独立通道）：统计属于当前会话才显示——type=2 统计带 sessionId 且与
     //type=1 状态（dshState）sessionId 不一致（切目录后旧会话统计残留）时不显示统计段；
@@ -1204,7 +1204,7 @@
         && [stateSessionId isKindOfClass:[NSString class]] && [(NSString *)stateSessionId length]
         && ![(NSString *)metricsSessionId isEqualToString:(NSString *)stateSessionId];
     if (!metricsSessionMismatch) {
-        metricsText = [WFCUDshState dshMetricsText:self.dshMetrics];
+        metricsText = [WFCUAgentState dshMetricsText:self.dshMetrics];
     }
     NSMutableArray<NSString *> *statusParts = [NSMutableArray array];
     if (ownerOffline) {
@@ -1343,7 +1343,7 @@
     if (!conversation || conversation.type != self.conversation.type || ![conversation.target isEqualToString:self.conversation.target]) {
         return;
     }
-    WFCUDshPlanDetailViewController *vc = [[WFCUDshPlanDetailViewController alloc] initWithConversation:conversation
+    WFCUAgentPlanDetailViewController *vc = [[WFCUAgentPlanDetailViewController alloc] initWithConversation:conversation
                                                                                                    qid:info[@"qid"]
                                                                                             questionId:info[@"questionId"]
                                                                                                   plan:info[@"plan"]
@@ -1675,12 +1675,12 @@
     [self registerCell:[WFCUPollMessageCell class] forContent:[WFCCPollMessageContent class]];
     [self registerCell:[WFCUPollResultMessageCell class] forContent:[WFCCPollResultMessageContent class]];
 
-    [self registerCell:[WFCUDshQuestionMessageCell class] forContent:[WFCCDshQuestionMessageContent class]];
-    [self registerCell:[WFCUDshTextMessageCell class] forContent:[WFCCDshAnswerMessageContent class]];
-    [self registerCell:[WFCUDshApprovalMessageCell class] forContent:[WFCCDshApprovalMessageContent class]];
-    [self registerCell:[WFCUDshTextMessageCell class] forContent:[WFCCDshApprovalResultMessageContent class]];
-    [self registerCell:[WFCUDshGoalMessageCell class] forContent:[WFCCDshGoalMessageContent class]];
-    [self registerCell:[WFCUDshTaskProgressMessageCell class] forContent:[WFCCDshTaskProgressMessageContent class]];
+    [self registerCell:[WFCUAgentQuestionMessageCell class] forContent:[WFCCAgentQuestionMessageContent class]];
+    [self registerCell:[WFCUAgentTextMessageCell class] forContent:[WFCCAgentAnswerMessageContent class]];
+    [self registerCell:[WFCUAgentApprovalMessageCell class] forContent:[WFCCAgentApprovalMessageContent class]];
+    [self registerCell:[WFCUAgentTextMessageCell class] forContent:[WFCCAgentApprovalResultMessageContent class]];
+    [self registerCell:[WFCUAgentGoalMessageCell class] forContent:[WFCCAgentGoalMessageContent class]];
+    [self registerCell:[WFCUAgentTaskProgressMessageCell class] forContent:[WFCCAgentTaskProgressMessageContent class]];
 
     [[WFCUConfigManager globalManager].cellContentDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerCell:obj forContentType:key];
@@ -2091,27 +2091,27 @@
 /**
  判断消息是否为「进行中的 AI 交互元素」（与 HarmonyOS 版 ConversationPage.isLiveAIMessage 语义一致）：
  - 流式生成中（类型 14 WFCCStreamingTextGeneratingMessageContent）→ YES；
- - 提问卡片（200 WFCCDshQuestionMessageContent）state == "pending"（等待用户选择）→ YES；
- - 审批卡片（202 WFCCDshApprovalMessageContent）state == "pending"（等待用户审批）→ YES；
- - 目标卡片（206 WFCCDshGoalMessageContent）phase != "complete"（目标未完成）→ YES；
- - 任务进度卡片（208 WFCCDshTaskProgressMessageContent）tasks 中任一 status == "running" → YES。
+ - 提问卡片（200 WFCCAgentQuestionMessageContent）state == "pending"（等待用户选择）→ YES；
+ - 审批卡片（202 WFCCAgentApprovalMessageContent）state == "pending"（等待用户审批）→ YES；
+ - 目标卡片（206 WFCCAgentGoalMessageContent）phase != "complete"（目标未完成）→ YES；
+ - 任务进度卡片（208 WFCCAgentTaskProgressMessageContent）tasks 中任一 status == "running" → YES。
  */
 - (BOOL)isLiveAIMessage:(WFCUMessageModel *)model {
     WFCCMessageContent *content = model.message.content;
     if ([content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
         return YES;
     }
-    if ([content isKindOfClass:[WFCCDshQuestionMessageContent class]]) {
-        return [((WFCCDshQuestionMessageContent *)content).state isEqualToString:@"pending"];
+    if ([content isKindOfClass:[WFCCAgentQuestionMessageContent class]]) {
+        return [((WFCCAgentQuestionMessageContent *)content).state isEqualToString:@"pending"];
     }
-    if ([content isKindOfClass:[WFCCDshApprovalMessageContent class]]) {
-        return [((WFCCDshApprovalMessageContent *)content).state isEqualToString:@"pending"];
+    if ([content isKindOfClass:[WFCCAgentApprovalMessageContent class]]) {
+        return [((WFCCAgentApprovalMessageContent *)content).state isEqualToString:@"pending"];
     }
-    if ([content isKindOfClass:[WFCCDshGoalMessageContent class]]) {
-        return ![((WFCCDshGoalMessageContent *)content).phase isEqualToString:@"complete"];
+    if ([content isKindOfClass:[WFCCAgentGoalMessageContent class]]) {
+        return ![((WFCCAgentGoalMessageContent *)content).phase isEqualToString:@"complete"];
     }
-    if ([content isKindOfClass:[WFCCDshTaskProgressMessageContent class]]) {
-        NSArray<NSDictionary *> *tasks = ((WFCCDshTaskProgressMessageContent *)content).tasks;
+    if ([content isKindOfClass:[WFCCAgentTaskProgressMessageContent class]]) {
+        NSArray<NSDictionary *> *tasks = ((WFCCAgentTaskProgressMessageContent *)content).tasks;
         for (NSDictionary *task in tasks) {
             if ([[task objectForKey:@"status"] isEqualToString:@"running"]) {
                 return YES;
@@ -2785,7 +2785,7 @@
         }
 
         // DSH 命令消息（207）是 AI 面板静默指令（透明消息）：不进入列表、不显示
-        if ([message.content isKindOfClass:[WFCCDshCommandMessageContent class]]) {
+        if ([message.content isKindOfClass:[WFCCAgentCommandMessageContent class]]) {
             continue;
         }
         
