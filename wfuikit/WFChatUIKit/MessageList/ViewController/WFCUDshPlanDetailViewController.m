@@ -13,7 +13,7 @@
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
 
-@interface WFCUDshPlanDetailViewController ()
+@interface WFCUAgentPlanDetailViewController ()
 @property (nonatomic, strong)WFCCConversation *conversation;
 @property (nonatomic, strong)NSString *qid;
 @property (nonatomic, strong)NSString *questionId;
@@ -27,7 +27,7 @@
 @property (nonatomic, strong)UIButton *rejectButton;
 @end
 
-@implementation WFCUDshPlanDetailViewController
+@implementation WFCUAgentPlanDetailViewController
 
 - (instancetype)initWithConversation:(WFCCConversation *)conversation
                                  qid:(NSString *)qid
@@ -82,7 +82,7 @@
     [self.approveButton setTitle:self.approveLabel forState:UIControlStateNormal];
     [self.approveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.approveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15];
-    self.approveButton.backgroundColor = [WFCUDshState accentColor];
+    self.approveButton.backgroundColor = [WFCUAgentState accentColor];
     self.approveButton.layer.cornerRadius = 6;
     self.approveButton.frame = CGRectMake(padding, btnY, btnWidth, btnHeight);
     [self.approveButton addTarget:self action:@selector(onApprove) forControlEvents:UIControlEventTouchUpInside];
@@ -100,7 +100,7 @@
 }
 
 - (void)decide:(NSString *)label {
-    WFCCDshAnswerMessageContent *answer = [[WFCCDshAnswerMessageContent alloc] init];
+    WFCCAgentAnswerMessageContent *answer = [[WFCCAgentAnswerMessageContent alloc] init];
     answer.qid = self.qid;
     answer.answers = @[@{@"id": self.questionId, @"selected": @[label]}];
     [[WFCCIMService sharedWFCIMService] send:self.conversation content:answer success:nil error:nil];

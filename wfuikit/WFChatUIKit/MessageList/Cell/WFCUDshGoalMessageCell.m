@@ -14,17 +14,17 @@
 
 #define DSH_CARD_PADDING 12
 
-@interface WFCUDshGoalMessageCell ()
+@interface WFCUAgentGoalMessageCell ()
 @property (nonatomic, strong)UILabel *titleLabel;
 @property (nonatomic, strong)UILabel *phaseLabel;
 @property (nonatomic, strong)UILabel *objectiveLabel;
 @property (nonatomic, strong)UILabel *metaLabel;
 @end
 
-@implementation WFCUDshGoalMessageCell
+@implementation WFCUAgentGoalMessageCell
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    WFCCDshGoalMessageContent *content = (WFCCDshGoalMessageContent *)msgModel.message.content;
+    WFCCAgentGoalMessageContent *content = (WFCCAgentGoalMessageContent *)msgModel.message.content;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat height = DSH_CARD_PADDING;
 
@@ -78,7 +78,7 @@
 - (void)setModel:(WFCUMessageModel *)model {
     [super setModel:model];
 
-    WFCCDshGoalMessageContent *content = (WFCCDshGoalMessageContent *)model.message.content;
+    WFCCAgentGoalMessageContent *content = (WFCCAgentGoalMessageContent *)model.message.content;
     CGFloat width = self.contentArea.bounds.size.width;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat currentY = DSH_CARD_PADDING;
@@ -89,8 +89,8 @@
                                            constrainedSize:CGSizeMake(contentWidth, 20)];
     self.titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, titleSize.width, 20);
 
-    self.phaseLabel.text = [WFCUDshState goalPhaseText:content.phase];
-    self.phaseLabel.backgroundColor = [WFCUDshState goalPhaseColor:content.phase];
+    self.phaseLabel.text = [WFCUAgentState goalPhaseText:content.phase];
+    self.phaseLabel.backgroundColor = [WFCUAgentState goalPhaseColor:content.phase];
     CGSize phaseSize = [WFCUUtilities getTextDrawingSize:self.phaseLabel.text
                                                     font:self.phaseLabel.font
                                            constrainedSize:CGSizeMake(contentWidth, 16)];
@@ -104,7 +104,12 @@
     self.objectiveLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(objectiveSize.height, 18));
     currentY += MAX(objectiveSize.height, 18) + 4;
 
-    self.metaLabel.text = [NSString stringWithFormat:@"已执行 %d 轮", (int)content.roundsStarted];
+    //ver:2 目标带 stage 文本时追加展示（如 "已执行 2 轮 · 1/3"）
+    NSString *meta = [NSString stringWithFormat:@"已执行 %d 轮", (int)content.roundsStarted];
+    if (content.stage.length) {
+        meta = [meta stringByAppendingFormat:@" · %@", content.stage];
+    }
+    self.metaLabel.text = meta;
     self.metaLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 16);
 }
 

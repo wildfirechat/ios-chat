@@ -32,7 +32,7 @@ static UIImage *WFCUDshAgentPluginIcon(void) {
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
         //圆角底色
         UIBezierPath *bg = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, size - 4, size - 4) cornerRadius:12];
-        [[WFCUDshState accentColor] setFill];
+        [[WFCUAgentState accentColor] setFill];
         [bg fill];
         //白色 "AI" 字样
         NSDictionary *attrs = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:20],

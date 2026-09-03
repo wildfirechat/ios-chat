@@ -19,11 +19,11 @@
 #define DSH_TASK_ICON_WIDTH 24
 #define DSH_TASK_ROW_GAP 8
 
-@interface WFCUDshTaskProgressMessageCell ()
+@interface WFCUAgentTaskProgressMessageCell ()
 @property (nonatomic, strong)NSMutableArray<UIView *> *dynamicViews;
 @end
 
-@implementation WFCUDshTaskProgressMessageCell
+@implementation WFCUAgentTaskProgressMessageCell
 
 //状态图标：与 PC 端 statusIcon 一致
 + (NSString *)statusIcon:(NSString *)status {
@@ -127,7 +127,7 @@
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
-    WFCCDshTaskProgressMessageContent *content = (WFCCDshTaskProgressMessageContent *)msgModel.message.content;
+    WFCCAgentTaskProgressMessageContent *content = (WFCCAgentTaskProgressMessageContent *)msgModel.message.content;
     CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
     CGFloat height = DSH_CARD_PADDING;
 
@@ -200,8 +200,8 @@
     }
     [self.dynamicViews removeAllObjects];
 
-    WFCCDshTaskProgressMessageContent *content = (WFCCDshTaskProgressMessageContent *)model.message.content;
-    if (![content isKindOfClass:[WFCCDshTaskProgressMessageContent class]]) {
+    WFCCAgentTaskProgressMessageContent *content = (WFCCAgentTaskProgressMessageContent *)model.message.content;
+    if (![content isKindOfClass:[WFCCAgentTaskProgressMessageContent class]]) {
         return;
     }
 
