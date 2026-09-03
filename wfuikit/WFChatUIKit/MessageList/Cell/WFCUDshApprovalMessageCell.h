@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUDshApprovalMessageCell : WFCUMessageCell
+@interface WFCUAgentApprovalMessageCell : WFCUMessageCell
 
 @end
 

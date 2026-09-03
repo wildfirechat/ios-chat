@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WFCUDshGoalMessageCell : WFCUMessageCell
+@interface WFCUAgentGoalMessageCell : WFCUMessageCell
 
 @end
 
