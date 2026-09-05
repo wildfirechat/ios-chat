@@ -1,24 +1,24 @@
 //
-//  WFCUDshQuestionMessageCell.m
+//  WFCUAgentQuestionMessageCell.m
 //  WFChatUIKit
 //
-//  DSH 提问卡片 Cell（200）。
+//  Agent 提问卡片 Cell（200）。
 //  选项垂直排列、整行可点；单选点击即答并立即本地置灰；多选勾选+底部"提交"按钮；
 //  "自定义回答"聚焦会话主输入框（卡片内不嵌输入框）；
 //  plan-review 显示"查看计划"按钮，intent.approve 命中的选项渲染为主色主按钮。
 //
 
-#import "WFCUDshQuestionMessageCell.h"
+#import "WFCUAgentQuestionMessageCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
+#import <WFChatClient/WFCCAgentMessageContents.h>
 #import "WFCUUtilities.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
 
-#define DSH_CARD_PADDING 12
-#define DSH_OPTION_ROW_HEIGHT 40
-#define DSH_OPTION_SPACING 6
+#define AGENT_CARD_PADDING 12
+#define AGENT_OPTION_ROW_HEIGHT 40
+#define AGENT_OPTION_SPACING 6
 
 @interface WFCUAgentQuestionMessageCell ()
 @property (nonatomic, strong)NSMutableArray<UIView *> *dynamicViews;
@@ -90,8 +90,8 @@
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)msgModel.message.content;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat height = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat height = AGENT_CARD_PADDING;
     BOOL locked = [content.state isEqualToString:@"answered"] || [content.state isEqualToString:@"expired"];
 
     NSDictionary *first = content.questions.firstObject;
@@ -122,7 +122,7 @@
         }
         if (planReview && detail.length && !locked) {
             //"查看计划"按钮
-            height += 36 + DSH_OPTION_SPACING;
+            height += 36 + AGENT_OPTION_SPACING;
         }
 
         NSArray *options = [self optionsOf:question];
@@ -132,9 +132,9 @@
         if (!locked && options.count) {
             if (planReview) {
                 //主/次按钮一行
-                height += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
+                height += AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING;
             } else {
-                height += options.count * (DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING);
+                height += options.count * (AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING);
             }
         }
         height += 4;
@@ -150,12 +150,12 @@
         height += MAX(stateSize.height, 16);
     } else {
         if (hasMulti) {
-            height += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
+            height += AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING;
         }
         //"自定义回答"按钮
-        height += DSH_OPTION_ROW_HEIGHT;
+        height += AGENT_OPTION_ROW_HEIGHT;
     }
-    height += DSH_CARD_PADDING;
+    height += AGENT_CARD_PADDING;
     return CGSizeMake(width, height);
 }
 
@@ -165,7 +165,7 @@
         self.dynamicViews = [NSMutableArray array];
         self.optionMeta = [NSMutableArray array];
         self.localSelected = [NSMutableDictionary dictionary];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDshAnswered:) name:WFCUDshAnsweredNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAgentAnswered:) name:WFCUAgentAnsweredNotification object:nil];
     }
     return self;
 }
@@ -174,7 +174,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)onDshAnswered:(NSNotification *)notification {
+- (void)onAgentAnswered:(NSNotification *)notification {
     WFCCAgentQuestionMessageContent *content = (WFCCAgentQuestionMessageContent *)self.model.message.content;
     if (![content isKindOfClass:[WFCCAgentQuestionMessageContent class]]) {
         return;
@@ -243,8 +243,8 @@
         return;
     }
     CGFloat width = self.contentArea.bounds.size.width;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat currentY = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat currentY = AGENT_CARD_PADDING;
     BOOL locked = [self isLocked];
 
     NSDictionary *first = content.questions.firstObject;
@@ -252,7 +252,7 @@
     if (header.length) {
         UILabel *headerLabel = [self makeLabel:[UIFont scaledBoldSystemFontOfSize:14] color:[UIColor blackColor] lines:1];
         headerLabel.text = [NSString stringWithFormat:@"【%@】", header];
-        headerLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 20);
+        headerLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 20);
         [self addView:headerLabel];
         currentY += 20 + 8;
     }
@@ -270,7 +270,7 @@
         CGSize titleSize = [WFCUUtilities getTextDrawingSize:title
                                                         font:titleLabel.font
                                                constrainedSize:CGSizeMake(contentWidth, 400)];
-        titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(titleSize.height, 18));
+        titleLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, MAX(titleSize.height, 18));
         [self addView:titleLabel];
         currentY += MAX(titleSize.height, 18) + 4;
 
@@ -282,17 +282,17 @@
             CGSize detailSize = [WFCUUtilities getTextDrawingSize:detail
                                                              font:detailLabel.font
                                                     constrainedSize:CGSizeMake(contentWidth, 200)];
-            detailLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, detailSize.height);
+            detailLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, detailSize.height);
             [self addView:detailLabel];
             currentY += detailSize.height + 4;
         }
         if (planReview && detail.length && !locked) {
             UIButton *planButton = [self makeButton:@"查看计划" primary:NO];
-            planButton.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 36);
+            planButton.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 36);
             planButton.tag = qi;
             [planButton addTarget:self action:@selector(onShowPlan:) forControlEvents:UIControlEventTouchUpInside];
             [self addView:planButton];
-            currentY += 36 + DSH_OPTION_SPACING;
+            currentY += 36 + AGENT_OPTION_SPACING;
         }
 
         NSArray *options = [[self class] optionsOf:question];
@@ -306,24 +306,24 @@
                 NSDictionary *intent = question[@"intent"];
                 NSString *approveLabel = [[self class] stringOf:intent key:@"approve"];
                 CGFloat btnWidth = (contentWidth - (options.count - 1) * 8) / options.count;
-                CGFloat btnX = DSH_CARD_PADDING;
+                CGFloat btnX = AGENT_CARD_PADDING;
                 for (NSDictionary *option in options) {
                     NSString *label = [[self class] stringOf:option key:@"label"] ?: @"";
                     BOOL isApprove = approveLabel.length && [label isEqualToString:approveLabel];
                     UIButton *button = [self makeButton:label primary:isApprove];
-                    button.frame = CGRectMake(btnX, currentY, btnWidth, DSH_OPTION_ROW_HEIGHT);
+                    button.frame = CGRectMake(btnX, currentY, btnWidth, AGENT_OPTION_ROW_HEIGHT);
                     button.tag = self.optionMeta.count;
                     [button addTarget:self action:@selector(onOptionTapped:) forControlEvents:UIControlEventTouchUpInside];
                     [self addView:button];
                     [self.optionMeta addObject:@{@"questionId": questionId, @"label": label, @"multiSelect": @(NO)}];
                     btnX += btnWidth + 8;
                 }
-                currentY += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
+                currentY += AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING;
             } else {
                 for (NSDictionary *option in options) {
                     NSString *label = [[self class] stringOf:option key:@"label"] ?: @"";
                     UIButton *button = [self makeButton:label primary:NO];
-                    button.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, DSH_OPTION_ROW_HEIGHT);
+                    button.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, AGENT_OPTION_ROW_HEIGHT);
                     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                     button.contentEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 12);
                     button.tag = self.optionMeta.count;
@@ -333,7 +333,7 @@
                     if (multiSelect && [self.localSelected[questionId] containsObject:label]) {
                         button.backgroundColor = [[WFCUAgentState accentColor] colorWithAlphaComponent:0.12];
                     }
-                    currentY += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
+                    currentY += AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING;
                 }
             }
         }
@@ -349,7 +349,7 @@
         CGSize stateSize = [WFCUUtilities getTextDrawingSize:stateText
                                                         font:stateLabel.font
                                                constrainedSize:CGSizeMake(contentWidth, 100)];
-        stateLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(stateSize.height, 16));
+        stateLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, MAX(stateSize.height, 16));
         [self addView:stateLabel];
     } else {
         if (hasMulti) {
@@ -358,16 +358,16 @@
                 selectedCount += set.count;
             }
             UIButton *submitButton = [self makeButton:@"提交" primary:YES];
-            submitButton.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, DSH_OPTION_ROW_HEIGHT);
+            submitButton.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, AGENT_OPTION_ROW_HEIGHT);
             submitButton.enabled = selectedCount > 0;
             submitButton.alpha = selectedCount > 0 ? 1.0 : 0.5;
             [submitButton addTarget:self action:@selector(onSubmit) forControlEvents:UIControlEventTouchUpInside];
             [self addView:submitButton];
             self.submitButton = submitButton;
-            currentY += DSH_OPTION_ROW_HEIGHT + DSH_OPTION_SPACING;
+            currentY += AGENT_OPTION_ROW_HEIGHT + AGENT_OPTION_SPACING;
         }
         UIButton *customButton = [self makeButton:@"自定义回答" primary:NO];
-        customButton.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, DSH_OPTION_ROW_HEIGHT);
+        customButton.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, AGENT_OPTION_ROW_HEIGHT);
         [customButton addTarget:self action:@selector(onCustomAnswer) forControlEvents:UIControlEventTouchUpInside];
         [self addView:customButton];
     }
@@ -421,7 +421,7 @@
 
 - (void)onCustomAnswer {
     //卡片内不嵌输入框：聚焦会话主输入框并弹键盘，用户直接发的文本会被服务端当作该卡片的自定义回答
-    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUDshFocusInputNotification object:self.model.message.conversation];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUAgentFocusInputNotification object:self.model.message.conversation];
 }
 
 - (void)onShowPlan:(UIButton *)button {
@@ -444,7 +444,7 @@
             break;
         }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUDshShowPlanDetailNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUAgentShowPlanDetailNotification
                                                         object:nil
                                                       userInfo:@{@"conversation": self.model.message.conversation,
                                                                  @"qid": content.qid ?: @"",
@@ -467,7 +467,7 @@
     //立即本地置灰（不依赖服务端推送实时性）
     self.locallyAnswered = YES;
     [self rebuild];
-    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUDshAnsweredNotification object:nil userInfo:@{@"qid": content.qid ?: @""}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUAgentAnsweredNotification object:nil userInfo:@{@"qid": content.qid ?: @""}];
 }
 
 @end

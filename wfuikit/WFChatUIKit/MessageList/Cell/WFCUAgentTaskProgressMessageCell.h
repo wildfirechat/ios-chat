@@ -1,8 +1,8 @@
 //
-//  WFCUDshTaskProgressMessageCell.h
+//  WFCUAgentTaskProgressMessageCell.h
 //  WFChatUIKit
 //
-//  DSH 任务进度卡片 Cell（208），纯展示。
+//  Agent 任务进度卡片 Cell（208），纯展示。
 //
 
 #import "WFCUMessageCell.h"

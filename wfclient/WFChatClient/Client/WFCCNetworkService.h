@@ -335,10 +335,22 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 @property(nonatomic, strong)id<WFCCUrlRedirector> urlRedirector;
 
 /**
- 记录每个会话的最后一个流式文本生成中的消息
- key: conversationKey (targetId_line), value: WFCCMessage
- */
-@property(nonatomic, strong) NSMutableDictionary<NSString *, WFCCMessage *> *streamingTextGeneratingMessages;
+  记录每个会话中正在流式文本生成的消息（多 agent 多机器人两级缓存，语义与 Web 端一致）。
+  同一会话里多个机器人可能同时各自生成，每个生成回合有独立 streamId，因此：
+  外层 key: conversationKey (targetId_line)，内层 key: streamId，value: WFCCMessage。
+  - 14 生成中：按 streamId 覆盖式 upsert 该回合最新内容；
+  - 15 已生成 / 20 已取消：只删除对应 streamId，内层 map 空时才删除会话 key。
+  */
+@property(nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, WFCCMessage *> *> *streamingTextGeneratingMessages;
+
+/**
+  获取会话所有仍在生成中的流式文本消息（多 agent 时每个 streamId 一条）。
+  内部会顺带清理已过期（>60s 未更新）的 stream，保持与旧单条接口一致的语义。
+
+  @param conversation 会话
+  @return 正在生成的消息数组，按开始生成先后（serverTime 升序）排列；没有则返回空数组
+  */
+- (NSArray<WFCCMessage *> *)allStreamingTextGeneratingMessages:(WFCCConversation *)conversation;
 
 /**
  当前是否处于登录状态

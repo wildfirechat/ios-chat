@@ -45,22 +45,22 @@
 		2BBC9CFD255D0007007DA28A /* WFCUConversationFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BBC9CFB255D0007007DA28A /* WFCUConversationFilesViewController.m */; };
 		2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD671A22336E821007A9FEC /* WFCUConfigManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD671A32336E821007A9FEC /* WFCUConfigManager.m */; };
-		B7DC0001DC1A00000000000D /* WFCUDshState.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000001 /* WFCUDshState.h */; };
-		B7DC0001DC1A00000000000E /* WFCUDshState.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000002 /* WFCUDshState.m */; };
-		B7DC0001DC1A00000000000F /* WFCUDshQuestionMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000003 /* WFCUDshQuestionMessageCell.h */; };
-		B7DC0001DC1A000000000010 /* WFCUDshQuestionMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000004 /* WFCUDshQuestionMessageCell.m */; };
-		B7DC0001DC1A000000000011 /* WFCUDshApprovalMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000005 /* WFCUDshApprovalMessageCell.h */; };
-		B7DC0001DC1A000000000012 /* WFCUDshApprovalMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000006 /* WFCUDshApprovalMessageCell.m */; };
-		B7DC0001DC1A000000000013 /* WFCUDshGoalMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000007 /* WFCUDshGoalMessageCell.h */; };
-		B7DC0001DC1A000000000014 /* WFCUDshGoalMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000008 /* WFCUDshGoalMessageCell.m */; };
-		B7DC0003DC1A00000000000003 /* WFCUDshTaskProgressMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0003DC1A00000000000001 /* WFCUDshTaskProgressMessageCell.h */; };
-		B7DC0003DC1A00000000000004 /* WFCUDshTaskProgressMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0003DC1A00000000000002 /* WFCUDshTaskProgressMessageCell.m */; };
-		B7DC0001DC1A000000000015 /* WFCUDshTextMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000009 /* WFCUDshTextMessageCell.h */; };
-		B7DC0001DC1A000000000016 /* WFCUDshTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000A /* WFCUDshTextMessageCell.m */; };
-		B7DC0001DC1A000000000017 /* WFCUDshPlanDetailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000B /* WFCUDshPlanDetailViewController.h */; };
-		B7DC0001DC1A000000000018 /* WFCUDshPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000C /* WFCUDshPlanDetailViewController.m */; };
-		B7DC0002DC1A00000000000003 /* WFCUDshAgentPanelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0002DC1A00000000000001 /* WFCUDshAgentPanelViewController.h */; };
-		B7DC0002DC1A00000000000004 /* WFCUDshAgentPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0002DC1A00000000000002 /* WFCUDshAgentPanelViewController.m */; };
+		B7DC0001DC1A00000000000D /* WFCUAgentState.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000001 /* WFCUAgentState.h */; };
+		B7DC0001DC1A00000000000E /* WFCUAgentState.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000002 /* WFCUAgentState.m */; };
+		B7DC0001DC1A00000000000F /* WFCUAgentQuestionMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000003 /* WFCUAgentQuestionMessageCell.h */; };
+		B7DC0001DC1A000000000010 /* WFCUAgentQuestionMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000004 /* WFCUAgentQuestionMessageCell.m */; };
+		B7DC0001DC1A000000000011 /* WFCUAgentApprovalMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000005 /* WFCUAgentApprovalMessageCell.h */; };
+		B7DC0001DC1A000000000012 /* WFCUAgentApprovalMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000006 /* WFCUAgentApprovalMessageCell.m */; };
+		B7DC0001DC1A000000000013 /* WFCUAgentGoalMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000007 /* WFCUAgentGoalMessageCell.h */; };
+		B7DC0001DC1A000000000014 /* WFCUAgentGoalMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000008 /* WFCUAgentGoalMessageCell.m */; };
+		B7DC0003DC1A00000000000003 /* WFCUAgentTaskProgressMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0003DC1A00000000000001 /* WFCUAgentTaskProgressMessageCell.h */; };
+		B7DC0003DC1A00000000000004 /* WFCUAgentTaskProgressMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0003DC1A00000000000002 /* WFCUAgentTaskProgressMessageCell.m */; };
+		B7DC0001DC1A000000000015 /* WFCUAgentTextMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A00000000000009 /* WFCUAgentTextMessageCell.h */; };
+		B7DC0001DC1A000000000016 /* WFCUAgentTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000A /* WFCUAgentTextMessageCell.m */; };
+		B7DC0001DC1A000000000017 /* WFCUAgentPlanDetailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000B /* WFCUAgentPlanDetailViewController.h */; };
+		B7DC0001DC1A000000000018 /* WFCUAgentPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0001DC1A0000000000000C /* WFCUAgentPlanDetailViewController.m */; };
+		B7DC0002DC1A00000000000003 /* WFCUAgentPanelViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DC0002DC1A00000000000001 /* WFCUAgentPanelViewController.h */; };
+		B7DC0002DC1A00000000000004 /* WFCUAgentPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DC0002DC1A00000000000002 /* WFCUAgentPanelViewController.m */; };
 		2BD6D2FD25FF603B001F2E33 /* Predefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F551036217F5CC100F56C26 /* Predefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2BD785C025482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */; };
 		2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */; };
@@ -755,22 +755,22 @@
 		2BCEC52F232E10E900D55E0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/wfc.strings"; sourceTree = "<group>"; };
 		2BD671A22336E821007A9FEC /* WFCUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUConfigManager.h; sourceTree = "<group>"; };
 		2BD671A32336E821007A9FEC /* WFCUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUConfigManager.m; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000001 /* WFCUDshState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshState.h; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000002 /* WFCUDshState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshState.m; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000003 /* WFCUDshQuestionMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshQuestionMessageCell.h; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000004 /* WFCUDshQuestionMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshQuestionMessageCell.m; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000005 /* WFCUDshApprovalMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshApprovalMessageCell.h; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000006 /* WFCUDshApprovalMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshApprovalMessageCell.m; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000007 /* WFCUDshGoalMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshGoalMessageCell.h; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000008 /* WFCUDshGoalMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshGoalMessageCell.m; sourceTree = "<group>"; };
-		B7DC0003DC1A00000000000001 /* WFCUDshTaskProgressMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshTaskProgressMessageCell.h; sourceTree = "<group>"; };
-		B7DC0003DC1A00000000000002 /* WFCUDshTaskProgressMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshTaskProgressMessageCell.m; sourceTree = "<group>"; };
-		B7DC0001DC1A00000000000009 /* WFCUDshTextMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshTextMessageCell.h; sourceTree = "<group>"; };
-		B7DC0001DC1A0000000000000A /* WFCUDshTextMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshTextMessageCell.m; sourceTree = "<group>"; };
-		B7DC0001DC1A0000000000000B /* WFCUDshPlanDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshPlanDetailViewController.h; sourceTree = "<group>"; };
-		B7DC0001DC1A0000000000000C /* WFCUDshPlanDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshPlanDetailViewController.m; sourceTree = "<group>"; };
-		B7DC0002DC1A00000000000001 /* WFCUDshAgentPanelViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUDshAgentPanelViewController.h; sourceTree = "<group>"; };
-		B7DC0002DC1A00000000000002 /* WFCUDshAgentPanelViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUDshAgentPanelViewController.m; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000001 /* WFCUAgentState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentState.h; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000002 /* WFCUAgentState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentState.m; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000003 /* WFCUAgentQuestionMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentQuestionMessageCell.h; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000004 /* WFCUAgentQuestionMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentQuestionMessageCell.m; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000005 /* WFCUAgentApprovalMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentApprovalMessageCell.h; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000006 /* WFCUAgentApprovalMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentApprovalMessageCell.m; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000007 /* WFCUAgentGoalMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentGoalMessageCell.h; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000008 /* WFCUAgentGoalMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentGoalMessageCell.m; sourceTree = "<group>"; };
+		B7DC0003DC1A00000000000001 /* WFCUAgentTaskProgressMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentTaskProgressMessageCell.h; sourceTree = "<group>"; };
+		B7DC0003DC1A00000000000002 /* WFCUAgentTaskProgressMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentTaskProgressMessageCell.m; sourceTree = "<group>"; };
+		B7DC0001DC1A00000000000009 /* WFCUAgentTextMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentTextMessageCell.h; sourceTree = "<group>"; };
+		B7DC0001DC1A0000000000000A /* WFCUAgentTextMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentTextMessageCell.m; sourceTree = "<group>"; };
+		B7DC0001DC1A0000000000000B /* WFCUAgentPlanDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentPlanDetailViewController.h; sourceTree = "<group>"; };
+		B7DC0001DC1A0000000000000C /* WFCUAgentPlanDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentPlanDetailViewController.m; sourceTree = "<group>"; };
+		B7DC0002DC1A00000000000001 /* WFCUAgentPanelViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUAgentPanelViewController.h; sourceTree = "<group>"; };
+		B7DC0002DC1A00000000000002 /* WFCUAgentPanelViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUAgentPanelViewController.m; sourceTree = "<group>"; };
 		2BD785BE25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUSelectNoDisturbingTimeViewController.h; sourceTree = "<group>"; };
 		2BD785BF25482F4500E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUSelectNoDisturbingTimeViewController.m; sourceTree = "<group>"; };
 		2BD8D72324D69B5300281B81 /* WFCUFilesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUFilesViewController.h; sourceTree = "<group>"; };
@@ -1718,16 +1718,16 @@
 				B7B6C6932F5D66F400319C8F /* WFCUMarkdownCell.m */,
 				B770E8BE2F40C57A00D4B219 /* WFCUPollMessageCell.h */,
 				B770E8BF2F40C57A00D4B219 /* WFCUPollMessageCell.m */,
-				B7DC0001DC1A00000000000003 /* WFCUDshQuestionMessageCell.h */,
-				B7DC0001DC1A00000000000004 /* WFCUDshQuestionMessageCell.m */,
-				B7DC0001DC1A00000000000005 /* WFCUDshApprovalMessageCell.h */,
-				B7DC0001DC1A00000000000006 /* WFCUDshApprovalMessageCell.m */,
-				B7DC0001DC1A00000000000007 /* WFCUDshGoalMessageCell.h */,
-				B7DC0001DC1A00000000000008 /* WFCUDshGoalMessageCell.m */,
-				B7DC0003DC1A00000000000001 /* WFCUDshTaskProgressMessageCell.h */,
-				B7DC0003DC1A00000000000002 /* WFCUDshTaskProgressMessageCell.m */,
-				B7DC0001DC1A00000000000009 /* WFCUDshTextMessageCell.h */,
-				B7DC0001DC1A0000000000000A /* WFCUDshTextMessageCell.m */,
+				B7DC0001DC1A00000000000003 /* WFCUAgentQuestionMessageCell.h */,
+				B7DC0001DC1A00000000000004 /* WFCUAgentQuestionMessageCell.m */,
+				B7DC0001DC1A00000000000005 /* WFCUAgentApprovalMessageCell.h */,
+				B7DC0001DC1A00000000000006 /* WFCUAgentApprovalMessageCell.m */,
+				B7DC0001DC1A00000000000007 /* WFCUAgentGoalMessageCell.h */,
+				B7DC0001DC1A00000000000008 /* WFCUAgentGoalMessageCell.m */,
+				B7DC0003DC1A00000000000001 /* WFCUAgentTaskProgressMessageCell.h */,
+				B7DC0003DC1A00000000000002 /* WFCUAgentTaskProgressMessageCell.m */,
+				B7DC0001DC1A00000000000009 /* WFCUAgentTextMessageCell.h */,
+				B7DC0001DC1A0000000000000A /* WFCUAgentTextMessageCell.m */,
 				B770E8C02F40C57A00D4B219 /* WFCUPollResultMessageCell.h */,
 				B770E8C12F40C57A00D4B219 /* WFCUPollResultMessageCell.m */,
 				B749E9982F3F86490092DEAE /* WFCUCollectionCell.h */,
@@ -1800,10 +1800,10 @@
 				B7B1A49E2F0A53D0003316BB /* WFCUCalendarSearchViewController.m */,
 				2F550ED0217F5CC000F56C26 /* WFCUMessageListViewController.m */,
 				2F550ED1217F5CC000F56C26 /* WFCUMessageListViewController.h */,
-				B7DC0001DC1A0000000000000B /* WFCUDshPlanDetailViewController.h */,
-				B7DC0001DC1A0000000000000C /* WFCUDshPlanDetailViewController.m */,
-				B7DC0002DC1A00000000000001 /* WFCUDshAgentPanelViewController.h */,
-				B7DC0002DC1A00000000000002 /* WFCUDshAgentPanelViewController.m */,
+				B7DC0001DC1A0000000000000B /* WFCUAgentPlanDetailViewController.h */,
+				B7DC0001DC1A0000000000000C /* WFCUAgentPlanDetailViewController.m */,
+				B7DC0002DC1A00000000000001 /* WFCUAgentPanelViewController.h */,
+				B7DC0002DC1A00000000000002 /* WFCUAgentPanelViewController.m */,
 				2BB4191424ED212200ABFEF1 /* WFCUUserMessageListViewController.h */,
 				2BB4191524ED212200ABFEF1 /* WFCUUserMessageListViewController.m */,
 				2F535BFD25296E6600C9AF09 /* WFCUQuoteViewController.h */,
@@ -2373,8 +2373,8 @@
 				2F551090217F5CC200F56C26 /* WFCUUtilities.m */,
 				2BD671A22336E821007A9FEC /* WFCUConfigManager.h */,
 				2BD671A32336E821007A9FEC /* WFCUConfigManager.m */,
-				B7DC0001DC1A00000000000001 /* WFCUDshState.h */,
-				B7DC0001DC1A00000000000002 /* WFCUDshState.m */,
+				B7DC0001DC1A00000000000001 /* WFCUAgentState.h */,
+				B7DC0001DC1A00000000000002 /* WFCUAgentState.m */,
 				2F518FEE235ED5B300FA3D58 /* WFCUAppServiceProvider.h */,
 				2F638919254E3FE30084EEA6 /* WFCUFavoriteItem.h */,
 				2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */,
@@ -3016,14 +3016,14 @@
 				B72FBB13283230F0005F2745 /* DWKWebView.h in Headers */,
 				2F5511F3217F5CC300F56C26 /* UITabBar+badge.h in Headers */,
 				2BD671A42336E821007A9FEC /* WFCUConfigManager.h in Headers */,
-				B7DC0001DC1A00000000000D /* WFCUDshState.h in Headers */,
-				B7DC0001DC1A00000000000F /* WFCUDshQuestionMessageCell.h in Headers */,
-				B7DC0001DC1A000000000011 /* WFCUDshApprovalMessageCell.h in Headers */,
-				B7DC0001DC1A000000000013 /* WFCUDshGoalMessageCell.h in Headers */,
-				B7DC0003DC1A00000000000003 /* WFCUDshTaskProgressMessageCell.h in Headers */,
-				B7DC0001DC1A000000000015 /* WFCUDshTextMessageCell.h in Headers */,
-				B7DC0001DC1A000000000017 /* WFCUDshPlanDetailViewController.h in Headers */,
-				B7DC0002DC1A00000000000003 /* WFCUDshAgentPanelViewController.h in Headers */,
+				B7DC0001DC1A00000000000D /* WFCUAgentState.h in Headers */,
+				B7DC0001DC1A00000000000F /* WFCUAgentQuestionMessageCell.h in Headers */,
+				B7DC0001DC1A000000000011 /* WFCUAgentApprovalMessageCell.h in Headers */,
+				B7DC0001DC1A000000000013 /* WFCUAgentGoalMessageCell.h in Headers */,
+				B7DC0003DC1A00000000000003 /* WFCUAgentTaskProgressMessageCell.h in Headers */,
+				B7DC0001DC1A000000000015 /* WFCUAgentTextMessageCell.h in Headers */,
+				B7DC0001DC1A000000000017 /* WFCUAgentPlanDetailViewController.h in Headers */,
+				B7DC0002DC1A00000000000003 /* WFCUAgentPanelViewController.h in Headers */,
 				2F5510BD217F5CC200F56C26 /* WFCUGeneralModifyViewController.h in Headers */,
 				2F5511E9217F5CC300F56C26 /* WFCUForwardViewController.h in Headers */,
 				B755657228389F8900BE047C /* WFCUArticlesCell.h in Headers */,
@@ -3486,14 +3486,14 @@
 				B71F0A7C28F54156000A7C8A /* DDMultiFormatter.m in Sources */,
 				B7C1917529CEFF7D00DBEA9B /* XLPageTitleCell.m in Sources */,
 				2BD671A52336E821007A9FEC /* WFCUConfigManager.m in Sources */,
-				B7DC0001DC1A00000000000E /* WFCUDshState.m in Sources */,
-				B7DC0001DC1A000000000010 /* WFCUDshQuestionMessageCell.m in Sources */,
-				B7DC0001DC1A000000000012 /* WFCUDshApprovalMessageCell.m in Sources */,
-				B7DC0001DC1A000000000014 /* WFCUDshGoalMessageCell.m in Sources */,
-				B7DC0003DC1A00000000000004 /* WFCUDshTaskProgressMessageCell.m in Sources */,
-				B7DC0001DC1A000000000016 /* WFCUDshTextMessageCell.m in Sources */,
-				B7DC0001DC1A000000000018 /* WFCUDshPlanDetailViewController.m in Sources */,
-				B7DC0002DC1A00000000000004 /* WFCUDshAgentPanelViewController.m in Sources */,
+				B7DC0001DC1A00000000000E /* WFCUAgentState.m in Sources */,
+				B7DC0001DC1A000000000010 /* WFCUAgentQuestionMessageCell.m in Sources */,
+				B7DC0001DC1A000000000012 /* WFCUAgentApprovalMessageCell.m in Sources */,
+				B7DC0001DC1A000000000014 /* WFCUAgentGoalMessageCell.m in Sources */,
+				B7DC0003DC1A00000000000004 /* WFCUAgentTaskProgressMessageCell.m in Sources */,
+				B7DC0001DC1A000000000016 /* WFCUAgentTextMessageCell.m in Sources */,
+				B7DC0001DC1A000000000018 /* WFCUAgentPlanDetailViewController.m in Sources */,
+				B7DC0002DC1A00000000000004 /* WFCUAgentPanelViewController.m in Sources */,
 				2F551205217F5CC300F56C26 /* WFCUConversationTableViewCell.m in Sources */,
 				B7B6C69C2F5D70D300319C8F /* WFCUMarkdownLabel.m in Sources */,
 				2BDF57A924AD70C8003C1F08 /* DNImageFetchOperation.m in Sources */,

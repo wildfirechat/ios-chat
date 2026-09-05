@@ -1,14 +1,14 @@
 //
-//  WFCUDshPlanDetailViewController.m
+//  WFCUAgentPlanDetailViewController.m
 //  WFChatUIKit
 //
-//  DSH plan-review 全屏计划详情页。底部 批准/拒绝 按钮发送 DSH_ANSWER 后返回。
+//  Agent plan-review 全屏计划详情页。底部 批准/拒绝 按钮发送 AGENT_ANSWER 后返回。
 //
 
-#import "WFCUDshPlanDetailViewController.h"
+#import "WFCUAgentPlanDetailViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
-#import "WFCUDshState.h"
+#import <WFChatClient/WFCCAgentMessageContents.h>
+#import "WFCUAgentState.h"
 #import "WFCUUtilities.h"
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
@@ -106,7 +106,7 @@
     [[WFCCIMService sharedWFCIMService] send:self.conversation content:answer success:nil error:nil];
 
     //通知提问卡片立即本地置灰（不依赖服务端推送实时性）
-    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUDshAnsweredNotification object:nil userInfo:@{@"qid": self.qid ?: @""}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WFCUAgentAnsweredNotification object:nil userInfo:@{@"qid": self.qid ?: @""}];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -171,7 +171,7 @@
     [hud showAnimated:YES];
     
     __weak typeof(self) ws = self;
-    [[WFCCIMService sharedWFCIMService] handleJoinGroupRequest:self.groupId memberId:targetUserId inviter:inviterId status:1 memberExtra:nil notifyLines:@[@(0)] success:^{
+    [[WFCCIMService sharedWFCIMService] handleJoinGroupRequest:self.groupId memberId:targetUserId inviter:inviterId status:1 memberExtra:nil notifyLines:@[@(self.line)] success:^{
         hud.hidden = YES;
         [ws.view makeToast:WFCString(@"UpdateDone")
                   duration:2

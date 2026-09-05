@@ -285,6 +285,7 @@
 - (void)onViewAllMember:(id)sender {
     WFCUGroupMemberCollectionViewController *vc = [[WFCUGroupMemberCollectionViewController alloc] init];
     vc.groupId = self.groupInfo.target;
+    vc.line = (int)self.conversation.line;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -411,7 +412,7 @@
             __weak typeof(self) ws = self;
             UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:WFCString(@"Dismiss") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [[WFCCIMService sharedWFCIMService] removeConversation:self.conversation clearMessage:YES];
-                [[WFCCIMService sharedWFCIMService] dismissGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] dismissGroup:self.conversation.target notifyLines:@[@(self.conversation.line)] notifyContent:nil success:^{
                     [ws.navigationController popToRootViewControllerAnimated:YES];
                 } error:^(int error_code) {
                     
@@ -428,7 +429,7 @@
         } else {
             __weak typeof(self) ws = self;
             //可以提示是否清空消息，如果保留消息keepMessage就为YES
-            [[WFCCIMService sharedWFCIMService] quitGroup:self.conversation.target keepMessage:NO notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] quitGroup:self.conversation.target keepMessage:NO notifyLines:@[@(self.conversation.line)] notifyContent:nil success:^{
                 [ws.navigationController popToRootViewControllerAnimated:YES];
             } error:^(int error_code) {
                 
@@ -1092,7 +1093,7 @@
     gmvc.titleText = WFCString(@"ModifyGroupName");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
-      [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Name newValue:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
+      [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Name newValue:newValue notifyLines:@[@(self.conversation.line)] notifyContent:nil success:^{
         result(YES);
           weakSelf.groupInfo.name = newValue;
           [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -1105,6 +1106,7 @@
   } else if ([self isGroupManageCell:indexPath]) {
       GroupManageTableViewController *gmvc = [[GroupManageTableViewController alloc] init];
       gmvc.groupInfo = self.groupInfo;
+      gmvc.line = (int)self.conversation.line;
       [self.navigationController pushViewController:gmvc animated:YES];
   } else if ([self isSearchMessageCell:indexPath]) {
       WFCUConversationSearchTableViewController *mvc = [[WFCUConversationSearchTableViewController alloc] init];
@@ -1124,7 +1126,7 @@
     gmvc.titleText = WFCString(@"ModifyMyGroupNameCard");
     gmvc.canEmpty = NO;
     gmvc.tryModify = ^(NSString *newValue, void (^result)(BOOL success)) {
-      [[WFCCIMService sharedWFCIMService] modifyGroupAlias:self.conversation.target alias:newValue notifyLines:@[@(0)] notifyContent:nil success:^{
+      [[WFCCIMService sharedWFCIMService] modifyGroupAlias:self.conversation.target alias:newValue notifyLines:@[@(self.conversation.line)] notifyContent:nil success:^{
         result(YES);
           [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
       } error:^(int error_code) {
@@ -1214,7 +1216,7 @@
 
           pvc.selectResult = ^(NSArray<NSString *> *contacts) {
               NSString *memberExtra = [WFCCUtilities getGroupMemberExtra:GroupMemberSource_Invite sourceTargetId:[WFCCNetworkService sharedInstance].userId];
-              [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
+              [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.conversation.target memberExtra:memberExtra notifyLines:@[@(ws.conversation.line)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
                   
               } error:^(int error_code) {
@@ -1247,7 +1249,7 @@
         pvc.multiSelect = YES;
         __weak typeof(self)ws = self;
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-          [[WFCCIMService sharedWFCIMService] kickoffMembers:contacts fromGroup:self.conversation.target notifyLines:@[@(0)] notifyContent:nil success:^{
+          [[WFCCIMService sharedWFCIMService] kickoffMembers:contacts fromGroup:self.conversation.target notifyLines:@[@(self.conversation.line)] notifyContent:nil success:^{
             [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.conversation.target forceUpdate:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
               NSMutableArray *tmpArray = [ws.memberList mutableCopy];

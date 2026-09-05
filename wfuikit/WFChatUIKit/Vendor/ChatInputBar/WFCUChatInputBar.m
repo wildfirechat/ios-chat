@@ -39,8 +39,8 @@
 #import "WFCUPollHomeViewController.h"
 #import "WFCUPanFilePickerViewController.h"
 #import "WFCUPanFile.h"
-#import "WFCUDshState.h"
-#import "WFCUDshAgentPanelViewController.h"
+#import "WFCUAgentState.h"
+#import "WFCUAgentPanelViewController.h"
 
 #define CHAT_INPUT_BAR_PADDING 8
 #define CHAT_INPUT_BAR_ICON_SIZE (CHAT_INPUT_BAR_HEIGHT - CHAT_INPUT_BAR_PADDING - CHAT_INPUT_BAR_PADDING)
@@ -86,10 +86,10 @@
 
 @property (nonatomic, strong)UIButton *voiceInputBtn;
 
-//DSH：输入框占位文本 & '/' 命令浮层
+//Agent：输入框占位文本 & '/' 命令浮层
 @property (nonatomic, strong)UILabel *placeholderLabel;
-@property (nonatomic, strong)UITableView *dshCommandMenu;
-@property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *dshFilteredCommands;
+@property (nonatomic, strong)UITableView *agentCommandMenu;
+@property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *agentFilteredCommands;
 
 @property (nonatomic, strong)UIView *inputContainer;
 @property (nonatomic, strong)UIView *publicContainer;
@@ -792,7 +792,7 @@
         [self.voiceInputBtn setHidden:YES];
         //每次打开扩展面板刷新 "AI 会话设置" 置灰状态（AI 不在线时禁用）
         if ([self.pluginInputView isKindOfClass:[WFCUPluginBoardView class]]) {
-            ((WFCUPluginBoardView *)self.pluginInputView).dshDisabled = ![self dshOwnerOnline];
+            ((WFCUPluginBoardView *)self.pluginInputView).agentDisabled = ![self agentOwnerOnline];
         }
         self.textInputView.inputView = self.pluginInputView;
         if (!self.textInputView.isFirstResponder) {
@@ -956,7 +956,7 @@
     self.textInputView.text = [self.textInputView.text stringByAppendingString:text];
 }
 
-#pragma mark - DSH 占位文本 & '/' 命令浮层
+#pragma mark - Agent 占位文本 & '/' 命令浮层
 - (void)setPlaceholder:(NSString *)placeholder {
     _placeholder = [placeholder copy];
     [self updatePlaceholderVisibility];
@@ -988,11 +988,11 @@
     [self.textInputView becomeFirstResponder];
 }
 
-//DSH '/' 命令浮层：输入框文本以"/"开头时弹出，按输入实时前缀过滤；仅 DSH 会话启用
-- (void)updateDshCommandMenu:(NSString *)text {
-    NSArray<NSDictionary<NSString *, NSString *> *> *commands = [WFCUAgentState dshCommands:self.conversation];
+//Agent '/' 命令浮层：输入框文本以"/"开头时弹出，按输入实时前缀过滤；仅 Agent 会话启用
+- (void)updateAgentCommandMenu:(NSString *)text {
+    NSArray<NSDictionary<NSString *, NSString *> *> *commands = [WFCUAgentState agentCommands:self.conversation];
     if (!commands.count || ![text hasPrefix:@"/"] || [text containsString:@"\n"] || [text containsString:@" "]) {
-        [self hideDshCommandMenu];
+        [self hideAgentCommandMenu];
         return;
     }
     NSMutableArray<NSDictionary<NSString *, NSString *> *> *filtered = [NSMutableArray array];
@@ -1002,42 +1002,42 @@
         }
     }
     if (!filtered.count) {
-        [self hideDshCommandMenu];
+        [self hideAgentCommandMenu];
         return;
     }
-    self.dshFilteredCommands = filtered;
+    self.agentFilteredCommands = filtered;
 
     CGFloat rowHeight = 36;
     CGFloat menuHeight = MIN(filtered.count, 5) * rowHeight;
-    if (!self.dshCommandMenu) {
-        self.dshCommandMenu = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        self.dshCommandMenu.delegate = self;
-        self.dshCommandMenu.dataSource = self;
-        self.dshCommandMenu.rowHeight = rowHeight;
-        self.dshCommandMenu.layer.cornerRadius = 6;
-        self.dshCommandMenu.layer.borderWidth = 0.5;
-        self.dshCommandMenu.layer.borderColor = [UIColor colorWithHexString:@"0xededed"].CGColor;
-        self.dshCommandMenu.backgroundColor = [UIColor whiteColor];
-        [self.dshCommandMenu registerClass:[UITableViewCell class] forCellReuseIdentifier:@"DshCommandCell"];
-        [self.parentView addSubview:self.dshCommandMenu];
+    if (!self.agentCommandMenu) {
+        self.agentCommandMenu = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.agentCommandMenu.delegate = self;
+        self.agentCommandMenu.dataSource = self;
+        self.agentCommandMenu.rowHeight = rowHeight;
+        self.agentCommandMenu.layer.cornerRadius = 6;
+        self.agentCommandMenu.layer.borderWidth = 0.5;
+        self.agentCommandMenu.layer.borderColor = [UIColor colorWithHexString:@"0xededed"].CGColor;
+        self.agentCommandMenu.backgroundColor = [UIColor whiteColor];
+        [self.agentCommandMenu registerClass:[UITableViewCell class] forCellReuseIdentifier:@"AgentCommandCell"];
+        [self.parentView addSubview:self.agentCommandMenu];
     }
-    self.dshCommandMenu.frame = CGRectMake(8, self.frame.origin.y - menuHeight - 4, self.bounds.size.width - 16, menuHeight);
-    [self.parentView bringSubviewToFront:self.dshCommandMenu];
-    self.dshCommandMenu.hidden = NO;
-    [self.dshCommandMenu reloadData];
+    self.agentCommandMenu.frame = CGRectMake(8, self.frame.origin.y - menuHeight - 4, self.bounds.size.width - 16, menuHeight);
+    [self.parentView bringSubviewToFront:self.agentCommandMenu];
+    self.agentCommandMenu.hidden = NO;
+    [self.agentCommandMenu reloadData];
 }
 
-- (void)hideDshCommandMenu {
-    self.dshCommandMenu.hidden = YES;
+- (void)hideAgentCommandMenu {
+    self.agentCommandMenu.hidden = YES;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dshFilteredCommands.count;
+    return self.agentFilteredCommands.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DshCommandCell" forIndexPath:indexPath];
-    NSDictionary *command = self.dshFilteredCommands[indexPath.row];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AgentCommandCell" forIndexPath:indexPath];
+    NSDictionary *command = self.agentFilteredCommands[indexPath.row];
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:command[@"command"]
                                                                              attributes:@{NSFontAttributeName: [UIFont monospacedSystemFontOfSize:14 weight:UIFontWeightMedium]}];
     [attr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", command[@"desc"]]
@@ -1049,9 +1049,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     //点选把"命令+空格"填入输入框（不直接发送）
-    NSDictionary *command = self.dshFilteredCommands[indexPath.row];
+    NSDictionary *command = self.agentFilteredCommands[indexPath.row];
     self.textInputView.text = [command[@"command"] stringByAppendingString:@" "];
-    [self hideDshCommandMenu];
+    [self hideAgentCommandMenu];
     [self updatePlaceholderVisibility];
 }
 
@@ -1099,11 +1099,11 @@
 #endif
         BOOL hasPoll = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
         BOOL hasCollection = [WFCUConfigManager globalManager].collectionServiceProvider != nil && self.conversation.type == Group_Type;
-        //DSH/AI 会话（line==2）显示 "AI 会话设置" 入口
-        BOOL hasDsh = [WFCUAgentState isDshConversation:self.conversation];
-        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection withDsh:hasDsh];
+        //Agent/AI 会话（line==2）显示 "AI 会话设置" 入口
+        BOOL hasAgent = [WFCUAgentState isAgentConversation:self.conversation];
+        _pluginInputView = [[WFCUPluginBoardView alloc] initWithDelegate:self withVoip:hasVoip withPtt:hasPtt withPoll:hasPoll withCollection:hasCollection withAgent:hasAgent];
         //AI 不在线时 "AI 会话设置" 入口置灰禁用
-        ((WFCUPluginBoardView *)_pluginInputView).dshDisabled = ![self dshOwnerOnline];
+        ((WFCUPluginBoardView *)_pluginInputView).agentDisabled = ![self agentOwnerOnline];
     }
     return _pluginInputView;
 }
@@ -1374,7 +1374,7 @@
     
     [self.delegate didTouchSend:self.textInputView.text withMentionInfos:self.mentionInfos withQuoteInfo:self.quoteInfo];
     self.textInputView.text = nil;
-    [self hideDshCommandMenu];
+    [self hideAgentCommandMenu];
     [self updatePlaceholderVisibility];
     [self clearQuoteInfo];
     [self updateQuoteView:NO showKeyboard:YES];
@@ -1492,7 +1492,7 @@
     
   NSString *oldStr = textView.text;
   NSString *newStr = [oldStr stringByReplacingCharactersInRange:range withString:text];
-  [self updateDshCommandMenu:newStr];
+  [self updateAgentCommandMenu:newStr];
   CGFloat textAreaWidth = textView.frame.size.width - 2 * textView.textContainer.lineFragmentPadding;
   CGSize size = [WFCUUtilities getTextDrawingSize:newStr font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(textAreaWidth, 1000)];
   
@@ -1600,7 +1600,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     [self updatePlaceholderVisibility];
-    [self updateDshCommandMenu:textView.text];
+    [self updateAgentCommandMenu:textView.text];
     if (textView.text.length > 0) {
         [self notifyTyping:0];
     }
@@ -1848,20 +1848,54 @@
         } else {
             [self makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
         }
-    } else if(itemTag == WFCU_PLUGIN_TAG_DSH_AGENT) {
-        // DSH/AI 会话设置面板（仅 line==2 AI 会话显示该入口）；AI 不在线时置灰不可点
-        if (![self dshOwnerOnline]) {
+    } else if(itemTag == WFCU_PLUGIN_TAG_AGENT_AGENT) {
+        // Agent/AI 会话设置面板（仅 line==2 AI 会话显示该入口）；AI 不在线时置灰不可点
+        if (![self agentOwnerOnline]) {
             return;
         }
-        WFCUAgentPanelViewController *vc = [[WFCUAgentPanelViewController alloc] initWithConversation:self.conversation];
-        [[self.delegate requireNavi] presentViewController:vc animated:YES completion:nil];
+        //多机器人（多 agent）会话：先列机器人（scope=31 有状态推送的 + 群内 robot_ 成员），
+        //多个则弹列表选择后再打开对应机器人的面板（选中绑定 robotUid）；单/空按默认打开
+        NSArray<NSString *> *robots = [WFCUAgentState listAgentRobotUids:self.conversation];
+        if (robots.count > 1) {
+            [self showAgentRobotChooser:robots];
+        } else {
+            [self openAgentPanelForRobot:robots.count ? robots[0] : nil];
+        }
     }
+}
+
+//多机器人：弹机器人列表（选择后绑定 robotUid 打开对应机器人面板）
+- (void)showAgentRobotChooser:(NSArray<NSString *> *)robots {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选择机器人"
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    for (NSString *uid in robots) {
+        NSString *name = [WFCUAgentState agentRobotName:uid];
+        [alert addAction:[UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            //等 action sheet 收起后再弹面板，避免 presentation 冲突
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self openAgentPanelForRobot:uid];
+            });
+        }]];
+    }
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    //iPad 弹窗需要锚点，否则会崩
+    alert.popoverPresentationController.sourceView = self;
+    alert.popoverPresentationController.sourceRect = self.bounds;
+    alert.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    [[self.delegate requireNavi] presentViewController:alert animated:YES completion:nil];
+}
+
+//打开指定机器人（robotUid 可为 nil = 会话默认机器人）的 AI 会话设置面板
+- (void)openAgentPanelForRobot:(NSString *)robotUid {
+    WFCUAgentPanelViewController *vc = [[WFCUAgentPanelViewController alloc] initWithConversation:self.conversation robotUid:robotUid];
+    [[self.delegate requireNavi] presentViewController:vc animated:YES completion:nil];
 }
 
 //AI 群（line==2）群主（AI 机器人）是否在线：clientStates 中存在 state==0 视为在线；
 //无状态/未取到视为不在线；非 AI 群返回 YES（不影响原逻辑）
-- (BOOL)dshOwnerOnline {
-    if (![WFCUAgentState isDshConversation:self.conversation]) {
+- (BOOL)agentOwnerOnline {
+    if (![WFCUAgentState isAgentConversation:self.conversation]) {
         return YES;
     }
     WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];

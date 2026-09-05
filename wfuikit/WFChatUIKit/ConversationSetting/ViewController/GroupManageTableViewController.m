@@ -174,16 +174,19 @@
 - (void)toManagerVC {
     ManagerTableViewController *mtvc = [[ManagerTableViewController alloc] init];
     mtvc.groupInfo = self.groupInfo;
+    mtvc.line = self.line;
     [self.navigationController pushViewController:mtvc animated:YES];
 }
 - (void)toMuteVC {
     GroupMuteTableViewController *gmtc = [[GroupMuteTableViewController alloc] init];
     gmtc.groupInfo = self.groupInfo;
+    gmtc.line = self.line;
     [self.navigationController pushViewController:gmtc animated:YES];
 }
 - (void)toMemberControlVC {
     GroupMemberControlTableViewController *gmcvc = [[GroupMemberControlTableViewController alloc] init];
     gmcvc.groupInfo = self.groupInfo;
+    gmcvc.line = self.line;
     [self.navigationController pushViewController:gmcvc animated:YES];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -215,7 +218,7 @@
             [alertController addAction:cancelAction];
             
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"Free2Join") style:self.groupInfo.joinType == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"0" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.joinType = 0;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
@@ -225,7 +228,7 @@
             [alertController addAction:openAction];
             
             UIAlertAction *onlyManagerAction = [UIAlertAction actionWithTitle:WFCString(@"MemberInviteOnly") style:self.groupInfo.joinType == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"1" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.joinType = 1;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
@@ -235,7 +238,7 @@
             [alertController addAction:onlyManagerAction];
             
             UIAlertAction *normalAction = [UIAlertAction actionWithTitle:WFCString(@"ManagerInviteOnly") style:self.groupInfo.joinType == 2 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"2" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.joinType = 2;
                     [ws.tableView reloadData];
                 } error:^(int error_code) {
@@ -248,7 +251,7 @@
             // 只有群组类型为 GroupType_Restricted (值为2) 时才显示"需要管理员验证"选项
             if (self.groupInfo.type == GroupType_Restricted) {
                 UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"NeedManagerVerify") style:self.groupInfo.joinType == 3 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"3" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_JoinType newValue:@"3" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                         ws.groupInfo.joinType = 3;
                         [ws.tableView reloadData];
                     } error:^(int error_code) {
@@ -270,7 +273,7 @@
             [alertController addAction:cancelAction];
             
             UIAlertAction *canSearchAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCanbeSearch") style:self.groupInfo.searchable == 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"0" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.searchable = 1;
                     [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                                 } error:^(int error_code) {
@@ -280,7 +283,7 @@
             [alertController addAction:canSearchAction];
             
             UIAlertAction *cantSearchAction = [UIAlertAction actionWithTitle:WFCString(@"GroupCannotSearch") style:self.groupInfo.searchable == 1 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_Searchable newValue:@"1" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.searchable = 0;
                     [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                                 } error:^(int error_code) {
@@ -300,7 +303,7 @@
                 [alertController addAction:cancelAction];
                 
             UIAlertAction *openAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
-                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"1" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                         ws.groupInfo.historyMessage = 1;
                         [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                                     } error:^(int error_code) {
@@ -310,7 +313,7 @@
                 [alertController addAction:openAction];
                 
             UIAlertAction *verifyAction = [UIAlertAction actionWithTitle:WFCString(@"GroupHistoryMessageNotAviable") style:self.groupInfo.historyMessage > 0 ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                    [[WFCCIMService sharedWFCIMService] modifyGroupInfo:ws.groupInfo.target type:Modify_Group_History_Message newValue:@"0" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                         ws.groupInfo.historyMessage = 0;
                         [ws.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                     } error:^(int error_code) {
@@ -326,6 +329,7 @@
         if(indexPath.row == 0) {
             WFCUJoinGroupRequestViewController *vc = [[WFCUJoinGroupRequestViewController alloc] init];
             vc.groupId = self.groupInfo.target;
+            vc.line = self.line;
             [self.navigationController pushViewController:vc animated:YES];
         }
     }

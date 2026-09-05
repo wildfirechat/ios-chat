@@ -69,14 +69,14 @@
     __weak typeof(self)ws = self;
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
         if (isAllow) {
-            [[WFCCIMService sharedWFCIMService] allowGroupMember:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] allowGroupMember:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 [ws loadMemberList];
                 [ws.tableView reloadData];
             } error:^(int error_code) {
                 
             }];
         } else {
-            [[WFCCIMService sharedWFCIMService] muteGroupMember:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] muteGroupMember:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 [ws loadMemberList];
                 [ws.tableView reloadData];
             } error:^(int error_code) {
@@ -108,7 +108,7 @@
             cell = [[WFCUGeneralSwitchTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"switchcell"];
             cell.textLabel.text = WFCString(@"MuteAllMembers");
             cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
-                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(0)] notifyContent:nil success:^{
+                [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_Mute newValue:value?@"1":@"0" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                     ws.groupInfo.mute = value;
                     onDone(YES);
                 } error:^(int error_code) {
@@ -164,7 +164,7 @@
 
         __weak typeof(self)ws = self;
         if (indexPath.section == 1) {
-            [[WFCCIMService sharedWFCIMService] muteGroupMember:self.groupInfo.target isSet:NO memberIds:@[[self.mutedMemberList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] muteGroupMember:self.groupInfo.target isSet:NO memberIds:@[[self.mutedMemberList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 for (WFCCGroupMember *member in ws.mutedMemberList) {
                     if ([member.memberId isEqualToString:[ws.mutedMemberList objectAtIndex:indexPath.row-1].memberId]) {
                         [ws.mutedMemberList removeObject:member];
@@ -176,7 +176,7 @@
                 
             }];
         } else if(indexPath.section == 2) {
-            [[WFCCIMService sharedWFCIMService] allowGroupMember:self.groupInfo.target isSet:NO memberIds:@[[self.allowedMemberList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] allowGroupMember:self.groupInfo.target isSet:NO memberIds:@[[self.allowedMemberList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 for (WFCCGroupMember *member in ws.allowedMemberList) {
                     if ([member.memberId isEqualToString:[ws.allowedMemberList objectAtIndex:indexPath.row-1].memberId]) {
                         [ws.allowedMemberList removeObject:member];

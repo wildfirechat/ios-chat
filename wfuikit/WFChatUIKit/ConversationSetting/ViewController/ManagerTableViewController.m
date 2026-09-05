@@ -61,7 +61,7 @@
     pvc.multiSelect = YES;
     __weak typeof(self)ws = self;
     pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(0)] notifyContent:nil success:^{
+        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:YES memberIds:contacts notifyLines:@[@(self.line)] notifyContent:nil success:^{
             for (NSString *memberId in contacts) {
                 WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:ws.groupInfo.target memberId:memberId];
                 if (member) {
@@ -130,7 +130,7 @@
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:WFCString(@"RemoveManager") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
 
         __weak typeof(self)ws = self;
-        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(0)] notifyContent:nil success:^{
+        [[WFCCIMService sharedWFCIMService] setGroupManager:self.groupInfo.target isSet:NO memberIds:@[[self.managerList objectAtIndex:indexPath.row-1].memberId] notifyLines:@[@(self.line)] notifyContent:nil success:^{
             for (WFCCGroupMember *member in ws.managerList) {
                 if ([member.memberId isEqualToString:[ws.managerList objectAtIndex:indexPath.row-1].memberId]) {
                     [ws.managerList removeObject:member];

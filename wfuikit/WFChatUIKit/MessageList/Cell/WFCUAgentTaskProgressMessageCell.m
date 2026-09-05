@@ -1,23 +1,23 @@
 //
-//  WFCUDshTaskProgressMessageCell.m
+//  WFCUAgentTaskProgressMessageCell.m
 //  WFChatUIKit
 //
-//  DSH 任务进度卡片 Cell（208），纯展示。
+//  Agent 任务进度卡片 Cell（208），纯展示。
 //  渲染：标题"🧩 任务进度" + 摘要角标（共 N 个 · M 运行中 / 全部完成 / N 失败），
 //  任务列表每行 = 状态图标 + 标签（label 或 id 短前缀）+ 状态文字（失败附原因）；
 //  空任务显示"暂无任务"。插件以 sendCard 首推、updateMessage 原地更新。
 //
 
-#import "WFCUDshTaskProgressMessageCell.h"
+#import "WFCUAgentTaskProgressMessageCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
+#import <WFChatClient/WFCCAgentMessageContents.h>
 #import "WFCUUtilities.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 #import "UIFont+YH.h"
 
-#define DSH_CARD_PADDING 12
-#define DSH_TASK_ICON_WIDTH 24
-#define DSH_TASK_ROW_GAP 8
+#define AGENT_CARD_PADDING 12
+#define AGENT_TASK_ICON_WIDTH 24
+#define AGENT_TASK_ROW_GAP 8
 
 @interface WFCUAgentTaskProgressMessageCell ()
 @property (nonatomic, strong)NSMutableArray<UIView *> *dynamicViews;
@@ -122,14 +122,14 @@
     CGSize badgeSize = [WFCUUtilities getTextDrawingSize:summary
                                                     font:badgeFont
                                            constrainedSize:CGSizeMake(contentWidth, 16)];
-    CGFloat badgeX = DSH_CARD_PADDING + titleSize.width + 6;
-    return badgeX + badgeSize.width + 12 > DSH_CARD_PADDING + contentWidth;
+    CGFloat badgeX = AGENT_CARD_PADDING + titleSize.width + 6;
+    return badgeX + badgeSize.width + 12 > AGENT_CARD_PADDING + contentWidth;
 }
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCAgentTaskProgressMessageContent *content = (WFCCAgentTaskProgressMessageContent *)msgModel.message.content;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat height = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat height = AGENT_CARD_PADDING;
 
     //标题行（含摘要角标）
     height += 20 + 8;
@@ -144,13 +144,13 @@
     NSArray *tasks = content.tasks;
     if (![tasks isKindOfClass:[NSArray class]] || tasks.count == 0) {
         //"暂无任务"
-        height += 16 + DSH_CARD_PADDING;
+        height += 16 + AGENT_CARD_PADDING;
         return CGSizeMake(width, height);
     }
 
     UIFont *labelFont = [UIFont scaledSystemFontOfSize:13];
     UIFont *metaFont = [UIFont scaledSystemFontOfSize:11];
-    CGFloat rowTextWidth = contentWidth - DSH_TASK_ICON_WIDTH;
+    CGFloat rowTextWidth = contentWidth - AGENT_TASK_ICON_WIDTH;
     for (NSDictionary *task in tasks) {
         if (![task isKindOfClass:[NSDictionary class]]) {
             continue;
@@ -164,10 +164,10 @@
                                                         font:metaFont
                                                constrainedSize:CGSizeMake(rowTextWidth, 40)];
         CGFloat rowHeight = MAX(labelSize.height, 18) + MAX(metaSize.height, 14) + 4;
-        height += rowHeight + DSH_TASK_ROW_GAP;
+        height += rowHeight + AGENT_TASK_ROW_GAP;
     }
-    height -= DSH_TASK_ROW_GAP; //最后一行无底部间距
-    height += DSH_CARD_PADDING;
+    height -= AGENT_TASK_ROW_GAP; //最后一行无底部间距
+    height += AGENT_CARD_PADDING;
     return CGSizeMake(width, height);
 }
 
@@ -206,8 +206,8 @@
     }
 
     CGFloat width = self.contentArea.bounds.size.width;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat currentY = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat currentY = AGENT_CARD_PADDING;
 
     //标题 + 摘要角标
     UILabel *titleLabel = [self makeLabel:[UIFont scaledBoldSystemFontOfSize:14] color:[UIColor blackColor] lines:1];
@@ -215,7 +215,7 @@
     CGSize titleSize = [WFCUUtilities getTextDrawingSize:titleLabel.text
                                                     font:titleLabel.font
                                            constrainedSize:CGSizeMake(contentWidth, 20)];
-    titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, titleSize.width, 20);
+    titleLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, titleSize.width, 20);
     [self addView:titleLabel];
 
     NSArray *tasks = content.tasks;
@@ -238,7 +238,7 @@
         CGSize badgeSize = [WFCUUtilities getTextDrawingSize:summary
                                                         font:badgeLabel.font
                                                constrainedSize:CGSizeMake(contentWidth, 16)];
-        CGFloat badgeX = badgeWraps ? DSH_CARD_PADDING : DSH_CARD_PADDING + titleSize.width + 6;
+        CGFloat badgeX = badgeWraps ? AGENT_CARD_PADDING : AGENT_CARD_PADDING + titleSize.width + 6;
         badgeLabel.frame = CGRectMake(badgeX, currentY + 2, badgeSize.width + 12, 16);
         [self addView:badgeLabel];
     }
@@ -247,7 +247,7 @@
     if (![tasks isKindOfClass:[NSArray class]] || tasks.count == 0) {
         UILabel *emptyLabel = [self makeLabel:[UIFont scaledSystemFontOfSize:12] color:[UIColor grayColor] lines:1];
         emptyLabel.text = @"暂无任务";
-        emptyLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 16);
+        emptyLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 16);
         [self addView:emptyLabel];
         return;
     }
@@ -255,7 +255,7 @@
     //任务列表
     UIFont *labelFont = [UIFont scaledSystemFontOfSize:13];
     UIFont *metaFont = [UIFont scaledSystemFontOfSize:11];
-    CGFloat rowTextWidth = contentWidth - DSH_TASK_ICON_WIDTH;
+    CGFloat rowTextWidth = contentWidth - AGENT_TASK_ICON_WIDTH;
     for (NSDictionary *task in tasks) {
         if (![task isKindOfClass:[NSDictionary class]]) {
             continue;
@@ -265,7 +265,7 @@
         //状态图标
         UILabel *iconLabel = [self makeLabel:[UIFont scaledSystemFontOfSize:14] color:[UIColor blackColor] lines:1];
         iconLabel.text = [[self class] statusIcon:status];
-        iconLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, DSH_TASK_ICON_WIDTH, 18);
+        iconLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, AGENT_TASK_ICON_WIDTH, 18);
 
         //标签（label 或 id 短前缀）
         NSString *label = [[self class] labelOfTask:task];
@@ -274,7 +274,7 @@
         CGSize labelSize = [WFCUUtilities getTextDrawingSize:label
                                                         font:labelFont
                                                constrainedSize:CGSizeMake(rowTextWidth, 200)];
-        labelLabel.frame = CGRectMake(DSH_CARD_PADDING + DSH_TASK_ICON_WIDTH, currentY, rowTextWidth, MAX(labelSize.height, 18));
+        labelLabel.frame = CGRectMake(AGENT_CARD_PADDING + AGENT_TASK_ICON_WIDTH, currentY, rowTextWidth, MAX(labelSize.height, 18));
 
         //状态文字（失败附原因）
         NSString *meta = [[self class] metaOfTask:task];
@@ -283,13 +283,13 @@
         CGSize metaSize = [WFCUUtilities getTextDrawingSize:meta
                                                         font:metaFont
                                                constrainedSize:CGSizeMake(rowTextWidth, 40)];
-        metaLabel.frame = CGRectMake(DSH_CARD_PADDING + DSH_TASK_ICON_WIDTH, currentY + MAX(labelSize.height, 18) + 2, rowTextWidth, MAX(metaSize.height, 14));
+        metaLabel.frame = CGRectMake(AGENT_CARD_PADDING + AGENT_TASK_ICON_WIDTH, currentY + MAX(labelSize.height, 18) + 2, rowTextWidth, MAX(metaSize.height, 14));
 
         [self addView:iconLabel];
         [self addView:labelLabel];
         [self addView:metaLabel];
 
-        currentY += MAX(labelSize.height, 18) + MAX(metaSize.height, 14) + 4 + DSH_TASK_ROW_GAP;
+        currentY += MAX(labelSize.height, 18) + MAX(metaSize.height, 14) + 4 + AGENT_TASK_ROW_GAP;
     }
 }
 

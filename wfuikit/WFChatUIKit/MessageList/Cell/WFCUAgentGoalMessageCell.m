@@ -1,18 +1,18 @@
 //
-//  WFCUDshGoalMessageCell.m
+//  WFCUAgentGoalMessageCell.m
 //  WFChatUIKit
 //
-//  DSH 目标进度卡片 Cell（206），纯展示。
+//  Agent 目标进度卡片 Cell（206），纯展示。
 //
 
-#import "WFCUDshGoalMessageCell.h"
+#import "WFCUAgentGoalMessageCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
+#import <WFChatClient/WFCCAgentMessageContents.h>
 #import "WFCUUtilities.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 #import "UIFont+YH.h"
 
-#define DSH_CARD_PADDING 12
+#define AGENT_CARD_PADDING 12
 
 @interface WFCUAgentGoalMessageCell ()
 @property (nonatomic, strong)UILabel *titleLabel;
@@ -25,8 +25,8 @@
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCAgentGoalMessageContent *content = (WFCCAgentGoalMessageContent *)msgModel.message.content;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat height = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat height = AGENT_CARD_PADDING;
 
     //标题行（含 phase 徽标）
     height += 20 + 8;
@@ -37,7 +37,7 @@
     height += MAX(objectiveSize.height, 18) + 4;
 
     //已执行 N 轮
-    height += 16 + DSH_CARD_PADDING;
+    height += 16 + AGENT_CARD_PADDING;
     return CGSizeMake(width, height);
 }
 
@@ -80,28 +80,28 @@
 
     WFCCAgentGoalMessageContent *content = (WFCCAgentGoalMessageContent *)model.message.content;
     CGFloat width = self.contentArea.bounds.size.width;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat currentY = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat currentY = AGENT_CARD_PADDING;
 
     self.titleLabel.text = @"🎯 目标进度";
     CGSize titleSize = [WFCUUtilities getTextDrawingSize:self.titleLabel.text
                                                     font:self.titleLabel.font
                                            constrainedSize:CGSizeMake(contentWidth, 20)];
-    self.titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, titleSize.width, 20);
+    self.titleLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, titleSize.width, 20);
 
     self.phaseLabel.text = [WFCUAgentState goalPhaseText:content.phase];
     self.phaseLabel.backgroundColor = [WFCUAgentState goalPhaseColor:content.phase];
     CGSize phaseSize = [WFCUUtilities getTextDrawingSize:self.phaseLabel.text
                                                     font:self.phaseLabel.font
                                            constrainedSize:CGSizeMake(contentWidth, 16)];
-    self.phaseLabel.frame = CGRectMake(DSH_CARD_PADDING + titleSize.width + 6, currentY + 2, phaseSize.width + 12, 16);
+    self.phaseLabel.frame = CGRectMake(AGENT_CARD_PADDING + titleSize.width + 6, currentY + 2, phaseSize.width + 12, 16);
     currentY += 20 + 8;
 
     self.objectiveLabel.text = content.objective;
     CGSize objectiveSize = [WFCUUtilities getTextDrawingSize:content.objective ?: @""
                                                         font:self.objectiveLabel.font
                                                constrainedSize:CGSizeMake(contentWidth, 200)];
-    self.objectiveLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, MAX(objectiveSize.height, 18));
+    self.objectiveLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, MAX(objectiveSize.height, 18));
     currentY += MAX(objectiveSize.height, 18) + 4;
 
     //ver:2 目标带 stage 文本时追加展示（如 "已执行 2 轮 · 1/3"）
@@ -110,7 +110,7 @@
         meta = [meta stringByAppendingFormat:@" · %@", content.stage];
     }
     self.metaLabel.text = meta;
-    self.metaLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 16);
+    self.metaLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 16);
 }
 
 @end

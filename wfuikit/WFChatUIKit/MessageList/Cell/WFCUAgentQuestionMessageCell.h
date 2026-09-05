@@ -1,8 +1,8 @@
 //
-//  WFCUDshQuestionMessageCell.h
+//  WFCUAgentQuestionMessageCell.h
 //  WFChatUIKit
 //
-//  DSH 提问卡片 Cell（200）。
+//  Agent 提问卡片 Cell（200）。
 //
 
 #import "WFCUMessageCell.h"

@@ -14,8 +14,8 @@
 @interface WFCUConversationTableViewCell : UITableViewCell
 @property (strong, nonatomic) UIImageView *potraitView;
 @property (strong, nonatomic) UILabel *targetView;
-@property (strong, nonatomic) UILabel *dshBadgeLabel;
-@property (strong, nonatomic) UIView *dshDotView;
+@property (strong, nonatomic) UILabel *agentBadgeLabel;
+@property (strong, nonatomic) UIView *agentDotView;
 @property (strong, nonatomic) UILabel *digestView;
 @property (strong, nonatomic) UILabel *offcialView;
 @property (strong, nonatomic) UIImageView *statusView;

@@ -14,7 +14,7 @@
 #import "UIColor+YH.h"
 #import <UIFont+YH.h>
 #import "WFCUImage.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 
 @implementation WFCUConversationTableViewCell
 - (void)awakeFromNib {
@@ -273,11 +273,11 @@
     }
 
     //AI 会话：标题后加 8pt 状态圆点；AI 群标题旁加"AI"描边小徽标（仅 AI 会话显示）
-    BOOL isDsh = [WFCUAgentState isDshConversation:conversation];
-    NSDictionary *dshState = isDsh ? [WFCUAgentState dshState:conversation] : nil;
+    BOOL isAgent = [WFCUAgentState isAgentConversation:conversation];
+    NSDictionary *agentState = isAgent ? [WFCUAgentState agentState:conversation] : nil;
     //AI 群群主（AI 机器人）不在线：状态圆点/徽标置灰（不显示运行态颜色）
     BOOL aiOffline = NO;
-    if (isDsh && conversation.type == Group_Type) {
+    if (isAgent && conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
         NSString *ownerId = groupInfo.owner;
         if (ownerId.length) {
@@ -293,31 +293,31 @@
             }
         }
     }
-    UIColor *dshMutedColor = [UIColor grayColor];
-    CGFloat dshX = self.targetView.frame.origin.x + self.targetView.frame.size.width + 4;
+    UIColor *agentMutedColor = [UIColor grayColor];
+    CGFloat agentX = self.targetView.frame.origin.x + self.targetView.frame.size.width + 4;
     if (!self.offcialView.hidden) {
-        dshX = self.offcialView.frame.origin.x + self.offcialView.frame.size.width + 4;
+        agentX = self.offcialView.frame.origin.x + self.offcialView.frame.size.width + 4;
     }
-    if (dshState) {
-        self.dshDotView.hidden = NO;
-        self.dshDotView.backgroundColor = aiOffline ? dshMutedColor : [WFCUAgentState stateColor:dshState[@"state"]];
-        self.dshDotView.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 6, 8, 8);
-        dshX += 8 + 4;
+    if (agentState) {
+        self.agentDotView.hidden = NO;
+        self.agentDotView.backgroundColor = aiOffline ? agentMutedColor : [WFCUAgentState stateColor:agentState[@"state"]];
+        self.agentDotView.frame = CGRectMake(agentX, self.targetView.frame.origin.y + 6, 8, 8);
+        agentX += 8 + 4;
     } else {
-        _dshDotView.hidden = YES;
+        _agentDotView.hidden = YES;
     }
-    if (isDsh && conversation.type == Group_Type) {
-        self.dshBadgeLabel.hidden = NO;
-        self.dshBadgeLabel.frame = CGRectMake(dshX, self.targetView.frame.origin.y + 3, 24, 14);
+    if (isAgent && conversation.type == Group_Type) {
+        self.agentBadgeLabel.hidden = NO;
+        self.agentBadgeLabel.frame = CGRectMake(agentX, self.targetView.frame.origin.y + 3, 24, 14);
         if (aiOffline) {
-            self.dshBadgeLabel.textColor = dshMutedColor;
-            self.dshBadgeLabel.layer.borderColor = dshMutedColor.CGColor;
+            self.agentBadgeLabel.textColor = agentMutedColor;
+            self.agentBadgeLabel.layer.borderColor = agentMutedColor.CGColor;
         } else {
-            self.dshBadgeLabel.textColor = [WFCUAgentState accentColor];
-            self.dshBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
+            self.agentBadgeLabel.textColor = [WFCUAgentState accentColor];
+            self.agentBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
         }
     } else {
-        _dshBadgeLabel.hidden = YES;
+        _agentBadgeLabel.hidden = YES;
     }
     
     self.potraitView.layer.cornerRadius = 4.f;
@@ -508,32 +508,32 @@
     }
     return _secretChatView;
 }
-- (UIView *)dshDotView {
-    if (!_dshDotView) {
-        _dshDotView = [[UIView alloc] initWithFrame:CGRectZero];
-        _dshDotView.layer.cornerRadius = 4;
-        _dshDotView.layer.masksToBounds = YES;
-        _dshDotView.hidden = YES;
-        [self.contentView addSubview:_dshDotView];
+- (UIView *)agentDotView {
+    if (!_agentDotView) {
+        _agentDotView = [[UIView alloc] initWithFrame:CGRectZero];
+        _agentDotView.layer.cornerRadius = 4;
+        _agentDotView.layer.masksToBounds = YES;
+        _agentDotView.hidden = YES;
+        [self.contentView addSubview:_agentDotView];
     }
-    return _dshDotView;
+    return _agentDotView;
 }
 
-- (UILabel *)dshBadgeLabel {
-    if (!_dshBadgeLabel) {
-        _dshBadgeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _dshBadgeLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:9];
-        _dshBadgeLabel.textColor = [WFCUAgentState accentColor];
-        _dshBadgeLabel.layer.borderWidth = 1;
-        _dshBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
-        _dshBadgeLabel.layer.cornerRadius = 2;
-        _dshBadgeLabel.layer.masksToBounds = YES;
-        _dshBadgeLabel.textAlignment = NSTextAlignmentCenter;
-        _dshBadgeLabel.text = @"AI";
-        _dshBadgeLabel.hidden = YES;
-        [self.contentView addSubview:_dshBadgeLabel];
+- (UILabel *)agentBadgeLabel {
+    if (!_agentBadgeLabel) {
+        _agentBadgeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _agentBadgeLabel.font = [UIFont scaledPingFangSCWithWeight:FontWeightStyleRegular size:9];
+        _agentBadgeLabel.textColor = [WFCUAgentState accentColor];
+        _agentBadgeLabel.layer.borderWidth = 1;
+        _agentBadgeLabel.layer.borderColor = [WFCUAgentState accentColor].CGColor;
+        _agentBadgeLabel.layer.cornerRadius = 2;
+        _agentBadgeLabel.layer.masksToBounds = YES;
+        _agentBadgeLabel.textAlignment = NSTextAlignmentCenter;
+        _agentBadgeLabel.text = @"AI";
+        _agentBadgeLabel.hidden = YES;
+        [self.contentView addSubview:_agentBadgeLabel];
     }
-    return _dshBadgeLabel;
+    return _agentBadgeLabel;
 }
 
 - (UILabel *)digestView {

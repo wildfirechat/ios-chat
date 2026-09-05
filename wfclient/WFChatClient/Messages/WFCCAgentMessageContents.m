@@ -1,11 +1,11 @@
 //
-//  WFCCDshMessageContents.m
+//  WFCCAgentMessageContents.m
 //  WFChatClient
 //
-//  DSH × Wildfire 结构化交互消息内容类实现。
+//  Agent × Wildfire 结构化交互消息内容类实现。
 //
 
-#import "WFCCDshMessageContents.h"
+#import "WFCCAgentMessageContents.h"
 #import "WFCCIMService.h"
 #import "Common.h"
 
@@ -318,6 +318,10 @@ static NSString *firstNonEmptyString(NSDictionary *dict, NSArray<NSString *> *ke
         dict[@"cmd"] = self.cmd;
     }
     dict[@"seq"] = @(self.seq);
+    //多机器人会话寻址：robotId 存在时才带上（空 = 会话默认机器人，与 PC 端 encode 一致）
+    if (self.robotId.length) {
+        dict[@"robotId"] = self.robotId;
+    }
     [self encodeJsonDict:dict payload:payload digest:@""];
     //透明消息：不携带可搜索/推送内容
     payload.searchableContent = @"";
@@ -330,6 +334,7 @@ static NSString *firstNonEmptyString(NSDictionary *dict, NSArray<NSString *> *ke
     self.op = [dict[@"op"] isKindOfClass:[NSString class]] && [dict[@"op"] length] ? dict[@"op"] : @"query";
     self.cmd = [dict[@"cmd"] isKindOfClass:[NSString class]] ? dict[@"cmd"] : nil;
     self.seq = [dict[@"seq"] integerValue];
+    self.robotId = [dict[@"robotId"] isKindOfClass:[NSString class]] && [dict[@"robotId"] length] ? dict[@"robotId"] : nil;
 }
 
 + (int)getContentType {

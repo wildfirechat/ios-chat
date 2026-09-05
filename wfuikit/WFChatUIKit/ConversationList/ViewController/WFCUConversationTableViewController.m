@@ -8,7 +8,7 @@
 
 #import "WFCUConversationTableViewController.h"
 #import "WFCUConversationTableViewCell.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUFriendRequestViewController.h"
 #import "WFCUSearchGroupTableViewCell.h"
@@ -39,7 +39,7 @@
 
 
 @interface WFCUConversationTableViewController () <UISearchControllerDelegate, UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) NSArray<NSString *> *dshWatchedAiOwners;
+@property (nonatomic, strong) NSArray<NSString *> *agentWatchedAiOwners;
 @property (nonatomic, strong)NSMutableArray<WFCCConversationInfo *> *conversations;
 
 @property (nonatomic, strong)  UISearchController       *searchController;
@@ -117,7 +117,7 @@
     self.searchHistory = [self loadSearchHistory];
 }
 
-//AI 在线状态变化（含 AI 群群主上线/下线）：刷新列表——DSH 状态圆点/徽标按在线状态置灰
+//AI 在线状态变化（含 AI 群群主上线/下线）：刷新列表——Agent 状态圆点/徽标按在线状态置灰
 - (void)onUserOnlineStateUpdated:(NSNotification *)notification {
     [self.tableView reloadData];
 }
@@ -356,7 +356,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.conversations = [[NSMutableArray alloc] init];
-    self.dshWatchedAiOwners = [NSArray array];
+    self.agentWatchedAiOwners = [NSArray array];
     
     [self initSearchUIAndTableView];
     self.definesPresentationContext = YES;
@@ -583,7 +583,7 @@
     NSMutableArray<NSString *> *owners = [NSMutableArray array];
     for (WFCCConversationInfo *info in self.conversations) {
         WFCCConversation *conv = info.conversation;
-        if (conv.type != Group_Type || conv.line != 2 || ![WFCUAgentState isDshConversation:conv]) {
+        if (conv.type != Group_Type || conv.line != 2 || ![WFCUAgentState isAgentConversation:conv]) {
             continue;
         }
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.target refresh:NO];
@@ -592,10 +592,10 @@
             [owners addObject:ownerId];
         }
     }
-    if (self.dshWatchedAiOwners.count) {
-        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.dshWatchedAiOwners success:nil error:nil];
+    if (self.agentWatchedAiOwners.count) {
+        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.agentWatchedAiOwners success:nil error:nil];
     }
-    self.dshWatchedAiOwners = owners;
+    self.agentWatchedAiOwners = owners;
     if (owners.count) {
         __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] watchOnlineState:Single_Type targets:owners duration:3600 success:^(NSArray<WFCCUserOnlineState *> *states) {
@@ -1455,8 +1455,8 @@
 }
 
 - (void)dealloc {
-    if (self.dshWatchedAiOwners.count) {
-        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.dshWatchedAiOwners success:nil error:nil];
+    if (self.agentWatchedAiOwners.count) {
+        [[WFCCIMService sharedWFCIMService] unwatchOnlineState:Single_Type targets:self.agentWatchedAiOwners success:nil error:nil];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     _searchController = nil;

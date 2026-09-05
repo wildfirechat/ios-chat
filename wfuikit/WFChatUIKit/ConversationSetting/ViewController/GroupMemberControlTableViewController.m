@@ -46,7 +46,7 @@
         cell.on = !self.groupInfo.privateChat;
         cell.textLabel.text = WFCString(@"AllowTemporarySession");
         cell.onSwitch = ^(BOOL value, int type, void (^onDone)(BOOL success)) {
-            [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_PrivateChat newValue:value?@"0":@"1" notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] modifyGroupInfo:self.groupInfo.target type:Modify_Group_PrivateChat newValue:value?@"0":@"1" notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 onDone(YES);
             } error:^(int error_code) {
                 onDone(NO);

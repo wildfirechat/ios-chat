@@ -154,7 +154,7 @@
 
         
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.groupId memberExtra:memberExtra notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] addMembers:contacts toGroup:ws.groupId memberExtra:memberExtra notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:YES];
             } error:^(int error_code) {
                 if (error_code == ERROR_CODE_GROUP_EXCEED_MAX_MEMBER_COUNT) {
@@ -178,7 +178,7 @@
         pvc.selectContact = YES;
         pvc.multiSelect = YES;
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
-            [[WFCCIMService sharedWFCIMService] kickoffMembers:contacts fromGroup:self.groupId notifyLines:@[@(0)] notifyContent:nil success:^{
+            [[WFCCIMService sharedWFCIMService] kickoffMembers:contacts fromGroup:self.groupId notifyLines:@[@(self.line)] notifyContent:nil success:^{
                 [[WFCCIMService sharedWFCIMService] getGroupMembers:ws.groupId forceUpdate:YES];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSMutableArray *tmpArray = [self.memberList mutableCopy];

@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, UserSettingScope) {
     //不能直接使用，协议栈内会使用此值
     UserSettingScope_Lock_PC = 30,
 
-    //会话级用户设置，DSH 会话状态通道。key 为 "{conversationType}-{line}-{target}_{type}"，type=1 表示状态
+    //会话级用户设置，Agent 会话状态通道。key 为 "{conversationType}-{line}-{target}_{type}"，type=1 表示状态
     UserSettingScope_Conversation_User_Setting = 31,
 
     //自定义用户设置，请使用1000以上的key
@@ -1625,11 +1625,14 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 
 #pragma mark - 流式文本相关
 /**
- 获取会话的流式文本生成中的消息
+  获取会话的流式文本生成中的消息（单 agent 场景兼容接口）
 
- @param conversation 会话
- @return 流式文本生成中的消息，如果没有则返回nil
- */
+  @param conversation 会话
+  @return 流式文本生成中的消息；如果会话没有仍在生成的 stream 则返回nil。
+  多 agent（多机器人）会话中同一时刻可能有多条不同 streamId 的生成中消息（14），
+  本接口只返回最早开始生成的一条；需要该会话全部生成中消息时，
+  请使用 [[WFCCNetworkService sharedInstance] allStreamingTextGeneratingMessages:conversation]。
+  */
 - (WFCCMessage *)getStreamingTextGeneratingMessage:(WFCCConversation *)conversation;
 
 #pragma mark - 用户相关

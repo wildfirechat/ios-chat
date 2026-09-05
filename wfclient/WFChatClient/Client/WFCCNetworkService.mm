@@ -91,20 +91,23 @@ NSString *kJoinGroupRequestUpdated = @"kJoinGroupRequestUpdated";
 
 #pragma mark - 流式文本生成状态监听
 /**
- 流式文本生成状态监听
+ 流式文本生成状态监听（多 agent 多机器人语义）：
+ - onStreamingTextGenerating:message: 每条 14（含同一 streamId 的增量更新、以及其它 agent 新开始的 14）都会触发一次；
+ - onStreamingTextGenerated: 仅当整个会话内层缓存变空（所有 streamId 都已 15 收尾，没有其它 agent 仍在生成）时触发一次，
+   一个 agent 收尾不再误报整个会话生成结束；20 取消不触发本回调。
  */
 @protocol StreamingTextStatusDelegate <NSObject>
 @optional
 /**
- 流式文本开始生成的回调
+ 流式文本生成中/更新的回调
 
  @param conversation 会话
- @param message 生成中的消息
+ @param message 生成中的消息（14）
  */
 - (void)onStreamingTextGenerating:(WFCCConversation *)conversation message:(WFCCMessage *)message;
 
 /**
- 流式文本生成完成的回调
+ 会话内全部流式文本都已生成完成的回调
 
  @param conversation 会话
  */
@@ -757,28 +760,97 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)handleStreamingTextMessage:(WFCCMessage *)message {
+    NSString *key = [self conversationKeyForMessage:message];
     if ([message.content isKindOfClass:[WFCCStreamingTextGeneratingMessageContent class]]) {
-        // 流式文本正在生成，保存消息
-        NSString *key = [self conversationKeyForMessage:message];
-        self.streamingTextGeneratingMessages[key] = message;
+        // 流式文本正在生成（14）：按「会话 + streamId」两级缓存覆盖式 upsert 该回合最新内容。
+        // 多 agent（多机器人）并发时同一会话存在多条不同 streamId 的 14，互不覆盖。
+        NSString *streamId = ((WFCCStreamingTextGeneratingMessageContent *)message.content).streamId;
+        if (streamId.length) {
+            NSMutableDictionary<NSString *, WFCCMessage *> *streams = self.streamingTextGeneratingMessages[key];
+            if (!streams) {
+                streams = [[NSMutableDictionary alloc] init];
+                self.streamingTextGeneratingMessages[key] = streams;
+            }
+            streams[streamId] = message;
+        }
 
         if ([self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerating:message:)]) {
             [self.streamingTextStatusDelegate onStreamingTextGenerating:message.conversation message:message];
         }
     } else if ([message.content isKindOfClass:[WFCCStreamingTextGeneratedMessageContent class]]) {
-        // 流式文本生成完成，清空对应会话的生成中消息
-        NSString *key = [self conversationKeyForMessage:message];
-        [self.streamingTextGeneratingMessages removeObjectForKey:key];
-
-        if ([self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerated:)]) {
+        // 流式文本生成完成（15）：只删除该 streamId 的缓存，其它仍在生成的 agent 不受影响；
+        // 仅当整个会话（内层 map）变空、不再有任何 agent 在生成时才通知 onStreamingTextGenerated，
+        // 避免一个 agent 收尾就误报整个会话生成结束。
+        NSString *streamId = ((WFCCStreamingTextGeneratedMessageContent *)message.content).streamId;
+        BOOL conversationFinished = [self removeStreamingTextMessageWithKey:key streamId:streamId];
+        if (conversationFinished && [self.streamingTextStatusDelegate respondsToSelector:@selector(onStreamingTextGenerated:)]) {
             [self.streamingTextStatusDelegate onStreamingTextGenerated:message.conversation];
         }
     } else if ([message.content isKindOfClass:[WFCCStreamingTextCancelledMessageContent class]]) {
-        // 流式文本已取消（无产出/失败），清空对应会话的生成中消息；
+        // 流式文本已取消（20）：只删除该 streamId 的缓存，其它仍在生成的 agent 不受影响；取消保持无通知。
         // 列表中的 14/15 消息由 UI 层（WFCUMessageListViewController）按 streamId 移除，取消消息自身透传不显示。
-        NSString *key = [self conversationKeyForMessage:message];
-        [self.streamingTextGeneratingMessages removeObjectForKey:key];
+        NSString *streamId = ((WFCCStreamingTextCancelledMessageContent *)message.content).streamId;
+        [self removeStreamingTextMessageWithKey:key streamId:streamId];
     }
+}
+
+/**
+ 15/20 公共删除逻辑：删除会话 key 下指定 streamId 的生成中消息；内层 map 空时删除会话 key。
+ 返回 YES 表示该会话已无任何正在生成的 stream（会话级缓存已删除）；NO 表示仍有其它 agent 在生成。
+ */
+- (BOOL)removeStreamingTextMessageWithKey:(NSString *)key streamId:(NSString *)streamId {
+    NSMutableDictionary<NSString *, WFCCMessage *> *streams = self.streamingTextGeneratingMessages[key];
+    if (!streams) {
+        return NO;
+    }
+    if (streamId.length) {
+        [streams removeObjectForKey:streamId];
+    }
+    if (streams.count == 0) {
+        [self.streamingTextGeneratingMessages removeObjectForKey:key];
+        return YES;
+    }
+    return NO;
+}
+
+- (NSArray<WFCCMessage *> *)allStreamingTextGeneratingMessages:(WFCCConversation *)conversation {
+    if (!conversation) {
+        return @[];
+    }
+    NSString *key = [NSString stringWithFormat:@"%@_%d", conversation.target, conversation.line];
+    NSMutableDictionary<NSString *, WFCCMessage *> *streams = self.streamingTextGeneratingMessages[key];
+    if (!streams || streams.count == 0) {
+        return @[];
+    }
+    // 过期/缺失清理：某 stream 超过 60s 未更新则认为生成已结束但 15/20 丢失，删除以免重开会话时复活陈旧气泡。
+    // 正常的长回合生成会不断有新的 14 刷新 serverTime，不会误删。
+    int64_t now = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSMutableArray<NSString *> *expiredStreamIds = nil;
+    for (NSString *streamId in streams) {
+        WFCCMessage *message = streams[streamId];
+        if (now - message.serverTime > 60 * 1000) {
+            if (!expiredStreamIds) {
+                expiredStreamIds = [[NSMutableArray alloc] init];
+            }
+            [expiredStreamIds addObject:streamId];
+        }
+    }
+    if (expiredStreamIds.count) {
+        [streams removeObjectsForKeys:expiredStreamIds];
+        if (streams.count == 0) {
+            [self.streamingTextGeneratingMessages removeObjectForKey:key];
+            return @[];
+        }
+    }
+    // 按 serverTime 升序返回，多个 agent 的气泡按各自开始生成先后追加（与 Web 端 Map 插入顺序语义一致）
+    return [streams.allValues sortedArrayUsingComparator:^NSComparisonResult(WFCCMessage *m1, WFCCMessage *m2) {
+        if (m1.serverTime < m2.serverTime) {
+            return NSOrderedAscending;
+        } else if (m1.serverTime > m2.serverTime) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+    }];
 }
 
 - (NSString *)conversationKeyForMessage:(WFCCMessage *)message {

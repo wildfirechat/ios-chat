@@ -4837,17 +4837,11 @@ public:
 
 #pragma mark - 流式文本相关
 - (WFCCMessage *)getStreamingTextGeneratingMessage:(WFCCConversation *)conversation {
-    NSString *key = [NSString stringWithFormat:@"%@_%d", conversation.target, conversation.line];
-    WFCCMessage *message = [[WFCCNetworkService sharedInstance].streamingTextGeneratingMessages objectForKey:key];
-    if (message) {
-        // 如果消息生成时间超过1分钟，则认为是过期的，返回nil
-        int64_t now = [[NSDate date] timeIntervalSince1970] * 1000;
-        if (now - message.serverTime > 60 * 1000) {
-            [[WFCCNetworkService sharedInstance].streamingTextGeneratingMessages removeObjectForKey:key];
-            return nil;
-        }
-    }
-    return message;
+    // 兼容旧「单条」语义（内含过期/缺失清理，已下沉到 NetworkService 的取全部方法中）：
+    // 返回该会话所有仍在生成 stream 中最早开始的一条；没有则返回 nil。
+    // 多 agent（多机器人）会话中同一时刻可能有多条不同 streamId 的生成中消息，
+    // 需要完整列表时请使用 [[WFCCNetworkService sharedInstance] allStreamingTextGeneratingMessages:conversation]。
+    return [[WFCCNetworkService sharedInstance] allStreamingTextGeneratingMessages:conversation].firstObject;
 }
 
 - (BOOL)beginTransaction {
