@@ -11,7 +11,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUImage.h"
 #import "UIColor+YH.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 
 #define PLUGIN_AREA_HEIGHT 211
 #define PLUGIN_PAGE_CONTROL_HEIGHT 20
@@ -22,11 +22,11 @@
 #define VerticalItemsCount 2
 #define ItemsPerPage (HorizontalItemsCount * VerticalItemsCount)
 
-//DSH 插件项 tag
-#define PLUGIN_TAG_DSH_AGENT WFCU_PLUGIN_TAG_DSH_AGENT
+//Agent 插件项 tag
+#define PLUGIN_TAG_AGENT_AGENT WFCU_PLUGIN_TAG_AGENT_AGENT
 
-//DSH "AI 会话设置" 图标（运行时绘制，避免新增资源）
-static UIImage *WFCUDshAgentPluginIcon(void) {
+//Agent "AI 会话设置" 图标（运行时绘制，避免新增资源）
+static UIImage *WFCUAgentPluginIcon(void) {
     CGFloat size = 60;
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(size, size)];
     return [renderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
@@ -73,7 +73,7 @@ static UIImage *WFCUDshAgentPluginIcon(void) {
 @property (nonatomic, assign)BOOL hasPtt;
 @property (nonatomic, assign)BOOL hasCollection;
 @property (nonatomic, assign)BOOL hasPoll;
-@property (nonatomic, assign)BOOL hasDsh;
+@property (nonatomic, assign)BOOL hasAgent;
 @property (nonatomic, strong)UIScrollView *scrollView;
 @property (nonatomic, strong)UIPageControl *pageControl;
 //已按这个宽度排过版。iPad 双栏下面板宽度是会话栏的宽度，且会随旋转/分屏拖拽变化。
@@ -82,7 +82,7 @@ static UIImage *WFCUDshAgentPluginIcon(void) {
 @end
 
 @implementation WFCUPluginBoardView
-- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection withDsh:(BOOL)withDsh {
+- (instancetype)initWithDelegate:(id<WFCUPluginBoardViewDelegate>)delegate withVoip:(BOOL)withWoip withPtt:(BOOL)withPtt withPoll:(BOOL) withPoll withCollection:(BOOL)withCollection withAgent:(BOOL)withAgent {
     CGFloat width = [UIScreen mainScreen].bounds.size.width-16;
     self = [super initWithFrame:CGRectMake(0, 0, width, PLUGIN_AREA_HEIGHT)];
     if (self) {
@@ -91,7 +91,7 @@ static UIImage *WFCUDshAgentPluginIcon(void) {
         self.hasPtt = withPtt;
         self.hasCollection = withCollection;
         self.hasPoll = withPoll;
-        self.hasDsh = withDsh;
+        self.hasAgent = withAgent;
         self.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
         
         self.itemViews = [[NSMutableArray alloc] init];
@@ -231,11 +231,11 @@ static UIImage *WFCUDshAgentPluginIcon(void) {
         if(self.hasPoll) {
             [_pluginItems insertObject:[[PluginItem alloc] initWithTitle:WFCString(@"Poll") image:[WFCUImage imageNamed:@"chat_input_plugin_poll"] tag:9] atIndex:_pluginItems.count];
         }
-        //DSH/AI 会话（line==2）专属："AI 会话设置"面板入口
-        if(self.hasDsh) {
-            PluginItem *dshItem = [[PluginItem alloc] initWithTitle:@"AI 会话设置" image:WFCUDshAgentPluginIcon() tag:PLUGIN_TAG_DSH_AGENT];
-            dshItem.disabled = self.dshDisabled;
-            [_pluginItems addObject:dshItem];
+        //Agent/AI 会话（line==2）专属："AI 会话设置"面板入口
+        if(self.hasAgent) {
+            PluginItem *agentItem = [[PluginItem alloc] initWithTitle:@"AI 会话设置" image:WFCUAgentPluginIcon() tag:PLUGIN_TAG_AGENT_AGENT];
+            agentItem.disabled = self.agentDisabled;
+            [_pluginItems addObject:agentItem];
         }
     }
     return _pluginItems;

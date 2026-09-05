@@ -1,8 +1,8 @@
 //
-//  WFCUDshApprovalMessageCell.h
+//  WFCUAgentApprovalMessageCell.h
 //  WFChatUIKit
 //
-//  DSH 工具审批卡片 Cell（202）。
+//  Agent 工具审批卡片 Cell（202）。
 //
 
 #import "WFCUMessageCell.h"

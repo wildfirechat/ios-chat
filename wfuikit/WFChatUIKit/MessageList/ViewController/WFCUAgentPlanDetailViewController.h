@@ -1,8 +1,8 @@
 //
-//  WFCUDshPlanDetailViewController.h
+//  WFCUAgentPlanDetailViewController.h
 //  WFChatUIKit
 //
-//  DSH plan-review 全屏计划详情页（等宽字体、可滚动，底部固定 批准/拒绝 按钮）。
+//  Agent plan-review 全屏计划详情页（等宽字体、可滚动，底部固定 批准/拒绝 按钮）。
 //
 
 #import <UIKit/UIKit.h>
