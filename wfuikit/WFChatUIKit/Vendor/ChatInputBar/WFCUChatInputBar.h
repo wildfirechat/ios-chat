@@ -88,8 +88,8 @@ typedef NS_ENUM(NSInteger, ChatInputBarStatus) {
 /// 父视图宽度变化（iPad 旋转、分屏拖拽、左右栏切换）后重新排版
 - (void)relayoutForParentBoundsChange;
 
-//输入框占位文本（DSH 会话状态提示用，nil 时不显示）
+//输入框占位文本（Agent 会话状态提示用，nil 时不显示）
 @property(nonatomic, strong)NSString *placeholder;
-//聚焦输入框并弹出键盘（DSH 提问卡片"自定义回答"用）
+//聚焦输入框并弹出键盘（Agent 提问卡片"自定义回答"用）
 - (void)focusTextInput;
 @end

@@ -1,19 +1,19 @@
 //
-//  WFCUDshApprovalMessageCell.m
+//  WFCUAgentApprovalMessageCell.m
 //  WFChatUIKit
 //
-//  DSH 工具审批卡片 Cell（202）。点击同意/拒绝发送 DSH_ApprovalResult 并立即本地置灰。
+//  Agent 工具审批卡片 Cell（202）。点击同意/拒绝发送 AGENT_ApprovalResult 并立即本地置灰。
 //
 
-#import "WFCUDshApprovalMessageCell.h"
+#import "WFCUAgentApprovalMessageCell.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
+#import <WFChatClient/WFCCAgentMessageContents.h>
 #import "WFCUUtilities.h"
-#import "WFCUDshState.h"
+#import "WFCUAgentState.h"
 #import "WFCUConfigManager.h"
 #import "UIFont+YH.h"
 
-#define DSH_CARD_PADDING 12
+#define AGENT_CARD_PADDING 12
 
 @interface WFCUAgentApprovalMessageCell ()
 @property (nonatomic, strong)UILabel *titleLabel;
@@ -30,8 +30,8 @@
 
 + (CGSize)sizeForClientArea:(WFCUMessageModel *)msgModel withViewWidth:(CGFloat)width {
     WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)msgModel.message.content;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat height = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat height = AGENT_CARD_PADDING;
 
     //标题
     height += 20 + 6;
@@ -45,7 +45,7 @@
         height += reasonSize.height + 4;
     }
     //按钮区/状态行
-    height += 40 + DSH_CARD_PADDING;
+    height += 40 + AGENT_CARD_PADDING;
     return CGSizeMake(width, height);
 }
 
@@ -122,15 +122,15 @@
 
     WFCCAgentApprovalMessageContent *content = (WFCCAgentApprovalMessageContent *)model.message.content;
     CGFloat width = self.contentArea.bounds.size.width;
-    CGFloat contentWidth = width - DSH_CARD_PADDING * 2;
-    CGFloat currentY = DSH_CARD_PADDING;
+    CGFloat contentWidth = width - AGENT_CARD_PADDING * 2;
+    CGFloat currentY = AGENT_CARD_PADDING;
 
     self.titleLabel.text = @"🔐 工具审批";
-    self.titleLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 20);
+    self.titleLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 20);
     currentY += 20 + 6;
 
     self.toolLabel.text = content.toolName;
-    self.toolLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, 18);
+    self.toolLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, 18);
     currentY += 18 + 4;
 
     if (content.reason.length) {
@@ -139,7 +139,7 @@
         CGSize reasonSize = [WFCUUtilities getTextDrawingSize:self.reasonLabel.text
                                                          font:self.reasonLabel.font
                                                 constrainedSize:CGSizeMake(contentWidth, 200)];
-        self.reasonLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY, contentWidth, reasonSize.height);
+        self.reasonLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY, contentWidth, reasonSize.height);
         currentY += reasonSize.height + 4;
     } else {
         self.reasonLabel.hidden = YES;
@@ -151,11 +151,11 @@
     self.stateLabel.hidden = !locked;
     if (locked) {
         self.stateLabel.text = [self stateText];
-        self.stateLabel.frame = CGRectMake(DSH_CARD_PADDING, currentY + 12, contentWidth, 16);
+        self.stateLabel.frame = CGRectMake(AGENT_CARD_PADDING, currentY + 12, contentWidth, 16);
     } else {
         CGFloat btnWidth = (contentWidth - 8) / 2.0;
-        self.approveButton.frame = CGRectMake(DSH_CARD_PADDING, currentY, btnWidth, 40);
-        self.rejectButton.frame = CGRectMake(DSH_CARD_PADDING + btnWidth + 8, currentY, btnWidth, 40);
+        self.approveButton.frame = CGRectMake(AGENT_CARD_PADDING, currentY, btnWidth, 40);
+        self.rejectButton.frame = CGRectMake(AGENT_CARD_PADDING + btnWidth + 8, currentY, btnWidth, 40);
     }
 }
 
@@ -177,7 +177,7 @@
     self.rejectButton.hidden = YES;
     self.stateLabel.hidden = NO;
     self.stateLabel.text = stateText;
-    self.stateLabel.frame = CGRectMake(DSH_CARD_PADDING, self.contentArea.bounds.size.height - DSH_CARD_PADDING - 16 - 12, width - DSH_CARD_PADDING * 2, 16);
+    self.stateLabel.frame = CGRectMake(AGENT_CARD_PADDING, self.contentArea.bounds.size.height - AGENT_CARD_PADDING - 16 - 12, width - AGENT_CARD_PADDING * 2, 16);
 }
 
 - (void)onApprove {

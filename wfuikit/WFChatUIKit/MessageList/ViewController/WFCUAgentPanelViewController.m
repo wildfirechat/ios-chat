@@ -1,9 +1,9 @@
 //
-//  WFCUDshAgentPanelViewController.m
+//  WFCUAgentPanelViewController.m
 //  WFChatUIKit
 //
-//  DSH/AI 会话设置面板实现（静默通道）。
-//  打开：发 DSH_Command(207) query（组合查询）→ 插件聚合面板数据写 scope=31 type=3
+//  Agent/AI 会话设置面板实现（静默通道）。
+//  打开：发 Agent_Command(207) query（组合查询）→ 插件聚合面板数据写 scope=31 type=3
 //  → 本端读 type=3 渲染（model/effort 下拉选项+当前值、sandbox 水平单选、plan switch、
 //  cwd 当前值+「切换」弹窗选目录）。
 //  操作：发 207 set（cmd=命令文本，如 "/model deepseek-official/xxx"），插件执行后写
@@ -20,21 +20,21 @@
 //  - 底部：压缩上下文 / 重置会话 / 销毁会话（红色实底，强警告确认后发 /destroy）
 //
 
-#import "WFCUDshAgentPanelViewController.h"
+#import "WFCUAgentPanelViewController.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatClient/WFCCDshMessageContents.h>
-#import "WFCUDshState.h"
+#import <WFChatClient/WFCCAgentMessageContents.h>
+#import "WFCUAgentState.h"
 #import "WFCUUtilities.h"
 #import "WFCUConfigManager.h"
 #import "UIColor+YH.h"
 
 //选项行按钮：携带 optionValue 以便点击回调识别（目录选择界面行复用）
-@interface WFCUDshOptionButton : UIButton
+@interface WFCUAgentOptionButton : UIButton
 @property (nonatomic, strong)NSString *optionValue;
 - (void)setOptionSelected:(BOOL)selected;
 @end
 
-@implementation WFCUDshOptionButton
+@implementation WFCUAgentOptionButton
 - (void)setOptionSelected:(BOOL)selected {
     if (selected) {
         self.backgroundColor = [WFCUAgentState accentColor];
@@ -56,7 +56,7 @@ static NSArray<NSDictionary<NSString *, NSString *> *> *defaultSandboxOptions(vo
 }
 
 //沙箱模式短文案（水平单选按钮用，与 PC/Android 端一致）
-static NSString *dshSandboxShortLabel(NSString *value) {
+static NSString *agentSandboxShortLabel(NSString *value) {
     if ([value isEqualToString:@"read-only"]) {
         return @"只读";
     }
@@ -74,7 +74,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 //下拉选择：iOS 14+ 用 UIMenu（原生下拉）；iOS 12/13 用 UIPickerView 弹层兜底。
 //选项为 @{@"value":.., @"label":..}；selectedValue 不在 options 时由 updateContent
 //补入并标注"（当前）"，保证下拉框始终展示真实当前值。
-@interface WFCUDshDropdownButton : UIButton
+@interface WFCUAgentDropdownButton : UIButton
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *options;
 @property (nonatomic, copy)NSString *selectedValue;
 @property (nonatomic, copy)NSString *placeholder;
@@ -84,7 +84,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 @end
 
 //UIPickerView 弹层（iOS 12/13 下拉兜底）：底部卡片 + 取消/完成
-@interface WFCUDshPickerViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface WFCUAgentPickerViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 @property (nonatomic, copy)void (^onSelect)(NSString *value);
 - (instancetype)initWithOptions:(NSArray<NSDictionary<NSString *, NSString *> *> *)options selectedValue:(NSString *)selectedValue;
 @end
@@ -92,7 +92,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 #pragma mark - 单选按钮
 
 //水平单选按钮：圆圈指示 + 文字（沙箱模式三选一）
-@interface WFCUDshRadioButton : UIControl
+@interface WFCUAgentRadioButton : UIControl
 @property (nonatomic, copy)NSString *optionValue;
 @property (nonatomic, assign)BOOL radioSelected;
 @property (nonatomic, copy)NSString *titleText;
@@ -101,7 +101,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 #pragma mark - 工作目录选择弹窗
 
 //独立目录选择界面（底部卡片）：候选来自 type=3 dirs；监听设置更新自动刷新
-@interface WFCUDshCwdPickerViewController : UIViewController
+@interface WFCUAgentCwdPickerViewController : UIViewController
 @property (nonatomic, copy)NSDictionary *(^dataProvider)(void); //@{@"dirs": NSArray, @"current": NSString}
 @property (nonatomic, copy)void (^onSelect)(NSString *dir);
 @end
@@ -110,6 +110,8 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 @interface WFCUAgentPanelViewController ()
 @property (nonatomic, strong)WFCCConversation *conversation;
+//目标机器人 uid（多机器人会话寻址：完整 robot_xxx_yyy，勿截断；空=会话默认机器人）
+@property (nonatomic, copy)NSString *robotUid;
 
 //数据（全部来自 scope=31 type=3 面板数据；207 set 后由 kSettingUpdated 重读刷新）
 @property (nonatomic, assign)BOOL applying;
@@ -129,9 +131,9 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)UIView *contentView;
 @property (nonatomic, strong)UIView *footerView;
 @property (nonatomic, strong)UILabel *modelTitleLabel;
-@property (nonatomic, strong)WFCUDshDropdownButton *modelDropdown;
+@property (nonatomic, strong)WFCUAgentDropdownButton *modelDropdown;
 @property (nonatomic, strong)UILabel *effortTitleLabel;
-@property (nonatomic, strong)WFCUDshDropdownButton *effortDropdown;
+@property (nonatomic, strong)WFCUAgentDropdownButton *effortDropdown;
 @property (nonatomic, strong)UILabel *cwdTitleLabel;
 @property (nonatomic, strong)UILabel *cwdValueLabel;
 @property (nonatomic, strong)UIView *cwdRowView;
@@ -139,7 +141,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)UILabel *cwdHintLabel;
 @property (nonatomic, strong)UILabel *sandboxTitleLabel;
 @property (nonatomic, strong)UIView *sandboxContainer;
-@property (nonatomic, strong)NSMutableArray<WFCUDshRadioButton *> *sandboxRadios;
+@property (nonatomic, strong)NSMutableArray<WFCUAgentRadioButton *> *sandboxRadios;
 @property (nonatomic, strong)UILabel *planTitleLabel;
 @property (nonatomic, strong)UISwitch *planSwitch;
 @property (nonatomic, strong)UILabel *planDescLabel;
@@ -152,7 +154,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 下拉选择控件实现
 
-@implementation WFCUDshDropdownButton {
+@implementation WFCUAgentDropdownButton {
     UILabel *_chevronLabel;
 }
 
@@ -269,7 +271,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     if (!presenter) {
         return;
     }
-    WFCUDshPickerViewController *picker = [[WFCUDshPickerViewController alloc] initWithOptions:[self displayOptions] selectedValue:self.selectedValue];
+    WFCUAgentPickerViewController *picker = [[WFCUAgentPickerViewController alloc] initWithOptions:[self displayOptions] selectedValue:self.selectedValue];
     __weak typeof(self) ws = self;
     picker.onSelect = ^(NSString *value) {
         __strong typeof(ws) ss = ws;
@@ -289,7 +291,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - UIPickerView 弹层实现（iOS 12/13 兜底）
 
-@implementation WFCUDshPickerViewController {
+@implementation WFCUAgentPickerViewController {
     NSArray<NSDictionary<NSString *, NSString *> *> *_options;
     NSString *_selectedValue;
     UIView *_cardView;
@@ -392,7 +394,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 单选按钮实现
 
-@implementation WFCUDshRadioButton {
+@implementation WFCUAgentRadioButton {
     UIView *_ringView;
     UIView *_dotView;
     UILabel *_titleLabel;
@@ -453,11 +455,11 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 工作目录选择弹窗实现
 
-@implementation WFCUDshCwdPickerViewController {
+@implementation WFCUAgentCwdPickerViewController {
     UIView *_cardView;
     UIScrollView *_scrollView;
     UIView *_contentView;
-    NSMutableArray<WFCUDshOptionButton *> *_rowButtons;
+    NSMutableArray<WFCUAgentOptionButton *> *_rowButtons;
 }
 
 - (instancetype)init {
@@ -574,7 +576,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
             if (dir.length && [dir isEqualToString:current]) {
                 display = [NSString stringWithFormat:@"%@（当前）", dir];
             }
-            WFCUDshOptionButton *btn = [[WFCUDshOptionButton alloc] initWithFrame:CGRectZero];
+            WFCUAgentOptionButton *btn = [[WFCUAgentOptionButton alloc] initWithFrame:CGRectZero];
             btn.optionValue = dir;
             [btn setTitle:[NSString stringWithFormat:@"📂 %@", display] forState:UIControlStateNormal];
             btn.titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13]];
@@ -595,7 +597,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     _scrollView.contentSize = CGSizeMake(w, y);
 }
 
-- (void)onSelectRow:(WFCUDshOptionButton *)sender {
+- (void)onSelectRow:(WFCUAgentOptionButton *)sender {
     if (!sender.optionValue.length) {
         return;
     }
@@ -617,9 +619,14 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 @implementation WFCUAgentPanelViewController
 
 - (instancetype)initWithConversation:(WFCCConversation *)conversation {
+    return [self initWithConversation:conversation robotUid:nil];
+}
+
+- (instancetype)initWithConversation:(WFCCConversation *)conversation robotUid:(NSString *)robotUid {
     self = [super init];
     if (self) {
         self.conversation = conversation;
+        self.robotUid = robotUid;
         self.modelOptions = @[];
         self.effortOptions = @[];
         self.sandboxOptions = defaultSandboxOptions();
@@ -646,7 +653,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     [self setupCard];
     //先读已有面板数据（若有）渲染，再发 207 query 组合查询刷新
     [self loadPanelDataFromUserSetting];
-    [self sendDshCommand:@"query" cmd:nil];
+    [self sendAgentCommand:@"query" cmd:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -692,9 +699,15 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     [self.cardView addSubview:header];
 
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, header.bounds.size.width - 80, headerH)];
-    titleLabel.text = @"🤖 AI 会话设置";
+    //多机器人：标题显示目标机器人名（用户信息缺失时回退完整 uid）
+    NSString *titleText = @"🤖 AI 会话设置";
+    if (self.robotUid.length) {
+        titleText = [NSString stringWithFormat:@"🤖 AI 会话设置 · %@", [WFCUAgentState agentRobotName:self.robotUid]];
+    }
+    titleLabel.text = titleText;
     titleLabel.font = [UIFont boldSystemFontOfSize:[WFCUConfigManager scaledSize:16]];
     titleLabel.textColor = [UIColor colorWithHexString:@"0x222222"];
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     [header addSubview:titleLabel];
 
     UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -788,7 +801,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     self.modelTitleLabel = [self makeSectionTitle:@"模型"];
     [self.contentView addSubview:self.modelTitleLabel];
 
-    self.modelDropdown = [[WFCUDshDropdownButton alloc] initWithFrame:CGRectZero];
+    self.modelDropdown = [[WFCUAgentDropdownButton alloc] initWithFrame:CGRectZero];
     self.modelDropdown.dropPresenter = self;
     self.modelDropdown.placeholder = @"正在获取模型列表…";
     __weak typeof(self) ws = self;
@@ -801,7 +814,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     self.effortTitleLabel = [self makeSectionTitle:@"推理等级"];
     [self.contentView addSubview:self.effortTitleLabel];
 
-    self.effortDropdown = [[WFCUDshDropdownButton alloc] initWithFrame:CGRectZero];
+    self.effortDropdown = [[WFCUAgentDropdownButton alloc] initWithFrame:CGRectZero];
     self.effortDropdown.dropPresenter = self;
     self.effortDropdown.placeholder = @"正在获取等级列表…";
     self.effortDropdown.onSelect = ^(NSString *value) {
@@ -892,9 +905,9 @@ static NSString *dshSandboxShortLabel(NSString *value) {
         if (!value.length) {
             continue;
         }
-        WFCUDshRadioButton *radio = [[WFCUDshRadioButton alloc] initWithFrame:CGRectZero];
+        WFCUAgentRadioButton *radio = [[WFCUAgentRadioButton alloc] initWithFrame:CGRectZero];
         radio.optionValue = value;
-        radio.titleText = dshSandboxShortLabel(value);
+        radio.titleText = agentSandboxShortLabel(value);
         [radio addTarget:self action:@selector(onSelectSandboxRadio:) forControlEvents:UIControlEventTouchUpInside];
         [self.sandboxContainer addSubview:radio];
         [self.sandboxRadios addObject:radio];
@@ -949,7 +962,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     CGFloat radioGap = 8;
     CGFloat radioW = (contentW - 32 - radioGap * 2) / 3.0;
     NSInteger idx = 0;
-    for (WFCUDshRadioButton *radio in self.sandboxRadios) {
+    for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.frame = CGRectMake(idx * (radioW + radioGap), 0, radioW, 40);
         idx++;
     }
@@ -972,7 +985,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 - (void)refreshCurrentValues {
     [self.modelDropdown updateContent];
     [self.effortDropdown updateContent];
-    for (WFCUDshRadioButton *radio in self.sandboxRadios) {
+    for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.radioSelected = [radio.optionValue isEqualToString:self.currentSandbox];
     }
     self.cwdValueLabel.text = self.currentCwd.length ? [NSString stringWithFormat:@"当前：%@", self.currentCwd] : @"当前：—";
@@ -982,12 +995,13 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 
 #pragma mark - 数据加载（scope=31 type=3 面板数据）
 
-//读 scope=31 type=3 面板数据（零解析）：model/effort/sandbox/plan/cwd/dirs
+//读 scope=31 type=3 面板数据（零解析）：model/effort/sandbox/plan/cwd/dirs。
+//多机器人：按本面板绑定的 robotUid 精确读 "<...>_3_<uid>"（空 = 会话默认）
 - (void)loadPanelDataFromUserSetting {
-    if (![WFCUAgentState isDshConversation:self.conversation]) {
+    if (![WFCUAgentState isAgentConversation:self.conversation]) {
         return;
     }
-    NSDictionary *data = [WFCUAgentState dshPanelData:self.conversation];
+    NSDictionary *data = [WFCUAgentState agentPanelData:self.conversation robotUid:self.robotUid];
     if (![data isKindOfClass:[NSDictionary class]]) {
         return;
     }
@@ -1097,11 +1111,12 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     [self loadPanelDataFromUserSetting];
 }
 
-#pragma mark - 207 DSH_Command 静默指令
+#pragma mark - 207 Agent_Command 静默指令
 
-//发送 207 面板指令（透明消息：不存储、不显示、不计未读，全部交互不落消息流）
-- (void)sendDshCommand:(NSString *)op cmd:(nullable NSString *)cmd {
-    if (![WFCUAgentState isDshConversation:self.conversation]) {
+//发送 207 面板指令（透明消息：不存储、不显示、不计未读，全部交互不落消息流）。
+//多机器人：带目标机器人 robotId（存在时仅该机器人执行，插件已支持）；空 = 会话默认机器人
+- (void)sendAgentCommand:(NSString *)op cmd:(nullable NSString *)cmd {
+    if (![WFCUAgentState isAgentConversation:self.conversation]) {
         return;
     }
     WFCCAgentCommandMessageContent *content = [[WFCCAgentCommandMessageContent alloc] init];
@@ -1109,6 +1124,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     content.cmd = cmd;
     //seq 防重/追踪（与 PC 端一致：毫秒时间戳取模）
     content.seq = (NSInteger)([[NSDate date] timeIntervalSince1970] * 1000) % 100000;
+    content.robotId = self.robotUid.length ? self.robotUid : nil;
     [[WFCCIMService sharedWFCIMService] send:self.conversation content:content success:nil error:nil];
 }
 
@@ -1120,7 +1136,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     }
     self.currentModel = value;
     [self refreshCurrentValues];
-    [self sendDshCommand:@"set" cmd:[NSString stringWithFormat:@"/model %@", value]];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/model %@", value]];
     [self flashApplying];
 }
 
@@ -1130,17 +1146,17 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     }
     self.currentEffort = value;
     [self refreshCurrentValues];
-    [self sendDshCommand:@"set" cmd:[NSString stringWithFormat:@"/effort %@", value]];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/effort %@", value]];
     [self flashApplying];
 }
 
-- (void)onSelectSandboxRadio:(WFCUDshRadioButton *)sender {
+- (void)onSelectSandboxRadio:(WFCUAgentRadioButton *)sender {
     if (self.applying || !sender.optionValue.length) {
         return;
     }
     self.currentSandbox = sender.optionValue;
     [self refreshCurrentValues];
-    [self sendDshCommand:@"set" cmd:[NSString stringWithFormat:@"/sandbox %@", sender.optionValue]];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/sandbox %@", sender.optionValue]];
     [self flashApplying];
 }
 
@@ -1151,7 +1167,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
     }
     self.planOn = self.planSwitch.on;
     [self refreshCurrentValues];
-    [self sendDshCommand:@"set" cmd:self.planOn ? @"/plan on" : @"/plan off"];
+    [self sendAgentCommand:@"set" cmd:self.planOn ? @"/plan on" : @"/plan off"];
     [self flashApplying];
 }
 
@@ -1161,9 +1177,9 @@ static NSString *dshSandboxShortLabel(NSString *value) {
         return;
     }
     if (!self.cwdCandidates.count) {
-        [self sendDshCommand:@"query" cmd:nil];
+        [self sendAgentCommand:@"query" cmd:nil];
     }
-    WFCUDshCwdPickerViewController *picker = [[WFCUDshCwdPickerViewController alloc] init];
+    WFCUAgentCwdPickerViewController *picker = [[WFCUAgentCwdPickerViewController alloc] init];
     __weak typeof(self) ws = self;
     picker.dataProvider = ^NSDictionary *{
         __strong typeof(ws) ss = ws;
@@ -1177,7 +1193,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
         //当前值先乐观更新，type=3 刷新兜底
         ss.currentCwd = dir;
         [ss refreshCurrentValues];
-        [ss sendDshCommand:@"set" cmd:[NSString stringWithFormat:@"/cwd %@", dir]];
+        [ss sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/cwd %@", dir]];
         [ss flashApplying];
     };
     [self presentViewController:picker animated:YES completion:nil];
@@ -1189,7 +1205,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
                                                            preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"压缩" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self sendDshCommand:@"set" cmd:@"/compact"];
+        [self sendAgentCommand:@"set" cmd:@"/compact"];
         [self flashApplying];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -1201,7 +1217,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
                                                            preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"重置" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [self sendDshCommand:@"set" cmd:@"/reset"];
+        [self sendAgentCommand:@"set" cmd:@"/reset"];
         [self flashApplying];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -1216,7 +1232,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
                                                            preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"确认销毁" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-        [self sendDshCommand:@"set" cmd:@"/destroy"];
+        [self sendAgentCommand:@"set" cmd:@"/destroy"];
         [self flashApplying];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -1238,7 +1254,7 @@ static NSString *dshSandboxShortLabel(NSString *value) {
 - (void)setControlsEnabled:(BOOL)enabled {
     self.modelDropdown.enabled = enabled;
     self.effortDropdown.enabled = enabled;
-    for (WFCUDshRadioButton *radio in self.sandboxRadios) {
+    for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.enabled = enabled;
     }
     self.cwdSwitchBtn.enabled = enabled;
