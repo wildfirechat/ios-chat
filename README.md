@@ -91,6 +91,11 @@
 2. [ZLPhotoBrowser](https://github.com/longitachi/ZLPhotoBrowser)
 > UI层使用了它们的动态库，如果需要源码可以去对应地址下载，可以自己编译替换第三方动态库。
 
+如果编译时提示动态库签名"cannot be verified"：这是因为动态库使用了官方自签证书，且文件带有隔离属性或符号链接被破坏。请使用```git clone```获取代码（不要用浏览器下载ZIP），项目不要放在FAT32等非Mac格式的磁盘或网盘同步目录中。如果已正常clone仍提示，执行```xattr -dr com.apple.quarantine <项目路径>```后重新编译即可。比如:
+```
+xattr -dr com.apple.quarantine /User/user/Download/ios-chat
+```
+
 ### 推送
 当应用在后台几秒钟后就会被冻结和杀掉，此时收到消息需要APNS通知。请部署推送服务，推送服务代码可以在[Github](https://github.com/wildfirechat/push_server)和[码云](https://gitee.com/wfchat/push_server)下载。具体使用方式，请参考推送服务项目上的说明。
 
