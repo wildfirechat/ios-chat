@@ -29,6 +29,19 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
 };
 
 /**
+ 会话 line。可以扩展自己的line，100以内系统保留，可以扩展使用100-255值。WFCUPadPrimaryNavigationController
+
+ - WFCCConversationLine_Default: 默认（普通消息）
+ - WFCCConversationLine_Moments: 朋友圈
+ - WFCCConversationLine_Agent: AI/Agent 会话
+ */
+typedef NS_ENUM(NSInteger, WFCCConversationLine) {
+    WFCCConversationLine_Default = 0,
+    WFCCConversationLine_Moments = 1,
+    WFCCConversationLine_Agent = 2,
+};
+
+/**
  会话
  */
 @interface WFCCConversation : WFCCJsonSerializer <NSCopying, WFCCDuplicatable>
@@ -38,7 +51,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
 
  @param type 会话类型
  @param target 目标会话ID
- @param line 默认传0
+ @param line 会话 line，取值见 WFCCConversationLine，默认传 WFCCConversationLine_Default
  @return 会话
  */
 +(instancetype)conversationWithType:(WFCCConversationType)type
@@ -72,7 +85,7 @@ typedef NS_ENUM(NSInteger, WFCCConversationType) {
 @property (nonatomic, strong)NSString *target;
 
 /**
- 默认为0
+ 会话 line，取值见 WFCCConversationLine，默认为 WFCCConversationLine_Default
  */
 @property (nonatomic, assign)int line;
 

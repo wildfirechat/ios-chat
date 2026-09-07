@@ -137,6 +137,22 @@
     self.searchHistory = [self loadSearchHistory];
 }
 
+//是否正在搜索。双栏下搜索框长在右栏那张搜索页上，searchController 根本不会 active；
+//单栏（含 iPhone）下 padSearchVC 恒为 nil，取值与 `searchController.active` 逐字节相同。
+- (BOOL)isSearching {
+    return self.padSearchVC != nil || self.searchController.active;
+}
+
+//当前那条搜索框。双栏下在右栏那张搜索页上，单栏（含 iPhone）下是左栏导航条里那条。
+- (UISearchBar *)activeSearchBar {
+    return self.padSearchVC ? self.padSearchVC.searchBar : self.searchController.searchBar;
+}
+
+//当前的搜索关键字
+- (NSString *)currentSearchText {
+    return [[self activeSearchBar] text];
+}
+
 //搜索历史那块浮层挂在谁身上。双栏下挂右栏那条导航栈的 view ——
 //挂左栏会被 320 宽的栏切掉，而且它要盖住的是搜索结果，不是会话列表。
 - (UIView *)searchHistoryHostView {
@@ -672,8 +688,7 @@
 }
 
 - (NSArray<NSNumber *> *)listedConversationLines {
-    //line 2 为 AI/DSH 会话
-    return @[@(0), @(5), @(2)];
+    return @[@(WFCCConversationLine_Default), @(5), @(WFCCConversationLine_Agent)];
 }
 
 - (BOOL)isListedConversation:(WFCCConversation *)conversation {
@@ -830,7 +845,7 @@
 }
 - (void)refreshLeftButton {
     dispatch_async(dispatch_get_main_queue(), ^{
-        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0), @(2)]];
+        WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
         NSUInteger count = unreadCount.unread;
         
         NSString *title = nil;
