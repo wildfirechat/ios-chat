@@ -626,7 +626,7 @@ static const CGFloat kThumbnailCompressionQuality = 0.45;
         if (!backupConversations || backupConversations.count == 0) {
             NSArray *conversationTypes = @[@(Single_Type), @(Group_Type), @(Channel_Type)];
             backupConversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:conversationTypes
-                                                                                      lines:@[@0]];
+                                                                                      lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
         }
 
         if (self.isCancelled) {

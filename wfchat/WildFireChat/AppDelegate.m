@@ -411,7 +411,7 @@
     }
     
     //2. 保存会话列表
-    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(0)]];
+    NSArray<WFCCConversationInfo*> *infos = [[WFCCIMService sharedWFCIMService] getConversationInfos:@[@(Single_Type), @(Group_Type), @(Channel_Type)] lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
     NSMutableArray<SharedConversation *> *sharedConvs = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *needComposedGroupIds = [[NSMutableArray alloc] init];
     //最多保存200个会话，再多就没有意义
@@ -684,7 +684,7 @@
 }
 
 - (NSInteger)updateBadgeNumber {
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     int count = unreadCount.unread + unreadFriendRequest;
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;

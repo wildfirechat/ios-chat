@@ -189,7 +189,7 @@
     // 备份单聊、群聊和频道
     NSArray *conversationTypes = @[@(Single_Type), @(Group_Type), @(Channel_Type)];
     self.conversations = [[WFCCIMService sharedWFCIMService] getConversationInfos:conversationTypes
-                                                                               lines:@[@0]];
+                                                                               lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
 
     // 排序：最近消息时间倒序
     self.conversations = [self.conversations sortedArrayUsingComparator:^NSComparisonResult(WFCCConversationInfo *obj1, WFCCConversationInfo *obj2) {

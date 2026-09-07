@@ -1153,7 +1153,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 - (void)uploadBadgeNumber {
-    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(0)]];
+    WFCCUnreadCount *unreadCount = [[WFCCIMService sharedWFCIMService] getUnreadCount:@[@(Single_Type), @(Group_Type), @(Channel_Type), @(SecretChat_Type)] lines:@[@(WFCCConversationLine_Default), @(WFCCConversationLine_Agent)]];
     int unreadFriendRequest = [[WFCCIMService sharedWFCIMService] getUnreadFriendRequestStatus];
     int count = unreadCount.unread + unreadFriendRequest;
     //同步到IM服务，IM服务当需要推送时，把这个数字发到推送服务，从而计算较为精确的角标数
