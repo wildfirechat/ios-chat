@@ -3013,6 +3013,11 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         if ([message.content isKindOfClass:[WFCCAgentCommandMessageContent class]]) {
             continue;
         }
+
+        // Agent 命令应答（209 Agent_Command_Result）是 207 指令的应答通道（透明消息）：不进入列表、不显示
+        if ([message.content isKindOfClass:[WFCCAgentCommandResultMessageContent class]]) {
+            continue;
+        }
         
         if ([message.content isKindOfClass:[WFCCTypingMessageContent class]] && message.direction == MessageDirection_Receive) {
             WFCCTypingMessageContent *content = (WFCCTypingMessageContent *)message.content;

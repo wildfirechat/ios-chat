@@ -17,6 +17,7 @@ static const int AgentMessageContentTypeApprovalResult = 203;
 static const int AgentMessageContentTypeGoal = 206;
 static const int AgentMessageContentTypeCommand = 207;
 static const int AgentMessageContentTypeTaskProgress = 208;
+static const int AgentMessageContentTypeCommandResult = 209;
 
 //取 dict 中首个非空 NSString 值（goal ver:2 兼容：v1 字段缺失时回退读取 v2 字段）
 static NSString *firstNonEmptyString(NSDictionary *dict, NSArray<NSString *> *keys) {
@@ -343,6 +344,78 @@ static NSString *firstNonEmptyString(NSDictionary *dict, NSArray<NSString *> *ke
 
 + (int)getContentFlags {
     //静默通道：透明消息（不存储、不计未读、不多端同步，对端不在线则丢弃），与会议命令消息一致
+    return WFCCPersistFlag_TRANSPARENT;
+}
+
+- (NSString *)digest:(WFCCMessage *)message {
+    //digest 为空：不显示在消息流/会话列表/通知
+    return @"";
+}
+
++ (void)load {
+    [[WFCCIMService sharedWFCIMService] registerMessageContent:self];
+}
+
+@end
+
+@implementation WFCCAgentCommandResultMessageContent
+
+- (WFCCMessagePayload *)encode {
+    WFCCMessagePayload *payload = [[WFCCMessagePayload alloc] init];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"ver"] = @(self.ver > 0 ? self.ver : 1);
+    dict[@"op"] = self.op.length ? self.op : @"";
+    dict[@"seq"] = @(self.seq);
+    //robotId/cwd/root 缺省时不下发（与插件侧构造一致）
+    if (self.robotId.length) {
+        dict[@"robotId"] = self.robotId;
+    }
+    if (self.cwd.length) {
+        dict[@"cwd"] = self.cwd;
+    }
+    if (self.root.length) {
+        dict[@"root"] = self.root;
+    }
+    dict[@"dirs"] = self.dirs ?: @[];
+    if (self.total > 0) {
+        dict[@"total"] = @(self.total);
+    }
+    dict[@"truncated"] = @(self.truncated);
+    [self encodeJsonDict:dict payload:payload digest:@""];
+    //透明消息：不落库、不显示、不计数（摘要由插件侧设置，客户端收到后按 seq 消费）
+    payload.searchableContent = @"";
+    payload.pushContent = @"";
+    return payload;
+}
+
+- (void)decode:(WFCCMessagePayload *)payload {
+    NSDictionary *dict = [WFCCAgentMessageContentBase decodeJsonDict:payload];
+    self.ver = [dict[@"ver"] integerValue];
+    self.op = [dict[@"op"] isKindOfClass:[NSString class]] ? dict[@"op"] : @"";
+    self.seq = [dict[@"seq"] integerValue];
+    self.robotId = [dict[@"robotId"] isKindOfClass:[NSString class]] && [dict[@"robotId"] length] ? dict[@"robotId"] : nil;
+    self.cwd = [dict[@"cwd"] isKindOfClass:[NSString class]] && [dict[@"cwd"] length] ? dict[@"cwd"] : nil;
+    self.root = [dict[@"root"] isKindOfClass:[NSString class]] && [dict[@"root"] length] ? dict[@"root"] : nil;
+    NSMutableArray<NSString *> *dirs = [NSMutableArray array];
+    NSArray *rawDirs = dict[@"dirs"];
+    if ([rawDirs isKindOfClass:[NSArray class]]) {
+        for (id dir in rawDirs) {
+            if ([dir isKindOfClass:[NSString class]] && [dir length]) {
+                [dirs addObject:dir];
+            }
+        }
+    }
+    self.dirs = dirs;
+    self.total = [dict[@"total"] integerValue];
+    self.truncated = [dict[@"truncated"] boolValue];
+}
+
++ (int)getContentType {
+    return AgentMessageContentTypeCommandResult;
+}
+
++ (int)getContentFlags {
+    //透明消息：不存储、不计未读、不多端同步（207 指令的应答通道）
     return WFCCPersistFlag_TRANSPARENT;
 }
 

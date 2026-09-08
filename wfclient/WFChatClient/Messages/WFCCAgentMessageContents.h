@@ -2,7 +2,7 @@
 //  WFCCAgentMessageContents.h
 //  WFChatClient
 //
-//  Agent × Wildfire 结构化交互消息内容类（200-208，官方预留 AI 交互段）。
+//  Agent × Wildfire 结构化交互消息内容类（200-209，官方预留 AI 交互段）。
 //
 //  Payload 约定:
 //    payload.content           = JSON 字符串（结构化数据）
@@ -109,6 +109,36 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger seq;
 /// 目标机器人 uid（多机器人会话寻址，完整 robot_xxx_yyy，勿截断）；空 = 会话默认机器人
 @property (nonatomic, strong, nullable) NSString *robotId;
+@end
+
+/// Agent 命令应答（机器人→用户），MessageContentType: 209
+/// 207 Agent_Command 的应答通道（当前仅 op=dirs：目录列表按需获取）；透明消息
+/// （不落库、不显示、不计数，digest 为空，与 207 一致）。
+/// payload.content = JSON 字符串，v1：
+/// {"ver":1, "op":"dirs", "seq":12345(回显请求 seq), "robotId":"robot_xxx_yyy"(可选),
+///  "cwd":"/abs/current/dir"(可选), "root":"/abs/root"(可选),
+///  "dirs":["a","b"], "total":194(可选), "truncated":false(可选)}
+/// dirs 为目录名（非全路径），按名称升序；root 为其父目录。
+/// 客户端必须按 seq 关联 pending 请求：seq 不匹配或已超时的应答直接丢弃。
+@interface WFCCAgentCommandResultMessageContent : WFCCAgentMessageContentBase
+/// 协议版本（当前 1）
+@property (nonatomic, assign) NSInteger ver;
+/// 应答对应的指令 op（当前仅 dirs）
+@property (nonatomic, strong) NSString *op;
+/// 回显请求的 seq（客户端据此关联 pending 请求）
+@property (nonatomic, assign) NSInteger seq;
+/// 应答机器人 uid（多机器人会话寻址，可能为空）
+@property (nonatomic, strong, nullable) NSString *robotId;
+/// 机器人当前工作目录（可能为空）
+@property (nonatomic, strong, nullable) NSString *cwd;
+/// 目录列表根目录（dirs 的父目录，可能为空）
+@property (nonatomic, strong, nullable) NSString *root;
+/// 目录名列表（非全路径，按名称升序；无则空数组，非 nil）
+@property (nonatomic, strong) NSArray<NSString *> *dirs;
+/// 总条数（0 = 未提供）
+@property (nonatomic, assign) NSInteger total;
+/// 是否被截断（插件侧上限 3000 条）
+@property (nonatomic, assign) BOOL truncated;
 @end
 
 NS_ASSUME_NONNULL_END

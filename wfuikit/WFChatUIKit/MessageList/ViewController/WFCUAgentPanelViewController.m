@@ -8,13 +8,20 @@
 //  cwd 当前值+「切换」弹窗选目录）。
 //  操作：发 207 set（cmd=命令文本，如 "/model deepseek-official/xxx"），插件执行后写
 //  type=1 lastChange（标题状态行可见）+ 刷新 type=3；本端监听 kSettingUpdated 重读 type=3。
-//  207 为透明消息（不存储、不显示、不计未读），全部交互不落消息流；不解析机器人回复文本。
+//  目录列表：type=3 已移除内联 dirs（单条设置值 4096 上限，超限会整条 JSON 失效），
+//  改为按需获取——点「切换」发 207 op=dirs（带 seq/robotId），插件用 209
+//  Agent_Command_Result 透明消息回传 {seq 回显, robotId, cwd, root, dirs[], total,
+//  truncated}；本端按 seq 关联 pending（同一面板可有多个），校验 robotId，
+//  seq 不匹配/已超时/机器人不匹配的应答直接丢弃。TTL 60s 缓存；超时 5s 重试 1 次，
+//  仍失败显示「获取目录失败，请重试」并保留手动输入兜底；老插件（不识别 op=dirs，
+//  type=3 仍内联 dirs）超时后回退读 type=3 的 dirs。
+//  207/209 均为透明消息（不存储、不显示、不计未读），全部交互不落消息流；不解析机器人回复文本。
 //
 //  交互对齐统一风格：
 //  - 模型/推理等级：下拉选择（iOS 14+ UIMenu；iOS 12/13 用 UIPickerView 弹层兜底；
 //    候选列表 + 当前值，当前值不在候选时补入并标注"（当前）"；选中发 207 set /model|/effort）
-//  - 工作目录：显示当前值 + 「切换」按钮，点切换弹出独立目录选择界面（候选来自 type=3 dirs，
-//    选中发 207 set /cwd），不再是内联平铺列表
+//  - 工作目录：显示当前值 + 「切换」按钮，点切换弹出独立目录选择界面（候选来自
+//    209 op=dirs 应答，老插件回退 type=3 dirs），选中发 207 set /cwd
 //  - 沙箱模式：三个水平单选按钮（只读/仅写工作区/完全放开），选中发 207 set /sandbox
 //  - 计划模式：UISwitch 开关，发 /plan on|off
 //  - 底部：压缩上下文 / 重置会话 / 销毁会话（红色实底，强警告确认后发 /destroy）
@@ -106,10 +113,19 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 
 #pragma mark - 工作目录选择弹窗
 
-//独立目录选择界面（底部卡片）：候选来自 type=3 dirs；监听设置更新自动刷新
-@interface WFCUAgentCwdPickerViewController : UIViewController <UIGestureRecognizerDelegate>
-@property (nonatomic, copy)NSDictionary *(^dataProvider)(void); //@{@"dirs": NSArray, @"current": NSString}
+//独立目录选择界面（底部卡片）：候选来自 209 op=dirs 应答（按需获取，TTL 60s 缓存），
+//老插件回退 type=3 内联 dirs；dirs 为空时按 status 文案显示加载/失败态（失败态带「重试」）。
+//底部固定「手动输入」行：直接输入目录名/相对路径作为兜底（等同 /cwd <路径>）。
+@interface WFCUAgentCwdPickerViewController : UIViewController <UIGestureRecognizerDelegate, UITextFieldDelegate>
+//@{@"dirs": NSArray, @"current": NSString, @"status": NSString(可选，dirs 为空时的提示文案),
+//  @"retryable": NSNumber(可选，失败态=true：显示「重试」按钮),
+//  @"hint": NSString(可选，底部说明，如截断提示)}
+@property (nonatomic, copy)NSDictionary *(^dataProvider)(void);
 @property (nonatomic, copy)void (^onSelect)(NSString *dir);
+//失败态「重试」回调（nil = 不显示重试按钮，如加载中）
+@property (nonatomic, copy)void (^onRetry)(void);
+//重读 dataProvider 重建候选（209 应答到达 / type=3 刷新 / 重试后调用）
+- (void)reload;
 @end
 
 #pragma mark - 面板
@@ -130,6 +146,19 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *effortOptions;  //@{@"value": id, @"label": id}
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *sandboxOptions; //@{@"value": mode, @"label": ...}
 @property (nonatomic, strong)NSArray<NSString *> *cwdCandidates;
+//目录列表按需获取（207 op=dirs → 209 Agent_Command_Result 应答）：
+//pending 表 key = seq，value = @{@"robotId": 目标机器人(空=会话默认), @"sentAt": NSDate, @"retried": @(BOOL)}
+@property (nonatomic, strong)NSMutableDictionary<NSNumber *, NSDictionary *> *pendingDirsRequests;
+@property (nonatomic, strong)NSTimer *dirsTimeoutTimer;
+@property (nonatomic, assign)NSInteger dirsSeqSeed;
+//目录列表缓存（同一面板会话内 TTL 60s；空数组也算有效缓存——机器人根目录真的没有子目录）
+@property (nonatomic, strong)NSArray<NSString *> *dirsCache;
+@property (nonatomic, strong)NSDate *dirsCacheTime;
+//目录选择界面状态：加载/失败文案（dirs 为空时展示）、失败态是否显示「重试」、截断提示
+@property (nonatomic, copy)NSString *dirsStatusText;
+@property (nonatomic, assign)BOOL dirsRequestFailed;
+@property (nonatomic, copy)NSString *dirsHintText;
+@property (nonatomic, weak)WFCUAgentCwdPickerViewController *cwdPicker;
 //上次渲染用的 type=3 面板数据（type=1/type=2 推送也会触发 kSettingUpdated，
 //数据未变化时直接跳过重排，避免把用户正在按下的控件重建掉）
 @property (nonatomic, strong)NSDictionary *lastPanelData;
@@ -499,10 +528,18 @@ static const CGFloat kAgentRadioHeight = 46;
 
 @implementation WFCUAgentCwdPickerViewController {
     UIView *_cardView;
+    UIView *_manualRow;
+    UITextField *_manualField;
+    UIButton *_manualButton;
     UIScrollView *_scrollView;
     UIView *_contentView;
     NSMutableArray<WFCUAgentOptionButton *> *_rowButtons;
+    CGFloat _keyboardOffset; //键盘弹起时卡片上移量（保证「手动输入」行不被遮挡）
 }
+
+//卡片高度（标题 48 + 手动输入 52 + 候选列表）
+static const CGFloat kAgentCwdHeaderH = 48;
+static const CGFloat kAgentCwdManualH = 52;
 
 - (instancetype)init {
     self = [super init];
@@ -526,8 +563,11 @@ static const CGFloat kAgentRadioHeight = 46;
 
     //面板数据刷新（207 query/set 后写 type=3）时重读目录候选
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+    //手动输入兜底：键盘弹起时卡片上移，避免「手动输入」行被键盘遮挡（小屏）
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboardWillChange:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboardWillChange:) name:UIKeyboardWillHideNotification object:nil];
 
-    CGFloat cardH = MIN(self.view.bounds.size.height * 0.6, 480);
+    CGFloat cardH = MIN(self.view.bounds.size.height * 0.65, 520);
     _cardView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - cardH, self.view.bounds.size.width, cardH)];
     _cardView.backgroundColor = [UIColor whiteColor];
     _cardView.layer.cornerRadius = 16;
@@ -538,12 +578,11 @@ static const CGFloat kAgentRadioHeight = 46;
     [self.view addSubview:_cardView];
 
     //标题行
-    CGFloat headerH = 48;
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _cardView.bounds.size.width, headerH)];
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _cardView.bounds.size.width, kAgentCwdHeaderH)];
     header.backgroundColor = [UIColor whiteColor];
     [_cardView addSubview:header];
 
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, header.bounds.size.width - 80, headerH)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, header.bounds.size.width - 80, kAgentCwdHeaderH)];
     titleLabel.text = @"选择工作目录";
     titleLabel.font = [UIFont boldSystemFontOfSize:[WFCUConfigManager scaledSize:16]];
     titleLabel.textColor = [UIColor colorWithHexString:@"0x222222"];
@@ -557,13 +596,49 @@ static const CGFloat kAgentRadioHeight = 46;
     [closeBtn addTarget:self action:@selector(closePanel) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:closeBtn];
 
-    UIView *headerLine = [[UIView alloc] initWithFrame:CGRectMake(0, headerH - 0.5, header.bounds.size.width, 0.5)];
+    UIView *headerLine = [[UIView alloc] initWithFrame:CGRectMake(0, kAgentCwdHeaderH - 0.5, header.bounds.size.width, 0.5)];
     headerLine.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
     [header addSubview:headerLine];
 
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, headerH, _cardView.bounds.size.width, cardH - headerH)];
+    //手动输入兜底行（固定不随候选重建，输入目录名/相对路径，等同 /cwd <路径>）
+    _manualRow = [[UIView alloc] initWithFrame:CGRectMake(0, kAgentCwdHeaderH, _cardView.bounds.size.width, kAgentCwdManualH)];
+    _manualRow.backgroundColor = [UIColor whiteColor];
+    [_cardView addSubview:_manualRow];
+
+    _manualField = [[UITextField alloc] initWithFrame:CGRectMake(16, 10, _manualRow.bounds.size.width - 16 - 72 - 10, 32)];
+    _manualField.placeholder = @"手动输入目录名或路径";
+    _manualField.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13]];
+    _manualField.textColor = [UIColor colorWithHexString:@"0x333333"];
+    _manualField.backgroundColor = [UIColor colorWithHexString:@"0xf2f3f5"];
+    _manualField.layer.cornerRadius = 6;
+    _manualField.clipsToBounds = YES;
+    _manualField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _manualField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _manualField.returnKeyType = UIReturnKeyDone;
+    _manualField.delegate = self;
+    _manualField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 32)];
+    _manualField.leftViewMode = UITextFieldViewModeAlways;
+    [_manualRow addSubview:_manualField];
+
+    UIButton *manualBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _manualButton = manualBtn;
+    manualBtn.frame = CGRectMake(_manualRow.bounds.size.width - 16 - 72, 10, 72, 32);
+    [manualBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [manualBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    manualBtn.titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13]];
+    manualBtn.backgroundColor = [WFCUAgentState accentColor];
+    manualBtn.layer.cornerRadius = 6;
+    [manualBtn addTarget:self action:@selector(onManualInput) forControlEvents:UIControlEventTouchUpInside];
+    [_manualRow addSubview:manualBtn];
+
+    UIView *manualLine = [[UIView alloc] initWithFrame:CGRectMake(0, kAgentCwdManualH - 0.5, _manualRow.bounds.size.width, 0.5)];
+    manualLine.backgroundColor = [UIColor colorWithHexString:@"0xededed"];
+    [_manualRow addSubview:manualLine];
+
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kAgentCwdHeaderH + kAgentCwdManualH, _cardView.bounds.size.width, cardH - kAgentCwdHeaderH - kAgentCwdManualH)];
     _scrollView.alwaysBounceVertical = YES;
     _scrollView.showsVerticalScrollIndicator = YES;
+    _scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [_cardView addSubview:_scrollView];
 
     _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _scrollView.bounds.size.width, 0)];
@@ -578,13 +653,44 @@ static const CGFloat kAgentRadioHeight = 46;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    CGFloat cardH = MIN(self.view.bounds.size.height * 0.6, 480);
-    _cardView.frame = CGRectMake(0, self.view.bounds.size.height - cardH, self.view.bounds.size.width, cardH);
-    _scrollView.frame = CGRectMake(0, 48, _cardView.bounds.size.width, cardH - 48);
+    [self layoutCard];
     if (_contentView && _contentView.bounds.size.width != _scrollView.bounds.size.width) {
         _contentView.frame = CGRectMake(0, 0, _scrollView.bounds.size.width, _contentView.bounds.size.height);
         [self rebuildRows];
     }
+}
+
+//卡片贴底 + 键盘弹起时整体上移（手动输入行始终可见）
+- (void)layoutCard {
+    CGFloat cardH = MIN(self.view.bounds.size.height * 0.65, 520);
+    CGFloat cardTop = self.view.bounds.size.height - cardH - _keyboardOffset;
+    _cardView.frame = CGRectMake(0, cardTop, self.view.bounds.size.width, cardH);
+    _manualRow.frame = CGRectMake(0, kAgentCwdHeaderH, _cardView.bounds.size.width, kAgentCwdManualH);
+    _manualField.frame = CGRectMake(16, 10, _manualRow.bounds.size.width - 16 - 72 - 10, 32);
+    _manualButton.frame = CGRectMake(_manualRow.bounds.size.width - 16 - 72, 10, 72, 32);
+    _scrollView.frame = CGRectMake(0, kAgentCwdHeaderH + kAgentCwdManualH, _cardView.bounds.size.width, cardH - kAgentCwdHeaderH - kAgentCwdManualH);
+}
+
+//键盘显隐：按键盘顶边与「手动输入」行底边的重叠量上移卡片
+- (void)onKeyboardWillChange:(NSNotification *)notification {
+    CGFloat offset = 0;
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        CGRect kbRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        CGFloat kbTop = [self.view convertRect:kbRect fromView:nil].origin.y;
+        CGFloat cardH = MIN(self.view.bounds.size.height * 0.65, 520);
+        CGFloat manualBottom = self.view.bounds.size.height - cardH + kAgentCwdHeaderH + kAgentCwdManualH;
+        if (manualBottom > kbTop) {
+            offset = manualBottom - kbTop + 8;
+        }
+    }
+    if (fabs(offset - _keyboardOffset) < 0.5) {
+        return;
+    }
+    _keyboardOffset = offset;
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration > 0 ? duration : 0.25 animations:^{
+        [self layoutCard];
+    }];
 }
 
 //type=3 刷新（207 query/set 后）重读目录候选
@@ -592,7 +698,37 @@ static const CGFloat kAgentRadioHeight = 46;
     [self rebuildRows];
 }
 
-//重建目录候选行（数据来自面板 dataProvider：dirs + current）
+//209 应答到达 / 重试 / 面板状态变化后重读 dataProvider
+- (void)reload {
+    if (self.isViewLoaded) {
+        [self rebuildRows];
+    }
+}
+
+//手动输入兜底：直接把输入串作为 /cwd 参数（目录名或路径），不再等待 209 应答
+- (void)onManualInput {
+    NSString *text = [_manualField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (!text.length) {
+        return;
+    }
+    [_manualField resignFirstResponder];
+    if (self.onSelect) {
+        self.onSelect(text);
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self onManualInput];
+    return YES;
+}
+
+#pragma mark - 候选重建
+
+//重建目录候选行（数据来自面板 dataProvider：dirs + current + status + hint）。
+//dirs 为空时按 status 显示加载/失败态；失败态（onRetry 非空）显示「重试」按钮。
 - (void)rebuildRows {
     for (UIView *sub in _contentView.subviews) {
         [sub removeFromSuperview];
@@ -602,16 +738,39 @@ static const CGFloat kAgentRadioHeight = 46;
     NSDictionary *data = self.dataProvider ? self.dataProvider() : nil;
     NSArray *dirs = [data[@"dirs"] isKindOfClass:[NSArray class]] ? data[@"dirs"] : @[];
     NSString *current = [data[@"current"] isKindOfClass:[NSString class]] ? data[@"current"] : @"";
+    NSString *status = [data[@"status"] isKindOfClass:[NSString class]] ? data[@"status"] : nil;
+    NSString *hint = [data[@"hint"] isKindOfClass:[NSString class]] ? data[@"hint"] : nil;
+    //失败态才显示「重试」（加载中不显示，避免误点）
+    BOOL retryable = [data[@"retryable"] boolValue] && self.onRetry != nil;
 
     CGFloat w = MAX(_contentView.bounds.size.width, 200);
     CGFloat y = 12;
     if (!dirs.count) {
-        UILabel *emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, y, w - 32, 40)];
-        emptyLabel.text = @"未获取到目录列表，可稍后重试";
-        emptyLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:12]];
-        emptyLabel.textColor = [UIColor colorWithHexString:@"0x999999"];
-        [_contentView addSubview:emptyLabel];
-        y += 52;
+        //加载/失败态：状态文案 +（失败时）重试按钮
+        NSString *text = status.length ? status : @"未获取到目录列表，可手动输入路径";
+        UILabel *statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, y, w - 32, 44)];
+        statusLabel.text = text;
+        statusLabel.numberOfLines = 2;
+        statusLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:12]];
+        statusLabel.textColor = [UIColor colorWithHexString:@"0x999999"];
+        [_contentView addSubview:statusLabel];
+        y += 46;
+
+        if (retryable) {
+            UIButton *retryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            retryBtn.frame = CGRectMake(16, y, w - 32, 40);
+            [retryBtn setTitle:@"重试" forState:UIControlStateNormal];
+            [retryBtn setTitleColor:[WFCUAgentState accentColor] forState:UIControlStateNormal];
+            retryBtn.titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13] weight:UIFontWeightMedium];
+            retryBtn.backgroundColor = [UIColor whiteColor];
+            retryBtn.layer.borderColor = [WFCUAgentState accentColor].CGColor;
+            retryBtn.layer.borderWidth = 1;
+            retryBtn.layer.cornerRadius = 6;
+            [retryBtn addTarget:self action:@selector(onRetryTapped) forControlEvents:UIControlEventTouchUpInside];
+            [_contentView addSubview:retryBtn];
+            y += 40 + 6;
+        }
+        y += 6;
     } else {
         CGFloat rowH = 42;
         CGFloat gap = 6;
@@ -637,8 +796,25 @@ static const CGFloat kAgentRadioHeight = 46;
         }
         y += 6;
     }
+
+    //底部说明（如截断提示：插件侧目录上限 3000 条）
+    if (hint.length) {
+        UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, y, w - 32, 32)];
+        hintLabel.text = hint;
+        hintLabel.numberOfLines = 2;
+        hintLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:11]];
+        hintLabel.textColor = [UIColor colorWithHexString:@"0x999999"];
+        [_contentView addSubview:hintLabel];
+        y += 34;
+    }
     _contentView.frame = CGRectMake(0, 0, w, y);
     _scrollView.contentSize = CGSizeMake(w, y);
+}
+
+- (void)onRetryTapped {
+    if (self.onRetry) {
+        self.onRetry();
+    }
 }
 
 - (void)onSelectRow:(WFCUAgentOptionButton *)sender {
@@ -687,6 +863,9 @@ static const CGFloat kAgentRadioHeight = 46;
         self.sandboxOptions = defaultSandboxOptions();
         self.cwdCandidates = @[];
         self.sandboxRadios = [NSMutableArray array];
+        //目录列表 pending 表 + seq 种子（毫秒取模，与 207 其他指令风格一致；同一面板内自增避免 seq 冲突）
+        self.pendingDirsRequests = [NSMutableDictionary dictionary];
+        self.dirsSeqSeed = (NSInteger)([[NSDate date] timeIntervalSince1970] * 1000) % 100000;
         //底部弹窗：透明背景 + 底部卡片，present 时原会话页可见
         self.modalPresentationStyle = UIModalPresentationOverFullScreen;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -706,6 +885,9 @@ static const CGFloat kAgentRadioHeight = 46;
 
     //scope=31 设置变化（插件执行 207 query/set 后写 type=3 / type=1，kSettingUpdated 不带 scope/key，重读当前会话 key）
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSettingUpdated:) name:kSettingUpdated object:nil];
+
+    //209 Agent_Command_Result（透明消息）：207 op=dirs 的应答通道，按 seq 关联 pending
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveMessages:) name:kReceiveMessages object:nil];
 
     [self setupCard];
     //先读已有面板数据（若有）渲染，再发 207 query 组合查询刷新
@@ -733,6 +915,18 @@ static const CGFloat kAgentRadioHeight = 46;
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.applyingTimer invalidate];
+    [self.dirsTimeoutTimer invalidate];
+}
+
+//面板关闭：停止超时轮询并清空 pending（NSTimer 会持有 self，不清会导致面板无法释放）
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed || self.navigationController.isBeingDismissed || !self.view.window) {
+        [self.pendingDirsRequests removeAllObjects];
+        [self stopDirsTimeoutTimer];
+        [self.applyingTimer invalidate];
+        self.applyingTimer = nil;
+    }
 }
 
 #pragma mark - UI 搭建
@@ -1158,7 +1352,9 @@ static const CGFloat kAgentRadioHeight = 46;
         self.planOn = [plan[@"on"] boolValue];
     }
 
-    //工作目录 + 根目录子目录列表
+    //工作目录 + 根目录子目录列表。
+    //dirs 已从 type=3 移除（改 209 按需应答）：新插件下这里通常为空，目录候选由
+    //207 op=dirs → 209 获取；老插件仍内联 dirs 时直接采用（兼容），并写入 60s 缓存。
     if ([data[@"cwd"] isKindOfClass:[NSString class]] && [data[@"cwd"] length]) {
         self.currentCwd = data[@"cwd"];
     }
@@ -1172,6 +1368,7 @@ static const CGFloat kAgentRadioHeight = 46;
         }
         if (arr.count) {
             self.cwdCandidates = [arr copy];
+            [self cacheDirs:arr];
         }
     }
 
@@ -1254,19 +1451,32 @@ static const CGFloat kAgentRadioHeight = 46;
     [self flashApplying];
 }
 
-//点「切换」：弹出独立目录选择界面（候选来自 type=3 dirs，组合查询已含；为空可重发 query 刷新）
+//点「切换」：弹出独立目录选择界面。
+//候选来源优先级：① 本面板 60s 内缓存 → ② 老插件 type=3 内联 dirs（兼容）
+//→ ③ 发 207 op=dirs 按需获取（显示加载态，等 209 应答）
 - (void)onOpenCwdPicker {
     if (self.applying) {
         return;
-    }
-    if (!self.cwdCandidates.count) {
-        [self sendAgentCommand:@"query" cmd:nil];
     }
     WFCUAgentCwdPickerViewController *picker = [[WFCUAgentCwdPickerViewController alloc] init];
     __weak typeof(self) ws = self;
     picker.dataProvider = ^NSDictionary *{
         __strong typeof(ws) ss = ws;
-        return @{@"dirs": ss ? (ss.cwdCandidates ?: @[]) : @[], @"current": ss ? (ss.currentCwd ?: @"") : @""};
+        if (!ss) {
+            return @{@"dirs": @[], @"current": @""};
+        }
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        dict[@"dirs"] = ss.cwdCandidates ?: @[];
+        dict[@"current"] = ss.currentCwd ?: @"";
+        //候选为空时展示加载/失败文案；失败态由 retryable 驱动「重试」按钮
+        if (!ss.cwdCandidates.count && ss.dirsStatusText.length) {
+            dict[@"status"] = ss.dirsStatusText;
+        }
+        dict[@"retryable"] = @(ss.dirsRequestFailed);
+        if (ss.dirsHintText.length) {
+            dict[@"hint"] = ss.dirsHintText;
+        }
+        return dict;
     };
     picker.onSelect = ^(NSString *dir) {
         __strong typeof(ws) ss = ws;
@@ -1279,7 +1489,229 @@ static const CGFloat kAgentRadioHeight = 46;
         [ss sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/cwd %@", dir]];
         [ss flashApplying];
     };
+    picker.onRetry = ^{
+        __strong typeof(ws) ss = ws;
+        [ss startDirsRequest];
+    };
+    self.cwdPicker = picker;
     [self presentViewController:picker animated:YES completion:nil];
+
+    //① 缓存（TTL 60s）直接用
+    if ([self dirsCacheValid]) {
+        self.cwdCandidates = self.dirsCache;
+        self.dirsStatusText = nil;
+        self.dirsRequestFailed = NO;
+        [picker reload];
+        return;
+    }
+    //② 老插件（type=3 仍内联 dirs）：直接使用并写入缓存，不再请求
+    if (self.cwdCandidates.count) {
+        [self cacheDirs:self.cwdCandidates];
+        self.dirsStatusText = nil;
+        self.dirsRequestFailed = NO;
+        [picker reload];
+        return;
+    }
+    //③ 已有在途请求：只刷新加载态，避免重复发指令
+    if (self.pendingDirsRequests.count) {
+        self.dirsStatusText = @"正在获取目录列表…";
+        [picker reload];
+        return;
+    }
+    [self startDirsRequest];
+}
+
+#pragma mark - 目录列表按需获取（207 op=dirs → 209 Agent_Command_Result）
+
+//缓存有效期（同一面板会话内）
+static const NSTimeInterval kAgentDirsCacheTTL = 60.0;
+//单次请求超时（超时重试 1 次，仍失败显示「获取目录失败，请重试」）
+static const NSTimeInterval kAgentDirsRequestTimeout = 5.0;
+
+//缓存是否有效（空数组也算有效缓存：机器人根目录真的没有子目录）
+- (BOOL)dirsCacheValid {
+    return self.dirsCache && self.dirsCacheTime && -[self.dirsCacheTime timeIntervalSinceNow] < kAgentDirsCacheTTL;
+}
+
+- (void)cacheDirs:(NSArray<NSString *> *)dirs {
+    self.dirsCache = dirs ?: @[];
+    self.dirsCacheTime = [NSDate date];
+}
+
+//下一个请求 seq（面板内自增，保证同一面板多个 pending 不冲突；应答原样回显用于关联）
+- (NSInteger)nextDirsSeq {
+    self.dirsSeqSeed = (self.dirsSeqSeed + 1) % 100000;
+    return self.dirsSeqSeed;
+}
+
+//发起 207 op=dirs（新 seq），登记 pending，显示加载态
+- (void)startDirsRequest {
+    if (![WFCUAgentState isAgentConversation:self.conversation]) {
+        return;
+    }
+    NSInteger seq = [self nextDirsSeq];
+    self.pendingDirsRequests[@(seq)] = @{@"robotId": self.robotUid ?: @"",
+                                         @"sentAt": [NSDate date],
+                                         @"retried": @(NO)};
+    self.dirsStatusText = @"正在获取目录列表…";
+    self.dirsRequestFailed = NO;
+    self.dirsHintText = nil;
+    [self sendDirsCommandWithSeq:seq];
+    [self startDirsTimeoutTimerIfNeeded];
+    [self.cwdPicker reload];
+}
+
+//发送 207 op=dirs（透明消息；robotId 空 = 会话默认机器人）
+- (void)sendDirsCommandWithSeq:(NSInteger)seq {
+    if (![WFCUAgentState isAgentConversation:self.conversation]) {
+        return;
+    }
+    WFCCAgentCommandMessageContent *content = [[WFCCAgentCommandMessageContent alloc] init];
+    content.op = @"dirs";
+    content.seq = seq;
+    content.robotId = self.robotUid.length ? self.robotUid : nil;
+    [[WFCCIMService sharedWFCIMService] send:self.conversation content:content success:nil error:nil];
+}
+
+- (void)startDirsTimeoutTimerIfNeeded {
+    if (self.dirsTimeoutTimer || !self.pendingDirsRequests.count) {
+        return;
+    }
+    self.dirsTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                             target:self
+                                                           selector:@selector(onDirsTimeoutTick)
+                                                           userInfo:nil
+                                                            repeats:YES];
+}
+
+- (void)stopDirsTimeoutTimer {
+    [self.dirsTimeoutTimer invalidate];
+    self.dirsTimeoutTimer = nil;
+}
+
+//超时扫描：单个 pending 超时 5s → 同 seq 重试 1 次；再超时 → 失败（回退 type=3 dirs）
+- (void)onDirsTimeoutTick {
+    if (!self.pendingDirsRequests.count) {
+        [self stopDirsTimeoutTimer];
+        return;
+    }
+    NSDate *now = [NSDate date];
+    for (NSNumber *seq in [self.pendingDirsRequests.allKeys copy]) {
+        NSMutableDictionary *pending = [self.pendingDirsRequests[seq] mutableCopy];
+        NSDate *sentAt = pending[@"sentAt"];
+        if ([now timeIntervalSinceDate:sentAt] < kAgentDirsRequestTimeout) {
+            continue;
+        }
+        if (![pending[@"retried"] boolValue]) {
+            //重试 1 次（沿用同一 seq：迟到的首次应答仍可关联）
+            pending[@"retried"] = @(YES);
+            pending[@"sentAt"] = now;
+            self.pendingDirsRequests[seq] = pending;
+            [self sendDirsCommandWithSeq:[seq integerValue]];
+        } else {
+            [self.pendingDirsRequests removeObjectForKey:seq];
+            [self onDirsRequestFailed];
+        }
+    }
+    if (!self.pendingDirsRequests.count) {
+        [self stopDirsTimeoutTimer];
+    }
+}
+
+//请求失败（超时重试后仍无应答）：老插件回退读 type=3 内联 dirs；仍为空则提示可重试
+- (void)onDirsRequestFailed {
+    NSArray<NSString *> *fallback = [self legacyDirsFromPanelData];
+    if (fallback.count) {
+        self.cwdCandidates = fallback;
+        [self cacheDirs:fallback];
+        self.dirsStatusText = nil;
+        self.dirsRequestFailed = NO;
+        self.dirsHintText = nil;
+    } else {
+        self.dirsRequestFailed = YES;
+        self.dirsStatusText = @"获取目录失败，请重试";
+    }
+    [self.cwdPicker reload];
+}
+
+//老插件兼容：type=3 面板数据内联 dirs（新插件已移除，通常为空）
+- (NSArray<NSString *> *)legacyDirsFromPanelData {
+    NSDictionary *data = [WFCUAgentState agentPanelData:self.conversation robotUid:self.robotUid];
+    NSArray *dirs = [data isKindOfClass:[NSDictionary class]] && [data[@"dirs"] isKindOfClass:[NSArray class]] ? data[@"dirs"] : nil;
+    if (!dirs.count) {
+        return @[];
+    }
+    NSMutableArray<NSString *> *arr = [NSMutableArray array];
+    for (id dir in dirs) {
+        if ([dir isKindOfClass:[NSString class]] && [dir length]) {
+            [arr addObject:dir];
+        }
+    }
+    return arr;
+}
+
+#pragma mark - 209 Agent_Command_Result 应答
+
+//209 为透明消息（不落库/不显示/不计未读），经 kReceiveMessages 到达
+- (void)onReceiveMessages:(NSNotification *)notification {
+    NSArray *messages = notification.object;
+    if (![messages isKindOfClass:[NSArray class]]) {
+        return;
+    }
+    for (WFCCMessage *message in messages) {
+        if (![message isKindOfClass:[WFCCMessage class]]) {
+            continue;
+        }
+        if (![message.conversation isEqual:self.conversation]) {
+            continue;
+        }
+        if (![message.content isKindOfClass:[WFCCAgentCommandResultMessageContent class]]) {
+            continue;
+        }
+        [self handleAgentCommandResult:(WFCCAgentCommandResultMessageContent *)message.content];
+    }
+}
+
+//处理 209 应答：op/seq/robotId 三重校验，全部通过才消费
+- (void)handleAgentCommandResult:(WFCCAgentCommandResultMessageContent *)result {
+    //仅处理 op=dirs（其他 op 的应答交回对应功能，本面板忽略）
+    if (![result.op isEqualToString:@"dirs"]) {
+        return;
+    }
+    NSNumber *key = @(result.seq);
+    NSDictionary *pending = self.pendingDirsRequests[key];
+    if (!pending) {
+        //seq 不匹配（非本面板请求）或已超时移除 → 丢弃
+        return;
+    }
+    //robotId 校验：指定了目标机器人时必须精确匹配（空 = 会话默认机器人，由插件决定应答方）
+    NSString *expected = pending[@"robotId"];
+    NSString *actual = result.robotId ?: @"";
+    if (expected.length && ![expected isEqualToString:actual]) {
+        return;
+    }
+    [self.pendingDirsRequests removeObjectForKey:key];
+    if (!self.pendingDirsRequests.count) {
+        [self stopDirsTimeoutTimer];
+    }
+
+    NSArray<NSString *> *dirs = result.dirs ?: @[];
+    self.cwdCandidates = dirs;
+    [self cacheDirs:dirs];
+    //应答带当前工作目录：兜底刷新（操作冷却期不覆盖乐观更新）
+    if (result.cwd.length && !self.applying) {
+        self.currentCwd = result.cwd;
+    }
+    self.dirsStatusText = nil;
+    self.dirsRequestFailed = NO;
+    //截断提示（插件侧上限 3000 条）
+    if (result.truncated && result.total > (NSInteger)dirs.count) {
+        self.dirsHintText = [NSString stringWithFormat:@"已截断，仅显示 %lu 个（共 %ld 个）", (unsigned long)dirs.count, (long)result.total];
+    } else {
+        self.dirsHintText = nil;
+    }
+    [self refreshCurrentValues];
+    [self.cwdPicker reload];
 }
 
 - (void)onCompact {
