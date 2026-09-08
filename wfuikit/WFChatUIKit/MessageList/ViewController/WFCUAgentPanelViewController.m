@@ -700,9 +700,9 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, header.bounds.size.width - 80, headerH)];
     //多机器人：标题显示目标机器人名（用户信息缺失时回退完整 uid）
-    NSString *titleText = @"🤖 AI 会话设置";
+    NSString *titleText = @"🤖 AI 设置";
     if (self.robotUid.length) {
-        titleText = [NSString stringWithFormat:@"🤖 AI 会话设置 · %@", [WFCUAgentState agentRobotName:self.robotUid]];
+        titleText = [NSString stringWithFormat:@"🤖 AI 设置 · %@", [WFCUAgentState agentRobotName:self.robotUid]];
     }
     titleLabel.text = titleText;
     titleLabel.font = [UIFont boldSystemFontOfSize:[WFCUConfigManager scaledSize:16]];

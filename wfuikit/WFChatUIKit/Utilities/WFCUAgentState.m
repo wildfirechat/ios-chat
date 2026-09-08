@@ -34,15 +34,19 @@ static NSString *fmtAgentNum(NSNumber *num) {
 
 @implementation WFCUAgentState
 
-//scope=31（会话级用户设置）本地库全量读：server 现统一写
+//scope=31（会话级用户设置）：server 现统一写
 //"<convType>-<line>-<target>_<type>_<机器人uid>"（uid 后缀，不再有无后缀 key），
-//因此不做精确 key 读取：扫描全部 scope=31 条目，返回首个 key 以 prefix 开头
-//（"<convType>-<line>-<target>_<type>_"）的 value。
+//因此不做精确 key 读取：按 key 前缀（"<convType>-<line>-<target>_<type>_"）查询
+//（getUserSettings:keyPrefix:，native 只返回 key 以 prefix 开头的条目，避免拉全量再筛选），
+//返回首个匹配 value。
 + (NSString *)settingValueWithKeyPrefix:(NSString *)prefix {
     if (prefix.length == 0) {
         return nil;
     }
-    NSDictionary<NSString *, NSString *> *settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting];
+    NSDictionary<NSString *, NSString *> *settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting keyPrefix:prefix];
+    if (![settings isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
     for (NSString *key in settings) {
         if ([key hasPrefix:prefix]) {
             return settings[key];
@@ -126,10 +130,10 @@ static NSString *fmtAgentNum(NSNumber *num) {
 
 #pragma mark - 多机器人（多 agent）支持
 
-//scope=31 设置表全量条目：key 形如 "<convType>-<line>-<target>_<type>_<机器人uid>"，
-//value 为 JSON 字符串
-+ (NSDictionary<NSString *, NSString *> *)agentSettingEntries {
-    NSDictionary<NSString *, NSString *> *settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting];
+//scope=31 设置表按 key 前缀查询的条目（native 已过滤，避免拉全量再筛选）：
+//key 形如 "<convType>-<line>-<target>_<type>_<机器人uid>"，value 为 JSON 字符串
++ (NSDictionary<NSString *, NSString *> *)agentSettingEntriesWithKeyPrefix:(NSString *)prefix {
+    NSDictionary<NSString *, NSString *> *settings = [[WFCCIMService sharedWFCIMService] getUserSettings:UserSettingScope_Conversation_User_Setting keyPrefix:prefix];
     if (![settings isKindOfClass:[NSDictionary class]]) {
         return @{};
     }
@@ -172,7 +176,7 @@ static NSString *fmtAgentNum(NSNumber *num) {
     }
     NSString *prefix = [self agentStateKey:conversation];
     NSMutableSet<NSString *> *uids = [NSMutableSet set];
-    NSDictionary<NSString *, NSString *> *settings = [self agentSettingEntries];
+    NSDictionary<NSString *, NSString *> *settings = [self agentSettingEntriesWithKeyPrefix:prefix];
     for (NSString *key in settings) {
         if ([key hasPrefix:prefix]) {
             NSString *uid = [key substringFromIndex:prefix.length];
@@ -204,9 +208,10 @@ static NSString *fmtAgentNum(NSNumber *num) {
     NSMutableDictionary<NSString *, NSDictionary *> *stateByUid = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, NSDictionary *> *metricsByUid = [NSMutableDictionary dictionary];
     NSMutableSet<NSString *> *uids = [NSMutableSet set];
-    NSDictionary<NSString *, NSString *> *settings = [self agentSettingEntries];
-    for (NSString *key in settings) {
-        NSString *value = settings[key];
+    // type=1 状态 / type=2 计量分别按前缀查询（native 已过滤，避免拉全量再筛选）
+    NSDictionary<NSString *, NSString *> *stateSettings = [self agentSettingEntriesWithKeyPrefix:statePrefix];
+    for (NSString *key in stateSettings) {
+        NSString *value = stateSettings[key];
         if ([key hasPrefix:statePrefix]) {
             NSString *uid = [key substringFromIndex:statePrefix.length];
             if (uid.length) {
@@ -216,7 +221,12 @@ static NSString *fmtAgentNum(NSNumber *num) {
                     stateByUid[uid] = dict;
                 }
             }
-        } else if ([key hasPrefix:metricsPrefix]) {
+        }
+    }
+    NSDictionary<NSString *, NSString *> *metricsSettings = [self agentSettingEntriesWithKeyPrefix:metricsPrefix];
+    for (NSString *key in metricsSettings) {
+        NSString *value = metricsSettings[key];
+        if ([key hasPrefix:metricsPrefix]) {
             NSString *uid = [key substringFromIndex:metricsPrefix.length];
             if (uid.length) {
                 NSDictionary *dict = [self parseAgentSettingValue:value];
@@ -249,17 +259,19 @@ static NSString *fmtAgentNum(NSNumber *num) {
     return result;
 }
 
-//读取指定机器人的 type=3 面板数据：robotUid 非空精确匹配 "<...>_3_<uid>"；
+//读取指定机器人的 type=3 面板数据：robotUid 非空按完整 key 单键查询 "<...>_3_<uid>"；
 //为空时取会话默认（首个 "<...>_3_" 前缀条目，兼容旧版）；未设置/非法返回 nil
 + (NSDictionary *)agentPanelData:(WFCCConversation *)conversation robotUid:(NSString *)robotUid {
     if (![self isAgentConversation:conversation]) {
         return nil;
     }
-    NSDictionary<NSString *, NSString *> *settings = [self agentSettingEntries];
     NSString *prefix = [self agentPanelKey:conversation];
     if (robotUid.length) {
-        return [self parseAgentSettingValue:settings[[prefix stringByAppendingString:robotUid]]];
+        // 精确匹配：单键查询，避免全量读取再筛选
+        NSString *raw = [[WFCCIMService sharedWFCIMService] getUserSetting:UserSettingScope_Conversation_User_Setting key:[prefix stringByAppendingString:robotUid]];
+        return [self parseAgentSettingValue:raw];
     }
+    NSDictionary<NSString *, NSString *> *settings = [self agentSettingEntriesWithKeyPrefix:prefix];
     for (NSString *key in settings) {
         if ([key hasPrefix:prefix]) {
             return [self parseAgentSettingValue:settings[key]];
