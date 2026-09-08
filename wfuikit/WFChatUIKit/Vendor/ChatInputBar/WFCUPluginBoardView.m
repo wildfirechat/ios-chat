@@ -25,22 +25,10 @@
 //Agent 插件项 tag
 #define PLUGIN_TAG_AGENT_AGENT WFCU_PLUGIN_TAG_AGENT_AGENT
 
-//Agent "AI 会话设置" 图标（运行时绘制，避免新增资源）
+//Agent "AI 会话设置" 图标：读取 xcassets 中 agent_ai imageset（白底圆角 + AI 字形，
+//与 chat_input_plugin_* 其它扩展项风格一致），替代运行时自绘
 static UIImage *WFCUAgentPluginIcon(void) {
-    CGFloat size = 60;
-    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(size, size)];
-    return [renderer imageWithActions:^(UIGraphicsImageRendererContext *rendererContext) {
-        //圆角底色
-        UIBezierPath *bg = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, size - 4, size - 4) cornerRadius:12];
-        [[WFCUAgentState accentColor] setFill];
-        [bg fill];
-        //白色 "AI" 字样
-        NSDictionary *attrs = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:20],
-                                NSForegroundColorAttributeName: [UIColor whiteColor]};
-        NSString *text = @"AI";
-        CGSize ts = [text sizeWithAttributes:attrs];
-        [text drawAtPoint:CGPointMake((size - ts.width) / 2.0, (size - ts.height) / 2.0) withAttributes:attrs];
-    }];
+    return [WFCUImage imageNamed:@"agent_ai"];
 }
 
 @interface PluginItem : NSObject
@@ -233,7 +221,7 @@ static UIImage *WFCUAgentPluginIcon(void) {
         }
         //Agent/AI 会话（line==2）专属："AI 会话设置"面板入口
         if(self.hasAgent) {
-            PluginItem *agentItem = [[PluginItem alloc] initWithTitle:@"AI 会话设置" image:WFCUAgentPluginIcon() tag:PLUGIN_TAG_AGENT_AGENT];
+            PluginItem *agentItem = [[PluginItem alloc] initWithTitle:@"AI 设置" image:WFCUAgentPluginIcon() tag:PLUGIN_TAG_AGENT_AGENT];
             agentItem.disabled = self.agentDisabled;
             [_pluginItems addObject:agentItem];
         }
