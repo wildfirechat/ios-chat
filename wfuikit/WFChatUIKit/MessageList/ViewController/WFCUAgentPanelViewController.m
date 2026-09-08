@@ -19,6 +19,12 @@
 //  - 计划模式：UISwitch 开关，发 /plan on|off
 //  - 底部：压缩上下文 / 重置会话 / 销毁会话（红色实底，强警告确认后发 /destroy）
 //
+//  触摸注意（勿回退）：遮罩关闭面板的 UITapGestureRecognizer 挂在 self.view 上，
+//  而手势识别器会收到"自身视图及其所有子视图"的触摸并在识别时取消它们——必须用
+//  gestureRecognizer:shouldReceiveTouch: 把卡片内的触摸挡在手势之外（并设
+//  cancelsTouchesInView=NO），否则卡片里的单选/开关/按钮/下拉都收不到 touchUpInside
+//  （iOS 上表现为"点沙箱单选没选中、面板直接关闭"）。三个 VC（面板 + 目录选择 + 下拉兜底）同规则。
+//
 
 #import "WFCUAgentPanelViewController.h"
 #import <WFChatClient/WFCChatClient.h>
@@ -84,7 +90,7 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @end
 
 //UIPickerView 弹层（iOS 12/13 下拉兜底）：底部卡片 + 取消/完成
-@interface WFCUAgentPickerViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface WFCUAgentPickerViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, copy)void (^onSelect)(NSString *value);
 - (instancetype)initWithOptions:(NSArray<NSDictionary<NSString *, NSString *> *> *)options selectedValue:(NSString *)selectedValue;
 @end
@@ -101,14 +107,14 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 #pragma mark - 工作目录选择弹窗
 
 //独立目录选择界面（底部卡片）：候选来自 type=3 dirs；监听设置更新自动刷新
-@interface WFCUAgentCwdPickerViewController : UIViewController
+@interface WFCUAgentCwdPickerViewController : UIViewController <UIGestureRecognizerDelegate>
 @property (nonatomic, copy)NSDictionary *(^dataProvider)(void); //@{@"dirs": NSArray, @"current": NSString}
 @property (nonatomic, copy)void (^onSelect)(NSString *dir);
 @end
 
 #pragma mark - 面板
 
-@interface WFCUAgentPanelViewController ()
+@interface WFCUAgentPanelViewController () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong)WFCCConversation *conversation;
 //目标机器人 uid（多机器人会话寻址：完整 robot_xxx_yyy，勿截断；空=会话默认机器人）
 @property (nonatomic, copy)NSString *robotUid;
@@ -124,6 +130,9 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *effortOptions;  //@{@"value": id, @"label": id}
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *sandboxOptions; //@{@"value": mode, @"label": ...}
 @property (nonatomic, strong)NSArray<NSString *> *cwdCandidates;
+//上次渲染用的 type=3 面板数据（type=1/type=2 推送也会触发 kSettingUpdated，
+//数据未变化时直接跳过重排，避免把用户正在按下的控件重建掉）
+@property (nonatomic, strong)NSDictionary *lastPanelData;
 
 //UI 骨架
 @property (nonatomic, strong)UIView *cardView;
@@ -313,8 +322,10 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [super viewDidLoad];
     self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.35];
 
-    //点背景关闭
+    //点背景关闭（仅遮罩空白区域；卡片内的滚轮/按钮必须能收到触摸）
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closePanel)];
+    tap.delegate = self;
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 
     CGFloat cardH = 260;
@@ -390,32 +401,49 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
+//遮罩手势只接收卡片外的触摸，卡片内（滚轮/取消/完成）的点击交给控件自己
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    UIView *touchView = touch.view;
+    if (!touchView) {
+        return YES;
+    }
+    return ![touchView isDescendantOfView:_cardView];
+}
+
 @end
 
 #pragma mark - 单选按钮实现
 
+//沙箱单选控件：整块（宽度约 1/3 卡片宽 × 46pt 高）都是点击热区，
+//并画出圆角底色+描边，让"可点区域"在视觉上可辨（iOS 上 HIG 建议热区 ≥44pt）
 @implementation WFCUAgentRadioButton {
     UIView *_ringView;
     UIView *_dotView;
     UILabel *_titleLabel;
 }
 
+//固定几何：圈 20pt，文字 13pt
+static const CGFloat kAgentRadioRingSize = 20;
+static const CGFloat kAgentRadioHeight = 46;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         _ringView = [[UIView alloc] initWithFrame:CGRectZero];
-        _ringView.layer.cornerRadius = 9;
+        _ringView.layer.cornerRadius = kAgentRadioRingSize / 2.0;
         _ringView.layer.borderWidth = 1.5;
         _ringView.userInteractionEnabled = NO;
         [self addSubview:_ringView];
 
         _dotView = [[UIView alloc] initWithFrame:CGRectZero];
-        _dotView.layer.cornerRadius = 4;
+        _dotView.layer.cornerRadius = 4.5;
         _dotView.userInteractionEnabled = NO;
         [self addSubview:_dotView];
 
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:12]];
+        _titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13]];
         _titleLabel.numberOfLines = 2;
         _titleLabel.userInteractionEnabled = NO;
         [self addSubview:_titleLabel];
@@ -435,20 +463,34 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [self applyStyle];
 }
 
+//操作冷却期（applying）整块变淡，给"暂时不可点"的反馈
+- (void)setEnabled:(BOOL)enabled {
+    [super setEnabled:enabled];
+    self.alpha = enabled ? 1.0 : 0.5;
+}
+
 - (void)applyStyle {
     UIColor *accent = [WFCUAgentState accentColor];
+    UIColor *idleBorder = [UIColor colorWithHexString:@"0xe5e6eb"];
     _ringView.layer.borderColor = (self.radioSelected ? accent : [UIColor colorWithHexString:@"0xc8c8c8"]).CGColor;
     _dotView.backgroundColor = self.radioSelected ? accent : [UIColor clearColor];
-    _titleLabel.textColor = self.radioSelected ? [UIColor colorWithHexString:@"0x333333"] : [UIColor colorWithHexString:@"0x888888"];
-    _titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:12] weight:(self.radioSelected ? UIFontWeightMedium : UIFontWeightRegular)];
+    _titleLabel.textColor = self.radioSelected ? accent : [UIColor colorWithHexString:@"0x666666"];
+    _titleLabel.font = [UIFont systemFontOfSize:[WFCUConfigManager scaledSize:13] weight:(self.radioSelected ? UIFontWeightMedium : UIFontWeightRegular)];
+
+    //整块热区的可视边界（选中：淡强调底色 + 强调描边；未选中：浅灰底 + 浅灰描边）
+    self.layer.cornerRadius = 8;
+    self.layer.borderWidth = 1;
+    self.layer.borderColor = (self.radioSelected ? accent : idleBorder).CGColor;
+    self.backgroundColor = self.radioSelected ? [accent colorWithAlphaComponent:0.08] : [UIColor colorWithHexString:@"0xf7f8fa"];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat h = self.bounds.size.height;
-    _ringView.frame = CGRectMake(4, (h - 18) / 2.0, 18, 18);
-    _dotView.frame = CGRectMake(4 + (18 - 8) / 2.0, (h - 8) / 2.0, 8, 8);
-    _titleLabel.frame = CGRectMake(28, 0, MAX(self.bounds.size.width - 32, 0), h);
+    _ringView.frame = CGRectMake(8, (h - kAgentRadioRingSize) / 2.0, kAgentRadioRingSize, kAgentRadioRingSize);
+    _dotView.frame = CGRectMake(CGRectGetMidX(_ringView.frame) - 4.5, CGRectGetMidY(_ringView.frame) - 4.5, 9, 9);
+    CGFloat titleX = CGRectGetMaxX(_ringView.frame) + 5;
+    _titleLabel.frame = CGRectMake(titleX, 0, MAX(self.bounds.size.width - titleX - 6, 0), h);
 }
 
 @end
@@ -476,8 +518,10 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [super viewDidLoad];
     self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.45];
 
-    //点背景关闭
+    //点背景关闭（仅遮罩空白区域；目录行按钮必须能收到触摸，否则"点了直接关闭、没选中"）
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closePanel)];
+    tap.delegate = self;
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 
     //面板数据刷新（207 query/set 后写 type=3）时重读目录候选
@@ -612,6 +656,17 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
+//遮罩手势只接收卡片外的触摸，卡片内的目录行按钮点击交给按钮自己
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    UIView *touchView = touch.view;
+    if (!touchView) {
+        return YES;
+    }
+    return ![touchView isDescendantOfView:_cardView];
+}
+
 @end
 
 #pragma mark - 面板实现
@@ -643,8 +698,10 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [super viewDidLoad];
     self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.45];
 
-    //点背景关闭
+    //点背景关闭：只认遮罩空白区域的点击（卡片内控件必须收到自己的触摸，见 shouldReceiveTouch）
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBackgroundTapped)];
+    tap.delegate = self;
+    tap.cancelsTouchesInView = NO; //遮罩手势不得取消卡片内控件（单选/开关/按钮/下拉）的触摸
     [self.view addGestureRecognizer:tap];
 
     //scope=31 设置变化（插件执行 207 query/set 后写 type=3 / type=1，kSettingUpdated 不带 scope/key，重读当前会话 key）
@@ -891,27 +948,43 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     [self.effortDropdown updateContent];
 }
 
-//重建沙箱模式水平单选按钮（三个，横向均分）
+//重建沙箱模式水平单选按钮（三个，横向均分）。
+//选项未变化时直接返回：kSettingUpdated 对 type=1/type=2 推送也会触发（高频），
+//若每次都 removeFromSuperview 重建，用户正在按下的按钮会被从视图树上摘掉 → 点击丢失。
 - (void)rebuildSandboxOptions {
+    NSArray *opts = self.sandboxOptions.count ? self.sandboxOptions : defaultSandboxOptions();
+    NSMutableArray<NSString *> *values = [NSMutableArray array];
+    for (NSDictionary *o in opts) {
+        NSString *value = [o[@"value"] isKindOfClass:[NSString class]] ? o[@"value"] : nil;
+        if (value.length) {
+            [values addObject:value];
+        }
+    }
+    if (values.count == self.sandboxRadios.count) {
+        BOOL same = YES;
+        for (NSInteger i = 0; i < (NSInteger)values.count; i++) {
+            if (![self.sandboxRadios[i].optionValue isEqualToString:values[i]]) {
+                same = NO;
+                break;
+            }
+        }
+        if (same) {
+            return; //选项一致，保留现有控件（选中态由 refreshCurrentValues 刷新）
+        }
+    }
+
     for (UIView *sub in self.sandboxContainer.subviews) {
         [sub removeFromSuperview];
     }
     [self.sandboxRadios removeAllObjects];
 
-    NSArray *opts = self.sandboxOptions.count ? self.sandboxOptions : defaultSandboxOptions();
-    NSInteger i = 0;
-    for (NSDictionary *o in opts) {
-        NSString *value = [o[@"value"] isKindOfClass:[NSString class]] ? o[@"value"] : nil;
-        if (!value.length) {
-            continue;
-        }
+    for (NSString *value in values) {
         WFCUAgentRadioButton *radio = [[WFCUAgentRadioButton alloc] initWithFrame:CGRectZero];
         radio.optionValue = value;
         radio.titleText = agentSandboxShortLabel(value);
         [radio addTarget:self action:@selector(onSelectSandboxRadio:) forControlEvents:UIControlEventTouchUpInside];
         [self.sandboxContainer addSubview:radio];
         [self.sandboxRadios addObject:radio];
-        i++;
     }
     [self refreshCurrentValues];
 }
@@ -958,15 +1031,15 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     self.sandboxTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
     y += 20 + 6;
 
-    self.sandboxContainer.frame = CGRectMake(x, y, contentW - 32, 40);
+    self.sandboxContainer.frame = CGRectMake(x, y, contentW - 32, kAgentRadioHeight);
     CGFloat radioGap = 8;
     CGFloat radioW = (contentW - 32 - radioGap * 2) / 3.0;
     NSInteger idx = 0;
     for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
-        radio.frame = CGRectMake(idx * (radioW + radioGap), 0, radioW, 40);
+        radio.frame = CGRectMake(idx * (radioW + radioGap), 0, radioW, kAgentRadioHeight);
         idx++;
     }
-    y += 40;
+    y += kAgentRadioHeight;
 
     //5. 计划模式
     y += sectionGap;
@@ -1005,6 +1078,12 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     if (![data isKindOfClass:[NSDictionary class]]) {
         return;
     }
+    //面板数据（type=3）未变化 → 不重排 UI。kSettingUpdated 对 type=1 状态 / type=2 统计
+    //推送同样会触发（Agent 运行中每 ~300ms 一次），无脑重排会让点击"点了没反应"。
+    if (self.lastPanelData && [self.lastPanelData isEqualToDictionary:data]) {
+        return;
+    }
+    self.lastPanelData = [data copy];
 
     //模型：current + options[{value,label}]
     NSDictionary *model = data[@"model"];
@@ -1106,6 +1185,10 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 //scope=31 设置变化（插件执行 207 query/set 后写 type=3 / type=1）：重读面板数据刷新 UI
 - (void)onSettingUpdated:(NSNotification *)notification {
     if (!self.isViewLoaded || !self.view.window) {
+        return;
+    }
+    //有下层弹层（目录选择/下拉兜底/确认框）时先不重排，避免把弹层的锚点控件重建掉
+    if (self.presentedViewController) {
         return;
     }
     [self loadPanelDataFromUserSetting];
@@ -1266,6 +1349,21 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 
 - (void)onBackgroundTapped {
     [self closePanel];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+//只有点在遮罩空白处才关闭面板；卡片（含其全部子控件）内的点击一律交给控件自身处理。
+//说明：手势识别器会收到"自身视图及其所有子视图"上的触摸，识别成功时默认取消这些触摸
+//（cancelsTouchesInView=YES），于是卡片里的 UIControl 收不到 touchUpInside——表现就是
+//"点沙箱单选没选中、面板直接关闭"。这里用 shouldReceiveTouch 把卡片内的触摸挡在手势之外。
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    UIView *touchView = touch.view;
+    if (!touchView) {
+        return YES;
+    }
+    //卡片自身或其子视图（header/footer/scrollView/contentView/各控件）→ 手势不接收
+    return ![touchView isDescendantOfView:self.cardView];
 }
 
 - (void)closePanel {
