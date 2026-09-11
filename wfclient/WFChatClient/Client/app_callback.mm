@@ -9,6 +9,8 @@
 #include "app_callback.h"
 
 #import <UIKit/UIKit.h>
+#import <TargetConditionals.h>
+#import <Security/Security.h>
 #import "WFCCUtilities.h"
 #import "sys/utsname.h"
 #import "WFCCNetworkService.h"
@@ -143,6 +145,124 @@ DeviceInfo AppCallBack::GetDeviceInfo() {
     info.sdkversion = [SDKVERSION UTF8String];
     
     return info;
+}
+
+void AppCallBack::GetRootCerts(std::vector<std::string> &certs) {
+    certs.clear();
+    
+#if TARGET_OS_OSX
+    // macOS：Security.framework 可以枚举系统锚点证书
+    CFArrayRef anchors = NULL;
+    OSStatus status = SecTrustCopyAnchorCertificates(&anchors);
+    if (status == errSecSuccess && anchors != NULL) {
+        CFIndex count = CFArrayGetCount(anchors);
+        for (CFIndex i = 0; i < count; ++i) {
+            SecCertificateRef cert = (SecCertificateRef)CFArrayGetValueAtIndex(anchors, i);
+            CFDataRef der = SecCertificateCopyData(cert);
+            if (der != NULL) {
+                certs.push_back(std::string((const char *)CFDataGetBytePtr(der), (size_t)CFDataGetLength(der)));
+                CFRelease(der);
+            }
+        }
+        CFRelease(anchors);
+    }
+    NSLog(@"[WFC] GetRootCerts(macOS) anchors=%lu, status=%d", (unsigned long)certs.size(), (int)status);
+#else
+    // iOS：SecTrustCopyAnchorCertificates 在 iOS 上不可用（头文件标记 __IPHONE_NA，符号未导出），
+    // 系统没有公开 API 能枚举根证书，因此改为读取 App Bundle 内置的 CA 文件。
+    // 使用方式：把 cacert.pem（可含多张 PEM 证书）加入 App 的 Copy Bundle Resources。
+    // 私有化部署也可以不内置，直接通过 useTls(false, {服务端证书}) 传入证书。
+    NSArray<NSString *> *candidates = @[@"cacert", @"ca-bundle", @"ca", @"rootca"];
+    for (NSString *name in candidates) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"pem"];
+        if (path.length == 0) {
+            path = [[NSBundle mainBundle] pathForResource:name ofType:@"crt"];
+        }
+        if (path.length == 0) {
+            continue;
+        }
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        if (data.length == 0) {
+            continue;
+        }
+        certs.push_back(std::string((const char *)data.bytes, (size_t)data.length));
+        NSLog(@"[WFC] GetRootCerts(iOS) loaded bundled CA:%@ size=%lu", path, (unsigned long)data.length);
+        break;
+    }
+    if (certs.empty()) {
+        NSLog(@"[WFC] GetRootCerts(iOS) no bundled CA found; TLS cert verification will be skipped unless useTls passes a cert");
+    }
+#endif
+}
+
+bool AppCallBack::CanVerifyServerCerts() {
+    // iOS/macOS 的 Security.framework 都能直接校验证书链（系统根 + 用户信任的 CA + 域名）
+    NSLog(@"[WFC] CanVerifyServerCerts -> true");
+    return true;
+}
+
+int AppCallBack::VerifyServerCerts(const std::vector<std::string> &derChain, const std::string &host) {
+    if (derChain.empty()) {
+        return -1;
+    }
+    
+    // 组装证书链（leaf 在首位）
+    NSMutableArray *certs = [NSMutableArray array];
+    for (const auto &der : derChain) {
+        if (der.empty()) {
+            continue;
+        }
+        NSData *data = [NSData dataWithBytes:der.data() length:der.size()];
+        SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)data);
+        if (cert) {
+            [certs addObject:(__bridge_transfer id)cert];
+        }
+    }
+    if (certs.count == 0) {
+        NSLog(@"[WFC] VerifyServerCerts no valid cert parsed");
+        return -1;
+    }
+    
+    // 带上域名策略，让系统一并做域名校验
+    NSString *hostStr = host.empty() ? nil : [NSString stringWithUTF8String:host.c_str()];
+    SecPolicyRef policy = SecPolicyCreateSSL(true, (__bridge CFStringRef)hostStr);
+    if (!policy) {
+        return -1;
+    }
+    
+    SecTrustRef trust = NULL;
+    OSStatus status = SecTrustCreateWithCertificates((__bridge CFArrayRef)certs, policy, &trust);
+    if (status != errSecSuccess || !trust) {
+        CFRelease(policy);
+        NSLog(@"[WFC] VerifyServerCerts create trust failed:%d host:%@", (int)status, hostStr);
+        return -1;
+    }
+    
+    int result = -1;
+    if (@available(iOS 12.0, macOS 10.14, *)) {
+        CFErrorRef error = NULL;
+        BOOL ok = SecTrustEvaluateWithError(trust, &error);
+        if (!ok && error) {
+            NSLog(@"[WFC] VerifyServerCerts failed host:%@ error:%@", hostStr, error);
+            CFRelease(error);
+        }
+        result = ok ? 1 : 0;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        SecTrustResultType trustResult = kSecTrustResultInvalid;
+        OSStatus evalStatus = SecTrustEvaluate(trust, &trustResult);
+        if (evalStatus == errSecSuccess) {
+            result = (trustResult == kSecTrustResultProceed || trustResult == kSecTrustResultUnspecified) ? 1 : 0;
+        }
+#pragma clang diagnostic pop
+    }
+    
+    CFRelease(trust);
+    CFRelease(policy);
+    
+    NSLog(@"[WFC] VerifyServerCerts host:%@ chain:%lu result:%d", hostStr, (unsigned long)derChain.size(), result);
+    return result;
 }
 
 }}

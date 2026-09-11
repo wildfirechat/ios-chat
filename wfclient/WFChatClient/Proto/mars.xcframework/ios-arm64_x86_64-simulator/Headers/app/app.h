@@ -21,6 +21,7 @@
 #define APPCOMM_INTERFACE_APPCOMM_H_
 
 #include <string>
+#include <vector>
 #include <stdint.h>
 
 #include "comm/comm_data.h"
@@ -81,6 +82,13 @@ extern DeviceInfo GetDeviceInfo();
 extern void SetAppHome(const std::string appHome);
 extern const std::string GetAppHome();
 extern double GetOsVersion();
+// 获取平台提供的系统根证书（每个元素为一张证书的原始字节，PEM 或 DER）。
+// 平台未实现时返回空列表。
+extern void GetRootCerts(std::vector<std::string>& _certs);
+// 平台是否支持用自己的信任库校验证书链
+extern bool CanVerifyServerCerts();
+// 用平台信任库校验证书链：1=可信，0=不可信，-1=平台不处理
+extern int VerifyServerCerts(const std::vector<std::string>& _der_chain, const std::string& _host);
 }}
 
 #endif /* APPCOMM_INTERFACE_APPCOMM_H_ */

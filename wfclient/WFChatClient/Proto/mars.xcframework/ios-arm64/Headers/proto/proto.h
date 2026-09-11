@@ -1035,6 +1035,8 @@ namespace mars{
         extern bool isTCPShortLink();
         extern void setUseKcp(int kcpPort, bool useKcp);
         extern bool isUseKcp();
+        extern void setUseWebsocket(bool useWebsocket);
+        extern bool isUseWebsocket();
         extern void noUseFts();
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);

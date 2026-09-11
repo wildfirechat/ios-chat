@@ -1115,6 +1115,10 @@ static WFCCNetworkService * sharedSingleton = nil;
   mars::stn::setGetJoinGroupRequestCallback(new GJGRCB(self));
   //KCP需要专业版IM服务支持，并打开KCP端口。这个函数要在onCreate之前调用，否则会无效.
   //mars::stn::setUseKcp(88, true);
+    
+  //使用websocket，只有2026.9.11之后的服务才可以支持
+  //mars::stn::setUseWebsocket(true);
+  //mars::stn::UseTls(false, std::list<std::string>());
   mars::baseevent::OnCreate();
 }
 
