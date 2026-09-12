@@ -1117,8 +1117,16 @@ static WFCCNetworkService * sharedSingleton = nil;
   //mars::stn::setUseKcp(88, true);
     
   //使用websocket，只有2026.9.11之后的服务才可以支持
-  //mars::stn::setUseWebsocket(true);
-  //mars::stn::UseTls(false, std::list<std::string>());
+//  mars::stn::setUseWebsocket(true);
+//  //TLS校验：域名连接使用公签证书走系统信任链；IP直连使用自签名证书，需把证书文件路径传入作为信任锚（注意：传内容会导致进程退出，路径必须真实存在）
+//  std::list<std::string> selfSignedCerts;
+//  NSString *certPath = [[NSBundle mainBundle] pathForResource:@"ip" ofType:@"crt"];
+//  if (certPath) {
+//      selfSignedCerts.push_back([certPath UTF8String]);
+//  }
+//  mars::stn::UseTls(false, selfSignedCerts);
+    
+    
   mars::baseevent::OnCreate();
 }
 

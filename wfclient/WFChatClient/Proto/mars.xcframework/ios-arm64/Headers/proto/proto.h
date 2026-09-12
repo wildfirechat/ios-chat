@@ -1035,6 +1035,7 @@ namespace mars{
         extern bool isTCPShortLink();
         extern void setUseKcp(int kcpPort, bool useKcp);
         extern bool isUseKcp();
+        // 需在 stn 初始化（BaseEvent onCreate）之前调用：长连接对象的类型在初始化时由工厂确定，之后切换不会重建
         extern void setUseWebsocket(bool useWebsocket);
         extern bool isUseWebsocket();
         extern void noUseFts();
@@ -1264,7 +1265,12 @@ namespace mars{
     
         extern void sendConferenceRequest(int64_t sessionId, const std::string &roomId, const std::string &request, bool advance, const std::string &data, GeneralStringCallback *callback);
     
-        //使用TLS连接
+        // 使用TLS连接。
+        // skipVerifyCert：true=不校验服务端证书（只加密不鉴权）；false=校验。
+        // selfSignedCerts：私有/自签证书的【文件路径】列表（不是证书内容），可传多个。
+        //   所有证书会加入同一个信任库、不区分地址：域名地址靠主机名校验绑定，
+        //   IP 地址则只要求证书链终止于其中任意一张。
+        //   注意：任何一张证书加载失败（路径不存在、非 PEM、误传目录）都会导致进程直接退出。
         extern void UseTls(bool skipVerifyCert, const std::list<std::string> &selfSignedCerts);
     
         extern bool filesystem_exists(const std::string &path);
