@@ -36,6 +36,9 @@
 #import "WFPttViewController.h"
 #endif
 #import "WFCUImage.h"
+#import "WFCUAsrManager.h"
+#import "WFCUPcmAudioRecorder.h"
+#import "WFCUVoiceInputView.h"
 #import "WFCUCreateCollectionViewController.h"
 #import "WFCUPollHomeViewController.h"
 #import "WFCUPanFilePickerViewController.h"
@@ -64,7 +67,11 @@
 //@implementation TextInfo
 //
 //@end
-@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate>
+@interface WFCUChatInputBar () <UITextViewDelegate, WFCUFaceBoardDelegate, UIImagePickerControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, WFCUPluginBoardViewDelegate, UIImagePickerControllerDelegate, LocationViewControllerDelegate, UIDocumentPickerDelegate, WFCUPublicMenuButtonDelegate, WFCUAsrManagerDelegate, WFCUVoiceInputViewDelegate>
+
++ (UIColor *)asrIconBaseColor;
++ (UIColor *)asrIconHighlightColor;
++ (CGFloat)levelForPcm:(NSData *)pcm;
 
 @property (nonatomic, assign)BOOL textInput;
 @property (nonatomic, assign)BOOL voiceInput;
@@ -129,6 +136,35 @@
 @property(nonatomic, strong)NSTimer *saveDraftTimer;
 
 @property(nonatomic, strong)NSMutableArray<WFCUPublicMenuButton *> *menuButtons;
+
+#pragma mark - 实时语音输入
+// 输入框右侧的麦克风按钮，配置了实时语音识别服务时显示
+@property (nonatomic, strong)UIButton *asrButton;
+@property (nonatomic, strong)WFCUAsrManager *asrManager;
+// 正在录音（麦克风按钮点击开始）
+@property (nonatomic, assign)BOOL isAsrRecording;
+// 语音识别文本在输入框中的范围 [asrTextStart, asrTextEnd)，识别结果会替换这个范围内的文本
+@property (nonatomic, assign)NSInteger asrTextStart;
+@property (nonatomic, assign)NSInteger asrTextEnd;
+// 是否正在把识别结果写入输入框，用于区分用户自己的编辑和光标移动
+@property (nonatomic, assign)BOOL isAsrUpdatingText;
+
+#pragma mark - 按住说话（实时语音输入）
+// 按住说话时显示的全屏浮层
+@property (nonatomic, strong)WFCUVoiceInputView *voiceInputView;
+@property (nonatomic, strong)UIPanGestureRecognizer *voiceInputPan;
+@property (nonatomic, strong)WFCUPcmAudioRecorder *pcmRecorder;
+// 本次按住说话录到的 16kHz PCM
+@property (nonatomic, strong)NSMutableData *pcmBuffer;
+// 是否正在使用实时语音识别的按住说话流程
+@property (nonatomic, assign)BOOL voiceInputAsrActive;
+@property (nonatomic, assign)NSTimeInterval voiceInputStartTime;
+// 按住说话时使用的识别管理器
+@property (nonatomic, strong)WFCUAsrManager *holdAsrManager;
+@property (nonatomic, copy)NSString *holdRecognizedText;
+@property (nonatomic, assign)BOOL holdAsrFinished;
+// 最长录音时长定时器
+@property (nonatomic, strong)NSTimer *holdMaxDurationTimer;
 @end
 
 @implementation WFCUChatInputBar
@@ -322,16 +358,479 @@
     [self.voiceInputBtn addTarget:self action:@selector(onTouchUpOutside:) forControlEvents:UIControlEventTouchUpOutside];
     [self.voiceInputBtn addTarget:self action:@selector(onTouchUpOutside:) forControlEvents:UIControlEventTouchCancel];
 
+    // 实时语音识别的按住说话需要跟随手指位置判断"取消"/"转文字"，用 pan 手势跟踪
+    self.voiceInputPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onVoiceInputPan:)];
+    self.voiceInputPan.cancelsTouchesInView = NO;
+    [self.voiceInputBtn addGestureRecognizer:self.voiceInputPan];
+
     self.voiceInputBtn.hidden = YES;
     self.textInputView.returnKeyType = UIReturnKeySend;
     self.textInputView.delegate = self;
+
+    // 配置了实时语音识别服务时，输入框右侧显示麦克风按钮，点击开始/停止语音输入
+    if ([WFCUConfigManager globalManager].asrStreamServiceUrl.length) {
+        CGFloat size = 18;
+        // 比输入框底部略微上移一点，视觉上更居中
+        CGFloat bottomOffset = 5;
+        CGRect tvFrame = self.textInputView.frame;
+        self.asrButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(tvFrame) - size - 2, CGRectGetMaxY(tvFrame) - size - bottomOffset, size, size)];
+        UIImage *micImage = [[WFCUImage imageNamed:@"mic_0"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self.asrButton setImage:micImage forState:UIControlStateNormal];
+        self.asrButton.tintColor = [WFCUChatInputBar asrIconBaseColor];
+        // 宽度变化时贴住输入框右侧，高度变化时贴住输入框底部
+        self.asrButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+        [self.asrButton addTarget:self action:@selector(onAsrButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.inputContainer addSubview:self.asrButton];
+        // 给输入框右侧留出图标的位置
+        UIEdgeInsets inset = self.textInputView.textContainerInset;
+        inset.right = size + 2;
+        self.textInputView.textContainerInset = inset;
+    }
 }
+
+#pragma mark - 实时语音输入（麦克风按钮）
+
++ (UIColor *)asrIconBaseColor {
+    return [UIColor colorWithHexString:@"0x9A9A9A"];
+}
+
++ (UIColor *)asrIconHighlightColor {
+    return [UIColor colorWithHexString:@"0x3B62E0"];
+}
+
+- (void)onAsrButtonClick {
+    if (self.isAsrRecording) {
+        // 正在录音，停止识别
+        [self stopAsrRecognition];
+    } else if (self.asrManager && self.asrManager.isRecognizing) {
+        // 已停止录音，正在等待剩余识别结果
+        NSLog(@"[WFCUAsr] 正在等待识别结果，忽略点击");
+    } else {
+        __weak typeof(self) weakSelf = self;
+        [WFCUUtilities checkRecordOrCameraPermission:YES complete:^(BOOL granted) {
+            if (granted) {
+                [weakSelf startAsrRecognition];
+            }
+        } viewController:[self.delegate requireNavi]];
+    }
+}
+
+- (void)startAsrRecognition {
+    if (!self.asrManager) {
+        self.asrManager = [[WFCUAsrManager alloc] init];
+    }
+    self.asrManager.delegate = self;
+    self.isAsrRecording = YES;
+
+    // 输入框获取焦点并弹出软键盘
+    [self.textInputView becomeFirstResponder];
+
+    // 麦克风图标变成主色调并闪烁
+    [self startAsrIconAnimation];
+
+    // 识别结果写入开始识别时的光标处，有选中的文本时替换选中的文本
+    NSRange selectedRange = self.textInputView.selectedRange;
+    self.asrTextStart = selectedRange.location;
+    self.asrTextEnd = selectedRange.location + selectedRange.length;
+
+    [self.asrManager startRecognition];
+}
+
+/**
+ * 用识别文本替换输入框中语音识别的文本范围，并把光标移到识别文本末尾
+ */
+- (void)updateAsrText:(NSString *)text {
+    NSString *current = self.textInputView.text ?: @"";
+    NSInteger start = MIN(self.asrTextStart, (NSInteger)current.length);
+    NSInteger end = MIN(MAX(self.asrTextEnd, start), (NSInteger)current.length);
+    NSString *newText = [current stringByReplacingCharactersInRange:NSMakeRange(start, end - start) withString:text];
+    NSInteger newEnd = start + text.length;
+
+    self.isAsrUpdatingText = YES;
+    self.textInputView.text = newText;
+    self.asrTextStart = start;
+    self.asrTextEnd = newEnd;
+    self.textInputView.selectedRange = NSMakeRange(newEnd, 0);
+    self.isAsrUpdatingText = NO;
+    // 识别文本长度变化后重新计算输入框高度
+    CGFloat textAreaWidth = self.textInputView.frame.size.width - 2 * self.textInputView.textContainer.lineFragmentPadding;
+    CGSize size = [WFCUUtilities getTextDrawingSize:newText font:[UIFont systemFontOfSize:16] constrainedSize:CGSizeMake(textAreaWidth, 1000)];
+    [self changeTextViewHeight:size.height needUpdateText:NO updateRange:NSMakeRange(0, 0)];
+}
+
+- (void)stopAsrRecognition {
+    if (self.asrManager && self.asrManager.isRecognizing) {
+        self.isAsrRecording = NO;
+        // 等待剩余识别结果时停止闪烁、保持主色调，识别结束后在 resetAsrState 中恢复
+        [self holdAsrIconAnimation];
+        [self.asrManager stopRecognition];
+    } else {
+        [self resetAsrState];
+    }
+}
+
+- (void)cancelAsrRecognition {
+    if (self.asrManager && self.asrManager.isRecognizing) {
+        [self.asrManager cancelRecognition];
+        [self resetAsrState];
+    }
+}
+
+- (void)resetAsrState {
+    self.isAsrRecording = NO;
+    [self resetAsrIconAnimation];
+}
+
+- (void)startAsrIconAnimation {
+    [self stopAsrIconAnimation];
+    self.asrButton.tintColor = [WFCUChatInputBar asrIconHighlightColor];
+    self.asrButton.alpha = 1;
+    CABasicAnimation *pulse = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    pulse.fromValue = @1.0;
+    pulse.toValue = @0.3;
+    pulse.duration = 0.6;
+    pulse.beginTime = CACurrentMediaTime() + 0.2;
+    pulse.autoreverses = YES;
+    pulse.repeatCount = HUGE_VALF;
+    pulse.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.asrButton.layer addAnimation:pulse forKey:@"asrPulse"];
+}
+
+- (void)holdAsrIconAnimation {
+    [self stopAsrIconAnimation];
+    self.asrButton.tintColor = [WFCUChatInputBar asrIconHighlightColor];
+    self.asrButton.alpha = 1;
+}
+
+- (void)resetAsrIconAnimation {
+    [self stopAsrIconAnimation];
+    self.asrButton.tintColor = [WFCUChatInputBar asrIconBaseColor];
+    self.asrButton.alpha = 1;
+}
+
+- (void)stopAsrIconAnimation {
+    [self.asrButton.layer removeAnimationForKey:@"asrPulse"];
+    self.asrButton.alpha = 1;
+}
+
+#pragma mark - WFCUAsrManagerDelegate
+
+- (void)asrManager:(WFCUAsrManager *)manager onPartialResult:(NSString *)text {
+    if (manager == self.holdAsrManager) {
+        self.holdRecognizedText = text;
+        if (self.voiceInputView.editing) {
+            [self.voiceInputView updateEditingText:text finished:NO];
+        } else {
+            [self.voiceInputView setRecognizedText:text];
+        }
+        return;
+    }
+    if (manager != self.asrManager) {
+        return;
+    }
+    [self updateAsrText:text];
+}
+
+- (void)asrManager:(WFCUAsrManager *)manager onFinalResult:(NSString *)text {
+    if (manager == self.holdAsrManager) {
+        self.holdAsrFinished = YES;
+        self.holdRecognizedText = text;
+        if (self.voiceInputView.editing) {
+            [self.voiceInputView updateEditingText:text finished:YES];
+        }
+        return;
+    }
+    if (manager != self.asrManager) {
+        return;
+    }
+    // 没有识别出文字时，保留原来选中的文本
+    if (text.length) {
+        [self updateAsrText:text];
+    }
+    [self resetAsrState];
+}
+
+- (void)asrManager:(WFCUAsrManager *)manager onError:(NSString *)message {
+    if (manager == self.holdAsrManager) {
+        // 已经识别出的文字保留，仍然可以编辑后发送
+        self.holdAsrFinished = YES;
+        if (self.voiceInputView.editing) {
+            [self.voiceInputView updateEditingText:self.holdRecognizedText finished:YES];
+        }
+        return;
+    }
+    if (manager != self.asrManager) {
+        return;
+    }
+    [self.parentView makeToast:[NSString stringWithFormat:WFCString(@"AsrRecognizeError"), message]];
+    [self resetAsrState];
+}
+
+- (void)asrManager:(WFCUAsrManager *)manager onHotwordDetected:(NSString *)hotword text:(NSString *)text {
+    if (manager != self.asrManager) {
+        return;
+    }
+    // 检测到热词（如 "Over"），识别已结束，填充文本后自动发送
+    [self resetAsrState];
+    [self updateAsrText:text];
+    [self sendAndCleanTextView];
+}
+
+#pragma mark - 按住说话（实时语音输入）
+
+- (BOOL)isHoldSpeechToTextEnabled {
+    return [WFCUConfigManager globalManager].asrStreamServiceUrl.length > 0;
+}
+
+- (void)onVoiceInputPan:(UIPanGestureRecognizer *)pan {
+    if (!self.voiceInputAsrActive || !self.voiceInputView) {
+        return;
+    }
+    CGPoint point = [pan locationInView:self.voiceInputView];
+    [self.voiceInputView updateZoneWithPoint:point];
+}
+
+- (WFCUVoiceInputZone)currentVoiceInputZone {
+    if (self.voiceInputView && self.voiceInputPan) {
+        CGPoint point = [self.voiceInputPan locationInView:self.voiceInputView];
+        [self.voiceInputView updateZoneWithPoint:point];
+    }
+    return self.voiceInputView ? self.voiceInputView.zone : WFCUVoiceInputZoneSend;
+}
+
+- (void)startVoiceInputAsr {
+    self.voiceInputAsrActive = YES;
+    self.voiceInputStartTime = [[NSDate date] timeIntervalSince1970];
+    self.pcmBuffer = [NSMutableData data];
+    self.holdRecognizedText = @"";
+    self.holdAsrFinished = NO;
+    [self cancelHoldSpeechToText];
+
+    CGRect buttonFrame = [self.voiceInputBtn convertRect:self.voiceInputBtn.bounds toView:self.parentView];
+    self.voiceInputView = [[WFCUVoiceInputView alloc] initWithFrame:self.parentView.bounds recordButtonFrame:buttonFrame];
+    self.voiceInputView.speechToTextEnabled = YES;
+    self.voiceInputView.delegate = self;
+    [self.parentView addSubview:self.voiceInputView];
+    [self.parentView bringSubviewToFront:self.voiceInputView];
+    // 录音时手指还在按钮上，浮层不能拦截触摸
+    self.voiceInputView.userInteractionEnabled = NO;
+    [self.voiceInputView show];
+
+    self.pcmRecorder = [[WFCUPcmAudioRecorder alloc] init];
+    __weak typeof(self) weakSelf = self;
+    self.pcmRecorder.dataCallback = ^(NSData *pcmData) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf handleHoldAudioData:pcmData];
+        });
+    };
+    self.pcmRecorder.errorCallback = ^(NSString *message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf handleHoldRecorderError:message];
+        });
+    };
+    [self.pcmRecorder startRecording];
+    // 最长录音时长：60秒
+    [self.holdMaxDurationTimer invalidate];
+    self.holdMaxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onHoldMaxDuration) userInfo:nil repeats:NO];
+}
+
+- (void)onHoldMaxDuration {
+    if (self.voiceInputAsrActive) {
+        NSLog(@"[WFCUAsr] 达到最大录音时长，自动停止");
+        [self finishVoiceInputWithZone:[self currentVoiceInputZone]];
+    }
+}
+
+- (void)handleHoldAudioData:(NSData *)pcmData {
+    if (!self.voiceInputAsrActive || !pcmData.length) {
+        return;
+    }
+    [self.pcmBuffer appendData:pcmData];
+    [self.voiceInputView setVoiceLevel:[WFCUChatInputBar levelForPcm:pcmData]];
+    if (self.holdAsrManager) {
+        [self.holdAsrManager feedAudioData:pcmData];
+    }
+}
+
+- (void)handleHoldRecorderError:(NSString *)message {
+    if (!self.voiceInputAsrActive) {
+        return;
+    }
+    NSLog(@"[WFCUAsr] 录音失败: %@", message);
+    if (self.pcmBuffer.length > 0) {
+        // 例如来电抢走了音频焦点，按手指当前的位置结束录音，保留已经录到的声音
+        [self finishVoiceInputWithZone:[self currentVoiceInputZone]];
+    } else {
+        [self resetVoiceInputState];
+        [self.parentView makeToast:[NSString stringWithFormat:WFCString(@"AsrRecognizeError"), message]];
+    }
+}
+
+/**
+ * 滑到"转文字"后开始实时识别，先把已经录到的音频补上
+ */
+- (void)startHoldSpeechToText {
+    if (self.holdAsrManager) {
+        return;
+    }
+    WFCUAsrManager *manager = [[WFCUAsrManager alloc] init];
+    manager.delegate = self;
+    self.holdAsrManager = manager;
+    self.holdAsrFinished = NO;
+    [manager startRecognitionWithAudioFeed];
+
+    NSData *recorded = [self.pcmBuffer copy];
+    for (NSInteger offset = 0; offset < (NSInteger)recorded.length; offset += 960) {
+        NSInteger length = MIN(960, (NSInteger)recorded.length - offset);
+        [manager feedAudioData:[recorded subdataWithRange:NSMakeRange(offset, length)]];
+    }
+}
+
+- (void)cancelHoldSpeechToText {
+    if (self.holdAsrManager) {
+        WFCUAsrManager *manager = self.holdAsrManager;
+        self.holdAsrManager = nil;
+        [manager cancelRecognition];
+    }
+}
+
+- (void)finishVoiceInputWithZone:(WFCUVoiceInputZone)zone {
+    if (!self.voiceInputAsrActive) {
+        return;
+    }
+    self.voiceInputAsrActive = NO;
+    NSTimeInterval duration = [[NSDate date] timeIntervalSince1970] - self.voiceInputStartTime;
+    [self.holdMaxDurationTimer invalidate];
+    self.holdMaxDurationTimer = nil;
+    [self stopPcmRecording];
+
+    if (zone == WFCUVoiceInputZoneText) {
+        // 停止识别，剩余识别结果返回后再更新编辑框
+        [self.holdAsrManager stopRecognition];
+        [self.voiceInputView enterEditing:self.holdRecognizedText];
+        if (self.holdAsrFinished) {
+            [self.voiceInputView updateEditingText:self.holdRecognizedText finished:YES];
+        }
+        return;
+    }
+
+    [self cancelHoldSpeechToText];
+    if (zone == WFCUVoiceInputZoneCancel) {
+        [self.voiceInputView dismiss];
+        [self resetVoiceInputState];
+    } else if (duration < 1.0) {
+        [self.voiceInputView showTooShortTip];
+        __weak typeof(self) weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.voiceInputView dismiss];
+            [weakSelf resetVoiceInputState];
+        });
+    } else {
+        [self.voiceInputView dismiss];
+        [self sendHeldVoice];
+        [self resetVoiceInputState];
+    }
+}
+
+- (void)stopPcmRecording {
+    if (self.pcmRecorder) {
+        [self.pcmRecorder stopRecording];
+        self.pcmRecorder = nil;
+    }
+}
+
+- (void)sendHeldVoice {
+    NSData *pcm = [self.pcmBuffer copy];
+    if (!pcm.length) {
+        return;
+    }
+    NSString *cacheDir = [[WFCUConfigManager globalManager] cachePathOf:self.conversation mediaType:Media_Type_VOICE];
+    NSString *wavPath = [cacheDir stringByAppendingPathComponent:[NSString stringWithFormat:@"asr%lld.wav", (long long)([[NSDate date] timeIntervalSince1970] * 1000)]];
+    if (![WFCUPcmAudioRecorder writeWavFileAtPath:wavPath fromPcm16kMono:pcm]) {
+        [self.parentView makeToast:WFCString(@"VoiceInputRecognizeFailed")];
+        return;
+    }
+    long duration = MAX(1, (long)round((double)pcm.length / 32000.0));
+    if ([self.delegate respondsToSelector:@selector(recordDidEnd:duration:error:)]) {
+        [self.delegate recordDidEnd:wavPath duration:duration error:nil];
+    }
+}
+
+- (void)sendHeldText:(NSString *)text {
+    if (!text.length) {
+        [self resetVoiceInputState];
+        return;
+    }
+    self.textInputView.text = text;
+    [self resetVoiceInputState];
+    self.inputBarStatus = ChatInputBarKeyboardStatus;
+    [self sendAndCleanTextView];
+}
+
+- (void)resetVoiceInputState {
+    self.voiceInputAsrActive = NO;
+    [self stopPcmRecording];
+    [self cancelHoldSpeechToText];
+    if (self.voiceInputView) {
+        [self.voiceInputView removeFromSuperview];
+        self.voiceInputView = nil;
+    }
+    self.pcmBuffer = nil;
+    self.holdRecognizedText = @"";
+    self.holdAsrFinished = NO;
+}
+
++ (CGFloat)levelForPcm:(NSData *)pcm {
+    NSInteger samples = pcm.length / sizeof(int16_t);
+    if (samples == 0) {
+        return 0;
+    }
+    const int16_t *data = (const int16_t *)pcm.bytes;
+    double sum = 0;
+    for (NSInteger i = 0; i < samples; i++) {
+        double sample = data[i];
+        sum += sample * sample;
+    }
+    double db = 20 * log10(MAX(sqrt(sum / samples), 1) / 32768.0);
+    // -50dB 以下视为安静，-15dB 以上视为最大音量
+    return (CGFloat)MAX(0, MIN(1, (db + 50) / 35.0));
+}
+
+#pragma mark - WFCUVoiceInputViewDelegate
+
+- (void)voiceInputView:(WFCUVoiceInputView *)view didChangeZone:(WFCUVoiceInputZone)zone {
+    if (zone == WFCUVoiceInputZoneText) {
+        [self startHoldSpeechToText];
+    }
+}
+
+- (void)voiceInputViewDidCancel:(WFCUVoiceInputView *)view {
+    [self resetVoiceInputState];
+}
+
+- (void)voiceInputViewDidSendVoice:(WFCUVoiceInputView *)view {
+    [self sendHeldVoice];
+    [self resetVoiceInputState];
+}
+
+- (void)voiceInputView:(WFCUVoiceInputView *)view didSendText:(NSString *)text {
+    [self sendHeldText:text];
+}
+
+
 - (void)onTapInputView:(id)sender {
     NSLog(@"on tap input view");
     self.inputBarStatus = ChatInputBarKeyboardStatus;
 }
 
 - (void)onTouchDown:(id)sender {
+    // 配置了实时语音识别服务时，普通语音消息使用新的按住说话流程：可以滑到"转文字"边说边显示识别结果
+    if ([self isHoldSpeechToTextEnabled] && self.inputBarStatus == ChatInputBarRecordStatus) {
+        if ([self canRecordNow]) {
+            [self startVoiceInputAsr];
+        }
+        return;
+    }
     if ([self canRecordNow]) {
         _recordView = [[WFCUVoiceRecordView alloc] initWithFrame:CGRectMake(self.parentView.bounds.size.width/2 - 70, self.parentView.bounds.size.height/2 - 70, 140, 140)];
         _recordView.center = self.parentView.center;
@@ -490,11 +989,19 @@
 }
 
 - (void)onTouchUpInside:(id)sender {
+    if (self.voiceInputAsrActive) {
+        [self finishVoiceInputWithZone:[self currentVoiceInputZone]];
+        return;
+    }
     [self.recordView removeFromSuperview];
     [self recordEnd];
 }
 
 - (void)onTouchUpOutside:(id)sender {
+    if (self.voiceInputAsrActive) {
+        [self finishVoiceInputWithZone:[self currentVoiceInputZone]];
+        return;
+    }
     [self.recordView removeFromSuperview];
     [self recordCancel];
 }
@@ -788,6 +1295,12 @@
     } else {
         self.textInputView.tintColor = self.textInputViewTintColor;
         self.inputCoverView.hidden = YES;
+    }
+
+    //麦克风按钮只在文字输入状态显示；切换到录音、表情、插件等状态时结束语音输入
+    self.asrButton.hidden = !self.textInput || inputBarStatus == ChatInputBarMuteStatus;
+    if (!self.textInput) {
+        [self cancelAsrRecognition];
     }
 
     //iPad 双栏：内联面板的显示/收起收口在这里，而不是散在各个 setXxxInput: 里 ——
@@ -1653,6 +2166,13 @@
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView {
+    // 语音输入过程中用户移动光标时结束语音输入（光标仍在识别文本末尾时不算）
+    if (!self.isAsrUpdatingText && self.asrManager.isRecognizing) {
+        NSRange sel = textView.selectedRange;
+        if (!(sel.length == 0 && (NSInteger)sel.location == self.asrTextEnd)) {
+            [self cancelAsrRecognition];
+        }
+    }
     if (self.textInputView == textView && self.conversation.type == Group_Type) {
         NSRange range = textView.selectedRange;
         for (WFCUMetionInfo *mention in self.mentionInfos) {
@@ -1679,6 +2199,10 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+    // 语音输入过程中用户编辑文本时结束语音输入
+    if (!self.isAsrUpdatingText && self.asrManager.isRecognizing) {
+        [self cancelAsrRecognition];
+    }
     if (textView.text.length > 0) {
         [self notifyTyping:0];
     }
@@ -2414,5 +2938,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.asrManager cancelRecognition];
 }
 @end

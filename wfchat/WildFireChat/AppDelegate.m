@@ -183,6 +183,13 @@
         return WFCGetAsrServiceUrl();
     };
     
+    //实时语音输入（流式语音转文字）
+    [WFCUConfigManager globalManager].asrStreamServiceUrlProvider = ^NSString *{
+        return WFCGetAsrStreamServiceUrl();
+    };
+    //获取实时语音识别所需的 authCode 时需要 IM 服务 host
+    [WFCUConfigManager globalManager].imServerHost = IM_SERVER_HOST;
+    
     [WFCUConfigManager globalManager].aiRobotId = AI_ROBOT;
     
     [WFCUConfigManager globalManager].dialinRobotId = DIALIN_ROBOT_ID;

@@ -71,6 +71,7 @@
 #endif
 
 #import "WFCUConfigManager.h"
+#import "WFCUAsrAuth.h"
 #import "WFCUSeletedUserViewController.h"
 
 #import "WFCUReceiptViewController.h"
@@ -4458,6 +4459,19 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         [self scrollToBottom:YES];
     }
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // asr-api 需要在 header 中带上认证码
+        [WFCUAsrAuth getAuthCode:^(NSString *authCode) {
+            [self startToTextRequest:link authCode:authCode];
+        } error:^(int errorCode) {
+            self.toTextModel.translating = NO;
+            [self.collectionView reloadData];
+            [self.view makeToast:WFCString(@"NetworkError")];
+        }];
+    });
+}
+
+- (void)startToTextRequest:(NSString *)link authCode:(NSString *)authCode {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSURL *url = [NSURL URLWithString:[WFCUConfigManager globalManager].asrServiceUrl];
         NSDictionary *parameters = @{@"url": link, @"noReuse":@(NO), @"noLlm":@(NO)};
@@ -4465,6 +4479,9 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        if (authCode.length) {
+            [request setValue:authCode forHTTPHeaderField:WFCUAsrAuth.headerAuthCode];
+        }
 
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];

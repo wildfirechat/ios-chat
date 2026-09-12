@@ -734,3 +734,16 @@
 "GreetingNight"="Working late";
 "WorkspaceWelcomeSubtitle"="Have a great day";
 "WorkspaceWelcomeHint"="Here's to a productive day";
+
+// 实时语音输入
+"VoiceInputVoice" = "Voice";
+"VoiceInputReleaseToSend" = "Release to Send";
+"VoiceInputReleaseToCancel" = "Release to Cancel";
+"VoiceInputSlideToText" = "Slide here to Text";
+"VoiceInputReleaseToEdit" = "Release to Edit";
+"VoiceInputSendVoice" = "Send Voice";
+"VoiceInputNoText" = "No speech recognized";
+"VoiceInputRecognizeFailed" = "Speech to text failed";
+"VoiceInputCountDown" = "Recording stops in %d s";
+"AsrRecognizeError" = "Speech recognition error: %@";
+"AsrNotConfigured" = "Speech recognition service is not configured";

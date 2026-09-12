@@ -188,6 +188,11 @@
 		2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */; };
 		2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */; };
 		2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */; };
+		A5A0000000000000000000B1 /* WFCUAsrAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A3 /* WFCUAsrAuth.m */; };
+		A5A0000000000000000000B2 /* WFCUAsrWebSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */; };
+		A5A0000000000000000000B3 /* WFCUPcmAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */; };
+		A5A0000000000000000000B4 /* WFCUAsrManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A9 /* WFCUAsrManager.m */; };
+		A5A0000000000000000000D1 /* WFCUVoiceInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000C2 /* WFCUVoiceInputView.m */; };
 		2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */; };
 		2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */; };
 		2F5510EF217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F21217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.h */; };
@@ -894,6 +899,16 @@
 		2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPluginBoardView.m; sourceTree = "<group>"; };
 		2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUEmotionTextAttachment.h; sourceTree = "<group>"; };
 		2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceRecordView.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A2 /* WFCUAsrAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrAuth.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A3 /* WFCUAsrAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrAuth.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrWebSocketClient.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrWebSocketClient.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPcmAudioRecorder.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPcmAudioRecorder.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A8 /* WFCUAsrManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrManager.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A9 /* WFCUAsrManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrManager.m; sourceTree = "<group>"; };
+		A5A0000000000000000000C1 /* WFCUVoiceInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVoiceInputView.h; sourceTree = "<group>"; };
+		A5A0000000000000000000C2 /* WFCUVoiceInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceInputView.m; sourceTree = "<group>"; };
 		2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULocationPoint.m; sourceTree = "<group>"; };
 		2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCHMapTreeUtils.m; sourceTree = "<group>"; };
 		2F550F21217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCHMapClusterControllerDebugPolygon.h; sourceTree = "<group>"; };
@@ -1684,6 +1699,7 @@
 				2F551074217F5CC100F56C26 /* Me */,
 				2F550EB2217F5CC000F56C26 /* MessageList */,
 				2F55108C217F5CC200F56C26 /* Utilities */,
+				A5A0000000000000000000A1 /* ASR */,
 				2F550EF2217F5CC000F56C26 /* Vendor */,
 				2F550BE2217F4D7B00F56C26 /* WFChatUIKit.h */,
 				2F551036217F5CC100F56C26 /* Predefine.h */,
@@ -1892,6 +1908,21 @@
 			path = Vendor;
 			sourceTree = "<group>";
 		};
+		A5A0000000000000000000A1 /* ASR */ = {
+			isa = PBXGroup;
+			children = (
+				A5A0000000000000000000A2 /* WFCUAsrAuth.h */,
+				A5A0000000000000000000A3 /* WFCUAsrAuth.m */,
+				A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */,
+				A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */,
+				A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */,
+				A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */,
+				A5A0000000000000000000A8 /* WFCUAsrManager.h */,
+				A5A0000000000000000000A9 /* WFCUAsrManager.m */,
+			);
+			path = ASR;
+			sourceTree = "<group>";
+		};
 		2F550EF3217F5CC000F56C26 /* ChatInputBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -1909,6 +1940,8 @@
 				2F550EF5217F5CC000F56C26 /* WFCUPluginItemView.h */,
 				2F550F16217F5CC100F56C26 /* WFCUPluginItemView.m */,
 				2F550EF9217F5CC000F56C26 /* WFCUVoiceRecordView.h */,
+				A5A0000000000000000000C1 /* WFCUVoiceInputView.h */,
+				A5A0000000000000000000C2 /* WFCUVoiceInputView.m */,
 				2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */,
 				B748123328A4BB8B003BB0C3 /* WFCUPublicMenuButton.h */,
 				B748123428A4BB8B003BB0C3 /* WFCUPublicMenuButton.m */,
@@ -3375,6 +3408,11 @@
 				2BDF57B324AD70C8003C1F08 /* DNAlbumCell.m in Sources */,
 				2FA2165222F1667F00670211 /* WFCUBlackListViewController.m in Sources */,
 				2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */,
+				A5A0000000000000000000B1 /* WFCUAsrAuth.m in Sources */,
+				A5A0000000000000000000B2 /* WFCUAsrWebSocketClient.m in Sources */,
+				A5A0000000000000000000B3 /* WFCUPcmAudioRecorder.m in Sources */,
+				A5A0000000000000000000B4 /* WFCUAsrManager.m in Sources */,
+				A5A0000000000000000000D1 /* WFCUVoiceInputView.m in Sources */,
 				2F551127217F5CC200F56C26 /* VideoPlayerKit.m in Sources */,
 				2BD785C125482F4600E8AE9B /* WFCUSelectNoDisturbingTimeViewController.m in Sources */,
 				2F56F6BB252A07AF00B829C4 /* WFCUCompositeBaseCell.m in Sources */,

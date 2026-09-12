@@ -51,6 +51,9 @@ NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNot
         // 打开链接策略默认值：1 = 提醒确认
         _openLinkPolicy = 1;
         
+        // 实时语音输入默认边说边出字
+        _enableAsrPartialResult = YES;
+        
         // 全局字体缩放默认值
         CGFloat savedFontScale = [[NSUserDefaults standardUserDefaults] doubleForKey:@"WFC_FONT_SCALE"];
         if (savedFontScale < 0.8 || savedFontScale > 1.5) {
@@ -345,6 +348,13 @@ NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNot
         return _asrServiceUrlProvider();
     }
     return _asrServiceUrl;
+}
+
+- (NSString *)asrStreamServiceUrl {
+    if (_asrStreamServiceUrlProvider) {
+        return _asrStreamServiceUrlProvider();
+    }
+    return _asrStreamServiceUrl;
 }
 
 - (NSString *)MINUTES_URL {

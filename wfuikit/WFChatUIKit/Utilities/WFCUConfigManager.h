@@ -85,6 +85,36 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
  */
 @property(nonatomic, copy)NSString *(^asrServiceUrlProvider)(void);
 
+/**
+ * 实时语音输入服务地址（asr-api 的 /api/stream，或内网直连 wf-voice 的 WebSocket 地址）。
+ * 配置之后，输入框右侧会显示麦克风按钮。
+ * 请求时会在 HTTP header authCode 中带上从 IM 服务获取的认证码，由 asr-api 校验。
+ */
+@property(nonatomic, strong)NSString *asrStreamServiceUrl;
+
+/**
+ * 动态提供实时语音输入服务地址，双网环境下根据当前网络返回主网或备网地址。
+ * 设置后优先于 asrStreamServiceUrl 属性。
+ */
+@property(nonatomic, copy)NSString *(^asrStreamServiceUrlProvider)(void);
+
+/**
+ * 实时语音输入是否边说边出字。开启时说话过程中实时显示正在说的这句话，说完后修正为这句的最终结果；
+ * 关闭时每说完一句才显示这句话。默认为 YES。
+ */
+@property(nonatomic, assign)BOOL enableAsrPartialResult;
+
+/**
+ * IM 服务 host（IP 或域名，不带 http 头和端口），用于实时语音识别获取 authCode。
+ * 也可以在 asrAuthCodeProvider 中自行提供认证码。
+ */
+@property(nonatomic, strong)NSString *imServerHost;
+
+/**
+ * 自定义获取实时语音输入所需的 authCode。设置后优先于 imServerHost 的方式。
+ */
+@property(nonatomic, copy)void (^asrAuthCodeProvider)(void (^success)(NSString *authCode), void (^error)(int errorCode));
+
 @property(nonatomic, strong)NSString *aiRobotId;
 
 //拨号机器人ID，设置后会在首页+号菜单中显示落地电话选项

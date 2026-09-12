@@ -83,6 +83,13 @@ NSString *ASR_SERVICE_URL = @"https://app.wildfirechat.net/asr/api/recognize";
 //语音转文字服务备选地址，双网环境下使用。
 NSString *ASR_SERVICE_BACKUP_URL = nil;
 
+//实时语音输入服务地址。请配置为 asr-api 的实时语音识别地址，例如 wss://example.com/asr/api/stream。
+//连接时会在 HTTP header authCode 中带上从 IM 服务获取的认证码。内网测试时也可以直连 wf-voice 的 WebSocket 地址（默认端口 12436），
+//例如 ws://192.168.1.100:12436。wf-voice 本身没有鉴权，也不支持 wss，请勿直接暴露到公网。
+NSString *ASR_STREAM_SERVICE_URL = @"wss://app.wildfirechat.net/asr/api/stream";
+//实时语音输入服务备选地址，双网环境下使用。
+NSString *ASR_STREAM_SERVICE_BACKUP_URL = nil;
+
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 BOOL Prefer_Password_Login = YES;
@@ -170,6 +177,10 @@ NSString *WFCGetWorkPlatformUrl(void) {
 
 NSString *WFCGetAsrServiceUrl(void) {
     return WFCSelectServer(ASR_SERVICE_URL, ASR_SERVICE_BACKUP_URL);
+}
+
+NSString *WFCGetAsrStreamServiceUrl(void) {
+    return WFCSelectServer(ASR_STREAM_SERVICE_URL, ASR_STREAM_SERVICE_BACKUP_URL);
 }
 
 NSString *WFCGetMinutesUrl(void) {

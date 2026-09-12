@@ -50,6 +50,11 @@ extern NSString *WORK_PLATFORM_BACKUP_URL;
 extern NSString *ASR_SERVICE_URL;
 extern NSString *ASR_SERVICE_BACKUP_URL;
 
+//实时语音输入服务地址（asr-api 的 /api/stream，或内网直连 wf-voice 的 WebSocket 地址）。
+//配置之后，输入框右侧会显示麦克风按钮。不需要实时语音输入时保持为 nil。
+extern NSString *ASR_STREAM_SERVICE_URL;
+extern NSString *ASR_STREAM_SERVICE_BACKUP_URL;
+
 //有2种登录方式，手机号码+验证码登录 和 手机号码+密码登录。
 //这个开关是否优先密码登录
 extern BOOL Prefer_Password_Login;
@@ -93,6 +98,7 @@ NSString *WFCGetPanServerAddress(void);
 NSString *WFCGetArchiveServerAddress(void);
 NSString *WFCGetWorkPlatformUrl(void);
 NSString *WFCGetAsrServiceUrl(void);
+NSString *WFCGetAsrStreamServiceUrl(void);
 NSString *WFCGetMinutesUrl(void);
 
 #endif /* Config_h */

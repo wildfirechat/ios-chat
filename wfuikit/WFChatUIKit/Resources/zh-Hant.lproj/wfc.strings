@@ -733,3 +733,16 @@
 "GreetingNight"="夜深了";
 "WorkspaceWelcomeSubtitle"="祝你有美好的一天";
 "WorkspaceWelcomeHint"="探索今天的高效工作吧";
+
+// 實時語音輸入
+"VoiceInputVoice" = "語音";
+"VoiceInputReleaseToSend" = "鬆開 發送";
+"VoiceInputReleaseToCancel" = "鬆手 取消";
+"VoiceInputSlideToText" = "滑到這裡 轉文字";
+"VoiceInputReleaseToEdit" = "鬆手 編輯文字";
+"VoiceInputSendVoice" = "發送原語音";
+"VoiceInputNoText" = "未識別到文字";
+"VoiceInputRecognizeFailed" = "轉文字失敗";
+"VoiceInputCountDown" = "%d 秒後將停止錄音";
+"AsrRecognizeError" = "語音識別錯誤：%@";
+"AsrNotConfigured" = "未配置語音識別服務地址";

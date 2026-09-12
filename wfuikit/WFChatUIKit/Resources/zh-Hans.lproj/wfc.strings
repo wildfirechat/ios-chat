@@ -737,3 +737,16 @@
 "GreetingNight"="夜深了";
 "WorkspaceWelcomeSubtitle"="祝你有美好的一天";
 "WorkspaceWelcomeHint"="探索今天的高效工作吧";
+
+// 实时语音输入
+"VoiceInputVoice" = "语音";
+"VoiceInputReleaseToSend" = "松开 发送";
+"VoiceInputReleaseToCancel" = "松手 取消";
+"VoiceInputSlideToText" = "滑到这里 转文字";
+"VoiceInputReleaseToEdit" = "松手 编辑文字";
+"VoiceInputSendVoice" = "发送原语音";
+"VoiceInputNoText" = "未识别到文字";
+"VoiceInputRecognizeFailed" = "转文字失败";
+"VoiceInputCountDown" = "%d 秒后将停止录音";
+"AsrRecognizeError" = "语音识别错误：%@";
+"AsrNotConfigured" = "未配置语音识别服务地址";
