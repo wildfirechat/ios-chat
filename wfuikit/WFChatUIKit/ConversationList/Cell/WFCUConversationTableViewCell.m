@@ -510,9 +510,10 @@
         _offcialView.textColor = [UIColor whiteColor];
         _offcialView.backgroundColor = [UIColor blueColor];
         _offcialView.textAlignment = NSTextAlignmentCenter;
-        _offcialView.text = @"官方";
+        _offcialView.text = WFCString(@"Official");
         CGSize size = [WFCUUtilities getTextDrawingSize:_offcialView.text font:_offcialView.font constrainedSize:CGSizeMake(200, 200)];
         _offcialView.frame = CGRectMake(0, 0, size.width+4, size.height);
+        _offcialView.hidden = YES;
         [self.contentView addSubview:_offcialView];
     }
     return _offcialView;
