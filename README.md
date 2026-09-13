@@ -85,7 +85,7 @@
 
 #### 1. 放证书
 
-把证书文件（`.cer`、`.crt`、`.pem`、`.der`，一个 `.pem` 里可以包含多张）放到 App 的 Bundle 根目录，例如工程里已有的 ```wfchat/WildFireChat/ip.crt```。客户端启动时会自动遍历 Bundle 根目录下的所有证书文件并加载，代码见 ```wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.m```。
+把证书文件（`.cer`、`.crt`、`.pem`、`.der`，一个 `.pem` 里可以包含多张）放到 App 的 Bundle 根目录。客户端启动时会自动遍历 Bundle 根目录下的所有证书文件并加载，代码见 ```wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.m```。
 
 > ShareExtension 不链接 chatclient 库，而是**文件引用**同一份证书管理源文件（```wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.*```）直接参与编译，证书文件也要加进 Extension 的 Bundle（`wfchat/ShareExtension/` 已配置好）。
 
@@ -97,7 +97,7 @@
 - 用 IP 直连就要有 **IP SAN**，用域名连接就要有 **DNS SAN**（或 `*.example.com` 通配）；
 - SAN 不匹配就是连接失败，**没有跳过校验的开关**。
 
-比如工程里已有的 `ip.crt`，SAN 是 `IP:101.35.103.221, IP:10.0.16.12`，就只能用这两个地址直连。
+比如有一个证书 `ip.crt`，SAN 是 `IP:101.35.103.221, IP:10.0.16.12`，就只能用这两个地址直连。
 
 #### 3. 证书建议做成"合规"证书
 
