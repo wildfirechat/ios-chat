@@ -395,7 +395,7 @@
 }
 
 + (UIColor *)asrIconHighlightColor {
-    return [UIColor colorWithHexString:@"0x3B62E0"];
+    return [WFCUConfigManager globalManager].primaryColor;
 }
 
 - (void)onAsrButtonClick {
@@ -607,7 +607,14 @@
     [self cancelHoldSpeechToText];
 
     CGRect buttonFrame = [self.voiceInputBtn convertRect:self.voiceInputBtn.bounds toView:self.parentView];
-    self.voiceInputView = [[WFCUVoiceInputView alloc] initWithFrame:self.parentView.bounds recordButtonFrame:buttonFrame];
+    // parentView 不包含底部安全区域，浮层延伸到屏幕底部，底部安全区域也盖上深灰背景
+    CGRect frame = self.parentView.bounds;
+    UIWindow *window = self.parentView.window;
+    if (window) {
+        CGRect parentInWindow = [self.parentView convertRect:self.parentView.bounds toView:window];
+        frame.size.height += MAX(0, CGRectGetHeight(window.bounds) - CGRectGetMaxY(parentInWindow));
+    }
+    self.voiceInputView = [[WFCUVoiceInputView alloc] initWithFrame:frame recordButtonFrame:buttonFrame];
     self.voiceInputView.speechToTextEnabled = YES;
     self.voiceInputView.delegate = self;
     [self.parentView addSubview:self.voiceInputView];

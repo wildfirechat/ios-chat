@@ -63,6 +63,11 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
 
 @property(nonatomic, strong)UIColor *externalNameColor;
 
+/*
+ * App 主色调，默认 #3B62E0，与 Android 的 colorPrimary 一致。按住说话转文字的气泡等使用这个颜色。
+ */
+@property(nonatomic, strong)UIColor *primaryColor;
+
 @property(nonatomic, weak)id<WFCUAppServiceProvider> appServiceProvider;
 
 @property(nonatomic, weak)id<WFCUOrgServiceProvider> orgServiceProvider;

@@ -312,6 +312,13 @@ NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNot
     return [UIColor colorWithHexString:@"0xF0A040"];
 }
 
+- (UIColor *)primaryColor {
+    if(_primaryColor) {
+        return _primaryColor;
+    }
+    return [UIColor colorWithHexString:@"0x3B62E0"];
+}
+
 //file path document/conversationresource/conv_line/conv_type/conv_target/mediatype/
 - (NSString *)cachePathOf:(WFCCConversation *)conversation mediaType:(WFCCMediaType)mediaType {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
