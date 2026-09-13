@@ -6,6 +6,7 @@
 //  Copyright © 2025 WildFireChat. All rights reserved.
 //
 
+#import <WFChatClient/WFCCCertificateManager.h>
 #import "WFCBackupRequestProgressViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatClient/WFCCBackupRequestNotificationContent.h>
@@ -308,7 +309,7 @@
 
     // 发送请求
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSession *session = [NSURLSession wfc_sessionWithConfiguration:config];
     NSURLSessionUploadTask *uploadTask = [session uploadTaskWithRequest:request
                                                            fromData:bodyData
                                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -409,7 +410,7 @@
 
     // 发送请求
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSession *session = [NSURLSession wfc_sessionWithConfiguration:config];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                              completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {

@@ -464,6 +464,8 @@
 		B70775922881ABB1004034A5 /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
 		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B707759A28823635004034A5 /* WFCUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B707759828823635004034A5 /* WFCUImage.m */; };
+		A5A0000000000000000000F1 /* WFCUCertImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */; };
+		A5A0000000000000000000F2 /* WFCUAFSecurityPolicy+Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */; };
 		B709CCE628F7B78C0036EDFA /* WFCUI420VideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */; };
 		B709CCE728F7B78C0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */; };
 		B709CCE928F7B9EF0036EDFA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */; };
@@ -1174,6 +1176,10 @@
 		B7016308290E346C00DCD651 /* DACircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DACircularProgressView.h; sourceTree = "<group>"; };
 		B707759728823635004034A5 /* WFCUImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUImage.h; sourceTree = "<group>"; };
 		B707759828823635004034A5 /* WFCUImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUImage.m; sourceTree = "<group>"; };
+		A5A0000000000000000000E1 /* WFCUCertImageDownloaderOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCertImageDownloaderOperation.h; sourceTree = "<group>"; };
+		A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCertImageDownloaderOperation.m; sourceTree = "<group>"; };
+		A5A0000000000000000000E3 /* WFCUAFSecurityPolicy+Certificate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WFCUAFSecurityPolicy+Certificate.h"; sourceTree = "<group>"; };
+		A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WFCUAFSecurityPolicy+Certificate.m"; sourceTree = "<group>"; };
 		B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
 		B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
 		B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
@@ -2400,6 +2406,10 @@
 				2F638919254E3FE30084EEA6 /* WFCUFavoriteItem.h */,
 				2F63891A254E3FE30084EEA6 /* WFCUFavoriteItem.m */,
 				B707759728823635004034A5 /* WFCUImage.h */,
+				A5A0000000000000000000E1 /* WFCUCertImageDownloaderOperation.h */,
+				A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */,
+				A5A0000000000000000000E3 /* WFCUAFSecurityPolicy+Certificate.h */,
+				A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */,
 				B707759828823635004034A5 /* WFCUImage.m */,
 				B77D1E0A29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.h */,
 				B77D1E0B29F0DFF3001A92D8 /* WFCUGeneralImageTextTableViewCell.m */,
@@ -3441,6 +3451,8 @@
 				2BEF78A823F6A84D000DE285 /* WFCUFloatingWindow.m in Sources */,
 				2BD8D72624D69B5400281B81 /* WFCUFilesViewController.m in Sources */,
 				B707759A28823635004034A5 /* WFCUImage.m in Sources */,
+				A5A0000000000000000000F1 /* WFCUCertImageDownloaderOperation.m in Sources */,
+				A5A0000000000000000000F2 /* WFCUAFSecurityPolicy+Certificate.m in Sources */,
 				149B3112241E65D500B935D3 /* UIFont+YH.m in Sources */,
 				2FD550ED2442AA0B00B3EE09 /* WFCURecallCell.m in Sources */,
 				2F5510A3217F5CC200F56C26 /* WFCUImageCell.m in Sources */,

@@ -72,6 +72,7 @@
 
 #import "WFCUConfigManager.h"
 #import "WFCUAsrAuth.h"
+#import <WFChatClient/WFCCCertificateManager.h>
 #import "WFCUSeletedUserViewController.h"
 
 #import "WFCUReceiptViewController.h"
@@ -4498,6 +4499,11 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
     });
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    // 语音转文字服务可能是自签证书的 https 地址
+    [[WFCCCertificateManager sharedManager] handleChallenge:challenge completion:completionHandler];
 }
 
 - (void)URLSession:(NSURLSession *)session task:(nonnull NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error {

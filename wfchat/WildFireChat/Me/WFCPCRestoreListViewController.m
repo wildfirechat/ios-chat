@@ -6,6 +6,7 @@
 //  Copyright © 2025 WildFireChat. All rights reserved.
 //
 
+#import <WFChatClient/WFCCCertificateManager.h>
 #import "WFCPCRestoreListViewController.h"
 #import "WFCRestoreOptionsViewController.h"
 #import "WFCPCRestoreProgressViewController.h"
@@ -188,7 +189,7 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
 
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSession *session = [NSURLSession wfc_sessionWithConfiguration:config];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                              completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

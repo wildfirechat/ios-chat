@@ -6,11 +6,12 @@
 //  Copyright © 2019 WildFireChat. All rights reserved.
 //
 
+#import <WFChatClient/WFCCCertificateManager.h>
 #import "WFCPrivacyViewController.h"
 #import <WebKit/WebKit.h>
 #import "WFCConfig.h"
 
-@interface WFCPrivacyViewController ()
+@interface WFCPrivacyViewController () <WKNavigationDelegate>
 @property(nonatomic, strong)WKWebView *webview;
 @end
 
@@ -20,6 +21,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.webview = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    // 自签证书的 https 页面需要处理证书挑战
+    self.webview.navigationDelegate = self;
     //页面在 iPad 右栏里，宽高不恒等于屏幕，补 autoresizing 跟随父视图（iPhone 上 no-op）
     self.webview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
@@ -46,4 +49,10 @@
 }
 */
 
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    [[WFCCCertificateManager sharedManager] handleChallenge:challenge completion:completionHandler];
+}
 @end

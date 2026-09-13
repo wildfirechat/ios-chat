@@ -139,6 +139,7 @@
 		B7981A352F2A1356004AB1F3 /* WFCFavoriteCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7981A342F2A1356004AB1F3 /* WFCFavoriteCardCell.m */; };
 		B79915CF2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */; };
 		B7A192D82A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */; };
+		B7A78E7930567844002C8A04 /* WFCCCertificateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A78E7830567844002C8A04 /* WFCCCertificateManager.m */; };
 		B7ABFF3C2F10DA7A00C3DEEC /* WFCBackupProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF372F10DA7A00C3DEEC /* WFCBackupProgressViewController.m */; };
 		B7ABFF3D2F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF312F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m */; };
 		B7ABFF3E2F10DA7A00C3DEEC /* WFCBackupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7ABFF332F10DA7A00C3DEEC /* WFCBackupListViewController.m */; };
@@ -161,6 +162,7 @@
 		B7D9B2AF2D8447E000402CC4 /* WFRedirector.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D9B2AE2D8447E000402CC4 /* WFRedirector.m */; };
 		B7DA72002F60FBEB00C112C8 /* ArchivedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */; };
 		B7DA72012F60FBEB00C112C8 /* ArchiveService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */; };
+		B7DD00000000000000000012 /* WFCUAFSecurityPolicy+Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DD00000000000000000004 /* WFCUAFSecurityPolicy+Certificate.m */; };
 		B7DEB6332F4D8BFA003E481E /* PanService.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6312F4D8BFA003E481E /* PanService.m */; };
 		B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -473,6 +475,8 @@
 		B79915CE2F0EA5AF001C4EE7 /* WFCSlideVerifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCSlideVerifyView.m; sourceTree = "<group>"; };
 		B7A192D62A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCPrivacyFindMeViewController.h; sourceTree = "<group>"; };
 		B7A192D72A4BDF3A003A27DC /* WFCPrivacyFindMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCPrivacyFindMeViewController.m; sourceTree = "<group>"; };
+		B7A78E7730567844002C8A04 /* WFCCCertificateManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WFCCCertificateManager.h; path = ../wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.h; sourceTree = SOURCE_ROOT; };
+		B7A78E7830567844002C8A04 /* WFCCCertificateManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WFCCCertificateManager.m; path = ../wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.m; sourceTree = SOURCE_ROOT; };
 		B7ABFF302F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupAndRestoreViewController.h; sourceTree = "<group>"; };
 		B7ABFF312F10DA7A00C3DEEC /* WFCBackupAndRestoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCBackupAndRestoreViewController.m; sourceTree = "<group>"; };
 		B7ABFF322F10DA7A00C3DEEC /* WFCBackupListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCBackupListViewController.h; sourceTree = "<group>"; };
@@ -509,6 +513,8 @@
 		B7DA71FC2F60FBEB00C112C8 /* ArchiveService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveService.m; sourceTree = "<group>"; };
 		B7DA71FD2F60FBEB00C112C8 /* ArchivedMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchivedMessage.h; sourceTree = "<group>"; };
 		B7DA71FE2F60FBEB00C112C8 /* ArchivedMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchivedMessage.m; sourceTree = "<group>"; };
+		B7DD00000000000000000003 /* WFCUAFSecurityPolicy+Certificate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WFCUAFSecurityPolicy+Certificate.h"; path = "../wfuikit/WFChatUIKit/Utilities/WFCUAFSecurityPolicy+Certificate.h"; sourceTree = SOURCE_ROOT; };
+		B7DD00000000000000000004 /* WFCUAFSecurityPolicy+Certificate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "WFCUAFSecurityPolicy+Certificate.m"; path = "../wfuikit/WFChatUIKit/Utilities/WFCUAFSecurityPolicy+Certificate.m"; sourceTree = SOURCE_ROOT; };
 		B7DEB6302F4D8BFA003E481E /* PanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanService.h; sourceTree = "<group>"; };
 		B7DEB6312F4D8BFA003E481E /* PanService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanService.m; sourceTree = "<group>"; };
 		B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */ = {isa = PBXFileReference; expectedSignature = "SelfSigned:FC3B101386344C50DB702A9AD1016FB51A3ECC8B9DA9B7AE47A048D4D0633983"; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = ../../wfuikit/WFChatUIKit/Vendor/SDWebImage/SDWebImage.xcframework; sourceTree = "<group>"; };
@@ -817,6 +823,10 @@
 				2F444779252D475C007A570E /* Shares.xcassets */,
 				2F44485B252D52AE007A570E /* ShareAppService.h */,
 				2F44485C252D52AE007A570E /* ShareAppService.m */,
+				B7A78E7730567844002C8A04 /* WFCCCertificateManager.h */,
+				B7A78E7830567844002C8A04 /* WFCCCertificateManager.m */,
+				B7DD00000000000000000003 /* WFCUAFSecurityPolicy+Certificate.h */,
+				B7DD00000000000000000004 /* WFCUAFSecurityPolicy+Certificate.m */,
 				2F97CDC7252EC7D90095DDFD /* ShareUtility.h */,
 				2F97CDC8252EC7D90095DDFD /* ShareUtility.m */,
 				B7B2F8482F0A0862001CBF4C /* ShareLocalizationHelper.h */,
@@ -1518,6 +1528,7 @@
 				2B4C027D252F4A570043FA41 /* AFURLSessionManager.m in Sources */,
 				2F97CDC9252EC7D90095DDFD /* ShareUtility.m in Sources */,
 				2F44485D252D52AE007A570E /* ShareAppService.m in Sources */,
+				B7DD00000000000000000012 /* WFCUAFSecurityPolicy+Certificate.m in Sources */,
 				2F56F706252CA99A00B829C4 /* ConversationListViewController.m in Sources */,
 				2B4C0280252F4A570043FA41 /* AFSecurityPolicy.m in Sources */,
 				2F5527C1252CB33E00B0CDCB /* SharedConversation.m in Sources */,
@@ -1528,6 +1539,7 @@
 				B7B2F83F2F0A0228001CBF4C /* WFCLocalization.m in Sources */,
 				2B4C027E252F4A570043FA41 /* AFURLRequestSerialization.m in Sources */,
 				2B4C0281252F4A570043FA41 /* MBProgressHUD.m in Sources */,
+				B7A78E7930567844002C8A04 /* WFCCCertificateManager.m in Sources */,
 				2F56F6F7252C956700B829C4 /* ShareViewController.m in Sources */,
 				2B4C027F252F4A570043FA41 /* AFNetworkReachabilityManager.m in Sources */,
 				B7B2F84A2F0A0862001CBF4C /* ShareLocalizationHelper.m in Sources */,
@@ -1856,6 +1868,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"WFCU_CERT_LOCAL_MANAGER=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../wfclient/WFChatClient/CertificateManager",
+				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1888,6 +1908,14 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"WFCU_CERT_LOCAL_MANAGER=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../wfclient/WFChatClient/CertificateManager",
 				);
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

@@ -8,6 +8,7 @@
 
 #import "WFCUAsrWebSocketClient.h"
 #import "WFCUAsrAuth.h"
+#import <WFChatClient/WFCCCertificateManager.h>
 
 static NSString *const kMessageEos = @"eos";
 static NSString *const kMessagePartial = @"partial";
@@ -58,7 +59,10 @@ static const NSTimeInterval kPingInterval = 30.0;
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
         config.timeoutIntervalForRequest = 5;
         config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-        self.session = [NSURLSession sessionWithConfiguration:config];
+        // 自签证书的 wss 地址需要统一的证书信任评估
+        self.session = [NSURLSession sessionWithConfiguration:config
+                                                     delegate:[WFCCCertificateURLSessionDelegate delegateWithManager:[WFCCCertificateManager sharedManager]]
+                                                delegateQueue:nil];
         self.webSocketTask = [self.session webSocketTaskWithRequest:request];
         self.pendingAudio = [NSMutableArray array];
         self.opened = NO;

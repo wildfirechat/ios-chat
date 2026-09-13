@@ -12,6 +12,7 @@
 #import <TargetConditionals.h>
 #import <Security/Security.h>
 #import "WFCCUtilities.h"
+#import "WFCCCertificateManager.h"
 #import "sys/utsname.h"
 #import "WFCCNetworkService.h"
 #import <CoreTelephony/CTCarrier.h>
@@ -193,6 +194,12 @@ void AppCallBack::GetRootCerts(std::vector<std::string> &certs) {
         NSLog(@"[WFC] GetRootCerts(iOS) no bundled CA found; TLS cert verification will be skipped unless useTls passes a cert");
     }
 #endif
+    // 由 WFCCCertificateManager 统一加载的内置证书（bundle 根目录下的 .cer/.crt/.pem/.der）也作为根证书
+    for (WFCCCertificate *certificate in [WFCCCertificateManager sharedManager].certificates) {
+        if (certificate.derData.length) {
+            certs.push_back(std::string((const char *)certificate.derData.bytes, (size_t)certificate.derData.length));
+        }
+    }
 }
 
 bool AppCallBack::CanVerifyServerCerts() {
@@ -260,6 +267,21 @@ int AppCallBack::VerifyServerCerts(const std::vector<std::string> &derChain, con
     
     CFRelease(trust);
     CFRelease(policy);
+    
+    // 系统信任库校验失败时，用内置的自签证书再校验一次（锚点 + 域名/IP SAN）
+    if (result != 1) {
+        NSMutableArray<NSData *> *derArray = [NSMutableArray array];
+        for (const auto &der : derChain) {
+            if (!der.empty()) {
+                [derArray addObject:[NSData dataWithBytes:der.data() length:der.size()]];
+            }
+        }
+        BOOL pinned = [[WFCCCertificateManager sharedManager] evaluateCertificateChain:derArray host:hostStr];
+        if (pinned) {
+            result = 1;
+            NSLog(@"[WFC] VerifyServerCerts host:%@ 通过内置证书校验", hostStr);
+        }
+    }
     
     NSLog(@"[WFC] VerifyServerCerts host:%@ chain:%lu result:%d", hostStr, (unsigned long)derChain.size(), result);
     return result;

@@ -6,6 +6,7 @@
 //  Copyright © 2025 WildFireChat. All rights reserved.
 //
 
+#import <WFChatClient/WFCCCertificateManager.h>
 #import "WFCPCRestoreProgressViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <WFChatClient/WFCCMessageBackupManager.h>
@@ -101,7 +102,7 @@
 
     __weak typeof(self) weakSelf = self;
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSession *session = [NSURLSession wfc_sessionWithConfiguration:config];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -243,7 +244,7 @@
 
     __weak typeof(self) weakSelf = self;
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSession *session = [NSURLSession wfc_sessionWithConfiguration:config];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;

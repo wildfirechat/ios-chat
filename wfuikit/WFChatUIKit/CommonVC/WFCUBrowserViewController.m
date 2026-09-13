@@ -13,7 +13,7 @@
 #import "WFCUConfigManager.h"
 #import "WFCUContactListViewController.h"
 
-@interface WFCUBrowserViewController ()
+@interface WFCUBrowserViewController () <WKNavigationDelegate>
 @property (nonatomic, strong)DWKWebView *webView;
 @property(nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *configDict;
 
@@ -38,6 +38,8 @@
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [self.view addSubview:self.webView];
+    // 工作台等自签证书的 https 页面需要处理证书挑战
+    self.webView.navigationDelegate = self;
     [self.webView addJavascriptObject:self namespace:nil];
     
 #ifdef DEBUG
@@ -205,5 +207,12 @@
     if(!parent) {
         [self.webView removeJavascriptObject:nil];
     }
+}
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    // 工作台等自签证书的 https 页面
+    [[WFCCCertificateManager sharedManager] handleChallenge:challenge completion:completionHandler];
 }
 @end

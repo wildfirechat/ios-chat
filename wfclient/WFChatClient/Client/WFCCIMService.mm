@@ -7,6 +7,7 @@
 //
 
 #import "WFCCIMService.h"
+#import "WFCCCertificateManager.h"
 #import "WFCCMediaMessageContent.h"
 #import <proto/MessageDB.h>
 #import <objc/runtime.h>
@@ -161,6 +162,13 @@ public:
     });
 }
 
+// 自签证书的 HTTPS 上传地址：默认 NSURLSession 不信任，按统一策略评估
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                                didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+                                  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    [[WFCCCertificateManager sharedManager] handleChallenge:challenge completion:completionHandler];
+}
+
 @end
 
 
@@ -196,6 +204,13 @@ public:
         float uploadProgress = totalBytesSent * 1.f / self.fileSize;
         m_progressBlock((int)totalBytesSent, self.fileSize);
     }
+}
+
+// 自签证书的 HTTPS 上传地址：默认 NSURLSession 不信任，按统一策略评估
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+                                didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+                                  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    [[WFCCCertificateManager sharedManager] handleChallenge:challenge completion:completionHandler];
 }
 @end
 
@@ -1290,7 +1305,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                 if(mars::stn::ForcePresignedUrlUpload()) {
                     largeMedia = YES;
                 } else {
-                    largeMedia = [fileSizeValue integerValue] > 100000000L;
+                    largeMedia = YES;//[fileSizeValue integerValue] > 100000000L;
                 }
                 fileSize = (int)[fileSizeValue integerValue];
             }
@@ -1444,6 +1459,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     NSString *key = array[2];
 
     WFAFHTTPSessionManager *manage = [WFAFHTTPSessionManager manager];
+    // 自签证书的地址需要走统一的证书信任评估
+    [manage setSessionDidReceiveAuthenticationChallengeBlock:[[WFCCCertificateManager sharedManager] sessionChallengeBlock]];
     [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     manage.requestSerializer = [WFAFHTTPRequestSerializer serializer];
     manage.responseSerializer = [WFAFHTTPResponseSerializer serializer];
@@ -1483,6 +1500,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     long messageId = [[[NSDate alloc] init] timeIntervalSince1970];
 
     WFAFHTTPSessionManager *manage = [WFAFHTTPSessionManager manager];
+    // 自签证书的地址需要走统一的证书信任评估
+    [manage setSessionDidReceiveAuthenticationChallengeBlock:[[WFCCCertificateManager sharedManager] sessionChallengeBlock]];
     [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     manage.requestSerializer = [WFAFHTTPRequestSerializer serializer];
     manage.responseSerializer = [WFAFHTTPResponseSerializer serializer];
@@ -1516,6 +1535,8 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     NSString *key = array[2];
 
     WFAFHTTPSessionManager *manage = [WFAFHTTPSessionManager manager];
+    // 自签证书的地址需要走统一的证书信任评估
+    [manage setSessionDidReceiveAuthenticationChallengeBlock:[[WFCCCertificateManager sharedManager] sessionChallengeBlock]];
     [manage.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     manage.requestSerializer = [WFAFHTTPRequestSerializer serializer];
     manage.responseSerializer = [WFAFHTTPResponseSerializer serializer];

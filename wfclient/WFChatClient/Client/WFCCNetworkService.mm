@@ -22,6 +22,7 @@
 #include <stn/stn_logic.h>
 #include <list>
 #import "WFCCIMService.h"
+#import "WFCCCertificateManager.h"
 #import "WFCCNetworkStatus.h"
 #import "WFCCRecallMessageContent.h"
 #import "WFCCUserOnlineState.h"
@@ -1116,16 +1117,19 @@ static WFCCNetworkService * sharedSingleton = nil;
   //KCP需要专业版IM服务支持，并打开KCP端口。这个函数要在onCreate之前调用，否则会无效.
   //mars::stn::setUseKcp(88, true);
     
-  //使用websocket，只有2026.9.11之后的服务才可以支持
+//  //使用websocket，只有2026.9.11之后的服务才可以支持，setUseWebsocket和UseTls都必须onCreate之前调用，否则会无效。
 //  mars::stn::setUseWebsocket(true);
-//  //TLS校验：域名连接使用公签证书走系统信任链；IP直连使用自签名证书，需把证书文件路径传入作为信任锚（注意：传内容会导致进程退出，路径必须真实存在）
+//  //TLS校验：域名连接使用公签证书走系统信任链；IP直连使用自签名证书，需把证书文件路径传入作为信任锚
+//  //（注意：协议栈要的是文件路径而不是证书内容，路径必须真实存在，传内容会导致进程退出）。
+//  //内置证书由 WFCCCertificateManager 统一遍历加载（bundle 根目录下的 .cer/.crt/.pem/.der）。
+//  WFCCCertificateManager *certificateManager = [WFCCCertificateManager sharedManager];
+//  [certificateManager loadCertificatesFromBundle:[NSBundle mainBundle]];
 //  std::list<std::string> selfSignedCerts;
-//  NSString *certPath = [[NSBundle mainBundle] pathForResource:@"ip" ofType:@"crt"];
-//  if (certPath) {
-//      selfSignedCerts.push_back([certPath UTF8String]);
+//  for (NSString *certPath in certificateManager.certificateFilePaths) {
+//      selfSignedCerts.push_back(certPath.UTF8String);
 //  }
 //  mars::stn::UseTls(false, selfSignedCerts);
-    
+//    
     
   mars::baseevent::OnCreate();
 }

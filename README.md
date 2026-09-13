@@ -79,6 +79,94 @@
 
 在项目的Config.m文件中，修改IM服务器地址配置。把```IM_SERVER_HOST```和```IM_SERVER_PORT```设置成火信的地址和端口。另外需要搭配应用服务器，请按照说明部署好[应用服务器](https://github.com/wildfirechat/app_server)，然后把```APP_SERVER_HOST```和```APP_SERVER_PORT```设置为应用服务器的地址和端口。
 
+### 自签名证书
+
+私有化部署时，IM 服务、媒体服务、应用服务等可能会使用自签名证书。客户端默认会以"证书无效"（`NSURLErrorServerCertificateUntrusted`）拒绝连接，工程内置了统一的证书信任管理，把证书放进 App 即可，不需要改动业务代码。
+
+#### 1. 放证书
+
+把证书文件（`.cer`、`.crt`、`.pem`、`.der`，一个 `.pem` 里可以包含多张）放到 App 的 Bundle 根目录，例如工程里已有的 ```wfchat/WildFireChat/ip.crt```。客户端启动时会自动遍历 Bundle 根目录下的所有证书文件并加载，代码见 ```wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.m```。
+
+> ShareExtension 不链接 chatclient 库，而是**文件引用**同一份证书管理源文件（```wfclient/WFChatClient/CertificateManager/WFCCCertificateManager.*```）直接参与编译，证书文件也要加进 Extension 的 Bundle（`wfchat/ShareExtension/` 已配置好）。
+
+#### 2. 证书里的地址必须和实际拨号的地址一致
+
+主机绑定**完全依赖证书的 SAN**（Subject Alternative Name），评估时统一使用 `SecPolicyCreateSSL(true, host)`，所以：
+
+- 证书 SAN 里必须包含客户端实际连接的 IP 或域名；
+- 用 IP 直连就要有 **IP SAN**，用域名连接就要有 **DNS SAN**（或 `*.example.com` 通配）；
+- SAN 不匹配就是连接失败，**没有跳过校验的开关**。
+
+比如工程里已有的 `ip.crt`，SAN 是 `IP:101.35.103.221, IP:10.0.16.12`，就只能用这两个地址直连。
+
+#### 3. 证书建议做成"合规"证书
+
+Apple 对 TLS 服务端证书有硬性策略，不满足时即使把证书内置为信任锚，Security.framework 依然会拒绝：
+
+- 有效期不超过 **825 天**；
+- 必须带 `extended key usage: serverAuth`。
+
+自签证书可以参考下面的命令生成：
+
+```bash
+openssl req -x509 -newkey rsa:2048 -nodes -days 820 \
+  -keyout server.key -out server.crt \
+  -subj "/CN=101.35.103.221" \
+  -addext "subjectAltName=IP:101.35.103.221,IP:10.0.16.12" \
+  -addext "basicConstraints=critical,CA:TRUE" \
+  -addext "keyUsage=critical,digitalSignature,keyEncipherment,keyCertSign" \
+  -addext "extendedKeyUsage=serverAuth"
+```
+
+如果不想重签、证书不满足上面两条，客户端默认的**宽松模式**可以兼容。
+
+#### 4. 两种校验策略
+
+| 策略 | 说明 |
+| --- | --- |
+| `WFCCCertPolicyModePermissive`（默认） | 用 `SecPolicyCreateBasicX509` 只校验证书链和有效期，不套用 Apple 的 825 天有效期、`serverAuth` EKU 等 TLS 策略；主机匹配由客户端按证书 SAN 自行完成。可以兼容不合规的自签证书 |
+| `WFCCCertPolicyModeTLS` | 完全走系统 TLS 策略，要求证书合规 |
+
+```objc
+// 切换到严格模式
+[WFCCCertificateManager sharedManager].policyMode = WFCCCertPolicyModeTLS;
+// 只信任内置证书，忽略系统信任库里的其它根证书
+[WFCCCertificateManager sharedManager].trustMode = WFCCCertTrustModePinOnly;
+// 关闭自签证书支持
+[WFCCCertificateManager sharedManager].enabled = NO;
+// 手动加载并应用到 IM（一般不需要，启动时会自动做）
+[WFCCCertificateManager setupWithMainBundleCertificates];
+```
+
+默认是"宽松模式 + 先走系统信任库、失败再用内置证书当锚点"，公签证书、用户自己安装并信任的证书、内置自签证书三种情况都能正常工作。
+
+#### 5. 覆盖范围
+
+证书信任管理已经接入所有网络通道，不需要逐个改造：
+
+- IM 长连接及协议栈内的媒体上传下载（`WFCCNetworkService` 的 TLS 配置 + 协议栈证书链校验回调）
+- 大文件预签名上传（`WFCCIMService`）
+- 头像、图片、表情、朋友圈图片（SDWebImage）
+- 应用服务、组织通讯录、接龙、投票、网盘、归档等（AFNetworking）
+- 实时语音输入的 WebSocket、语音转文字（`NSURLSession`）
+- 工作台、关于、隐私政策等网页（WKWebView）
+
+#### 6. 排障
+
+证书不匹配或校验失败时会输出 `[WFCCCert]` 前缀的日志，包含服务端证书的 SAN、有效期、指纹，以及当前连接的 host 是否匹配。也可以直接调用：
+
+```objc
+NSLog(@"%@", [[WFCCCertificateManager sharedManager] describeCertificatesForHost:@"101.35.103.221"]);
+```
+
+#### 7. 安全建议
+
+内置证书信任是为了兼容私有化部署的自签证书，安全性弱于公签证书，生产环境建议：
+
+- 使用公签证书；或者搭建私有 CA（长期有效）签发服务端证书（不超过 825 天），客户端内置并固定 CA，续期时不用发版；
+- 不要为了省事把证书校验全局放开；
+- 自签方案仅用于内网或设备可管控的私有化部署。
+
 ### 登陆
 使用手机号码及验证码登陆，
 > 在没有短信供应商时，可以使用[superCode](https://github.com/wildfirechat/app_server#短信资源)进行测试验证。
