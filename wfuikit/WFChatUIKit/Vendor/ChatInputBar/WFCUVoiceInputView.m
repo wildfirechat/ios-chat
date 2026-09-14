@@ -1251,7 +1251,17 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
         if (self.bubbleState == WFCUBubbleStateText || self.bubbleState == WFCUBubbleStateEdit) {
             [self animateBubbleToState:self.bubbleState];
         }
+        [self scrollEditTextToBottom];
     }
+}
+
+/**
+ * 气泡到高度上限后文字在内部滚动，识别追加的文字默认滚到底部保持可见
+ */
+- (void)scrollEditTextToBottom {
+    if (!self.textEditText.text.length) return;
+    [self.textEditText layoutIfNeeded];
+    [self.textEditText scrollRangeToVisible:NSMakeRange(self.textEditText.text.length - 1, 1)];
 }
 
 - (void)showTooShortTip {
@@ -1296,6 +1306,7 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 
     self.waveView.loading = YES;
     [self animateBubbleToState:WFCUBubbleStateEdit];
+    [self scrollEditTextToBottom];
     [self updateSendTextButtonState];
 }
 
@@ -1307,6 +1318,7 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
     if (!self.userEditedText && text) {
         self.textEditText.text = text;
         [self animateBubbleToState:WFCUBubbleStateEdit];
+        [self scrollEditTextToBottom];
     }
     [self updateSendTextButtonState];
 }
@@ -1404,6 +1416,13 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
             frame->width = maxWidth;
             frame->textBottomMargin = showWave ? 20.0 : 0.0;
             frame->height = [self measureBubbleHeightForWidth:frame->width textBottomMargin:frame->textBottomMargin];
+            // 高度不能超出可用空间，否则超长文字会把气泡顶出屏幕上沿；
+            // 到上限后由 UITextView 在气泡内部滚动
+            CGFloat bubbleBottomY = self.bounds.size.height - [self currentBubbleBottomMargin] - self.keyboardOffset;
+            CGFloat maxHeight = bubbleBottomY - [self bubbleTopMargin];
+            if (maxHeight > 0) {
+                frame->height = MIN(frame->height, maxHeight);
+            }
             WFCUSetFrameColor(frame, noText ? WFCU_VOICE_RED_COLOR : primaryColor, NO);
             WFCUSetFrameColor(frame, noText ? [UIColor whiteColor] : contentColor, YES);
             frame->waveWidth = 34.0;
@@ -1484,7 +1503,7 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 
     self.currentBubbleFrame = cur;
 
-    CGFloat bottomY = self.bounds.size.height - self.bubbleBottomMargin - self.keyboardOffset;
+    CGFloat bottomY = self.bounds.size.height - [self currentBubbleBottomMargin] - self.keyboardOffset;
     self.bubbleView.frame = CGRectMake(cur.left, bottomY - cur.height, cur.width, cur.height);
     self.bubbleView.bubbleColor = [UIColor colorWithRed:cur.r green:cur.g blue:cur.b alpha:cur.a];
     self.bubbleView.tailX = cur.tailX;
@@ -1539,10 +1558,33 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 #pragma mark - 10. 键盘 Notification
 
 /**
+ * 气泡底部到屏幕底部的距离。
+ * 录音态要避开底部的弧形按钮区；编辑态贴在底部按钮组上方 20pt，
+ * 否则文字超长时气泡只向上长，气泡和按钮之间会留出一大块空白
+ */
+- (CGFloat)currentBubbleBottomMargin {
+    if (self.editing) {
+        return self.editActionsBottomMargin + 96.0 + 20.0;
+    }
+    return self.bubbleBottomMargin;
+}
+
+/**
+ * 气泡顶部到屏幕上沿的最小留白
+ */
+- (CGFloat)bubbleTopMargin {
+    CGFloat topMargin = 12.0;
+    if (@available(iOS 11.0, *)) {
+        topMargin += self.safeAreaInsets.top;
+    }
+    return topMargin;
+}
+
+/**
  * 编辑文字时深灰背景完全不透明处，在气泡下边缘稍上方
  */
 - (CGFloat)editPanelTop {
-    return self.bounds.size.height - self.keyboardOffset - self.bubbleBottomMargin - self.bubbleView.tailHeight - 5.0;
+    return self.bounds.size.height - self.keyboardOffset - [self currentBubbleBottomMargin] - self.bubbleView.tailHeight - 5.0;
 }
 
 - (void)keyboardWillChangeFrame:(NSNotification *)note {
@@ -1561,9 +1603,13 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
         [self setNeedsLayout];
         [self layoutIfNeeded];
 
-        WFCUBubbleFrame frame = self.currentBubbleFrame;
-        CGFloat bottomY = self.bounds.size.height - self.bubbleBottomMargin - self.keyboardOffset;
-        self.bubbleView.frame = CGRectMake(frame.left, bottomY - frame.height, frame.width, frame.height);
+        // 可用空间随键盘变化，重新计算气泡高度（超限时收缩，文字在气泡内滚动）
+        WFCUBubbleFrame frame;
+        [self computeBubbleFrameForState:self.bubbleState frame:&frame];
+        self.fromBubbleFrame = frame;
+        self.toBubbleFrame = frame;
+        self.bubbleAnimDisplayLink.paused = YES;
+        [self applyBubbleFrame:&frame toFrame:&frame fraction:1.0];
     }];
 }
 

@@ -17,7 +17,7 @@ static const NSTimeInterval kMaxRecordingDuration = 60.0;      // 最长录音�
 static const NSTimeInterval kWaitEosTimeout = 8.0;             // 停止录音后等待剩余识别结果的基础时间：8秒
 // 停止录音后收到过识别结果，之后这么久没有新消息，认为已经识别完。
 // 服务端不支持 eos 指令或消息在转发中丢失时不会回复 [EOS]，靠它结束识别
-static const NSTimeInterval kWaitEosIdleAfterResult = 2.5;
+static const NSTimeInterval kWaitEosIdleAfterResult = 10;
 // 16kHz、16-bit 的音频每毫秒 32 字节
 static const NSInteger kPcmBytesPerMillisecond = 32;
 
