@@ -14,11 +14,10 @@
 #import <WFChatClient/WFCChatClient.h>
 
 static const NSTimeInterval kMaxRecordingDuration = 60.0;      // 最长录音时长：60秒
-static const NSTimeInterval kWaitEosTimeout = 8.0;             // 停止录音后等待剩余识别结果的最长时间：8秒
-// 停止录音后服务端一直没有推送消息，认为已经识别完。服务端不支持 eos 指令时不会回复 [EOS]，靠它结束识别
-static const NSTimeInterval kWaitEosIdleTimeout = 3.0;
-// 停止录音后收到过识别结果，之后这么久没有新消息，认为已经识别完
-static const NSTimeInterval kWaitEosIdleAfterResult = 1.5;
+static const NSTimeInterval kWaitEosTimeout = 8.0;             // 停止录音后等待剩余识别结果的基础时间：8秒
+// 停止录音后收到过识别结果，之后这么久没有新消息，认为已经识别完。
+// 服务端不支持 eos 指令或消息在转发中丢失时不会回复 [EOS]，靠它结束识别
+static const NSTimeInterval kWaitEosIdleAfterResult = 2.5;
 // 16kHz、16-bit 的音频每毫秒 32 字节
 static const NSInteger kPcmBytesPerMillisecond = 32;
 
@@ -79,11 +78,13 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
 
 - (void)startWithFeedAudio:(BOOL)feedAudio {
     if (self.state != WFCUAsrStateIdle) {
-        NSLog(@"[WFCUAsr] 正在识别中，无需重复开始");
+        NSLog(@"[WFCUAsr][Manager] 正在识别中，无需重复开始");
         return;
     }
     NSString *url = [WFCUConfigManager globalManager].asrStreamServiceUrl;
+    NSLog(@"[WFCUAsr][Manager] 开始识别 feedAudio=%d url=%@", feedAudio, url ?: @"(空)");
     if (!url.length) {
+        NSLog(@"[WFCUAsr][Manager] 未配置 asrStreamServiceUrl，无法识别");
         [self notifyError:@"未配置语音识别服务地址"];
         return;
     }
@@ -114,11 +115,14 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
         return;
     }
     __weak typeof(self) weakSelf = self;
+    NSTimeInterval authCodeStart = CACurrentMediaTime();
     [WFCUAsrAuth getAuthCode:^(NSString *authCode) {
         __strong typeof(weakSelf) self = weakSelf;
         if (!self) {
             return;
         }
+        NSLog(@"[WFCUAsr][Manager] 获取 authCode 成功 耗时=%.0fms 长度=%lu",
+              (CACurrentMediaTime() - authCodeStart) * 1000.0, (unsigned long)authCode.length);
         // 获取认证码期间，识别可能已经停止或取消
         if (self.wsClient == client) {
             [client connect:url clientId:clientId partialResult:partialResult authCode:authCode];
@@ -128,6 +132,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
         if (!self) {
             return;
         }
+        NSLog(@"[WFCUAsr][Manager] 获取 authCode 失败 code=%d", errorCode);
         if (self.wsClient == client) {
             [self failRecognition:[NSString stringWithFormat:@"获取认证码失败: %d", errorCode]];
         }
@@ -143,7 +148,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
         [self stopAudioRecording];
         if (hasAudio) {
             // 连接成功后发送完缓存的音频再结束，一直连不上时超时
-            NSLog(@"[WFCUAsr] 停止录音，连接成功后再结束识别");
+            NSLog(@"[WFCUAsr][Manager] 停止录音，连接成功后再结束识别");
             self.pendingStop = YES;
             [self cancelTimeout:&_maxDurationBlock];
             [self cancelTimeout:&_waitEosTimeoutBlock];
@@ -156,20 +161,28 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
             [self finishRecognition];
         }
     } else if (self.state == WFCUAsrStateRecording) {
-        NSLog(@"[WFCUAsr] 停止录音，等待剩余识别结果");
+        NSLog(@"[WFCUAsr][Manager] 停止录音，等待剩余识别结果");
         self.state = WFCUAsrStateFinishing;
         [self cancelTimeout:&_maxDurationBlock];
         [self stopAudioRecording];
         [self.wsClient sendEos];
-        // 一次提供了较长的音频时，服务端需要更多时间识别。按音频时长增加等待时间
+        // 服务端是按实时速度消费音频的：一次提供了较长的音频时（例如先按住说了十几秒才滑到"转文字"，
+        // 之前录到的音频会一次性补发过去），服务端要把积压的音频按实时速度消完才可能出结果，
+        // 所以停止后的等待时间要加上音频时长本身。按音频时长的一半、十分之一估算都会让长音频被过早结束，
+        // 表现为"说完滑到转文字，什么都没识别出来"。
         long long audioMs = self.feedAudioBytes / kPcmBytesPerMillisecond;
+        // 服务端处理速度受机器负载影响，实测能到音频时长的 1.6 倍，这里按 1.5 倍再加 8 秒基础时间留出余量
+        NSTimeInterval waitAfterEos = kWaitEosTimeout + audioMs * 1.5 / 1000.0;
+        NSLog(@"[WFCUAsr][Manager] 音频约 %lld ms，停止后最长等待 %.1f 秒（收到结果后 %.1f 秒无新消息就结束）",
+              audioMs, waitAfterEos, kWaitEosIdleAfterResult);
         [self cancelTimeout:&_waitEosTimeoutBlock];
         __weak typeof(self) weakSelf = self;
-        self.waitEosTimeoutBlock = [self scheduleAfter:kWaitEosTimeout + audioMs / 2000.0 block:^{
+        self.waitEosTimeoutBlock = [self scheduleAfter:waitAfterEos block:^{
             [weakSelf onWaitEosTimeout];
         }];
+        // 收到第一条结果前不能提前结束，否则积压的音频还没识别完就放弃了
         [self cancelTimeout:&_waitEosIdleBlock];
-        self.waitEosIdleBlock = [self scheduleAfter:kWaitEosIdleTimeout + audioMs / 10000.0 block:^{
+        self.waitEosIdleBlock = [self scheduleAfter:waitAfterEos block:^{
             [weakSelf onWaitEosIdle];
         }];
     }
@@ -185,7 +198,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
 
 - (void)cancelRecognition {
     if (self.state != WFCUAsrStateIdle) {
-        NSLog(@"[WFCUAsr] 取消识别");
+        NSLog(@"[WFCUAsr][Manager] 取消识别");
         [self cleanup];
     }
 }
@@ -198,16 +211,16 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
 
 - (void)onWaitEosTimeout {
     if (self.state == WFCUAsrStateConnecting) {
-        NSLog(@"[WFCUAsr] 连接语音识别服务超时");
+        NSLog(@"[WFCUAsr][Manager] 连接语音识别服务超时");
         [self failRecognition:@"连接语音识别服务超时"];
     } else {
-        NSLog(@"[WFCUAsr] 等待剩余识别结果超时，结束识别");
+        NSLog(@"[WFCUAsr][Manager] 等待剩余识别结果超时，结束识别");
         [self finishRecognition];
     }
 }
 
 - (void)onWaitEosIdle {
-    NSLog(@"[WFCUAsr] 没有收到 [EOS]，按已返回的识别结果结束识别");
+    NSLog(@"[WFCUAsr][Manager] 没有收到 [EOS]，按已返回的识别结果结束识别");
     [self finishRecognition];
 }
 
@@ -231,6 +244,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
         return;
     }
     self.state = WFCUAsrStateRecording;
+    NSLog(@"[WFCUAsr][Manager] 识别服务已连接");
     if (self.pendingStop) {
         self.pendingStop = NO;
         [self stopRecognition];
@@ -262,7 +276,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
 }
 
 - (void)asrWebSocketClient:(WFCUAsrWebSocketClient *)client didFailWithError:(NSString *)error {
-    NSLog(@"[WFCUAsr] 语音识别服务错误: %@", error);
+    NSLog(@"[WFCUAsr][Manager] 语音识别服务错误: %@ (state=%ld)", error, (long)self.state);
     if (self.state == WFCUAsrStateFinishing) {
         // 已经停止录音，保留已识别出的文本
         [self finishRecognition];
@@ -295,10 +309,10 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
     BOOL success = [recorder startRecording];
     // 启动失败时 PcmAudioRecorder 会回调 errorCallback，由它结束识别
     if (success) {
-        NSLog(@"[WFCUAsr] 录音已开始");
+        NSLog(@"[WFCUAsr][Manager] 录音已开始");
         __weak typeof(self) weakSelf2 = self;
         self.maxDurationBlock = [self scheduleAfter:kMaxRecordingDuration block:^{
-            NSLog(@"[WFCUAsr] 达到最大录音时长，自动停止");
+            NSLog(@"[WFCUAsr][Manager] 达到最大录音时长，自动停止");
             [weakSelf2 stopRecognition];
         }];
     }
@@ -320,7 +334,7 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
     if (self.hotwordOverEnabled) {
         NSRange match = [WFCUAsrManager hotwordOverRangeIn:self.recognizedText];
         if (match.location != NSNotFound) {
-            NSLog(@"[WFCUAsr] 检测到 Over 热词");
+            NSLog(@"[WFCUAsr][Manager] 检测到 Over 热词");
             NSString *text = [[WFCUAsrManager removeHotwordOverFrom:self.recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             id<WFCUAsrManagerDelegate> delegate = self.delegate;
             [self cleanup];
@@ -363,6 +377,11 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
     id<WFCUAsrManagerDelegate> delegate = self.delegate;
     // wf-voice 会把句号替换成逗号，去掉结尾多余的逗号
     NSString *text = [WFCUAsrManager trimTrailingCommas:[self getText]];
+    if (text.length == 0) {
+        NSLog(@"[WFCUAsr][Manager] 识别结束，但结果为空（收到音频 %lld 字节）", self.feedAudioBytes);
+    } else {
+        NSLog(@"[WFCUAsr][Manager] 识别结束，最终文本: %@", text);
+    }
     [self cleanup];
     if ([delegate respondsToSelector:@selector(asrManager:onFinalResult:)]) {
         [delegate asrManager:self onFinalResult:text];
@@ -373,6 +392,8 @@ typedef NS_ENUM(NSInteger, WFCUAsrState) {
     if (self.state == WFCUAsrStateIdle) {
         return;
     }
+    NSLog(@"[WFCUAsr][Manager] 识别失败: %@ (state=%ld, 音频 %lld 字节)",
+          message, (long)self.state, self.feedAudioBytes);
     id<WFCUAsrManagerDelegate> delegate = self.delegate;
     [self cleanup];
     if ([delegate respondsToSelector:@selector(asrManager:onError:)]) {

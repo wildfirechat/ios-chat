@@ -36,6 +36,17 @@ static const NSTimeInterval kPingInterval = 30.0;
 
 @implementation WFCUAsrWebSocketClient
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        // 必须在 init 里初始化：获取 authCode、建立连接都要时间，这期间录音已经在产生音频，
+        // 会先调用 sendAudioData 缓存起来。如果等到 connect 里才创建，先到的音频会被静默丢掉，
+        // 表现为"开始说话到连接建立之间的录音没有发过去"（例如按按住说话滑到转文字之前的录音）
+        _pendingAudio = [NSMutableArray array];
+    }
+    return self;
+}
+
 - (void)dealloc {
     [self.pingTimer invalidate];
     self.pingTimer = nil;
@@ -45,10 +56,11 @@ static const NSTimeInterval kPingInterval = 30.0;
        clientId:(NSString *)clientId
   partialResult:(BOOL)partialResult
        authCode:(NSString *)authCode {
-    NSLog(@"[WFCUAsr] 正在连接语音识别服务: %@", url);
+    NSLog(@"[WFCUAsr][WS] 开始连接 %@", url);
     if (@available(iOS 13.0, *)) {
         NSURL *nsUrl = [NSURL URLWithString:url];
         if (!nsUrl) {
+            NSLog(@"[WFCUAsr][WS] 地址无效: %@", url);
             [self notifyError:@"语音识别服务地址无效"];
             return;
         }
@@ -64,7 +76,10 @@ static const NSTimeInterval kPingInterval = 30.0;
                                                      delegate:[WFCCCertificateURLSessionDelegate delegateWithManager:[WFCCCertificateManager sharedManager]]
                                                 delegateQueue:nil];
         self.webSocketTask = [self.session webSocketTaskWithRequest:request];
-        self.pendingAudio = [NSMutableArray array];
+        // 注意：不要在这里重建 pendingAudio，connect 之前可能已经缓存了音频（见 init）
+        if (!self.pendingAudio) {
+            self.pendingAudio = [NSMutableArray array];
+        }
         self.opened = NO;
         self.disconnected = NO;
         [self.webSocketTask resume];
@@ -79,6 +94,7 @@ static const NSTimeInterval kPingInterval = 30.0;
                 return;
             }
             if (error) {
+                NSLog(@"[WFCUAsr][WS] 发送 clientId 失败: %@", error.localizedDescription);
                 [self handleFailure:error];
                 return;
             }
@@ -100,6 +116,9 @@ static const NSTimeInterval kPingInterval = 30.0;
             return;
         }
         if (!self.opened) {
+            if (!self.pendingAudio) {
+                self.pendingAudio = [NSMutableArray array];
+            }
             [self.pendingAudio addObject:pcmData];
             return;
         }
@@ -116,6 +135,7 @@ static const NSTimeInterval kPingInterval = 30.0;
             return;
         }
     }
+    NSLog(@"[WFCUAsr][WS] 发送 eos");
     uint8_t silence[kSilenceFrameBytes];
     memset(silence, 0, sizeof(silence));
     NSData *silenceData = [NSData dataWithBytes:silence length:sizeof(silence)];
@@ -161,10 +181,13 @@ static const NSTimeInterval kPingInterval = 30.0;
         [self.pendingAudio removeAllObjects];
         self.opened = YES;
     }
+    NSUInteger pendingBytes = 0;
     for (NSData *data in pending) {
+        pendingBytes += data.length;
         [self sendDataMessage:data];
     }
-    NSLog(@"[WFCUAsr] 连接成功，发送连接前缓存的音频 %lu 帧", (unsigned long)pending.count);
+    NSLog(@"[WFCUAsr][WS] 连接成功 partial=%d，补发连接前缓存的音频 %lu 帧 / %lu 字节",
+          partialResult, (unsigned long)pending.count, (unsigned long)pendingBytes);
     WFCUAsrWebSocketClient *client = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (client.disconnected) {
@@ -185,7 +208,7 @@ static const NSTimeInterval kPingInterval = 30.0;
         NSURLSessionWebSocketMessage *message = [[NSURLSessionWebSocketMessage alloc] initWithData:data];
         [task sendMessage:message completionHandler:^(NSError *error) {
             if (error) {
-                NSLog(@"[WFCUAsr] 发送音频数据失败: %@", error.localizedDescription);
+                NSLog(@"[WFCUAsr][WS] 发送音频数据失败: %@", error.localizedDescription);
             }
         }];
     }
@@ -200,7 +223,7 @@ static const NSTimeInterval kPingInterval = 30.0;
         NSURLSessionWebSocketMessage *message = [[NSURLSessionWebSocketMessage alloc] initWithString:text];
         [task sendMessage:message completionHandler:^(NSError *error) {
             if (error) {
-                NSLog(@"[WFCUAsr] 发送消息失败: %@", error.localizedDescription);
+                NSLog(@"[WFCUAsr][WS] 发送消息失败: %@", error.localizedDescription);
             }
         }];
     }
@@ -254,13 +277,17 @@ static const NSTimeInterval kPingInterval = 30.0;
         }
         [task sendPingWithPongReceiveHandler:^(NSError *error) {
             if (error) {
-                NSLog(@"[WFCUAsr] ping 失败: %@", error.localizedDescription);
+                NSLog(@"[WFCUAsr][WS] ping 失败: %@", error.localizedDescription);
             }
         }];
     }
 }
 
 - (void)handleText:(NSString *)message {
+    // 中间结果很频繁，不打印；其余消息（每句最终结果、[EOS]、[TRIAL] 等）打出来便于排查
+    if (![message isEqualToString:kMessagePong] && ![message hasPrefix:kMessagePartialPrefix]) {
+        NSLog(@"[WFCUAsr][WS] 收到服务端消息: %@", message);
+    }
     if ([message isEqualToString:kMessageEosAck]) {
         [self postToMain:^{
             if ([self.delegate respondsToSelector:@selector(asrWebSocketClientDidReceiveEos:)]) {
@@ -278,7 +305,7 @@ static const NSTimeInterval kPingInterval = 30.0;
         }
     } else if ([message hasPrefix:kMessageTrialPrefix]) {
         // 体验版每个连接只识别前 30 秒音频
-        NSLog(@"[WFCUAsr] %@", message);
+        NSLog(@"[WFCUAsr][WS] %@", message);
     } else if (![message isEqualToString:kMessagePong]) {
         NSString *text = [self.class parseResultText:message];
         if (text.length) {
@@ -312,6 +339,8 @@ static const NSTimeInterval kPingInterval = 30.0;
     } else {
         message = [NSString stringWithFormat:@"连接失败: %@", error.localizedDescription ?: @""];
     }
+    NSLog(@"[WFCUAsr][WS] 连接失败 status=%ld error=%@ (domain=%@ code=%ld)",
+          (long)statusCode, error.localizedDescription, error.domain, (long)error.code);
     [self notifyError:message];
 }
 

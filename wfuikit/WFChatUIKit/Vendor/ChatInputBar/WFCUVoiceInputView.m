@@ -27,6 +27,9 @@
 #define WFCU_VOICE_ACTION_TEXT       [UIColor colorWithRed:0xBD/255.f green:0xBD/255.f blue:0xBD/255.f alpha:1.f]
 #define WFCU_VOICE_SEND_BUTTON       [UIColor colorWithRed:0xDA/255.f green:0xDA/255.f blue:0xDA/255.f alpha:1.f]
 #define WFCU_VOICE_SEND_PRESSED      [UIColor colorWithRed:0xBD/255.f green:0xBD/255.f blue:0xBD/255.f alpha:1.f]
+// 发送按钮禁用态，与 Android 的 voice_input_send_button_bg.xml / voice_input_send_text.xml 一致
+#define WFCU_VOICE_SEND_DISABLED      [UIColor colorWithRed:0x4E/255.f green:0x4E/255.f blue:0x4E/255.f alpha:1.f]
+#define WFCU_VOICE_SEND_DISABLED_TEXT [UIColor colorWithRed:0x73/255.f green:0x73/255.f blue:0x73/255.f alpha:1.f]
 
 // App 主色调，与 Android 的 colorPrimary 一致
 static UIColor *WFCUAppPrimaryColor(void) {
@@ -767,8 +770,10 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGFloat width = rect.size.width;
-    CGFloat height = rect.size.height;
+    // 注意：必须用 bounds 而不是 drawRect 传入的 rect（脏区），
+    // 否则局部重绘时会按脏区尺寸画出一个尺寸/位置都不对的气泡
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
     CGFloat bodyBottom = height - self.tailHeight;
     if (width <= 0 || bodyBottom <= 0) return;
 
@@ -800,6 +805,52 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 
     [self.bubbleColor setFill];
     [tailPath fill];
+}
+
+@end
+
+#pragma mark - 4.1 编辑用输入框
+
+/**
+ * 编辑识别文字用的 UITextView。
+ *
+ * 文字要显示在蓝色气泡上，输入框必须完全透明。只设一次 backgroundColor 并不稳：
+ * UIAppearance（例如某些三方 SDK 给 UITextView 设了白底）是在视图加入 window 时才应用的，
+ * 会覆盖掉之前设置的 clearColor，结果气泡里就出现一块白色方块。
+ * 这里在 init / didMoveToWindow / layoutSubviews 里反复兜底，并把内部容器视图的背景也清掉。
+ */
+@interface WFCUVoiceEditTextView : UITextView
+@end
+
+@implementation WFCUVoiceEditTextView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self wfcu_clearBackground];
+    }
+    return self;
+}
+
+- (void)didMoveToWindow {
+    [super didMoveToWindow];
+    [self wfcu_clearBackground];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self wfcu_clearBackground];
+}
+
+- (void)wfcu_clearBackground {
+    self.backgroundColor = [UIColor clearColor];
+    self.opaque = NO;
+    self.layer.backgroundColor = [UIColor clearColor].CGColor;
+    // UITextView 内部还有自己的容器视图，一并清掉，避免残留白底
+    for (UIView *subview in self.subviews) {
+        subview.backgroundColor = [UIColor clearColor];
+        subview.opaque = NO;
+    }
 }
 
 @end
@@ -959,13 +1010,15 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
     // 4. 气泡及内容
     self.bubbleView = [[WFCUVoiceBubbleView alloc] initWithFrame:CGRectZero];
     self.bubbleView.alpha = 0;
+    // 子视图不允许超出气泡，避免文字/光标区域在气泡外露出边角
+    self.bubbleView.clipsToBounds = YES;
     [self addSubview:self.bubbleView];
 
     self.waveView = [[WFCUVoiceWaveView alloc] initWithFrame:CGRectZero];
     self.waveView.barColor = contentColor;
     [self.bubbleView addSubview:self.waveView];
 
-    self.textEditText = [[UITextView alloc] initWithFrame:CGRectZero];
+    self.textEditText = [[WFCUVoiceEditTextView alloc] initWithFrame:CGRectZero];
     self.textEditText.backgroundColor = [UIColor clearColor];
     self.textEditText.opaque = NO;
     self.textEditText.textColor = contentColor;
@@ -980,6 +1033,7 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
     [self.bubbleView addSubview:self.textEditText];
 
     self.hintLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.hintLabel.backgroundColor = [UIColor clearColor];
     self.hintLabel.textAlignment = NSTextAlignmentCenter;
     self.hintLabel.font = [UIFont systemFontOfSize:18];
     self.hintLabel.alpha = 0;
@@ -1044,11 +1098,16 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
     self.sendTextButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.sendTextButton setBackgroundImage:[UIImage imageWithColor:WFCU_VOICE_SEND_BUTTON size:CGSizeMake(1, 1)] forState:UIControlStateNormal];
     [self.sendTextButton setBackgroundImage:[UIImage imageWithColor:WFCU_VOICE_SEND_PRESSED size:CGSizeMake(1, 1)] forState:UIControlStateHighlighted];
+    // 与 Android 一致：识别没结束或者文字为空时按钮置灰（底色 #4E4E4E、文字 #737373），
+    // 否则删空文字后会一直留着一个浅色（看起来是白色）的方块
+    [self.sendTextButton setBackgroundImage:[UIImage imageWithColor:WFCU_VOICE_SEND_DISABLED size:CGSizeMake(1, 1)] forState:UIControlStateDisabled];
     [self.sendTextButton setTitle:WFCString(@"Send") forState:UIControlStateNormal];
     [self.sendTextButton setTitleColor:WFCU_VOICE_LABEL_SELECTED forState:UIControlStateNormal];
+    [self.sendTextButton setTitleColor:WFCU_VOICE_SEND_DISABLED_TEXT forState:UIControlStateDisabled];
     self.sendTextButton.titleLabel.font = [UIFont systemFontOfSize:19];
     self.sendTextButton.layer.cornerRadius = 37;
     self.sendTextButton.layer.masksToBounds = YES;
+    self.sendTextButton.enabled = NO;
     [self.sendTextButton addTarget:self action:@selector(onEditSendTextClick) forControlEvents:UIControlEventTouchUpInside];
     [self.editActionsLayout addSubview:self.sendTextButton];
 }
@@ -1233,10 +1292,11 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 
     self.textEditText.userInteractionEnabled = YES;
     self.textEditText.editable = YES;
-    [self.textEditText becomeFirstResponder];
+//    [self.textEditText becomeFirstResponder];
 
     self.waveView.loading = YES;
     [self animateBubbleToState:WFCUBubbleStateEdit];
+    [self updateSendTextButtonState];
 }
 
 - (void)updateEditingText:(NSString *)text finished:(BOOL)finished {
@@ -1248,10 +1308,20 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
         self.textEditText.text = text;
         [self animateBubbleToState:WFCUBubbleStateEdit];
     }
+    [self updateSendTextButtonState];
 }
 
 - (NSString *)editingText {
     return self.textEditText.text ?: @"";
+}
+
+/**
+ * 发送按钮的可用状态，和 Android 的 updateEditActions 一致：
+ * 识别结束、并且去掉首尾空白后还有文字时才能发送
+ */
+- (void)updateSendTextButtonState {
+    NSString *text = [self.textEditText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    self.sendTextButton.enabled = self.asrFinished && text.length > 0;
 }
 
 #pragma mark - 8. 气泡 Frame 计算与 Morphing 动画
@@ -1425,9 +1495,11 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
 
     CGFloat textWidth = cur.width - 40.0;
     self.textEditText.frame = CGRectMake(20.0, 18.0, textWidth, cur.height - self.bubbleView.tailHeight - 18.0 - cur.textBottomMargin);
+    // 文字/光标的可见性只由 textAlpha 控制：识别结束后声波隐藏（waveAlpha=0），
+    // 但文字仍要显示，所以这里颜色 alpha 固定为 1，不能用 waveA
     self.textEditText.alpha = cur.textAlpha;
-    self.textEditText.textColor = [UIColor colorWithRed:cur.waveR green:cur.waveG blue:cur.waveB alpha:cur.waveA];
-    self.textEditText.tintColor = [UIColor colorWithRed:cur.waveR green:cur.waveG blue:cur.waveB alpha:cur.waveA];
+    self.textEditText.textColor = [UIColor colorWithRed:cur.waveR green:cur.waveG blue:cur.waveB alpha:1.0];
+    self.textEditText.tintColor = [UIColor colorWithRed:cur.waveR green:cur.waveG blue:cur.waveB alpha:1.0];
 
     self.hintLabel.frame = CGRectMake(20.0, 18.0, textWidth, cur.height - self.bubbleView.tailHeight - 36.0);
     self.hintLabel.alpha = cur.hintAlpha;
@@ -1440,6 +1512,8 @@ static inline void WFCUSetFrameColor(WFCUBubbleFrame *frame, UIColor *color, BOO
     if (self.bubbleState == WFCUBubbleStateEdit) {
         [self animateBubbleToState:WFCUBubbleStateEdit];
     }
+    // 删空文字后发送按钮要置灰，不能一直留着一个浅色方块
+    [self updateSendTextButtonState];
 }
 
 - (void)onEditCancelClick {

@@ -768,10 +768,14 @@
         [self resetVoiceInputState];
         return;
     }
+    // 发送复用输入框那一套逻辑（清空、草稿、@、引用等），但发送完要保持用户原来的输入栏状态。
+    // sendAndCleanTextView 内部的 updateQuoteView:showKeyboard:YES 会把录音态切成键盘态，
+    // 所以先记下原状态，发完再恢复，避免按住说话发完文字后输入栏跳到文字输入模式
+    ChatInputBarStatus originalStatus = self.inputBarStatus;
     self.textInputView.text = text;
     [self resetVoiceInputState];
-    self.inputBarStatus = ChatInputBarKeyboardStatus;
     [self sendAndCleanTextView];
+    self.inputBarStatus = originalStatus;
 }
 
 - (void)resetVoiceInputState {
