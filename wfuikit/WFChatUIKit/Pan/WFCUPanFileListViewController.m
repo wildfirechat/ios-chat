@@ -13,9 +13,11 @@
 #import "WFCUImage.h"
 #import "WFCUPanUploadManager.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "MBProgressHUD.h"
 #import "UIFont+YH.h"
+#import "WFCUPanViewController.h"
+#import "WFCUForwardViewController.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUPanFileCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *iconView;

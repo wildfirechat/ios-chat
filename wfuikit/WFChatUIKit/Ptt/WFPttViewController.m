@@ -9,7 +9,6 @@
 #import "WFPttViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import <PttClient/WFPttClient.h>
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "WFCUUtilities.h"
 
 @interface WFPttViewController ()

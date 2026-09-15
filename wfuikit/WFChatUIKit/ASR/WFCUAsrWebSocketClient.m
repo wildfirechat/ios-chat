@@ -131,8 +131,12 @@ static const NSTimeInterval kPingInterval = 30.0;
 
 - (void)sendEos {
     @synchronized (self) {
-        if (!self.opened || self.disconnected || self.webSocketTask == nil) {
-            return;
+        if (@available(iOS 13.0, *)) {
+            if (!self.opened || self.disconnected || self.webSocketTask == nil) {
+                return;
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
     NSLog(@"[WFCUAsr][WS] 发送 eos");

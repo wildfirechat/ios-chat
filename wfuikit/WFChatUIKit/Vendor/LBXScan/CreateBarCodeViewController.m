@@ -11,9 +11,11 @@
 #import "LBXScanNative.h"
 #import "UIImageView+CornerRadius.h"
 #import <WFChatClient/WFCChatClient.h>
-#import <WFChatUIKit/WFChatUIKit.h>
 #import "SDWebImage/SDWebImage.h"
-
+#import "WFCUConfigManager.h"
+#import "QrCodeHelper.h"
+#import "WFCUImage.h"
+#import "WFCUPadUtility.h"
 
 @interface CreateBarCodeViewController ()
 @property (nonatomic, strong)UIImageView *logoView;

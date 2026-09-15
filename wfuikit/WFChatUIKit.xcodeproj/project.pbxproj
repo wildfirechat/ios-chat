@@ -188,11 +188,6 @@
 		2F5510E8217F5CC200F56C26 /* WFCUPluginBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */; };
 		2F5510EA217F5CC200F56C26 /* WFCUEmotionTextAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */; };
 		2F5510EC217F5CC200F56C26 /* WFCUVoiceRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */; };
-		A5A0000000000000000000B1 /* WFCUAsrAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A3 /* WFCUAsrAuth.m */; };
-		A5A0000000000000000000B2 /* WFCUAsrWebSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */; };
-		A5A0000000000000000000B3 /* WFCUPcmAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */; };
-		A5A0000000000000000000B4 /* WFCUAsrManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A9 /* WFCUAsrManager.m */; };
-		A5A0000000000000000000D1 /* WFCUVoiceInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000C2 /* WFCUVoiceInputView.m */; };
 		2F5510ED217F5CC200F56C26 /* WFCULocationPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */; };
 		2F5510EE217F5CC200F56C26 /* CCHMapTreeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */; };
 		2F5510EF217F5CC200F56C26 /* CCHMapClusterControllerDebugPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F550F21217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.h */; };
@@ -429,6 +424,13 @@
 		90414AFC21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 90414AFA21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.h */; };
 		90414AFD21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */; };
 		93B99771BBCE30E376535693 /* WFCUPadPrimaryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95435749C8C7671AD8E96D51 /* WFCUPadPrimaryNavigationController.m */; };
+		A5A0000000000000000000B1 /* WFCUAsrAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A3 /* WFCUAsrAuth.m */; };
+		A5A0000000000000000000B2 /* WFCUAsrWebSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */; };
+		A5A0000000000000000000B3 /* WFCUPcmAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */; };
+		A5A0000000000000000000B4 /* WFCUAsrManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000A9 /* WFCUAsrManager.m */; };
+		A5A0000000000000000000D1 /* WFCUVoiceInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000C2 /* WFCUVoiceInputView.m */; };
+		A5A0000000000000000000F1 /* WFCUCertImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */; };
+		A5A0000000000000000000F2 /* WFCUAFSecurityPolicy+Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */; };
 		B70162EB290E2F1700DCD651 /* MWTapDetectingImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D5290E2F1700DCD651 /* MWTapDetectingImageView.h */; };
 		B70162EC290E2F1700DCD651 /* MWPhoto.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D6290E2F1700DCD651 /* MWPhoto.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B70162ED290E2F1700DCD651 /* MWPhotoProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B70162D7290E2F1700DCD651 /* MWPhotoProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -464,8 +466,6 @@
 		B70775922881ABB1004034A5 /* wfc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2BCEC52E232E10DF00D55E0D /* wfc.strings */; };
 		B707759928823635004034A5 /* WFCUImage.h in Headers */ = {isa = PBXBuildFile; fileRef = B707759728823635004034A5 /* WFCUImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B707759A28823635004034A5 /* WFCUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B707759828823635004034A5 /* WFCUImage.m */; };
-		A5A0000000000000000000F1 /* WFCUCertImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */; };
-		A5A0000000000000000000F2 /* WFCUAFSecurityPolicy+Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */; };
 		B709CCE628F7B78C0036EDFA /* WFCUI420VideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */; };
 		B709CCE728F7B78C0036EDFA /* WFCUI420VideoFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */; };
 		B709CCE928F7B9EF0036EDFA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */; };
@@ -901,16 +901,6 @@
 		2F550F19217F5CC100F56C26 /* WFCUPluginBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPluginBoardView.m; sourceTree = "<group>"; };
 		2F550F1B217F5CC100F56C26 /* WFCUEmotionTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUEmotionTextAttachment.h; sourceTree = "<group>"; };
 		2F550F1D217F5CC100F56C26 /* WFCUVoiceRecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceRecordView.m; sourceTree = "<group>"; };
-		A5A0000000000000000000A2 /* WFCUAsrAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrAuth.h; sourceTree = "<group>"; };
-		A5A0000000000000000000A3 /* WFCUAsrAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrAuth.m; sourceTree = "<group>"; };
-		A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrWebSocketClient.h; sourceTree = "<group>"; };
-		A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrWebSocketClient.m; sourceTree = "<group>"; };
-		A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPcmAudioRecorder.h; sourceTree = "<group>"; };
-		A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPcmAudioRecorder.m; sourceTree = "<group>"; };
-		A5A0000000000000000000A8 /* WFCUAsrManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrManager.h; sourceTree = "<group>"; };
-		A5A0000000000000000000A9 /* WFCUAsrManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrManager.m; sourceTree = "<group>"; };
-		A5A0000000000000000000C1 /* WFCUVoiceInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVoiceInputView.h; sourceTree = "<group>"; };
-		A5A0000000000000000000C2 /* WFCUVoiceInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceInputView.m; sourceTree = "<group>"; };
 		2F550F1E217F5CC100F56C26 /* WFCULocationPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCULocationPoint.m; sourceTree = "<group>"; };
 		2F550F20217F5CC100F56C26 /* CCHMapTreeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCHMapTreeUtils.m; sourceTree = "<group>"; };
 		2F550F21217F5CC100F56C26 /* CCHMapClusterControllerDebugPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCHMapClusterControllerDebugPolygon.h; sourceTree = "<group>"; };
@@ -1146,6 +1136,20 @@
 		90414AFB21AF5A93008EF915 /* WFCUConversationSearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUConversationSearchTableViewCell.m; sourceTree = "<group>"; };
 		95435749C8C7671AD8E96D51 /* WFCUPadPrimaryNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadPrimaryNavigationController.m; sourceTree = "<group>"; };
 		97609B4A6692774CE3EABC16 /* WFCUPadSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPadSplitViewController.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A2 /* WFCUAsrAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrAuth.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A3 /* WFCUAsrAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrAuth.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrWebSocketClient.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrWebSocketClient.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPcmAudioRecorder.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUPcmAudioRecorder.m; sourceTree = "<group>"; };
+		A5A0000000000000000000A8 /* WFCUAsrManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUAsrManager.h; sourceTree = "<group>"; };
+		A5A0000000000000000000A9 /* WFCUAsrManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUAsrManager.m; sourceTree = "<group>"; };
+		A5A0000000000000000000C1 /* WFCUVoiceInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUVoiceInputView.h; sourceTree = "<group>"; };
+		A5A0000000000000000000C2 /* WFCUVoiceInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUVoiceInputView.m; sourceTree = "<group>"; };
+		A5A0000000000000000000E1 /* WFCUCertImageDownloaderOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCertImageDownloaderOperation.h; sourceTree = "<group>"; };
+		A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCertImageDownloaderOperation.m; sourceTree = "<group>"; };
+		A5A0000000000000000000E3 /* WFCUAFSecurityPolicy+Certificate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WFCUAFSecurityPolicy+Certificate.h"; sourceTree = "<group>"; };
+		A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WFCUAFSecurityPolicy+Certificate.m"; sourceTree = "<group>"; };
 		AA88ED0825C545C9BFD1DCCE /* WFCUPadSearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUPadSearchResultViewController.h; sourceTree = "<group>"; };
 		B70162D5290E2F1700DCD651 /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWTapDetectingImageView.h; sourceTree = "<group>"; };
 		B70162D6290E2F1700DCD651 /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhoto.h; sourceTree = "<group>"; };
@@ -1176,10 +1180,6 @@
 		B7016308290E346C00DCD651 /* DACircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DACircularProgressView.h; sourceTree = "<group>"; };
 		B707759728823635004034A5 /* WFCUImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUImage.h; sourceTree = "<group>"; };
 		B707759828823635004034A5 /* WFCUImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUImage.m; sourceTree = "<group>"; };
-		A5A0000000000000000000E1 /* WFCUCertImageDownloaderOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUCertImageDownloaderOperation.h; sourceTree = "<group>"; };
-		A5A0000000000000000000E2 /* WFCUCertImageDownloaderOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUCertImageDownloaderOperation.m; sourceTree = "<group>"; };
-		A5A0000000000000000000E3 /* WFCUAFSecurityPolicy+Certificate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WFCUAFSecurityPolicy+Certificate.h"; sourceTree = "<group>"; };
-		A5A0000000000000000000E4 /* WFCUAFSecurityPolicy+Certificate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WFCUAFSecurityPolicy+Certificate.m"; sourceTree = "<group>"; };
 		B709CCE428F7B78C0036EDFA /* WFCUI420VideoFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUI420VideoFrame.h; sourceTree = "<group>"; };
 		B709CCE528F7B78C0036EDFA /* WFCUI420VideoFrame.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WFCUI420VideoFrame.mm; sourceTree = "<group>"; };
 		B709CCE828F7B9EE0036EDFA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
@@ -1914,21 +1914,6 @@
 			path = Vendor;
 			sourceTree = "<group>";
 		};
-		A5A0000000000000000000A1 /* ASR */ = {
-			isa = PBXGroup;
-			children = (
-				A5A0000000000000000000A2 /* WFCUAsrAuth.h */,
-				A5A0000000000000000000A3 /* WFCUAsrAuth.m */,
-				A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */,
-				A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */,
-				A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */,
-				A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */,
-				A5A0000000000000000000A8 /* WFCUAsrManager.h */,
-				A5A0000000000000000000A9 /* WFCUAsrManager.m */,
-			);
-			path = ASR;
-			sourceTree = "<group>";
-		};
 		2F550EF3217F5CC000F56C26 /* ChatInputBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -2540,6 +2525,21 @@
 				B75D81632782B800009D4A19 /* WFAVEngineKit.xcframework */,
 			);
 			path = AVEngine;
+			sourceTree = "<group>";
+		};
+		A5A0000000000000000000A1 /* ASR */ = {
+			isa = PBXGroup;
+			children = (
+				A5A0000000000000000000A2 /* WFCUAsrAuth.h */,
+				A5A0000000000000000000A3 /* WFCUAsrAuth.m */,
+				A5A0000000000000000000A4 /* WFCUAsrWebSocketClient.h */,
+				A5A0000000000000000000A5 /* WFCUAsrWebSocketClient.m */,
+				A5A0000000000000000000A6 /* WFCUPcmAudioRecorder.h */,
+				A5A0000000000000000000A7 /* WFCUPcmAudioRecorder.m */,
+				A5A0000000000000000000A8 /* WFCUAsrManager.h */,
+				A5A0000000000000000000A9 /* WFCUAsrManager.m */,
+			);
+			path = ASR;
 			sourceTree = "<group>";
 		};
 		B70162D4290E2F1700DCD651 /* MWPhotoBrowser */ = {
@@ -3891,7 +3891,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
 				INFOPLIST_FILE = WFChatUIKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3923,7 +3923,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WFChatUIKit/Predefine.h";
 				INFOPLIST_FILE = WFChatUIKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
