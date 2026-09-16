@@ -152,7 +152,6 @@
 		B7B2F8412F0A0228001CBF4C /* WFCLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F83D2F0A0228001CBF4C /* WFCLocalization.m */; };
 		B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8432F0A0279001CBF4C /* WFCLanguageTableViewController.m */; };
 		B7B2F8452F0A0576001CBF4C /* SDWebImage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; };
-		B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7B2F84A2F0A0862001CBF4C /* ShareLocalizationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B2F8492F0A0862001CBF4C /* ShareLocalizationHelper.m */; };
 		B7C1775A2CE83720005A5E1B /* TYHWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C177572CE83720005A5E1B /* TYHWaterMark.m */; };
 		B7CB3A90289BB5CF00E9D688 /* WFCResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CB3A8F289BB5CF00E9D688 /* WFCResetPasswordViewController.m */; };
@@ -222,17 +221,6 @@
 				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B7B2F8472F0A0576001CBF4C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				B7B2F8462F0A0576001CBF4C /* SDWebImage.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1262,7 +1250,6 @@
 				2F56F6EF252C956700B829C4 /* Sources */,
 				2F56F6F0252C956700B829C4 /* Frameworks */,
 				2F56F6F1252C956700B829C4 /* Resources */,
-				B7B2F8472F0A0576001CBF4C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
