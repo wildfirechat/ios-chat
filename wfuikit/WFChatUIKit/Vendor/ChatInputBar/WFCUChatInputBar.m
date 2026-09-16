@@ -2334,7 +2334,7 @@
     }
 
     [self updatePlaceholderVisibility];
-    [self updateDshCommandMenu:textView.text];
+    //[self updateDshCommandMenu:textView.text];
     [self updateAgentCommandMenu:textView.text];
     if (textView.text.length > 0) {
         [self notifyTyping:0];
