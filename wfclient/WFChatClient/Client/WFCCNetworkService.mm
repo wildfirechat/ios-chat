@@ -1276,6 +1276,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     return mars::stn::isTCPShortLink()?YES:NO;
 }
 
+- (void)setUseWebsocket:(BOOL)useWebsocket {
+    mars::stn::setUseWebsocket(useWebsocket ? true:false);
+}
+
+- (BOOL)isUseWebsocket {
+    return mars::stn::isUseWebsocket()?YES:NO;
+}
+
 - (void)noUseFts {
     mars::stn::noUseFts();
 }

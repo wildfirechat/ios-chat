@@ -424,6 +424,21 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (BOOL)isTcpShortLink;
 
 /**
+ 使用websocket连接。需要专业版IM服务支持（2026.9.11及之后的版本）。
+ 注意：必须在connect之前调用，协议栈初始化时会确定长连接的类型，之后再调用不会生效。
+
+ @param useWebsocket 是否使用websocket
+ */
+- (void)setUseWebsocket:(BOOL)useWebsocket;
+
+/**
+ 是否使用websocket连接。
+
+ @return 是否使用websocket
+ */
+- (BOOL)isUseWebsocket;
+
+/**
  不使用FTS搜索。仅在connect之前调用有效。
  */
 - (void)noUseFts;
