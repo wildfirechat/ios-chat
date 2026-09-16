@@ -126,6 +126,7 @@
     [WFCCNetworkService sharedInstance].connectToServerDelegate = self;
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
+    [[WFCCNetworkService sharedInstance] setBackupAddress:@"10.43.43.66" port:80];
     [[WFCCNetworkService sharedInstance] setBackupAddressStrategy:0];
     [WFCCNetworkService sharedInstance].defaultPortraitProvider = [AppService sharedAppService];
     [WFCCNetworkService sharedInstance].urlRedirector = [[WFRedirector alloc] init];
