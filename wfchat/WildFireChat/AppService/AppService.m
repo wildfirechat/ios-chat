@@ -442,7 +442,7 @@ static AppService *sharedSingleton = nil;
 }
 
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin appServerAddress:(NSString *)appServerAddress success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:appServerAddress]];
     [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
@@ -1034,7 +1034,7 @@ static inline BOOL isHTTPURL(NSString *str) {
     NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *urlString = [NSString stringWithFormat:@"%@/version/check?platform=%d&currentVersion=%@&buildNumber=%@", WFCGetAppServerAddress(), platform, currentVersion, buildNumber];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
     
     [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];

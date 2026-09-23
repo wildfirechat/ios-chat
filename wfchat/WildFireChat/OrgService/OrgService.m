@@ -319,7 +319,7 @@ static OrgService *sharedSingleton = nil;
         return;
     }
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:WFCGetOrgServerAddress()]];
     
     [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
