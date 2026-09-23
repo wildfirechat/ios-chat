@@ -4857,15 +4857,22 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
     WFCCMessage *msg = self.imageMsgs[index];
     UIImage *image = nil;
     BOOL video = NO;
+    MWPhoto *photo;
     if([msg.content isKindOfClass:[WFCCImageMessageContent class]]) {
         WFCCImageMessageContent *imgCnt = (WFCCImageMessageContent *)msg.content;
         image = imgCnt.thumbnail;
+        if(image) {
+            photo = [MWPhoto photoWithImage:image];
+        } else if(imgCnt.thumbParameter) {
+            photo = [MWPhoto photoWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", imgCnt.remoteUrl, imgCnt.thumbParameter]]];
+        }
     } else if([msg.content isKindOfClass:[WFCCVideoMessageContent class]]) {
         WFCCVideoMessageContent *videoCnt = (WFCCVideoMessageContent *)msg.content;
         image = videoCnt.thumbnail;
         video = YES;
+        photo = [MWPhoto photoWithImage:image];
     }
-    MWPhoto *photo = [MWPhoto photoWithImage:image];
+    
     photo.isVideo = video;
     return photo;
 }

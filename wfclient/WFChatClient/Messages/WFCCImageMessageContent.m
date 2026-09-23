@@ -113,6 +113,9 @@
         UIImage *image = [UIImage imageWithContentsOfFile:self.localPath];
         _thumbnail = [WFCCUtilities generateThumbnail:image withWidth:120 withHeight:120];
     }
+    if(!_thumbnail && self.thumbParameter) {
+        return _thumbnail;
+    }
     if(!_thumbnail) {
         _thumbnail = [WFCCIMService sharedWFCIMService].defaultThumbnailImage;
     }
