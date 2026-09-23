@@ -1458,6 +1458,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     mars::stn::addHttpHeader([header UTF8String], value.length ? [value UTF8String] : "");
 }
 
+- (void)setHttpPrefixPath:(NSString *)prefixPath {
+    mars::stn::setHttpPrefixPath([prefixPath UTF8String]);
+}
+
+- (void)setHttpUploadPrefixPath:(NSString *)prefixPath {
+    mars::stn::setHttpUploadPrefixPath([prefixPath UTF8String]);
+}
+
 - (void)setProxyInfo:(NSString *)host ip:(NSString *)ip port:(int)port username:(NSString *)username password:(NSString *)password {
     mars::stn::setProxyInfo(host?[host UTF8String]:"", ip?[ip UTF8String]:"", port, username?[username UTF8String]:"", password?[password UTF8String]:"");
 }

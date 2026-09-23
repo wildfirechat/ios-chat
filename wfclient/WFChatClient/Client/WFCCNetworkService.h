@@ -578,6 +578,20 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
 - (void)addHttpHeader:(NSString *)header value:(NSString *)value;
 
 /**
+ 设置协议栈短连接HTTP请求的prefix path
+
+ @param prefixPath prefix path
+ */
+- (void)setHttpPrefixPath:(NSString *)prefixPath;
+
+/**
+ 设置协议栈上传文件的HTTP请求的prefix path
+
+ @param prefixPath prefix path
+ */
+- (void)setHttpUploadPrefixPath:(NSString *)prefixPath;
+
+/**
  设置代理，注意只能支持socks5代理，http代理无法支持，只有专业版支持此功能
 
  @param host     代理服务域名，host和ip至少要有一个有效值
