@@ -113,7 +113,9 @@
             downloadFailure:(void (^)(NSError *error))failure {
     AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
     NSMutableURLRequest *request =[serializer requestWithMethod:@"GET" URLString:requestURLString parameters:nil error:nil];
-    NSURLSessionDownloadTask *task = [[AFHTTPSessionManager manager] downloadTaskWithRequest:request progress:nil destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
+    NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
         return [NSURL fileURLWithPath:[savedPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{

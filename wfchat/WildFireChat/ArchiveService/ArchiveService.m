@@ -253,6 +253,8 @@ static ArchiveService *sharedSingleton = nil;
     }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0;

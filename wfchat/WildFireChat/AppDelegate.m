@@ -127,6 +127,27 @@
     [WFCCNetworkService sharedInstance].receiveMessageDelegate = self;
     [[WFCCNetworkService sharedInstance] setServerAddress:IM_SERVER_HOST];
     [[WFCCNetworkService sharedInstance] setBackupAddressStrategy:0];
+
+    // ===== 私有化部署（全WSS 单入口 + 自签 CA）必须设置这两项 =====
+    // 说明（见 SDK：wfclient/WFChatClient/Client/WFCCNetworkService.h）：
+    //   ① 部署只对外开 443 且由 nginx 终结 TLS，客户端必须走 websocket；
+    //   ② 服务端证书由内置 CA（cacert.crt，CN=wildfire-im）签发，用 UseTls 传入该 CA 做钉扎校验
+    //      （skipVerifyCert 传 NO = 不跳过校验；传 YES 仅临时排障用）。
+    // ⚠️ 这两个调用必须在连接建立（mars onCreate）之前执行，否则不生效。
+    [[WFCCNetworkService sharedInstance] setUseWebsocket:YES];
+    {
+        NSString *caCertPath = [[NSBundle mainBundle] pathForResource:@"cacert" ofType:@"crt"];
+        if (caCertPath.length == 0) {
+            caCertPath = [[NSBundle mainBundle] pathForResource:@"cacert" ofType:@"pem"];
+        }
+        if (caCertPath.length > 0) {
+            [[WFCCNetworkService sharedInstance] UseTls:NO selfSignedCerts:@[caCertPath]];
+            NSLog(@"[WFC] 协议栈 TLS 钉扎已启用（内置 CA：%@）", caCertPath.lastPathComponent);
+        } else {
+            NSLog(@"[WFC] 未找到内置 CA（cacert.crt）—— 协议栈可能因证书校验失败而连不上，"
+                   "请确认它已加入 App 的 Copy Bundle Resources");
+        }
+    }
     [WFCCNetworkService sharedInstance].defaultPortraitProvider = [AppService sharedAppService];
     [WFCCNetworkService sharedInstance].urlRedirector = [[WFRedirector alloc] init];
 //    [[WFCCNetworkService sharedInstance] setProxyInfo:nil ip:@"192.168.1.80" port:1080 username:nil password:nil];

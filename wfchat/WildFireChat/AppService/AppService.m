@@ -414,6 +414,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)probeAppServer:(NSString *)url completion:(void(^)(BOOL reachable))completion {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 5.0;
@@ -442,6 +443,7 @@ static AppService *sharedSingleton = nil;
 
 - (void)post:(NSString *)path data:(id)data isLogin:(BOOL)isLogin appServerAddress:(NSString *)appServerAddress success:(void(^)(NSDictionary *dict))successBlock error:(void(^)(NSError * _Nonnull error))errorBlock {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     
@@ -544,6 +546,7 @@ static AppService *sharedSingleton = nil;
         
         for (NSString *logFile in logFiles) {
             AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
             manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
             
             NSString *url = [WFCGetAppServerAddress() stringByAppendingFormat:@"/logs/%@/upload", [WFCCNetworkService sharedInstance].userId];
@@ -1032,6 +1035,8 @@ static inline BOOL isHTTPURL(NSString *str) {
     NSString *urlString = [NSString stringWithFormat:@"%@/version/check?platform=%d&currentVersion=%@&buildNumber=%@", WFCGetAppServerAddress(), platform, currentVersion, buildNumber];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [WFCAppCertPolicy applyTo:manager];   // 私有化部署：钉扎内置 CA
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     

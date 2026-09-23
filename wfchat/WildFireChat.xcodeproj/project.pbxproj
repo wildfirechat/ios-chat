@@ -21,6 +21,8 @@
 		2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F3F2442111F006BE3D8 /* WFCThemeTableViewController.m */; };
 		2B840F432442125B006BE3D8 /* WFCThemeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B840F422442125B006BE3D8 /* WFCThemeTableViewCell.m */; };
 		2E1D1FFC1FAF0AE600F4405D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */; };
+		BB28B28809AB9D5F6C9BF900 /* cacert.crt in Resources */ = {isa = PBXBuildFile; fileRef = E713449992679437A222C84F /* cacert.crt */; };
+		3D17BF02CBEB54B041452E3E /* WFCAppCertPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9134C85E56F03C94A23102EE /* WFCAppCertPolicy.m */; };
 		2E1D20021FAF0AE600F4405D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20001FAF0AE600F4405D /* Main.storyboard */; };
 		2E1D20041FAF0AE600F4405D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20031FAF0AE600F4405D /* Assets.xcassets */; };
 		2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E1D20051FAF0AE600F4405D /* LaunchScreen.storyboard */; };
@@ -258,6 +260,9 @@
 		2E1D1FF71FAF0AE600F4405D /* 野火IM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "野火IM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E713449992679437A222C84F /* cacert.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = cacert.crt; sourceTree = "<group>"; };
+		DB2B1198E038B5730E0B37DE /* WFCAppCertPolicy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCAppCertPolicy.h; sourceTree = "<group>"; };
+		9134C85E56F03C94A23102EE /* WFCAppCertPolicy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCAppCertPolicy.m; sourceTree = "<group>"; };
 		2E1D20011FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2E1D20031FAF0AE600F4405D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E1D20061FAF0AE600F4405D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -697,6 +702,9 @@
 				B78B184C2CF71943008A2C09 /* Vendor */,
 				2E1D1FFA1FAF0AE600F4405D /* AppDelegate.h */,
 				2E1D1FFB1FAF0AE600F4405D /* AppDelegate.m */,
+				E713449992679437A222C84F /* cacert.crt */,
+				DB2B1198E038B5730E0B37DE /* WFCAppCertPolicy.h */,
+				9134C85E56F03C94A23102EE /* WFCAppCertPolicy.m */,
 				BD491388F852427B98C2D0AE /* SceneDelegate.h */,
 				B19FEFF8908544218632F7FE /* SceneDelegate.m */,
 				B78DD43628167D1E009589F7 /* WFCCallKitManager.h */,
@@ -1359,6 +1367,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB28B28809AB9D5F6C9BF900 /* cacert.crt in Resources */,
 				2E1D20071FAF0AE600F4405D /* LaunchScreen.storyboard in Resources */,
 				2FBF915D232F6A47003521FF /* InfoPlist.strings in Resources */,
 				2F1B0DD321E1B38100139CB1 /* ring.caf in Resources */,
@@ -1424,6 +1433,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D17BF02CBEB54B041452E3E /* WFCAppCertPolicy.m in Sources */,
 				149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */,
 				2FEA5D6A21F4AC8900280B23 /* WFCLoginViewController.m in Sources */,
 				2F63892C254E81910084EEA6 /* WFCFavoriteUnknownCell.m in Sources */,

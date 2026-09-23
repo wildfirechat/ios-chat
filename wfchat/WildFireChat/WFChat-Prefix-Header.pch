@@ -11,6 +11,9 @@
 
 #import <UIKit/UIKit.h>
 
+// 私有化部署（自签 CA）下应用层 HTTPS 的证书策略（见 WFCAppCertPolicy.h）
+#import "WFCAppCertPolicy.h"
+
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 

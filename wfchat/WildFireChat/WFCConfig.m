@@ -11,7 +11,7 @@
 //IM服务HOST，域名或者IP，注意不能带http头，也不能带端口。
 //NSString *IM_SERVER_HOST = @"192.168.1.81";
 //NSString *IM_SERVER_HOST = @"2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10"; //ipv6地址，不能带[]和端口
-NSString *IM_SERVER_HOST = @"wildfirechat.net";
+NSString *IM_SERVER_HOST = @"101.35.103.221";
 
 // 主网媒体地址前缀，双网环境下用于头像/媒体类消息的 URL 转换。
 NSString *MAIN_MEDIA_URL_PREFIX = nil;
@@ -26,30 +26,30 @@ NSString *BACKUP_MEDIA_URL_PREFIX = nil;
 
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
 //NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
-NSString *APP_SERVER_ADDRESS = @"https://app.wildfirechat.net";
+NSString *APP_SERVER_ADDRESS = @"https://101.35.103.221/app";
 //应用服务备选地址，双网环境下使用。不需要双网时保持为 nil。
 NSString *APP_SERVER_BACKUP_ADDRESS = nil;
 
 //组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
 //组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
-NSString *ORG_SERVER_ADDRESS = @"https://org.wildfirechat.net";
+NSString *ORG_SERVER_ADDRESS = @"https://101.35.103.221/organication";
 //组织通讯录服务备选地址，双网环境下使用。
 NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
 
 //接龙服务地址，如果没有部署，可以设置为nil。
-NSString *COLLECTION_SERVER_ADDRESS = @"https://jielong.wildfirechat.net";
+NSString *COLLECTION_SERVER_ADDRESS = @"https://101.35.103.221/collection";
 //接龙服务备选地址，双网环境下使用。
 NSString *COLLECTION_SERVER_BACKUP_ADDRESS = nil;
 
 //投票服务地址，如果没有部署，可以设置为nil。
 //NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.81:8082";
-NSString *POLL_SERVER_ADDRESS = @"https://poll.wildfirechat.net";
+NSString *POLL_SERVER_ADDRESS = @"https://101.35.103.221/poll";
 //投票服务备选地址，双网环境下使用。
 NSString *POLL_SERVER_BACKUP_ADDRESS = nil;
 
 // 网盘服务地址，如果没有部署，可以设置为nil。
 //NSString *PAN_SERVER_ADDRESS = @"http://192.168.1.81:8083";
-NSString *PAN_SERVER_ADDRESS = @"https://pan.wildfirechat.net";
+NSString *PAN_SERVER_ADDRESS = nil;   // 本部署未提供服务（如需网盘服务再配置）
 //网盘服务备选地址，双网环境下使用。
 NSString *PAN_SERVER_BACKUP_ADDRESS = nil;
 
@@ -60,9 +60,9 @@ NSString *ARCHIVE_SERVER_BACKUP_ADDRESS = nil;
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
 // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
-NSString *ICE_ADDRESS = @"turn:turn.wildfirechat.net:3478";
-NSString *ICE_USERNAME = @"wfchat";
-NSString *ICE_PASSWORD = @"wfchatpwd";
+NSString *ICE_ADDRESS = @"turn:101.35.103.221:3478";
+NSString *ICE_USERNAME = @"wfturn";
+NSString *ICE_PASSWORD = @"Bv32mbJ2YQ5jhCfY";   // 本次全新部署生成；服务端改动后需同步（见 /var/wildfire/.env 的 TURN_PASSWORD）
 
 //用户协议和隐私政策，上线前请替换成您自己的内容
 NSString *USER_PRIVACY_URL = @"https://example.com/user_privacy.html";
@@ -79,14 +79,14 @@ NSString *WORK_PLATFORM_BACKUP_URL = nil;
 //语音转文字服务地址。关于语音转文字信息请参考：https://gitee.com/wfchat/asr-api 。
 //野火提供的测试服务会记录语音文件和转换后的文字，上线会有可能泄密风险。因此请确保务必上线时购买部署自己的语音转文字服务，或者设置为nil。
 //NSString *ASR_SERVICE_URL = nil;
-NSString *ASR_SERVICE_URL = @"https://app.wildfirechat.net/asr/api/recognize";
+NSString *ASR_SERVICE_URL = @"https://101.35.103.221/asr/api/recognize";
 //语音转文字服务备选地址，双网环境下使用。
 NSString *ASR_SERVICE_BACKUP_URL = nil;
 
 //实时语音输入服务地址。请配置为 asr-api 的实时语音识别地址，例如 wss://example.com/asr/api/stream。
 //连接时会在 HTTP header authCode 中带上从 IM 服务获取的认证码。内网测试时也可以直连 wf-voice 的 WebSocket 地址（默认端口 12436），
 //例如 ws://192.168.1.100:12436。wf-voice 本身没有鉴权，也不支持 wss，请勿直接暴露到公网。
-NSString *ASR_STREAM_SERVICE_URL = @"wss://app.wildfirechat.net/asr/api/stream";
+NSString *ASR_STREAM_SERVICE_URL = @"wss://101.35.103.221/asr/api/stream";
 //实时语音输入服务备选地址，双网环境下使用。
 NSString *ASR_STREAM_SERVICE_BACKUP_URL = nil;
 
