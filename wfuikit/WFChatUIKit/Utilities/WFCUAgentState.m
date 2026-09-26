@@ -124,8 +124,8 @@ static NSString *fmtAgentNum(NSNumber *num) {
 //AI 面板数据（scope=31 type=3，Agent_Command 207 query 组合查询结果）：
 //{model:{current,options[]}, effort:{current,options[]}, sandbox:{current,options[]},
 // preset:{current,options[{value,label}]}, approval:{current,options[{value,label}]},
-// plan:{on}, cwd, sessionId, dirs[]}；未设置/非法返回 nil
-//（preset/approval 为整体透传：可能缺失或 options 为空数组，由调用方容错）
+// mode:{current,options[{value,label}]}, plan:{on}, cwd, sessionId, dirs[]}；未设置/非法返回 nil
+//（preset/approval/mode 为整体透传：可能缺失或 options 为空数组，由调用方容错）
 + (NSDictionary *)agentPanelData:(WFCCConversation *)conversation {
     return [self agentPanelData:conversation robotUid:nil];
 }

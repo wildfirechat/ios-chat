@@ -4,7 +4,7 @@
 //
 //  Agent/AI 会话设置面板实现（静默通道）。
 //  打开：发 Agent_Command(207) query（组合查询）→ 插件聚合面板数据写 scope=31 type=3
-//  → 本端读 type=3 渲染（model/effort/preset/approval 下拉选项+当前值、sandbox 水平单选、
+//  → 本端读 type=3 渲染（model/effort/preset/approval 下拉选项+当前值、sandbox/mode 水平单选、
 //  plan switch、cwd 当前值+「切换」弹窗选目录）。
 //  操作：发 207 set（cmd=命令文本，如 "/model deepseek-official/xxx"），插件执行后写
 //  type=1 lastChange（标题状态行可见）+ 刷新 type=3；本端监听 kSettingUpdated 重读 type=3。
@@ -27,6 +27,9 @@
 //    或两字段整体缺失（旧版插件）时控件禁用、仅显示当前值文本，不隐藏整行；
 //    选中分别发 207 set /preset <value> 与 /approval <value>
 //  - 沙箱模式：三个水平单选按钮（只读/仅写工作区/完全放开），选中发 207 set /sandbox
+//  - 会话模式：两个水平单选按钮（打断（后到打断先到）/ 排队（串行等待）），选中发
+//    207 set /mode；选项本地固定两项，不依赖 type=3 mode.options——始终可切换，
+//    mode.current 存在时同步本地状态做服务端回显（插件缺该字段的旧版下保持本地值）
 //  - 计划模式：UISwitch 开关，发 /plan on|off
 //  - 底部：压缩上下文 / 重置会话 / 销毁会话（红色实底，强警告确认后发 /destroy）
 //
@@ -82,6 +85,23 @@ static NSString *agentSandboxShortLabel(NSString *value) {
     }
     if ([value isEqualToString:@"danger-full-access"]) {
         return @"完全放开";
+    }
+    return value;
+}
+
+//会话模式固定两项（本地兜底，与插件 CONV_MODES 一致）：控件始终可切换，不依赖 type=3 mode.options
+static NSArray<NSString *> *agentConvModeValues(void) {
+    return @[@"interrupt", @"queue"];
+}
+
+//会话模式文案（水平单选按钮用，与 PC/hm 端一致）：
+//interrupt=后到打断先到（新消息打断运行中的回合）/ queue=串行等待（按到达顺序排队）
+static NSString *agentConvModeLabel(NSString *value) {
+    if ([value isEqualToString:@"interrupt"]) {
+        return @"打断（后到打断先到）";
+    }
+    if ([value isEqualToString:@"queue"]) {
+        return @"排队（串行等待）";
     }
     return value;
 }
@@ -147,6 +167,7 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)NSString *currentSandbox;
 @property (nonatomic, strong)NSString *currentPreset;    //Agent 模式当前值（type=3 preset.current）
 @property (nonatomic, strong)NSString *currentApproval;  //工具审批策略当前值（type=3 approval.current）
+@property (nonatomic, strong)NSString *convMode;         //会话模式当前值（type=3 mode.current；本地默认 interrupt）
 @property (nonatomic, assign)BOOL planOn;
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *modelOptions;   //@{@"value": @"provider/id", @"label": ...}
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *effortOptions;  //@{@"value": id, @"label": id}
@@ -192,6 +213,9 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)WFCUAgentDropdownButton *presetDropdown;
 @property (nonatomic, strong)UILabel *approvalTitleLabel;
 @property (nonatomic, strong)WFCUAgentDropdownButton *approvalDropdown;
+@property (nonatomic, strong)UILabel *convModeTitleLabel;
+@property (nonatomic, strong)UIView *convModeContainer;
+@property (nonatomic, strong)NSMutableArray<WFCUAgentRadioButton *> *convModeRadios;
 @property (nonatomic, strong)UILabel *planTitleLabel;
 @property (nonatomic, strong)UISwitch *planSwitch;
 @property (nonatomic, strong)UILabel *planDescLabel;
@@ -878,6 +902,9 @@ static const CGFloat kAgentCwdManualH = 52;
         self.approvalOptions = @[];
         self.cwdCandidates = @[];
         self.sandboxRadios = [NSMutableArray array];
+        //会话模式：本地默认 interrupt（与插件默认一致）；type=3 mode.current 存在时覆盖（服务端回显）
+        self.convMode = @"interrupt";
+        self.convModeRadios = [NSMutableArray array];
         //目录列表 pending 表 + seq 种子（毫秒取模，与 207 其他指令风格一致；同一面板内自增避免 seq 冲突）
         self.pendingDirsRequests = [NSMutableDictionary dictionary];
         self.dirsSeqSeed = (NSInteger)([[NSDate date] timeIntervalSince1970] * 1000) % 100000;
@@ -1122,7 +1149,17 @@ static const CGFloat kAgentCwdManualH = 52;
     self.sandboxContainer = [[UIView alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:self.sandboxContainer];
 
-    //5. Agent 模式（preset，下拉选择；选项来自 type=3 preset.options{value,label}）
+    //5. 会话模式（两个水平单选按钮：打断（后到打断先到）/ 排队（串行等待））。
+    //固定两项、本地兜底：不依赖 type=3 mode.options，插件缺该字段（旧版）时同样可切换；
+    //current 由 type=3 mode.current 回显（见 loadPanelDataFromUserSetting）
+    self.convModeTitleLabel = [self makeSectionTitle:@"会话模式"];
+    [self.contentView addSubview:self.convModeTitleLabel];
+
+    self.convModeContainer = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.contentView addSubview:self.convModeContainer];
+    [self rebuildConvModeOptions];
+
+    //6. Agent 模式（preset，下拉选择；选项来自 type=3 preset.options{value,label}）
     self.presetTitleLabel = [self makeSectionTitle:@"Agent 模式"];
     [self.contentView addSubview:self.presetTitleLabel];
 
@@ -1134,7 +1171,7 @@ static const CGFloat kAgentCwdManualH = 52;
     };
     [self.contentView addSubview:self.presetDropdown];
 
-    //6. 工具审批（approval，下拉选择；选项来自 type=3 approval.options{value,label}）
+    //7. 工具审批（approval，下拉选择；选项来自 type=3 approval.options{value,label}）
     self.approvalTitleLabel = [self makeSectionTitle:@"工具审批"];
     [self.contentView addSubview:self.approvalTitleLabel];
 
@@ -1146,7 +1183,7 @@ static const CGFloat kAgentCwdManualH = 52;
     };
     [self.contentView addSubview:self.approvalDropdown];
 
-    //7. 计划模式
+    //8. 计划模式
     self.planTitleLabel = [self makeSectionTitle:@"计划模式"];
     [self.contentView addSubview:self.planTitleLabel];
 
@@ -1159,10 +1196,11 @@ static const CGFloat kAgentCwdManualH = 52;
     self.planDescLabel.textColor = [UIColor colorWithHexString:@"0x666666"];
     [self.contentView addSubview:self.planDescLabel];
 
-    //模型/推理等级/沙箱/Agent 模式/工具审批选项（当前数据为空，仅占位）
+    //模型/推理等级/沙箱/会话模式/Agent 模式/工具审批选项（当前数据为空，仅占位）
     [self refreshModelDropdown];
     [self refreshEffortDropdown];
     [self rebuildSandboxOptions];
+    [self rebuildConvModeOptions];
     [self refreshPresetDropdown];
     [self refreshApprovalDropdown];
     [self refreshCurrentValues];
@@ -1242,6 +1280,25 @@ static const CGFloat kAgentCwdManualH = 52;
     [self refreshCurrentValues];
 }
 
+//重建会话模式水平单选按钮（两个，横向均分）。
+//与沙箱不同：选项本地固定两项（interrupt/queue），不读 type=3 mode.options——插件缺
+//mode 字段（旧版）时控件同样存在且可切换；current 回显由 refreshCurrentValues 刷新选中态。
+//固定两项只需建一次：重复调用直接返回，避免 kSettingUpdated 高频推送把用户按下的控件重建掉。
+- (void)rebuildConvModeOptions {
+    if (self.convModeRadios.count) {
+        return;
+    }
+    for (NSString *value in agentConvModeValues()) {
+        WFCUAgentRadioButton *radio = [[WFCUAgentRadioButton alloc] initWithFrame:CGRectZero];
+        radio.optionValue = value;
+        radio.titleText = agentConvModeLabel(value);
+        [radio addTarget:self action:@selector(onSelectConvModeRadio:) forControlEvents:UIControlEventTouchUpInside];
+        [self.convModeContainer addSubview:radio];
+        [self.convModeRadios addObject:radio];
+    }
+    [self refreshCurrentValues];
+}
+
 //按当前数据自上而下重排 contentView 全部区块
 - (void)layoutAll {
     CGFloat contentW = self.contentView.bounds.size.width;
@@ -1294,7 +1351,22 @@ static const CGFloat kAgentCwdManualH = 52;
     }
     y += kAgentRadioHeight;
 
-    //5. Agent 模式（下拉选择，与模型/推理等级同款行）
+    //5. 会话模式（两个水平单选：打断（后到打断先到）/ 排队（串行等待））
+    y += sectionGap;
+    self.convModeTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
+    y += 20 + 6;
+
+    self.convModeContainer.frame = CGRectMake(x, y, contentW - 32, kAgentRadioHeight);
+    CGFloat convRadioGap = 8;
+    CGFloat convRadioW = (contentW - 32 - convRadioGap) / 2.0;
+    NSInteger convIdx = 0;
+    for (WFCUAgentRadioButton *radio in self.convModeRadios) {
+        radio.frame = CGRectMake(convIdx * (convRadioW + convRadioGap), 0, convRadioW, kAgentRadioHeight);
+        convIdx++;
+    }
+    y += kAgentRadioHeight;
+
+    //6. Agent 模式（下拉选择，与模型/推理等级同款行）
     y += sectionGap;
     self.presetTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
     y += 20 + 6;
@@ -1302,7 +1374,7 @@ static const CGFloat kAgentCwdManualH = 52;
     self.presetDropdown.frame = CGRectMake(x, y, contentW - 32, 38);
     y += 38;
 
-    //6. 工具审批（下拉选择，与模型/推理等级同款行）
+    //7. 工具审批（下拉选择，与模型/推理等级同款行）
     y += sectionGap;
     self.approvalTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
     y += 20 + 6;
@@ -1310,7 +1382,7 @@ static const CGFloat kAgentCwdManualH = 52;
     self.approvalDropdown.frame = CGRectMake(x, y, contentW - 32, 38);
     y += 38;
 
-    //7. 计划模式
+    //8. 计划模式
     y += sectionGap;
     self.planTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
     y += 20 + 6;
@@ -1331,6 +1403,10 @@ static const CGFloat kAgentCwdManualH = 52;
     [self.approvalDropdown updateContent];
     for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.radioSelected = [radio.optionValue isEqualToString:self.currentSandbox];
+    }
+    //会话模式选中态（本地默认/乐观值 + type=3 mode.current 回显都走这里）
+    for (WFCUAgentRadioButton *radio in self.convModeRadios) {
+        radio.radioSelected = [radio.optionValue isEqualToString:self.convMode];
     }
     self.cwdValueLabel.text = self.currentCwd.length ? [NSString stringWithFormat:@"当前：%@", self.currentCwd] : @"当前：—";
     self.planSwitch.on = self.planOn;
@@ -1467,6 +1543,16 @@ static const CGFloat kAgentCwdManualH = 52;
         self.approvalOptions = [arr copy];
     }
 
+    //会话模式（mode）：只读 current 做服务端回显——重开面板时不再显示回默认值。
+    //选项本地固定两项（控件始终可切换），故不解析 mode.options；字段缺失（旧版插件）或
+    //current 为空时保持本地默认/乐观更新值不动。
+    NSDictionary *mode = data[@"mode"];
+    if ([mode isKindOfClass:[NSDictionary class]]) {
+        if ([mode[@"current"] isKindOfClass:[NSString class]] && [mode[@"current"] length]) {
+            self.convMode = mode[@"current"];
+        }
+    }
+
     //计划模式
     NSDictionary *plan = data[@"plan"];
     if ([plan isKindOfClass:[NSDictionary class]]) {
@@ -1496,6 +1582,7 @@ static const CGFloat kAgentCwdManualH = 52;
     [self refreshModelDropdown];
     [self refreshEffortDropdown];
     [self rebuildSandboxOptions];
+    [self rebuildConvModeOptions];
     [self refreshPresetDropdown];
     [self refreshApprovalDropdown];
     [self refreshCurrentValues];
@@ -1560,6 +1647,19 @@ static const CGFloat kAgentCwdManualH = 52;
     self.currentSandbox = sender.optionValue;
     [self refreshCurrentValues];
     [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/sandbox %@", sender.optionValue]];
+    [self flashApplying];
+}
+
+//切换会话模式：本地乐观更新 + 刷新选中态 + 207 set /mode <value>。
+//固定两项、始终可切换（不依赖服务端 options）；插件执行后写 type=1 lastChange 并刷新
+//type=3，本端由 loadPanelDataFromUserSetting 读 mode.current 校正（服务端回显为权威）。
+- (void)onSelectConvModeRadio:(WFCUAgentRadioButton *)sender {
+    if (self.applying || !sender.optionValue.length || [sender.optionValue isEqualToString:self.convMode]) {
+        return;
+    }
+    self.convMode = sender.optionValue;
+    [self refreshCurrentValues];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/mode %@", sender.optionValue]];
     [self flashApplying];
 }
 
@@ -1915,6 +2015,10 @@ static const NSTimeInterval kAgentDirsRequestTimeout = 5.0;
     self.modelDropdown.enabled = enabled;
     self.effortDropdown.enabled = enabled;
     for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
+        radio.enabled = enabled;
+    }
+    //会话模式：固定两项、始终可切换，仅随操作冷却短暂禁用（防连点）
+    for (WFCUAgentRadioButton *radio in self.convModeRadios) {
         radio.enabled = enabled;
     }
     //Agent 模式/工具审批：选项为空（部署未提供 / 旧版插件无该字段）时保持禁用，仅显示当前值文本
