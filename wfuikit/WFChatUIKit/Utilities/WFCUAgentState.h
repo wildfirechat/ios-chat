@@ -7,8 +7,9 @@
 //  "<convType>-<line>-<target>_1_<机器人uid>"；Token 统计 type=2（独立通道）：
 //  回合结束必推 {usage, turn, context, cacheHitRatePct, speed, metricsAt}，
 //  独立于状态推送（含出错/取消）；AI 面板数据 type=3（组合查询结果）：
-//  打开面板发 Agent_Command(207) query 后插件聚合 {model, effort, sandbox, plan,
-//  cwd, sessionId, dirs} 写入，操作（207 set）后插件写 type=1 lastChange 并刷新 type=3。
+//  打开面板发 Agent_Command(207) query 后插件聚合 {model, effort, sandbox, preset,
+//  approval, plan, cwd, sessionId, dirs} 写入，操作（207 set）后插件写 type=1
+//  lastChange 并刷新 type=3。
 //  server 统一在 scope=31 key 尾部追加机器人 uid（无旧式无后缀 key），读取不做精确
 //  key 匹配：全量读 scope=31（getUserSettings:）后取首个 key 以
 //  "<convType>-<line>-<target>_<type>_" 前缀开头的条目（agentStateKey: 等返回该前缀）。
@@ -60,7 +61,9 @@ extern NSString *const WFCUAgentAnsweredNotification;
 
 /// 读取 AI 面板数据（scope=31 type=3，Agent_Command 207 query 组合查询结果，按 "<...>_3_" 前缀匹配）：
 /// {model:{current,options[]}, effort:{current,options[]}, sandbox:{current,options[]},
-///  plan:{on}, cwd, sessionId, dirs[]}。未设置/非法时返回 nil。
+///  preset:{current,options[{value,label}]}, approval:{current,options[{value,label}]},
+///  plan:{on}, cwd, sessionId, dirs[]}。preset/approval 可能整体缺失（旧版插件）或
+/// options 为空数组（部署未提供 preset 服务）；未设置/非法时返回 nil。
 + (nullable NSDictionary *)agentPanelData:(WFCCConversation *)conversation;
 
 // ===================== 多机器人（多 agent）支持 =====================

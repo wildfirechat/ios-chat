@@ -4,8 +4,8 @@
 //
 //  Agent/AI 会话设置面板实现（静默通道）。
 //  打开：发 Agent_Command(207) query（组合查询）→ 插件聚合面板数据写 scope=31 type=3
-//  → 本端读 type=3 渲染（model/effort 下拉选项+当前值、sandbox 水平单选、plan switch、
-//  cwd 当前值+「切换」弹窗选目录）。
+//  → 本端读 type=3 渲染（model/effort/preset/approval 下拉选项+当前值、sandbox 水平单选、
+//  plan switch、cwd 当前值+「切换」弹窗选目录）。
 //  操作：发 207 set（cmd=命令文本，如 "/model deepseek-official/xxx"），插件执行后写
 //  type=1 lastChange（标题状态行可见）+ 刷新 type=3；本端监听 kSettingUpdated 重读 type=3。
 //  目录列表：type=3 已移除内联 dirs（单条设置值 4096 上限，超限会整条 JSON 失效），
@@ -22,6 +22,10 @@
 //    候选列表 + 当前值，当前值不在候选时补入并标注"（当前）"；选中发 207 set /model|/effort）
 //  - 工作目录：显示当前值 + 「切换」按钮，点切换弹出独立目录选择界面（候选来自
 //    209 op=dirs 应答，老插件回退 type=3 dirs），选中发 207 set /cwd
+//  - Agent 模式 / 工具审批：下拉选择（与模型/推理等级同款控件；选项为 {value,label}
+//    对象数组，字段与 model.options 同构）；Agent 模式选项为空（部署未提供 preset 服务）
+//    或两字段整体缺失（旧版插件）时控件禁用、仅显示当前值文本，不隐藏整行；
+//    选中分别发 207 set /preset <value> 与 /approval <value>
 //  - 沙箱模式：三个水平单选按钮（只读/仅写工作区/完全放开），选中发 207 set /sandbox
 //  - 计划模式：UISwitch 开关，发 /plan on|off
 //  - 底部：压缩上下文 / 重置会话 / 销毁会话（红色实底，强警告确认后发 /destroy）
@@ -141,10 +145,14 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)NSString *currentEffort;
 @property (nonatomic, strong)NSString *currentCwd;
 @property (nonatomic, strong)NSString *currentSandbox;
+@property (nonatomic, strong)NSString *currentPreset;    //Agent 模式当前值（type=3 preset.current）
+@property (nonatomic, strong)NSString *currentApproval;  //工具审批策略当前值（type=3 approval.current）
 @property (nonatomic, assign)BOOL planOn;
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *modelOptions;   //@{@"value": @"provider/id", @"label": ...}
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *effortOptions;  //@{@"value": id, @"label": id}
 @property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *sandboxOptions; //@{@"value": mode, @"label": ...}
+@property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *presetOptions;  //@{@"value": preset, @"label": ...}（空 = 未提供 preset 服务/旧版插件）
+@property (nonatomic, strong)NSArray<NSDictionary<NSString *, NSString *> *> *approvalOptions; //@{@"value": policy, @"label": ...}（空 = 字段缺失/旧版插件）
 @property (nonatomic, strong)NSArray<NSString *> *cwdCandidates;
 //目录列表按需获取（207 op=dirs → 209 Agent_Command_Result 应答）：
 //pending 表 key = seq，value = @{@"robotId": 目标机器人(空=会话默认), @"sentAt": NSDate, @"retried": @(BOOL)}
@@ -180,6 +188,10 @@ static NSString *agentSandboxShortLabel(NSString *value) {
 @property (nonatomic, strong)UILabel *sandboxTitleLabel;
 @property (nonatomic, strong)UIView *sandboxContainer;
 @property (nonatomic, strong)NSMutableArray<WFCUAgentRadioButton *> *sandboxRadios;
+@property (nonatomic, strong)UILabel *presetTitleLabel;
+@property (nonatomic, strong)WFCUAgentDropdownButton *presetDropdown;
+@property (nonatomic, strong)UILabel *approvalTitleLabel;
+@property (nonatomic, strong)WFCUAgentDropdownButton *approvalDropdown;
 @property (nonatomic, strong)UILabel *planTitleLabel;
 @property (nonatomic, strong)UISwitch *planSwitch;
 @property (nonatomic, strong)UILabel *planDescLabel;
@@ -861,6 +873,9 @@ static const CGFloat kAgentCwdManualH = 52;
         self.modelOptions = @[];
         self.effortOptions = @[];
         self.sandboxOptions = defaultSandboxOptions();
+        //Agent 模式/工具审批：默认空（= 未提供/旧版插件，控件禁用），由 type=3 面板数据填充
+        self.presetOptions = @[];
+        self.approvalOptions = @[];
         self.cwdCandidates = @[];
         self.sandboxRadios = [NSMutableArray array];
         //目录列表 pending 表 + seq 种子（毫秒取模，与 207 其他指令风格一致；同一面板内自增避免 seq 冲突）
@@ -1107,7 +1122,31 @@ static const CGFloat kAgentCwdManualH = 52;
     self.sandboxContainer = [[UIView alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:self.sandboxContainer];
 
-    //5. 计划模式
+    //5. Agent 模式（preset，下拉选择；选项来自 type=3 preset.options{value,label}）
+    self.presetTitleLabel = [self makeSectionTitle:@"Agent 模式"];
+    [self.contentView addSubview:self.presetTitleLabel];
+
+    self.presetDropdown = [[WFCUAgentDropdownButton alloc] initWithFrame:CGRectZero];
+    self.presetDropdown.dropPresenter = self;
+    self.presetDropdown.placeholder = @"—";
+    self.presetDropdown.onSelect = ^(NSString *value) {
+        [ws onSelectPresetValue:value];
+    };
+    [self.contentView addSubview:self.presetDropdown];
+
+    //6. 工具审批（approval，下拉选择；选项来自 type=3 approval.options{value,label}）
+    self.approvalTitleLabel = [self makeSectionTitle:@"工具审批"];
+    [self.contentView addSubview:self.approvalTitleLabel];
+
+    self.approvalDropdown = [[WFCUAgentDropdownButton alloc] initWithFrame:CGRectZero];
+    self.approvalDropdown.dropPresenter = self;
+    self.approvalDropdown.placeholder = @"—";
+    self.approvalDropdown.onSelect = ^(NSString *value) {
+        [ws onSelectApprovalValue:value];
+    };
+    [self.contentView addSubview:self.approvalDropdown];
+
+    //7. 计划模式
     self.planTitleLabel = [self makeSectionTitle:@"计划模式"];
     [self.contentView addSubview:self.planTitleLabel];
 
@@ -1120,10 +1159,12 @@ static const CGFloat kAgentCwdManualH = 52;
     self.planDescLabel.textColor = [UIColor colorWithHexString:@"0x666666"];
     [self.contentView addSubview:self.planDescLabel];
 
-    //模型/推理等级/沙箱选项（当前数据为空，仅占位）
+    //模型/推理等级/沙箱/Agent 模式/工具审批选项（当前数据为空，仅占位）
     [self refreshModelDropdown];
     [self refreshEffortDropdown];
     [self rebuildSandboxOptions];
+    [self refreshPresetDropdown];
+    [self refreshApprovalDropdown];
     [self refreshCurrentValues];
     [self layoutAll];
 }
@@ -1140,6 +1181,24 @@ static const CGFloat kAgentCwdManualH = 52;
     self.effortDropdown.options = self.effortOptions ?: @[];
     self.effortDropdown.selectedValue = self.currentEffort ?: @"";
     [self.effortDropdown updateContent];
+}
+
+//刷新 Agent 模式下拉：选项取自 type=3 preset.options（{value,label} 对象数组，与 model 同构）。
+//options 为空（部署未提供 preset 服务）或字段缺失（旧版插件）→ 禁用控件，仅显示 current 文本；
+//current 不在 options 时由 updateContent 补入并标注"（当前）"，保证展示真实当前值
+- (void)refreshPresetDropdown {
+    self.presetDropdown.options = self.presetOptions ?: @[];
+    self.presetDropdown.selectedValue = self.currentPreset ?: @"";
+    [self.presetDropdown updateContent];
+    self.presetDropdown.enabled = self.presetOptions.count > 0 && !self.applying;
+}
+
+//刷新工具审批下拉：选项取自 type=3 approval.options（{value,label} 对象数组）；空/缺失同样禁用
+- (void)refreshApprovalDropdown {
+    self.approvalDropdown.options = self.approvalOptions ?: @[];
+    self.approvalDropdown.selectedValue = self.currentApproval ?: @"";
+    [self.approvalDropdown updateContent];
+    self.approvalDropdown.enabled = self.approvalOptions.count > 0 && !self.applying;
 }
 
 //重建沙箱模式水平单选按钮（三个，横向均分）。
@@ -1235,7 +1294,23 @@ static const CGFloat kAgentCwdManualH = 52;
     }
     y += kAgentRadioHeight;
 
-    //5. 计划模式
+    //5. Agent 模式（下拉选择，与模型/推理等级同款行）
+    y += sectionGap;
+    self.presetTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
+    y += 20 + 6;
+
+    self.presetDropdown.frame = CGRectMake(x, y, contentW - 32, 38);
+    y += 38;
+
+    //6. 工具审批（下拉选择，与模型/推理等级同款行）
+    y += sectionGap;
+    self.approvalTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
+    y += 20 + 6;
+
+    self.approvalDropdown.frame = CGRectMake(x, y, contentW - 32, 38);
+    y += 38;
+
+    //7. 计划模式
     y += sectionGap;
     self.planTitleLabel.frame = CGRectMake(x, y, contentW - 32, 20);
     y += 20 + 6;
@@ -1252,6 +1327,8 @@ static const CGFloat kAgentCwdManualH = 52;
 - (void)refreshCurrentValues {
     [self.modelDropdown updateContent];
     [self.effortDropdown updateContent];
+    [self.presetDropdown updateContent];
+    [self.approvalDropdown updateContent];
     for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.radioSelected = [radio.optionValue isEqualToString:self.currentSandbox];
     }
@@ -1346,6 +1423,50 @@ static const CGFloat kAgentCwdManualH = 52;
         }
     }
 
+    //Agent 模式（preset）：current + options[{value,label}]（与 model 同构，直接复用下拉控件）。
+    //options 可能为空数组（部署未提供 preset 服务）→ 同样置空数组，控件由 refreshPresetDropdown 禁用
+    NSDictionary *preset = data[@"preset"];
+    if ([preset isKindOfClass:[NSDictionary class]]) {
+        if ([preset[@"current"] isKindOfClass:[NSString class]] && [preset[@"current"] length]) {
+            self.currentPreset = preset[@"current"];
+        }
+        NSArray *opts = [preset[@"options"] isKindOfClass:[NSArray class]] ? preset[@"options"] : @[];
+        NSMutableArray<NSDictionary<NSString *, NSString *> *> *arr = [NSMutableArray array];
+        for (id o in opts) {
+            if (![o isKindOfClass:[NSDictionary class]]) {
+                continue;
+            }
+            NSString *value = [o[@"value"] isKindOfClass:[NSString class]] ? o[@"value"] : nil;
+            NSString *label = [o[@"label"] isKindOfClass:[NSString class]] && [o[@"label"] length] ? o[@"label"] : value;
+            if (value.length) {
+                [arr addObject:@{@"value": value, @"label": label.length ? label : value}];
+            }
+        }
+        //空数组同样写入：部署未提供 preset 服务时控件禁用（仅显示 current 值），不隐藏整行
+        self.presetOptions = [arr copy];
+    }
+
+    //工具审批（approval）：current + options[{value,label}]；字段整体缺失（旧版插件）时保持空数组 → 控件禁用
+    NSDictionary *approval = data[@"approval"];
+    if ([approval isKindOfClass:[NSDictionary class]]) {
+        if ([approval[@"current"] isKindOfClass:[NSString class]] && [approval[@"current"] length]) {
+            self.currentApproval = approval[@"current"];
+        }
+        NSArray *opts = [approval[@"options"] isKindOfClass:[NSArray class]] ? approval[@"options"] : @[];
+        NSMutableArray<NSDictionary<NSString *, NSString *> *> *arr = [NSMutableArray array];
+        for (id o in opts) {
+            if (![o isKindOfClass:[NSDictionary class]]) {
+                continue;
+            }
+            NSString *value = [o[@"value"] isKindOfClass:[NSString class]] ? o[@"value"] : nil;
+            NSString *label = [o[@"label"] isKindOfClass:[NSString class]] && [o[@"label"] length] ? o[@"label"] : value;
+            if (value.length) {
+                [arr addObject:@{@"value": value, @"label": label.length ? label : value}];
+            }
+        }
+        self.approvalOptions = [arr copy];
+    }
+
     //计划模式
     NSDictionary *plan = data[@"plan"];
     if ([plan isKindOfClass:[NSDictionary class]]) {
@@ -1375,6 +1496,8 @@ static const CGFloat kAgentCwdManualH = 52;
     [self refreshModelDropdown];
     [self refreshEffortDropdown];
     [self rebuildSandboxOptions];
+    [self refreshPresetDropdown];
+    [self refreshApprovalDropdown];
     [self refreshCurrentValues];
     [self layoutAll];
 }
@@ -1437,6 +1560,28 @@ static const CGFloat kAgentCwdManualH = 52;
     self.currentSandbox = sender.optionValue;
     [self refreshCurrentValues];
     [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/sandbox %@", sender.optionValue]];
+    [self flashApplying];
+}
+
+//切换 Agent 模式：207 set /preset <value>（插件执行后写 type=1 lastChange 并刷新 type=3）
+- (void)onSelectPresetValue:(NSString *)value {
+    if (self.applying || !value.length) {
+        return;
+    }
+    self.currentPreset = value;
+    [self refreshCurrentValues];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/preset %@", value]];
+    [self flashApplying];
+}
+
+//切换工具审批策略：207 set /approval <value>（同上）
+- (void)onSelectApprovalValue:(NSString *)value {
+    if (self.applying || !value.length) {
+        return;
+    }
+    self.currentApproval = value;
+    [self refreshCurrentValues];
+    [self sendAgentCommand:@"set" cmd:[NSString stringWithFormat:@"/approval %@", value]];
     [self flashApplying];
 }
 
@@ -1772,6 +1917,9 @@ static const NSTimeInterval kAgentDirsRequestTimeout = 5.0;
     for (WFCUAgentRadioButton *radio in self.sandboxRadios) {
         radio.enabled = enabled;
     }
+    //Agent 模式/工具审批：选项为空（部署未提供 / 旧版插件无该字段）时保持禁用，仅显示当前值文本
+    self.presetDropdown.enabled = enabled && self.presetOptions.count > 0;
+    self.approvalDropdown.enabled = enabled && self.approvalOptions.count > 0;
     self.cwdSwitchBtn.enabled = enabled;
     self.planSwitch.enabled = enabled;
     self.compactBtn.enabled = enabled;
