@@ -1475,6 +1475,7 @@ static WFCCNetworkService * sharedSingleton = nil;
 }
 
 -(void)UseTls:(BOOL)skipVerifyCert selfSignedCerts:(NSArray<NSString *> *)certs {
+    mars::app::SetCallback(mars::app::AppCallBack::Instance());
     std::list<std::string> selfSigendCerts;
     for (NSString *cert in certs) {
         selfSigendCerts.push_back(cert.UTF8String);
