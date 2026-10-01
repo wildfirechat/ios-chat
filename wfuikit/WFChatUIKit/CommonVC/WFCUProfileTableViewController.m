@@ -461,8 +461,8 @@
                 self.momentCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            // 添加"他/她的网盘"入口（域外用户不显示）
-            if([WFCUConfigManager globalManager].panServiceProvider && ![WFCCUtilities isExternalTarget:self.userId]) {
+            // 添加"他/她的网盘"入口（网盘未配置或域外用户不显示）
+            if([WFCUConfigManager isPanConfigured] && ![WFCCUtilities isExternalTarget:self.userId]) {
                 self.panCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"panCell"];
                 self.panCell.textLabel.text = @"他/她的网盘";
                 self.panCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

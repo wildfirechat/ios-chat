@@ -31,7 +31,20 @@ typedef NS_ENUM(NSInteger, WFCUPanFileType) {
 @property (nonatomic, copy) NSString *createdAt;
 @property (nonatomic, copy) NSString *updatedAt;
 
+/// 文档接口（recent/with-me）附带：VIEW / EDIT
+@property (nonatomic, copy, nullable) NSString *permission;
+/// 文档接口（recent/with-me）附带：打开/分享时间
+@property (nonatomic, copy, nullable) NSString *openedAt;
+
 + (instancetype)fromDictionary:(NSDictionary *)dict;
+
+/// 小写扩展名（不含点）
+- (NSString *)extension;
+- (BOOL)isFolder;
+/// 是否可以用在线文档打开（不是文件夹且扩展名属于 Word/Excel/PPT/PDF 组）
+- (BOOL)canOpenOnline;
+/// 人类可读的大小，如 1.2 MB
+- (NSString *)sizeText;
 
 @end
 

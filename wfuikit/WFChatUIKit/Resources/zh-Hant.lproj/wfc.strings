@@ -714,6 +714,26 @@
 "Copy"="複製";
 "CannotCopyToSelf"="不能將文件夾複製到自身內";
 "SaveToPan"="保存到網盤";
+"SaveToPanAndOpen"="存到網盤並打開";
+"SavedToPan"="已保存到網盤";
+"SaveToPanFailed"="保存到網盤失敗";
+"DocOnlinePreview"="線上看";
+"Download"="下載";
+"CloudDrive"="雲盤";
+"OnlineDocs"="文檔";
+"RecentDocs"="最近打開";
+"NewDoc"="新建";
+"NewDocument"="新建文檔";
+"NewSpreadsheet"="新建表格";
+"NewPresentation"="新建演示";
+"UnnamedDoc"="未命名文檔";
+"UnnamedSheet"="未命名表格";
+"UnnamedSlide"="未命名演示";
+"OpenSourceLicense"="開源許可";
+"SelectGroup"="選擇群聊";
+"LoadFailedRetry"="載入失敗，請重試";
+"Rename"="重命名";
+"NewName"="新名稱";
 
 "AIGeneratedContent"="本內容由AI生成";
 

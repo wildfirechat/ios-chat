@@ -46,6 +46,7 @@
 #import "WFCUMessageCell.h"
 #import "WFCUPanFile.h"
 #import "WFCUPanSpace.h"
+#import "WFCUPanDocUtils.h"
 
 #import "UIView+Toast.h"
 
@@ -3033,6 +3034,17 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
             return;
         }
         
+        // 文档格式且网盘可用时，优先在只读在线文档里打开
+        if ([WFCUConfigManager isPanConfigured] && [WFCUPanDocUtils isOnlineDocName:fileContent.name]) {
+            __weak typeof(self)wsdoc = self;
+            [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:model.message.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
+                [wsdoc openOnlineDocWithUrl:authorizedUrl name:fileContent.name];
+            } error:^(int error_code) {
+                [wsdoc openOnlineDocWithUrl:fileContent.remoteUrl name:fileContent.name];
+            }];
+            return;
+        }
+        
         __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:model.message.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
             WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
@@ -3483,6 +3495,17 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         [self.navigationController pushViewController:vc animated:YES];
     } else if ([msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
         WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+        
+        // 文档格式且网盘可用时，优先在只读在线文档里打开
+        if ([WFCUConfigManager isPanConfigured] && [WFCUPanDocUtils isOnlineDocName:fileContent.name]) {
+            __weak typeof(self)wsdoc = self;
+            [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
+                [wsdoc openOnlineDocWithUrl:authorizedUrl name:fileContent.name];
+            } error:^(int error_code) {
+                [wsdoc openOnlineDocWithUrl:fileContent.remoteUrl name:fileContent.name];
+            }];
+            return;
+        }
         
         __weak typeof(self)ws = self;
         [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
@@ -4048,13 +4071,30 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         }
     }
     
-    // 保存到网盘
-    if ([msg.content isKindOfClass:[WFCCFileMessageContent class]] &&
-        [WFCUConfigManager globalManager].panServiceProvider) {
+    // 文件消息：在线预览 / 存到网盘 / 存到网盘并打开 / 下载
+    BOOL isFileMessage = [msg.content isKindOfClass:[WFCCFileMessageContent class]];
+    if (isFileMessage && [WFCUConfigManager isPanConfigured]) {
+        WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+        if ([WFCUPanDocUtils isOnlineDocName:fileContent.name]) {
+            [menuItems addObject:[KxMenuItem menuItem:WFCString(@"DocOnlinePreview")
+                                                image:nil
+                                               target:self
+                                               action:@selector(onMenuDocOnlinePreview:)]];
+        }
         [menuItems addObject:[KxMenuItem menuItem:WFCString(@"SaveToPan")
                                             image:nil
                                            target:self
                                            action:@selector(onMenuSaveToPan:)]];
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"SaveToPanAndOpen")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuSaveToPanAndOpen:)]];
+    }
+    if (isFileMessage) {
+        [menuItems addObject:[KxMenuItem menuItem:WFCString(@"Download")
+                                            image:nil
+                                           target:self
+                                           action:@selector(onMenuDownloadFile:)]];
     }
     
     // 语音转文字
@@ -4213,6 +4253,18 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
     [self performSaveToPan:nil];
 }
 
+- (void)onMenuSaveToPanAndOpen:(KxMenuItem *)item {
+    [self performSaveToPanAndOpen:nil];
+}
+
+- (void)onMenuDocOnlinePreview:(KxMenuItem *)item {
+    [self performDocOnlinePreview:nil];
+}
+
+- (void)onMenuDownloadFile:(KxMenuItem *)item {
+    [self performDownloadFile:nil];
+}
+
 
 -(BOOL)canBecomeFirstResponder {
     return YES;
@@ -4220,7 +4272,7 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if(self.cell4Menu) {
-        if (action == @selector(performDelete:) || action == @selector(performCancel:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:) || action == @selector(performToText:) || action == @selector(performSaveToPan:)) {
+        if (action == @selector(performDelete:) || action == @selector(performCancel:) || action == @selector(performCopy:) || action == @selector(performForward:) || action == @selector(performRecall:) || action == @selector(performComplain:) || action == @selector(performMultiSelect:) || action == @selector(performQuote:) || action == @selector(performFavorite:) || action == @selector(performToText:) || action == @selector(performSaveToPan:) || action == @selector(performSaveToPanAndOpen:) || action == @selector(performDocOnlinePreview:) || action == @selector(performDownloadFile:)) {
             return YES; //显示自定义的菜单项
         } else {
             return NO;
@@ -4581,6 +4633,79 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
 }
 
 - (void)performSaveToPan:(id)sender {
+    [self saveFileMessageToPanWithOpen:NO];
+}
+
+- (void)performSaveToPanAndOpen:(id)sender {
+    [self saveFileMessageToPanWithOpen:YES];
+}
+
+// 只读在线预览文档消息（doc 格式），走内置 WebView 的在线文档页
+- (void)performDocOnlinePreview:(id)sender {
+    WFCCMessage *msg = self.cell4Menu.model.message;
+    if (![msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
+        return;
+    }
+    WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
+        [ws openOnlineDocWithUrl:authorizedUrl name:fileContent.name];
+    } error:^(int error_code) {
+        [ws openOnlineDocWithUrl:fileContent.remoteUrl name:fileContent.name];
+    }];
+}
+
+// 下载文件消息：交给系统
+- (void)performDownloadFile:(id)sender {
+    WFCCMessage *msg = self.cell4Menu.model.message;
+    if (![msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
+        return;
+    }
+    WFCCFileMessageContent *fileContent = (WFCCFileMessageContent *)msg.content;
+    __weak typeof(self)ws = self;
+    [[WFCCIMService sharedWFCIMService] getAuthorizedMediaUrl:msg.messageUid mediaType:Media_Type_FILE mediaPath:fileContent.remoteUrl success:^(NSString *authorizedUrl, NSString *backupUrl) {
+        [ws openUrlExternally:authorizedUrl];
+    } error:^(int error_code) {
+        [ws openUrlExternally:fileContent.remoteUrl];
+    }];
+}
+
+- (void)openOnlineDocWithUrl:(NSString *)url name:(NSString *)name {
+    NSString *docUrl = [WFCUPanDocUtils docViewUrl:url name:name];
+    if (docUrl.length == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
+        });
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+        bvc.url = docUrl;
+        bvc.hidenOpenInBrowser = YES;
+        bvc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:bvc animated:YES];
+    });
+}
+
+- (void)openUrlExternally:(NSString *)url {
+    NSURL *nsurl = url.length ? [NSURL URLWithString:url] : nil;
+    if (!nsurl) {
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:nsurl options:@{} completionHandler:^(BOOL success) {
+                if (!success) {
+                    NSLog(@"无法打开URL: %@", url);
+                }
+            }];
+        } else {
+            [[UIApplication sharedApplication] openURL:nsurl];
+        }
+    });
+}
+
+- (void)saveFileMessageToPanWithOpen:(BOOL)openAfterSave {
     // 保存文件到网盘
     WFCCMessage *msg = self.cell4Menu.model.message;
     if (![msg.content isKindOfClass:[WFCCFileMessageContent class]]) {
@@ -4594,18 +4719,18 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
     [[WFCUConfigManager globalManager].panServiceProvider getMySpacesWithSuccess:^(NSArray<WFCUPanSpace *> *spaces) {
         if (spaces.count == 0) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [ws.view makeToast:@"没有可用的网盘空间" duration:1 position:CSToastPositionCenter];
+                [ws.view makeToast:WFCString(@"NoPrivateSpace") duration:1 position:CSToastPositionCenter];
             });
             return;
         }
         
         // 显示选择空间的 ActionSheet
         dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"SaveToPan") message:@"选择要保存到的空间" preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:WFCString(@"SaveToPan") message:WFCString(@"SelectTargetSpace") preferredStyle:UIAlertControllerStyleActionSheet];
             
             for (WFCUPanSpace *space in spaces) {
                 [alert addAction:[UIAlertAction actionWithTitle:space.name style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [ws saveFileToSpace:space fileContent:fileContent];
+                    [ws saveFileToSpace:space fileContent:fileContent openAfterSave:openAfterSave];
                 }]];
             }
             
@@ -4619,20 +4744,20 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         });
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ws.view makeToast:@"获取网盘空间失败" duration:1 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"PanNotAvailable") duration:1 position:CSToastPositionCenter];
         });
     }];
 }
 
 // 保存文件到指定空间
-- (void)saveFileToSpace:(WFCUPanSpace *)space fileContent:(WFCCFileMessageContent *)fileContent {
+- (void)saveFileToSpace:(WFCUPanSpace *)space fileContent:(WFCCFileMessageContent *)fileContent openAfterSave:(BOOL)openAfterSave {
     __weak typeof(self)ws = self;
     
     // 首先检查空间写入权限
     [[WFCUConfigManager globalManager].panServiceProvider checkSpaceWritePermission:space.spaceId success:^(BOOL hasPermission) {
         if (!hasPermission) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [ws.view makeToast:@"没有权限写入该空间" duration:1 position:CSToastPositionCenter];
+                [ws.view makeToast:WFCString(@"NoPermission") duration:1 position:CSToastPositionCenter];
             });
             return;
         }
@@ -4651,16 +4776,34 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
                                                                     copy:YES 
                                                                  success:^(WFCUPanFile *file) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [ws.view makeToast:@"已保存到网盘" duration:1 position:CSToastPositionCenter];
+                [ws.view makeToast:WFCString(@"SavedToPan") duration:1 position:CSToastPositionCenter];
+                if (openAfterSave && file) {
+                    if ([WFCUPanDocUtils isOnlineDocName:file.name]) {
+                        NSString *docUrl = [WFCUPanDocUtils docOpenUrl:file.fileId];
+                        if (docUrl.length) {
+                            WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+                            bvc.url = docUrl;
+                            bvc.hidenOpenInBrowser = YES;
+                            bvc.hidesBottomBarWhenPushed = YES;
+                            [ws.navigationController pushViewController:bvc animated:YES];
+                        }
+                    } else {
+                        [[WFCUConfigManager globalManager].panServiceProvider getFileDownloadUrl:file.fileId success:^(NSString *url) {
+                            [ws openUrlExternally:url];
+                        } error:^(int errorCode, NSString *message) {
+                            NSLog(@"Get download URL error: %d, %@", errorCode, message);
+                        }];
+                    }
+                }
             });
         } error:^(int errorCode, NSString *message) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [ws.view makeToast:@"保存失败" duration:1 position:CSToastPositionCenter];
+                [ws.view makeToast:WFCString(@"SaveToPanFailed") duration:1 position:CSToastPositionCenter];
             });
         }];
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ws.view makeToast:@"检查权限失败" duration:1 position:CSToastPositionCenter];
+            [ws.view makeToast:WFCString(@"CheckPermissionFailed") duration:1 position:CSToastPositionCenter];
         });
     }];
 }

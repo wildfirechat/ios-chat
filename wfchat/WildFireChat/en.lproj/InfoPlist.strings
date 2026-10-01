@@ -434,3 +434,5 @@ ReportMessage="If you find any content that violates laws and morality, or your 
 "MessagesCountLabel"="Messages";
 "MessageBracket"="[Message]";
 "Pan"="NetDisk";
+"CloudDrive"="Cloud Drive";
+"OnlineDocs"="Docs";

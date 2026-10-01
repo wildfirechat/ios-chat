@@ -16,6 +16,8 @@
 #import "MBProgressHUD.h"
 #import "UIFont+YH.h"
 #import "WFCUPanViewController.h"
+#import "WFCUPanDocUtils.h"
+#import "WFCUBrowserViewController.h"
 #import "WFCUForwardViewController.h"
 #import "WFCUUtilities.h"
 
@@ -744,6 +746,18 @@
         
         [self.navigationController pushViewController:vc animated:YES];
     } else {
+        // 文档格式优先用在线文档打开（编辑/查看）
+        if (file.canOpenOnline && [WFCUConfigManager isPanConfigured]) {
+            NSString *docUrl = [WFCUPanDocUtils docOpenUrl:file.fileId];
+            if (docUrl.length) {
+                WFCUBrowserViewController *bvc = [[WFCUBrowserViewController alloc] init];
+                bvc.url = docUrl;
+                bvc.hidenOpenInBrowser = YES;
+                bvc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:bvc animated:YES];
+                return;
+            }
+        }
         [[WFCUConfigManager globalManager].panServiceProvider getFileDownloadUrl:file.fileId success:^(NSString *url) {
             NSLog(@"Download URL: %@", url);
             if (url.length > 0) {

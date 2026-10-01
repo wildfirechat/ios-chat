@@ -42,7 +42,7 @@
 //                     @{@"title":@"Things", @"image":@"discover_things",@"des":@"Things"}
     ]];
     
-    if(PAN_SERVER_ADDRESS || PAN_SERVER_BACKUP_ADDRESS) {
+    if([WFCUConfigManager isPanConfigured]) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
     }
     

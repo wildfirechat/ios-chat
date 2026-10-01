@@ -41,6 +41,8 @@
 #define File_Settings_Cell 2
 #define Safe_Setting_Cell 3
 #define More_Setting_Cell 4
+#define CloudDrive_Cell 5
+#define OnlineDocs_Cell 6
 
 @implementation WFCMeTableViewController
 
@@ -82,22 +84,28 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFontScaleChanged:) name:WFCUFontScaleDidChangeNotification object:nil];
     
+    NSMutableArray *items = [NSMutableArray array];
     if ([[WFCCIMService sharedWFCIMService] isCommercialServer]) {
-        self.itemDataSource = @[
+        [items addObjectsFromArray:@[
             @{@"title":LocalizedString(@"Message"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
             @{@"title":LocalizedString(@"Favorite"), @"image":@"favorite_settings", @"type":@(Favorite_Settings_Cell)},
             @{@"title":LocalizedString(@"File"), @"image":@"file_settings", @"type":@(File_Settings_Cell)},
-            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)},
-            @{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}
-        ];
+            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)}
+        ]];
     } else {
-        self.itemDataSource = @[
+        [items addObjectsFromArray:@[
             @{@"title":LocalizedString(@"MessageNotification"), @"image":@"notification_setting", @"type":@(Notification_Setting_Cell)},
             @{@"title":LocalizedString(@"Favorite"), @"image":@"favorite_settings", @"type":@(Favorite_Settings_Cell)},
-            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)},
-            @{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}
-        ];
+            @{@"title":LocalizedString(@"AccountSafety"), @"image":@"safe_setting", @"type":@(Safe_Setting_Cell)}
+        ]];
     }
+    // 云盘 / 在线文档入口：仅在网盘已配置时显示
+    if ([WFCUConfigManager isPanConfigured]) {
+        [items addObject:@{@"title":LocalizedString(@"CloudDrive"), @"image":@"net_disk", @"type":@(CloudDrive_Cell)}];
+        [items addObject:@{@"title":LocalizedString(@"OnlineDocs"), @"image":@"dev_docs", @"type":@(OnlineDocs_Cell)}];
+    }
+    [items addObject:@{@"title":LocalizedString(@"Settings"), @"image":@"MoreSetting", @"type":@(More_Setting_Cell)}];
+    self.itemDataSource = items;
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
 }
 
@@ -214,6 +222,15 @@
            WFCSecurityTableViewController * stvc = [[WFCSecurityTableViewController alloc] init];
            stvc.hidesBottomBarWhenPushed = YES;
            [self.navigationController pushViewController:stvc animated:YES];
+       } else if(type == CloudDrive_Cell) {
+           WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
+           vc.viewMode = WFCUPanViewModeAll;
+           vc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:vc animated:YES];
+       } else if(type == OnlineDocs_Cell) {
+           WFCUPanDocsViewController *vc = [[WFCUPanDocsViewController alloc] init];
+           vc.hidesBottomBarWhenPushed = YES;
+           [self.navigationController pushViewController:vc animated:YES];
        } else if(type == More_Setting_Cell) {
            WFCSettingTableViewController *vc = [[WFCSettingTableViewController alloc] init];
                   vc.hidesBottomBarWhenPushed = YES;

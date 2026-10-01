@@ -340,6 +340,107 @@ static PanService *sharedSingleton = nil;
     }];
 }
 
+#pragma mark - 在线文档
+
+- (BOOL)isPanConfigured {
+    return WFCGetPanServerAddress().length > 0;
+}
+
+- (NSString *)panServerAddress {
+    return WFCGetPanServerAddress();
+}
+
+- (void)getRecentDocsWithSuccess:(void(^)(NSArray<WFCUPanFile *> *files))successBlock
+                           error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/api/v1/docs/recent";
+    
+    [self postWithAuth:path data:@{} success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSMutableArray *files = [NSMutableArray array];
+            NSArray *items = dict[@"data"];
+            if ([items isKindOfClass:[NSArray class]]) {
+                for (NSDictionary *item in items) {
+                    if (![item isKindOfClass:[NSDictionary class]]) {
+                        continue;
+                    }
+                    // RecentDocVO: {file:{...}, permission, openedAt}
+                    NSDictionary *fileDict = [item[@"file"] isKindOfClass:[NSDictionary class]] ? item[@"file"] : item;
+                    WFCUPanFile *file = [WFCUPanFile fromDictionary:fileDict];
+                    if (file) {
+                        file.permission = item[@"permission"] ?: file.permission;
+                        file.openedAt = item[@"openedAt"] ?: file.openedAt;
+                        [files addObject:file];
+                    }
+                }
+            }
+            if(successBlock) successBlock(files);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)removeRecentDoc:(NSInteger)fileId
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/api/v1/docs/recent/remove";
+    NSDictionary *params = @{@"fileId": @(fileId)};
+    
+    [self postWithAuth:path data:params success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            if(successBlock) successBlock();
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)createDoc:(NSString *)type
+             name:(NSString *)name
+          success:(void(^)(WFCUPanFile *file))successBlock
+            error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/api/v1/docs/create";
+    NSMutableDictionary *params = [@{@"type": type ?: @"docx"} mutableCopy];
+    if (name.length) {
+        params[@"name"] = name;
+    }
+    
+    [self postWithAuth:path data:params success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            WFCUPanFile *file = [WFCUPanFile fromDictionary:dict[@"data"]];
+            if(successBlock) successBlock(file);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
+- (void)isMobileDocEditEnabledWithSuccess:(void(^)(BOOL mobileEdit))successBlock
+                                    error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/api/v1/docs/options";
+    
+    [self postWithAuth:path data:@{} success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSDictionary *data = dict[@"data"];
+            BOOL mobileEdit = NO;
+            if ([data isKindOfClass:[NSDictionary class]]) {
+                mobileEdit = [data[@"mobileEdit"] boolValue];
+            }
+            if(successBlock) successBlock(mobileEdit);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 #pragma mark - HTTP Helper Methods
 
 - (void)postWithAuth:(NSString *)path

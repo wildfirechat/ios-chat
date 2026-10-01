@@ -36,6 +36,12 @@ extern NSString *const WFCUFontScaleDidChangeNotification;
 @interface WFCUConfigManager : NSObject
 + (WFCUConfigManager *)globalManager;
 
+/// 网盘是否已配置（PAN_SERVER_ADDRESS 非空）。所有网盘/在线文档入口统一用这个门控。
++ (BOOL)isPanConfigured;
+
+/// 网盘服务根地址，未配置返回 nil。
++ (nullable NSString *)panServerAddress;
+
 - (void)setupNavBar;
 @property(nonatomic, assign)WFCUThemeType selectedTheme;
 

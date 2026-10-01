@@ -30,6 +30,30 @@ NSString *const WFCUFontScaleDidChangeNotification = @"WFCUFontScaleDidChangeNot
     return sharedSingleton;
 }
 
+/// 网盘是否已配置：以 panServiceProvider 是否装配为准（AppDelegate 仅在 PAN_SERVER_ADDRESS 非空时装配）。
++ (BOOL)isPanConfigured {
+    id<WFCUPanService> provider = [WFCUConfigManager globalManager].panServiceProvider;
+    if (!provider) {
+        return NO;
+    }
+    if ([provider respondsToSelector:@selector(isPanConfigured)]) {
+        return [provider isPanConfigured];
+    }
+    return YES;
+}
+
+/// 网盘服务根地址，未配置返回 nil。
++ (NSString *)panServerAddress {
+    id<WFCUPanService> provider = [WFCUConfigManager globalManager].panServiceProvider;
+    if (!provider) {
+        return nil;
+    }
+    if ([provider respondsToSelector:@selector(panServerAddress)]) {
+        return [provider panServerAddress];
+    }
+    return nil;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {

@@ -277,12 +277,18 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
                     void (^completionHandler)(int, id,BOOL) = ^(int code, id value,BOOL complete){
                         NSString *del=@"";
                         result[@"code"]=@(0);
-                        NSMutableDictionary *jsdata = [[NSMutableDictionary alloc] init];
-                        jsdata[@"code"]=@(code);
-                        if(value!=nil){
-                            jsdata[@"data"]=value;
+                        if (complete) {
+                            NSMutableDictionary *jsdata = [[NSMutableDictionary alloc] init];
+                            jsdata[@"code"]=@(code);
+                            if(value!=nil){
+                                jsdata[@"data"]=value;
+                            }
+                            result[@"data"] = jsdata;
+                        } else {
+                            // 多次回调（setProgressData 语义，如 setPageHeader 的按钮 id）：
+                            // 页面拿到原始值，不再包一层 {code,data}。
+                            result[@"data"] = value != nil ? value : [NSNull null];
                         }
-                        result[@"data"] = jsdata;
                         value=[JSBUtil objToJsonString:result];
                         value=[value stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
                         

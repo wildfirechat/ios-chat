@@ -434,3 +434,5 @@ ReportMessage="如果您发现有违反法律和道德的内容，或者您的�
 "MessagesCountLabel"="消息数量";
 "MessageBracket"="[消息]";
 "Pan"="网盘";
+"CloudDrive"="云盘";
+"OnlineDocs"="文档";

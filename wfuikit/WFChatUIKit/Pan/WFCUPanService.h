@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol WFCUPanService <NSObject>
 
+/// 网盘是否已配置（PAN_SERVER_ADDRESS 非空）。所有网盘/在线文档入口都应以此门控。
+- (BOOL)isPanConfigured;
+
+/// 网盘服务根地址，如 https://pan.example.com 。在线文档页在 `<root>/doc/` 下。
+- (nullable NSString *)panServerAddress;
+
 /// 获取所有可访问的空间列表
 - (void)getSpacesWithSuccess:(void(^)(NSArray<WFCUPanSpace *> *spaces))successBlock
                        error:(void(^)(int errorCode, NSString *message))errorBlock;
@@ -91,6 +97,27 @@ NS_ASSUME_NONNULL_BEGIN
         parentId:(NSInteger)targetParentId
          success:(void(^)(void))successBlock
            error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+#pragma mark - 在线文档
+
+/// 最近打开的文档列表（返回的 WFCUPanFile 上带有 permission/openedAt）
+- (void)getRecentDocsWithSuccess:(void(^)(NSArray<WFCUPanFile *> *files))successBlock
+                           error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+/// 从「最近打开」里移除一条记录（不删除文件）
+- (void)removeRecentDoc:(NSInteger)fileId
+                success:(void(^)(void))successBlock
+                  error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+/// 新建在线文档，type 取 docx/xlsx/pptx
+- (void)createDoc:(NSString *)type
+             name:(nullable NSString *)name
+          success:(void(^)(WFCUPanFile *file))successBlock
+            error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+/// 手机端是否可以新建/编辑文档（服务端 docs.mobile_edit 开关）
+- (void)isMobileDocEditEnabledWithSuccess:(void(^)(BOOL mobileEdit))successBlock
+                                    error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 @end
 

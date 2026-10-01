@@ -12,12 +12,17 @@
 #import "dsbridge.h"
 #import "WFCUConfigManager.h"
 #import "WFCUContactListViewController.h"
+#import "WFCUPanGroupPickerViewController.h"
 
 @interface WFCUBrowserViewController () <WKNavigationDelegate>
 @property (nonatomic, strong)DWKWebView *webView;
 @property(nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *configDict;
 
 @property (nonatomic, assign)BOOL authed;
+
+// setPageHeader：页面把标题栏交给宿主画，按钮点击多次回调（complete:NO）。
+@property (nonatomic, copy)JSCallback pageHeaderCallback;
+@property (nonatomic, strong)NSArray<NSDictionary *> *pageHeaderActions;
 @end
 
 @implementation WFCUBrowserViewController
@@ -137,6 +142,114 @@
     return nil;
 }
 
+/// 在线文档页（<root>/doc/...）不会调用 config: 做签名，chooseContacts/chooseGroup 需要跳过签名门控。
+- (BOOL)isPanDocPage {
+    NSString *path = self.webView.URL.path ?: @"";
+    return [path isEqualToString:@"/doc"] ||
+           [path hasPrefix:@"/doc/"] ||
+           [path rangeOfString:@"/pan/doc"].location != NSNotFound;
+}
+
+/// 下载文档/历史版本：交给系统（应用内打开文件会白屏）。参数是地址字符串或 {url,name}。
+- (id)downloadFile:(id)arg {
+    NSString *url = nil;
+    if ([arg isKindOfClass:[NSString class]]) {
+        url = arg;
+    } else if ([arg isKindOfClass:[NSDictionary class]]) {
+        url = arg[@"url"];
+    }
+    NSURL *nsurl = url.length ? [NSURL URLWithString:url] : nil;
+    if (!nsurl || !nsurl.scheme) {
+        NSLog(@"downloadFile ignored: %@", arg);
+        return nil;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:nsurl options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:nsurl];
+        }
+    });
+    return nil;
+}
+
+/// 页面标题栏交给宿主：{title?,subtitle?,actions:[{id,text,icon,primary}]}。
+/// 按钮点击用 complete:NO 多次回调按钮 id（回调常驻）。
+- (void)setPageHeader:(NSDictionary *)message completion:(JSCallback)completionHandler {
+    self.pageHeaderCallback = completionHandler;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([message isKindOfClass:[NSDictionary class]]) {
+            NSString *title = message[@"title"];
+            NSString *subtitle = message[@"subtitle"];
+            if (title.length) {
+                self.title = title;
+            }
+            self.navigationItem.prompt = subtitle.length ? subtitle : nil;
+            NSArray *actions = message[@"actions"];
+            if ([actions isKindOfClass:[NSArray class]]) {
+                self.pageHeaderActions = actions;
+                NSMutableArray *items = [NSMutableArray array];
+                for (NSInteger i = 0; i < actions.count; i++) {
+                    NSDictionary *action = actions[i];
+                    if (![action isKindOfClass:[NSDictionary class]]) {
+                        continue;
+                    }
+                    NSString *text = action[@"text"] ?: action[@"id"];
+                    if (!text.length) {
+                        continue;
+                    }
+                    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:text style:UIBarButtonItemStylePlain target:self action:@selector(onPageHeaderAction:)];
+                    item.tag = i;
+                    [items addObject:item];
+                }
+                self.navigationItem.rightBarButtonItems = items.count ? items : nil;
+            } else {
+                self.pageHeaderActions = nil;
+                self.navigationItem.rightBarButtonItems = nil;
+            }
+        }
+    });
+}
+
+- (void)onPageHeaderAction:(UIBarButtonItem *)sender {
+    if (sender.tag < 0 || sender.tag >= (NSInteger)self.pageHeaderActions.count) {
+        return;
+    }
+    NSDictionary *action = self.pageHeaderActions[sender.tag];
+    NSString *actionId = action[@"id"];
+    if (actionId.length && self.pageHeaderCallback) {
+        self.pageHeaderCallback(0, actionId, NO);
+    }
+}
+
+/// 群多选：回 {code:0, data:"<JSON串 [{gid,name,portrait}]>"}，取消回 -1。
+- (void)chooseGroup:(NSDictionary *)message completion:(JSCallback)completionHandler {
+    if (![self isPanDocPage] && (!self.webView.URL.host || ![self.configDict[self.webView.URL.host] boolValue])) {
+        NSLog(@"Error host %@ not config!", self.webView.URL.host);
+        completionHandler(1, nil, YES);
+        return;
+    }
+    
+    WFCUPanGroupPickerViewController *picker = [[WFCUPanGroupPickerViewController alloc] init];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:picker];
+    picker.selectResult = ^(NSArray<WFCCGroupInfo *> *groups) {
+        NSMutableArray *output = [[NSMutableArray alloc] init];
+        for (WFCCGroupInfo *group in groups) {
+            [output addObject:@{@"gid": group.target ?: @"",
+                                @"name": group.displayName.length ? group.displayName : (group.name ?: @""),
+                                @"portrait": group.portrait ?: @""}];
+        }
+        if (output.count) {
+            NSData *data = [NSJSONSerialization dataWithJSONObject:output options:0 error:nil];
+            NSString *json = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"[]";
+            completionHandler(0, json, YES);
+        } else {
+            completionHandler(1, nil, YES);
+        }
+    };
+    [self.navigationController presentViewController:navi animated:YES completion:nil];
+}
+
 - (void)close:(NSDictionary *)message completion:(JSCallback)completionHandler {
     [self.navigationController popoverPresentationController];
     completionHandler(0, nil, YES);
@@ -165,7 +278,8 @@
 }
 
 - (void)chooseContacts:(NSDictionary *)message completion:(JSCallback)completionHandler {
-    if(!self.webView.URL.host || ![self.configDict[self.webView.URL.host] boolValue]) {
+    // 在线文档页不调用 config: 做签名，跳过该校验，否则分享选人会静默失败。
+    if(![self isPanDocPage] && (!self.webView.URL.host || ![self.configDict[self.webView.URL.host] boolValue])) {
         NSLog(@"Error host %@ not config!", self.webView.URL.host);
         completionHandler(1, nil, YES);
         return;
@@ -185,7 +299,7 @@
             [contacts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:obj refresh:NO];
                 if(userInfo) {
-                    [output addObject:@{@"uid":userInfo.userId, @"displayName":userInfo.displayName}];
+                    [output addObject:@{@"uid":userInfo.userId, @"name":userInfo.name ?: @"", @"displayName":userInfo.displayName ?: @"", @"portrait":userInfo.portrait ?: @""}];
                 } else {
                     [output addObject:@{@"uid":obj}];
                 }
