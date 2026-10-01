@@ -4762,13 +4762,16 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
             return;
         }
         
+        // 先取目标目录现有文件：服务端不允许同目录同名，重名时自动加 (1)/(2)
+        [[WFCUConfigManager globalManager].panServiceProvider getSpaceFiles:space.spaceId parentId:0 success:^(NSArray<WFCUPanFile *> *files) {
+        NSString *uniqueName = [ws uniqueFileName:fileContent.name inFiles:files];
         // 根据文件扩展名获取 MIME 类型
-        NSString *mimeType = [ws mimeTypeForFileName:fileContent.name];
+        NSString *mimeType = [ws mimeTypeForFileName:uniqueName];
         
         // 创建文件记录
         [[WFCUConfigManager globalManager].panServiceProvider createFile:space.spaceId 
                                                                 parentId:0 
-                                                                    name:fileContent.name 
+                                                                    name:uniqueName 
                                                                     size:(int64_t)fileContent.size 
                                                                 mimeType:mimeType 
                                                                      md5:@"" 
@@ -4801,11 +4804,39 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
                 [ws.view makeToast:WFCString(@"SaveToPanFailed") duration:1 position:CSToastPositionCenter];
             });
         }];
+        } error:^(int errorCode, NSString *message) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ws.view makeToast:WFCString(@"SaveToPanFailed") duration:1 position:CSToastPositionCenter];
+            });
+        }];
     } error:^(int errorCode, NSString *message) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [ws.view makeToast:WFCString(@"CheckPermissionFailed") duration:1 position:CSToastPositionCenter];
         });
     }];
+}
+
+// 同目录重名时自动加 (1)/(2)…（与服务端「不允许同目录同名」约束配套）
+- (NSString *)uniqueFileName:(NSString *)name inFiles:(NSArray<WFCUPanFile *> *)files {
+    NSMutableSet<NSString *> *names = [NSMutableSet set];
+    for (WFCUPanFile *f in files) {
+        if (f.name.length) {
+            [names addObject:f.name];
+        }
+    }
+    if (![names containsObject:name]) {
+        return name;
+    }
+    NSString *ext = [name pathExtension];
+    NSString *base = [name stringByDeletingPathExtension];
+    NSInteger i = 1;
+    NSString *candidate;
+    do {
+        candidate = ext.length ? [NSString stringWithFormat:@"%@(%ld).%@", base, (long)i, ext]
+                               : [NSString stringWithFormat:@"%@(%ld)", base, (long)i];
+        i++;
+    } while ([names containsObject:candidate]);
+    return candidate;
 }
 
 // 根据文件名获取 MIME 类型

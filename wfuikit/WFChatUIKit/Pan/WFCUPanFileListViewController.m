@@ -643,9 +643,11 @@
         hud.progress = progress;
     } success:^(NSString *storageUrl, int64_t size, NSString *md5) {
         NSString *mimeType = [[WFCUPanUploadManager sharedManager] mimeTypeForFile:filePath];
+        // 同目录重名时自动加 (1)/(2)（服务端不允许同目录同名）
+        NSString *uniqueName = [weakSelf uniqueFileName:fileName inFiles:weakSelf.files];
         [[WFCUConfigManager globalManager].panServiceProvider createFile:self.space.spaceId 
                                                                 parentId:weakSelf.parentId 
-                                                                    name:fileName 
+                                                                    name:uniqueName 
                                                                     size:size 
                                                                 mimeType:mimeType 
                                                                      md5:md5 
@@ -670,6 +672,29 @@
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
+}
+
+// 同目录重名时自动加 (1)/(2)…（与服务端「不允许同目录同名」约束配套）
+- (NSString *)uniqueFileName:(NSString *)name inFiles:(NSArray<WFCUPanFile *> *)files {
+    NSMutableSet<NSString *> *names = [NSMutableSet set];
+    for (WFCUPanFile *f in files) {
+        if (f.name.length) {
+            [names addObject:f.name];
+        }
+    }
+    if (![names containsObject:name]) {
+        return name;
+    }
+    NSString *ext = [name pathExtension];
+    NSString *base = [name stringByDeletingPathExtension];
+    NSInteger i = 1;
+    NSString *candidate;
+    do {
+        candidate = ext.length ? [NSString stringWithFormat:@"%@(%ld).%@", base, (long)i, ext]
+                               : [NSString stringWithFormat:@"%@(%ld)", base, (long)i];
+        i++;
+    } while ([names containsObject:candidate]);
+    return candidate;
 }
 
 #pragma mark - UITableViewDataSource
