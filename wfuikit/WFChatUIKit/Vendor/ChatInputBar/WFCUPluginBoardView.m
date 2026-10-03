@@ -184,9 +184,12 @@
                           [[PluginItem alloc] initWithTitle:WFCString(@"TakePhoto") image:[WFCUImage imageNamed:@"chat_input_plugin_camera"] tag:2],
                           [[PluginItem alloc] initWithTitle:WFCString(@"Location") image:[WFCUImage imageNamed:@"chat_input_plugin_location"] tag:3],
                           [[PluginItem alloc] initWithTitle:WFCString(@"Files") image:[WFCUImage imageNamed:@"chat_input_plugin_file"] tag:5],
-                          [[PluginItem alloc] initWithTitle:WFCString(@"Card") image:[WFCUImage imageNamed:@"chat_input_plugin_card"] tag:6],
-                          [[PluginItem alloc] initWithTitle:WFCString(@"Pan") image:[WFCUImage imageNamed:@"chat_input_plugin_file"] tag:10]
+                          [[PluginItem alloc] initWithTitle:WFCString(@"Card") image:[WFCUImage imageNamed:@"chat_input_plugin_card"] tag:6]
                           ] mutableCopy];
+
+        if ([WFCUConfigManager isPanConfigured]) {
+            [_pluginItems addObject:[[PluginItem alloc] initWithTitle:WFCString(@"Pan") image:[WFCUImage imageNamed:@"chat_input_plugin_file"] tag:10]];
+        }
 
 #if WFCU_SUPPORT_VOIP
         if (self.hasVoip) {

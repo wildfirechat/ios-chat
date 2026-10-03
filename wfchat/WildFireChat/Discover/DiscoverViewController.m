@@ -44,6 +44,7 @@
     
     if([WFCUConfigManager isPanConfigured]) {
         [self.dataSource addObject:@{@"title":LocalizedString(@"Pan"), @"image":@"net_disk",@"des":@"Pan"}];
+        [self.dataSource addObject:@{@"title":LocalizedString(@"OnlineDocs"), @"image":@"file",@"des":@"OnlineDocs"}];
     }
     
     if(NSClassFromString(@"SDTimeLineTableViewController")) {
@@ -168,6 +169,12 @@
     if ([des isEqualToString:@"Pan"]) {
         WFCUPanViewController *vc = [[WFCUPanViewController alloc] init];
         vc.viewMode = WFCUPanViewModeAll;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
+    if ([des isEqualToString:@"OnlineDocs"]) {
+        WFCUPanDocsViewController *vc = [[WFCUPanDocsViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
