@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WFCUPanSpace.h"
 #import "WFCUPanFile.h"
+#import "WFCUPanSharedDoc.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -108,6 +109,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeRecentDoc:(NSInteger)fileId
                 success:(void(^)(void))successBlock
                   error:(void(^)(int errorCode, NSString *message))errorBlock;
+
+/// 共享给我的文档列表（返回 WFCUPanSharedDoc，含 file/permission/sharedAt/sources）
+- (void)getSharedDocsWithSuccess:(void(^)(NSArray<WFCUPanSharedDoc *> *docs))successBlock
+                           error:(void(^)(int errorCode, NSString *message))errorBlock;
 
 /// 新建在线文档，type 取 docx/xlsx/pptx
 - (void)createDoc:(NSString *)type

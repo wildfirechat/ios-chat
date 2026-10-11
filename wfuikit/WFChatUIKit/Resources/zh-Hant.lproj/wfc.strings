@@ -722,6 +722,10 @@
 "CloudDrive"="雲盤";
 "OnlineDocs"="文檔";
 "RecentDocs"="最近打開";
+"SharedWithMe"="共享給我";
+"ShareFromGroup"="群組：%@";
+"DocCanEdit"="可編輯";
+"DocCanView"="可檢視";
 "NewDoc"="新建";
 "NewDocument"="新建文檔";
 "NewSpreadsheet"="新建表格";
@@ -729,7 +733,6 @@
 "UnnamedDoc"="未命名文檔";
 "UnnamedSheet"="未命名表格";
 "UnnamedSlide"="未命名演示";
-"OpenSourceLicense"="開源許可";
 "SelectGroup"="選擇群聊";
 "LoadFailedRetry"="載入失敗，請重試";
 "Rename"="重命名";

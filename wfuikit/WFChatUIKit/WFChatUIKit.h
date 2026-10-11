@@ -114,6 +114,7 @@ FOUNDATION_EXPORT const unsigned char WFChatUIKitVersionString[];
 #import <WFChatUIKit/WFCUPanService.h>
 #import <WFChatUIKit/WFCUPanSpace.h>
 #import <WFChatUIKit/WFCUPanFile.h>
+#import <WFChatUIKit/WFCUPanSharedDoc.h>
 #import <WFChatUIKit/WFCUPanDocUtils.h>
 #import <WFChatUIKit/WFCUPanViewController.h>
 #import <WFChatUIKit/WFCUPanDocsViewController.h>

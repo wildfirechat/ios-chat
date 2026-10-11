@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 网盘文件编辑/查看：<root>/doc/open?fileId=&platform=mobile
 + (nullable NSString *)docOpenUrl:(NSInteger)fileId;
 
-/// 开源许可页：<root>/doc/licenses.html
-+ (nullable NSString *)licensesUrl;
-
 /// 当前网盘根地址（来自 panServiceProvider），未配置返回 nil
 + (nullable NSString *)panServerAddress;
 

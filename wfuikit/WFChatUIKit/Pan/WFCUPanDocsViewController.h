@@ -2,7 +2,7 @@
 //  WFCUPanDocsViewController.h
 //  WFChatUIKit
 //
-//  在线文档首页：最近打开、新建文档、开源许可。
+//  在线文档首页：最近打开、共享给我、新建文档。
 //
 
 #import <UIKit/UIKit.h>

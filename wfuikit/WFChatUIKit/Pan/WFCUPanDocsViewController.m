@@ -6,6 +6,7 @@
 #import "WFCUPanDocsViewController.h"
 #import "WFCUPanService.h"
 #import "WFCUPanFile.h"
+#import "WFCUPanSharedDoc.h"
 #import "WFCUPanDocUtils.h"
 #import "WFCUConfigManager.h"
 #import "WFCUBrowserViewController.h"
@@ -15,7 +16,9 @@
 
 @interface WFCUPanDocsViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) NSMutableArray<WFCUPanFile *> *recentDocs;
+@property (nonatomic, strong) NSMutableArray<WFCUPanSharedDoc *> *sharedDocs;
 @property (nonatomic, assign) BOOL mobileEditEnabled;
 @property (nonatomic, assign) BOOL loading;
 @end
@@ -27,7 +30,13 @@
     self.title = WFCString(@"OnlineDocs");
     self.view.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.recentDocs = [NSMutableArray array];
-    
+    self.sharedDocs = [NSMutableArray array];
+
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[WFCString(@"RecentDocs"), WFCString(@"SharedWithMe")]];
+    self.segmentedControl.selectedSegmentIndex = 0;
+    [self.segmentedControl addTarget:self action:@selector(onTabChanged:) forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.titleView = self.segmentedControl;
+
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView.dataSource = self;
@@ -35,17 +44,34 @@
     self.tableView.backgroundColor = [WFCUConfigManager globalManager].backgroudColor;
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:self.tableView];
-    
+
     [self refreshNewDocButton];
     [self loadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self loadRecentDocs];
+    [self loadActiveTab];
 }
 
 #pragma mark - Data
+
+- (BOOL)isSharedTab {
+    return self.segmentedControl.selectedSegmentIndex == 1;
+}
+
+- (void)onTabChanged:(UISegmentedControl *)sender {
+    [self.tableView reloadData];
+    [self loadActiveTab];
+}
+
+- (void)loadActiveTab {
+    if ([self isSharedTab]) {
+        [self loadSharedDocs];
+    } else {
+        [self loadRecentDocs];
+    }
+}
 
 - (void)loadData {
     __weak typeof(self) ws = self;
@@ -61,7 +87,7 @@
             [ws refreshNewDocButton];
         });
     }];
-    [self loadRecentDocs];
+    [self loadActiveTab];
 }
 
 - (void)loadRecentDocs {
@@ -76,6 +102,28 @@
             ws.loading = NO;
             [ws.recentDocs removeAllObjects];
             [ws.recentDocs addObjectsFromArray:files];
+            [ws.tableView reloadData];
+        });
+    } error:^(int errorCode, NSString *message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ws.loading = NO;
+            [ws.tableView reloadData];
+        });
+    }];
+}
+
+- (void)loadSharedDocs {
+    if (![WFCUConfigManager isPanConfigured]) {
+        return;
+    }
+    __weak typeof(self) ws = self;
+    self.loading = YES;
+    [self.tableView reloadData];
+    [[WFCUConfigManager globalManager].panServiceProvider getSharedDocsWithSuccess:^(NSArray<WFCUPanSharedDoc *> *docs) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ws.loading = NO;
+            [ws.sharedDocs removeAllObjects];
+            [ws.sharedDocs addObjectsFromArray:docs];
             [ws.tableView reloadData];
         });
     } error:^(int errorCode, NSString *message) {
@@ -140,18 +188,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)onLicenses:(id)sender {
-    NSString *url = [WFCUPanDocUtils licensesUrl];
-    if (url.length == 0) {
-        return;
-    }
-    WFCUBrowserViewController *vc = [[WFCUBrowserViewController alloc] init];
-    vc.url = url;
-    vc.hidenOpenInBrowser = YES;
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
 - (void)openDoc:(NSInteger)fileId {
     NSString *url = [WFCUPanDocUtils docOpenUrl:fileId];
     if (url.length == 0) {
@@ -166,22 +202,8 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return self.recentDocs.count;
-    }
-    return 1; // 开源许可
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0 && self.recentDocs.count) {
-        return WFCString(@"RecentDocs");
-    }
-    return nil;
+    return [self isSharedTab] ? self.sharedDocs.count : self.recentDocs.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -190,7 +212,25 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
     }
-    if (indexPath.section == 0) {
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if ([self isSharedTab]) {
+        WFCUPanSharedDoc *doc = self.sharedDocs[indexPath.row];
+        cell.textLabel.text = doc.file.name;
+        NSString *who = [self sourceTextForSharedDoc:doc];
+        NSString *time = doc.sharedAt.length ? doc.sharedAt : @"";
+        NSString *perm = doc.canEdit ? WFCString(@"DocCanEdit") : WFCString(@"DocCanView");
+        NSMutableArray<NSString *> *parts = [NSMutableArray array];
+        if (who.length) {
+            [parts addObject:who];
+        }
+        if (time.length) {
+            [parts addObject:time];
+        }
+        [parts addObject:perm];
+        cell.detailTextLabel.text = [parts componentsJoinedByString:@" · "];
+        cell.detailTextLabel.textColor = [UIColor grayColor];
+        cell.imageView.image = [self iconForFile:doc.file.name];
+    } else {
         WFCUPanFile *file = self.recentDocs[indexPath.row];
         cell.textLabel.text = file.name;
         NSString *sizeText = file.sizeText;
@@ -198,14 +238,26 @@
         cell.detailTextLabel.text = time.length ? [NSString stringWithFormat:@"%@ · %@", sizeText, time] : sizeText;
         cell.detailTextLabel.textColor = [UIColor grayColor];
         cell.imageView.image = [self iconForFile:file.name];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else {
-        cell.textLabel.text = WFCString(@"OpenSourceLicense");
-        cell.detailTextLabel.text = nil;
-        cell.imageView.image = nil;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
+}
+
+- (NSString *)sourceTextForSharedDoc:(WFCUPanSharedDoc *)doc {
+    NSMutableArray<NSString *> *names = [NSMutableArray array];
+    for (WFCUPanShareSource *source in doc.sources) {
+        NSString *name = nil;
+        if ([source.targetType isEqualToString:@"GROUP"]) {
+            if (source.targetName.length) {
+                name = [NSString stringWithFormat:WFCString(@"ShareFromGroup"), source.targetName];
+            }
+        } else {
+            name = source.createdByName;
+        }
+        if (name.length && ![names containsObject:name]) {
+            [names addObject:name];
+        }
+    }
+    return [names componentsJoinedByString:@"、"];
 }
 
 - (UIImage *)iconForFile:(NSString *)name {
@@ -226,20 +278,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 0) {
+    if ([self isSharedTab]) {
+        WFCUPanSharedDoc *doc = self.sharedDocs[indexPath.row];
+        [self openDoc:doc.file.fileId];
+    } else {
         WFCUPanFile *file = self.recentDocs[indexPath.row];
         [self openDoc:file.fileId];
-    } else {
-        [self onLicenses:nil];
     }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.section == 0;
+    return ![self isSharedTab];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle != UITableViewCellEditingStyleDelete || indexPath.section != 0) {
+    if (editingStyle != UITableViewCellEditingStyleDelete || [self isSharedTab]) {
         return;
     }
     WFCUPanFile *file = self.recentDocs[indexPath.row];

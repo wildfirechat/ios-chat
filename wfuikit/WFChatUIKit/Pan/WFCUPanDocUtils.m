@@ -105,12 +105,4 @@
     return result;
 }
 
-+ (NSString *)licensesUrl {
-    NSString *base = [self docBase];
-    if (base.length == 0) {
-        return nil;
-    }
-    return [base stringByAppendingString:@"licenses.html"];
-}
-
 @end

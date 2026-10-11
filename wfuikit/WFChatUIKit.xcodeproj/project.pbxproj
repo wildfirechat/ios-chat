@@ -683,6 +683,8 @@
 		B7DEB6452F4D8BDA003E481E /* WFCUPanDocsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6442F4D8BDA003E481E /* WFCUPanDocsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B7DEB6472F4D8BDA003E481E /* WFCUPanDocsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB6462F4D8BDA003E481E /* WFCUPanDocsViewController.m */; };
 		B7DEB6492F4D8BDA003E481E /* WFCUPanGroupPickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB6482F4D8BDA003E481E /* WFCUPanGroupPickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB64E2F4D8BDA003E481E /* WFCUPanSharedDoc.h in Headers */ = {isa = PBXBuildFile; fileRef = B7DEB64C2F4D8BDA003E481E /* WFCUPanSharedDoc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7DEB64F2F4D8BDA003E481E /* WFCUPanSharedDoc.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB64D2F4D8BDA003E481E /* WFCUPanSharedDoc.m */; };
 		B7DEB64B2F4D8BDA003E481E /* WFCUPanGroupPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DEB64A2F4D8BDA003E481E /* WFCUPanGroupPickerViewController.m */; };
 		B7E1913A28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B7E1913828CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.h */; };
 		B7E1913B28CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E1913928CE1FC600E3A815 /* WFCUConferencePortraitCollectionViewCell.m */; };
@@ -1389,6 +1391,8 @@
 		B7DA72022F60FC1500C112C8 /* WFCUArchiveService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUArchiveService.h; sourceTree = "<group>"; };
 		B7DEB61D2F4D8BDA003E481E /* WFCUPanFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanFile.h; sourceTree = "<group>"; };
 		B7DEB61E2F4D8BDA003E481E /* WFCUPanFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanFile.m; sourceTree = "<group>"; };
+		B7DEB64C2F4D8BDA003E481E /* WFCUPanSharedDoc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanSharedDoc.h; sourceTree = "<group>"; };
+		B7DEB64D2F4D8BDA003E481E /* WFCUPanSharedDoc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanSharedDoc.m; sourceTree = "<group>"; };
 		B7DEB61F2F4D8BDA003E481E /* WFCUPanFileListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanFileListViewController.h; sourceTree = "<group>"; };
 		B7DEB6202F4D8BDA003E481E /* WFCUPanFileListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCUPanFileListViewController.m; sourceTree = "<group>"; };
 		B7DEB6212F4D8BDA003E481E /* WFCUPanService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCUPanService.h; sourceTree = "<group>"; };
@@ -2941,6 +2945,8 @@
 				B7DEB6352F4DD574003E481E /* WFCUPanUploadManager.m */,
 				B7DEB61D2F4D8BDA003E481E /* WFCUPanFile.h */,
 				B7DEB61E2F4D8BDA003E481E /* WFCUPanFile.m */,
+				B7DEB64C2F4D8BDA003E481E /* WFCUPanSharedDoc.h */,
+				B7DEB64D2F4D8BDA003E481E /* WFCUPanSharedDoc.m */,
 				B7DEB61F2F4D8BDA003E481E /* WFCUPanFileListViewController.h */,
 				B7DEB6202F4D8BDA003E481E /* WFCUPanFileListViewController.m */,
 				B7DEB6212F4D8BDA003E481E /* WFCUPanService.h */,
@@ -3009,6 +3015,7 @@
 				B7DEB62B2F4D8BDA003E481E /* WFCUPanViewController.h in Headers */,
 				B7DEB62D2F4D8BDA003E481E /* WFCUPanFileListViewController.h in Headers */,
 				B7DEB62C2F4D8BDA003E481E /* WFCUPanFile.h in Headers */,
+				B7DEB64E2F4D8BDA003E481E /* WFCUPanSharedDoc.h in Headers */,
 				B7DEB62E2F4D8BDA003E481E /* WFCUPanSpace.h in Headers */,
 				B7DEB62F2F4D8BDA003E481E /* WFCUPanService.h in Headers */,
 				B7DEB6412F4D8BDA003E481E /* WFCUPanDocUtils.h in Headers */,
@@ -3500,6 +3507,7 @@
 				B7B1A49C2F0A4EDA003316BB /* WFCULinkRecordTableViewCell.m in Sources */,
 				B7DEB6272F4D8BDA003E481E /* WFCUPanViewController.m in Sources */,
 				B7DEB6282F4D8BDA003E481E /* WFCUPanFile.m in Sources */,
+				B7DEB64F2F4D8BDA003E481E /* WFCUPanSharedDoc.m in Sources */,
 				B7DEB6292F4D8BDA003E481E /* WFCUPanFileListViewController.m in Sources */,
 				B7DEB62A2F4D8BDA003E481E /* WFCUPanSpace.m in Sources */,
 				B7DEB6432F4D8BDA003E481E /* WFCUPanDocUtils.m in Sources */,

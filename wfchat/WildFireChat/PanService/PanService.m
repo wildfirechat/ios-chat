@@ -382,6 +382,31 @@ static PanService *sharedSingleton = nil;
     }];
 }
 
+- (void)getSharedDocsWithSuccess:(void(^)(NSArray<WFCUPanSharedDoc *> *docs))successBlock
+                           error:(void(^)(int errorCode, NSString *message))errorBlock {
+    NSString *path = @"/api/v1/shares/with-me";
+
+    [self postWithAuth:path data:@{} success:^(NSDictionary *dict) {
+        if([dict[@"code"] intValue] == 0) {
+            NSMutableArray *docs = [NSMutableArray array];
+            NSArray *items = dict[@"data"];
+            if ([items isKindOfClass:[NSArray class]]) {
+                for (NSDictionary *item in items) {
+                    WFCUPanSharedDoc *doc = [WFCUPanSharedDoc fromDictionary:item];
+                    if (doc) {
+                        [docs addObject:doc];
+                    }
+                }
+            }
+            if(successBlock) successBlock(docs);
+        } else {
+            if(errorBlock) errorBlock([dict[@"code"] intValue], dict[@"message"]);
+        }
+    } error:^(NSError * _Nonnull error) {
+        if(errorBlock) errorBlock(-1, error.localizedDescription);
+    }];
+}
+
 - (void)removeRecentDoc:(NSInteger)fileId
                 success:(void(^)(void))successBlock
                   error:(void(^)(int errorCode, NSString *message))errorBlock {

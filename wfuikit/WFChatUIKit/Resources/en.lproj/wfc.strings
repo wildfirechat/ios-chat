@@ -723,6 +723,10 @@
 "CloudDrive"="Cloud Drive";
 "OnlineDocs"="Docs";
 "RecentDocs"="Recent";
+"SharedWithMe"="Shared with Me";
+"ShareFromGroup"="Group: %@";
+"DocCanEdit"="Editable";
+"DocCanView"="View only";
 "NewDoc"="New";
 "NewDocument"="New Document";
 "NewSpreadsheet"="New Spreadsheet";
@@ -730,7 +734,6 @@
 "UnnamedDoc"="Untitled Document";
 "UnnamedSheet"="Untitled Spreadsheet";
 "UnnamedSlide"="Untitled Presentation";
-"OpenSourceLicense"="Open Source Licenses";
 "SelectGroup"="Select Group";
 "LoadFailedRetry"="Load failed, please retry";
 "Rename"="Rename";
