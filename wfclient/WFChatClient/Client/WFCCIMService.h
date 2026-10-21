@@ -1319,6 +1319,9 @@ typedef NS_ENUM(NSInteger, WFCCFileRecordOrder) {
 /**
  取消发送消息，只有发送媒体类消息才可以取消
  
+ 无论媒体是由协议栈上传，还是由 SDK 内部直传（内置对象存储的大文件），都会被取消；
+ 取消后消息会被置为发送失败状态。
+ 
  @param messageId 消息Id
  @return 是否取消成功
  */

@@ -134,6 +134,9 @@ public:
 @property(nonatomic, strong)NSURLSessionUploadTask *uploadTask;
 @property(nonatomic, assign)int fileSize;
 @property(nonatomic, assign)int expireDuration;
+// 是否已被 cancelSendingMessage 取消。上传完成和用户取消可能同时发生，
+// 取消后回调不能再继续 sendSavedMessage，否则消息会被发出去
+@property(nonatomic, assign)BOOL cancelled;
 @end
 
 @implementation WFCUUploadModel
@@ -1360,6 +1363,13 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     model.uploadTask = [[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:model delegateQueue:nil] uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:file] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [ws.uploadingModelMap removeObjectForKey:@(messageId)];
+            if(model.cancelled) {
+                // 用户已经取消：消息状态已在 cancelSendingMessage 中处理过，
+                // 这里只释放回调，不能再走成功回调把消息发出去
+                delete model->_sendCallback;
+                model->_sendCallback = NULL;
+                return;
+            }
             if(error) {
                 NSLog(@"error %@", error.localizedDescription);
                 [model didUploadedFailed:-500];
@@ -1474,6 +1484,11 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
     } progress:^(NSProgress * _Nonnull uploadProgress) {
             callback->onProgress((int)uploadProgress.completedUnitCount, (int)uploadProgress.totalUnitCount);
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if(!ws.uploadingModelMap[@(messageId)]) {
+                // 用户已取消，任务已被 cancelSendingMessage 从 map 中移除，
+                // 不能再继续 sendSavedMessage，否则消息还是会被发出去
+                return;
+            }
             [ws.uploadingModelMap removeObjectForKey:@(messageId)];
             WFCCMediaMessageContent *mediaContent = (WFCCMediaMessageContent *)callback->m_message.content;
             mediaContent.remoteUrl = remoteUrl;
@@ -1577,23 +1592,41 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
 }
 
 - (BOOL)cancelSendingMessage:(long)messageId {
-    BOOL canceled = mars::stn::cancelSendingMessage(messageId)?YES:NO;
-    if(!canceled) {
-        NSObject *upload = [self.uploadingModelMap objectForKey:@(messageId)];
-        if(upload) {
-            if([upload isKindOfClass:[WFCUUploadModel class]]) {
-                [self.uploadingModelMap removeObjectForKey:@(messageId)];
-                WFCUUploadModel *uploadModel = (WFCUUploadModel *)upload;
-                [uploadModel.uploadTask cancel];
-                return YES;
-            } else if([upload isKindOfClass:[NSURLSessionDataTask class]]) {
-                [self.uploadingModelMap removeObjectForKey:@(messageId)];
-                NSURLSessionDataTask *task = (NSURLSessionDataTask *)upload;
-                [task cancel];
-                return YES;
+    BOOL canceled = NO;
+
+    // 内置对象存储的大文件不走协议栈上传，而是在本类里用 NSURLSession 直传，
+    // 协议栈不知道这个上传任务的存在，所以不能只看协议栈的取消结果。
+    NSObject *upload = [self.uploadingModelMap objectForKey:@(messageId)];
+    if(upload) {
+        [self.uploadingModelMap removeObjectForKey:@(messageId)];
+        if([upload isKindOfClass:[WFCUUploadModel class]]) {
+            WFCUUploadModel *uploadModel = (WFCUUploadModel *)upload;
+            // 先置取消标记：上传可能刚好完成，回调里要靠它拦住后续的 sendSavedMessage
+            uploadModel.cancelled = YES;
+            [uploadModel.uploadTask cancel];
+
+            // 取消后不会再走成功/失败回调，这里主动把消息置为发送失败并通知界面，
+            // 避免消息一直停留在发送中状态
+            WFCCMessage *message = uploadModel->_sendCallback ? uploadModel->_sendCallback->m_message : nil;
+            if(message) {
+                message.status = Message_Status_Send_Failure;
+                [[WFCCIMService sharedWFCIMService] updateMessage:messageId status:Message_Status_Send_Failure];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kSendingMessageStatusUpdated
+                                                                    object:@(messageId)
+                                                                  userInfo:@{@"status":@(Message_Status_Send_Failure), @"message":message, @"errorCode":@(-1)}];
             }
+        } else if([upload isKindOfClass:[NSURLSessionDataTask class]]) {
+            // 七牛等对象存储走的是 AFNetworking，取消后 failure 回调里会置为发送失败
+            [(NSURLSessionDataTask *)upload cancel];
         }
+        canceled = YES;
     }
+
+    // 小文件由协议栈自己上传，或者消息已经交给协议栈发送时，需要协议栈来取消
+    if(mars::stn::cancelSendingMessage(messageId)) {
+        canceled = YES;
+    }
+
     return canceled;
 }
 
