@@ -456,6 +456,21 @@ typedef NS_ENUM(NSInteger, ConnectedNetworkType) {
  */
 - (void)setHeartBeatInterval:(int)second;
 
+/**
+ 设置低码率模式。
+ 低码率模式下，协议栈同步数据时以小包进行，能够解决在网络码率特别低时超时问题。
+ 此函数只能在connect之前调用。
+ 
+ @param lowBPSMode 是否低码率模式
+ */
+- (void)setLowBPSMode:(BOOL)lowBPSMode;
+
+/**
+ 设置在加入群组前是否清理群组的历史消息。默认为true。二次加入时会有影响。
+ 
+ @param clrMsgWhenJoinGrp 是否清理加入之前的消息
+ */
+- (void)setClearMessageWhenJoinGroup:(BOOL)clrMsgWhenJoinGrp;
 
 /**
  时间偏移。一般用于时间不正确的设置，可以设置时间偏移确保能够设备能够正常使用。时间是服务器时间-当前时间

@@ -1042,6 +1042,7 @@ namespace mars{
         extern bool setAuthInfo(const std::string &userId, const std::string &token);
         extern void setLiteMode(bool liteMode);
         extern void setLowBPSMode(bool lowBPSMode);
+        extern void setClrMsgWhenJoinGrp(bool clear);
         extern void Disconnect(uint8_t flag);
         extern int64_t Connect(const std::string& host);
         extern void setBackupAddressStrategy(int strategy);

@@ -1298,6 +1298,14 @@ static WFCCNetworkService * sharedSingleton = nil;
     }
 }
 
+- (void)setLowBPSMode:(BOOL)lowBPSMode {
+    mars::stn::setLowBPSMode(lowBPSMode);
+}
+
+- (void)setClearMessageWhenJoinGroup:(BOOL)clrMsgWhenJoinGrp {
+    mars::stn::setClrMsgWhenJoinGrp(clrMsgWhenJoinGrp);
+}
+
 -(void)setTimeOffset:(int)timeOffset {
     _timeOffset = timeOffset;
     mars::stn::setTimeOffset(timeOffset);
