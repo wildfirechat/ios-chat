@@ -1308,7 +1308,7 @@ static void fillTMessage(mars::stn::TMessage &tmsg, WFCCConversation *conv, WFCC
                 if(mars::stn::ForcePresignedUrlUpload()) {
                     largeMedia = YES;
                 } else {
-                    largeMedia = YES;//[fileSizeValue integerValue] > 100000000L;
+                    largeMedia = [fileSizeValue integerValue] > 100000000L;
                 }
                 fileSize = (int)[fileSizeValue integerValue];
             }
