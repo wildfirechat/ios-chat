@@ -11,7 +11,7 @@
 //IM服务HOST，域名或者IP，注意不能带http头，也不能带端口。
 //NSString *IM_SERVER_HOST = @"192.168.1.81";
 //NSString *IM_SERVER_HOST = @"2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10"; //ipv6地址，不能带[]和端口
-NSString *IM_SERVER_HOST = @"im.lgdg.cc";
+NSString *IM_SERVER_HOST = @"aiwork-im.lgdg.cc";
 
 // 主网媒体地址前缀，双网环境下用于头像/媒体类消息的 URL 转换。
 NSString *MAIN_MEDIA_URL_PREFIX = nil;
@@ -26,13 +26,13 @@ NSString *BACKUP_MEDIA_URL_PREFIX = nil;
 
 //NSString *APP_SERVER_ADDRESS = @"http://wildfirechat.net:8888";
 //NSString *APP_SERVER_ADDRESS = @"http://[2409:8a00:32c0:1ee0:702d:f0c0:2e1b:4d10]:8888"; //ipv6地址要用这种方式
-NSString *APP_SERVER_ADDRESS = @"https://im.lgdg.cc/app";
+NSString *APP_SERVER_ADDRESS = @"https://aiwork-im.lgdg.cc/app";
 //应用服务备选地址，双网环境下使用。不需要双网时保持为 nil。
 NSString *APP_SERVER_BACKUP_ADDRESS = nil;
 
 //组织通讯录服务地址，如果没有部署，可以设置为nil。如果需要组织通讯录功能，请部署组织通讯录服务，然后这里填上组织通讯录服务地址。请注意不能写应用服务地址。
 //组织通讯录服务开源在 https://gitee.com/wfchat/organization-platform
-NSString *ORG_SERVER_ADDRESS = @"https://im.lgdg.cc/org";
+NSString *ORG_SERVER_ADDRESS = @"https://aiwork-im.lgdg.cc/org";
 //组织通讯录服务备选地址，双网环境下使用。
 NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
 
@@ -72,7 +72,7 @@ NSString *FILE_TRANSFER_ID = @"wfc_file_transfer";
 
 //如果想要关掉工作台，把WORK_PLATFORM_URL设置为nil就可以了。工作平台项目地址：https://gitee.com/wfchat/open-platform
 //NSString *WORK_PLATFORM_URL = nil;
-NSString *WORK_PLATFORM_URL = @"https://im.lgdg.cc/open/work.html";
+NSString *WORK_PLATFORM_URL = @"https://aiwork-im.lgdg.cc/open/work.html";
 //工作台备选地址，双网环境下使用。
 NSString *WORK_PLATFORM_BACKUP_URL = nil;
 
