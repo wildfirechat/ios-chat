@@ -10,7 +10,7 @@
 #define SharePredefine_h
 
 //此处id要与开发者中心创建时一致
-#define WFC_SHARE_APP_GROUP_ID @"group.cn.wildfirechat.messanger"
+#define WFC_SHARE_APP_GROUP_ID @"group.cn.wildfirechat.qixin"
 
 #define WFC_SHARE_BACKUPED_CONVERSATION_LIST @"wfc_share_conversation_list"
 
