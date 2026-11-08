@@ -12,6 +12,7 @@
 #import "WFCUGeneralSwitchTableViewCell.h"
 #import "WFCUContactListViewController.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 #import "UIView+Toast.h"
 
 
@@ -138,18 +139,20 @@
                 cell.imageView.image = [WFCUImage imageNamed:@"plus"];
                 cell.textLabel.text = WFCString(@"MuteMember");
             } else {
-                WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.mutedMemberList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
+                WFCCGroupMember *groupMember = [self.mutedMemberList objectAtIndex:indexPath.row-1];
+                WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId refresh:NO];
                 [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
-                cell.textLabel.text = member.displayName;
+                cell.textLabel.text = [WFCUUtilities displayNameForUser:member.displayName userId:groupMember.memberId];
             }
         } else if(indexPath.section == 2) {
             if (indexPath.row == 0) {
                 cell.imageView.image = [WFCUImage imageNamed:@"plus"];
                 cell.textLabel.text = WFCString(@"AllowMember");
             } else {
-                WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.allowedMemberList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
+                WFCCGroupMember *groupMember = [self.allowedMemberList objectAtIndex:indexPath.row-1];
+                WFCCUserInfo *member = [[WFCCIMService sharedWFCIMService] getUserInfo:groupMember.memberId refresh:NO];
                 [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[member.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
-                cell.textLabel.text = member.displayName;
+                cell.textLabel.text = [WFCUUtilities displayNameForUser:member.displayName userId:groupMember.memberId];
             }
         }
         

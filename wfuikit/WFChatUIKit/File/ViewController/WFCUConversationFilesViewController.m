@@ -11,6 +11,7 @@
 #import "WFCUFilesViewController.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUConversationFilesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -50,13 +51,11 @@
     WFCCConversationInfo *conv = self.conversations[indexPath.row];
     if (conv.conversation.type == Single_Type) {
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:conv.conversation.target refresh:NO];
-        if (user.friendAlias.length) {
-            cell.textLabel.text = user.friendAlias;
-        } else if(user.displayName.length) {
-            cell.textLabel.text = user.displayName;
-        } else {
-            cell.textLabel.text = WFCString(@"User");
+        NSString *name = user.friendAlias.length ? user.friendAlias : user.displayName;
+        if (!name.length) {
+            name = WFCString(@"User");
         }
+        cell.textLabel.text = [WFCUUtilities displayNameForUser:name userId:conv.conversation.target];
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     } else if (conv.conversation.type == Group_Type) {
         WFCCGroupInfo *group = [[WFCCIMService sharedWFCIMService] getGroupInfo:conv.conversation.target refresh:NO];
@@ -80,13 +79,11 @@
     } else if (conv.conversation.type == SecretChat_Type) {
         NSString *userId = [[WFCCIMService sharedWFCIMService] getSecretChatInfo:conv.conversation.target].userId;
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-        if (user.friendAlias.length) {
-            cell.textLabel.text = user.friendAlias;
-        } else if(user.displayName.length) {
-            cell.textLabel.text = user.displayName;
-        } else {
-            cell.textLabel.text = WFCString(@"User");
+        NSString *name = user.friendAlias.length ? user.friendAlias : user.displayName;
+        if (!name.length) {
+            name = WFCString(@"User");
         }
+        cell.textLabel.text = [WFCUUtilities displayNameForUser:name userId:userId];
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
     }
     

@@ -10,6 +10,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUContactListViewController.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 #import "UIView+Toast.h"
 
 @interface ManagerTableViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -108,15 +109,16 @@
     if (indexPath.section == 0) {
         WFCCUserInfo *owner = [[WFCCIMService sharedWFCIMService] getUserInfo:self.groupInfo.owner refresh:NO];
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[owner.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-        cell.textLabel.text = owner.displayName;
+        cell.textLabel.text = [WFCUUtilities displayNameForUser:owner.displayName userId:self.groupInfo.owner];
     } else if(indexPath.section == 1) {
         if (indexPath.row == 0) {
             cell.imageView.image = [WFCUImage imageNamed:@"plus"];
             cell.textLabel.text = WFCString(@"AddManager");
         } else {
-            WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:[self.managerList objectAtIndex:indexPath.row-1].memberId  refresh:NO];
+            WFCCGroupMember *groupManager = [self.managerList objectAtIndex:indexPath.row-1];
+            WFCCUserInfo *manager = [[WFCCIMService sharedWFCIMService] getUserInfo:groupManager.memberId refresh:NO];
             [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[manager.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
-            cell.textLabel.text = manager.displayName;
+            cell.textLabel.text = [WFCUUtilities displayNameForUser:manager.displayName userId:groupManager.memberId];
         }
     }
     

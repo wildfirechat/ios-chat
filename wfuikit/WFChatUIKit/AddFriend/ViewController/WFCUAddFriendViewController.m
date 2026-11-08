@@ -218,7 +218,14 @@
         cell.portraitIV.image = [WFCUImage imageNamed:@"search_icon"];
     } else {
         WFCCUserInfo *userInfo = self.searchList[indexPath.row];
-        [cell.titleLable setText:userInfo.displayName];
+        NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:userInfo.userId];
+        if ([WFCCUtilities isExternalTarget:userInfo.userId]) {
+            NSString *domainId = [WFCCUtilities getExternalDomain:userInfo.userId];
+            cell.titleLable.attributedText = [WFCCUtilities getExternal:domainId withName:name withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
+        } else {
+            cell.titleLable.attributedText = nil;
+            cell.titleLable.text = name;
+        }
         [cell.portraitIV sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     }
   

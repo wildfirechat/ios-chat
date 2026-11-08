@@ -30,12 +30,16 @@
 - (void)updateUserInfo:(WFCCUserInfo *)userInfo {
   [self.potraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
   
-    if (userInfo.friendAlias.length) {
-        self.targetView.text = userInfo.friendAlias;
-    } else if(userInfo.displayName.length > 0) {
-        self.targetView.text = userInfo.displayName;
+    NSString *name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+    if (!name.length) {
+        name = [NSString stringWithFormat:@"user<%@>", self.message.fromUser];
+    }
+    if ([WFCCUtilities isExternalTarget:userInfo.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:userInfo.userId];
+        self.targetView.attributedText = [WFCCUtilities getExternal:domainId withName:name withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
     } else {
-        self.targetView.text = [NSString stringWithFormat:@"user<%@>", self.message.fromUser];
+        self.targetView.attributedText = nil;
+        self.targetView.text = name;
     }
 }
 

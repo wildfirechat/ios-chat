@@ -20,6 +20,9 @@
 + (NSString *)getUnduplicatedPath:(NSString *)path;
 + (BOOL)isFileExist:(NSString *)filePath;
 
+/// 用户显示名（外部域用户追加 @域名）
++ (NSString *)displayNameForUser:(NSString *)name userId:(NSString *)userId;
+
 /// 顶部状态栏高度（包括安全区）
 + (CGFloat)wf_statusBarHeight;
 

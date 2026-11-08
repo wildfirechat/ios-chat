@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUConferenceMemberTableViewCell ()
 @property(nonatomic, strong)UIImageView *portraitView;
@@ -38,7 +39,13 @@
         title = userInfo.friendAlias;
     }
     
-    self.nameLabel.text = title;
+    if ([WFCCUtilities isExternalTarget:member.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:member.userId];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:title withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
+    } else {
+        self.nameLabel.attributedText = nil;
+        self.nameLabel.text = title;
+    }
     self.nameLabel.frame = CGRectMake(56, 8, [UIScreen mainScreen].bounds.size.width - 80-56, 18);
     if(member.isHost && member.isMe) {
         self.extraLabel.hidden = NO;

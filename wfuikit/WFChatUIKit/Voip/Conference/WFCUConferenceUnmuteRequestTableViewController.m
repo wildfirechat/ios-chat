@@ -143,7 +143,7 @@
     
     NSString *userId = self.members[indexPath.row];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
-    cell.textLabel.text = userInfo.friendAlias.length?userInfo.friendAlias:userInfo.displayName;
+    cell.textLabel.text = [WFCUUtilities displayNameForUser:(userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName) userId:userId];
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     cell.tag = indexPath.row;
     

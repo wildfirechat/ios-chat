@@ -85,6 +85,9 @@
                 userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
             }
             senderName = userInfo.readableName;
+            if (msg.conversation.type != Channel_Type) {
+                senderName = [WFCUUtilities displayNameForUser:senderName userId:msg.fromUser];
+            }
         }
 
         result = [result stringByAppendingFormat:@"%@:%@", senderName, digest];

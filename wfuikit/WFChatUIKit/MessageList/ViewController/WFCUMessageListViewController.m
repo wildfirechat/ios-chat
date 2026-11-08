@@ -4556,7 +4556,7 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
         item.conversation = self.cell4Menu.model.message.conversation;
         if (self.cell4Menu.model.message.conversation.type == Single_Type || self.cell4Menu.model.message.conversation.type == SecretChat_Type) {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
-            item.origin = userInfo.displayName;
+            item.origin = [WFCUUtilities displayNameForUser:userInfo.displayName userId:self.cell4Menu.model.message.fromUser];
         } else if (self.cell4Menu.model.message.conversation.type == Group_Type) {
             WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.cell4Menu.model.message.conversation.target refresh:NO];
             item.origin = groupInfo.displayName;
@@ -4565,7 +4565,7 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
             item.origin = groupInfo.name;
         } else {
             WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.cell4Menu.model.message.fromUser refresh:NO];
-            item.origin = userInfo.displayName;
+            item.origin = [WFCUUtilities displayNameForUser:userInfo.displayName userId:self.cell4Menu.model.message.fromUser];
         }
         
         
@@ -4762,6 +4762,9 @@ NSString *const WFCUConversationInfoDidChangeNotification = @"WFCUConversationIn
     WFCCMultiCallOngoingMessageContent *ongoing = (WFCCMultiCallOngoingMessageContent *)self.ongoingCallDict[self.ongoingCallDict.allKeys[indexPath.row]].content;
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:ongoing.initiator inGroup:self.conversation.type == Group_Type ? self.conversation.target : nil refresh:NO];
     NSString *userName = userInfo.friendAlias.length ? userInfo.friendAlias : (userInfo.groupAlias.length ? userInfo.groupAlias : userInfo.displayName);
+    if (userName.length) {
+        userName = [WFCUUtilities displayNameForUser:userName userId:ongoing.initiator];
+    }
     NSString *callHint = WFCString(@"CallInProgress");
     if(userName.length) {
         callHint = [NSString stringWithFormat:WFCString(@"UserCallInProgress"), userName];

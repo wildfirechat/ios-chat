@@ -17,6 +17,7 @@
 #import <WFChatClient/WFCCPollResultMessageContent.h>
 #import <SDWebImage/SDWebImage.h>
 #import "UIFont+YH.h"
+#import "WFCUUtilities.h"
 
 #define HEADER_HEIGHT 140
 #define OPTION_CELL_HEIGHT 50
@@ -97,7 +98,8 @@
     }
     
     // 创建者名称
-    NSString *creatorName = creatorInfo.displayName ?: creatorInfo.name ?: poll.creatorId;
+    NSString *creatorName = creatorInfo.displayName ?: creatorInfo.name ?: [WFCCUtilities getTargetWithoutDomain:poll.creatorId];
+    creatorName = [WFCUUtilities displayNameForUser:creatorName userId:poll.creatorId];
     self.creatorLabel.text = [NSString stringWithFormat:WFCString(@"PollCreator"), creatorName];
     
     // 状态标签

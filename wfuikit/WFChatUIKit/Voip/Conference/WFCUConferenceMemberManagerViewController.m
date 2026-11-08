@@ -129,9 +129,7 @@
             if(applyingUnmuteAudioMembers.count == 1) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteAudioMembers[0] refresh:NO];
                 name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
-                if(!name.length) {
-                    name = @"1名成员";
-                }
+                name = [WFCUUtilities displayNameForUser:name userId:applyingUnmuteAudioMembers[0]];
             } else {
                 name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteAudioMembers.count];
             }
@@ -148,9 +146,7 @@
             if(applyingUnmuteVideoMembers.count == 1) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:applyingUnmuteVideoMembers[0] refresh:NO];
                 name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
-                if(!name.length) {
-                    name = @"1名成员";
-                }
+                name = [WFCUUtilities displayNameForUser:name userId:applyingUnmuteVideoMembers[0]];
             } else {
                 name = [NSString stringWithFormat:@"%ld名成员", applyingUnmuteVideoMembers.count];
             }
@@ -167,9 +163,7 @@
             if(handupMembers.count == 1) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:handupMembers[0] refresh:NO];
                 name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
-                if(!name.length) {
-                    name = @"1名成员";
-                }
+                name = [WFCUUtilities displayNameForUser:name userId:handupMembers[0]];
             } else {
                 name = [NSString stringWithFormat:@"%ld名成员", handupMembers.count];
             }

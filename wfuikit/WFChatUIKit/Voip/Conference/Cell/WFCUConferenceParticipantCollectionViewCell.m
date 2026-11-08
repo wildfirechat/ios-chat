@@ -10,6 +10,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUWaitingAnimationView.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 #import "WFCUConferenceLabelView.h"
 
 @interface WFCUConferenceParticipantCollectionViewCell ()
@@ -52,7 +53,7 @@
 
     self.layer.borderColor = [UIColor clearColor].CGColor;
     self.portraitView.layer.borderColor = [UIColor clearColor].CGColor;
-    self.conferenceLabelView.name = userInfo.readableName;
+    self.conferenceLabelView.name = [WFCUUtilities displayNameForUser:userInfo.readableName userId:userInfo.userId];
     
     BOOL isVideoMuted = YES;
     BOOL isAudioMuted = YES;

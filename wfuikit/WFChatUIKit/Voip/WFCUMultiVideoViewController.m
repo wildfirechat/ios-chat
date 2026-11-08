@@ -224,7 +224,7 @@
     
     self.userNameLabel = [[UILabel alloc] init];
     self.userNameLabel.font = [UIFont systemFontOfSize:26];
-    self.userNameLabel.text = user.displayName;
+    self.userNameLabel.text = [WFCUUtilities displayNameForUser:user.displayName userId:self.currentSession.inviter];
     self.userNameLabel.textColor = [UIColor whiteColor];
     [self.view addSubview:self.userNameLabel];
     
@@ -1078,7 +1078,8 @@
         reasonStr = WFCString(@"LeaveConference"); //"NetworkError";
     }
     
-    [self.view makeToast:[NSString stringWithFormat:@"%@ %@", userInfo.displayName, reasonStr] duration:1 position:CSToastPositionCenter];
+    NSString *displayName = [WFCUUtilities displayNameForUser:userInfo.displayName userId:userId];
+    [self.view makeToast:[NSString stringWithFormat:@"%@ %@", displayName, reasonStr] duration:1 position:CSToastPositionCenter];
 }
 
 - (void)didChangeMode:(BOOL)isAudioOnly {

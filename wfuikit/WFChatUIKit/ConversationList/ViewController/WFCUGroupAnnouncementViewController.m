@@ -43,7 +43,13 @@
         [self.portraitView sd_setImageWithURL:[NSURL URLWithString:author.portrait] placeholderImage: [WFCUImage imageNamed:@"PersonalChat"]];
         
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 16, self.view.bounds.size.width - 80 - 16, 20)];
-        self.nameLabel.text = author.displayName;
+        NSString *authorName = author.displayName.length ? author.displayName : [WFCCUtilities getTargetWithoutDomain:self.announcement.author];
+        if ([WFCCUtilities isExternalTarget:self.announcement.author]) {
+            NSString *domainId = [WFCCUtilities getExternalDomain:self.announcement.author];
+            self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:authorName withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
+        } else {
+            self.nameLabel.text = authorName;
+        }
         
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 48, self.view.bounds.size.width - 80 - 16, 14)];
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.announcement.timestamp/1000];

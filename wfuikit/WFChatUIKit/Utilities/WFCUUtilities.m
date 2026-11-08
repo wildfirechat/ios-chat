@@ -296,6 +296,20 @@
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
++ (NSString *)displayNameForUser:(NSString *)name userId:(NSString *)userId {
+    if (![WFCCUtilities isExternalTarget:userId]) {
+        return name.length ? name : userId;
+    }
+    NSString *domainId = [WFCCUtilities getExternalDomain:userId];
+    if (!domainId.length) {
+        return name.length ? name : userId;
+    }
+    WFCCDomainInfo *domainInfo = [[WFCCIMService sharedWFCIMService] getDomainInfo:domainId refresh:NO];
+    NSString *domainName = domainInfo.name.length ? domainInfo.name : domainId;
+    NSString *baseName = name.length ? name : [WFCCUtilities getTargetWithoutDomain:userId];
+    return [NSString stringWithFormat:@"%@ @%@", baseName, domainName];
+}
+
 + (CGFloat)wf_navigationHeight {
     return 44.f;
 }

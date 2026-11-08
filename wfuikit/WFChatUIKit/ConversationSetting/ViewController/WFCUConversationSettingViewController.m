@@ -362,7 +362,7 @@
         pvc.selectResult = ^(NSArray<NSString *> *contacts) {
             if (contacts.count == 1) {
                 WFCCUserInfo *newOwnerUserInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:[contacts objectAtIndex:0] inGroup:ws.groupInfo.target refresh:NO];
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:WFCString(@"ConfirmTransferGroup"), newOwnerUserInfo.readableName] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:WFCString(@"ConfirmTransferGroup"), [WFCUUtilities displayNameForUser:newOwnerUserInfo.readableName userId:newOwnerUserInfo.userId]] preferredStyle:UIAlertControllerStyleAlert];
 
                 UIAlertAction *actionDismiss = [UIAlertAction actionWithTitle:WFCString(@"Transfer") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:ws.view animated:YES];

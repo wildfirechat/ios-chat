@@ -11,6 +11,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
 #import "WFCUGeneralImageTextTableViewCell.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUReadViewController () <UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView *tableView;
@@ -33,6 +34,11 @@
     }    
     [self.view addSubview:self.tableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserInfoUpdated:) name:kUserInfoUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDomainInfoUpdated:) name:kDomainInfoUpdated object:nil];
+}
+
+- (void)onDomainInfoUpdated:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 - (void)onUserInfoUpdated:(NSNotification *)notification {
@@ -55,7 +61,8 @@
     if(!cell) {
         cell = [[WFCUGeneralImageTextTableViewCell alloc] initWithReuseIdentifier:@"cell" cellHeight:CELL_HEIGHT];
     }
-    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userIds[indexPath.row] inGroup:self.groupId refresh:NO];
+    NSString *targetId = self.userIds[indexPath.row];
+    WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:targetId inGroup:self.groupId refresh:NO];
     
     [cell.portraitIV sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     NSString *name = userInfo.friendAlias;
@@ -64,12 +71,22 @@
         if(!name.length) {
             name = userInfo.displayName;
             if(!name.length) {
-                name = self.userIds[indexPath.row];
+                name = [WFCCUtilities getTargetWithoutDomain:targetId];
             }
         }
     }
-    cell.titleLable.text = name;
-    
+
+    if([WFCCUtilities isExternalTarget:targetId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:targetId];
+        cell.titleLable.attributedText = [WFCCUtilities getExternal:domainId
+                                                           withName:name
+                                                          withColor:[WFCUConfigManager globalManager].externalNameColor
+                                                           withSize:10];
+    } else {
+        cell.titleLable.attributedText = nil;
+        cell.titleLable.text = name;
+    }
+
     return cell;
 }
 

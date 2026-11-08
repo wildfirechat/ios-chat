@@ -11,6 +11,7 @@
 #import "UITextView+Placeholder.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUShareMessageView ()
 @property (weak, nonatomic) IBOutlet UIImageView *portraitImageView;
@@ -240,8 +241,9 @@
             name = userInfo.displayName;
             portrait = userInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), conversation.target];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), [WFCCUtilities getTargetWithoutDomain:conversation.target]];
         }
+        name = [WFCUUtilities displayNameForUser:name userId:conversation.target];
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     } else if (conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:conversation.target refresh:NO];
@@ -278,8 +280,9 @@
             name = userInfo.displayName;
             portrait = userInfo.portrait;
         } else {
-            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), userId];
+            name = [NSString stringWithFormat:@"%@<%@>", WFCString(@"User"), [WFCCUtilities getTargetWithoutDomain:userId]];
         }
+        name = [WFCUUtilities displayNameForUser:name userId:userId];
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:[portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
     }
     

@@ -310,7 +310,8 @@
     // 刷新 Header 数据
     // 创建者信息
     WFCCUserInfo *creatorInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.collection.creatorId refresh:NO];
-    NSString *creatorName = creatorInfo.displayName ?: creatorInfo.name ?: self.collection.creatorId;
+    NSString *creatorName = creatorInfo.displayName ?: creatorInfo.name ?: [WFCCUtilities getTargetWithoutDomain:self.collection.creatorId];
+    creatorName = [WFCUUtilities displayNameForUser:creatorName userId:self.collection.creatorId];
     self.creatorLabel.text = [NSString stringWithFormat:WFCString(@"CollectionCreatorInfo"), creatorName, self.collection.participantCount];
     // 加载头像
     if (creatorInfo.portrait.length > 0) {

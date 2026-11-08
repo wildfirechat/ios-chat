@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUUtilities.h"
 #import "UIFont+YH.h"
+#import "WFCUConfigManager.h"
 
 
 @interface WFCUFileRecordTableViewCell ()
@@ -23,7 +24,10 @@
 + (CGFloat)sizeOfRecord:(WFCCFileRecord *)record withCellWidth:(CGFloat)width {
     CGSize size1 = [WFCUUtilities getTextDrawingSize:record.name font:[UIFont scaledSystemFontOfSize:18] constrainedSize:CGSizeMake(width - 74, 48)];
     
-    NSString *info = [NSString stringWithFormat:@"%@ 来自%@ %@", [WFCUUtilities formatTimeLabel:record.timestamp], [[WFCCIMService sharedWFCIMService] getUserInfo:record.userId inGroup:record.conversation.type == Group_Type ? record.conversation.target : nil refresh:NO].displayName, [WFCUUtilities formatSizeLable:record.size]];
+    WFCCUserInfo *senderInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:record.userId inGroup:record.conversation.type == Group_Type ? record.conversation.target : nil refresh:NO];
+    NSString *senderName = senderInfo.displayName.length ? senderInfo.displayName : [WFCCUtilities getTargetWithoutDomain:record.userId];
+    senderName = [WFCUUtilities displayNameForUser:senderName userId:record.userId];
+    NSString *info = [NSString stringWithFormat:@"%@ 来自%@ %@", [WFCUUtilities formatTimeLabel:record.timestamp], senderName, [WFCUUtilities formatSizeLable:record.size]];
     
     
     CGSize size2 = [WFCUUtilities getTextDrawingSize:info font:[UIFont scaledSystemFontOfSize:14] constrainedSize:CGSizeMake(width - 74, 40)];
@@ -73,15 +77,18 @@
     [self setFileIcon:fileRecord.name];
     self.nameLabel.text = self.fileRecord.name;
     
-    NSString *sender = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO].displayName;
-    if(!sender.length) {
-        sender = fileRecord.userId;
-    }
+    WFCCUserInfo *senderInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:fileRecord.userId inGroup:fileRecord.conversation.type == Group_Type ? fileRecord.conversation.target : nil refresh:NO];
+    NSString *sender = senderInfo.displayName.length ? senderInfo.displayName : [WFCCUtilities getTargetWithoutDomain:fileRecord.userId];
     
     NSString *info = [NSString stringWithFormat:@"%@ 来自", [WFCUUtilities formatTimeLabel:fileRecord.timestamp]];
     
     NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:info];
-    [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:sender attributes:@{NSForegroundColorAttributeName : [UIColor blueColor]}]];
+    if([WFCCUtilities isExternalTarget:fileRecord.userId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:fileRecord.userId];
+        [attStr appendAttributedString:[WFCCUtilities getExternal:domainId withName:sender withColor:[UIColor blueColor] withSize:14]];
+    } else {
+        [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:sender attributes:@{NSForegroundColorAttributeName : [UIColor blueColor]}]];
+    }
     [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@", [WFCUUtilities formatSizeLable:fileRecord.size]]]];
     
     self.infoLabel.attributedText = attStr;

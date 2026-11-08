@@ -435,7 +435,7 @@
     
     self.userNameLabel = [[UILabel alloc] init];
     self.userNameLabel.font = [UIFont systemFontOfSize:26];
-    self.userNameLabel.text = user.displayName;
+    self.userNameLabel.text = [WFCUUtilities displayNameForUser:user.displayName userId:self.currentSession.initiator];
     self.userNameLabel.textColor = [UIColor whiteColor];
     [self.view addSubview:self.userNameLabel];
     
@@ -855,6 +855,7 @@
         WFCCTranscriptionMessageContent *content = (WFCCTranscriptionMessageContent *)msg.content;
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:content.userId refresh:NO];
         NSString *name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+        name = [WFCUUtilities displayNameForUser:name userId:content.userId];
         
         NSMutableAttributedString *line = [[NSMutableAttributedString alloc] initWithString:name attributes:@{NSForegroundColorAttributeName : [UIColor orangeColor], NSFontAttributeName : [UIFont systemFontOfSize:12]}];
         [line appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@":%@", content.content] attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont systemFontOfSize:12]}]];
@@ -1551,7 +1552,7 @@
     UILabel *ownerLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleWidth + 16, offset, bounds.size.width-titleWidth - 16 -16, 14)];
     ownerLabel.font = [UIFont systemFontOfSize:12];
     WFCCUserInfo *owner = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conferenceInfo.owner refresh:NO];
-    ownerLabel.text = owner.displayName;
+    ownerLabel.text = [WFCUUtilities displayNameForUser:owner.displayName userId:self.conferenceInfo.owner];
     [panel addSubview:ownerTitle];
     [panel addSubview:ownerLabel];
     
@@ -2040,10 +2041,11 @@
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
     NSString *text;
+    NSString *displayName = [WFCUUtilities displayNameForUser:(userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName) userId:userId];
     if(screenSharing) {
-        text = [NSString stringWithFormat:@"%@ 开始屏幕分享", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName];
+        text = [NSString stringWithFormat:@"%@ 开始屏幕分享", displayName];
     } else {
-        text = [NSString stringWithFormat:@"%@ 加入了会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName];
+        text = [NSString stringWithFormat:@"%@ 加入了会议", displayName];
     }
     [self.view makeToast:text duration:1 position:CSToastPositionCenter];
 }
@@ -2117,7 +2119,8 @@
         reasonStr = @"离开会议"; //"网络错误";
     }
     
-    [self.view makeToast:[NSString stringWithFormat:@"%@ %@", userInfo.displayName, reasonStr] duration:1 position:CSToastPositionCenter];
+    NSString *displayName = [WFCUUtilities displayNameForUser:userInfo.displayName userId:userId];
+    [self.view makeToast:[NSString stringWithFormat:@"%@ %@", displayName, reasonStr] duration:1 position:CSToastPositionCenter];
 }
 
 - (void)didChangeMode:(BOOL)isAudioOnly {
@@ -2271,7 +2274,8 @@
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.currentSession.host refresh:NO];
         
         __weak typeof(self)ws = self;
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName] preferredStyle:UIAlertControllerStyleAlert];
+        NSString *hostName = [WFCUUtilities displayNameForUser:(userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName) userId:self.currentSession.host];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"会议未开始或者已经结束，请联系 %@ 启动会议", hostName] preferredStyle:UIAlertControllerStyleAlert];
 
         UIAlertAction *action1 = [UIAlertAction actionWithTitle:WFCString(@"Ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [ws leftVC];
@@ -2690,6 +2694,7 @@
     } else if(userInfo.displayName.length) {
         userName = userInfo.displayName;
     }
+    userName = [WFCUUtilities displayNameForUser:userName userId:sender];
     
     switch(commandType) {
         case MUTE_ALL_AUDIO: {
@@ -2847,6 +2852,7 @@
     
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:msg.fromUser refresh:NO];
     NSString *name = userInfo.friendAlias.length ? userInfo.friendAlias : userInfo.displayName;
+    name = [WFCUUtilities displayNameForUser:name userId:msg.fromUser];
     
     NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:name attributes:@{NSForegroundColorAttributeName : [UIColor orangeColor]}];
     [attStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@":%@", [msg.content digest:msg]] attributes:@{NSForegroundColorAttributeName : [UIColor grayColor]}]];

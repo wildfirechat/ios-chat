@@ -11,6 +11,7 @@
 #import "UIFont+YH.h"
 #import "UIColor+YH.h"
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUSearchGroupTableViewCell()
 @property (strong, nonatomic) UIImageView *portrait;
@@ -85,7 +86,7 @@
             if (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Alias) {
                 WFCCGroupMember *member = [[WFCCIMService sharedWFCIMService] getGroupMember:groupSearchInfo.groupInfo.target memberId:memberId];
                 if (member && [[member.alias lowercaseString] rangeOfString:[groupSearchInfo.keyword lowercaseString]].location != NSNotFound) {
-                    string = [[NSMutableAttributedString alloc] initWithString:member.alias];
+                    string = [[NSMutableAttributedString alloc] initWithString:[WFCUUtilities displayNameForUser:member.alias userId:memberId]];
                     [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
                     [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
                     break;
@@ -95,7 +96,7 @@
             if(string == nil && (groupSearchInfo.marchType & GroupSearchMarchTypeMask_Member_Name)) {
                 WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:memberId refresh:NO];
                 if (userInfo && [[userInfo.displayName lowercaseString] rangeOfString:[groupSearchInfo.keyword lowercaseString]].location != NSNotFound) {
-                    string = [[NSMutableAttributedString alloc] initWithString:userInfo.displayName];
+                    string = [[NSMutableAttributedString alloc] initWithString:[WFCUUtilities displayNameForUser:userInfo.displayName userId:memberId]];
                     [string addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, string.length)];
                     [string addAttribute:NSUnderlineStyleAttributeName value:@YES range:NSMakeRange(0, string.length)];
                     break;

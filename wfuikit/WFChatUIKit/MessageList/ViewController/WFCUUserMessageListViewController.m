@@ -25,9 +25,8 @@
     [super viewDidLoad];
     WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
     
-    if (userInfo.displayName.length) {
-        self.title = [NSString stringWithFormat:WFCString(@"%@`s messages"), userInfo.displayName];
-    }
+    NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:self.userId];
+    self.title = [NSString stringWithFormat:WFCString(@"%@`s messages"), [WFCUUtilities displayNameForUser:name userId:self.userId]];
     
     self.messages = [[[WFCCIMService sharedWFCIMService] getUserMessages:self.userId conversation:self.conversation contentTypes:nil from:0 count:20] mutableCopy];
     self.hasMore = self.messages.count == 20;

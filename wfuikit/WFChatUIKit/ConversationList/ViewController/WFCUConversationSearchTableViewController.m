@@ -278,11 +278,9 @@
     if (self.conversation.type == Single_Type) {
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-        if(userInfo.displayName.length) {
-            label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
-        } else {
-            label.text = @"用户聊天记录";
-        }
+        NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:self.conversation.target];
+        name = [WFCUUtilities displayNameForUser:name userId:self.conversation.target];
+        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", name];
     } else if (self.conversation.type == Group_Type) {
         WFCCGroupInfo *groupInfo = [[WFCCIMService sharedWFCIMService] getGroupInfo:self.conversation.target refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[groupInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"GroupChatRound"]];
@@ -304,7 +302,9 @@
         
         WFCCUserInfo *userInfo = [[WFCCIMService sharedWFCIMService] getUserInfo:userId refresh:NO];
         [portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", userInfo.displayName];
+        NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:userId];
+        name = [WFCUUtilities displayNameForUser:name userId:userId];
+        label.text = [NSString stringWithFormat:@"\"%@\"的聊天记录", name];
     }
     
     [header addSubview:label];

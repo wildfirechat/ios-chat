@@ -9,6 +9,7 @@
 #import "WFCUConferencePortraitCollectionViewCell.h"
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 #import "WFCUConferenceLabelView.h"
 
 @interface WFCUConferencePortraitCollectionViewCell ()
@@ -25,8 +26,9 @@
     self.layer.borderWidth = 1.f;
     self.layer.borderColor = [UIColor clearColor].CGColor;
     [self.portraitView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    self.nameLabel.text = userInfo.readableName;
-    self.conferenceLabelView.name = userInfo.readableName;
+    NSString *name = [WFCUUtilities displayNameForUser:userInfo.readableName userId:userInfo.userId];
+    self.nameLabel.text = name;
+    self.conferenceLabelView.name = name;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVolumeUpdated:) name:@"wfavVolumeUpdated" object:nil];

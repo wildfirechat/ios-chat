@@ -10,6 +10,7 @@
 #import <WFChatClient/WFCChatClient.h>
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
+#import "WFCUUtilities.h"
 
 @interface WFCUBlackListViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong)  UITableView *tableView;
@@ -70,7 +71,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[userInfo.portrait stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[WFCUImage imageNamed:@"PersonalChat"]];
-    cell.textLabel.text = userInfo.displayName;
+    NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:userInfo.userId];
+    cell.textLabel.text = [WFCUUtilities displayNameForUser:name userId:userInfo.userId];
     return cell;
 }
 

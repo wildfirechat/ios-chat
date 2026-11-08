@@ -15,6 +15,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "WFCUImage.h"
 #import "UIFont+YH.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUCompositeBaseCell ()
 @property(nonatomic, strong)UIImageView *portraitImageView;
@@ -88,7 +89,14 @@ static CGFloat gWFCUCompositeListWidth = 0;
         [self.portraitImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.portrait] placeholderImage:[WFCUImage imageNamed:@"PersonlChat"]];
     }
     
-    self.nameLabel.text = userInfo.displayName;
+    NSString *name = userInfo.displayName.length ? userInfo.displayName : [WFCCUtilities getTargetWithoutDomain:message.fromUser];
+    if ([WFCCUtilities isExternalTarget:message.fromUser]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:message.fromUser];
+        self.nameLabel.attributedText = [WFCCUtilities getExternal:domainId withName:name withColor:[WFCUConfigManager globalManager].externalNameColor withSize:10];
+    } else {
+        self.nameLabel.attributedText = nil;
+        self.nameLabel.text = name;
+    }
     
     NSDate *from = [[NSDate alloc] initWithTimeIntervalSince1970:message.serverTime/1000];
     

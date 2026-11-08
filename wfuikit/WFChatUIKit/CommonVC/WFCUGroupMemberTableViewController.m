@@ -9,6 +9,7 @@
 #import "WFCUGroupMemberTableViewController.h"
 #import <WFChatClient/WFCChatClient.h>
 #import "WFCUGroupMemberTableViewCell.h"
+#import "WFCUConfigManager.h"
 
 @interface WFCUGroupMemberTableViewController ()
 @property (nonatomic, strong)NSMutableArray *members;
@@ -66,7 +67,14 @@
     }
     WFCCGroupMember *member = self.members[indexPath.row];
     WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:member.memberId inGroup:self.groupId refresh:NO];
-    cell.groupNameView.text = user.displayName;
+    NSString *name = user.displayName.length ? user.displayName : [WFCCUtilities getTargetWithoutDomain:member.memberId];
+    if ([WFCCUtilities isExternalTarget:member.memberId]) {
+        NSString *domainId = [WFCCUtilities getExternalDomain:member.memberId];
+        cell.groupNameView.attributedText = [WFCCUtilities getExternal:domainId withName:name withColor:[WFCUConfigManager globalManager].externalNameColor withSize:12];
+    } else {
+        cell.groupNameView.attributedText = nil;
+        cell.groupNameView.text = name;
+    }
     if (self.selectable) {
         if ([self.selectedMembers containsObject:member]) {
             cell.isSelected = YES;

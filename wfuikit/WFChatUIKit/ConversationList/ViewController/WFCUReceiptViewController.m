@@ -44,10 +44,8 @@
     config.titleViewInset = UIEdgeInsetsMake(5, 50, 5, 50);
     
     self.pageViewController = [[XLPageViewController alloc] initWithConfig:config];
-    CGRect bounds = self.view.bounds;
-    bounds.origin.y = [WFCUUtilities wf_navigationFullHeight];
-    bounds.size.height -= ([WFCUUtilities wf_navigationFullHeight] + [WFCUUtilities wf_safeDistanceBottom]);
-    self.pageViewController.view.frame = bounds;
+    self.pageViewController.view.frame = self.view.bounds;
+    self.pageViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self;
     [self addChildViewController:self.pageViewController];
@@ -103,6 +101,16 @@
     [self.unReadedUserIds removeObject:self.message.fromUser];
     
     self.titles = @[[NSString stringWithFormat:@"已读(%ld)", self.readedUserIds.count], [NSString stringWithFormat:@"未读(%ld)", self.unReadedUserIds.count]];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    // 用实际安全区，而不是写死的状态栏 + 44：iPad 分栏、横屏、刘海屏下导航栏高度都可能不同
+    UIEdgeInsets safeInsets = self.view.safeAreaInsets;
+    CGRect frame = self.view.bounds;
+    frame.origin.y = safeInsets.top;
+    frame.size.height = MAX(0, frame.size.height - safeInsets.top - safeInsets.bottom);
+    self.pageViewController.view.frame = frame;
 }
 
 /*

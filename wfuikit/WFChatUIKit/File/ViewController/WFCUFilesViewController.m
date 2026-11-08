@@ -12,6 +12,7 @@
 #import "WFCUBrowserViewController.h"
 #import "WFCUConfigManager.h"
 #import "WFCUPadUtility.h"
+#import "WFCUUtilities.h"
 #import "UIImage+ERCategory.h"
 #import "UIFont+YH.h"
 
@@ -84,13 +85,12 @@
         self.title = WFCString(@"MyFiles");
     } else if(self.userFiles) {
         WFCCUserInfo *user = [[WFCCIMService sharedWFCIMService] getUserInfo:self.userId refresh:NO];
-        if (user.friendAlias.length) {
-            self.title = [NSString stringWithFormat:WFCString(@"%@`s files"), user.friendAlias];
-        } else if (user.displayName.length) {
-            self.title = [NSString stringWithFormat:WFCString(@"%@`s files"), user.displayName];
-        } else {
-            self.title = WFCString(@"Files");
+        NSString *name = user.friendAlias.length ? user.friendAlias : user.displayName;
+        if (!name.length) {
+            name = self.userId.length ? [WFCCUtilities getTargetWithoutDomain:self.userId] : WFCString(@"Files");
         }
+        name = [WFCUUtilities displayNameForUser:name userId:self.userId];
+        self.title = [NSString stringWithFormat:WFCString(@"%@`s files"), name];
     } else if(self.conversation) {
         self.title = WFCString(@"ConversationFiles");
     } else {
