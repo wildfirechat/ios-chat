@@ -7,11 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D1E0A0020000000000000001 /* WFCServiceCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */; };
-		D1E0A0010000000000000001 /* WFMomentUIKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; };
-		D1E0A0010000000000000002 /* WFMomentUIKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D1E0A0010000000000000004 /* WFMomentClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; };
-		D1E0A0010000000000000005 /* WFMomentClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3105241D292C00B935D3 /* UIColor+YH.m */; };
 		149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3109241E300C00B935D3 /* UIFont+YH.m */; };
 		149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B311D242247E900B935D3 /* UIImage+ERCategory.m */; };
@@ -172,6 +167,11 @@
 		B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B7E1AD732DDD71260079E5A6 /* SDWebImage.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B7E494E428F670BA00FF2333 /* libyuv.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7E494E328F670BA00FF2333 /* libyuv.xcframework */; };
 		B7EDF7DF2858161C0013602E /* WFCDestroyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EDF7DD2858161C0013602E /* WFCDestroyAccountViewController.m */; };
+		D1E0A0010000000000000001 /* WFMomentUIKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; };
+		D1E0A0010000000000000002 /* WFMomentUIKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D1E0A0010000000000000004 /* WFMomentClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; };
+		D1E0A0010000000000000005 /* WFMomentClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D1E0A0020000000000000001 /* WFCServiceCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */; };
 		D8DD2FE9D1B342D18C7568ED /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B19FEFF8908544218632F7FE /* SceneDelegate.m */; };
 		DIALINC5414A5FCF1342DB8AC4 /* WFCUDialPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */; };
 /* End PBXBuildFile section */
@@ -235,10 +235,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D1E0A0020000000000000002 /* WFCServiceCheckViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCServiceCheckViewController.h; sourceTree = "<group>"; };
-		D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCServiceCheckViewController.m; sourceTree = "<group>"; };
-		D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentUIKit.xcframework; path = Frameworks/WFMomentUIKit.xcframework; sourceTree = SOURCE_ROOT; };
-		D1E0A0010000000000000006 /* WFMomentClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentClient.xcframework; path = Frameworks/WFMomentClient.xcframework; sourceTree = SOURCE_ROOT; };
 		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
 		149B3106241D292C00B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
 		149B3108241E300C00B935D3 /* UIFont+YH.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+YH.h"; sourceTree = "<group>"; };
@@ -522,6 +518,10 @@
 		B7EDF7DE2858161C0013602E /* WFCDestroyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCDestroyAccountViewController.h; sourceTree = "<group>"; };
 		B7F892B528CCB8C400E362DE /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Toast.h"; path = "../../../../wfuikit/WFChatUIKit/Category/UIView+Toast.h"; sourceTree = "<group>"; };
 		BD491388F852427B98C2D0AE /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentUIKit.xcframework; path = Frameworks/WFMomentUIKit.xcframework; sourceTree = SOURCE_ROOT; };
+		D1E0A0010000000000000006 /* WFMomentClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentClient.xcframework; path = Frameworks/WFMomentClient.xcframework; sourceTree = SOURCE_ROOT; };
+		D1E0A0020000000000000002 /* WFCServiceCheckViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCServiceCheckViewController.h; sourceTree = "<group>"; };
+		D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCServiceCheckViewController.m; sourceTree = "<group>"; };
 		DIALIN7ECF959EF5E34E3D8E0A /* WFCUDialPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFCUDialPadViewController.h; sourceTree = "<group>"; };
 		DIALIN9EE0057FD2E6422690D3 /* WFCUDialPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFCUDialPadViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -673,6 +673,7 @@
 				B71F0AD028F5475A000A7C8A /* BroadcastSetupUI */,
 				2EAC88E61FB0A0D6004B34D1 /* Frameworks */,
 				2E1D1FF81FAF0AE600F4405D /* Products */,
+				B7AA9F7D30A290EF00F96FFC /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1179,6 +1180,15 @@
 			path = SSKeychain;
 			sourceTree = "<group>";
 		};
+		B7AA9F7D30A290EF00F96FFC /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */,
+				D1E0A0010000000000000006 /* WFMomentClient.xcframework */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		B7C177582CE83720005A5E1B /* TYHWaterMark */ = {
 			isa = PBXGroup;
 			children = (
@@ -1678,7 +1688,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: FengYun Sun (U2266X7K8M)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1738,7 +1748,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: FengYun Sun (ZTJABWRJ5T)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1761,6 +1770,7 @@
 		2E1D200E1FAF0AE600F4405D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APS_ENVIRONMENT = development;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1769,7 +1779,7 @@
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1810,15 +1820,15 @@
 		2E1D200F1FAF0AE600F4405D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APS_ENVIRONMENT = production;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WildFireChat/WildFireChat.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1864,7 +1874,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1903,9 +1913,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1945,7 +1954,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Broadcast/Info.plist;
@@ -1974,9 +1983,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Broadcast/Info.plist;
@@ -2006,7 +2014,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
@@ -2035,9 +2043,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = Y8356M2VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastSetupUI/Info.plist;
