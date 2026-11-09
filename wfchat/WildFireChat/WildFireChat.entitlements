@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>aps-environment</key>
-	<string>development</string>
+	<string>$(APS_ENVIRONMENT)</string>
 	<key>com.apple.developer.networking.wifi-info</key>
 	<true/>
 	<key>com.apple.security.app-sandbox</key>
