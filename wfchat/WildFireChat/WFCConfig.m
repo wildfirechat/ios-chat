@@ -60,7 +60,10 @@ NSString *ARCHIVE_SERVER_BACKUP_ADDRESS = nil;
 // Turn服务配置，用户音视频通话功能，详情参考 https://docs.wildfirechat.net/webrtc/
 // 我们提供的服务能力有限，总体带宽仅3Mbps，只能用于用户测试和体验，为了保证测试可用，我们会不定期的更改密码。
 // 上线时请一定要切换成你们自己的服务。可以购买腾讯云或者阿里云的轻量服务器，价格很便宜，可以避免影响到您的用户体验。
-NSString *ICE_ADDRESS = @"turn:172.16.198.165:3478";
+// 本环境（AIPLUS POC）为单端口化方案：janus 在内网，客户端经 TURN 中继接入
+// 两台 TURN 分别由入口 Nginx 的 3478 / 3479 端口映射，互为备份
+NSString *ICE_ADDRESS = @"turn:aiwork-im.lgdg.cc:3478";
+NSString *ICE_ADDRESS2 = @"turn:aiwork-im.lgdg.cc:3479";
 NSString *ICE_USERNAME = @"wfchat";
 NSString *ICE_PASSWORD = @"WFpocTurn8Pass";
 

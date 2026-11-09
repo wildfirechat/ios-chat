@@ -32,6 +32,7 @@ extern NSString *ARCHIVE_SERVER_BACKUP_ADDRESS;
 
 
 extern NSString *ICE_ADDRESS;
+extern NSString *ICE_ADDRESS2;   // 第二个 TURN（本环境两台 TURN 分别由入口 3478/3479 映射）
 extern NSString *ICE_USERNAME;
 extern NSString *ICE_PASSWORD;
 

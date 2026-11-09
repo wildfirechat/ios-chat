@@ -148,8 +148,9 @@
     //多人音视频通话时，是否在显示谁在说话
     [WFCUConfigManager globalManager].displaySpeakingInMultiCall = YES;
     
-    //音视频高级版不需要stun/turn服务，请注释掉下面这行。单人版和多人版需要turn服务，请自己部署然后修改配置文件。
+    //本环境 janus 在内网，客户端需经 TURN 中继（两台 TURN 分别对应入口 3478/3479）
     [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS userName:ICE_USERNAME password:ICE_PASSWORD];
+    [[WFAVEngineKit sharedEngineKit] addIceServer:ICE_ADDRESS2 userName:ICE_USERNAME password:ICE_PASSWORD];
     
     [[WFAVEngineKit sharedEngineKit] setVideoProfile:kWFAVVideoProfile360P swapWidthHeight:YES];
     [WFAVEngineKit sharedEngineKit].delegate = self;
