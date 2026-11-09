@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1E0A0020000000000000001 /* WFCServiceCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */; };
 		D1E0A0010000000000000001 /* WFMomentUIKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; };
 		D1E0A0010000000000000002 /* WFMomentUIKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D1E0A0010000000000000004 /* WFMomentClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; };
@@ -234,6 +235,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1E0A0020000000000000002 /* WFCServiceCheckViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFCServiceCheckViewController.h; sourceTree = "<group>"; };
+		D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFCServiceCheckViewController.m; sourceTree = "<group>"; };
 		D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentUIKit.xcframework; path = Frameworks/WFMomentUIKit.xcframework; sourceTree = SOURCE_ROOT; };
 		D1E0A0010000000000000006 /* WFMomentClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentClient.xcframework; path = Frameworks/WFMomentClient.xcframework; sourceTree = SOURCE_ROOT; };
 		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
@@ -952,6 +955,8 @@
 				2FF07F4721F82E7200A78A62 /* WFCAboutViewController.m */,
 				2F50BE82237970780049CD39 /* WFCDiagnoseViewController.h */,
 				2F50BE83237970780049CD39 /* WFCDiagnoseViewController.m */,
+				D1E0A0020000000000000002 /* WFCServiceCheckViewController.h */,
+				D1E0A0020000000000000003 /* WFCServiceCheckViewController.m */,
 				2FF07F4821F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.h */,
 				2FF07F5121F82E7200A78A62 /* WFCMeTableViewHeaderViewCell.m */,
 				2FF07F4B21F82E7200A78A62 /* WFCMeTableViewController.h */,
@@ -1462,6 +1467,7 @@
 				2F4B0EB3245C232E000A41C6 /* CreateDeviceViewController.m in Sources */,
 				B7CB3A93289BD66C00E9D688 /* WFCChangePasswordViewController.m in Sources */,
 				2F50BE84237970780049CD39 /* WFCDiagnoseViewController.m in Sources */,
+				D1E0A0020000000000000001 /* WFCServiceCheckViewController.m in Sources */,
 				B770E8BD2F40C55400D4B219 /* PollService.m in Sources */,
 				2B840F402442111F006BE3D8 /* WFCThemeTableViewController.m in Sources */,
 				B7B2F8442F0A0279001CBF4C /* WFCLanguageTableViewController.m in Sources */,

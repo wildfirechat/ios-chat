@@ -12,6 +12,7 @@
 #import "DiscoverViewController.h"
 #import "WFCMeTableViewController.h"
 #import "WFCConfig.h"
+#import "WFCServiceCheckViewController.h"
 
 #import "UIFont+YH.h"
 #ifdef WFC_MOMENTS
@@ -249,6 +250,56 @@
             [self.view removeFromSuperview];
             [superView addSubview:self.view];
         }
+    }
+}
+
+
+#pragma mark - POC 诊断入口（右下角悬浮按钮）
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self setupDiagnoseFloatingButton];
+}
+
+- (void)setupDiagnoseFloatingButton {
+    static NSInteger const kTag = 0x5E1CE;
+    UIButton *btn = [self.view viewWithTag:kTag];
+    if (btn == nil) {
+        btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        btn.tag = kTag;
+        btn.backgroundColor = [UIColor colorWithWhite:0 alpha:0.55];
+        [btn setTitle:@"诊断" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
+        btn.layer.cornerRadius = 26;
+        btn.layer.masksToBounds = YES;
+        btn.layer.borderWidth = 1.0;
+        btn.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.25].CGColor;
+        [btn addTarget:self action:@selector(onTapDiagnoseButton) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
+
+    CGFloat size = 52;
+    CGFloat margin = 16;
+    CGFloat tabBarHeight = self.tabBar.bounds.size.height;
+    // 放在 TabBar 上方、屏幕右下角
+    CGFloat y = self.view.bounds.size.height - tabBarHeight - size - margin;
+    btn.frame = CGRectMake(self.view.bounds.size.width - size - margin, y, size, size);
+    [self.view bringSubviewToFront:btn];
+}
+
+- (void)onTapDiagnoseButton {
+    UINavigationController *nav = self.selectedViewController;
+    if (![nav isKindOfClass:[UINavigationController class]]) {
+        nav = self.settingNav ?: self.firstNav;
+    }
+    WFCServiceCheckViewController *vc = [[WFCServiceCheckViewController alloc] init];
+    if (nav != nil) {
+        [nav pushViewController:vc animated:YES];
+    } else {
+        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vc]
+                           animated:YES
+                         completion:nil];
     }
 }
 
