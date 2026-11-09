@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1E0A0010000000000000001 /* WFMomentUIKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; };
+		D1E0A0010000000000000002 /* WFMomentUIKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D1E0A0010000000000000004 /* WFMomentClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; };
+		D1E0A0010000000000000005 /* WFMomentClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1E0A0010000000000000006 /* WFMomentClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		149B3107241D292C00B935D3 /* UIColor+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3105241D292C00B935D3 /* UIColor+YH.m */; };
 		149B310A241E300C00B935D3 /* UIFont+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B3109241E300C00B935D3 /* UIFont+YH.m */; };
 		149B311E242247E900B935D3 /* UIImage+ERCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 149B311D242247E900B935D3 /* UIImage+ERCategory.m */; };
@@ -219,6 +223,8 @@
 				B7E1AD752DDD71260079E5A6 /* SDWebImage.xcframework in Embed Frameworks */,
 				2F79F32D2783059000D6F254 /* WFChatUIKit.framework in Embed Frameworks */,
 				B75D816D2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Embed Frameworks */,
+				D1E0A0010000000000000002 /* WFMomentUIKit.xcframework in Embed Frameworks */,
+				D1E0A0010000000000000005 /* WFMomentClient.xcframework in Embed Frameworks */,
 				B75D816B2782CEB5009D4A19 /* WebRTC.xcframework in Embed Frameworks */,
 				B7D8F7332783029400752426 /* ZLPhotoBrowser.xcframework in Embed Frameworks */,
 			);
@@ -228,6 +234,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1E0A0010000000000000003 /* WFMomentUIKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentUIKit.xcframework; path = Frameworks/WFMomentUIKit.xcframework; sourceTree = SOURCE_ROOT; };
+		D1E0A0010000000000000006 /* WFMomentClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WFMomentClient.xcframework; path = Frameworks/WFMomentClient.xcframework; sourceTree = SOURCE_ROOT; };
 		149B3105241D292C00B935D3 /* UIColor+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YH.m"; sourceTree = "<group>"; };
 		149B3106241D292C00B935D3 /* UIColor+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YH.h"; sourceTree = "<group>"; };
 		149B3108241E300C00B935D3 /* UIFont+YH.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+YH.h"; sourceTree = "<group>"; };
@@ -532,6 +540,8 @@
 				B7E1AD742DDD71260079E5A6 /* SDWebImage.xcframework in Frameworks */,
 				B78B18592CF71A01008A2C09 /* Security.framework in Frameworks */,
 				B75D816C2782CEB7009D4A19 /* WFAVEngineKit.xcframework in Frameworks */,
+				D1E0A0010000000000000001 /* WFMomentUIKit.xcframework in Frameworks */,
+				D1E0A0010000000000000004 /* WFMomentClient.xcframework in Frameworks */,
 				9051774E2243CD8D0020A2AC /* Security.framework in Frameworks */,
 				9051774C2243CD830020A2AC /* SystemConfiguration.framework in Frameworks */,
 				2F1B0DEE21E2161E00139CB1 /* CoreTelephony.framework in Frameworks */,
