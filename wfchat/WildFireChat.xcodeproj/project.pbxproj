@@ -1780,7 +1780,6 @@
 					"$(PROJECT_DIR)/WildFireChat/AV/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
-					"$(PROJECT_DIR)/WildFireChat/Moments",
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
@@ -1829,7 +1828,6 @@
 					"$(PROJECT_DIR)/WildFireChat/AV/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/Frameworks/GoogleWebRTC/Frameworks/frameworks",
 					"$(PROJECT_DIR)/WildFireChat",
-					"$(PROJECT_DIR)/WildFireChat/Moments",
 					"$(PROJECT_DIR)/WildFireChat/SDWebImage",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WildFireChat/WFChat-Prefix-Header.pch";
