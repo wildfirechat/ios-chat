@@ -48,12 +48,12 @@ NSString *POLL_SERVER_ADDRESS = nil;         // 未部署投票服务
 NSString *POLL_SERVER_BACKUP_ADDRESS = nil;
 
 // 网盘服务地址，如果没有部署，可以设置为nil。
-//NSString *PAN_SERVER_ADDRESS = @"http://192.168.1.81:8083";
+//NSString *PAN_SERVER_ADDRESS = nil;   // 未部署网盘服务（原为野火开发机内网地址）
 NSString *PAN_SERVER_ADDRESS = nil;          // 未部署网盘服务
 //网盘服务备选地址，双网环境下使用。
 NSString *PAN_SERVER_BACKUP_ADDRESS = nil;
 
-//NSString *ARCHIVE_SERVER_ADDRESS = @"http://192.168.1.81:8088";
+//NSString *ARCHIVE_SERVER_ADDRESS = nil;   // 未部署归档服务（原为野火开发机内网地址）
 NSString *ARCHIVE_SERVER_ADDRESS = nil;
 //消息归档服务备选地址，双网环境下使用。
 NSString *ARCHIVE_SERVER_BACKUP_ADDRESS = nil;
@@ -116,7 +116,7 @@ NSString *DIALIN_ROBOT_ID = nil;//@"robotdialin";
 NSString *AI_MINUTES_ROBOT_ID = @"robotminutes";
 
 //语音记录查看页面地址，如：http://192.168.1.81:8883/index.html
-NSString *MINUTES_URL = @"http://101.42.4.222:8883/index.html";
+NSString *MINUTES_URL = nil;   // 未部署会议纪要服务（原为野火官方公网地址）
 //语音记录查看页面备选地址，双网环境下使用。
 NSString *MINUTES_BACKUP_URL = nil;
 
