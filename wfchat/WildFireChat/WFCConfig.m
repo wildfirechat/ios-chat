@@ -37,13 +37,13 @@ NSString *ORG_SERVER_ADDRESS = @"https://aiwork-im.lgdg.cc/org";
 NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
 
 //接龙服务地址，如果没有部署，可以设置为nil。
-NSString *COLLECTION_SERVER_ADDRESS = nil;   // 未部署接龙服务
+NSString *COLLECTION_SERVER_ADDRESS = @"https://aiwork-im.lgdg.cc/collection";
 //接龙服务备选地址，双网环境下使用。
 NSString *COLLECTION_SERVER_BACKUP_ADDRESS = nil;
 
 //投票服务地址，如果没有部署，可以设置为nil。
 //NSString *POLL_SERVER_ADDRESS = @"http://192.168.1.81:8082";
-NSString *POLL_SERVER_ADDRESS = nil;         // 未部署投票服务
+NSString *POLL_SERVER_ADDRESS = @"https://aiwork-im.lgdg.cc/poll";
 //投票服务备选地址，双网环境下使用。
 NSString *POLL_SERVER_BACKUP_ADDRESS = nil;
 
@@ -82,14 +82,14 @@ NSString *WORK_PLATFORM_BACKUP_URL = nil;
 //语音转文字服务地址。关于语音转文字信息请参考：https://gitee.com/wfchat/asr-api 。
 //野火提供的测试服务会记录语音文件和转换后的文字，上线会有可能泄密风险。因此请确保务必上线时购买部署自己的语音转文字服务，或者设置为nil。
 //NSString *ASR_SERVICE_URL = nil;
-NSString *ASR_SERVICE_URL = nil;   // 未部署语音转文字
+NSString *ASR_SERVICE_URL = @"https://aiwork-im.lgdg.cc/asr/api/recognize";
 //语音转文字服务备选地址，双网环境下使用。
 NSString *ASR_SERVICE_BACKUP_URL = nil;
 
 //实时语音输入服务地址。请配置为 asr-api 的实时语音识别地址，例如 wss://example.com/asr/api/stream。
 //连接时会在 HTTP header authCode 中带上从 IM 服务获取的认证码。内网测试时也可以直连 wf-voice 的 WebSocket 地址（默认端口 12436），
 //例如 ws://192.168.1.100:12436。wf-voice 本身没有鉴权，也不支持 wss，请勿直接暴露到公网。
-NSString *ASR_STREAM_SERVICE_URL = nil;   // 未部署语音转文字（流式）
+NSString *ASR_STREAM_SERVICE_URL = @"wss://aiwork-im.lgdg.cc/asr/api/stream";
 //实时语音输入服务备选地址，双网环境下使用。
 NSString *ASR_STREAM_SERVICE_BACKUP_URL = nil;
 
