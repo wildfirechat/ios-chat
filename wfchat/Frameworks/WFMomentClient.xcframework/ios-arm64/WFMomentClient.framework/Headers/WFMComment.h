@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "WFMomentDefine.h"
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 @class WFMCommentMessageContent;

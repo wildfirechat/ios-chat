@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <WFChatClient/WFCChatClient.h>
 #import "WFMFeed.h"
 #import "WFMomentDefine.h"
-#import <WFChatClient/WFCChatClient.h>
 
 #define MESSAGE_CONTENT_TYPE_FEED 501
 

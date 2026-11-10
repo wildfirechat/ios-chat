@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong)NSString *thumbUrl;
 @property(nonatomic, assign)int mediaWidth;
 @property(nonatomic, assign)int mediaHeight;
+@property(nonatomic, strong)NSDictionary *dict;
 @end
 
 @interface WFMFeed : NSObject

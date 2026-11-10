@@ -24,5 +24,7 @@ typedef NS_ENUM(NSInteger, WFMVisiableScope) {
 @property(nonatomic, assign)WFMVisiableScope visiableScope;
 @property(nonatomic, assign)long long updateDt;
 
+
+@property(nonatomic, strong)NSDictionary *dict;
 @property(nonatomic, strong)NSData *data;
 @end

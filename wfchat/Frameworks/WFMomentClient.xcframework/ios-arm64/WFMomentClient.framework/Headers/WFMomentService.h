@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *kReceiveComments;
 extern NSString *kReceiveFeeds;
+extern NSString *kClearUnreadComments;
 
 @class WFCCMessageContent;
 @protocol WFMomentReceiveMessageDelegate <NSObject>
@@ -47,7 +48,7 @@ typedef NS_ENUM(NSInteger, WFMUpdateUserProfileType) {
                success:(void(^)(void))successBlock
                  error:(void(^)(int error_code))errorBlock;
 
-- (void)getFeeds:(NSUInteger)fromIndex
+- (void)getFeeds:(long long)fromIndex
             count:(NSInteger)count
         fromUser:(NSString *)user
          success:(void(^)(NSArray<WFMFeed *> *))successBlock
@@ -74,6 +75,7 @@ typedef NS_ENUM(NSInteger, WFMUpdateUserProfileType) {
                  error:(void(^)(int error_code))errorBlock;
 
 - (NSArray<WFCCMessage *> *)getMessages:(BOOL)isNew;
+- (NSArray<WFCCMessage *> *)getMessages:(long long)fromIndex isNew:(BOOL)isNew;
 
 - (int)getUnreadCount;
 - (void)clearUnreadStatus;

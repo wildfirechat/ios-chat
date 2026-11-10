@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <WFChatClient/WFCChatClient.h>
 #import "WFMComment.h"
 #import "WFMomentDefine.h"
 #import "WFMFeed.h"
-#import <WFChatClient/WFCChatClient.h>
 
 #define MESSAGE_CONTENT_TYPE_COMMENT 502
 
