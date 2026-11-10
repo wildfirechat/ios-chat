@@ -13,6 +13,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import "AppDelegate.h"
 #import "WFCBaseTabBarController.h"
+#import "WFCServiceCheckViewController.h"
 #import "WFCResetPasswordViewController.h"
 #import "MBProgressHUD.h"
 #import "UILabel+YBAttributeTextTapAction.h"
@@ -956,6 +957,52 @@
 
     // 清理待执行的操作
     self.pendingLoginAction = nil;
+}
+
+
+#pragma mark - 登录页右下角「诊断」入口
+// 登录失败时（连不上 IM / 应用服务 / 组织通讯录 / 开放平台）也能量测，
+// 因此除了主界面的入口，登录页单独放一个同样的悬浮按钮。
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self setupLoginDiagnoseButton];
+}
+
+- (void)setupLoginDiagnoseButton {
+    static NSInteger const kDiagnoseTag = 0x5E1CF;
+    UIButton *btn = [self.view viewWithTag:kDiagnoseTag];
+    if (btn == nil) {
+        btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        btn.tag = kDiagnoseTag;
+        btn.backgroundColor = [UIColor colorWithWhite:0 alpha:0.55];
+        [btn setTitle:@"诊断" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
+        btn.layer.cornerRadius = 24;
+        btn.layer.masksToBounds = YES;
+        btn.layer.borderWidth = 1.0;
+        btn.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.25].CGColor;
+        [btn addTarget:self action:@selector(onTapLoginDiagnose) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
+
+    CGFloat size = 48;
+    CGFloat margin = 16;
+    CGFloat bottomInset = 16;
+    if (@available(iOS 11.0, *)) {
+        bottomInset += self.view.safeAreaInsets.bottom;
+    }
+    CGFloat x = self.view.bounds.size.width - size - margin;
+    CGFloat y = self.view.bounds.size.height - size - bottomInset;
+    btn.frame = CGRectMake(x, y, size, size);
+    [self.view bringSubviewToFront:btn];
+}
+
+- (void)onTapLoginDiagnose {
+    WFCServiceCheckViewController *vc = [[WFCServiceCheckViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 @end
