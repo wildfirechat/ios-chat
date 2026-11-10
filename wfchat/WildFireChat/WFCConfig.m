@@ -37,7 +37,7 @@ NSString *ORG_SERVER_ADDRESS = @"https://lt.wildfirechat.net/org";
 NSString *ORG_SERVER_BACKUP_ADDRESS = nil;
 
 //接龙服务地址，如果没有部署，可以设置为nil。
-NSString *COLLECTION_SERVER_ADDRESS = nil;
+NSString *COLLECTION_SERVER_ADDRESS = @"https://lt.wildfirechat.net/collection";
 //接龙服务备选地址，双网环境下使用。
 NSString *COLLECTION_SERVER_BACKUP_ADDRESS = nil;
 
