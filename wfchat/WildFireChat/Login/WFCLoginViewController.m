@@ -975,26 +975,27 @@
     if (btn == nil) {
         btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.tag = kDiagnoseTag;
-        btn.backgroundColor = [UIColor colorWithWhite:0 alpha:0.55];
-        [btn setTitle:@"诊断" forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
-        btn.layer.cornerRadius = 24;
-        btn.layer.masksToBounds = YES;
-        btn.layer.borderWidth = 1.0;
-        btn.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.25].CGColor;
+        // 无文字，仅一个小齿轮图标
+        UIImage *gear = [UIImage systemImageNamed:@"gearshape"];
+        [btn setImage:gear forState:UIControlStateNormal];
+        btn.tintColor = [UIColor colorWithWhite:0.55 alpha:0.85];   // 低调的灰
+        btn.backgroundColor = [UIColor clearColor];
+        btn.accessibilityLabel = @"诊断";
+        btn.accessibilityHint = @"检查服务连通性";
         [btn addTarget:self action:@selector(onTapLoginDiagnose) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:btn];
     }
 
-    CGFloat size = 48;
-    CGFloat margin = 16;
-    CGFloat bottomInset = 16;
+    // 尺寸：小图标 32x32，点击热区足够
+    CGFloat size = 32;
+    CGFloat margin = 8;
+    CGFloat topInset = 0;
     if (@available(iOS 11.0, *)) {
-        bottomInset += self.view.safeAreaInsets.bottom;
+        topInset = self.view.safeAreaInsets.top;
     }
+    // 放在右上角安全区域内
     CGFloat x = self.view.bounds.size.width - size - margin;
-    CGFloat y = self.view.bounds.size.height - size - bottomInset;
+    CGFloat y = topInset + margin;
     btn.frame = CGRectMake(x, y, size, size);
     [self.view bringSubviewToFront:btn];
 }
