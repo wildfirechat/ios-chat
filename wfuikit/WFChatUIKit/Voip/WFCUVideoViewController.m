@@ -274,6 +274,7 @@
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
 //        _minimizeButton.hidden = YES;
         [self.view addSubview:_minimizeButton];
+        [self layoutTopCornerButtons];
     }
     return _minimizeButton;
 }
@@ -503,6 +504,30 @@
     [super viewWillDisappear:animated];
     
     [self stopConnectedTimer];
+}
+
+- (void)viewSafeAreaInsetsDidChange {
+    [super viewSafeAreaInsetsDidChange];
+    [self layoutTopCornerButtons];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    // 横竖屏切换、安全区变化后重新摆放，否则会沿用旧的安全区位置
+    [self layoutTopCornerButtons];
+}
+
+// 顶部角落按钮按安全区摆放：刘海/灵动岛机型的顶部安全区有 44~59pt，状态栏区域收不到点击，
+// 原来固定的 y=32 会落在状态栏里，表现就是按钮点不了。没有安全区时保持原来的位置。
+- (void)layoutTopCornerButtons {
+    if (!_minimizeButton) {
+        return;
+    }
+    UIEdgeInsets insets = self.view.safeAreaInsets;
+    CGRect frame = _minimizeButton.frame;
+    frame.origin.x = 16 + insets.left;
+    frame.origin.y = MAX(insets.top + 8, 32);
+    _minimizeButton.frame = frame;
 }
 
 - (void)setPanStartPoint:(CGPoint)panStartPoint {
