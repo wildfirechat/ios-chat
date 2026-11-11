@@ -619,7 +619,10 @@
             successBlock(userId, token, newUser, resetCode);
         } error:errorBlock];
     } else {
-        [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:successBlock error:errorBlock];
+        // 验证码登录后是否弹出「修改密码」由 ENABLE_RESET_PASSWORD_AFTER_CODE_LOGIN 控制，默认不弹
+        [[AppService sharedAppService] loginWithMobile:user verifyCode:password success:^(NSString *userId, NSString *token, BOOL newUser, NSString *resetCode) {
+            successBlock(userId, token, newUser, ENABLE_RESET_PASSWORD_AFTER_CODE_LOGIN ? resetCode : nil);
+        } error:errorBlock];
     }
 }
 
