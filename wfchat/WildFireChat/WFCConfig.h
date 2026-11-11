@@ -69,6 +69,10 @@ extern BOOL ENABLE_WATER_MARKER;
 //是否开启滑动验证。如果关闭，需要在应用服务同步关闭。
 extern BOOL ENABLE_SLIDE_VERIFY;
 
+//验证码登录成功后，是否弹出「修改密码」界面（app-server 返回 resetCode 时，用于把初始密码改成新密码）。
+//默认关闭：验证码登录后直接进入主界面。
+extern BOOL ENABLE_RESET_PASSWORD_AFTER_CODE_LOGIN;
+
 //AI机器人ID，可以在单聊或者群里@ 
 extern NSString *AI_ROBOT;
 
