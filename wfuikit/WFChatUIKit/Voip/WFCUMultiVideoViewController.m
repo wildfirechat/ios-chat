@@ -318,6 +318,7 @@
         [_minimizeButton addTarget:self action:@selector(minimizeButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _minimizeButton.hidden = NO;
         [self.view addSubview:_minimizeButton];
+        [self layoutTopCornerButtons];
     }
     return _minimizeButton;
 }
@@ -334,6 +335,7 @@
         [_addParticipantButton addTarget:self action:@selector(addParticipantButtonDidTap:) forControlEvents:UIControlEventTouchDown];
         _addParticipantButton.hidden = YES;
         [self.view addSubview:_addParticipantButton];
+        [self layoutTopCornerButtons];
     }
     return _addParticipantButton;
 }
@@ -658,6 +660,37 @@
     [super viewWillDisappear:animated];
     
     [self stopConnectedTimer];
+}
+
+- (void)viewSafeAreaInsetsDidChange {
+    [super viewSafeAreaInsetsDidChange];
+    [self layoutTopCornerButtons];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    // 横竖屏切换、安全区变化后重新摆放，否则会沿用旧的安全区位置
+    [self layoutTopCornerButtons];
+}
+
+// 顶部两个角落的按钮（左：最小化，右：加人）按安全区摆放：刘海/灵动岛机型的顶部安全区有 44~59pt，
+// 状态栏区域收不到点击，原来固定的 y=46 会落在状态栏里，表现就是按钮点不了。
+// 横屏时左右安全区（刘海那一侧）也要避开。没有安全区时保持原来的位置。
+- (void)layoutTopCornerButtons {
+    UIEdgeInsets insets = self.view.safeAreaInsets;
+    CGFloat top = MAX(insets.top + 8, 46);
+    if (_minimizeButton) {
+        CGRect frame = _minimizeButton.frame;
+        frame.origin.x = 16 + insets.left;
+        frame.origin.y = top;
+        _minimizeButton.frame = frame;
+    }
+    if (_addParticipantButton) {
+        CGRect frame = _addParticipantButton.frame;
+        frame.origin.x = self.view.bounds.size.width - 16 - frame.size.width - insets.right;
+        frame.origin.y = top;
+        _addParticipantButton.frame = frame;
+    }
 }
 
 - (void)setPanStartPoint:(CGPoint)panStartPoint {
