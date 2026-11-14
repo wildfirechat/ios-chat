@@ -231,6 +231,7 @@
         }
         [self.bubbleView setBubbleTipNumber:info.unreadCount.unread];
     }
+    _offcialView.hidden = YES;
     
     if (info.isSilent) {
         self.silentView.hidden = NO;
